@@ -1,0 +1,103 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../macros/prisonerProfHeader.njk" import profileField %}
+
+
+{% set title = "Incident statement" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+      collapseOnMobile: true,
+      items: [
+        {
+            text: "Digital prison services",
+            href: dpsUrl
+        },
+        {
+            text: "Place a prisoner on report",
+            href: "#"
+        }
+      ],
+      classes: "govuk-!-display-none-print"
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+
+    <div class="incidentStatement-content">
+            <hr>
+                <div class="prisoner-incident-header govuk-!-width-full govuk-!-margin-bottom-3 govuk-!-margin-top-3">
+                    <div class="govuk-grid-column-one-quarter">
+                        <img/>
+                    </div>
+                    <div class="govuk-grid-column-one-quarter">
+                        {{ profileField(name='offender-name', label='Name', value='FILLME') }}
+                    </div>
+                    <div class="govuk-grid-column-one-quarter">
+                        {{ profileField(name='offender-prn', label='Prison number', value='FILLME') }}                
+                    </div>
+                    <div class="govuk-grid-column-one-quarter">
+                        {{ profileField(name='offender-location', label='Location', value='FILLME') }}            
+                    </div>
+                <div>
+            <hr>
+
+
+            <form method="" class="govuk-!-margin-top-5">
+            
+                {{ govukTextarea({
+                name: "incidentStatement",
+                id: "incidentStatement",
+                label: {
+                    text: "Write the full details of the alleged offence.",
+                    classes: "govuk-!-margin-bottom-2"
+                },
+                rows: '25',
+                classes: "govuk-!-width-three-quarters",
+                attributes: {
+                    'data-test': "incident-statement-input"
+                },
+                errorMessage: errors | findError("incidentStatement")
+                }) }}
+
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "is-statement-complete",
+                    name: "is-statement-complete",
+                    fieldset: {
+                        legend: {
+                            text: "Is the statement complete?"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "no",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Save and continue",
+                    type: "submit",
+                    classes: "govuk-button--submit",
+                    attributes: { "data-test": "incident-report-submit" }
+                }) }}
+
+            </form>
+        {# </div> #}
+    {# </div> #}
+  </div>
+{% endblock %}
