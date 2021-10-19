@@ -1,9 +1,10 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "../macros/prisonerProfHeader.njk" import profileField %}
 
 
 {% set title = "Incident statement" %}
@@ -13,44 +14,18 @@
 {% endblock %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-      collapseOnMobile: true,
-      items: [
-        {
-            text: "Digital prison services",
-            href: dpsUrl
-        },
-        {
-            text: "Place a prisoner on report",
-            href: "#"
-        }
-      ],
-      classes: "govuk-!-display-none-print"
-    }) }}
+    {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+    <div class="govuk-grid-row">
+        <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
 
-    <div class="incidentStatement-content">
-            <hr>
-                <div class="prisoner-incident-header govuk-!-width-full govuk-!-margin-bottom-3 govuk-!-margin-top-3">
-                    <div class="govuk-grid-column-one-quarter">
-                        <img/>
-                    </div>
-                    <div class="govuk-grid-column-one-quarter">
-                        {{ profileField(name='offender-name', label='Name', value='FILLME') }}
-                    </div>
-                    <div class="govuk-grid-column-one-quarter">
-                        {{ profileField(name='offender-prn', label='Prison number', value='FILLME') }}                
-                    </div>
-                    <div class="govuk-grid-column-one-quarter">
-                        {{ profileField(name='offender-location', label='Location', value='FILLME') }}            
-                    </div>
-                <div>
-            <hr>
+        <div class="incidentStatement-prisonerPlaybackSection">
+            {{ prisonerPlaybackSection('Natalie', 'GH345EU', 'Sheffield') }}
+        </div>
 
-
+        <div>
             <form method="" class="govuk-!-margin-top-5">
             
                 {{ govukTextarea({
@@ -95,9 +70,8 @@
                     classes: "govuk-button--submit",
                     attributes: { "data-test": "incident-report-submit" }
                 }) }}
-
             </form>
-        {# </div> #}
-    {# </div> #}
-  </div>
+        </div>
+    </div>
+
 {% endblock %}

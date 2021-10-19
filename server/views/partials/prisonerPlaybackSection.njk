@@ -1,0 +1,26 @@
+{% from "../macros/prisonerPlaybackField.njk" import prisonerPlaybackField %}
+
+{% macro prisonerPlaybackSection(name, prn, location) %}
+<hr>
+    <div class="prisonerPlaybackSectionInner govuk-!-width-full">
+        <div class="govuk-grid-column-one-quarter">
+            <img
+                src=""
+                height="150"
+                width="120"
+                alt=""
+                data-test="playback-offender-image"
+            />
+        </div>
+        <div class="govuk-grid-column-one-quarter" data-test="playback-offender-name">
+            {{ prisonerPlaybackField(name='offender-name', label='Name', value=name) }}
+        </div>
+        <div class="govuk-grid-column-one-quarter" data-test="playback-offender-prn">
+            {{ prisonerPlaybackField(name='offender-prn', label='Prison number', value=prn) }}                
+        </div>
+        <div class="govuk-grid-column-one-quarter" data-test="playback-offender-location">
+            {{ prisonerPlaybackField(name='offender-location', label='Location', value=location) }}            
+        </div>
+    </div>
+<hr>
+{% endmacro %}

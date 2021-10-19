@@ -4,7 +4,7 @@ import { FormError } from '../../@types/template'
 
 export default class IncidentStatementRoutes {
   private renderView = async (req: Request, res: Response, error?: FormError): Promise<void> => {
-    return res.render('pages/incidentReport', {
+    return res.render('pages/incidentStatement', {
       errors: error ? [error] : [],
     })
   }
