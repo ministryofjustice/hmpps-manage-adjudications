@@ -5,7 +5,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Incident statement" %}
 
@@ -18,60 +18,71 @@
 {% endblock %}
 
 {% block content %}
+	{% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-test": "error-summary" }
+    }) }}
+  {% endif %}
+
     <div class="govuk-grid-row">
-        <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+      <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
 
-        <div class="incidentStatement-prisonerPlaybackSection">
-            {{ prisonerPlaybackSection('Natalie', 'GH345EU', 'Sheffield') }}
-        </div>
+			<div class="incidentStatement-prisonerPlaybackSection">
+				{{ prisonerPlaybackSection('Clamp, Natalie', 'GH345EU', 'Sheffield') }}
+			</div>
 
-        <div>
-            <form method="" class="govuk-!-margin-top-5">
-            
-                {{ govukTextarea({
-                name: "incidentStatement",
-                id: "incidentStatement",
-                label: {
-                    text: "Write the full details of the alleged offence.",
-                    classes: "govuk-!-margin-bottom-2"
-                },
-                rows: '25',
-                classes: "govuk-!-width-three-quarters",
-                attributes: {
-                    'data-test': "incident-statement-input"
-                },
-                errorMessage: errors | findError("incidentStatement")
-                }) }}
+			<div>
+				<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+					<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-                {{ govukRadios({
-                    classes: "govuk-radios--inline",
-                    idPrefix: "is-statement-complete",
-                    name: "is-statement-complete",
-                    fieldset: {
-                        legend: {
-                            text: "Is the statement complete?"
-                        }
-                    },
-                    items: [
-                        {
-                            value: "yes",
-                            text: "Yes"
-                        },
-                        {
-                            value: "no",
-                            text: "No"
-                        }
-                    ]
-                }) }}
+					{{ govukTextarea({
+						name: "incidentStatement",
+						id: "incidentStatement",
+						label: {
+							text: "Write the full details of the alleged offence.",
+							classes: "govuk-!-margin-bottom-2"
+						},
+						rows: '25',
+						classes: "govuk-!-width-three-quarters",
+						attributes: {
+							'data-test': "incident-statement-input"
+						},
+						errorMessage: errors | findError("incidentStatement")
+						}) }}
 
-                {{ govukButton({
-                    text: "Save and continue",
-                    type: "submit",
-                    classes: "govuk-button--submit",
-                    attributes: { "data-test": "incident-report-submit" }
-                }) }}
-            </form>
-        </div>
+						{{ govukRadios({
+							classes: "govuk-radios--inline",
+							idPrefix: "incidentStatementComplete",
+							id: "incidentStatementComplete",
+							name: "incidentStatementComplete",
+							errorMessage: errors | findError("incidentStatementComplete"),
+							fieldset: {
+									legend: {
+											text: "Is the statement complete?"
+									}
+							},
+							items: [
+								{
+										value: "yes",
+										text: "Yes"
+								},
+								{
+										value: "no",
+										text: "No"
+								}
+							]
+						}) }}
+
+						{{ govukButton({
+							text: "Save and continue",
+							type: "submit",
+							classes: "govuk-button--submit",
+							attributes: { "data-test": "incident-report-submit" }
+						}) }}
+				</form>
+			</div>
     </div>
 
 {% endblock %}

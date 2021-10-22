@@ -3,22 +3,23 @@
 {% macro prisonerPlaybackSection(name, prn, location) %}
 <hr>
     <div class="prisonerPlaybackSectionInner govuk-!-width-full">
-        <div class="govuk-grid-column-one-quarter">
+        <div class="prisonerPlaybackSection-segment prisonerPlaybackSection-segment-image" data-test="playback-offender-image">
             <img
-                src=""
-                height="150"
-                width="120"
-                alt=""
+                src="/assets/images/image-missing.jpg"
+                height="120"
+                width="100"
+                alt="Photograph of <Forename> <Surname>"
+                aria-label="Photograph of <Forename> <Surname>"
                 data-test="playback-offender-image"
             />
         </div>
-        <div class="govuk-grid-column-one-quarter" data-test="playback-offender-name">
+        <div class="prisonerPlaybackSection-segment prisonerPlaybackSection-textSegment" data-test="playback-offender-name">
             {{ prisonerPlaybackField(name='offender-name', label='Name', value=name) }}
         </div>
-        <div class="govuk-grid-column-one-quarter" data-test="playback-offender-prn">
+        <div class="prisonerPlaybackSection-segment prisonerPlaybackSection-textSegment" data-test="playback-offender-prn">
             {{ prisonerPlaybackField(name='offender-prn', label='Prison number', value=prn) }}                
         </div>
-        <div class="govuk-grid-column-one-quarter" data-test="playback-offender-location">
+        <div class="prisonerPlaybackSection-segment prisonerPlaybackSection-textSegment" data-test="playback-offender-location">
             {{ prisonerPlaybackField(name='offender-location', label='Location', value=location) }}            
         </div>
     </div>
