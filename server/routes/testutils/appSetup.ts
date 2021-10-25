@@ -9,6 +9,8 @@ import errorHandler from '../../errorHandler'
 import standardRouter from '../standardRouter'
 import UserService from '../../services/userService'
 import * as auth from '../../authentication/auth'
+import { Services } from '../../services'
+import PlaceOnReportService from '../../services/placeOnReportService'
 
 const user = {
   name: 'john smith',
@@ -16,6 +18,30 @@ const user = {
   lastName: 'smith',
   username: 'user1',
   displayName: 'John Smith',
+  activeCaseLoadId: 'MDI',
+  allCaseLoads: [
+    {
+      caseLoadId: 'MDI',
+      description: 'Moorland',
+      type: 'INST',
+      caseloadFunction: 'TEST',
+      currentlyActive: true,
+    },
+    {
+      caseLoadId: 'LEI',
+      description: 'Leeds',
+      type: 'INST',
+      caseloadFunction: 'TEST',
+      currentlyActive: false,
+    },
+  ],
+  activeCaseLoad: {
+    caseLoadId: 'MDI',
+    description: 'Moorland',
+    type: 'INST',
+    caseloadFunction: 'TEST',
+    currentlyActive: true,
+  },
 }
 
 class MockUserService extends UserService {
@@ -54,7 +80,17 @@ function appSetup(route: Router, production: boolean): Express {
   return app
 }
 
-export default function appWithAllRoutes({ production = false }: { production?: boolean }): Express {
+export default function appWithAllRoutes(
+  { production = false }: { production?: boolean },
+  overrides: Partial<Services> = {}
+): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(allRoutes(standardRouter(new MockUserService())), production)
+  return appSetup(
+    allRoutes(standardRouter(new MockUserService()), {
+      userService: new MockUserService(),
+      placeOnReportService: {} as PlaceOnReportService,
+      ...overrides,
+    }),
+    production
+  )
 }
