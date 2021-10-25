@@ -11,11 +11,10 @@ generic-service:
     INGRESS_URL: "https://manage-adjudications-dev.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
-    PRISON_API_URL: https://api-dev.prison.service.justice.gov.uk
     DIGITAL_PRISON_SERVICE_URL: https://digital-dev.prison.service.justice.gov.uk
     MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk
+    PRISON_API_URL: https://api-dev.prison.service.justice.gov.uk
     DPS_URL: https://digital-dev.prison.service.justice.gov.uk
-
     
   allowlist: null
 
