@@ -13,6 +13,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICE_URL: https://digital-dev.prison.service.justice.gov.uk
     MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk
+    PRISON_API_URL: https://api.prison.service.justice.gov.uk
     
   allowlist: null
 
