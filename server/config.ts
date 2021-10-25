@@ -58,6 +58,14 @@ export default {
       systemClientId: get('SYSTEM_CLIENT_ID', 'manage-adjudications-client', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
+    prison: {
+      url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
+      timeout: {
+        response: Number(get('PRISON_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('PRISON_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(),
+    },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
       timeout: {
@@ -69,4 +77,6 @@ export default {
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
+  digitalPrisonServiceUrl: get('DIGITAL_PRISON_SERVICE_URL', 'http://localhost:3002', requiredInProduction),
+  supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
 }
