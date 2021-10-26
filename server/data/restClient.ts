@@ -44,6 +44,10 @@ export default class RestClient {
     return this.config.timeout
   }
 
+  defaultErrorLogger(error: UnsanitisedError): void {
+    logger.warn(sanitiseError(error), `Error calling ${this.name}`)
+  }
+
   async get<T>({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<T> {
     logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
     try {

@@ -26,11 +26,10 @@
     }) }}
   {% endif %}
 
-    <div class="govuk-grid-row">
-      <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+      <h1 class="govuk-heading-l">{{ title }}</h1>
 
 			<div class="incidentStatement-prisonerPlaybackSection">
-				{{ prisonerPlaybackSection('Clamp, Natalie', 'GH345EU', 'Sheffield') }}
+				{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
 			</div>
 
 			<div>
@@ -83,6 +82,6 @@
 						}) }}
 				</form>
 			</div>
-    </div>
+
 
 {% endblock %}
