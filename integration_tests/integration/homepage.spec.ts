@@ -1,5 +1,4 @@
 import Homepage from '../pages/homepage'
-import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 
 context('Homepage', () => {
