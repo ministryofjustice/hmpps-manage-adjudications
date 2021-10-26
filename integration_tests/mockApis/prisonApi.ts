@@ -1,7 +1,8 @@
+import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 
-const stubUserCaseloads = (caseloads: CaseLoad[]) =>
+const stubUserCaseloads = (caseloads: CaseLoad[]): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
