@@ -1,4 +1,4 @@
-import HomePage from '../pages/homePage'
+import Homepage from '../pages/homepage'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 
@@ -16,14 +16,14 @@ context('SignIn', () => {
 
   it('User name visible in header', () => {
     cy.signIn()
-    const homePage: HomePage = Page.verifyOnPage(HomePage)
+    const homePage: Homepage = Page.verifyOnPage(Homepage)
     homePage.signInName().contains('J. Smith')
     homePage.activeLocation().contains('Moorland')
   })
 
   it('User can log out', () => {
     cy.signIn()
-    const homePage: HomePage = Page.verifyOnPage(HomePage)
+    const homePage: Homepage = Page.verifyOnPage(Homepage)
     homePage.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
   })

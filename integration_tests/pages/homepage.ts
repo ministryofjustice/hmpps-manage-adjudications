@@ -1,6 +1,6 @@
 import Page, { PageElement } from './page'
 
-export default class HomePage extends Page {
+export default class Homepage extends Page {
   constructor() {
     super('This site is under construction...')
   }
