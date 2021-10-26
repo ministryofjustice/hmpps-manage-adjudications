@@ -1,5 +1,5 @@
-import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+import express, { Router } from 'express'
+// import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 // import IncidentStatementRoutes from './incidentStatement'
 
