@@ -8,8 +8,8 @@ generic-service:
     host: manage-adjudications.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://manage-adjudications-dev.hmpps.service.justice.gov.uk"
-    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    INGRESS_URL: "https://manage-adjudications.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICE_URL: https://digital.prison.service.justice.gov.uk
     MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api.hmpps.service.justice.gov.uk
