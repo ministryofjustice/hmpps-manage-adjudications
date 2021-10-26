@@ -1,6 +1,7 @@
 import { stubFor } from './wiremock'
+import { CaseLoad } from '../../server/data/prisonApiClient'
 
-const stubUserCaseloads = caseloads =>
+const stubUserCaseloads = (caseloads: CaseLoad[]) =>
   stubFor({
     request: {
       method: 'GET',
