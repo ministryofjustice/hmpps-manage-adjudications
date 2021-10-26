@@ -16,14 +16,14 @@ context('SignIn', () => {
 
   it('User name visible in header', () => {
     cy.signIn()
-    const homePage = Page.verifyOnPage(HomePage)
+    const homePage: HomePage = Page.verifyOnPage(HomePage)
     homePage.signInName().contains('J. Smith')
     homePage.activeLocation().contains('Moorland')
   })
 
   it('User can log out', () => {
     cy.signIn()
-    const homePage = Page.verifyOnPage(HomePage)
+    const homePage: HomePage = Page.verifyOnPage(HomePage)
     homePage.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
   })
