@@ -15,5 +15,5 @@ export default abstract class Page {
 
   signOut = (): PageElement => cy.get('[data-qa=sign-out]')
 
-  feedbackBanner = (): PageElement => cy.get('[data-test="feedback-banner"]')
+  feedbackBanner = (): PageElement => cy.get('[data-qa="feedback-banner"]')
 }
