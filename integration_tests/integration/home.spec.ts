@@ -1,7 +1,7 @@
 import Homepage from '../pages/home'
 import Page from '../pages/page'
 
-context('Homepage', () => {
+context('Home page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

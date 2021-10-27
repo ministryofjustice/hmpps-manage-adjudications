@@ -1,6 +1,6 @@
 import ErrorPage from '../pages/error'
 
-context('Error', () => {
+context('Error page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
