@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import validateForm from './incidentStatementValidation'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
-// import type PrisonerResultSummary from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 
 type PageData = {
@@ -17,20 +16,20 @@ export default class IncidentStatementRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, prisonerData } = pageData
+    const { error } = pageData
+    // const { prisonerNumber } = req.params
+    const prisonerNumber = 'G6415GD' // fix until we can get hold of the searched PRN
+    const { user } = res.locals
+
+    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+
     return res.render(`pages/incidentStatement`, {
       errors: error ? [error] : [],
-      prisoner: prisonerData,
+      prisoner,
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
-    // const { prisonerNumber } = req.session
-    const prisonerData = await this.placeOnReportService.getPrisonerDetails('G6415GD', user)
-
-    return this.renderView(req, res, { prisonerData })
-  }
+  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body

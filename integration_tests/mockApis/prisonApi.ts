@@ -23,6 +23,20 @@ const stubUserCaseloads = (caseloads: CaseLoad[]): SuperAgentRequest =>
     },
   })
 
+const stubGetPrisonerDetails = ({ prisonerNumber, response = {} }) =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/offenders/${prisonerNumber}`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubUserCaseloads,
+  stubGetPrisonerDetails,
 }
