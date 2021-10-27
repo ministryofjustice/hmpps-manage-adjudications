@@ -1,5 +1,10 @@
+import type { Readable } from 'stream'
+import { plainToClass } from 'class-transformer'
+
+import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
+import PrisonerResult from './prisonerResult'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -18,5 +23,23 @@ export default class PrisonApiClient {
 
   getUserCaseLoads(): Promise<CaseLoad[]> {
     return this.restClient.get<CaseLoad[]>({ path: '/api/users/me/caseLoads' })
+  }
+
+  async getPrisonerImage(prisonerNumber: string): Promise<Readable> {
+    return this.restClient.stream({
+      path: `/api/bookings/offenderNo/${prisonerNumber}/image/data`,
+      errorLogger: error =>
+        error.status === 404
+          ? logger.info(`No prisoner image available for prisonerNumber: ${prisonerNumber}`)
+          : this.restClient.defaultErrorLogger(error),
+    }) as Promise<Readable>
+  }
+
+  async getPrisonerDetails(prisonerNumber: string): Promise<PrisonerResult> {
+    const result = await this.restClient.get<PrisonerResult>({
+      path: `/api/offenders/${prisonerNumber}`,
+    })
+
+    return plainToClass(PrisonerResult, result, { excludeExtraneousValues: true })
   }
 }

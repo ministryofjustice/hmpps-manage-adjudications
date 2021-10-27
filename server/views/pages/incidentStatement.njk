@@ -1,0 +1,87 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Incident statement" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+	{% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-test": "error-summary" }
+    }) }}
+  {% endif %}
+
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+
+			<div class="incidentStatement-prisonerPlaybackSection">
+				{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+			</div>
+
+			<div>
+				<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+					<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+					{{ govukTextarea({
+						name: "incidentStatement",
+						id: "incidentStatement",
+						label: {
+							text: "Write the full details of the alleged offence.",
+							classes: "govuk-!-margin-bottom-2"
+						},
+						rows: '25',
+						classes: "govuk-!-width-three-quarters",
+						attributes: {
+							'data-test': "incident-statement-input"
+						},
+						errorMessage: errors | findError("incidentStatement")
+						}) }}
+
+						{{ govukRadios({
+							classes: "govuk-radios--inline",
+							idPrefix: "incidentStatementComplete",
+							id: "incidentStatementComplete",
+							name: "incidentStatementComplete",
+							errorMessage: errors | findError("incidentStatementComplete"),
+							fieldset: {
+									legend: {
+											text: "Is the statement complete?"
+									}
+							},
+							items: [
+								{
+										value: "yes",
+										text: "Yes"
+								},
+								{
+										value: "no",
+										text: "No"
+								}
+							]
+						}) }}
+
+						{{ govukButton({
+							text: "Save and continue",
+							type: "submit",
+							classes: "govuk-button--submit",
+							attributes: { "data-test": "incident-report-submit" }
+						}) }}
+				</form>
+			</div>
+
+
+{% endblock %}

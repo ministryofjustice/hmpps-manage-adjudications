@@ -5,7 +5,7 @@ import appWithAllRoutes from './testutils/appSetup'
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({})
+  app = appWithAllRoutes({ production: false })
 })
 
 afterEach(() => {
@@ -13,12 +13,12 @@ afterEach(() => {
 })
 
 describe('GET /', () => {
-  it('should render index page', () => {
+  it('should render homepage page', () => {
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('This site is under construction...')
+      .expect(response => {
+        expect(response.text).toContain('This site is under construction...')
       })
   })
 })

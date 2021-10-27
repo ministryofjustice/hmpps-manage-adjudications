@@ -1,13 +1,17 @@
-import type { RequestHandler, Router } from 'express'
+import type { Router } from 'express'
 
-import asyncMiddleware from '../middleware/asyncMiddleware'
+import incidentStatementRoutes from './incidentStatement'
+import checkYourAnswersRoutes from './checkYourAnswers'
+import placeOnReportRoutes from './placeOnReport'
+import prisonerRoutes from './prisonerRoutes'
 
-export default function routes(router: Router): Router {
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+import { Services } from '../services'
 
-  get('/', (req, res, next) => {
-    res.render('pages/index')
-  })
-
+export default function routes(router: Router, { placeOnReportService }: Services): Router {
+  router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
+  router.use('/check-your-answers', checkYourAnswersRoutes())
+  router.use('/place-a-prisoner-on-report', placeOnReportRoutes())
+  router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
+  router.get('/', (req, res, next) => res.render('pages/index'))
   return router
 }
