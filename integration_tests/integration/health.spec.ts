@@ -1,4 +1,4 @@
-context('Healthcheck', () => {
+context('Health check', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthPing')
