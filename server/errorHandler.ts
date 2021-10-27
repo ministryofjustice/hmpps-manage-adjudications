@@ -11,13 +11,18 @@ export default function createErrorHandler(production: boolean) {
       return res.redirect('/sign-out')
     }
 
-    res.locals.message = production
-      ? 'Something went wrong. The error has been logged. Please try again'
-      : error.message
-    res.locals.status = error.status
-    res.locals.stack = production ? null : error.stack
+    const title = production ? undefined : error.message
+    const status = production ? null : error.status
+    const stack = production ? null : error.stack
 
     res.status(error.status || 500)
+
+    return res.render('pages/error', {
+      title,
+      status,
+      stack,
+      url: res.locals?.redirectUrl || req.originalUrl,
+    })
 
     return res.render('pages/error')
   }

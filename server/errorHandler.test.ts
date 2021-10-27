@@ -30,8 +30,18 @@ describe('GET 404', () => {
       .expect(404)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Something went wrong. The error has been logged. Please try again')
+        expect(res.text).toContain('Sorry, there is a problem with the service')
         expect(res.text).not.toContain('NotFoundError: Not found')
+      })
+  })
+
+  it('should include link to request url if no redirect url', async () => {
+    return request(app)
+      .get('/unknown')
+      .expect(404)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('/unknown')
       })
   })
 })

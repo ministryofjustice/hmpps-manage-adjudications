@@ -1,4 +1,4 @@
-import Homepage from '../pages/homepage'
+import Homepage from '../pages/home'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 
