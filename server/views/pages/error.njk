@@ -1,7 +1,12 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/breadCrumb.njk" import breadCrumb %}
 
 {% set title =  title | default('Sorry, there is a problem with the service') %}
+
+{% block beforeContent %}
+  {{ breadCrumb() }}
+{% endblock %}
 
 {% block content %}
   <div class="govuk-grid-row">
