@@ -1,0 +1,38 @@
+.prisonerPlaybackSectionInner {
+  @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+	&--with-border {
+    padding: govuk-spacing(3) 0;
+    border-top: 1px solid $govuk-border-colour;
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+	&__prisoner-image {
+    width: 90px;
+    height: 100%;
+    margin-right: govuk-spacing(5);
+  }
+
+	&__item {
+    @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1 1 1;
+      padding-right: govuk-spacing(3);
+			width: 20%;
+
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

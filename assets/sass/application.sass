@@ -1,23 +1,13 @@
 $govuk-global-styles: true
 $path: "/assets/images/"
+$govuk-page-width: 1170px
+$govuk-font-family-print: 'GDS Transport'
 
 @import 'govuk/all'
 @import 'moj/all'
 
+@import './components/feedback-banner'
 @import './components/header'
+@import './components/_prisoner-playback.scss'
+
 @import './local'
-
-.prisonerPlaybackSectionInner
-	min-height: 140px
-
-.prisonerPlaybackSection-segment
-	float: left
-
-.prisonerPlaybackSection-segment-image
-	width: 12%
-	padding: 10px
-
-.prisonerPlaybackSection-textSegment
-	width: 20%
-	word-wrap: break-word
-	padding-top: 40px
