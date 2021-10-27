@@ -23,7 +23,13 @@ const stubUserCaseloads = (caseloads: CaseLoad[]): SuperAgentRequest =>
     },
   })
 
-const stubGetPrisonerDetails = ({ prisonerNumber, response = {} }) =>
+const stubGetPrisonerDetails = ({
+  prisonerNumber,
+  response = {},
+}: {
+  prisonerNumber: string
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
@@ -32,7 +38,7 @@ const stubGetPrisonerDetails = ({ prisonerNumber, response = {} }) =>
     response: {
       status: 200,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: response,
+      jsonBody: Response,
     },
   })
 
