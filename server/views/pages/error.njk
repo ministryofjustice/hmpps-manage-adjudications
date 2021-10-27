@@ -1,11 +1,11 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../partials/breadCrumb.njk" import breadCrumb %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
 
 {% set title =  title | default('Sorry, there is a problem with the service') %}
 
 {% block beforeContent %}
-  {{ breadCrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
