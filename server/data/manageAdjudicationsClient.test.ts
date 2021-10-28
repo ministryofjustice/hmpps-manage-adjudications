@@ -19,7 +19,7 @@ describe('manageAdjudicationsClient', () => {
     nock.cleanAll()
   })
 
-  describe('addDraftAdjudicationIncidentStatement', () => {
+  describe('postDraftIncidentStatement', () => {
     it('should return only the neccessary prisoner details', async () => {
       const result = {
         draftAdjudication: {
@@ -35,27 +35,18 @@ describe('manageAdjudicationsClient', () => {
           },
         },
       }
+
+      const content = { statement: 'test' }
+
       fakeManageAdjudicationsApi
-        .post('/draft-adjudications/4/incident-statement')
+        .post('/draft-adjudications/4/incident-statement', content)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, result)
 
-      const response = await client.addDraftAdjudicationIncidentStatement(4, { statement: '' })
+      const response = await client.postDraftIncidentStatement(4, content)
 
-      expect(response).toEqual({
-        draftAdjudication: {
-          id: 4,
-          prisonerNumber: 'A12345',
-          adjudicationSent: false,
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-          },
-          incidentStatement: {
-            statement: 'test',
-          },
-        },
-      })
+      expect(response).toEqual(result)
+      expect(response.draftAdjudication.incidentStatement.statement).toEqual('test')
     })
   })
 })

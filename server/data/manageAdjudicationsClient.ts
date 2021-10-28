@@ -13,10 +13,7 @@ export default class ManageAdjudicationsClient {
     this.restClient = new RestClient('Manage Adjudications API', config.apis.adjudications, token)
   }
 
-  async addDraftAdjudicationIncidentStatement(
-    id: number,
-    incidentStatement: IncidentStatement
-  ): Promise<DraftIncidentStatement> {
+  async postDraftIncidentStatement(id: number, incidentStatement: IncidentStatement): Promise<DraftIncidentStatement> {
     return this.restClient.post({
       path: `/draft-adjudications/${id}/incident-statement`,
       data: { ...incidentStatement },
