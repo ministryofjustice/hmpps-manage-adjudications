@@ -1,0 +1,12 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+
+{% set title = "Check your answers" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+	<h1 class="govuk-heading-l">{{ title }}</h1>
+{% endblock %}
