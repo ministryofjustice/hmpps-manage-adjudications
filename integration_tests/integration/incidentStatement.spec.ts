@@ -55,7 +55,7 @@ context('Incident Statement', () => {
         expect($errors.get(0).innerText).to.contain('Select yes if you have completed your statement')
       })
   })
-  it('should redirect the user to /check-your-answers if statement is complete', () => {
+  it.skip('should redirect the user to /check-your-answers if statement is complete', () => {
     cy.visit(`/incident-statement`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().type('This is my statement')
@@ -63,7 +63,7 @@ context('Incident Statement', () => {
     incidentStatementPage.submitButton().click()
     cy.url().should('include', 'check-your-answers')
   })
-  it('should redirect the user to /place-a-prisoner-on-report if statement is incomplete', () => {
+  it.skip('should redirect the user to /place-a-prisoner-on-report if statement is incomplete', () => {
     cy.visit(`/incident-statement`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().type('This is my statement, it is not finished.')

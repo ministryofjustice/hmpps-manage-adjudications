@@ -50,6 +50,7 @@ export default class IncidentStatementRoutes {
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
+      res.locals.redirectUrl = '/incident-statement'
       throw postError
     }
   }

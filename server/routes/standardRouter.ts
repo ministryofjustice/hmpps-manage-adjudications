@@ -19,6 +19,8 @@ export default function standardRouter(userService: UserService): Router {
   }
 
   router.use((req, res, next) => {
+    if (req.query?.journeyStartUrl) req.session.journeyStartUrl = req.query.journeyStartUrl
+
     if (typeof req.csrfToken === 'function') {
       res.locals.csrfToken = req.csrfToken()
     }
