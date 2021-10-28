@@ -4,11 +4,17 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
+const postDraftIncidentStatement = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
     return { getPrisonerImage, getPrisonerDetails }
+  })
+})
+jest.mock('../data/manageAdjudicationsClient', () => {
+  return jest.fn().mockImplementation(() => {
+    return { postDraftIncidentStatement }
   })
 })
 
@@ -18,6 +24,14 @@ const token = 'some token'
 
 describe('placeOnReportService', () => {
   let service: PlaceOnReportService
+
+  const user = {
+    activeCaseLoadId: 'MDI',
+    name: 'User',
+    username: 'user1',
+    token: 'token-1',
+    authSource: 'auth',
+  }
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
@@ -33,13 +47,7 @@ describe('placeOnReportService', () => {
     it('uses prison api to request image data', async () => {
       getPrisonerImage.mockResolvedValue('image data')
 
-      const result = await service.getPrisonerImage('A1234AA', {
-        activeCaseLoadId: 'MDI',
-        name: 'User',
-        username: 'user1',
-        token: 'token-1',
-        authSource: 'auth',
-      })
+      const result = await service.getPrisonerImage('A1234AA', user)
 
       expect(result).toEqual('image data')
       expect(PrisonApiClient).toBeCalledWith(token)
@@ -57,13 +65,7 @@ describe('placeOnReportService', () => {
         categoryCode: 'C',
       })
 
-      const result = await service.getPrisonerDetails('A1234AA', {
-        activeCaseLoadId: 'MDI',
-        name: 'User',
-        username: 'user1',
-        token: 'token-1',
-        authSource: 'auth',
-      })
+      const result = await service.getPrisonerDetails('A1234AA', user)
 
       expect(result).toEqual({
         assignedLivingUnit: { description: '1-2-015' },
@@ -77,6 +79,44 @@ describe('placeOnReportService', () => {
       })
       expect(PrisonApiClient).toBeCalledWith(token)
       expect(getPrisonerDetails).toBeCalledWith('A1234AA')
+    })
+  })
+
+  describe('postDraftIncidentStatement', () => {
+    beforeEach(() => {
+      postDraftIncidentStatement.mockResolvedValue({
+        draftAdjudication: {
+          id: 4,
+          prisonerNumber: 'A12345',
+          adjudicationSent: false,
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2020-12-10T10:00:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+          },
+        },
+      })
+    })
+    it('makes the api call and returns data', async () => {
+      const response = await service.postDraftIncidentStatement(4, 'This is a statement', user)
+
+      expect(postDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement' })
+      expect(response).toStrictEqual({
+        draftAdjudication: {
+          id: 4,
+          prisonerNumber: 'A12345',
+          adjudicationSent: false,
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2020-12-10T10:00:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+          },
+        },
+      })
     })
   })
 })
