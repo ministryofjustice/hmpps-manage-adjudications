@@ -22,7 +22,7 @@
     {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
-      attributes: { "data-test": "error-summary" }
+      attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
 
@@ -46,7 +46,7 @@
 						rows: '25',
 						classes: "govuk-!-width-three-quarters",
 						attributes: {
-							'data-test': "incident-statement-input"
+							'data-qa': "incident-statement-input"
 						},
 						errorMessage: errors | findError("incidentStatement")
 						}) }}
@@ -58,9 +58,10 @@
 							name: "incidentStatementComplete",
 							errorMessage: errors | findError("incidentStatementComplete"),
 							fieldset: {
-									legend: {
-											text: "Is the statement complete?"
-									}
+								attributes: { "data-qa": "incident-statement-radios" },
+								legend: {
+										text: "Is the statement complete?"
+								}
 							},
 							items: [
 								{
@@ -78,7 +79,7 @@
 							text: "Save and continue",
 							type: "submit",
 							classes: "govuk-button--submit",
-							attributes: { "data-test": "incident-report-submit" }
+							attributes: { "data-qa": "incident-statement-submit" }
 						}) }}
 				</form>
 			</div>
