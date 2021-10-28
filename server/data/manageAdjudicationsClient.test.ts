@@ -19,7 +19,7 @@ describe('manageAdjudicationsClient', () => {
     nock.cleanAll()
   })
 
-  describe('addDraftAdjudicationIncidentStatement', () => {
+  describe('postDraftIncidentStatement', () => {
     it('should return only the neccessary prisoner details', async () => {
       const result = {
         draftAdjudication: {
@@ -43,7 +43,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, result)
 
-      const response = await client.addDraftAdjudicationIncidentStatement(4, content)
+      const response = await client.postDraftIncidentStatement(4, content)
 
       expect(response).toEqual(result)
       expect(response.draftAdjudication.incidentStatement.statement).toEqual('test')

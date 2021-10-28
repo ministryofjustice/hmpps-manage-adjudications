@@ -53,20 +53,31 @@ describe('POST /incident-statement', () => {
       .expect('Location', '/check-your-answers')
   })
 
-  it('should redirect to the landing page if the statement is incomplete', () => {
+  it('should redirect to the task page if the statement is incomplete', () => {
     return request(app)
       .post('/incident-statement')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
       .expect('Location', '/place-a-prisoner-on-report')
   })
 
-  it('should render validation messages', () => {
+  it('should render error summary with correct validation message', () => {
     return request(app)
       .post('/incident-statement')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
         expect(res.text).toContain('Select yes if you have completed your statement')
+      })
+  })
+
+  it('should throw an error on api failure', () => {
+    placeOnReportService.postDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
+    return request(app)
+      .post('/incident-statement')
+      .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Error: error message content')
       })
   })
 })

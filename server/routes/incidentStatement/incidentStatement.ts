@@ -1,9 +1,9 @@
-import url from 'url'
 import { Request, Response } from 'express'
 import validateForm from './incidentStatementValidation'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
+import logger from '../../../logger'
 
 type PageData = {
   error?: FormError
@@ -33,17 +33,24 @@ export default class IncidentStatementRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
+    const { user } = res.locals
+
+    // const { draftAdjudicationId } = req.session
+    const draftAdjudicationId = 0 // fix until we can get hold of the id
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
-
     if (error) return this.renderView(req, res, { error })
 
-    const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
+    const statementComplete = incidentStatementComplete === 'yes'
 
-    return res.redirect(
-      url.format({
-        pathname,
-      })
-    )
+    const pathname = statementComplete ? '/check-your-answers' : '/place-a-prisoner-on-report'
+
+    try {
+      await this.placeOnReportService.postDraftIncidentStatement(draftAdjudicationId, incidentStatement, user)
+      return res.redirect(pathname)
+    } catch (postError) {
+      logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
+      throw postError
+    }
   }
 }

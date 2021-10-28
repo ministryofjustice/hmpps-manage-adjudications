@@ -2,9 +2,11 @@ import { Readable } from 'stream'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
+import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
 import convertToTitleCase from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
+import DraftIncidentStatementResult from '../data/IncidentStatementResult'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -34,5 +36,17 @@ export default class PlaceOnReportService {
     }
 
     return enhancedResult
+  }
+
+  async postDraftIncidentStatement(
+    id: number,
+    incidentStatement: string,
+    user: User
+  ): Promise<DraftIncidentStatementResult> {
+    const client = new ManageAdjudicationsClient(user.token)
+    const requestBody = {
+      statement: incidentStatement,
+    }
+    return client.postDraftIncidentStatement(id, requestBody)
   }
 }
