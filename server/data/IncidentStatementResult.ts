@@ -9,19 +9,15 @@ type IncidentStatement = {
   statement: number
 }
 
-export default class DraftIncidentStatement {
-  @Expose()
+type DraftIncidentStatement = {
   id: number
-
-  @Expose()
   prisonerNumber: string
-
-  @Expose()
   adjudicationSent: boolean
-
-  @Expose()
   incidentDetails: IncidentDetails
-
-  @Expose()
   incidentStatement: IncidentStatement
+}
+
+export default class DraftIncidentStatementResult {
+  @Expose()
+  draftAdjudication: DraftIncidentStatement
 }
