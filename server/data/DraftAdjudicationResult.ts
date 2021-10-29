@@ -10,7 +10,6 @@ export type IncidentStatement = {
 export type DraftAdjudication = {
   id: number
   prisonerNumber: string
-  adjudicationSent: boolean
   incidentDetails: IncidentDetails
   incidentStatement: IncidentStatement
 }
