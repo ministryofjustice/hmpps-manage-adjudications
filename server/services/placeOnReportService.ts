@@ -38,21 +38,6 @@ export default class PlaceOnReportService {
     return enhancedResult
   }
 
-  async startNewDraftAdjudication(
-    dateTimeOfIncident: string,
-    locationId: number,
-    prisonerNumber: string,
-    user: User
-  ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user.token)
-    const requestBody = {
-      dateTimeOfIncident,
-      locationId,
-      prisonerNumber,
-    }
-    return client.startNewAdjudication(requestBody)
-  }
-
   async postDraftIncidentStatement(
     id: number,
     incidentStatement: string,
