@@ -6,7 +6,7 @@ const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/prison/health/ping',
+      urlPattern: '/prisonApi/health/ping',
     },
     response: {
       status,
