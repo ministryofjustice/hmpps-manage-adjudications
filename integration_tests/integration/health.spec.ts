@@ -25,16 +25,17 @@ context('Health check', () => {
       cy.task('stubAdjudicationsPing', 500)
     })
 
-    it('Health check page is visible', () => {
+    it('Health check page is visible and returning unhealthy', () => {
       cy.request({ url: '/health', method: 'GET', failOnStatusCode: false }).its('body.healthy').should('equal', false)
     })
 
-    it('All dependant APIs are healthy', () => {
+    it('All dependant APIs are unhealthy', () => {
       cy.request({ url: '/health', method: 'GET', failOnStatusCode: false }).then(response => {
         expect(response.body.checks.hmppsAuth.status).to.eq(500)
         expect(response.body.checks.prisonerSearch.status).to.eq(500)
         expect(response.body.checks.tokenVerification.status).to.eq(500)
         expect(response.body.checks.adjudications.status).to.eq(500)
+        expect(response.body.checks.prisonApi.status).to.eq(500)
       })
     })
   })
