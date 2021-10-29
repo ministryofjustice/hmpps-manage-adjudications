@@ -1,25 +1,28 @@
 context('Health check', () => {
-  beforeEach(() => {
-    cy.task('reset')
-    cy.task('stubAuthPing')
-    cy.task('stubTokenVerificationPing')
+  describe('Healthy', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubAuthPing')
+      cy.task('stubPrisonerSearchPing')
+      cy.task('stubPrisonPing')
+      cy.task('stubAdjudicationsPing')
+    })
+    it('Health check page is visible', () => {
+      cy.request('/health').its('body.healthy').should('equal', true)
+    })
+
+    it('Ping is visible and UP', () => {
+      cy.request('/ping').its('body.status').should('equal', 'UP')
+    })
   })
 
-  it('Health check page is visible', () => {
-    cy.request('/health').its('body.healthy').should('equal', true)
-  })
-
-  it('Ping is visible and UP', () => {
-    cy.request('/ping').its('body.status').should('equal', 'UP')
-  })
-
-  context('Unhealthy', () => {
+  describe('Unhealthy', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubAuthPing', 500)
       cy.task('stubPrisonerSearchPing', 500)
       cy.task('stubPrisonApiPing', 500)
-      cy.task('stubAdjudicationsApiPing', 500)
+      cy.task('stubAdjudicationsPing', 500)
     })
 
     it('Health check page is visible', () => {

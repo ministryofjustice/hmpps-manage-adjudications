@@ -1,8 +1,7 @@
 import { resetStubs } from '../mockApis/wiremock'
-import prisonApi from '../mockApis/prisonApi'
+import prisonApi from '../mockApis/prison'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 import auth from '../mockApis/auth'
-import tokenVerification from '../mockApis/tokenVerification'
 import prisonerSearch from '../mockApis/prisonerSearch'
 import adjudications from '../mockApis/adjudications'
 
@@ -16,10 +15,9 @@ export default (on: (string, Record) => void): void => {
     stubAuthUser: auth.stubUser,
 
     stubAuthPing: status => auth.stubPing(status),
-    stubTokenVerificationPing: status => tokenVerification.stubPing(status),
     stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
-    stubPrisonApiPing: status => prisonApi.stubPing(status),
-    stubAdjudications: status => adjudications.stubPing(status),
+    stubPrisonPing: status => prisonApi.stubPing(status),
+    stubAdjudicationsPing: status => adjudications.stubPing(status),
     stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
   })
 }

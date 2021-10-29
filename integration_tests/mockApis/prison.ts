@@ -2,11 +2,11 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 
-const stubPing = (status = 200) =>
+const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/prisonApi/health/ping',
+      urlPattern: '/prison/health/ping',
     },
     response: {
       status,

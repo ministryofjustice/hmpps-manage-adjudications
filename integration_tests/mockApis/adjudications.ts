@@ -1,10 +1,11 @@
+import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 
-const stubPing = (status = 200) =>
+const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/search/health/ping',
+      urlPattern: '/adjudications/health/ping',
     },
     response: {
       status,

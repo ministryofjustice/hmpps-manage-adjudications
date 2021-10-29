@@ -36,14 +36,14 @@ const favicon = () =>
     },
   })
 
-const ping = (status: number) =>
+const ping = (status = 200) =>
   stubFor({
     request: {
       method: 'GET',
       urlPattern: '/auth/health/ping',
     },
     response: {
-      status: 200,
+      status,
     },
   })
 
