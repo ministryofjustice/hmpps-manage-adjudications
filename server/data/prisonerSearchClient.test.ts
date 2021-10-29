@@ -16,7 +16,8 @@ describe('prisonerSearchClient', () => {
   afterEach(() => {
     nock.cleanAll()
   })
-  describe('qqRP', () => {
+
+  describe('search', () => {
     it('search by prisoner identifier', async () => {
       const results: unknown[] = []
       fakePrisonerSearchApi
@@ -58,7 +59,9 @@ describe('prisonerSearchClient', () => {
 
       expect(output).toEqual(results)
     })
+  })
 
+  describe('response', () => {
     it('parses response correctly', async () => {
       const response = [
         {
