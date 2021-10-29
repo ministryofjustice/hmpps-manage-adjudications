@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { Response } from 'superagent'
+import { Response, SuperAgentRequest } from 'superagent'
 
 import { stubFor, getRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
@@ -36,7 +36,7 @@ const favicon = () =>
     },
   })
 
-const stubPing = (status = 200) =>
+const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
