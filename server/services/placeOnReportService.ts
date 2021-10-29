@@ -6,7 +6,7 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
 import convertToTitleCase from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
-import DraftIncidentStatementResult from '../data/IncidentStatementResult'
+import { DraftAdjudicationResult } from '../data/DraftAdjudicationResult'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -42,7 +42,7 @@ export default class PlaceOnReportService {
     id: number,
     incidentStatement: string,
     user: User
-  ): Promise<DraftIncidentStatementResult> {
+  ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       statement: incidentStatement,

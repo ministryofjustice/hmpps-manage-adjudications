@@ -25,7 +25,6 @@ describe('manageAdjudicationsClient', () => {
         draftAdjudication: {
           id: 4,
           prisonerNumber: 'A12345',
-          adjudicationSent: false,
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-10T10:00:00',
