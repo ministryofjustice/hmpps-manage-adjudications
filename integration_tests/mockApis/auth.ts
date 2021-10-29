@@ -36,7 +36,7 @@ const favicon = () =>
     },
   })
 
-const ping = () =>
+const ping = (status: number) =>
   stubFor({
     request: {
       method: 'GET',
@@ -138,7 +138,8 @@ const stubUserRoles = () =>
 
 export default {
   getSignInUrl,
-  stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
+  stubPing: (status = 200): Promise<[Response, Response]> =>
+    Promise.all([ping(status), tokenVerification.stubPing(status)]),
   stubSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(), tokenVerification.stubVerifyToken()]),
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),

@@ -3,6 +3,8 @@ import prisonApi from '../mockApis/prisonApi'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
+import prisonerSearch from '../mockApis/prisonerSearch'
+import adjudications from '../mockApis/adjudications'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -12,10 +14,12 @@ export default (on: (string, Record) => void): void => {
     stubSignIn: (caseLoads: CaseLoad[]) => Promise.all([auth.stubSignIn(), prisonApi.stubUserCaseloads(caseLoads)]),
 
     stubAuthUser: auth.stubUser,
-    stubAuthPing: auth.stubPing,
 
-    stubTokenVerificationPing: tokenVerification.stubPing,
-
+    stubAuthPing: status => auth.stubPing(status),
+    stubTokenVerificationPing: status => tokenVerification.stubPing(status),
+    stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
+    stubPrisonApiPing: status => prisonApi.stubPing(status),
+    stubAdjudications: status => adjudications.stubPing(status),
     stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
   })
 }
