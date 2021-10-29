@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { Response } from 'superagent'
+import { Response, SuperAgentRequest } from 'superagent'
 
 import { stubFor, getRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
@@ -36,14 +36,14 @@ const favicon = () =>
     },
   })
 
-const ping = () =>
+const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
       urlPattern: '/auth/health/ping',
     },
     response: {
-      status: 200,
+      status,
     },
   })
 
@@ -138,7 +138,7 @@ const stubUserRoles = () =>
 
 export default {
   getSignInUrl,
-  stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
+  stubPing,
   stubSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(), tokenVerification.stubVerifyToken()]),
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),
