@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer'
+import { Expose } from 'class-transformer'
 
 export default class PrisonerSearchResult {
   @Expose()
@@ -18,43 +18,4 @@ export default class PrisonerSearchResult {
 
   @Expose()
   cellLocation: string
-
-  @Expose()
-  pncNumber: string
-
-  @Expose()
-  croNumber: string
-
-  @Type(() => Date)
-  @Expose()
-  dateOfBirth: Date
-
-  @Expose()
-  mostSeriousOffence: string
-
-  @Expose()
-  category: string
-
-  @Expose()
-  nationality: string
-
-  @Type(() => Date)
-  @Expose()
-  sentenceExpiryDate: Date
-
-  @Type(() => Date)
-  @Expose()
-  licenceExpiryDate: Date
-
-  @Type(() => Date)
-  @Expose()
-  paroleEligibilityDate: Date
-
-  @Type(() => Date)
-  @Expose()
-  homeDetentionCurfewEligibilityDate: Date
-
-  @Type(() => Date)
-  @Expose()
-  releaseDate: Date
 }
