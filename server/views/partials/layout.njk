@@ -19,7 +19,7 @@
 
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}} - {{applicationName}} - Digital Prison Services{% endblock %}
 
 {% block header %}
   {% include "./header.njk" %}
