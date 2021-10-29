@@ -36,7 +36,7 @@ export default class IncidentStatementRoutes {
     const { user } = res.locals
 
     // const { draftAdjudicationId } = req.session
-    const draftAdjudicationId = 0 // fix until we can get hold of the id
+    const draftAdjudicationId = 1 // fix until we can get hold of the id
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error })

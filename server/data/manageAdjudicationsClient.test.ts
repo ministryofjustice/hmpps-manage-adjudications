@@ -19,6 +19,38 @@ describe('manageAdjudicationsClient', () => {
     nock.cleanAll()
   })
 
+  describe('startNewDraftAdjudication', () => {
+    it('should return the new draft adjudication', async () => {
+      const result = {
+        draftAdjudication: {
+          id: 1,
+          prisonerNumber: 'G2996UX',
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          },
+        },
+      }
+      const details = {
+        locationId: 2,
+        dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        prisonerNumber: 'G2996UX',
+      }
+
+      fakeManageAdjudicationsApi
+        .post('/draft-adjudications', details)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.startNewDraftAdjudication(details)
+
+      expect(response).toEqual(result)
+      expect(response.draftAdjudication.prisonerNumber).toEqual('G2996UX')
+      expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-10-28T15:40:25.884')
+      expect(response.draftAdjudication.incidentDetails.locationId).toEqual(2)
+    })
+  })
+
   describe('postDraftIncidentStatement', () => {
     it('should return only the neccessary prisoner details', async () => {
       const result = {

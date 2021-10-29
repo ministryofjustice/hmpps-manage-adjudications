@@ -1,0 +1,63 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "../macros/timeInput.njk" import timeInput %}
+
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Incident details" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+	{% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+
+			<div class="prisonerPlaybackSection">
+				{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+			</div>
+
+			<div>
+				<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+					<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+            {{ datePicker({
+                id: 'incidentDate',
+                label: 'Date of incident',
+                name: 'incidentDate',
+                date: formValues.incidentDate,
+                errorMessage: errors | findError('incidentDate'),
+								attributes: {'data-disable-future-date':'true'}
+            }) }}
+
+						{{ 
+							timeInput({
+								id: 'incidentTime',
+                legend: 'Time of incident',
+                name: 'incidentTime',
+								hint: 'Use the 24 hour clock. For example, 09 08 or 17 32.',
+                errorMessage: errors | findError('incidentTime')
+							})
+						}}
+
+				</form>
+			</div>
+
+
+{% endblock %}

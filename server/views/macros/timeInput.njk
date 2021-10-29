@@ -1,0 +1,48 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{%  macro timeInput(params) %}
+	{% call govukFieldset({
+		legend: {
+			text: params.legend,
+			classes: "",
+			isPageHeading: false
+		}
+	}) %}
+
+		<div id="timeInput-hint" class="govuk-hint">
+			{{ params.hint }}
+		</div>
+
+		<div class="govuk-date-input" id="timeInput-formGroup-container">
+			<div class="govuk-date-input__item">
+				{{ govukInput({
+					label: {
+						text: "Hours"
+					},
+					classes: "govuk-date-input__input govuk-input--width-2",
+					id: params.id + '-hours',
+					name: params.id + '-hours',
+					formGroup: {
+						classes: "incidentTime"
+					}
+				}) }}
+			</div>
+
+			<div class="govuk-date-input__item">
+				{{ govukInput({
+					label: {
+						html: 'Minutes'
+					},
+					id: params.id + '-mins',
+					name: params.id + '-mins',
+					classes: "govuk-date-input__input govuk-input--width-2",
+					formGroup: {
+						classes: "incidentTime"
+					}
+				}) }} 
+			</div>
+		</div>
+
+	{% endcall %}
+{%  endmacro %}

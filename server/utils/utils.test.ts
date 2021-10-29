@@ -1,4 +1,4 @@
-import convertToTitleCase from './utils'
+import { convertToTitleCase, formatLocation } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -27,5 +27,20 @@ describe('Convert to title case', () => {
   })
   it('Hyphenated', () => {
     expect(convertToTitleCase('Robert-John SmiTH-jONes-WILSON')).toEqual('Robert-John Smith-Jones-Wilson')
+  })
+})
+
+describe('formatLocation()', () => {
+  it('should cope with undefined', () => {
+    expect(formatLocation(undefined)).toEqual(undefined)
+  })
+  it('should cope with null', () => {
+    expect(formatLocation(null)).toEqual(undefined)
+  })
+  it('should preserve normal location names', () => {
+    expect(formatLocation('A1234BC')).toEqual('A1234BC')
+  })
+  it('should convert CSWAP', () => {
+    expect(formatLocation('CSWAP')).not.toEqual('CSWAP')
   })
 })

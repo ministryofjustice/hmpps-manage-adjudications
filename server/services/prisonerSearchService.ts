@@ -4,7 +4,7 @@ import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchResult from '../data/prisonerSearchResult'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import convertToTitleCase from '../utils/utils'
+import { convertToTitleCase } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
