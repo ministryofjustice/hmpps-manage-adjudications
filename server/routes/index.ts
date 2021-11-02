@@ -9,8 +9,8 @@ import prisonerSearchRoutes from './prisonerSearch'
 
 import { Services } from '../services'
 
-export default function routes(router: Router, { placeOnReportService }: Services): Router {
-  router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService }))
+export default function routes(router: Router, { placeOnReportService, locationService }: Services): Router {
+  router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService }))
   router.use('/place-a-prisoner-on-report', taskListRoutes())

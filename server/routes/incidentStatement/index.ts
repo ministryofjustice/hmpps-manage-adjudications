@@ -17,8 +17,8 @@ export default function prisonerIncidentStatementsRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/', incidentStatement.view)
-  post('/', incidentStatement.submit)
+  get('/:prisonerNumber/:id', incidentStatement.view)
+  post('/:prisonerNumber/:id', incidentStatement.submit)
 
   return router
 }

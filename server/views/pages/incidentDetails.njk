@@ -4,9 +4,13 @@
 {% from "../macros/datePicker.njk" import datePicker %}
 {% from "../macros/timeInput.njk" import timeInput %}
 
-
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set isDateError = errors | isErrorPresent(['incidentDate[date]'])  %}
+{% set isHourError = errors | isErrorPresent(['incidentDate[time][hour]', 'incidentDate[time]'])  %}
+{% set isMinuteError = errors | isErrorPresent(['incidentDate[time][minute]', 'incidentDate[time]'])  %}
 
 {% set title = "Incident details" %}
 
@@ -38,24 +42,56 @@
 					<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
             {{ datePicker({
-                id: 'incidentDate',
+                id: 'incidentDate[date]',
                 label: 'Date of incident',
-                name: 'incidentDate',
-                date: formValues.incidentDate,
-                errorMessage: errors | findError('incidentDate'),
-								attributes: {'data-disable-future-date':'true'}
+                name: 'incidentDate[date]',
+                date: data.incidentDate.date,
+          			errorMessage: errors | findErrors(['incidentDate[date]']),
+								attributes: {'data-disable-future-date':'true'},
+								classes: 'govuk-input--width-10'
             }) }}
 
 						{{ 
 							timeInput({
-								id: 'incidentTime',
+								errorMessage: errors | concatErrors(["incidentDate[time][hour]", "incidentDate[time][minute]", "incidentDate[time]"]),
                 legend: 'Time of incident',
-                name: 'incidentTime',
 								hint: 'Use the 24 hour clock. For example, 09 08 or 17 32.',
-                errorMessage: errors | findError('incidentTime')
+								hour:  {
+									name: 'incidentDate[time][hour]',
+									id: 'incidentDate[time][hour]',
+									value: data.incidentDate.hour,
+									classes: ('govuk-input--error' if isHourError)
+            		},
+          			minutes:  {
+									name: 'incidentDate[time][minute]',
+									id: 'incidentDate[time][minute]',
+									value: data.incidentDate.minute,
+									classes: ('govuk-input--error' if isMinuteError)
+              	}
 							})
 						}}
 
+						{{
+        			govukSelect({
+								id: 'locationId',
+								name: 'locationId',
+								label: {
+									text: 'Location of incident',
+									isPageHeading: false,
+									classes: ''
+								},
+          			items: locations | toSelect('locationId', 'userDescription', data.locationId ),
+								classes: '',
+								errorMessage: errors | findError('locationId')
+							})
+						}}
+
+						{{ govukButton({
+							text: "Save and continue",
+							type: "submit",
+							classes: "govuk-button--submit",
+							attributes: { "data-qa": "incident-statement-submit" }
+						}) }}
 				</form>
 			</div>
 

@@ -1,3 +1,5 @@
+import { SubmittedDateTime } from '../@types/template'
+
 export const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -20,7 +22,23 @@ export const formatLocation = (locationName: string): string => {
   return locationName
 }
 
+export const formatDateToISOString = (userSubmittedDateTime: SubmittedDateTime): string => {
+  try {
+    const dateArray = userSubmittedDateTime.date.split('/')
+    return new Date(
+      Number(dateArray[2]),
+      Number(dateArray[1]) - 1,
+      Number(dateArray[0]),
+      Number(userSubmittedDateTime.time.hour),
+      Number(userSubmittedDateTime.time.minute)
+    ).toISOString()
+  } catch {
+    return null
+  }
+}
+
 export default {
   convertToTitleCase,
   formatLocation,
+  formatDateToISOString,
 }

@@ -2,6 +2,7 @@
 import nunjucks from 'nunjucks'
 import express from 'express'
 import * as pathModule from 'path'
+import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
 
@@ -56,6 +57,46 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       }
     }
     return null
+  })
+
+  njkEnv.addFilter('findErrors', (errors: FormError[], formFieldIds: string[]) => {
+    const fieldIds = formFieldIds.map(field => `#${field}`)
+    const errorIds = errors.map(error => error.href)
+    const firstPresentFieldError = fieldIds.find(fieldId => errorIds.includes(fieldId))
+    if (firstPresentFieldError) {
+      return { text: errors.find(error => error.href === firstPresentFieldError).text }
+    }
+    return null
+  })
+
+  njkEnv.addFilter('toSelect', (array, valueKey, textKey, value) => {
+    const emptyOption = {
+      value: '',
+      text: 'Select',
+      selected: value === '',
+    }
+    const items = array.map((item: Record<string, unknown>) => ({
+      value: item[valueKey],
+      text: item[textKey],
+      selected: item[valueKey] === Number(value),
+    }))
+    return [emptyOption, ...items]
+  })
+
+  njkEnv.addFilter('concatErrors', (errors: FormError[], formFieldIds: string[]) => {
+    const fieldIds = formFieldIds.map(field => `#${field}`)
+    const foundErrors = errors.filter(error => fieldIds.includes(error.href))
+    if (foundErrors.length === 0) {
+      return null
+    }
+    const errorMessages = foundErrors.map(error => escapeHtml(error.text)).join('<br/>')
+    return { html: errorMessages }
+  })
+
+  njkEnv.addFilter('isErrorPresent', (errors: FormError[], formFieldIds: string[]) => {
+    const fieldIds = formFieldIds.map(field => `#${field}`)
+    const foundErrors = errors.filter(error => fieldIds.includes(error.href))
+    return foundErrors.length !== 0
   })
 
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)

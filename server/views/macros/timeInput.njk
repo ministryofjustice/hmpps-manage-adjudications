@@ -2,10 +2,11 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {%  macro timeInput(params) %}
+<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error {% endif %}">
 	{% call govukFieldset({
+		role: 'group',
 		legend: {
 			text: params.legend,
-			classes: "",
 			isPageHeading: false
 		}
 	}) %}
@@ -14,35 +15,37 @@
 			{{ params.hint }}
 		</div>
 
-		<div class="govuk-date-input" id="timeInput-formGroup-container">
-			<div class="govuk-date-input__item">
-				{{ govukInput({
-					label: {
-						text: "Hours"
-					},
-					classes: "govuk-date-input__input govuk-input--width-2",
-					id: params.id + '-hours',
-					name: params.id + '-hours',
-					formGroup: {
-						classes: "incidentTime"
-					}
-				}) }}
-			</div>
-
-			<div class="govuk-date-input__item">
-				{{ govukInput({
-					label: {
-						html: 'Minutes'
-					},
-					id: params.id + '-mins',
-					name: params.id + '-mins',
-					classes: "govuk-date-input__input govuk-input--width-2",
-					formGroup: {
-						classes: "incidentTime"
-					}
-				}) }} 
+		<div class="govuk-date-input" id="incidentTime">
+			<div class="govuk-date-input__item flex-container">
+				<div id="incidentDate[time]" class="govuk-!-margin-right-4">
+					{{ govukInput({
+						label: {
+							text: "Hours",
+							classes: 'govuk-date-input__label'
+						},
+						classes: 'govuk-date-input__input govuk-input--width-2 ' + params.hour.classes,
+						id: params.hour.id,
+						name: params.hour.name,
+						value: params.hour.value,
+						attributes: { 'data-qa': 'incident-date-hour' }
+					}) }}
+				</div>
+          <div id="incidentDate[time]" class="govuk-!-margin-right-4">
+					{{ govukInput({
+						label: {
+							text: "Minutes",
+							classes: 'govuk-date-input__label'
+						},
+						classes: 'govuk-date-input__input govuk-input--width-2 ' + params.minutes.classes,
+						id: params.minutes.id,
+						name: params.minutes.name,
+						value: params.minutes.value,
+						attributes: { 'data-qa': 'incident-date-minutes' }
+					}) }}
+				</div>
 			</div>
 		</div>
 
 	{% endcall %}
+	</div>
 {%  endmacro %}
