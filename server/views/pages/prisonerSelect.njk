@@ -35,7 +35,7 @@
       <a href="{{ pshUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
-      <a href="/incident-details/{{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="prisoner-move-to-hospital-link"><span class="govuk-visually-hidden">{{ prisoner.displayName }} - </span>Start a report</a>
+      <a href="/incident-details/{{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="start-report-link"><span class="govuk-visually-hidden">{{ prisoner.displayName }} - </span>Start a report</a>
     {% endset -%}
     {% set rows = (rows.push([
       { html: prisonerImageHtml },

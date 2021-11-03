@@ -67,7 +67,7 @@ function appSetup(route: Router, production: boolean): Express {
 
   app.use((req, res, next) => {
     res.locals = {}
-    res.locals.user = req.user
+    res.locals.user = user
     next()
   })
 
@@ -86,6 +86,7 @@ export default function appWithAllRoutes(
   overrides: Partial<Services> = {}
 ): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
+
   return appSetup(
     allRoutes(standardRouter(new MockUserService()), {
       userService: new MockUserService(),
