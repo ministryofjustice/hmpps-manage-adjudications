@@ -1,11 +1,4 @@
-interface Agency {
-  agencyId: string
-  description: string
-  agencyType: string
-  active: boolean
-}
-
-interface Location {
+export type PrisonLocation = {
   locationId: number
   locationType: string
   description: string
@@ -19,6 +12,11 @@ interface Location {
   internalLocationCode: string
 }
 
-export type PrisonLocation = Location
 export type AgencyId = string
-export type Prison = Agency
+
+export type Prison = {
+  agencyId: string
+  description: string
+  agencyType: string
+  active: boolean
+}

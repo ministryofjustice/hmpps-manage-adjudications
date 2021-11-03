@@ -6,7 +6,7 @@ import IncidentDetailsRoutes from './incidentDetails'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 
-export default function prisonerIncidentStatementsRoutes({
+export default function prisonerIncidentDetailsRoutes({
   placeOnReportService,
   locationService,
 }: {
