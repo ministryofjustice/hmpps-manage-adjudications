@@ -1,15 +1,15 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
-{%  macro timeInput(params) %}
-<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error {% endif %}">
-	{% call govukFieldset({
-		role: 'group',
-		legend: {
-			text: params.legend,
-			isPageHeading: false
-		}
-	}) %}
+{% macro timeInput(params) %}
+	<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error {% endif %}">
+		{% call govukFieldset({
+			role: 'group',
+			legend: {
+				text: params.legend,
+				isPageHeading: false
+			}
+		}) %}
 
 		<div id="timeInput-hint" class="govuk-hint">
 			{{ params.hint }}
@@ -30,7 +30,7 @@
 						attributes: { 'data-qa': 'incident-date-hour' }
 					}) }}
 				</div>
-          <div id="incidentDate[time]" class="govuk-!-margin-right-4">
+				<div id="incidentDate[time]" class="govuk-!-margin-right-4">
 					{{ govukInput({
 						label: {
 							text: "Minutes",
@@ -46,6 +46,6 @@
 			</div>
 		</div>
 
-	{% endcall %}
+		{% endcall %}
 	</div>
-{%  endmacro %}
+{% endmacro %}

@@ -10,33 +10,33 @@
 {% set title = "Incident statement" %}
 
 {% block pageTitle %}
-  {{ title }}
+	{{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+	{{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
 	{% if errors | length %}
-    {{ govukErrorSummary({
+		{{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-  {% endif %}
+	{% endif %}
 
-      <h1 class="govuk-heading-l">{{ title }}</h1>
+	<h1 class="govuk-heading-l">{{ title }}</h1>
 
-			<div class="prisonerPlaybackSection">
-				{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
-			</div>
+	<div class="prisonerPlaybackSection">
+		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+	</div>
 
-			<div>
-				<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-					<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+	<div>
+		<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-					{{ govukTextarea({
+			{{ govukTextarea({
 						name: "incidentStatement",
 						id: "incidentStatement",
 						label: {
@@ -51,7 +51,7 @@
 						errorMessage: errors | findError("incidentStatement")
 						}) }}
 
-						{{ govukRadios({
+			{{ govukRadios({
 							classes: "govuk-radios--inline",
 							idPrefix: "incidentStatementComplete",
 							id: "incidentStatementComplete",
@@ -75,14 +75,13 @@
 							]
 						}) }}
 
-						{{ govukButton({
+			{{ govukButton({
 							text: "Save and continue",
 							type: "submit",
 							classes: "govuk-button--submit",
 							attributes: { "data-qa": "incident-statement-submit" }
 						}) }}
-				</form>
-			</div>
-
+		</form>
+	</div>
 
 {% endblock %}
