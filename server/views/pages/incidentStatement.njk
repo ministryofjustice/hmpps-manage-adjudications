@@ -37,50 +37,50 @@
 			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
 			{{ govukTextarea({
-						name: "incidentStatement",
-						id: "incidentStatement",
-						label: {
-							text: "Write the full details of the alleged offence.",
-							classes: "govuk-!-margin-bottom-2"
-						},
-						rows: '25',
-						classes: "govuk-!-width-three-quarters",
-						attributes: {
-							'data-qa': "incident-statement-input"
-						},
-						errorMessage: errors | findError("incidentStatement")
-						}) }}
+				name: "incidentStatement",
+				id: "incidentStatement",
+				label: {
+					text: "Write the full details of the alleged offence.",
+					classes: "govuk-!-margin-bottom-2"
+				},
+				rows: '25',
+				classes: "govuk-!-width-three-quarters",
+				attributes: {
+					'data-qa': "incident-statement-input"
+				},
+				errorMessage: errors | findError("incidentStatement")
+				}) }}
 
 			{{ govukRadios({
-							classes: "govuk-radios--inline",
-							idPrefix: "incidentStatementComplete",
-							id: "incidentStatementComplete",
-							name: "incidentStatementComplete",
-							errorMessage: errors | findError("incidentStatementComplete"),
-							fieldset: {
-								attributes: { "data-qa": "incident-statement-radios" },
-								legend: {
-										text: "Is the statement complete?"
-								}
-							},
-							items: [
-								{
-										value: "yes",
-										text: "Yes"
-								},
-								{
-										value: "no",
-										text: "No"
-								}
-							]
-						}) }}
+				classes: "govuk-radios--inline",
+				idPrefix: "incidentStatementComplete",
+				id: "incidentStatementComplete",
+				name: "incidentStatementComplete",
+				errorMessage: errors | findError("incidentStatementComplete"),
+				fieldset: {
+					attributes: { "data-qa": "incident-statement-radios" },
+					legend: {
+							text: "Is the statement complete?"
+					}
+				},
+				items: [
+					{
+							value: "yes",
+							text: "Yes"
+					},
+					{
+							value: "no",
+							text: "No"
+					}
+				]
+			}) }}
 
 			{{ govukButton({
-							text: "Save and continue",
-							type: "submit",
-							classes: "govuk-button--submit",
-							attributes: { "data-qa": "incident-statement-submit" }
-						}) }}
+				text: "Save and continue",
+				type: "submit",
+				classes: "govuk-button--submit",
+				attributes: { "data-qa": "incident-statement-submit" }
+			}) }}
 		</form>
 	</div>
 
