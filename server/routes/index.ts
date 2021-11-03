@@ -5,15 +5,17 @@ import checkYourAnswersRoutes from './checkYourAnswers'
 import taskListRoutes from './taskList'
 import prisonerRoutes from './prisonerRoutes'
 import prisonerSearchRoutes from './prisonerSearch'
+import prisonerSelectRoutes from './prisonerSelect'
 
 import { Services } from '../services'
 
-export default function routes(router: Router, { placeOnReportService }: Services): Router {
+export default function routes(router: Router, { placeOnReportService, prisonerSearchService }: Services): Router {
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService }))
   router.use('/place-a-prisoner-on-report', taskListRoutes())
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
   router.use('/search-for-prisoner', prisonerSearchRoutes())
+  router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
   router.get('/', (req, res, next) => res.render('pages/index'))
   return router
 }
