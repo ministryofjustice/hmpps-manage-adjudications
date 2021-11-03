@@ -23,6 +23,6 @@ export default (on: (string, Record) => void): void => {
     stubGetLocations: prisonApi.stubGetLocations,
 
     stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
-    stubPostDraftIncidentStatement: id => adjudications.stubPostDraftIncidentStatement(id),
+    stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
   })
 }

@@ -47,7 +47,7 @@
                 name: 'incidentDate[date]',
                 date: data.incidentDate.date,
           			errorMessage: errors | findErrors(['incidentDate[date]']),
-								attributes: {'data-disable-future-date':'true'},
+								attributes: {'data-disable-future-date':'true', 'data-qa': "incident-details-date" },
 								classes: 'govuk-input--width-10'
             }) }}
 
@@ -90,7 +90,7 @@
 							text: "Save and continue",
 							type: "submit",
 							classes: "govuk-button--submit",
-							attributes: { "data-qa": "incident-statement-submit" }
+							attributes: { "data-qa": "incident-details-submit" }
 						}) }}
 				</form>
 			</div>

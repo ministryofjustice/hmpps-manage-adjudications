@@ -65,7 +65,7 @@ const stubGetLocations = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/api/agencies/${agencyId}/locations?eventType=OCCUR`,
+      url: `/prisonApi/api/agencies/${agencyId}/locations?eventType=OCCUR`,
     },
     response: {
       status: 200,
