@@ -14,8 +14,8 @@ const stubPing = (status = 200): SuperAgentRequest =>
     },
   })
 
-const stubSearch = ({ query, results }): SuperAgentRequest => {
-  return stubFor({
+const stubSearch = ({ query, results }: Record<string, unknown>): SuperAgentRequest =>
+  stubFor({
     request: {
       method: 'POST',
       urlPattern: '/search/prisoner-search/match-prisoners',
@@ -29,7 +29,6 @@ const stubSearch = ({ query, results }): SuperAgentRequest => {
       jsonBody: results,
     },
   })
-}
 
 export default {
   stubPing,
