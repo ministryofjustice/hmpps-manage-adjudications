@@ -38,10 +38,9 @@ export default class IncidentStatementRoutes {
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error })
 
-    const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
-
     try {
       await this.placeOnReportService.postDraftIncidentStatement(Number(id), incidentStatement, user)
+      const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
