@@ -1,0 +1,63 @@
+import validateForm from './incidentDetailsValidation'
+
+describe('validateForm - incident statement', () => {
+  describe('Valid submit shows no errors', () => {
+    it('returns the expected response for a valid submit', () => {
+      expect(
+        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } }, locationId: 2343 })
+      ).toBeNull()
+    })
+  })
+  describe('incidentDate', () => {
+    it('shows error if a date is not selected', () => {
+      expect(validateForm({ incidentDate: { time: { hour: '12', minute: '23' } }, locationId: 2343 })).toEqual({
+        href: '#incidentDate[date]',
+        text: 'Enter date of incident',
+      })
+    })
+  })
+  describe('incidentTime', () => {
+    it('shows error if an hour is not submitted', () => {
+      expect(validateForm({ incidentDate: { date: '31/10/2021', time: { minute: '23' } }, locationId: 2343 })).toEqual({
+        href: '#incidentDate[time][hour]',
+        text: 'Enter time of incident',
+      })
+    })
+    it('shows error if an invalid hour is submitted', () => {
+      expect(
+        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } }, locationId: 2343 })
+      ).toEqual({
+        href: '#incidentDate[time][hour]',
+        text: 'Enter an hour which is 23 or less',
+      })
+    })
+    it('shows error if a minute is not submitted', () => {
+      expect(validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12' } }, locationId: 2343 })).toEqual({
+        href: '#incidentDate[time][minute]',
+        text: 'Enter time of incident',
+      })
+    })
+    it('shows error if an invalid minute is submitted', () => {
+      expect(
+        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } }, locationId: 2343 })
+      ).toEqual({
+        href: '#incidentDate[time][minute]',
+        text: 'Enter a minute which is 59 or less',
+      })
+    })
+    it('shows error if neither an hour or a minute is submitted', () => {
+      expect(validateForm({ incidentDate: { date: '31/10/2021', time: {} }, locationId: 2343 })).toEqual({
+        href: '#incidentDate[time]',
+        text: 'Enter time of incident',
+      })
+    })
+  })
+  describe('locationId', () => {
+    it('shows error if location is not selected', () => {
+      expect(validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } } })).toEqual({
+        href: '#locationId',
+        text: 'Select location of incident',
+      })
+    })
+  })
+})

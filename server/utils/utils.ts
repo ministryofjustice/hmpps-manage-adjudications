@@ -1,7 +1,17 @@
-const properCase = (word: string): string =>
+import moment from 'moment'
+import { SubmittedDateTime } from '../@types/template'
+
+type DateTimeInput = {
+  date: string
+  hours: string
+  minutes: string
+  dateFormat?: string
+}
+
+export const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
-const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
+export const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
 
 /**
  * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
@@ -9,9 +19,41 @@ const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
  * @param name name to be converted.
  * @returns name converted to proper case.
  */
-const properCaseName = (name: string): string => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
+export const properCaseName = (name: string): string => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
 
-const convertToTitleCase = (sentence: string): string =>
+export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
-export default convertToTitleCase
+export const formatLocation = (locationName: string): string => {
+  if (!locationName) return undefined
+  if (locationName.includes('CSWAP')) return 'No cell allocated'
+  return locationName
+}
+
+const buildDateTime = ({ date, hours, minutes, dateFormat = 'DD/MM/YYYY' }: DateTimeInput) => {
+  const time =
+    date &&
+    Number.isSafeInteger(Number.parseInt(hours, 10)) &&
+    Number.isSafeInteger(Number.parseInt(minutes, 10)) &&
+    moment(date, dateFormat)
+  return time ? time.hour(Number(hours)).minutes(Number(minutes)) : ''
+}
+
+export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => {
+  try {
+    const dateTime = buildDateTime({
+      date: userSubmittedDateTime.date,
+      hours: userSubmittedDateTime.time.hour,
+      minutes: userSubmittedDateTime.time.minute,
+    })
+    return moment(dateTime).format('YYYY-MM-DDTHH:mm')
+  } catch {
+    return null
+  }
+}
+
+export default {
+  convertToTitleCase,
+  formatLocation,
+  formatDate,
+}

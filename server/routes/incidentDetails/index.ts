@@ -1,24 +1,27 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
-import IncidentStatementRoutes from './incidentStatement'
+import IncidentDetailsRoutes from './incidentDetails'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
+import LocationService from '../../services/locationService'
 
-export default function prisonerIncidentStatementsRoutes({
+export default function prisonerIncidentDetailsRoutes({
   placeOnReportService,
+  locationService,
 }: {
   placeOnReportService: PlaceOnReportService
+  locationService: LocationService
 }): Router {
   const router = express.Router()
 
-  const incidentStatement = new IncidentStatementRoutes(placeOnReportService)
+  const incidentDetails = new IncidentDetailsRoutes(placeOnReportService, locationService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/:prisonerNumber/:id', incidentStatement.view)
-  post('/:prisonerNumber/:id', incidentStatement.submit)
+  get('/:prisonerNumber', incidentDetails.view)
+  post('/:prisonerNumber', incidentDetails.submit)
 
   return router
 }
