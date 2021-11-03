@@ -3,10 +3,6 @@
 
   &__image {
     width: 90px;
-
-    @media print {
-      width: 60px;
-    }
   }
 
   .govuk-table__header {

@@ -17,7 +17,7 @@
     {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
-      attributes: { "data-test": "error-summary" }
+      attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
 
@@ -80,7 +80,7 @@
     
   {% else %}
     {% if not errors | length %}
-      <p class="govuk-!-padding-top-3" data-test="no-results-message">There are no results for the details you have entered.</p>
+      <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
     {% endif %}
   {% endif %}
 {% endblock %}
