@@ -33,7 +33,7 @@ export default class IncidentStatementRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
     const { user } = res.locals
-    const { id } = req.params
+    const { id, prisonerNumber } = req.params
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error })
@@ -45,7 +45,7 @@ export default class IncidentStatementRoutes {
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = '/incident-statement'
+      res.locals.redirectUrl = `/incident-statement/${prisonerNumber}/${id}`
       throw postError
     }
   }

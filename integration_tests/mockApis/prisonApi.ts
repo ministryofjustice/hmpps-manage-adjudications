@@ -55,8 +55,28 @@ const stubGetPrisonerDetails = ({
     },
   })
 
+const stubGetLocations = ({
+  agencyId,
+  response = [],
+}: {
+  agencyId: string
+  response: Record<string, unknown>[]
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/api/agencies/${agencyId}/locations?eventType=OCCUR`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Sort-Fields': 'userDescription' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubUserCaseloads,
   stubGetPrisonerDetails,
+  stubGetLocations,
 }
