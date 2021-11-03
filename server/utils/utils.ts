@@ -1,4 +1,12 @@
+import moment from 'moment'
 import { SubmittedDateTime } from '../@types/template'
+
+type DateTimeInput = {
+  date: string
+  hours: string
+  minutes: string
+  dateFormat?: string
+}
 
 export const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -22,16 +30,23 @@ export const formatLocation = (locationName: string): string => {
   return locationName
 }
 
-export const formatDateToISOString = (userSubmittedDateTime: SubmittedDateTime): string => {
+const buildDateTime = ({ date, hours, minutes, dateFormat = 'DD/MM/YYYY' }: DateTimeInput) => {
+  const time =
+    date &&
+    Number.isSafeInteger(Number.parseInt(hours, 10)) &&
+    Number.isSafeInteger(Number.parseInt(minutes, 10)) &&
+    moment(date, dateFormat)
+  return time ? time.hour(Number(hours)).minutes(Number(minutes)) : ''
+}
+
+export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => {
   try {
-    const dateArray = userSubmittedDateTime.date.split('/')
-    return new Date(
-      Number(dateArray[2]),
-      Number(dateArray[1]) - 1,
-      Number(dateArray[0]),
-      Number(userSubmittedDateTime.time.hour),
-      Number(userSubmittedDateTime.time.minute)
-    ).toISOString()
+    const dateTime = buildDateTime({
+      date: userSubmittedDateTime.date,
+      hours: userSubmittedDateTime.time.hour,
+      minutes: userSubmittedDateTime.time.minute,
+    })
+    return moment(dateTime).format('YYYY-MM-DDTHH:mm')
   } catch {
     return null
   }
@@ -40,5 +55,5 @@ export const formatDateToISOString = (userSubmittedDateTime: SubmittedDateTime):
 export default {
   convertToTitleCase,
   formatLocation,
-  formatDateToISOString,
+  formatDate,
 }

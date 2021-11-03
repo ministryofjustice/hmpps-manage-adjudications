@@ -38,9 +38,7 @@ export default class IncidentStatementRoutes {
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error })
 
-    const statementComplete = incidentStatementComplete === 'yes'
-
-    const pathname = statementComplete ? '/check-your-answers' : '/place-a-prisoner-on-report'
+    const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
 
     try {
       await this.placeOnReportService.postDraftIncidentStatement(Number(id), incidentStatement, user)

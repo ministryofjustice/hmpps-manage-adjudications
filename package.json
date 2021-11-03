@@ -106,6 +106,7 @@
     "http-errors": "^1.8.0",
     "jquery": "^3.6.0",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "nocache": "^3.0.1",
     "nunjucks": "^3.2.3",
     "passport": "^0.5.0",

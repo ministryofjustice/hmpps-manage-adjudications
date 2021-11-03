@@ -4,7 +4,7 @@ import { FormError, SubmittedDateTime } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
-import { formatDateToISOString } from '../../utils/utils'
+import { formatDate } from '../../utils/utils'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -61,11 +61,9 @@ export default class IncidentDetailsRoutes {
     const error = validateForm({ incidentDate, locationId })
     if (error) return this.renderView(req, res, { error, incidentDate, locationId })
 
-    const dateTimeOfIncident = formatDateToISOString(incidentDate)
-
     try {
       const newAdjudication = await this.placeOnReportService.startNewDraftAdjudication(
-        dateTimeOfIncident,
+        formatDate(incidentDate),
         locationId,
         prisonerNumber,
         user

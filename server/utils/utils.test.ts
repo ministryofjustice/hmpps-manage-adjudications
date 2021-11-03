@@ -1,4 +1,4 @@
-import { convertToTitleCase, formatLocation, formatDateToISOString } from './utils'
+import { convertToTitleCase, formatLocation, formatDate } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -46,13 +46,11 @@ describe('formatLocation()', () => {
 })
 
 describe('formatDateToISOString', () => {
-  it('returns', () => {
-    expect(formatDateToISOString({ date: '27/10/2021', time: { hour: '13', minute: '30' } })).toEqual(
-      '2021-10-27T12:30:00.000Z'
-    )
+  it.only('returns', () => {
+    expect(formatDate({ date: '27/10/2021', time: { hour: '13', minute: '30' } })).toEqual('2021-10-27T13:30')
   })
   it('returns error message if any of the inputs are invalid', () => {
-    expect(formatDateToISOString({ date: '27/10/2021', time: { hour: 'we', minute: 'go' } })).toEqual(null)
-    expect(formatDateToISOString({ date: 'help', time: { hour: '23', minute: '11' } })).toEqual(null)
+    expect(formatDate({ date: '27/10/2021', time: { hour: 'we', minute: 'go' } })).toEqual(null)
+    expect(formatDate({ date: 'help', time: { hour: '23', minute: '11' } })).toEqual(null)
   })
 })
