@@ -27,4 +27,56 @@ context('Prisoner Search', () => {
         expect($errors.get(0).innerText).to.contain('Enter a name or prison number')
       })
   })
+
+  it('should show results for name search', () => {
+    cy.task('stubSearch', {
+      query: {
+        includeAliases: false,
+        lastName: 'Smith',
+        prisonIds: ['MDI'],
+      },
+      results: [
+        {
+          cellLocation: '1-2-015',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          prisonerNumber: 'A1234AA',
+          prisonName: 'HMP Moorland',
+        },
+      ],
+    })
+
+    cy.visit(`/search-for-prisoner`)
+    const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
+    prisonerSearchPage.searchTermInput().type('Smith')
+    prisonerSearchPage.submitButton().click()
+    prisonerSearchPage.errorSummary().should('not.exist')
+    prisonerSearchPage.resultsRows().should('have.length', 1)
+  })
+
+  it('should show results for number search', () => {
+    cy.task('stubSearch', {
+      query: {
+        includeAliases: false,
+        prisonerIdentifier: 'A1234AA',
+        prisonIds: ['MDI'],
+      },
+      results: [
+        {
+          cellLocation: '1-2-015',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          prisonerNumber: 'A1234AA',
+          prisonName: 'HMP Moorland',
+        },
+      ],
+    })
+
+    cy.visit(`/search-for-prisoner`)
+    const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
+    prisonerSearchPage.searchTermInput().type('A1234AA')
+    prisonerSearchPage.submitButton().click()
+    prisonerSearchPage.errorSummary().should('not.exist')
+    prisonerSearchPage.resultsRows().should('have.length', 1)
+  })
 })

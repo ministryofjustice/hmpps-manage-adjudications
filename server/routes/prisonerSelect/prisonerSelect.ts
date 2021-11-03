@@ -30,7 +30,7 @@ export default class PrisonerSelectRoutes {
     if (!searchTerm) return res.redirect('/search-for-prisoner')
 
     const searchResults = await this.prisonerSearchService.search(
-      { searchTerm, prisonIds: [user.activeCaseLoadId] },
+      { searchTerm, prisonIds: [user.activeCaseLoad.caseLoadId] },
       user
     )
 

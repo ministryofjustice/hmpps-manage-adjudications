@@ -13,7 +13,9 @@ export default (on: (string, Record) => void): void => {
     getSignInUrl: auth.getSignInUrl,
     stubSignIn: (caseLoads: CaseLoad[]) => Promise.all([auth.stubSignIn(), prisonApi.stubUserCaseloads(caseLoads)]),
 
+    stubSearch: prisonerSearch.stubSearch,
     stubAuthUser: auth.stubUser,
+
     stubTokenPing: status => tokenVerification.stubPing(status),
     stubAuthPing: status => auth.stubPing(status),
     stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
