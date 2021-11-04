@@ -1,9 +1,9 @@
-import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import { User } from '../data/hmppsAuthClient'
 
 import { ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 
 export default class ReportedAdjudicationService {
+  // eslint-disable-next-line no-unused-vars
   async getReportedAdjudication(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
     // const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
     return {
