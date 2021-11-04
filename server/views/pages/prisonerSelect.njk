@@ -1,0 +1,86 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = "Select a prisoner" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {% include "../partials/prisonerSearchForm.njk" %}
+
+  {% set rows = [] %}
+  {% for prisoner in searchResults %}
+    {% set prisonerImageHtml %}
+      <img src="/prisoner/{{ prisoner.prisonerNumber }}/image" alt="Photograph of {{ prisoner.displayName }}" class="results-table__image" />
+    {% endset -%}
+    {% set prisonerLinkHtml %}
+      <a href="{{ pshUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
+    {% endset -%}
+    {% set startReportlLinkHtml %}
+      <a href="/incident-details/{{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="start-report-link"><span class="govuk-visually-hidden">{{ prisoner.displayName }} - </span>Start a report</a>
+    {% endset -%}
+    {% set rows = (rows.push([
+      { html: prisonerImageHtml },
+      {
+        html: prisonerLinkHtml,
+        attributes: {
+          "data-sort-value": prisoner.displayName
+        }
+      },
+      { text: prisoner.prisonerNumber },
+      { text: prisoner.cellLocation },
+      { html: startReportlLinkHtml }
+    ]), rows) %}
+  {% endfor %}
+
+  {% if rows | length %}
+    <p class="align-right"><strong>People listed:</strong> {{ rows.length }}</p>
+
+    <div class="results-table">
+      {{ govukTable({
+        head: [
+          { html: '<span class="govuk-visually-hidden">Picture</span>' },
+          {
+            text: "Name",
+            attributes: {
+              "aria-sort": "ascending"
+            }
+          },
+          { text: "Prison number" },
+          {
+            text: "Cell",
+            attributes: {
+              "aria-sort": "none"
+            }
+          },
+          { text: "" }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "prisoner-search-results-table", "data-module": "moj-sortable-table" }
+      }) }}
+    </div>
+    
+  {% else %}
+    {% if not errors | length %}
+      <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

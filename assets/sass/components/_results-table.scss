@@ -1,0 +1,15 @@
+.results-table {
+  overflow: auto;
+
+  &__image {
+    width: 90px;
+  }
+
+  .govuk-table__header {
+    vertical-align: bottom;
+  }
+
+  .govuk-table__cell {
+    vertical-align: middle;
+  }
+}

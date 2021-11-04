@@ -10,4 +10,8 @@ export default class PrisonerSearch extends Page {
   submitButton = (): PageElement => cy.get('[data-qa="prisoner-search-submit"]')
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
+
+  resultsTable = (): PageElement => cy.get('[data-qa="prisoner-search-results-table"]')
+
+  resultsRows = (): PageElement => this.resultsTable().get('tbody tr')
 }

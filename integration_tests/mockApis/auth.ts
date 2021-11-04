@@ -117,6 +117,7 @@ const stubUser = () =>
         username: 'USER1',
         active: true,
         name: 'john smith',
+        activeCaseLoadId: 'MDI',
       },
     },
   })
