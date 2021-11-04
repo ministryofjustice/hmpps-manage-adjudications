@@ -11,10 +11,35 @@ type TaskType = {
 
 export const tasks: TaskType[] = [
   {
-    id: 'search-restricted-patient',
-    heading: 'Search for a restricted patient',
-    description: 'Search for a restricted patient to view their details or add a case note.',
-    href: '/search-for-restricted-patient',
+    id: 'start-a-new-report',
+    heading: 'Start a new report',
+    description: 'Start creating a new report.',
+    href: '/search-for-prisoner',
+    roles: null,
+    enabled: true,
+  },
+  {
+    id: 'continue-a-report',
+    heading: 'Continue a report',
+    description: 'Continue a report that you have already started.',
+    href: '/select-report',
+    roles: null,
+    enabled: true,
+  },
+  {
+    id: 'view-your-completed-reports',
+    heading: 'View your completed reports',
+    description:
+      'View your completed reports. You can also make changes to a report you have completed in the last 48 hours.',
+    href: '/your-completed-reports',
+    roles: null,
+    enabled: true,
+  },
+  {
+    id: 'view-all-completed-reports',
+    heading: 'View all completed reports',
+    description: 'View all completed reports in your establishment.',
+    href: '/all-completed-reports',
     roles: null,
     enabled: true,
   },
