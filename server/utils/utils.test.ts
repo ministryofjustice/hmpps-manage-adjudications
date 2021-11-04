@@ -1,4 +1,4 @@
-import { convertToTitleCase, formatLocation, formatDate } from './utils'
+import { convertToTitleCase, formatLocation, formatDate, formatTimestampToDate, formatTimestampToTime } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -52,5 +52,32 @@ describe('formatDateToISOString', () => {
   it('returns error message if any of the inputs are invalid', () => {
     expect(formatDate({ date: '27/10/2021', time: { hour: 'we', minute: 'go' } })).toEqual(null)
     expect(formatDate({ date: 'help', time: { hour: '23', minute: '11' } })).toEqual(null)
+  })
+})
+
+describe('formatTimestampToDate', () => {
+  it('should format timestamp to date', () => {
+    expect(formatTimestampToDate('2018-12-23T13:21')).toEqual('23/12/2018')
+  })
+  it('should format date only timestamp to date', () => {
+    expect(formatTimestampToDate('2018-12-23')).toEqual('23/12/2018')
+  })
+  it('should format timestamp to date using provided format', () => {
+    expect(formatTimestampToDate('2018-12-23T13:21', 'DD MMMM YY')).toEqual('23 December 18')
+  })
+  it('should not fail to parse absent timestamp', () => {
+    expect(formatTimestampToDate(undefined)).toEqual(undefined)
+  })
+})
+
+describe('formatTimestampToDateTime', () => {
+  it('should format timestamp to time', () => {
+    expect(formatTimestampToTime('2018-12-23T07:21')).toEqual('07:21')
+  })
+  it('should format timestamp to time using provided format', () => {
+    expect(formatTimestampToTime('2018-12-23T07:21', 'H:mm')).toEqual('7:21')
+  })
+  it('should not fail to parse absent timestamp', () => {
+    expect(formatTimestampToTime(undefined)).toEqual(undefined)
   })
 })
