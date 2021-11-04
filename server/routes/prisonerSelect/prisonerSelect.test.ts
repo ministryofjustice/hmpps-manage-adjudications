@@ -82,7 +82,7 @@ describe('POST /select-prisoner', () => {
       .expect(res => {
         expect(res.text).toContain('Error: Select a prisoner')
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter a name or prison number')
+        expect(res.text).toContain('Enter a prisoner’s name or number')
       })
   })
 })
