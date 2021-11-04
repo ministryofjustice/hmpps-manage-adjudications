@@ -67,6 +67,7 @@ describe('prisonerSearchService', () => {
         {
           cellLocation: '1-2-016',
           displayName: 'Jones, Steve',
+          name: 'Steve Jones',
           firstName: 'STEVE',
           lastName: 'JONES',
           prisonName: 'HMP Moorland',
@@ -75,6 +76,7 @@ describe('prisonerSearchService', () => {
         {
           cellLocation: '1-2-015',
           displayName: 'Smith, John',
+          name: 'John Smith',
           firstName: 'JOHN',
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
@@ -98,6 +100,7 @@ describe('prisonerSearchService', () => {
       expect(results).toStrictEqual([
         {
           displayName: 'Smith, John',
+          name: 'John Smith',
           firstName: 'JOHN',
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',

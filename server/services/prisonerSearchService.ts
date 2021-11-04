@@ -9,6 +9,7 @@ import PrisonerResult from '../data/prisonerResult'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
   displayName: string
+  name: string
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
@@ -34,6 +35,7 @@ export default class PrisonerSearchService {
   private static enhancePrisoner(prisoner: PrisonerSearchResult | PrisonerResult) {
     return {
       displayName: convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`),
+      name: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
     }
   }
 

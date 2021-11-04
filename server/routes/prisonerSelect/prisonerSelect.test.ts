@@ -24,6 +24,7 @@ describe('GET /select-prisoner', () => {
         {
           cellLocation: '1-2-015',
           displayName: 'Smith, John',
+          name: 'John Smith',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
         } as PrisonerSearchSummary,
@@ -36,14 +37,14 @@ describe('GET /select-prisoner', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
-          expect(res.text).toContain('<p class="align-right"><strong>People listed:</strong> 1</p>')
+          expect(res.text).toContain('<p class="align-right"><strong>Prisoners listed:</strong> 1</p>')
           expect(res.text).toContain(
             '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />'
           )
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('1-2-015')
           expect(res.text).toContain(
-            '<a href="/incident-details/A1234AA" class="govuk-link" data-qa="start-report-link"><span class="govuk-visually-hidden">Smith, John - </span>Start a report</a>'
+            '<a href="/incident-details/A1234AA" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>'
           )
         })
     })
