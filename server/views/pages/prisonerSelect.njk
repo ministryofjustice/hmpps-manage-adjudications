@@ -32,10 +32,10 @@
       <img src="/prisoner/{{ prisoner.prisonerNumber }}/image" alt="Photograph of {{ prisoner.displayName }}" class="results-table__image" />
     {% endset -%}
     {% set prisonerLinkHtml %}
-      <a href="{{ pshUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
+      <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
-      <a href="/incident-details/{{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="start-report-link"><span class="govuk-visually-hidden">{{ prisoner.displayName }} - </span>Start a report</a>
+      <a href="/incident-details/{{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
       { html: prisonerImageHtml },
@@ -52,7 +52,7 @@
   {% endfor %}
 
   {% if rows | length %}
-    <p class="align-right"><strong>People listed:</strong> {{ rows.length }}</p>
+    <p class="align-right"><strong>Prisoners listed:</strong> {{ rows.length }}</p>
 
     <div class="results-table">
       {{ govukTable({

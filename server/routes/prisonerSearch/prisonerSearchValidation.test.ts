@@ -9,7 +9,7 @@ describe('validateForm', () => {
     it('invalid', () => {
       expect(validateForm({ searchTerm: '' })).toStrictEqual({
         href: '#searchTerm',
-        text: 'Enter a name or prison number',
+        text: 'Enter a prisoner’s name or number',
       })
     })
   })

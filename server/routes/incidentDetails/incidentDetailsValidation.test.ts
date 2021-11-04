@@ -51,6 +51,22 @@ describe('validateForm - incident statement', () => {
         text: 'Enter time of incident',
       })
     })
+    it('shows error if only one digit for hours', () => {
+      expect(
+        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } }, locationId: 2343 })
+      ).toEqual({
+        href: '#incidentDate[time][hour]',
+        text: 'Enter the hour using 2 numbers - for example, 08 or 18',
+      })
+    })
+    it('shows error if only one digit for minutes', () => {
+      expect(
+        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } }, locationId: 2343 })
+      ).toEqual({
+        href: '#incidentDate[time][minute]',
+        text: 'Enter the minute using 2 numbers - for example, 08 or 18',
+      })
+    })
   })
   describe('locationId', () => {
     it('shows error if location is not selected', () => {
