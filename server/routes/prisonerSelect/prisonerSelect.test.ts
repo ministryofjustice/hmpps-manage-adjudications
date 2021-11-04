@@ -24,6 +24,7 @@ describe('GET /select-prisoner', () => {
         {
           cellLocation: '1-2-015',
           displayName: 'Smith, John',
+          name: 'John Smith',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
         } as PrisonerSearchSummary,
@@ -43,7 +44,7 @@ describe('GET /select-prisoner', () => {
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('1-2-015')
           expect(res.text).toContain(
-            '<a href="/incident-details/A1234AA" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for Smith, John</span></a>'
+            '<a href="/incident-details/A1234AA" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>'
           )
         })
     })
