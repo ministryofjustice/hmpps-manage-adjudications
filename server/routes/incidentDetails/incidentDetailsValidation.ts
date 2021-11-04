@@ -34,6 +34,14 @@ const errors: { [key: string]: FormError } = {
     href: '#locationId',
     text: 'Select location of incident',
   },
+  ONE_DIGIT_HOUR: {
+    href: '#incidentDate[time][hour]',
+    text: 'Enter the hour using 2 numbers - for example, 08 or 18',
+  },
+  ONE_DIGIT_MINUTE: {
+    href: '#incidentDate[time][minute]',
+    text: 'Enter the minute using 2 numbers - for example, 08 or 18',
+  },
 }
 
 export default function validateForm({
@@ -60,6 +68,12 @@ export default function validateForm({
   }
   if (Number.isNaN(Number(incidentDate.time.minute)) || Number(incidentDate.time.minute) > 59) {
     return errors.INVALID_MIN
+  }
+  if (incidentDate.time.hour.length < 2) {
+    return errors.ONE_DIGIT_HOUR
+  }
+  if (incidentDate.time.minute.length < 2) {
+    return errors.ONE_DIGIT_MINUTE
   }
 
   return null
