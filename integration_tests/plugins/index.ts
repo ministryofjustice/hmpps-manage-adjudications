@@ -22,5 +22,9 @@ export default (on: (string, Record) => void): void => {
     stubPrisonApiPing: status => prisonApi.stubPing(status),
     stubAdjudicationsPing: status => adjudications.stubPing(status),
     stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
+    stubGetLocations: prisonApi.stubGetLocations,
+
+    stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
+    stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
   })
 }

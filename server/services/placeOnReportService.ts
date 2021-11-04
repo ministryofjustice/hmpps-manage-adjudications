@@ -4,7 +4,7 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
-import convertToTitleCase from '../utils/utils'
+import { convertToTitleCase, formatLocation } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
 import { DraftAdjudicationResult } from '../data/DraftAdjudicationResult'
 
@@ -32,10 +32,25 @@ export default class PlaceOnReportService {
       friendlyName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       displayName: convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`),
       prisonerNumber: prisoner.offenderNo,
-      currentLocation: prisoner.assignedLivingUnit.agencyName,
+      currentLocation: formatLocation(prisoner.assignedLivingUnit.description),
     }
 
     return enhancedResult
+  }
+
+  async startNewDraftAdjudication(
+    dateTimeOfIncident: string,
+    locationId: number,
+    prisonerNumber: string,
+    user: User
+  ): Promise<DraftAdjudicationResult> {
+    const client = new ManageAdjudicationsClient(user.token)
+    const requestBody = {
+      dateTimeOfIncident,
+      locationId,
+      prisonerNumber,
+    }
+    return client.startNewDraftAdjudication(requestBody)
   }
 
   async postDraftIncidentStatement(

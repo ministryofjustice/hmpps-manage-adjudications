@@ -5,6 +5,7 @@ import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
 import PrisonerResult from './prisonerResult'
+import { PrisonLocation } from './PrisonLocationResult'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -25,7 +26,7 @@ export default class PrisonApiClient {
     return this.restClient.get<CaseLoad[]>({ path: '/api/users/me/caseLoads' })
   }
 
-  async getPrisonerImage(prisonerNumber: string): Promise<Readable> {
+  getPrisonerImage(prisonerNumber: string): Promise<Readable> {
     return this.restClient.stream({
       path: `/api/bookings/offenderNo/${prisonerNumber}/image/data`,
       errorLogger: error =>
@@ -41,5 +42,12 @@ export default class PrisonApiClient {
     })
 
     return plainToClass(PrisonerResult, result, { excludeExtraneousValues: true })
+  }
+
+  async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<PrisonLocation[]> {
+    return this.restClient.get({
+      path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,
+      headers: { 'Sort-Fields': 'userDescription' },
+    })
   }
 }

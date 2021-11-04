@@ -12,6 +12,7 @@ import * as auth from '../../authentication/auth'
 import { Services } from '../../services'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
+import LocationService from '../../services/locationService'
 
 const user = {
   name: 'john smith',
@@ -92,6 +93,7 @@ export default function appWithAllRoutes(
       userService: new MockUserService(),
       placeOnReportService: {} as PlaceOnReportService,
       prisonerSearchService: {} as PrisonerSearchService,
+      locationService: {} as LocationService,
       ...overrides,
     }),
     production

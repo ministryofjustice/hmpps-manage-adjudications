@@ -17,8 +17,7 @@ export default class IncidentStatementRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
-    // const { prisonerNumber } = req.params
-    const prisonerNumber = 'G6415GD' // fix until we can get hold of the searched PRN
+    const { prisonerNumber } = req.params
     const { user } = res.locals
 
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
@@ -34,23 +33,18 @@ export default class IncidentStatementRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
     const { user } = res.locals
-
-    // const { draftAdjudicationId } = req.session
-    const draftAdjudicationId = 0 // fix until we can get hold of the id
+    const { id, prisonerNumber } = req.params
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error })
 
-    const statementComplete = incidentStatementComplete === 'yes'
-
-    const pathname = statementComplete ? '/check-your-answers' : '/place-a-prisoner-on-report'
-
     try {
-      await this.placeOnReportService.postDraftIncidentStatement(draftAdjudicationId, incidentStatement, user)
+      await this.placeOnReportService.postDraftIncidentStatement(Number(id), incidentStatement, user)
+      const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = '/incident-statement'
+      res.locals.redirectUrl = `/incident-statement/${prisonerNumber}/${id}`
       throw postError
     }
   }

@@ -5,6 +5,7 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
 const postDraftIncidentStatement = jest.fn()
+const startNewDraftAdjudication = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -14,7 +15,7 @@ jest.mock('../data/prisonApiClient', () => {
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { postDraftIncidentStatement }
+    return { postDraftIncidentStatement, startNewDraftAdjudication }
   })
 })
 
@@ -41,6 +42,38 @@ describe('placeOnReportService', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('startNewDraftAdjudication', () => {
+    it('returns the adjudication details with new id', async () => {
+      startNewDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 1,
+          prisonerNumber: 'G2996UX',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          },
+        },
+      })
+
+      const result = await service.startNewDraftAdjudication('2021-10-28T15:40:25.884', 3, 'G2996UX', user)
+      expect(startNewDraftAdjudication).toBeCalledWith({
+        dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        locationId: 3,
+        prisonerNumber: 'G2996UX',
+      })
+      expect(result).toEqual({
+        draftAdjudication: {
+          id: 1,
+          prisonerNumber: 'G2996UX',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          },
+        },
+      })
+    })
   })
 
   describe('getPrisonerImage', () => {
@@ -76,9 +109,21 @@ describe('placeOnReportService', () => {
         lastName: 'SMITH',
         offenderNo: 'A1234AA',
         prisonerNumber: 'A1234AA',
+        currentLocation: '1-2-015',
       })
       expect(PrisonApiClient).toBeCalledWith(token)
       expect(getPrisonerDetails).toBeCalledWith('A1234AA')
+    })
+    it('displays correct location when the prisoner is in CSWAP', async () => {
+      getPrisonerDetails.mockResolvedValue({
+        offenderNo: 'A1234AA',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        assignedLivingUnit: { description: 'CSWAP' },
+        categoryCode: 'C',
+      })
+      const result = await service.getPrisonerDetails('A1234AA', user)
+      expect(result.currentLocation).toEqual('No cell allocated')
     })
   })
 
