@@ -15,8 +15,10 @@ export default function CheckAnswersRoutes({
   const checkYourAnswers = new CheckYourAnswersRoutes(placeOnReportService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/', checkYourAnswers.view)
+  get('/:prisonerNumber/:id', checkYourAnswers.view)
+  post('/:prisonerNumber/:id', checkYourAnswers.view)
 
   return router
 }

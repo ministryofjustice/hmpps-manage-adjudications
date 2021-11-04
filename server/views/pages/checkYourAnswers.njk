@@ -1,12 +1,66 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% set title = "Check your answers" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Check your answers before placing them on report" %}
+
+{% block pageTitle %}
+	{{ title }}
+{% endblock %}
 
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
+
 	<h1 class="govuk-heading-l">{{ title }}</h1>
+
+	<div class="prisonerPlaybackSection">
+		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+	</div>
+
+	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+			<div class="flex-container checkAnswers-heading">
+				<h2 class="govuk-heading-m">Incident details</h2>
+				<a href="" class="govuk-link">Change</a>
+			</div>
+			<div class="checkAnswers-incidentDetails">
+    		{{ incidentDetailsSummaryList(data.incidentDetails, 'Not entered', { "data-qa": "check-answers-details" }) }}
+			</div>
+
+			<div class="flex-container checkAnswers-heading">
+				<h2 class="govuk-heading-m govuk-!-margin-top-9">Incident statement</h2>
+				<a href="" class="govuk-link">Change</a>
+			</div>
+			{# <p class="govuk-body">{{ data.incidentStatement }}</p> #}
+			<p class="govuk-body checkAnswers-incidentDetails">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>
+
+			<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+			<h2 class="govuk-heading-m">Place on report</h2>
+			<p class="govuk-body govuk-!-margin-bottom-6 checkAnswers-conditions">By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
+
+			{{ govukButton({
+				text: "Save and continue",
+				type: "submit",
+				classes: "govuk-button--submit govuk-!-margin-right-2",
+				attributes: { "data-qa": "check-answers-submit" }
+			}) }}
+
+			{{ govukButton({
+				text: "Exit",
+				classes: "govuk-button--secondary",
+				element: 'a',
+				href: '/back-to-start',
+				attributes: { "data-qa": "check-answers-exit" }
+			}) }}
+	</form>
+
 {% endblock %}
