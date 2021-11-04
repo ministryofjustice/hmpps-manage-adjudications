@@ -23,6 +23,7 @@ describe('GET /select-prisoner', () => {
       prisonerSearchService.search.mockResolvedValue([
         {
           cellLocation: '1-2-015',
+          displayCellLocation: '1-2-015',
           displayName: 'Smith, John',
           friendlyName: 'John Smith',
           prisonerNumber: 'A1234AA',
