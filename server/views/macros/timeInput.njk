@@ -27,7 +27,7 @@
 						id: params.hour.id,
 						name: params.hour.name,
 						value: params.hour.value,
-						attributes: { 'data-qa': 'incident-date-hour' }
+						attributes: { 'data-qa': 'incident-date-hour', pattern: "[0-9]*", inputmode: "numeric" }
 					}) }}
 				</div>
 				<div id="incidentDate[time]" class="govuk-!-margin-right-4">
@@ -40,7 +40,7 @@
 						id: params.minutes.id,
 						name: params.minutes.name,
 						value: params.minutes.value,
-						attributes: { 'data-qa': 'incident-date-minutes' }
+						attributes: { 'data-qa': 'incident-date-minutes', pattern: "[0-9]*", inputmode: "numeric" }
 					}) }}
 				</div>
 			</div>
