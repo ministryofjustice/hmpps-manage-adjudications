@@ -52,8 +52,12 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
   }
 }
 
+export const hasAnyRole = (requiredRoles: string[], userRoles: string[]): boolean =>
+  requiredRoles.some(role => userRoles.includes(role))
+
 export default {
   convertToTitleCase,
   formatLocation,
   formatDate,
+  hasAnyRole,
 }

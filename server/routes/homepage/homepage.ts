@@ -1,4 +1,6 @@
 import { Request, Response } from 'express'
+import UserService from '../../services/userService'
+import { hasAnyRole } from '../../utils/utils'
 
 type TaskType = {
   id: string
@@ -40,14 +42,18 @@ export const tasks: TaskType[] = [
     heading: 'View all completed reports',
     description: 'View all completed reports in your establishment.',
     href: '/all-completed-reports',
-    roles: null,
+    roles: ['ADJUDICATION_REVIEW'],
     enabled: true,
   },
 ]
 
-export default class PrisonerSearchRoutes {
-  view = async (req: Request, res: Response): Promise<void> =>
-    res.render('pages/homepage', {
-      tasks,
+export default class HomepageRoutes {
+  constructor(private readonly userService: UserService) {}
+
+  view = async (req: Request, res: Response): Promise<void> => {
+    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    return res.render('pages/homepage', {
+      tasks: tasks.filter(task => task.enabled).filter(task => !task.roles || hasAnyRole(task.roles, userRoles)),
     })
+  }
 }

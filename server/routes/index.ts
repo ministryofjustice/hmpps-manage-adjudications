@@ -13,7 +13,7 @@ import { Services } from '../services'
 
 export default function routes(
   router: Router,
-  { placeOnReportService, locationService, prisonerSearchService }: Services
+  { placeOnReportService, locationService, prisonerSearchService, userService }: Services
 ): Router {
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
@@ -22,6 +22,6 @@ export default function routes(
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
   router.use('/search-for-prisoner', prisonerSearchRoutes())
   router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
-  router.use('/', homepageRoutes())
+  router.use('/', homepageRoutes({ userService }))
   return router
 }
