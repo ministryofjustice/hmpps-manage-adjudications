@@ -24,14 +24,11 @@ export default function validateForm({
   incidentStatement,
   incidentStatementComplete,
 }: incidentStatementForm): FormError | null {
-  if (!incidentStatementComplete) {
-    return errors.RADIO_OPTION_MISSING
-  }
+  if (!incidentStatementComplete) return errors.RADIO_OPTION_MISSING
 
-  if (incidentStatementComplete === 'yes') {
-    if (!incidentStatement) return errors.MISSING_TEXT
-    if (incidentStatement.length > 4000) return errors.WORD_COUNT_EXCEEDED
-  }
+  if (incidentStatement.length > 4000) return errors.WORD_COUNT_EXCEEDED
+
+  if (incidentStatementComplete === 'yes' && !incidentStatement) return errors.MISSING_TEXT
 
   return null
 }

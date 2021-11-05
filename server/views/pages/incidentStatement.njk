@@ -39,6 +39,7 @@
 			{{ govukTextarea({
 				name: "incidentStatement",
 				id: "incidentStatement",
+				value: incidentStatement,
 				label: {
 					text: "Write the full details of the alleged offence.",
 					classes: "govuk-!-margin-bottom-2"
@@ -66,11 +67,14 @@
 				items: [
 					{
 							value: "yes",
-							text: "Yes"
+							text: "Yes",
+							checked: incidentStatementComplete === 'yes'
 					},
 					{
 							value: "no",
-							text: "No"
+							text: "No",
+							checked: incidentStatementComplete === 'no'
+
 					}
 				]
 			}) }}
