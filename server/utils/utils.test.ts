@@ -67,7 +67,7 @@ describe('hasAnyRole', () => {
     expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_ONE'])).toEqual(true)
   })
   it.only('returns false when they have none of the required roles', () => {
-    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_THREE'])).toEqual(false)
+    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_THREE', 'ROLE_FOUR'])).toEqual(false)
     expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], null)).toEqual(false)
   })
   it.only('returns true if there are no required roles', () => {
