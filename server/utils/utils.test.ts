@@ -1,4 +1,11 @@
-import { convertToTitleCase, formatLocation, formatDate, hasAnyRole } from './utils'
+import {
+  convertToTitleCase,
+  formatLocation,
+  formatDate,
+  formatTimestampToDate,
+  formatTimestampToTime,
+  hasAnyRole,
+} from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -66,5 +73,32 @@ describe('hasAnyRole', () => {
   it.only('returns true if there are no required roles', () => {
     expect(hasAnyRole(null, null)).toEqual(true)
     expect(hasAnyRole(null, ['ROLE_ONE'])).toEqual(true)
+  })
+})
+
+describe('formatTimestampToDate', () => {
+  it('should format timestamp to date', () => {
+    expect(formatTimestampToDate('2018-12-23T13:21')).toEqual('23/12/2018')
+  })
+  it('should format date only timestamp to date', () => {
+    expect(formatTimestampToDate('2018-12-23')).toEqual('23/12/2018')
+  })
+  it('should format timestamp to date using provided format', () => {
+    expect(formatTimestampToDate('2018-12-23T13:21', 'DD MMMM YY')).toEqual('23 December 18')
+  })
+  it('should not fail to parse absent timestamp', () => {
+    expect(formatTimestampToDate(undefined)).toEqual(undefined)
+  })
+})
+
+describe('formatTimestampToDateTime', () => {
+  it('should format timestamp to time', () => {
+    expect(formatTimestampToTime('2018-12-23T07:21')).toEqual('07:21')
+  })
+  it('should format timestamp to time using provided format', () => {
+    expect(formatTimestampToTime('2018-12-23T07:21', 'H:mm')).toEqual('7:21')
+  })
+  it('should not fail to parse absent timestamp', () => {
+    expect(formatTimestampToTime(undefined)).toEqual(undefined)
   })
 })

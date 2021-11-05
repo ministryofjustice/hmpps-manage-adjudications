@@ -21,6 +21,9 @@ export const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
  */
 export const properCaseName = (name: string): string => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
 
+export const formatName = (firstName: string, lastName: string): string =>
+  [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
+
 export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
@@ -54,6 +57,12 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
 
 export const hasAnyRole = (requiredRoles: string[], userRoles: string[]): boolean =>
   !requiredRoles || (!!userRoles && requiredRoles.some(role => userRoles.includes(role)))
+
+export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/YYYY'): string =>
+  timestamp && moment(timestamp).format(outputFormat)
+
+export const formatTimestampToTime = (timestamp: string, format = 'HH:mm'): string =>
+  timestamp && moment(timestamp).format(format)
 
 export default {
   convertToTitleCase,

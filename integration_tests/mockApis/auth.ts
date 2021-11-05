@@ -122,7 +122,7 @@ const stubUser = () =>
     },
   })
 
-const stubUserRoles = (roles = []) =>
+const stubUserRoles = (roles = []): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',

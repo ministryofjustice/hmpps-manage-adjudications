@@ -80,4 +80,31 @@ describe('manageAdjudicationsClient', () => {
       expect(response.draftAdjudication.incidentStatement.statement).toEqual('test')
     })
   })
+
+  describe('getReportedAdjudication', () => {
+    it('should return the reported adjudication data', async () => {
+      const result = {
+        reportedAdjudication: {
+          adjudicationNumber: 3,
+          prisonerNumber: 'A12345',
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2020-12-10T10:00:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+          },
+        },
+      }
+
+      fakeManageAdjudicationsApi
+        .get('/reported-adjudications/3')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.getReportedAdjudication(3)
+
+      expect(response).toEqual(result)
+    })
+  })
 })
