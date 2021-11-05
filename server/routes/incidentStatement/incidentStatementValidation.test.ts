@@ -30,6 +30,14 @@ describe('validateForm - incident statement', () => {
         text: 'Write your statement using 4,000 characters or less',
       })
     })
+    it('returns the expected response for an invalid submit', () => {
+      expect(
+        validateForm({ incidentStatementComplete: 'no', incidentStatement: wordLimitExceedingString })
+      ).toStrictEqual({
+        href: '#incidentStatement',
+        text: 'Write your statement using 4,000 characters or less',
+      })
+    })
   })
   describe('Radio button option not selected', () => {
     it('returns the expected response for a valid submit with draft', () => {
