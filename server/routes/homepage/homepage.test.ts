@@ -37,7 +37,7 @@ describe('GET /', () => {
       })
   })
   it('the review tile should not be visible without the correct role', () => {
-    userService.getUserRoles.mockResolvedValue(['ADJUDICATION_REVIEW'])
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATION_REVIEWER'])
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)

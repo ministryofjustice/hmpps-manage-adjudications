@@ -14,4 +14,25 @@ context('Home page', () => {
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
   })
+
+  it('should only see some tiles without the reviewer role', () => {
+    cy.visit(`/`)
+    const homepage: Homepage = Page.verifyOnPage(Homepage)
+    homepage.feedbackBanner().should('exist')
+    homepage.startANewReportLink().should('exist')
+    homepage.continueAReportLink().should('exist')
+    homepage.viewYourCompletedReportsLink().should('exist')
+    homepage.viewAllCompletedReportsLink().should('not.exist')
+  })
+
+  it('should see all the tiles with the reviewer role', () => {
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATION_REVIEWER' }])
+    cy.visit(`/`)
+    const homepage: Homepage = Page.verifyOnPage(Homepage)
+    homepage.feedbackBanner().should('exist')
+    homepage.startANewReportLink().should('exist')
+    homepage.continueAReportLink().should('exist')
+    homepage.viewYourCompletedReportsLink().should('exist')
+    homepage.viewAllCompletedReportsLink().should('exist')
+  })
 })
