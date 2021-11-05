@@ -22,7 +22,6 @@ export default class IncidentStatementRoutes {
 
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
 
-    console.log(incidentStatement)
     return res.render(`pages/incidentStatement`, {
       errors: error ? [error] : [],
       prisoner,
