@@ -53,7 +53,7 @@ export default class HomepageRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     return res.render('pages/homepage', {
-      tasks: tasks.filter(task => task.enabled).filter(task => !task.roles || hasAnyRole(task.roles, userRoles)),
+      tasks: tasks.filter(task => task.enabled).filter(task => hasAnyRole(task.roles, userRoles)),
     })
   }
 }
