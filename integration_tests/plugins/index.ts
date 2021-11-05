@@ -15,6 +15,7 @@ export default (on: (string, Record) => void): void => {
 
     stubSearch: prisonerSearch.stubSearch,
     stubAuthUser: auth.stubUser,
+    stubUserRoles: auth.stubUserRoles,
 
     stubTokenPing: status => tokenVerification.stubPing(status),
     stubAuthPing: status => auth.stubPing(status),

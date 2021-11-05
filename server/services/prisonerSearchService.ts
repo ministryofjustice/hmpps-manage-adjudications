@@ -5,11 +5,11 @@ import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchResult from '../data/prisonerSearchResult'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import { convertToTitleCase } from '../utils/utils'
-import PrisonerResult from '../data/prisonerResult'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
   displayName: string
-  name: string
+  friendlyName: string
+  displayCellLocation: string
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
@@ -32,10 +32,11 @@ export interface PrisonerSearch {
 export default class PrisonerSearchService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  private static enhancePrisoner(prisoner: PrisonerSearchResult | PrisonerResult) {
+  private static enhancePrisoner(prisoner: PrisonerSearchResult) {
     return {
       displayName: convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`),
-      name: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      friendlyName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      displayCellLocation: prisoner.cellLocation?.replace('CSWAP', 'No cell allocated') || 'None',
     }
   }
 

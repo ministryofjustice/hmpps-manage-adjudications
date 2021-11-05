@@ -23,8 +23,9 @@ describe('GET /select-prisoner', () => {
       prisonerSearchService.search.mockResolvedValue([
         {
           cellLocation: '1-2-015',
+          displayCellLocation: '1-2-015',
           displayName: 'Smith, John',
-          name: 'John Smith',
+          friendlyName: 'John Smith',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
         } as PrisonerSearchSummary,

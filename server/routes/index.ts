@@ -8,12 +8,13 @@ import taskListRoutes from './taskList'
 import prisonerRoutes from './prisonerRoutes'
 import prisonerSearchRoutes from './prisonerSearch'
 import prisonerSelectRoutes from './prisonerSelect'
+import homepageRoutes from './homepage'
 
 import { Services } from '../services'
 
 export default function routes(
   router: Router,
-  { placeOnReportService, locationService, prisonerSearchService, reportedAdjudicationsService }: Services
+  { placeOnReportService, locationService, prisonerSearchService, reportedAdjudicationsService, userService }: Services
 ): Router {
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
@@ -23,6 +24,6 @@ export default function routes(
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
   router.use('/search-for-prisoner', prisonerSearchRoutes())
   router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
-  router.get('/', (req, res, next) => res.render('pages/index'))
+  router.use('/', homepageRoutes({ userService }))
   return router
 }
