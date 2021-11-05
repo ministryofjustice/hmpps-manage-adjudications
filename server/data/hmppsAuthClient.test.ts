@@ -51,6 +51,29 @@ describe('hmppsAuthClient', () => {
     })
   })
 
+  describe('getUserFromUsername', () => {
+    it('should return data from api', async () => {
+      const response = {
+        username: 'DEMO_USER1',
+        active: false,
+        name: 'John Smith',
+        authSource: 'nomis',
+        staffId: 231232,
+        activeCaseLoadId: 'MDI',
+        userId: 231232,
+        uuid: '5105a589-75b3-4ca0-9433-b96228c1c8f3',
+      }
+
+      fakeHmppsAuthApi
+        .get('/api/user/DEMO_USER1')
+        .matchHeader('authorization', `Bearer ${token.access_token}`)
+        .reply(200, response)
+
+      const output = await hmppsAuthClient.getUserFromUsername('DEMO_USER1', token.access_token)
+      expect(output).toEqual(response)
+    })
+  })
+
   describe('getSystemClientToken', () => {
     it('should instantiate the redis client', async () => {
       tokenStore.getToken.mockResolvedValue(token.access_token)

@@ -3,8 +3,7 @@ import { Readable } from 'stream'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
-import LocationService from './locationService'
-import { PrisonLocation, IncidentLocation } from '../data/PrisonLocationResult'
+import { Location } from '../data/PrisonLocationResult'
 
 import { convertToTitleCase, formatLocation, getTime, getDate } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
@@ -67,28 +66,23 @@ export default class PlaceOnReportService {
     return client.postDraftIncidentStatement(id, requestBody)
   }
 
-  async getCheckYourAnswersInfo(
-    id: number,
-    incidentLocations: IncidentLocation[],
-    user: User
-  ): Promise<CheckYourAnswers> {
-    const client = new ManageAdjudicationsClient(user.token)
+  async getCheckYourAnswersInfo(id: number, locations: Location[], user: User): Promise<CheckYourAnswers> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
 
-    const [draftAdjudicationInfo] = await Promise.all([client.getDraftAdjudication(id)])
+    const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { draftAdjudication } = draftAdjudicationInfo
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.createdByUserId, user.token)
 
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')
     const time = getTime(dateTime)
 
-    const [locationObj] = incidentLocations.filter(
-      loc => loc.locationId === draftAdjudication.incidentDetails.locationId
-    )
+    const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
 
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: user.name,
+        value: reporter.name,
       },
       {
         label: 'Date',

@@ -21,12 +21,12 @@ export type Prison = {
   active: boolean
 }
 
-export type IncidentLocation = {
+export type Location = {
   locationId: number
-  locationType: string
-  description: string
-  parentLocationId: number
-  currentOccupancy: number
+  locationType?: string
+  description?: string
+  parentLocationId?: number
+  currentOccupancy?: number
   locationPrefix: string
   userDescription: string
 }
