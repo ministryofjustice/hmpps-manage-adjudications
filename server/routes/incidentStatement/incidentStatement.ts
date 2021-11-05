@@ -39,7 +39,12 @@ export default class IncidentStatementRoutes {
     if (error) return this.renderView(req, res, { error })
 
     try {
-      await this.placeOnReportService.postDraftIncidentStatement(Number(id), incidentStatement, user)
+      await this.placeOnReportService.postDraftIncidentStatement(
+        Number(id),
+        incidentStatement,
+        incidentStatementComplete === 'yes',
+        user
+      )
       const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
       return res.redirect(pathname)
     } catch (postError) {
