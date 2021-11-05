@@ -20,3 +20,13 @@ export type Prison = {
   agencyType: string
   active: boolean
 }
+
+export type IncidentLocation = {
+  locationId: number
+  locationType: string
+  description: string
+  parentLocationId: number
+  currentOccupancy: number
+  locationPrefix: string
+  userDescription: string
+}

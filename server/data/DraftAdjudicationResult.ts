@@ -17,3 +17,13 @@ export type DraftAdjudication = {
 export type DraftAdjudicationResult = {
   draftAdjudication: DraftAdjudication
 }
+
+export type CheckYourAnswers = {
+  incidentDetails: summarySectionItems[]
+  statement: string
+}
+
+type summarySectionItems = {
+  label: string
+  value: string
+}

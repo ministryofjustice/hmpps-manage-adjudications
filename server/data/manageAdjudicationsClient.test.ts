@@ -107,4 +107,42 @@ describe('manageAdjudicationsClient', () => {
       expect(response).toEqual(result)
     })
   })
+
+  describe('getDraftAdjudication', () => {
+    it('should return the draft adjudication data', async () => {
+      const result = {
+        draftAdjudication: {
+          id: 10,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26152,
+            dateTimeOfIncident: '2021-11-04T07:20:00',
+            createdByUserId: 'NCLAMP_GEN',
+            createdDateTime: '2021-11-04T09:21:21.960765',
+            modifiedByUserId: 'NCLAMP_GEN',
+            modifiedByDateTime: '2021-11-04T09:21:21.960765',
+          },
+          incidentStatement: {
+            id: 9,
+            statement: 'test',
+            createdByUserId: 'NCLAMP_GEN',
+            createdDateTime: '2021-11-04T09:23:06.76843',
+            modifiedByUserId: 'NCLAMP_GEN',
+            modifiedByDateTime: '2021-11-04T09:23:06.76843',
+          },
+          createdByUserId: 'NCLAMP_GEN',
+          createdDateTime: '2021-11-04T09:21:21.95935',
+        },
+      }
+
+      fakeManageAdjudicationsApi
+        .get('/draft-adjudications/10')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.getDraftAdjudication(10)
+
+      expect(response).toEqual(result)
+    })
+  })
 })

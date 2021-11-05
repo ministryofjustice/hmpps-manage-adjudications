@@ -1,4 +1,12 @@
-import { convertToTitleCase, formatLocation, formatDate, formatTimestampToDate, formatTimestampToTime } from './utils'
+import {
+  convertToTitleCase,
+  formatLocation,
+  formatDate,
+  formatTimestampToDate,
+  formatTimestampToTime,
+  getTime,
+  getDate,
+} from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -79,5 +87,33 @@ describe('formatTimestampToDateTime', () => {
   })
   it('should not fail to parse absent timestamp', () => {
     expect(formatTimestampToTime(undefined)).toEqual(undefined)
+  })
+})
+
+describe('getTime()', () => {
+  it('should return the correctly formatted time only', () => {
+    expect(getTime('2019-09-23T15:30:00')).toEqual('15:30')
+  })
+
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getTime('2019-13-23')).toEqual('Invalid date or time')
+  })
+
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getTime(null)).toEqual('Invalid date or time')
+  })
+})
+
+describe('getDate()', () => {
+  it('should return the correctly formatted date only', () => {
+    expect(getDate('2019-09-23T15:30:00')).toEqual('Monday 23 September 2019')
+  })
+
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getDate('2019-13-23')).toEqual('Invalid date or time')
+  })
+
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getDate(null)).toEqual('Invalid date or time')
   })
 })

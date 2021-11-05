@@ -28,6 +28,12 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async getDraftAdjudication(id: number): Promise<DraftAdjudicationResult> {
+    return this.restClient.get({
+      path: `/draft-adjudications/${id}`,
+    })
+  }
+
   async getReportedAdjudication(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.get({
       path: `/reported-adjudications/${adjudicationNumber}`,

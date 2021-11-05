@@ -99,6 +99,12 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return foundErrors.length !== 0
   })
 
+  njkEnv.addFilter('showDefault', (value, specifiedText) => {
+    if (value === 0) return value
+
+    return value || specifiedText || '--'
+  })
+
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
