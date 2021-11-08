@@ -12,6 +12,10 @@ interface UserDetails {
 export default class UserService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
+  async getUserRoles(token: string): Promise<string[]> {
+    return this.hmppsAuthClient.getUserRoles(token)
+  }
+
   async getUser(token: string): Promise<UserDetails> {
     const user = await this.hmppsAuthClient.getUser(token)
     const allCaseLoads = await new PrisonApiClient(token).getUserCaseLoads()

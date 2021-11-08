@@ -16,7 +16,7 @@ export default class IncidentStatementRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error } = pageData
+    const { error, incidentStatement, incidentStatementComplete } = pageData
     const { prisonerNumber } = req.params
     const { user } = res.locals
 
@@ -25,6 +25,8 @@ export default class IncidentStatementRoutes {
     return res.render(`pages/incidentStatement`, {
       errors: error ? [error] : [],
       prisoner,
+      incidentStatement,
+      incidentStatementComplete,
     })
   }
 
@@ -36,7 +38,7 @@ export default class IncidentStatementRoutes {
     const { id, prisonerNumber } = req.params
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
-    if (error) return this.renderView(req, res, { error })
+    if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
     try {
       await this.placeOnReportService.postDraftIncidentStatement(

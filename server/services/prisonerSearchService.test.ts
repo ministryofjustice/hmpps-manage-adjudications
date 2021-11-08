@@ -66,8 +66,9 @@ describe('prisonerSearchService', () => {
       expect(results).toStrictEqual([
         {
           cellLocation: '1-2-016',
+          displayCellLocation: '1-2-016',
           displayName: 'Jones, Steve',
-          name: 'Steve Jones',
+          friendlyName: 'Steve Jones',
           firstName: 'STEVE',
           lastName: 'JONES',
           prisonName: 'HMP Moorland',
@@ -75,8 +76,9 @@ describe('prisonerSearchService', () => {
         },
         {
           cellLocation: '1-2-015',
+          displayCellLocation: '1-2-015',
           displayName: 'Smith, John',
-          name: 'John Smith',
+          friendlyName: 'John Smith',
           firstName: 'JOHN',
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
@@ -94,13 +96,16 @@ describe('prisonerSearchService', () => {
           lastName: 'SMITH',
           prisonName: 'HMP Moorland',
           prisonerNumber: 'A1234AA',
+          cellLocation: '1-2-015',
         },
       ])
       const results = await service.search({ searchTerm: 'Smith, John', prisonIds }, user)
       expect(results).toStrictEqual([
         {
+          cellLocation: '1-2-015',
+          displayCellLocation: '1-2-015',
           displayName: 'Smith, John',
-          name: 'John Smith',
+          friendlyName: 'John Smith',
           firstName: 'JOHN',
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',

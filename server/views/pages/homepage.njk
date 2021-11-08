@@ -1,0 +1,47 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "../partials/card.njk" import card %}
+
+{% set title = "Place a prisoner on report" %}
+{% set feedbackBannerBackground = '#f0f4f5 '%}
+
+{% block pageTitle %}
+  Place a prisoner on report
+{% endblock %}
+
+{% block main %}
+  <div class="govuk-width-container">
+    {{ govukBreadcrumbs({
+      collapseOnMobile: true,
+      items: [{
+        text: "Digital prison services",
+        href: digitalPrisonServiceUrl
+      }],
+      classes: "govuk-!-display-none-print"
+    }) }}
+
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+  </div>
+
+  <div class="homepage-content">
+    <div class="govuk-width-container">
+      <ul class="govuk-grid-row card-group">
+          {% for task in tasks %}
+            <li class="govuk-grid-column-one-third card-group__item">
+              {{ card({
+                "href": task.href,
+                "clickable": "true",
+                "heading": task.heading,
+                "description": task.description,
+                "id": task.id
+              }) }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/assets/js/card.js"></script>
+{% endblock %}

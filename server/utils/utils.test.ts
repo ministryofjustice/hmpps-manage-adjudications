@@ -1,4 +1,11 @@
-import { convertToTitleCase, formatLocation, formatDate, formatTimestampToDate, formatTimestampToTime } from './utils'
+import {
+  convertToTitleCase,
+  formatLocation,
+  formatDate,
+  formatTimestampToDate,
+  formatTimestampToTime,
+  hasAnyRole,
+} from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -52,6 +59,20 @@ describe('formatDateToISOString', () => {
   it('returns error message if any of the inputs are invalid', () => {
     expect(formatDate({ date: '27/10/2021', time: { hour: 'we', minute: 'go' } })).toEqual(null)
     expect(formatDate({ date: 'help', time: { hour: '23', minute: '11' } })).toEqual(null)
+  })
+})
+
+describe('hasAnyRole', () => {
+  it.only('returns true when they have one of the required roles', () => {
+    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_ONE'])).toEqual(true)
+  })
+  it.only('returns false when they have none of the required roles', () => {
+    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_THREE', 'ROLE_FOUR'])).toEqual(false)
+    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], null)).toEqual(false)
+  })
+  it.only('returns true if there are no required roles', () => {
+    expect(hasAnyRole(null, null)).toEqual(true)
+    expect(hasAnyRole(null, ['ROLE_ONE'])).toEqual(true)
   })
 })
 
