@@ -3,14 +3,14 @@ import CompletedAdjudicationsService from '../../services/completedAdjudications
 import { pageRequestFrom, PageResponse } from '../../utils/Pagination'
 import { CompletedAdjudicationSummary } from '../../data/CompletedAdjudicationsData'
 
-export default class CompletedReportsRoutes {
+export default class YourCompletedReportsRoutes {
   constructor(private readonly completedAdjudicationsService: CompletedAdjudicationsService) {}
 
   private renderView = async (
     req: Request,
     res: Response,
     results: PageResponse<CompletedAdjudicationSummary>
-  ): Promise<void> => res.render(`pages/completedReports`, results)
+  ): Promise<void> => res.render(`pages/yourCompletedReports`, results)
 
   view = async (req: Request, res: Response): Promise<void> => {
     const results = await this.completedAdjudicationsService.getCompletedAdjudications(
