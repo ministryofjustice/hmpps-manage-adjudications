@@ -3,7 +3,7 @@ import { Readable } from 'stream'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
-import { Location } from '../data/PrisonLocationResult'
+import { PrisonLocation } from '../data/PrisonLocationResult'
 
 import { convertToTitleCase, formatLocation, getTime, getDate } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
@@ -66,7 +66,7 @@ export default class PlaceOnReportService {
     return client.postDraftIncidentStatement(id, requestBody)
   }
 
-  async getCheckYourAnswersInfo(id: number, locations: Location[], user: User): Promise<CheckYourAnswers> {
+  async getCheckYourAnswersInfo(id: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
 
     const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(id)

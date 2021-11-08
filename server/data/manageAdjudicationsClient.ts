@@ -1,3 +1,4 @@
+import { Response } from 'superagent'
 import config from '../config'
 import { DraftAdjudicationResult, IncidentStatement, IncidentDetails } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult } from './ReportedAdjudicationResult'
@@ -31,6 +32,12 @@ export default class ManageAdjudicationsClient {
   async getDraftAdjudication(id: number): Promise<DraftAdjudicationResult> {
     return this.restClient.get({
       path: `/draft-adjudications/${id}`,
+    })
+  }
+
+  async submitCompleteDraftAdjudication(id: number): Promise<Response> {
+    return this.restClient.post({
+      path: `/draft-adjudications/${id}/complete-draft-adjudication`,
     })
   }
 

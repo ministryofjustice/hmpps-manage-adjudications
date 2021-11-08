@@ -145,4 +145,16 @@ describe('manageAdjudicationsClient', () => {
       expect(response).toEqual(result)
     })
   })
+
+  describe('submitCompleteDraftAdjudication', () => {
+    it('should return empty object after posting the complete draft adjudication to NOMIS', async () => {
+      fakeManageAdjudicationsApi
+        .post('/draft-adjudications/16/complete-draft-adjudication')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200)
+
+      const response = await client.submitCompleteDraftAdjudication(16)
+      expect(response).toEqual({})
+    })
+  })
 })

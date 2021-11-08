@@ -2,12 +2,13 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import ManageAdjudicationsClient from '../../data/manageAdjudicationsClient'
 
 type PageData = {
   error?: FormError | FormError[]
 }
 
-export default class IncidentStatementRoutes {
+export default class checkYourAnswersRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService
@@ -24,7 +25,8 @@ export default class IncidentStatementRoutes {
       user
     )
 
-    const data = await this.placeOnReportService.getCheckYourAnswersInfo(Number(id), incidentLocations, user)
+    const IdNumberValue: number = parseInt(id as string, 10)
+    const data = await this.placeOnReportService.getCheckYourAnswersInfo(IdNumberValue, incidentLocations, user)
 
     return res.render(`pages/checkYourAnswers`, {
       errors: error ? [error] : [],
@@ -36,8 +38,12 @@ export default class IncidentStatementRoutes {
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
+    const { id } = req.params
+    const IdNumberValue: number = parseInt(id as string, 10)
     try {
-      return res.redirect(`/place-a-prisoner-on-report`)
+      await new ManageAdjudicationsClient(user.token).submitCompleteDraftAdjudication(IdNumberValue)
+      return res.redirect(`/prisoner-placed-on-report`)
     } catch (postError) {
       res.locals.redirectUrl = `/place-a-prisoner-on-report`
       throw postError

@@ -1,6 +1,10 @@
 export type IncidentDetails = {
   locationId: number
   dateTimeOfIncident: string
+  createdByUserId?: string
+  createdDateTime?: string
+  modifiedByUserId?: string
+  modifiedByDateTime?: string
 }
 
 export type IncidentStatement = {
