@@ -3,16 +3,16 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import CompletedResports from './completedReports'
 
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import CompletedAdjudicationsService from '../../services/completedAdjudicationsService'
 
 export default function completedReportsRoutes({
-  reportedAdjudicationsService,
+  completedAdjudicationsService,
 }: {
-  reportedAdjudicationsService: ReportedAdjudicationsService
+  completedAdjudicationsService: CompletedAdjudicationsService
 }): Router {
   const router = express.Router()
 
-  const completedReports = new CompletedResports(reportedAdjudicationsService)
+  const completedReports = new CompletedResports(completedAdjudicationsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 

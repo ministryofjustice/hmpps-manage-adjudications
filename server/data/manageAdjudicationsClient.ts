@@ -2,6 +2,9 @@ import config from '../config'
 import { DraftAdjudicationResult, IncidentStatement, IncidentDetails } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
+import { User } from './hmppsAuthClient'
+import { CompletedAdjudicationSummary } from './CompletedAdjudicationsData'
+import { PageRequest, PageResponse, pageResponseFrom } from '../utils/Pagination'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -33,4 +36,20 @@ export default class ManageAdjudicationsClient {
       path: `/reported-adjudications/${adjudicationNumber}`,
     })
   }
+
+  async getCompletedAdjudications(
+    user: User,
+    pageRequest: PageRequest
+  ): Promise<PageResponse<CompletedAdjudicationSummary>> {
+    return pageResponseFrom(pageRequest, dummyResults)
+  }
 }
+
+const dummyResults: CompletedAdjudicationSummary[] = [
+  {
+    reportExpirationDateTime: new Date(),
+    prisonerFirstName: 'John',
+    prisonerLastName: 'Smith',
+    prisonerNumber: 'A1234AA',
+  },
+]
