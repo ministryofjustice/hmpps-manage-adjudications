@@ -32,7 +32,8 @@ describe('GET /prisoner-placed-on-report', () => {
       .get('/prisoner-placed-on-report?adjudicationNumber=123')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('John Smith has been placed on report. Your charge number is 123.')
+        expect(res.text).toContain('John Smith has been placed on report')
+        expect(res.text).toContain('123')
       })
   })
 
