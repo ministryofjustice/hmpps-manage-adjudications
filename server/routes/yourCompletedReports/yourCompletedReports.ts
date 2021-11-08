@@ -10,7 +10,7 @@ export default class YourCompletedReportsRoutes {
     req: Request,
     res: Response,
     results: PageResponse<CompletedAdjudicationSummary>
-  ): Promise<void> => res.render(`pages/yourCompletedReports`, results)
+  ): Promise<void> => res.render(`pages/yourCompletedReports`, { yourCompletedReports: results })
 
   view = async (req: Request, res: Response): Promise<void> => {
     const results = await this.completedAdjudicationsService.getCompletedAdjudications(

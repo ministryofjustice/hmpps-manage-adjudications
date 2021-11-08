@@ -1,6 +1,9 @@
 export type CompletedAdjudicationSummary = {
-  reportExpirationDateTime: Date
+  dateTimeOfIncident: Date
   prisonerFirstName: string
   prisonerLastName: string
+  prisonerDisplayName: string
+  prisonerFriendlyName: string
   prisonerNumber: string
+  adjudicationsNumber: string
 }

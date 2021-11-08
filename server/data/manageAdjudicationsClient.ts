@@ -47,9 +47,12 @@ export default class ManageAdjudicationsClient {
 
 const dummyResults: CompletedAdjudicationSummary[] = [
   {
-    reportExpirationDateTime: new Date(),
+    dateTimeOfIncident: new Date(),
+    prisonerDisplayName: 'Smith, John',
+    prisonerFriendlyName: 'Smith, John',
     prisonerFirstName: 'John',
     prisonerLastName: 'Smith',
     prisonerNumber: 'A1234AA',
+    adjudicationsNumber: '1',
   },
 ]
