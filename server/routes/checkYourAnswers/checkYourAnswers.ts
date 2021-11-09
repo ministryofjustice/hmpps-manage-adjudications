@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import ManageAdjudicationsClient from '../../data/manageAdjudicationsClient'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -32,6 +31,7 @@ export default class checkYourAnswersRoutes {
       errors: error ? [error] : [],
       prisoner,
       data,
+      IdNumberValue,
     })
   }
 
@@ -42,8 +42,8 @@ export default class checkYourAnswersRoutes {
     const { id } = req.params
     const IdNumberValue: number = parseInt(id as string, 10)
     try {
-      await new ManageAdjudicationsClient(user.token).submitCompleteDraftAdjudication(IdNumberValue)
-      return res.redirect(`/prisoner-placed-on-report`)
+      const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
+      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}`)
     } catch (postError) {
       res.locals.redirectUrl = `/place-a-prisoner-on-report`
       throw postError

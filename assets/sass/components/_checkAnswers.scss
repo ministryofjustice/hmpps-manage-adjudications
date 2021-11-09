@@ -2,7 +2,7 @@
 	max-width: 500px;
 }
 
-.checkAnswers-incidentDetails{
+.checkAnswers-incidentDetails, .checkAnswers-incidentStatement{
 	@media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
 		max-width: 60%;
 	}

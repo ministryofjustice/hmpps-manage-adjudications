@@ -1,7 +1,6 @@
-import { Response } from 'superagent'
 import config from '../config'
 import { DraftAdjudicationResult, IncidentStatement, IncidentDetails } from './DraftAdjudicationResult'
-import { ReportedAdjudicationResult } from './ReportedAdjudicationResult'
+import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -35,7 +34,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async submitCompleteDraftAdjudication(id: number): Promise<Response> {
+  async submitCompleteDraftAdjudication(id: number): Promise<ReportedAdjudication> {
     return this.restClient.post({
       path: `/draft-adjudications/${id}/complete-draft-adjudication`,
     })

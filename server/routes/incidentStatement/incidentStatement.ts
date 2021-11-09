@@ -40,7 +40,10 @@ export default class IncidentStatementRoutes {
 
     try {
       await this.placeOnReportService.postDraftIncidentStatement(Number(id), incidentStatement, user)
-      const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
+      const pathname =
+        incidentStatementComplete === 'yes'
+          ? `/check-your-answers/${prisonerNumber}/${id}`
+          : `/place-a-prisoner-on-report`
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)

@@ -29,7 +29,7 @@
 
 			<div class="flex-container checkAnswers-heading">
 				<h2 class="govuk-heading-m">Incident details</h2>
-				<a href="" class="govuk-link govuk-!-padding-left-2">Change</a>
+				<a href='/incident-details/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-details-changeLink">Change</a>
 			</div>
 			<div class="checkAnswers-incidentDetails">
     		{{ incidentDetailsSummaryList(data.incidentDetails, 'Not entered', { "data-qa": "check-answers-details" }) }}
@@ -37,9 +37,9 @@
 
 			<div class="flex-container checkAnswers-heading">
 				<h2 class="govuk-heading-m govuk-!-margin-top-6">Incident statement</h2>
-				<a href="" class="govuk-link govuk-!-padding-left-2">Change</a>
+				<a href='/incident-statement/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-statement-changeLink">Change</a>
 			</div>
-			<p class="govuk-body checkAnswers-incidentDetails">{{ data.statement }}</p>
+			<p class="govuk-body checkAnswers-incidentStatement" data-qa="check-answers-statement">{{ data.statement }}</p>
 
 			<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

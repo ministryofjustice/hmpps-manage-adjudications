@@ -49,7 +49,7 @@ describe('POST /incident-statement', () => {
     return request(app)
       .post('/incident-statement/G6415GD/1')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-      .expect('Location', '/check-your-answers')
+      .expect('Location', '/check-your-answers/G6415GD/1')
   })
 
   it('should redirect to the task page if the statement is incomplete', () => {

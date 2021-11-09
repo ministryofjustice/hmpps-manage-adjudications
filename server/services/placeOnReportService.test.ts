@@ -7,6 +7,7 @@ const getPrisonerDetails = jest.fn()
 const postDraftIncidentStatement = jest.fn()
 const startNewDraftAdjudication = jest.fn()
 const getDraftAdjudication = jest.fn()
+const submitCompleteDraftAdjudication = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -16,7 +17,12 @@ jest.mock('../data/prisonApiClient', () => {
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { postDraftIncidentStatement, startNewDraftAdjudication, getDraftAdjudication }
+    return {
+      postDraftIncidentStatement,
+      startNewDraftAdjudication,
+      getDraftAdjudication,
+      submitCompleteDraftAdjudication,
+    }
   })
 })
 
@@ -219,6 +225,32 @@ describe('placeOnReportService', () => {
           },
         },
       })
+    })
+  })
+  describe('completeDraftAdjudication', () => {
+    it('calls api and returns the reported adjudication number', async () => {
+      submitCompleteDraftAdjudication.mockResolvedValue({
+        adjudicationNumber: 234,
+        incidentDetails: {
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-09T13:55:34.143Z',
+          dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+          locationId: 0,
+          modifiedByDateTime: '2021-11-09T13:55:34.143Z',
+          modifiedByUserId: 'string',
+        },
+        incidentStatement: {
+          completed: false,
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-09T13:55:34.143Z',
+          modifiedByDateTime: '2021-11-09T13:55:34.143Z',
+          modifiedByUserId: 'string',
+          statement: 'string',
+        },
+        prisonerNumber: 'G2996UX',
+      })
+      const response = await service.completeDraftAdjudication(4, user)
+      expect(response).toStrictEqual(234)
     })
   })
 })
