@@ -5,7 +5,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
-const reportedAdjudicationsService = new ReportedAdjudicationsService() as jest.Mocked<ReportedAdjudicationsService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(null) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
