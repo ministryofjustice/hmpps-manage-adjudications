@@ -58,11 +58,13 @@ export default class PlaceOnReportService {
   async postDraftIncidentStatement(
     id: number,
     incidentStatement: string,
+    completed: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       statement: incidentStatement,
+      completed,
     }
     return client.postDraftIncidentStatement(id, requestBody)
   }

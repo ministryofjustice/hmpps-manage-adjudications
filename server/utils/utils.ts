@@ -57,6 +57,9 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
   }
 }
 
+export const hasAnyRole = (requiredRoles: string[], userRoles: string[]): boolean =>
+  !requiredRoles || (!!userRoles && requiredRoles.some(role => userRoles.includes(role)))
+
 export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/YYYY'): string =>
   timestamp && moment(timestamp).format(outputFormat)
 
@@ -84,4 +87,5 @@ export default {
   formatDate,
   getTime,
   getDate,
+  hasAnyRole,
 }

@@ -209,9 +209,9 @@ describe('placeOnReportService', () => {
       },
     })
     it('makes the api call and returns data', async () => {
-      const response = await service.postDraftIncidentStatement(4, 'This is a statement', user)
+      const response = await service.postDraftIncidentStatement(4, 'This is a statement', true, user)
 
-      expect(postDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement' })
+      expect(postDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
       expect(response).toStrictEqual({
         draftAdjudication: {
           id: 4,

@@ -50,6 +50,14 @@ describe('POST /incident-statement', () => {
       .post('/incident-statement/G6415GD/1')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
       .expect('Location', '/check-your-answers/G6415GD/1')
+      .expect(_ => {
+        expect(placeOnReportService.postDraftIncidentStatement).toHaveBeenLastCalledWith(
+          1,
+          'Lorem Ipsum',
+          true,
+          expect.anything()
+        )
+      })
   })
 
   it('should redirect to the task page if the statement is incomplete', () => {

@@ -122,7 +122,7 @@ const stubUser = () =>
     },
   })
 
-const stubUserRoles = () =>
+const stubUserRoles = (roles = []): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
@@ -133,7 +133,7 @@ const stubUserRoles = () =>
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: [{ roleId: 'SOME_USER_ROLE' }],
+      jsonBody: roles,
     },
   })
 
@@ -165,4 +165,5 @@ export default {
     Promise.all([favicon(), redirect(), signOut(), token(), tokenVerification.stubVerifyToken()]),
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),
   stubGetUserFromUsername,
+  stubUserRoles,
 }

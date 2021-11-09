@@ -9,6 +9,7 @@ export type IncidentDetails = {
 
 export type IncidentStatement = {
   statement: string
+  completed?: boolean
 }
 
 export type DraftAdjudication = {
