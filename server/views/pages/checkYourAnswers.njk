@@ -29,7 +29,7 @@
 
 			<div class="flex-container checkAnswers-heading">
 				<h2 class="govuk-heading-m">Incident details</h2>
-				<a href='/incident-details/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-details-changeLink">Change</a>
+				<a href='/incident-details/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}/edit' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-details-changeLink">Change</a>
 			</div>
 			<div class="checkAnswers-incidentDetails">
     		{{ incidentDetailsSummaryList(data.incidentDetails, 'Not entered', { "data-qa": "check-answers-details" }) }}
