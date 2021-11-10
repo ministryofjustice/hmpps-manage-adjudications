@@ -9,12 +9,18 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import PrisonerResult from '../data/prisonerResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { DraftAdjudicationResult, CheckYourAnswers } from '../data/DraftAdjudicationResult'
+import { SubmittedDateTime } from '../@types/template'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
   displayName: string
   prisonerNumber: string
   currentLocation: string
+}
+
+type ExistingDraftIncidentDetails = {
+  dateTime: SubmittedDateTime
+  locationId: number
 }
 
 export default class PlaceOnReportService {
@@ -115,6 +121,33 @@ export default class PlaceOnReportService {
       incidentDetails,
       statement: formatStatement(draftAdjudication.incidentStatement.statement),
     }
+  }
+
+  async getDraftIncidentDetailsForEditing(id: number, user: User): Promise<ExistingDraftIncidentDetails> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const response = await manageAdjudicationsClient.getDraftAdjudication(id)
+    const { incidentDetails } = response.draftAdjudication
+    const date = getDate(incidentDetails.dateTimeOfIncident, 'DD/MM/YYYY')
+    const time = getTime(incidentDetails.dateTimeOfIncident)
+    const hour = time.split(':')[0]
+    const minute = time.split(':')[1]
+    return { dateTime: { date, time: { hour, minute } }, locationId: incidentDetails.locationId }
+  }
+
+  async editDraftIncidentDetails(
+    id: number,
+    dateTime: string,
+    location: number,
+    user: User
+  ): Promise<DraftAdjudicationResult> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const editedIncidentDetails = {
+      dateTimeOfIncident: dateTime,
+      locationId: location,
+    }
+
+    const editedAdjudication = await manageAdjudicationsClient.editDraftAdjudication(id, editedIncidentDetails)
+    return editedAdjudication
   }
 
   async completeDraftAdjudication(id: number, user: User): Promise<number> {

@@ -1,5 +1,10 @@
 import config from '../config'
-import { DraftAdjudicationResult, IncidentStatement, IncidentDetails } from './DraftAdjudicationResult'
+import {
+  DraftAdjudicationResult,
+  IncidentStatement,
+  IncidentDetails,
+  EditedIncidentDetails,
+} from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 
@@ -37,6 +42,16 @@ export default class ManageAdjudicationsClient {
   async submitCompleteDraftAdjudication(id: number): Promise<ReportedAdjudication> {
     return this.restClient.post({
       path: `/draft-adjudications/${id}/complete-draft-adjudication`,
+    })
+  }
+
+  async editDraftAdjudication(
+    id: number,
+    editedIncidentDetails: EditedIncidentDetails
+  ): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/draft-adjudications/${id}/incident-details`,
+      data: { ...editedIncidentDetails },
     })
   }
 

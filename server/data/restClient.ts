@@ -102,6 +102,31 @@ export default class RestClient {
     }
   }
 
+  async put<T>({ path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest = {}): Promise<T> {
+    logger.info(`Put using user credentials: calling ${this.name}: ${path}`)
+    try {
+      const result = await superagent
+        .put(`${this.apiUrl()}${path}`)
+        .send(data)
+        .type('json')
+        .agent(this.agent)
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined
+        })
+        .auth(this.token, { type: 'bearer' })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+
+      return raw ? result : result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'PUT'`)
+      throw sanitisedError
+    }
+  }
+
   async stream({ path = null, headers = {} }: StreamRequest = {}): Promise<unknown> {
     logger.info(`Get using user credentials: calling ${this.name}: ${path}`)
     return new Promise((resolve, reject) => {
