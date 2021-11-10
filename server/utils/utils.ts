@@ -27,8 +27,11 @@ export const formatName = (firstName: string, lastName: string): string =>
   [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
 
 export const getFormattedReporterName = (name: string): string => {
+  if (!name) {
+    return null
+  }
   const names = name.split(' ')
-  return `${names[0][0]}. ${names[1]}`
+  return `${names[0][0]}. ${names.reverse()[0]}`
 }
 
 export const convertToTitleCase = (sentence: string): string =>
