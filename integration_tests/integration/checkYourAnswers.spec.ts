@@ -186,7 +186,7 @@ context('Incident details', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report')
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
