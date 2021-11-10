@@ -35,7 +35,7 @@ describe('placeOnReportService', () => {
 
   const user = {
     activeCaseLoadId: 'MDI',
-    name: 'User',
+    name: 'User Smith',
     username: 'user1',
     token: 'token-1',
     authSource: 'auth',
@@ -122,7 +122,7 @@ describe('placeOnReportService', () => {
         incidentDetails: [
           {
             label: 'Reporting Officer',
-            value: 'Natalie Clamp',
+            value: 'N. Clamp',
           },
           {
             label: 'Date',

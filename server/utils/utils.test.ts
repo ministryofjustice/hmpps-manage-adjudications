@@ -7,6 +7,7 @@ import {
   getTime,
   getDate,
   hasAnyRole,
+  getFormattedReporterName,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -130,5 +131,17 @@ describe('getDate()', () => {
 
   it('should return Invalid message if no date time string is used', () => {
     expect(getDate(null)).toEqual('Invalid date or time')
+  })
+})
+
+describe('getFormattedReporterName()', () => {
+  it('should return a correctly formatted name', () => {
+    expect(getFormattedReporterName('Test User')).toEqual('T. User')
+  })
+  it('should return a correctly formatted name when the surname is double barelled', () => {
+    expect(getFormattedReporterName('Test User-Smith')).toEqual('T. User-Smith')
+  })
+  it('should return a correctly formatted name when the first name is double barelled', () => {
+    expect(getFormattedReporterName('Test-Jo User')).toEqual('T. User')
   })
 })
