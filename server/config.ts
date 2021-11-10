@@ -82,6 +82,14 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    curious: {
+      url: get('CURIOUS_API_URL', 'http://localhost:3004', requiredInProduction),
+      timeout: {
+        response: Number(get('CURIOUS_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('CURIOUS_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(),
+    },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
       timeout: {
