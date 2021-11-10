@@ -5,7 +5,10 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
-const reportedAdjudicationsService = new ReportedAdjudicationsService(null) as jest.Mocked<ReportedAdjudicationsService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
@@ -34,6 +37,26 @@ describe('GET /prisoner-placed-on-report', () => {
       .expect(res => {
         expect(res.text).toContain('John Smith has been placed on report')
         expect(res.text).toContain('123')
+        expect(res.text).toContain('They have recorded disabilities')
+        expect(res.text).toContain('Moderate learning difficulty')
+        expect(res.text).toContain('Dyslexia')
+      })
+  })
+
+  it('should not show neurodivesity information if none provided', () => {
+    reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+      reportExpirationDateTime: '2020-12-23T07:21',
+      prisonerFirstName: 'John',
+      prisonerLastName: 'Smith',
+      prisonerPreferredNonEnglishLanguage: 'French',
+      prisonerOtherLanguages: ['English', 'Spanish'],
+      prisonerNeurodiversities: null,
+    })
+    return request(app)
+      .get('/prisoner-placed-on-report?adjudicationNumber=123')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).not.toContain('They have recorded disabilities')
       })
   })
 
