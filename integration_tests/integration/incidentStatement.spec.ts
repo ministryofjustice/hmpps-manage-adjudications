@@ -90,7 +90,7 @@ context('Incident Statement', () => {
     incidentStatementPage.radioYes().check()
     incidentStatementPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers')
+      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/3456')
     })
   })
   it('should redirect the user to /place-a-prisoner-on-report if statement is incomplete', () => {

@@ -12,6 +12,7 @@ export default (on: (string, Record) => void): void => {
 
     getSignInUrl: auth.getSignInUrl,
     stubSignIn: (caseLoads: CaseLoad[]) => Promise.all([auth.stubSignIn(), prisonApi.stubUserCaseloads(caseLoads)]),
+    stubGetUserFromUsername: auth.stubGetUserFromUsername,
 
     stubSearch: prisonerSearch.stubSearch,
     stubAuthUser: auth.stubUser,
@@ -27,5 +28,7 @@ export default (on: (string, Record) => void): void => {
 
     stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
     stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
+    stubGetDraftAdjudication: adjudications.stubGetDraftAdjudication,
+    stubSubmitCompleteDraftAdjudication: adjudications.stubSubmitCompleteDraftAdjudication,
   })
 }

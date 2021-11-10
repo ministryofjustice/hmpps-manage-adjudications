@@ -1,6 +1,8 @@
 import moment from 'moment'
 import { SubmittedDateTime } from '../@types/template'
 
+const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
+
 type DateTimeInput = {
   date: string
   hours: string
@@ -64,9 +66,26 @@ export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/Y
 export const formatTimestampToTime = (timestamp: string, format = 'HH:mm'): string =>
   timestamp && moment(timestamp).format(format)
 
+export const isValidDateTimeFormat = (dateTimeString: string): boolean =>
+  moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
+
+export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(format)
+}
+
+export const getTime = (dateTimeString: string): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
+}
+
 export default {
   convertToTitleCase,
   formatLocation,
   formatDate,
+  getTime,
+  getDate,
   hasAnyRole,
 }

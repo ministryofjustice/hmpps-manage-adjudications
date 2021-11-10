@@ -1,12 +1,14 @@
 import { Readable } from 'stream'
 
+import { convertToTitleCase, formatLocation, getTime, getDate } from '../utils/utils'
+
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
-import { convertToTitleCase, formatLocation } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
-import { DraftAdjudicationResult } from '../data/DraftAdjudicationResult'
+import { PrisonLocation } from '../data/PrisonLocationResult'
+import { DraftAdjudicationResult, CheckYourAnswers } from '../data/DraftAdjudicationResult'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -65,5 +67,49 @@ export default class PlaceOnReportService {
       completed,
     }
     return client.postDraftIncidentStatement(id, requestBody)
+  }
+
+  async getCheckYourAnswersInfo(id: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+
+    const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(id)
+    const { draftAdjudication } = draftAdjudicationInfo
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.createdByUserId, user.token)
+
+    const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
+    const date = getDate(dateTime, 'D MMMM YYYY')
+    const time = getTime(dateTime)
+
+    const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
+
+    const incidentDetails = [
+      {
+        label: 'Reporting Officer',
+        value: reporter.name,
+      },
+      {
+        label: 'Date',
+        value: date,
+      },
+      {
+        label: 'Time',
+        value: time,
+      },
+      {
+        label: 'Location',
+        value: locationObj.userDescription,
+      },
+    ]
+
+    return {
+      incidentDetails,
+      statement: draftAdjudication.incidentStatement.statement,
+    }
+  }
+
+  async completeDraftAdjudication(id: number, user: User): Promise<number> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const completedAdjudication = await manageAdjudicationsClient.submitCompleteDraftAdjudication(id)
+    return completedAdjudication.adjudicationNumber
   }
 }
