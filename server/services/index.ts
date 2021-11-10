@@ -2,6 +2,7 @@ import UserService from './userService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
 import PlaceOnReportService from './placeOnReportService'
+import CuriousApiService from './curiousApiService'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import PrisonerSearchService from './prisonerSearchService'
 import LocationService from './locationService'
@@ -9,7 +10,8 @@ import LocationService from './locationService'
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const placeOnReportService = new PlaceOnReportService(hmppsAuthClient)
-const reportedAdjudicationsService = new ReportedAdjudicationsService(hmppsAuthClient)
+const curiousApiService = new CuriousApiService()
+const reportedAdjudicationsService = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService)
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 const locationService = new LocationService(hmppsAuthClient)
 

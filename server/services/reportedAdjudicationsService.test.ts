@@ -3,9 +3,11 @@ import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import CuriousApiService from './curiousApiService'
 
 const getPrisonerDetails = jest.fn()
 const getReportedAdjudication = jest.fn()
+const getNeurodiversitiesForReport = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
@@ -19,8 +21,14 @@ jest.mock('../data/manageAdjudicationsClient', () => {
     return { getReportedAdjudication }
   })
 })
+jest.mock('./curiousApiService', () => {
+  return jest.fn().mockImplementation(() => {
+    return { getNeurodiversitiesForReport }
+  })
+})
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiService>
 
 const token = 'token-1'
 const user = {
@@ -36,7 +44,7 @@ describe('reportedAdjudicationsService', () => {
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
 
-    service = new ReportedAdjudicationsService(hmppsAuthClient)
+    service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService)
   })
 
   afterEach(() => {
@@ -66,6 +74,8 @@ describe('reportedAdjudicationsService', () => {
           firstName: 'JOHN',
           lastName: 'SMITH',
         })
+
+        getNeurodiversitiesForReport.mockResolvedValue(['Hearing impairment', 'Visual impairment'])
       })
 
       it('returns the correct data', async () => {
@@ -77,7 +87,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerLastName: 'SMITH',
           prisonerPreferredNonEnglishLanguage: 'Spanish',
           prisonerOtherLanguages: ['German', 'French'],
-          prisonerNeurodiversities: ['Cant read', 'Cant write'],
+          prisonerNeurodiversities: ['Hearing impairment', 'Visual impairment'],
         })
       })
 
@@ -88,6 +98,7 @@ describe('reportedAdjudicationsService', () => {
         expect(getReportedAdjudication).toBeCalledWith(123)
         expect(PrisonApiClient).toBeCalledWith(token)
         expect(getPrisonerDetails).toBeCalledWith('A1234AA')
+        expect(getNeurodiversitiesForReport).toBeCalledWith('A1234AA', token)
       })
     })
   })
