@@ -82,6 +82,16 @@ export default class PlaceOnReportService {
 
     const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
 
+    const formatStatement = (statement: string) => {
+      if (!statement) return null
+      const statementArray = statement.split(/\r|\n/)
+      return statementArray
+        .map(paragraph => {
+          return `<p class="govuk-body">${paragraph}</p>`
+        })
+        .join('')
+    }
+
     const incidentDetails = [
       {
         label: 'Reporting Officer',
@@ -103,7 +113,7 @@ export default class PlaceOnReportService {
 
     return {
       incidentDetails,
-      statement: draftAdjudication.incidentStatement.statement,
+      statement: formatStatement(draftAdjudication.incidentStatement.statement),
     }
   }
 

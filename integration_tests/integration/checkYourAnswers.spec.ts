@@ -189,7 +189,7 @@ context('Incident details', () => {
       expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
     })
   })
-  it.only('should go to the incident details page if the incident details change link is clicked', () => {
+  it('should go to the incident details page if the incident details change link is clicked', () => {
     cy.visit(`/check-your-answers/G6415GD/3456`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
@@ -197,7 +197,7 @@ context('Incident details', () => {
       expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
     })
   })
-  it.only('should go to the incident statement page if the incident statement change link is clicked', () => {
+  it('should go to the incident statement page if the incident statement change link is clicked', () => {
     cy.visit(`/check-your-answers/G6415GD/3456`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentStatementChangeLink().click()
