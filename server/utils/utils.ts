@@ -26,6 +26,11 @@ export const properCaseName = (name: string): string => (isBlank(name) ? '' : na
 export const formatName = (firstName: string, lastName: string): string =>
   [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
 
+export const getFormattedReporterName = (name: string): string => {
+  const names = name.split(' ')
+  return `${names[0][0]}. ${names[1]}`
+}
+
 export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
@@ -88,4 +93,5 @@ export default {
   getTime,
   getDate,
   hasAnyRole,
+  getFormattedReporterName,
 }

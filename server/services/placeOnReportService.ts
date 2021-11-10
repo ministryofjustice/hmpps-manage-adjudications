@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 
-import { convertToTitleCase, formatLocation, getTime, getDate } from '../utils/utils'
+import { convertToTitleCase, formatLocation, getTime, getDate, getFormattedReporterName } from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -85,7 +85,7 @@ export default class PlaceOnReportService {
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: reporter.name,
+        value: getFormattedReporterName(reporter.name),
       },
       {
         label: 'Date',
