@@ -64,7 +64,10 @@ export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/Y
 export const formatTimestampToTime = (timestamp: string, format = 'HH:mm'): string =>
   timestamp && moment(timestamp).format(format)
 
+export const numberRange = (start: number, end: number): number[] => Array(end - start + 1).map((_, idx) => start + idx)
+
 export default {
+  numberRange,
   convertToTitleCase,
   formatLocation,
   formatDate,

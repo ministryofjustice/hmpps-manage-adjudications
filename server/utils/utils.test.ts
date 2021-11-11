@@ -5,6 +5,7 @@ import {
   formatTimestampToDate,
   formatTimestampToTime,
   hasAnyRole,
+  numberRange,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -91,14 +92,17 @@ describe('formatTimestampToDate', () => {
   })
 })
 
-describe('formatTimestampToDateTime', () => {
-  it('should format timestamp to time', () => {
-    expect(formatTimestampToTime('2018-12-23T07:21')).toEqual('07:21')
+describe('numberRange', () => {
+  it('should be inclusive between two numbers', () => {
+    expect(numberRange(1, 3)).toEqual([1, 2, 3])
   })
-  it('should format timestamp to time using provided format', () => {
-    expect(formatTimestampToTime('2018-12-23T07:21', 'H:mm')).toEqual('7:21')
+  it('should return an array with the single element when to and from are the same', () => {
+    expect(numberRange(2, 2)).toEqual([2])
   })
-  it('should not fail to parse absent timestamp', () => {
-    expect(formatTimestampToTime(undefined)).toEqual(undefined)
+  it('should work from zero', () => {
+    expect(numberRange(0, 4)).toEqual([0, 1, 2, 3, 4])
+  })
+  it('should work for negative numbers', () => {
+    expect(numberRange(-5, -3)).toEqual([-5, -4, -3])
   })
 })

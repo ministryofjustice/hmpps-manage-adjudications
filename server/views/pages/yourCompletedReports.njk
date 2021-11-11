@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
 {% set title = "Your completed reports" %}
 
@@ -14,6 +15,8 @@
     <span class="govuk-!-margin-bottom-1 govuk-label--s">Location: </span>
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
+
+
 
   {% set rows = [] %}
 
@@ -34,7 +37,7 @@
   {% endfor %}
 
   {% if rows | length %}
-
+    {{ mojPagination(pagination) }}
   <div class="results-table">
     {{ govukTable({
       head: [
@@ -52,6 +55,7 @@
     }) }}
   </div>
 
+  {{ mojPagination(pagination) }}
   {% else %}
     <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
   {% endif %}

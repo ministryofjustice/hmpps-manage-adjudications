@@ -4,7 +4,8 @@ import { ReportedAdjudicationResult } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 import { User } from './hmppsAuthClient'
 import { CompletedAdjudicationSummary } from './CompletedAdjudicationsData'
-import { PageRequest, PageResponse, pageResponseFrom } from '../utils/Pagination'
+import { PageResponse, pageResponseFrom } from '../utils/PageResponse'
+import PageRequest from '../utils/PageRequest'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
