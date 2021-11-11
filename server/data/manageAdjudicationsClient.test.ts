@@ -87,6 +87,7 @@ describe('manageAdjudicationsClient', () => {
         reportedAdjudication: {
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
+          bookingId: 123,
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-10T10:00:00',

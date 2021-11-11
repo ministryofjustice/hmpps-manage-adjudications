@@ -6,6 +6,7 @@ import config from '../config'
 import RestClient from './restClient'
 import PrisonerResult from './prisonerResult'
 import { Location } from './PrisonLocationResult'
+import { SecondaryLanguage } from './SecondaryLanguageResult'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -48,6 +49,12 @@ export default class PrisonApiClient {
     return this.restClient.get({
       path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,
       headers: { 'Sort-Fields': 'userDescription' },
+    })
+  }
+
+  async getSecondaryLanguages(bookingId: number): Promise<SecondaryLanguage[]> {
+    return this.restClient.get({
+      path: `/api/bookings/${bookingId}/secondary-languages`,
     })
   }
 }
