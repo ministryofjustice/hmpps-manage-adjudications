@@ -1,6 +1,7 @@
 import bunyan from 'bunyan'
 import CuriousApiService from './curiousApiService'
 import CuriousApiClient from '../data/curiousApiClient'
+import { makeNotFoundError } from '../test/helpers'
 
 const getLearnerProfiles = jest.fn()
 
@@ -92,6 +93,26 @@ describe('curiousApiService', () => {
         await service.getNeurodiversitiesForReport('G6123VU', token)
 
         expect(spyLogError).toHaveBeenCalled()
+      })
+    })
+
+    describe('on curious 404', () => {
+      const spyLogError = jest.spyOn(bunyan.prototype, 'error')
+
+      beforeEach(() => {
+        getLearnerProfiles.mockRejectedValue(makeNotFoundError())
+      })
+
+      it('returns a null value', async () => {
+        const result = await service.getNeurodiversitiesForReport('G6123VU', token)
+
+        expect(result).toEqual(null)
+      })
+
+      it('does not log an error', async () => {
+        await service.getNeurodiversitiesForReport('G6123VU', token)
+
+        expect(spyLogError).not.toHaveBeenCalled()
       })
     })
   })

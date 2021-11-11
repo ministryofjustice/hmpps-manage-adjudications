@@ -31,6 +31,10 @@ export default class CuriousApiService {
         applicableNeurodiversitiesForReportLowercase.includes(neurodiversity.toLowerCase())
       )
     } catch (err) {
+      if (err.response?.status === 404) {
+        // Expected
+        return null
+      }
       // Log the error and continue
       log.error(`Failed to get neurodiversities. Reason: ${err.message}`, err)
     }
