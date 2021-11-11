@@ -152,7 +152,7 @@ describe('reportedAdjudicationsService', () => {
         const result = await service.getReportedAdjudication(123, user)
 
         expect(result.prisonerPreferredNonEnglishLanguage).toBeNull()
-        expect(result.prisonerOtherLanguages).toBeNull()
+        expect(result.prisonerOtherLanguages.length).toEqual(0)
       })
     })
   })
