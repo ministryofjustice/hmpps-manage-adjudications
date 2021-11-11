@@ -19,7 +19,7 @@ export default class YourCompletedReportsRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const results = await this.completedAdjudicationsService.getCompletedAdjudications(
       res.locals.user,
-      pageRequestFrom(20, 0)
+      pageRequestFrom(20, 1)
     )
     return this.renderView(req, res, results)
   }

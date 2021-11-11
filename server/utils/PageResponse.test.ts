@@ -49,15 +49,9 @@ describe('pageResponseFrom', () => {
     expect(response.results).toEqual(numberRange(6, 6))
   })
 
-  describe('generate pages from a results set', () => {
+  describe('changeIndex', () => {
     it('change from first page being one to being zero', () => {
       const response = pageResponseFrom<number>(pageRequestFrom(5, 2, 1), numberRange(1, 20))
-      expect(response.firstPage).toEqual(1)
-      expect(response.pageNumber).toEqual(2)
-      expect(response.lastPage()).toEqual(4)
-      expect(response.totalPages()).toEqual(4)
-      expect(response.results).toEqual(numberRange(6, 10))
-
       const changeStartPage = response.changeIndex(0)
       expect(changeStartPage.firstPage).toEqual(0)
       expect(changeStartPage.pageNumber).toEqual(1)
@@ -67,18 +61,74 @@ describe('pageResponseFrom', () => {
     })
     it('change from first page being zero to being one', () => {
       const response = pageResponseFrom<number>(pageRequestFrom(5, 1, 0), numberRange(1, 20))
-      expect(response.firstPage).toEqual(0)
-      expect(response.pageNumber).toEqual(1)
-      expect(response.lastPage()).toEqual(3)
-      expect(response.totalPages()).toEqual(4)
-      expect(response.results).toEqual(numberRange(6, 10))
-
       const changeStartPage = response.changeIndex(1)
       expect(changeStartPage.firstPage).toEqual(1)
       expect(changeStartPage.pageNumber).toEqual(2)
       expect(changeStartPage.lastPage()).toEqual(4)
       expect(changeStartPage.totalPages()).toEqual(4)
       expect(changeStartPage.results).toEqual(numberRange(6, 10))
+    })
+  })
+
+  describe('pageRange', () => {
+    it('range accommodated in the results, first page is the first page', () => {
+      const page6Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 6, 1), numberRange(1, 100))
+      expect(page6Of20Pages.totalPages()).toEqual(20)
+      const accommodatedRange = page6Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(1, 10))
+    })
+    it('range accommodated in the results, last page is the last page', () => {
+      const page16Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 16, 1), numberRange(1, 100))
+      expect(page16Of20Pages.totalPages()).toEqual(20)
+      const accommodatedRange = page16Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(11, 20))
+    })
+    it('range accommodated in the results, in the middle of the results', () => {
+      const page16Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 10, 1), numberRange(1, 100))
+      expect(page16Of20Pages.totalPages()).toEqual(20)
+      const accommodatedRange = page16Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(5, 14))
+    })
+    it('range not accommodated in the results, at the beginning of the results', () => {
+      const page5Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 5, 1), numberRange(1, 100))
+      expect(page5Of20Pages.totalPages()).toEqual(20)
+      const accommodatedRange = page5Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(1, 10))
+    })
+    it('range not accommodated in the results, at the beginning of the results with a small set of results', () => {
+      const page5Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 1, 1), numberRange(1, 20))
+      expect(page5Of20Pages.totalPages()).toEqual(4)
+      const accommodatedRange = page5Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(1, 4))
+    })
+    it('range not accommodated in the results, at the end of results', () => {
+      const page17Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 17, 1), numberRange(1, 100))
+      expect(page17Of20Pages.totalPages()).toEqual(20)
+      const accommodatedRange = page17Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(11, 20))
+    })
+    it('range not accommodated in the results, at the end of results with a small set of results', () => {
+      const page17Of20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 20))
+      expect(page17Of20Pages.totalPages()).toEqual(4)
+      const accommodatedRange = page17Of20Pages.pageRange(5, 4)
+      expect(accommodatedRange).toEqual(numberRange(1, 4))
+    })
+  })
+  describe('to', () => {
+    it('to, where there are more pages', () => {
+      const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
+      expect(page3WithPageSize5And20Pages.to()).toEqual(15)
+    })
+    it('to, where this is the last page', () => {
+      const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 14))
+      expect(page3WithPageSize5And20Pages.to()).toEqual(14)
+    })
+  })
+
+  describe('from', () => {
+    it('from', () => {
+      const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
+      expect(page3WithPageSize5And20Pages.from()).toEqual(11)
     })
   })
 })

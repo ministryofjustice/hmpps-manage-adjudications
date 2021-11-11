@@ -20,7 +20,7 @@ export class PageResponse<T> {
   }
 
   from(): number {
-    return Math.min(this.totalResults, (this.pageNumber - this.firstPage) * this.pageSize + 1)
+    return (this.pageNumber - this.firstPage) * this.pageSize + 1
   }
 
   to(): number {
@@ -37,14 +37,14 @@ export class PageResponse<T> {
     if (idealStart < this.firstPage) {
       // We would start before the first page - push the range forward so we start at the first page.
       const offset = this.firstPage - idealStart
-      const end = Math.max(this.lastPage(), idealEnd + offset)
+      const end = Math.min(this.lastPage(), idealEnd + offset)
       const start = this.firstPage
       return numberRange(start, end)
     }
     if (idealEnd > this.lastPage()) {
       // We would finish after the last page - push the range backwards so we finish at the last page.
       const offset = idealEnd - this.lastPage()
-      const start = Math.min(this.firstPage, idealStart - offset)
+      const start = Math.max(this.firstPage, idealStart - offset)
       const end = this.lastPage()
       return numberRange(start, end)
     }
