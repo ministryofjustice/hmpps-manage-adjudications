@@ -146,7 +146,7 @@ export default class PlaceOnReportService {
       locationId: location,
     }
 
-    const editedAdjudication = await manageAdjudicationsClient.editDraftAdjudication(id, editedIncidentDetails)
+    const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication
   }
 

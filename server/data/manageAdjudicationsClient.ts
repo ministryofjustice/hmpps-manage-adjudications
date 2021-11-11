@@ -45,7 +45,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async editDraftAdjudication(
+  async editDraftIncidentDetails(
     id: number,
     editedIncidentDetails: EditedIncidentDetails
   ): Promise<DraftAdjudicationResult> {
