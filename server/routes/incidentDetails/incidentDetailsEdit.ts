@@ -43,9 +43,11 @@ export default class IncidentDetailsEditRoutes {
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
+    const location = error ? locationId : existingDraftIncidentDetails.locationId
+
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(existingDraftIncidentDetails.dateTime),
-      locationId: locationId || existingDraftIncidentDetails.locationId,
+      locationId: location,
     }
 
     return res.render(`pages/incidentDetails`, {
