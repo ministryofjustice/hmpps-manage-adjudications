@@ -9,11 +9,20 @@ export default function mojPaginationFromPageResponse<T>(pageResponse: PageRespo
     },
     ...mojPreviousFromPageResponse(pageResponse, url),
     ...mojNextFromPageResponse(pageResponse, url),
-    items: pageResponse.pageRange(5, 4).map(pageNumber => {
-      url.searchParams.set('pageNumber', pageNumber.toString())
-      return { text: pageNumber.toString(), href: url.href, selected: pageNumber === pageResponse.pageNumber }
-    }),
+    ...mojItemsFromPageResponse(pageResponse, url),
   }
+}
+
+function mojItemsFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL) {
+  return (
+    (!pageResponse.singlePageOfResults() && {
+      items: pageResponse.pageRange(5, 4).map(pageNumber => {
+        url.searchParams.set('pageNumber', pageNumber.toString())
+        return { text: pageNumber.toString(), href: url.href, selected: pageNumber === pageResponse.pageNumber }
+      }),
+    }) ||
+    {}
+  )
 }
 
 function mojPreviousFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL) {

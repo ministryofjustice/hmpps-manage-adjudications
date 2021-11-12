@@ -19,6 +19,10 @@ export class PageResponse<T> {
     return Math.floor((this.totalResults - 1) / this.pageSize) + 1
   }
 
+  singlePageOfResults(): boolean {
+    return this.totalPages() === 1
+  }
+
   resultsFrom(): number {
     return Math.min(this.totalResults, (this.pageNumber - this.firstPage) * this.pageSize + 1)
   }

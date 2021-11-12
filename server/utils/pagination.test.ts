@@ -15,7 +15,6 @@ describe('mojPaginationFromPageResponse', () => {
   })
   it('one result', () => {
     expect(mojPaginationFromPageResponse(new PageResponse(10, 1, 1, null), baseUrl)).toEqual({
-      items: [{ href: 'http://localhost/?pageNumber=1', selected: true, text: '1' }],
       results: {
         count: 1,
         from: 1,

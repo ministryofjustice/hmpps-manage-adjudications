@@ -47,7 +47,7 @@ export default class ManageAdjudicationsClient {
   }
 }
 
-const dummyResults: CompletedAdjudicationSummary[] = generateRange(1, 1000, _ => {
+const dummyResults: CompletedAdjudicationSummary[] = generateRange(1, 1, _ => {
   return {
     dateTimeOfIncident: new Date(),
     prisonerDisplayName: 'Smith, John',
