@@ -14,6 +14,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import LocationService from '../../services/locationService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import CompletedAdjudicationsService from '../../services/completedAdjudicationsService'
 
 const user = {
   name: 'john smith',
@@ -96,6 +97,7 @@ export default function appWithAllRoutes(
       prisonerSearchService: {} as PrisonerSearchService,
       locationService: {} as LocationService,
       reportedAdjudicationsService: {} as ReportedAdjudicationsService,
+      completedAdjudicationsService: {} as CompletedAdjudicationsService,
       ...overrides,
     }),
     production
