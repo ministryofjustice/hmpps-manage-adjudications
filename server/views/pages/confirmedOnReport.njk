@@ -11,56 +11,68 @@
 
 {% block content %}
     {{ govukPanel({
-        titleText: prisonerFirstAndLastName + ' has been placed on report. Your charge number is ' + adjudicationNumber + '.',
+        titleText: prisonerFirstAndLastName + ' has been placed on report',
+        html: 'Your report number is: <br><strong>' + adjudicationNumber + '</strong>',
         classes: "govuk-!-margin-bottom-6"
     }) }}
 
-    <h2 class="govuk-heading-m">What you must do next</h2>
+    <div class="confirmed-on-report-section">
+        <h2 class="govuk-heading-m">What you must do next</h2>
 
-    <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
+        <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
 
-    <div class="whatever">
-        <p class="govuk-body">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review
-            before it is given to {{ prisonerFirstAndLastName }}.</p>
+        <div class="confirmed-on-report-process-warning">
+            <p class="confirmed-on-report-process-warning-text">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review
+                before it is given to {{ prisonerFirstAndLastName }}.</p>
+        </div>
     </div>
 
     <p class="govuk-body">You must make sure that {{ prisonerFirstAndLastName }} can understand the report.</p>
 
     {% if showPrisonerPreferredLanguage %}
-        <p class="govuk-body">{{ prisonerFirstAndLastName }}’s preferred language is:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>{{ prisonerPreferredLanguage }}</li>
-        </ul>
+        <div class="confirmed-on-report-section">
+            <p class="confirmed-on-report-list-header-text">{{ prisonerFirstAndLastName }}’s preferred language is:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>{{ prisonerPreferredLanguage }}</li>
+            </ul>
+        </div>
 
         {% if showPrisonerOtherLanguages %}
-            <p class="govuk-body">They have other languages of:</p>
-            <ul class="govuk-list govuk-list--bullet">
-            {% for entry in prisonerOtherLanguages %}
-                <li class="govuk-body govuk-!-margin-bottom-4">{{ entry }}</li>
-            {% endfor %}
-            </ul>
+            <div class="confirmed-on-report-section">
+                <p class="confirmed-on-report-list-header-text">They have other languages of:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                {% for entry in prisonerOtherLanguages %}
+                    <li>{{ entry }}</li>
+                {% endfor %}
+                </ul>
+            </div>
         {% endif %}
     {% endif %}
 
     {% if showPrisonerNeurodiversities %}
-        <p class="govuk-body">They have recorded disabilities and learning difficulties of:</p>
-        <ul class="govuk-list govuk-list--bullet">
-        {% for entry in prisonerNeurodiversities %}
-            <li class="govuk-body govuk-!-margin-bottom-4">{{ entry }}</li>
-        {% endfor %}
-        </ul>
+        <div class="confirmed-on-report-section">
+            <p class="confirmed-on-report-list-header-text">They have recorded disabilities and learning difficulties of:</p>
+            <ul class="govuk-list govuk-list--bullet">
+            {% for entry in prisonerNeurodiversities %}
+                <li>{{ entry }}</li>
+            {% endfor %}
+            </ul>
+        </div>
     {% endif %}
+    
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    <div class="govuk-body">
-        <img src="/images/Printer_icon.png" alt="Print icon"/>
-        <a href="/print-report?adjudicationNumber={{ adjudicationNumber }}" class="govuk-link">Print a copy of this report</a>
+    <div class="govuk-body confirmed-on-report-print-link">
+        <a href="/print-report?adjudicationNumber={{ adjudicationNumber }}" class="govuk-link print-link govuk-!-display-none-print">
+            Print a copy of this report
+        </a>
     </div>
-
 
     {{ govukButton({
         text: 'Finish',
         element: 'a',
         href: '/place-a-prisoner-on-report',
+        classes: "govuk-button--secondary",
         attributes: {
             'data-test': 'place-a-prisoner-on-report'
         }

@@ -25,7 +25,7 @@ export default class ConfirmedOnReportRoutes {
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'DD MMMM YYYY'),
       prisonerFirstAndLastName: formatName(adjudicationDetails.prisonerFirstName, adjudicationDetails.prisonerLastName),
-      showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
+      showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage != null,
       prisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
       showPrisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages?.length > 0,
       prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,

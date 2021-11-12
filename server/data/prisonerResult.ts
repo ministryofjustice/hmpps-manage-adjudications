@@ -22,4 +22,7 @@ export default class PrisonerResult {
 
   @Expose()
   categoryCode: string
+
+  @Expose()
+  language: string
 }

@@ -22,6 +22,7 @@ beforeEach(() => {
       agencyName: 'Moorland (HMP & YOI)',
     },
     categoryCode: undefined,
+    language: 'English',
     friendlyName: 'Udfsanaye Aidetria',
     displayName: 'Aidetria, Udfsanaye',
     prisonerNumber: 'G6415GD',
@@ -49,9 +50,9 @@ describe('POST /incident-statement', () => {
     return request(app)
       .post('/incident-statement/G6415GD/1')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-      .expect('Location', '/check-your-answers')
+      .expect('Location', '/check-your-answers/G6415GD/1')
       .expect(_ => {
-        expect(placeOnReportService.postDraftIncidentStatement).toHaveBeenLastCalledWith(
+        expect(placeOnReportService.addOrUpdateDraftIncidentStatement).toHaveBeenLastCalledWith(
           1,
           'Lorem Ipsum',
           true,
@@ -78,7 +79,7 @@ describe('POST /incident-statement', () => {
   })
 
   it('should throw an error on api failure', () => {
-    placeOnReportService.postDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
+    placeOnReportService.addOrUpdateDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
     return request(app)
       .post('/incident-statement/G6415GD/1')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })

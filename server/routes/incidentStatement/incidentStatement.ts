@@ -16,7 +16,7 @@ export default class IncidentStatementRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error } = pageData
+    const { error, incidentStatement, incidentStatementComplete } = pageData
     const { prisonerNumber } = req.params
     const { user } = res.locals
 
@@ -25,10 +25,22 @@ export default class IncidentStatementRoutes {
     return res.render(`pages/incidentStatement`, {
       errors: error ? [error] : [],
       prisoner,
+      incidentStatement,
+      incidentStatementComplete,
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
+  view = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params
+    const { user } = res.locals
+
+    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(Number(id), user)
+
+    return this.renderView(req, res, {
+      incidentStatement: draftAdjudicationResult?.draftAdjudication.incidentStatement?.statement,
+      incidentStatementComplete: draftAdjudicationResult?.draftAdjudication.incidentStatement?.completed ? 'yes' : null,
+    })
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
@@ -36,16 +48,19 @@ export default class IncidentStatementRoutes {
     const { id, prisonerNumber } = req.params
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
-    if (error) return this.renderView(req, res, { error })
+    if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
     try {
-      await this.placeOnReportService.postDraftIncidentStatement(
+      await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
         Number(id),
         incidentStatement,
         incidentStatementComplete === 'yes',
         user
       )
-      const pathname = incidentStatementComplete === 'yes' ? '/check-your-answers' : '/place-a-prisoner-on-report'
+      const pathname =
+        incidentStatementComplete === 'yes'
+          ? `/check-your-answers/${prisonerNumber}/${id}`
+          : '/place-a-prisoner-on-report'
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)

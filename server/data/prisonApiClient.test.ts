@@ -65,6 +65,7 @@ describe('prisonApiClient', () => {
         lastName: 'SMITH',
         assignedLivingUnit: { description: '1-2-015' },
         categoryCode: 'C',
+        language: 'English',
         imprisonmentStatus: 'UNKNOWN',
         dateOfBirth: '2005-01-01',
       }
@@ -80,6 +81,7 @@ describe('prisonApiClient', () => {
           description: '1-2-015',
         },
         categoryCode: 'C',
+        language: 'English',
       })
     })
   })
@@ -103,6 +105,35 @@ describe('prisonApiClient', () => {
 
       const output = await client.getLocations('MDI', false)
       expect(output).toEqual(locations)
+    })
+  })
+
+  describe('getSecondaryLanguages', () => {
+    it('should return data from api', async () => {
+      const result = [
+        {
+          code: 'SPA',
+          description: 'Spanish',
+          canRead: true,
+          canWrite: false,
+          canSpeak: true,
+        },
+        {
+          code: 'GER',
+          description: 'German',
+          canRead: true,
+          canWrite: false,
+          canSpeak: false,
+        },
+      ]
+
+      fakePrisonApi
+        .get('/api/bookings/123/secondary-languages')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const output = await client.getSecondaryLanguages(123)
+      expect(output).toEqual(result)
     })
   })
 })

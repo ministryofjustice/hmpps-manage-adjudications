@@ -87,6 +87,7 @@ describe('manageAdjudicationsClient', () => {
         reportedAdjudication: {
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
+          bookingId: 123,
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-10T10:00:00',
@@ -104,6 +105,89 @@ describe('manageAdjudicationsClient', () => {
 
       const response = await client.getReportedAdjudication(3)
 
+      expect(response).toEqual(result)
+    })
+  })
+
+  describe('getDraftAdjudication', () => {
+    it('should return the draft adjudication data', async () => {
+      const result = {
+        draftAdjudication: {
+          id: 10,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26152,
+            dateTimeOfIncident: '2021-11-04T07:20:00',
+            createdByUserId: 'NCLAMP_GEN',
+            createdDateTime: '2021-11-04T09:21:21.960765',
+            modifiedByUserId: 'NCLAMP_GEN',
+            modifiedByDateTime: '2021-11-04T09:21:21.960765',
+          },
+          incidentStatement: {
+            id: 9,
+            statement: 'test',
+            createdByUserId: 'NCLAMP_GEN',
+            createdDateTime: '2021-11-04T09:23:06.76843',
+            modifiedByUserId: 'NCLAMP_GEN',
+            modifiedByDateTime: '2021-11-04T09:23:06.76843',
+          },
+          createdByUserId: 'NCLAMP_GEN',
+          createdDateTime: '2021-11-04T09:21:21.95935',
+        },
+      }
+
+      fakeManageAdjudicationsApi
+        .get('/draft-adjudications/10')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.getDraftAdjudication(10)
+
+      expect(response).toEqual(result)
+    })
+  })
+
+  describe('submitCompleteDraftAdjudication', () => {
+    const result = {
+      reportedAdjudication: {
+        adjudicationNumber: 2345221,
+        prisonerNumber: 'G6123VU',
+        incidentDetails: {},
+        incidentStatement: {},
+      },
+    }
+    it('should return reported adjudication after posting the complete draft adjudication to NOMIS', async () => {
+      fakeManageAdjudicationsApi
+        .post('/draft-adjudications/16/complete-draft-adjudication')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(201, result)
+
+      const response = await client.submitCompleteDraftAdjudication(16)
+      expect(response).toEqual(result)
+    })
+  })
+
+  describe('editDraftIncidentDetails', () => {
+    const result = {
+      reportedAdjudication: {
+        adjudicationNumber: 2345221,
+        prisonerNumber: 'G6123VU',
+        incidentDetails: {},
+        incidentStatement: {},
+      },
+    }
+
+    const editedDetails = {
+      dateTimeOfIncident: '2021-11-04T09:21:00.00',
+      locationId: 23424,
+    }
+    it('should return a draft adjudication', async () => {
+      fakeManageAdjudicationsApi
+        .put(`/draft-adjudications/16/incident-details`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.editDraftIncidentDetails(16, editedDetails)
       expect(response).toEqual(result)
     })
   })
