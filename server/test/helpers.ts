@@ -1,4 +1,4 @@
-export const makeError = (key: any, value: any) =>
+export const makeError = (key: string, value: unknown): Error =>
   new (class TestError extends Error {
     constructor() {
       super()
@@ -6,6 +6,6 @@ export const makeError = (key: any, value: any) =>
     }
   })()
 
-export const makeNotFoundError = () => makeError('response', { status: 404 })
+export const makeNotFoundError = (): Error => makeError('response', { status: 404 })
 
 export default { makeError, makeNotFoundError }
