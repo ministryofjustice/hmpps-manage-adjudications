@@ -9,6 +9,7 @@ const startNewDraftAdjudication = jest.fn()
 const getDraftAdjudication = jest.fn()
 const submitCompleteDraftAdjudication = jest.fn()
 const editDraftIncidentDetails = jest.fn()
+const putDraftIncidentStatement = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -20,6 +21,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
       postDraftIncidentStatement,
+      putDraftIncidentStatement,
       startNewDraftAdjudication,
       getDraftAdjudication,
       submitCompleteDraftAdjudication,
@@ -140,7 +142,7 @@ describe('placeOnReportService', () => {
           },
         ],
         statement:
-          '<p class="govuk-body">John didn\'t want to go to chapel today. </p><p class="govuk-body">He pushed over some pews and threw things on the floor.</p>',
+          "<p class='govuk-body'>John didn't want to go to chapel today. </p><p class='govuk-body'>He pushed over some pews and threw things on the floor.</p>",
       }
       expect(result).toEqual(expectedResult)
     })
@@ -197,8 +199,8 @@ describe('placeOnReportService', () => {
     })
   })
 
-  describe('postDraftIncidentStatement', () => {
-    postDraftIncidentStatement.mockResolvedValue({
+  describe('addOrUpdateDraftIncidentStatement', () => {
+    const draftAdjudicationResult = {
       draftAdjudication: {
         id: 4,
         prisonerNumber: 'A12345',
@@ -210,11 +212,58 @@ describe('placeOnReportService', () => {
           statement: 'test',
         },
       },
-    })
-    it('makes the api call and returns data', async () => {
-      const response = await service.postDraftIncidentStatement(4, 'This is a statement', true, user)
+    }
+    postDraftIncidentStatement.mockResolvedValue(draftAdjudicationResult)
+    putDraftIncidentStatement.mockResolvedValue(draftAdjudicationResult)
+
+    it('makes the api call to create a new statement and returns data', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 4,
+          prisonerNumber: 'A12345',
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2020-12-10T10:00:00',
+          },
+        },
+      })
+      const response = await service.addOrUpdateDraftIncidentStatement(4, 'This is a statement', true, user)
 
       expect(postDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
+
+      expect(response).toStrictEqual({
+        draftAdjudication: {
+          id: 4,
+          prisonerNumber: 'A12345',
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2020-12-10T10:00:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+          },
+        },
+      })
+    })
+
+    it('makes the api call to edit an existing statement and returns data', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 4,
+          prisonerNumber: 'A12345',
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2020-12-10T10:00:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+          },
+        },
+      })
+      const response = await service.addOrUpdateDraftIncidentStatement(4, 'This is a statement', true, user)
+
+      expect(putDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
+
       expect(response).toStrictEqual({
         draftAdjudication: {
           id: 4,

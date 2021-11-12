@@ -74,6 +74,14 @@ export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/Y
 export const formatTimestampToTime = (timestamp: string, format = 'HH:mm'): string =>
   timestamp && moment(timestamp).format(format)
 
+export const numberRange = (start: number, end: number): number[] => generateRange(start, end, _ => _)
+
+export function generateRange<T>(start: number, end: number, generator: (index: number) => T): T[] {
+  return Array(end - start + 1)
+    .fill(null)
+    .map((_, idx) => generator(start + idx))
+}
+
 export const isValidDateTimeFormat = (dateTimeString: string): boolean =>
   moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
@@ -90,6 +98,7 @@ export const getTime = (dateTimeString: string): string => {
 }
 
 export default {
+  numberRange,
   convertToTitleCase,
   formatLocation,
   formatDate,
