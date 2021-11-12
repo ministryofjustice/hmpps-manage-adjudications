@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 
-import { convertToTitleCase, formatLocation, getTime, getDate, getFormattedReporterName } from '../utils/utils'
+import { convertToTitleCase, formatLocation, getDate, getFormattedReporterName, getTime } from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -8,7 +8,7 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
 import PrisonerResult from '../data/prisonerResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { DraftAdjudicationResult, CheckYourAnswers } from '../data/DraftAdjudicationResult'
+import { CheckYourAnswers, DraftAdjudicationResult } from '../data/DraftAdjudicationResult'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -55,18 +55,24 @@ export default class PlaceOnReportService {
     return client.startNewDraftAdjudication(requestBody)
   }
 
-  async postDraftIncidentStatement(
+  async addOrUpdateDraftIncidentStatement(
     id: number,
     incidentStatement: string,
     completed: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
+
+    const { draftAdjudication } = await client.getDraftAdjudication(id)
+    const editRequired = Boolean(draftAdjudication?.incidentStatement != null)
+
     const requestBody = {
       statement: incidentStatement,
       completed,
     }
-    return client.postDraftIncidentStatement(id, requestBody)
+    return editRequired
+      ? client.putDraftIncidentStatement(id, requestBody)
+      : client.postDraftIncidentStatement(id, requestBody)
   }
 
   async getCheckYourAnswersInfo(id: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
@@ -87,7 +93,7 @@ export default class PlaceOnReportService {
       const statementArray = statement.split(/\r|\n/)
       return statementArray
         .map(paragraph => {
-          return `<p class="govuk-body">${paragraph}</p>`
+          return `<p class='govuk-body'>${paragraph}</p>`
         })
         .join('')
     }
@@ -121,5 +127,10 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const completedAdjudication = await manageAdjudicationsClient.submitCompleteDraftAdjudication(id)
     return completedAdjudication.adjudicationNumber
+  }
+
+  async getDraftAdjudicationDetails(id: number, user: User): Promise<DraftAdjudicationResult> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    return manageAdjudicationsClient.getDraftAdjudication(id)
   }
 }

@@ -1,6 +1,6 @@
 import config from '../config'
-import { DraftAdjudicationResult, IncidentStatement, IncidentDetails } from './DraftAdjudicationResult'
-import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
+import { DraftAdjudicationResult, IncidentDetails, IncidentStatement } from './DraftAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationResult } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -23,6 +23,13 @@ export default class ManageAdjudicationsClient {
 
   async postDraftIncidentStatement(id: number, incidentStatement: IncidentStatement): Promise<DraftAdjudicationResult> {
     return this.restClient.post({
+      path: `/draft-adjudications/${id}/incident-statement`,
+      data: { ...incidentStatement },
+    })
+  }
+
+  async putDraftIncidentStatement(id: number, incidentStatement: IncidentStatement): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
       path: `/draft-adjudications/${id}/incident-statement`,
       data: { ...incidentStatement },
     })

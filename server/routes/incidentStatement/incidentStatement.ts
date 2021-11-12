@@ -30,7 +30,17 @@ export default class IncidentStatementRoutes {
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
+  view = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params
+    const { user } = res.locals
+
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(Number(id), user)
+
+    return this.renderView(req, res, {
+      incidentStatement: draftAdjudication.incidentStatement?.statement,
+      incidentStatementComplete: draftAdjudication.incidentStatement?.completed ? 'yes' : 'no',
+    })
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
@@ -41,7 +51,7 @@ export default class IncidentStatementRoutes {
     if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
     try {
-      await this.placeOnReportService.postDraftIncidentStatement(
+      await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
         Number(id),
         incidentStatement,
         incidentStatementComplete === 'yes',
