@@ -63,17 +63,17 @@ describe('GET /incident-details', () => {
 })
 
 describe('POST /incident-details', () => {
-  it('should redirect to incident statement page if details is complete', () => {
+  it('should redirect to incident statement page if details are complete', () => {
     return request(app)
       .post('/incident-details/G6415GD')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: '2' })
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
       .expect(302)
       .expect('Location', '/incident-statement/G6415GD/1')
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)
       .post('/incident-details/G6415GD')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: '2' })
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
@@ -84,7 +84,7 @@ describe('POST /incident-details', () => {
     placeOnReportService.startNewDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
       .post('/incident-details/G6415GD')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } }, locationId: '2' })
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } }, locationId: 2 })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Internal Error')

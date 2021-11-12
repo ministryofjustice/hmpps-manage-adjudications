@@ -36,6 +36,23 @@ beforeEach(() => {
     locationId: 1234,
   })
 
+  placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
+    draftAdjudication: {
+      createdByUserId: 'TEST_GEN',
+      createdDateTime: '2021-10-27T10:13:17.808Z',
+      id: 34,
+      incidentDetails: {
+        createdByUserId: 'TEST_GEN',
+        createdDateTime: '2021-10-27T10:13:17.808Z',
+        dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+        locationId: 2,
+        modifiedByDateTime: '2021-10-27T10:13:17.808Z',
+        modifiedByUserId: 'TEST_GEN',
+      },
+      prisonerNumber: 'G6415GD',
+    },
+  })
+
   locationService.getIncidentLocations.mockResolvedValue([
     { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
     { locationId: 6, locationPrefix: 'OC', userDescription: 'Rivendell' },
@@ -61,4 +78,32 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
   })
 })
 
-// describe('POST /incident-details', () => {})
+describe('POST /incident-details/<PRN>/<id>/edit', () => {
+  it('should redirect to incident statement page if details are complete', () => {
+    return request(app)
+      .post('/incident-details/G6415GD/34/edit')
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .expect(302)
+      .expect('Location', '/incident-statement/G6415GD/34')
+  })
+  it('should render an error summary with correct validation message', () => {
+    return request(app)
+      .post('/incident-details/G6415GD/34/edit')
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter an hour which is 23 or less')
+      })
+  })
+  it('should throw an error on PUT endpoint failure', () => {
+    placeOnReportService.editDraftIncidentDetails.mockRejectedValue(new Error('Internal Error'))
+    return request(app)
+      .post('/incident-details/G6415GD/34/edit')
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } }, locationId: 2 })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Error: Internal Error')
+      })
+  })
+})
