@@ -1,6 +1,9 @@
 import { PageResponse } from './pageResponse'
 
-export default function mojPaginationFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL): Record<string, any> {
+export default function mojPaginationFromPageResponse<T>(
+  pageResponse: PageResponse<T>,
+  url: URL
+): Record<string, unknown> {
   return {
     results: {
       from: pageResponse.resultsFrom(),

@@ -1,13 +1,4 @@
-import {
-  convertToTitleCase,
-  formatLocation,
-  formatDate,
-  formatTimestampToDate,
-  formatTimestampToTime,
-  hasAnyRole,
-  numberRange,
-  generateRange,
-} from './utils'
+import { convertToTitleCase, formatLocation, formatDate, formatTimestampToDate, hasAnyRole, numberRange } from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
