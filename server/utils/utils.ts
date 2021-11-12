@@ -102,5 +102,8 @@ export default {
   convertToTitleCase,
   formatLocation,
   formatDate,
+  getTime,
+  getDate,
   hasAnyRole,
+  getFormattedReporterName,
 }

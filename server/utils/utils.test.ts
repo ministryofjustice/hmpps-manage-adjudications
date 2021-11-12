@@ -79,20 +79,6 @@ describe('hasAnyRole', () => {
   })
 })
 
-describe('hasAnyRole', () => {
-  it.only('returns true when they have one of the required roles', () => {
-    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_ONE'])).toEqual(true)
-  })
-  it.only('returns false when they have none of the required roles', () => {
-    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], ['ROLE_THREE', 'ROLE_FOUR'])).toEqual(false)
-    expect(hasAnyRole(['ROLE_ONE', 'ROLE_TWO'], null)).toEqual(false)
-  })
-  it.only('returns true if there are no required roles', () => {
-    expect(hasAnyRole(null, null)).toEqual(true)
-    expect(hasAnyRole(null, ['ROLE_ONE'])).toEqual(true)
-  })
-})
-
 describe('formatTimestampToDate', () => {
   it('should format timestamp to date', () => {
     expect(formatTimestampToDate('2018-12-23T13:21')).toEqual('23/12/2018')
