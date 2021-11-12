@@ -16,14 +16,16 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
 })
 
-reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+const reportedAdjudicationInformation = {
   reportExpirationDateTime: '2020-12-23T07:21',
   prisonerFirstName: 'John',
   prisonerLastName: 'Smith',
   prisonerPreferredNonEnglishLanguage: 'French',
   prisonerOtherLanguages: ['English', 'Spanish'],
   prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
-})
+}
+
+reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -37,6 +39,8 @@ describe('GET /prisoner-placed-on-report', () => {
       .expect(res => {
         expect(res.text).toContain('John Smith has been placed on report')
         expect(res.text).toContain('123')
+        expect(res.text).toContain('John Smith’s preferred language is')
+        expect(res.text).toContain('They have other languages of')
         expect(res.text).toContain('They have recorded disabilities')
         expect(res.text).toContain('Moderate learning difficulty')
         expect(res.text).toContain('Dyslexia')
@@ -45,11 +49,7 @@ describe('GET /prisoner-placed-on-report', () => {
 
   it('should not show neurodivesity information if none provided', () => {
     reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
-      reportExpirationDateTime: '2020-12-23T07:21',
-      prisonerFirstName: 'John',
-      prisonerLastName: 'Smith',
-      prisonerPreferredNonEnglishLanguage: 'French',
-      prisonerOtherLanguages: ['English', 'Spanish'],
+      ...reportedAdjudicationInformation,
       prisonerNeurodiversities: null,
     })
     return request(app)
@@ -57,6 +57,34 @@ describe('GET /prisoner-placed-on-report', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('They have recorded disabilities')
+      })
+  })
+
+  it('should not show any language information if no primary language provided', () => {
+    reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+      ...reportedAdjudicationInformation,
+      prisonerPreferredNonEnglishLanguage: null,
+    })
+    return request(app)
+      .get('/prisoner-placed-on-report?adjudicationNumber=123')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).not.toContain('John Smith’s preferred language is')
+        expect(res.text).not.toContain('They have other languages of')
+      })
+  })
+
+  it('should not show the secondary language text if no secondary languages provided', () => {
+    reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+      ...reportedAdjudicationInformation,
+      prisonerOtherLanguages: null,
+    })
+    return request(app)
+      .get('/prisoner-placed-on-report?adjudicationNumber=123')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('John Smith’s preferred language is')
+        expect(res.text).not.toContain('They have other languages of')
       })
   })
 
