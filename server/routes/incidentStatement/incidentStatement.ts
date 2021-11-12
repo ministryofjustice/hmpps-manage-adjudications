@@ -38,7 +38,7 @@ export default class IncidentStatementRoutes {
 
     return this.renderView(req, res, {
       incidentStatement: draftAdjudicationResult?.draftAdjudication.incidentStatement?.statement,
-      incidentStatementComplete: draftAdjudicationResult?.draftAdjudication.incidentStatement?.completed ? 'yes' : 'no',
+      incidentStatementComplete: draftAdjudicationResult?.draftAdjudication.incidentStatement?.completed ? 'yes' : null,
     })
   }
 
