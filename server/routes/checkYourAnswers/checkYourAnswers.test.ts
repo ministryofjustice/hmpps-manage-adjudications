@@ -25,6 +25,7 @@ beforeEach(() => {
       agencyName: 'Moorland (HMP & YOI)',
     },
     categoryCode: undefined,
+    language: 'English',
     friendlyName: 'Udfsanaye Aidetria',
     displayName: 'Aidetria, Udfsanaye',
     prisonerNumber: 'G6415GD',

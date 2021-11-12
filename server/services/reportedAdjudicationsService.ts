@@ -12,6 +12,13 @@ function calculateExpirationTime(datetimeOfIncident: string): string {
   return expirationTime.format('YYYY-MM-DDTHH:mm')
 }
 
+function getNonEnglishLanguage(primaryLanguage: string): string {
+  if (!primaryLanguage || primaryLanguage === 'English') {
+    return null
+  }
+  return primaryLanguage
+}
+
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
@@ -25,22 +32,21 @@ export default class ReportedAdjudicationsService {
     )
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const [prisoner, prisonerNeurodiversities] = await Promise.all([
+    const [prisoner, secondaryLanguages, prisonerNeurodiversities] = await Promise.all([
       new PrisonApiClient(token).getPrisonerDetails(adjudicationData.reportedAdjudication.prisonerNumber),
+      new PrisonApiClient(token).getSecondaryLanguages(adjudicationData.reportedAdjudication.bookingId),
       this.curiousApiService.getNeurodiversitiesForReport(adjudicationData.reportedAdjudication.prisonerNumber, token),
     ])
-    // TODO - later
-    // const profileData = await prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
-    // const prisonerOtherLanguages = await new PrisonApiClient(token).getSecondaryLanguages(bookingId),
 
-    // const prisonerPreferredNonEnglishLanguage = getNonEnglishReadLanguage(profileData.language)
+    const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
+    const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
 
     return {
       reportExpirationDateTime,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
-      prisonerPreferredNonEnglishLanguage: 'Spanish',
-      prisonerOtherLanguages: ['German', 'French'],
+      prisonerPreferredNonEnglishLanguage,
+      prisonerOtherLanguages,
       prisonerNeurodiversities,
     }
   }
