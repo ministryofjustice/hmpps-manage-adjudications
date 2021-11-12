@@ -27,10 +27,25 @@ context('Incident Statement', () => {
           dateTimeOfIncident: '2021-11-03T11:09:42',
           locationId: 234,
         },
-        incidentStatement: {},
         prisonerNumber: 'G6415GD',
       },
     })
+    cy.task('stubGetDraftAdjudication', {
+      id: 3456,
+      response: {
+        draftAdjudication: {
+          id: 3456,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 234,
+            createdByUserId: 'TEST_GEN',
+            createdDateTime: '2021-11-09T13:51:37.241636',
+          },
+        },
+      },
+    })
+
     cy.task('stubPostDraftIncidentStatement', {
       id: 3456,
       response: {
