@@ -1,6 +1,11 @@
 import config from '../config'
-import { DraftAdjudicationResult, IncidentDetails, IncidentStatement } from './DraftAdjudicationResult'
-import { ReportedAdjudication, ReportedAdjudicationResult } from './ReportedAdjudicationResult'
+import {
+  DraftAdjudicationResult,
+  IncidentStatement,
+  IncidentDetails,
+  EditedIncidentDetails,
+} from './DraftAdjudicationResult'
+import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 import { User } from './hmppsAuthClient'
 import { CompletedAdjudicationSummary } from './CompletedAdjudicationsData'
@@ -49,6 +54,16 @@ export default class ManageAdjudicationsClient {
   async submitCompleteDraftAdjudication(id: number): Promise<ReportedAdjudication> {
     return this.restClient.post({
       path: `/draft-adjudications/${id}/complete-draft-adjudication`,
+    })
+  }
+
+  async editDraftIncidentDetails(
+    id: number,
+    editedIncidentDetails: EditedIncidentDetails
+  ): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/draft-adjudications/${id}/incident-details`,
+      data: { ...editedIncidentDetails },
     })
   }
 

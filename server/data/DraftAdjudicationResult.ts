@@ -26,11 +26,16 @@ export type DraftAdjudicationResult = {
 }
 
 export type CheckYourAnswers = {
-  incidentDetails: summarySectionItems[]
+  incidentDetails: SummarySectionItems[]
   statement: string
 }
 
-type summarySectionItems = {
+type SummarySectionItems = {
   label: string
   value: string
+}
+
+export type EditedIncidentDetails = {
+  dateTimeOfIncident: string
+  locationId: number
 }

@@ -30,5 +30,6 @@ export default (on: (string, Record) => void): void => {
     stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
     stubGetDraftAdjudication: adjudications.stubGetDraftAdjudication,
     stubSubmitCompleteDraftAdjudication: adjudications.stubSubmitCompleteDraftAdjudication,
+    stubEditDraftIncidentDetails: adjudications.stubEditDraftIncidentDetails,
   })
 }

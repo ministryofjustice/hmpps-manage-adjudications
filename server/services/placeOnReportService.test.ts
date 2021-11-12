@@ -8,6 +8,7 @@ const postDraftIncidentStatement = jest.fn()
 const startNewDraftAdjudication = jest.fn()
 const getDraftAdjudication = jest.fn()
 const submitCompleteDraftAdjudication = jest.fn()
+const editDraftIncidentDetails = jest.fn()
 const putDraftIncidentStatement = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
@@ -24,6 +25,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       startNewDraftAdjudication,
       getDraftAdjudication,
       submitCompleteDraftAdjudication,
+      editDraftIncidentDetails,
     }
   })
 })
@@ -301,6 +303,59 @@ describe('placeOnReportService', () => {
       })
       const response = await service.completeDraftAdjudication(4, user)
       expect(response).toStrictEqual(234)
+    })
+  })
+  describe('getDraftIncidentDetailsForEditing', () => {
+    it('should return draft incident details in format ready for editing', async () => {
+      const expectedResult = { dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } }, locationId: 1234 }
+
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 4,
+          prisonerNumber: 'A12345',
+          incidentDetails: {
+            locationId: 1234,
+            dateTimeOfIncident: '2021-11-08T10:00:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+          },
+        },
+      })
+
+      const response = await service.getDraftIncidentDetailsForEditing(4, user)
+      expect(response).toEqual(expectedResult)
+    })
+  })
+  describe('editDraftIncidentDetails', () => {
+    it('creates the edited incident details object and sends', async () => {
+      const expectedResult = {
+        adjudicationNumber: 234,
+        incidentDetails: {
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-09T13:55:34.143Z',
+          dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+          locationId: 12123123,
+          modifiedByDateTime: '2021-11-09T13:55:34.143Z',
+          modifiedByUserId: 'string',
+        },
+        incidentStatement: {
+          completed: false,
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-09T13:55:34.143Z',
+          modifiedByDateTime: '2021-11-09T13:55:34.143Z',
+          modifiedByUserId: 'string',
+          statement: 'string',
+        },
+        prisonerNumber: 'G2996UX',
+      }
+      editDraftIncidentDetails.mockResolvedValue(expectedResult)
+      const response = await service.editDraftIncidentDetails(4, '2021-11-09T13:55:34.143Z', 12123123, user)
+      expect(response).toEqual(expectedResult)
+      expect(editDraftIncidentDetails).toBeCalledWith(4, {
+        dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+        locationId: 12123123,
+      })
     })
   })
 })
