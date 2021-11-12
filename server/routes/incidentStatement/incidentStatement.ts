@@ -34,11 +34,11 @@ export default class IncidentStatementRoutes {
     const { id } = req.params
     const { user } = res.locals
 
-    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(Number(id), user)
+    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(Number(id), user)
 
     return this.renderView(req, res, {
-      incidentStatement: draftAdjudication.incidentStatement?.statement,
-      incidentStatementComplete: draftAdjudication.incidentStatement?.completed ? 'yes' : 'no',
+      incidentStatement: draftAdjudicationResult?.draftAdjudication.incidentStatement?.statement,
+      incidentStatementComplete: draftAdjudicationResult?.draftAdjudication.incidentStatement?.completed ? 'yes' : 'no',
     })
   }
 

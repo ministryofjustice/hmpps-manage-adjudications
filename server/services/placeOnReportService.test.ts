@@ -140,7 +140,7 @@ describe('placeOnReportService', () => {
           },
         ],
         statement:
-          '<p class="govuk-body">John didn\'t want to go to chapel today. </p><p class="govuk-body">He pushed over some pews and threw things on the floor.</p>',
+          "<p class='govuk-body'>John didn't want to go to chapel today. </p><p class='govuk-body'>He pushed over some pews and threw things on the floor.</p>",
       }
       expect(result).toEqual(expectedResult)
     })
