@@ -1,12 +1,67 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../macros/incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% set title = "Check your answers" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Check your answers before placing them on report" %}
+
+{% block pageTitle %}
+	{{ title }}
+{% endblock %}
 
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
+
 	<h1 class="govuk-heading-l">{{ title }}</h1>
+
+	<div class="prisonerPlaybackSection">
+		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+	</div>
+
+	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+			<div class="flex-container checkAnswers-heading">
+				<h2 class="govuk-heading-m">Incident details</h2>
+				<a href='/incident-details/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}/edit' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-details-changeLink">Change</a>
+			</div>
+			<div class="checkAnswers-incidentDetails">
+    		{{ incidentDetailsSummaryList(data.incidentDetails, 'Not entered', { "data-qa": "check-answers-details" }) }}
+			</div>
+
+			<div class="flex-container checkAnswers-heading">
+				<h2 class="govuk-heading-m govuk-!-margin-top-6">Incident statement</h2>
+				<a href='/incident-statement/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-statement-changeLink">Change</a>
+			</div>
+			<div class="checkAnswers-incidentStatement" data-qa="check-answers-statement">
+				{{ data.statement | safe }}
+			</div>
+
+			<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+			<h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>
+			<p class="govuk-body govuk-!-margin-bottom-6 checkAnswers-conditions">By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
+
+			{{ govukButton({
+				text: "Accept and place on report",
+				type: "submit",
+				classes: "govuk-button--submit govuk-!-margin-right-2",
+				attributes: { "data-qa": "check-answers-submit" }
+			}) }}
+
+			{{ govukButton({
+				text: "Exit",
+				classes: "govuk-button--secondary",
+				element: 'a',
+				href: '/place-the-prisoner-on-report',
+				attributes: { "data-qa": "check-answers-exit" }
+			}) }}
+	</form>
+
 {% endblock %}

@@ -26,7 +26,7 @@ export default function routes(
 ): Router {
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
-  router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService }))
+  router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService, locationService }))
   router.use('/place-a-prisoner-on-report', taskListRoutes())
   router.use('/prisoner-placed-on-report', confirmedOnReportRoutes({ reportedAdjudicationsService }))
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))

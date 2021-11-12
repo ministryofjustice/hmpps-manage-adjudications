@@ -1,6 +1,8 @@
 import moment from 'moment'
 import { SubmittedDateTime } from '../@types/template'
 
+const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
+
 type DateTimeInput = {
   date: string
   hours: string
@@ -23,6 +25,14 @@ export const properCaseName = (name: string): string => (isBlank(name) ? '' : na
 
 export const formatName = (firstName: string, lastName: string): string =>
   [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
+
+export const getFormattedReporterName = (name: string): string => {
+  if (!name) {
+    return null
+  }
+  const names = name.split(' ')
+  return `${names[0][0]}. ${names.reverse()[0]}`
+}
 
 export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
@@ -72,10 +82,28 @@ export function generateRange<T>(start: number, end: number, generator: (index: 
     .map((_, idx) => generator(start + idx))
 }
 
+export const isValidDateTimeFormat = (dateTimeString: string): boolean =>
+  moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
+
+export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(format)
+}
+
+export const getTime = (dateTimeString: string): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
+}
+
 export default {
   numberRange,
   convertToTitleCase,
   formatLocation,
   formatDate,
+  getTime,
+  getDate,
   hasAnyRole,
+  getFormattedReporterName,
 }

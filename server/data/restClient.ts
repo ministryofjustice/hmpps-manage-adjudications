@@ -3,9 +3,9 @@ import Agent, { HttpsAgent } from 'agentkeepalive'
 import { Readable } from 'stream'
 
 import logger from '../../logger'
+import type { UnsanitisedError } from '../sanitisedError'
 import sanitiseError from '../sanitisedError'
 import { ApiConfig } from '../config'
-import type { UnsanitisedError } from '../sanitisedError'
 
 interface GetRequest {
   path?: string
@@ -129,5 +129,29 @@ export default class RestClient {
           }
         })
     })
+  }
+
+  async put<T>({ path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest = {}): Promise<T> {
+    logger.info(`Put using user credentials: calling ${this.name}: ${path}`)
+    try {
+      const result = await superagent
+        .put(`${this.apiUrl()}${path}`)
+        .send(data)
+        .agent(this.agent)
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .auth(this.token, { type: 'bearer' })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+
+      return raw ? result : result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
+      throw sanitisedError
+    }
   }
 }

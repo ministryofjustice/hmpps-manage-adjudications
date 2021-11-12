@@ -5,7 +5,7 @@ import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
 import PrisonerResult from './prisonerResult'
-import { PrisonLocation } from './PrisonLocationResult'
+import { Location } from './PrisonLocationResult'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -44,7 +44,7 @@ export default class PrisonApiClient {
     return plainToClass(PrisonerResult, result, { excludeExtraneousValues: true })
   }
 
-  async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<PrisonLocation[]> {
+  async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<Location[]> {
     return this.restClient.get({
       path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,
       headers: { 'Sort-Fields': 'userDescription' },

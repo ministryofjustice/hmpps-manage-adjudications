@@ -1,4 +1,14 @@
-import { convertToTitleCase, formatLocation, formatDate, formatTimestampToDate, hasAnyRole, numberRange } from './utils'
+import {
+  numberRange,
+  convertToTitleCase,
+  formatLocation,
+  formatDate,
+  formatTimestampToDate,
+  getTime,
+  getDate,
+  hasAnyRole,
+  getFormattedReporterName,
+} from './utils'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -96,5 +106,45 @@ describe('numberRange', () => {
   })
   it('should work for negative numbers', () => {
     expect(numberRange(-5, -3)).toEqual([-5, -4, -3])
+  })
+})
+
+describe('getTime()', () => {
+  it('should return the correctly formatted time only', () => {
+    expect(getTime('2019-09-23T15:30:00')).toEqual('15:30')
+  })
+
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getTime('2019-13-23')).toEqual('Invalid date or time')
+  })
+
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getTime(null)).toEqual('Invalid date or time')
+  })
+})
+
+describe('getDate()', () => {
+  it('should return the correctly formatted date only', () => {
+    expect(getDate('2019-09-23T15:30:00')).toEqual('Monday 23 September 2019')
+  })
+
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getDate('2019-13-23')).toEqual('Invalid date or time')
+  })
+
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getDate(null)).toEqual('Invalid date or time')
+  })
+})
+
+describe('getFormattedReporterName()', () => {
+  it('should return a correctly formatted name', () => {
+    expect(getFormattedReporterName('Test User')).toEqual('T. User')
+  })
+  it('should return a correctly formatted name when the surname is double barelled', () => {
+    expect(getFormattedReporterName('Test User-Smith')).toEqual('T. User-Smith')
+  })
+  it('should return a correctly formatted name when the first name is double barelled', () => {
+    expect(getFormattedReporterName('Test-Jo User')).toEqual('T. User')
   })
 })
