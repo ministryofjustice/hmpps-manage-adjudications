@@ -52,8 +52,6 @@ const apiChecks = [
   service('hmppsAuth', `${config.apis.hmppsAuth.url}/health/ping`, config.apis.hmppsAuth.agent),
   service('prisonerSearch', `${config.apis.prisonerSearch.url}/health/ping`, config.apis.prisonerSearch.agent),
   service('prisonApi', `${config.apis.prison.url}/health/ping`, config.apis.prison.agent),
-  service('manageAdjudicationsApi', `${config.apis.adjudications.url}/health/ping`, config.apis.adjudications.agent),
-  service('curiousApi', `${config.apis.curious.url}/health/ping`, config.apis.curious.agent),
   service('adjudications', `${config.apis.adjudications.url}/health/ping`, config.apis.adjudications.agent),
   ...(config.apis.tokenVerification.enabled
     ? [
