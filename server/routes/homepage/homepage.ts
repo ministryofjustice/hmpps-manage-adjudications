@@ -42,7 +42,7 @@ export const tasks: TaskType[] = [
     heading: 'View all completed reports',
     description: 'View all completed reports in your establishment.',
     href: '/all-completed-reports',
-    roles: ['ADJUDICATION_REVIEWER'],
+    roles: ['MANAGING_ADJUDICATIONS_REVIEWER'],
     enabled: true,
   },
 ]
