@@ -1,5 +1,5 @@
 import { numberRange } from './utils'
-import PageRequest from './PageRequest'
+import PageRequest from './pageRequest'
 
 export class PageResponse<T> {
   constructor(
@@ -19,11 +19,11 @@ export class PageResponse<T> {
     return Math.floor((this.totalResults - 1) / this.pageSize) + 1
   }
 
-  from(): number {
-    return (this.pageNumber - this.firstPage) * this.pageSize + 1
+  resultsFrom(): number {
+    return Math.min(this.totalResults, (this.pageNumber - this.firstPage) * this.pageSize + 1)
   }
 
-  to(): number {
+  resultsTo(): number {
     return Math.min(this.totalResults, (this.pageNumber - this.firstPage + 1) * this.pageSize)
   }
 
@@ -51,6 +51,14 @@ export class PageResponse<T> {
     // We can accommodated the range with the pages we have.
     return numberRange(idealStart, idealEnd)
   }
+
+  hasNext(): boolean {
+    return this.pageNumber < this.totalPages()
+  }
+
+  hasPrevious(): boolean {
+    return this.pageNumber > this.firstPage
+  }
 }
 
 export function pageRequestFrom(pageSize: number, pageNumber: number, firstPage = 1): PageRequest {
@@ -64,51 +72,4 @@ export function pageResponseFrom<T>(pageRequest: PageRequest, allResults: T[]): 
   const { firstPage } = pageRequest
   const results = allResults.slice((pageNumber - firstPage) * pageSize, (pageNumber - firstPage + 1) * pageSize)
   return new PageResponse<T>(pageSize, pageNumber, totalResults, results, firstPage)
-}
-
-export function mojPaginationFromPageResponse<T>(pageResponse: PageResponse<T>): Record<string, any> {
-  return {
-    results: {
-      from: pageResponse.from(),
-      to: pageResponse.to(),
-      count: pageResponse.pageSize,
-    },
-    previous: {
-      text: 'Previous',
-      href: '',
-    },
-    next: {
-      text: 'Next',
-      href: '',
-    },
-    items: [{ text: '1', href: '/page=1' }],
-  }
-  //
-  //
-  // {{ mojPagination({
-  //   results: {
-  //     from: 10,
-  //     to: 20,
-  //     count: 30
-  //   },
-  //   previous: {
-  //     text: 'Previous',
-  //     href: ''
-  //   },
-  //   next: {
-  //     text: 'Next',
-  //     href: ''
-  //   },
-  //   items: [{
-  //     text: '1',
-  //     href: '/page=1'
-  //   }, {
-  //     text: '2',
-  //     href: '/page=2',
-  //     selected: true
-  //   }, {
-  //     text: '3',
-  //     href: '/page=3'
-  //   }]
-  // }) }}
 }

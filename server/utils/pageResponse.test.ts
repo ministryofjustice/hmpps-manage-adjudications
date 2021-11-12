@@ -1,4 +1,4 @@
-import { pageRequestFrom, PageResponse, pageResponseFrom } from './PageResponse'
+import { pageRequestFrom, PageResponse, pageResponseFrom } from './pageResponse'
 import { numberRange } from './utils'
 
 describe('totalPages', () => {
@@ -117,18 +117,18 @@ describe('pageResponseFrom', () => {
   describe('to', () => {
     it('to, where there are more pages', () => {
       const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
-      expect(page3WithPageSize5And20Pages.to()).toEqual(15)
+      expect(page3WithPageSize5And20Pages.resultsTo()).toEqual(15)
     })
     it('to, where this is the last page', () => {
       const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 14))
-      expect(page3WithPageSize5And20Pages.to()).toEqual(14)
+      expect(page3WithPageSize5And20Pages.resultsTo()).toEqual(14)
     })
   })
 
   describe('from', () => {
     it('from', () => {
       const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
-      expect(page3WithPageSize5And20Pages.from()).toEqual(11)
+      expect(page3WithPageSize5And20Pages.resultsFrom()).toEqual(11)
     })
   })
 })

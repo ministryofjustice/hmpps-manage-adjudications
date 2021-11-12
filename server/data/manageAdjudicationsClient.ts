@@ -4,8 +4,8 @@ import { ReportedAdjudicationResult } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 import { User } from './hmppsAuthClient'
 import { CompletedAdjudicationSummary } from './CompletedAdjudicationsData'
-import { PageResponse, pageResponseFrom } from '../utils/PageResponse'
-import PageRequest from '../utils/PageRequest'
+import { PageResponse, pageResponseFrom } from '../utils/pageResponse'
+import PageRequest from '../utils/pageRequest'
 import { generateRange } from '../utils/utils'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -47,7 +47,7 @@ export default class ManageAdjudicationsClient {
   }
 }
 
-const dummyResults: CompletedAdjudicationSummary[] = generateRange(1, 100, _ => {
+const dummyResults: CompletedAdjudicationSummary[] = generateRange(1, 1000, _ => {
   return {
     dateTimeOfIncident: new Date(),
     prisonerDisplayName: 'Smith, John',
@@ -55,6 +55,6 @@ const dummyResults: CompletedAdjudicationSummary[] = generateRange(1, 100, _ => 
     prisonerFirstName: 'John',
     prisonerLastName: 'Smith',
     prisonerNumber: 'A1234AA',
-    adjudicationsNumber: `1`,
+    adjudicationsNumber: `${_}`,
   }
 })

@@ -1,8 +1,8 @@
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import { CompletedAdjudicationSummary } from '../data/CompletedAdjudicationsData'
-import { PageResponse } from '../utils/PageResponse'
-import PageRequest from '../utils/PageRequest'
+import { PageResponse } from '../utils/pageResponse'
+import PageRequest from '../utils/pageRequest'
 
 export default class CompletedAdjudicationsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
