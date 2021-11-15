@@ -88,6 +88,7 @@ describe('manageAdjudicationsClient', () => {
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
           bookingId: 123,
+          dateTimeReportExpires: '2020-12-12T10:00:00',
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-10T10:00:00',
@@ -152,6 +153,7 @@ describe('manageAdjudicationsClient', () => {
       reportedAdjudication: {
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
+        dateTimeReportExpires: '2021-11-06T09:21:00.00',
         incidentDetails: {},
         incidentStatement: {},
       },
