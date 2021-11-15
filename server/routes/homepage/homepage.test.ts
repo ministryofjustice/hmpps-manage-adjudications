@@ -28,7 +28,7 @@ describe('GET /', () => {
       })
   })
   it('the review tile should not be visible without the correct role', () => {
-    userService.getUserRoles.mockResolvedValue(['NOT_THE_ADJUDICATION_REVIEW_ROLE'])
+    userService.getUserRoles.mockResolvedValue(['NOT_THE_ADJUDICATIONS_REVIEWER_ROLE'])
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
@@ -37,7 +37,7 @@ describe('GET /', () => {
       })
   })
   it('the review tile should not be visible without the correct role', () => {
-    userService.getUserRoles.mockResolvedValue(['MANAGING_ADJUDICATIONS_REVIEWER'])
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)

@@ -26,7 +26,7 @@ context('Home page', () => {
   })
 
   it('should see all the tiles with the reviewer role', () => {
-    cy.task('stubUserRoles', [{ roleCode: 'MANAGING_ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(`/`)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
