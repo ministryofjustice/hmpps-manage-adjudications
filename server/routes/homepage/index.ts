@@ -10,6 +10,6 @@ export default function homepageRoutes({ userService }: { userService: UserServi
   const prisonerSearch = new HomepageRoutes(userService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  get('/', prisonerSearch.view)
+  get('/place-a-prisoner-on-report', prisonerSearch.view)
   return router
 }

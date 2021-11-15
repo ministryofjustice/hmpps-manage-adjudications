@@ -10,13 +10,13 @@ context('Home page', () => {
   })
 
   it('should see the feedback banner', () => {
-    cy.visit(`/`)
+    cy.visit(`/place-a-prisoner-on-report`)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
   })
 
   it('should only see some tiles without the reviewer role', () => {
-    cy.visit(`/`)
+    cy.visit(`/place-a-prisoner-on-report`)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
@@ -27,7 +27,7 @@ context('Home page', () => {
 
   it('should see all the tiles with the reviewer role', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.visit(`/`)
+    cy.visit(`/place-a-prisoner-on-report`)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
