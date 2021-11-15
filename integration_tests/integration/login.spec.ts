@@ -10,7 +10,7 @@ context('Sign in', () => {
   })
 
   it('Unauthenticated user directed to auth', () => {
-    cy.visit('/')
+    cy.visit('/place-a-prisoner-on-report')
     Page.verifyOnPage(AuthSignInPage)
   })
 
