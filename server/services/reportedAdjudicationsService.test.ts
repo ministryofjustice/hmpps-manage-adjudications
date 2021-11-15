@@ -59,6 +59,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            dateTimeReportExpires: '2021-10-22T15:40:25.884',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -101,7 +102,7 @@ describe('reportedAdjudicationsService', () => {
         const result = await service.getReportedAdjudication(123, user)
 
         expect(result).toEqual({
-          reportExpirationDateTime: '2021-10-30T15:40',
+          reportExpirationDateTime: '2021-10-22T15:40:25.884',
           prisonerFirstName: 'JOHN',
           prisonerLastName: 'SMITH',
           prisonerPreferredNonEnglishLanguage: 'Spanish',
@@ -127,6 +128,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            dateTimeReportExpires: '2021-10-22T15:40:25.884',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',

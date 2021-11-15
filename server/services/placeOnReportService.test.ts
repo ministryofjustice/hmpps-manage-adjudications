@@ -283,6 +283,7 @@ describe('placeOnReportService', () => {
     it('calls api and returns the reported adjudication number', async () => {
       submitCompleteDraftAdjudication.mockResolvedValue({
         adjudicationNumber: 234,
+        dateTimeReportExpired: '2021-11-12T13:55:34.143Z',
         incidentDetails: {
           createdByUserId: 'string',
           createdDateTime: '2021-11-09T13:55:34.143Z',
