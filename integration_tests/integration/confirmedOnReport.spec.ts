@@ -76,7 +76,7 @@ context('Prisoner has been placed on report', () => {
 
   it('should contain the required page elements', () => {
     cy.visit(`/prisoner-placed-on-report?adjudicationNumber=1524242`)
-    const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
+    Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('Your report number is')
     cy.contains('1524242')
     cy.contains('John Smith must be given a copy of this report by 10:00 on 12 December 2020')
