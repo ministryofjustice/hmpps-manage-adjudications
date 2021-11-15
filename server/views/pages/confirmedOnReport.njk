@@ -63,7 +63,8 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     <div class="govuk-body confirmed-on-report-print-link">
-        <a href="/print-report?adjudicationNumber={{ adjudicationNumber }}" class="govuk-link print-link govuk-!-display-none-print">
+        <a href="/print-report?adjudicationNumber={{ adjudicationNumber }}" class="govuk-link print-link govuk-!-display-none-print"
+          data-qa="confirmed-on-report-print">
             Print a copy of this report
         </a>
     </div>
@@ -74,7 +75,7 @@
         href: '/place-a-prisoner-on-report',
         classes: "govuk-button--secondary",
         attributes: {
-            'data-test': 'place-a-prisoner-on-report'
+            'data-qa': 'confirmed-on-report-finish'
         }
     }) }}
 

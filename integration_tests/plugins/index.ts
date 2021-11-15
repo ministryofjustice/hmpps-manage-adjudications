@@ -1,5 +1,6 @@
 import { resetStubs } from '../mockApis/wiremock'
 import prisonApi from '../mockApis/prisonApi'
+import curiousApi from '../mockApis/curiousApi'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 import auth from '../mockApis/auth'
 import prisonerSearch from '../mockApis/prisonerSearch'
@@ -25,11 +26,15 @@ export default (on: (string, Record) => void): void => {
     stubAdjudicationsPing: status => adjudications.stubPing(status),
     stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
     stubGetLocations: prisonApi.stubGetLocations,
+    stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
 
     stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
     stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
     stubGetDraftAdjudication: adjudications.stubGetDraftAdjudication,
     stubSubmitCompleteDraftAdjudication: adjudications.stubSubmitCompleteDraftAdjudication,
     stubEditDraftIncidentDetails: adjudications.stubEditDraftIncidentDetails,
+    stubGetReportedAdjudication: adjudications.stubGetReportedAdjudication,
+
+    stubGetNeurodiversities: curiousApi.stubGetNeurodiversities,
   })
 }
