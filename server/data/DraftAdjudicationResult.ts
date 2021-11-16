@@ -10,6 +10,10 @@ export type IncidentDetails = {
 export type IncidentStatement = {
   statement: string
   completed?: boolean
+  createdByUserId?: string
+  createdDateTime?: string
+  modifiedByDateTime?: string
+  modifiedByUserId?: string
 }
 
 export type DraftAdjudication = {

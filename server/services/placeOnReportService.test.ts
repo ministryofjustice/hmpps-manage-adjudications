@@ -10,6 +10,7 @@ const getDraftAdjudication = jest.fn()
 const submitCompleteDraftAdjudication = jest.fn()
 const editDraftIncidentDetails = jest.fn()
 const putDraftIncidentStatement = jest.fn()
+const getAllDraftAdjudicationsForUser = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -26,6 +27,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       getDraftAdjudication,
       submitCompleteDraftAdjudication,
       editDraftIncidentDetails,
+      getAllDraftAdjudicationsForUser,
     }
   })
 })
@@ -357,6 +359,82 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         locationId: 12123123,
       })
+    })
+  })
+
+  describe('getAllDraftAdjudicationsForUser', () => {
+    it('gets all the users draft reports and enhances them', async () => {
+      getAllDraftAdjudicationsForUser.mockResolvedValue({
+        draftAdjudications: [
+          {
+            createdByUserId: 'user1',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            id: 1,
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-16T14:15:00',
+              locationId: 123,
+            },
+            incidentStatement: {
+              completed: false,
+              statement: 'test',
+            },
+            prisonerNumber: 'A12345',
+          },
+          {
+            createdByUserId: 'user1',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            id: 2,
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-20T09:45:00',
+              locationId: 456,
+            },
+            incidentStatement: {
+              completed: true,
+              statement: 'test',
+            },
+            prisonerNumber: 'A12345',
+          },
+        ],
+      })
+      const response = await service.getAllDraftAdjudicationsForUser(user)
+      expect(response).toEqual([
+        {
+          createdByUserId: 'user1',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          id: 1,
+          prisonerNumber: 'A12345',
+          incidentDetails: {
+            locationId: 123,
+            dateTimeOfIncident: '2021-11-16T14:15:00',
+          },
+          incidentStatement: {
+            statement: 'test',
+            completed: false,
+          },
+          friendlyName: 'John Smith',
+          displayName: 'Smith, John',
+          incidentDate: '16 November 2021',
+          incidentTime: '14:15',
+        },
+        {
+          createdByUserId: 'user1',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          id: 2,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-20T09:45:00',
+            locationId: 456,
+          },
+          incidentStatement: {
+            completed: true,
+            statement: 'test',
+          },
+          prisonerNumber: 'A12345',
+          friendlyName: 'John Smith',
+          displayName: 'Smith, John',
+          incidentDate: '20 November 2021',
+          incidentTime: '09:45',
+        },
+      ])
     })
   })
 })
