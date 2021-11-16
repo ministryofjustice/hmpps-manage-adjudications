@@ -75,7 +75,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(`/prisoner-placed-on-report?adjudicationNumber=1524242`)
+    cy.visit(`/prisoner-placed-on-report/1524242`)
     Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('Your report number is')
     cy.contains('1524242')
@@ -88,7 +88,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('should redirect the user to print-report on print', () => {
-    cy.visit(`/prisoner-placed-on-report?adjudicationNumber=1524242`)
+    cy.visit(`/prisoner-placed-on-report/1524242`)
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.printLink().click()
     cy.location().should(loc => {
@@ -97,7 +97,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
-    cy.visit(`/prisoner-placed-on-report?adjudicationNumber=1524242`)
+    cy.visit(`/prisoner-placed-on-report/1524242`)
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishButton().click()
     cy.location().should(loc => {
