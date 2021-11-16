@@ -16,7 +16,7 @@ export default function prisonerConfirmedOnReportRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/', confirmedOnReport.view)
+  get('/:adjudicationNumber', confirmedOnReport.view)
 
   return router
 }
