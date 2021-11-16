@@ -8,7 +8,7 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
 import PrisonerResult from '../data/prisonerResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { DraftAdjudicationResult, CheckYourAnswers } from '../data/DraftAdjudicationResult'
+import { DraftAdjudicationResult, CheckYourAnswers, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 
 export interface PrisonerResultSummary extends PrisonerResult {
@@ -16,6 +16,13 @@ export interface PrisonerResultSummary extends PrisonerResult {
   displayName: string
   prisonerNumber: string
   currentLocation: string
+}
+
+interface DraftAdjudicationEnhanced extends DraftAdjudication {
+  displayName: string
+  friendlyName: string
+  incidentDate: string
+  incidentTime: string
 }
 
 type ExistingDraftIncidentDetails = {
@@ -165,5 +172,27 @@ export default class PlaceOnReportService {
   async getDraftAdjudicationDetails(id: number, user: User): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     return manageAdjudicationsClient.getDraftAdjudication(id)
+  }
+
+  async getAllDraftAdjudicationsForUser(user: User): Promise<DraftAdjudicationEnhanced[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const allAdjudications = await new ManageAdjudicationsClient(token).getAllDraftAdjudicationsForUser()
+
+    const enhanceReport = async (authToken: string, report: DraftAdjudication) => {
+      const prisoner = await new PrisonApiClient(authToken).getPrisonerDetails(report.prisonerNumber)
+      const displayName = convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`)
+      const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
+      const incidentDate = getDate(report.incidentDetails.dateTimeOfIncident, 'D MMMM YYYY')
+      const incidentTime = getTime(report.incidentDetails.dateTimeOfIncident)
+      return { ...report, displayName, friendlyName, incidentDate, incidentTime }
+    }
+
+    const getEnhancedReportsByUser = async () => {
+      return Promise.all(
+        allAdjudications.draftAdjudications.map((report: DraftAdjudication) => enhanceReport(token, report))
+      )
+    }
+
+    return getEnhancedReportsByUser().then(reportsByUser => reportsByUser)
   }
 }

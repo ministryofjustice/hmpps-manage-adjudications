@@ -25,6 +25,10 @@ export type DraftAdjudicationResult = {
   draftAdjudication: DraftAdjudication
 }
 
+export type DraftAdjudicationResultList = {
+  draftAdjudications: DraftAdjudication[]
+}
+
 export type CheckYourAnswers = {
   incidentDetails: SummarySectionItems[]
   statement: string
