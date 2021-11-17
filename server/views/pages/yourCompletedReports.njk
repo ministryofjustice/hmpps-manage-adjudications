@@ -25,7 +25,7 @@
       <a href="/place-the-prisoner-on-report/{{ completedReport.adjudicationsNumber }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
-      { text: completedReport.prisonerDisplayName },
+      { text: completedReport.displayName },
       { text: completedReport.prisonerNumber },
       { text: completedReport.dateTimeOfIncident,
         attributes: {

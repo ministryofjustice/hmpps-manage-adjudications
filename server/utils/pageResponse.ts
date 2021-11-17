@@ -10,6 +10,10 @@ export class PageResponse<T> {
     readonly firstPage: number = 1
   ) {}
 
+  map<S>(transform: (input: T) => S): PageResponse<S> {
+    return new PageResponse(this.size, this.number, this.numberOfElements, this.content.map(transform), this.firstPage)
+  }
+
   changeIndex(newFirstPage: number): PageResponse<T> {
     const offset = this.firstPage - newFirstPage
     return new PageResponse<T>(this.size, this.number - offset, this.numberOfElements, this.content, newFirstPage)
