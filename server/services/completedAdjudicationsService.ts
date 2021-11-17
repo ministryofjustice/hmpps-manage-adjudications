@@ -11,6 +11,6 @@ export default class CompletedAdjudicationsService {
     user: User,
     pageRequest: PageRequest
   ): Promise<PageResponse<CompletedAdjudicationSummary>> {
-    return new ManageAdjudicationsClient(user.token).getCompletedAdjudications(user, pageRequest)
+    return new ManageAdjudicationsClient(user.token).getCompletedAdjudications(user.activeCaseLoadId, pageRequest)
   }
 }

@@ -3,20 +3,20 @@ import PageRequest from './pageRequest'
 
 export class PageResponse<T> {
   constructor(
-    readonly pageSize: number,
-    readonly pageNumber: number,
-    readonly totalResults: number,
+    readonly size: number,
+    readonly number: number,
+    readonly numberOfElements: number,
     readonly results: T[],
     readonly firstPage: number = 1
   ) {}
 
   changeIndex(newFirstPage: number): PageResponse<T> {
     const offset = this.firstPage - newFirstPage
-    return new PageResponse<T>(this.pageSize, this.pageNumber - offset, this.totalResults, this.results, newFirstPage)
+    return new PageResponse<T>(this.size, this.number - offset, this.numberOfElements, this.results, newFirstPage)
   }
 
   totalPages(): number {
-    return Math.floor((this.totalResults - 1) / this.pageSize) + 1
+    return Math.floor((this.numberOfElements - 1) / this.size) + 1
   }
 
   singlePageOfResults(): boolean {
@@ -24,11 +24,11 @@ export class PageResponse<T> {
   }
 
   resultsFrom(): number {
-    return Math.min(this.totalResults, (this.pageNumber - this.firstPage) * this.pageSize + 1)
+    return Math.min(this.numberOfElements, (this.number - this.firstPage) * this.size + 1)
   }
 
   resultsTo(): number {
-    return Math.min(this.totalResults, (this.pageNumber - this.firstPage + 1) * this.pageSize)
+    return Math.min(this.numberOfElements, (this.number - this.firstPage + 1) * this.size)
   }
 
   lastPage(): number {
@@ -36,8 +36,8 @@ export class PageResponse<T> {
   }
 
   pageRange(before: number, after: number): number[] {
-    const idealStart = this.pageNumber - before
-    const idealEnd = this.pageNumber + after
+    const idealStart = this.number - before
+    const idealEnd = this.number + after
     if (idealStart < this.firstPage) {
       // We would start before the first page - push the range forward so we start at the first page.
       const offset = this.firstPage - idealStart
@@ -57,11 +57,11 @@ export class PageResponse<T> {
   }
 
   hasNext(): boolean {
-    return this.pageNumber < this.totalPages()
+    return this.number < this.totalPages()
   }
 
   hasPrevious(): boolean {
-    return this.pageNumber > this.firstPage
+    return this.number > this.firstPage
   }
 }
 

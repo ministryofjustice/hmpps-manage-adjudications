@@ -20,7 +20,7 @@
 
   {% set rows = [] %}
 
-  {% for completedReport in yourCompletedReports.results %}
+  {% for completedReport in yourCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
       <a href="/place-the-prisoner-on-report/{{ completedReport.adjudicationsNumber }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
