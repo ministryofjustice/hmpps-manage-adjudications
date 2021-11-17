@@ -7,7 +7,7 @@ export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.query
+    const { adjudicationNumber } = req.params
     const { user } = res.locals
 
     const adjudicationNumberValue: number = parseInt(adjudicationNumber as string, 10)

@@ -74,9 +74,29 @@ const stubGetLocations = ({
     },
   })
 
+const stubGetSecondaryLanguages = ({
+  bookingId,
+  response = [],
+}: {
+  bookingId: number
+  response: Record<string, unknown>[]
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/bookings/${bookingId}/secondary-languages`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Sort-Fields': 'userDescription' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubUserCaseloads,
   stubGetPrisonerDetails,
   stubGetLocations,
+  stubGetSecondaryLanguages,
 }
