@@ -57,7 +57,7 @@ export class PageResponse<T> {
   }
 
   hasNext(): boolean {
-    return this.number < this.totalPages()
+    return this.number < this.lastPage()
   }
 
   hasPrevious(): boolean {

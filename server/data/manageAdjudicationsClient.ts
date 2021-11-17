@@ -8,7 +8,6 @@ import {
 } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
-import { CompletedAdjudicationSummary } from './CompletedAdjudicationsData'
 import { PageResponse } from '../utils/pageResponse'
 import PageRequest from '../utils/pageRequest'
 
@@ -75,10 +74,10 @@ export default class ManageAdjudicationsClient {
   async getCompletedAdjudications(
     agencyId: string,
     pageRequest: PageRequest
-  ): Promise<PageResponse<CompletedAdjudicationSummary>> {
+  ): Promise<PageResponse<ReportedAdjudication>> {
     const result = await this.restClient.get({
       path: `/reported-adjudications/my/agency/${agencyId}/?page=0&size=10`,
     })
-    return plainToClassFromExist(new PageResponse<CompletedAdjudicationSummary>(0, 0, 0, null, 0), result)
+    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result)
   }
 }

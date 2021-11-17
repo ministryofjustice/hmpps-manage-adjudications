@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import CompletedAdjudicationsService from '../../services/completedAdjudicationsService'
 import { pageRequestFrom, PageResponse } from '../../utils/pageResponse'
-import { CompletedAdjudicationSummary } from '../../data/CompletedAdjudicationsData'
 import mojPaginationFromPageResponse from '../../utils/pagination'
+import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 
 export default class YourCompletedReportsRoutes {
   constructor(private readonly completedAdjudicationsService: CompletedAdjudicationsService) {}
@@ -10,12 +10,12 @@ export default class YourCompletedReportsRoutes {
   private renderView = async (
     req: Request,
     res: Response,
-    results: PageResponse<CompletedAdjudicationSummary>
+    results: PageResponse<ReportedAdjudication>
   ): Promise<void> =>
     res.render(`pages/yourCompletedReports`, {
       yourCompletedReports: results,
       pagination: mojPaginationFromPageResponse(
-        results,
+        results.changeIndex(1),
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
     })

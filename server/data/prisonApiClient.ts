@@ -45,6 +45,14 @@ export default class PrisonApiClient {
     return plainToClass(PrisonerResult, result, { excludeExtraneousValues: true })
   }
 
+  async getBatchPrisonerDetails(prisonerNumbers: string[]): Promise<PrisonerResult[]> {
+    const result = await this.restClient.post<PrisonerResult[]>({
+      path: `/api/bookings/offenders`,
+      data: prisonerNumbers,
+    })
+    return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: true }))
+  }
+
   async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<Location[]> {
     return this.restClient.get({
       path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,

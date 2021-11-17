@@ -1,3 +1,5 @@
+import { IncidentDetails } from './DraftAdjudicationResult'
+
 export type CompletedAdjudicationSummary = {
   dateTimeOfIncident: Date
   prisonerFirstName: string
@@ -6,4 +8,5 @@ export type CompletedAdjudicationSummary = {
   prisonerFriendlyName: string
   prisonerNumber: string
   adjudicationsNumber: string
+  incidentDetails: IncidentDetails
 }
