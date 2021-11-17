@@ -1,6 +1,8 @@
 import nock from 'nock'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
+import { PageResponse } from '../utils/pageResponse'
+import PageRequest from '../utils/pageRequest'
 
 jest.mock('../../logger')
 
@@ -191,6 +193,49 @@ describe('manageAdjudicationsClient', () => {
 
       const response = await client.editDraftIncidentDetails(16, editedDetails)
       expect(response).toEqual(result)
+    })
+  })
+
+  describe('getCompletedAdjudications', () => {
+    const content = [
+      {
+        adjudicationNumber: 2,
+        prisonerNumber: 'G6123VU',
+        bookingId: 2,
+        dateTimeReportExpires: '2021-11-17T11:45:00',
+        incidentDetails: {
+          locationId: 3,
+          dateTimeOfIncident: '2021-11-15T11:45:00',
+        },
+        incidentStatement: {
+          statement: 'My second incident',
+        },
+      },
+      {
+        adjudicationNumber: 1,
+        prisonerNumber: 'G6174VU',
+        bookingId: 1,
+        dateTimeReportExpires: '2021-11-17T11:30:00',
+        incidentDetails: {
+          locationId: 3,
+          dateTimeOfIncident: '2021-11-15T11:30:00',
+        },
+        incidentStatement: {
+          statement: 'My first incident',
+        },
+      },
+    ]
+    const request = new PageRequest(20, 1, 1)
+    const response = new PageResponse(20, 0, 1, content, 0)
+
+    it('should return a page of completed adjudications with a one based index', async () => {
+      fakeManageAdjudicationsApi
+        .get(`/reported-adjudications/my/agency/MDI/?page=0&size=20`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, response)
+
+      const result = await client.getCompletedAdjudications('MDI', request)
+      expect(result).toEqual(response.changeIndex(1))
     })
   })
 })
