@@ -450,5 +450,10 @@ describe('placeOnReportService', () => {
         },
       ])
     })
+    it('deals with no returned reports elegantly', async () => {
+      getAllDraftAdjudicationsForUser.mockResolvedValue({ draftAdjudications: [] })
+      const response = await service.getAllDraftAdjudicationsForUser(user)
+      expect(response).toEqual([])
+    })
   })
 })
