@@ -1,0 +1,84 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = "Select a report" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+
+      {% set rows = [] %}
+      {% for report in reports %}
+        {% set prisonerLinkHtml %}
+        <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ report.prisonerNumber }}" class="govuk-link">{{ report.displayName }}</a>
+        {% endset -%}
+        {% set incidentDateHtml %}
+        <p class="govuk-body continue-report-text" data-qa="incident-date-text">{{ report.incidentDate }}</p>
+        {% endset -%}
+        {% set incidentTimeHtml %}
+        <p class="govuk-body continue-report-text" data-qa="incident-time-text">{{ report.incidentTime }}</p>
+        {% endset -%}
+        {% set startReportlLinkHtml %}
+        <a href="/place-the-prisoner-on-report/{{ report.prisonerNumber }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a>
+        {% endset -%}
+        {% set rows = (rows.push([
+      {
+        html: prisonerLinkHtml,
+        attributes: {
+          "data-sort-value": report.displayName
+        }
+      },
+      { html: incidentDateHtml, attributes: {
+          "data-sort-value": report.incidentDetails.dateTimeOfIncident
+        } },
+      { html: incidentTimeHtml },
+      { html: startReportlLinkHtml }
+    ]), rows) %}
+      {% endfor %}
+
+      {% if rows | length %}
+        <div class="results-table">
+          {{ govukTable({
+        head: [
+          {
+            text: "Prisoner’s name",
+            attributes: {
+              "aria-sort": "ascending",
+              "data-qa": "prisoner-name-sort"
+            }
+          },
+          { text: "Date of incident", 
+            attributes: {
+              "aria-sort": "ascending",
+              "data-qa": "date-sort"
+
+            }
+           },
+          { text: "Time of incident"},
+          { text: "" }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "continue-report-results-table", "data-module": "moj-sortable-table" }
+      }) }}
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    {% if not errors | length %}
+      <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no reports for you to continue.</p>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

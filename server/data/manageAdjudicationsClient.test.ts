@@ -193,4 +193,54 @@ describe('manageAdjudicationsClient', () => {
       expect(response).toEqual(result)
     })
   })
+
+  describe('getAllDraftAdjudicationsForUser', () => {
+    const result = {
+      draftAdjudications: [
+        {
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          id: 1,
+          incidentDetails: {
+            createdByUserId: 'string',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            dateTimeOfIncident: '2021-11-16T14:15:08.021Z',
+            locationId: 23444,
+            modifiedByDateTime: '2021-11-16T14:15:08.021Z',
+            modifiedByUserId: 'string',
+          },
+          incidentStatement: {
+            completed: true,
+            createdByUserId: 'string',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            modifiedByDateTime: '2021-11-16T14:15:08.021Z',
+            modifiedByUserId: 'string',
+            statement: 'string',
+          },
+          prisonerNumber: 'G2996UX',
+        },
+        {
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-16T15:12:08.021Z',
+          id: 2,
+          incidentDetails: {
+            createdByUserId: 'string',
+            createdDateTime: '2021-11-16T14:33:00.000Z',
+            dateTimeOfIncident: '2021-11-16T12:30:00.000Z',
+            locationId: 1335,
+          },
+          prisonerNumber: 'G2296UP',
+        },
+      ],
+    }
+    it('should return a list of all the draft reports for the logged-in user', async () => {
+      fakeManageAdjudicationsApi
+        .get(`/draft-adjudications`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.getAllDraftAdjudicationsForUser()
+      expect(response).toEqual(result)
+    })
+  })
 })

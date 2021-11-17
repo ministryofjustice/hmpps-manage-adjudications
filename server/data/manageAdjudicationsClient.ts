@@ -1,6 +1,7 @@
 import config from '../config'
 import {
   DraftAdjudicationResult,
+  DraftAdjudicationResultList,
   IncidentStatement,
   IncidentDetails,
   EditedIncidentDetails,
@@ -48,6 +49,12 @@ export default class ManageAdjudicationsClient {
   async getDraftAdjudication(id: number): Promise<DraftAdjudicationResult> {
     return this.restClient.get({
       path: `/draft-adjudications/${id}`,
+    })
+  }
+
+  async getAllDraftAdjudicationsForUser(): Promise<DraftAdjudicationResultList> {
+    return this.restClient.get({
+      path: `/draft-adjudications`,
     })
   }
 
