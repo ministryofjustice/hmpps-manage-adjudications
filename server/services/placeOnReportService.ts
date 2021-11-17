@@ -193,6 +193,10 @@ export default class PlaceOnReportService {
       )
     }
 
-    return getEnhancedReportsByUser().then(reportsByUser => reportsByUser)
+    return getEnhancedReportsByUser().then(reportsByUser =>
+      reportsByUser.sort((a: DraftAdjudicationEnhanced, b: DraftAdjudicationEnhanced) =>
+        a.displayName.localeCompare(b.displayName)
+      )
+    )
   }
 }

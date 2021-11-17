@@ -1,7 +1,7 @@
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
 
-context('Incident details', () => {
+context('Incident details (edit)', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

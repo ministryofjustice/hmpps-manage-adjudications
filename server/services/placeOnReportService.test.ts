@@ -363,7 +363,21 @@ describe('placeOnReportService', () => {
   })
 
   describe('getAllDraftAdjudicationsForUser', () => {
-    it('gets all the users draft reports and enhances them', async () => {
+    it('gets all the users draft reports and enhances them, and then sorts by surname', async () => {
+      getPrisonerDetails.mockResolvedValueOnce({
+        offenderNo: 'A12345',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        assignedLivingUnit: { description: '1-2-015' },
+        categoryCode: 'C',
+      })
+      getPrisonerDetails.mockResolvedValueOnce({
+        offenderNo: 'G2996UX',
+        firstName: 'JACK',
+        lastName: 'BURROWS',
+        assignedLivingUnit: { description: '1-2-015' },
+        categoryCode: 'C',
+      })
       getAllDraftAdjudicationsForUser.mockResolvedValue({
         draftAdjudications: [
           {
@@ -392,7 +406,7 @@ describe('placeOnReportService', () => {
               completed: true,
               statement: 'test',
             },
-            prisonerNumber: 'A12345',
+            prisonerNumber: 'G2996UX',
           },
         ],
       })
@@ -401,25 +415,10 @@ describe('placeOnReportService', () => {
         {
           createdByUserId: 'user1',
           createdDateTime: '2021-11-16T14:15:08.021Z',
-          id: 1,
-          prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 123,
-            dateTimeOfIncident: '2021-11-16T14:15:00',
-          },
-          incidentStatement: {
-            statement: 'test',
-            completed: false,
-          },
-          friendlyName: 'John Smith',
-          displayName: 'Smith, John',
-          incidentDate: '16 November 2021',
-          incidentTime: '14:15',
-        },
-        {
-          createdByUserId: 'user1',
-          createdDateTime: '2021-11-16T14:15:08.021Z',
+          displayName: 'Burrows, Jack',
+          friendlyName: 'Jack Burrows',
           id: 2,
+          incidentDate: '20 November 2021',
           incidentDetails: {
             dateTimeOfIncident: '2021-11-20T09:45:00',
             locationId: 456,
@@ -428,11 +427,26 @@ describe('placeOnReportService', () => {
             completed: true,
             statement: 'test',
           },
-          prisonerNumber: 'A12345',
-          friendlyName: 'John Smith',
-          displayName: 'Smith, John',
-          incidentDate: '20 November 2021',
           incidentTime: '09:45',
+          prisonerNumber: 'G2996UX',
+        },
+        {
+          createdByUserId: 'user1',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          displayName: 'Smith, John',
+          friendlyName: 'John Smith',
+          id: 1,
+          incidentDate: '16 November 2021',
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-16T14:15:00',
+            locationId: 123,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'test',
+          },
+          incidentTime: '14:15',
+          prisonerNumber: 'A12345',
         },
       ])
     })
