@@ -1,5 +1,5 @@
 import { pageRequestFrom, PageResponse, pageResponseFrom } from './pageResponse'
-import { numberRange } from './utils'
+import { generateRange, numberRange } from './utils'
 
 describe('totalPages', () => {
   it('no results', () => {
@@ -129,6 +129,17 @@ describe('pageResponseFrom', () => {
     it('from', () => {
       const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
       expect(page3WithPageSize5And20Pages.resultsFrom()).toEqual(11)
+    })
+  })
+
+  describe('map', () => {
+    it('map from number type to string', () => {
+      const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
+      const expectedPage3WithPageSize5And20PagesAfterMap = pageResponseFrom<number>(
+        pageRequestFrom(5, 3, 1),
+        numberRange(201, 300)
+      )
+      expect(page3WithPageSize5And20Pages.map(_ => _ + 200)).toEqual(expectedPage3WithPageSize5And20PagesAfterMap)
     })
   })
 })
