@@ -6,13 +6,13 @@ export class PageResponse<T> {
     readonly size: number,
     readonly number: number,
     readonly numberOfElements: number,
-    readonly results: T[],
+    readonly content: T[],
     readonly firstPage: number = 1
   ) {}
 
   changeIndex(newFirstPage: number): PageResponse<T> {
     const offset = this.firstPage - newFirstPage
-    return new PageResponse<T>(this.size, this.number - offset, this.numberOfElements, this.results, newFirstPage)
+    return new PageResponse<T>(this.size, this.number - offset, this.numberOfElements, this.content, newFirstPage)
   }
 
   totalPages(): number {
@@ -71,9 +71,9 @@ export function pageRequestFrom(pageSize: number, pageNumber: number, firstPage 
 
 export function pageResponseFrom<T>(pageRequest: PageRequest, allResults: T[]): PageResponse<T> {
   const totalResults = allResults.length
-  const { pageNumber } = pageRequest
-  const { pageSize } = pageRequest
-  const { firstPage } = pageRequest
-  const results = allResults.slice((pageNumber - firstPage) * pageSize, (pageNumber - firstPage + 1) * pageSize)
-  return new PageResponse<T>(pageSize, pageNumber, totalResults, results, firstPage)
+  const { number } = pageRequest
+  const { size } = pageRequest
+  const { page } = pageRequest
+  const results = allResults.slice((number - page) * size, (number - page + 1) * size)
+  return new PageResponse<T>(size, number, totalResults, results, page)
 }

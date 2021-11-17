@@ -13,12 +13,12 @@ export default class CompletedAdjudicationsService {
       user.activeCaseLoadId,
       pageRequest
     )
+    const prisonNumbers = x.content.map(_ => _.prisonerNumber)
     const y = await new ManageAdjudicationsClient(user.token).getCompletedAdjudications(
       user.activeCaseLoadId,
       pageRequest
     )
-    const z = await new PrisonApiClient(user.token).getPrisonerDetails('G9967VP')
-    const zz = await new PrisonApiClient(user.token).getBatchPrisonerDetails(['G9967VP'])
+    const zz = await new PrisonApiClient(user.token).getBatchPrisonerDetails(prisonNumbers)
     return x
   }
 }

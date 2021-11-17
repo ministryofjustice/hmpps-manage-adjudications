@@ -1,3 +1,3 @@
 export default class PageRequest {
-  constructor(readonly pageSize: number, readonly pageNumber: number, readonly firstPage: number = 1) {}
+  constructor(readonly size: number, readonly number: number, readonly page: number = 1) {}
 }
