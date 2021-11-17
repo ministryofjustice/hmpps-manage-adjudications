@@ -28,10 +28,10 @@ context('Prisoner has been placed on report', () => {
           adjudicationNumber: 3,
           prisonerNumber: 'G6415GD',
           bookingId: 123,
-          dateTimeReportExpires: '2020-12-12T10:00:00',
+          dateTimeReportExpires: '2020-12-08T10:00:00',
           incidentDetails: {
             locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
+            dateTimeOfIncident: '2020-12-06T10:00:00',
           },
           incidentStatement: {
             statement: 'test',
@@ -79,7 +79,7 @@ context('Prisoner has been placed on report', () => {
     Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('Your report number is')
     cy.contains('1524242')
-    cy.contains('John Smith must be given a copy of this report by 10:00 on 12 December 2020')
+    cy.contains('John Smith must be given a copy of this report by 10:00 on 8 December 2020')
     cy.contains('John Smith’s preferred language is:')
     cy.contains('French')
     cy.contains('They have other languages of:')
