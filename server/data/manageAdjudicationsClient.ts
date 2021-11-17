@@ -75,9 +75,10 @@ export default class ManageAdjudicationsClient {
     agencyId: string,
     pageRequest: PageRequest
   ): Promise<PageResponse<ReportedAdjudication>> {
+    const zeroBasedPageRequest = pageRequest.changeIndex(0)
     const result = await this.restClient.get({
-      path: `/reported-adjudications/my/agency/${agencyId}/?page=0&size=10`,
+      path: `/reported-adjudications/my/agency/${agencyId}/?page=${zeroBasedPageRequest.number}&size=${zeroBasedPageRequest.size}`,
     })
-    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result)
+    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
   }
 }

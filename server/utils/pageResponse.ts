@@ -77,7 +77,7 @@ export function pageResponseFrom<T>(pageRequest: PageRequest, allResults: T[]): 
   const totalResults = allResults.length
   const { number } = pageRequest
   const { size } = pageRequest
-  const { page } = pageRequest
-  const results = allResults.slice((number - page) * size, (number - page + 1) * size)
-  return new PageResponse<T>(size, number, totalResults, results, page)
+  const { firstPage } = pageRequest
+  const results = allResults.slice((number - firstPage) * size, (number - firstPage + 1) * size)
+  return new PageResponse<T>(size, number, totalResults, results, firstPage)
 }
