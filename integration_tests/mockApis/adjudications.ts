@@ -138,7 +138,7 @@ const stubGetAllDraftAdjudicationsForUser = (response = {}): SuperAgentRequest =
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/draft-adjudications`,
+      url: `/adjudications/draft-adjudications/my/agency/MDI`,
     },
     response: {
       status: 200,
