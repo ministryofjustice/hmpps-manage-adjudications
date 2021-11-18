@@ -4,22 +4,26 @@ import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
+import { PageResponse } from '../utils/pageResponse'
+import PageRequest from '../utils/pageRequest'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
 const getReportedAdjudication = jest.fn()
 const getNeurodiversitiesForReport = jest.fn()
+const getBatchPrisonerDetails = jest.fn()
+const getYourCompletedAdjudications = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getPrisonerDetails, getSecondaryLanguages }
+    return { getPrisonerDetails, getSecondaryLanguages, getBatchPrisonerDetails }
   })
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getReportedAdjudication }
+    return { getReportedAdjudication, getYourCompletedAdjudications }
   })
 })
 jest.mock('./curiousApiService', () => {
@@ -50,6 +54,98 @@ describe('reportedAdjudicationsService', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  describe('getReportedAdjudication', () => {
+    beforeEach(() => {
+      const completedAdjudicationsContent = [
+        {
+          adjudicationNumber: 2,
+          prisonerNumber: 'G6123VU',
+          bookingId: 2,
+          dateTimeReportExpires: '2021-11-17T11:45:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:45:00',
+          },
+          incidentStatement: {
+            statement: 'My second incident',
+          },
+        },
+        {
+          adjudicationNumber: 1,
+          prisonerNumber: 'G6174VU',
+          bookingId: 1,
+          dateTimeReportExpires: '2021-11-17T11:30:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:30:00',
+          },
+          incidentStatement: {
+            statement: 'My first incident',
+          },
+        },
+      ]
+      const batchPrisonerDetails = [
+        {
+          offenderNo: 'G6123VU',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+        },
+        {
+          offenderNo: 'G6174VU',
+          firstName: 'James',
+          lastName: 'Moriarty',
+        },
+      ]
+      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
+      getYourCompletedAdjudications.mockResolvedValue(new PageResponse(20, 1, 2, completedAdjudicationsContent, 1))
+    })
+
+    it('returns the correct data', async () => {
+      const result = await service.getYourCompletedAdjudications(user, new PageRequest(20, 1, 1))
+
+      const expectedAdjudicationContent = [
+        {
+          displayName: 'Smith, John',
+          formattedDateTimeOfIncident: '15 November 2021 - 11:45',
+          dateTimeOfIncident: '2021-11-15T11:45:00',
+          friendlyName: 'John Smith',
+          adjudicationNumber: 2,
+          prisonerNumber: 'G6123VU',
+          bookingId: 2,
+          dateTimeReportExpires: '2021-11-17T11:45:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:45:00',
+          },
+          incidentStatement: {
+            statement: 'My second incident',
+          },
+        },
+        {
+          displayName: 'Moriarty, James',
+          formattedDateTimeOfIncident: '15 November 2021 - 11:30',
+          dateTimeOfIncident: '2021-11-15T11:30:00',
+          friendlyName: 'James Moriarty',
+          adjudicationNumber: 1,
+          prisonerNumber: 'G6174VU',
+          bookingId: 1,
+          dateTimeReportExpires: '2021-11-17T11:30:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:30:00',
+          },
+          incidentStatement: {
+            statement: 'My first incident',
+          },
+        },
+      ]
+
+      const expected = new PageResponse(20, 1, 2, expectedAdjudicationContent, 1)
+
+      expect(result).toEqual(expected)
+    })
   })
 
   describe('getReportedAdjudication', () => {

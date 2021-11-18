@@ -39,6 +39,7 @@
   {% if rows | length %}
     {{ mojPagination(pagination) }}
   <div class="results-table">
+
     {{ govukTable({
       head: [
         { text: 'Prisoners name' },
@@ -53,9 +54,9 @@
       rows: rows,
       attributes: { "data-qa": "prisoner-search-results-table", "data-module": "moj-sortable-table" }
     }) }}
-  </div>
 
-  {{ mojPagination(pagination) }}
+  </div>
+    {{ mojPagination(pagination) }}
   {% else %}
     <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
   {% endif %}

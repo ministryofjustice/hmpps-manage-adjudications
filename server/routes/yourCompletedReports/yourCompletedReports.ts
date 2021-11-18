@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import CompletedAdjudicationsService from '../../services/completedAdjudicationsService'
 import { pageRequestFrom, PageResponse } from '../../utils/pageResponse'
 import mojPaginationFromPageResponse from '../../utils/pagination'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default class YourCompletedReportsRoutes {
-  constructor(private readonly completedAdjudicationsService: CompletedAdjudicationsService) {}
+  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (
     req: Request,
@@ -21,7 +21,7 @@ export default class YourCompletedReportsRoutes {
     })
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const results = await this.completedAdjudicationsService.getYourCompletedAdjudications(
+    const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
       pageRequestFrom(20, +req.query.pageNumber || 1)
     )
