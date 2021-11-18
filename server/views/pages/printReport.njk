@@ -23,8 +23,8 @@
    govukButton({
     text: 'Print this report',
     element: 'a',
-    href: '#',
-    classes: 'print-link--button govuk-button',
+    href: 'javascript:window.print()',
+    classes: 'print-link--button govuk-button govuk-!-display-none-print',
     attributes: {
      'data-qa': 'print-report-button'
     }
@@ -36,7 +36,7 @@
     text: 'Exit',
     element: 'a',
     href: exitURl,
-    classes: 'govuk-button--secondary govuk-!-margin-left-2',
+    classes: 'govuk-button--secondary govuk-!-margin-left-2 govuk-!-display-none-print',
     attributes: {
      'data-qa': 'print-report-exit'
     }
