@@ -77,8 +77,6 @@ context('Print a copy of this report', () => {
   it('should contain the required page elements', () => {
     cy.visit(`/print-report/1524242`)
     Page.verifyOnPage(PrintReport)
-    cy.contains('Your report number is')
-    cy.contains('1524242')
     cy.contains('John Smith must be given a copy of this report by 10:00 on 8 December 2020')
     cy.contains('John Smith’s preferred language is:')
     cy.contains('French')
