@@ -2,7 +2,6 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CompletedAdjudicationsService from './completedAdjudicationsService'
 import PageRequest from '../utils/pageRequest'
 import { PageResponse } from '../utils/pageResponse'
-import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 
 const getBatchPrisonerDetails = jest.fn()
 const getYourCompletedAdjudications = jest.fn()

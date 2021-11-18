@@ -1,5 +1,5 @@
 import { pageRequestFrom, PageResponse, pageResponseFrom } from './pageResponse'
-import { generateRange, numberRange } from './utils'
+import { numberRange } from './utils'
 
 describe('totalPages', () => {
   it('no results', () => {
