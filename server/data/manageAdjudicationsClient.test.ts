@@ -280,7 +280,7 @@ describe('manageAdjudicationsClient', () => {
 
     it('should return a page of completed adjudications with a one based index', async () => {
       fakeManageAdjudicationsApi
-        .get(`/reported-adjudications/my/agency/MDI/?page=0&size=20`)
+        .get(`/reported-adjudications/my/agency/MDI?page=0&size=20`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 

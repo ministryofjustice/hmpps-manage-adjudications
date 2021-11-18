@@ -11,7 +11,7 @@ interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   displayName: string
   friendlyName: string
   formattedDateTimeOfIncident: string
-  dateTimeOfIncident: Date
+  dateTimeOfIncident: string
 }
 
 export default class CompletedAdjudicationsService {
@@ -48,7 +48,7 @@ export default class CompletedAdjudicationsService {
       ...reportedAdjudication,
       displayName,
       friendlyName,
-      dateTimeOfIncident: timestampToDate(reportedAdjudication.incidentDetails.dateTimeOfIncident),
+      dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'DD MMMM YYYY - HH:mm'

@@ -93,10 +93,24 @@ const stubGetSecondaryLanguages = ({
     },
   })
 
+const stubGetBatchPrisonerDetails = (response = []): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/prisonApi/api/bookings/offenders?activeOnly=false`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubUserCaseloads,
   stubGetPrisonerDetails,
   stubGetLocations,
   stubGetSecondaryLanguages,
+  stubGetBatchPrisonerDetails,
 }

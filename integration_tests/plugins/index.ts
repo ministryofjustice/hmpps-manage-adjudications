@@ -27,6 +27,7 @@ export default (on: (string, Record) => void): void => {
     stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
     stubGetLocations: prisonApi.stubGetLocations,
     stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
+    stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,
 
     stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
     stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
@@ -37,5 +38,6 @@ export default (on: (string, Record) => void): void => {
 
     stubGetNeurodiversities: curiousApi.stubGetNeurodiversities,
     stubGetAllDraftAdjudicationsForUser: adjudications.stubGetAllDraftAdjudicationsForUser,
+    stubGetYourReportedAdjudications: adjudications.stubGetYourReportedAdjudications,
   })
 }

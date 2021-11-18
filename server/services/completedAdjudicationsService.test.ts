@@ -95,7 +95,7 @@ describe('completedAdjudicationsService', () => {
         {
           displayName: 'Smith, John',
           formattedDateTimeOfIncident: '15 November 2021 - 11:45',
-          dateTimeOfIncident: new Date('2021-11-15T11:45:00'),
+          dateTimeOfIncident: '2021-11-15T11:45:00',
           friendlyName: 'John Smith',
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
@@ -112,7 +112,7 @@ describe('completedAdjudicationsService', () => {
         {
           displayName: 'Moriarty, James',
           formattedDateTimeOfIncident: '15 November 2021 - 11:30',
-          dateTimeOfIncident: new Date('2021-11-15T11:30:00'),
+          dateTimeOfIncident: '2021-11-15T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
           prisonerNumber: 'G6174VU',
