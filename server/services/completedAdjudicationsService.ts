@@ -4,7 +4,7 @@ import { PageResponse } from '../utils/pageResponse'
 import PageRequest from '../utils/pageRequest'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 import PrisonApiClient from '../data/prisonApiClient'
-import { convertToTitleCase, formatTimestampToDate, timestampToDate } from '../utils/utils'
+import { convertToTitleCase, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 
 interface ReportedAdjudicationEnhanced extends ReportedAdjudication {

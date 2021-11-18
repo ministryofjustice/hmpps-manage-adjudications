@@ -1,7 +1,7 @@
 import YourCompletedReportsPage from '../pages/yourCompletedReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
-import { ReportedAdjudication, ReportedAdjudicationResult } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudication } from '../../server/data/ReportedAdjudicationResult'
 
 context('Your Completed Reports', () => {
   beforeEach(() => {

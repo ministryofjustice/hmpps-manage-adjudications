@@ -1,6 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
-import { PageResponse, pageResponseFrom } from '../../server/utils/pageResponse'
+import { pageResponseFrom } from '../../server/utils/pageResponse'
 import PageRequest from '../../server/utils/pageRequest'
 
 const stubPing = (status = 200): SuperAgentRequest =>
@@ -156,6 +156,11 @@ const stubGetYourReportedAdjudications = ({
   number = 0,
   size = 20,
   allContent = [],
+}: {
+  agencyId: string
+  number: number
+  size: number
+  allContent: unknown[]
 }): SuperAgentRequest => {
   const response = pageResponseFrom(new PageRequest(size, number, 0), allContent)
   return stubFor({
