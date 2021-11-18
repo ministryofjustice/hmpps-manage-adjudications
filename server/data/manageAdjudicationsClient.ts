@@ -16,6 +16,7 @@ import { generateRange } from '../utils/utils'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
+  agencyId: string
 }
 
 export default class ManageAdjudicationsClient {
@@ -52,9 +53,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getAllDraftAdjudicationsForUser(): Promise<DraftAdjudicationResultList> {
+  async getAllDraftAdjudicationsForUser(agencyId: string): Promise<DraftAdjudicationResultList> {
     return this.restClient.get({
-      path: `/draft-adjudications`,
+      path: `/draft-adjudications/my/agency/${agencyId}`,
     })
   }
 
