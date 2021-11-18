@@ -2,6 +2,7 @@ import { plainToClassFromExist } from 'class-transformer'
 import config from '../config'
 import {
   DraftAdjudicationResult,
+  DraftAdjudicationResultList,
   IncidentStatement,
   IncidentDetails,
   EditedIncidentDetails,
@@ -13,6 +14,7 @@ import PageRequest from '../utils/pageRequest'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
+  agencyId: string
 }
 
 export default class ManageAdjudicationsClient {
@@ -46,6 +48,12 @@ export default class ManageAdjudicationsClient {
   async getDraftAdjudication(id: number): Promise<DraftAdjudicationResult> {
     return this.restClient.get({
       path: `/draft-adjudications/${id}`,
+    })
+  }
+
+  async getAllDraftAdjudicationsForUser(agencyId: string): Promise<DraftAdjudicationResultList> {
+    return this.restClient.get({
+      path: `/draft-adjudications/my/agency/${agencyId}`,
     })
   }
 

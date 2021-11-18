@@ -1,7 +1,7 @@
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
 
-context('Incident details', () => {
+context('Check Your Answers', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

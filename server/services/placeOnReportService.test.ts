@@ -10,6 +10,7 @@ const getDraftAdjudication = jest.fn()
 const submitCompleteDraftAdjudication = jest.fn()
 const editDraftIncidentDetails = jest.fn()
 const putDraftIncidentStatement = jest.fn()
+const getAllDraftAdjudicationsForUser = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -26,6 +27,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       getDraftAdjudication,
       submitCompleteDraftAdjudication,
       editDraftIncidentDetails,
+      getAllDraftAdjudicationsForUser,
     }
   })
 })
@@ -73,6 +75,7 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         locationId: 3,
         prisonerNumber: 'G2996UX',
+        agencyId: 'MDI',
       })
       expect(result).toEqual({
         draftAdjudication: {
@@ -357,6 +360,101 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         locationId: 12123123,
       })
+    })
+  })
+
+  describe('getAllDraftAdjudicationsForUser', () => {
+    it('gets all the users draft reports and enhances them, and then sorts by surname', async () => {
+      getPrisonerDetails.mockResolvedValueOnce({
+        offenderNo: 'A12345',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        assignedLivingUnit: { description: '1-2-015' },
+        categoryCode: 'C',
+      })
+      getPrisonerDetails.mockResolvedValueOnce({
+        offenderNo: 'G2996UX',
+        firstName: 'JACK',
+        lastName: 'BURROWS',
+        assignedLivingUnit: { description: '1-2-015' },
+        categoryCode: 'C',
+      })
+      getAllDraftAdjudicationsForUser.mockResolvedValue({
+        draftAdjudications: [
+          {
+            createdByUserId: 'user1',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            id: 1,
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-16T14:15:00',
+              locationId: 123,
+            },
+            incidentStatement: {
+              completed: false,
+              statement: 'test',
+            },
+            prisonerNumber: 'A12345',
+          },
+          {
+            createdByUserId: 'user1',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            id: 2,
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-20T09:45:00',
+              locationId: 456,
+            },
+            incidentStatement: {
+              completed: true,
+              statement: 'test',
+            },
+            prisonerNumber: 'G2996UX',
+          },
+        ],
+      })
+      const response = await service.getAllDraftAdjudicationsForUser(user)
+      expect(response).toEqual([
+        {
+          createdByUserId: 'user1',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          displayName: 'Burrows, Jack',
+          friendlyName: 'Jack Burrows',
+          id: 2,
+          incidentDate: '20 November 2021',
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-20T09:45:00',
+            locationId: 456,
+          },
+          incidentStatement: {
+            completed: true,
+            statement: 'test',
+          },
+          incidentTime: '09:45',
+          prisonerNumber: 'G2996UX',
+        },
+        {
+          createdByUserId: 'user1',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          displayName: 'Smith, John',
+          friendlyName: 'John Smith',
+          id: 1,
+          incidentDate: '16 November 2021',
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-16T14:15:00',
+            locationId: 123,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'test',
+          },
+          incidentTime: '14:15',
+          prisonerNumber: 'A12345',
+        },
+      ])
+    })
+    it('deals with no returned reports elegantly', async () => {
+      getAllDraftAdjudicationsForUser.mockResolvedValue({ draftAdjudications: [] })
+      const response = await service.getAllDraftAdjudicationsForUser(user)
+      expect(response).toEqual([])
     })
   })
 })

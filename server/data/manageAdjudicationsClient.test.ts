@@ -1,8 +1,6 @@
 import nock from 'nock'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
-import { PageResponse } from '../utils/pageResponse'
-import PageRequest from '../utils/pageRequest'
 
 jest.mock('../../logger')
 
@@ -35,6 +33,7 @@ describe('manageAdjudicationsClient', () => {
       }
       const details = {
         locationId: 2,
+        agencyId: 'MDI',
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         prisonerNumber: 'G2996UX',
       }
@@ -196,46 +195,53 @@ describe('manageAdjudicationsClient', () => {
     })
   })
 
-  describe('getCompletedAdjudications', () => {
-    const content = [
-      {
-        adjudicationNumber: 2,
-        prisonerNumber: 'G6123VU',
-        bookingId: 2,
-        dateTimeReportExpires: '2021-11-17T11:45:00',
-        incidentDetails: {
-          locationId: 3,
-          dateTimeOfIncident: '2021-11-15T11:45:00',
+  describe('getAllDraftAdjudicationsForUser', () => {
+    const result = {
+      draftAdjudications: [
+        {
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-16T14:15:08.021Z',
+          id: 1,
+          incidentDetails: {
+            createdByUserId: 'string',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            dateTimeOfIncident: '2021-11-16T14:15:08.021Z',
+            locationId: 23444,
+            modifiedByDateTime: '2021-11-16T14:15:08.021Z',
+            modifiedByUserId: 'string',
+          },
+          incidentStatement: {
+            completed: true,
+            createdByUserId: 'string',
+            createdDateTime: '2021-11-16T14:15:08.021Z',
+            modifiedByDateTime: '2021-11-16T14:15:08.021Z',
+            modifiedByUserId: 'string',
+            statement: 'string',
+          },
+          prisonerNumber: 'G2996UX',
         },
-        incidentStatement: {
-          statement: 'My second incident',
+        {
+          createdByUserId: 'string',
+          createdDateTime: '2021-11-16T15:12:08.021Z',
+          id: 2,
+          incidentDetails: {
+            createdByUserId: 'string',
+            createdDateTime: '2021-11-16T14:33:00.000Z',
+            dateTimeOfIncident: '2021-11-16T12:30:00.000Z',
+            locationId: 1335,
+          },
+          prisonerNumber: 'G2296UP',
         },
-      },
-      {
-        adjudicationNumber: 1,
-        prisonerNumber: 'G6174VU',
-        bookingId: 1,
-        dateTimeReportExpires: '2021-11-17T11:30:00',
-        incidentDetails: {
-          locationId: 3,
-          dateTimeOfIncident: '2021-11-15T11:30:00',
-        },
-        incidentStatement: {
-          statement: 'My first incident',
-        },
-      },
-    ]
-    const request = new PageRequest(20, 1, 1)
-    const response = new PageResponse(20, 0, 2, content, 0)
-
-    it('should return a page of completed adjudications with a one based index', async () => {
+      ],
+    }
+    it('should return a list of all the draft reports provided by the API', async () => {
       fakeManageAdjudicationsApi
-        .get(`/reported-adjudications/my/agency/MDI/?page=0&size=20`)
+        .get(`/draft-adjudications/my/agency/MDI`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, response)
+        .reply(200, result)
 
-      const result = await client.getYourCompletedAdjudications('MDI', request)
-      expect(result).toEqual(response.changeIndex(1))
+      const response = await client.getAllDraftAdjudicationsForUser('MDI')
+      expect(response).toEqual(result)
     })
   })
 })

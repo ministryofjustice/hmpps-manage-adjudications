@@ -23,7 +23,7 @@ export default class ConfirmedOnReportRoutes {
     return res.render(`pages/confirmedOnReport`, {
       adjudicationNumber: adjudicationNumberValue,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
-      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'DD MMMM YYYY'),
+      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
       prisonerFirstAndLastName: formatName(adjudicationDetails.prisonerFirstName, adjudicationDetails.prisonerLastName),
       showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage != null,
       prisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
