@@ -32,13 +32,13 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /prisoner-placed-on-report', () => {
-  it('should load the confirmation of placed on report page', () => {
+describe('GET /print-report', () => {
+  it('should load the print page', () => {
     return request(app)
-      .get('/prisoner-placed-on-report/123')
+      .get('/print-report/123')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('John Smith has been placed on report')
+        expect(res.text).toContain('Print a copy of this report')
         expect(res.text).toContain('123')
         expect(res.text).toContain('John Smith’s preferred language is')
         expect(res.text).toContain('They have other languages of')
@@ -54,7 +54,7 @@ describe('GET /prisoner-placed-on-report', () => {
       prisonerNeurodiversities: null,
     })
     return request(app)
-      .get('/prisoner-placed-on-report/123')
+      .get('/print-report/123')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('They have recorded disabilities')
@@ -67,7 +67,7 @@ describe('GET /prisoner-placed-on-report', () => {
       prisonerPreferredNonEnglishLanguage: null,
     })
     return request(app)
-      .get('/prisoner-placed-on-report/123')
+      .get('/print-report/123')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('John Smith’s preferred language is')
@@ -81,7 +81,7 @@ describe('GET /prisoner-placed-on-report', () => {
       prisonerOtherLanguages: null,
     })
     return request(app)
-      .get('/prisoner-placed-on-report/123')
+      .get('/print-report/123')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('John Smith’s preferred language is')
@@ -91,7 +91,7 @@ describe('GET /prisoner-placed-on-report', () => {
 
   it('should throw an error if no adjudication number provided', () => {
     return request(app)
-      .get('/prisoner-placed-on-report')
+      .get('/print-report')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('NotFoundError')
@@ -100,7 +100,7 @@ describe('GET /prisoner-placed-on-report', () => {
 
   it('should throw an error if an invalid adjudication number provided', () => {
     return request(app)
-      .get('/prisoner-placed-on-report/BadNumber')
+      .get('/print-report/BadNumber')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: No adjudication number provided')
@@ -110,7 +110,7 @@ describe('GET /prisoner-placed-on-report', () => {
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getReportedAdjudication.mockRejectedValue(new Error('error message content'))
     return request(app)
-      .get('/prisoner-placed-on-report/123')
+      .get('/print-report/123')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: error message content')

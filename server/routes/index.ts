@@ -10,6 +10,7 @@ import prisonerSearchRoutes from './prisonerSearch'
 import prisonerSelectRoutes from './prisonerSelect'
 import yourCompletedReportsRoutes from './yourCompletedReports'
 import continueReportSelectRoutes from './continueReport'
+import printReportRoutes from './printReport'
 import homepageRoutes from './homepage'
 
 import { Services } from '../services'
@@ -35,6 +36,7 @@ export default function routes(
   router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
   router.use('/your-completed-reports', yourCompletedReportsRoutes({ completedAdjudicationsService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
+  router.use('/print-report', printReportRoutes({ reportedAdjudicationsService }))
   router.use('/', homepageRoutes({ userService }))
   return router
 }

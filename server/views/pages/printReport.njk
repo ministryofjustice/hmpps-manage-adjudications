@@ -1,0 +1,49 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "../macros/onReport.njk" import onReportInfo %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set title = "Print a copy of this report" %}
+
+{% block pageTitle %}
+ {{ title }}
+{% endblock %}
+
+{% block content %}
+ <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+   <h1 class="govuk-heading-l">{{ title }}</h1>
+
+   {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+
+   <div class="govuk-!-margin-top-9">
+    {{ 
+   govukButton({
+    text: 'Print this report',
+    element: 'a',
+    href: '#',
+    classes: 'print-link--button govuk-button',
+    attributes: {
+     'data-qa': 'print-report-button'
+    }
+   }) 
+  }}
+
+    {{ 
+   govukButton({
+    text: 'Exit',
+    element: 'a',
+    href: exitURl,
+    classes: 'govuk-button--secondary govuk-!-margin-left-2',
+    attributes: {
+     'data-qa': 'print-report-exit'
+    }
+   }) 
+  }}</div>
+
+  </div>
+ </div>
+
+{% endblock %}

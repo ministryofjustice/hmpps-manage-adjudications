@@ -105,6 +105,7 @@ describe('reportedAdjudicationsService', () => {
           reportExpirationDateTime: '2021-10-22T15:40:25.884',
           prisonerFirstName: 'JOHN',
           prisonerLastName: 'SMITH',
+          prisonerNumber: 'A1234AA',
           prisonerPreferredNonEnglishLanguage: 'Spanish',
           prisonerOtherLanguages: ['Spanish', 'German'],
           prisonerNeurodiversities: ['Hearing impairment', 'Visual impairment'],

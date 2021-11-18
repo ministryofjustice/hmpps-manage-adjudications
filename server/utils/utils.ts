@@ -97,6 +97,11 @@ export const getTime = (dateTimeString: string): string => {
   return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 }
 
+export const possessive = (string: string): string => {
+  if (!string) return ''
+  return `${string}${string.toLowerCase().endsWith('s') ? '’' : '’s'}`
+}
+
 export default {
   numberRange,
   convertToTitleCase,
@@ -106,4 +111,5 @@ export default {
   getDate,
   hasAnyRole,
   getFormattedReporterName,
+  possessive,
 }
