@@ -15,7 +15,7 @@ export default class YourCompletedReportsRoutes {
     res.render(`pages/yourCompletedReports`, {
       yourCompletedReports: results,
       pagination: mojPaginationFromPageResponse(
-        results.changeIndex(1),
+        results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
     })

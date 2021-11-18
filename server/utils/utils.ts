@@ -68,13 +68,14 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
 export const hasAnyRole = (requiredRoles: string[], userRoles: string[]): boolean =>
   !requiredRoles || (!!userRoles && requiredRoles.some(role => userRoles.includes(role)))
 
-export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/YYYY'): string =>
-  timestamp && moment(timestamp).format(outputFormat)
+export const formatTimestampToDate = (timestamp: string, format = 'DD/MM/YYYY'): string =>
+  formatTimestampTo(timestamp, format)
 
 export const formatTimestampToTime = (timestamp: string, format = 'HH:mm'): string =>
-  timestamp && moment(timestamp).format(format)
+  formatTimestampTo(timestamp, format)
 
-export const timestampToDate = (timestamp: string): Date => timestamp && moment(timestamp).toDate()
+export const formatTimestampTo = (timestamp: string, format: string): string =>
+  timestamp && moment(timestamp).format(format)
 
 export const numberRange = (start: number, end: number): number[] => generateRange(start, end, _ => _)
 

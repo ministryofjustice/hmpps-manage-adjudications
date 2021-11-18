@@ -1,5 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
+import { pageResponseFrom } from '../../server/utils/pageResponse'
+import PageRequest from '../../server/utils/pageRequest'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -149,6 +151,39 @@ const stubGetAllDraftAdjudicationsForUser = (response = {}): SuperAgentRequest =
     },
   })
 
+const stubGetYourReportedAdjudications = ({
+  agencyId = 'MDI',
+  number = 0,
+  size = 20,
+  allContent = [],
+}: {
+  agencyId: string
+  number: number
+  size: number
+  allContent: unknown[]
+}): SuperAgentRequest => {
+  const response = pageResponseFrom(new PageRequest(size, number, 0), allContent)
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/my/agency/${agencyId}?page=${number}&size=${size}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        content: response.content,
+        totalPages: response.totalPages(),
+        size: response.size,
+        totalElements: response.totalElements,
+        number: response.number,
+      },
+    },
+  })
+}
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -158,4 +193,5 @@ export default {
   stubEditDraftIncidentDetails,
   stubGetReportedAdjudication,
   stubGetAllDraftAdjudicationsForUser,
+  stubGetYourReportedAdjudications,
 }

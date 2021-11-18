@@ -5,22 +5,22 @@ export class PageResponse<T> {
   constructor(
     readonly size: number,
     readonly number: number,
-    readonly numberOfElements: number,
+    readonly totalElements: number,
     readonly content: T[],
     readonly firstPage: number = 1
   ) {}
 
   map<S>(transform: (input: T) => S): PageResponse<S> {
-    return new PageResponse(this.size, this.number, this.numberOfElements, this.content.map(transform), this.firstPage)
+    return new PageResponse(this.size, this.number, this.totalElements, this.content.map(transform), this.firstPage)
   }
 
   changeIndex(newFirstPage: number): PageResponse<T> {
     const offset = this.firstPage - newFirstPage
-    return new PageResponse<T>(this.size, this.number - offset, this.numberOfElements, this.content, newFirstPage)
+    return new PageResponse<T>(this.size, this.number - offset, this.totalElements, this.content, newFirstPage)
   }
 
   totalPages(): number {
-    return Math.floor((this.numberOfElements - 1) / this.size) + 1
+    return Math.floor((this.totalElements - 1) / this.size) + 1
   }
 
   singlePageOfResults(): boolean {
@@ -28,11 +28,11 @@ export class PageResponse<T> {
   }
 
   resultsFrom(): number {
-    return Math.min(this.numberOfElements, (this.number - this.firstPage) * this.size + 1)
+    return Math.min(this.totalElements, (this.number - this.firstPage) * this.size + 1)
   }
 
   resultsTo(): number {
-    return Math.min(this.numberOfElements, (this.number - this.firstPage + 1) * this.size)
+    return Math.min(this.totalElements, (this.number - this.firstPage + 1) * this.size)
   }
 
   lastPage(): number {

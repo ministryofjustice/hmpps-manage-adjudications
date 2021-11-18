@@ -4,14 +4,14 @@ import { PageResponse } from '../utils/pageResponse'
 import PageRequest from '../utils/pageRequest'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 import PrisonApiClient from '../data/prisonApiClient'
-import { convertToTitleCase, formatTimestampToDate, timestampToDate } from '../utils/utils'
+import { convertToTitleCase, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 
 interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   displayName: string
   friendlyName: string
   formattedDateTimeOfIncident: string
-  dateTimeOfIncident: Date
+  dateTimeOfIncident: string
 }
 
 export default class CompletedAdjudicationsService {
@@ -48,7 +48,7 @@ export default class CompletedAdjudicationsService {
       ...reportedAdjudication,
       displayName,
       friendlyName,
-      dateTimeOfIncident: timestampToDate(reportedAdjudication.incidentDetails.dateTimeOfIncident),
+      dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'DD MMMM YYYY - HH:mm'

@@ -8,7 +8,7 @@ export default function mojPaginationFromPageResponse<T>(
     results: {
       from: pageResponse.resultsFrom(),
       to: pageResponse.resultsTo(),
-      count: pageResponse.numberOfElements,
+      count: pageResponse.totalElements,
     },
     ...mojPreviousFromPageResponse(pageResponse, url),
     ...mojNextFromPageResponse(pageResponse, url),
