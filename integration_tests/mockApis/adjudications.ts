@@ -155,10 +155,9 @@ const stubGetYourReportedAdjudications = ({
   agencyId = 'MDI',
   number = 0,
   size = 20,
-  firstPage = 0,
   allContent = [],
 }): SuperAgentRequest => {
-  const response = pageResponseFrom(new PageRequest(size, number, firstPage), allContent)
+  const response = pageResponseFrom(new PageRequest(size, number, 0), allContent)
   return stubFor({
     request: {
       method: 'GET',
