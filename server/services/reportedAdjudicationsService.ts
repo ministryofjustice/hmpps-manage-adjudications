@@ -32,6 +32,7 @@ export default class ReportedAdjudicationsService {
 
     return {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
+      prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
       prisonerPreferredNonEnglishLanguage,

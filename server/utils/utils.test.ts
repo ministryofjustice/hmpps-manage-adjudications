@@ -8,6 +8,7 @@ import {
   getDate,
   hasAnyRole,
   getFormattedReporterName,
+  possessive,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -146,5 +147,17 @@ describe('getFormattedReporterName()', () => {
   })
   it('should return a correctly formatted name when the first name is double barelled', () => {
     expect(getFormattedReporterName('Test-Jo User')).toEqual('T. User')
+  })
+})
+
+describe('Possessive', () => {
+  it('No string', () => {
+    expect(possessive(null)).toEqual('')
+  })
+  it('Converts name with no S correctly', () => {
+    expect(possessive('David Smith')).toEqual('David Smith’s')
+  })
+  it('Converts name with S correctly', () => {
+    expect(possessive('David Jones')).toEqual('David Jones’')
   })
 })
