@@ -71,7 +71,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getCompletedAdjudications(
+  async getYourCompletedAdjudications(
     agencyId: string,
     pageRequest: PageRequest
   ): Promise<PageResponse<ReportedAdjudication>> {

@@ -4,42 +4,42 @@ import { PageResponse } from '../utils/pageResponse'
 import PageRequest from '../utils/pageRequest'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 import PrisonApiClient from '../data/prisonApiClient'
-import { convertToTitleCase, formatTimestampToDate } from '../utils/utils'
-import PrisonerResult from '../data/prisonerResult'
+import { convertToTitleCase, formatTimestampToDate, timestampToDate } from '../utils/utils'
+import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 
 interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   displayName: string
   friendlyName: string
-  dateTimeOfIncident: string
+  formattedDateTimeOfIncident: string
+  dateTimeOfIncident: Date
 }
 
 export default class CompletedAdjudicationsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  async getCompletedAdjudications(
+  async getYourCompletedAdjudications(
     user: User,
     pageRequest: PageRequest
   ): Promise<PageResponse<ReportedAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user.token).getCompletedAdjudications(
+    const pageResponse = await new ManageAdjudicationsClient(user.token).getYourCompletedAdjudications(
       user.activeCaseLoadId,
       pageRequest
     )
-    const prisonerDetails = await new PrisonApiClient(user.token).getBatchPrisonerDetails(
-      pageResponse.content.map(_ => _.prisonerNumber)
+    const prisonerDetails = new Map(
+      (
+        await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
     return pageResponse.map(reportedAdjudication =>
-      this.enhanceReportedAdjudication(reportedAdjudication, prisonerDetails)
+      this.enhanceReportedAdjudication(reportedAdjudication, prisonerDetails.get(reportedAdjudication.prisonerNumber))
     )
   }
 
   enhanceReportedAdjudication(
     reportedAdjudication: ReportedAdjudication,
-    prisonerResults: PrisonerResult[]
+    prisonerResult: PrisonerSimpleResult
   ): ReportedAdjudicationEnhanced {
-    const prisonerResult = prisonerResults.find(
-      prisonerDetail => prisonerDetail.offenderNo === reportedAdjudication.prisonerNumber
-    )
     const displayName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
@@ -48,7 +48,8 @@ export default class CompletedAdjudicationsService {
       ...reportedAdjudication,
       displayName,
       friendlyName,
-      dateTimeOfIncident: formatTimestampToDate(
+      dateTimeOfIncident: timestampToDate(reportedAdjudication.incidentDetails.dateTimeOfIncident),
+      formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'DD MMMM YYYY - HH:mm'
       ),

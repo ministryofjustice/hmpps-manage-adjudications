@@ -226,7 +226,7 @@ describe('manageAdjudicationsClient', () => {
       },
     ]
     const request = new PageRequest(20, 1, 1)
-    const response = new PageResponse(20, 0, 1, content, 0)
+    const response = new PageResponse(20, 0, 2, content, 0)
 
     it('should return a page of completed adjudications with a one based index', async () => {
       fakeManageAdjudicationsApi
@@ -234,7 +234,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 
-      const result = await client.getCompletedAdjudications('MDI', request)
+      const result = await client.getYourCompletedAdjudications('MDI', request)
       expect(result).toEqual(response.changeIndex(1))
     })
   })
