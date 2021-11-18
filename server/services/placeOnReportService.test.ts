@@ -75,6 +75,7 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         locationId: 3,
         prisonerNumber: 'G2996UX',
+        agencyId: 'MDI',
       })
       expect(result).toEqual({
         draftAdjudication: {

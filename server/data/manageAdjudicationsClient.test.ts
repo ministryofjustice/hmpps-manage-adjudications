@@ -33,6 +33,7 @@ describe('manageAdjudicationsClient', () => {
       }
       const details = {
         locationId: 2,
+        agencyId: 'MDI',
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         prisonerNumber: 'G2996UX',
       }
@@ -233,13 +234,13 @@ describe('manageAdjudicationsClient', () => {
         },
       ],
     }
-    it('should return a list of all the draft reports for the logged-in user', async () => {
+    it('should return a list of all the draft reports provided by the API', async () => {
       fakeManageAdjudicationsApi
-        .get(`/draft-adjudications`)
+        .get(`/draft-adjudications/my/agency/MDI`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, result)
 
-      const response = await client.getAllDraftAdjudicationsForUser()
+      const response = await client.getAllDraftAdjudicationsForUser('MDI')
       expect(response).toEqual(result)
     })
   })

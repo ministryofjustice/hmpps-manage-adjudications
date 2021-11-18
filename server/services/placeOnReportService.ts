@@ -62,6 +62,7 @@ export default class PlaceOnReportService {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       dateTimeOfIncident,
+      agencyId: user.activeCaseLoadId,
       locationId,
       prisonerNumber,
     }
@@ -176,7 +177,9 @@ export default class PlaceOnReportService {
 
   async getAllDraftAdjudicationsForUser(user: User): Promise<DraftAdjudicationEnhanced[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const allAdjudications = await new ManageAdjudicationsClient(token).getAllDraftAdjudicationsForUser()
+    const allAdjudications = await new ManageAdjudicationsClient(token).getAllDraftAdjudicationsForUser(
+      user.activeCaseLoadId
+    )
 
     const enhanceReport = async (authToken: string, report: DraftAdjudication) => {
       const prisoner = await new PrisonApiClient(authToken).getPrisonerDetails(report.prisonerNumber)
