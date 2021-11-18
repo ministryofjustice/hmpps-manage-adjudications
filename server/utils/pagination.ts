@@ -8,7 +8,7 @@ export default function mojPaginationFromPageResponse<T>(
     results: {
       from: pageResponse.resultsFrom(),
       to: pageResponse.resultsTo(),
-      count: pageResponse.totalResults,
+      count: pageResponse.numberOfElements,
     },
     ...mojPreviousFromPageResponse(pageResponse, url),
     ...mojNextFromPageResponse(pageResponse, url),
@@ -21,7 +21,7 @@ function mojItemsFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL) {
     (!pageResponse.singlePageOfResults() && {
       items: pageResponse.pageRange(5, 4).map(pageNumber => {
         url.searchParams.set('pageNumber', pageNumber.toString())
-        return { text: pageNumber.toString(), href: url.href, selected: pageNumber === pageResponse.pageNumber }
+        return { text: pageNumber.toString(), href: url.href, selected: pageNumber === pageResponse.number }
       }),
     }) ||
     {}
@@ -29,7 +29,7 @@ function mojItemsFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL) {
 }
 
 function mojPreviousFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL) {
-  url.searchParams.set('pageNumber', (pageResponse.pageNumber - 1).toString())
+  url.searchParams.set('pageNumber', (pageResponse.number - 1).toString())
   return (
     (pageResponse.hasPrevious() && {
       previous: {
@@ -42,7 +42,7 @@ function mojPreviousFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL)
 }
 
 function mojNextFromPageResponse<T>(pageResponse: PageResponse<T>, url: URL) {
-  url.searchParams.set('pageNumber', (pageResponse.pageNumber + 1).toString())
+  url.searchParams.set('pageNumber', (pageResponse.number + 1).toString())
   return (
     (pageResponse.hasNext() && {
       next: {

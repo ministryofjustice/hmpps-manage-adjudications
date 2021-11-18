@@ -74,6 +74,8 @@ export const formatTimestampToDate = (timestamp: string, outputFormat = 'DD/MM/Y
 export const formatTimestampToTime = (timestamp: string, format = 'HH:mm'): string =>
   timestamp && moment(timestamp).format(format)
 
+export const timestampToDate = (timestamp: string): Date => timestamp && moment(timestamp).toDate()
+
 export const numberRange = (start: number, end: number): number[] => generateRange(start, end, _ => _)
 
 export function generateRange<T>(start: number, end: number, generator: (index: number) => T): T[] {

@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer'
 import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
+import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
 import { Location } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
@@ -43,6 +44,14 @@ export default class PrisonApiClient {
     })
 
     return plainToClass(PrisonerResult, result, { excludeExtraneousValues: true })
+  }
+
+  async getBatchPrisonerDetails(prisonerNumbers: string[]): Promise<PrisonerSimpleResult[]> {
+    const result = await this.restClient.post<PrisonerSimpleResult[]>({
+      path: `/api/bookings/offenders?activeOnly=false`,
+      data: prisonerNumbers,
+    })
+    return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: true }))
   }
 
   async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<Location[]> {

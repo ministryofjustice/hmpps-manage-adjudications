@@ -3,20 +3,24 @@ import PageRequest from './pageRequest'
 
 export class PageResponse<T> {
   constructor(
-    readonly pageSize: number,
-    readonly pageNumber: number,
-    readonly totalResults: number,
-    readonly results: T[],
+    readonly size: number,
+    readonly number: number,
+    readonly numberOfElements: number,
+    readonly content: T[],
     readonly firstPage: number = 1
   ) {}
 
+  map<S>(transform: (input: T) => S): PageResponse<S> {
+    return new PageResponse(this.size, this.number, this.numberOfElements, this.content.map(transform), this.firstPage)
+  }
+
   changeIndex(newFirstPage: number): PageResponse<T> {
     const offset = this.firstPage - newFirstPage
-    return new PageResponse<T>(this.pageSize, this.pageNumber - offset, this.totalResults, this.results, newFirstPage)
+    return new PageResponse<T>(this.size, this.number - offset, this.numberOfElements, this.content, newFirstPage)
   }
 
   totalPages(): number {
-    return Math.floor((this.totalResults - 1) / this.pageSize) + 1
+    return Math.floor((this.numberOfElements - 1) / this.size) + 1
   }
 
   singlePageOfResults(): boolean {
@@ -24,11 +28,11 @@ export class PageResponse<T> {
   }
 
   resultsFrom(): number {
-    return Math.min(this.totalResults, (this.pageNumber - this.firstPage) * this.pageSize + 1)
+    return Math.min(this.numberOfElements, (this.number - this.firstPage) * this.size + 1)
   }
 
   resultsTo(): number {
-    return Math.min(this.totalResults, (this.pageNumber - this.firstPage + 1) * this.pageSize)
+    return Math.min(this.numberOfElements, (this.number - this.firstPage + 1) * this.size)
   }
 
   lastPage(): number {
@@ -36,8 +40,8 @@ export class PageResponse<T> {
   }
 
   pageRange(before: number, after: number): number[] {
-    const idealStart = this.pageNumber - before
-    const idealEnd = this.pageNumber + after
+    const idealStart = this.number - before
+    const idealEnd = this.number + after
     if (idealStart < this.firstPage) {
       // We would start before the first page - push the range forward so we start at the first page.
       const offset = this.firstPage - idealStart
@@ -57,11 +61,11 @@ export class PageResponse<T> {
   }
 
   hasNext(): boolean {
-    return this.pageNumber < this.totalPages()
+    return this.number < this.lastPage()
   }
 
   hasPrevious(): boolean {
-    return this.pageNumber > this.firstPage
+    return this.number > this.firstPage
   }
 }
 
@@ -71,9 +75,9 @@ export function pageRequestFrom(pageSize: number, pageNumber: number, firstPage 
 
 export function pageResponseFrom<T>(pageRequest: PageRequest, allResults: T[]): PageResponse<T> {
   const totalResults = allResults.length
-  const { pageNumber } = pageRequest
-  const { pageSize } = pageRequest
+  const { number } = pageRequest
+  const { size } = pageRequest
   const { firstPage } = pageRequest
-  const results = allResults.slice((pageNumber - firstPage) * pageSize, (pageNumber - firstPage + 1) * pageSize)
-  return new PageResponse<T>(pageSize, pageNumber, totalResults, results, firstPage)
+  const results = allResults.slice((number - firstPage) * size, (number - firstPage + 1) * size)
+  return new PageResponse<T>(size, number, totalResults, results, firstPage)
 }

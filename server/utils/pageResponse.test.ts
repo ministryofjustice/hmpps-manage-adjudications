@@ -26,27 +26,27 @@ describe('pageResponseFrom', () => {
   it('one result', () => {
     const response = pageResponseFrom<number>(pageRequestFrom(5, 1), numberRange(1, 1))
     expect(response.totalPages()).toEqual(1)
-    expect(response.results).toEqual(numberRange(1, 1))
+    expect(response.content).toEqual(numberRange(1, 1))
   })
   it('first page where there is more than one page of results', () => {
     const response = pageResponseFrom<number>(pageRequestFrom(5, 1), numberRange(1, 6))
     expect(response.totalPages()).toEqual(2)
-    expect(response.results).toEqual(numberRange(1, 5))
+    expect(response.content).toEqual(numberRange(1, 5))
   })
   it('last page where there is more than one page of results', () => {
     const response = pageResponseFrom<number>(pageRequestFrom(5, 2), numberRange(1, 6))
     expect(response.totalPages()).toEqual(2)
-    expect(response.results).toEqual(numberRange(6, 6))
+    expect(response.content).toEqual(numberRange(6, 6))
   })
   it('first page where there is more than one page of results and the first page is zero', () => {
     const response = pageResponseFrom<number>(pageRequestFrom(5, 0, 0), numberRange(1, 6))
     expect(response.totalPages()).toEqual(2)
-    expect(response.results).toEqual(numberRange(1, 5))
+    expect(response.content).toEqual(numberRange(1, 5))
   })
   it('last page where there is more than one page of results and the first page is zero', () => {
     const response = pageResponseFrom<number>(pageRequestFrom(5, 1, 0), numberRange(1, 6))
     expect(response.totalPages()).toEqual(2)
-    expect(response.results).toEqual(numberRange(6, 6))
+    expect(response.content).toEqual(numberRange(6, 6))
   })
 
   describe('changeIndex', () => {
@@ -54,19 +54,19 @@ describe('pageResponseFrom', () => {
       const response = pageResponseFrom<number>(pageRequestFrom(5, 2, 1), numberRange(1, 20))
       const changeStartPage = response.changeIndex(0)
       expect(changeStartPage.firstPage).toEqual(0)
-      expect(changeStartPage.pageNumber).toEqual(1)
+      expect(changeStartPage.number).toEqual(1)
       expect(changeStartPage.lastPage()).toEqual(3)
       expect(changeStartPage.totalPages()).toEqual(4)
-      expect(changeStartPage.results).toEqual(numberRange(6, 10))
+      expect(changeStartPage.content).toEqual(numberRange(6, 10))
     })
     it('change from first page being zero to being one', () => {
       const response = pageResponseFrom<number>(pageRequestFrom(5, 1, 0), numberRange(1, 20))
       const changeStartPage = response.changeIndex(1)
       expect(changeStartPage.firstPage).toEqual(1)
-      expect(changeStartPage.pageNumber).toEqual(2)
+      expect(changeStartPage.number).toEqual(2)
       expect(changeStartPage.lastPage()).toEqual(4)
       expect(changeStartPage.totalPages()).toEqual(4)
-      expect(changeStartPage.results).toEqual(numberRange(6, 10))
+      expect(changeStartPage.content).toEqual(numberRange(6, 10))
     })
   })
 
@@ -129,6 +129,17 @@ describe('pageResponseFrom', () => {
     it('from', () => {
       const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
       expect(page3WithPageSize5And20Pages.resultsFrom()).toEqual(11)
+    })
+  })
+
+  describe('map', () => {
+    it('map from number type to string', () => {
+      const page3WithPageSize5And20Pages = pageResponseFrom<number>(pageRequestFrom(5, 3, 1), numberRange(1, 100))
+      const expectedPage3WithPageSize5And20PagesAfterMap = pageResponseFrom<number>(
+        pageRequestFrom(5, 3, 1),
+        numberRange(201, 300)
+      )
+      expect(page3WithPageSize5And20Pages.map(_ => _ + 200)).toEqual(expectedPage3WithPageSize5And20PagesAfterMap)
     })
   })
 })

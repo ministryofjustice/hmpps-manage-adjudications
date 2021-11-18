@@ -20,14 +20,14 @@
 
   {% set rows = [] %}
 
-  {% for completedReport in yourCompletedReports.results %}
+  {% for completedReport in yourCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-      <a href="/place-the-prisoner-on-report/{{ completedReport.adjudicationsNumber }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+      <a href="/place-the-prisoner-on-report/{{ completedReport.adjudicationNumber }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
-      { text: completedReport.prisonerDisplayName },
+      { text: completedReport.displayName },
       { text: completedReport.prisonerNumber },
-      { text: completedReport.dateTimeOfIncident,
+      { text: completedReport.formattedDateTimeOfIncident,
         attributes: {
         "data-sort-value": completedReport.dateTimeOfIncident
       }
@@ -45,7 +45,7 @@
         { text: "Prison number" },
         { text: "Date and time of incident",
           attributes: {
-          "aria-sort": "ascending"
+          "aria-sort": "descending"
         }
         },
         { text: "" }

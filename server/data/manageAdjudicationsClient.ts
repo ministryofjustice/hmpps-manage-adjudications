@@ -1,3 +1,4 @@
+import { plainToClassFromExist } from 'class-transformer'
 import config from '../config'
 import {
   DraftAdjudicationResult,
@@ -8,11 +9,8 @@ import {
 } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
-import { User } from './hmppsAuthClient'
-import { CompletedAdjudicationSummary } from './CompletedAdjudicationsData'
-import { PageResponse, pageResponseFrom } from '../utils/pageResponse'
+import { PageResponse } from '../utils/pageResponse'
 import PageRequest from '../utils/pageRequest'
-import { generateRange } from '../utils/utils'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -81,22 +79,14 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getCompletedAdjudications(
-    user: User,
+  async getYourCompletedAdjudications(
+    agencyId: string,
     pageRequest: PageRequest
-  ): Promise<PageResponse<CompletedAdjudicationSummary>> {
-    return pageResponseFrom(pageRequest, dummyResults)
+  ): Promise<PageResponse<ReportedAdjudication>> {
+    const zeroBasedPageRequest = pageRequest.changeIndex(0)
+    const result = await this.restClient.get({
+      path: `/reported-adjudications/my/agency/${agencyId}/?page=${zeroBasedPageRequest.number}&size=${zeroBasedPageRequest.size}`,
+    })
+    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
   }
 }
-
-const dummyResults: CompletedAdjudicationSummary[] = generateRange(1, 1, _ => {
-  return {
-    dateTimeOfIncident: new Date(),
-    prisonerDisplayName: 'Smith, John',
-    prisonerFriendlyName: 'Smith, John',
-    prisonerFirstName: 'John',
-    prisonerLastName: 'Smith',
-    prisonerNumber: 'A1234AA',
-    adjudicationsNumber: `${_}`,
-  }
-})
