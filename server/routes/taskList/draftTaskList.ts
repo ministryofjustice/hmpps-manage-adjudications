@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
 
 export default class DraftTaskListRoutes {
@@ -15,9 +16,17 @@ export default class DraftTaskListRoutes {
     }
 
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    const adjudicationDetails = {
+      reportExpirationDateTime: '2021-11-19T15:53:00.000Z',
+    }
+    const data = await this.placeOnReportService.getDraftTaskListStatuses()
 
     return res.render(`pages/draftTaskList`, {
       prisoner,
+      data,
+      prisonerFirstAndLastName: prisoner.friendlyName,
+      expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
+      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
     })
   }
 

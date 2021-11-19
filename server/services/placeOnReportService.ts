@@ -202,4 +202,20 @@ export default class PlaceOnReportService {
       )
     )
   }
+
+  async getDraftTaskListStatuses(): Promise<unknown> {
+    const taskListDetails = [
+      [{ html: '<a href="">Incident details</a>' }, { html: '<strong class="govuk-tag">Complete</strong>' }],
+      [
+        { html: '<a href="">Incident statement</a>' },
+        { html: '<strong class="govuk-tag govuk-tag--grey">In progress</strong>' },
+      ],
+      [
+        { html: '<a href="">Accept details and place on report</a>' },
+        { html: '<strong class="govuk-tag govuk-tag--grey">In progress</strong>' },
+      ],
+    ]
+
+    return taskListDetails
+  }
 }
