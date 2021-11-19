@@ -60,7 +60,7 @@ export default class IncidentStatementRoutes {
       const pathname =
         incidentStatementComplete === 'yes'
           ? `/check-your-answers/${prisonerNumber}/${id}`
-          : '/place-the-prisoner-on-report'
+          : `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)

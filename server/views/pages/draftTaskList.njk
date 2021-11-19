@@ -1,0 +1,26 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../macros/incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageTitle %}
+  Place the prisoner on report
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+
+	<h1 class="govuk-heading-l">Place {{prisoner.friendlyName}} on report</h1>
+
+	<div class="prisonerPlaybackSection">
+		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+	</div>
+
+
+{% endblock %}

@@ -32,6 +32,7 @@ export default class checkYourAnswersRoutes {
       prisoner,
       data,
       IdNumberValue,
+      exitUrl: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
     })
   }
 
@@ -39,13 +40,13 @@ export default class checkYourAnswersRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { id } = req.params
+    const { id, prisonerNumber } = req.params
     const IdNumberValue: number = parseInt(id as string, 10)
     try {
       const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
       return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}`)
     } catch (postError) {
-      res.locals.redirectUrl = `/place-the-prisoner-on-report`
+      res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
       throw postError
     }
   }
