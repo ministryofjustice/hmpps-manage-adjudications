@@ -85,7 +85,7 @@ context('Print a copy of this report', () => {
     cy.contains('German')
   })
 
-  it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
+  it('should redirect the user to /place-the-prisoner-on-report on finish', () => {
     cy.visit(`/print-report/1524242`)
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.exitButton().click()

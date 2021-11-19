@@ -108,14 +108,14 @@ context('Incident Statement', () => {
       expect(loc.pathname).to.eq('/check-your-answers/G6415GD/3456')
     })
   })
-  it('should redirect the user to /place-a-prisoner-on-report if statement is incomplete', () => {
+  it('should redirect the user to /place-the-prisoner-on-report if statement is incomplete', () => {
     cy.visit(`/incident-statement/G6415GD/3456`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().type('This is my statement, it is not finished.')
     incidentStatementPage.radioNo().check()
     incidentStatementPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report')
     })
   })
 })

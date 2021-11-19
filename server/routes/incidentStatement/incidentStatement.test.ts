@@ -65,7 +65,7 @@ describe('POST /incident-statement', () => {
     return request(app)
       .post('/incident-statement/G6415GD/1')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
-      .expect('Location', '/place-a-prisoner-on-report')
+      .expect('Location', '/place-the-prisoner-on-report')
   })
 
   it('should render error summary with correct validation message', () => {
