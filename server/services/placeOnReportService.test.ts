@@ -105,14 +105,14 @@ describe('placeOnReportService', () => {
             statement:
               "John didn't want to go to chapel today. \nHe pushed over some pews and threw things on the floor.",
           },
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-04T09:21:21.95935',
         },
       })
 
       hmppsAuthClient.getUserFromUsername.mockResolvedValue({
         name: 'Natalie Clamp',
-        username: 'NCLAMP_GEN',
+        username: 'TEST_GEN',
         activeCaseLoadId: 'MDI',
         token: '',
         authSource: '',
@@ -455,6 +455,99 @@ describe('placeOnReportService', () => {
       getAllDraftAdjudicationsForUser.mockResolvedValue({ draftAdjudications: [] })
       const response = await service.getAllDraftAdjudicationsForUser(user)
       expect(response).toEqual([])
+    })
+  })
+  describe('getInfoForTaskListStatuses', () => {
+    it('returns the correct response when there is no incident statement', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 104,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 357591,
+            dateTimeOfIncident: '2021-10-12T20:00:00',
+            handoverDeadline: '2021-10-14T20:00:00',
+            createdByUserId: 'TEST_GEN',
+            createdDateTime: '2021-11-22T10:43:15.764699151',
+            modifiedByUserId: 'TEST_GEN',
+            modifiedByDateTime: '2021-11-22T10:43:15.764699151',
+          },
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-11-22T10:43:15.763328964',
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(104, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-10-14T20:00:00',
+        statementPresent: false,
+        statementComplete: false,
+      })
+    })
+    it('returns the correct response when there is an incomplete incident statement', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 104,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 357591,
+            dateTimeOfIncident: '2021-10-12T20:00:00',
+            handoverDeadline: '2021-10-14T20:00:00',
+            createdByUserId: 'TEST_GEN',
+            createdDateTime: '2021-11-22T10:43:15.764699',
+            modifiedByUserId: 'TEST_GEN',
+            modifiedByDateTime: '2021-11-22T10:43:15.764699',
+          },
+          incidentStatement: {
+            statement: 'This is incomplete',
+            completed: false,
+            createdByUserId: 'TEST_GEN',
+            createdDateTime: '2021-11-22T15:12:07.333725',
+            modifiedByUserId: 'TEST_GEN',
+            modifiedByDateTime: '2021-11-22T15:12:07.333725',
+          },
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-11-22T10:43:15.763329',
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(104, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-10-14T20:00:00',
+        statementPresent: true,
+        statementComplete: false,
+      })
+    })
+    it('returns the correct response when there is a complete incident statement', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 92,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26999,
+            dateTimeOfIncident: '2021-11-18T14:50:00',
+            handoverDeadline: '2021-11-23T00:00:00',
+            createdByUserId: 'NCLAMP_GEN',
+            createdDateTime: '2021-11-19T14:35:50.137823',
+            modifiedByUserId: 'NCLAMP_GEN',
+            modifiedByDateTime: '2021-11-19T14:35:50.137823',
+          },
+          incidentStatement: {
+            statement: 'ghjghjgh',
+            completed: true,
+            createdByUserId: 'NCLAMP_GEN',
+            createdDateTime: '2021-11-19T14:35:53.092888',
+            modifiedByUserId: 'NCLAMP_GEN',
+            modifiedByDateTime: '2021-11-19T14:35:53.092888',
+          },
+          createdByUserId: 'NCLAMP_GEN',
+          createdDateTime: '2021-11-19T14:35:50.137624',
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(92, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-11-23T00:00:00',
+        statementPresent: true,
+        statementComplete: true,
+      })
     })
   })
 })

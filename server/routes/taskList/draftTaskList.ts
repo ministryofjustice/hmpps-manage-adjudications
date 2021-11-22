@@ -16,17 +16,16 @@ export default class DraftTaskListRoutes {
     }
 
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
-    const adjudicationDetails = {
-      reportExpirationDateTime: '2021-11-19T15:53:00.000Z',
-    }
-    const data = await this.placeOnReportService.getDraftTaskListStatuses()
+    const taskListDetails = await this.placeOnReportService.getInfoForTaskListStatuses(idValue, user)
 
     return res.render(`pages/draftTaskList`, {
       prisoner,
-      data,
+      adjudicationId: id,
+      statementPresent: taskListDetails.statementPresent,
+      statementComplete: taskListDetails.statementComplete,
       prisonerFirstAndLastName: prisoner.friendlyName,
-      expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
-      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
+      expirationTime: formatTimestampToTime(taskListDetails.handoverDeadline),
+      expirationDay: formatTimestampToDate(taskListDetails.handoverDeadline, 'D MMMM YYYY'),
     })
   }
 

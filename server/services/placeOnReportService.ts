@@ -8,7 +8,12 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
 import PrisonerResult from '../data/prisonerResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { DraftAdjudicationResult, CheckYourAnswers, DraftAdjudication } from '../data/DraftAdjudicationResult'
+import {
+  DraftAdjudicationResult,
+  CheckYourAnswers,
+  DraftAdjudication,
+  TaskListDetails,
+} from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 
 export interface PrisonerResultSummary extends PrisonerResult {
@@ -203,19 +208,14 @@ export default class PlaceOnReportService {
     )
   }
 
-  async getDraftTaskListStatuses(): Promise<unknown> {
-    const taskListDetails = [
-      [{ html: '<a href="">Incident details</a>' }, { html: '<strong class="govuk-tag">Complete</strong>' }],
-      [
-        { html: '<a href="">Incident statement</a>' },
-        { html: '<strong class="govuk-tag govuk-tag--grey">In progress</strong>' },
-      ],
-      [
-        { html: '<a href="">Accept details and place on report</a>' },
-        { html: '<strong class="govuk-tag govuk-tag--grey">In progress</strong>' },
-      ],
-    ]
+  async getInfoForTaskListStatuses(draftAdjudicationId: number, user: User): Promise<TaskListDetails> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
 
-    return taskListDetails
+    return {
+      handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
+      statementPresent: !!draftAdjudication.incidentStatement,
+      statementComplete: draftAdjudication.incidentStatement?.completed || false,
+    }
   }
 }
