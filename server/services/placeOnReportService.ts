@@ -138,7 +138,7 @@ export default class PlaceOnReportService {
 
     return {
       incidentDetails,
-      statement: formatStatement(draftAdjudication.incidentStatement.statement),
+      statement: formatStatement(draftAdjudication.incidentStatement?.statement),
     }
   }
 

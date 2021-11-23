@@ -1,9 +1,16 @@
 .taskListTable {
- border-top: 1px solid #b1b4b6;
+
+ .taskListTable_col1 {
+  width:85%;
+ }
 
  .govuk-tag {
   display: flex;
   justify-content: center;
   width: 140px;
+ }
+
+ .govuk-body, .task {
+  margin-bottom: 0;
  }
 }

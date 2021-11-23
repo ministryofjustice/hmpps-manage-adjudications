@@ -1,40 +1,58 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro taskList(prisonerNo, adjudicationId, statementPresent = false, statementComplete = false, attributes) %}
+{% macro taskList(prisonerNo, adjudicationId, statementPresent, statementComplete, attributes) %}
 
- {% set data = [
+  {% set data = [
    [
     { html: "<a href='/incident-details/"+ prisonerNo + "/" + adjudicationId + "/edit' class='task'>Incident details</a>" },
     { html: '<strong class="govuk-tag">Complete</strong>' }
    ]
   ] %}
- {% if statementComplete %}
-  {% set data = (data.push([
+
+  {% if statementPresent == false %}
+    {% set data = (data.push([
+    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task'>Incident statement</a>" },
+    { html: '<strong class="govuk-tag govuk-tag--grey">Not started</strong>' }
+   ]), data)
+   %}
+  {% else %}
+    {% if statementComplete %}
+      {% set data = (data.push([
     { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task'>Incident statement</a>" },
     { html: '<strong class="govuk-tag">Complete</strong>' }
    ]), data)
    %}
- {% else %}
-  {% set data = (data.push([
+    {% else %}
+      {% set data = (data.push([
     { html: "<a href='/incident-statement/" + prisonerNo + "/" + adjudicationId + "' class='task'>Incident statement</a>" },
-   { html: '<strong class="govuk-tag govuk-tag--grey">In progress</strong>' }
+   { html: '<strong class="govuk-tag govuk-tag--blue">In progress</strong>' }
    ]), data)%}
- {% endif %}
- {% if statementPresent === false %}
- {% set data = (data.push([
+    {% endif %}
+  {% endif %}
+
+  {% if statementComplete %}
+    {% set data = (data.push([
    { html: "<a href='/check-your-answers/"+prisonerNo+"/"+adjudicationId+"' class='task'>Accept details and place on report</a>" },
-   { html: '<strong class="govuk-tag govuk-tag--grey">Cannot start</strong>' }
+   { html: '<strong class="govuk-tag govuk-tag--grey">Not started</strong>' }
   ]), data) %}
   {% else %}
-   {% set data = (data.push([
-   { html: "<a href='/check-your-answers/"+prisonerNo+"/"+adjudicationId+"' class='task'>Accept details and place on report</a>" },
-   { html: '<strong class="govuk-tag govuk-tag--grey">In progress</strong>' }
+    {% set data = (data.push([
+   { html: "<p class='govuk-body task'>Accept details and place on report</p>" },
+   { html: '<strong class="govuk-tag govuk-tag--grey">Not started</strong>' }
   ]), data) %}
   {% endif %}
 
- {{ govukTable({
+  {{ govukTable({
     classes: 'taskListTable',
     attributes: attributes,
+    head: [
+      {
+        classes: 'taskListTable_col1'
+      },
+      {
+        classes: 'taskListTable_col2'
+      }
+    ],
     rows: data
   }) }}
 
