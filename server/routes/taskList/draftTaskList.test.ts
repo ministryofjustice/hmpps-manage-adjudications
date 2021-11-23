@@ -49,11 +49,11 @@ describe('GET /place-the-prisoner-on-report', () => {
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
-          expect(response.text).toContain('Complete')
+          expect(response.text).toContain('COMPLETE')
           expect(response.text).toContain('Incident statement')
-          expect(response.text).toContain('In progress')
+          expect(response.text).toContain('IN PROGRESS')
           expect(response.text).toContain('Accept details and place on report')
-          expect(response.text).toContain('Not started')
+          expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain(
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 00:00 on 23 November 2021.'
           )
