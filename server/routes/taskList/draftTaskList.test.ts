@@ -40,17 +40,20 @@ describe('GET /place-the-prisoner-on-report', () => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T00:00:00',
         statementPresent: true,
-        statementComplete: true,
+        statementComplete: false,
       })
     })
-    it.only('should load the continue report page', () => {
+    it('should load the continue report page', () => {
       return request(app)
         .get('/place-the-prisoner-on-report/G6415GD/104')
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
+          expect(response.text).toContain('Complete')
           expect(response.text).toContain('Incident statement')
+          expect(response.text).toContain('In progress')
           expect(response.text).toContain('Accept details and place on report')
+          expect(response.text).toContain('Not started')
           expect(response.text).toContain(
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 00:00 on 23 November 2021.'
           )

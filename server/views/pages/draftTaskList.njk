@@ -23,10 +23,16 @@
 
 	<div class="govuk-grid-row">
 		<div class="govuk-grid-column-three-quarters">
-			
-			{{ taskList(prisoner.prisonerNumber, adjudicationId, statementPresent, statementComplete) }}
 
-			<p class="govuk-body">You need to provide {{ prisonerFirstAndLastName }} with a printed copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
+			{{ taskList(
+				prisoner.prisonerNumber, 
+				adjudicationId, 
+				statementPresent, 
+				statementComplete, 
+				{ "data-qa": "taskList" }
+			) }}
+
+			<p class="govuk-body" data-qa="expirationNotice">You need to provide {{ prisonerFirstAndLastName }} with a printed copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
 
 		</div>
 	</div>

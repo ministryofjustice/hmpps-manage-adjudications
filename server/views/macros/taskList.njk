@@ -4,27 +4,27 @@
 
   {% set data = [
    [
-    { html: "<a href='/incident-details/"+ prisonerNo + "/" + adjudicationId + "/edit' class='task'>Incident details</a>" },
+    { html: "<a href='/incident-details/"+ prisonerNo + "/" + adjudicationId + "/edit' class='task' data-qa='incident-details-link'>Incident details</a>" },
     { html: '<strong class="govuk-tag">Complete</strong>' }
    ]
   ] %}
 
   {% if statementPresent == false %}
     {% set data = (data.push([
-    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task'>Incident statement</a>" },
+    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
     { html: '<strong class="govuk-tag govuk-tag--grey">Not started</strong>' }
    ]), data)
    %}
   {% else %}
     {% if statementComplete %}
       {% set data = (data.push([
-    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task'>Incident statement</a>" },
+    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
     { html: '<strong class="govuk-tag">Complete</strong>' }
    ]), data)
    %}
     {% else %}
       {% set data = (data.push([
-    { html: "<a href='/incident-statement/" + prisonerNo + "/" + adjudicationId + "' class='task'>Incident statement</a>" },
+    { html: "<a href='/incident-statement/" + prisonerNo + "/" + adjudicationId + "' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
    { html: '<strong class="govuk-tag govuk-tag--blue">In progress</strong>' }
    ]), data)%}
     {% endif %}
@@ -32,12 +32,12 @@
 
   {% if statementComplete %}
     {% set data = (data.push([
-   { html: "<a href='/check-your-answers/"+prisonerNo+"/"+adjudicationId+"' class='task'>Accept details and place on report</a>" },
+   { html: "<a href='/check-your-answers/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='accept-details-link'>Accept details and place on report</a>" },
    { html: '<strong class="govuk-tag govuk-tag--grey">Not started</strong>' }
   ]), data) %}
   {% else %}
     {% set data = (data.push([
-   { html: "<p class='govuk-body task'>Accept details and place on report</p>" },
+   { html: "<p class='govuk-body task' data-qa='accept-details-text'>Accept details and place on report</p>" },
    { html: '<strong class="govuk-tag govuk-tag--grey">Not started</strong>' }
   ]), data) %}
   {% endif %}
