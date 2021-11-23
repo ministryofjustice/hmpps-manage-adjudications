@@ -1,7 +1,7 @@
 import TaskList from '../pages/taskList'
 import Page from '../pages/page'
 
-context('Check Your Answers', () => {
+context('Task list', () => {
   context('Just incident details completed', () => {
     beforeEach(() => {
       cy.task('reset')
