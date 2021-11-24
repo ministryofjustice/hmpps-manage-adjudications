@@ -59,7 +59,7 @@ context('Task list', () => {
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
-          expect($cells.get(1).innerText).to.contain('COMPLETE')
+          expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Incident statement')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
           expect($cells.get(4).innerText).to.contain('Accept details and place on report')
@@ -155,7 +155,7 @@ context('Task list', () => {
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
-          expect($cells.get(1).innerText).to.contain('COMPLETE')
+          expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Incident statement')
           expect($cells.get(3).innerText).to.contain('IN PROGRESS')
           expect($cells.get(4).innerText).to.contain('Accept details and place on report')
@@ -235,9 +235,9 @@ context('Task list', () => {
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
-          expect($cells.get(1).innerText).to.contain('COMPLETE')
+          expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Incident statement')
-          expect($cells.get(3).innerText).to.contain('COMPLETE')
+          expect($cells.get(3).innerText).to.contain('COMPLETED')
           expect($cells.get(4).innerText).to.contain('Accept details and place on report')
           expect($cells.get(5).innerText).to.contain('NOT STARTED')
         })

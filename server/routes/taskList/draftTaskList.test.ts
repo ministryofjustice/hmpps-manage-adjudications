@@ -49,7 +49,7 @@ describe('GET /place-the-prisoner-on-report', () => {
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
-          expect(response.text).toContain('COMPLETE')
+          expect(response.text).toContain('COMPLETED')
           expect(response.text).toContain('Incident statement')
           expect(response.text).toContain('IN PROGRESS')
           expect(response.text).toContain('Accept details and place on report')
