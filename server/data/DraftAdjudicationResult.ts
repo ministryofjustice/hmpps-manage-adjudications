@@ -1,6 +1,7 @@
 export type IncidentDetails = {
   locationId: number
   dateTimeOfIncident: string
+  handoverDeadline?: string
   createdByUserId?: string
   createdDateTime?: string
   modifiedByUserId?: string
@@ -46,4 +47,10 @@ type SummarySectionItems = {
 export type EditedIncidentDetails = {
   dateTimeOfIncident: string
   locationId: number
+}
+
+export type TaskListDetails = {
+  handoverDeadline: string
+  statementPresent: boolean
+  statementComplete: boolean
 }

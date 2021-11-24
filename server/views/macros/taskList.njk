@@ -1,0 +1,59 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro taskList(prisonerNo, adjudicationId, statementPresent, statementComplete, attributes) %}
+
+  {% set data = [
+   [
+    { html: "<a href='/incident-details/"+ prisonerNo + "/" + adjudicationId + "/edit' class='task' data-qa='incident-details-link'>Incident details</a>" },
+    { html: '<strong class="govuk-tag">COMPLETE</strong>' }
+   ]
+  ] %}
+
+  {% if statementPresent == false %}
+    {% set data = (data.push([
+    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
+    { html: '<strong class="govuk-tag govuk-tag--grey">NOT STARTED</strong>' }
+   ]), data)
+   %}
+  {% else %}
+    {% if statementComplete %}
+      {% set data = (data.push([
+    { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
+    { html: '<strong class="govuk-tag">COMPLETE</strong>' }
+   ]), data)
+   %}
+    {% else %}
+      {% set data = (data.push([
+    { html: "<a href='/incident-statement/" + prisonerNo + "/" + adjudicationId + "' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
+   { html: '<strong class="govuk-tag govuk-tag--blue">IN PROGRESS</strong>' }
+   ]), data)%}
+    {% endif %}
+  {% endif %}
+
+  {% if statementComplete %}
+    {% set data = (data.push([
+   { html: "<a href='/check-your-answers/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='accept-details-link'>Accept details and place on report</a>" },
+   { html: '<strong class="govuk-tag govuk-tag--grey">NOT STARTED</strong>' }
+  ]), data) %}
+  {% else %}
+    {% set data = (data.push([
+   { html: "<p class='govuk-body task' data-qa='accept-details-text'>Accept details and place on report</p>" },
+   { html: '<strong class="govuk-tag govuk-tag--grey">NOT STARTED</strong>' }
+  ]), data) %}
+  {% endif %}
+
+  {{ govukTable({
+    classes: 'taskListTable',
+    attributes: attributes,
+    head: [
+      {
+        classes: 'taskListTable_col1'
+      },
+      {
+        classes: 'taskListTable_col2'
+      }
+    ],
+    rows: data
+  }) }}
+
+{% endmacro %}

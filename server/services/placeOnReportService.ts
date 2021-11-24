@@ -8,7 +8,12 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
 import PrisonerResult from '../data/prisonerResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { DraftAdjudicationResult, CheckYourAnswers, DraftAdjudication } from '../data/DraftAdjudicationResult'
+import {
+  DraftAdjudicationResult,
+  CheckYourAnswers,
+  DraftAdjudication,
+  TaskListDetails,
+} from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 
 export interface PrisonerResultSummary extends PrisonerResult {
@@ -133,7 +138,7 @@ export default class PlaceOnReportService {
 
     return {
       incidentDetails,
-      statement: formatStatement(draftAdjudication.incidentStatement.statement),
+      statement: formatStatement(draftAdjudication.incidentStatement?.statement),
     }
   }
 
@@ -201,5 +206,16 @@ export default class PlaceOnReportService {
         a.displayName.localeCompare(b.displayName)
       )
     )
+  }
+
+  async getInfoForTaskListStatuses(draftAdjudicationId: number, user: User): Promise<TaskListDetails> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
+
+    return {
+      handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
+      statementPresent: !!draftAdjudication.incidentStatement,
+      statementComplete: draftAdjudication.incidentStatement?.completed || false,
+    }
   }
 }

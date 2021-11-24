@@ -1,0 +1,40 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/taskList.njk" import taskList %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+  Place the prisoner on report
+{% endblock %}
+
+{% block beforeContent %}
+	{{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+
+	<h1 class="govuk-heading-l">Place {{ prisoner.friendlyName }} on report</h1>
+
+	<div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+	</div>
+
+	<div class="govuk-grid-row">
+		<div class="govuk-grid-column-three-quarters">
+
+			{{ taskList(
+				prisoner.prisonerNumber, 
+				adjudicationId, 
+				statementPresent, 
+				statementComplete, 
+				{ "data-qa": "taskList" }
+			) }}
+
+			<p class="govuk-body" data-qa="expirationNotice">You need to provide {{ prisonerFirstAndLastName }} with a printed copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
+
+		</div>
+	</div>
+
+{% endblock %}
