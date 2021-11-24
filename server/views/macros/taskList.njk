@@ -5,7 +5,7 @@
   {% set data = [
    [
     { html: "<a href='/incident-details/"+ prisonerNo + "/" + adjudicationId + "/edit' class='task' data-qa='incident-details-link'>Incident details</a>" },
-    { html: '<strong class="govuk-tag">COMPLETE</strong>' }
+    { html: '<strong class="govuk-tag">COMPLETED</strong>' }
    ]
   ] %}
 
@@ -19,7 +19,7 @@
     {% if statementComplete %}
       {% set data = (data.push([
     { html: "<a href='/incident-statement/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='incident-statement-link'>Incident statement</a>" },
-    { html: '<strong class="govuk-tag">COMPLETE</strong>' }
+    { html: '<strong class="govuk-tag">COMPLETED</strong>' }
    ]), data)
    %}
     {% else %}
