@@ -87,7 +87,7 @@ export default class ReportedAdjudicationsService {
       dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
-        'DD MMMM YYYY - HH:mm'
+        'D MMMM YYYY - HH:mm'
       ),
     }
   }
