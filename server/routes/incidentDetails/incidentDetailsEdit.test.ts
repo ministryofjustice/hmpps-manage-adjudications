@@ -80,12 +80,12 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
 })
 
 describe('POST /incident-details/<PRN>/<id>/edit', () => {
-  it('should redirect to incident statement page if details are complete', () => {
+  it('should redirect to incident statement page if details are complete but statement is incomplete', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/edit')
       .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
       .expect(302)
-      .expect('Location', '/check-your-answers/G6415GD/34')
+      .expect('Location', '/incident-statement/G6415GD/34')
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)
@@ -106,5 +106,41 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .expect(res => {
         expect(res.text).toContain('Error: Internal Error')
       })
+  })
+})
+
+describe('Incident details completed already', () => {
+  beforeEach(() => {
+    placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
+      draftAdjudication: {
+        createdByUserId: 'TEST_GEN',
+        createdDateTime: '2021-10-27T10:13:17.808Z',
+        id: 34,
+        incidentDetails: {
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-10-27T10:13:17.808Z',
+          dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+          locationId: 2,
+          modifiedByDateTime: '2021-10-27T10:40:17.808Z',
+          modifiedByUserId: 'TEST_GEN',
+        },
+        incidentStatement: {
+          completed: true,
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-10-27T10:30:17.808Z',
+          modifiedByDateTime: '2021-10-27T10:30:17.808Z',
+          modifiedByUserId: 'TEST_GEN',
+          statement: 'blah blah',
+        },
+        prisonerNumber: 'G6415GD',
+      },
+    })
+  })
+  it('should redirect to check your answers page if details are complete and statement is complete', () => {
+    return request(app)
+      .post('/incident-details/G6415GD/34/edit')
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .expect(302)
+      .expect('Location', '/check-your-answers/G6415GD/34')
   })
 })
