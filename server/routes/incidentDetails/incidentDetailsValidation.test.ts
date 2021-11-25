@@ -67,6 +67,21 @@ describe('validateForm - incident statement', () => {
         text: 'Enter the minute using 2 numbers - for example, 08 or 18',
       })
     })
+    it('shows error if the time entered is in the future (on the current day)', () => {
+      const now = new Date()
+      expect(
+        validateForm({
+          incidentDate: {
+            date: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
+            time: { hour: `${now.getHours()}`, minute: `${now.getMinutes() + 20}` },
+          },
+          locationId: 2343,
+        })
+      ).toEqual({
+        href: '#incidentDate[time]',
+        text: 'Enter an incident time that is not in the future.',
+      })
+    })
   })
   describe('locationId', () => {
     it('shows error if location is not selected', () => {
