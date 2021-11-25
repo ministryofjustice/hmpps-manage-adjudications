@@ -73,7 +73,7 @@ describe('validateForm - incident statement', () => {
         validateForm({
           incidentDate: {
             date: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
-            time: { hour: `${now.getHours()}`, minute: `${now.getMinutes() + 20}` },
+            time: { hour: `${now.getHours()}`, minute: `${now.getMinutes()}` },
           },
           locationId: 2343,
         })

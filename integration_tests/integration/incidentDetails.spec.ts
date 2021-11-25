@@ -128,7 +128,7 @@ context('Incident details', () => {
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('21')
+    incidentDetailsPage.timeInputHours().type('03')
     incidentDetailsPage.timeInputMinutes().type('20')
     incidentDetailsPage.locationSelector().select('Workshop 19 - Braille')
     incidentDetailsPage.submitButton().click()

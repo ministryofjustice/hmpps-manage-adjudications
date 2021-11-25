@@ -85,13 +85,12 @@ context('Print a copy of this report', () => {
     cy.contains('German')
   })
 
-  // estimated URL for the reported adjudication task list
-  it('should redirect the user to /place-the-prisoner-on-report on finish', () => {
+  it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
     cy.visit(`/print-report/1524242`)
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/1524242')
+      expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
     })
   })
 })

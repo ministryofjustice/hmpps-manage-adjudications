@@ -31,8 +31,7 @@ export default class PrintReportRoutes {
       prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
-      // estimated URL for the reported adjudication task list
-      exitURl: `/place-the-prisoner-on-report/${adjudicationNumber}`,
+      exitUrl: `/place-a-prisoner-on-report`,
     })
   }
 

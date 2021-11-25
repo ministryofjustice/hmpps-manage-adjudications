@@ -81,7 +81,10 @@ export default function validateForm({
     return errors.ONE_DIGIT_MINUTE
   }
   if (incidentDate.date === `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`) {
-    if (Number(incidentDate.time.hour) >= now.getHours() && Number(incidentDate.time.minute) > now.getMinutes()) {
+    if (Number(incidentDate.time.hour) > now.getHours()) {
+      return errors.FUTURE_TIME
+    }
+    if (Number(incidentDate.time.hour) === now.getHours() && Number(incidentDate.time.minute) >= now.getMinutes()) {
       return errors.FUTURE_TIME
     }
   }
