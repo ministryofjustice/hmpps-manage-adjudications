@@ -71,13 +71,17 @@ export default class IncidentDetailsEditRoutes {
     const IdNumberValue: number = parseInt(id as string, 10)
 
     try {
-      await this.placeOnReportService.editDraftIncidentDetails(
+      const response = await this.placeOnReportService.editDraftIncidentDetails(
         IdNumberValue,
         formatDate(incidentDate),
         locationId,
         user
       )
-      return res.redirect(`/check-your-answers/${prisonerNumber}/${id}`)
+
+      const nextPageURL = response.draftAdjudication.incidentStatement?.completed
+        ? `/check-your-answers/${prisonerNumber}/${id}`
+        : `/incident-statement/${prisonerNumber}/${id}`
+      return res.redirect(nextPageURL)
     } catch (postError) {
       logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/check-your-answers/${prisonerNumber}/${id}`
