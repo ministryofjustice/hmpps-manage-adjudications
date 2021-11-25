@@ -31,7 +31,7 @@ export default class PrintReportRoutes {
       prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
-      exitUrl: `/place-a-prisoner-on-report/`,
+      exitUrl: `/place-a-prisoner-on-report`,
     })
   }
 
