@@ -77,7 +77,7 @@ export default class IncidentDetailsEditRoutes {
         locationId,
         user
       )
-      return res.redirect(`/incident-statement/${prisonerNumber}/${id}`)
+      return res.redirect(`/check-your-answers/${prisonerNumber}/${id}`)
     } catch (postError) {
       logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/check-your-answers/${prisonerNumber}/${id}`

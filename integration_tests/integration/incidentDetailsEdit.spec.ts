@@ -122,7 +122,7 @@ context('Incident details (edit)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/34')
+      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34')
     })
   })
 })

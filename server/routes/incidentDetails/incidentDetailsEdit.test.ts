@@ -85,7 +85,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post('/incident-details/G6415GD/34/edit')
       .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
       .expect(302)
-      .expect('Location', '/incident-statement/G6415GD/34')
+      .expect('Location', '/check-your-answers/G6415GD/34')
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)
