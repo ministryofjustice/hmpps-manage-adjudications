@@ -100,6 +100,18 @@ export const getTime = (dateTimeString: string): string => {
   return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
 }
 
+export const getHour = (dateTimeString: string): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH')
+}
+
+export const getMinute = (dateTimeString: string): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('mm')
+}
+
 export const possessive = (string: string): string => {
   if (!string) return ''
   return `${string}${string.toLowerCase().endsWith('s') ? '’' : '’s'}`
@@ -111,6 +123,8 @@ export default {
   formatLocation,
   formatDate,
   getTime,
+  getHour,
+  getMinute,
   getDate,
   hasAnyRole,
   getFormattedReporterName,

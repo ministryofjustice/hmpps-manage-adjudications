@@ -5,6 +5,8 @@ import {
   formatDate,
   formatTimestampToDate,
   getTime,
+  getHour,
+  getMinute,
   getDate,
   hasAnyRole,
   getFormattedReporterName,
@@ -60,10 +62,6 @@ describe('formatDateToISOString', () => {
   it('returns', () => {
     expect(formatDate({ date: '27/10/2021', time: { hour: '13', minute: '30' } })).toEqual('2021-10-27T13:30')
   })
-  // it('returns error message if any of the inputs are invalid', () => {
-  //   expect(formatDate({ date: '27/10/2021', time: { hour: 'we', minute: 'go' } })).toEqual(null)
-  //   expect(formatDate({ date: 'help', time: { hour: '23', minute: '11' } })).toEqual(null)
-  // })
 })
 
 describe('hasAnyRole', () => {
@@ -121,6 +119,34 @@ describe('getTime()', () => {
 
   it('should return Invalid message if no date time string is used', () => {
     expect(getTime(null)).toEqual('Invalid date or time')
+  })
+})
+
+describe('getHour()', () => {
+  it('should return the correctly formatted time only', () => {
+    expect(getHour('2019-09-23T15:30:00')).toEqual('15')
+  })
+
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getHour('2019-13-23')).toEqual('Invalid date or time')
+  })
+
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getHour(null)).toEqual('Invalid date or time')
+  })
+})
+
+describe('getMinute()', () => {
+  it('should return the correctly formatted time only', () => {
+    expect(getMinute('2019-09-23T15:30:00')).toEqual('30')
+  })
+
+  it('should return Invalid message if invalid string is used', () => {
+    expect(getMinute('2019-13-23')).toEqual('Invalid date or time')
+  })
+
+  it('should return Invalid message if no date time string is used', () => {
+    expect(getMinute(null)).toEqual('Invalid date or time')
   })
 })
 
