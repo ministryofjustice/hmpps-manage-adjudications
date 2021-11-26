@@ -1,5 +1,5 @@
 import { FormError, SubmittedDateTime } from '../../@types/template'
-import { getDate, getHour, getMinute, formatDate } from '../../utils/utils'
+import { formatDate } from '../../utils/utils'
 
 type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
