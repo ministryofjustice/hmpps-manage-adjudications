@@ -17,6 +17,13 @@ describe('validateForm - incident statement', () => {
     })
   })
   describe('incidentTime', () => {
+    beforeAll(() => {
+      jest.useFakeTimers('modern')
+      jest.setSystemTime(new Date(1636017690000))
+    })
+    afterAll(() => {
+      jest.useRealTimers()
+    })
     it('shows error if an hour is not submitted', () => {
       expect(validateForm({ incidentDate: { date: '31/10/2021', time: { minute: '23' } }, locationId: 2343 })).toEqual({
         href: '#incidentDate[time][hour]',
@@ -68,12 +75,13 @@ describe('validateForm - incident statement', () => {
       })
     })
     it('shows error if the time entered is in the future (on the current day)', () => {
-      const now = new Date()
+      expect(new Date().valueOf()).toBe(1636017690000)
+      // 2021-11-04T09:21:30.000Z
       expect(
         validateForm({
           incidentDate: {
-            date: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
-            time: { hour: `${now.getHours()}`, minute: `${now.getMinutes()}` },
+            date: '04/11/2021',
+            time: { hour: `09`, minute: `22` },
           },
           locationId: 2343,
         })

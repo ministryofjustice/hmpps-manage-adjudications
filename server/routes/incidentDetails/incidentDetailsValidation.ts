@@ -1,4 +1,5 @@
 import { FormError, SubmittedDateTime } from '../../@types/template'
+import { formatDate } from '../../utils/utils'
 
 type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
@@ -52,7 +53,6 @@ export default function validateForm({
   incidentDate,
   locationId,
 }: incidentDetailsForm): FormError | FormError[] | null {
-  const now = new Date()
   if (!incidentDate.date) {
     return errors.MISSING_DATE
   }
@@ -80,13 +80,8 @@ export default function validateForm({
   if (incidentDate.time.minute.length < 2) {
     return errors.ONE_DIGIT_MINUTE
   }
-  if (incidentDate.date === `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`) {
-    if (Number(incidentDate.time.hour) > now.getHours()) {
-      return errors.FUTURE_TIME
-    }
-    if (Number(incidentDate.time.hour) === now.getHours() && Number(incidentDate.time.minute) >= now.getMinutes()) {
-      return errors.FUTURE_TIME
-    }
+  if (new Date(formatDate(incidentDate)) > new Date()) {
+    return errors.FUTURE_TIME
   }
 
   return null
