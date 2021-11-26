@@ -81,7 +81,7 @@ describe('validateForm - incident statement', () => {
         validateForm({
           incidentDate: {
             date: '04/11/2021',
-            time: { hour: `09`, minute: `30` },
+            time: { hour: `09`, minute: `22` },
           },
           locationId: 2343,
         })
