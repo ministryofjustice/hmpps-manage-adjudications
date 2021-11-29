@@ -39,5 +39,6 @@ export default (on: (string, Record) => void): void => {
     stubGetNeurodiversities: curiousApi.stubGetNeurodiversities,
     stubGetAllDraftAdjudicationsForUser: adjudications.stubGetAllDraftAdjudicationsForUser,
     stubGetYourReportedAdjudications: adjudications.stubGetYourReportedAdjudications,
+    stubGetAllReportedAdjudications: adjudications.stubGetYourReportedAdjudications,
   })
 }

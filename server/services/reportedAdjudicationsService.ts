@@ -14,6 +14,7 @@ interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   friendlyName: string
   formattedDateTimeOfIncident: string
   dateTimeOfIncident: string
+  reportingOfficer?: string
 }
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
@@ -61,12 +62,32 @@ export default class ReportedAdjudicationsService {
       user.activeCaseLoadId,
       pageRequest
     )
+
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
+    return pageResponse.map(reportedAdjudication =>
+      this.enhanceReportedAdjudication(reportedAdjudication, prisonerDetails.get(reportedAdjudication.prisonerNumber))
+    )
+  }
+
+  async getAllCompletedAdjudications(
+    user: User,
+    pageRequest: PageRequest
+  ): Promise<PageResponse<ReportedAdjudicationEnhanced>> {
+    const pageResponse = await new ManageAdjudicationsClient(user.token).getAllCompletedAdjudications(
+      user.activeCaseLoadId,
+      pageRequest
+    )
+
+    const prisonerDetails = new Map(
+      (
+        await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+    )
     return pageResponse.map(reportedAdjudication =>
       this.enhanceReportedAdjudication(reportedAdjudication, prisonerDetails.get(reportedAdjudication.prisonerNumber))
     )
@@ -80,10 +101,13 @@ export default class ReportedAdjudicationsService {
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
+    // const reportingOfficer = (reportedAdjudication && reportedAdjudication.incidentDetails.createdByUserId) || ''
+
     return {
       ...reportedAdjudication,
       displayName,
       friendlyName,
+      reportingOfficer: 'Nora Jones',
       dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,

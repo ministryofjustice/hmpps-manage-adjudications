@@ -13,6 +13,7 @@ const getReportedAdjudication = jest.fn()
 const getNeurodiversitiesForReport = jest.fn()
 const getBatchPrisonerDetails = jest.fn()
 const getYourCompletedAdjudications = jest.fn()
+const getAllCompletedAdjudications = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
@@ -23,7 +24,7 @@ jest.mock('../data/prisonApiClient', () => {
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getReportedAdjudication, getYourCompletedAdjudications }
+    return { getReportedAdjudication, getYourCompletedAdjudications, getAllCompletedAdjudications }
   })
 })
 jest.mock('./curiousApiService', () => {
@@ -115,6 +116,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
+          reportingOfficer: 'Nora Jones',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -129,6 +131,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-15T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
+          reportingOfficer: 'Nora Jones',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
@@ -253,6 +256,99 @@ describe('reportedAdjudicationsService', () => {
         expect(result.prisonerPreferredNonEnglishLanguage).toBeNull()
         expect(result.prisonerOtherLanguages.length).toEqual(0)
       })
+    })
+  })
+
+  describe('getAllCompletedAdjudications', () => {
+    beforeEach(() => {
+      const completedAdjudicationsContent = [
+        {
+          adjudicationNumber: 2,
+          prisonerNumber: 'G6123VU',
+          bookingId: 2,
+          dateTimeReportExpires: '2021-11-17T11:45:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:45:00',
+          },
+          incidentStatement: {
+            statement: 'Statement 2',
+          },
+        },
+        {
+          adjudicationNumber: 1,
+          prisonerNumber: 'G6174VU',
+          bookingId: 1,
+          dateTimeReportExpires: '2021-11-17T11:30:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:30:00',
+          },
+          incidentStatement: {
+            statement: 'Statement 1',
+          },
+        },
+      ]
+      const batchPrisonerDetails = [
+        {
+          offenderNo: 'G6123VU',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+        },
+        {
+          offenderNo: 'G6174VU',
+          firstName: 'Thomas',
+          lastName: 'Booker',
+        },
+      ]
+      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
+      getAllCompletedAdjudications.mockResolvedValue(new PageResponse(20, 1, 2, completedAdjudicationsContent, 1))
+    })
+    it('returns the data', async () => {
+      const result = await service.getAllCompletedAdjudications(user, new PageRequest(20, 1, 1))
+
+      const expectedAdjudicationContent = [
+        {
+          displayName: 'Smith, John',
+          formattedDateTimeOfIncident: '15 November 2021 - 11:45',
+          dateTimeOfIncident: '2021-11-15T11:45:00',
+          friendlyName: 'John Smith',
+          adjudicationNumber: 2,
+          prisonerNumber: 'G6123VU',
+          bookingId: 2,
+          dateTimeReportExpires: '2021-11-17T11:45:00',
+          reportingOfficer: 'Nora Jones',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:45:00',
+          },
+          incidentStatement: {
+            statement: 'Statement 2',
+          },
+        },
+        {
+          displayName: 'Booker, Thomas',
+          formattedDateTimeOfIncident: '15 November 2021 - 11:30',
+          dateTimeOfIncident: '2021-11-15T11:30:00',
+          friendlyName: 'Thomas Booker',
+          adjudicationNumber: 1,
+          reportingOfficer: 'Nora Jones',
+          prisonerNumber: 'G6174VU',
+          bookingId: 1,
+          dateTimeReportExpires: '2021-11-17T11:30:00',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-11-15T11:30:00',
+          },
+          incidentStatement: {
+            statement: 'Statement 1',
+          },
+        },
+      ]
+
+      const expected = new PageResponse(20, 1, 2, expectedAdjudicationContent, 1)
+
+      expect(result).toEqual(expected)
     })
   })
 })

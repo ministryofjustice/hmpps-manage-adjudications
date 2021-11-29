@@ -1,0 +1,64 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+{% set title = "All completed reports" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <p>
+    <span class="govuk-!-margin-bottom-1 govuk-label--s">Location: </span>
+    <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
+  </p>
+
+  {% set rows = [] %}
+
+  {% for completedReport in allCompletedReports.content %}
+    {% set viewCompletedReportlLinkHtml %}
+      <a href="/prisoner-report/{{ completedReport.adjudicationNumber }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+    {% endset -%}
+    {% set rows = (rows.push([
+      { text: completedReport.displayName },
+      { text: completedReport.prisonerNumber },
+      { text: completedReport.formattedDateTimeOfIncident,
+        attributes: {
+        "data-sort-value": completedReport.dateTimeOfIncident
+      }
+      },
+      { text: completedReport.reportingOfficer },
+      { html: viewCompletedReportlLinkHtml }
+    ]), rows) %}
+  {% endfor %}
+
+  {% if rows | length %}
+    {{ mojPagination(pagination) }}
+  <div class="results-table">
+
+    {{ govukTable({
+      head: [
+        { html: 'Prisoner&#8217;s name' },
+        { text: "Prison number" },
+        { text: "Date and time of incident",
+          attributes: {
+          "aria-sort": "descending"
+        }
+        },
+        { text: "Reporting officer" },
+        { text: "" }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "prisoner-search-results-table", "data-module": "moj-sortable-table" }
+    }) }}
+
+  </div>
+    {{ mojPagination(pagination) }}
+  {% else %}
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
+  {% endif %}
+
+{% endblock %}

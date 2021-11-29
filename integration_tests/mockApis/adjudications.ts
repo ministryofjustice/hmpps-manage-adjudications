@@ -184,6 +184,39 @@ const stubGetYourReportedAdjudications = ({
   })
 }
 
+const stubGetAllReportedAdjudications = ({
+  agencyId = 'MDI',
+  number = 0,
+  size = 20,
+  allContent = [],
+}: {
+  agencyId: string
+  number: number
+  size: number
+  allContent: unknown[]
+}): SuperAgentRequest => {
+  const response = pageResponseFrom(new PageRequest(size, number, 0), allContent)
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/agency/${agencyId}?page=${number}&size=${size}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        content: response.content,
+        totalPages: response.totalPages(),
+        size: response.size,
+        totalElements: response.totalElements,
+        number: response.number,
+      },
+    },
+  })
+}
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -194,4 +227,5 @@ export default {
   stubGetReportedAdjudication,
   stubGetAllDraftAdjudicationsForUser,
   stubGetYourReportedAdjudications,
+  stubGetAllReportedAdjudications,
 }
