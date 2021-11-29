@@ -17,7 +17,6 @@ export default function allCompletedReportsRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
   get('/', allCompletedReports.view)
-  get('/:adjudicationNo', allCompletedReports.view)
 
   return router
 }
