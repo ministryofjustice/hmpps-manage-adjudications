@@ -17,6 +17,10 @@ interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   reportingOfficer?: string
 }
 
+interface ReportedAdjudicationWithReporter extends ReportedAdjudication {
+  reporterName: string
+}
+
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
     return null
@@ -70,7 +74,11 @@ export default class ReportedAdjudicationsService {
     )
 
     return pageResponse.map(reportedAdjudication =>
-      this.enhanceReportedAdjudication(reportedAdjudication, prisonerDetails.get(reportedAdjudication.prisonerNumber))
+      this.enhanceReportedAdjudication(
+        reportedAdjudication,
+        prisonerDetails.get(reportedAdjudication.prisonerNumber),
+        null
+      )
     )
   }
 
@@ -88,26 +96,44 @@ export default class ReportedAdjudicationsService {
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
-    return pageResponse.map(reportedAdjudication =>
-      this.enhanceReportedAdjudication(reportedAdjudication, prisonerDetails.get(reportedAdjudication.prisonerNumber))
+
+    const reportingOfficerDetails = new Map(
+      (await Promise.all(pageResponse.content.map(adj => this.addReporter(user, adj)))).map(adjudication => [
+        adjudication.adjudicationNumber,
+        adjudication,
+      ])
     )
+
+    return pageResponse.map(reportedAdjudication =>
+      this.enhanceReportedAdjudication(
+        reportedAdjudication,
+        prisonerDetails.get(reportedAdjudication.prisonerNumber),
+        reportingOfficerDetails.get(reportedAdjudication.adjudicationNumber)
+      )
+    )
+  }
+
+  async addReporter(user: User, reportedAdjudication: ReportedAdjudication): Promise<ReportedAdjudicationWithReporter> {
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(reportedAdjudication.createdByUserId, user.token)
+    return { ...reportedAdjudication, reporterName: reporter.name }
   }
 
   enhanceReportedAdjudication(
     reportedAdjudication: ReportedAdjudication,
-    prisonerResult: PrisonerSimpleResult
+    prisonerResult: PrisonerSimpleResult,
+    reporterResult: ReportedAdjudicationWithReporter
   ): ReportedAdjudicationEnhanced {
     const displayName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
-    // const reportingOfficer = (reportedAdjudication && reportedAdjudication.incidentDetails.createdByUserId) || ''
+    const reportingOfficer = (reporterResult && reporterResult.reporterName) || ''
 
     return {
       ...reportedAdjudication,
       displayName,
       friendlyName,
-      reportingOfficer: 'Nora Jones',
+      reportingOfficer,
       dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,

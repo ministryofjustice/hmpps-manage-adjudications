@@ -65,6 +65,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
+          createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -78,6 +79,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
+          createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:30:00',
@@ -116,7 +118,8 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
-          reportingOfficer: 'Nora Jones',
+          createdByUserId: 'NCLAMP_GEN',
+          reportingOfficer: '',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -131,7 +134,8 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-15T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
-          reportingOfficer: 'Nora Jones',
+          createdByUserId: 'NCLAMP_GEN',
+          reportingOfficer: '',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
@@ -158,6 +162,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            createdByUserId: 'NCLAMP_GEN',
             dateTimeReportExpires: '2021-10-22T15:40:25.884',
             incidentDetails: {
               locationId: 3,
@@ -229,6 +234,7 @@ describe('reportedAdjudicationsService', () => {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
             dateTimeReportExpires: '2021-10-22T15:40:25.884',
+            createdByUserId: 'NCLAMP_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -267,6 +273,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
+          createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -280,6 +287,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
+          createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:30:00',
@@ -301,6 +309,13 @@ describe('reportedAdjudicationsService', () => {
           lastName: 'Booker',
         },
       ]
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Natalie Clamp',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
       getAllCompletedAdjudications.mockResolvedValue(new PageResponse(20, 1, 2, completedAdjudicationsContent, 1))
     })
@@ -317,7 +332,8 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
-          reportingOfficer: 'Nora Jones',
+          createdByUserId: 'NCLAMP_GEN',
+          reportingOfficer: 'Natalie Clamp',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -332,7 +348,8 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-15T11:30:00',
           friendlyName: 'Thomas Booker',
           adjudicationNumber: 1,
-          reportingOfficer: 'Nora Jones',
+          createdByUserId: 'NCLAMP_GEN',
+          reportingOfficer: 'Natalie Clamp',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
