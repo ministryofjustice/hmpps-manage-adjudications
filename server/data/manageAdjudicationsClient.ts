@@ -89,4 +89,16 @@ export default class ManageAdjudicationsClient {
     })
     return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
   }
+
+  async getAllCompletedAdjudications(
+    agencyId: string,
+    pageRequest: PageRequest
+  ): Promise<PageResponse<ReportedAdjudication>> {
+    const zeroBasedPageRequest = pageRequest.changeIndex(0)
+    const result = await this.restClient.get({
+      path: `/reported-adjudications/agency/${agencyId}?page=${zeroBasedPageRequest.number}&size=${zeroBasedPageRequest.size}`,
+    })
+
+    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
+  }
 }

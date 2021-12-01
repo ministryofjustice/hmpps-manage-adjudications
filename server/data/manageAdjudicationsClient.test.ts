@@ -246,7 +246,7 @@ describe('manageAdjudicationsClient', () => {
       expect(response).toEqual(result)
     })
   })
-  describe('getCompletedAdjudications', () => {
+  describe('getYourCompletedAdjudications', () => {
     const content = [
       {
         adjudicationNumber: 2,
@@ -285,6 +285,49 @@ describe('manageAdjudicationsClient', () => {
         .reply(200, response)
 
       const result = await client.getYourCompletedAdjudications('MDI', request)
+      expect(result).toEqual(response.changeIndex(1))
+    })
+  })
+
+  describe('getAllCompletedAdjudications', () => {
+    const content = [
+      {
+        adjudicationNumber: 2,
+        prisonerNumber: 'G6123VU',
+        bookingId: 2,
+        dateTimeReportExpires: '2021-11-17T11:45:00',
+        incidentDetails: {
+          locationId: 3,
+          dateTimeOfIncident: '2021-11-15T11:45:00',
+        },
+        incidentStatement: {
+          statement: 'My second incident',
+        },
+      },
+      {
+        adjudicationNumber: 1,
+        prisonerNumber: 'G6174VU',
+        bookingId: 1,
+        dateTimeReportExpires: '2021-11-17T11:30:00',
+        incidentDetails: {
+          locationId: 3,
+          dateTimeOfIncident: '2021-11-15T11:30:00',
+        },
+        incidentStatement: {
+          statement: 'My first incident',
+        },
+      },
+    ]
+    const request = new PageRequest(20, 1, 1)
+    const response = new PageResponse(20, 0, 2, content, 0)
+
+    it('should return a page of completed adjudications with a one based index', async () => {
+      fakeManageAdjudicationsApi
+        .get(`/reported-adjudications/agency/MDI?page=0&size=20`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, response)
+
+      const result = await client.getAllCompletedAdjudications('MDI', request)
       expect(result).toEqual(response.changeIndex(1))
     })
   })

@@ -5,10 +5,19 @@ export type ReportedAdjudication = {
   prisonerNumber: string
   bookingId: number
   dateTimeReportExpires: string
+  createdByUserId: string
   incidentDetails: IncidentDetails
   incidentStatement: IncidentStatement
 }
 
 export type ReportedAdjudicationResult = {
   reportedAdjudication: ReportedAdjudication
+}
+
+export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
+  displayName: string
+  friendlyName: string
+  formattedDateTimeOfIncident: string
+  dateTimeOfIncident: string
+  reportingOfficer?: string
 }

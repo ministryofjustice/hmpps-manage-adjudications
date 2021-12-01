@@ -13,6 +13,7 @@ const getReportedAdjudication = jest.fn()
 const getNeurodiversitiesForReport = jest.fn()
 const getBatchPrisonerDetails = jest.fn()
 const getYourCompletedAdjudications = jest.fn()
+const getAllCompletedAdjudications = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
@@ -23,7 +24,7 @@ jest.mock('../data/prisonApiClient', () => {
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getReportedAdjudication, getYourCompletedAdjudications }
+    return { getReportedAdjudication, getYourCompletedAdjudications, getAllCompletedAdjudications }
   })
 })
 jest.mock('./curiousApiService', () => {
@@ -64,6 +65,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
+          createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -77,6 +79,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
+          createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:30:00',
@@ -115,6 +118,8 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           bookingId: 2,
           dateTimeReportExpires: '2021-11-17T11:45:00',
+          createdByUserId: 'NCLAMP_GEN',
+          reportingOfficer: '',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -129,6 +134,8 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-15T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
+          createdByUserId: 'NCLAMP_GEN',
+          reportingOfficer: '',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
           dateTimeReportExpires: '2021-11-17T11:30:00',
@@ -155,6 +162,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            createdByUserId: 'NCLAMP_GEN',
             dateTimeReportExpires: '2021-10-22T15:40:25.884',
             incidentDetails: {
               locationId: 3,
@@ -226,6 +234,7 @@ describe('reportedAdjudicationsService', () => {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
             dateTimeReportExpires: '2021-10-22T15:40:25.884',
+            createdByUserId: 'NCLAMP_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -253,6 +262,113 @@ describe('reportedAdjudicationsService', () => {
         expect(result.prisonerPreferredNonEnglishLanguage).toBeNull()
         expect(result.prisonerOtherLanguages.length).toEqual(0)
       })
+    })
+  })
+
+  describe('getAllCompletedAdjudications', () => {
+    beforeEach(() => {
+      const completedAdjudicationsContent = [
+        {
+          adjudicationNumber: 1524427,
+          prisonerNumber: 'A5041DY',
+          bookingId: 1200675,
+          dateTimeReportExpires: '2021-12-02T14:10:00',
+          incidentDetails: {
+            locationId: 27217,
+            dateTimeOfIncident: '2021-11-30T14:10:00',
+            handoverDeadline: '2021-12-02T14:10:00',
+          },
+          incidentStatement: { statement: 'Something happened', completed: false },
+          createdByUserId: 'TEST_GEN',
+        },
+        {
+          adjudicationNumber: 1524425,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1201638,
+          dateTimeReportExpires: '2021-12-02T14:00:00',
+          incidentDetails: {
+            locationId: 357592,
+            dateTimeOfIncident: '2021-11-30T14:00:00',
+            handoverDeadline: '2021-12-02T14:00:00',
+          },
+          incidentStatement: { statement: 'efe er3d 32r §', completed: false },
+          createdByUserId: 'TEST_GEN',
+        },
+      ]
+      const batchPrisonerDetails = [
+        {
+          offenderNo: 'A5041DY',
+          firstName: 'Michael',
+          lastName: 'Willis',
+        },
+        {
+          offenderNo: 'G6415GD',
+          firstName: 'Peter',
+          lastName: 'Smith',
+        },
+      ]
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Test User',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
+      getAllCompletedAdjudications.mockResolvedValue(new PageResponse(20, 1, 2, completedAdjudicationsContent, 1))
+    })
+    it('returns the data', async () => {
+      const result = await service.getAllCompletedAdjudications(user, new PageRequest(20, 1, 1))
+
+      const expectedAdjudicationContent = [
+        {
+          createdByUserId: 'TEST_GEN',
+          displayName: 'Willis, Michael',
+          friendlyName: 'Michael Willis',
+          reportingOfficer: 'Test User',
+          dateTimeOfIncident: '2021-11-30T14:10:00',
+          formattedDateTimeOfIncident: '30 November 2021 - 14:10',
+          adjudicationNumber: 1524427,
+          prisonerNumber: 'A5041DY',
+          bookingId: 1200675,
+          dateTimeReportExpires: '2021-12-02T14:10:00',
+          incidentDetails: {
+            handoverDeadline: '2021-12-02T14:10:00',
+            locationId: 27217,
+            dateTimeOfIncident: '2021-11-30T14:10:00',
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Something happened',
+          },
+        },
+
+        {
+          adjudicationNumber: 1524425,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1201638,
+          dateTimeReportExpires: '2021-12-02T14:00:00',
+          incidentDetails: {
+            handoverDeadline: '2021-12-02T14:00:00',
+            locationId: 357592,
+            dateTimeOfIncident: '2021-11-30T14:00:00',
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'efe er3d 32r §',
+          },
+          createdByUserId: 'TEST_GEN',
+          displayName: 'Smith, Peter',
+          friendlyName: 'Peter Smith',
+          reportingOfficer: 'Test User',
+          dateTimeOfIncident: '2021-11-30T14:00:00',
+          formattedDateTimeOfIncident: '30 November 2021 - 14:00',
+        },
+      ]
+
+      const expected = new PageResponse(20, 1, 2, expectedAdjudicationContent, 1)
+
+      expect(result).toEqual(expected)
     })
   })
 })
