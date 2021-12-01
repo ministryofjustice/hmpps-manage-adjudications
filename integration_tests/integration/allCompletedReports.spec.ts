@@ -3,7 +3,7 @@ import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication } from '../../server/data/ReportedAdjudicationResult'
 
-context('Your Completed Reports', () => {
+context('All Completed Reports', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -22,11 +22,22 @@ context('Your Completed Reports', () => {
   })
 
   it('pagination should work', () => {
+    cy.task('stubGetUserFromUsername', {
+      username: 'TEST_GEN',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'TEST_GEN',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return {
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
+        createdByUserId: 'TEST_GEN',
         dateTimeReportExpires: null,
         incidentDetails: {
           locationId: 1,
@@ -41,7 +52,7 @@ context('Your Completed Reports', () => {
     cy.task('stubGetAllReportedAdjudications', { number: 14, allContent: manyReportedAdjudications }) // Page 15
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     // Page 1
-    cy.visit(`/all-completed-reports/`)
+    cy.visit(`/all-completed-reports`)
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.previousLink().should('not.exist')
     allCompletedReportsPage.nextLink().should('exist')

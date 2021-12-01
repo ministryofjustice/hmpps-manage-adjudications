@@ -90,6 +90,7 @@ export default class ReportedAdjudicationsService {
       user.activeCaseLoadId,
       pageRequest
     )
+    console.log(pageResponse.content)
 
     const prisonerDetails = new Map(
       (
@@ -97,18 +98,18 @@ export default class ReportedAdjudicationsService {
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
-    const reportingOfficerDetails = new Map(
-      (await Promise.all(pageResponse.content.map(adj => this.addReporter(user, adj)))).map(adjudication => [
-        adjudication.adjudicationNumber,
-        adjudication,
-      ])
-    )
+    const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
+    const reporterNamesAndUsernames =
+      (await Promise.all(
+        [...usernamesInPage].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+      )) || []
+    const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
     return pageResponse.map(reportedAdjudication =>
       this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        reportingOfficerDetails.get(reportedAdjudication.adjudicationNumber)
+        reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId)
       )
     )
   }
@@ -121,13 +122,13 @@ export default class ReportedAdjudicationsService {
   enhanceReportedAdjudication(
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
-    reporterResult: ReportedAdjudicationWithReporter
+    reporterName: string
   ): ReportedAdjudicationEnhanced {
     const displayName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
-    const reportingOfficer = (reporterResult && reporterResult.reporterName) || ''
+    const reportingOfficer = reporterName || ''
 
     return {
       ...reportedAdjudication,
