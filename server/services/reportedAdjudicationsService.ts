@@ -90,7 +90,6 @@ export default class ReportedAdjudicationsService {
       user.activeCaseLoadId,
       pageRequest
     )
-    console.log(pageResponse.content)
 
     const prisonerDetails = new Map(
       (
