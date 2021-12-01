@@ -21,6 +21,59 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.noResultsMessage().should('exist')
   })
 
+  it('should display the correct data on the first page', () => {
+    cy.task('stubGetAllReportedAdjudications', {})
+    cy.task('stubGetUserFromUsername', {
+      username: 'TEST_GEN',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'TEST_GEN',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
+    const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 20, _ => {
+      return {
+        adjudicationNumber: _,
+        prisonerNumber: 'A1234AA',
+        bookingId: 1,
+        createdByUserId: 'TEST_GEN',
+        dateTimeReportExpires: null,
+        incidentDetails: {
+          locationId: 1,
+          dateTimeOfIncident: '2021-11-15T11:30:00',
+        },
+        incidentStatement: null,
+      }
+    })
+    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
+
+    cy.visit(`/all-completed-reports/`)
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage
+      .resultsTable()
+      .find('th')
+      .then($headings => {
+        expect($headings.get(0).innerText).to.contain('Prisoner’s name')
+        expect($headings.get(1).innerText).to.contain('Prison number')
+        expect($headings.get(2).innerText).to.contain('Date and time of incident')
+        expect($headings.get(3).innerText).to.contain('Reporting officer')
+      })
+    allCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Potter, Harry')
+        expect($data.get(1).innerText).to.contain('A1234AA')
+        expect($data.get(2).innerText).to.contain('15 November 2021 - 11:30')
+        expect($data.get(3).innerText).to.contain('Test User')
+        expect($data.get(4).innerText).to.contain('View')
+      })
+  })
+
   it('pagination should work', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'TEST_GEN',

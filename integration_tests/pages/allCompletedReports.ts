@@ -17,4 +17,6 @@ export default class YourCompletedReportsPage extends Page {
     this.paginationLinks().contains(new RegExp(`^${number.toString()}$`))
 
   paginationResults = (): PageElement => cy.get('.moj-pagination__results').first()
+
+  resultsTable = (): PageElement => cy.get('[data-qa="complete-adjudications-results-table"]')
 }

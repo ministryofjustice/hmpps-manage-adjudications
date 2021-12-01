@@ -5,21 +5,9 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
 import PageRequest from '../utils/pageRequest'
 import { PageResponse } from '../utils/pageResponse'
-import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationEnhanced } from '../data/ReportedAdjudicationResult'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { convertToTitleCase, formatTimestampToDate } from '../utils/utils'
-
-interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
-  displayName: string
-  friendlyName: string
-  formattedDateTimeOfIncident: string
-  dateTimeOfIncident: string
-  reportingOfficer?: string
-}
-
-interface ReportedAdjudicationWithReporter extends ReportedAdjudication {
-  reporterName: string
-}
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -111,11 +99,6 @@ export default class ReportedAdjudicationsService {
         reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId)
       )
     )
-  }
-
-  async addReporter(user: User, reportedAdjudication: ReportedAdjudication): Promise<ReportedAdjudicationWithReporter> {
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(reportedAdjudication.createdByUserId, user.token)
-    return { ...reportedAdjudication, reporterName: reporter.name }
   }
 
   enhanceReportedAdjudication(
