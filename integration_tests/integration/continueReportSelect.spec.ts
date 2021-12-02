@@ -14,8 +14,6 @@ context('Continue a report - select report', () => {
             createdDateTime: '2021-11-17T09:40:00Z',
             id: 1,
             incidentDetails: {
-              createdByUserId: 'USER1',
-              createdDateTime: '2021-11-17T09:40:00Z',
               dateTimeOfIncident: '2021-11-16T16:45:00',
               locationId: 233,
             },

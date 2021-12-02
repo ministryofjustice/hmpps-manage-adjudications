@@ -39,8 +39,6 @@ context('Incident Statement', () => {
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             locationId: 234,
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-09T13:51:37.241636',
           },
         },
       },

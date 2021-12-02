@@ -40,15 +40,11 @@ context('Check Your Answers', () => {
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             locationId: 234,
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-09T13:51:37.241636',
           },
           incidentStatement: {
             id: 23,
             statement: 'This is my statement',
             completed: true,
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-09T13:55:00',
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-03T11:09:42',
@@ -64,8 +60,6 @@ context('Check Your Answers', () => {
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             locationId: 234,
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-09T13:51:37.241636',
           },
           incidentStatement: {
             id: 23,
@@ -121,15 +115,11 @@ context('Check Your Answers', () => {
         incidentDetails: {
           dateTimeOfIncident: '2021-11-03T11:09:42',
           locationId: 234,
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-09T13:51:37.241636',
         },
         incidentStatement: {
           id: 23,
           statement: 'This is my statement',
           completed: true,
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-09T13:55:00',
         },
         prisonerNumber: 'G6415GD',
       },
