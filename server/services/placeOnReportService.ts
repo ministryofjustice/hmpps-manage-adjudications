@@ -1,6 +1,13 @@
 import { Readable } from 'stream'
 
-import { convertToTitleCase, formatLocation, getDate, getFormattedReporterName, getTime } from '../utils/utils'
+import {
+  convertToTitleCase,
+  formatLocation,
+  getDate,
+  getFormattedReporterName,
+  getTime,
+  formatStatement,
+} from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -106,16 +113,6 @@ export default class PlaceOnReportService {
     const time = getTime(dateTime)
 
     const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
-
-    const formatStatement = (statement: string) => {
-      if (!statement) return null
-      const statementArray = statement.split(/\r|\n/)
-      return statementArray
-        .map(paragraph => {
-          return `<p class='govuk-body'>${paragraph}</p>`
-        })
-        .join('')
-    }
 
     const incidentDetails = [
       {

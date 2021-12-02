@@ -39,6 +39,11 @@ export type CheckYourAnswers = {
   statement: string
 }
 
+export interface PrisonerReport extends CheckYourAnswers {
+  reportNo: number
+  draftId: number
+}
+
 type SummarySectionItems = {
   label: string
   value: string

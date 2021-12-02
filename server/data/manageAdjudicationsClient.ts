@@ -101,4 +101,10 @@ export default class ManageAdjudicationsClient {
 
     return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
   }
+
+  async createDraftFromCompleteAdjudication(adjudicationNumber: number): Promise<DraftAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/create-draft-adjudication`,
+    })
+  }
 }

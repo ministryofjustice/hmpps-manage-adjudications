@@ -1,0 +1,13 @@
+.prisonerReport-heading, .prisoner-report-top-bar {
+ display: flex;
+ justify-content: space-between;
+ @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+		max-width: 55%;
+	}
+}
+
+.prisonerReport-incidentDetails, .prisonerReport-incidentStatement{
+	@media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+		max-width: 55%;
+	}
+}

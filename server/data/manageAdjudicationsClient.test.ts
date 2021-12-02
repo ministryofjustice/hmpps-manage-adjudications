@@ -331,4 +331,45 @@ describe('manageAdjudicationsClient', () => {
       expect(result).toEqual(response.changeIndex(1))
     })
   })
+  describe('createDraftFromCompleteAdjudication', () => {
+    it('return a new draft with the details of the completed adjudication', async () => {
+      const result = {
+        draftAdjudication: {
+          id: 177,
+          prisonerNumber: 'A7820DY',
+          incidentDetails: {
+            locationId: 26142,
+            dateTimeOfIncident: '2021-12-01T09:40:00',
+            handoverDeadline: '2021-12-03T09:40:00',
+            createdByUserId: 'TEST_GEN',
+            createdDateTime: '2021-12-02T14:36:29.786185082',
+            modifiedByUserId: 'TEST_GEN',
+            modifiedByDateTime: '2021-12-02T14:36:29.786185082',
+          },
+          incidentStatement: {
+            statement: 'TESTING',
+            completed: true,
+            createdByUserId: 'TEST_GEN',
+            createdDateTime: '2021-12-02T14:36:29.788815896',
+            modifiedByUserId: 'TEST_GEN',
+            modifiedByDateTime: '2021-12-02T14:36:29.788815896',
+          },
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-12-02T14:36:29.786055469',
+        },
+      }
+
+      fakeManageAdjudicationsApi
+        .post('/reported-adjudications/12347/create-draft-adjudication')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+
+      const response = await client.createDraftFromCompleteAdjudication(12347)
+      expect(response).toEqual(result)
+      expect(response.draftAdjudication.prisonerNumber).toEqual('A7820DY')
+      expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-12-01T09:40:00')
+      expect(response.draftAdjudication.incidentStatement.statement).toEqual('TESTING')
+      expect(response.draftAdjudication.incidentDetails.locationId).toEqual(26142)
+    })
+  })
 })
