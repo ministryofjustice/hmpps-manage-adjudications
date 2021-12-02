@@ -31,6 +31,7 @@ context('Your Completed Reports', () => {
           dateTimeOfIncident: '2021-11-15T11:30:00',
         },
         incidentStatement: null,
+        createdByUserId: 'TEST_GEN',
       }
     })
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
