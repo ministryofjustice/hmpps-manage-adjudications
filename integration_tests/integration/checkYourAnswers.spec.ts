@@ -65,8 +65,6 @@ context('Check Your Answers', () => {
             id: 23,
             statement: 'This is my statement',
             completed: true,
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-09T13:55:00',
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-03T11:09:42',

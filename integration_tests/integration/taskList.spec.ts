@@ -123,8 +123,6 @@ context('Task list', () => {
               id: 23,
               statement: 'This is my statement',
               completed: false,
-              createdByUserId: 'TEST_GEN',
-              createdDateTime: '2021-11-09T13:55:00',
             },
             createdByUserId: 'TEST_GEN',
             createdDateTime: '2021-11-03T11:09:00',
