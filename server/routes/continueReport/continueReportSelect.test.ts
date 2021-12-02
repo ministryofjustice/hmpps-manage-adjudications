@@ -44,14 +44,10 @@ describe('GET /select-report', () => {
           incidentDetails: {
             locationId: 357591,
             dateTimeOfIncident: '2021-10-12T20:00:00',
-            createdByUserId: 'NCLAMP_GEN',
-            createdDateTime: '2021-11-09T16:57:30.413472',
           },
           incidentStatement: {
             statement: 'This is my statement',
             completed: false,
-            createdByUserId: 'NCLAMP_GEN',
-            createdDateTime: '2021-11-09T16:57:52.93693',
           },
           createdByUserId: 'NCLAMP_GEN',
           createdDateTime: '2021-11-09T16:57:30.390919',
@@ -66,18 +62,10 @@ describe('GET /select-report', () => {
           incidentDetails: {
             locationId: 27187,
             dateTimeOfIncident: '2021-11-11T15:15:00',
-            createdByUserId: 'NCLAMP_GEN',
-            createdDateTime: '2021-11-12T13:26:09.346023',
-            modifiedByUserId: 'NCLAMP_GEN',
-            modifiedByDateTime: '2021-11-12T13:26:09.346023',
           },
           incidentStatement: {
             statement: 'Test statement',
             completed: true,
-            createdByUserId: 'NCLAMP_GEN',
-            createdDateTime: '2021-11-12T13:26:18.993237',
-            modifiedByUserId: 'NCLAMP_GEN',
-            modifiedByDateTime: '2021-11-12T13:26:18.993237',
           },
           createdByUserId: 'NCLAMP_GEN',
           createdDateTime: '2021-11-12T13:26:09.345754',
