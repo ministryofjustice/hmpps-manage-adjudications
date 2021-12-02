@@ -7,7 +7,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import { PageResponse } from '../../utils/pageResponse'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
-jest.mock('../../services/UserService.ts')
+jest.mock('../../services/userService.ts')
 
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
