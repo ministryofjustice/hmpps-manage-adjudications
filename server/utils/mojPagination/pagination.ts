@@ -53,7 +53,7 @@ export default function mojPaginationFromPageResponse<T>(
   }
 }
 
-function mojItemsFromPageResponse<T>(pageResponse: PageResponse, url: URL): NumberedPageLink[] | null {
+function mojItemsFromPageResponse(pageResponse: PageResponse, url: URL): NumberedPageLink[] | null {
   return (
     (!pageResponse.singlePageOfResults() &&
       pageResponse.pageRange(5, 4).map(pageNumber => {
@@ -64,7 +64,7 @@ function mojItemsFromPageResponse<T>(pageResponse: PageResponse, url: URL): Numb
   )
 }
 
-function mojPreviousFromPageResponse<T>(pageResponse: PageResponse, url: URL): PageLink | null {
+function mojPreviousFromPageResponse(pageResponse: PageResponse, url: URL): PageLink | null {
   url.searchParams.set('pageNumber', (pageResponse.pageNumber - 1).toString())
   return (
     (pageResponse.hasPrevious() && {
@@ -75,7 +75,7 @@ function mojPreviousFromPageResponse<T>(pageResponse: PageResponse, url: URL): P
   )
 }
 
-function mojNextFromPageResponse<T>(pageResponse: PageResponse, url: URL): PageLink | null {
+function mojNextFromPageResponse(pageResponse: PageResponse, url: URL): PageLink | null {
   url.searchParams.set('pageNumber', (pageResponse.pageNumber + 1).toString())
   return (
     (pageResponse.hasNext() && {
