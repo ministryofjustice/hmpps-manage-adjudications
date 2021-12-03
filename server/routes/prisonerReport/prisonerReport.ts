@@ -30,6 +30,9 @@ export default class prisonerReportRoutes {
     return res.render(`pages/prisonerReport`, {
       prisoner,
       data,
+      printHref: `/print-report/${data.draftId}`,
+      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/edit`,
+      editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${data.draftId}`,
     })
   }
 

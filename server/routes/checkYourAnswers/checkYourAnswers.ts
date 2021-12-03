@@ -33,6 +33,8 @@ export default class checkYourAnswersRoutes {
       data,
       IdNumberValue,
       exitUrl: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
+      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${IdNumberValue}/edit`,
+      editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${IdNumberValue}`,
     })
   }
 

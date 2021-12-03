@@ -5,13 +5,13 @@ export default class PrisonerReportPage extends Page {
     super('report')
   }
 
-  incidentDetailsSummary = (): PageElement => cy.get('[data-qa="prisoner-report-details"]')
+  incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
 
-  incidentStatement = (): PageElement => cy.get('[data-qa="prisoner-report-statement"]')
+  incidentStatement = (): PageElement => cy.get('[data-qa="adjudicationsSummary-incidentStatement"]')
 
-  incidentDetailsChangeLink = (): PageElement => cy.get('[data-qa="prisoner-report-details-changeLink"]')
+  incidentDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-details-changeLink"]')
 
-  incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="prisoner-report-statement-changeLink"]')
+  incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-statement-changeLink"]')
 
   returnLink = (): PageElement => cy.get('[data-qa="prisoner-report-return-link"]')
 }

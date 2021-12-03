@@ -5,13 +5,13 @@ export default class CheckYourAnswersPage extends Page {
     super('Check your answers')
   }
 
-  incidentDetailsSummary = (): PageElement => cy.get('[data-qa="check-answers-details"]')
+  incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
 
-  incidentStatement = (): PageElement => cy.get('[data-qa="check-answers-statement"]')
+  incidentStatement = (): PageElement => cy.get('[data-qa="adjudicationsSummary-incidentStatement"]')
 
-  incidentDetailsChangeLink = (): PageElement => cy.get('[data-qa="check-answers-details-changeLink"]')
+  incidentDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-details-changeLink"]')
 
-  incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="check-answers-statement-changeLink"]')
+  incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-statement-changeLink"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="check-answers-submit"]')
 
