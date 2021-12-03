@@ -14,6 +14,7 @@ const getNeurodiversitiesForReport = jest.fn()
 const getBatchPrisonerDetails = jest.fn()
 const getYourCompletedAdjudications = jest.fn()
 const getAllCompletedAdjudications = jest.fn()
+const createDraftFromCompleteAdjudication = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
@@ -24,7 +25,12 @@ jest.mock('../data/prisonApiClient', () => {
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getReportedAdjudication, getYourCompletedAdjudications, getAllCompletedAdjudications }
+    return {
+      getReportedAdjudication,
+      getYourCompletedAdjudications,
+      getAllCompletedAdjudications,
+      createDraftFromCompleteAdjudication,
+    }
   })
 })
 jest.mock('./curiousApiService', () => {
@@ -369,6 +375,66 @@ describe('reportedAdjudicationsService', () => {
       const expected = new PageResponse(20, 1, 2, expectedAdjudicationContent, 1)
 
       expect(result).toEqual(expected)
+    })
+  })
+
+  describe('getPrisonerReport', () => {
+    beforeEach(() => {
+      createDraftFromCompleteAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 10,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26152,
+            dateTimeOfIncident: '2021-11-04T07:20:00',
+          },
+          incidentStatement: {
+            statement: 'Statement for a test',
+          },
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-11-04T09:21:21.95935',
+        },
+      })
+
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Test User',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+    })
+    it('returns the correct information', async () => {
+      const locations = [
+        { locationId: 26152, locationPrefix: 'P3', userDescription: 'place 3', description: '' },
+        { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
+        { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
+      ]
+      const result = await service.getPrisonerReport(user, 1234, locations)
+      const expectedResult = {
+        reportNo: 1234,
+        draftId: 10,
+        incidentDetails: [
+          {
+            label: 'Reporting Officer',
+            value: 'T. User',
+          },
+          {
+            label: 'Date',
+            value: '4 November 2021',
+          },
+          {
+            label: 'Time',
+            value: '07:20',
+          },
+          {
+            label: 'Location',
+            value: 'place 3',
+          },
+        ],
+        statement: "<p class='govuk-body'>Statement for a test</p>",
+      }
+      expect(result).toEqual(expectedResult)
     })
   })
 })
