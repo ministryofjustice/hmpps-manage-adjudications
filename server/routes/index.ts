@@ -31,7 +31,6 @@ export default function routes(
   router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
-  router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use(
     '/prisoner-report',
     prisonerReportRoutes({ reportedAdjudicationsService, placeOnReportService, locationService })
