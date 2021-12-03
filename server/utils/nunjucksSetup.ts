@@ -106,6 +106,16 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return value || specifiedText || '--'
   })
 
+  njkEnv.addFilter('formatStatement', (statement: string) => {
+    if (!statement) return null
+    const statementArray = statement.split(/\r|\n/)
+    return statementArray
+      .map(paragraph => {
+        return `<p class='govuk-body'>${paragraph}</p>`
+      })
+      .join('')
+  })
+
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)

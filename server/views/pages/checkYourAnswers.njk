@@ -40,7 +40,7 @@
 				<a href='/incident-statement/{{ prisoner.prisonerNumber }}/{{ IdNumberValue }}' class="govuk-link govuk-!-padding-left-2" data-qa="check-answers-statement-changeLink">Change</a>
 			</div>
 			<div class="checkAnswers-incidentStatement" data-qa="check-answers-statement">
-				{{ data.statement | safe }}
+				{{ data.statement | formatStatement |safe }}
 			</div>
 
 			<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

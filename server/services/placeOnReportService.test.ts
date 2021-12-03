@@ -103,7 +103,7 @@ describe('placeOnReportService', () => {
           incidentStatement: {
             id: 9,
             statement:
-              "John didn't want to go to chapel today. \nHe pushed over some pews and threw things on the floor.",
+              "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-04T09:21:21.95935',
@@ -144,8 +144,7 @@ describe('placeOnReportService', () => {
             value: 'place 3',
           },
         ],
-        statement:
-          "<p class='govuk-body'>John didn't want to go to chapel today. </p><p class='govuk-body'>He pushed over some pews and threw things on the floor.</p>",
+        statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
       }
       expect(result).toEqual(expectedResult)
     })

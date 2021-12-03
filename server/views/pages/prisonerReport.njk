@@ -28,8 +28,8 @@
   {{ printLink('Print a copy of this report', 'right', 'govuk-!-padding-right-0') }}
  </div>
 
- <div class="govuk-!-margin-top-5">
-  <div class="flex-container prisonerReport-heading">
+
+  <div class="flex-container prisonerReport-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
    <a href='/incident-details/{{ prisoner.prisonerNumber }}/{{ data.draftId }}/edit' class="govuk-link" data-qa="prisoner-report-details-changeLink">Change</a>
   </div>
@@ -37,14 +37,14 @@
    {{ incidentDetailsSummaryList(data.incidentDetails, 'Not entered', { "data-qa": "prisoner-report-details" }) }}
   </div>
 
-  <div class="flex-container prisonerReport-heading">
-   <h2 class="govuk-heading-m govuk-!-margin-top-6">Incident statement</h2>
+  <div class="flex-container prisonerReport-heading govuk-!-margin-top-9">
+   <h2 class="govuk-heading-m">Incident statement</h2>
    <a href='/incident-statement/{{ prisoner.prisonerNumber }}/{{ data.draftId }}' class="govuk-link" data-qa="prisoner-report-statement-changeLink">Change</a>
   </div>
   <div class="prisonerReport-incidentStatement" data-qa="prisoner-report-statement">
-   {{ data.statement | safe }}
+   {{ data.statement | formatStatement | safe }}
   </div>
- </div>
+
  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
  <p class="govuk-body"><a href='/your-completed-reports' class="govuk-link" data-qa="prisoner-report-return-link">Return to your complete reports</a></p>
 

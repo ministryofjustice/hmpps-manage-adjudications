@@ -1,13 +1,6 @@
 import { Readable } from 'stream'
 
-import {
-  convertToTitleCase,
-  formatLocation,
-  getDate,
-  getFormattedReporterName,
-  getTime,
-  formatStatement,
-} from '../utils/utils'
+import { convertToTitleCase, formatLocation, getDate, getFormattedReporterName, getTime } from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -135,7 +128,7 @@ export default class PlaceOnReportService {
 
     return {
       incidentDetails,
-      statement: formatStatement(draftAdjudication.incidentStatement?.statement),
+      statement: draftAdjudication.incidentStatement?.statement,
     }
   }
 

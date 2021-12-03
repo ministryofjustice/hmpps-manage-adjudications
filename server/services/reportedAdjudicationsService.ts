@@ -6,14 +6,7 @@ import CuriousApiService from './curiousApiService'
 import PageRequest from '../utils/pageRequest'
 import { PageResponse } from '../utils/pageResponse'
 import { ReportedAdjudication, ReportedAdjudicationEnhanced } from '../data/ReportedAdjudicationResult'
-import {
-  convertToTitleCase,
-  formatStatement,
-  getDate,
-  getFormattedReporterName,
-  getTime,
-  formatTimestampToDate,
-} from '../utils/utils'
+import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport } from '../data/DraftAdjudicationResult'
@@ -174,7 +167,7 @@ export default class ReportedAdjudicationsService {
       reportNo: adjudicationNumber,
       draftId: draftAdjudication.id,
       incidentDetails,
-      statement: formatStatement(draftAdjudication.incidentStatement?.statement),
+      statement: draftAdjudication.incidentStatement?.statement,
     }
   }
 }

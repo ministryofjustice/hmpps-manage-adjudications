@@ -432,7 +432,7 @@ describe('reportedAdjudicationsService', () => {
             value: 'place 3',
           },
         ],
-        statement: "<p class='govuk-body'>Statement for a test</p>",
+        statement: 'Statement for a test',
       }
       expect(result).toEqual(expectedResult)
     })

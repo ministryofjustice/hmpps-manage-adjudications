@@ -105,16 +105,6 @@ export const possessive = (string: string): string => {
   return `${string}${string.toLowerCase().endsWith('s') ? '’' : '’s'}`
 }
 
-export const formatStatement = (statement: string): string => {
-  if (!statement) return null
-  const statementArray = statement.split(/\r|\n/)
-  return statementArray
-    .map(paragraph => {
-      return `<p class='govuk-body'>${paragraph}</p>`
-    })
-    .join('')
-}
-
 export default {
   numberRange,
   convertToTitleCase,
@@ -125,5 +115,4 @@ export default {
   hasAnyRole,
   getFormattedReporterName,
   possessive,
-  formatStatement,
 }
