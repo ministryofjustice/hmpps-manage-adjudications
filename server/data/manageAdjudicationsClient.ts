@@ -1,4 +1,3 @@
-import { plainToClassFromExist } from 'class-transformer'
 import config from '../config'
 import {
   DraftAdjudicationResult,
@@ -8,9 +7,8 @@ import {
   EditedIncidentDetails,
 } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
+import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
-import { PageResponse } from '../utils/pageResponse'
-import PageRequest from '../utils/pageRequest'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -81,24 +79,19 @@ export default class ManageAdjudicationsClient {
 
   async getYourCompletedAdjudications(
     agencyId: string,
-    pageRequest: PageRequest
-  ): Promise<PageResponse<ReportedAdjudication>> {
-    const zeroBasedPageRequest = pageRequest.changeIndex(0)
-    const result = await this.restClient.get({
-      path: `/reported-adjudications/my/agency/${agencyId}?page=${zeroBasedPageRequest.number}&size=${zeroBasedPageRequest.size}`,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    return this.restClient.get({
+      path: `/reported-adjudications/my/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`,
     })
-    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
   }
 
   async getAllCompletedAdjudications(
     agencyId: string,
-    pageRequest: PageRequest
-  ): Promise<PageResponse<ReportedAdjudication>> {
-    const zeroBasedPageRequest = pageRequest.changeIndex(0)
-    const result = await this.restClient.get({
-      path: `/reported-adjudications/agency/${agencyId}?page=${zeroBasedPageRequest.number}&size=${zeroBasedPageRequest.size}`,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    return this.restClient.get({
+      path: `/reported-adjudications/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`,
     })
-
-    return plainToClassFromExist(new PageResponse<ReportedAdjudication>(0, 0, 0, null, 0), result).changeIndex(1)
   }
 }

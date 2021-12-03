@@ -4,8 +4,6 @@ import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
-import { PageResponse } from '../../utils/pageResponse'
-
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
 
@@ -60,9 +58,12 @@ beforeEach(() => {
       },
     },
   ]
-  reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue(
-    new PageResponse(20, 1, 2, completedAdjudicationsContent, 1)
-  )
+  reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
+    size: 20,
+    number: 0,
+    totalElements: 2,
+    content: completedAdjudicationsContent,
+  })
 })
 
 afterEach(() => {

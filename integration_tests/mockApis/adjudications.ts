@@ -1,7 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
-import { pageResponseFrom } from '../../server/utils/pageResponse'
-import PageRequest from '../../server/utils/pageRequest'
+import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -162,7 +161,11 @@ const stubGetYourReportedAdjudications = ({
   size: number
   allContent: unknown[]
 }): SuperAgentRequest => {
-  const response = pageResponseFrom(new PageRequest(size, number, 0), allContent)
+  const apiRequest = {
+    size,
+    number,
+  }
+  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
   return stubFor({
     request: {
       method: 'GET',
@@ -173,13 +176,7 @@ const stubGetYourReportedAdjudications = ({
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: {
-        content: response.content,
-        totalPages: response.totalPages(),
-        size: response.size,
-        totalElements: response.totalElements,
-        number: response.number,
-      },
+      jsonBody: apiResponse,
     },
   })
 }
@@ -195,7 +192,11 @@ const stubGetAllReportedAdjudications = ({
   size: number
   allContent: unknown[]
 }): SuperAgentRequest => {
-  const response = pageResponseFrom(new PageRequest(size, number, 0), allContent)
+  const apiRequest = {
+    size,
+    number,
+  }
+  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
   return stubFor({
     request: {
       method: 'GET',
@@ -206,13 +207,7 @@ const stubGetAllReportedAdjudications = ({
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: {
-        content: response.content,
-        totalPages: response.totalPages(),
-        size: response.size,
-        totalElements: response.totalElements,
-        number: response.number,
-      },
+      jsonBody: apiResponse,
     },
   })
 }

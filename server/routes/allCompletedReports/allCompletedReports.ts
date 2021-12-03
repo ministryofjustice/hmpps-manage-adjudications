@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import { pageRequestFrom, PageResponse } from '../../utils/pageResponse'
-import mojPaginationFromPageResponse from '../../utils/pagination'
+import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import { hasAnyRole } from '../../utils/utils'
 import { ReportedAdjudicationEnhanced } from '../../data/ReportedAdjudicationResult'
+import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
 
@@ -15,7 +15,7 @@ export default class AllCompletedReportsRoutes {
   private renderView = async (
     req: Request,
     res: Response,
-    results: PageResponse<ReportedAdjudicationEnhanced>
+    results: ApiPageResponse<ReportedAdjudicationEnhanced>
   ): Promise<void> =>
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
