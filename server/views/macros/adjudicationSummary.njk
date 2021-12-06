@@ -1,7 +1,6 @@
 {% from "../macros/incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
 
 {% macro adjudicationSummary(detailsURL, statementURL, incidentData, statementEditable) %}
-<div>{{ statementEditable }}</div>
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
    <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink">Change</a></p>
