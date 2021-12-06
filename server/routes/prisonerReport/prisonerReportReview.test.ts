@@ -4,13 +4,16 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import UserService from '../../services/userService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
+jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null
@@ -19,7 +22,10 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, placeOnReportService, locationService })
+  app = appWithAllRoutes(
+    { production: false },
+    { reportedAdjudicationsService, placeOnReportService, locationService, userService }
+  )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'John',
@@ -77,15 +83,26 @@ afterEach(() => {
 })
 
 describe('GET /prisoner-report', () => {
-  it('should load the prisoner report page', () => {
+  it('should load the prisoner report page if the user has the correct role', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .get('/prisoner-report/G6415GD/12345/report')
+      .get('/prisoner-report/G6415GD/12345/review')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('John Smith’s report')
         expect(response.text).toContain('10:45')
         expect(response.text).toContain('Chapel')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
+      })
+  })
+  it('should not load the prisoner report page if no role present', () => {
+    userService.getUserRoles.mockResolvedValue([])
+    return request(app)
+      .get('/prisoner-report/G6415GD/12345/review')
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Page not found')
+        expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(0)
       })
   })
 })

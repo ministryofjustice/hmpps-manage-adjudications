@@ -26,10 +26,10 @@
    {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
  </div>
 
- {{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data) }}
+ {{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data, statementEditable) }}
 
  <p class="govuk-body">
-  <a href='/your-completed-reports' class="govuk-link" data-qa="prisoner-report-return-link">Return to your complete reports</a>
+  <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">Return to your complete reports</a>
  </p>
 
 {% endblock %}

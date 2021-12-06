@@ -27,7 +27,7 @@
 	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-		{{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data) }}
+		{{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data, statementEditable) }}
 
 		<h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>
 		<p class="govuk-body govuk-!-margin-bottom-6 checkAnswers-conditions">By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
