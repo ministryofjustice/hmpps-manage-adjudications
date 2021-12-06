@@ -6,6 +6,7 @@ context('Prisoner report', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: {
@@ -86,7 +87,7 @@ context('Prisoner report', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/G6415GD/12345/review`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary().should('exist')
@@ -94,7 +95,7 @@ context('Prisoner report', () => {
     PrisonerReportPage.returnLink().should('exist')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/G6415GD/12345/review`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary()
@@ -116,33 +117,30 @@ context('Prisoner report', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/G6415GD/12345/review`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/G6415GD/12345/review`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/incident-details/G6415GD/177/edit')
     })
   })
-  it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+  it('should not show a link to edit the incident statement', () => {
+    cy.visit(`/prisoner-report/G6415GD/12345/review`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.incidentStatementChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/177')
-    })
+    PrisonerReportPage.incidentStatementChangeLink().should('not.exist')
   })
   it('should go to /your-completed-reports if the return link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/G6415GD/12345/review`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.returnLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/your-completed-reports')
+      expect(loc.pathname).to.eq('/all-completed-reports')
     })
   })
 })

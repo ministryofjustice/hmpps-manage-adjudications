@@ -33,7 +33,7 @@ export default function routes(
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
   router.use(
     '/prisoner-report',
-    prisonerReportRoutes({ reportedAdjudicationsService, placeOnReportService, locationService })
+    prisonerReportRoutes({ reportedAdjudicationsService, placeOnReportService, locationService, userService })
   )
   router.use('/', homepageRoutes({ userService }))
   return router
