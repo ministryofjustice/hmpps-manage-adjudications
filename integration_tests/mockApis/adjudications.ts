@@ -217,6 +217,27 @@ const stubGetAllReportedAdjudications = ({
   })
 }
 
+const stubCreateDraftFromCompleteAdjudication = ({
+  adjudicationNumber,
+  response = {},
+}: {
+  adjudicationNumber: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/create-draft-adjudication`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -228,4 +249,5 @@ export default {
   stubGetAllDraftAdjudicationsForUser,
   stubGetYourReportedAdjudications,
   stubGetAllReportedAdjudications,
+  stubCreateDraftFromCompleteAdjudication,
 }

@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 
 {% from "../macros/onReport.njk" import onReportInfo %}
+{% from "../macros/printLink.njk" import printLink %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
@@ -24,12 +25,7 @@
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    <div class="govuk-body confirmed-on-report-print-link">
-        <a href="/print-report?adjudicationNumber={{ adjudicationNumber }}" class="govuk-link print-link govuk-!-display-none-print"
-          data-qa="confirmed-on-report-print">
-            Print a copy of this report
-        </a>
-    </div>
+    {{ printLink('Print a copy of this report', printHref, "left", "govuk-!-padding-bottom-0") }}
 
     {{ govukButton({
         text: 'Finish',

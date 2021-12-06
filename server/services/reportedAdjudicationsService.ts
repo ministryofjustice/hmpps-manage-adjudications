@@ -6,8 +6,10 @@ import CuriousApiService from './curiousApiService'
 import PageRequest from '../utils/pageRequest'
 import { PageResponse } from '../utils/pageResponse'
 import { ReportedAdjudication, ReportedAdjudicationEnhanced } from '../data/ReportedAdjudicationResult'
+import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
-import { convertToTitleCase, formatTimestampToDate } from '../utils/utils'
+import { PrisonLocation } from '../data/PrisonLocationResult'
+import { PrisonerReport } from '../data/DraftAdjudicationResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -122,6 +124,50 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'D MMMM YYYY - HH:mm'
       ),
+    }
+  }
+
+  async getPrisonerReport(
+    user: User,
+    adjudicationNumber: number,
+    locations: PrisonLocation[]
+  ): Promise<PrisonerReport> {
+    const newDraftAdjudicationData = await new ManageAdjudicationsClient(
+      user.token
+    ).createDraftFromCompleteAdjudication(adjudicationNumber)
+    const { draftAdjudication } = newDraftAdjudicationData
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.createdByUserId, user.token)
+
+    const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
+    const date = getDate(dateTime, 'D MMMM YYYY')
+    const time = getTime(dateTime)
+
+    const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
+
+    const incidentDetails = [
+      {
+        label: 'Reporting Officer',
+        value: getFormattedReporterName(reporter.name),
+      },
+      {
+        label: 'Date',
+        value: date,
+      },
+      {
+        label: 'Time',
+        value: time,
+      },
+      {
+        label: 'Location',
+        value: locationObj.userDescription,
+      },
+    ]
+
+    return {
+      reportNo: adjudicationNumber,
+      draftId: draftAdjudication.id,
+      incidentDetails,
+      statement: draftAdjudication.incidentStatement?.statement,
     }
   }
 }

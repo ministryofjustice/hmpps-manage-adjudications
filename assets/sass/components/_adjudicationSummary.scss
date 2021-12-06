@@ -1,0 +1,13 @@
+.adjudicationsSummary-heading, .prisoner-report-top-bar {
+ display: flex;
+ justify-content: space-between;
+ @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+		max-width: 60%;
+	}
+}
+
+.adjudicationsSummary-incidentDetails, .adjudicationsSummary-incidentStatement{
+	@media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+		max-width: 60%;
+	}
+}

@@ -1,0 +1,22 @@
+{% from "../macros/incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
+
+{% macro adjudicationSummary(detailsURL, statementURL, incidentData) %}
+  <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-5">
+   <h2 class="govuk-heading-m">Incident details</h2>
+   <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink">Change</a></p>
+  </div>
+  <div class="adjudicationsSummary-incidentDetails">
+   {{ incidentDetailsSummaryList(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
+  </div>
+
+  <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
+   <h2 class="govuk-heading-m">Incident statement</h2>
+  <p class="govuk-body"><a href={{ statementURL }} class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink">Change</a></p>
+  </div>
+  <div class="adjudicationsSummary-incidentStatement" data-qa="adjudicationsSummary-incidentStatement">
+   {{ incidentData.statement | formatStatement | safe }}
+  </div>
+
+ <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+{% endmacro %}
