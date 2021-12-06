@@ -1,8 +1,8 @@
 import Page, { PageElement } from './page'
 
-export default class CheckYourAnswersPage extends Page {
+export default class PrisonerReportPage extends Page {
   constructor() {
-    super('Check your answers')
+    super('report')
   }
 
   incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
@@ -13,7 +13,5 @@ export default class CheckYourAnswersPage extends Page {
 
   incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-statement-changeLink"]')
 
-  submitButton = (): PageElement => cy.get('[data-qa="check-answers-submit"]')
-
-  exitButton = (): PageElement => cy.get('[data-qa="check-answers-exit"]')
+  returnLink = (): PageElement => cy.get('[data-qa="prisoner-report-return-link"]')
 }
