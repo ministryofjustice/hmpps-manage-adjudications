@@ -3,9 +3,8 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
-import PageRequest from '../utils/pageRequest'
-import { PageResponse } from '../utils/pageResponse'
 import { ReportedAdjudication, ReportedAdjudicationEnhanced } from '../data/ReportedAdjudicationResult'
+import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
@@ -50,8 +49,8 @@ export default class ReportedAdjudicationsService {
 
   async getYourCompletedAdjudications(
     user: User,
-    pageRequest: PageRequest
-  ): Promise<PageResponse<ReportedAdjudicationEnhanced>> {
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user.token).getYourCompletedAdjudications(
       user.activeCaseLoadId,
       pageRequest
@@ -63,7 +62,7 @@ export default class ReportedAdjudicationsService {
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
-    return pageResponse.map(reportedAdjudication =>
+    return this.mapData(pageResponse, reportedAdjudication =>
       this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
@@ -74,8 +73,8 @@ export default class ReportedAdjudicationsService {
 
   async getAllCompletedAdjudications(
     user: User,
-    pageRequest: PageRequest
-  ): Promise<PageResponse<ReportedAdjudicationEnhanced>> {
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user.token).getAllCompletedAdjudications(
       user.activeCaseLoadId,
       pageRequest
@@ -94,7 +93,7 @@ export default class ReportedAdjudicationsService {
       )) || []
     const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
-    return pageResponse.map(reportedAdjudication =>
+    return this.mapData(pageResponse, reportedAdjudication =>
       this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
@@ -168,6 +167,13 @@ export default class ReportedAdjudicationsService {
       draftId: draftAdjudication.id,
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
+    }
+  }
+
+  mapData<TI, TO>(data: ApiPageResponse<TI>, transform: (input: TI) => TO): ApiPageResponse<TO> {
+    return {
+      ...data,
+      content: data.content.map(transform),
     }
   }
 }

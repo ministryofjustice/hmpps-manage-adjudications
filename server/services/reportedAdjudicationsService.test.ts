@@ -4,8 +4,6 @@ import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
-import { PageResponse } from '../utils/pageResponse'
-import PageRequest from '../utils/pageRequest'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -108,11 +106,19 @@ describe('reportedAdjudicationsService', () => {
         },
       ]
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
-      getYourCompletedAdjudications.mockResolvedValue(new PageResponse(20, 1, 2, completedAdjudicationsContent, 1))
+      getYourCompletedAdjudications.mockResolvedValue({
+        size: 20,
+        pageNumber: 0,
+        totalElements: 2,
+        content: completedAdjudicationsContent,
+      })
     })
 
     it('returns the correct data', async () => {
-      const result = await service.getYourCompletedAdjudications(user, new PageRequest(20, 1, 1))
+      const result = await service.getYourCompletedAdjudications(user, {
+        size: 20,
+        number: 0,
+      })
 
       const expectedAdjudicationContent = [
         {
@@ -155,7 +161,12 @@ describe('reportedAdjudicationsService', () => {
         },
       ]
 
-      const expected = new PageResponse(20, 1, 2, expectedAdjudicationContent, 1)
+      const expected = {
+        size: 20,
+        pageNumber: 0,
+        totalElements: 2,
+        content: expectedAdjudicationContent,
+      }
 
       expect(result).toEqual(expected)
     })
@@ -321,10 +332,18 @@ describe('reportedAdjudicationsService', () => {
         authSource: '',
       })
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
-      getAllCompletedAdjudications.mockResolvedValue(new PageResponse(20, 1, 2, completedAdjudicationsContent, 1))
+      getAllCompletedAdjudications.mockResolvedValue({
+        size: 20,
+        pageNumber: 0,
+        totalElements: 2,
+        content: completedAdjudicationsContent,
+      })
     })
     it('returns the data', async () => {
-      const result = await service.getAllCompletedAdjudications(user, new PageRequest(20, 1, 1))
+      const result = await service.getAllCompletedAdjudications(user, {
+        size: 20,
+        number: 0,
+      })
 
       const expectedAdjudicationContent = [
         {
@@ -372,7 +391,12 @@ describe('reportedAdjudicationsService', () => {
         },
       ]
 
-      const expected = new PageResponse(20, 1, 2, expectedAdjudicationContent, 1)
+      const expected = {
+        size: 20,
+        pageNumber: 0,
+        totalElements: 2,
+        content: expectedAdjudicationContent,
+      }
 
       expect(result).toEqual(expected)
     })

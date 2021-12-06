@@ -1,11 +1,19 @@
-import { PageResponse } from './pageResponse'
-import mojPaginationFromPageResponse from './pagination'
+import mojPaginationFromPageResponse, { pageRequestFrom } from './pagination'
 
 describe('mojPaginationFromPageResponse', () => {
   const baseUrl = new URL('http://localhost/')
+  const dummyData = [] as string[]
   it('no results', () => {
-    expect(mojPaginationFromPageResponse(new PageResponse(10, 1, 0, null), baseUrl)).toEqual({
+    const apiResults = {
+      size: 10,
+      number: 0,
+      totalElements: 0,
+      content: dummyData,
+    }
+    expect(mojPaginationFromPageResponse(apiResults, baseUrl)).toEqual({
       items: [],
+      previous: null,
+      next: null,
       results: {
         count: 0,
         from: 0,
@@ -14,7 +22,16 @@ describe('mojPaginationFromPageResponse', () => {
     })
   })
   it('one result', () => {
-    expect(mojPaginationFromPageResponse(new PageResponse(10, 1, 1, null), baseUrl)).toEqual({
+    const apiResults = {
+      size: 10,
+      number: 0,
+      totalElements: 1,
+      content: dummyData,
+    }
+    expect(mojPaginationFromPageResponse(apiResults, baseUrl)).toEqual({
+      items: null,
+      previous: null,
+      next: null,
       results: {
         count: 1,
         from: 1,
@@ -23,7 +40,13 @@ describe('mojPaginationFromPageResponse', () => {
     })
   })
   it('first page of many pages', () => {
-    expect(mojPaginationFromPageResponse(new PageResponse(10, 1, 200, null), baseUrl)).toEqual({
+    const apiResults = {
+      size: 10,
+      number: 0,
+      totalElements: 200,
+      content: dummyData,
+    }
+    expect(mojPaginationFromPageResponse(apiResults, baseUrl)).toEqual({
       items: [
         { href: 'http://localhost/?pageNumber=1', selected: true, text: '1' },
         { href: 'http://localhost/?pageNumber=2', selected: false, text: '2' },
@@ -36,6 +59,7 @@ describe('mojPaginationFromPageResponse', () => {
         { href: 'http://localhost/?pageNumber=9', selected: false, text: '9' },
         { href: 'http://localhost/?pageNumber=10', selected: false, text: '10' },
       ],
+      previous: null,
       next: {
         href: 'http://localhost/?pageNumber=2',
         text: 'Next',
@@ -48,7 +72,13 @@ describe('mojPaginationFromPageResponse', () => {
     })
   })
   it('second page of many pages', () => {
-    expect(mojPaginationFromPageResponse(new PageResponse(10, 2, 200, null), baseUrl)).toEqual({
+    const apiResults = {
+      size: 10,
+      number: 1,
+      totalElements: 200,
+      content: dummyData,
+    }
+    expect(mojPaginationFromPageResponse(apiResults, baseUrl)).toEqual({
       items: [
         { href: 'http://localhost/?pageNumber=1', selected: false, text: '1' },
         { href: 'http://localhost/?pageNumber=2', selected: true, text: '2' },
@@ -77,7 +107,13 @@ describe('mojPaginationFromPageResponse', () => {
     })
   })
   it('last page of many pages', () => {
-    expect(mojPaginationFromPageResponse(new PageResponse(10, 20, 200, null), baseUrl)).toEqual({
+    const apiResults = {
+      size: 10,
+      number: 19,
+      totalElements: 200,
+      content: dummyData,
+    }
+    expect(mojPaginationFromPageResponse(apiResults, baseUrl)).toEqual({
       items: [
         { href: 'http://localhost/?pageNumber=11', selected: false, text: '11' },
         { href: 'http://localhost/?pageNumber=12', selected: false, text: '12' },
@@ -94,11 +130,21 @@ describe('mojPaginationFromPageResponse', () => {
         href: 'http://localhost/?pageNumber=19',
         text: 'Previous',
       },
+      next: null,
       results: {
         count: 200,
         from: 191,
         to: 200,
       },
+    })
+  })
+})
+
+describe('pageRequestFrom', () => {
+  it('does correct conversion from one-based to zero-based and transfers requested page size', () => {
+    expect(pageRequestFrom(10, 2)).toEqual({
+      size: 10,
+      number: 1,
     })
   })
 })

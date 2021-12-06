@@ -1,8 +1,6 @@
 import nock from 'nock'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
-import PageRequest from '../utils/pageRequest'
-import { PageResponse } from '../utils/pageResponse'
 
 jest.mock('../../logger')
 
@@ -257,17 +255,25 @@ describe('manageAdjudicationsClient', () => {
         },
       },
     ]
-    const request = new PageRequest(20, 1, 1)
-    const response = new PageResponse(20, 0, 2, content, 0)
+    const request = {
+      size: 20,
+      number: 0,
+    }
+    const response = {
+      size: 20,
+      pageNumber: 0,
+      totalElements: 2,
+      content,
+    }
 
-    it('should return a page of completed adjudications with a one based index', async () => {
+    it('should return a page of completed adjudications', async () => {
       fakeManageAdjudicationsApi
         .get(`/reported-adjudications/my/agency/MDI?page=0&size=20`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 
       const result = await client.getYourCompletedAdjudications('MDI', request)
-      expect(result).toEqual(response.changeIndex(1))
+      expect(result).toEqual(response)
     })
   })
 
@@ -300,17 +306,25 @@ describe('manageAdjudicationsClient', () => {
         },
       },
     ]
-    const request = new PageRequest(20, 1, 1)
-    const response = new PageResponse(20, 0, 2, content, 0)
+    const request = {
+      size: 20,
+      number: 0,
+    }
+    const response = {
+      size: 20,
+      pageNumber: 0,
+      totalElements: 2,
+      content,
+    }
 
-    it('should return a page of completed adjudications with a one based index', async () => {
+    it('should return a page of completed adjudications', async () => {
       fakeManageAdjudicationsApi
         .get(`/reported-adjudications/agency/MDI?page=0&size=20`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 
       const result = await client.getAllCompletedAdjudications('MDI', request)
-      expect(result).toEqual(response.changeIndex(1))
+      expect(result).toEqual(response)
     })
   })
   describe('createDraftFromCompleteAdjudication', () => {
