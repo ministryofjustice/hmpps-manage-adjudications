@@ -2,6 +2,7 @@
 
 {% from "../macros/onReport.njk" import onReportInfo %}
 {% from "../macros/printLink.njk" import printLink %}
+{% from "../macros/noticeOfBeingPlacedOnReport.njk" import noticeOfBeingPlacedOnReport %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
@@ -36,5 +37,7 @@
             'data-qa': 'confirmed-on-report-finish'
         }
     }) }}
+
+    {{ noticeOfBeingPlacedOnReport() }}
 
 {% endblock %}
