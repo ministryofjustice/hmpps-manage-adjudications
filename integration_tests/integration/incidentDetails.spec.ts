@@ -58,6 +58,16 @@ context('Incident details', () => {
         },
       ],
     })
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'USER1',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
     cy.signIn()
   })
   it('should contain the required page elements', () => {

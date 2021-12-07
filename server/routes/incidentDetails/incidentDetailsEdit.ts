@@ -36,8 +36,9 @@ export default class IncidentDetailsEditRoutes {
 
     const IdNumberValue: number = parseInt(id as string, 10)
 
-    const [prisoner, existingDraftIncidentDetails] = await Promise.all([
+    const [prisoner, reporter, existingDraftIncidentDetails] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
+      this.placeOnReportService.getReporterName(user),
       this.placeOnReportService.getDraftIncidentDetailsForEditing(IdNumberValue, user),
     ])
     const { agencyId } = prisoner.assignedLivingUnit
@@ -55,6 +56,7 @@ export default class IncidentDetailsEditRoutes {
       prisoner,
       locations,
       data,
+      reportingOfficer: reporter || '',
     })
   }
 

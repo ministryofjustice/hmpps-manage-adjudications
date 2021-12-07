@@ -58,6 +58,11 @@ export default class PlaceOnReportService {
     return enhancedResult
   }
 
+  async getReporterName(user: User): Promise<string> {
+    const userDetails = await this.hmppsAuthClient.getUserFromUsername(user.username, user.token)
+    return userDetails.name
+  }
+
   async startNewDraftAdjudication(
     dateTimeOfIncident: string,
     locationId: number,

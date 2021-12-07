@@ -76,6 +76,16 @@ context('Incident details (edit) - statement incomplete', () => {
         },
       ],
     })
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'USER1',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
     cy.signIn()
   })
   it('should contain the required page elements', () => {
@@ -204,6 +214,16 @@ context('Incident details (edit) - statement complete', () => {
           userDescription: 'Workshop 4 - PICTA',
         },
       ],
+    })
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'USER1',
+        token: 'token-1',
+        authSource: 'auth',
+      },
     })
     cy.signIn()
   })

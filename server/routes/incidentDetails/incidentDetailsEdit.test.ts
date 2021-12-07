@@ -50,6 +50,8 @@ beforeEach(() => {
     },
   })
 
+  placeOnReportService.getReporterName.mockResolvedValue('Test User')
+
   locationService.getIncidentLocations.mockResolvedValue([
     { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
     { locationId: 6, locationPrefix: 'OC', userDescription: 'Rivendell' },

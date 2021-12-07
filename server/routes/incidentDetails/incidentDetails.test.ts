@@ -44,7 +44,7 @@ beforeEach(() => {
       },
     },
   })
-
+  placeOnReportService.getReporterName.mockResolvedValue('Test User')
   locationService.getIncidentLocations.mockResolvedValue([])
 })
 
