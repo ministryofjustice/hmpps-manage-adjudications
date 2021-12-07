@@ -35,6 +35,7 @@ export default class prisonerReportRoutes {
       editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${data.draftId}`,
       statementEditable: true,
       returnLinkURL: `/your-completed-reports`,
+      returnLinkContent: 'Return to your completed reports',
     })
   }
 
