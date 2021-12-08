@@ -13,3 +13,11 @@
 
   .page-break-before
     page-break-before: always
+
+  .fixed-bottom
+    position: fixed
+    bottom: 0
+
+@page
+  @bottom-left
+    content: counter(page) "/" counter(pages)
