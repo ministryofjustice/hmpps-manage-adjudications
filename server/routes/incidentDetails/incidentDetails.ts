@@ -36,7 +36,7 @@ export default class IncidentDetailsRoutes {
 
     const [prisoner, reporter] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
-      this.placeOnReportService.getReporterName(user),
+      this.placeOnReportService.getReporterName(user.username, user),
     ])
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)

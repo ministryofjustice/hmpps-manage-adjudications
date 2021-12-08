@@ -34,6 +34,7 @@ context('Incident details (edit) - statement incomplete', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          createdByUserId: 'USER1',
         },
       },
     })
@@ -48,6 +49,7 @@ context('Incident details (edit) - statement incomplete', () => {
           },
           incidentStatement: {},
           prisonerNumber: 'G6415GD',
+          createdByUserId: 'USER2',
         },
       },
     })
@@ -80,7 +82,7 @@ context('Incident details (edit) - statement incomplete', () => {
       username: 'USER1',
       response: {
         activeCaseLoadId: 'MDI',
-        name: 'Test User',
+        name: 'USER ONE',
         username: 'USER1',
         token: 'token-1',
         authSource: 'auth',
@@ -91,11 +93,19 @@ context('Incident details (edit) - statement incomplete', () => {
   it('should contain the required page elements', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.reportingOfficerLabel().should('exist')
+    incidentDetailsPage.reportingOfficerName().should('exist')
     incidentDetailsPage.datePicker().should('exist')
     incidentDetailsPage.timeInputHours().should('exist')
     incidentDetailsPage.timeInputMinutes().should('exist')
     incidentDetailsPage.locationSelector().should('exist')
     incidentDetailsPage.submitButton().should('exist')
+  })
+  it('should show the correct reporting officer - the original creator of the report', () => {
+    cy.visit(`/incident-details/G6415GD/34/edit`)
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
+    incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
   it('should show error if one of the time fields is not filled in correctly', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
@@ -170,6 +180,7 @@ context('Incident details (edit) - statement complete', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          createdByUserId: 'USER1',
         },
       },
     })
@@ -187,6 +198,7 @@ context('Incident details (edit) - statement complete', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          createdByUserId: 'USER2',
         },
       },
     })
@@ -219,7 +231,7 @@ context('Incident details (edit) - statement complete', () => {
       username: 'USER1',
       response: {
         activeCaseLoadId: 'MDI',
-        name: 'Test User',
+        name: 'USER ONE',
         username: 'USER1',
         token: 'token-1',
         authSource: 'auth',

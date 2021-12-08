@@ -99,7 +99,7 @@ describe('placeOnReportService', () => {
         token: '',
         authSource: '',
       })
-      const result = await service.getReporterName(user)
+      const result = await service.getReporterName('TEST_GEN', user)
       expect(result).toEqual('Test User')
     })
   })

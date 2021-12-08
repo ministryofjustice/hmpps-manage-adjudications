@@ -62,7 +62,7 @@ context('Incident details', () => {
       username: 'USER1',
       response: {
         activeCaseLoadId: 'MDI',
-        name: 'Test User',
+        name: 'USER ONE',
         username: 'USER1',
         token: 'token-1',
         authSource: 'auth',
@@ -73,11 +73,19 @@ context('Incident details', () => {
   it('should contain the required page elements', () => {
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.reportingOfficerLabel().should('exist')
+    incidentDetailsPage.reportingOfficerName().should('exist')
     incidentDetailsPage.datePicker().should('exist')
     incidentDetailsPage.timeInputHours().should('exist')
     incidentDetailsPage.timeInputMinutes().should('exist')
     incidentDetailsPage.locationSelector().should('exist')
     incidentDetailsPage.submitButton().should('exist')
+  })
+  it('should show the correct reporting officer - the original creator of the report', () => {
+    cy.visit(`/incident-details/G6415GD`)
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
+    incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
   it('should show error if a date is not selected', () => {
     cy.visit(`/incident-details/G6415GD`)
