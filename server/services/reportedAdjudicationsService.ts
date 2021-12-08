@@ -158,7 +158,7 @@ export default class ReportedAdjudicationsService {
       },
       {
         label: 'Location',
-        value: locationObj.userDescription,
+        value: locationObj?.userDescription || '',
       },
     ]
 

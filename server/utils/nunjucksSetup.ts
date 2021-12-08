@@ -109,7 +109,9 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addFilter('formatStatement', (statement: string) => {
     if (!statement) return null
     const statementArray = statement.split(/\r|\n/)
+
     return statementArray
+      .map(para => escapeHtml(para))
       .map(paragraph => {
         return `<p class='govuk-body'>${paragraph}</p>`
       })
