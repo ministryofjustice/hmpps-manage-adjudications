@@ -33,6 +33,7 @@ interface DraftAdjudicationEnhanced extends DraftAdjudication {
 type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   locationId: number
+  createdByUserId: string
 }
 
 export default class PlaceOnReportService {
@@ -56,6 +57,11 @@ export default class PlaceOnReportService {
     }
 
     return enhancedResult
+  }
+
+  async getReporterName(username: string, user: User): Promise<string> {
+    const userDetails = await this.hmppsAuthClient.getUserFromUsername(username, user.token)
+    return userDetails.name
   }
 
   async startNewDraftAdjudication(
@@ -140,7 +146,11 @@ export default class PlaceOnReportService {
     const time = getTime(incidentDetails.dateTimeOfIncident)
     const hour = time.split(':')[0]
     const minute = time.split(':')[1]
-    return { dateTime: { date, time: { hour, minute } }, locationId: incidentDetails.locationId }
+    return {
+      dateTime: { date, time: { hour, minute } },
+      locationId: incidentDetails.locationId,
+      createdByUserId: response.draftAdjudication.createdByUserId,
+    }
   }
 
   async editDraftIncidentDetails(

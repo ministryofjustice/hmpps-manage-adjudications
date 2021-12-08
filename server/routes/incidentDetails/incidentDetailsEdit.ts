@@ -40,6 +40,8 @@ export default class IncidentDetailsEditRoutes {
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
       this.placeOnReportService.getDraftIncidentDetailsForEditing(IdNumberValue, user),
     ])
+    const { createdByUserId } = existingDraftIncidentDetails
+    const reporter = await this.placeOnReportService.getReporterName(createdByUserId, user)
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
@@ -55,6 +57,7 @@ export default class IncidentDetailsEditRoutes {
       prisoner,
       locations,
       data,
+      reportingOfficer: reporter || '',
     })
   }
 
