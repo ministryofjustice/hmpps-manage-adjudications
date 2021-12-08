@@ -1,2 +1,12 @@
 .govuk-main-wrapper
   min-height: 600px
+
+@media print
+  .no-print, .govuk-header, .govuk-footer
+     display: none !important
+
+  .print
+     display: block !important
+
+  .page-break-before
+    page-break-before: always

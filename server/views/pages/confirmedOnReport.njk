@@ -13,7 +13,9 @@
     {{ title }}
 {% endblock %}
 
+
 {% block content %}
+  <div class="no-print">
     {{ govukPanel({
         titleText: prisonerFirstAndLastName + ' has been placed on report',
         html: 'Your report number is: <br><strong>' + adjudicationNumber + '</strong>',
@@ -27,7 +29,6 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     {{ printLink('Print a copy of this report', printHref, "left", "govuk-!-padding-bottom-0") }}
-
     {{ govukButton({
         text: 'Finish',
         element: 'a',
@@ -38,6 +39,7 @@
         }
     }) }}
 
-    {{ noticeOfBeingPlacedOnReport() }}
+  </div>
+  {{ noticeOfBeingPlacedOnReport() }}
 
 {% endblock %}
