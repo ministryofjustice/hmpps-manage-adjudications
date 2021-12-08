@@ -44,6 +44,7 @@ export default class ReportedAdjudicationsService {
       prisonerPreferredNonEnglishLanguage,
       prisonerOtherLanguages,
       prisonerNeurodiversities,
+      statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
     }
   }
 

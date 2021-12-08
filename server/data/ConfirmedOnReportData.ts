@@ -6,4 +6,5 @@ export type ConfirmedOnReportData = {
   prisonerPreferredNonEnglishLanguage?: string
   prisonerOtherLanguages?: Array<string>
   prisonerNeurodiversities?: Array<string>
+  statement: string
 }

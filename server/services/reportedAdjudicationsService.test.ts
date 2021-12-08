@@ -230,6 +230,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerPreferredNonEnglishLanguage: 'Spanish',
           prisonerOtherLanguages: ['Spanish', 'German'],
           prisonerNeurodiversities: ['Hearing impairment', 'Visual impairment'],
+          statement: 'Example statement',
         })
       })
 

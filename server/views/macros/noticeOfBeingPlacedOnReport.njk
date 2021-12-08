@@ -2,9 +2,9 @@
 {% from "../macros/noticeOfBeingPlacedOnReportPage2.njk" import noticeOfBeingPlacedOnReportPage2 %}
 {% from "../macros/noticeOfBeingPlacedOnReportPage3.njk" import noticeOfBeingPlacedOnReportPage3 %}
 {% from "../macros/noticeOfBeingPlacedOnReportPage4.njk" import noticeOfBeingPlacedOnReportPage4 %}
-{% macro noticeOfBeingPlacedOnReport() %}
+{% macro noticeOfBeingPlacedOnReport(adjudicationNumber, statement) %}
     <div class="print">
-        {{ noticeOfBeingPlacedOnReportPage1() }}
+        {{ noticeOfBeingPlacedOnReportPage1(adjudicationNumber, statement) }}
         {{ noticeOfBeingPlacedOnReportPage2() }}
         {{ noticeOfBeingPlacedOnReportPage3() }}
         {{ noticeOfBeingPlacedOnReportPage4() }}

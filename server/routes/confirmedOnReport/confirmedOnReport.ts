@@ -31,6 +31,7 @@ export default class ConfirmedOnReportRoutes {
       prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
+      statement: adjudicationDetails.statement,
       printHref: `/print-report/${adjudicationNumber}`,
     })
   }

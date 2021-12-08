@@ -24,6 +24,7 @@ const reportedAdjudicationInformation = {
   prisonerPreferredNonEnglishLanguage: 'French',
   prisonerOtherLanguages: ['English', 'Spanish'],
   prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
+  statement: 'A statement',
 }
 
 reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)
