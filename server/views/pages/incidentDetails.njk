@@ -41,6 +41,8 @@
 		<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
+			{% include "../partials/reportingOfficer.njk" %}
+
 			{{ datePicker({
 				id: 'incidentDate[date]',
 				label: 'Date of incident',

@@ -35,6 +35,7 @@ beforeEach(() => {
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
     locationId: 1234,
+    createdByUserId: 'TESTER2_GEN',
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
@@ -49,6 +50,8 @@ beforeEach(() => {
       prisonerNumber: 'G6415GD',
     },
   })
+
+  placeOnReportService.getReporterName.mockResolvedValue('Tester2 User')
 
   locationService.getIncidentLocations.mockResolvedValue([
     { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
@@ -71,6 +74,7 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident details')
+        expect(res.text).toContain('Tester2 User')
       })
   })
 })

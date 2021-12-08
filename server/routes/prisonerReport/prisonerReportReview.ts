@@ -38,6 +38,7 @@ export default class prisonerReportReviewRoutes {
       editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/edit`,
       statementEditable: false,
       returnLinkURL: `/all-completed-reports`,
+      returnLinkContent: 'Return to all completed reports',
     })
   }
 

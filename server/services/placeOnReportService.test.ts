@@ -90,6 +90,20 @@ describe('placeOnReportService', () => {
     })
   })
 
+  describe('getReporter', () => {
+    it('returns the users name', async () => {
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Test User',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+      const result = await service.getReporterName('TEST_GEN', user)
+      expect(result).toEqual('Test User')
+    })
+  })
+
   describe('getCheckYourAnswersInfo', () => {
     it('returns the draft adjudication information', async () => {
       getDraftAdjudication.mockResolvedValue({
