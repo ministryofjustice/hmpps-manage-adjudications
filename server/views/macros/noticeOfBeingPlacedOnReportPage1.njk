@@ -1,4 +1,75 @@
 {% macro noticeOfBeingPlacedOnReportPage1(adjudicationNumber) %}
     <h1 class='govuk-panel__title'>Notice of being put on report</h1>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        <div class="prisonerPlaybackSectionInner govuk-!-width-full">
+            <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-name">
+
+                <p class="govuk-!-margin-bottom-1 govuk-label--s">Name</p>
+                <p class="govuk-!-margin-bottom-1 govuk-label--xs" data-qa="offender-name">
+                    Saunders, John
+                </p>
+
+            </div>
+            <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-prn">
+
+                <p class="govuk-!-margin-bottom-1 govuk-label--s">Prison number</p>
+                <p class="govuk-!-margin-bottom-1 govuk-label--xs" data-qa="offender-prn">
+                    G6123VU
+                </p>
+
+            </div>
+            <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-location">
+
+                <p class="govuk-!-margin-bottom-1 govuk-label--s">Location</p>
+                <p class="govuk-!-margin-bottom-1 govuk-label--xs" data-qa="offender-location">
+                    3-3-037
+                </p>
+            </div>
+        </div>
+
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <p class='govuk-body'>You need to attend an adjudication hearing. This will not be held before:</p>
+    <p class='govuk-body'>8 October 2021 at 09:30</p>
+    <p class="govuk-!-margin-bottom-1 govuk-label--s">It is alleged that an incident happened:</p>
+    <ul>
+        <li>on 6 October 2021</li>
+        <li>at 09:40</li>
+        <li>in Moorland Prison - Library</li>
+    </ul>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <p class="govuk-!-margin-bottom-1 govuk-label--s">The reporting officer's statement about the incident</p>
+
+    <p class="govuk-!-margin-bottom-1 govuk-label--xs">Reporting officer:</p>
+    <p class="govuk-!-margin-bottom-1 govuk-label--xs">J. Osgoodby</p>
+    <p class="govuk-!-margin-bottom-1 govuk-label--xs">Date:</p>
+    <p class="govuk-!-margin-bottom-1 govuk-label--xs">6 October 2021</p>
+    <p class="govuk-!-margin-bottom-1 govuk-label--xs">Time:</p>
+    <p class="govuk-!-margin-bottom-1 govuk-label--xs">11:35</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <p class="govuk-!-margin-bottom-1 govuk-label--s">The alleged offence broke prison rule 51</p>
+
     <div class='fixed-bottom'>Report number: {{ adjudicationNumber }}</div>
+
+    <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="offender-name">
+        Charge 1
+    </p>
+    <div class="prisonerPlaybackSectionInner govuk-!-width-full">
+        <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-name">
+
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Paragraph number</p>
+            <input type='text'>
+
+        </div>
+        <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-prn">
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Detail of charge (some more)</p>
+            <input type='text'>
+        </div>
+    </div>
+
+
+
 {% endmacro %}
