@@ -1,4 +1,4 @@
-{% macro noticeOfBeingPlacedOnReportPage1(adjudicationNumber) %}
+{% macro noticeOfBeingPlacedOnReportPage1(adjudicationNumber, statement) %}
     <h1 class='govuk-panel__title'>Notice of being put on report</h1>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
@@ -40,6 +40,9 @@
     </ul>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <p class="govuk-!-margin-bottom-1 govuk-label--s">The reporting officer's statement about the incident</p>
+    <div class="adjudicationsSummary-incidentStatement" data-qa="adjudicationsSummary-incidentStatement">
+        {{ statement | formatStatement | safe }}
+    </div>
 
     <p class="govuk-!-margin-bottom-1 govuk-label--xs">Reporting officer:</p>
     <p class="govuk-!-margin-bottom-1 govuk-label--xs">J. Osgoodby</p>
@@ -54,18 +57,18 @@
 
     <div class='fixed-bottom'>Report number: {{ adjudicationNumber }}</div>
 
-    <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="offender-name">
-        Charge 1
-    </p>
-    <div class="prisonerPlaybackSectionInner govuk-!-width-full">
-        <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-name">
 
+    <div class="prisonerPlaybackSectionInner govuk-!-width-full">
+
+        <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-name">
+            <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="offender-name">
+                Charge 1
+            </p>
             <p class="govuk-!-margin-bottom-1 govuk-label--xs">Paragraph number</p>
             <input type='text'>
-
         </div>
         <div class="prisonerPlaybackSectionInner__item" data-qa="playback-offender-prn">
-            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Detail of charge (some more)</p>
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Detail of charge</p>
             <input type='text'>
         </div>
     </div>
