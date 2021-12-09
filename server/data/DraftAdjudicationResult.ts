@@ -13,8 +13,6 @@ export type DraftAdjudication = {
   id: number
   prisonerNumber: string
   startedByUserId: string
-  createdByUserId: string
-  createdDateTime: string
   incidentDetails: IncidentDetails
   incidentStatement?: IncidentStatement
 }

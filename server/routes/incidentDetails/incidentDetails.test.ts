@@ -36,8 +36,6 @@ beforeEach(() => {
     draftAdjudication: {
       id: 1,
       prisonerNumber: 'G6415GD',
-      createdByUserId: 'TEST_GEN',
-      createdDateTime: '2021-11-04T09:21:21.95935',
       startedByUserId: 'TEST_GEN',
       incidentDetails: {
         locationId: 2,

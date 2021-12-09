@@ -119,8 +119,6 @@ describe('placeOnReportService', () => {
             statement:
               "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-04T09:21:21.95935',
           startedByUserId: 'TEST_GEN',
         },
       })
@@ -380,8 +378,6 @@ describe('placeOnReportService', () => {
       getAllDraftAdjudicationsForUser.mockResolvedValue({
         draftAdjudications: [
           {
-            createdByUserId: 'user1',
-            createdDateTime: '2021-11-16T14:15:08.021Z',
             startedByUserId: 'user1',
             id: 1,
             incidentDetails: {
@@ -395,8 +391,6 @@ describe('placeOnReportService', () => {
             prisonerNumber: 'A12345',
           },
           {
-            createdByUserId: 'user1',
-            createdDateTime: '2021-11-16T14:15:08.021Z',
             startedByUserId: 'user1',
             id: 2,
             incidentDetails: {
@@ -414,8 +408,6 @@ describe('placeOnReportService', () => {
       const response = await service.getAllDraftAdjudicationsForUser(user)
       expect(response).toEqual([
         {
-          createdByUserId: 'user1',
-          createdDateTime: '2021-11-16T14:15:08.021Z',
           startedByUserId: 'user1',
           displayName: 'Burrows, Jack',
           friendlyName: 'Jack Burrows',
@@ -433,8 +425,6 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G2996UX',
         },
         {
-          createdByUserId: 'user1',
-          createdDateTime: '2021-11-16T14:15:08.021Z',
           startedByUserId: 'user1',
           displayName: 'Smith, John',
           friendlyName: 'John Smith',
@@ -470,8 +460,6 @@ describe('placeOnReportService', () => {
             dateTimeOfIncident: '2021-10-12T20:00:00',
             handoverDeadline: '2021-10-14T20:00:00',
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-22T10:43:15.763328964',
           startedByUserId: 'TEST_GEN',
         },
       })
@@ -496,8 +484,6 @@ describe('placeOnReportService', () => {
             statement: 'This is incomplete',
             completed: false,
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-22T10:43:15.763329',
           startedByUserId: 'TEST_GEN',
         },
       })
@@ -522,8 +508,6 @@ describe('placeOnReportService', () => {
             statement: 'ghjghjgh',
             completed: true,
           },
-          createdByUserId: 'NCLAMP_GEN',
-          createdDateTime: '2021-11-19T14:35:50.137624',
           startedByUserId: 'NCLAMP_GEN',
         },
       })

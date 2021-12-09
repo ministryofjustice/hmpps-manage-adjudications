@@ -10,8 +10,6 @@ context('Continue a report - select report', () => {
       cy.task('stubGetAllDraftAdjudicationsForUser', {
         draftAdjudications: [
           {
-            createdByUserId: 'USER1',
-            createdDateTime: '2021-11-17T09:40:00Z',
             startedByUserId: 'USER1',
             id: 1,
             incidentDetails: {
@@ -25,8 +23,6 @@ context('Continue a report - select report', () => {
             prisonerNumber: 'G2996UX',
           },
           {
-            createdByUserId: 'USER1',
-            createdDateTime: '2021-11-17T11:40:00Z',
             startedByUserId: 'USER1',
             id: 2,
             incidentDetails: {

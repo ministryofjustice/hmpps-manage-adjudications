@@ -33,7 +33,6 @@ interface DraftAdjudicationEnhanced extends DraftAdjudication {
 type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   locationId: number
-  createdByUserId: string
   startedByUserId: string
 }
 
@@ -150,7 +149,6 @@ export default class PlaceOnReportService {
     return {
       dateTime: { date, time: { hour, minute } },
       locationId: incidentDetails.locationId,
-      createdByUserId: response.draftAdjudication.createdByUserId,
       startedByUserId: response.draftAdjudication.startedByUserId,
     }
   }

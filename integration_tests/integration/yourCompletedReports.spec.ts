@@ -32,7 +32,6 @@ context('Your Completed Reports', () => {
         },
         incidentStatement: null,
         createdByUserId: 'TEST_GEN',
-        startedByUserId: 'TEST_GEN',
       }
     })
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
