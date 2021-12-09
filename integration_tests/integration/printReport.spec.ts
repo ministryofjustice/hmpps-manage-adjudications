@@ -77,7 +77,7 @@ context('Print a copy of this report', () => {
   it('should contain the required page elements', () => {
     cy.visit(`/print-report/1524242`)
     Page.verifyOnPage(PrintReport)
-    cy.contains('John Smith must be given a copy of this report by 10:00 on 8 December 2020')
+    cy.contains('John Smith must be given a copy of this report by 10:00 on Tuesday 8 December')
     cy.contains('John Smith’s preferred language is:')
     cy.contains('French')
     cy.contains('They have other languages of:')
@@ -85,12 +85,12 @@ context('Print a copy of this report', () => {
     cy.contains('German')
   })
 
-  it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
-    cy.visit(`/print-report/1524242`)
+  it('should redirect the user to the referrer on finish', () => {
+    cy.visit(`/print-report/1524242?referrer=/prisoner-report/G6415GD/1524242/report`)
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
+      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524242/report')
     })
   })
 })
