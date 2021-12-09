@@ -3,7 +3,8 @@
 }
 
 .adjudication-print-form-input {
-  height: 25px;
+  height: 30px;
+  border-width: medium;
 }
 
 .adjudication-print-form-header {
@@ -19,7 +20,34 @@
   width: 1170px; /*TODO why*/
 }
 
+.adjudication-print-form-statement-paragraph {
+  &__item {
+    margin-bottom: 0px;
+    &:last-child {
+      margin-bottom: 10px;
+    }
+  }
+}
+
 .adjudication-print-form-section {
+  display: flex;
+  align-items: end;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    padding-right: govuk-spacing(3);
+    width: 20%;
+
+    &:last-child {
+      width: 60%;
+    }
+  }
+}
+
+.adjudication-print-form-charge-section {
   padding-bottom: 10px;
   display: flex;
   align-items: end;

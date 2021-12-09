@@ -113,7 +113,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return statementArray
       .map(para => escapeHtml(para))
       .map(paragraph => {
-        return `<p class='govuk-body'>${paragraph}</p>`
+        return `<p class='govuk-bod govuk-!-font-size-14 adjudication-print-form-statement-paragraph__item'>${paragraph}</p>`
       })
       .join('')
   })

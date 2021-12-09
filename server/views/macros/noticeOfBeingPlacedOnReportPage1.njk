@@ -36,7 +36,7 @@
     </ul>
     <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
     <p class='govuk-body govuk-!-font-size-14 adjudication-print-form-header-bold'>The reporting officer's statement about the incident</p>
-    <div class='adjudicationsSummary-incidentStatement'>
+    <div class='adjudication-print-form-statement-paragraph'>
         {{ statement | formatStatement | safe }}
     </div>
     <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Reporting officer: J. Osgoodby</p>
@@ -47,15 +47,15 @@
 
     <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 adjudication-print-form-header-bold'>The alleged offence broke prison rule 51</p>
     {% for i in range(1, 5) -%}
-    <div class='adjudication-print-form-section govuk-!-width-full'>
-        <div class='adjudication-print-form-section__item'>
+    <div class='adjudication-print-form-charge-section govuk-!-width-full'>
+        <div class='adjudication-print-form-charge-section__item'>
             <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 adjudication-print-form-header-bold'>
                 Charge {{ i }}
             </p>
             <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Paragraph number</p>
             <input class='adjudication-print-form-input' type='text'>
         </div>
-        <div class='adjudication-print-form-section__item'>
+        <div class='adjudication-print-form-charge-section__item'>
             <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Detail of charge</p>
             <input class='adjudication-print-form-input' type='text'>
         </div>
