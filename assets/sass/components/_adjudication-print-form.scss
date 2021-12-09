@@ -1,0 +1,43 @@
+.adjudication-print-form-header-bold {
+ font-weight: 700;
+}
+
+.adjudication-print-form-header {
+ background-color: #D8D8D8;
+}
+
+.adjudication-print-form-footer {
+  background-color: #D8D8D8;
+  position: fixed;
+  bottom: 0;
+  width: 1170px; /**/
+}
+
+.adjudication-print-form-section {
+    padding-bottom: 0;
+    display: flex;
+    align-items: end;
+
+	&--with-border {
+    padding: govuk-spacing(3) 0;
+    border-top: 1px solid $govuk-border-colour;
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+	&__item {
+    @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1 1 1;
+      padding-right: govuk-spacing(3);
+			width: 20%;
+
+      &:last-child {
+        width: 80%;
+        padding-right: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
