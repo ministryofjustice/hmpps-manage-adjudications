@@ -105,7 +105,7 @@ describe('placeOnReportService', () => {
   })
 
   describe('getCheckYourAnswersInfo', () => {
-    it('returns the draft adjudication information', async () => {
+    it('returns the draft adjudication information - no completed adjudication number', async () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: {
           id: 10,
@@ -159,6 +159,65 @@ describe('placeOnReportService', () => {
           },
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the draft adjudication information - completed adjudication number included', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 10,
+          adjudicationNumber: 123456,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26152,
+            dateTimeOfIncident: '2021-11-04T07:20:00',
+          },
+          incidentStatement: {
+            id: 9,
+            statement:
+              "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+          },
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: '2021-11-04T09:21:21.95935',
+        },
+      })
+
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Natalie Clamp',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+
+      const locations = [
+        { locationId: 26152, locationPrefix: 'P3', userDescription: 'place 3', description: '' },
+        { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
+        { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
+      ]
+
+      const result = await service.getCheckYourAnswersInfo(10, locations, user)
+      const expectedResult = {
+        incidentDetails: [
+          {
+            label: 'Reporting Officer',
+            value: 'N. Clamp',
+          },
+          {
+            label: 'Date',
+            value: '4 November 2021',
+          },
+          {
+            label: 'Time',
+            value: '07:20',
+          },
+          {
+            label: 'Location',
+            value: 'place 3',
+          },
+        ],
+        statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+        adjudicationNumber: 123456,
       }
       expect(result).toEqual(expectedResult)
     })

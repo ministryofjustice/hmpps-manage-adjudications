@@ -135,6 +135,7 @@ export default class PlaceOnReportService {
     return {
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
+      adjudicationNumber: draftAdjudication.adjudicationNumber,
     }
   }
 

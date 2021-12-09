@@ -11,6 +11,7 @@ export type IncidentStatement = {
 
 export type DraftAdjudication = {
   id: number
+  adjudicationNumber?: number
   prisonerNumber: string
   createdByUserId: string
   createdDateTime: string
@@ -29,6 +30,7 @@ export type DraftAdjudicationResultList = {
 export type CheckYourAnswers = {
   incidentDetails: SummarySectionItems[]
   statement: string
+  adjudicationNumber?: number
 }
 
 export interface PrisonerReport extends CheckYourAnswers {
