@@ -12,6 +12,7 @@ context('Continue a report - select report', () => {
           {
             createdByUserId: 'USER1',
             createdDateTime: '2021-11-17T09:40:00Z',
+            startedByUserId: 'USER1',
             id: 1,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-16T16:45:00',
@@ -26,6 +27,7 @@ context('Continue a report - select report', () => {
           {
             createdByUserId: 'USER1',
             createdDateTime: '2021-11-17T11:40:00Z',
+            startedByUserId: 'USER1',
             id: 2,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-14T08:30:00',

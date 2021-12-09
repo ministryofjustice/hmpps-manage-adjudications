@@ -38,6 +38,7 @@ beforeEach(() => {
       prisonerNumber: 'G6415GD',
       createdByUserId: 'TEST_GEN',
       createdDateTime: '2021-11-04T09:21:21.95935',
+      startedByUserId: 'TEST_GEN',
       incidentDetails: {
         locationId: 2,
         dateTimeOfIncident: '2021-10-27T13:30:00.000',

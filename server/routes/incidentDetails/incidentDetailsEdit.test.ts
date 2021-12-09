@@ -36,12 +36,14 @@ beforeEach(() => {
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
     locationId: 1234,
     createdByUserId: 'TESTER2_GEN',
+    startedByUserId: 'TESTER2_GEN',
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
     draftAdjudication: {
       createdByUserId: 'TEST_GEN',
       createdDateTime: '2021-10-27T10:13:17.808Z',
+      startedByUserId: 'TEST_GEN',
       id: 34,
       incidentDetails: {
         dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
@@ -115,6 +117,7 @@ describe('Incident details completed already', () => {
       draftAdjudication: {
         createdByUserId: 'TEST_GEN',
         createdDateTime: '2021-10-27T10:13:17.808Z',
+        startedByUserId: 'TEST_GEN',
         id: 34,
         incidentDetails: {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',

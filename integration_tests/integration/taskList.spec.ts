@@ -34,6 +34,7 @@ context('Task list', () => {
             },
             createdByUserId: 'TEST_GEN',
             createdDateTime: '2021-11-03T11:09:00',
+            startedByUserId: 'TEST_GEN',
           },
         },
       })
@@ -126,6 +127,7 @@ context('Task list', () => {
             },
             createdByUserId: 'TEST_GEN',
             createdDateTime: '2021-11-03T11:09:00',
+            startedByUserId: 'TEST_GEN',
           },
         },
       })
@@ -202,6 +204,7 @@ context('Task list', () => {
             },
             createdByUserId: 'TEST_GEN',
             createdDateTime: '2021-11-03T11:09:00',
+            startedByUserId: 'TEST_GEN',
           },
         },
       })

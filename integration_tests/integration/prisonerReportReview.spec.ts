@@ -46,6 +46,7 @@ context('Prisoner report', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-12-02T14:36:29.786055469',
+          startedByUserId: 'TEST_GEN',
         },
       },
     })

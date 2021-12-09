@@ -121,6 +121,7 @@ describe('placeOnReportService', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-04T09:21:21.95935',
+          startedByUserId: 'TEST_GEN',
         },
       })
 
@@ -381,6 +382,7 @@ describe('placeOnReportService', () => {
           {
             createdByUserId: 'user1',
             createdDateTime: '2021-11-16T14:15:08.021Z',
+            startedByUserId: 'user1',
             id: 1,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-16T14:15:00',
@@ -395,6 +397,7 @@ describe('placeOnReportService', () => {
           {
             createdByUserId: 'user1',
             createdDateTime: '2021-11-16T14:15:08.021Z',
+            startedByUserId: 'user1',
             id: 2,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-20T09:45:00',
@@ -413,6 +416,7 @@ describe('placeOnReportService', () => {
         {
           createdByUserId: 'user1',
           createdDateTime: '2021-11-16T14:15:08.021Z',
+          startedByUserId: 'user1',
           displayName: 'Burrows, Jack',
           friendlyName: 'Jack Burrows',
           id: 2,
@@ -431,6 +435,7 @@ describe('placeOnReportService', () => {
         {
           createdByUserId: 'user1',
           createdDateTime: '2021-11-16T14:15:08.021Z',
+          startedByUserId: 'user1',
           displayName: 'Smith, John',
           friendlyName: 'John Smith',
           id: 1,
@@ -467,6 +472,7 @@ describe('placeOnReportService', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-22T10:43:15.763328964',
+          startedByUserId: 'TEST_GEN',
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -492,6 +498,7 @@ describe('placeOnReportService', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-22T10:43:15.763329',
+          startedByUserId: 'TEST_GEN',
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -517,6 +524,7 @@ describe('placeOnReportService', () => {
           },
           createdByUserId: 'NCLAMP_GEN',
           createdDateTime: '2021-11-19T14:35:50.137624',
+          startedByUserId: 'NCLAMP_GEN',
         },
       })
       const response = await service.getInfoForTaskListStatuses(92, user)

@@ -48,6 +48,7 @@ context('Check Your Answers', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-03T11:09:42',
+          startedByUserId: 'TEST_GEN',
         },
       },
     })
@@ -68,6 +69,7 @@ context('Check Your Answers', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-11-03T11:09:42',
+          startedByUserId: 'TEST_GEN',
         },
       },
     })

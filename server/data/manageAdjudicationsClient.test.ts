@@ -127,6 +127,7 @@ describe('manageAdjudicationsClient', () => {
           },
           createdByUserId: 'NCLAMP_GEN',
           createdDateTime: '2021-11-04T09:21:21.95935',
+          startedByUserId: 'NCLAMP_GEN',
         },
       }
 
@@ -193,6 +194,7 @@ describe('manageAdjudicationsClient', () => {
         {
           createdByUserId: 'string',
           createdDateTime: '2021-11-16T14:15:08.021Z',
+          startedByUserId: 'string',
           id: 1,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-16T14:15:08.021Z',
@@ -207,6 +209,7 @@ describe('manageAdjudicationsClient', () => {
         {
           createdByUserId: 'string',
           createdDateTime: '2021-11-16T15:12:08.021Z',
+          startedByUserId: 'string',
           id: 2,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-16T12:30:00.000Z',
@@ -352,6 +355,7 @@ describe('manageAdjudicationsClient', () => {
           },
           createdByUserId: 'TEST_GEN',
           createdDateTime: '2021-12-02T14:36:29.786055469',
+          startedByUserId: 'TEST_GEN',
         },
       }
 

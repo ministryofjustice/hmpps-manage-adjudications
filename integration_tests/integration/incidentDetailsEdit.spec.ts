@@ -35,6 +35,7 @@ context('Incident details (edit) - statement incomplete', () => {
           },
           prisonerNumber: 'G6415GD',
           createdByUserId: 'USER1',
+          startedByUserId: 'USER1',
         },
       },
     })
@@ -50,6 +51,7 @@ context('Incident details (edit) - statement incomplete', () => {
           incidentStatement: {},
           prisonerNumber: 'G6415GD',
           createdByUserId: 'USER2',
+          startedByUserId: 'USER2',
         },
       },
     })
@@ -181,6 +183,7 @@ context('Incident details (edit) - statement complete', () => {
           },
           prisonerNumber: 'G6415GD',
           createdByUserId: 'USER1',
+          startedByUserId: 'USER1',
         },
       },
     })
@@ -199,6 +202,7 @@ context('Incident details (edit) - statement complete', () => {
           },
           prisonerNumber: 'G6415GD',
           createdByUserId: 'USER2',
+          startedByUserId: 'USER2',
         },
       },
     })
