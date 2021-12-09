@@ -135,7 +135,7 @@ export default class ReportedAdjudicationsService {
       user.token
     ).createDraftFromCompleteAdjudication(adjudicationNumber)
     const { draftAdjudication } = newDraftAdjudicationData
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.createdByUserId, user.token)
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
 
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')

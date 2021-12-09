@@ -46,8 +46,7 @@ context('Check Your Answers', () => {
             statement: 'This is my statement',
             completed: true,
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-03T11:09:42',
+          startedByUserId: 'TEST_GEN',
         },
       },
     })
@@ -66,8 +65,7 @@ context('Check Your Answers', () => {
             statement: 'This is my statement',
             completed: true,
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-03T11:09:42',
+          startedByUserId: 'TEST_GEN',
         },
       },
     })
