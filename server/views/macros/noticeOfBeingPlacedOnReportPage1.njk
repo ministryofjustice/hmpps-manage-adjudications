@@ -1,65 +1,67 @@
 {% macro noticeOfBeingPlacedOnReportPage1(adjudicationNumber, statement) %}
-    <h1 class='govuk-heading-m adjudication-print-form-header'>Notice of being put on report</h1>
-
-    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-
-    <div class='adjudication-print-form-section govuk-!-width-full'>
-        <div class='adjudication-print-form-section__item'>
-            <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Name</p>
-            <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
-                Saunders, John
-            </p>
+    <h1 class='govuk-heading-m govuk-!-padding-2 adjudication-print-form-header'>Notice of being put on report</h1>
+    <div class='govuk-!-margin-2'>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <div class='adjudication-print-form-section govuk-!-width-full'>
+            <div class='adjudication-print-form-section__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Name</p>
+                <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
+                    Saunders, John
+                </p>
+            </div>
+            <div class='adjudication-print-form-section__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Prison number</p>
+                <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
+                    G6123VU
+                </p>
+            </div>
+            <div class='adjudication-print-form-section__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Location</p>
+                <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
+                    3-3-037
+                </p>
+            </div>
         </div>
-        <div class='adjudication-print-form-section__item'>
-            <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Prison number</p>
-            <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
-                G6123VU
-            </p>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>You need to attend an adjudication hearing.
+            This will not be held before:</p>
+        <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>8 October 2021 at 09:30</p>
+        <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>It is alleged that
+            an incident happened:</p>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li class='govuk-body govuk-!-font-size-14'>on 6 October 2021</li>
+            <li class='govuk-body govuk-!-font-size-14'>at 09:40</li>
+            <li class='govuk-body govuk-!-font-size-14'>in Moorland Prison - Library</li>
+        </ul>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <h2 class='govuk-body govuk-!-font-size-14 govuk-!-font-weight-bold govuk-!-margin-bottom-1'>The reporting
+            officer's statement about the incident</h2>
+        <div class='adjudication-print-form-statement-paragraph'>
+            {{ statement | formatStatement | safe }}
         </div>
-        <div class='adjudication-print-form-section__item'>
-            <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Location</p>
-            <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
-                3-3-037
-            </p>
-        </div>
+        <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-2 govuk-!-font-size-14'>Reporting officer: J.
+            Osgoodby</p>
+        <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Date: 6 October 2021</p>
+        <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Time: 11:35</p>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>The alleged offence
+            broke prison rule 51</p>
+        {% for i in range(1, 5) -%}
+            <div class='adjudication-print-form-section govuk-!-width-full govuk-!-margin-bottom-1'>
+                <div class='adjudication-print-form-section__item'>
+                    <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14 govuk-!-font-weight-bold'>
+                        Charge {{ i }}
+                    </p>
+                    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Paragraph number</p>
+                    <input class='adjudication-print-form-input' type='text'>
+                </div>
+                <div class='adjudication-print-form-section__item'>
+                    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Detail of charge</p>
+                    <input class='adjudication-print-form-input' type='text'>
+                </div>
+            </div>
+        {%- endfor %}
     </div>
-
-    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>You need to attend an adjudication hearing. This will not be held before:</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>8 October 2021 at 09:30</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>It is alleged that an incident happened:</p>
-    <ul class='govuk-list govuk-list--bullet'>
-        <li class='govuk-body govuk-!-font-size-14'>on 6 October 2021</li>
-        <li class='govuk-body govuk-!-font-size-14'>at 09:40</li>
-        <li class='govuk-body govuk-!-font-size-14'>in Moorland Prison - Library</li>
-    </ul>
-    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-    <h2 class='govuk-body govuk-!-font-size-14 govuk-!-font-weight-bold govuk-!-margin-bottom-1'>The reporting officer's statement about the incident</h2>
-    <div class='adjudication-print-form-statement-paragraph'>
-        {{ statement | formatStatement | safe }}
-    </div>
-    <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-2 govuk-!-font-size-14'>Reporting officer: J. Osgoodby</p>
-    <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Date: 6 October 2021</p>
-    <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Time: 11:35</p>
-
-    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>The alleged offence broke prison rule 51</p>
-    {% for i in range(1, 5) -%}
-    <div class='adjudication-print-form-section govuk-!-width-full govuk-!-margin-bottom-1'>
-        <div class='adjudication-print-form-section__item'>
-            <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14 govuk-!-font-weight-bold'>
-                Charge {{ i }}
-            </p>
-            <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Paragraph number</p>
-            <input class='adjudication-print-form-input' type='text'>
-        </div>
-        <div class='adjudication-print-form-section__item'>
-            <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Detail of charge</p>
-            <input class='adjudication-print-form-input' type='text'>
-        </div>
-    </div>
-    {%- endfor %}
-    <h2 class='adjudication-print-form-footer govuk-body govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
+    <h2 class='adjudication-print-form-footer govuk-body govuk-!-font-size-14'>Report
+        number: {{ adjudicationNumber }}</h2>
 {% endmacro %}
