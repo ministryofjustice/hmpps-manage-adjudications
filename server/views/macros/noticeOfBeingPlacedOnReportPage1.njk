@@ -1,5 +1,8 @@
 {% macro noticeOfBeingPlacedOnReportPage1(adjudicationNumber, statement) %}
-    <h1 class='govuk-heading-m govuk-!-padding-2 adjudication-print-form-header'>Notice of being put on report</h1>
+    <div class='adjudication-print-form-header '>
+       <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
+       <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
+    </div>
     <div class='govuk-!-margin-2'>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         <div class='adjudication-print-form-section govuk-!-width-full'>
@@ -62,6 +65,4 @@
             </div>
         {%- endfor %}
     </div>
-    <h2 class='adjudication-print-form-footer govuk-body govuk-!-font-size-14'>Report
-        number: {{ adjudicationNumber }}</h2>
 {% endmacro %}

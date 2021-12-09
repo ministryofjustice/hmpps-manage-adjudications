@@ -5,8 +5,8 @@
 {% macro noticeOfBeingPlacedOnReport(adjudicationNumber, statement) %}
     <div class="print">
         {{ noticeOfBeingPlacedOnReportPage1(adjudicationNumber, statement) }}
-        {{ noticeOfBeingPlacedOnReportPage2() }}
-        {{ noticeOfBeingPlacedOnReportPage3() }}
-        {{ noticeOfBeingPlacedOnReportPage4() }}
+        {{ noticeOfBeingPlacedOnReportPage2(adjudicationNumber) }}
+        {{ noticeOfBeingPlacedOnReportPage3(adjudicationNumber) }}
+        {{ noticeOfBeingPlacedOnReportPage4(adjudicationNumber) }}
     </div>
 {% endmacro %}

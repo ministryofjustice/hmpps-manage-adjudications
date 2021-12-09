@@ -1,5 +1,8 @@
-{% macro noticeOfBeingPlacedOnReportPage4() %}
-    <h1 class='govuk-heading-m govuk-!-padding-2 adjudication-print-form-header page-break-before'>Notice of being put on report</h1>
+{% macro noticeOfBeingPlacedOnReportPage4(adjudicationNumber) %}
+    <div class='adjudication-print-form-header page-break-before'>
+        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
+        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
+    </div>
     <div class='govuk-!-margin-2'>
     <h2 class='govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>After receiving any punishment</h2>
     <p class='govuk-body govuk-!-font-size-14'>If you are not satisfied with the outcome, you can request a review of the findings - ask a member of staff for a ‘DIS8 - Request for review form’. You must request a review within 6 weeks of your adjudication hearing.</p>
