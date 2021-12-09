@@ -39,32 +39,27 @@
     <div class='adjudicationsSummary-incidentStatement'>
         {{ statement | formatStatement | safe }}
     </div>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Reporting officer:</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>J. Osgoodby</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Date:</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>6 October 2021</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Time:</p>
-    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>11:35</p>
+    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Reporting officer: J. Osgoodby</p>
+    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Date: 6 October 2021</p>
+    <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Time: 11:35</p>
 
     <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
 
     <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 adjudication-print-form-header-bold'>The alleged offence broke prison rule 51</p>
-    {% for i in range(1, 4) -%}
+    {% for i in range(1, 5) -%}
     <div class='adjudication-print-form-section govuk-!-width-full'>
         <div class='adjudication-print-form-section__item'>
             <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 adjudication-print-form-header-bold'>
                 Charge {{ i }}
             </p>
             <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Paragraph number</p>
-            <input type='text'>
+            <input class='adjudication-print-form-input' type='text'>
         </div>
         <div class='adjudication-print-form-section__item'>
             <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Detail of charge</p>
-            <input type='text'>
+            <input class='adjudication-print-form-input' type='text'>
         </div>
     </div>
     {%- endfor %}
     <h2 class='adjudication-print-form-footer govuk-body govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
-
-
 {% endmacro %}

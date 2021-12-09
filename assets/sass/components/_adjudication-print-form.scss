@@ -1,43 +1,39 @@
 .adjudication-print-form-header-bold {
- font-weight: 700;
+  font-weight: 700;
+}
+
+.adjudication-print-form-input {
+  height: 25px;
 }
 
 .adjudication-print-form-header {
- background-color: #D8D8D8;
+  background-color: #D8D8D8;
+  padding: 10px;
 }
 
 .adjudication-print-form-footer {
   background-color: #D8D8D8;
   position: fixed;
   bottom: 0;
-  width: 1170px; /**/
+  padding: 10px;
+  width: 1170px; /*TODO why*/
 }
 
 .adjudication-print-form-section {
-    padding-bottom: 0;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: end;
+
+  &__item {
     display: flex;
-    align-items: end;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    padding-right: govuk-spacing(3);
+    width: 20%;
 
-	&--with-border {
-    padding: govuk-spacing(3) 0;
-    border-top: 1px solid $govuk-border-colour;
-    border-bottom: 1px solid $govuk-border-colour;
-  }
-
-	&__item {
-    @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      flex: 1 1 1;
-      padding-right: govuk-spacing(3);
-			width: 20%;
-
-      &:last-child {
-        width: 80%;
-        padding-right: 0;
-        margin-bottom: 0;
-      }
+    &:last-child {
+      width: 80%;
     }
   }
 }
