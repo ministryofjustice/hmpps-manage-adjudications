@@ -49,6 +49,8 @@ export default class ConfirmedOnReportRoutes {
       prisonerNumber: adjudicationDetails.prisonerNumber,
       locationName: adjudicationDetails.locationName,
       agencyName: adjudicationDetails.agencyName,
+      reportingOfficer: adjudicationDetails.reportingOfficer,
+      locationDescription: `${adjudicationDetails.agencyName} ${adjudicationDetails.locationName}`,
     })
   }
 

@@ -1,4 +1,4 @@
-{% macro noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, prisonerNumber, statement) %}
+{% macro noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, prisonerNumber, locationDescription, statement, reportingOfficer) %}
     <div class='adjudication-print-form-header '>
        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
@@ -34,7 +34,7 @@
         <ul class='govuk-list govuk-list--bullet'>
             <li class='govuk-body govuk-!-font-size-14'>on 6 October 2021</li>
             <li class='govuk-body govuk-!-font-size-14'>at 09:40</li>
-            <li class='govuk-body govuk-!-font-size-14'>in Moorland Prison - Library</li>
+            <li class='govuk-body govuk-!-font-size-14'>in {{ locationDescription }}</li>
         </ul>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         <h2 class='govuk-body govuk-!-font-size-14 govuk-!-font-weight-bold govuk-!-margin-bottom-1'>The reporting
@@ -42,8 +42,7 @@
         <div class='adjudication-print-form-statement-paragraph'>
             {{ statement | formatStatement | safe }}
         </div>
-        <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-2 govuk-!-font-size-14'>Reporting officer: J.
-            Osgoodby</p>
+        <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-2 govuk-!-font-size-14'>Reporting officer: {{ reportingOfficer }}</p>
         <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Date: 6 October 2021</p>
         <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Time: 11:35</p>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
