@@ -9,6 +9,7 @@ import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatT
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport } from '../data/DraftAdjudicationResult'
+import LocationService from './locationService'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -20,7 +21,8 @@ function getNonEnglishLanguage(primaryLanguage: string): string {
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly curiousApiService: CuriousApiService
+    private readonly curiousApiService: CuriousApiService,
+    private readonly locationService: LocationService
   ) {}
 
   async getReportedAdjudication(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
@@ -32,6 +34,13 @@ export default class ReportedAdjudicationsService {
       new PrisonApiClient(token).getSecondaryLanguages(adjudicationData.reportedAdjudication.bookingId),
       this.curiousApiService.getNeurodiversitiesForReport(adjudicationData.reportedAdjudication.prisonerNumber, token),
     ])
+
+    const location = await this.locationService.getIncidentLocation(
+      adjudicationData.reportedAdjudication.incidentDetails.locationId,
+      user
+    )
+
+    const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
 
     const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
     const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
@@ -45,6 +54,8 @@ export default class ReportedAdjudicationsService {
       prisonerOtherLanguages,
       prisonerNeurodiversities,
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
+      locationName: location.userDescription,
+      agencyName: agencyDescription.description,
     }
   }
 

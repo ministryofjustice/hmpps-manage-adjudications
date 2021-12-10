@@ -4,6 +4,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
+import LocationService from './locationService'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -37,8 +38,11 @@ jest.mock('./curiousApiService', () => {
   })
 })
 
+jest.mock('./locationService')
+
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiService>
+const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 const token = 'token-1'
 const user = {
@@ -48,13 +52,32 @@ const user = {
   token,
 } as User
 
+const location = {
+  locationId: 27187,
+  locationType: 'ADJU',
+  description: 'ADJ',
+  agencyId: 'MDI',
+  parentLocationId: 27186,
+  currentOccupancy: 0,
+  locationPrefix: 'MDI-RES-MCASU-MCASU',
+  userDescription: 'Adj',
+  internalLocationCode: 'MCASU',
+}
+
+const agency = {
+  agencyId: 'MDI',
+  description: 'Moorland (HMP & YOI)',
+}
+
 describe('reportedAdjudicationsService', () => {
   let service: ReportedAdjudicationsService
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-
-    service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService)
+    // TODO qqRP rationalise tests
+    locationService.getIncidentLocation.mockResolvedValue(location)
+    locationService.getAgency.mockResolvedValue(agency)
+    service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService, locationService)
   })
 
   afterEach(() => {
@@ -223,6 +246,8 @@ describe('reportedAdjudicationsService', () => {
         const result = await service.getReportedAdjudication(123, user)
 
         expect(result).toEqual({
+          agencyName: 'Moorland (HMP & YOI)',
+          locationName: 'Adj',
           reportExpirationDateTime: '2021-10-22T15:40:25.884',
           prisonerFirstName: 'JOHN',
           prisonerLastName: 'SMITH',

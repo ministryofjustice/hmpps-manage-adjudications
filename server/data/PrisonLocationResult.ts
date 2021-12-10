@@ -14,7 +14,7 @@ export type PrisonLocation = {
 
 export type AgencyId = string
 
-export type LocationId = string
+export type LocationId = number
 
 export type Agency = {
   agencyId: string
