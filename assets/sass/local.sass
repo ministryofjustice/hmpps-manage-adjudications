@@ -1,8 +1,6 @@
 body
- -webkit-print-color-adjust: exact !important
-
-.govuk-main-wrapper
-  min-height: 600px
+ -webkit-print-color-adjust: exact !important /* Make background colour print - Chrome, Edge */
+ color-adjust: exact /* Make background colour print - Firefox*/
 
 .print-only
   display: none
@@ -17,6 +15,9 @@ body
   .page-break-before
     page-break-before: always
 
+  .govuk-main-wrapper
+    padding: 0px !important /* Remove the initial padding on the first page */
+
 @page
-  @bottom-left
-    content: counter(page) "/" counter(pages)
+  margin: 10mm 3mm 10mm 3mm /* Chrome defaults which seem to be reasonable */
+  size: A4 portrait
