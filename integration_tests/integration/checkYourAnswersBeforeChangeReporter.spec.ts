@@ -162,12 +162,12 @@ context('Check Your Answers', () => {
 
     CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
   })
-  it('should go to the completion page if the user submits', () => {
+  it('should go to the completion page (changed) if the user submits changes to the report', () => {
     cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234')
+      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234/changes-confirmed/report')
     })
   })
   it('should go to the prisoner report page if the user cancels', () => {
