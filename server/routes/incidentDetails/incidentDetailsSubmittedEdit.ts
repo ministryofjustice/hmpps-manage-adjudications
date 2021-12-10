@@ -12,7 +12,7 @@ type PageData = {
   locationId?: string
 }
 
-export default class IncidentDetailsRoutes {
+export default class IncidentDetailsSubmittedEditRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService
@@ -31,19 +31,24 @@ export default class IncidentDetailsRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, incidentDate, locationId } = pageData
-    const { prisonerNumber } = req.params
+    const { prisonerNumber, id } = req.params
     const { user } = res.locals
 
-    const [prisoner, reporter] = await Promise.all([
+    const IdNumberValue: number = parseInt(id as string, 10)
+
+    const [prisoner, adjudicationDetails] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
-      this.placeOnReportService.getReporterName(user.username, user),
+      this.placeOnReportService.getDraftIncidentDetailsForEditing(IdNumberValue, user),
     ])
+    const reporter = await this.placeOnReportService.getReporterName(adjudicationDetails.startedByUserId, user)
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
+    const location = error ? locationId : adjudicationDetails.locationId
+
     const data = {
-      incidentDate: this.getIncidentDate(incidentDate),
-      locationId,
+      incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(adjudicationDetails.dateTime),
+      locationId: location,
     }
 
     return res.render(`pages/incidentDetails`, {
@@ -52,8 +57,9 @@ export default class IncidentDetailsRoutes {
       locations,
       data,
       reportingOfficer: reporter || '',
-      submitButtonText: 'Save and continue',
-      reportPreviouslySubmitted: false,
+      submitButtonText: 'Continue',
+      reportPreviouslySubmitted: true,
+      adjudicationNumber: adjudicationDetails.adjudicationNumber,
     })
   }
 
@@ -62,23 +68,20 @@ export default class IncidentDetailsRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentDate, locationId } = req.body
     const { user } = res.locals
-    const { prisonerNumber } = req.params
+    const { prisonerNumber, id } = req.params
 
     const error = validateForm({ incidentDate, locationId })
     if (error) return this.renderView(req, res, { error, incidentDate, locationId })
 
+    const IdNumberValue: number = parseInt(id as string, 10)
+
     try {
-      const newAdjudication = await this.placeOnReportService.startNewDraftAdjudication(
-        formatDate(incidentDate),
-        locationId,
-        prisonerNumber,
-        user
-      )
-      const { id } = newAdjudication.draftAdjudication
-      return res.redirect(`/incident-statement/${prisonerNumber}/${id}`)
+      this.placeOnReportService.editDraftIncidentDetails(IdNumberValue, formatDate(incidentDate), locationId, user)
+
+      return res.redirect(`/check-your-answers/${prisonerNumber}/${id}/report`)
     } catch (postError) {
-      logger.error(`Failed to post incident details for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`
+      logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)
+      res.locals.redirectUrl = `/check-your-answers/${prisonerNumber}/${id}/report`
       throw postError
     }
   }

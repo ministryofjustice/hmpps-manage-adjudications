@@ -58,6 +58,8 @@ export default class IncidentDetailsEditRoutes {
       locations,
       data,
       reportingOfficer: reporter || '',
+      submitButtonText: 'Save and continue',
+      reportPreviouslySubmitted: false,
     })
   }
 
