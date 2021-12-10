@@ -1,8 +1,8 @@
 {% from "../macros/noticeOfBeingPlacedOnReportDetails.njk" import noticeOfBeingPlacedOnReportDetails %}
 {% from "../macros/noticeOfBeingPlacedOnReportLegal.njk" import noticeOfBeingPlacedOnReportLegal %}
-{% macro noticeOfBeingPlacedOnReport(adjudicationNumber, prisonerDisplayName, statement) %}
+{% macro noticeOfBeingPlacedOnReport(adjudicationNumber, prisonerDisplayName, prisonerNumber, statement) %}
     <div class="print">
-        {{ noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, statement) }}
+        {{ noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, prisonerNumber, statement) }}
         {{ noticeOfBeingPlacedOnReportLegal(adjudicationNumber) }}
     </div>
 {% endmacro %}

@@ -35,6 +35,7 @@ export default class ConfirmedOnReportRoutes {
       prisonerDisplayName: convertToTitleCase(
         `${adjudicationDetails.prisonerFirstName}, ${adjudicationDetails.prisonerLastName}`
       ),
+      prisonerNumber: adjudicationDetails.prisonerNumber,
     })
   }
 
