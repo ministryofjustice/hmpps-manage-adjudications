@@ -1,4 +1,3 @@
-import { report } from 'superagent'
 import { ConfirmedOnReportData, SimplifiedConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
