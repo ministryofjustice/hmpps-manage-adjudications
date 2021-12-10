@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import { convertToTitleCase, formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 
 export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -32,7 +32,9 @@ export default class ConfirmedOnReportRoutes {
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
       statement: adjudicationDetails.statement,
-      printHref: `/print-report/${adjudicationNumber}`,
+      prisonerDisplayName: convertToTitleCase(
+        `${adjudicationDetails.prisonerFirstName}, ${adjudicationDetails.prisonerLastName}`
+      ),
     })
   }
 

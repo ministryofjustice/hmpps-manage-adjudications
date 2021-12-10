@@ -1,4 +1,4 @@
-{% macro noticeOfBeingPlacedOnReportDetails(adjudicationNumber, statement) %}
+{% macro noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, statement) %}
     <div class='adjudication-print-form-header '>
        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
@@ -9,7 +9,7 @@
             <div class='adjudication-print-form-section__item'>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Name</p>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
-                    Saunders, John
+                    {{ prisonerDisplayName }}
                 </p>
             </div>
             <div class='adjudication-print-form-section__item'>
