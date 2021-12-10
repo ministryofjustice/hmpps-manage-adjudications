@@ -1,11 +1,6 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% macro onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) %}
- <div class="confirmed-on-report-section">
-
-  <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
-  <div class="govuk-inset-text">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
-
   <p class="govuk-body">You must make sure that {{ prisonerFirstAndLastName }} can understand the report.</p>
 
   {% if showPrisonerPreferredLanguage %}
@@ -36,6 +31,6 @@
       <li>{{ entry }}</li>
      {% endfor %}
     </ul>
-   </div>
+
   {% endif %}
  {% endmacro %}

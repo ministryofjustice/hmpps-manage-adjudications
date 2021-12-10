@@ -47,6 +47,22 @@ export default class ReportedAdjudicationsService {
     }
   }
 
+  async getSimplifiedReportedAdjudication(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
+    const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
+      adjudicationData.reportedAdjudication.prisonerNumber
+    )
+
+    return {
+      reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
+      prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
+      prisonerFirstName: prisoner.firstName,
+      prisonerLastName: prisoner.lastName,
+    }
+  }
+
   async getYourCompletedAdjudications(
     user: User,
     pageRequest: ApiPageRequest

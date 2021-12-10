@@ -50,8 +50,7 @@ export default class checkYourAnswersRoutes {
     const IdNumberValue: number = parseInt(id as string, 10)
     try {
       const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
-      // TODO: This should go to the changed report confirmation page
-      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}`)
+      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/report`)
     } catch (postError) {
       res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
       throw postError

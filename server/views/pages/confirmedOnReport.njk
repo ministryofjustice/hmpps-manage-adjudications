@@ -6,35 +6,51 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% set title = "Prisoner has been placed on report" %}
+{% if changed %}
+  {% set title = "Report change is confirmed" %}
+{% else %}
+  {% set title = "Prisoner has been placed on report" %}
+{% endif %}
 
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block content %}
-    {{ govukPanel({
-        titleText: prisonerFirstAndLastName + ' has been placed on report',
-        html: 'Your report number is: <br><strong>' + adjudicationNumber + '</strong>',
-        classes: "govuk-!-margin-bottom-6"
-    }) }}
+  <div class="govuk-grid-row">
+      {{ govukPanel({
+          titleText: bannerText,
+          html: bannerHTML,
+          classes: "govuk-!-margin-bottom-6"
+        }) }}
 
-    <h2 class="govuk-heading-m">What you must do next</h2>
+      <h2 class="govuk-heading-m">What you must do next</h2>
 
-    {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+      <div class="confirmed-on-report-section">
+        {% if not changed %}
+          <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
+        {% endif %}
+        <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
 
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        {% if changed %}
+          <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
+        {% else %}
+          {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+          {{ printLink('Print a copy of this report', printHref, "left", "govuk-!-padding-bottom-0") }}
+        {% endif %}
+      </div>
 
-    {{ printLink('Print a copy of this report', printHref, "left", "govuk-!-padding-bottom-0") }}
-
-    {{ govukButton({
+      {{ govukButton({
         text: 'Finish',
         element: 'a',
-        href: '/place-a-prisoner-on-report',
-        classes: "govuk-button--secondary",
+        href: buttonHref,
+        classes: buttonClass,
         attributes: {
-            'data-qa': 'confirmed-on-report-finish'
+          'data-qa': 'confirmed-on-report-finish'
         }
-    }) }}
+      }) }}
+
+  </div>
 
 {% endblock %}

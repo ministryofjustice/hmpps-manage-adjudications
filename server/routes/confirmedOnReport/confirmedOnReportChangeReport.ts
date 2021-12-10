@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import { formatName, formatTimestampToDate, formatTimestampToTime, possessive } from '../../utils/utils'
 
-export default class ConfirmedOnReportRoutes {
+export default class ConfirmedOnReportChangeReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
@@ -15,7 +15,7 @@ export default class ConfirmedOnReportRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getReportedAdjudication(
+    const adjudicationDetails = await this.reportedAdjudicationsService.getSimplifiedReportedAdjudication(
       adjudicationNumberValue,
       user
     )
@@ -30,18 +30,11 @@ export default class ConfirmedOnReportRoutes {
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
       prisonerFirstAndLastName,
-      showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage != null,
-      prisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
-      showPrisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages?.length > 0,
-      prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
-      showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
-      prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
-      printHref: `/print-report/${adjudicationNumber}`,
-      changed: false,
-      bannerText: `${prisonerFirstAndLastName} has been placed on report`,
-      bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
-      buttonClass: 'govuk-button--secondary',
-      buttonHref: '/place-a-prisoner-on-report',
+      changed: true,
+      bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed`,
+      bannerHTML: null,
+      buttonClass: 'govuk-button',
+      buttonHref: `/prisoner-report/${adjudicationDetails.prisonerNumber}/${adjudicationNumber}/report`,
     })
   }
 
