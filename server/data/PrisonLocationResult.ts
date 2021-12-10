@@ -14,11 +14,11 @@ export type PrisonLocation = {
 
 export type AgencyId = string
 
-export type Prison = {
+export type LocationId = string
+
+export type Agency = {
   agencyId: string
   description: string
-  agencyType: string
-  active: boolean
 }
 
 export type Location = {

@@ -2,9 +2,13 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { convertToTitleCase, formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import LocationService from '../../services/locationService'
 
 export default class ConfirmedOnReportRoutes {
-  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
+  constructor(
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private locationService: LocationService
+  ) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber } = req.params
@@ -19,6 +23,9 @@ export default class ConfirmedOnReportRoutes {
       adjudicationNumberValue,
       user
     )
+
+    const location = await this.locationService.getIncidentLocation('27187', user)
+    const agency = await this.locationService.getAgency(location.agencyId, user)
 
     return res.render(`pages/confirmedOnReport`, {
       adjudicationNumber: adjudicationNumberValue,
@@ -36,6 +43,7 @@ export default class ConfirmedOnReportRoutes {
         `${adjudicationDetails.prisonerFirstName}, ${adjudicationDetails.prisonerLastName}`
       ),
       prisonerNumber: adjudicationDetails.prisonerNumber,
+      locationDisplayName: location,
     })
   }
 

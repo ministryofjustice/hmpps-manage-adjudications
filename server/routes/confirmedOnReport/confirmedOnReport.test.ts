@@ -2,18 +2,22 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import LocationService from '../../services/locationService'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
+jest.mock('../../services/locationService.ts')
 
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 
+const locationService = new LocationService(null) as jest.Mocked<LocationService>
+
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService })
 })
 
 const reportedAdjudicationInformation = {
@@ -27,7 +31,26 @@ const reportedAdjudicationInformation = {
   statement: 'A statement',
 }
 
+const location = {
+  locationId: 27187,
+  locationType: 'ADJU',
+  description: 'ADJ',
+  agencyId: 'MDI',
+  parentLocationId: 27186,
+  currentOccupancy: 0,
+  locationPrefix: 'MDI-RES-MCASU-MCASU',
+  userDescription: 'Adj',
+  internalLocationCode: 'MCASU',
+}
+
+const agency = {
+  agencyId: 'MDI',
+  description: 'Moorland (HMP & YOI)',
+}
+// TODO qqRP rationalise test
 reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)
+locationService.getIncidentLocation.mockResolvedValue(location)
+locationService.getAgency.mockResolvedValue(agency)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -54,6 +77,8 @@ describe('GET /prisoner-placed-on-report', () => {
       ...reportedAdjudicationInformation,
       prisonerNeurodiversities: null,
     })
+    locationService.getIncidentLocation.mockResolvedValue(location)
+    locationService.getAgency.mockResolvedValue(agency)
     return request(app)
       .get('/prisoner-placed-on-report/123')
       .expect('Content-Type', /html/)
@@ -67,6 +92,8 @@ describe('GET /prisoner-placed-on-report', () => {
       ...reportedAdjudicationInformation,
       prisonerPreferredNonEnglishLanguage: null,
     })
+    locationService.getIncidentLocation.mockResolvedValue(location)
+    locationService.getAgency.mockResolvedValue(agency)
     return request(app)
       .get('/prisoner-placed-on-report/123')
       .expect('Content-Type', /html/)
@@ -81,6 +108,8 @@ describe('GET /prisoner-placed-on-report', () => {
       ...reportedAdjudicationInformation,
       prisonerOtherLanguages: null,
     })
+    locationService.getIncidentLocation.mockResolvedValue(location)
+    locationService.getAgency.mockResolvedValue(agency)
     return request(app)
       .get('/prisoner-placed-on-report/123')
       .expect('Content-Type', /html/)
