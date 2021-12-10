@@ -77,6 +77,7 @@ describe('reportedAdjudicationsService', () => {
     // TODO qqRP rationalise tests
     locationService.getIncidentLocation.mockResolvedValue(location)
     locationService.getAgency.mockResolvedValue(agency)
+    hmppsAuthClient.getUserFromUsername.mockResolvedValue(user)
     service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService, locationService)
   })
 
@@ -256,6 +257,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerOtherLanguages: ['Spanish', 'German'],
           prisonerNeurodiversities: ['Hearing impairment', 'Visual impairment'],
           statement: 'Example statement',
+          reportingOfficer: 'U. User',
         })
       })
 

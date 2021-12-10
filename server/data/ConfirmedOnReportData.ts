@@ -5,6 +5,7 @@ export type ConfirmedOnReportData = SimplifiedConfirmedOnReportData & {
   statement: string
   agencyName: string
   locationName: string
+  reportingOfficer: string
 }
 
 export type SimplifiedConfirmedOnReportData = {

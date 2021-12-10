@@ -28,6 +28,7 @@ const reportedAdjudicationInformation = {
   agencyName: 'Moorland (HMP & YOI)',
   locationName: 'Adj',
   statement: 'A statement',
+  reportingOfficer: 'An officer',
 }
 
 reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)

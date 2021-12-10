@@ -1,3 +1,4 @@
+import { report } from 'superagent'
 import { ConfirmedOnReportData, SimplifiedConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -35,15 +36,19 @@ export default class ReportedAdjudicationsService {
       this.curiousApiService.getNeurodiversitiesForReport(adjudicationData.reportedAdjudication.prisonerNumber, token),
     ])
 
+    const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
+    const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
+
     const location = await this.locationService.getIncidentLocation(
       adjudicationData.reportedAdjudication.incidentDetails.locationId,
       user
     )
-
     const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
 
-    const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
-    const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(
+      adjudicationData.reportedAdjudication.createdByUserId,
+      user.token
+    )
 
     return {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
@@ -56,6 +61,7 @@ export default class ReportedAdjudicationsService {
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
       locationName: location.userDescription,
       agencyName: agencyDescription.description,
+      reportingOfficer: getFormattedReporterName(reporter.name),
     }
   }
 

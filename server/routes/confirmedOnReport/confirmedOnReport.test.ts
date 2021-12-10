@@ -28,6 +28,7 @@ const reportedAdjudicationInformation = {
   agencyName: 'MDI',
   locationName: 'Adj',
   statement: 'A statement',
+  reportingOfficer: 'An officer',
 }
 
 reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)
