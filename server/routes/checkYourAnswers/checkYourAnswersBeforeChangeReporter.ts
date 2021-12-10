@@ -35,10 +35,10 @@ export default class checkYourAnswersRoutes {
       editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${IdNumberValue}/edit`,
       editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${IdNumberValue}`,
       statementEditable: true,
-      creationJourney: true,
-      submitButtonText: 'Accept and place on report',
-      secondaryButtonText: 'Exit',
-      exitUrl: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
+      creationJourney: false,
+      submitButtonText: 'Confirm changes',
+      secondaryButtonText: 'Cancel',
+      exitUrl: `/prisoner-report/${prisonerNumber}/${data.adjudicationNumber}/report`,
     })
   }
 
@@ -50,7 +50,7 @@ export default class checkYourAnswersRoutes {
     const IdNumberValue: number = parseInt(id as string, 10)
     try {
       const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
-      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}`)
+      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/report`)
     } catch (postError) {
       res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
       throw postError

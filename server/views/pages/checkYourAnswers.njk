@@ -6,7 +6,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% if creationJourney %}
 {% set title = "Check your answers before placing them on report" %}
+{% else %}
+{% set title = "Check your answers before changing the report" %}
+{% endif %}
 
 {% block pageTitle %}
 	{{ title }}
@@ -29,18 +33,20 @@
 
 		{{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data, statementEditable) }}
 
+		{% if creationJourney %}
 		<h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>
 		<p class="govuk-body govuk-!-margin-bottom-6 checkAnswers-conditions">By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
+		{% endif %}
 
 		{{ govukButton({
-				text: "Accept and place on report",
+				text: submitButtonText,
 				type: "submit",
 				classes: "govuk-button--submit govuk-!-margin-right-2",
 				attributes: { "data-qa": "check-answers-submit" }
 			}) }}
 
 		{{ govukButton({
-				text: "Exit",
+				text: secondaryButtonText,
 				classes: "govuk-button--secondary",
 				element: 'a',
 				href: exitUrl,

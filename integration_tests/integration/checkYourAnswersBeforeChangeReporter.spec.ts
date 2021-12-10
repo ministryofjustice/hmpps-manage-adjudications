@@ -1,4 +1,4 @@
-import CheckYourAnswers from '../pages/checkYourAnswers'
+import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
 
 context('Check Your Answers', () => {
@@ -55,6 +55,7 @@ context('Check Your Answers', () => {
       response: {
         draftAdjudication: {
           id: 3456,
+          adjudicationNumber: 123456,
           prisonerNumber: 'G6415GD',
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
@@ -123,18 +124,18 @@ context('Check Your Answers', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+    cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary().should('exist')
     CheckYourAnswersPage.incidentStatement().should('exist')
     CheckYourAnswersPage.submitButton().should('exist')
-    CheckYourAnswersPage.submitButton().contains('Accept and place on report')
-    CheckYourAnswersPage.exitButton().contains('Exit')
+    CheckYourAnswersPage.submitButton().contains('Confirm changes')
     CheckYourAnswersPage.exitButton().should('exist')
+    CheckYourAnswersPage.exitButton().contains('Cancel')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+    cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary()
@@ -156,25 +157,25 @@ context('Check Your Answers', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+    cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
   })
-  it('should go to the completion page if the user submits', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+  it('should go to the completion page (changed) if the user submits changes to the report', () => {
+    cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234')
+      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234/changes-confirmed/report')
     })
   })
-  it('should go to the task page if the user exits without submitting', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+  it('should go to the prisoner report page if the user cancels', () => {
+    cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G6415GD/3456')
+      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/123456/report')
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
@@ -186,7 +187,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+    cy.visit(`/check-your-answers/G6415GD/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {

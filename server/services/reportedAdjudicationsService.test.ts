@@ -441,8 +441,7 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'Statement for a test',
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-04T09:21:21.95935',
+          startedByUserId: 'TEST_GEN',
         },
       })
 

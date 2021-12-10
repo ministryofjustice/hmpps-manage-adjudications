@@ -73,12 +73,12 @@ afterEach(() => {
 describe('GET /check-your-answers', () => {
   it('should load the check-your-answers page', () => {
     return request(app)
-      .get('/check-your-answers/G6415GD/1')
+      .get('/check-your-answers/G6415GD/1/report')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
-        expect(response.text).toContain('Accept and place on report')
-        expect(response.text).toContain(
+        expect(response.text).toContain('Confirm changes')
+        expect(response.text).not.toContain(
           'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'
         )
         expect(placeOnReportService.getCheckYourAnswersInfo).toHaveBeenCalledTimes(1)
@@ -89,9 +89,9 @@ describe('GET /check-your-answers', () => {
 describe('POST /check-your-answers', () => {
   it('should redirect to the correct page if details is complete', () => {
     return request(app)
-      .post('/check-your-answers/G6415GD/1')
+      .post('/check-your-answers/G6415GD/1/report')
       .expect(302)
-      .expect('Location', '/prisoner-placed-on-report/2342')
+      .expect('Location', '/prisoner-placed-on-report/2342/changes-confirmed/report')
   })
 
   it('should throw an error on api failure', () => {

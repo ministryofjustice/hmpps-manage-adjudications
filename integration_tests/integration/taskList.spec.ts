@@ -32,8 +32,7 @@ context('Task list', () => {
               handoverDeadline: '2021-11-05T11:09:00',
               locationId: 234,
             },
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-03T11:09:00',
+            startedByUserId: 'TEST_GEN',
           },
         },
       })
@@ -124,8 +123,7 @@ context('Task list', () => {
               statement: 'This is my statement',
               completed: false,
             },
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-03T11:09:00',
+            startedByUserId: 'TEST_GEN',
           },
         },
       })
@@ -200,8 +198,7 @@ context('Task list', () => {
               statement: 'This is my statement',
               completed: true,
             },
-            createdByUserId: 'TEST_GEN',
-            createdDateTime: '2021-11-03T11:09:00',
+            startedByUserId: 'TEST_GEN',
           },
         },
       })

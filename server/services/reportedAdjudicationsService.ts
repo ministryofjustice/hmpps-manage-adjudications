@@ -1,4 +1,4 @@
-import { ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
+import { ConfirmedOnReportData, SimplifiedConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
@@ -56,6 +56,25 @@ export default class ReportedAdjudicationsService {
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
       locationName: location.userDescription,
       agencyName: agencyDescription.description,
+    }
+  }
+
+  async getSimplifiedReportedAdjudication(
+    adjudicationNumber: number,
+    user: User
+  ): Promise<SimplifiedConfirmedOnReportData> {
+    const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
+      adjudicationData.reportedAdjudication.prisonerNumber
+    )
+
+    return {
+      reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
+      prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
+      prisonerFirstName: prisoner.firstName,
+      prisonerLastName: prisoner.lastName,
     }
   }
 
@@ -147,7 +166,7 @@ export default class ReportedAdjudicationsService {
       user.token
     ).createDraftFromCompleteAdjudication(adjudicationNumber)
     const { draftAdjudication } = newDraftAdjudicationData
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.createdByUserId, user.token)
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
 
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')

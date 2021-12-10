@@ -105,10 +105,67 @@ describe('placeOnReportService', () => {
   })
 
   describe('getCheckYourAnswersInfo', () => {
-    it('returns the draft adjudication information', async () => {
+    it('returns the draft adjudication information - no completed adjudication number', async () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: {
           id: 10,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26152,
+            dateTimeOfIncident: '2021-11-04T07:20:00',
+          },
+          incidentStatement: {
+            id: 9,
+            statement:
+              "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+          },
+          startedByUserId: 'TEST_GEN',
+        },
+      })
+
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Natalie Clamp',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+
+      const locations = [
+        { locationId: 26152, locationPrefix: 'P3', userDescription: 'place 3', description: '' },
+        { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
+        { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
+      ]
+
+      const result = await service.getCheckYourAnswersInfo(10, locations, user)
+      const expectedResult = {
+        incidentDetails: [
+          {
+            label: 'Reporting Officer',
+            value: 'N. Clamp',
+          },
+          {
+            label: 'Date',
+            value: '4 November 2021',
+          },
+          {
+            label: 'Time',
+            value: '07:20',
+          },
+          {
+            label: 'Location',
+            value: 'place 3',
+          },
+        ],
+        statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the draft adjudication information - completed adjudication number included', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 10,
+          adjudicationNumber: 123456,
           prisonerNumber: 'G6123VU',
           incidentDetails: {
             locationId: 26152,
@@ -159,6 +216,7 @@ describe('placeOnReportService', () => {
           },
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+        adjudicationNumber: 123456,
       }
       expect(result).toEqual(expectedResult)
     })
@@ -379,8 +437,7 @@ describe('placeOnReportService', () => {
       getAllDraftAdjudicationsForUser.mockResolvedValue({
         draftAdjudications: [
           {
-            createdByUserId: 'user1',
-            createdDateTime: '2021-11-16T14:15:08.021Z',
+            startedByUserId: 'user1',
             id: 1,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-16T14:15:00',
@@ -393,8 +450,7 @@ describe('placeOnReportService', () => {
             prisonerNumber: 'A12345',
           },
           {
-            createdByUserId: 'user1',
-            createdDateTime: '2021-11-16T14:15:08.021Z',
+            startedByUserId: 'user1',
             id: 2,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-20T09:45:00',
@@ -411,8 +467,7 @@ describe('placeOnReportService', () => {
       const response = await service.getAllDraftAdjudicationsForUser(user)
       expect(response).toEqual([
         {
-          createdByUserId: 'user1',
-          createdDateTime: '2021-11-16T14:15:08.021Z',
+          startedByUserId: 'user1',
           displayName: 'Burrows, Jack',
           friendlyName: 'Jack Burrows',
           id: 2,
@@ -429,8 +484,7 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G2996UX',
         },
         {
-          createdByUserId: 'user1',
-          createdDateTime: '2021-11-16T14:15:08.021Z',
+          startedByUserId: 'user1',
           displayName: 'Smith, John',
           friendlyName: 'John Smith',
           id: 1,
@@ -465,8 +519,7 @@ describe('placeOnReportService', () => {
             dateTimeOfIncident: '2021-10-12T20:00:00',
             handoverDeadline: '2021-10-14T20:00:00',
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-22T10:43:15.763328964',
+          startedByUserId: 'TEST_GEN',
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -490,8 +543,7 @@ describe('placeOnReportService', () => {
             statement: 'This is incomplete',
             completed: false,
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-22T10:43:15.763329',
+          startedByUserId: 'TEST_GEN',
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -515,8 +567,7 @@ describe('placeOnReportService', () => {
             statement: 'ghjghjgh',
             completed: true,
           },
-          createdByUserId: 'NCLAMP_GEN',
-          createdDateTime: '2021-11-19T14:35:50.137624',
+          startedByUserId: 'NCLAMP_GEN',
         },
       })
       const response = await service.getInfoForTaskListStatuses(92, user)
