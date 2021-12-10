@@ -16,7 +16,7 @@ export default class PrintReportRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getReportedAdjudication(
+    const adjudicationDetails = await this.reportedAdjudicationsService.getEnhancedConfirmationDetails(
       adjudicationNumberValue,
       user
     )

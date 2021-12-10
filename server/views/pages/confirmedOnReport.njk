@@ -6,7 +6,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% if changed %}
+{% if adjudicationEdited %}
   {% set title = "Report change is confirmed" %}
 {% else %}
   {% set title = "Prisoner has been placed on report" %}
@@ -27,12 +27,12 @@
       <h2 class="govuk-heading-m">What you must do next</h2>
 
       <div class="confirmed-on-report-section">
-        {% if not changed %}
+        {% if not adjudicationEdited %}
           <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
         {% endif %}
         <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
 
-        {% if changed %}
+        {% if adjudicationEdited %}
           <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
         {% else %}
           {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}

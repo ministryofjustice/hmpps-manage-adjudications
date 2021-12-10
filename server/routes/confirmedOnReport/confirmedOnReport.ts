@@ -15,7 +15,7 @@ export default class ConfirmedOnReportRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getReportedAdjudication(
+    const adjudicationDetails = await this.reportedAdjudicationsService.getEnhancedConfirmationDetails(
       adjudicationNumberValue,
       user
     )
@@ -37,7 +37,7 @@ export default class ConfirmedOnReportRoutes {
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
       printHref: `/print-report/${adjudicationNumber}`,
-      changed: false,
+      adjudicationEdited: false,
       bannerText: `${prisonerFirstAndLastName} has been placed on report`,
       bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
       buttonClass: 'govuk-button--secondary',
