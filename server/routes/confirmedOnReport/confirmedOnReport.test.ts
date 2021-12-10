@@ -25,10 +25,13 @@ const reportedAdjudicationInformation = {
   prisonerPreferredNonEnglishLanguage: 'French',
   prisonerOtherLanguages: ['English', 'Spanish'],
   prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
-  agencyName: 'MDI',
-  locationName: 'Adj',
+  incidentAgencyName: 'Moorland (HMP & YOI)',
+  incidentLocationName: 'Adj',
   statement: 'A statement',
   reportingOfficer: 'An officer',
+  prisonerAgencyName: 'Moorland (HMP & YOI)',
+  prisonerLivingUnitName: '5-2-A-050',
+  incidentDate: '2020-12-21T07:21',
 }
 
 reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)

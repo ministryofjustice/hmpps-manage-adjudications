@@ -3,9 +3,12 @@ export type ConfirmedOnReportData = SimplifiedConfirmedOnReportData & {
   prisonerOtherLanguages?: Array<string>
   prisonerNeurodiversities?: Array<string>
   statement: string
-  agencyName: string
-  locationName: string
+  incidentAgencyName: string
+  incidentLocationName: string
   reportingOfficer: string
+  prisonerAgencyName: string
+  prisonerLivingUnitName: string
+  incidentDate: string
 }
 
 export type SimplifiedConfirmedOnReportData = {

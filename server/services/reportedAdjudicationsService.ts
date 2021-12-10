@@ -58,9 +58,12 @@ export default class ReportedAdjudicationsService {
       prisonerOtherLanguages,
       prisonerNeurodiversities,
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
-      locationName: location.userDescription,
-      agencyName: agencyDescription.description,
+      incidentLocationName: location.userDescription,
+      incidentAgencyName: agencyDescription.description,
       reportingOfficer: getFormattedReporterName(reporter.name),
+      prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
+      prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
+      incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
     }
   }
 

@@ -221,6 +221,10 @@ describe('reportedAdjudicationsService', () => {
           firstName: 'JOHN',
           lastName: 'SMITH',
           language: 'Spanish',
+          assignedLivingUnit: {
+            description: 'Adj',
+            agencyName: 'Moorland (HMP & YOI)',
+          },
         })
 
         getSecondaryLanguages.mockResolvedValue([
@@ -247,9 +251,12 @@ describe('reportedAdjudicationsService', () => {
         const result = await service.getReportedAdjudication(123, user)
 
         expect(result).toEqual({
-          agencyName: 'Moorland (HMP & YOI)',
-          locationName: 'Adj',
+          incidentAgencyName: 'Moorland (HMP & YOI)',
+          incidentLocationName: 'Adj',
+          incidentDate: '2021-10-28T15:40:25.884',
+          prisonerAgencyName: 'Moorland (HMP & YOI)',
           reportExpirationDateTime: '2021-10-22T15:40:25.884',
+          prisonerLivingUnitName: 'Adj',
           prisonerFirstName: 'JOHN',
           prisonerLastName: 'SMITH',
           prisonerNumber: 'A1234AA',
@@ -296,6 +303,10 @@ describe('reportedAdjudicationsService', () => {
           firstName: 'JOHN',
           lastName: 'SMITH',
           language: 'English',
+          assignedLivingUnit: {
+            description: 'Adj',
+            agencyName: 'Moorland (HMP & YOI)',
+          },
         })
 
         getSecondaryLanguages.mockResolvedValue([])
