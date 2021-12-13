@@ -1,7 +1,13 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { convertToTitleCase, formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import {
+  convertToTitleCase,
+  formatName,
+  formatTimestampTo,
+  formatTimestampToDate,
+  formatTimestampToTime,
+} from '../../utils/utils'
 
 export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -48,8 +54,10 @@ export default class ConfirmedOnReportRoutes {
       ),
       prisonerNumber: adjudicationDetails.prisonerNumber,
       reportingOfficer: adjudicationDetails.reportingOfficer,
-      incidentLocationDescription: `${adjudicationDetails.incidentAgencyName} ${adjudicationDetails.incidentLocationName}`,
+      incidentLocationDescription: `${adjudicationDetails.incidentAgencyName} - ${adjudicationDetails.incidentLocationName}`,
       prisonerLocationDescription: `${adjudicationDetails.prisonerAgencyName} - ${adjudicationDetails.prisonerLivingUnitName}`,
+      incidentDate: formatTimestampTo(adjudicationDetails.incidentDate, 'D MMMM YYYY'),
+      incidentTime: formatTimestampTo(adjudicationDetails.incidentDate, 'HH:mm'),
     })
   }
 
