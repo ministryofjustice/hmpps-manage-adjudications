@@ -3,6 +3,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import IncidentDetailsRoutes from './incidentDetails'
 import IncidentDetailsEditRoutes from './incidentDetailsEdit'
+import IncidentDetailsSubmittedEditRoutes from './incidentDetailsSubmittedEdit'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
@@ -18,6 +19,7 @@ export default function prisonerIncidentDetailsRoutes({
 
   const incidentDetails = new IncidentDetailsRoutes(placeOnReportService, locationService)
   const incidentDetailsEdit = new IncidentDetailsEditRoutes(placeOnReportService, locationService)
+  const incidentDetailsSubmittedEdit = new IncidentDetailsSubmittedEditRoutes(placeOnReportService, locationService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
@@ -26,6 +28,8 @@ export default function prisonerIncidentDetailsRoutes({
   post('/:prisonerNumber', incidentDetails.submit)
   get('/:prisonerNumber/:id/edit', incidentDetailsEdit.view)
   post('/:prisonerNumber/:id/edit', incidentDetailsEdit.submit)
+  get('/:prisonerNumber/:id/submitted/edit', incidentDetailsSubmittedEdit.view)
+  post('/:prisonerNumber/:id/submitted/edit', incidentDetailsSubmittedEdit.submit)
 
   return router
 }

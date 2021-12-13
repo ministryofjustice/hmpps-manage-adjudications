@@ -15,7 +15,7 @@ export default class ConfirmedOnReportChangeReportRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getSimplifiedReportedAdjudication(
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(
       adjudicationNumberValue,
       user
     )
@@ -30,7 +30,7 @@ export default class ConfirmedOnReportChangeReportRoutes {
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
       prisonerFirstAndLastName,
-      changed: true,
+      adjudicationEdited: true,
       bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed`,
       bannerHTML: null,
       buttonClass: 'govuk-button',
