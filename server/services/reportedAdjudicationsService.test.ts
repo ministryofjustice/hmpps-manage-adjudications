@@ -74,7 +74,6 @@ describe('reportedAdjudicationsService', () => {
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-    // TODO qqRP rationalise tests
     locationService.getIncidentLocation.mockResolvedValue(location)
     locationService.getAgency.mockResolvedValue(agency)
     hmppsAuthClient.getUserFromUsername.mockResolvedValue(user)
