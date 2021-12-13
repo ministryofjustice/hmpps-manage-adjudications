@@ -1,11 +1,11 @@
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
-import { PrisonLocation, AgencyId, LocationId, Agency } from '../data/PrisonLocationResult'
+import { PrisonLocation, Location, AgencyId, LocationId, Agency } from '../data/PrisonLocationResult'
 
 export default class LocationService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  async getIncidentLocation(locationId: LocationId, user: User): Promise<PrisonLocation> {
+  async getIncidentLocation(locationId: LocationId, user: User): Promise<Location> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new PrisonApiClient(token).getLocation(locationId)
   }

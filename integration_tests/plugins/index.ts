@@ -18,6 +18,7 @@ export default (on: (string, Record) => void): void => {
     stubSearch: prisonerSearch.stubSearch,
     stubAuthUser: auth.stubUser,
     stubUserRoles: auth.stubUserRoles,
+    stubGetUser: auth.stubGetUser,
 
     stubTokenPing: status => tokenVerification.stubPing(status),
     stubAuthPing: status => auth.stubPing(status),
@@ -26,6 +27,8 @@ export default (on: (string, Record) => void): void => {
     stubAdjudicationsPing: status => adjudications.stubPing(status),
     stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
     stubGetLocations: prisonApi.stubGetLocations,
+    stubGetLocation: prisonApi.stubGetLocation,
+    stubGetAgency: prisonApi.stubGetAgency,
     stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
     stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,
 

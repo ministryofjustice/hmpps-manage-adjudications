@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import { CaseLoad } from '../../server/data/prisonApiClient'
+import { Location, Agency } from '../../server/data/PrisonLocationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -74,6 +75,32 @@ const stubGetLocations = ({
     },
   })
 
+const stubGetLocation = ({ locationId, response }: { locationId: number; response: Location }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/locations/${locationId}`,
+    },
+    response: {
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      status: 200,
+      jsonBody: response,
+    },
+  })
+
+const stubGetAgency = ({ agencyId, response }: { agencyId: number; response: Agency }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/agencies/${agencyId}`,
+    },
+    response: {
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      status: 200,
+      jsonBody: response,
+    },
+  })
+
 const stubGetSecondaryLanguages = ({
   bookingId,
   response = [],
@@ -111,6 +138,8 @@ export default {
   stubUserCaseloads,
   stubGetPrisonerDetails,
   stubGetLocations,
+  stubGetLocation,
+  stubGetAgency,
   stubGetSecondaryLanguages,
   stubGetBatchPrisonerDetails,
 }
