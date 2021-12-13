@@ -34,6 +34,7 @@ type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   locationId: number
   startedByUserId: string
+  adjudicationNumber?: number
 }
 
 export default class PlaceOnReportService {
@@ -151,6 +152,7 @@ export default class PlaceOnReportService {
       dateTime: { date, time: { hour, minute } },
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
+      adjudicationNumber: response.draftAdjudication.adjudicationNumber,
     }
   }
 

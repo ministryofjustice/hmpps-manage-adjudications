@@ -117,7 +117,7 @@ context('Prisoner report', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/177/edit')
+      expect(loc.pathname).to.eq('/incident-details/G6415GD/177/submitted/edit')
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {

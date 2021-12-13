@@ -34,7 +34,7 @@ const reportedAdjudicationInformation = {
   incidentDate: '2020-12-21T07:21',
 }
 
-reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue(reportedAdjudicationInformation)
+reportedAdjudicationsService.getEnhancedConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -57,7 +57,7 @@ describe('GET /prisoner-placed-on-report', () => {
   })
 
   it('should not show neurodivesity information if none provided', () => {
-    reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+    reportedAdjudicationsService.getEnhancedConfirmationDetails.mockResolvedValue({
       ...reportedAdjudicationInformation,
       prisonerNeurodiversities: null,
     })
@@ -70,7 +70,7 @@ describe('GET /prisoner-placed-on-report', () => {
   })
 
   it('should not show any language information if no primary language provided', () => {
-    reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+    reportedAdjudicationsService.getEnhancedConfirmationDetails.mockResolvedValue({
       ...reportedAdjudicationInformation,
       prisonerPreferredNonEnglishLanguage: null,
     })
@@ -84,7 +84,7 @@ describe('GET /prisoner-placed-on-report', () => {
   })
 
   it('should not show the secondary language text if no secondary languages provided', () => {
-    reportedAdjudicationsService.getReportedAdjudication.mockResolvedValue({
+    reportedAdjudicationsService.getEnhancedConfirmationDetails.mockResolvedValue({
       ...reportedAdjudicationInformation,
       prisonerOtherLanguages: null,
     })
@@ -116,7 +116,7 @@ describe('GET /prisoner-placed-on-report', () => {
   })
 
   it('should throw an error on api failure', () => {
-    reportedAdjudicationsService.getReportedAdjudication.mockRejectedValue(new Error('error message content'))
+    reportedAdjudicationsService.getEnhancedConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)
       .get('/prisoner-placed-on-report/123')
       .expect('Content-Type', /html/)

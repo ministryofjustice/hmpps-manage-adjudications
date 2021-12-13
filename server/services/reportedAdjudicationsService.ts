@@ -25,7 +25,7 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getReportedAdjudication(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
+  async getEnhancedConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -67,10 +67,7 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getSimplifiedReportedAdjudication(
-    adjudicationNumber: number,
-    user: User
-  ): Promise<SimplifiedConfirmedOnReportData> {
+  async getConfirmationDetails(adjudicationNumber: number, user: User): Promise<SimplifiedConfirmedOnReportData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
