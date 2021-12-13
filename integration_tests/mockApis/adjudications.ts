@@ -51,6 +51,27 @@ const stubPostDraftIncidentStatement = ({
     },
   })
 
+const stubPutDraftIncidentStatement = ({
+  id,
+  response = {},
+}: {
+  id: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/draft-adjudications/${id}/incident-statement`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubGetDraftAdjudication = ({
   id,
   response = {},
@@ -237,6 +258,7 @@ export default {
   stubPing,
   stubStartNewDraftAdjudication,
   stubPostDraftIncidentStatement,
+  stubPutDraftIncidentStatement,
   stubGetDraftAdjudication,
   stubSubmitCompleteDraftAdjudication,
   stubEditDraftIncidentDetails,
