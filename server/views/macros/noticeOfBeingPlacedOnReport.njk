@@ -1,8 +1,6 @@
 {% from "../macros/noticeOfBeingPlacedOnReportDetails.njk" import noticeOfBeingPlacedOnReportDetails %}
 {% from "../macros/noticeOfBeingPlacedOnReportLegal.njk" import noticeOfBeingPlacedOnReportLegal %}
 {% macro noticeOfBeingPlacedOnReport(adjudicationNumber, prisonerDisplayName, prisonerNumber, prisonerLocationDescription, incidentDate, incidentTime, incidentLocationDescription, statement, reportingOfficer) %}
-    <div class="print-only">
-        {{ noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, prisonerNumber, prisonerLocationDescription, incidentDate, incidentTime, incidentLocationDescription, statement, reportingOfficer) }}
-        {{ noticeOfBeingPlacedOnReportLegal(adjudicationNumber) }}
-    </div>
+    {{ noticeOfBeingPlacedOnReportDetails(adjudicationNumber, prisonerDisplayName, prisonerNumber, prisonerLocationDescription, incidentDate, incidentTime, incidentLocationDescription, statement, reportingOfficer) }}
+    {{ noticeOfBeingPlacedOnReportLegal(adjudicationNumber) }}
 {% endmacro %}

@@ -106,14 +106,14 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return value || specifiedText || '--'
   })
 
-  njkEnv.addFilter('formatStatement', (statement: string) => {
+  njkEnv.addFilter('formatStatement', (statement: string, cssClasses: string) => {
     if (!statement) return null
     const statementArray = statement.split(/\r|\n/)
 
     return statementArray
       .map(para => escapeHtml(para))
       .map(paragraph => {
-        return `<p class='govuk-bod govuk-!-font-size-14 govuk-!-margin-bottom-0'>${paragraph}</p>`
+        return `<p class=${cssClasses}>${paragraph}</p>`
       })
       .join('')
   })

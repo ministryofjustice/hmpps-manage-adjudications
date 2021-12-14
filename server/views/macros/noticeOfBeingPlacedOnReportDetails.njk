@@ -40,7 +40,7 @@
         <h2 class='govuk-body govuk-!-font-size-14 govuk-!-font-weight-bold govuk-!-margin-bottom-1'>The reporting
             officer's statement about the incident</h2>
         <div class='adjudication-print-form-statement-paragraph'>
-            {{ statement | formatStatement | safe }}
+            {{ statement | formatStatement('"govuk-bod govuk-!-font-size-14 govuk-!-margin-bottom-0"') | safe }}
         </div>
         <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-2 govuk-!-font-size-14'>Reporting officer: {{ reportingOfficer }}</p>
         <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14'>Date: {{ incidentDate }}</p>
