@@ -1,36 +1,35 @@
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
 {% macro onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) %}
   <p class="govuk-body">You must make sure that {{ prisonerFirstAndLastName }} can understand the report.</p>
 
   {% if showPrisonerPreferredLanguage %}
-   <div class="confirmed-on-report-section">
-    <p class="confirmed-on-report-list-header-text">{{ prisonerFirstAndLastName | possessive }} preferred language is:</p>
-    <ul class="govuk-list govuk-list--bullet">
-     <li>{{ prisonerPreferredLanguage }}</li>
-    </ul>
-   </div>
-
-   {% if showPrisonerOtherLanguages %}
     <div class="confirmed-on-report-section">
-     <p class="confirmed-on-report-list-header-text">They have other languages of:</p>
-     <ul class="govuk-list govuk-list--bullet">
-      {% for entry in prisonerOtherLanguages %}
-       <li>{{ entry }}</li>
-      {% endfor %}
-     </ul>
+      <p class="confirmed-on-report-list-header-text">{{ prisonerFirstAndLastName | possessive }} preferred language is:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>{{ prisonerPreferredLanguage }}</li>
+      </ul>
     </div>
-   {% endif %}
+
+    {% if showPrisonerOtherLanguages %}
+      <div class="confirmed-on-report-section">
+        <p class="confirmed-on-report-list-header-text">They have other languages of:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          {% for entry in prisonerOtherLanguages %}
+            <li>{{ entry }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
   {% endif %}
 
   {% if showPrisonerNeurodiversities %}
-   <div class="confirmed-on-report-section">
-    <p class="confirmed-on-report-list-header-text">They have recorded disabilities and learning difficulties of:</p>
-    <ul class="govuk-list govuk-list--bullet">
-     {% for entry in prisonerNeurodiversities %}
-      <li>{{ entry }}</li>
-     {% endfor %}
-    </ul>
+    <div class="confirmed-on-report-section">
+      <p class="confirmed-on-report-list-header-text">They have recorded disabilities and learning difficulties of:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        {% for entry in prisonerNeurodiversities %}
+          <li>{{ entry }}</li>
+        {% endfor %}
+      </ul>
+    </div>
 
   {% endif %}
- {% endmacro %}
+{% endmacro %}

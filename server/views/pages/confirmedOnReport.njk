@@ -2,6 +2,7 @@
 
 {% from "../macros/onReport.njk" import onReportInfo %}
 {% from "../macros/printLink.njk" import printLink %}
+{% from "../macros/noticeOfBeingPlacedOnReport.njk" import noticeOfBeingPlacedOnReport %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
@@ -18,6 +19,7 @@
 
 {% block content %}
   <div class="govuk-grid-row">
+    <div class='no-print'>
       {{ govukPanel({
           titleText: bannerText,
           html: bannerHTML,
@@ -47,9 +49,9 @@
         {% else %}
           {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
           <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-          {{ printLink('Print a copy of this report', printHref, "left", "govuk-!-padding-bottom-0") }}
+          {{ printLink('Print a copy of this report', 'javascript:window.print()', "left", "govuk-!-padding-bottom-0") }}
         {% endif %}
-      </div>
+
 
       {{ govukButton({
         text: 'Finish',
@@ -60,7 +62,11 @@
           'data-qa': 'confirmed-on-report-finish'
         }
       }) }}
-
+      </div>
+    </div>
+    <div class="print-only">
+      {{ noticeOfBeingPlacedOnReport(adjudicationNumber, prisonerDisplayName, prisonerNumber, prisonerLocationDescription, incidentDate, incidentTime, incidentLocationDescription, statement, reportingOfficer) }}
+    </div>
   </div>
 
 {% endblock %}

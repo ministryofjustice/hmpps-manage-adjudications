@@ -122,6 +122,19 @@ const stubUser = () =>
     },
   })
 
+const stubGetUser = ({ username, response }: { username: string; response: { username; name } }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/auth/api/user/${username}`,
+    },
+    response: {
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      status: 200,
+      jsonBody: response,
+    },
+  })
+
 const stubUserRoles = (roles = []): SuperAgentRequest =>
   stubFor({
     request: {
@@ -166,4 +179,5 @@ export default {
   stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),
   stubGetUserFromUsername,
   stubUserRoles,
+  stubGetUser,
 }

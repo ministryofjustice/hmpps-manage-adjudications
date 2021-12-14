@@ -1,4 +1,4 @@
-import { ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
+import { EnhancedConfirmedOnReportData, ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
@@ -9,6 +9,7 @@ import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatT
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport } from '../data/DraftAdjudicationResult'
+import LocationService from './locationService'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -20,10 +21,11 @@ function getNonEnglishLanguage(primaryLanguage: string): string {
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly curiousApiService: CuriousApiService
+    private readonly curiousApiService: CuriousApiService,
+    private readonly locationService: LocationService
   ) {}
 
-  async getEnhancedConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
+  async getEnhancedConfirmationDetails(adjudicationNumber: number, user: User): Promise<EnhancedConfirmedOnReportData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -36,6 +38,17 @@ export default class ReportedAdjudicationsService {
     const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
     const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
 
+    const location = await this.locationService.getIncidentLocation(
+      adjudicationData.reportedAdjudication.incidentDetails.locationId,
+      user
+    )
+    const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
+
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(
+      adjudicationData.reportedAdjudication.createdByUserId,
+      user.token
+    )
+
     return {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
@@ -44,6 +57,13 @@ export default class ReportedAdjudicationsService {
       prisonerPreferredNonEnglishLanguage,
       prisonerOtherLanguages,
       prisonerNeurodiversities,
+      statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
+      incidentLocationName: location.userDescription,
+      incidentAgencyName: agencyDescription.description,
+      reportingOfficer: getFormattedReporterName(reporter.name),
+      prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
+      prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
+      incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
     }
   }
 

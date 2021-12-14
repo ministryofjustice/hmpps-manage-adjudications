@@ -16,6 +16,7 @@ const locationService = new LocationService(null) as jest.Mocked<LocationService
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
+  null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 

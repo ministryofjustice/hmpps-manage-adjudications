@@ -6,7 +6,7 @@ import config from '../config'
 import RestClient from './restClient'
 import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
-import { Location } from './PrisonLocationResult'
+import { Agency, AgencyId, Location, LocationId } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
 
 export interface CaseLoad {
@@ -58,6 +58,18 @@ export default class PrisonApiClient {
     return this.restClient.get({
       path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,
       headers: { 'Sort-Fields': 'userDescription' },
+    })
+  }
+
+  async getLocation(locationId: LocationId): Promise<Location> {
+    return this.restClient.get({
+      path: `/api/locations/${locationId}`,
+    })
+  }
+
+  async getAgency(agencyId: AgencyId): Promise<Agency> {
+    return this.restClient.get({
+      path: `/api/agencies/${agencyId}`,
     })
   }
 

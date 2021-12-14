@@ -11,9 +11,13 @@ const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const placeOnReportService = new PlaceOnReportService(hmppsAuthClient)
 const curiousApiService = new CuriousApiService()
-const reportedAdjudicationsService = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService)
-const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 const locationService = new LocationService(hmppsAuthClient)
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  hmppsAuthClient,
+  curiousApiService,
+  locationService
+)
+const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 
 export const services = {
   userService,

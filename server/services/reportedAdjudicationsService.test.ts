@@ -4,6 +4,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
+import LocationService from './locationService'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -37,8 +38,11 @@ jest.mock('./curiousApiService', () => {
   })
 })
 
+jest.mock('./locationService')
+
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiService>
+const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 const token = 'token-1'
 const user = {
@@ -48,13 +52,32 @@ const user = {
   token,
 } as User
 
+const location = {
+  locationId: 27187,
+  locationType: 'ADJU',
+  description: 'ADJ',
+  agencyId: 'MDI',
+  parentLocationId: 27186,
+  currentOccupancy: 0,
+  locationPrefix: 'MDI-RES-MCASU-MCASU',
+  userDescription: 'Adj',
+  internalLocationCode: 'MCASU',
+}
+
+const agency = {
+  agencyId: 'MDI',
+  description: 'Moorland (HMP & YOI)',
+}
+
 describe('reportedAdjudicationsService', () => {
   let service: ReportedAdjudicationsService
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
-
-    service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService)
+    locationService.getIncidentLocation.mockResolvedValue(location)
+    locationService.getAgency.mockResolvedValue(agency)
+    hmppsAuthClient.getUserFromUsername.mockResolvedValue(user)
+    service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService, locationService)
   })
 
   afterEach(() => {
@@ -197,6 +220,10 @@ describe('reportedAdjudicationsService', () => {
           firstName: 'JOHN',
           lastName: 'SMITH',
           language: 'Spanish',
+          assignedLivingUnit: {
+            description: 'Adj',
+            agencyName: 'Moorland (HMP & YOI)',
+          },
         })
 
         getSecondaryLanguages.mockResolvedValue([
@@ -223,13 +250,20 @@ describe('reportedAdjudicationsService', () => {
         const result = await service.getEnhancedConfirmationDetails(123, user)
 
         expect(result).toEqual({
+          incidentAgencyName: 'Moorland (HMP & YOI)',
+          incidentLocationName: 'Adj',
+          incidentDate: '2021-10-28T15:40:25.884',
+          prisonerAgencyName: 'Moorland (HMP & YOI)',
           reportExpirationDateTime: '2021-10-22T15:40:25.884',
+          prisonerLivingUnitName: 'Adj',
           prisonerFirstName: 'JOHN',
           prisonerLastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonerPreferredNonEnglishLanguage: 'Spanish',
           prisonerOtherLanguages: ['Spanish', 'German'],
           prisonerNeurodiversities: ['Hearing impairment', 'Visual impairment'],
+          statement: 'Example statement',
+          reportingOfficer: 'U. User',
         })
       })
 
@@ -268,6 +302,10 @@ describe('reportedAdjudicationsService', () => {
           firstName: 'JOHN',
           lastName: 'SMITH',
           language: 'English',
+          assignedLivingUnit: {
+            description: 'Adj',
+            agencyName: 'Moorland (HMP & YOI)',
+          },
         })
 
         getSecondaryLanguages.mockResolvedValue([])

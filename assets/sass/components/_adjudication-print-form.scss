@@ -1,0 +1,41 @@
+.adjudication-print-form-input {
+  height: 30px;
+  border-width: medium;
+  border-style: solid;
+}
+
+.adjudication-print-form-prisoner-statement {
+  height: 500px;
+  width: 100%;
+  border-width: medium;
+  border-style: solid;
+}
+
+.adjudication-print-form-header {
+  background-color: #D8D8D8;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.adjudication-print-form-section {
+  display: flex;
+  align-items: end;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    padding-right: govuk-spacing(3);
+    width: 25%;
+
+    &:last-child {
+      width: 75%;
+    }
+  }
+}
+
+
+
