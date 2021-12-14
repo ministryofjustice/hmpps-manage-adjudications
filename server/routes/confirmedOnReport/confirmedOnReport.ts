@@ -1,7 +1,13 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import {
+  convertToTitleCase,
+  formatName,
+  formatTimestampTo,
+  formatTimestampToDate,
+  formatTimestampToTime,
+} from '../../utils/utils'
 
 export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -42,6 +48,16 @@ export default class ConfirmedOnReportRoutes {
       bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
       buttonClass: 'govuk-button--secondary',
       buttonHref: '/place-a-prisoner-on-report',
+      statement: adjudicationDetails.statement,
+      prisonerDisplayName: convertToTitleCase(
+        `${adjudicationDetails.prisonerFirstName}, ${adjudicationDetails.prisonerLastName}`
+      ),
+      prisonerNumber: adjudicationDetails.prisonerNumber,
+      reportingOfficer: adjudicationDetails.reportingOfficer,
+      incidentLocationDescription: `${adjudicationDetails.incidentAgencyName} - ${adjudicationDetails.incidentLocationName}`,
+      prisonerLocationDescription: `${adjudicationDetails.prisonerAgencyName} - ${adjudicationDetails.prisonerLivingUnitName}`,
+      incidentDate: formatTimestampTo(adjudicationDetails.incidentDate, 'D MMMM YYYY'),
+      incidentTime: formatTimestampTo(adjudicationDetails.incidentDate, 'HH:mm'),
     })
   }
 

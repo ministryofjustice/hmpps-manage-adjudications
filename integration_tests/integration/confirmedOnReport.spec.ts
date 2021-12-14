@@ -29,6 +29,7 @@ context('Prisoner has been placed on report', () => {
           prisonerNumber: 'G6415GD',
           bookingId: 123,
           dateTimeReportExpires: '2020-12-08T10:00:00',
+          createdByUserId: 'AJONES',
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-06T10:00:00',
@@ -70,6 +71,12 @@ context('Prisoner has been placed on report', () => {
         },
       ],
     })
+    cy.task('stubGetLocation', {
+      locationId: 2,
+      response: { locationId: 2, agencyId: 'MDI', userDescription: 'Adj', locationPrefix: 'MDI-RES-MCASU-MCASU' },
+    })
+    cy.task('stubGetAgency', { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' })
+    cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
 
     cy.signIn()
   })
@@ -85,15 +92,6 @@ context('Prisoner has been placed on report', () => {
     cy.contains('They have other languages of:')
     cy.contains('Spanish')
     cy.contains('German')
-  })
-
-  it('should redirect the user to print-report on print', () => {
-    cy.visit(`/prisoner-placed-on-report/1524242`)
-    const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.printLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/print-report/1524242')
-    })
   })
 
   it('should redirect the user to /place-a-prisoner-on-report on finish', () => {

@@ -16,7 +16,7 @@
    {% endif %}
   </div>
   <div class="adjudicationsSummary-incidentStatement" data-qa="adjudicationsSummary-incidentStatement">
-   {{ incidentData.statement | formatStatement | safe }}
+   {{ incidentData.statement | formatStatement('"govuk-body"') | safe }}
   </div>
 
  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

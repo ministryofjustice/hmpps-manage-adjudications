@@ -7,6 +7,7 @@ jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
+  null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 
@@ -24,6 +25,13 @@ const reportedAdjudicationInformation = {
   prisonerPreferredNonEnglishLanguage: 'French',
   prisonerOtherLanguages: ['English', 'Spanish'],
   prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
+  incidentAgencyName: 'Moorland (HMP & YOI)',
+  incidentLocationName: 'Adj',
+  statement: 'A statement',
+  reportingOfficer: 'An officer',
+  prisonerAgencyName: 'Moorland (HMP & YOI)',
+  prisonerLivingUnitName: '5-2-A-050',
+  incidentDate: '2020-12-21T07:21',
 }
 
 reportedAdjudicationsService.getEnhancedConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)

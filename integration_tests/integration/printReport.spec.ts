@@ -28,6 +28,7 @@ context('Print a copy of this report', () => {
           adjudicationNumber: 3,
           prisonerNumber: 'G6415GD',
           bookingId: 123,
+          createdByUserId: 'AJONES',
           dateTimeReportExpires: '2020-12-08T10:00:00',
           incidentDetails: {
             locationId: 2,
@@ -70,7 +71,12 @@ context('Print a copy of this report', () => {
         },
       ],
     })
-
+    cy.task('stubGetLocation', {
+      locationId: 2,
+      response: { locationId: 2, agencyId: 'MDI', userDescription: 'Adj', locationPrefix: 'MDI-RES-MCASU-MCASU' },
+    })
+    cy.task('stubGetAgency', { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' })
+    cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
     cy.signIn()
   })
 
