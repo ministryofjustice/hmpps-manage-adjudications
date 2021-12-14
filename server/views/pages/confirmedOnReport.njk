@@ -30,10 +30,20 @@
         {% if not adjudicationEdited %}
           <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
         {% endif %}
-        <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
+
+        {% if not editedByReviewer %}
+          <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
+        {% else %}
+          <p class="govuk-body">You must confirm with the reporting officer, {{ reporterName }}, that their statement is still accurate.</p>
+          <p class="govuk-body">{{ reporterName }} will need to make any changes to their statement before {{ prisonerFirstAndLastName }} is given an updated copy of their report.</p>
+        {% endif %}
 
         {% if adjudicationEdited %}
-          <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
+          {% if editedByReviewer %}
+            <p class="govuk-body govuk-inset-text">{{ prisonerFirstAndLastName }} must be given an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
+          {% else %}
+            <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
+          {% endif %}
         {% else %}
           {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
           <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

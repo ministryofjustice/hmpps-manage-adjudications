@@ -54,12 +54,17 @@ export default class ReportedAdjudicationsService {
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
       adjudicationData.reportedAdjudication.prisonerNumber
     )
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(
+      adjudicationData.reportedAdjudication.createdByUserId,
+      user.token
+    )
 
     return {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
+      reporter: reporter.name,
     }
   }
 

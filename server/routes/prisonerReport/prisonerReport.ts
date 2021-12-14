@@ -31,7 +31,7 @@ export default class prisonerReportRoutes {
       prisoner,
       data,
       printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${prisoner.prisonerNumber}/${adjudicationNumber}/report`,
-      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit`,
+      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit?referrer=/prisoner-report/${prisoner.prisonerNumber}/${adjudicationNumber}/report`,
       editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit`,
       statementEditable: true,
       returnLinkURL: `/your-completed-reports`,

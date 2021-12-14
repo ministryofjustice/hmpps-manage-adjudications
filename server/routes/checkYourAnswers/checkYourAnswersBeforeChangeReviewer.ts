@@ -32,13 +32,12 @@ export default class checkYourAnswersRoutes {
       prisoner,
       data,
       IdNumberValue,
-      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${IdNumberValue}/submitted/edit?referrer=/check-your-answers/${prisoner.prisonerNumber}/${IdNumberValue}/report`,
-      editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${IdNumberValue}/submitted/edit`,
-      statementEditable: true,
+      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${IdNumberValue}/submitted/edit?referrer=/check-your-answers/${prisoner.prisonerNumber}/${IdNumberValue}/review`,
+      statementEditable: false,
       creationJourney: false,
       submitButtonText: 'Confirm changes',
       secondaryButtonText: 'Cancel',
-      exitUrl: `/prisoner-report/${prisonerNumber}/${data.adjudicationNumber}/report`,
+      exitUrl: `/prisoner-report/${prisonerNumber}/${data.adjudicationNumber}/review`,
     })
   }
 
@@ -50,7 +49,7 @@ export default class checkYourAnswersRoutes {
     const IdNumberValue: number = parseInt(id as string, 10)
     try {
       const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
-      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/report`)
+      return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/review`)
     } catch (postError) {
       res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
       throw postError

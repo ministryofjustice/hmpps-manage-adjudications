@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime, possessive } from '../../utils/utils'
 
-export default class ConfirmedOnReportChangeReportRoutes {
+export default class ConfirmedOnReportChangeReviewRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
@@ -31,11 +31,12 @@ export default class ConfirmedOnReportChangeReportRoutes {
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
       prisonerFirstAndLastName,
       adjudicationEdited: true,
-      editedByReviewer: false,
+      editedByReviewer: true,
       bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed`,
       bannerHTML: null,
       buttonClass: 'govuk-button',
-      buttonHref: `/prisoner-report/${adjudicationDetails.prisonerNumber}/${adjudicationNumber}/report`,
+      buttonHref: `/prisoner-report/${adjudicationDetails.prisonerNumber}/${adjudicationNumber}/review`,
+      reporterName: adjudicationDetails.reporter,
     })
   }
 

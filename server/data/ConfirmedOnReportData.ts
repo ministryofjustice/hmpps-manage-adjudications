@@ -3,6 +3,7 @@ export type ConfirmedOnReportData = {
   prisonerFirstName: string
   prisonerLastName: string
   prisonerNumber: string
+  reporter?: string
   prisonerPreferredNonEnglishLanguage?: string
   prisonerOtherLanguages?: Array<string>
   prisonerNeurodiversities?: Array<string>

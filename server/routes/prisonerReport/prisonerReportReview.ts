@@ -35,7 +35,7 @@ export default class prisonerReportReviewRoutes {
       prisoner,
       data,
       printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${prisoner.prisonerNumber}/${adjudicationNumber}/review`,
-      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit`,
+      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit?referrer=/prisoner-report/${prisoner.prisonerNumber}/${adjudicationNumber}/review`,
       statementEditable: false,
       returnLinkURL: `/all-completed-reports`,
       returnLinkContent: 'Return to all completed reports',
