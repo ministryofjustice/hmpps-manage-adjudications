@@ -94,15 +94,6 @@ context('Prisoner has been placed on report', () => {
     cy.contains('German')
   })
 
-  it('should redirect the user to print-report on print', () => {
-    cy.visit(`/prisoner-placed-on-report/1524242`)
-    const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.printLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/print-report/1524242')
-    })
-  })
-
   it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
     cy.visit(`/prisoner-placed-on-report/1524242`)
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
