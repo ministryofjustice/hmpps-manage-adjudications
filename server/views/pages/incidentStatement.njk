@@ -52,6 +52,7 @@
 				errorMessage: errors | findError("incidentStatement")
 				}) }}
 
+		{% if not adjudicationEdited %}
 			{{ govukRadios({
 				classes: "govuk-radios--inline",
 				idPrefix: "incidentStatementComplete",
@@ -78,13 +79,24 @@
 					}
 				]
 			}) }}
+			{% endif %}
 
 			{{ govukButton({
-				text: "Save and continue",
+				text: submitButtonText,
 				type: "submit",
 				classes: "govuk-button--submit",
 				attributes: { "data-qa": "incident-statement-submit" }
 			}) }}
+
+			{% if adjudicationEdited %}
+				{{ govukButton({
+					text: "Cancel",
+						element: "a",
+						href: "/prisoner-report/"+ prisoner.prisonerNumber + "/" + adjudicationNumber + "/report",
+						classes: "govuk-button--secondary",
+					attributes: { "data-qa": "incident-statement-cancel" }
+				}) }}
+			{% endif %}
 		</form>
 	</div>
 

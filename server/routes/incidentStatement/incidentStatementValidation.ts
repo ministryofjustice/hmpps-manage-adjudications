@@ -3,6 +3,7 @@ import { FormError } from '../../@types/template'
 type incidentStatementForm = {
   incidentStatement?: string
   incidentStatementComplete?: string
+  adjudicationEdited?: boolean
 }
 
 const errors: { [key: string]: FormError } = {
@@ -23,8 +24,9 @@ const errors: { [key: string]: FormError } = {
 export default function validateForm({
   incidentStatement,
   incidentStatementComplete,
+  adjudicationEdited,
 }: incidentStatementForm): FormError | null {
-  if (!incidentStatementComplete) return errors.RADIO_OPTION_MISSING
+  if (!incidentStatementComplete && !adjudicationEdited) return errors.RADIO_OPTION_MISSING
 
   if (incidentStatement.length > 4000) return errors.WORD_COUNT_EXCEEDED
 
