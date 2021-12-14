@@ -33,8 +33,7 @@
                     {{ govukButton({
                         text: 'Print this report',
                         element: 'a',
-                        href: 'javascript:window.print()',
-                        classes: 'print-link--button govuk-button govuk-!-display-none-print',
+                        classes: 'print-link--button govuk-button govuk-!-display-none-print print-page',
                         attributes: {
                             'data-qa': 'print-report-button'
                         }
@@ -54,7 +53,7 @@
             </div>
         </div>
         <div class="print-only">
-            {{ noticeOfBeingPlacedOnReport(adjudicationNumber, prisonerDisplayName, prisonerNumber, prisonerLocationDescription, incidentDate, incidentTime, incidentLocationDescription, statement, reportingOfficer) }}
+            {{ noticeOfBeingPlacedOnReport(noticeOfBeingPutOnReportData) }}
         </div>
     </div>
 
