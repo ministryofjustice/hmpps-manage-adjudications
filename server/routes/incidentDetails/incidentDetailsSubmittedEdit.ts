@@ -32,6 +32,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, incidentDate, locationId } = pageData
     const { prisonerNumber, id } = req.params
+    const { referrer } = req.query
     const { user } = res.locals
 
     const IdNumberValue: number = parseInt(id as string, 10)
@@ -51,6 +52,10 @@ export default class IncidentDetailsSubmittedEditRoutes {
       locationId: location,
     }
 
+    const cancelButtonHref = (referrer as string)?.includes('review')
+      ? `/prisoner-report/${prisoner.prisonerNumber}/${adjudicationDetails.adjudicationNumber}/review`
+      : `/prisoner-report/${prisoner.prisonerNumber}/${adjudicationDetails.adjudicationNumber}/report`
+
     return res.render(`pages/incidentDetails`, {
       errors: error ? [error] : [],
       prisoner,
@@ -58,6 +63,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
       data,
       reportingOfficer: reporter || '',
       submitButtonText: 'Continue',
+      cancelButtonHref: cancelButtonHref || '/place-a-prisoner-on-report',
       reportPreviouslySubmitted: true,
       adjudicationNumber: adjudicationDetails.adjudicationNumber,
     })
@@ -69,19 +75,23 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { incidentDate, locationId } = req.body
     const { user } = res.locals
     const { prisonerNumber, id } = req.params
+    const { referrer } = req.query
 
     const error = validateForm({ incidentDate, locationId })
     if (error) return this.renderView(req, res, { error, incidentDate, locationId })
 
     const IdNumberValue: number = parseInt(id as string, 10)
+    const nextPage = (referrer as string).includes('review')
+      ? `/check-your-answers/${prisonerNumber}/${id}/review`
+      : `/check-your-answers/${prisonerNumber}/${id}/report`
 
     try {
       this.placeOnReportService.editDraftIncidentDetails(IdNumberValue, formatDate(incidentDate), locationId, user)
 
-      return res.redirect(`/check-your-answers/${prisonerNumber}/${id}/report`)
+      return res.redirect(nextPage)
     } catch (postError) {
       logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = `/check-your-answers/${prisonerNumber}/${id}/report`
+      res.locals.redirectUrl = `/place-a-prisoner-on-report`
       throw postError
     }
   }

@@ -20,4 +20,5 @@ export type ConfirmedOnReportChangedData = {
   prisonerFirstName: string
   prisonerLastName: string
   prisonerNumber: string
+  reporter?: string
 }

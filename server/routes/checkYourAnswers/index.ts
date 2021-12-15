@@ -3,6 +3,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import CheckYourAnswersRoutes from './checkYourAnswers'
 import CheckYourAnswersBeforeChangeReporterRoutes from './checkYourAnswersBeforeChangeReporter'
+import CheckYourAnswersBeforeChangeReviewerRoutes from './checkYourAnswersBeforeChangeReviewer'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
@@ -17,6 +18,10 @@ export default function CheckAnswersRoutes({
   const router = express.Router()
 
   const checkYourAnswers = new CheckYourAnswersRoutes(placeOnReportService, locationService)
+  const checkYourAnswersBeforeChangeReviewerRoutes = new CheckYourAnswersBeforeChangeReviewerRoutes(
+    placeOnReportService,
+    locationService
+  )
   const checkYourAnswersBeforeChangeReporter = new CheckYourAnswersBeforeChangeReporterRoutes(
     placeOnReportService,
     locationService
@@ -29,6 +34,8 @@ export default function CheckAnswersRoutes({
   post('/:prisonerNumber/:id', checkYourAnswers.submit)
   get('/:prisonerNumber/:id/report', checkYourAnswersBeforeChangeReporter.view)
   post('/:prisonerNumber/:id/report', checkYourAnswersBeforeChangeReporter.submit)
+  get('/:prisonerNumber/:id/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
+  post('/:prisonerNumber/:id/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
 
   return router
 }
