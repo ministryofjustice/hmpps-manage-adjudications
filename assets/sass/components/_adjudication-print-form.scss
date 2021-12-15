@@ -1,4 +1,4 @@
-.adjudication-print-form-input {
+.adjudication-print-form-charges {
   height: 30px;
   border-width: medium;
   border-style: solid;
@@ -19,7 +19,7 @@
   align-items: center;
 }
 
-.adjudication-print-form-section {
+@mixin adjudication-print-form-section {
   display: flex;
   align-items: end;
 
@@ -29,10 +29,26 @@
     justify-content: center;
     flex: 1 1 auto;
     padding-right: govuk-spacing(3);
-    width: 25%;
+  }
+}
 
+.adjudication-print-form-section-prisoner {
+  @include adjudication-print-form-section;
+
+  &__item {
+    width: 20%;
     &:last-child {
-      width: 75%;
+      width: 60%;
+    }
+  }
+}
+
+.adjudication-print-form-section-charges {
+  @include adjudication-print-form-section;
+  &__item {
+    width: 20%;
+    &:last-child {
+      width: 80%;
     }
   }
 }

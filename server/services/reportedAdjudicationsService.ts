@@ -1,4 +1,4 @@
-import { EnhancedConfirmedOnReportData, ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
+import { ConfirmedOnReportData, ConfirmedOnReportChangedData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
@@ -25,7 +25,7 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getEnhancedConfirmationDetails(adjudicationNumber: number, user: User): Promise<EnhancedConfirmedOnReportData> {
+  async getConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -67,7 +67,10 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
+  async getConfirmationDetailsChangedReport(
+    adjudicationNumber: number,
+    user: User
+  ): Promise<ConfirmedOnReportChangedData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)

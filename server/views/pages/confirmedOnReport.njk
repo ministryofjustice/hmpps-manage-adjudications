@@ -49,10 +49,8 @@
         {% else %}
           {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
           <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-          {{ printLink('Print a copy of this report', 'javascript:window.print()', "left", "govuk-!-padding-bottom-0") }}
+          {{ printLink('Print a copy of this report', '', "left", "govuk-!-padding-bottom-0") }}
         {% endif %}
-
-
       {{ govukButton({
         text: 'Finish',
         element: 'a',
@@ -65,7 +63,7 @@
       </div>
     </div>
     <div class="print-only">
-      {{ noticeOfBeingPlacedOnReport(adjudicationNumber, prisonerDisplayName, prisonerNumber, prisonerLocationDescription, incidentDate, incidentTime, incidentLocationDescription, statement, reportingOfficer) }}
+      {{ noticeOfBeingPlacedOnReport(noticeOfBeingPutOnReportData) }}
     </div>
   </div>
 

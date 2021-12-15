@@ -1,54 +1,60 @@
 {% extends "../partials/layout.njk" %}
 
 {% from "../macros/onReport.njk" import onReportInfo %}
+{% from "../macros/noticeOfBeingPlacedOnReport.njk" import noticeOfBeingPlacedOnReport %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
+
 {% set title = "Print a copy of this report" %}
 
 {% block pageTitle %}
-  {{ title }}
+    {{ title }}
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">{{ title }}</h1>
+    <div class="govuk-grid-row">
+        <div class='no-print'>
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-l">{{ title }}</h1>
 
-       <div class="confirmed-on-report-section">
-         <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
-        <div class="govuk-inset-text">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
-        {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
-      </div>
+                <div class="confirmed-on-report-section">
+                    <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report
+                        by {{ expirationTime }} on {{ expirationDay }}.</p>
+                    <div class="govuk-inset-text">You must follow local processes. You might need to give a copy of the
+                        printed report to another member of staff to review before it is given
+                        to {{ prisonerFirstAndLastName }}.
+                    </div>
+                    {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+                </div>
 
-      <div class="govuk-!-margin-top-7 govuk-!-padding-left-2">
-        {{ 
-          govukButton({
-            text: 'Print this report',
-            element: 'a',
-            href: 'javascript:window.print()',
-            classes: 'print-link--button govuk-button govuk-!-display-none-print',
-            attributes: {
-            'data-qa': 'print-report-button'
-            }
-          }) 
-        }}
+                <div class="govuk-!-margin-top-7 govuk-!-padding-left-2">
+                    {{ govukButton({
+                        text: 'Print this report',
+                        element: 'a',
+                        classes: 'print-link--button govuk-button govuk-!-display-none-print print-page',
+                        attributes: {
+                            'data-qa': 'print-report-button'
+                        }
+                    }) }}
 
-        {{ 
-          govukButton({
-            text: 'Exit',
-            element: 'a',
-            href: exitUrl,
-            classes: 'govuk-button--secondary govuk-!-margin-left-2 govuk-!-display-none-print',
-            attributes: {
-            'data-qa': 'print-report-exit'
-            }
-          }) 
-        }}
-      </div>
+                    {{ govukButton({
+                        text: 'Exit',
+                        element: 'a',
+                        href: exitUrl,
+                        classes: 'govuk-button--secondary govuk-!-margin-left-2 govuk-!-display-none-print',
+                        attributes: {
+                            'data-qa': 'print-report-exit'
+                        }
+                    }) }}
+                </div>
 
+            </div>
+        </div>
+        <div class="print-only">
+            {{ noticeOfBeingPlacedOnReport(noticeOfBeingPutOnReportData) }}
+        </div>
     </div>
-  </div>
 
 {% endblock %}

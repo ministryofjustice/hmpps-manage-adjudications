@@ -1,7 +1,8 @@
-export type EnhancedConfirmedOnReportData = ConfirmedOnReportData & {
-  prisonerPreferredNonEnglishLanguage?: string
-  prisonerOtherLanguages?: Array<string>
-  prisonerNeurodiversities?: Array<string>
+export type ConfirmedOnReportData = {
+  reportExpirationDateTime: string
+  prisonerFirstName: string
+  prisonerLastName: string
+  prisonerNumber: string
   statement: string
   incidentAgencyName: string
   incidentLocationName: string
@@ -9,9 +10,12 @@ export type EnhancedConfirmedOnReportData = ConfirmedOnReportData & {
   prisonerAgencyName: string
   prisonerLivingUnitName: string
   incidentDate: string
+  prisonerPreferredNonEnglishLanguage?: string
+  prisonerOtherLanguages?: Array<string>
+  prisonerNeurodiversities?: Array<string>
 }
 
-export type ConfirmedOnReportData = {
+export type ConfirmedOnReportChangedData = {
   reportExpirationDateTime: string
   prisonerFirstName: string
   prisonerLastName: string

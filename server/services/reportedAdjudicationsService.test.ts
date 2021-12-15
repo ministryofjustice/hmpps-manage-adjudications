@@ -247,7 +247,7 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('returns the correct data', async () => {
-        const result = await service.getEnhancedConfirmationDetails(123, user)
+        const result = await service.getConfirmationDetails(123, user)
 
         expect(result).toEqual({
           incidentAgencyName: 'Moorland (HMP & YOI)',
@@ -268,7 +268,7 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('makes the correct calls', async () => {
-        await service.getEnhancedConfirmationDetails(123, user)
+        await service.getConfirmationDetails(123, user)
 
         expect(ManageAdjudicationsClient).toBeCalledWith(token)
         expect(getReportedAdjudication).toBeCalledWith(123)
@@ -312,7 +312,7 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('returns the correct data', async () => {
-        const result = await service.getEnhancedConfirmationDetails(123, user)
+        const result = await service.getConfirmationDetails(123, user)
 
         expect(result.prisonerPreferredNonEnglishLanguage).toBeNull()
         expect(result.prisonerOtherLanguages.length).toEqual(0)

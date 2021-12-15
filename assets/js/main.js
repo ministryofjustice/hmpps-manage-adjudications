@@ -1,4 +1,4 @@
-$(document).ready(function () {
+jQuery(function () {
   $('.date-input').each(function (index, element) {
     const disableFutureDates = Boolean($(element).data('disable-future-date'))
     const disablePastDates = Boolean($(element).data('disable-past-date'))
@@ -16,5 +16,8 @@ $(document).ready(function () {
     $(element).prop('placeholder', '')
 
     $(element).attr('readonly', 'true')
+  })
+  $('.print-page').on('click', function () {
+    window.print()
   })
 })
