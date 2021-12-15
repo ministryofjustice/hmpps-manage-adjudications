@@ -1,5 +1,7 @@
 import ConfirmedOnReport from '../pages/confirmedOnReport'
-import Page from '../pages/page'
+import Page, { PageElement } from '../pages/page'
+import PrintReport from '../pages/printReport'
+import NotificationOfBeingPlacedOnReport from '../pages/notificationOfBeingPlacedOnReport'
 
 context('Prisoner has been placed on report', () => {
   beforeEach(() => {
@@ -81,25 +83,32 @@ context('Prisoner has been placed on report', () => {
     cy.signIn()
   })
 
-  it('should contain the required page elements', () => {
-    cy.visit(`/prisoner-placed-on-report/1524242`)
-    Page.verifyOnPage(ConfirmedOnReport)
-    cy.contains('Your report number is')
-    cy.contains('1524242')
-    cy.contains('John Smith must be given a copy of this report by 10:00 on 8 December 2020')
-    cy.contains('John Smith’s preferred language is:')
-    cy.contains('French')
-    cy.contains('They have other languages of:')
-    cy.contains('Spanish')
-    cy.contains('German')
+  const checkNotificationOfBeingPlacedOnReportPage = (page: NotificationOfBeingPlacedOnReport): void => {
+    page.section().should('exist').should('not.be.visible')
+    page.adjudicationNumber().should('contain', '1524242')
+    page.prisonerDisplayName().should('contain', 'John, Smith')
+    page.prisonerNumber().should('contain', 'G6415GD')
+    page.prisonerLocationDescription().should('contain', 'Moorland (HMP & YOI) - 1-2-015')
+    page.incidentDate().should('contain', '6 December 2020')
+    page.incidentTime().should('contain', '10:00')
+    page.incidentLocationDescription().should('contain', 'Moorland (HMP & YOI) - Adj')
+    page.statement().should('contain', 'test')
+  }
+
+  it('The notification of being on report should present on the print report page', () => {
+    cy.visit(`/print-report/1524242`)
+    const printReportPage = Page.verifyOnPage(PrintReport)
+    printReportPage.printButton().should('exist')
+    const notificationOfBeingPlacedOnReportPage = new NotificationOfBeingPlacedOnReport('Print a copy of this report')
+    checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
   })
 
-  it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
+  it('The notification of being on report should present on the confirm page', () => {
     cy.visit(`/prisoner-placed-on-report/1524242`)
-    const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.finishButton().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
-    })
+    Page.verifyOnPage(ConfirmedOnReport)
+    const notificationOfBeingPlacedOnReportPage = new NotificationOfBeingPlacedOnReport(
+      'John Smith has been placed on report'
+    )
+    checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
   })
 })
