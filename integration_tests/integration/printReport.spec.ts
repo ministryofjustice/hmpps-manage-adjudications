@@ -1,5 +1,6 @@
 import Page from '../pages/page'
 import PrintReport from '../pages/printReport'
+import NotificationOfBeingPlacedOnReport from '../pages/notificationOfBeingPlacedOnReport'
 
 context('Print a copy of this report', () => {
   beforeEach(() => {
@@ -12,7 +13,7 @@ context('Print a copy of this report', () => {
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)' },
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMP & YOI)' },
         categoryCode: 'C',
         language: 'French',
         alerts: [
@@ -75,7 +76,7 @@ context('Print a copy of this report', () => {
       locationId: 2,
       response: { locationId: 2, agencyId: 'MDI', userDescription: 'Adj', locationPrefix: 'MDI-RES-MCASU-MCASU' },
     })
-    cy.task('stubGetAgency', { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
     cy.signIn()
   })
@@ -98,5 +99,24 @@ context('Print a copy of this report', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524242/report')
     })
+  })
+
+  it('The notification of being on report should present but hidden', () => {
+    cy.visit(`/print-report/1524242`)
+    const printReportPage = Page.verifyOnPage(PrintReport)
+    printReportPage.printButton().should('exist')
+    const notificationOfBeingPlacedOnReportPage = new NotificationOfBeingPlacedOnReport('Print a copy of this report')
+    notificationOfBeingPlacedOnReportPage.checkOnPage()
+    notificationOfBeingPlacedOnReportPage.section().should('exist').should('not.be.visible')
+    notificationOfBeingPlacedOnReportPage.adjudicationNumber().should('contain', '1524242')
+    notificationOfBeingPlacedOnReportPage.prisonerDisplayName().should('contain', 'John, Smith')
+    notificationOfBeingPlacedOnReportPage.prisonerNumber().should('contain', 'G6415GD')
+    notificationOfBeingPlacedOnReportPage
+      .prisonerLocationDescription()
+      .should('contain', 'Moorland (HMP & YOI) - 1-2-015')
+    notificationOfBeingPlacedOnReportPage.incidentDate().should('contain', '6 December 2020')
+    notificationOfBeingPlacedOnReportPage.incidentTime().should('contain', '10:00')
+    notificationOfBeingPlacedOnReportPage.incidentLocationDescription().should('contain', 'Moorland (HMP & YOI) - Adj')
+    notificationOfBeingPlacedOnReportPage.statement().should('contain', 'test')
   })
 })
