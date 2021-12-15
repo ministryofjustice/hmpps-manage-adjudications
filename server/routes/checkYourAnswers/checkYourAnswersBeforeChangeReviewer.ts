@@ -51,7 +51,7 @@ export default class checkYourAnswersRoutes {
       const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
       return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/review`)
     } catch (postError) {
-      res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
+      res.locals.redirectUrl = `/all-completed-reports`
       throw postError
     }
   }

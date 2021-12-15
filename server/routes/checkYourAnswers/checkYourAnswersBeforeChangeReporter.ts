@@ -46,13 +46,13 @@ export default class checkYourAnswersRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { id, prisonerNumber } = req.params
+    const { id } = req.params
     const IdNumberValue: number = parseInt(id as string, 10)
     try {
       const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
       return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/report`)
     } catch (postError) {
-      res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
+      res.locals.redirectUrl = `/your-completed-reports`
       throw postError
     }
   }
