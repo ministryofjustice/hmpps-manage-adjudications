@@ -73,7 +73,7 @@ afterEach(() => {
 describe('GET /check-your-answers', () => {
   it('should load the check-your-answers page', () => {
     return request(app)
-      .get('/check-your-answers/G6415GD/1/report')
+      .get('/check-your-answers/G6415GD/1/review')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
@@ -87,17 +87,17 @@ describe('GET /check-your-answers', () => {
 })
 
 describe('POST /check-your-answers', () => {
-  it('should redirect to the correct page if details is complete', () => {
+  it('should redirect to the correct page if details are complete', () => {
     return request(app)
-      .post('/check-your-answers/G6415GD/1/report')
+      .post('/check-your-answers/G6415GD/1/review')
       .expect(302)
-      .expect('Location', '/prisoner-placed-on-report/2342/changes-confirmed/report')
+      .expect('Location', '/prisoner-placed-on-report/2342/changes-confirmed/review')
   })
 
   it('should throw an error on api failure', () => {
     placeOnReportService.completeDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/check-your-answers/G6415GD/1/report')
+      .post('/check-your-answers/G6415GD/1/review')
       .expect(response => {
         expect(response.text).toContain('Error: Internal Error')
       })

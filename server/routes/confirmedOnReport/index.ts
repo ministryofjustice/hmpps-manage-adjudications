@@ -3,6 +3,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ConfirmedOnReportRoutes from './confirmedOnReport'
 import ConfirmedOnReportChangeReportRoutes from './confirmedOnReportChangeReport'
+import ConfirmedOnReportChangeReviewRoutes from './confirmedOnReportChangeReview'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
@@ -15,11 +16,13 @@ export default function prisonerConfirmedOnReportRoutes({
 
   const confirmedOnReport = new ConfirmedOnReportRoutes(reportedAdjudicationsService)
   const confirmedOnReportChangeReportRoutes = new ConfirmedOnReportChangeReportRoutes(reportedAdjudicationsService)
+  const confirmedOnReportChangeReviewRoutes = new ConfirmedOnReportChangeReviewRoutes(reportedAdjudicationsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
   get('/:adjudicationNumber', confirmedOnReport.view)
   get('/:adjudicationNumber/changes-confirmed/report', confirmedOnReportChangeReportRoutes.view)
+  get('/:adjudicationNumber/changes-confirmed/review', confirmedOnReportChangeReviewRoutes.view)
 
   return router
 }

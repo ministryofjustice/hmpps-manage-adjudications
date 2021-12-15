@@ -69,7 +69,25 @@ afterEach(() => {
 })
 
 describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
-  it('should load the incident details edit page', () => {
+  it('should load the incident details edit page with report referrer', () => {
+    return request(app)
+      .get('/incident-details/G6415GD/5/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/report')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Incident details')
+        expect(res.text).toContain('Tester2 User')
+      })
+  })
+  it('should load the incident details edit page with review referrer', () => {
+    return request(app)
+      .get('/incident-details/G6415GD/5/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Incident details')
+        expect(res.text).toContain('Tester2 User')
+      })
+  })
+  it('should load the incident details edit page with no referrer', () => {
     return request(app)
       .get('/incident-details/G6415GD/5/submitted/edit')
       .expect('Content-Type', /html/)
@@ -90,16 +108,23 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
 })
 
 describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
-  it('should redirect to incident statement page if details are complete but statement is incomplete', () => {
+  it('should redirect to check your answers page - reporter', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/report')
       .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
       .expect(302)
       .expect('Location', '/check-your-answers/G6415GD/34/report')
   })
+  it('should redirect to check your answers page - reviewer', () => {
+    return request(app)
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .expect(302)
+      .expect('Location', '/check-your-answers/G6415GD/34/review')
+  })
   it('should render an error summary with correct validation message', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
       .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
       .expect('Content-Type', /html/)
       .expect(res => {

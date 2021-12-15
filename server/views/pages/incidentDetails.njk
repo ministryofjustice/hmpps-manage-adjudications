@@ -98,7 +98,7 @@
 				{{ govukButton({
 					text: 'Cancel',
 					element: "a",
-					href: "/prisoner-report/"+ prisoner.prisonerNumber + "/" + adjudicationNumber + "/report",
+					href: cancelButtonHref,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "incident-details-cancel" }
 				}) }}
