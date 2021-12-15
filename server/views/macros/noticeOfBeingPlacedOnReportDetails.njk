@@ -5,20 +5,20 @@
     </div>
     <div class='govuk-!-margin-2'>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-        <div class='adjudication-print-form-section govuk-!-width-full'>
-            <div class='adjudication-print-form-section__item'>
+        <div class='adjudication-print-form-section-prisoner govuk-!-width-full'>
+            <div class='adjudication-print-form-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Name</p>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
                     {{ noticeOfBeingPutOnReportData.prisonerDisplayName }}
                 </p>
             </div>
-            <div class='adjudication-print-form-section__item'>
+            <div class='adjudication-print-form-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Prison number</p>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
                     {{ noticeOfBeingPutOnReportData.prisonerNumber }}
                 </p>
             </div>
-            <div class='adjudication-print-form-section__item'>
+            <div class='adjudication-print-form-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Location</p>
                 <p class='govuk-!-margin-bottom-1 govuk-!-font-size-14'>
                     {{ noticeOfBeingPutOnReportData.prisonerLocationDescription }}
@@ -51,17 +51,17 @@
         <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>The alleged offence
             broke prison rule 51</p>
         {% for i in range(1, 5) -%}
-            <div class='adjudication-print-form-section govuk-!-width-full govuk-!-margin-bottom-1'>
-                <div class='adjudication-print-form-section__item'>
+            <div class='adjudication-print-form-section-charges govuk-!-width-full govuk-!-margin-bottom-1'>
+                <div class='adjudication-print-form-section-charges__item'>
                     <p class='govuk-body govuk-!-margin-bottom-0 govuk-!-font-size-14 govuk-!-font-weight-bold'>
                         Charge {{ i }}
                     </p>
                     <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Paragraph number</p>
-                    <input class='adjudication-print-form-input' type='text'>
+                    <input class='adjudication-print-form-charges' type='text'>
                 </div>
-                <div class='adjudication-print-form-section__item'>
+                <div class='adjudication-print-form-section-charges__item'>
                     <p class='govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-14'>Detail of charge</p>
-                    <input class='adjudication-print-form-input' type='text'>
+                    <input class='adjudication-print-form-charges' type='text'>
                 </div>
             </div>
         {%- endfor %}
