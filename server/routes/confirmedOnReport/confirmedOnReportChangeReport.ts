@@ -15,7 +15,7 @@ export default class ConfirmedOnReportChangeReportRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getSimplifiedConfirmationDetails(
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetailsChangedReport(
       adjudicationNumberValue,
       user
     )

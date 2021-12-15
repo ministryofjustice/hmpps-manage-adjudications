@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import NoticeOfBeingPutOnReportData from './NoticeOfBeingPutOnReportData'
 
 export default class PrintReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -16,7 +17,7 @@ export default class PrintReportRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getEnhancedConfirmationDetails(
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(
       adjudicationNumberValue,
       user
     )
@@ -33,6 +34,7 @@ export default class PrintReportRoutes {
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
       exitUrl: referrer,
+      noticeOfBeingPutOnReportData: new NoticeOfBeingPutOnReportData(adjudicationNumber, adjudicationDetails),
     })
   }
 

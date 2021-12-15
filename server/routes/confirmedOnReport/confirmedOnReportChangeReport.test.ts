@@ -24,7 +24,7 @@ const reportedAdjudicationInformation = {
   prisonerNumber: 'H5123BY',
 }
 
-reportedAdjudicationsService.getSimplifiedConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)
+reportedAdjudicationsService.getConfirmationDetailsChangedReport.mockResolvedValue(reportedAdjudicationInformation)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -43,7 +43,9 @@ describe('GET /prisoner-placed-on-report - edited adjudication', () => {
   })
 
   it('should throw an error on api failure', () => {
-    reportedAdjudicationsService.getSimplifiedConfirmationDetails.mockRejectedValue(new Error('error message content'))
+    reportedAdjudicationsService.getConfirmationDetailsChangedReport.mockRejectedValue(
+      new Error('error message content')
+    )
     return request(app)
       .get('/prisoner-placed-on-report/123/changes-confirmed/report')
       .expect('Content-Type', /html/)
