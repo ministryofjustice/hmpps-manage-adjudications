@@ -84,7 +84,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   const checkNotificationOfBeingPlacedOnReportPage = (page: NotificationOfBeingPlacedOnReport): void => {
-    page.section().should('exist').should('not.be.visible')
+    page.section().should('exist')
     page.adjudicationNumber().should('contain', '1524242')
     page.prisonerDisplayName().should('contain', 'John, Smith')
     page.prisonerNumber().should('contain', 'G6415GD')
