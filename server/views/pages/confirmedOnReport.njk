@@ -18,42 +18,41 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class='no-print'>
-      {{ govukPanel({
+  <div class='no-print'>
+    {{ govukPanel({
           titleText: bannerText,
           html: bannerHTML,
           classes: "govuk-!-margin-bottom-6"
         }) }}
 
-      <h2 class="govuk-heading-m">What you must do next</h2>
+    <h2 class="govuk-heading-m">What you must do next</h2>
 
-      <div class="confirmed-on-report-section">
-        {% if not adjudicationEdited %}
-          <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
-        {% endif %}
+    <div class="confirmed-on-report-section">
+      {% if not adjudicationEdited %}
+        <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
+      {% endif %}
 
-        {% if not editedByReviewer %}
-          <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
+      {% if not editedByReviewer %}
+        <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
+      {% else %}
+        <p class="govuk-body">You must confirm with the reporting officer, {{ reporterName }}, that their statement is still accurate.</p>
+        <p class="govuk-body">{{ reporterName }} will need to make any changes to their statement before {{ prisonerFirstAndLastName }} is given an updated copy of their report.</p>
+      {% endif %}
+
+      {% if adjudicationEdited %}
+        {% if editedByReviewer %}
+          <p class="govuk-body govuk-inset-text">{{ prisonerFirstAndLastName }} must be given an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
         {% else %}
-          <p class="govuk-body">You must confirm with the reporting officer, {{ reporterName }}, that their statement is still accurate.</p>
-          <p class="govuk-body">{{ reporterName }} will need to make any changes to their statement before {{ prisonerFirstAndLastName }} is given an updated copy of their report.</p>
+          <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
         {% endif %}
-
-        {% if adjudicationEdited %}
-          {% if editedByReviewer %}
-            <p class="govuk-body govuk-inset-text">{{ prisonerFirstAndLastName }} must be given an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
-          {% else %}
-            <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
-          {% endif %}
-        {% else %}
-          {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
-          {{ printLink('Print a copy of this report', '', "left", "govuk-!-padding-bottom-0") }}
-          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-          <p class="govuk-body" >
-            <a href="https://eu.surveymonkey.com/r/5HKYLY9" class="govuk-link" data-qa="feedback-link">What did you think of our service?  (Opens in a new tab.) </a> This will take 2 minutes.
+      {% else %}
+        {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+        {{ printLink('Print a copy of this report', '', "left", 'govuk-!-padding-right-0') }}
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <p class="govuk-body" >
+          <a href="https://eu.surveymonkey.com/r/5HKYLY9" class="govuk-link" data-qa="feedback-link">What did you think of our service? (Opens in a new tab)</a>.  This will take 2 minutes.
           </p>
-        {% endif %}
+      {% endif %}
       {{ govukButton({
         text: 'Finish',
         element: 'a',
@@ -63,11 +62,13 @@
           'data-qa': 'confirmed-on-report-finish'
         }
       }) }}
-      </div>
     </div>
     <div class="print-only" data-qa="notification-of-being-on-report-section">
       {{ noticeOfBeingPlacedOnReport(noticeOfBeingPlacedOnReportData) }}
     </div>
+  </div>
+  <div class="print-only">
+    {{ noticeOfBeingPlacedOnReport(noticeOfBeingPutOnReportData) }}
   </div>
 
 {% endblock %}
