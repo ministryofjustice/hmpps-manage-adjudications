@@ -1,7 +1,7 @@
 import Page, { PageElement } from './page'
 
 export default class PrintReportPage extends Page {
-  constructor(title) {
+  constructor(title: string) {
     super(title)
   }
 

@@ -1,5 +1,5 @@
 import ConfirmedOnReport from '../pages/confirmedOnReport'
-import Page, { PageElement } from '../pages/page'
+import Page from '../pages/page'
 import PrintReport from '../pages/printReport'
 import NotificationOfBeingPlacedOnReport from '../pages/notificationOfBeingPlacedOnReport'
 
