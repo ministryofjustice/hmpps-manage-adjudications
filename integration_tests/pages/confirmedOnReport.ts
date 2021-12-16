@@ -7,5 +7,7 @@ export default class ConfirmedOnReportPage extends Page {
 
   printLink = (): PageElement => cy.get('[data-qa="printLink"]')
 
+  feedbackLink = (): PageElement => cy.get('[data-qa="feedback-link"]')
+
   finishButton = (): PageElement => cy.get('[data-qa="confirmed-on-report-finish"]')
 }
