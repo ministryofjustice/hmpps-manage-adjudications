@@ -105,7 +105,7 @@ context('Prisoner has been placed on report', () => {
   it('should show a feedback link with correct href', () => {
     cy.visit(`/prisoner-placed-on-report/1524242`)
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.feedbackLink().should('contain', 'What did you think of our service?  (Opens in a new tab.)')
+    confirmedOnReportPage.feedbackLink().should('contain', 'What did you think of our service? (Opens in a new tab)')
     confirmedOnReportPage
       .feedbackLink()
       .should('have.attr', 'href')
