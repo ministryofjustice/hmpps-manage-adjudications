@@ -12,7 +12,7 @@ context('Prisoner has been placed on report', () => {
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)' },
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMP & YOI)' },
         categoryCode: 'C',
         language: 'French',
         alerts: [
@@ -75,7 +75,7 @@ context('Prisoner has been placed on report', () => {
       locationId: 2,
       response: { locationId: 2, agencyId: 'MDI', userDescription: 'Adj', locationPrefix: 'MDI-RES-MCASU-MCASU' },
     })
-    cy.task('stubGetAgency', { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
 
     cy.signIn()

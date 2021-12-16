@@ -1,7 +1,7 @@
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../../utils/utils'
 
-export default class NoticeOfBeingPutOnReportData {
+export default class noticeOfBeingPlacedOnReportData {
   adjudicationNumber: string
 
   statement: string

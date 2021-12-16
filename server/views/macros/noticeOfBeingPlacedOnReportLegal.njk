@@ -1,7 +1,9 @@
 {% macro noticeOfBeingPlacedOnReportLegal(adjudicationNumber) %}
     <div class='adjudication-print-form-header page-break-before'>
         <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
-        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
+        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'
+            data-qa='notice-of-being-placed-on-report-adjudication-number'>Report number:
+            <span class='govuk-!-font-weight-regular'>{{ adjudicationNumber }}</span></h2>
     </div>
     <div class='govuk-!-margin-2'>
         <h2 class='govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Preparing for
@@ -51,14 +53,16 @@
         <p class='govuk-body govuk-!-font-size-14'>You will not receive additional days if you are serving an
             indeterminate sentence such as life, Imprisonment for Public Protection (IPP) or a Detention Training Order
             (DTO).</p>
-        <p class='govuk-body govuk-!-font-size-14'>If the case is referred to an independent adjudicator, it will start
-            again from the beginning and you will be issued with a ‘Template C form’.</p>
     </div>
     <div class='adjudication-print-form-header page-break-before'>
         <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
-        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
+        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'
+            data-qa='notice-of-being-placed-on-report-adjudication-number'>Report number:
+            <span class='govuk-!-font-weight-regular'>{{ adjudicationNumber }}</span></h2>
     </div>
     <div class='govuk-!-margin-2'>
+        <p class='govuk-body govuk-!-font-size-14'>If the case is referred to an independent adjudicator, it will start
+            again from the beginning and you will be issued with a ‘Template C form’.</p>
         <p class='govuk-body govuk-!-font-size-14'>All evidence will be heard again; this is called being ‘de novo’. You
             will be entitled to legal representation at this hearing. For further details see Annex A paragraph 2.8 of
             PSI 05/2018.</p>
@@ -97,6 +101,14 @@
                 other relevant factors, when deciding what punishment to give you
             </li>
         </ul>
+    </div>
+    <div class='adjudication-print-form-header page-break-before'>
+        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
+        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'
+            data-qa='notice-of-being-placed-on-report-adjudication-number'>Report number:
+            <span class='govuk-!-font-weight-regular'>{{ adjudicationNumber }}</span></h2>
+    </div>
+    <div class='govuk-!-margin-2'>
         <h2 class='govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Calling
             witnesses</h2>
         <p class='govuk-body govuk-!-font-size-14'>The Governor or Director will ask whether you want to call any
@@ -104,12 +116,6 @@
             Governor or Director believes their evidence would not add anything. For example, if you wanted other
             prisoners to give evidence and they would say the same thing, only one would be called. You, the reporting
             officer, and the Governor or Director can question the witnesses.</p>
-    </div>
-    <div class='adjudication-print-form-header page-break-before'>
-        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
-        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
-    </div>
-    <div class='govuk-!-margin-2'>
         <h2 class='govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>Getting legal
             advice and legal representation</h2>
         <p class='govuk-body govuk-!-font-size-14'>The Governor or Director will ask whether you want legal advice or
@@ -142,6 +148,14 @@
         <p class='govuk-body govuk-!-font-size-14'>If the Governor or Director is considering a punishment of cellular
             confinement, they will ask a doctor or nurse to assess whether there are any medical reasons why this would
             not be appropriate for you on this occasion.</p>
+    </div>
+    <div class='adjudication-print-form-header page-break-before'>
+        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
+        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'
+            data-qa='notice-of-being-placed-on-report-adjudication-number'>Report number:
+            <span class='govuk-!-font-weight-regular'>{{ adjudicationNumber }}</span></h2>
+    </div>
+    <div class='govuk-!-margin-2'>
         <h2 class='govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-14 govuk-!-font-weight-bold'>After
             receiving any punishment</h2>
         <p class='govuk-body govuk-!-font-size-14'>If you are not satisfied with the outcome, you can request a review
@@ -155,12 +169,6 @@
             solicitor can apply for a review of the punishment and any compensation you have been instructed to pay for
             any damage to prison property by completing form IA4 within 14 days of the outcome and sending that form to
             the Governor.</p>
-    </div>
-    <div class='adjudication-print-form-header page-break-before'>
-        <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
-        <h2 class='govuk-heading-s govuk-!-margin-2 govuk-!-font-size-14'>Report number: {{ adjudicationNumber }}</h2>
-    </div>
-    <div class='govuk-!-margin-2'>
         <p class='govuk-body govuk-!-font-size-14'>If you receive a punishment of additional days added to your
             sentence, you can ask for some of these days to be removed, subject to conditions. You must do this within 6
             months of the incident date. You can then apply every 6 months for any additional days to be removed.</p>
