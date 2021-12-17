@@ -6,7 +6,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-
 {% set title = "Print a copy of this report" %}
 
 {% block pageTitle %}
@@ -14,23 +13,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="govuk-grid-row">
+    <div>
         <div class='no-print'>
-            <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l">{{ title }}</h1>
+            <h1 class="govuk-heading-l">{{ title }}</h1>
 
-                <div class="confirmed-on-report-section">
-                    <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report
+            <div class="confirmed-on-report-section">
+                <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report
                         by {{ expirationTime }} on {{ expirationDay }}.</p>
-                    <div class="govuk-inset-text">You must follow local processes. You might need to give a copy of the
+                <div class="govuk-inset-text">You must follow local processes. You might need to give a copy of the
                         printed report to another member of staff to review before it is given
                         to {{ prisonerFirstAndLastName }}.
                     </div>
-                    {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
-                </div>
+                {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+            </div>
 
-                <div class="govuk-!-margin-top-7 govuk-!-padding-left-2">
-                    {{ govukButton({
+            <div class="govuk-!-margin-top-7 govuk-!-padding-left-2">
+                {{ govukButton({
                         text: 'Print this report',
                         element: 'a',
                         classes: 'print-link--button govuk-button govuk-!-display-none-print print-page',
@@ -39,7 +37,7 @@
                         }
                     }) }}
 
-                    {{ govukButton({
+                {{ govukButton({
                         text: 'Exit',
                         element: 'a',
                         href: exitUrl,
@@ -48,8 +46,6 @@
                             'data-qa': 'print-report-exit'
                         }
                     }) }}
-                </div>
-
             </div>
         </div>
         <div class="print-only" data-qa="notification-of-being-on-report-section">
