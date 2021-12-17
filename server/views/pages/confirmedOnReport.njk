@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
+  <div>
     <div class='no-print'>
       {{ govukPanel({
           titleText: bannerText,
@@ -48,13 +48,13 @@
           {% endif %}
         {% else %}
           {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
-          {{ printLink('Print a copy of this report', '', "left", "govuk-!-padding-bottom-0") }}
+          {{ printLink('Print a copy of this report', '', "left", "govuk-!-padding-right-0") }}
           <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
           <p class="govuk-body" >
             <a href="https://eu.surveymonkey.com/r/5HKYLY9" class="govuk-link" data-qa="feedback-link">What did you think of our service?  (Opens in a new tab.) </a> This will take 2 minutes.
           </p>
         {% endif %}
-      {{ govukButton({
+        {{ govukButton({
         text: 'Finish',
         element: 'a',
         href: buttonHref,

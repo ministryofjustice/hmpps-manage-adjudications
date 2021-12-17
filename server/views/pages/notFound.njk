@@ -9,18 +9,14 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">{{ title }}</h1>
-      <p class="govuk-body">
-        If you typed or pasted the web address, check it is correct.
-      </p>
-      <p class="govuk-body">
-        {{ govukButton({
-          text: "Continue",
-          href: url
-        }) }}
-      </p>
-    </div>
-  </div>
+  <h1 class="govuk-heading-xl">{{ title }}</h1>
+  <p class="govuk-body">
+    If you typed or pasted the web address, check it is correct.
+  </p>
+  <p class="govuk-body">
+    {{ govukButton({
+      text: "Continue",
+      href: url
+    }) }}
+  </p>
 {% endblock %}
