@@ -1,17 +1,17 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 
-const stubGetNeurodiversities = ({
-  id,
+const stubGetLearnerProfile = ({
+  prisonerNumber,
   response = {},
 }: {
-  id: number
+  prisonerNumber: string
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/draft-adjudications/${id}`,
+      url: `/curious/learnerProfile/${prisonerNumber}`,
     },
     response: {
       status: 200,
@@ -36,6 +36,6 @@ const stubPing = (status = 200): SuperAgentRequest =>
   })
 
 export default {
-  stubGetNeurodiversities,
+  stubGetLearnerProfile,
   stubPing,
 }

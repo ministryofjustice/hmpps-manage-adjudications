@@ -59,7 +59,7 @@ context('Print a copy of this report', () => {
         },
       ],
     })
-    cy.task('stubGetNeurodiversities', {
+    cy.task('stubGetLearnerProfile', {
       prisonerNumber: 'G6415GD',
       response: [
         {
