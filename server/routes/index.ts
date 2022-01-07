@@ -2,6 +2,8 @@ import type { Router } from 'express'
 
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
+import typeOfOffenceRoutes from './typeOfOffence'
+import detailsOfOffenceRoutes from './detailsOfOffence'
 import checkYourAnswersRoutes from './checkYourAnswers'
 import confirmedOnReportRoutes from './confirmedOnReport'
 import taskListRoutes from './taskList'
@@ -22,6 +24,8 @@ export default function routes(
   { placeOnReportService, locationService, prisonerSearchService, reportedAdjudicationsService, userService }: Services
 ): Router {
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
+  router.use('/offence-details', typeOfOffenceRoutes())
+  router.use('/details-of-offence', detailsOfOffenceRoutes())
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService, locationService }))
   router.use('/prisoner-placed-on-report', confirmedOnReportRoutes({ reportedAdjudicationsService }))
