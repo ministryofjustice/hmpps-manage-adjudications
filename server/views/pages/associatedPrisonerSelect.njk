@@ -34,7 +34,7 @@
       <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
-      <a href="/incident-details/{{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>
+      <a href="{{ redirectUrl }}&selectedPerson={{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="select-prisoner-link">Select prisoner</a>
     {% endset -%}
     {% set rows = (rows.push([
       { html: prisonerImageHtml },
@@ -51,8 +51,6 @@
   {% endfor %}
 
   {% if rows | length %}
-    <p class="align-right"><strong>Prisoners listed:</strong> {{ rows.length }}</p>
-
     <div class="results-table">
       {{ govukTable({
         head: [
@@ -65,7 +63,7 @@
           },
           { text: "Prison number" },
           {
-            text: "Cell",
+            text: "Location",
             attributes: {
               "aria-sort": "none"
             }

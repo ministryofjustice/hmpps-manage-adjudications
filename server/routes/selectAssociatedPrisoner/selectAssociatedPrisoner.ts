@@ -8,24 +8,27 @@ type PageData = {
   error?: FormError
   searchResults?: PrisonerSearchSummary[]
   searchTerm: string
+  redirectUrl?: string
 }
 export default class SelectAssociatedPrisonerRoutes {
   constructor(private readonly prisonerSearchService: PrisonerSearchService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, searchResults, searchTerm } = pageData
+    const { error, searchResults, searchTerm, redirectUrl } = pageData
 
     return res.render('pages/associatedPrisonerSelect', {
       errors: error ? [error] : [],
-      //   journeyStartUrl: `/select-prisoner?searchTerm=${searchTerm}`,
+      journeyStartUrl: `/select-prisoner?searchTerm=${searchTerm}&redirectUrl=${redirectUrl}`,
       searchResults,
       searchTerm,
+      redirectUrl,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const searchTerm = JSON.stringify(req.query.searchTerm)?.replace(/"/g, '')
+    const redirectUrl = JSON.stringify(req.query.redirectUrl)?.replace(/"/g, '')
 
     // if (!searchTerm) return res.redirect('/search-for-prisoner')
 
@@ -34,7 +37,7 @@ export default class SelectAssociatedPrisonerRoutes {
       user
     )
 
-    return this.renderView(req, res, { searchResults, searchTerm })
+    return this.renderView(req, res, { searchResults, searchTerm, redirectUrl })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {

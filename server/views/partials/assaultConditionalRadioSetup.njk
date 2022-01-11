@@ -3,6 +3,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set prisoner %}
+{% if radioSelected === 'assaultedPrisoner' %}
+  <div>  
+    <p>Name - {{ associatedPersonDetails.name }} </p> 
+    <p>PRN - {{ associatedPersonDetails.id }} </p> 
+  
+  </div>
+{% else %}
 <div class="flex-container" >
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
@@ -26,6 +33,8 @@
 			}) }}
 </div>
 </div>
+{% endif %}
+
 {% endset -%}
 
 {% set prisonOfficer %}
@@ -56,8 +65,8 @@
 
 {% set otherStaff %}
 {{ govukInput({
-  id: "assaultedOtherStaff",
-  name: "assaultedOtherStaff",
+  id: "assaultedOtherStaffId",
+  name: "assaultedOtherStaffId",
   classes: "govuk-!-width-one-quarter",
   label: {
     text: "Enter their name",
@@ -68,8 +77,8 @@
 
 {% set otherMisc %}
 {{ govukInput({
-  id: "assaultedOtherMisc",
-  name: "assaultedOtherMisc",
+  id: "assaultedOtherMiscId",
+  name: "assaultedOtherMiscId",
   classes: "govuk-!-width-one-quarter",
   label: {
     text: "Enter their name",
@@ -79,8 +88,8 @@
 {% endset -%}
 
     {{ govukRadios({
-    idPrefix: 'assault',
-    name: 'assault',
+    idPrefix: 'outerRadio',
+    name: 'assaultRadios',
     fieldset: {
         legend: {
         text: "Who was assaulted?",
@@ -94,28 +103,32 @@
       text: "Another prisoner",
       conditional: {
         html: prisoner
-      }
+      },
+      checked: radioSelected === "assaultedPrisoner"
     },
     {
       value: "assaultedPrisonOfficer",
       text: "A prison officer",
       conditional: {
         html: prisonOfficer
-      }
+      },
+      checked: radioSelected === "assaultedPrisonOfficer"
     },
     {
       value: "assaultedOtherStaff",
       text: "A member of staff who is not a prison officer",
       conditional: {
         html: otherStaff
-      }
+      },
+      checked: radioSelected === "assaultedOtherStaff"
     },
     {
       value: "assaultedOtherMisc",
       text: "Another person not listed above",
       conditional: {
         html: otherMisc
-      }
+      },
+      checked: radioSelected === "assaultedOtherMisc"
     }
   ]
     }) }}
