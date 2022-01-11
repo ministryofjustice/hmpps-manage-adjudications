@@ -1,0 +1,121 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set prisoner %}
+<div class="flex-container" >
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "assaultedPrisonerId",
+  name: "assaultedPrisonerId",
+  classes: "govuk-!-width-full-width",
+  label: {
+    text: "Enter their name or prison number",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+<div class="govuk-!-margin-top-6">
+		{{ govukButton({
+				text: 'Search',
+				classes: "govuk-button--secondary",
+        type: "submit",
+        name: "search",
+        value: "assaultedPrisonerSearchSubmit",
+				attributes: { "data-qa": "assault-prisoner-search" }
+			}) }}
+</div>
+</div>
+{% endset -%}
+
+{% set prisonOfficer %}
+<div class="flex-container">
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "assaultedPrisonOfficerId",
+  name: "assaultedPrisonOfficerId",
+  classes: "govuk-!-width-full-width",
+  label: {
+    text: "Enter their name or user ID",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+<div class="govuk-!-margin-top-6">
+		{{ govukButton({
+				text: 'Search',
+				classes: "govuk-button--secondary",
+        type: "submit",
+        name: "search",
+        value: "assaultedPrisonOfficerSearchSubmit",
+				attributes: { "data-qa": "assault-prison-officer-search" }
+			}) }}
+</div>
+</div>
+{% endset -%}
+
+{% set otherStaff %}
+{{ govukInput({
+  id: "assaultedOtherStaff",
+  name: "assaultedOtherStaff",
+  classes: "govuk-!-width-one-quarter",
+  label: {
+    text: "Enter their name",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+{% endset -%}
+
+{% set otherMisc %}
+{{ govukInput({
+  id: "assaultedOtherMisc",
+  name: "assaultedOtherMisc",
+  classes: "govuk-!-width-one-quarter",
+  label: {
+    text: "Enter their name",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+{% endset -%}
+
+    {{ govukRadios({
+    idPrefix: 'assault',
+    name: 'assault',
+    fieldset: {
+        legend: {
+        text: "Who was assaulted?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+        }
+    },
+    items: [
+    {
+      value: "assaultedPrisoner",
+      text: "Another prisoner",
+      conditional: {
+        html: prisoner
+      }
+    },
+    {
+      value: "assaultedPrisonOfficer",
+      text: "A prison officer",
+      conditional: {
+        html: prisonOfficer
+      }
+    },
+    {
+      value: "assaultedOtherStaff",
+      text: "A member of staff who is not a prison officer",
+      conditional: {
+        html: otherStaff
+      }
+    },
+    {
+      value: "assaultedOtherMisc",
+      text: "Another person not listed above",
+      conditional: {
+        html: otherMisc
+      }
+    }
+  ]
+    }) }}
