@@ -18,7 +18,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.render('pages/associatedPrisonerSelect', {
       errors: error ? [error] : [],
-      journeyStartUrl: `/select-prisoner?searchTerm=${searchTerm}&redirectUrl=${redirectUrl}`,
+      journeyStartUrl: `/select-associated-prisoner?searchTerm=${searchTerm}&redirectUrl=${redirectUrl}`,
       searchResults,
       searchTerm,
       redirectUrl,

@@ -3,16 +3,12 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import SelectAssociatedStaffRoutes from './selectAssociatedStaff'
 
-import PrisonerSearchService from '../../services/prisonerSearchService'
+import UserService from '../../services/userService'
 
-export default function selectAssociatedStaffRoutes({
-  prisonerSearchService,
-}: {
-  prisonerSearchService: PrisonerSearchService
-}): Router {
+export default function selectAssociatedStaffRoutes({ userService }: { userService: UserService }): Router {
   const router = express.Router()
 
-  const selectAssociatedStaff = new SelectAssociatedStaffRoutes(prisonerSearchService)
+  const selectAssociatedStaff = new SelectAssociatedStaffRoutes(userService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

@@ -57,6 +57,7 @@ export default class AssaultRoutes {
       res.redirect(`${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?radioSelected=${assaultRadios}`)
     } else {
       // do overall form submit with data collected
+      // eslint-disable-next-line no-console
       console.log(radioSelected, ' = ', selectedPerson)
     }
   }

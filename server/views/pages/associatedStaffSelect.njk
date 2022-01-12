@@ -1,0 +1,82 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = "Select a staff member" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {# {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %} #}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {% include "../partials/prisonerSearchForm.njk" %}
+
+  {% set rows = [] %}
+  {% for staffMember in searchResults %}
+    {% set staffMemberName %}
+      <p class="govuk-body">{{ staffMember.displayName }}</p>
+    {% endset -%}
+    {% set startReportlLinkHtml %}
+      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.userId }}" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>
+    {% endset -%}
+    {% set rows = (rows.push([
+      {
+        html: staffMemberName,
+        attributes: {
+          "data-sort-value": staffMember.displayName
+        }
+      },
+      { text: staffMember.location },
+      { text: staffMember.userId },
+      { text: staffMember.emailAddress },
+      { html: startReportlLinkHtml }
+    ]), rows) %}
+  {% endfor %}
+
+  {% if rows | length %}
+    <div class="results-table">
+      {{ govukTable({
+        head: [
+          {
+            text: "Name",
+            attributes: {
+              "aria-sort": "ascending"
+            }
+          },
+          {
+            text: "Location",
+            attributes: {
+              "aria-sort": "none"
+            }
+          },
+          { text: "User ID" },
+          {
+            text: "Email address"
+          },
+          { text: "" }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "staffMember-search-results-table", "data-module": "moj-sortable-table" }
+      }) }}
+    </div>
+    
+  {% else %}
+    {% if not errors | length %}
+      <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

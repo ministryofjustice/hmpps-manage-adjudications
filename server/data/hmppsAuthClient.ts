@@ -44,6 +44,16 @@ export interface UserRole {
   roleCode: string
 }
 
+export type MatchedUserResult = {
+  exists: boolean
+  username: string
+  verified: boolean
+  email?: string
+  name: string
+  activeCaseLoadId?: string
+  staffId: number
+}
+
 export default class HmppsAuthClient {
   constructor(private readonly tokenStore: TokenStore) {}
 
@@ -58,6 +68,13 @@ export default class HmppsAuthClient {
 
   getUserFromUsername(username: string, token: string): Promise<User> {
     return this.restClient(token).get({ path: `/api/user/${username}` })
+  }
+
+  getUsersFromName(firstName: string, lastName: string, token: string): Promise<MatchedUserResult[]> {
+    return this.restClient(token).get({
+      path: `/api/prisonuser`,
+      query: querystring.stringify({ firstName: firstName?.trim(), lastName: lastName?.trim() }),
+    })
   }
 
   getUserRoles(token: string): Promise<string[]> {
