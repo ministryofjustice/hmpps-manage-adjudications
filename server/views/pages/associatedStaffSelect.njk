@@ -27,22 +27,19 @@
 
   {% set rows = [] %}
   {% for staffMember in searchResults %}
-    {% set staffMemberName %}
-      <p class="govuk-body">{{ staffMember.displayName }}</p>
-    {% endset -%}
     {% set startReportlLinkHtml %}
-      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.userId }}" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>
+      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
-        html: staffMemberName,
+        text: staffMember.name,
         attributes: {
-          "data-sort-value": staffMember.displayName
+          "data-sort-value": staffMember.name
         }
       },
-      { text: staffMember.location },
-      { text: staffMember.userId },
-      { text: staffMember.emailAddress },
+      { text: staffMember.activeCaseLoadId },
+      { text: staffMember.username },
+      { text: staffMember.email or "None entered" },
       { html: startReportlLinkHtml }
     ]), rows) %}
   {% endfor %}

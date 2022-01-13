@@ -1,8 +1,8 @@
-import url from 'url'
+// import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import UserService, { StaffDetails } from '../../services/userService'
-import validateForm from '../prisonerSearch/prisonerSearchValidation'
+// import validateForm from '../prisonerSearch/prisonerSearchValidation'
 
 type PageData = {
   error?: FormError
@@ -33,24 +33,22 @@ export default class SelectAssociatedPrisonerRoutes {
     // if (!searchTerm) return res.redirect('/search-for-prisoner')
 
     const [firstName, lastName] = searchTerm.split(' ')
-    console.log(firstName, lastName)
+
     const searchResults = await this.userService.getStaffFromNames(firstName, lastName, user)
 
     return this.renderView(req, res, { searchResults, searchTerm, redirectUrl })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { searchTerm } = req.body
-
-    const error = validateForm({ searchTerm })
-
-    if (error) return this.renderView(req, res, { error, searchTerm })
-
-    return res.redirect(
-      url.format({
-        pathname: '/select-prisoner',
-        query: { searchTerm },
-      })
-    )
+    // const { searchTerm } = req.body
+    // const error = validateForm({ searchTerm })
+    // if (error) return this.renderView(req, res, { error, searchTerm })
+    // return res.redirect(
+    //   url.format({
+    //     pathname: '/select-prisoner',
+    //     query: { searchTerm },
+    //   })
+    // )
   }
 }

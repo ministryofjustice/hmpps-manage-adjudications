@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PrisonerResult from '../../data/prisonerResult'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import UserService from '../../services/userService'
 
 type PageData = {
   error?: FormError
@@ -13,7 +14,7 @@ type PageData = {
 }
 
 export default class AssaultRoutes {
-  constructor(private readonly placeOnReportService: PlaceOnReportService) {}
+  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, radioSelected, associatedPersonDetails } = pageData
@@ -33,10 +34,16 @@ export default class AssaultRoutes {
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     const associatedPersonDetails = { id: selectedPerson, name: '' }
     if (selectedPerson) {
-      const prisoner = await this.placeOnReportService.getPrisonerDetails(selectedPerson, user)
-      associatedPersonDetails.name = prisoner.displayName
+      if (radioSelected === 'assaultedPrisoner') {
+        const prisoner = await this.placeOnReportService.getPrisonerDetails(selectedPerson, user)
+        associatedPersonDetails.name = prisoner.displayName
+      } else if (radioSelected === 'assaultedPrisonOfficer') {
+        const staffMember = await this.userService.getStaffFromUsername(selectedPerson, user.token)
+        console.log('hello!', staffMember)
+        associatedPersonDetails.name = staffMember.name
+      }
     }
-
+    // console.log(selectedPerson, associatedPersonDetails)
     return this.renderView(req, res, {
       radioSelected,
       associatedPerson: selectedPerson,

@@ -39,6 +39,10 @@ export default class UserService {
     }
   }
 
+  async getStaffFromUsername(username: string, user: User): Promise<User> {
+    return this.hmppsAuthClient.getUserFromUsername(username, user.token)
+  }
+
   async getStaffFromNames(firstName: string, lastName: string, user: User): Promise<StaffDetails[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return this.hmppsAuthClient.getUsersFromName(firstName, lastName, token)
