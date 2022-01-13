@@ -54,6 +54,12 @@ export type MatchedUserResult = {
   staffId: number
 }
 
+export type UserEmail = {
+  username: string
+  email: string
+  verified: boolean
+}
+
 export default class HmppsAuthClient {
   constructor(private readonly tokenStore: TokenStore) {}
 
@@ -75,6 +81,10 @@ export default class HmppsAuthClient {
       path: `/api/prisonuser`,
       query: querystring.stringify({ firstName: firstName?.trim(), lastName: lastName?.trim() }),
     })
+  }
+
+  getUserEmail(username: string, token: string): Promise<UserEmail> {
+    return this.restClient(token).get({ path: `/api/user/${username}/email` })
   }
 
   getUserRoles(token: string): Promise<string[]> {

@@ -42,6 +42,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
+    const redirectUrl = JSON.stringify(req.query.redirectUrl)?.replace(/"/g, '')
 
     const error = validateForm({ searchTerm })
 
@@ -49,8 +50,8 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.redirect(
       url.format({
-        pathname: '/select-prisoner',
-        query: { searchTerm },
+        pathname: '/select-associated-prisoner',
+        query: { searchTerm, redirectUrl },
       })
     )
   }

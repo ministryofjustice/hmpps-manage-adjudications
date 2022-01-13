@@ -25,6 +25,8 @@ export default class AssaultRoutes {
       radioSelected,
       associatedPersonDetails,
       exitUrl: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
+      prisonerNumber,
+      id,
     })
   }
 

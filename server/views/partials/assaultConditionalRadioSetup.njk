@@ -3,10 +3,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set prisoner %}
-{% if radioSelected === 'assaultedPrisoner' %}
+{% if (radioSelected === 'assaultedPrisoner') and (associatedPersonDetails.name) %}
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
     <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
+    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?radioSelected=assaultedPrisoner">Delete</a></p>
   </div>
 {% else %}
 <div class="flex-container" >
@@ -37,10 +38,11 @@
 {% endset -%}
 
 {% set prisonOfficer %}
-{% if radioSelected === 'assaultedPrisonOfficer' %}
+{% if (radioSelected === 'assaultedPrisonOfficer') and (associatedPersonDetails.name) %}
   <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
-    <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ associatedPersonDetails.id }} </p> 
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p>
+    <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ associatedPersonDetails.id }} </p>
+    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?radioSelected=assaultedPrisonOfficer">Delete</a></p>
   </div>
 {% else %}
 <div class="flex-container">
