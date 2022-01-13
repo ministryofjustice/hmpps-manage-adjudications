@@ -59,7 +59,7 @@ context('Prisoner has been placed on report', () => {
         },
       ],
     })
-    cy.task('stubGetLearnerProfile', {
+    cy.task('stubGetNeurodiversities', {
       prisonerNumber: 'G6415GD',
       response: [
         {
