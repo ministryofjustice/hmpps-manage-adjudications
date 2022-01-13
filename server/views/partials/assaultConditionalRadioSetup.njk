@@ -5,9 +5,8 @@
 {% set prisoner %}
 {% if radioSelected === 'assaultedPrisoner' %}
   <div>  
-    <p>Name - {{ associatedPersonDetails.name }} </p> 
-    <p>PRN - {{ associatedPersonDetails.id }} </p> 
-  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
   </div>
 {% else %}
 <div class="flex-container" >
@@ -38,6 +37,12 @@
 {% endset -%}
 
 {% set prisonOfficer %}
+{% if radioSelected === 'assaultedPrisonOfficer' %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
+    <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ associatedPersonDetails.id }} </p> 
+  </div>
+{% else %}
 <div class="flex-container">
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
@@ -61,6 +66,7 @@
 			}) }}
 </div>
 </div>
+{% endif %}
 {% endset -%}
 
 {% set otherStaff %}

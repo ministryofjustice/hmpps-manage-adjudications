@@ -38,12 +38,10 @@ export default class AssaultRoutes {
         const prisoner = await this.placeOnReportService.getPrisonerDetails(selectedPerson, user)
         associatedPersonDetails.name = prisoner.displayName
       } else if (radioSelected === 'assaultedPrisonOfficer') {
-        const staffMember = await this.userService.getStaffFromUsername(selectedPerson, user.token)
-        console.log('hello!', staffMember)
+        const staffMember = await this.userService.getStaffFromUsername(selectedPerson, user)
         associatedPersonDetails.name = staffMember.name
       }
     }
-    // console.log(selectedPerson, associatedPersonDetails)
     return this.renderView(req, res, {
       radioSelected,
       associatedPerson: selectedPerson,
