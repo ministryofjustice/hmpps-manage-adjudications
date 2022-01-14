@@ -18,7 +18,6 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.render('pages/associatedPrisonerSelect', {
       errors: error ? [error] : [],
-      journeyStartUrl: `/select-associated-prisoner?searchTerm=${searchTerm}&redirectUrl=${redirectUrl}`,
       searchResults,
       searchTerm,
       redirectUrl,
@@ -27,17 +26,23 @@ export default class SelectAssociatedPrisonerRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
+    const { prisonNumber, id } = req.params
+    const { startUrl } = req.query
     const searchTerm = JSON.stringify(req.query.searchTerm)?.replace(/"/g, '')
     const redirectUrl = JSON.stringify(req.query.redirectUrl)?.replace(/"/g, '')
 
-    // if (!searchTerm) return res.redirect('/search-for-prisoner')
+    if (!searchTerm) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
 
     const searchResults = await this.prisonerSearchService.search(
       { searchTerm, prisonIds: [user.activeCaseLoad.caseLoadId] },
       user
     )
 
-    return this.renderView(req, res, { searchResults, searchTerm, redirectUrl })
+    return this.renderView(req, res, {
+      searchResults,
+      searchTerm,
+      redirectUrl,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -46,7 +51,11 @@ export default class SelectAssociatedPrisonerRoutes {
 
     const error = validateForm({ searchTerm })
 
-    if (error) return this.renderView(req, res, { error, searchTerm })
+    if (error)
+      return this.renderView(req, res, {
+        error,
+        searchTerm,
+      })
 
     return res.redirect(
       url.format({

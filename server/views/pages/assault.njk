@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 
@@ -16,6 +17,14 @@
 {% endblock %}
 
 {% block content %}
+
+	{% if errors | length %}
+		{{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+	{% endif %}
 
 	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

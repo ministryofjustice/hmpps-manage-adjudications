@@ -32,9 +32,6 @@ export interface StaffDetails {
   username: string
 }
 
-// Check if there are any numbers or underscores, which would indicate that the term is not a name
-const isIdentifier = (searchTerm: string) => /\d_/.test(searchTerm)
-
 export default class UserService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 

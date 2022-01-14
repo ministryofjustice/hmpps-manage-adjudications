@@ -23,7 +23,32 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {% include "../partials/prisonerSearchForm.njk" %}
+  <form method="POST" novalidate="novalidate" data-qa="search-form">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+  <div class="horizontal-form govuk-!-margin-bottom-3">
+    {{ govukInput({
+      id: "searchTerm",
+      name: "searchTerm",
+      value: searchTerm,
+      label: {
+        html: 'Enter their name'
+      },
+      classes: "govuk-!-width-full",
+      attributes: {
+        'data-qa': "search-term-input"
+      },
+      errorMessage: errors | findError("searchTerm")
+    }) }}
+
+    {{ govukButton({
+      text: "Search",
+      type: "submit",
+      classes: "govuk-button--secondary",
+      attributes: { "data-qa": "search-submit" }
+    }) }}
+  </div>
+</form>
 
   {% set rows = [] %}
   {% for staffMember in searchResults %}

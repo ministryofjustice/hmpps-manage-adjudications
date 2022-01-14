@@ -13,9 +13,11 @@
 <div class="flex-container" >
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
-  id: "assaultedPrisonerId",
-  name: "assaultedPrisonerId",
+  id: "assaultedPrisonerInput",
+  name: "assaultedPrisonerInput",
   classes: "govuk-!-width-full-width",
+  value: assaultedPrisonerInput,
+  errorMessage: errors | findErrors(['assaultedPrisonerInput']),
   label: {
     text: "Enter their name or prison number",
     classes: "govuk-!-font-weight-bold"
@@ -45,28 +47,33 @@
     <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?radioSelected=assaultedPrisonOfficer">Delete</a></p>
   </div>
 {% else %}
+<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
 <div class="flex-container">
+<div id="assaultedPrisonOfficerFullName">
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
-  id: "assaultedPrisonOfficerIdFirstname",
-  name: "assaultedPrisonOfficerIdFirstname",
+  id: "assaultedPrisonOfficerFirstname",
+  name: "assaultedPrisonOfficerFirstname",
   classes: "govuk-!-width-full-width",
+  value: assaultedPrisonOfficerFirstname,
+  errorMessage: errors | findErrors(['assaultedPrisonOfficerFirstname', 'assaultedPrisonOfficerFullName' ]),
   label: {
-    text: "First name",
-    classes: "govuk-!-font-weight-bold"
+    text: "First name"
   }
 }) }}
 </div>
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
-  id: "assaultedPrisonOfficerIdLastname",
-  name: "assaultedPrisonOfficerIdLastname",
+  id: "assaultedPrisonOfficerLastname",
+  name: "assaultedPrisonOfficerLastname",
   classes: "govuk-!-width-full-width",
+  value: assaultedPrisonOfficerLastname,
+  errorMessage: errors | findErrors(['assaultedPrisonOfficerLastname', 'assaultedPrisonOfficerFullName']),
   label: {
-    text: "Last name",
-    classes: "govuk-!-font-weight-bold"
+    text: "Last name"
   }
 }) }}
+</div>
 </div>
 <div class="govuk-!-margin-top-6">
 		{{ govukButton({
@@ -84,8 +91,8 @@
 
 {% set otherStaff %}
 {{ govukInput({
-  id: "assaultedOtherStaffId",
-  name: "assaultedOtherStaffId",
+  id: "assaultedOtherStaffInput",
+  name: "assaultedOtherStaffInput",
   classes: "govuk-!-width-one-quarter",
   label: {
     text: "Enter their name",
@@ -96,8 +103,8 @@
 
 {% set otherMisc %}
 {{ govukInput({
-  id: "assaultedOtherMiscId",
-  name: "assaultedOtherMiscId",
+  id: "assaultedOtherMiscInput",
+  name: "assaultedOtherMiscInput",
   classes: "govuk-!-width-one-quarter",
   label: {
     text: "Enter their name",
