@@ -2,12 +2,12 @@
 import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
-import UserService, { StaffDetails } from '../../services/userService'
+import UserService, { StaffSearchByName } from '../../services/userService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
 
 type PageData = {
   error?: FormError
-  searchResults?: StaffDetails[]
+  searchResults?: StaffSearchByName[]
   searchTerm: string
   redirectUrl?: string
 }
@@ -32,7 +32,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const redirectUrl = JSON.stringify(req.query.redirectUrl)?.replace(/"/g, '')
     // if (!searchTerm) return res.redirect('/search-for-prisoner')
 
-    const searchResults = await this.userService.getStaff(searchTerm, user)
+    const searchResults = await this.userService.getStaffFromNames(searchTerm, user)
     console.log('in controller', searchResults)
 
     return this.renderView(req, res, { searchResults, searchTerm, redirectUrl })

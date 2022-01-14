@@ -53,14 +53,15 @@ export default class AssaultRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { id, prisonerNumber } = req.params
-    const { assaultedPrisonerId, assaultedPrisonOfficerId, assaultRadios } = req.body
+    const { assaultedPrisonerId, assaultedPrisonOfficerIdFirstname, assaultedPrisonOfficerIdLastname, assaultRadios } =
+      req.body
     const { selectedPerson, radioSelected } = req.query
     if (req.body.search) {
       // redirect to prisoner search page or staff search page with details entered
       const searchPageHref =
         req.body.search === 'assaultedPrisonerSearchSubmit'
           ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerId}`
-          : `/select-associated-staff?searchTerm=${assaultedPrisonOfficerId}`
+          : `/select-associated-staff?searchTerm=${assaultedPrisonOfficerIdFirstname} ${assaultedPrisonOfficerIdLastname}`
       res.redirect(`${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?radioSelected=${assaultRadios}`)
     } else {
       // do overall form submit with data collected

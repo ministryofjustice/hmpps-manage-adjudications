@@ -48,11 +48,22 @@
 <div class="flex-container">
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
-  id: "assaultedPrisonOfficerId",
-  name: "assaultedPrisonOfficerId",
+  id: "assaultedPrisonOfficerIdFirstname",
+  name: "assaultedPrisonOfficerIdFirstname",
   classes: "govuk-!-width-full-width",
   label: {
-    text: "Enter their name or user ID",
+    text: "First name",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "assaultedPrisonOfficerIdLastname",
+  name: "assaultedPrisonOfficerIdLastname",
+  classes: "govuk-!-width-full-width",
+  label: {
+    text: "Last name",
     classes: "govuk-!-font-weight-bold"
   }
 }) }}

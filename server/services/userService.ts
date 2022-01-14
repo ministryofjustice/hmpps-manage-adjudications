@@ -55,34 +55,16 @@ export default class UserService {
   }
 
   async getStaffFromUsername(username: string, user: User): Promise<UserWithEmail> {
-    const result = await this.hmppsAuthClient.getUserFromUsername(username, user.token)
-    const userEmail = await this.hmppsAuthClient.getUserEmail(username, user.token)
-    console.log(result)
-    // @ts-expect-error: sorting this tomorrow
-    return { result, email: userEmail.email }
+    const [result, userEmail] = await Promise.all([
+      this.hmppsAuthClient.getUserFromUsername(username, user.token),
+      this.hmppsAuthClient.getUserEmail(username, user.token),
+    ])
+    return { ...result, email: userEmail.email }
   }
 
   async getStaffFromNames(name: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const [firstName, lastName] = name.split(' ')
     return this.hmppsAuthClient.getUsersFromName(firstName, lastName, token)
-  }
-
-  async getStaff(search: string, user: User): Promise<StaffDetails[]> {
-    const searchTerm = search.replace(/,/g, ' ').replace(/\s\s+/g, ' ').trim()
-
-    const searchResults = isIdentifier(searchTerm)
-      ? await this.getStaffFromUsername(searchTerm, user)
-      : await this.getStaffFromNames(searchTerm, user)
-    console.log('in service function', searchResults)
-    const searchResultsList = Array.isArray(searchResults) ? searchResults : [searchResults]
-    return searchResultsList.map(staffMember => {
-      return {
-        username: staffMember.username,
-        name: staffMember.name,
-        activeCaseLoadId: staffMember.activeCaseLoadId,
-        // email: staffMember.email,
-      }
-    })
   }
 }
