@@ -46,6 +46,7 @@ beforeEach(() => {
         dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
         locationId: 2,
       },
+      incidentRole: {},
       prisonerNumber: 'G6415GD',
     },
   })
@@ -118,6 +119,7 @@ describe('Incident details completed already', () => {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
           locationId: 2,
         },
+        incidentRole: {},
         incidentStatement: {
           completed: true,
           statement: 'blah blah',

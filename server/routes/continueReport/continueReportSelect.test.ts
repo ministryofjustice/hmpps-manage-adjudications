@@ -45,6 +45,7 @@ describe('GET /select-report', () => {
             locationId: 357591,
             dateTimeOfIncident: '2021-10-12T20:00:00',
           },
+          incidentRole: {},
           incidentStatement: {
             statement: 'This is my statement',
             completed: false,
@@ -62,6 +63,7 @@ describe('GET /select-report', () => {
             locationId: 27187,
             dateTimeOfIncident: '2021-11-11T15:15:00',
           },
+          incidentRole: {},
           incidentStatement: {
             statement: 'Test statement',
             completed: true,

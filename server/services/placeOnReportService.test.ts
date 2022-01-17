@@ -76,6 +76,10 @@ describe('placeOnReportService', () => {
         locationId: 3,
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
+        // Added by temporary code to preserve APi compatibility
+        incidentRole: {
+          roleCode: '25a',
+        },
       })
       expect(result).toEqual({
         draftAdjudication: {
