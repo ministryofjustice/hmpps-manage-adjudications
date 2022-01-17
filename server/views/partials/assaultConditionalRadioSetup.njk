@@ -10,7 +10,7 @@
     <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?radioSelected=assaultedPrisoner">Delete</a></p>
   </div>
 {% else %}
-<div class="flex-container" >
+<div class="flex-container flex-center">
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
   id: "assaultedPrisonerInput",
@@ -24,16 +24,14 @@
   }
 }) }}
 </div>
-<div class="govuk-!-margin-top-6">
 		{{ govukButton({
 				text: 'Search',
-				classes: "govuk-button--secondary",
+				classes: "govuk-button--secondary conditionalRadioSearchButton",
         type: "submit",
         name: "search",
         value: "assaultedPrisonerSearchSubmit",
 				attributes: { "data-qa": "assault-prisoner-search" }
 			}) }}
-</div>
 </div>
 {% endif %}
 
@@ -48,25 +46,21 @@
   </div>
 {% else %}
 <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
-<div class="flex-container">
-<div id="assaultedPrisonOfficerFullName">
-<div class="govuk-!-margin-right-3">
+<div id="assaultedPrisonOfficerFullName" class="govuk-form-group flex-container flex-column">
 {{ govukInput({
   id: "assaultedPrisonOfficerFirstname",
   name: "assaultedPrisonOfficerFirstname",
-  classes: "govuk-!-width-full-width",
+  classes: "govuk-!-width-one-third",
   value: assaultedPrisonOfficerFirstname,
   errorMessage: errors | findErrors(['assaultedPrisonOfficerFirstname', 'assaultedPrisonOfficerFullName' ]),
   label: {
     text: "First name"
   }
 }) }}
-</div>
-<div class="govuk-!-margin-right-3">
 {{ govukInput({
   id: "assaultedPrisonOfficerLastname",
   name: "assaultedPrisonOfficerLastname",
-  classes: "govuk-!-width-full-width",
+  classes: "govuk-!-width-one-third",
   value: assaultedPrisonOfficerLastname,
   errorMessage: errors | findErrors(['assaultedPrisonOfficerLastname', 'assaultedPrisonOfficerFullName']),
   label: {
@@ -74,18 +68,15 @@
   }
 }) }}
 </div>
-</div>
-<div class="govuk-!-margin-top-6">
-		{{ govukButton({
-				text: 'Search',
-				classes: "govuk-button--secondary",
-        type: "submit",
-        name: "search",
-        value: "assaultedPrisonOfficerSearchSubmit",
-				attributes: { "data-qa": "assault-prison-officer-search" }
-			}) }}
-</div>
-</div>
+{{ govukButton({
+    text: 'Search',
+    classes: "govuk-button--secondary govuk-!-margin-top-4",
+    type: "submit",
+    name: "search",
+    value: "assaultedPrisonOfficerSearchSubmit",
+    attributes: { "data-qa": "assault-prison-officer-search" }
+  }) }}
+
 {% endif %}
 {% endset -%}
 

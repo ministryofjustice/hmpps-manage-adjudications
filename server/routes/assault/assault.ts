@@ -18,6 +18,25 @@ type PageData = {
   assaultedPrisonOfficerLastname?: string
 }
 
+const submitValue = (
+  assaultRadios: string,
+  radioSelected: string,
+  selectedPerson: string,
+  assaultedOtherStaffInput: string,
+  assaultedOtherMiscInput: string
+): { assaultRadios: string; selectedPerson: string } | null => {
+  switch (assaultRadios) {
+    case radioSelected:
+      return { assaultRadios, selectedPerson }
+    case 'assaultedOtherStaff':
+      return { assaultRadios, selectedPerson: assaultedOtherStaffInput }
+    case 'assaultedOtherMisc':
+      return { assaultRadios, selectedPerson: assaultedOtherMiscInput }
+    default:
+      return null
+  }
+}
+
 export default class AssaultRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
@@ -74,11 +93,10 @@ export default class AssaultRoutes {
       assaultedPrisonOfficerFirstname,
       assaultedPrisonOfficerLastname,
       assaultRadios,
-      // assaultedOtherStaffInput,
-      // assaultedOtherMiscInput,
+      assaultedOtherStaffInput,
+      assaultedOtherMiscInput,
     } = req.body
     const { selectedPerson, radioSelected } = req.query
-    // check which submit button has been clicked
     if (search) {
       const error =
         search === 'assaultedPrisonerSearchSubmit'
@@ -101,15 +119,26 @@ export default class AssaultRoutes {
         search === 'assaultedPrisonerSearchSubmit'
           ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
           : `/select-associated-staff?searchTerm=${assaultedPrisonOfficerFirstname} ${assaultedPrisonOfficerLastname}`
-      res.redirect(
+      return res.redirect(
         `${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?radioSelected=${assaultRadios}&startUrl=assault`
       )
-    } else {
-      // check that a radio has been selected and a name given
-      // do overall form submit with data collected
-      // eslint-disable-next-line no-console
-      console.log(radioSelected, ' = ', selectedPerson)
     }
-    return res.redirect('/somewhere')
+    const result = submitValue(
+      assaultRadios,
+      radioSelected as string,
+      selectedPerson as string,
+      assaultedOtherStaffInput,
+      assaultedOtherMiscInput
+    )
+    // submit the result to the server here and redirect to next page
+    try {
+      // API call to post data to database
+      // eslint-disable-next-line no-console
+      console.log(result)
+      return res.redirect('/somewhere')
+    } catch (error) {
+      res.locals.redirectUrl = `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
+      throw error
+    }
   }
 }

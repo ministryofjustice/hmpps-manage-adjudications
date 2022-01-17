@@ -2,13 +2,13 @@ import { FormError } from '../../@types/template'
 
 type SearchForm = {
   firstName: string
-  lastName: StaticRange
+  lastName: string
 }
 
 const errors: { [key: string]: FormError } = {
   MISSING_PRISON_OFFICER_INPUT: {
     href: '#assaultedPrisonOfficerFullName',
-    text: 'Enter a name',
+    text: 'Enter their name',
   },
   MISSING_PRISON_OFFICER_INPUT_FIRST: {
     href: '#assaultedPrisonOfficerFirstname',
