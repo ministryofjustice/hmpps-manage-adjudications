@@ -39,6 +39,7 @@ beforeEach(() => {
         dateTimeOfIncident: '2021-12-09T10:30:00',
         handoverDeadline: '2021-12-11T10:30:00',
       },
+      incidentRole: {},
       incidentStatement: {
         statement: 'This is the statement about the event',
         completed: true,

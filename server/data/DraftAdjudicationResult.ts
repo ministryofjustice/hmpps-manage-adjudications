@@ -4,6 +4,11 @@ export type IncidentDetails = {
   handoverDeadline?: string
 }
 
+export type IncidentRole = {
+  roleCode?: string
+  associatedPrisonersNumber?: string
+}
+
 export type IncidentStatement = {
   statement: string
   completed?: boolean
@@ -15,6 +20,7 @@ export type DraftAdjudication = {
   prisonerNumber: string
   startedByUserId: string
   incidentDetails: IncidentDetails
+  incidentRole: IncidentRole
   incidentStatement?: IncidentStatement
 }
 
@@ -45,6 +51,7 @@ type SummarySectionItems = {
 export type EditedIncidentDetails = {
   dateTimeOfIncident: string
   locationId: number
+  incidentRole?: IncidentRole
 }
 
 export type TaskListDetails = {
