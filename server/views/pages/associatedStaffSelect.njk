@@ -26,19 +26,33 @@
   <form method="POST" novalidate="novalidate" data-qa="search-form">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-  <div class="horizontal-form govuk-!-margin-bottom-3">
+  <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
     {{ govukInput({
-      id: "searchTerm",
-      name: "searchTerm",
-      value: searchTerm,
+      id: "searchFirstName",
+      name: "searchFirstName",
+      value: searchFirstName,
       label: {
-        html: 'Enter their name'
+        html: 'First name'
       },
       classes: "govuk-!-width-full",
       attributes: {
-        'data-qa': "search-term-input"
+        'data-qa': "search-first-name-input"
       },
-      errorMessage: errors | findError("searchTerm")
+      errorMessage: errors | findError("searchFirstName")
+    }) }}
+
+    {{ govukInput({
+      id: "searchLastName",
+      name: "searchLastName",
+      value: searchLastName,
+      label: {
+        html: 'Last name'
+      },
+      classes: "govuk-!-width-full",
+      attributes: {
+        'data-qa': "search-last-name-input"
+      },
+      errorMessage: errors | findError("searchLastName")
     }) }}
 
     {{ govukButton({

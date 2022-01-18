@@ -118,7 +118,7 @@ export default class AssaultRoutes {
       const searchPageHref =
         search === 'assaultedPrisonerSearchSubmit'
           ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
-          : `/select-associated-staff?searchTerm=${assaultedPrisonOfficerFirstname} ${assaultedPrisonOfficerLastname}`
+          : `/select-associated-staff?searchFirstName=${assaultedPrisonOfficerFirstname}&searchLastName=${assaultedPrisonOfficerLastname}`
       return res.redirect(
         `${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?radioSelected=${assaultRadios}&startUrl=assault`
       )
