@@ -9,7 +9,7 @@ import validatePrisonOfficerSearch from './assaultedPrisonOfficerValidation'
 type PageData = {
   error?: FormError
   associatedPerson?: string
-  radioSelected?: string
+  queryRadioSelection?: string
   searchSuccessful?: boolean
   prisoner?: PrisonerResult
   associatedPersonDetails?: { id: string; name: string }
@@ -19,19 +19,19 @@ type PageData = {
 }
 
 const submitValue = (
-  assaultRadios: string,
-  radioSelected: string,
+  currentRadioSelected: string,
+  queryRadioSelection: string,
   selectedPerson: string,
   assaultedOtherStaffInput: string,
   assaultedOtherMiscInput: string
-): { assaultRadios: string; selectedPerson: string } | null => {
-  switch (assaultRadios) {
-    case radioSelected:
-      return { assaultRadios, selectedPerson }
+): { currentRadioSelected: string; selectedPerson: string } | null => {
+  switch (currentRadioSelected) {
+    case queryRadioSelection:
+      return { currentRadioSelected, selectedPerson }
     case 'assaultedOtherStaff':
-      return { assaultRadios, selectedPerson: assaultedOtherStaffInput }
+      return { currentRadioSelected, selectedPerson: assaultedOtherStaffInput }
     case 'assaultedOtherMisc':
-      return { assaultRadios, selectedPerson: assaultedOtherMiscInput }
+      return { currentRadioSelected, selectedPerson: assaultedOtherMiscInput }
     default:
       return null
   }
@@ -43,7 +43,7 @@ export default class AssaultRoutes {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const {
       error,
-      radioSelected,
+      queryRadioSelection,
       associatedPersonDetails,
       assaultedPrisonerInput,
       assaultedPrisonOfficerFirstname,
@@ -53,7 +53,7 @@ export default class AssaultRoutes {
 
     return res.render(`pages/assault`, {
       errors: error ? [error] : [],
-      radioSelected,
+      queryRadioSelection,
       associatedPersonDetails,
       exitUrl: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
       prisonerNumber,
@@ -66,20 +66,20 @@ export default class AssaultRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const radioSelected = JSON.stringify(req.query.radioSelected)?.replace(/"/g, '')
+    const queryRadioSelection = JSON.stringify(req.query.queryRadioSelection)?.replace(/"/g, '')
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     const associatedPersonDetails = { id: selectedPerson, name: '' }
     if (selectedPerson) {
-      if (radioSelected === 'assaultedPrisoner') {
+      if (queryRadioSelection === 'assaultedPrisoner') {
         const prisoner = await this.placeOnReportService.getPrisonerDetails(selectedPerson, user)
         associatedPersonDetails.name = prisoner.displayName
-      } else if (radioSelected === 'assaultedPrisonOfficer') {
+      } else if (queryRadioSelection === 'assaultedPrisonOfficer') {
         const staffMember = await this.userService.getStaffFromUsername(selectedPerson, user)
         associatedPersonDetails.name = staffMember.name
       }
     }
     return this.renderView(req, res, {
-      radioSelected,
+      queryRadioSelection,
       associatedPerson: selectedPerson,
       associatedPersonDetails,
     })
@@ -92,40 +92,40 @@ export default class AssaultRoutes {
       assaultedPrisonerInput,
       assaultedPrisonOfficerFirstname,
       assaultedPrisonOfficerLastname,
-      assaultRadios,
+      currentRadioSelected,
       assaultedOtherStaffInput,
       assaultedOtherMiscInput,
     } = req.body
-    const { selectedPerson, radioSelected } = req.query
+    const { selectedPerson, queryRadioSelection } = req.query
     if (search) {
-      const error =
-        search === 'assaultedPrisonerSearchSubmit'
-          ? validatePrisonerSearch({ searchTerm: assaultedPrisonerInput })
-          : validatePrisonOfficerSearch({
-              firstName: assaultedPrisonOfficerFirstname,
-              lastName: assaultedPrisonOfficerLastname,
-            })
+      const prisonerAssaulted = search === 'assaultedPrisonerSearchSubmit'
+      const error = prisonerAssaulted
+        ? validatePrisonerSearch({ searchTerm: assaultedPrisonerInput })
+        : validatePrisonOfficerSearch({
+            firstName: assaultedPrisonOfficerFirstname,
+            lastName: assaultedPrisonOfficerLastname,
+          })
 
       if (error)
         return this.renderView(req, res, {
           error,
-          radioSelected: assaultRadios,
+          queryRadioSelection: currentRadioSelected,
           assaultedPrisonerInput,
           assaultedPrisonOfficerFirstname,
           assaultedPrisonOfficerLastname,
         })
 
-      const searchPageHref =
-        search === 'assaultedPrisonerSearchSubmit'
-          ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
-          : `/select-associated-staff?searchFirstName=${assaultedPrisonOfficerFirstname}&searchLastName=${assaultedPrisonOfficerLastname}`
+      const searchPageHref = prisonerAssaulted
+        ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
+        : `/select-associated-staff?searchFirstName=${assaultedPrisonOfficerFirstname}&searchLastName=${assaultedPrisonOfficerLastname}`
       return res.redirect(
-        `${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?radioSelected=${assaultRadios}&startUrl=assault`
+        `${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?queryRadioSelection=${currentRadioSelected}&startUrl=assault`
       )
     }
+
     const result = submitValue(
-      assaultRadios,
-      radioSelected as string,
+      currentRadioSelected,
+      queryRadioSelection as string,
       selectedPerson as string,
       assaultedOtherStaffInput,
       assaultedOtherMiscInput

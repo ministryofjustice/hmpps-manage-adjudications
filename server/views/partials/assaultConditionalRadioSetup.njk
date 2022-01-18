@@ -3,11 +3,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set prisoner %}
-{% if (radioSelected === 'assaultedPrisoner') and (associatedPersonDetails.name) %}
+{% if (queryRadioSelection === 'assaultedPrisoner') and (associatedPersonDetails.name) %}
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
     <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
-    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?radioSelected=assaultedPrisoner">Delete</a></p>
+    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?queryRadioSelection=assaultedPrisoner">Delete</a></p>
   </div>
 {% else %}
 <div class="flex-container flex-center">
@@ -38,11 +38,11 @@
 {% endset -%}
 
 {% set prisonOfficer %}
-{% if (radioSelected === 'assaultedPrisonOfficer') and (associatedPersonDetails.name) %}
+{% if (queryRadioSelection === 'assaultedPrisonOfficer') and (associatedPersonDetails.name) %}
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p>
     <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ associatedPersonDetails.id }} </p>
-    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?radioSelected=assaultedPrisonOfficer">Delete</a></p>
+    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?queryRadioSelection=assaultedPrisonOfficer">Delete</a></p>
   </div>
 {% else %}
 <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
@@ -106,7 +106,7 @@
 
     {{ govukRadios({
     idPrefix: 'outerRadio',
-    name: 'assaultRadios',
+    name: 'currentRadioSelected',
     fieldset: {
         legend: {
         text: "Who was assaulted?",
@@ -121,7 +121,7 @@
       conditional: {
         html: prisoner
       },
-      checked: radioSelected === "assaultedPrisoner"
+      checked: queryRadioSelection === "assaultedPrisoner"
     },
     {
       value: "assaultedPrisonOfficer",
@@ -129,7 +129,7 @@
       conditional: {
         html: prisonOfficer
       },
-      checked: radioSelected === "assaultedPrisonOfficer"
+      checked: queryRadioSelection === "assaultedPrisonOfficer"
     },
     {
       value: "assaultedOtherStaff",
@@ -137,7 +137,7 @@
       conditional: {
         html: otherStaff
       },
-      checked: radioSelected === "assaultedOtherStaff"
+      checked: queryRadioSelection === "assaultedOtherStaff"
     },
     {
       value: "assaultedOtherMisc",
@@ -145,7 +145,7 @@
       conditional: {
         html: otherMisc
       },
-      checked: radioSelected === "assaultedOtherMisc"
+      checked: queryRadioSelection === "assaultedOtherMisc"
     }
   ]
     }) }}
