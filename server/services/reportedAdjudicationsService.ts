@@ -64,6 +64,7 @@ export default class ReportedAdjudicationsService {
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
       incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
+      createdDateTime: adjudicationData.reportedAdjudication.createdDateTime,
     }
   }
 
