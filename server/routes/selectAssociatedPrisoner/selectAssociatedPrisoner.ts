@@ -29,7 +29,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const { prisonNumber, id } = req.params
     const { startUrl } = req.query
     const searchTerm = JSON.stringify(req.query.searchTerm)?.replace(/"/g, '')
-    const redirectUrl = JSON.stringify(req.query.redirectUrl)?.replace(/"/g, '')
+    const { redirectUrl } = req.session
 
     if (!searchTerm) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
 

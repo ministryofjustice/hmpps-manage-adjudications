@@ -114,13 +114,11 @@ export default class AssaultRoutes {
           assaultedPrisonOfficerFirstname,
           assaultedPrisonOfficerLastname,
         })
-
+      req.session.redirectUrl = `/assault/${prisonerNumber}/${id}?queryRadioSelection=${currentRadioSelected}`
       const searchPageHref = prisonerAssaulted
         ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
         : `/select-associated-staff?searchFirstName=${assaultedPrisonOfficerFirstname}&searchLastName=${assaultedPrisonOfficerLastname}`
-      return res.redirect(
-        `${searchPageHref}&redirectUrl=/assault/${prisonerNumber}/${id}?queryRadioSelection=${currentRadioSelected}&startUrl=assault`
-      )
+      return res.redirect(`${searchPageHref}&startUrl=assault`)
     }
 
     const result = submitValue(
