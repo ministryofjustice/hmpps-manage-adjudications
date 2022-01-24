@@ -29,7 +29,8 @@ beforeEach(() => {
       prisonerNumber: 'G6123VU',
       bookingId: 2,
       dateTimeReportExpires: '2021-11-17T11:45:00',
-      createdByUserId: 'NCLAMP_GEN',
+      createdDateTime: '2021-11-15T11:45:00',
+      createdByUserId: 'TEST_ER',
       reportingOfficer: '',
       incidentDetails: {
         locationId: 3,
@@ -45,11 +46,12 @@ beforeEach(() => {
       dateTimeOfIncident: '2021-11-15T11:30:00',
       friendlyName: 'James Moriarty',
       adjudicationNumber: 1,
-      createdByUserId: 'NCLAMP_GEN',
+      createdByUserId: 'TEST_ER',
       reportingOfficer: '',
       prisonerNumber: 'G6174VU',
       bookingId: 1,
       dateTimeReportExpires: '2021-11-17T11:30:00',
+      createdDateTime: '2021-11-15T11:30:00',
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:30:00',
