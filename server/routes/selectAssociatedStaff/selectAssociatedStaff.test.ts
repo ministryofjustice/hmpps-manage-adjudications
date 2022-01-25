@@ -1,0 +1,94 @@
+import { Express } from 'express'
+import request from 'supertest'
+import UserService from '../../services/userService'
+import appWithAllRoutes from '../testutils/appSetup'
+
+jest.mock('../../services/userService')
+
+const userService = new UserService(null) as jest.Mocked<UserService>
+
+let app: Express
+
+beforeEach(() => {
+  app = appWithAllRoutes(
+    { production: false },
+    { userService },
+    { redirectUrl: '/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer' }
+  )
+})
+
+afterEach(() => {
+  jest.resetAllMocks()
+})
+
+describe('GET /select-associated-staff', () => {
+  describe('with results', () => {
+    beforeEach(() => {
+      userService.getStaffFromNames.mockResolvedValue([
+        {
+          username: 'JSMITH_GEN',
+          staffId: 485592,
+          email: 'john.smith@digital.justice.gov.uk',
+          verified: true,
+          firstName: 'John',
+          lastName: 'Smith',
+          name: 'John Smith',
+          activeCaseLoadId: 'MDI',
+        },
+      ])
+    })
+
+    it('should load the search for a prisoner page', () => {
+      return request(app)
+        .get('/select-associated-staff?searchFirstName=john&searchLastName=smith')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Select a staff member')
+          expect(res.text).toContain('John Smith')
+          expect(res.text).toContain('JSMITH_GEN')
+          expect(res.text).toContain(
+            '<a href="/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>'
+          )
+        })
+    })
+  })
+
+  describe('without results', () => {
+    beforeEach(() => {
+      userService.getStaffFromNames.mockResolvedValue([])
+    })
+
+    it('should load the search for a prisoner page', () => {
+      return request(app)
+        .get('/select-associated-staff?searchFirstName=john&searchLastName=smith')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Select a staff member')
+          expect(res.text).toContain('There are no results for the details you have entered.')
+        })
+    })
+  })
+})
+
+describe('POST /select-associated-staff', () => {
+  it('should redirect to select staff member page with the correct search text and redirect URL intact', () => {
+    return request(app)
+      .post('/select-associated-staff?searchFirstName=john&searchLastName=smith')
+      .send({ searchFirstName: 'john', searchLastName: 'doe' })
+      .expect(
+        'Location',
+        '/select-associated-staff?searchFirstName=john&searchLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisonOfficer'
+      )
+  })
+
+  it('should render validation messages', () => {
+    return request(app)
+      .post('/select-associated-staff')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Error: Select a staff member')
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter their name')
+      })
+  })
+})

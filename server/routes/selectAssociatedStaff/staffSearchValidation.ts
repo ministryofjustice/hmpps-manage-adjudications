@@ -7,7 +7,7 @@ type SearchForm = {
 
 const errors: { [key: string]: FormError } = {
   MISSING_NAME: {
-    href: '#staffFullName',
+    href: '#searchFullName',
     text: 'Enter their name',
   },
   MISSING_FIRST_NAME: {
@@ -22,13 +22,13 @@ const errors: { [key: string]: FormError } = {
 
 export default function validateForm({ searchFirstName, searchLastName }: SearchForm): FormError | null {
   if (!searchFirstName && !searchLastName) {
-    return errors.MISSING_PRISON_OFFICER_INPUT
+    return errors.MISSING_NAME
   }
   if (!searchFirstName) {
-    return errors.MISSING_PRISON_OFFICER_INPUT_FIRST
+    return errors.MISSING_FIRST_NAME
   }
   if (!searchLastName) {
-    return errors.MISSING_PRISON_OFFICER_INPUT_LAST
+    return errors.MISSING_LAST_NAME
   }
 
   return null

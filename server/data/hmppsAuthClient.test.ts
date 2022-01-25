@@ -74,6 +74,52 @@ describe('hmppsAuthClient', () => {
     })
   })
 
+  describe('getUsersFromName', () => {
+    const response = {
+      email: 'bsmith@justice.gov.uk',
+      firstName: 'Bob',
+      lastName: 'Smith',
+      name: 'Bob Smith',
+      username: 'BSMITH_GEN',
+    }
+    it('should return data from api', async () => {
+      fakeHmppsAuthApi
+        .get('/api/prisonuser?firstName=bob&lastName=smith')
+        .matchHeader('authorization', `Bearer ${token.access_token}`)
+        .reply(200, response)
+
+      const output = await hmppsAuthClient.getUsersFromName('bob', 'smith', token.access_token)
+      expect(output).toEqual(response)
+    })
+    it('should trim the names', async () => {
+      fakeHmppsAuthApi
+        .get('/api/prisonuser?firstName=bob&lastName=smith')
+        .matchHeader('authorization', `Bearer ${token.access_token}`)
+        .reply(200, response)
+
+      const output = await hmppsAuthClient.getUsersFromName('   bob  ', '  smith', token.access_token)
+      expect(output).toEqual(response)
+    })
+  })
+
+  describe('getUserEmail', () => {
+    it('should return data from api', async () => {
+      const response = {
+        username: 'BSMITH_GEN',
+        email: 'bob.smith@digital.justice.gov.uk',
+        verified: true,
+      }
+
+      fakeHmppsAuthApi
+        .get('/api/user/BSMITH_GEN/email')
+        .matchHeader('authorization', `Bearer ${token.access_token}`)
+        .reply(200, response)
+
+      const output = await hmppsAuthClient.getUserEmail('BSMITH_GEN', token.access_token)
+      expect(output).toEqual(response)
+    })
+  })
+
   describe('getSystemClientToken', () => {
     it('should instantiate the redis client', async () => {
       tokenStore.getToken.mockResolvedValue(token.access_token)

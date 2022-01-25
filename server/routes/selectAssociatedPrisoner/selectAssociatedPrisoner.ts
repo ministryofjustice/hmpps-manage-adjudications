@@ -47,7 +47,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
-    const redirectUrl = JSON.stringify(req.query.redirectUrl)?.replace(/"/g, '')
+    const { redirectUrl } = req.session
 
     const error = validateForm({ searchTerm })
 
