@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 import { convertToTitleCase } from '../utils/utils'
-import type HmppsAuthClient from '../data/hmppsAuthClient'
+import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
 
 interface UserDetails {
@@ -7,6 +8,28 @@ interface UserDetails {
   displayName: string
   allCaseLoads: CaseLoad[] | string[]
   activeCaseLoad: CaseLoad
+}
+
+export interface StaffSearchByName {
+  activeCaseLoadId?: string
+  email?: string
+  firstName?: string
+  lastName?: string
+  name: string
+  staffId: number
+  username: string
+  verified?: boolean
+}
+
+export interface UserWithEmail extends User {
+  email: string
+}
+
+export interface StaffDetails {
+  activeCaseLoadId: string
+  email?: string
+  name: string
+  username: string
 }
 
 export default class UserService {
@@ -26,5 +49,18 @@ export default class UserService {
       allCaseLoads,
       activeCaseLoad: allCaseLoads.find((caseLoad: CaseLoad) => caseLoad.currentlyActive),
     }
+  }
+
+  async getStaffFromUsername(username: string, user: User): Promise<UserWithEmail> {
+    const [result, userEmail] = await Promise.all([
+      this.hmppsAuthClient.getUserFromUsername(username, user.token),
+      this.hmppsAuthClient.getUserEmail(username, user.token),
+    ])
+    return { ...result, email: userEmail.email }
+  }
+
+  async getStaffFromNames(firstName: string, lastName: string, user: User): Promise<StaffSearchByName[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return this.hmppsAuthClient.getUsersFromName(firstName, lastName, token)
   }
 }

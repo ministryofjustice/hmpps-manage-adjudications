@@ -6,6 +6,7 @@ declare module 'express-session' {
     journeyStartUrl: query
     returnTo: string
     nowInMinutes: number
+    redirectUrl: string
   }
 }
 
