@@ -14,6 +14,7 @@ export default (on: (string, Record) => void): void => {
     getSignInUrl: auth.getSignInUrl,
     stubSignIn: (caseLoads: CaseLoad[]) => Promise.all([auth.stubSignIn(), prisonApi.stubUserCaseloads(caseLoads)]),
     stubGetUserFromUsername: auth.stubGetUserFromUsername,
+    stubGetUserFromNames: auth.stubGetUserFromNames,
 
     stubSearch: prisonerSearch.stubSearch,
     stubAuthUser: auth.stubUser,
