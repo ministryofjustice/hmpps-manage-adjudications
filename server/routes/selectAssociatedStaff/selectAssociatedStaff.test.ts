@@ -1,18 +1,21 @@
 import { Express } from 'express'
 import request from 'supertest'
+import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/userService')
+jest.mock('../../services/placeOnReportService')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
+const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 
 let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
-    { userService },
+    { userService, placeOnReportService },
     { redirectUrl: '/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer' }
   )
 })
@@ -36,15 +39,30 @@ describe('GET /select-associated-staff', () => {
           activeCaseLoadId: 'MDI',
         },
       ])
+
+      placeOnReportService.getAssociatedStaffDetails.mockResolvedValue([
+        {
+          username: 'JSMITH_GEN',
+          staffId: 485592,
+          email: 'john.smith@digital.justice.gov.uk',
+          verified: true,
+          firstName: 'John',
+          lastName: 'Smith',
+          name: 'John Smith',
+          activeCaseLoadId: 'MDI',
+          currentLocation: 'Moorland',
+        },
+      ])
     })
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-staff?searchFirstName=john&searchLastName=smith')
+        .get('/select-associated-staff?staffFirstName=john&staffLastName=smith')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
           expect(res.text).toContain('John Smith')
+          expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
             '<a href="/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>'
@@ -60,10 +78,11 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-staff?searchFirstName=john&searchLastName=smith')
+        .get('/select-associated-staff?staffFirstName=john&staffLastName=smith')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
+          expect(res.text).not.toContain('JSMITH_GEN')
           expect(res.text).toContain('There are no results for the details you have entered.')
         })
     })
@@ -73,11 +92,11 @@ describe('GET /select-associated-staff', () => {
 describe('POST /select-associated-staff', () => {
   it('should redirect to select staff member page with the correct search text and redirect URL intact', () => {
     return request(app)
-      .post('/select-associated-staff?searchFirstName=john&searchLastName=smith')
-      .send({ searchFirstName: 'john', searchLastName: 'doe' })
+      .post('/select-associated-staff?staffFirstName=john&staffLastName=smith')
+      .send({ staffFirstName: 'john', staffLastName: 'doe' })
       .expect(
         'Location',
-        '/select-associated-staff?searchFirstName=john&searchLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisonOfficer'
+        '/select-associated-staff?staffFirstName=john&staffLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisonOfficer'
       )
   })
 
