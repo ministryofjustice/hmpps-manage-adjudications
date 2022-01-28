@@ -5,6 +5,7 @@ import {
   IncidentStatement,
   IncidentDetails,
   EditedIncidentDetails,
+  IncidentRole,
 } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
@@ -13,6 +14,7 @@ import RestClient from './restClient'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
+  incidentRole: IncidentRole
 }
 
 export default class ManageAdjudicationsClient {

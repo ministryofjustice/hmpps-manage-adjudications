@@ -41,6 +41,7 @@ beforeEach(() => {
         locationId: 2,
         dateTimeOfIncident: '2021-10-27T13:30:00.000',
       },
+      incidentRole: {},
     },
   })
   placeOnReportService.getReporterName.mockResolvedValue('Test User')

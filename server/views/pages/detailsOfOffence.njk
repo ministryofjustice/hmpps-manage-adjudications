@@ -1,0 +1,25 @@
+{% extends "../partials/layout.njk" %}
+
+{% set title = "Offence details" %}
+
+{% block pageTitle %}
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+	{% if errors | length %}
+		{{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+	{% endif %}
+
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+    <p class="govuk-body">
+        <a href="/incident-statement/{{ prisonerNumber }}/{{ id }}" class="govuk-link">Go to incident statement page</a>
+    </p>
+
+
+{% endblock %}

@@ -29,6 +29,7 @@ context('Prisoner has been placed on report', () => {
           prisonerNumber: 'G6415GD',
           bookingId: 123,
           dateTimeReportExpires: '2020-12-08T10:00:00',
+          createdDateTime: '2020-12-06T10:00:00',
           createdByUserId: 'AJONES',
           incidentDetails: {
             locationId: 2,
@@ -101,16 +102,5 @@ context('Prisoner has been placed on report', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
     })
-  })
-  it('should show a feedback link with correct href', () => {
-    cy.visit(`/prisoner-placed-on-report/1524242`)
-    const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.feedbackLink().should('contain', 'What did you think of our service? (Opens in a new tab)')
-    confirmedOnReportPage
-      .feedbackLink()
-      .should('have.attr', 'href')
-      .then(href => {
-        expect(href).to.equal('https://eu.surveymonkey.com/r/5HKYLY9')
-      })
   })
 })

@@ -13,6 +13,7 @@ export type ConfirmedOnReportData = {
   prisonerPreferredNonEnglishLanguage?: string
   prisonerOtherLanguages?: Array<string>
   prisonerNeurodiversities?: Array<string>
+  createdDateTime: string
 }
 
 export type ConfirmedOnReportChangedData = {

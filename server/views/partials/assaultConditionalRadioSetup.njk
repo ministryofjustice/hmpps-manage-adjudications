@@ -1,0 +1,151 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set prisoner %}
+{% if (queryRadioSelection === 'assaultedPrisoner') and (associatedPersonDetails.name) %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
+    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?queryRadioSelection=assaultedPrisoner">Delete</a></p>
+  </div>
+{% else %}
+<div class="flex-container flex-center">
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "assaultedPrisonerInput",
+  name: "assaultedPrisonerInput",
+  classes: "govuk-!-width-full-width",
+  value: assaultedPrisonerInput,
+  errorMessage: errors | findErrors(['assaultedPrisonerInput']),
+  label: {
+    text: "Enter their name or prison number",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+		{{ govukButton({
+				text: 'Search',
+				classes: "govuk-button--secondary conditionalRadioSearchButton",
+        type: "submit",
+        name: "search",
+        value: "assaultedPrisonerSearchSubmit",
+				attributes: { "data-qa": "assault-prisoner-search" }
+			}) }}
+</div>
+{% endif %}
+
+{% endset -%}
+
+{% set prisonOfficer %}
+{% if (queryRadioSelection === 'assaultedPrisonOfficer') and (associatedPersonDetails.name) %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p>
+    <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ associatedPersonDetails.id }} </p>
+    <p class="govuk-body"><a href="/assault/{{prisonerNumber}}/{{id}}?queryRadioSelection=assaultedPrisonOfficer">Delete</a></p>
+  </div>
+{% else %}
+<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+<div id="assaultedPrisonOfficerFullName" class="govuk-form-group flex-container flex-column">
+{{ govukInput({
+  id: "assaultedPrisonOfficerFirstname",
+  name: "assaultedPrisonOfficerFirstname",
+  classes: "govuk-!-width-one-third",
+  value: assaultedPrisonOfficerFirstname,
+  errorMessage: errors | findErrors(['assaultedPrisonOfficerFirstname', 'assaultedPrisonOfficerFullName' ]),
+  label: {
+    text: "First name"
+  }
+}) }}
+{{ govukInput({
+  id: "assaultedPrisonOfficerLastname",
+  name: "assaultedPrisonOfficerLastname",
+  classes: "govuk-!-width-one-third",
+  value: assaultedPrisonOfficerLastname,
+  errorMessage: errors | findErrors(['assaultedPrisonOfficerLastname', 'assaultedPrisonOfficerFullName']),
+  label: {
+    text: "Last name"
+  }
+}) }}
+</div>
+{{ govukButton({
+    text: 'Search',
+    classes: "govuk-button--secondary govuk-!-margin-top-4",
+    type: "submit",
+    name: "search",
+    value: "assaultedPrisonOfficerSearchSubmit",
+    attributes: { "data-qa": "assault-prison-officer-search" }
+  }) }}
+
+{% endif %}
+{% endset -%}
+
+{% set otherStaff %}
+{{ govukInput({
+  id: "assaultedOtherStaffInput",
+  name: "assaultedOtherStaffInput",
+  classes: "govuk-!-width-one-quarter",
+  label: {
+    text: "Enter their name",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+{% endset -%}
+
+{% set otherMisc %}
+{{ govukInput({
+  id: "assaultedOtherMiscInput",
+  name: "assaultedOtherMiscInput",
+  classes: "govuk-!-width-one-quarter",
+  label: {
+    text: "Enter their name",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+{% endset -%}
+
+    {{ govukRadios({
+    idPrefix: 'outerRadio',
+    name: 'currentRadioSelected',
+    fieldset: {
+        legend: {
+        text: "Who was assaulted?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+        }
+    },
+    items: [
+    {
+      value: "assaultedPrisoner",
+      text: "Another prisoner",
+      conditional: {
+        html: prisoner
+      },
+      checked: queryRadioSelection === "assaultedPrisoner"
+    },
+    {
+      value: "assaultedPrisonOfficer",
+      text: "A prison officer",
+      conditional: {
+        html: prisonOfficer
+      },
+      checked: queryRadioSelection === "assaultedPrisonOfficer"
+    },
+    {
+      value: "assaultedOtherStaff",
+      text: "A member of staff who is not a prison officer",
+      conditional: {
+        html: otherStaff
+      },
+      checked: queryRadioSelection === "assaultedOtherStaff"
+    },
+    {
+      value: "assaultedOtherMisc",
+      text: "Another person not listed above",
+      conditional: {
+        html: otherMisc
+      },
+      checked: queryRadioSelection === "assaultedOtherMisc"
+    }
+  ]
+    }) }}

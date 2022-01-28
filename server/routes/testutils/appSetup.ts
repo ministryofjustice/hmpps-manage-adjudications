@@ -60,7 +60,7 @@ class MockUserService extends UserService {
   }
 }
 
-function appSetup(route: Router, production: boolean): Express {
+function appSetup(route: Router, production: boolean, session: Record<string, unknown>): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -74,6 +74,12 @@ function appSetup(route: Router, production: boolean): Express {
   })
 
   app.use(cookieSession({ keys: [''] }))
+  app.use((req, res, next) => {
+    Object.entries(session).forEach(([key, value]) => {
+      req.session[key] = value
+    })
+    next()
+  })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use('/', route)
@@ -85,7 +91,8 @@ function appSetup(route: Router, production: boolean): Express {
 
 export default function appWithAllRoutes(
   { production = false }: { production?: boolean },
-  overrides: Partial<Services> = {}
+  overrides: Partial<Services> = {},
+  session = {}
 ): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
 
@@ -98,6 +105,7 @@ export default function appWithAllRoutes(
       reportedAdjudicationsService: {} as ReportedAdjudicationsService,
       ...overrides,
     }),
-    production
+    production,
+    session
   )
 }

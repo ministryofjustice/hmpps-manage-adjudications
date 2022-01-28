@@ -29,6 +29,7 @@ context('Prisoner has been placed on report', () => {
           prisonerNumber: 'G6415GD',
           bookingId: 1201395,
           dateTimeReportExpires: '2021-12-11T09:40:00',
+          createdDateTime: '2021-12-09T09:40:00',
           incidentDetails: {
             locationId: 197682,
             dateTimeOfIncident: '2021-12-09T09:40:00',

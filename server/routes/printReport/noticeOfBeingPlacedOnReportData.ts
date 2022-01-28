@@ -20,6 +20,10 @@ export default class noticeOfBeingPlacedOnReportData {
 
   incidentTime: string
 
+  reportedDate: string
+
+  reportedTime: string
+
   constructor(adjudicationNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
     this.adjudicationNumber = adjudicationNumber
     this.statement = confirmedOnReportData.statement
@@ -32,5 +36,7 @@ export default class noticeOfBeingPlacedOnReportData {
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${confirmedOnReportData.prisonerLivingUnitName}`
     this.incidentDate = formatTimestampTo(confirmedOnReportData.incidentDate, 'D MMMM YYYY')
     this.incidentTime = formatTimestampTo(confirmedOnReportData.incidentDate, 'HH:mm')
+    this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
+    this.reportedTime = formatTimestampTo(confirmedOnReportData.createdDateTime, 'HH:mm')
   }
 }

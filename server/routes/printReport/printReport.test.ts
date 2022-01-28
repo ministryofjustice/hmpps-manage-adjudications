@@ -32,6 +32,7 @@ const reportedAdjudicationInformation = {
   prisonerAgencyName: 'Moorland (HMP & YOI)',
   prisonerLivingUnitName: '5-2-A-050',
   incidentDate: '2020-12-21T07:21',
+  createdDateTime: '2020-12-21T10:45',
 }
 
 reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)

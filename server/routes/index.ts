@@ -2,6 +2,8 @@ import type { Router } from 'express'
 
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
+import typeOfOffenceRoutes from './typeOfOffence'
+import detailsOfOffenceRoutes from './detailsOfOffence'
 import checkYourAnswersRoutes from './checkYourAnswers'
 import confirmedOnReportRoutes from './confirmedOnReport'
 import taskListRoutes from './taskList'
@@ -14,6 +16,9 @@ import continueReportSelectRoutes from './continueReport'
 import prisonerReportRoutes from './prisonerReport'
 import homepageRoutes from './homepage'
 import printReportRoutes from './printReport'
+import assaultRoutes from './assault'
+import selectAssociatedPrisonerRoutes from './selectAssociatedPrisoner'
+import selectAssociatedStaffRoutes from './selectAssociatedStaff'
 
 import { Services } from '../services'
 
@@ -22,6 +27,9 @@ export default function routes(
   { placeOnReportService, locationService, prisonerSearchService, reportedAdjudicationsService, userService }: Services
 ): Router {
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
+  router.use('/offence-details', typeOfOffenceRoutes())
+  router.use('/details-of-offence', detailsOfOffenceRoutes())
+  router.use('/assault', assaultRoutes({ placeOnReportService, userService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService, locationService }))
   router.use('/prisoner-placed-on-report', confirmedOnReportRoutes({ reportedAdjudicationsService }))
@@ -29,6 +37,8 @@ export default function routes(
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
   router.use('/search-for-prisoner', prisonerSearchRoutes())
   router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
+  router.use('/select-associated-prisoner', selectAssociatedPrisonerRoutes({ prisonerSearchService }))
+  router.use('/select-associated-staff', selectAssociatedStaffRoutes({ userService }))
   router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
