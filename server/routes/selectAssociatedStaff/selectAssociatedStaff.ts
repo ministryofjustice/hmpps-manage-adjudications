@@ -1,27 +1,29 @@
 import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
-import UserService, { StaffSearchByName } from '../../services/userService'
+import UserService from '../../services/userService'
 import validateForm from './staffSearchValidation'
+import PlaceOnReportService, { StaffSearchWithCurrentLocation } from '../../services/placeOnReportService'
 
 type PageData = {
   error?: FormError
-  searchResults?: StaffSearchByName[]
-  searchFirstName: string
-  searchLastName: string
+  searchResults?: StaffSearchWithCurrentLocation[]
+  staffFirstName: string
+  staffLastName: string
   redirectUrl?: string
 }
+
 export default class SelectAssociatedPrisonerRoutes {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService, private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, searchResults, searchFirstName, searchLastName, redirectUrl } = pageData
+    const { error, searchResults, staffFirstName, staffLastName, redirectUrl } = pageData
 
     return res.render('pages/associatedStaffSelect', {
       errors: error ? [error] : [],
       searchResults,
-      searchFirstName,
-      searchLastName,
+      staffFirstName,
+      staffLastName,
       redirectUrl,
     })
   }
@@ -30,26 +32,26 @@ export default class SelectAssociatedPrisonerRoutes {
     const { user } = res.locals
     const { prisonNumber, id } = req.params
     const { startUrl } = req.query
-    const searchFirstName = JSON.stringify(req.query.searchFirstName)?.replace(/"/g, '')
-    const searchLastName = JSON.stringify(req.query.searchLastName)?.replace(/"/g, '')
+    const staffFirstName = JSON.stringify(req.query.staffFirstName)?.replace(/"/g, '')
+    const staffLastName = JSON.stringify(req.query.staffLastName)?.replace(/"/g, '')
     const { redirectUrl } = req.session
 
-    if (!searchFirstName || !searchLastName) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
+    if (!staffFirstName || !staffLastName) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
 
-    const searchResults = await this.userService.getStaffFromNames(searchFirstName, searchLastName, user)
-
-    return this.renderView(req, res, { searchResults, searchFirstName, searchLastName, redirectUrl })
+    const results = await this.userService.getStaffFromNames(staffFirstName, staffLastName, user)
+    const searchResults = await this.placeOnReportService.getAssociatedStaffDetails(results, user)
+    return this.renderView(req, res, { searchResults, staffFirstName, staffLastName, redirectUrl })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { searchFirstName, searchLastName } = req.body
+    const { staffFirstName, staffLastName } = req.body
     const { redirectUrl } = req.session
-    const error = validateForm({ searchFirstName, searchLastName })
-    if (error) return this.renderView(req, res, { error, searchFirstName, searchLastName })
+    const error = validateForm({ staffFirstName, staffLastName })
+    if (error) return this.renderView(req, res, { error, staffFirstName, staffLastName })
     return res.redirect(
       url.format({
         pathname: '/select-associated-staff',
-        query: { searchFirstName, searchLastName, redirectUrl },
+        query: { staffFirstName, staffLastName, redirectUrl },
       })
     )
   }

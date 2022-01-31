@@ -28,9 +28,9 @@
 
   <div class="horizontal-form govuk-!-margin-bottom-3" id="searchFullName">
     {{ govukInput({
-      id: "searchFirstName",
-      name: "searchFirstName",
-      value: searchFirstName,
+      id: "staffFirstName",
+      name: "staffFirstName",
+      value: staffFirstName,
       label: {
         html: 'First name'
       },
@@ -38,13 +38,13 @@
       attributes: {
         'data-qa': "search-first-name-input"
       },
-      errorMessage: errors | findError("searchFirstName")
+      errorMessage: errors | findErrors(['staffFirstName', 'searchFullName' ])
     }) }}
 
     {{ govukInput({
-      id: "searchLastName",
-      name: "searchLastName",
-      value: searchLastName,
+      id: "staffLastName",
+      name: "staffLastName",
+      value: staffLastName,
       label: {
         html: 'Last name'
       },
@@ -52,7 +52,7 @@
       attributes: {
         'data-qa': "search-last-name-input"
       },
-      errorMessage: errors | findError("searchLastName")
+      errorMessage: errors | findErrors(['staffLastName', 'searchFullName' ])
     }) }}
 
     {{ govukButton({
@@ -67,7 +67,7 @@
   {% set rows = [] %}
   {% for staffMember in searchResults %}
     {% set startReportlLinkHtml %}
-      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>
+      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
@@ -76,9 +76,9 @@
           "data-sort-value": staffMember.name
         }
       },
-      { text: staffMember.activeCaseLoadId },
+      { text: staffMember.currentLocation },
       { text: staffMember.username },
-      { text: staffMember.email or "None entered" },
+      { text: staffMember.email or "No email address" },
       { html: startReportlLinkHtml }
     ]), rows) %}
   {% endfor %}
@@ -90,7 +90,8 @@
           {
             text: "Name",
             attributes: {
-              "aria-sort": "ascending"
+              "aria-sort": "ascending",
+              "data-qa": "staff-name-sort"
             }
           },
           {

@@ -15,6 +15,7 @@ import {
   TaskListDetails,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
+import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -28,6 +29,10 @@ interface DraftAdjudicationEnhanced extends DraftAdjudication {
   friendlyName: string
   incidentDate: string
   incidentTime: string
+}
+
+export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
+  currentLocation: string
 }
 
 type ExistingDraftIncidentDetails = {
@@ -224,5 +229,30 @@ export default class PlaceOnReportService {
       statementPresent: !!draftAdjudication.incidentStatement,
       statementComplete: draftAdjudication.incidentStatement?.completed || false,
     }
+  }
+
+  async getAssociatedStaffDetails(
+    staffMembers: StaffSearchByName[],
+    user: User
+  ): Promise<StaffSearchWithCurrentLocation[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+
+    const agencyIds = [...new Set(staffMembers.map(person => person.activeCaseLoadId))]
+
+    const getLocationName = async (agencyId: string) => {
+      if (isCentralAdminCaseload(agencyId)) return { agencyId: 'CADM_I', locationFullName: 'Central Admin' }
+
+      const locationName = await new PrisonApiClient(token).getAgency(agencyId)
+      return { agencyId, locationFullName: locationName?.description }
+    }
+
+    const locations = await Promise.all(agencyIds.map((agencyId: string) => getLocationName(agencyId)))
+
+    return Promise.all(
+      staffMembers.map((staffMember: StaffSearchByName) => {
+        const currentLocation = locations.find(location => location.agencyId === staffMember.activeCaseLoadId)
+        return { ...staffMember, currentLocation: currentLocation.locationFullName }
+      })
+    )
   }
 }
