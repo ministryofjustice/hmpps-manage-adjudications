@@ -65,7 +65,7 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            '<a href="/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>'
+            '<a href="/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
           )
         })
     })

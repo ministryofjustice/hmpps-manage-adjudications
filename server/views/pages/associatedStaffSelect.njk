@@ -67,7 +67,7 @@
   {% set rows = [] %}
   {% for staffMember in searchResults %}
     {% set startReportlLinkHtml %}
-      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link">Select staff member</a>
+      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
@@ -90,7 +90,8 @@
           {
             text: "Name",
             attributes: {
-              "aria-sort": "ascending"
+              "aria-sort": "ascending",
+              "data-qa": "staff-name-sort"
             }
           },
           {

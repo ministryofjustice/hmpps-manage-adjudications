@@ -194,6 +194,27 @@ const stubGetUserFromNames = ({
     },
   })
 
+const stubGetEmail = ({
+  username,
+  response = {},
+}: {
+  username: string
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/auth/api/user/${username}/email  `,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   getSignInUrl,
   stubPing,
@@ -204,4 +225,5 @@ export default {
   stubUserRoles,
   stubGetUser,
   stubGetUserFromNames,
+  stubGetEmail,
 }
