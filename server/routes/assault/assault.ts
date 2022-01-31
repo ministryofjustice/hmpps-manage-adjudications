@@ -102,8 +102,8 @@ export default class AssaultRoutes {
       const error = prisonerAssaulted
         ? validatePrisonerSearch({ searchTerm: assaultedPrisonerInput })
         : validatePrisonOfficerSearch({
-            firstName: assaultedPrisonOfficerFirstname,
-            lastName: assaultedPrisonOfficerLastname,
+            staffFirstName: assaultedPrisonOfficerFirstname,
+            staffLastName: assaultedPrisonOfficerLastname,
           })
 
       if (error)
@@ -116,8 +116,8 @@ export default class AssaultRoutes {
         })
       req.session.redirectUrl = `/assault/${prisonerNumber}/${id}?queryRadioSelection=${currentRadioSelected}`
       const searchPageHref = prisonerAssaulted
-        ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
-        : `/select-associated-staff?searchFirstName=${assaultedPrisonOfficerFirstname}&searchLastName=${assaultedPrisonOfficerLastname}`
+        ? `/select-associated-prisoner/${prisonerNumber}/${id}?searchTerm=${assaultedPrisonerInput}`
+        : `/select-associated-staff/${prisonerNumber}/${id}?staffFirstName=${assaultedPrisonOfficerFirstname}&staffLastName=${assaultedPrisonOfficerLastname}`
       return res.redirect(`${searchPageHref}&startUrl=assault`)
     }
 

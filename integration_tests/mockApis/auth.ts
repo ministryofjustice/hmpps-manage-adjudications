@@ -204,7 +204,7 @@ const stubGetEmail = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/auth/api/user/${username}/email  `,
+      url: `/auth/api/user/${username}/email`,
     },
     response: {
       status: 200,

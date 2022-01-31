@@ -8,7 +8,7 @@ describe('validateForm', () => {
 
     it('invalid - both names', () => {
       expect(validateForm({ staffFirstName: '', staffLastName: '' })).toStrictEqual({
-        href: '#searchFullName',
+        href: '#staffFullName',
         text: 'Enter their name',
       })
     })

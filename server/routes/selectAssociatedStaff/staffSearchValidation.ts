@@ -7,7 +7,7 @@ type SearchForm = {
 
 const errors: { [key: string]: FormError } = {
   MISSING_NAME: {
-    href: '#searchFullName',
+    href: '#staffFullName',
     text: 'Enter their name',
   },
   MISSING_FIRST_NAME: {

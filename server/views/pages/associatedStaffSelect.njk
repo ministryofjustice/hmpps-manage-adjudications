@@ -26,7 +26,7 @@
   <form method="POST" novalidate="novalidate" data-qa="search-form">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-  <div class="horizontal-form govuk-!-margin-bottom-3" id="searchFullName">
+  <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
     {{ govukInput({
       id: "staffFirstName",
       name: "staffFirstName",
@@ -38,7 +38,7 @@
       attributes: {
         'data-qa': "search-first-name-input"
       },
-      errorMessage: errors | findErrors(['staffFirstName', 'searchFullName' ])
+      errorMessage: errors | findErrors(['staffFirstName', 'staffFullName' ])
     }) }}
 
     {{ govukInput({
@@ -52,7 +52,7 @@
       attributes: {
         'data-qa': "search-last-name-input"
       },
-      errorMessage: errors | findErrors(['staffLastName', 'searchFullName' ])
+      errorMessage: errors | findErrors(['staffLastName', 'staffFullName' ])
     }) }}
 
     {{ govukButton({

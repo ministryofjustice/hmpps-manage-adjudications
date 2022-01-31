@@ -20,8 +20,8 @@ export default function selectAssociatedStaffRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/', selectAssociatedStaff.view)
-  post('/', selectAssociatedStaff.submit)
+  get('/:prisonerNumber/:id', selectAssociatedStaff.view)
+  post('/:prisonerNumber/:id', selectAssociatedStaff.submit)
 
   return router
 }

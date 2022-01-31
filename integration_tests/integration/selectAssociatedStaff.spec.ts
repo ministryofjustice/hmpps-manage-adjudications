@@ -33,7 +33,7 @@ context('Continue a report - select report', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
+      cy.visit(`/select-associated-staff/G2996UX/1?staffFirstName=Bob&staffLastName=Smith`)
       const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
 
       selectAssociatedStaffPage.firstNameInput().should('exist')
@@ -42,7 +42,7 @@ context('Continue a report - select report', () => {
       selectAssociatedStaffPage.noResultsMessage().should('not.exist')
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
+      cy.visit(`/select-associated-staff/G2996UX/1?staffFirstName=Bob&staffLastName=Smith`)
       const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
 
       selectAssociatedStaffPage
@@ -74,7 +74,6 @@ context('Continue a report - select report', () => {
       cy.get('#assaultedPrisonOfficerLastname').type('Smith')
       cy.get('[data-qa="assault-prison-officer-search"]').click()
 
-      cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
       const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
       selectAssociatedStaffPage.selectStaffMemberLink().click()
       cy.location().should(loc => {
