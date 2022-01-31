@@ -605,20 +605,9 @@ describe('placeOnReportService', () => {
           verified: true,
         },
       ]
+
       const response = await service.getAssociatedStaffDetails(staffMembers, user)
-      expect(response).toEqual([
-        {
-          activeCaseLoadId: 'MDI',
-          email: 'testerPerson@justice.gov.uk',
-          firstName: 'Tester',
-          lastName: 'Person',
-          name: 'Tester Person',
-          staffId: 1234564789,
-          username: 'RO_USER_TEST',
-          verified: true,
-          currentLocation: 'Moorland (HMP & YOI)',
-        },
-      ])
+      expect(response).toEqual([{ ...staffMembers[0], currentLocation: 'Moorland (HMP & YOI)' }])
     })
     it('returns the correct response when the caseload is the central agency id', async () => {
       const staffMembers = [
@@ -636,14 +625,7 @@ describe('placeOnReportService', () => {
       const response = await service.getAssociatedStaffDetails(staffMembers, user)
       expect(response).toEqual([
         {
-          activeCaseLoadId: 'CADM_I',
-          email: 'testerPerson@justice.gov.uk',
-          firstName: 'Tester',
-          lastName: 'Person',
-          name: 'Tester Person',
-          staffId: 1234564789,
-          username: 'RO_USER_TEST',
-          verified: true,
+          ...staffMembers[0],
           currentLocation: 'Central Admin',
         },
       ])

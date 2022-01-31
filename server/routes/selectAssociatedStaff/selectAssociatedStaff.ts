@@ -3,11 +3,11 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import validateForm from './staffSearchValidation'
-import PlaceOnReportService, { StaffSearchByNameEnhanced } from '../../services/placeOnReportService'
+import PlaceOnReportService, { StaffSearchWithCurrentLocation } from '../../services/placeOnReportService'
 
 type PageData = {
   error?: FormError
-  searchResults?: StaffSearchByNameEnhanced[]
+  searchResults?: StaffSearchWithCurrentLocation[]
   staffFirstName: string
   staffLastName: string
   redirectUrl?: string

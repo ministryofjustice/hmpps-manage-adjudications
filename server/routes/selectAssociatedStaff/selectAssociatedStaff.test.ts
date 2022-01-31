@@ -92,7 +92,7 @@ describe('GET /select-associated-staff', () => {
 describe('POST /select-associated-staff', () => {
   it('should redirect to select staff member page with the correct search text and redirect URL intact', () => {
     return request(app)
-      .post('/select-associated-staff?staffFirstName=john&staffLastName=smith')
+      .post('/select-associated-staff')
       .send({ staffFirstName: 'john', staffLastName: 'doe' })
       .expect(
         'Location',

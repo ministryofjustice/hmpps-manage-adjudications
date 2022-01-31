@@ -32,6 +32,10 @@ export interface StaffDetails {
   username: string
 }
 
+export const isCentralAdminCaseload = (caseloadId: string): boolean => {
+  return caseloadId === 'CADM_I'
+}
+
 export default class UserService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 

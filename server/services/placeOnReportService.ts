@@ -15,7 +15,7 @@ import {
   TaskListDetails,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
-import { StaffSearchByName } from './userService'
+import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -31,7 +31,7 @@ interface DraftAdjudicationEnhanced extends DraftAdjudication {
   incidentTime: string
 }
 
-export interface StaffSearchByNameEnhanced extends StaffSearchByName {
+export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
   currentLocation: string
 }
 
@@ -231,16 +231,28 @@ export default class PlaceOnReportService {
     }
   }
 
-  async getAssociatedStaffDetails(staffMembers: StaffSearchByName[], user: User): Promise<StaffSearchByNameEnhanced[]> {
+  async getAssociatedStaffDetails(
+    staffMembers: StaffSearchByName[],
+    user: User
+  ): Promise<StaffSearchWithCurrentLocation[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
 
-    const getLocationName = async (staffMember: StaffSearchByName) => {
-      if (staffMember.activeCaseLoadId === 'CADM_I') return { ...staffMember, currentLocation: 'Central Admin' }
+    const agencyIds = [...new Set(staffMembers.map(person => person.activeCaseLoadId))]
 
-      const locationName = await new PrisonApiClient(token).getAgency(staffMember.activeCaseLoadId)
-      return { ...staffMember, currentLocation: locationName?.description }
+    const getLocationName = async (agencyId: string) => {
+      if (isCentralAdminCaseload(agencyId)) return { agencyId: 'CADM_I', locationFullName: 'Central Admin' }
+
+      const locationName = await new PrisonApiClient(token).getAgency(agencyId)
+      return { agencyId, locationFullName: locationName?.description }
     }
 
-    return Promise.all(staffMembers.map((staffMember: StaffSearchByName) => getLocationName(staffMember)))
+    const locations = await Promise.all(agencyIds.map((agencyId: string) => getLocationName(agencyId)))
+
+    return Promise.all(
+      staffMembers.map((staffMember: StaffSearchByName) => {
+        const currentLocation = locations.find(location => location.agencyId === staffMember.activeCaseLoadId)
+        return { ...staffMember, currentLocation: currentLocation.locationFullName }
+      })
+    )
   }
 }
