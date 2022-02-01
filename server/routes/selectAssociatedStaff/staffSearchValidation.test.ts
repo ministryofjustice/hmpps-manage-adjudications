@@ -3,24 +3,24 @@ import validateForm from './staffSearchValidation'
 describe('validateForm', () => {
   describe('first and last names', () => {
     it('valid', () => {
-      expect(validateForm({ searchFirstName: 'John', searchLastName: 'Smith' })).toBeNull()
+      expect(validateForm({ staffFirstName: 'John', staffLastName: 'Smith' })).toBeNull()
     })
 
     it('invalid - both names', () => {
-      expect(validateForm({ searchFirstName: '', searchLastName: '' })).toStrictEqual({
-        href: '#searchFullName',
+      expect(validateForm({ staffFirstName: '', staffLastName: '' })).toStrictEqual({
+        href: '#staffFullName',
         text: 'Enter their name',
       })
     })
     it('invalid - first name', () => {
-      expect(validateForm({ searchFirstName: '', searchLastName: 'Smith' })).toStrictEqual({
-        href: '#searchFirstName',
+      expect(validateForm({ staffFirstName: '', staffLastName: 'Smith' })).toStrictEqual({
+        href: '#staffFirstName',
         text: 'Enter their first name',
       })
     })
     it('invalid - last names', () => {
-      expect(validateForm({ searchFirstName: 'John', searchLastName: '' })).toStrictEqual({
-        href: '#searchLastName',
+      expect(validateForm({ staffFirstName: 'John', staffLastName: '' })).toStrictEqual({
+        href: '#staffLastName',
         text: 'Enter their last name',
       })
     })

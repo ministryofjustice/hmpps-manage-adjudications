@@ -1,33 +1,33 @@
 import { FormError } from '../../@types/template'
 
 type SearchForm = {
-  searchFirstName?: string
-  searchLastName?: string
+  staffFirstName?: string
+  staffLastName?: string
 }
 
 const errors: { [key: string]: FormError } = {
   MISSING_NAME: {
-    href: '#searchFullName',
+    href: '#staffFullName',
     text: 'Enter their name',
   },
   MISSING_FIRST_NAME: {
-    href: '#searchFirstName',
+    href: '#staffFirstName',
     text: 'Enter their first name',
   },
   MISSING_LAST_NAME: {
-    href: '#searchLastName',
+    href: '#staffLastName',
     text: 'Enter their last name',
   },
 }
 
-export default function validateForm({ searchFirstName, searchLastName }: SearchForm): FormError | null {
-  if (!searchFirstName && !searchLastName) {
+export default function validateForm({ staffFirstName, staffLastName }: SearchForm): FormError | null {
+  if (!staffFirstName && !staffLastName) {
     return errors.MISSING_NAME
   }
-  if (!searchFirstName) {
+  if (!staffFirstName) {
     return errors.MISSING_FIRST_NAME
   }
-  if (!searchLastName) {
+  if (!staffLastName) {
     return errors.MISSING_LAST_NAME
   }
 

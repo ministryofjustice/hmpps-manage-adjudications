@@ -11,11 +11,12 @@ const submitCompleteDraftAdjudication = jest.fn()
 const editDraftIncidentDetails = jest.fn()
 const putDraftIncidentStatement = jest.fn()
 const getAllDraftAdjudicationsForUser = jest.fn()
+const getAgency = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getPrisonerImage, getPrisonerDetails }
+    return { getPrisonerImage, getPrisonerDetails, getAgency }
   })
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
@@ -580,6 +581,54 @@ describe('placeOnReportService', () => {
         statementPresent: true,
         statementComplete: true,
       })
+    })
+  })
+
+  describe('getAssociatedStaffDetails', () => {
+    it('returns the correct response', async () => {
+      getAgency.mockResolvedValue({
+        agencyId: 'MDI',
+        description: 'Moorland (HMP & YOI)',
+        longDescription: 'HMP & YOI Moorland Prison near Doncaster',
+        agencyType: 'INST',
+        active: true,
+      })
+      const staffMembers = [
+        {
+          activeCaseLoadId: 'MDI',
+          email: 'testerPerson@justice.gov.uk',
+          firstName: 'Tester',
+          lastName: 'Person',
+          name: 'Tester Person',
+          staffId: 1234564789,
+          username: 'RO_USER_TEST',
+          verified: true,
+        },
+      ]
+
+      const response = await service.getAssociatedStaffDetails(staffMembers, user)
+      expect(response).toEqual([{ ...staffMembers[0], currentLocation: 'Moorland (HMP & YOI)' }])
+    })
+    it('returns the correct response when the caseload is the central agency id', async () => {
+      const staffMembers = [
+        {
+          activeCaseLoadId: 'CADM_I',
+          email: 'testerPerson@justice.gov.uk',
+          firstName: 'Tester',
+          lastName: 'Person',
+          name: 'Tester Person',
+          staffId: 1234564789,
+          username: 'RO_USER_TEST',
+          verified: true,
+        },
+      ]
+      const response = await service.getAssociatedStaffDetails(staffMembers, user)
+      expect(response).toEqual([
+        {
+          ...staffMembers[0],
+          currentLocation: 'Central Admin',
+        },
+      ])
     })
   })
 })

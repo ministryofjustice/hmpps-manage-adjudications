@@ -19,6 +19,8 @@ export default (on: (string, Record) => void): void => {
     stubAuthUser: auth.stubUser,
     stubUserRoles: auth.stubUserRoles,
     stubGetUser: auth.stubGetUser,
+    stubGetUserFromNames: auth.stubGetUserFromNames,
+    stubGetEmail: auth.stubGetEmail,
 
     stubTokenPing: status => tokenVerification.stubPing(status),
     stubAuthPing: status => auth.stubPing(status),
