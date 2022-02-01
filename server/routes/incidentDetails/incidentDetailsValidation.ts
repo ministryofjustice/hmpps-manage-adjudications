@@ -4,6 +4,7 @@ import { formatDate } from '../../utils/utils'
 type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
   locationId?: number
+  incidentRole?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -47,11 +48,16 @@ const errors: { [key: string]: FormError } = {
     href: '#incidentDate[time]',
     text: 'Enter an incident time that is not in the future.',
   },
+  MISSING_ROLE: {
+    href: '#currentRadioSelected',
+    text: 'Select a role.',
+  },
 }
 
 export default function validateForm({
   incidentDate,
   locationId,
+  incidentRole,
 }: incidentDetailsForm): FormError | FormError[] | null {
   if (!incidentDate.date) {
     return errors.MISSING_DATE
@@ -82,6 +88,9 @@ export default function validateForm({
   }
   if (new Date(formatDate(incidentDate)) > new Date()) {
     return errors.FUTURE_TIME
+  }
+  if (!incidentRole) {
+    return errors.MISSING_ROLE
   }
 
   return null

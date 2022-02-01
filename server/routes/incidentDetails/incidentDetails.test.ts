@@ -41,7 +41,10 @@ beforeEach(() => {
         locationId: 2,
         dateTimeOfIncident: '2021-10-27T13:30:00.000',
       },
-      incidentRole: {},
+      incidentRole: {
+        associatedPrisonersNumber: 'G2678PF',
+        roleCode: '25a',
+      },
     },
   })
   placeOnReportService.getReporterName.mockResolvedValue('Test User')
@@ -63,13 +66,31 @@ describe('GET /incident-details', () => {
   })
 })
 
-describe('POST /incident-details', () => {
+describe.skip('POST /incident-details', () => {
   it('should redirect to incident statement page if details are complete', () => {
     return request(app)
       .post('/incident-details/G6415GD')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
-      .expect(302)
-      .expect('Location', '/incident-statement/G6415GD/1')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        associatedPrisonersNumber: 'G2678PF',
+        roleCode: '25a',
+      })
+      .expect(res => {
+        expect(res.text).toContain('Bleeeppp')
+      })
+    // .expect(302)
+    // .expect('Location', '/incident-statement/G6415GD/1')
+  })
+  it('should render an error summary with correct validation message - associated prisoner search', () => {
+    return request(app)
+      .post('/incident-details/G6415GD')
+      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter an hour which is 23 or less')
+      })
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)

@@ -38,7 +38,7 @@ describe('GET /select-associated-prisoner', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-prisoner?searchTerm=Smith')
+        .get('/select-associated-prisoner/G6123VU?searchTerm=Smith')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
@@ -57,7 +57,7 @@ describe('GET /select-associated-prisoner', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-prisoner?searchTerm=Smith')
+        .get('/select-associated-prisoner/G6123VU?searchTerm=Smith')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
@@ -70,17 +70,17 @@ describe('GET /select-associated-prisoner', () => {
 describe('POST /select-associated-prisoner', () => {
   it('should redirect to select prisoner page with the correct search text and redirect URL intact', () => {
     return request(app)
-      .post('/select-associated-prisoner')
+      .post('/select-associated-prisoner/G6123VU')
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        '/select-associated-prisoner?searchTerm=Smith&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisoner'
+        '/select-associated-prisoner/G6123VU?searchTerm=Smith&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisoner'
       )
   })
 
   it('should render validation messages', () => {
     return request(app)
-      .post('/select-associated-prisoner')
+      .post('/select-associated-prisoner/G6123VU')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Select a prisoner')

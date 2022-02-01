@@ -48,6 +48,7 @@ export default class SelectAssociatedPrisonerRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
     const { redirectUrl } = req.session
+    const { prisonerNumber } = req.params
 
     const error = validateForm({ searchTerm })
 
@@ -59,7 +60,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.redirect(
       url.format({
-        pathname: '/select-associated-prisoner',
+        pathname: `/select-associated-prisoner/${prisonerNumber}`,
         query: { searchTerm, redirectUrl },
       })
     )

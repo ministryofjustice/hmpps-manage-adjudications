@@ -1,0 +1,116 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+ {% set inciteAnotherPrisoner %}
+{% if (queryRadioSelection === 'inciteAnotherPrisoner') and (associatedPersonDetails.name) %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
+    <p class="govuk-body"><a href="/incident-details/{{prisonerNumber}}?queryRadioSelection=inciteAnotherPrisoner">Delete</a></p>
+  </div>
+{% else %}
+<div class="flex-container flex-center">
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "inciteAnotherPrisonerInput",
+  name: "inciteAnotherPrisonerInput",
+  classes: "govuk-!-width-full-width",
+  value: inciteAnotherPrisonerInput,
+  errorMessage: errors | findErrors(['inciteAnotherPrisonerInput']),
+  label: {
+    text: "Enter their name or prison number",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+    {{ govukButton({
+        text: 'Search',
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+    type: "submit",
+    name: "search",
+    value: "inciteAnotherPrisonerSearchSubmit",
+        attributes: { "data-qa": "incite-prisoner-search" }
+    }) }}
+</div>
+{% endif %}
+{% endset -%}
+
+ {% set assistAnotherPrisoner %}
+{% if (queryRadioSelection === 'assistAnotherPrisoner') and (associatedPersonDetails.name) %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
+    <p class="govuk-body"><a href="/incident-details/{{prisonerNumber}}?queryRadioSelection=assistAnotherPrisoner">Delete</a></p>
+  </div>
+{% else %}
+<div class="flex-container flex-center">
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "assistAnotherPrisonerInput",
+  name: "assistAnotherPrisonerInput",
+  classes: "govuk-!-width-full-width",
+  value: assistAnotherPrisoner,
+  errorMessage: errors | findErrors(['assistAnotherPrisonerInput']),
+  label: {
+    text: "Enter their name or prison number",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+    {{ govukButton({
+        text: 'Search',
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+    type: "submit",
+    name: "search",
+    value: "assistAnotherPrisonerSearchSubmit",
+        attributes: { "data-qa": "assist-prisoner-search" }
+    }) }}
+</div>
+{% endif %}
+{% endset -%}
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {{ govukRadios({
+    idPrefix: 'RoleRadios',
+    id: 'currentRadioSelected',
+    name: 'currentRadioSelected',
+    fieldset: {
+        legend: {
+        text: "What was " + prisoner.friendlyName | possessive | safe + " role in the incident?",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+        }
+    },
+    items: [
+    {
+      value: "onTheirOwn",
+      text: "Committed this incident on their own",
+      checked: queryRadioSelection === "onTheirOwn"
+    },
+    {
+      value: "attemptOnTheirOwn",
+      text: "Attempted to commit this incident on their own",
+      checked: queryRadioSelection === "attemptOnTheirOwn"
+    },
+    {
+      value: "inciteAnotherPrisoner",
+      text: "Incited another prisoner of commit this incident",
+      conditional: {
+        html: inciteAnotherPrisoner
+      },
+      checked: queryRadioSelection === "inciteAnotherPrisoner"
+    },
+    {
+      value: "assistAnotherPrisoner",
+      text: "Assisted another prisoner to commit, or attemp to commit, this incident",
+      conditional: {
+        html: assistAnotherPrisoner
+      },
+      checked: queryRadioSelection === "assistAnotherPrisoner"
+    }
+  ]
+    }) }}
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

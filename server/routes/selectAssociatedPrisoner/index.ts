@@ -17,8 +17,8 @@ export default function selectAssociatedPrisonerRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/', selectAssociatedPrisoner.view)
-  post('/', selectAssociatedPrisoner.submit)
+  get('/:prisonerNumber', selectAssociatedPrisoner.view)
+  post('/:prisonerNumber', selectAssociatedPrisoner.submit)
 
   return router
 }
