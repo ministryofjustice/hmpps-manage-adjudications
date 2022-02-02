@@ -35,6 +35,14 @@ export default class Decision {
     return this
   }
 
+  getTitle() {
+    return this.decisionTitle
+  }
+
+  getQuestions() {
+    return this.decisionQuestion
+  }
+
   code(code: Code) {
     this.decisionCode = code
     return this
@@ -62,10 +70,37 @@ export default class Decision {
     return null
   }
 
-  questionsTo(): Array<Question> {
+  matching(fn: (d: Decision) => boolean): Array<Decision> {
+    const matches = [].concat(...this.childrenDecisions.map(c => c.matching(fn)))
+    if (fn(this)) {
+      matches.push(this)
+    }
+    return matches
+  }
+
+  allCodes(): Array<Code> {
+    const codes = [].concat(...this.childrenDecisions.map(c => c.allCodes()))
+    if (this.decisionCode) {
+      codes.push(this.decisionCode)
+    }
+    return codes.sort()
+  }
+
+  invalidDecisions(): Array<Decision> {
+    return this.matching(d => d.invalid())
+  }
+
+  invalid(): boolean {
+    return (
+      (this.childrenDecisions.length === 0 && this.decisionCode == null) ||
+      (this.childrenDecisions.length !== 0 && this.decisionTitle == null)
+    )
+  }
+
+  questionsToGetHere(): Array<Question> {
     let questions = new Array<Question>()
     if (this.parentDecision) {
-      questions = this.parentDecision.questionsTo()
+      questions = this.parentDecision.questionsToGetHere()
     }
     if (this.decisionQuestion) {
       questions.push(this.decisionQuestion)
@@ -85,11 +120,7 @@ export default class Decision {
   }
 
   findByTitle(title: Title): Array<Decision> {
-    const matches: Array<Decision> = [].concat(...this.childrenDecisions.map(c => c.findByTitle(title)))
-    if (title?.title === this.decisionTitle?.title) {
-      matches.push(this)
-    }
-    return matches
+    return this.matching(d => title?.title === this.decisionTitle?.title)
   }
 
   toString(indent = 0): string {

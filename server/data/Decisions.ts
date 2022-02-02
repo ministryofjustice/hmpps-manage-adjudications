@@ -13,7 +13,7 @@ const whoWasAssaulted = new Title('Who was assaulted?')
 const raciallyAggravated = new Title('Was the incident a racially aggravated assault?')
 const whatHappened = new Title('What happened?')
 const greaterThanAllowed = new Title('Did they have a greater amount than they are allowed to have?')
-const forPersonalUse = new Title('Was th article only for {}`s personal user')
+const forPersonalUse = new Title('Was the article only for {}`s personal user')
 const whoWasDisrespectfulTo = new Title('Who was {} disrespectful to?')
 const racistBehaviour = new Title('Did the incident involve racist behaviour?')
 const whoDidAttemptToDetain = new Title('Who did {} attempt to detain?')
@@ -26,14 +26,14 @@ const damages = new Question('Sets fire to, or damages, the prison or any proper
 const disrespectfulThreatening = new Question('Disrespectful, threatening, abusive, or insulting')
 const disobeys = new Question('Disobeys any lawful order, or failure to comply with any rule or regulation')
 const detains = new Question('Detains another person')
-const prevents = new Question('Preventing someone doing their job')
+const stopping = new Question('Stopping someone who is not a prisoner from doing their job')
 const absent = new Question(
   'Being absent without authorisation, being in an unauthorised place, or failing to work correctly'
 )
 
 const assaulting = new Question('Assaulting someone')
 const fighting = new Question('Fighting with someone')
-const endangering = new Question('Endangering')
+const endangering = new Question('Endangering the health or personal safety of someone')
 
 const prisoner = new Question('Another prisoner')
 const officer = new Question('A prison officer')
@@ -60,8 +60,8 @@ const receivingWithoutConsent = new Question('Receiving any controlled drug with
 const receivingDuringVisit = new Question('Receiving any controlled drug or any other article during a visit')
 const tampering = new Question('Tampering with or falsifying a drug testing sample')
 const refuseSample = new Question('Refuses to provide a sample for drug testing')
-const administratingThemselves = new Question('Administrating a controlled drug to themself ')
-const failingToStopSomeoneElse = new Question('Failing to stop someone else administrating a controlled drug to them ')
+const administratingThemselves = new Question('Administrating a controlled drug to themself')
+const failingToStopSomeoneElse = new Question('Failing to stop someone else administrating a controlled drug to them')
 const possessionOfControlled = new Question('Possessing any unauthorised controlled drugs')
 const possessionOfControlledGreater = new Question(
   'Possessing a greater quantity of controlled drugs than authorised to have'
@@ -84,11 +84,173 @@ const threatening = new Question('Threatening, abusive, or insulting behaviour')
 const disobeyingLawful = new Question('Disobeying any lawful order')
 const failureToComply = new Question('Failure to comply with any rule or regulation')
 
+const denyingAccess = new Question('Denying someone access to any part of the prison')
+const obstructing = new Question('Obstructing a member of staff from doing their job')
+const preventingTest = new Question('Stopping someone carrying out a drug test')
+
+const absentWithoutAuthorisation = new Question('Being absent without authorisation')
+const unauthorisedPlace = new Question('Being in an unauthorised place')
+const failingWork = new Question('Failing to work correctly')
+
 function decision(question: Question) {
   return new Decision(question)
 }
 
+function t(title: string) {
+  return new Title(title)
+}
+
+function q(question: string) {
+  return new Question(question)
+}
+
+function c(code: string) {
+  return new Code(code)
+}
+
 const committed = new Decision()
+  .title(t('What type of offence did {} commit?'))
+  .child(
+    decision(q('Assault, fighting, or endangering the health or personal safety of others'))
+      .title(t('What did the incident involve?'))
+      .child(
+        decision(q('Assaulting someone'))
+          .title(t('Who was assaulted?'))
+          .child(
+            decision(q('Another prisoner'))
+              .title(t('Was the incident a racially aggravated assault?'))
+              .child(decision(q('Yes')).code(todo))
+              .child(decision(q('No')).code(todo))
+          )
+          .child(
+            decision(q('A prison officer'))
+              .title(t('Was the incident a racially aggravated assault?'))
+              .child(decision(q('Yes')).code(todo))
+              .child(decision(q('No')).code(todo))
+          )
+          .child(
+            decision(q('A member of staff who is not a prison officer'))
+              .title(t('Was the incident a racially aggravated assault?'))
+              .child(decision(q('Yes')).code(todo))
+              .child(decision(q('No')).code(todo))
+          )
+          .child(
+            decision(q('Another person not listed above'))
+              .title(t('Was the incident a racially aggravated assault?'))
+              .child(decision(q('Yes')).code(todo))
+              .child(decision(q('No')).code(todo))
+          )
+          .child(decision(q('Fighting with someone')).code(todo))
+          .child(decision(q('Endangering the health or personal safety of someone')).code(todo))
+      )
+  )
+  .child(
+    decision(q('Escape or failure to comply with temporary release conditions'))
+      .title(t('What did the incident involve?'))
+      .child(decision(q('Escaping')).code(todo))
+      .child(decision(q('Absconding from either prison or legal custody')).code(todo))
+      .child(decision(q('Failing to comply with any conditions of a temporary release')).code(todo))
+      .child(decision(q('Failing to return from their temporary release')).code(todo))
+  )
+  .child(
+    decision(q('Possession of unauthorised articles, or drugs or alcohol related'))
+      .title(t('What did the incident involve?'))
+      .child(
+        decision(q('Possession of an unauthorised article'))
+          .title(t('What happened?'))
+          .child(
+            decision(q('Has unauthorised article in possession'))
+              .title(t('Did they have a greater amount than they are allowed to have?'))
+              .child(decision(q('Yes')).code(todo))
+              .child(decision(q('No')).code(todo))
+          )
+          .child(
+            decision(q('Sells or gives an unauthorised article to another person'))
+              .title(t('Was the article only for {}`s personal user'))
+              .child(decision(q('Yes')).code(todo))
+              .child(decision(q('No')).code(todo))
+          )
+          .child(decision(q('Takes an article from another person without permission')).code(todo))
+      )
+      .child(
+        decision(q('Drugs'))
+          .title(t('What happened?'))
+          .child(decision(q('Receiving any controlled drug without the consent of an officer')).code(todo))
+          .child(decision(q('Receiving any controlled drug or any other article during a visit')).code(todo))
+          .child(decision(q('Tampering with or falsifying a drug testing sample')).code(todo))
+          .child(decision(q('Refuses to provide a sample for drug testing')).code(todo))
+          .child(decision(q('Administrating a controlled drug to themself')).code(todo))
+          .child(decision(q('Failing to stop someone else administrating a controlled drug to them')).code(todo))
+          .child(decision(q('Possessing any unauthorised controlled drugs')).code(todo))
+          .child(decision(q('Possessing a greater quantity of controlled drugs than authorised to have')).code(todo))
+      )
+      .child(
+        decision(q('Alcohol'))
+          .title(t('What happened?'))
+          .child(decision(q('Possessing any unauthorised controlled drugs')).code(todo))
+          .child(decision(q('Possessing a greater quantity of controlled drugs than authorised to have')).code(todo))
+      )
+  )
+  .child(
+    decision(q('Sets fire to, or damages, the prison or any property'))
+      .title(t('What did the incident involve?'))
+      .child(decision(q('Sets fire to any part of the prison or any property')).code(todo))
+      .child(decision(q('Racially aggravated damage')).code(todo))
+      .child(decision(q('Destroys or damages any part of the prison')).code(todo))
+      .child(decision(q("Destroys or damages someone else's property")).code(todo))
+  )
+  .child(
+    decision(q('Disrespectful, threatening, abusive, or insulting'))
+      .title(t('What did the incident involve?'))
+      .child(
+        decision(q('Disrespectful behaviour'))
+          .title(t('Who was {} disrespectful to?'))
+          .child(decision(q('A prison officer')).code(todo))
+          .child(decision(q('A member of staff who is not a prison officer')).code(todo))
+          .child(decision(q('Another person not listed above')).code(todo))
+      )
+      .child(
+        decision(q('Threatening, abusive, or insulting behaviour'))
+          .title(t('Did the incident involve racist behaviour?'))
+          .child(decision(q('Yes')).code(todo))
+          .child(decision(q('No')).code(todo))
+      )
+  )
+  .child(
+    decision(q('Disobeys any lawful order, or failure to comply with any rule or regulation'))
+      .title(t('What did the incident involve?'))
+      .child(decision(q('Disobeying any lawful order')).code(todo))
+      .child(decision(q('Failure to comply with any rule or regulation')).code(todo))
+  )
+  .child(
+    decision(q('Detains another person'))
+      .title(t('Who did {} attempt to detain?'))
+      .child(decision(q('Another prisoner')).code(todo))
+      .child(decision(q('A prison officer')).code(todo))
+      .child(decision(q('A member of staff who is not a prison officer')).code(todo))
+      .child(decision(q('Another person not listed above')).code(todo))
+  )
+  .child(
+    decision(q('Stopping someone who is not a prisoner from doing their job'))
+      .title(t('What did the incident involve?'))
+      .child(decision(q('Denying someone access to any part of the prison')).code(todo))
+      .child(decision(q('Obstructing a member of staff from doing their job')).code(todo))
+      .child(
+        decision(q('Stopping someone carrying out a drug test'))
+          .title(t('What happened?'))
+          .child(decision(q('Tampering with or falsifying a drug testing sample')).code(todo))
+          .child(decision(q('Refuses to provide a sample for drug testing')).code(todo))
+      )
+  )
+  .child(
+    decision(q('Being absent without authorisation, being in an unauthorised place, or failing to work correctly'))
+      .title(t('What did the incident involve?'))
+      .child(decision(q('Being absent without authorisation')).code(todo))
+      .child(decision(q('Being in an unauthorised place')).code(todo))
+      .child(decision(q('Failing to work correctly')).code(todo))
+  )
+
+const committed2 = new Decision()
   .title(typeOfOffence)
   .child(
     decision(assault)
@@ -154,7 +316,6 @@ const committed = new Decision()
           .child(decision(consumeAlcoholOtherThanProvided).code(todo))
       )
   )
-
   .child(
     decision(damages)
       .title(whatDidTheIncidentInvolve)
@@ -177,12 +338,7 @@ const committed = new Decision()
         decision(threatening).title(racistBehaviour).child(decision(yes).code(todo)).child(decision(no).code(todo))
       )
   )
-  .child(
-    decision(disobeys)
-      .title(whatDidTheIncidentInvolve)
-      .child(decision(disobeyingLawful).code(todo))
-      .child(decision(failureToComply).code(todo))
-  )
+  .child(decision(disobeys).child(decision(disobeyingLawful).code(todo)).child(decision(failureToComply).code(todo)))
   .child(
     decision(detains)
       .title(whoDidAttemptToDetain)
@@ -191,8 +347,24 @@ const committed = new Decision()
       .child(decision(staff).code(todo))
       .child(decision(another).code(todo))
   )
-
-  .child(decision(prevents))
-  .child(decision(absent))
+  .child(
+    decision(stopping)
+      .title(whatDidTheIncidentInvolve)
+      .child(decision(denyingAccess).code(todo))
+      .child(decision(obstructing).code(todo))
+      .child(
+        decision(preventingTest)
+          .title(whatHappened)
+          .child(decision(tampering).code(todo))
+          .child(decision(refuseSample).code(todo))
+      )
+  )
+  .child(
+    decision(absent)
+      .title(whatDidTheIncidentInvolve)
+      .child(decision(absentWithoutAuthorisation).code(todo))
+      .child(decision(unauthorisedPlace).code(todo))
+      .child(decision(failingWork).code(todo))
+  )
 
 export default committed
