@@ -16,6 +16,7 @@ const greaterThanAllowed = new Title('Did they have a greater amount than they a
 const forPersonalUse = new Title('Was th article only for {}`s personal user')
 const whoWasDisrespectfulTo = new Title('Who was {} disrespectful to?')
 const racistBehaviour = new Title('Did the incident involve racist behaviour?')
+const whoDidAttemptToDetain = new Title('Who did {} attempt to detain?')
 
 // Questions
 const assault = new Question('Assault, fighting, or endangering the health or personal safety of others')
@@ -77,11 +78,11 @@ const damagesPrison = new Question('Destroys or damages any part of the prison')
 const damagesProperty = new Question("Destroys or damages someone else's property")
 
 const disrespectful = new Question('Disrespectful behaviour')
-const prisonOfficer = new Question('A prison officer')
-const staffNotOfficer = new Question('A member of staff who is not a prison officer')
-const anotherPerson = new Question('Another person not listed above')
 
 const threatening = new Question('Threatening, abusive, or insulting behaviour')
+
+const disobeyingLawful = new Question('Disobeying any lawful order')
+const failureToComply = new Question('Failure to comply with any rule or regulation')
 
 function decision(question: Question) {
   return new Decision(question)
@@ -168,16 +169,29 @@ const committed = new Decision()
       .child(
         decision(disrespectful)
           .title(whoWasDisrespectfulTo)
-          .child(decision(prisonOfficer).code(todo))
-          .child(decision(staffNotOfficer).code(todo))
-          .child(decision(anotherPerson).code(todo))
+          .child(decision(officer).code(todo))
+          .child(decision(staff).code(todo))
+          .child(decision(another).code(todo))
       )
       .child(
         decision(threatening).title(racistBehaviour).child(decision(yes).code(todo)).child(decision(no).code(todo))
       )
   )
-  .child(decision(disobeys))
-  .child(decision(detains))
+  .child(
+    decision(disobeys)
+      .title(whatDidTheIncidentInvolve)
+      .child(decision(disobeyingLawful).code(todo))
+      .child(decision(failureToComply).code(todo))
+  )
+  .child(
+    decision(detains)
+      .title(whoDidAttemptToDetain)
+      .child(decision(prisoner).code(todo))
+      .child(decision(officer).code(todo))
+      .child(decision(staff).code(todo))
+      .child(decision(another).code(todo))
+  )
+
   .child(decision(prevents))
   .child(decision(absent))
 
