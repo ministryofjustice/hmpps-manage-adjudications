@@ -50,7 +50,7 @@ export default class ReportedAdjudicationsService {
     )
 
     return {
-      reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
+      reportExpirationDateTime: adjudicationData.reportedAdjudication.incidentDetails.handoverDeadline,
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
@@ -84,7 +84,7 @@ export default class ReportedAdjudicationsService {
     )
 
     return {
-      reportExpirationDateTime: adjudicationData.reportedAdjudication.dateTimeReportExpires,
+      reportExpirationDateTime: adjudicationData.reportedAdjudication.incidentDetails.handoverDeadline,
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,

@@ -25,10 +25,10 @@ context('Your Completed Reports', () => {
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
-        dateTimeReportExpires: null,
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-11-15T11:30:00',
+          handoverDeadline: '2021-11-17T11:30:00',
         },
         incidentStatement: null,
         createdByUserId: 'TEST_GEN',

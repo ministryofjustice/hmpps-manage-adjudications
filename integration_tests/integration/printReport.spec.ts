@@ -29,11 +29,11 @@ context('Print a copy of this report', () => {
           prisonerNumber: 'G6415GD',
           bookingId: 123,
           createdByUserId: 'AJONES',
-          dateTimeReportExpires: '2020-12-08T10:00:00',
           createdDateTime: '2020-12-06T10:00:00',
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-06T10:00:00',
+            handoverDeadline: '2020-12-08T10:00:00',
           },
           incidentStatement: {
             statement: 'test',

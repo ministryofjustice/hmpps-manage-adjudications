@@ -28,7 +28,6 @@ context('Prisoner has been placed on report', () => {
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
           bookingId: 1201395,
-          dateTimeReportExpires: '2021-12-11T09:40:00',
           createdDateTime: '2021-12-09T09:40:00',
           incidentDetails: {
             locationId: 197682,
@@ -37,7 +36,6 @@ context('Prisoner has been placed on report', () => {
           },
           incidentStatement: {
             statement: 'Statement here.',
-            completed: false,
           },
           createdByUserId: 'TEST_GEN',
         },

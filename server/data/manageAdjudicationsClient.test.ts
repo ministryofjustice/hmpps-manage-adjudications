@@ -103,10 +103,10 @@ describe('manageAdjudicationsClient', () => {
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
           bookingId: 123,
-          dateTimeReportExpires: '2020-12-12T10:00:00',
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-10T10:00:00',
+            handoverDeadline: '2020-12-12T10:00:00',
           },
           incidentRole: {
             roleCode: '25a',
@@ -167,7 +167,6 @@ describe('manageAdjudicationsClient', () => {
       reportedAdjudication: {
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
-        dateTimeReportExpires: '2021-11-06T09:21:00.00',
         incidentDetails: {},
         incidentRole: {},
         incidentStatement: {},
@@ -262,10 +261,10 @@ describe('manageAdjudicationsClient', () => {
         adjudicationNumber: 2,
         prisonerNumber: 'G6123VU',
         bookingId: 2,
-        dateTimeReportExpires: '2021-11-17T11:45:00',
         incidentDetails: {
           locationId: 3,
           dateTimeOfIncident: '2021-11-15T11:45:00',
+          handoverDeadline: '2021-11-17T11:45:00',
         },
         incidentRole: {
           roleCode: '25a',
@@ -279,10 +278,10 @@ describe('manageAdjudicationsClient', () => {
         adjudicationNumber: 1,
         prisonerNumber: 'G6174VU',
         bookingId: 1,
-        dateTimeReportExpires: '2021-11-17T11:30:00',
         incidentDetails: {
           locationId: 3,
           dateTimeOfIncident: '2021-11-15T11:30:00',
+          handoverDeadline: '2021-11-17T11:30:00',
         },
         incidentRole: {},
         incidentStatement: {
@@ -318,10 +317,10 @@ describe('manageAdjudicationsClient', () => {
         adjudicationNumber: 2,
         prisonerNumber: 'G6123VU',
         bookingId: 2,
-        dateTimeReportExpires: '2021-11-17T11:45:00',
         incidentDetails: {
           locationId: 3,
           dateTimeOfIncident: '2021-11-15T11:45:00',
+          handoverDeadline: '2021-11-17T11:45:00',
         },
         incidentRole: {
           roleCode: '25a',
@@ -335,10 +334,10 @@ describe('manageAdjudicationsClient', () => {
         adjudicationNumber: 1,
         prisonerNumber: 'G6174VU',
         bookingId: 1,
-        dateTimeReportExpires: '2021-11-17T11:30:00',
         incidentDetails: {
           locationId: 3,
           dateTimeOfIncident: '2021-11-15T11:30:00',
+          handoverDeadline: '2021-11-17T11:30:00',
         },
         incidentRole: {},
         incidentStatement: {
