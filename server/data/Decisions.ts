@@ -64,6 +64,16 @@ const possessionOfControlledGreater = new Question(
   'Possessing a greater quantity of controlled drugs than authorised to have'
 )
 
+const consumeAlcohol = new Question('Possessing any unauthorised controlled drugs')
+const consumeAlcoholOtherThanProvided = new Question(
+  'Possessing a greater quantity of controlled drugs than authorised to have'
+)
+
+const setsFire = new Question('Sets fire to any part of the prison or any property')
+const raciallyAggravatedDamage = new Question('Racially aggravated damage')
+const damagesPrison = new Question('Destroys or damages any part of the prison')
+const damagesProperty = new Question("Destroys or damages someone else's property")
+
 function decision(question: Question) {
   return new Decision(question)
 }
@@ -127,10 +137,22 @@ const committed = new Decision()
           .child(decision(possessionOfControlled).code(todo))
           .child(decision(possessionOfControlledGreater).code(todo))
       )
-      .child(decision(alcohol).title(whatHappened))
+      .child(
+        decision(alcohol)
+          .title(whatHappened)
+          .child(decision(consumeAlcohol).code(todo))
+          .child(decision(consumeAlcoholOtherThanProvided).code(todo))
+      )
   )
 
-  .child(decision(damages))
+  .child(
+    decision(damages)
+      .title(whatDidTheIncidentInvolve)
+      .child(decision(setsFire).code(todo))
+      .child(decision(raciallyAggravatedDamage).code(todo))
+      .child(decision(damagesPrison).code(todo))
+      .child(decision(damagesProperty).code(todo))
+  )
   .child(decision(disrespectful))
   .child(decision(disobeys))
   .child(decision(detains))
