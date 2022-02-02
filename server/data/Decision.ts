@@ -3,18 +3,25 @@ import Question from './Question'
 import Code from './Code'
 
 export default class Decision {
-  children: Array<Decision> = new Array<Decision>()
-
   parent: Decision
+
+  children: Array<Decision> = new Array<Decision>()
 
   question: Question
 
+  code: Code
+
   title: Title
 
-  code: Code
+  page: Page = 'Default'
 
   constructor(question?: Question) {
     this.question = question
+  }
+
+  withPage(page: Page) {
+    this.page = page
+    return this
   }
 
   withChild(child: Decision) {
@@ -56,7 +63,7 @@ export default class Decision {
   }
 
   questionsTo(): Array<Question> {
-    let questions: Question[] = []
+    let questions = new Array<Question>()
     if (this.parent) {
       questions = this.parent.questionsTo()
     }
@@ -77,6 +84,14 @@ export default class Decision {
     return null
   }
 
+  findByTitle(title: Title): Array<Decision> {
+    const matches: Array<Decision> = [].concat(...this.children.map(c => c.findByTitle(title)))
+    if (title?.title === this.title?.title) {
+      matches.push(this)
+    }
+    return matches
+  }
+
   toString(indent = 0): string {
     const padding = new Array(indent).join(' ')
     let output = `${padding}Id: ${this.id()}`
@@ -95,3 +110,5 @@ export default class Decision {
     return output
   }
 }
+
+type Page = 'Default'

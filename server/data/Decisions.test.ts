@@ -1,11 +1,9 @@
 import committed from './Decisions'
-import Code from './Code'
+import Title from './Title'
 
 describe('tokenStore', () => {
   it('Print out', () => {
-    const s = committed.findById('0:0:0:1')
-    const qq = s.questionsTo()
-
-    console.log(s.findByCode(new Code('TODO')).questionsTo())
+    console.log(committed.toString())
+    // committed.findByTitle(new Title('What happened?')).forEach(d => console.log(d.toString()))
   })
 })
