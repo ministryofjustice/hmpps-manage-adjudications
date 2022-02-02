@@ -427,6 +427,10 @@ describe('placeOnReportService', () => {
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
           locationId: 12123123,
         },
+        incidentRole: {
+          associatedPrisonersNumber: 'G2996UX',
+          roleCode: '25a',
+        },
         incidentStatement: {
           completed: false,
           statement: 'string',

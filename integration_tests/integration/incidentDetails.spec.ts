@@ -179,7 +179,7 @@ context('Incident details', () => {
     incidentDetailsPage.radioButtons().find('input[value="onTheirOwn"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/3456')
+      expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner incited', () => {
@@ -196,7 +196,7 @@ context('Incident details', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/3456')
+      expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner assisted', () => {
@@ -213,7 +213,7 @@ context('Incident details', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/3456')
+      expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
     })
   })
   it('should show error summary if an associated prisoner is not entered', () => {
@@ -230,10 +230,10 @@ context('Incident details', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Enter a prison number or name to search.')
+        expect($errors.get(0).innerText).to.contain('Enter their name or prison number')
       })
   })
-  it('should redirect the user to /incident-statement if form is incomplete', () => {
+  it('should redirect the user to /offence-details if form is incomplete', () => {
     const today = new Date()
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
@@ -244,7 +244,7 @@ context('Incident details', () => {
     incidentDetailsPage.radioButtons().find('input[value="onTheirOwn"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/3456')
+      expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
     })
   })
 })

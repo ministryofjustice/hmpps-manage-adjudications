@@ -67,7 +67,7 @@ describe('GET /incident-details', () => {
 })
 
 describe('POST /incident-details', () => {
-  it('should redirect to incident statement page if details are complete', () => {
+  it('should redirect to type of offence page if details are complete', () => {
     return request(app)
       .post('/incident-details/G6415GD?selectedPerson=G2678PF')
       .send({
@@ -76,7 +76,7 @@ describe('POST /incident-details', () => {
         currentRadioSelected: 'inciteAnotherPrisoner',
       })
       .expect(302)
-      .expect('Location', '/incident-statement/G6415GD/1')
+      .expect('Location', '/offence-details/G6415GD/1')
   })
   it('should render an error summary with correct validation message if the selected person has been tampered with in the URL', () => {
     return request(app)
@@ -89,7 +89,7 @@ describe('POST /incident-details', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter a prison number or name to search')
+        expect(res.text).toContain('Enter their name or prison number.')
       })
   })
   it('should render an error summary with correct validation message - missing radio button selection', () => {
@@ -101,7 +101,7 @@ describe('POST /incident-details', () => {
       })
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select a role.')
+        expect(res.text).toContain('Select the prisoner’s role in this incident.')
       })
   })
   it('should render an error summary with correct validation message - incorrect time entered', () => {

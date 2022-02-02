@@ -134,7 +134,7 @@ export default class IncidentDetailsRoutes {
       delete req.session.incidentDate
       delete req.session.incidentLocation
       const { id } = newAdjudication.draftAdjudication
-      return res.redirect(`/incident-statement/${prisonerNumber}/${id}`)
+      return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
     } catch (postError) {
       logger.error(`Failed to post incident details for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`

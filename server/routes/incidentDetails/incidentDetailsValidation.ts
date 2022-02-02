@@ -51,11 +51,11 @@ const errors: { [key: string]: FormError } = {
   },
   MISSING_ROLE: {
     href: '#currentRadioSelected',
-    text: 'Select a role.',
+    text: 'Select the prisoner’s role in this incident.',
   },
   MISSING_ASSOCIATED_PRISONER: {
     href: '#currentRadioSelected',
-    text: 'Enter a prison number or name to search.',
+    text: 'Enter their name or prison number.',
   },
 }
 
