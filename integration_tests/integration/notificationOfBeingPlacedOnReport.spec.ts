@@ -30,11 +30,11 @@ context('Prisoner has been placed on report', () => {
           adjudicationNumber: 3,
           prisonerNumber: 'G6415GD',
           bookingId: 123,
-          dateTimeReportExpires: '2020-12-08T10:00:00',
           createdByUserId: 'AJONES',
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2020-12-06T10:00:00',
+            handoverDeadline: '2020-12-08T10:00:00',
           },
           incidentStatement: {
             statement: 'test',

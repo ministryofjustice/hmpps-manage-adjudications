@@ -4,7 +4,6 @@ export type ReportedAdjudication = {
   adjudicationNumber: number
   prisonerNumber: string
   bookingId: number
-  dateTimeReportExpires: string
   createdDateTime: string
   createdByUserId: string
   incidentDetails: IncidentDetails

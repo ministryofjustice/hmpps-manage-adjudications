@@ -91,11 +91,11 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
           bookingId: 2,
-          dateTimeReportExpires: '2021-11-17T11:45:00',
           createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
+            handoverDeadline: '2021-11-17T11:45:00',
           },
           incidentStatement: {
             statement: 'My second incident',
@@ -105,11 +105,11 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 1,
           prisonerNumber: 'G6174VU',
           bookingId: 1,
-          dateTimeReportExpires: '2021-11-17T11:30:00',
           createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:30:00',
+            handoverDeadline: '2021-11-17T11:30:00',
           },
           incidentStatement: {
             statement: 'My first incident',
@@ -152,12 +152,12 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
           bookingId: 2,
-          dateTimeReportExpires: '2021-11-17T11:45:00',
           createdByUserId: 'NCLAMP_GEN',
           reportingOfficer: '',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:45:00',
+            handoverDeadline: '2021-11-17T11:45:00',
           },
           incidentStatement: {
             statement: 'My second incident',
@@ -173,10 +173,10 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: '',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
-          dateTimeReportExpires: '2021-11-17T11:30:00',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-11-15T11:30:00',
+            handoverDeadline: '2021-11-17T11:30:00',
           },
           incidentStatement: {
             statement: 'My first incident',
@@ -203,14 +203,13 @@ describe('reportedAdjudicationsService', () => {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
             createdByUserId: 'NCLAMP_GEN',
-            dateTimeReportExpires: '2021-10-22T15:40:25.884',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
+              handoverDeadline: '2021-10-22T15:40:25.884',
             },
             incidentStatement: {
               statement: 'Example statement',
-              completed: true,
             },
           },
         })
@@ -284,15 +283,14 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            dateTimeReportExpires: '2021-10-22T15:40:25.884',
             createdByUserId: 'NCLAMP_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
+              handoverDeadline: '2021-10-22T15:40:25.884',
             },
             incidentStatement: {
               statement: 'Example statement',
-              completed: true,
             },
           },
         })
@@ -327,26 +325,24 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 1524427,
           prisonerNumber: 'A5041DY',
           bookingId: 1200675,
-          dateTimeReportExpires: '2021-12-02T14:10:00',
           incidentDetails: {
             locationId: 27217,
             dateTimeOfIncident: '2021-11-30T14:10:00',
             handoverDeadline: '2021-12-02T14:10:00',
           },
-          incidentStatement: { statement: 'Something happened', completed: false },
+          incidentStatement: { statement: 'Something happened' },
           createdByUserId: 'TEST_GEN',
         },
         {
           adjudicationNumber: 1524425,
           prisonerNumber: 'G6415GD',
           bookingId: 1201638,
-          dateTimeReportExpires: '2021-12-02T14:00:00',
           incidentDetails: {
             locationId: 357592,
             dateTimeOfIncident: '2021-11-30T14:00:00',
             handoverDeadline: '2021-12-02T14:00:00',
           },
-          incidentStatement: { statement: 'efe er3d 32r §', completed: false },
+          incidentStatement: { statement: 'efe er3d 32r §' },
           createdByUserId: 'TEST_GEN',
         },
       ]
@@ -394,14 +390,12 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 1524427,
           prisonerNumber: 'A5041DY',
           bookingId: 1200675,
-          dateTimeReportExpires: '2021-12-02T14:10:00',
           incidentDetails: {
             handoverDeadline: '2021-12-02T14:10:00',
             locationId: 27217,
             dateTimeOfIncident: '2021-11-30T14:10:00',
           },
           incidentStatement: {
-            completed: false,
             statement: 'Something happened',
           },
         },
@@ -410,14 +404,12 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 1524425,
           prisonerNumber: 'G6415GD',
           bookingId: 1201638,
-          dateTimeReportExpires: '2021-12-02T14:00:00',
           incidentDetails: {
             handoverDeadline: '2021-12-02T14:00:00',
             locationId: 357592,
             dateTimeOfIncident: '2021-11-30T14:00:00',
           },
           incidentStatement: {
-            completed: false,
             statement: 'efe er3d 32r §',
           },
           createdByUserId: 'TEST_GEN',

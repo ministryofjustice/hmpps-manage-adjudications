@@ -28,13 +28,13 @@ beforeEach(() => {
       adjudicationNumber: 2,
       prisonerNumber: 'G6123VU',
       bookingId: 2,
-      dateTimeReportExpires: '2021-11-17T11:45:00',
       createdDateTime: '2021-11-15T11:45:00',
       createdByUserId: 'TEST_ER',
       reportingOfficer: '',
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:45:00',
+        handoverDeadline: '2021-11-17T11:45:00',
       },
       incidentStatement: {
         statement: 'My second incident',
@@ -50,11 +50,11 @@ beforeEach(() => {
       reportingOfficer: '',
       prisonerNumber: 'G6174VU',
       bookingId: 1,
-      dateTimeReportExpires: '2021-11-17T11:30:00',
       createdDateTime: '2021-11-15T11:30:00',
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:30:00',
+        handoverDeadline: '2021-11-17T11:30:00',
       },
       incidentStatement: {
         statement: 'My first incident',
