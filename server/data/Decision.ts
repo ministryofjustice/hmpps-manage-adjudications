@@ -3,50 +3,50 @@ import Question from './Question'
 import Code from './Code'
 
 export default class Decision {
-  parent: Decision
+  private parentDecision: Decision
 
-  children: Array<Decision> = new Array<Decision>()
+  private childrenDecisions: Array<Decision> = new Array<Decision>()
 
-  question: Question
+  private readonly decisionQuestion: Question
 
-  code: Code
+  private decisionCode: Code
 
-  title: Title
+  private decisionTitle: Title
 
-  page: Page = 'Default'
+  private decisionPage: Page = 'Default'
 
   constructor(question?: Question) {
-    this.question = question
+    this.decisionQuestion = question
   }
 
-  withPage(page: Page) {
-    this.page = page
+  page(page: Page) {
+    this.decisionPage = page
     return this
   }
 
-  withChild(child: Decision) {
-    child.setParent(this)
-    this.children.push(child)
+  child(child: Decision) {
+    child.parent(this)
+    this.childrenDecisions.push(child)
     return this
   }
 
-  withTitle(title: Title) {
-    this.title = title
+  title(title: Title) {
+    this.decisionTitle = title
     return this
   }
 
-  withCode(code: Code) {
-    this.code = code
+  code(code: Code) {
+    this.decisionCode = code
     return this
   }
 
-  setParent(parent: Decision) {
-    this.parent = parent
+  parent(parent: Decision) {
+    this.parentDecision = parent
   }
 
   id(): string {
-    if (this.parent) {
-      return `${this.parent.id()}:${this.parent.children.indexOf(this)}`
+    if (this.parentDecision) {
+      return `${this.parentDecision.id()}:${this.parentDecision.childrenDecisions.indexOf(this)}`
     }
     return '0'
   }
@@ -55,7 +55,7 @@ export default class Decision {
     if (id === this.id()) {
       return this
     }
-    const matches = this.children.map(c => c.findById(id)).filter(c => c)
+    const matches = this.childrenDecisions.map(c => c.findById(id)).filter(c => c)
     if (matches.length) {
       return matches[0]
     }
@@ -64,20 +64,20 @@ export default class Decision {
 
   questionsTo(): Array<Question> {
     let questions = new Array<Question>()
-    if (this.parent) {
-      questions = this.parent.questionsTo()
+    if (this.parentDecision) {
+      questions = this.parentDecision.questionsTo()
     }
-    if (this.question) {
-      questions.push(this.question)
+    if (this.decisionQuestion) {
+      questions.push(this.decisionQuestion)
     }
     return questions
   }
 
   findByCode(code: Code): Decision {
-    if (code?.code === this.code?.code) {
+    if (code?.code === this.decisionCode?.code) {
       return this
     }
-    const matches = this.children.map(c => c.findByCode(code)).filter(c => c)
+    const matches = this.childrenDecisions.map(c => c.findByCode(code)).filter(c => c)
     if (matches.length) {
       return matches[0]
     }
@@ -85,8 +85,8 @@ export default class Decision {
   }
 
   findByTitle(title: Title): Array<Decision> {
-    const matches: Array<Decision> = [].concat(...this.children.map(c => c.findByTitle(title)))
-    if (title?.title === this.title?.title) {
+    const matches: Array<Decision> = [].concat(...this.childrenDecisions.map(c => c.findByTitle(title)))
+    if (title?.title === this.decisionTitle?.title) {
       matches.push(this)
     }
     return matches
@@ -95,17 +95,17 @@ export default class Decision {
   toString(indent = 0): string {
     const padding = new Array(indent).join(' ')
     let output = `${padding}Id: ${this.id()}`
-    if (this.question?.question) {
-      output = `${output}\r\n${padding}Question: ${this.question?.question}`
+    if (this.decisionQuestion?.question) {
+      output = `${output}\r\n${padding}Question: ${this.decisionQuestion?.question}`
     }
-    if (this.title?.title) {
-      output = `${output}\r\n${padding}Title: ${this.title.title}`
+    if (this.decisionTitle?.title) {
+      output = `${output}\r\n${padding}Title: ${this.decisionTitle.title}`
     }
-    if (this.children.length) {
-      output = `${output}\r\n${this.children.map(child => child.toString(indent + 4)).join('\r\n')}`
+    if (this.childrenDecisions.length) {
+      output = `${output}\r\n${this.childrenDecisions.map(child => child.toString(indent + 4)).join('\r\n')}`
     }
-    if (this.code?.code) {
-      output = `${output}\r\n${padding}Code: ${this.code.code}`
+    if (this.decisionCode?.code) {
+      output = `${output}\r\n${padding}Code: ${this.decisionCode.code}`
     }
     return output
   }

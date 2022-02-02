@@ -53,83 +53,88 @@ const inPossession = new Question('Has unauthorised article in possession')
 const sells = new Question('Sells or gives an unauthorised article to another person')
 const takes = new Question('Takes an article from another person without permission')
 
+const receivingWithoutConsent = new Question('Receiving any controlled drug without the consent of an officer')
+const receivingDuringVisit = new Question('Receiving any controlled drug or any other article during a visit')
+const tampering = new Question('Tampering with or falsifying a drug testing sample')
+const refuseSample = new Question('Refuses to provide a sample for drug testing')
+const administratingThemselves = new Question('Administrating a controlled drug to themself ')
+const failingToStopSomeoneElse = new Question('Failing to stop someone else administrating a controlled drug to them ')
+const possessionOfControlled = new Question('Possessing any unauthorised controlled drugs')
+const possessionOfControlledGreater = new Question(
+  'Possessing a greater quantity of controlled drugs than authorised to have'
+)
+
 function decision(question: Question) {
   return new Decision(question)
 }
 
 const committed = new Decision()
-  .withTitle(typeOfOffence)
-  .withChild(
+  .title(typeOfOffence)
+  .child(
     decision(assault)
-      .withTitle(whatDidTheIncidentInvolve)
-      .withChild(
+      .title(whatDidTheIncidentInvolve)
+      .child(
         decision(assaulting)
-          .withTitle(whoWasAssaulted)
-          .withChild(
-            decision(prisoner)
-              .withTitle(raciallyAggravated)
-              .withChild(decision(yes).withCode(todo))
-              .withChild(decision(no).withCode(todo))
+          .title(whoWasAssaulted)
+          .child(
+            decision(prisoner).title(raciallyAggravated).child(decision(yes).code(todo)).child(decision(no).code(todo))
           )
-          .withChild(
-            decision(officer)
-              .withTitle(raciallyAggravated)
-              .withChild(decision(yes).withCode(todo))
-              .withChild(decision(no).withCode(todo))
+          .child(
+            decision(officer).title(raciallyAggravated).child(decision(yes).code(todo)).child(decision(no).code(todo))
           )
-          .withChild(
-            decision(staff)
-              .withTitle(raciallyAggravated)
-              .withChild(decision(yes).withCode(todo))
-              .withChild(decision(no).withCode(todo))
+          .child(
+            decision(staff).title(raciallyAggravated).child(decision(yes).code(todo)).child(decision(no).code(todo))
           )
-          .withChild(
-            decision(another)
-              .withTitle(raciallyAggravated)
-              .withChild(decision(yes).withCode(todo))
-              .withChild(decision(no).withCode(todo))
+          .child(
+            decision(another).title(raciallyAggravated).child(decision(yes).code(todo)).child(decision(no).code(todo))
           )
-          .withChild(decision(fighting).withCode(todo))
-          .withChild(decision(endangering).withCode(todo))
+          .child(decision(fighting).code(todo))
+          .child(decision(endangering).code(todo))
       )
   )
-  .withChild(
+  .child(
     decision(escaped)
-      .withTitle(whatDidTheIncidentInvolve)
-      .withChild(decision(escaping).withCode(todo))
-      .withChild(decision(absconding).withCode(todo))
-      .withChild(decision(failingToComply).withCode(todo))
-      .withChild(decision(failingToReturn).withCode(todo))
+      .title(whatDidTheIncidentInvolve)
+      .child(decision(escaping).code(todo))
+      .child(decision(absconding).code(todo))
+      .child(decision(failingToComply).code(todo))
+      .child(decision(failingToReturn).code(todo))
   )
-  .withChild(
+  .child(
     decision(possession)
-      .withTitle(whatDidTheIncidentInvolve)
-      .withChild(
+      .title(whatDidTheIncidentInvolve)
+      .child(
         decision(unauthorised)
-          .withTitle(whatHappened)
-          .withChild(
+          .title(whatHappened)
+          .child(
             decision(inPossession)
-              .withTitle(greaterThanAllowed)
-              .withChild(decision(yes).withCode(todo))
-              .withChild(decision(no).withCode(todo))
+              .title(greaterThanAllowed)
+              .child(decision(yes).code(todo))
+              .child(decision(no).code(todo))
           )
-          .withChild(
-            decision(sells)
-              .withTitle(forPersonalUse)
-              .withChild(decision(yes).withCode(todo))
-              .withChild(decision(no).withCode(todo))
-          )
-          .withChild(decision(takes).withCode(todo))
+          .child(decision(sells).title(forPersonalUse).child(decision(yes).code(todo)).child(decision(no).code(todo)))
+          .child(decision(takes).code(todo))
       )
-      .withChild(decision(drugs).withTitle(whatHappened))
-      .withChild(decision(alcohol).withTitle(whatHappened))
+      .child(
+        decision(drugs)
+          .title(whatHappened)
+          .child(decision(receivingWithoutConsent).code(todo))
+          .child(decision(receivingDuringVisit).code(todo))
+          .child(decision(tampering).code(todo))
+          .child(decision(refuseSample).code(todo))
+          .child(decision(administratingThemselves).code(todo))
+          .child(decision(failingToStopSomeoneElse).code(todo))
+          .child(decision(possessionOfControlled).code(todo))
+          .child(decision(possessionOfControlledGreater).code(todo))
+      )
+      .child(decision(alcohol).title(whatHappened))
   )
 
-  .withChild(decision(damages))
-  .withChild(decision(disrespectful))
-  .withChild(decision(disobeys))
-  .withChild(decision(detains))
-  .withChild(decision(prevents))
-  .withChild(decision(absent))
+  .child(decision(damages))
+  .child(decision(disrespectful))
+  .child(decision(disobeys))
+  .child(decision(detains))
+  .child(decision(prevents))
+  .child(decision(absent))
 
 export default committed
