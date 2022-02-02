@@ -5,6 +5,7 @@ type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
   locationId?: number
   incidentRole?: string
+  associatedPrisonersNumber?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -52,12 +53,17 @@ const errors: { [key: string]: FormError } = {
     href: '#currentRadioSelected',
     text: 'Select a role.',
   },
+  MISSING_ASSOCIATED_PRISONER: {
+    href: '#currentRadioSelected',
+    text: 'Enter a prison number or name to search.',
+  },
 }
 
 export default function validateForm({
   incidentDate,
   locationId,
   incidentRole,
+  associatedPrisonersNumber,
 }: incidentDetailsForm): FormError | FormError[] | null {
   if (!incidentDate.date) {
     return errors.MISSING_DATE
@@ -91,6 +97,12 @@ export default function validateForm({
   }
   if (!incidentRole) {
     return errors.MISSING_ROLE
+  }
+  if (
+    (incidentRole === 'inciteAnotherPrisoner' && !associatedPrisonersNumber) ||
+    (incidentRole === 'assistAnotherPrisoner' && !associatedPrisonersNumber)
+  ) {
+    return errors.MISSING_ASSOCIATED_PRISONER
   }
 
   return null

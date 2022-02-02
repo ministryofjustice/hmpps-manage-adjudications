@@ -6,6 +6,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
+import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -109,7 +110,15 @@ export default class IncidentDetailsRoutes {
       return res.redirect(`${searchPageHref}&startUrl=incident-details`)
     }
 
-    const error = validateForm({ incidentDate, locationId, incidentRole: currentRadioSelected })
+    // Check the selectedPerson has not been tampered with in URL
+    const associatedPrisonersNumber = isPrisonerIdentifier(selectedPerson) ? selectedPerson : null
+
+    const error = validateForm({
+      incidentDate,
+      locationId,
+      incidentRole: currentRadioSelected,
+      associatedPrisonersNumber,
+    })
     if (error) return this.renderView(req, res, { error, incidentDate, locationId })
 
     try {
@@ -117,7 +126,7 @@ export default class IncidentDetailsRoutes {
         formatDate(incidentDate),
         locationId,
         prisonerNumber,
-        selectedPerson,
+        associatedPrisonersNumber,
         currentRadioSelected, // Somewhere before(?) this we need to convert the currentRadioSelected to the calculated roleCode
         user
       )

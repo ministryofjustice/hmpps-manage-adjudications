@@ -8,6 +8,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toBeNull()
     })
@@ -19,6 +20,7 @@ describe('validateForm', () => {
           incidentDate: { time: { hour: '12', minute: '23' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[date]',
@@ -40,6 +42,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { minute: '23' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -52,6 +55,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -64,6 +68,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '12' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -76,6 +81,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -88,6 +94,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: {} },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time]',
@@ -100,6 +107,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -112,6 +120,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -129,6 +138,7 @@ describe('validateForm', () => {
           },
           locationId: 2343,
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time]',
@@ -142,6 +152,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#locationId',
@@ -149,17 +160,60 @@ describe('validateForm', () => {
       })
     })
   })
-  describe('incidentRole', () => {
+  describe('incidentRole and associated prisoner', () => {
     it('shows error if radio button not selected', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
+          associatedPrisonersNumber: null,
         })
       ).toEqual({
         href: '#currentRadioSelected',
         text: 'Select a role.',
       })
+    })
+    it('shows error if no associated prisoner is selected when there should be', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'inciteAnotherPrisoner',
+          associatedPrisonersNumber: null,
+        })
+      ).toEqual({
+        href: '#currentRadioSelected',
+        text: 'Enter a prison number or name to search.',
+      })
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'assistAnotherPrisoner',
+          associatedPrisonersNumber: null,
+        })
+      ).toEqual({
+        href: '#currentRadioSelected',
+        text: 'Enter a prison number or name to search.',
+      })
+    })
+    it('shows no error there does not need to be an associated prisoner', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'onTheirOwn',
+          associatedPrisonersNumber: null,
+        })
+      ).toBeNull()
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: null,
+        })
+      ).toBeNull()
     })
   })
 })

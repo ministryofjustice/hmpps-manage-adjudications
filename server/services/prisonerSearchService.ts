@@ -13,7 +13,7 @@ export interface PrisonerSearchSummary extends PrisonerSearchResult {
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
-const isPrisonerIdentifier = (searchTerm: string) => /\d/.test(searchTerm)
+export const isPrisonerIdentifier = (searchTerm: string): boolean => /\d/.test(searchTerm)
 
 function searchByName(searchTerm: string, prisonIds: string[]): PrisonerSearchByName {
   const [lastName, firstName] = searchTerm.split(' ')
