@@ -14,13 +14,15 @@ const raciallyAggravated = new Title('Was the incident a racially aggravated ass
 const whatHappened = new Title('What happened?')
 const greaterThanAllowed = new Title('Did they have a greater amount than they are allowed to have?')
 const forPersonalUse = new Title('Was th article only for {}`s personal user')
+const whoWasDisrespectfulTo = new Title('Who was {} disrespectful to?')
+const racistBehaviour = new Title('Did the incident involve racist behaviour?')
 
 // Questions
 const assault = new Question('Assault, fighting, or endangering the health or personal safety of others')
 const escaped = new Question('Escape or failure to comply with temporary release conditions')
 const possession = new Question('Possession of unauthorised articles, or drugs or alcohol related')
 const damages = new Question('Sets fire to, or damages, the prison or any property')
-const disrespectful = new Question('Disrespectful, threatening, abusive, or insulting')
+const disrespectfulThreatening = new Question('Disrespectful, threatening, abusive, or insulting')
 const disobeys = new Question('Disobeys any lawful order, or failure to comply with any rule or regulation')
 const detains = new Question('Detains another person')
 const prevents = new Question('Preventing someone doing their job')
@@ -73,6 +75,13 @@ const setsFire = new Question('Sets fire to any part of the prison or any proper
 const raciallyAggravatedDamage = new Question('Racially aggravated damage')
 const damagesPrison = new Question('Destroys or damages any part of the prison')
 const damagesProperty = new Question("Destroys or damages someone else's property")
+
+const disrespectful = new Question('Disrespectful behaviour')
+const prisonOfficer = new Question('A prison officer')
+const staffNotOfficer = new Question('A member of staff who is not a prison officer')
+const anotherPerson = new Question('Another person not listed above')
+
+const threatening = new Question('Threatening, abusive, or insulting behaviour')
 
 function decision(question: Question) {
   return new Decision(question)
@@ -153,7 +162,20 @@ const committed = new Decision()
       .child(decision(damagesPrison).code(todo))
       .child(decision(damagesProperty).code(todo))
   )
-  .child(decision(disrespectful))
+  .child(
+    decision(disrespectfulThreatening)
+      .title(whatDidTheIncidentInvolve)
+      .child(
+        decision(disrespectful)
+          .title(whoWasDisrespectfulTo)
+          .child(decision(prisonOfficer).code(todo))
+          .child(decision(staffNotOfficer).code(todo))
+          .child(decision(anotherPerson).code(todo))
+      )
+      .child(
+        decision(threatening).title(racistBehaviour).child(decision(yes).code(todo)).child(decision(no).code(todo))
+      )
+  )
   .child(decision(disobeys))
   .child(decision(detains))
   .child(decision(prevents))
