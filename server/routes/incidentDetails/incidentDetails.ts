@@ -107,7 +107,7 @@ export default class IncidentDetailsRoutes {
       req.session.redirectUrl = `/incident-details/${prisonerNumber}?queryRadioSelection=${currentRadioSelected}`
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
-      const searchPageHref = `/select-associated-prisoner/${prisonerNumber}?searchTerm=${searchValue}`
+      const searchPageHref = `/select-associated-prisoner?searchTerm=${searchValue}`
       return res.redirect(`${searchPageHref}&startUrl=incident-details`)
     }
 

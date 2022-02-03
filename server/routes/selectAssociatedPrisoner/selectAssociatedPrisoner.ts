@@ -26,12 +26,12 @@ export default class SelectAssociatedPrisonerRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { prisonNumber, id } = req.params
+    const { id } = req.params
     const { startUrl } = req.query
     const searchTerm = JSON.stringify(req.query.searchTerm)?.replace(/"/g, '')
     const { redirectUrl } = req.session
-
-    if (!searchTerm) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
+    const prisonerNumber = redirectUrl.match(/.*\/(\w{7})/)[1]
+    if (!searchTerm) return res.redirect(`/${startUrl}/${prisonerNumber}/${id}`)
 
     const searchResults = await this.prisonerSearchService.search(
       { searchTerm, prisonIds: [user.activeCaseLoad.caseLoadId] },
@@ -48,7 +48,6 @@ export default class SelectAssociatedPrisonerRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
     const { redirectUrl } = req.session
-    const { prisonerNumber } = req.params
 
     const error = validateForm({ searchTerm })
 
@@ -60,7 +59,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.redirect(
       url.format({
-        pathname: `/select-associated-prisoner/${prisonerNumber}`,
+        pathname: `/select-associated-prisoner`,
         query: { searchTerm, redirectUrl },
       })
     )
