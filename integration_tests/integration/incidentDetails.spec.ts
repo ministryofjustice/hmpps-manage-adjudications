@@ -82,6 +82,15 @@ context('Incident details', () => {
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'A5155DY',
+      response: {
+        offenderNo: 'A5155DY',
+        firstName: 'TOBY',
+        lastName: 'PERCROSS',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+      },
+    })
     cy.task('stubSearch', {
       query: {
         includeAliases: false,
@@ -94,6 +103,22 @@ context('Incident details', () => {
           firstName: 'JAMES',
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
+          prisonName: 'HMP Moorland',
+        },
+      ],
+    })
+    cy.task('stubSearch', {
+      query: {
+        includeAliases: false,
+        prisonerIdentifier: 'A5155DY',
+        prisonIds: ['MDI'],
+      },
+      results: [
+        {
+          cellLocation: '1-2-015',
+          firstName: 'TOBY',
+          lastName: 'PERCROSS',
+          prisonerNumber: 'A5155DY',
           prisonName: 'HMP Moorland',
         },
       ],
@@ -211,6 +236,30 @@ context('Incident details', () => {
     incidentDetailsPage.conditionalInputAssist().type('T3356FU')
     incidentDetailsPage.searchButtonAssist().click()
     cy.get('[data-qa="select-prisoner-link"]').click()
+    incidentDetailsPage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
+    })
+  })
+  it.only('should submit form successfully with correct data if the user changes their radio selection after searching', () => {
+    const today = new Date()
+    cy.visit(`/incident-details/G6415GD`)
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
+    incidentDetailsPage.timeInputHours().type('12')
+    incidentDetailsPage.timeInputMinutes().type('30')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtons().find('input[value="assistAnotherPrisoner"]').check()
+    incidentDetailsPage.conditionalInputAssist().type('T3356FU')
+    incidentDetailsPage.searchButtonAssist().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    incidentDetailsPage.radioButtons().find('input[value="inciteAnotherPrisoner"]').check()
+    incidentDetailsPage.conditionalInputIncite().type('A5155DY')
+    incidentDetailsPage.searchButtonIncite().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    cy.location().should(loc => {
+      expect(loc.search).to.eq('?queryRadioSelection=inciteAnotherPrisoner&selectedPerson=A5155DY')
+    })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
