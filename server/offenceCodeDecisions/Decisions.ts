@@ -14,10 +14,11 @@ const committed = new Decision()
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
       .title('What did the incident involve?')
-      .url('/incident-involved/1')
+      .url('qqrp')
       .child(
         decision('Assaulting someone')
           .title('Who was assaulted?')
+          .url('incident-involved/1')
           .child(
             decision('Another prisoner')
               .title('Was the incident a racially aggravated assault?')

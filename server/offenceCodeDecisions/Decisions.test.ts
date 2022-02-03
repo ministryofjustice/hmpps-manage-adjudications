@@ -26,7 +26,7 @@ describe('decisions', () => {
   })
 
   it('no invalid decisions', () => {
-    expect(committed.invalidDecisions().map(d => d.getQuestions())).toHaveLength(0)
+    expect(committed.invalidDecisions().map(d => d.getQuestion())).toHaveLength(0)
   })
 
   it('no duplicate urls', () => {

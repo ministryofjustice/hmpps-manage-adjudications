@@ -10,10 +10,10 @@ export default function offenceCodeDecisionsRoutes(): Router {
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/:incidentRole/:offenceCodeDecision', offenceCodeDecisions.view)
+  get('/:adjudicationNumber/:incidentRole/:offenceCodeDecision', offenceCodeDecisions.view)
 
   committed.allUrls().forEach(url => {
-    get(url, offenceCodeDecisions.view)
+    get(`/:adjudicationNumber/${url}`, offenceCodeDecisions.view)
   })
 
   return router

@@ -1,14 +1,15 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 
-{% block pageTitle %}
-	TODO
-{% endblock %}
+{% set title = pageTitle %}
+
+
 
 {% block beforeContent %}
  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-   TODO
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
 {% endblock %}

@@ -1,4 +1,4 @@
-import Title from '../data/Title'
+import Title from './Title'
 import Question from './Question'
 import Code from './Code'
 
@@ -25,14 +25,25 @@ export default class Decision {
     }
   }
 
-  page(page: Page) {
-    this.decisionPage = page
-    return this
+  id(): string {
+    if (this.parentDecision) {
+      return `${this.parentDecision.id()}:${this.parentDecision.childrenDecisions.indexOf(this)}`
+    }
+    return '0'
+  }
+
+  parent(parent: Decision) {
+    this.parentDecision = parent
   }
 
   child(child: Decision) {
     child.parent(this)
     this.childrenDecisions.push(child)
+    return this
+  }
+
+  page(page: Page) {
+    this.decisionPage = page
     return this
   }
 
@@ -45,12 +56,9 @@ export default class Decision {
     return this
   }
 
-  allUrls(): Array<string> {
-    const codes = [].concat(...this.childrenDecisions.map(c => c.allUrls()))
-    if (this.decisionUrl) {
-      codes.push(this.decisionUrl)
-    }
-    return codes.sort()
+  code(code: Code) {
+    this.decisionCode = code
+    return this
   }
 
   url(url: string) {
@@ -62,33 +70,34 @@ export default class Decision {
     return this.decisionTitle
   }
 
-  getQuestions() {
+  getQuestion() {
     return this.decisionQuestion
   }
 
-  code(code: Code) {
-    this.decisionCode = code
-    return this
+  getChildren() {
+    return this.childrenDecisions
   }
 
-  parent(parent: Decision) {
-    this.parentDecision = parent
-  }
-
-  id(): string {
-    if (this.parentDecision) {
-      return `${this.parentDecision.id()}:${this.parentDecision.childrenDecisions.indexOf(this)}`
+  allUrls(): Array<string> {
+    const codes = [].concat(...this.childrenDecisions.map(c => c.allUrls()))
+    if (this.decisionUrl) {
+      codes.push(this.decisionUrl)
     }
-    return '0'
+    return codes.sort()
+  }
+
+  findByUrl(url: string): Decision {
+    return this.findBy(d => d.decisionUrl === url)
   }
 
   findById(id: string): Decision {
-    if (id === this.id()) {
-      return this
-    }
-    const matches = this.childrenDecisions.map(c => c.findById(id)).filter(c => c)
-    if (matches.length) {
-      return matches[0]
+    return this.findBy(d => d.id() === id)
+  }
+
+  findBy(fn: (d: Decision) => boolean): Decision {
+    const matching = this.matching(fn)
+    if (matching.length !== 0) {
+      return matching[0]
     }
     return null
   }
@@ -116,7 +125,9 @@ export default class Decision {
   invalid(): boolean {
     return (
       (this.childrenDecisions.length === 0 && this.decisionCode == null) ||
-      (this.childrenDecisions.length !== 0 && this.decisionTitle == null)
+      (this.childrenDecisions.length !== 0 && this.decisionTitle == null) ||
+      (this.decisionUrl != null && this.matching(d => d !== this && d.decisionUrl === this.decisionUrl).length !== 0) ||
+      (this.decisionUrl != null && this.decisionUrl.startsWith('/'))
     )
   }
 
