@@ -1,4 +1,4 @@
-import Title from './Title'
+import Title from '../data/Title'
 import Question from './Question'
 import Code from './Code'
 
