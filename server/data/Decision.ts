@@ -15,8 +15,12 @@ export default class Decision {
 
   private decisionPage: Page = 'Default'
 
-  constructor(question?: Question) {
-    this.decisionQuestion = question
+  constructor(question?: Question | string) {
+    if (question instanceof Question) {
+      this.decisionQuestion = question
+    } else if (typeof question === 'string') {
+      this.decisionQuestion = new Question(question)
+    }
   }
 
   page(page: Page) {
@@ -30,8 +34,12 @@ export default class Decision {
     return this
   }
 
-  title(title: Title) {
-    this.decisionTitle = title
+  title(title: Title | string) {
+    if (title instanceof Title) {
+      this.decisionTitle = title
+    } else if (typeof title === 'string') {
+      this.decisionTitle = new Title(title)
+    }
     return this
   }
 
