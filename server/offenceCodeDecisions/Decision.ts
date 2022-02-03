@@ -15,6 +15,8 @@ export default class Decision {
 
   private decisionPage: Page = 'Default'
 
+  private decisionUrl: string
+
   constructor(question?: Question | string) {
     if (question instanceof Question) {
       this.decisionQuestion = question
@@ -40,6 +42,19 @@ export default class Decision {
     } else if (typeof title === 'string') {
       this.decisionTitle = new Title(title)
     }
+    return this
+  }
+
+  allUrls(): Array<string> {
+    const codes = [].concat(...this.childrenDecisions.map(c => c.allUrls()))
+    if (this.decisionUrl) {
+      codes.push(this.decisionUrl)
+    }
+    return codes.sort()
+  }
+
+  url(url: string) {
+    this.decisionUrl = url
     return this
   }
 

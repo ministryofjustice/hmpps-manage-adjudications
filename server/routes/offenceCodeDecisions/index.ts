@@ -1,15 +1,20 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
-import OffenceCodesRoutes from './offenceCodeDecisions'
+import OffenceCodeDecisionsRoutes from './offenceCodeDecisions'
+import committed from '../../offenceCodeDecisions/Decisions'
 
-export default function offenceCodesRoutes(): Router {
+export default function offenceCodeDecisionsRoutes(): Router {
   const router = express.Router()
 
-  const offenceCodes = new OffenceCodesRoutes()
+  const offenceCodeDecisions = new OffenceCodeDecisionsRoutes()
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/:incidentRole/:offenceCodeDecision', offenceCodes.view)
+  get('/:incidentRole/:offenceCodeDecision', offenceCodeDecisions.view)
+
+  committed.allUrls().forEach(url => {
+    get(url, offenceCodeDecisions.view)
+  })
 
   return router
 }

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import committed from '../../offenceCodeDecisions/Decisions'
 
-export default class offenceCodesRoutes {
+export default class offenceCodeRoutes {
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { incidentRole, offenceCodeDecision } = req.params
     const currentDecision = committed.findById(offenceCodeDecision)
