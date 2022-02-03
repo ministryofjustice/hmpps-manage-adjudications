@@ -17,29 +17,6 @@ type PageData = {
   assistAnotherPrisonerInput?: string
 }
 
-const finalRadioSelection = (
-  currentRadioSelected: string,
-  queryRadioSelection: string,
-  selectedPerson: string,
-  inciteAnotherPrisonerInput: string,
-  assistAnotherPrisonerInput: string
-): { currentRadioSelected: string; selectedPerson: string } | null => {
-  switch (currentRadioSelected) {
-    case queryRadioSelection:
-      return { currentRadioSelected, selectedPerson }
-    case 'onTheirOwn':
-      return { currentRadioSelected, selectedPerson: null }
-    case 'attemptOnTheirOwn':
-      return { currentRadioSelected, selectedPerson: null }
-    case 'inciteAnotherPrisoner':
-      return { currentRadioSelected, selectedPerson: inciteAnotherPrisonerInput }
-    case 'assistAnotherPrisoner':
-      return { currentRadioSelected, selectedPerson: assistAnotherPrisonerInput }
-    default:
-      return null
-  }
-}
-
 export default class IncidentDetailsRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
@@ -145,21 +122,16 @@ export default class IncidentDetailsRoutes {
     })
     if (error) return this.renderView(req, res, { error, incidentDate, locationId })
 
-    const incidentRoleDetails = finalRadioSelection(
-      currentRadioSelected,
-      queryRadioSelection,
-      selectedPerson,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput
-    )
-
     try {
       const newAdjudication = await this.placeOnReportService.startNewDraftAdjudication(
         formatDate(incidentDate),
         locationId,
         prisonerNumber,
-        incidentRoleDetails.selectedPerson,
-        incidentRoleDetails.currentRadioSelected, // Somewhere before(?) this we need to convert the currentRadioSelected to the calculated roleCode
+        associatedPrisonersNumber,
+        currentRadioSelected,
+        queryRadioSelection,
+        inciteAnotherPrisonerInput,
+        assistAnotherPrisonerInput,
         user
       )
       delete req.session.redirectUrl

@@ -83,6 +83,9 @@ describe('placeOnReportService', () => {
         'G2996UX',
         'T3356FU',
         '25a',
+        '25a',
+        null,
+        null,
         user
       )
       expect(startNewDraftAdjudication).toBeCalledWith({
