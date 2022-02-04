@@ -3,8 +3,10 @@ import url from 'url'
 import decisionTrees from '../../offenceCodeDecisions/DecisionTrees'
 import { FormError } from '../../@types/template'
 import validateForm from './offenceCodeDecisionsValidation'
+import PlaceOnReportService from '../../services/placeOnReportService'
 
 import type IncidentRole from '../../offenceCodeDecisions/IncidentRoles'
+import { properCaseName } from '../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -12,21 +14,38 @@ type PageData = {
 }
 
 export default class OffenceCodeRoutes {
+  constructor(private readonly placeOnReportService: PlaceOnReportService) {}
+
+  private async placeholderValues(adjudicationNumber: string, res: Response) {
+    const { user } = res.locals
+    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
+      Number(adjudicationNumber),
+      user
+    )
+    const prisonerDetails = await this.placeOnReportService.getPrisonerDetails(
+      draftAdjudication.draftAdjudication.prisonerNumber,
+      user
+    )
+    return {
+      offenderFirstName: properCaseName(prisonerDetails.firstName),
+      offenderLastName: properCaseName(prisonerDetails.lastName),
+    }
+  }
+
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { error, selectedDecisionId } = pageData
-
+    const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
     const path = req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, '')
     const decision = decisionTrees.get(incidentRole as IncidentRole).findByUrl(path)
 
-    const pageTitle = decision.getTitle().title // TODO process the title
+    const pageTitle = decision.getTitle().getProcessedText(placeholderValues)
     const questions = decision.getChildren().map(d => {
       return {
         id: d.id(),
-        label: d.getQuestion().question, // TODO process the question
+        label: d.getQuestion().getProcessedText(placeholderValues),
       }
     })
-
     return res.render(`pages/${decision.getPage() || 'offenceCodeDecisions'}`, {
       errors: error ? [error] : [],
       selectedDecisionId,
@@ -52,10 +71,13 @@ export default class OffenceCodeRoutes {
     }
 
     const selectedDecision = decisionTrees.get(incidentRole as IncidentRole).findById(selectedDecisionId)
+    const redirectUrl = selectedDecision.getCode()
+      ? `/TODO`
+      : `/offence-code/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
     return res.redirect(
       url.format({
-        pathname: `/offence-code/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`,
+        pathname: redirectUrl,
       })
     )
   }

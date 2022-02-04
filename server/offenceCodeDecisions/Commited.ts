@@ -10,7 +10,7 @@ function decision(question: Question | string) {
 }
 
 export default new Decision()
-  .title('What type of offence did {OFFENDER} commit?')
+  .title('What type of offence did {OFFENDED_FIRST_NAME} {OFFENDER_LAST_NAME} commit?')
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
       .title('What did the incident involve?')
@@ -68,7 +68,7 @@ export default new Decision()
           )
           .child(
             decision('Sells or gives an unauthorised article to another person')
-              .title('Was the article only for {}`s personal user')
+              .title('Was the article only for {OFFENDED_FIRST_NAME} {OFFENDER_LAST_NAME}`s personal user')
               .child(decision('Yes').code(todo))
               .child(decision('No').code(todo))
           )
@@ -106,7 +106,7 @@ export default new Decision()
       .title('What did the incident involve?')
       .child(
         decision('Disrespectful behaviour')
-          .title('Who was {} disrespectful to?')
+          .title('Who was {OFFENDED_FIRST_NAME} {OFFENDER_LAST_NAME} disrespectful to?')
           .child(decision('A prison officer').code(todo))
           .child(decision('A member of staff who is not a prison officer').code(todo))
           .child(decision('Another person not listed above').code(todo))
@@ -126,7 +126,7 @@ export default new Decision()
   )
   .child(
     decision('Detains another person')
-      .title('Who did {} attempt to detain?')
+      .title('Who did {OFFENDED_FIRST_NAME} {OFFENDER_LAST_NAME} attempt to detain?')
       .child(decision('Another prisoner').code(todo))
       .child(decision('A prison officer').code(todo))
       .child(decision('A member of staff who is not a prison officer').code(todo))
