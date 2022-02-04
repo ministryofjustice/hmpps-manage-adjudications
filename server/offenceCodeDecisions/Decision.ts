@@ -74,8 +74,12 @@ export default class Decision {
     return this.decisionQuestion
   }
 
-  getChildren() {
+  getChildren(): Array<Decision> {
     return this.childrenDecisions
+  }
+
+  getUrl(): string {
+    return this.decisionUrl
   }
 
   allUrls(): Array<string> {

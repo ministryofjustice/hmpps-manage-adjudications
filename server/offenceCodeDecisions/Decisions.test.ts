@@ -16,6 +16,7 @@ function findDuplicates<T>(toCheck: Array<T>) {
 describe('decisions', () => {
   it('toString', () => {
     // Not a test but useful output
+    const x = committed
     console.log(committed.toString())
   })
 

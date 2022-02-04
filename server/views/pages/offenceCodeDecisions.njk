@@ -1,15 +1,41 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set title = pageTitle %}
 
-
-
 {% block beforeContent %}
- {{ breadcrumb() }}
+    {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
+
+    {% set decisions = [] %}
+
+    {% for child in children %}
+        {% set decisions = (decisions.push(
+            {
+                value: "onTheirOwn",
+                text: "Committed this incident on their own",
+                checked: queryRadioSelection === "onTheirOwn"
+            }
+        ), decisions) %}
+    {% endfor %}
+
+    {{ govukRadios({
+        idPrefix: 'RoleRadios',
+        id: 'currentRadioSelected',
+        name: 'currentRadioSelected',
+        attributes: { "data-qa": "radio-buttons" },
+        fieldset: {
+            legend: {
+                text: "What was " + prisoner.friendlyName | possessive | safe + " role in the incident?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+            }
+        },
+        items: decisions
+    }) }}
 
 {% endblock %}
