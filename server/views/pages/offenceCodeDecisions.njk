@@ -11,16 +11,15 @@
 {% block content %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
 
-    {% set decisions = [] %}
+    {% set items = [] %}
 
-    {% for child in children %}
-        {% set decisions = (decisions.push(
+    {% for question in questions %}
+        {% set items = (items.push(
             {
-                value: "onTheirOwn",
-                text: "Committed this incident on their own",
-                checked: queryRadioSelection === "onTheirOwn"
+                value: question.id,
+                text: question.label
             }
-        ), decisions) %}
+        ), items) %}
     {% endfor %}
 
     {{ govukRadios({
@@ -28,14 +27,7 @@
         id: 'currentRadioSelected',
         name: 'currentRadioSelected',
         attributes: { "data-qa": "radio-buttons" },
-        fieldset: {
-            legend: {
-                text: "What was " + prisoner.friendlyName | possessive | safe + " role in the incident?",
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--s"
-            }
-        },
-        items: decisions
+        items: items
     }) }}
 
 {% endblock %}

@@ -13,7 +13,7 @@ export default class Decision {
 
   private decisionTitle: Title
 
-  private decisionPage: Page = 'Default'
+  private decisionPage: Page
 
   private decisionUrl: string
 
@@ -66,6 +66,10 @@ export default class Decision {
     return this
   }
 
+  getId() {
+    return this.id()
+  }
+
   getTitle() {
     return this.decisionTitle
   }
@@ -80,6 +84,10 @@ export default class Decision {
 
   getUrl(): string {
     return this.decisionUrl
+  }
+
+  getPage(): string {
+    return this.decisionPage
   }
 
   allUrls(): Array<string> {
@@ -131,7 +139,8 @@ export default class Decision {
       (this.childrenDecisions.length === 0 && this.decisionCode == null) ||
       (this.childrenDecisions.length !== 0 && this.decisionTitle == null) ||
       (this.decisionUrl != null && this.matching(d => d !== this && d.decisionUrl === this.decisionUrl).length !== 0) ||
-      (this.decisionUrl != null && this.decisionUrl.startsWith('/'))
+      (this.decisionUrl != null && this.decisionUrl.startsWith('/')) ||
+      (this.decisionPage != null && this.decisionPage.startsWith('/'))
     )
   }
 
