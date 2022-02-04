@@ -7,7 +7,16 @@
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
     <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
-    <p class="govuk-body"><a href="/incident-details/{{prisonerNumber}}?queryRadioSelection=inciteAnotherPrisoner">Delete</a></p>
+    <div>
+      {{ govukButton({
+          text: 'Delete',
+          classes: "govuk-button--secondary",
+            type: "submit",
+            name: "deleteAssociatedPrisoner",
+            value: "inciteAnotherPrisonerDelete",
+          attributes: { "data-qa": "incite-prisoner-delete" }
+      }) }}
+    </div>
   </div>
 {% else %}
 <div class="flex-container flex-center">
@@ -41,7 +50,16 @@
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
     <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
-    <p class="govuk-body"><a href="/incident-details/{{prisonerNumber}}?queryRadioSelection=assistAnotherPrisoner">Delete</a></p>
+    <div>
+    {{ govukButton({
+        text: 'Delete',
+        classes: "govuk-button--secondary",
+          type: "submit",
+          name: "deleteAssociatedPrisoner",
+          value: "assistAnotherPrisonerDelete",
+        attributes: { "data-qa": "assist-prisoner-delete" }
+    }) }}
+    </div>
   </div>
 {% else %}
 <div class="flex-container flex-center">

@@ -11,7 +11,7 @@ import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 type PageData = {
   error?: FormError | FormError[]
   incidentDate?: SubmittedDateTime
-  locationId?: string
+  locationId?: string | number
   queryRadioSelection?: string
   inciteAnotherPrisonerInput?: string
   assistAnotherPrisonerInput?: string
@@ -49,8 +49,8 @@ export default class IncidentDetailsRoutes {
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
     const data = {
-      incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(req.session.incidentDate),
-      locationId: locationId || req.session.incidentLocation,
+      incidentDate: this.getIncidentDate(incidentDate),
+      locationId,
     }
 
     const associatedPersonDetails = { id: selectedPerson, name: '' }
@@ -75,7 +75,15 @@ export default class IncidentDetailsRoutes {
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
+  view = async (req: Request, res: Response): Promise<void> => {
+    const pageData = {
+      incidentDate: req.session.incidentDate,
+      locationId: req.session.incidentLocation,
+    }
+    delete req.session.incidentDate
+    delete req.session.incidentLocation
+    return this.renderView(req, res, pageData)
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const {
@@ -83,6 +91,7 @@ export default class IncidentDetailsRoutes {
       locationId,
       currentRadioSelected,
       search,
+      deleteAssociatedPrisoner,
       inciteAnotherPrisonerInput,
       assistAnotherPrisonerInput,
     } = req.body
@@ -90,6 +99,16 @@ export default class IncidentDetailsRoutes {
     const { prisonerNumber } = req.params
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     const queryRadioSelection = JSON.stringify(req.query.queryRadioSelection)?.replace(/"/g, '')
+
+    if (deleteAssociatedPrisoner) {
+      req.session.incidentDate = incidentDate
+      req.session.incidentLocation = locationId
+      const restartUrl =
+        deleteAssociatedPrisoner === 'inciteAnotherPrisonerDelete'
+          ? `/incident-details/${prisonerNumber}?queryRadioSelection=inciteAnotherPrisoner`
+          : `/incident-details/${prisonerNumber}?queryRadioSelection=assistAnotherPrisoner`
+      return res.redirect(restartUrl)
+    }
 
     if (search) {
       const searchValue =
@@ -135,8 +154,7 @@ export default class IncidentDetailsRoutes {
         user
       )
       delete req.session.redirectUrl
-      delete req.session.incidentDate
-      delete req.session.incidentLocation
+
       const { id } = newAdjudication.draftAdjudication
       return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
     } catch (postError) {
