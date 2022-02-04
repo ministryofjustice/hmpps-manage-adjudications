@@ -13,7 +13,11 @@ const locationService = new LocationService(null) as jest.Mocked<LocationService
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
+  app = appWithAllRoutes(
+    { production: false },
+    { placeOnReportService, locationService },
+    { originalRadioSelection: 'inciteAnotherPrisoner' }
+  )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',

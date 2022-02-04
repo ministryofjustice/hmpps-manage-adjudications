@@ -241,7 +241,7 @@ context('Incident details', () => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
     })
   })
-  it.only('should submit form successfully with correct data if the user changes their radio selection after searching', () => {
+  it('should submit form successfully with correct data if the user changes their radio selection after searching', () => {
     const today = new Date()
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
@@ -258,7 +258,7 @@ context('Incident details', () => {
     incidentDetailsPage.searchButtonIncite().click()
     cy.get('[data-qa="select-prisoner-link"]').click()
     cy.location().should(loc => {
-      expect(loc.search).to.eq('?queryRadioSelection=inciteAnotherPrisoner&selectedPerson=A5155DY')
+      expect(loc.search).to.eq('?selectedPerson=A5155DY')
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {

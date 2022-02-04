@@ -76,42 +76,8 @@ export default class PlaceOnReportService {
     prisonerNumber: string,
     associatedPrisonersNumber: string,
     roleCode: string,
-    previousRoleCode: string,
-    inciteAnotherPrisonerNumber: string,
-    assistAnotherPrisonerNumber: string,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const finalRadioSelection = (
-      currentRadioSelected: string,
-      queryRadioSelection: string,
-      selectedPerson: string,
-      inciteAnotherPrisonerInput: string,
-      assistAnotherPrisonerInput: string
-    ): { currentRadioSelected: string; selectedPerson: string } | null => {
-      switch (currentRadioSelected) {
-        case queryRadioSelection:
-          return { currentRadioSelected, selectedPerson }
-        case 'onTheirOwn':
-          return { currentRadioSelected, selectedPerson: null }
-        case 'attemptOnTheirOwn':
-          return { currentRadioSelected, selectedPerson: null }
-        case 'inciteAnotherPrisoner':
-          return { currentRadioSelected, selectedPerson: inciteAnotherPrisonerInput }
-        case 'assistAnotherPrisoner':
-          return { currentRadioSelected, selectedPerson: assistAnotherPrisonerInput }
-        default:
-          return null
-      }
-    }
-
-    const incidentRoleDetails = finalRadioSelection(
-      roleCode,
-      previousRoleCode,
-      associatedPrisonersNumber,
-      inciteAnotherPrisonerNumber,
-      assistAnotherPrisonerNumber
-    )
-
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       dateTimeOfIncident,
@@ -121,7 +87,7 @@ export default class PlaceOnReportService {
       // Temporary code to make it work with the current API - all incidents will be "attempted to commit"
       incidentRole: {
         roleCode: '25a', // without temporary code... roleCode: incidentRoleDetails.currentRadioSelected - converted to the appropriate role code
-        associatedPrisonersNumber: incidentRoleDetails.selectedPerson,
+        associatedPrisonersNumber,
       },
     }
     return client.startNewDraftAdjudication(requestBody)

@@ -7,14 +7,16 @@ import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
+import { User } from '../../data/hmppsAuthClient'
 
 type PageData = {
   error?: FormError | FormError[]
   incidentDate?: SubmittedDateTime
   locationId?: string | number
-  queryRadioSelection?: string
+  originalRadioSelection?: string
   inciteAnotherPrisonerInput?: string
   assistAnotherPrisonerInput?: string
+  associatedPrisonersNumber?: string
 }
 
 export default class IncidentDetailsRoutes {
@@ -34,12 +36,29 @@ export default class IncidentDetailsRoutes {
     return null
   }
 
+  private getCurrentAssociatedPrisonerDetails = async (
+    associatedPrisonersNumber: string,
+    selectedPerson: string,
+    user: User
+  ) => {
+    if (associatedPrisonersNumber === null) return null
+    const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(selectedPerson, user)
+    return associatedPrisoner.displayName
+  }
+
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, incidentDate, locationId, inciteAnotherPrisonerInput, assistAnotherPrisonerInput } = pageData
+    const {
+      error,
+      incidentDate,
+      locationId,
+      inciteAnotherPrisonerInput,
+      assistAnotherPrisonerInput,
+      originalRadioSelection,
+      associatedPrisonersNumber,
+    } = pageData
     const { prisonerNumber } = req.params
     const { user } = res.locals
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
-    const queryRadioSelection = JSON.stringify(req.query.queryRadioSelection)?.replace(/"/g, '')
 
     const [prisoner, reporter] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
@@ -53,11 +72,9 @@ export default class IncidentDetailsRoutes {
       locationId,
     }
 
-    const associatedPersonDetails = { id: selectedPerson, name: '' }
-    if (selectedPerson) {
-      const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(selectedPerson, user)
-      associatedPersonDetails.name = associatedPrisoner.displayName
-    }
+    const associatedPrisonerName = selectedPerson
+      ? await this.getCurrentAssociatedPrisonerDetails(associatedPrisonersNumber, selectedPerson, user)
+      : null
 
     return res.render(`pages/incidentDetails`, {
       errors: error ? [error] : [],
@@ -68,10 +85,11 @@ export default class IncidentDetailsRoutes {
       reportingOfficer: reporter || '',
       submitButtonText: 'Save and continue',
       reportPreviouslySubmitted: false,
-      queryRadioSelection,
+      originalRadioSelection,
       inciteAnotherPrisonerInput,
       assistAnotherPrisonerInput,
-      associatedPersonDetails,
+      associatedPrisonerNumber: selectedPerson,
+      associatedPrisonerName,
     })
   }
 
@@ -79,9 +97,12 @@ export default class IncidentDetailsRoutes {
     const pageData = {
       incidentDate: req.session.incidentDate,
       locationId: req.session.incidentLocation,
+      originalRadioSelection: req.session.originalRadioSelection,
     }
+
     delete req.session.incidentDate
     delete req.session.incidentLocation
+
     return this.renderView(req, res, pageData)
   }
 
@@ -98,16 +119,13 @@ export default class IncidentDetailsRoutes {
     const { user } = res.locals
     const { prisonerNumber } = req.params
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
-    const queryRadioSelection = JSON.stringify(req.query.queryRadioSelection)?.replace(/"/g, '')
+    const { originalRadioSelection } = req.session
 
     if (deleteAssociatedPrisoner) {
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
-      const restartUrl =
-        deleteAssociatedPrisoner === 'inciteAnotherPrisonerDelete'
-          ? `/incident-details/${prisonerNumber}?queryRadioSelection=inciteAnotherPrisoner`
-          : `/incident-details/${prisonerNumber}?queryRadioSelection=assistAnotherPrisoner`
-      return res.redirect(restartUrl)
+      req.session.originalRadioSelection = currentRadioSelected
+      return res.redirect(`/incident-details/${prisonerNumber}`)
     }
 
     if (search) {
@@ -119,19 +137,20 @@ export default class IncidentDetailsRoutes {
           error,
           incidentDate,
           locationId,
-          queryRadioSelection: currentRadioSelected,
+          originalRadioSelection: currentRadioSelected,
           inciteAnotherPrisonerInput,
           assistAnotherPrisonerInput,
         })
-      req.session.redirectUrl = `/incident-details/${prisonerNumber}?queryRadioSelection=${currentRadioSelected}`
+      req.session.redirectUrl = `/incident-details/${prisonerNumber}`
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
+      req.session.originalRadioSelection = currentRadioSelected
       const searchPageHref = `/select-associated-prisoner?searchTerm=${searchValue}`
       return res.redirect(`${searchPageHref}&startUrl=incident-details`)
     }
 
-    // Check the selectedPerson has not been tampered with in URL
-    const associatedPrisonersNumber = isPrisonerIdentifier(selectedPerson) ? selectedPerson : null
+    const associatedPrisonersNumber =
+      isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
 
     const error = validateForm({
       incidentDate,
@@ -139,7 +158,15 @@ export default class IncidentDetailsRoutes {
       incidentRole: currentRadioSelected,
       associatedPrisonersNumber,
     })
-    if (error) return this.renderView(req, res, { error, incidentDate, locationId })
+
+    if (error)
+      return this.renderView(req, res, {
+        error,
+        incidentDate,
+        locationId,
+        originalRadioSelection: currentRadioSelected,
+        associatedPrisonersNumber,
+      })
 
     try {
       const newAdjudication = await this.placeOnReportService.startNewDraftAdjudication(
@@ -148,13 +175,10 @@ export default class IncidentDetailsRoutes {
         prisonerNumber,
         associatedPrisonersNumber,
         currentRadioSelected,
-        queryRadioSelection,
-        inciteAnotherPrisonerInput,
-        assistAnotherPrisonerInput,
         user
       )
       delete req.session.redirectUrl
-
+      delete req.session.originalRadioSelection
       const { id } = newAdjudication.draftAdjudication
       return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
     } catch (postError) {

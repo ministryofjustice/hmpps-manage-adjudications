@@ -3,10 +3,10 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
  {% set inciteAnotherPrisoner %}
-{% if (queryRadioSelection === 'inciteAnotherPrisoner') and (associatedPersonDetails.name) %}
+{% if (originalRadioSelection === 'inciteAnotherPrisoner') and (associatedPrisonerName) %}
   <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
-    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPrisonerName }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPrisonerNumber }} </p> 
     <div>
       {{ govukButton({
           text: 'Delete',
@@ -46,10 +46,10 @@
 {% endset -%}
 
  {% set assistAnotherPrisoner %}
-{% if (queryRadioSelection === 'assistAnotherPrisoner') and (associatedPersonDetails.name) %}
+{% if (originalRadioSelection === 'assistAnotherPrisoner') and (associatedPrisonerName) %}
   <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPersonDetails.name }} </p> 
-    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPersonDetails.id }} </p> 
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPrisonerName }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPrisonerNumber }} </p> 
     <div>
     {{ govukButton({
         text: 'Delete',
@@ -91,7 +91,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     {{ govukRadios({
-    idPrefix: 'RoleRadios',
+    idPrefix: 'currentRadioSelected',
     id: 'currentRadioSelected',
     name: 'currentRadioSelected',
     attributes: { "data-qa": "radio-buttons" },
@@ -106,12 +106,12 @@
     {
       value: "onTheirOwn",
       text: "Committed this incident on their own",
-      checked: queryRadioSelection === "onTheirOwn"
+      checked: originalRadioSelection === "onTheirOwn"
     },
     {
       value: "attemptOnTheirOwn",
       text: "Attempted to commit this incident on their own",
-      checked: queryRadioSelection === "attemptOnTheirOwn"
+      checked: originalRadioSelection === "attemptOnTheirOwn"
     },
     {
       value: "inciteAnotherPrisoner",
@@ -119,15 +119,15 @@
       conditional: {
         html: inciteAnotherPrisoner
       },
-      checked: queryRadioSelection === "inciteAnotherPrisoner"
+      checked: originalRadioSelection === "inciteAnotherPrisoner"
     },
     {
       value: "assistAnotherPrisoner",
-      text: "Assisted another prisoner to commit, or attemp to commit, this incident",
+      text: "Assisted another prisoner to commit, or attempt to commit, this incident",
       conditional: {
         html: assistAnotherPrisoner
       },
-      checked: queryRadioSelection === "assistAnotherPrisoner"
+      checked: originalRadioSelection === "assistAnotherPrisoner"
     }
   ]
     }) }}

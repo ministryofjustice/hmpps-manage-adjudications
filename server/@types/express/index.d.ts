@@ -11,6 +11,7 @@ declare module 'express-session' {
     redirectUrl: string
     incidentDate: SubmittedDateTime
     incidentLocation: number
+    originalRadioSelection: string
   }
 }
 
