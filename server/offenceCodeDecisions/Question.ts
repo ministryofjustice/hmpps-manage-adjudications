@@ -1,13 +1,9 @@
 import processText, { PlaceholderValues } from './Placeholder'
 
-type QuestionType = 'RADIO' | 'FIND_PRISONER'
-
 export default class Question {
   question: string
 
-  questionType: QuestionType
-
-  constructor(question: string, questionType: QuestionType = 'RADIO') {
+  constructor(question: string) {
     this.question = question
   }
 
