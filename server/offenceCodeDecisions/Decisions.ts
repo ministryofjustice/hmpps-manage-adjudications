@@ -14,7 +14,6 @@ const committed = new Decision()
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
       .title('What did the incident involve?')
-      .url('qqrp')
       .child(
         decision('Assaulting someone')
           .title('Who was assaulted?')

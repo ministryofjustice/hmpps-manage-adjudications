@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set title = pageTitle %}
@@ -22,12 +23,22 @@
         ), items) %}
     {% endfor %}
 
-    {{ govukRadios({
-        idPrefix: 'RoleRadios',
-        id: 'currentRadioSelected',
-        name: 'currentRadioSelected',
-        attributes: { "data-qa": "radio-buttons" },
-        items: items
-    }) }}
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ govukRadios({
+            idPrefix: 'decisionRadio',
+            name: 'decisionRadio',
+            attributes: { "data-qa": "radio-buttons" },
+            items: items
+        }) }}
 
+        {{ govukButton({
+            text: 'Continue',
+            type: "submit",
+            name: "decisionFormSubmit",
+            classes: "govuk-button--submit govuk-!-margin-right-2",
+            attributes: { "data-qa": "assault-submit" }
+        }) }}
+
+    </form>
 {% endblock %}

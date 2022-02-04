@@ -26,8 +26,8 @@ export default class Decision {
   }
 
   id(): string {
-    if (this.parentDecision) {
-      return `${this.parentDecision.id()}:${this.parentDecision.childrenDecisions.indexOf(this)}`
+    if (this.getParent()) {
+      return `${this.getParent().id()}:${this.getParent().childrenDecisions.indexOf(this)}`
     }
     return '0'
   }
@@ -78,28 +78,36 @@ export default class Decision {
     return this.decisionQuestion
   }
 
-  getChildren(): Array<Decision> {
+  getChildren() {
     return this.childrenDecisions
   }
 
+  getParent() {
+    return this.parentDecision
+  }
+
   getUrl(): string {
-    return this.decisionUrl
+    return this.decisionUrl || this.id()
   }
 
   getPage(): string {
     return this.decisionPage
   }
 
+  getCode() {
+    return this.decisionCode
+  }
+
   allUrls(): Array<string> {
-    const codes = [].concat(...this.childrenDecisions.map(c => c.allUrls()))
-    if (this.decisionUrl) {
-      codes.push(this.decisionUrl)
+    const codes = [].concat(...this.getChildren().map(c => c.allUrls()))
+    if (this.getUrl()) {
+      codes.push(this.getUrl())
     }
     return codes.sort()
   }
 
   findByUrl(url: string): Decision {
-    return this.findBy(d => d.decisionUrl === url)
+    return this.findBy(d => d.getUrl() === url)
   }
 
   findById(id: string): Decision {
@@ -115,7 +123,7 @@ export default class Decision {
   }
 
   matching(fn: (d: Decision) => boolean): Array<Decision> {
-    const matches = [].concat(...this.childrenDecisions.map(c => c.matching(fn)))
+    const matches = [].concat(...this.getChildren().map(c => c.matching(fn)))
     if (fn(this)) {
       matches.push(this)
     }
@@ -123,9 +131,9 @@ export default class Decision {
   }
 
   allCodes(): Array<Code> {
-    const codes = [].concat(...this.childrenDecisions.map(c => c.allCodes()))
-    if (this.decisionCode) {
-      codes.push(this.decisionCode)
+    const codes = [].concat(...this.getChildren().map(c => c.allCodes()))
+    if (this.getCode()) {
+      codes.push(this.getCode())
     }
     return codes.sort()
   }
@@ -136,54 +144,45 @@ export default class Decision {
 
   invalid(): boolean {
     return (
-      (this.childrenDecisions.length === 0 && this.decisionCode == null) ||
-      (this.childrenDecisions.length !== 0 && this.decisionTitle == null) ||
-      (this.decisionUrl != null && this.matching(d => d !== this && d.decisionUrl === this.decisionUrl).length !== 0) ||
-      (this.decisionUrl != null && this.decisionUrl.startsWith('/')) ||
-      (this.decisionPage != null && this.decisionPage.startsWith('/'))
+      (this.getChildren().length === 0 && this.getCode() == null) ||
+      (this.getChildren().length !== 0 && this.getTitle() == null) ||
+      (this.getUrl() != null && this.matching(d => d !== this && d.getUrl() === this.getUrl()).length !== 0) ||
+      (this.getUrl() != null && this.getUrl().startsWith('/')) ||
+      (this.getPage() != null && this.getPage().startsWith('/'))
     )
   }
 
   questionsToGetHere(): Array<Question> {
     let questions = new Array<Question>()
-    if (this.parentDecision) {
-      questions = this.parentDecision.questionsToGetHere()
+    if (this.getParent()) {
+      questions = this.getParent().questionsToGetHere()
     }
-    if (this.decisionQuestion) {
-      questions.push(this.decisionQuestion)
+    if (this.getQuestion()) {
+      questions.push(this.getQuestion())
     }
     return questions
   }
 
   findByCode(code: Code): Decision {
-    if (code?.code === this.decisionCode?.code) {
-      return this
-    }
-    const matches = this.childrenDecisions.map(c => c.findByCode(code)).filter(c => c)
-    if (matches.length) {
-      return matches[0]
-    }
-    return null
-  }
-
-  findByTitle(title: Title): Array<Decision> {
-    return this.matching(d => title?.title === this.decisionTitle?.title)
+    return this.findBy(d => d.getCode()?.code === code?.code)
   }
 
   toString(indent = 0): string {
     const padding = new Array(indent).join(' ')
     let output = `${padding}Id: ${this.id()}`
-    if (this.decisionQuestion?.question) {
-      output = `${output}\r\n${padding}Question: ${this.decisionQuestion?.question}`
+    if (this.getQuestion()?.question) {
+      output = `${output}\r\n${padding}Question: ${this.getQuestion()?.question}`
     }
-    if (this.decisionTitle?.title) {
-      output = `${output}\r\n${padding}Title: ${this.decisionTitle.title}`
+    if (this.getTitle()?.title) {
+      output = `${output}\r\n${padding}Title: ${this.getTitle().title}`
     }
-    if (this.childrenDecisions.length) {
-      output = `${output}\r\n${this.childrenDecisions.map(child => child.toString(indent + 4)).join('\r\n')}`
+    if (this.getChildren().length) {
+      output = `${output}\r\n${this.getChildren()
+        .map(child => child.toString(indent + 4))
+        .join('\r\n')}`
     }
-    if (this.decisionCode?.code) {
-      output = `${output}\r\n${padding}Code: ${this.decisionCode.code}`
+    if (this.getCode()?.code) {
+      output = `${output}\r\n${padding}Code: ${this.getCode().code}`
     }
     return output
   }

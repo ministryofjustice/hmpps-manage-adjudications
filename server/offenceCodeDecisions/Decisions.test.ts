@@ -35,4 +35,9 @@ describe('decisions', () => {
     const duplicates = findDuplicates(allUrls)
     expect(duplicates).toHaveLength(0)
   })
+
+  it('url will use id when not provided', () => {
+    const qqRP = committed.findByUrl('0')
+    const x = ''
+  })
 })
