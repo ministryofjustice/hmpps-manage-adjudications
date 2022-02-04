@@ -26,10 +26,12 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
-            idPrefix: 'decisionRadio',
-            name: 'decisionRadio',
+            idPrefix: 'selectedDecisionId',
+            name: 'selectedDecisionId',
+            id: 'selectedDecisionId',
             attributes: { "data-qa": "radio-buttons" },
-            items: items
+            items: items,
+            errorMessage: errors | findError("selectedDecisionId")
         }) }}
 
         {{ govukButton({

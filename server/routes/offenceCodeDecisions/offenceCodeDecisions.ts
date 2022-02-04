@@ -1,18 +1,24 @@
 import { Request, Response } from 'express'
 import url from 'url'
-import committed from '../../offenceCodeDecisions/Decisions'
+import decisionTrees from '../../offenceCodeDecisions/DecisionTrees'
 import { FormError } from '../../@types/template'
+import validateForm from './offenceCodeDecisionsValidation'
+
+import type IncidentRole from '../../offenceCodeDecisions/IncidentRoles'
 
 type PageData = {
   error?: FormError
-  selectedRadio: string
+  selectedDecisionId?: string
 }
 
 export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
+    const { error, selectedDecisionId } = pageData
+
     const path = req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, '')
-    const decision = committed.findByUrl(path)
+    const decision = decisionTrees.get(incidentRole as IncidentRole).findByUrl(path)
+
     const pageTitle = decision.getTitle().title // TODO process the title
     const questions = decision.getChildren().map(d => {
       return {
@@ -21,34 +27,31 @@ export default class OffenceCodeRoutes {
       }
     })
 
-    if (decision.getPage() != null) {
-      return res.render(`page${decision.getPage()}, data`)
-    }
-
-    return res.render(`pages/offenceCodeDecisions`, {
+    return res.render(`pages/${decision.getPage() || 'offenceCodeDecisions'}`, {
+      errors: error ? [error] : [],
+      selectedDecisionId,
       questions,
       pageTitle,
       pageData,
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
+  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    const { decisionRadio } = req.body
+    const { selectedDecisionId } = req.body
 
-    // TODO error handling
-    const error = false
+    const error = validateForm({ selectedDecisionId })
 
     if (error) {
       return this.renderView(req, res, {
         error,
-        selectedRadio: 'TODO',
+        selectedDecisionId,
       })
     }
 
-    const selectedDecision = committed.findById(decisionRadio)
+    const selectedDecision = decisionTrees.get(incidentRole as IncidentRole).findById(selectedDecisionId)
 
     return res.redirect(
       url.format({

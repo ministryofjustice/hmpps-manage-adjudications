@@ -9,8 +9,8 @@ function decision(question: Question | string) {
   return new Decision(question)
 }
 
-const committed = new Decision()
-  .title('What type of offence did {} commit?')
+export default new Decision()
+  .title('What type of offence did {OFFENDER} commit?')
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
       .title('What did the incident involve?')
@@ -151,5 +151,3 @@ const committed = new Decision()
       .child(decision('Being in an unauthorised place').code(todo))
       .child(decision('Failing to work correctly').code(todo))
   )
-
-export default committed

@@ -1,4 +1,4 @@
-import committed from './Decisions'
+import decisionTrees from './DecisionTrees'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
@@ -14,30 +14,30 @@ function findDuplicates<T>(toCheck: Array<T>) {
 }
 
 describe('decisions', () => {
-  it('toString', () => {
+  it.skip('toString', () => {
     // Not a test but useful output
-    const x = committed
-    console.log(committed.toString())
+    decisionTrees.forEach(decisionTree => console.log(decisionTree.toString()))
   })
 
   it.skip('no duplicate codes', () => {
-    const allCodes = committed.allCodes().map(c => c.code)
-    const duplicates = findDuplicates(allCodes)
-    expect(duplicates).toHaveLength(0)
+    decisionTrees.forEach(decisionTree => {
+      const allCodes = decisionTree.allCodes().map(c => c.code)
+      const duplicates = findDuplicates(allCodes)
+      expect(duplicates).toHaveLength(0)
+    })
   })
 
   it('no invalid decisions', () => {
-    expect(committed.invalidDecisions().map(d => d.getQuestion())).toHaveLength(0)
+    decisionTrees.forEach(decisionTree => {
+      expect(decisionTree.invalidDecisions().map(d => d.getQuestion())).toHaveLength(0)
+    })
   })
 
   it('no duplicate urls', () => {
-    const allUrls = committed.allUrls()
-    const duplicates = findDuplicates(allUrls)
-    expect(duplicates).toHaveLength(0)
-  })
-
-  it('url will use id when not provided', () => {
-    const qqRP = committed.findByUrl('0')
-    const x = ''
+    decisionTrees.forEach(decisionTree => {
+      const allUrls = decisionTree.allUrls()
+      const duplicates = findDuplicates(allUrls)
+      expect(duplicates).toHaveLength(0)
+    })
   })
 })
