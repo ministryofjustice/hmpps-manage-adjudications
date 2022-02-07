@@ -5,12 +5,17 @@ export type PlaceholderValues = {
 
 // eslint-disable-next-line no-shadow
 export const enum PlaceholderText {
+  OFFENDER_FULL_NAME = '{OFFENDER_FULL_NAME}',
   OFFENDER_FIRST_NAME = '{OFFENDER_FIRST_NAME}',
   OFFENDER_LAST_NAME = '{OFFENDER_LAST_NAME}',
 }
 
 export function getProcessedText(template: string, placeholderValues: PlaceholderValues): string {
   return (template || '')
+    .replace(
+      PlaceholderText.OFFENDER_FULL_NAME,
+      `${placeholderValues.offenderLastName} ${placeholderValues.offenderLastName}`
+    )
     .replace(PlaceholderText.OFFENDER_FIRST_NAME, placeholderValues.offenderFirstName)
     .replace(PlaceholderText.OFFENDER_LAST_NAME, placeholderValues.offenderLastName)
 }
