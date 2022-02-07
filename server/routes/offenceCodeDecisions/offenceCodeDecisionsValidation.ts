@@ -4,7 +4,10 @@ type DecisionForm = {
   selectedDecisionId?: string
 }
 
-type ErrorType = 'MISSING_SELECTION'
+// eslint-disable-next-line no-shadow
+enum ErrorType {
+  MISSING_SELECTION = 'MISSING_SELECTION',
+}
 
 const errors: { [key in ErrorType]: FormError } = {
   MISSING_SELECTION: {
