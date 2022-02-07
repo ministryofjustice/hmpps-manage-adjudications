@@ -6,7 +6,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
-import { radioToIncidentRole } from './offenceRoleCodes'
+import { radioToIncidentRole } from './incidentRoleCode'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 import { User } from '../../data/hmppsAuthClient'
 
@@ -146,8 +146,7 @@ export default class IncidentDetailsRoutes {
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
       req.session.originalRadioSelection = currentRadioSelected
-      const searchPageHref = `/select-associated-prisoner?searchTerm=${searchValue}`
-      return res.redirect(`${searchPageHref}&startUrl=incident-details`)
+      return res.redirect(`/select-associated-prisoner?searchTerm=${searchValue}`)
     }
 
     const associatedPrisonersNumber =

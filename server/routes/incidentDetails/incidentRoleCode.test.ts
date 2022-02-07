@@ -1,4 +1,4 @@
-import { radioToIncidentRole } from './offenceRoleCodes'
+import { radioToIncidentRole } from './incidentRoleCode'
 
 describe('radioToIncidentRole', () => {
   it('null radio selection', () => {

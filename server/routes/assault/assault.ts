@@ -118,7 +118,7 @@ export default class AssaultRoutes {
       const searchPageHref = prisonerAssaulted
         ? `/select-associated-prisoner?searchTerm=${assaultedPrisonerInput}`
         : `/select-associated-staff/${prisonerNumber}/${id}?staffFirstName=${assaultedPrisonOfficerFirstname}&staffLastName=${assaultedPrisonOfficerLastname}`
-      return res.redirect(`${searchPageHref}&startUrl=assault`)
+      return res.redirect(`${searchPageHref}`)
     }
 
     //
