@@ -18,24 +18,24 @@ type PageData = {
   assaultedPrisonOfficerLastname?: string
 }
 
-const submitValue = (
-  currentRadioSelected: string,
-  originalRadioSelection: string,
-  selectedPerson: string,
-  assaultedOtherStaffInput: string,
-  assaultedOtherMiscInput: string
-): { currentRadioSelected: string; selectedPerson: string } | null => {
-  switch (currentRadioSelected) {
-    case originalRadioSelection:
-      return { currentRadioSelected, selectedPerson }
-    case 'assaultedOtherStaff':
-      return { currentRadioSelected, selectedPerson: assaultedOtherStaffInput }
-    case 'assaultedOtherMisc':
-      return { currentRadioSelected, selectedPerson: assaultedOtherMiscInput }
-    default:
-      return null
-  }
-}
+// const submitValue = (
+//   currentRadioSelected: string,
+//   originalRadioSelection: string,
+//   selectedPerson: string,
+//   assaultedOtherStaffInput: string,
+//   assaultedOtherMiscInput: string
+// ): { currentRadioSelected: string; selectedPerson: string } | null => {
+//   switch (currentRadioSelected) {
+//     case originalRadioSelection:
+//       return { currentRadioSelected, selectedPerson }
+//     case 'assaultedOtherStaff':
+//       return { currentRadioSelected, selectedPerson: assaultedOtherStaffInput }
+//     case 'assaultedOtherMisc':
+//       return { currentRadioSelected, selectedPerson: assaultedOtherMiscInput }
+//     default:
+//       return null
+//   }
+// }
 
 export default class AssaultRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
@@ -121,13 +121,14 @@ export default class AssaultRoutes {
       return res.redirect(`${searchPageHref}&startUrl=assault`)
     }
 
-    const result = submitValue(
-      currentRadioSelected,
-      originalRadioSelection as string,
-      selectedPerson as string,
-      assaultedOtherStaffInput,
-      assaultedOtherMiscInput
-    )
+    //
+    // const result = submitValue(
+    //   currentRadioSelected,
+    //   originalRadioSelection as string,
+    //   selectedPerson as string,
+    //   assaultedOtherStaffInput,
+    //   assaultedOtherMiscInput
+    // )
     // submit the result to the server here and redirect to next page
     try {
       // API call to post data to database
