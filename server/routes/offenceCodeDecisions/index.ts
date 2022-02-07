@@ -13,10 +13,10 @@ export default function offenceCodeDecisionsRoutes({
   const offenceCodeDecisions = new OffenceCodeDecisionsRoutes(placeOnReportService)
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
-  decisionTrees.forEach(decisionTree =>
+  decisionTrees.forEach((decisionTree, incidentRole) =>
     decisionTree.allUrls().forEach(url => {
-      get(`/:adjudicationNumber/:incidentRole/${url}`, offenceCodeDecisions.view)
-      post(`/:adjudicationNumber/:incidentRole/${url}`, offenceCodeDecisions.submit)
+      get(`/:adjudicationNumber/:incidentRole(${incidentRole})/${url}`, offenceCodeDecisions.view)
+      post(`/:adjudicationNumber/:incidentRole(${incidentRole})/${url}`, offenceCodeDecisions.submit)
     })
   )
   return router
