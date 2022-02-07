@@ -93,10 +93,10 @@ export default class AssaultRoutes {
       assaultedPrisonOfficerFirstname,
       assaultedPrisonOfficerLastname,
       currentRadioSelected,
-      assaultedOtherStaffInput,
-      assaultedOtherMiscInput,
+      // assaultedOtherStaffInput,
+      // assaultedOtherMiscInput,
     } = req.body
-    const { selectedPerson, originalRadioSelection } = req.query
+    // const { selectedPerson, originalRadioSelection } = req.query
     if (search) {
       const prisonerAssaulted = search === 'assaultedPrisonerSearchSubmit'
       const error = prisonerAssaulted
