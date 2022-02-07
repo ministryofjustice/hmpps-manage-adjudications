@@ -16,6 +16,7 @@ function findDuplicates<T>(toCheck: Array<T>) {
 describe('decisions', () => {
   it.skip('toString', () => {
     // Not a test but useful output
+    // eslint-disable-next-line no-console
     decisionTrees.forEach(decisionTree => console.log(decisionTree.toString()))
   })
 
