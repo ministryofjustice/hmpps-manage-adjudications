@@ -34,7 +34,7 @@ context('Incident details', () => {
         prisonerNumber: 'G6415GD',
         incidentRole: {
           associatedPrisonersNumber: 'T3356FU',
-          roleCode: '25a',
+          roleCode: '25b',
         },
       },
     })
@@ -194,6 +194,22 @@ context('Incident details', () => {
       })
   })
   it('should submit form successfully if all data entered - no associated prisoner required', () => {
+    cy.task('stubStartNewDraftAdjudication', {
+      draftAdjudication: {
+        id: 3456,
+        incidentDetails: {
+          dateTimeOfIncident: '2021-11-03T11:09:42',
+          handoverDeadline: '2021-11-05T11:09:42',
+          locationId: 234,
+        },
+        incidentStatement: {},
+        prisonerNumber: 'G6415GD',
+        incidentRole: {
+          associatedPrisonersNumber: 'T3356FU',
+          roleCode: '25a',
+        },
+      },
+    })
     const today = new Date()
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
@@ -201,7 +217,7 @@ context('Incident details', () => {
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
-    incidentDetailsPage.radioButtons().find('input[value="onTheirOwn"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="attemptOnTheirOwn"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
@@ -225,6 +241,22 @@ context('Incident details', () => {
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner assisted', () => {
+    cy.task('stubStartNewDraftAdjudication', {
+      draftAdjudication: {
+        id: 3456,
+        incidentDetails: {
+          dateTimeOfIncident: '2021-11-03T11:09:42',
+          handoverDeadline: '2021-11-05T11:09:42',
+          locationId: 234,
+        },
+        incidentStatement: {},
+        prisonerNumber: 'G6415GD',
+        incidentRole: {
+          associatedPrisonersNumber: 'T3356FU',
+          roleCode: '25c',
+        },
+      },
+    })
     const today = new Date()
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)

@@ -182,7 +182,7 @@ describe('validateForm', () => {
           associatedPrisonersNumber: null,
         })
       ).toEqual({
-        href: '#currentRadioSelected',
+        href: '#inciteAnotherPrisonerInput',
         text: 'Enter their name or prison number.',
       })
       expect(
@@ -193,7 +193,7 @@ describe('validateForm', () => {
           associatedPrisonersNumber: null,
         })
       ).toEqual({
-        href: '#currentRadioSelected',
+        href: '#assistAnotherPrisonerInput',
         text: 'Enter their name or prison number.',
       })
     })

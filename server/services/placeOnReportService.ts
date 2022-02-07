@@ -84,9 +84,8 @@ export default class PlaceOnReportService {
       agencyId: user.activeCaseLoadId,
       locationId,
       prisonerNumber,
-      // Temporary code to make it work with the current API - all incidents will be "attempted to commit"
       incidentRole: {
-        roleCode: '25a', // without temporary code... roleCode: incidentRoleDetails.currentRadioSelected - converted to the appropriate role code
+        roleCode,
         associatedPrisonersNumber,
       },
     }

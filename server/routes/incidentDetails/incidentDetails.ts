@@ -6,6 +6,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
+import { radioToIncidentRole } from './offenceRoleCodes'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 import { User } from '../../data/hmppsAuthClient'
 
@@ -168,13 +169,15 @@ export default class IncidentDetailsRoutes {
         associatedPrisonersNumber,
       })
 
+    const incidentRoleCode = radioToIncidentRole(currentRadioSelected)
+
     try {
       const newAdjudication = await this.placeOnReportService.startNewDraftAdjudication(
         formatDate(incidentDate),
         locationId,
         prisonerNumber,
         associatedPrisonersNumber,
-        currentRadioSelected,
+        incidentRoleCode,
         user
       )
       delete req.session.redirectUrl

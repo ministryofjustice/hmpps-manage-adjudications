@@ -47,7 +47,7 @@ beforeEach(() => {
       },
       incidentRole: {
         associatedPrisonersNumber: 'G2678PF',
-        roleCode: '25a',
+        roleCode: '25b',
       },
     },
   })
