@@ -1,4 +1,4 @@
-import processText, { PlaceholderValues } from './Placeholder'
+import { getProcessedText, PlaceholderValues } from './Placeholder'
 
 export default class Question {
   question: string
@@ -8,6 +8,6 @@ export default class Question {
   }
 
   getProcessedText(placeholderValues: PlaceholderValues): string {
-    return processText(this.question, placeholderValues)
+    return getProcessedText(this.question, placeholderValues)
   }
 }

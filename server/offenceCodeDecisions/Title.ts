@@ -1,4 +1,4 @@
-import processText from './Placeholder'
+import { getProcessedText } from './Placeholder'
 import type { PlaceholderValues } from './Placeholder'
 
 export default class Title {
@@ -9,6 +9,6 @@ export default class Title {
   }
 
   getProcessedText(placeholderValues: PlaceholderValues): string {
-    return processText(this.title, placeholderValues)
+    return getProcessedText(this.title, placeholderValues)
   }
 }

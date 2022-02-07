@@ -1,6 +1,7 @@
 import Decision from './Decision'
 import Question from './Question'
 import Code from './Code'
+import { PlaceholderText } from './Placeholder'
 
 // Codes
 const todo = new Code('TODO')
@@ -10,7 +11,9 @@ function decision(question: Question | string) {
 }
 
 export default new Decision()
-  .title('What type of offence did {OFFENDED_FIRST_NAME} {OFFENDER_LAST_NAME} commit?')
+  .title(
+    `What type of offence did ${PlaceholderText.OFFENDER_FIRST_NAME} ${PlaceholderText.OFFENDER_FIRST_NAME} commit?`
+  )
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
       .title('What did the incident involve?')
