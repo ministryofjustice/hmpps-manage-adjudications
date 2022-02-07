@@ -31,7 +31,7 @@
             id: 'selectedDecisionId',
             attributes: { "data-qa": "radio-buttons" },
             items: items,
-            errorMessage: errors | findError("selectedDecisionId")
+            errorMessage: "selectedDecisionId" | findError(errors)
         }) }}
 
         {{ govukButton({

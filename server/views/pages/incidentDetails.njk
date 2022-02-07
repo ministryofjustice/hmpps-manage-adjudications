@@ -84,7 +84,7 @@
 					},
 					items: locations | toSelect('locationId', 'userDescription', data.locationId ),
 					classes: '',
-					errorMessage: errors | findError('locationId')
+					errorMessage: 'locationId' | findError(errors)
 				})
 			}}
 

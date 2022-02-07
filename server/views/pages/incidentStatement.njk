@@ -49,7 +49,7 @@
 				attributes: {
 					'data-qa': "incident-statement-input"
 				},
-				errorMessage: errors | findError("incidentStatement")
+				errorMessage: "incidentStatement" | findError(errors)
 				}) }}
 
 		{% if not adjudicationEdited %}
@@ -58,7 +58,7 @@
 				idPrefix: "incidentStatementComplete",
 				id: "incidentStatementComplete",
 				name: "incidentStatementComplete",
-				errorMessage: errors | findError("incidentStatementComplete"),
+				errorMessage: "incidentStatementComplete" | findError(errors),
 				fieldset: {
 					attributes: { "data-qa": "incident-statement-radios" },
 					legend: {
