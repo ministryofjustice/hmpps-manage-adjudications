@@ -26,12 +26,10 @@ export default class SelectAssociatedPrisonerRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { prisonNumber, id } = req.params
-    const { startUrl } = req.query
     const searchTerm = JSON.stringify(req.query.searchTerm)?.replace(/"/g, '')
     const { redirectUrl } = req.session
-
-    if (!searchTerm) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
+    if (!searchTerm)
+      return res.render(`pages/notFound.njk`, { url: req.headers.referer || `/place-a-prisoner-on-report` })
 
     const searchResults = await this.prisonerSearchService.search(
       { searchTerm, prisonIds: [user.activeCaseLoad.caseLoadId] },
@@ -59,7 +57,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.redirect(
       url.format({
-        pathname: '/select-associated-prisoner',
+        pathname: `/select-associated-prisoner`,
         query: { searchTerm, redirectUrl },
       })
     )

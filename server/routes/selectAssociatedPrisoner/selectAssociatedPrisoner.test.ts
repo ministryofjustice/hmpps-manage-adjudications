@@ -10,11 +10,7 @@ const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<Pri
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes(
-    { production: false },
-    { prisonerSearchService },
-    { redirectUrl: '/assault/G6123VU/1234?queryRadioSelection=assaultedPrisoner' }
-  )
+  app = appWithAllRoutes({ production: false }, { prisonerSearchService }, { redirectUrl: '/assault/G6123VU/1234' })
 })
 
 afterEach(() => {
@@ -44,7 +40,7 @@ describe('GET /select-associated-prisoner', () => {
           expect(res.text).toContain('Select a prisoner')
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain(
-            '<a href="/assault/G6123VU/1234?queryRadioSelection=assaultedPrisoner&selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner</a>'
+            '<a href="/assault/G6123VU/1234?selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner</a>'
           )
         })
     })
@@ -72,10 +68,7 @@ describe('POST /select-associated-prisoner', () => {
     return request(app)
       .post('/select-associated-prisoner')
       .send({ searchTerm: 'Smith' })
-      .expect(
-        'Location',
-        '/select-associated-prisoner?searchTerm=Smith&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisoner'
-      )
+      .expect('Location', '/select-associated-prisoner?searchTerm=Smith&redirectUrl=%2Fassault%2FG6123VU%2F1234')
   })
 
   it('should render validation messages', () => {

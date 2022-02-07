@@ -88,10 +88,13 @@
 				})
 			}}
 
+			{% include "../partials/incidentDetailsRadios.njk" %}
+
+
 			{{ govukButton({
 					text: submitButtonText,
 					type: "submit",
-					classes: "govuk-button--submit",
+					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "incident-details-submit" }
 			}) }}
 			{% if reportPreviouslySubmitted %}

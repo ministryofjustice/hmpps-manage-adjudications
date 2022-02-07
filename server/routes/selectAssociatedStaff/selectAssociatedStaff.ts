@@ -11,6 +11,7 @@ type PageData = {
   staffFirstName: string
   staffLastName: string
   redirectUrl?: string
+  originalRadioSelection?: string
 }
 
 export default class SelectAssociatedPrisonerRoutes {
@@ -30,17 +31,22 @@ export default class SelectAssociatedPrisonerRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { prisonNumber, id } = req.params
-    const { startUrl } = req.query
     const staffFirstName = JSON.stringify(req.query.staffFirstName)?.replace(/"/g, '')
     const staffLastName = JSON.stringify(req.query.staffLastName)?.replace(/"/g, '')
-    const { redirectUrl } = req.session
+    const { redirectUrl, originalRadioSelection } = req.session
 
-    if (!staffFirstName || !staffLastName) return res.redirect(`/${startUrl}/${prisonNumber}/${id}`)
+    if (!staffFirstName || !staffLastName)
+      return res.render(`pages/notFound.njk`, { url: req.headers.referer || `/place-a-prisoner-on-report` })
 
     const results = await this.userService.getStaffFromNames(staffFirstName, staffLastName, user)
     const searchResults = await this.placeOnReportService.getAssociatedStaffDetails(results, user)
-    return this.renderView(req, res, { searchResults, staffFirstName, staffLastName, redirectUrl })
+    return this.renderView(req, res, {
+      searchResults,
+      staffFirstName,
+      staffLastName,
+      redirectUrl,
+      originalRadioSelection,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {

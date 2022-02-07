@@ -1,0 +1,135 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+ {% set inciteAnotherPrisoner %}
+{% if (originalRadioSelection === 'inciteAnotherPrisoner') and (associatedPrisonerName) %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPrisonerName }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPrisonerNumber }} </p> 
+    <div>
+      {{ govukButton({
+          text: 'Delete',
+          classes: "govuk-button--secondary",
+            type: "submit",
+            name: "deleteAssociatedPrisoner",
+            value: "inciteAnotherPrisonerDelete",
+          attributes: { "data-qa": "incite-prisoner-delete" }
+      }) }}
+    </div>
+  </div>
+{% else %}
+<div class="flex-container flex-center">
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "inciteAnotherPrisonerInput",
+  name: "inciteAnotherPrisonerInput",
+  classes: "govuk-!-width-full-width",
+  value: inciteAnotherPrisonerInput,
+  errorMessage: errors | findErrors(['inciteAnotherPrisonerInput']),
+  label: {
+    text: "Enter their name or prison number",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+    {{ govukButton({
+        text: 'Search',
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+    type: "submit",
+    name: "search",
+    value: "inciteAnotherPrisonerSearchSubmit",
+        attributes: { "data-qa": "incite-prisoner-search" }
+    }) }}
+</div>
+{% endif %}
+{% endset -%}
+
+ {% set assistAnotherPrisoner %}
+{% if (originalRadioSelection === 'assistAnotherPrisoner') and (associatedPrisonerName) %}
+  <div>  
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPrisonerName }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPrisonerNumber }} </p> 
+    <div>
+    {{ govukButton({
+        text: 'Delete',
+        classes: "govuk-button--secondary",
+          type: "submit",
+          name: "deleteAssociatedPrisoner",
+          value: "assistAnotherPrisonerDelete",
+        attributes: { "data-qa": "assist-prisoner-delete" }
+    }) }}
+    </div>
+  </div>
+{% else %}
+<div class="flex-container flex-center">
+<div class="govuk-!-margin-right-3">
+{{ govukInput({
+  id: "assistAnotherPrisonerInput",
+  name: "assistAnotherPrisonerInput",
+  classes: "govuk-!-width-full-width",
+  value: assistAnotherPrisoner,
+  errorMessage: errors | findErrors(['assistAnotherPrisonerInput']),
+  label: {
+    text: "Enter their name or prison number",
+    classes: "govuk-!-font-weight-bold"
+  }
+}) }}
+</div>
+    {{ govukButton({
+        text: 'Search',
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+    type: "submit",
+    name: "search",
+    value: "assistAnotherPrisonerSearchSubmit",
+        attributes: { "data-qa": "assist-prisoner-search" }
+    }) }}
+</div>
+{% endif %}
+{% endset -%}
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {{ govukRadios({
+    idPrefix: 'currentRadioSelected',
+    id: 'currentRadioSelected',
+    name: 'currentRadioSelected',
+    attributes: { "data-qa": "radio-buttons" },
+    fieldset: {
+        legend: {
+        text: "What was " + prisoner.friendlyName | possessive | safe + " role in the incident?",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+        }
+    },
+    items: [
+    {
+      value: "onTheirOwn",
+      text: "Committed this incident on their own",
+      checked: originalRadioSelection === "onTheirOwn"
+    },
+    {
+      value: "attemptOnTheirOwn",
+      text: "Attempted to commit this incident on their own",
+      checked: originalRadioSelection === "attemptOnTheirOwn"
+    },
+    {
+      value: "inciteAnotherPrisoner",
+      text: "Incited another prisoner of commit this incident",
+      conditional: {
+        html: inciteAnotherPrisoner
+      },
+      checked: originalRadioSelection === "inciteAnotherPrisoner"
+    },
+    {
+      value: "assistAnotherPrisoner",
+      text: "Assisted another prisoner to commit, or attempt to commit, this incident",
+      conditional: {
+        html: assistAnotherPrisoner
+      },
+      checked: originalRadioSelection === "assistAnotherPrisoner"
+    }
+  ]
+    }) }}
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

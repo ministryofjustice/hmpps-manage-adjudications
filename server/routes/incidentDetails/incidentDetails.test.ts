@@ -13,7 +13,11 @@ const locationService = new LocationService(null) as jest.Mocked<LocationService
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
+  app = appWithAllRoutes(
+    { production: false },
+    { placeOnReportService, locationService },
+    { originalRadioSelection: 'inciteAnotherPrisoner' }
+  )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
@@ -41,7 +45,10 @@ beforeEach(() => {
         locationId: 2,
         dateTimeOfIncident: '2021-10-27T13:30:00.000',
       },
-      incidentRole: {},
+      incidentRole: {
+        associatedPrisonersNumber: 'G2678PF',
+        roleCode: '25b',
+      },
     },
   })
   placeOnReportService.getReporterName.mockResolvedValue('Test User')
@@ -64,16 +71,46 @@ describe('GET /incident-details', () => {
 })
 
 describe('POST /incident-details', () => {
-  it('should redirect to incident statement page if details are complete', () => {
+  it('should redirect to type of offence page if details are complete', () => {
     return request(app)
-      .post('/incident-details/G6415GD')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .post('/incident-details/G6415GD?selectedPerson=G2678PF')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'inciteAnotherPrisoner',
+      })
       .expect(302)
-      .expect('Location', '/incident-statement/G6415GD/1')
+      .expect('Location', '/offence-details/G6415GD/1')
   })
-  it('should render an error summary with correct validation message', () => {
+  it('should render an error summary with correct validation message if the selected person has been tampered with in the URL', () => {
     return request(app)
-      .post('/incident-details/G6415GD')
+      .post('/incident-details/G6415GD?selectedPerson=gobbledegook')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'inciteAnotherPrisoner',
+      })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter their name or prison number.')
+      })
+  })
+  it('should render an error summary with correct validation message - missing radio button selection', () => {
+    return request(app)
+      .post('/incident-details/G6415GD?selectedPerson=G2678PF')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '11', minute: '30' } },
+        locationId: 2,
+      })
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Select the prisoner’s role in this incident.')
+      })
+  })
+  it('should render an error summary with correct validation message - incorrect time entered', () => {
+    return request(app)
+      .post('/incident-details/G6415GD?selectedPerson=G2678PF')
       .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -84,8 +121,12 @@ describe('POST /incident-details', () => {
   it('should throw an error on api failure', () => {
     placeOnReportService.startNewDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/incident-details/G6415GD')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } }, locationId: 2 })
+      .post('/incident-details/G6415GD?selectedPerson=G2678PF')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'inciteAnotherPrisoner',
+      })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Internal Error')

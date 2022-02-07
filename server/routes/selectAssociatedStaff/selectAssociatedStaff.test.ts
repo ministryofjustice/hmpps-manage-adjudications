@@ -16,7 +16,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { userService, placeOnReportService },
-    { redirectUrl: '/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer' }
+    { redirectUrl: '/assault/G6123VU/1234?originalRadioSelection=assaultedPrisonOfficer' }
   )
 })
 
@@ -65,7 +65,7 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            '<a href="/assault/G6123VU/1234?queryRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
+            '<a href="/assault/G6123VU/1234?originalRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
           )
         })
     })
@@ -96,7 +96,7 @@ describe('POST /select-associated-staff', () => {
       .send({ staffFirstName: 'john', staffLastName: 'doe' })
       .expect(
         'Location',
-        '/select-associated-staff/G6123VU/1234?staffFirstName=john&staffLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3FqueryRadioSelection%3DassaultedPrisonOfficer'
+        '/select-associated-staff/G6123VU/1234?staffFirstName=john&staffLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3ForiginalRadioSelection%3DassaultedPrisonOfficer'
       )
   })
 
