@@ -1,5 +1,5 @@
-import committed from './Commited'
+import committedDecisionTree from './CommitedDecisionTree'
 import Decision from './Decision'
-import type IncidentRole from './IncidentRoles'
+import IncidentRole from '../incidentRole/IncidentRole'
 
-export default new Map<IncidentRole, Decision>([['committed', committed]])
+export default new Map<IncidentRole, Decision>([[IncidentRole.COMMITTED, committedDecisionTree]])

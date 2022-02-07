@@ -4,8 +4,7 @@ import decisionTrees from '../../offenceCodeDecisions/DecisionTrees'
 import { FormError } from '../../@types/template'
 import validateForm from './offenceCodeDecisionsValidation'
 import PlaceOnReportService from '../../services/placeOnReportService'
-
-import type IncidentRole from '../../offenceCodeDecisions/IncidentRoles'
+import IncidentRole from '../../incidentRole/IncidentRole'
 import { properCaseName } from '../../utils/utils'
 
 type PageData = {
