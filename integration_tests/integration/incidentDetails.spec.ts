@@ -205,7 +205,6 @@ context('Incident details', () => {
         incidentStatement: {},
         prisonerNumber: 'G6415GD',
         incidentRole: {
-          associatedPrisonersNumber: 'T3356FU',
           roleCode: '25a',
         },
       },

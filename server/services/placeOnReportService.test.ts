@@ -67,7 +67,7 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G2996UX',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25a',
+            roleCode: '25b',
           },
           incidentDetails: {
             locationId: 3,
@@ -82,7 +82,7 @@ describe('placeOnReportService', () => {
         3,
         'G2996UX',
         'T3356FU',
-        '25a',
+        '25b',
         user
       )
       expect(startNewDraftAdjudication).toBeCalledWith({
@@ -92,7 +92,7 @@ describe('placeOnReportService', () => {
         agencyId: 'MDI',
         // Added by temporary code to preserve APi compatibility
         incidentRole: {
-          roleCode: '25a',
+          roleCode: '25b',
           associatedPrisonersNumber: 'T3356FU',
         },
       })
@@ -103,7 +103,7 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G2996UX',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25a',
+            roleCode: '25b',
           },
           incidentDetails: {
             locationId: 3,
@@ -399,7 +399,14 @@ describe('placeOnReportService', () => {
   })
   describe('getDraftIncidentDetailsForEditing', () => {
     it('should return draft incident details in format ready for editing', async () => {
-      const expectedResult = { dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } }, locationId: 1234 }
+      const expectedResult = {
+        dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
+        locationId: 1234,
+        incidentRole: {
+          associatedPrisonersNumber: 'G2996UX',
+          roleCode: '25b',
+        },
+      }
 
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: {
@@ -411,6 +418,10 @@ describe('placeOnReportService', () => {
           },
           incidentStatement: {
             statement: 'test',
+          },
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            roleCode: '25b',
           },
         },
       })
@@ -429,7 +440,7 @@ describe('placeOnReportService', () => {
         },
         incidentRole: {
           associatedPrisonersNumber: 'G2996UX',
-          roleCode: '25a',
+          roleCode: '25b',
         },
         incidentStatement: {
           completed: false,
@@ -438,11 +449,22 @@ describe('placeOnReportService', () => {
         prisonerNumber: 'G2996UX',
       }
       editDraftIncidentDetails.mockResolvedValue(expectedResult)
-      const response = await service.editDraftIncidentDetails(4, '2021-11-09T13:55:34.143Z', 12123123, user)
+      const response = await service.editDraftIncidentDetails(
+        4,
+        '2021-11-09T13:55:34.143Z',
+        12123123,
+        'G2996UX',
+        '25b',
+        user
+      )
       expect(response).toEqual(expectedResult)
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         locationId: 12123123,
+        incidentRole: {
+          associatedPrisonersNumber: 'G2996UX',
+          roleCode: '25b',
+        },
       })
     })
   })

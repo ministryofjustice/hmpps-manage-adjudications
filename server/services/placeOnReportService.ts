@@ -40,6 +40,7 @@ type ExistingDraftIncidentDetails = {
   locationId: number
   startedByUserId: string
   adjudicationNumber?: number
+  incidentRole?: { associatedPrisonersNumber: string; roleCode: string }
 }
 
 export default class PlaceOnReportService {
@@ -164,6 +165,10 @@ export default class PlaceOnReportService {
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
       adjudicationNumber: response.draftAdjudication.adjudicationNumber,
+      incidentRole: {
+        associatedPrisonersNumber: response.draftAdjudication.incidentRole.associatedPrisonersNumber,
+        roleCode: response.draftAdjudication.incidentRole.roleCode,
+      },
     }
   }
 
@@ -171,14 +176,19 @@ export default class PlaceOnReportService {
     id: number,
     dateTime: string,
     location: number,
+    associatedPrisonersNumber: string,
+    roleCode: string,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
+      incidentRole: {
+        associatedPrisonersNumber,
+        roleCode,
+      },
     }
-
     const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication
   }

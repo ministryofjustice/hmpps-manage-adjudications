@@ -36,6 +36,10 @@ beforeEach(() => {
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
+    incidentRole: {
+      associatedPrisonersNumber: 'T3345XV',
+      roleCode: '25b',
+    },
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
@@ -79,60 +83,57 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
   })
 })
 
-describe.skip('POST /incident-details/<PRN>/<id>/edit', () => {
-  it('should redirect to incident statement page if details are complete but statement is incomplete', () => {
+describe('POST /incident-details/<PRN>/<id>/edit', () => {
+  it('should redirect to offence details page if details are complete after changing information', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/edit')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'onTheirOwn',
+      })
       .expect(302)
-      .expect('Location', '/incident-statement/G6415GD/34')
+      .expect('Location', '/offence-details/G6415GD/34')
   })
-  it('should render an error summary with correct validation message', () => {
+  it('should render an error summary with correct validation message - user enters invalid hour', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/edit')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'incitedAnotherPrisoner',
+      })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
         expect(res.text).toContain('Enter an hour which is 23 or less')
       })
   })
+  it('should render an error summary with correct validation message - user does not search for associated prisoner when required', () => {
+    return request(app)
+      .post('/incident-details/G6415GD/34/edit')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'inciteAnotherPrisoner',
+      })
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter their name or prison number.')
+      })
+  })
   it('should throw an error on PUT endpoint failure', () => {
     placeOnReportService.editDraftIncidentDetails.mockRejectedValue(new Error('Internal Error'))
     return request(app)
       .post('/incident-details/G6415GD/34/edit')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'onTheirOwn',
+      })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Internal Error')
       })
-  })
-})
-
-describe.skip('Incident details completed already', () => {
-  beforeEach(() => {
-    placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
-      draftAdjudication: {
-        startedByUserId: 'TEST_GEN',
-        id: 34,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-          locationId: 2,
-        },
-        incidentRole: {},
-        incidentStatement: {
-          completed: true,
-          statement: 'blah blah',
-        },
-        prisonerNumber: 'G6415GD',
-      },
-    })
-  })
-  it('should redirect to check your answers page if details are complete and statement is complete', () => {
-    return request(app)
-      .post('/incident-details/G6415GD/34/edit')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
-      .expect(302)
-      .expect('Location', '/check-your-answers/G6415GD/34')
   })
 })
