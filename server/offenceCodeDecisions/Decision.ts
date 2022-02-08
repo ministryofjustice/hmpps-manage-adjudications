@@ -102,11 +102,11 @@ export default class Decision {
   }
 
   allUrls(): Array<string> {
-    const codes = [].concat(...this.getChildren().map(c => c.allUrls()))
+    const urls = [].concat(...this.getChildren().map(c => c.allUrls()))
     if (this.getUrl()) {
-      codes.push(this.getUrl())
+      urls.push(this.getUrl())
     }
-    return codes.sort()
+    return urls.sort()
   }
 
   findByUrl(url: string): Decision {
@@ -141,20 +141,6 @@ export default class Decision {
     return codes.sort()
   }
 
-  invalidDecisions(): Array<Decision> {
-    return this.matching(d => d.invalid())
-  }
-
-  invalid(): boolean {
-    return (
-      (this.getChildren().length === 0 && this.getCode() == null) ||
-      (this.getChildren().length !== 0 && this.getTitle() == null) ||
-      (this.getUrl() != null && this.matching(d => d !== this && d.getUrl() === this.getUrl()).length !== 0) ||
-      (this.getUrl() != null && this.getUrl().startsWith('/')) ||
-      (this.getPage() != null && this.getPage().startsWith('/'))
-    )
-  }
-
   questionsToGetHere(): Array<Question> {
     let questions = new Array<Question>()
     if (this.getParent()) {
@@ -177,18 +163,21 @@ export default class Decision {
       output = `${output}\r\n${padding}Question: ${this.getQuestion()?.question}`
     }
     if (this.getTitle()?.getTitles()) {
-      output = `${output}${this.getTitle().toString(indent)}`
+      output = `${output}\r\n${this.getTitle().toString(indent)}`
+    }
+    if (this.getCode()?.code) {
+      output = `${output}\r\n${this.getCode().toString(indent)}`
     }
     if (this.getChildren().length) {
       output = `${output}\r\n${this.getChildren()
         .map(child => child.toString(indent + 4))
         .join('\r\n')}`
     }
-    if (this.getCode()?.code) {
-      output = `${output}\r\n${padding}Code: ${this.getCode().code}`
-    }
     return output
   }
 }
 
-type Page = 'Default'
+// eslint-disable-next-line no-shadow
+enum Page {
+  DEFAULT = 'DEFAULT',
+}

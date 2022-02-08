@@ -22,16 +22,11 @@ export default class Title {
   }
 
   toString(indent = 0) {
-    let output = ''
     const padding = new Array(indent).join(' ')
     const distinct = new Set(this.getTitles().values())
     if (distinct.size === 1) {
-      output = `${output}\r\n${padding}Title: ${distinct.values().next().value}`
-    } else {
-      this.getTitles().forEach((title, incidentRole) => {
-        output = `${output}\r\n${padding}Title(${incidentRole}): ${title}`
-      })
+      return `${padding}Title: ${distinct.values().next().value}`
     }
-    return output
+    return [...this.getTitles().entries()].map(entry => `${padding}Title(${entry[0]}): ${entry[1]}`).join('\r\n')
   }
 }
