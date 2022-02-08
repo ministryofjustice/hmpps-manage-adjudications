@@ -1,6 +1,7 @@
 import Title from './Title'
 import Question from './Question'
 import Code from './Code'
+import IncidentRole from '../incidentRole/IncidentRole'
 
 export default class Decision {
   private parentDecision: Decision
@@ -47,10 +48,12 @@ export default class Decision {
     return this
   }
 
-  title(title: Title | string) {
+  title(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
     if (title instanceof Title) {
       this.decisionTitle = title
     } else if (typeof title === 'string') {
+      this.decisionTitle = new Title(title)
+    } else {
       this.decisionTitle = new Title(title)
     }
     return this
@@ -173,8 +176,8 @@ export default class Decision {
     if (this.getQuestion()?.question) {
       output = `${output}\r\n${padding}Question: ${this.getQuestion()?.question}`
     }
-    if (this.getTitle()?.title) {
-      output = `${output}\r\n${padding}Title: ${this.getTitle().title}`
+    if (this.getTitle()?.getTitles()) {
+      output = `${output}${this.getTitle().toString(indent)}`
     }
     if (this.getChildren().length) {
       output = `${output}\r\n${this.getChildren()

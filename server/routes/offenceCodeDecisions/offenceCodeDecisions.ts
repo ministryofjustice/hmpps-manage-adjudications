@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import url from 'url'
-import decisionTrees from '../../offenceCodeDecisions/DecisionTrees'
+import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { FormError } from '../../@types/template'
 import validateForm from './offenceCodeDecisionsValidation'
 import PlaceOnReportService from '../../services/placeOnReportService'
@@ -36,9 +36,9 @@ export default class OffenceCodeRoutes {
     const { error, selectedDecisionId } = pageData
     const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
     const path = req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, '')
-    const decision = decisionTrees.get(incidentRole as IncidentRole).findByUrl(path)
+    const decision = decisionTree.findByUrl(path)
 
-    const pageTitle = decision.getTitle().getProcessedText(placeholderValues)
+    const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const questions = decision.getChildren().map(d => {
       return {
         id: d.id(),
@@ -69,7 +69,7 @@ export default class OffenceCodeRoutes {
       })
     }
 
-    const selectedDecision = decisionTrees.get(incidentRole as IncidentRole).findById(selectedDecisionId)
+    const selectedDecision = decisionTree.findById(selectedDecisionId)
     const redirectUrl = selectedDecision.getCode()
       ? `/TODO`
       : `/offence-code/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`

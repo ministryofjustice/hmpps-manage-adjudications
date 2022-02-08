@@ -2,6 +2,7 @@ import Decision from './Decision'
 import Question from './Question'
 import Code from './Code'
 import { PlaceholderText as Text } from './Placeholder'
+import Role from '../incidentRole/IncidentRole'
 
 // Codes
 const todo = new Code('TODO')
@@ -11,7 +12,12 @@ function decision(question: Question | string) {
 }
 
 export default new Decision()
-  .title(`What type of offence did ${Text.OFFENDER_FULL_NAME} commit?`)
+  .title([
+    [Role.COMMITTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} commit?`],
+    [Role.ATTEMPTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} attempt to commit?`],
+    [Role.ASSISTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} assist another prisoner to commit?`],
+    [Role.INCITED, `What type of offence did ${Text.OFFENDER_FULL_NAME} incite another prisoner to commit?`],
+  ])
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
       .title('What did the incident involve?')
@@ -107,7 +113,12 @@ export default new Decision()
       .title('What did the incident involve?')
       .child(
         decision('Disrespectful behaviour')
-          .title(`Who was ${Text.OFFENDER_FULL_NAME} disrespectful to?`)
+          .title([
+            [Role.COMMITTED, `Who was ${Text.OFFENDER_FULL_NAME} disrespectful to?`],
+            [Role.ATTEMPTED, `Who was ${Text.OFFENDER_FULL_NAME} attempting to be disrespectful to?`],
+            [Role.INCITED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to be disrespectful to?`],
+            [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} assist another prisoner to be disrespectful to?`],
+          ])
           .child(decision('A prison officer').code(todo))
           .child(decision('A member of staff who is not a prison officer').code(todo))
           .child(decision('Another person not listed above').code(todo))
@@ -127,7 +138,12 @@ export default new Decision()
   )
   .child(
     decision('Detains another person')
-      .title(`Who did ${Text.OFFENDER_FULL_NAME} attempt to detain?`)
+      .title([
+        [Role.COMMITTED, `Who did ${Text.OFFENDER_FULL_NAME} detain?`],
+        [Role.ATTEMPTED, `Who did ${Text.OFFENDER_FULL_NAME} attempt to detain?`],
+        [Role.INCITED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to detain?`],
+        [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} assist TODO`],
+      ])
       .child(decision('Another prisoner').code(todo))
       .child(decision('A prison officer').code(todo))
       .child(decision('A member of staff who is not a prison officer').code(todo))
