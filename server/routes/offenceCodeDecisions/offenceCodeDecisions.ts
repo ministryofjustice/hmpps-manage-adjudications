@@ -72,7 +72,7 @@ export default class OffenceCodeRoutes {
     const selectedDecision = decisionTree.findById(selectedDecisionId)
     const redirectUrl = selectedDecision.getCode()
       ? `/TODO`
-      : `/offence-code/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
+      : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
     return res.redirect(
       url.format({

@@ -14,7 +14,7 @@ export function getProcessedText(template: string, placeholderValues: Placeholde
   return (template || '')
     .replace(
       PlaceholderText.OFFENDER_FULL_NAME,
-      `${placeholderValues.offenderLastName} ${placeholderValues.offenderLastName}`
+      `${placeholderValues.offenderFirstName} ${placeholderValues.offenderLastName}`
     )
     .replace(PlaceholderText.OFFENDER_FIRST_NAME, placeholderValues.offenderFirstName)
     .replace(PlaceholderText.OFFENDER_LAST_NAME, placeholderValues.offenderLastName)

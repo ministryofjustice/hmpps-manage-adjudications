@@ -27,7 +27,7 @@ export default function routes(
   router: Router,
   { placeOnReportService, locationService, prisonerSearchService, reportedAdjudicationsService, userService }: Services
 ): Router {
-  router.use('/offence-code', offenceCodeDecisionsRoutes({ placeOnReportService }))
+  router.use('/offence-code-selection', offenceCodeDecisionsRoutes({ placeOnReportService }))
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/offence-details', typeOfOffenceRoutes())
   router.use('/details-of-offence', detailsOfOffenceRoutes())

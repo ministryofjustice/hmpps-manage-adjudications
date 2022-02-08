@@ -11,6 +11,7 @@ function decision(question: Question | string) {
   return new Decision(question)
 }
 
+// This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default new Decision()
   .title([
     [Role.COMMITTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} commit?`],
