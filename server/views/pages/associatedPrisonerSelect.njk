@@ -38,7 +38,7 @@
       attributes: {
         'data-qa': "search-term-input"
       },
-      errorMessage: errors | findError("searchTerm")
+      errorMessage: "searchTerm" | findError(errors)
     }) }}
 
     {{ govukButton({

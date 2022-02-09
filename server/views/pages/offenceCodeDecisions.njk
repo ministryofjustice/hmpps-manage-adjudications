@@ -1,0 +1,46 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title = pageTitle %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+    {% set items = [] %}
+
+    {% for question in questions %}
+        {% set items = (items.push(
+            {
+                value: question.id,
+                text: question.label
+            }
+        ), items) %}
+    {% endfor %}
+
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ govukRadios({
+            idPrefix: 'selectedDecisionId',
+            name: 'selectedDecisionId',
+            id: 'selectedDecisionId',
+            attributes: { "data-qa": "radio-buttons" },
+            items: items,
+            errorMessage: "selectedDecisionId" | findError(errors)
+        }) }}
+
+        {{ govukButton({
+            text: 'Continue',
+            type: "submit",
+            name: "decisionFormSubmit",
+            classes: "govuk-button--submit govuk-!-margin-right-2",
+            attributes: { "data-qa": "assault-submit" }
+        }) }}
+
+    </form>
+{% endblock %}
