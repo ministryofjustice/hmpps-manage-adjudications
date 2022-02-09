@@ -7,6 +7,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { properCaseName } from '../../utils/utils'
 import { DecisionForm } from './decisionForm'
+import { DecisionType } from '../../offenceCodeDecisions/Decision'
 
 type PageData = { error?: FormError } & DecisionForm
 
@@ -43,6 +44,7 @@ export default class OffenceCodeRoutes {
       return {
         id: d.id(),
         label: d.getQuestion().getProcessedText(placeholderValues),
+        type: d.getType().toString(),
       }
     })
     return res.render(`pages/offenceCodeDecisions`, {

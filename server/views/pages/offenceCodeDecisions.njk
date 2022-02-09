@@ -10,15 +10,25 @@
 {% endblock %}
 
 {% block content %}
+
     <h1 class="govuk-heading-l">{{ title }}</h1>
 
     {% set items = [] %}
 
     {% for question in questions %}
+        {% if question.type == 'PRISONER' %}
+            {% set qqRP %}
+                <div>hello</div>
+            {% endset -%}
+        {% endif %}
+
         {% set items = (items.push(
             {
                 value: question.id,
-                text: question.label
+                text: question.label,
+                conditional: {
+                    html: qqRP
+                }
             }
         ), items) %}
     {% endfor %}

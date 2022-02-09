@@ -70,7 +70,7 @@ export class Decision {
   }
 
   getType() {
-    return DecisionType
+    return this.decisionType
   }
 
   getId() {
