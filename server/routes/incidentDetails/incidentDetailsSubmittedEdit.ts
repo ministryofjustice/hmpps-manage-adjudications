@@ -86,7 +86,15 @@ export default class IncidentDetailsSubmittedEditRoutes {
       : `/check-your-answers/${prisonerNumber}/${id}/report`
 
     try {
-      this.placeOnReportService.editDraftIncidentDetails(IdNumberValue, formatDate(incidentDate), locationId, user)
+      this.placeOnReportService.editDraftIncidentDetails(
+        IdNumberValue,
+        formatDate(incidentDate),
+        locationId,
+        // placeholder - will be dealt with when we alter the incident details submitted edit page
+        null,
+        '25a',
+        user
+      )
 
       return res.redirect(nextPage)
     } catch (postError) {

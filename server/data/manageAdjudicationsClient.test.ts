@@ -30,7 +30,7 @@ describe('manageAdjudicationsClient', () => {
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
           },
           incidentRole: {
-            roleCode: '25a',
+            roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
           },
         },
@@ -40,7 +40,7 @@ describe('manageAdjudicationsClient', () => {
         agencyId: 'MDI',
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         incidentRole: {
-          roleCode: '25a',
+          roleCode: '25b',
           associatedPrisonersNumber: 'B2345BB',
         },
         prisonerNumber: 'G2996UX',
@@ -57,7 +57,7 @@ describe('manageAdjudicationsClient', () => {
       expect(response.draftAdjudication.prisonerNumber).toEqual('G2996UX')
       expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-10-28T15:40:25.884')
       expect(response.draftAdjudication.incidentDetails.locationId).toEqual(2)
-      expect(response.draftAdjudication.incidentRole.roleCode).toEqual('25a')
+      expect(response.draftAdjudication.incidentRole.roleCode).toEqual('25b')
       expect(response.draftAdjudication.incidentRole.associatedPrisonersNumber).toEqual('B2345BB')
     })
   })
@@ -73,7 +73,7 @@ describe('manageAdjudicationsClient', () => {
             dateTimeOfIncident: '2020-12-10T10:00:00',
           },
           incidentRole: {
-            roleCode: '25a',
+            roleCode: '25c',
             associatedPrisonersNumber: 'B2345BB',
           },
           incidentStatement: {
@@ -109,7 +109,7 @@ describe('manageAdjudicationsClient', () => {
             handoverDeadline: '2020-12-12T10:00:00',
           },
           incidentRole: {
-            roleCode: '25a',
+            roleCode: '25c',
             associatedPrisonersNumber: 'B2345BB',
           },
           incidentStatement: {
@@ -140,7 +140,7 @@ describe('manageAdjudicationsClient', () => {
             dateTimeOfIncident: '2021-11-04T07:20:00',
           },
           incidentRole: {
-            roleCode: '25a',
+            roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
           },
           incidentStatement: {
@@ -198,7 +198,7 @@ describe('manageAdjudicationsClient', () => {
       dateTimeOfIncident: '2021-11-04T09:21:00.00',
       locationId: 23424,
       incidentRole: {
-        roleCode: '25a',
+        roleCode: '25b',
         associatedPrisonersNumber: 'B2345BB',
       },
     }
@@ -225,7 +225,6 @@ describe('manageAdjudicationsClient', () => {
           },
           incidentRole: {
             roleCode: '25a',
-            associatedPrisonersNumber: 'B2345BB',
           },
           incidentStatement: {
             completed: true,
@@ -267,7 +266,7 @@ describe('manageAdjudicationsClient', () => {
           handoverDeadline: '2021-11-17T11:45:00',
         },
         incidentRole: {
-          roleCode: '25a',
+          roleCode: '25c',
           associatedPrisonersNumber: 'B2345BB',
         },
         incidentStatement: {
@@ -323,7 +322,7 @@ describe('manageAdjudicationsClient', () => {
           handoverDeadline: '2021-11-17T11:45:00',
         },
         incidentRole: {
-          roleCode: '25a',
+          roleCode: '25b',
           associatedPrisonersNumber: 'B2345BB',
         },
         incidentStatement: {
@@ -378,7 +377,7 @@ describe('manageAdjudicationsClient', () => {
             handoverDeadline: '2021-12-03T09:40:00',
           },
           incidentRole: {
-            roleCode: '25a',
+            roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
           },
           incidentStatement: {
@@ -399,7 +398,7 @@ describe('manageAdjudicationsClient', () => {
       expect(response.draftAdjudication.prisonerNumber).toEqual('A7820DY')
       expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-12-01T09:40:00')
       expect(response.draftAdjudication.incidentDetails.locationId).toEqual(26142)
-      expect(response.draftAdjudication.incidentRole.roleCode).toEqual('25a')
+      expect(response.draftAdjudication.incidentRole.roleCode).toEqual('25b')
       expect(response.draftAdjudication.incidentRole.associatedPrisonersNumber).toEqual('B2345BB')
       expect(response.draftAdjudication.incidentStatement.statement).toEqual('TESTING')
     })

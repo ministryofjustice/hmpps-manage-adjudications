@@ -12,6 +12,7 @@ declare module 'express-session' {
     incidentDate: SubmittedDateTime
     incidentLocation: number
     originalRadioSelection: string
+    originalAssociatedPrisonerNumber: string
   }
 }
 
