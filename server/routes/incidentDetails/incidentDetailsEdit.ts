@@ -93,7 +93,7 @@ export default class IncidentDetailsEditRoutes {
     )
 
     const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonerNumber, user)
-    console.log(incidentDate)
+
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(existingDraftIncidentDetails.dateTime),
       locationId: location,
