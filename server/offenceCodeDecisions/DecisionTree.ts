@@ -1,5 +1,5 @@
-import { Decision, decision } from './Decision'
-import { Code, id } from './Code'
+import { Decision, DecisionType as Type, decision } from './Decision'
+import { id } from './Code'
 import { PlaceholderText as Text } from './Placeholder'
 import Role from '../incidentRole/IncidentRole'
 
@@ -25,18 +25,21 @@ export default new Decision()
           .url('incident-involved/1')
           .child(
             decision('Another prisoner')
+              .type(Type.PRISONER)
               .title('Was the incident a racially aggravated assault?')
               .child(decision('Yes').code(id(1001)))
               .child(decision('No').code(id(1002)))
           )
           .child(
             decision('A prison officer')
+              .type(Type.OFFICER)
               .title('Was the incident a racially aggravated assault?')
               .child(decision('Yes').code(id(1003)))
               .child(decision('No').code(id(1004)))
           )
           .child(
             decision('A member of staff who is not a prison officer')
+              .type(Type.STAFF)
               .title('Was the incident a racially aggravated assault?')
               .child(decision('Yes').code(id(1005)))
               .child(decision('No').code(id(1006)))
@@ -44,6 +47,7 @@ export default new Decision()
           .child(
             decision('Another person not listed above')
               .title('Was the incident a racially aggravated assault?')
+              .type(Type.ANOTHER)
               .child(decision('Yes').code(id(1007)))
               .child(decision('No').code(id(1008)))
           )
@@ -119,9 +123,9 @@ export default new Decision()
             [Role.INCITED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to be disrespectful to?`],
             [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} assist another prisoner to be disrespectful to?`],
           ])
-          .child(decision('A prison officer').code(id(19001)))
-          .child(decision('A member of staff who is not a prison officer').code(id(19002)))
-          .child(decision('Another person not listed above').code(id(19003)))
+          .child(decision('A prison officer').type(Type.OFFICER).code(id(19001)))
+          .child(decision('A member of staff who is not a prison officer').type(Type.PRISONER).code(id(19002)))
+          .child(decision('Another person not listed above').type(Type.ANOTHER).code(id(19003)))
       )
       .child(
         decision('Threatening, abusive, or insulting behaviour')
@@ -144,10 +148,10 @@ export default new Decision()
         [Role.INCITED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to detain?`],
         [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} assist ${Text.ASSISTED_FULL_NAME} to detain?`],
       ])
-      .child(decision('Another prisoner').code(id(2001)))
-      .child(decision('A prison officer').code(id(2002)))
-      .child(decision('A member of staff who is not a prison officer').code(id(2003)))
-      .child(decision('Another person not listed above').code(id(2004)))
+      .child(decision('Another prisoner').type(Type.PRISONER).code(id(2001)))
+      .child(decision('A prison officer').type(Type.OFFICER).code(id(2002)))
+      .child(decision('A member of staff who is not a prison officer').type(Type.STAFF).code(id(2003)))
+      .child(decision('Another person not listed above').type(Type.ANOTHER).code(id(2004)))
   )
   .child(
     decision('Stopping someone who is not a prisoner from doing their job')

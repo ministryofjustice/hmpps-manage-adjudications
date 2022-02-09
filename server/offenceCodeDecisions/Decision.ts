@@ -15,7 +15,9 @@ export class Decision {
 
   private decisionTitle: Title
 
-  private decisionPage: Page
+  private decisionPage: Page = Page.DEFAULT
+
+  private decisionType: DecisionType = DecisionType.DEFAULT
 
   private decisionUrl: string
 
@@ -68,6 +70,15 @@ export class Decision {
   url(url: string) {
     this.decisionUrl = url
     return this
+  }
+
+  type(decisionType: DecisionType) {
+    this.decisionType = decisionType
+    return this
+  }
+
+  getType() {
+    return DecisionType
   }
 
   getId() {
@@ -187,6 +198,15 @@ export function decision(question: Question | string) {
 }
 
 // eslint-disable-next-line no-shadow
-enum Page {
+export enum Page {
   DEFAULT = 'DEFAULT',
+}
+
+// eslint-disable-next-line no-shadow
+export enum DecisionType {
+  DEFAULT = 'DEFAULT',
+  PRISONER = 'PRISONER',
+  OFFICER = 'OFFICER',
+  STAFF = 'STAFF',
+  ANOTHER = 'ANOTHER',
 }
