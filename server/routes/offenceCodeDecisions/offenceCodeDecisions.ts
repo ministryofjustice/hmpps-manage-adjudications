@@ -6,11 +6,9 @@ import validateForm from './offenceCodeDecisionsValidation'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { properCaseName } from '../../utils/utils'
+import { DecisionForm } from './decisionForm'
 
-type PageData = {
-  error?: FormError
-  selectedDecisionId?: string
-}
+type PageData = { error?: FormError } & DecisionForm
 
 export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -28,8 +26,8 @@ export default class OffenceCodeRoutes {
     return {
       offenderFirstName: properCaseName(prisonerDetails.firstName),
       offenderLastName: properCaseName(prisonerDetails.lastName),
-      assistedFirstName: '',
-      assistedLastName: '',
+      assistedFirstName: 'TODO',
+      assistedLastName: 'TODO',
     }
   }
 
@@ -47,7 +45,7 @@ export default class OffenceCodeRoutes {
         label: d.getQuestion().getProcessedText(placeholderValues),
       }
     })
-    return res.render(`pages/${decision.getPage() || 'offenceCodeDecisions'}`, {
+    return res.render(`pages/offenceCodeDecisions`, {
       errors: error ? [error] : [],
       selectedDecisionId,
       questions,
@@ -56,22 +54,44 @@ export default class OffenceCodeRoutes {
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
+  view = async (req: Request, res: Response): Promise<void> => {
+    if (req.query.selectedPerson) {
+      // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
+      // then redirect to view page to render. TODO should this be in a helper route / class
+      const sessionDecisionForm = (res.locals.sessionDecisionForm || {}) as DecisionForm
+      sessionDecisionForm.userLookup = req.params.selectedPerson
+      return res.redirect(
+        url.format({
+          pathname: `/offence-code-selection${req.path}`,
+        })
+      )
+    }
+    // We are viewing this page. If we have come from a user lookup then we should have the previous state of the form
+    // In the session, so we render that now and remove it from the session.
+    const sessionDecisionForm = res.locals.sessionDecisionForm as DecisionForm
+    res.locals.sessionDecisionForm = null
+    return this.renderView(req, res, sessionDecisionForm || {})
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { selectedDecisionId } = req.body
+    const userLookup = req.body[`${selectedDecisionId}userLookup`]
+    const decisionForm = {
+      selectedDecisionId,
+      userLookup,
+    }
 
-    const error = validateForm({ selectedDecisionId })
+    const error = validateForm(decisionForm)
 
     if (error) {
       return this.renderView(req, res, {
         error,
-        selectedDecisionId,
+        ...decisionForm,
       })
     }
 
-    const selectedDecision = decisionTree.findById(selectedDecisionId)
+    const selectedDecision = decisionTree.findById(decisionForm.selectedDecisionId)
     const redirectUrl = selectedDecision.getCode()
       ? `/TODO`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`

@@ -24,6 +24,7 @@
     {% endfor %}
 
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="0:0userLookup" value="TODO" />
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
             idPrefix: 'selectedDecisionId',

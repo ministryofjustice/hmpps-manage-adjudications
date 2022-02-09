@@ -28,8 +28,7 @@ describe('decisions', () => {
         (decision.getChildren().length !== 0 && decision.getTitle() == null) ||
         (decision.getUrl() != null &&
           decision.matching(d => d !== decision && d.getUrl() === decision.getUrl()).length !== 0) ||
-        (decision.getUrl() != null && decision.getUrl().startsWith('/')) ||
-        (decision.getPage() != null && decision.getPage().startsWith('/'))
+        (decision.getUrl() != null && decision.getUrl().startsWith('/'))
       )
     }
     const invalidDecisions = decisionTree.matching(invalid)

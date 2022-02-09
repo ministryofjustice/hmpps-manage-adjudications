@@ -2,7 +2,6 @@ import Title from './Title'
 import Question from './Question'
 import { Code } from './Code'
 import IncidentRole from '../incidentRole/IncidentRole'
-import { Answers } from './Answers'
 
 export class Decision {
   private parentDecision: Decision
@@ -14,8 +13,6 @@ export class Decision {
   private decisionCode: Code
 
   private decisionTitle: Title
-
-  private decisionPage: Page = Page.DEFAULT
 
   private decisionType: DecisionType = DecisionType.DEFAULT
 
@@ -43,11 +40,6 @@ export class Decision {
   child(child: Decision) {
     child.parent(this)
     this.childrenDecisions.push(child)
-    return this
-  }
-
-  page(page: Page) {
-    this.decisionPage = page
     return this
   }
 
@@ -105,10 +97,6 @@ export class Decision {
     return this.decisionUrl || this.id()
   }
 
-  getPage(): string {
-    return this.decisionPage
-  }
-
   getCode() {
     return this.decisionCode
   }
@@ -164,10 +152,6 @@ export class Decision {
     return questions
   }
 
-  fill(answers: Answers) {
-    return answers
-  }
-
   findByCode(code: Code): Decision {
     return this.findBy(d => d.getCode()?.getId() === code?.getId())
   }
@@ -195,11 +179,6 @@ export class Decision {
 
 export function decision(question: Question | string) {
   return new Decision(question)
-}
-
-// eslint-disable-next-line no-shadow
-export enum Page {
-  DEFAULT = 'DEFAULT',
 }
 
 // eslint-disable-next-line no-shadow

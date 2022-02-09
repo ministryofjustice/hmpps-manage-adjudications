@@ -1,8 +1,5 @@
 import { FormError } from '../../@types/template'
-
-type DecisionForm = {
-  selectedDecisionId?: string
-}
+import { DecisionForm } from './decisionForm'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -12,12 +9,12 @@ enum ErrorType {
 const errors: { [key in ErrorType]: FormError } = {
   MISSING_SELECTION: {
     href: '#selectedDecisionId',
-    text: 'Please make a choice', // TODO correct message
+    text: 'Please make a choice',
   },
 }
 
-export default function validateForm({ selectedDecisionId }: DecisionForm): FormError | null {
-  if (!selectedDecisionId) {
+export default function validateForm(decisionForm: DecisionForm): FormError | null {
+  if (!decisionForm.selectedDecisionId) {
     return errors.MISSING_SELECTION
   }
   return null
