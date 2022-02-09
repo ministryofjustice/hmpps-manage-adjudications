@@ -62,16 +62,29 @@ describe('placeOnReportService', () => {
     it('returns the adjudication details with new id', async () => {
       startNewDraftAdjudication.mockResolvedValue({
         draftAdjudication: {
+          adjudicationNumber: 4567123,
           id: 1,
           prisonerNumber: 'G2996UX',
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            roleCode: '25a',
+          },
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
+            handoverDeadline: '2021-10-30T15:40:25.884',
           },
         },
       })
 
-      const result = await service.startNewDraftAdjudication('2021-10-28T15:40:25.884', 3, 'G2996UX', user)
+      const result = await service.startNewDraftAdjudication(
+        '2021-10-28T15:40:25.884',
+        3,
+        'G2996UX',
+        'T3356FU',
+        '25a',
+        user
+      )
       expect(startNewDraftAdjudication).toBeCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         locationId: 3,
@@ -80,15 +93,22 @@ describe('placeOnReportService', () => {
         // Added by temporary code to preserve APi compatibility
         incidentRole: {
           roleCode: '25a',
+          associatedPrisonersNumber: 'T3356FU',
         },
       })
       expect(result).toEqual({
         draftAdjudication: {
           id: 1,
+          adjudicationNumber: 4567123,
           prisonerNumber: 'G2996UX',
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            roleCode: '25a',
+          },
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
+            handoverDeadline: '2021-10-30T15:40:25.884',
           },
         },
       })
@@ -406,6 +426,10 @@ describe('placeOnReportService', () => {
         incidentDetails: {
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
           locationId: 12123123,
+        },
+        incidentRole: {
+          associatedPrisonersNumber: 'G2996UX',
+          roleCode: '25a',
         },
         incidentStatement: {
           completed: false,

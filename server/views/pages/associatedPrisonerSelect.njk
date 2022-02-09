@@ -59,7 +59,7 @@
       <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
-      <a href="{{ redirectUrl }}&selectedPerson={{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="select-prisoner-link">Select prisoner</a>
+      <a href="{{ redirectUrl }}?selectedPerson={{ prisoner.prisonerNumber }}" class="govuk-link" data-qa="select-prisoner-link">Select prisoner</a>
     {% endset -%}
     {% set rows = (rows.push([
       { html: prisonerImageHtml },

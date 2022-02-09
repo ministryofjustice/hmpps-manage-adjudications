@@ -1,16 +1,28 @@
 import validateForm from './incidentDetailsValidation'
 
-describe('validateForm - incident statement', () => {
+describe('validateForm', () => {
   describe('Valid submit shows no errors', () => {
     it('returns the expected response for a valid submit', () => {
       expect(
-        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } }, locationId: 2343 })
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
       ).toBeNull()
     })
   })
   describe('incidentDate', () => {
     it('shows error if a date is not selected', () => {
-      expect(validateForm({ incidentDate: { time: { hour: '12', minute: '23' } }, locationId: 2343 })).toEqual({
+      expect(
+        validateForm({
+          incidentDate: { time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
         href: '#incidentDate[date]',
         text: 'Enter date of incident',
       })
@@ -25,42 +37,78 @@ describe('validateForm - incident statement', () => {
       jest.useRealTimers()
     })
     it('shows error if an hour is not submitted', () => {
-      expect(validateForm({ incidentDate: { date: '31/10/2021', time: { minute: '23' } }, locationId: 2343 })).toEqual({
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter time of incident',
       })
     })
     it('shows error if an invalid hour is submitted', () => {
       expect(
-        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } }, locationId: 2343 })
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter an hour which is 23 or less',
       })
     })
     it('shows error if a minute is not submitted', () => {
-      expect(validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12' } }, locationId: 2343 })).toEqual({
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter time of incident',
       })
     })
     it('shows error if an invalid minute is submitted', () => {
       expect(
-        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } }, locationId: 2343 })
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter a minute which is 59 or less',
       })
     })
     it('shows error if neither an hour or a minute is submitted', () => {
-      expect(validateForm({ incidentDate: { date: '31/10/2021', time: {} }, locationId: 2343 })).toEqual({
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: {} },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
         href: '#incidentDate[time]',
         text: 'Enter time of incident',
       })
     })
     it('shows error if only one digit for hours', () => {
       expect(
-        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } }, locationId: 2343 })
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter the hour using 2 numbers - for example, 08 or 18',
@@ -68,7 +116,12 @@ describe('validateForm - incident statement', () => {
     })
     it('shows error if only one digit for minutes', () => {
       expect(
-        validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } }, locationId: 2343 })
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter the minute using 2 numbers - for example, 08 or 18',
@@ -84,6 +137,8 @@ describe('validateForm - incident statement', () => {
             time: { hour: `09`, minute: `22` },
           },
           locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
         href: '#incidentDate[time]',
@@ -93,10 +148,72 @@ describe('validateForm - incident statement', () => {
   })
   describe('locationId', () => {
     it('shows error if location is not selected', () => {
-      expect(validateForm({ incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } } })).toEqual({
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
         href: '#locationId',
         text: 'Select location of incident',
       })
+    })
+  })
+  describe('incidentRole and associated prisoner', () => {
+    it('shows error if radio button not selected', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          associatedPrisonersNumber: null,
+        })
+      ).toEqual({
+        href: '#currentRadioSelected',
+        text: 'Select the prisoner’s role in this incident.',
+      })
+    })
+    it('shows error if no associated prisoner is selected when there should be', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'inciteAnotherPrisoner',
+          associatedPrisonersNumber: null,
+        })
+      ).toEqual({
+        href: '#inciteAnotherPrisonerInput',
+        text: 'Enter their name or prison number.',
+      })
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'assistAnotherPrisoner',
+          associatedPrisonersNumber: null,
+        })
+      ).toEqual({
+        href: '#assistAnotherPrisonerInput',
+        text: 'Enter their name or prison number.',
+      })
+    })
+    it('shows no error there does not need to be an associated prisoner', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'onTheirOwn',
+          associatedPrisonersNumber: null,
+        })
+      ).toBeNull()
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attemptOnTheirOwn',
+          associatedPrisonersNumber: null,
+        })
+      ).toBeNull()
     })
   })
 })

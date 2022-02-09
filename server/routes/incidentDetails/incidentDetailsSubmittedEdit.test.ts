@@ -108,7 +108,7 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
 })
 
-describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
+describe.skip('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   it('should redirect to check your answers page - reporter', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/report')

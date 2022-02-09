@@ -1,3 +1,5 @@
+import { SubmittedDateTime } from '../template'
+
 export default {}
 
 declare module 'express-session' {
@@ -7,6 +9,9 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     redirectUrl: string
+    incidentDate: SubmittedDateTime
+    incidentLocation: number
+    originalRadioSelection: string
   }
 }
 

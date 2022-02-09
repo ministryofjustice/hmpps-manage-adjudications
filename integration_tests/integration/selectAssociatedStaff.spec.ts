@@ -78,7 +78,7 @@ context('Continue a report - select report', () => {
       selectAssociatedStaffPage.selectStaffMemberLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq('/assault/G2996UX/1')
-        expect(loc.search).to.eq('?queryRadioSelection=assaultedPrisonOfficer&selectedPerson=BSMITH_GEN')
+        expect(loc.search).to.eq('?originalRadioSelection=assaultedPrisonOfficer&selectedPerson=BSMITH_GEN')
       })
     })
   })

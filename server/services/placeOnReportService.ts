@@ -74,6 +74,8 @@ export default class PlaceOnReportService {
     dateTimeOfIncident: string,
     locationId: number,
     prisonerNumber: string,
+    associatedPrisonersNumber: string,
+    roleCode: string,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
@@ -82,9 +84,9 @@ export default class PlaceOnReportService {
       agencyId: user.activeCaseLoadId,
       locationId,
       prisonerNumber,
-      // Temporary code to make it work with the current API - all incidents will be "attempted to commit"
       incidentRole: {
-        roleCode: '25a',
+        roleCode,
+        associatedPrisonersNumber,
       },
     }
     return client.startNewDraftAdjudication(requestBody)
@@ -240,7 +242,7 @@ export default class PlaceOnReportService {
     const agencyIds = [...new Set(staffMembers.map(person => person.activeCaseLoadId))]
 
     const getLocationName = async (agencyId: string) => {
-      if (isCentralAdminCaseload(agencyId)) return { agencyId: 'CADM_I', locationFullName: 'Central Admin' }
+      if (isCentralAdminCaseload(agencyId)) return { agencyId, locationFullName: 'Central Admin' }
 
       const locationName = await new PrisonApiClient(token).getAgency(agencyId)
       return { agencyId, locationFullName: locationName?.description }
