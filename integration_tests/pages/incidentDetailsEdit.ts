@@ -29,6 +29,12 @@ export default class IncidentDetailsEditPage extends Page {
 
   searchButtonAssist = (): PageElement => cy.get('[data-qa="assist-prisoner-search"]')
 
+  prisonerPrnAssist = (): PageElement => cy.get('[data-qa="assist-prisoner-prn"]')
+
+  prisonerNameAssist = (): PageElement => cy.get('[data-qa="assist-prisoner-name"]')
+
+  inciteAssociatedPrisonerDeleteButton = (): PageElement => cy.get('[data-qa="incite-prisoner-delete"]')
+
   submitButton = (): PageElement => cy.get('[data-qa="incident-details-submit"]')
 
   exitButton = (): PageElement => cy.get('[data-qa="incident-details-exit"]')

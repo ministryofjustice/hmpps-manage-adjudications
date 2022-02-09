@@ -93,7 +93,7 @@ export default class IncidentDetailsEditRoutes {
     )
 
     const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonerNumber, user)
-
+    console.log(incidentDate)
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(existingDraftIncidentDetails.dateTime),
       locationId: location,
@@ -101,7 +101,6 @@ export default class IncidentDetailsEditRoutes {
       associatedPrisonerNumber,
       associatedPrisonerName,
     }
-
     return res.render(`pages/incidentDetails`, {
       errors: error ? [error] : [],
       prisoner,
@@ -117,8 +116,16 @@ export default class IncidentDetailsEditRoutes {
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> =>
-    this.renderView(req, res, { originalRadioSelection: req.session.originalRadioSelection })
+  view = async (req: Request, res: Response): Promise<void> => {
+    const pageData = {
+      incidentDate: req.session.incidentDate,
+      locationId: req.session.incidentLocation as unknown as string,
+      originalRadioSelection: req.session.originalRadioSelection,
+    }
+    delete req.session.incidentDate
+    delete req.session.incidentLocation
+    return this.renderView(req, res, pageData)
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const {
@@ -136,8 +143,11 @@ export default class IncidentDetailsEditRoutes {
     const { originalRadioSelection } = req.session
 
     if (deleteAssociatedPrisoner) {
+      req.session.incidentDate = incidentDate
+      req.session.incidentLocation = locationId
       delete req.session.originalRadioSelection
       delete req.session.redirectUrl
+
       // TODO: In here we need to redirect to the delete page, and on the submit button do a PUT request to remove the associated prisoner and incident rolecode, then redirect back to /incident-details/<PRN>/<id>/edit
       return res.redirect(`/delete-person`)
     }
@@ -157,6 +167,8 @@ export default class IncidentDetailsEditRoutes {
         })
       req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/edit`
       req.session.originalRadioSelection = currentRadioSelected
+      req.session.incidentDate = incidentDate
+      req.session.incidentLocation = locationId
       return res.redirect(`/select-associated-prisoner?searchTerm=${searchValue}`)
     }
 
@@ -196,6 +208,7 @@ export default class IncidentDetailsEditRoutes {
       )
       delete req.session.redirectUrl
       delete req.session.originalRadioSelection
+
       return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
     } catch (postError) {
       logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)

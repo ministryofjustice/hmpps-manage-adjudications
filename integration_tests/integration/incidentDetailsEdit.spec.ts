@@ -220,7 +220,7 @@ context('Incident details (edit) - statement incomplete', () => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
     })
   })
-  it.only('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
+  it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
@@ -282,6 +282,45 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
     })
+  })
+  it('should remember the changed location and time once it comes back to this page from the search page', () => {
+    cy.visit(`/incident-details/G6415GD/34/edit`)
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtons().find('input[value="assistAnotherPrisoner"]').check()
+    incidentDetailsPage.conditionalInputAssist().type('T3356FU')
+    incidentDetailsPage.searchButtonAssist().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    cy.location().should(loc => {
+      expect(loc.search).to.eq('?selectedPerson=T3356FU')
+    })
+    incidentDetailsPage.timeInputHours().should('have.value', '13')
+    incidentDetailsPage.timeInputMinutes().should('have.value', '10')
+    incidentDetailsPage.locationSelector().contains('Workshop 19 - Braille')
+    incidentDetailsPage.radioButtons().find('input[value="assistAnotherPrisoner"]').should('be.checked')
+    incidentDetailsPage.prisonerNameAssist().contains('Jones, James')
+    incidentDetailsPage.prisonerPrnAssist().contains('T3356FU')
+    incidentDetailsPage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+    })
+  })
+  it('should remember the changed location and time once it comes back to this page after deleting an associated prisoner', () => {
+    cy.visit(`/incident-details/G6415GD/34/edit`)
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.timeInputHours().clear()
+    incidentDetailsPage.timeInputHours().type('13')
+    incidentDetailsPage.timeInputMinutes().clear()
+    incidentDetailsPage.timeInputMinutes().type('00')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.inciteAssociatedPrisonerDeleteButton().click()
+    // TODO: Once the /delete-person page is created, it will redirect automatically to this page so the next line can be removed
+    cy.visit(`/incident-details/G6415GD/34/edit`)
+    incidentDetailsPage.timeInputHours().should('have.value', '13')
+    incidentDetailsPage.timeInputMinutes().should('have.value', '00')
+    incidentDetailsPage.locationSelector().contains('Workshop 2')
+    // TODO: Once the /delete-person page is created, the next line should be true
+    // incidentDetailsPage.radioButtons().find('input[value="onTheirOwn"]').should('be.checked')
   })
   it('should redirect to the task list page if the user exists the page', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
