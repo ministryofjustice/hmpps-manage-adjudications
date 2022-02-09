@@ -1,5 +1,5 @@
 import decisionTree from './DecisionTree'
-import Decision from './Decision'
+import { Decision } from './Decision'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
@@ -39,6 +39,12 @@ describe('decisions', () => {
   it('no duplicate urls', () => {
     const allUrls = decisionTree.allUrls()
     const duplicates = findDuplicates(allUrls)
+    expect(duplicates).toHaveLength(0)
+  })
+
+  it('no duplicate code ids', () => {
+    const allCodeIds = decisionTree.allCodes().map(code => code.getId())
+    const duplicates = findDuplicates(allCodeIds)
     expect(duplicates).toHaveLength(0)
   })
 })

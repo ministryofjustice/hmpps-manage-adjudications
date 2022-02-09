@@ -28,6 +28,8 @@ export default class OffenceCodeRoutes {
     return {
       offenderFirstName: properCaseName(prisonerDetails.firstName),
       offenderLastName: properCaseName(prisonerDetails.lastName),
+      assistedFirstName: '',
+      assistedLastName: '',
     }
   }
 

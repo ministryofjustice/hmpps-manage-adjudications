@@ -1,16 +1,20 @@
-export default class Code {
-  code: string
+export class Code {
+  uniqueId: number
 
-  constructor(code: string) {
-    this.code = code
+  constructor(uniqueId: number) {
+    this.uniqueId = uniqueId
   }
 
-  getCode() {
-    return this.code
+  getId() {
+    return this.uniqueId
   }
 
   toString(indent = 0) {
     const padding = new Array(indent).join(' ')
-    return `${padding}Code: ${this.getCode()}`
+    return `${padding}Code: ${this.getId()}`
   }
+}
+
+export function id(code: number) {
+  return new Code(code)
 }

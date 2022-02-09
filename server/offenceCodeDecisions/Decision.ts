@@ -1,9 +1,10 @@
 import Title from './Title'
 import Question from './Question'
-import Code from './Code'
+import { Code } from './Code'
 import IncidentRole from '../incidentRole/IncidentRole'
+import { Answers } from './Answers'
 
-export default class Decision {
+export class Decision {
   private parentDecision: Decision
 
   private childrenDecisions: Array<Decision> = new Array<Decision>()
@@ -152,8 +153,12 @@ export default class Decision {
     return questions
   }
 
+  fill(answers: Answers) {
+    return answers
+  }
+
   findByCode(code: Code): Decision {
-    return this.findBy(d => d.getCode()?.code === code?.code)
+    return this.findBy(d => d.getCode()?.getId() === code?.getId())
   }
 
   toString(indent = 0): string {
@@ -165,7 +170,7 @@ export default class Decision {
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
     }
-    if (this.getCode()?.code) {
+    if (this.getCode()?.getId()) {
       output = `${output}\r\n${this.getCode().toString(indent)}`
     }
     if (this.getChildren().length) {
@@ -175,6 +180,10 @@ export default class Decision {
     }
     return output
   }
+}
+
+export function decision(question: Question | string) {
+  return new Decision(question)
 }
 
 // eslint-disable-next-line no-shadow
