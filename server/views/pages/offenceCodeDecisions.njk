@@ -12,11 +12,8 @@
 {% endblock %}
 
 {% block content %}
-
     <h1 class="govuk-heading-l">{{ title }}</h1>
-
     {% set items = [] %}
-
     {% for question in questions %}
         {% if question.type == 'OFFICER' %}
             {% set decisionHtml %}
@@ -39,7 +36,6 @@
             checked: decisionFormData.selectedDecisionId == question.id
         }), items) %}
     {% endfor %}
-
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
