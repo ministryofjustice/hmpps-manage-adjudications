@@ -9,18 +9,20 @@ type PageData = {
   searchResults?: PrisonerSearchSummary[]
   searchTerm: string
   redirectUrl?: string
+  queryConnector?: string
 }
 export default class SelectAssociatedPrisonerRoutes {
   constructor(private readonly prisonerSearchService: PrisonerSearchService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, searchResults, searchTerm, redirectUrl } = pageData
+    const { error, searchResults, searchTerm, redirectUrl, queryConnector } = pageData
 
     return res.render('pages/associatedPrisonerSelect', {
       errors: error ? [error] : [],
       searchResults,
       searchTerm,
       redirectUrl,
+      queryConnector,
     })
   }
 
@@ -36,10 +38,13 @@ export default class SelectAssociatedPrisonerRoutes {
       user
     )
 
+    const queryConnector = redirectUrl && redirectUrl.includes('?') ? '&' : '?'
+
     return this.renderView(req, res, {
       searchResults,
       searchTerm,
       redirectUrl,
+      queryConnector: queryConnector || '?',
     })
   }
 
