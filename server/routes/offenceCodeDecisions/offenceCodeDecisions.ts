@@ -70,7 +70,7 @@ export default class OffenceCodeRoutes {
     if (req.query.selectedPerson) {
       // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
       // then redirect to the view page after removing the request parameter.
-      updateSessionDecisionForm(res, req.query.selectedPerson[0])
+      updateSessionDecisionForm(req, req.query.selectedPerson[0])
       return res.redirect(
         url.format({
           pathname: `/offence-code-selection${req.path}`,
@@ -79,7 +79,7 @@ export default class OffenceCodeRoutes {
     }
     // We are viewing this page. If we have come from a user selection then we should have the previous state of the
     // form in the session, so we render that now and remove it from the session.
-    return this.renderView(req, res, getAndDeleteSessionDecisionForm(res) || {})
+    return this.renderView(req, res, getAndDeleteSessionDecisionForm(req) || {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -89,7 +89,7 @@ export default class OffenceCodeRoutes {
     if (req.body.searchUser) {
       // We need to redirect the user to the search page, but before we do that we need to save the current data from
       // the session.
-      setSessionDecisionForm(res, decisionForm)
+      setSessionDecisionForm(req, decisionForm)
       return res.redirect(
         url.format({
           pathname: 'TODO',

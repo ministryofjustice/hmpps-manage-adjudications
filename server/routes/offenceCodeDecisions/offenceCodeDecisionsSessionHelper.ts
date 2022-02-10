@@ -5,21 +5,21 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { DecisionForm } from './decisionForm'
 
-export function setSessionDecisionForm(res: Response, form: DecisionForm) {
-  res.locals.sessionDecisionForm = form
+export function setSessionDecisionForm(req: Request, form: DecisionForm) {
+  req.session.sessionDecisionForm = form
 }
 
-function getSessionDecisionForm(res: Response) {
-  return res.locals.sessionDecisionForm as DecisionForm
+function getSessionDecisionForm(req: Request) {
+  return req.session.sessionDecisionForm as DecisionForm
 }
 
-export function getAndDeleteSessionDecisionForm(res: Response): DecisionForm {
-  const sessionDecisionForm = getSessionDecisionForm(res)
-  setSessionDecisionForm(res, null)
+export function getAndDeleteSessionDecisionForm(req: Request): DecisionForm {
+  const sessionDecisionForm = getSessionDecisionForm(req)
+  setSessionDecisionForm(req, null)
   return sessionDecisionForm
 }
 
-export function updateSessionDecisionForm(res: Response, redirectData: string) {
+export function updateSessionDecisionForm(res: Request, redirectData: string) {
   const form = getSessionDecisionForm(res)
   if (form) {
     switch (decisionTree.findById(form.selectedDecisionId).getType()) {
