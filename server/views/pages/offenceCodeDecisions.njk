@@ -3,7 +3,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "../macros/userSearchOffenceCodeDecisionRadio.njk" import userSearchOffenceCodeDecisionRadio %}
+{% from "../macros/staffUserSearchOffenceCodeDecisionInput.njk" import staffUserSearchOffenceCodeDecisionInput %}
+{% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 
 {% set title = pageTitle %}
 
@@ -17,7 +18,17 @@
     {% for question in questions %}
         {% if question.type == 'OFFICER' or question.type == 'STAFF' %}
             {% set decisionHtml %}
-                {{  userSearchOffenceCodeDecisionRadio(
+                {{  staffUserSearchOffenceCodeDecisionInput(
+                    decisionFormData.selectedDecisionId,
+                    question.id,
+                    decisionFormData.selectedDecisionData.userId,
+                    decisionFormData.selectedDecisionData.userSearchInput,
+                    errors
+                ) }}
+            {% endset -%}
+        {% elseif question.type == 'PRISONER' %}
+            {% set decisionHtml %}
+                {{  prisonerSearchOffenceCodeDecisionInput(
                     decisionFormData.selectedDecisionId,
                     question.id,
                     decisionFormData.selectedDecisionData.userId,

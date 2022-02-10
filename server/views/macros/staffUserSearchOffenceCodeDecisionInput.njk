@@ -2,8 +2,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro userSearchOffenceCodeDecisionRadio(selectedDecisionId, questionId, userId, userSearchInput, errors) %}
+{% macro staffUserSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, userId, userSearchInput, errors) %}
     {% if selectedDecisionId == questionId and userId != null %}
+        <input type="hidden" name="userId{{ questionId }}" value="{{ userId }}" />
         TODO
     {% else %}
         <div class="flex-container flex-center">

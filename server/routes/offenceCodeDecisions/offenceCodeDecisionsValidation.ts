@@ -13,12 +13,19 @@ export default function validateForm(decisionForm: DecisionForm): FormError | nu
   }
   switch (decisionTree.findById(selectedDecisionId).getType()) {
     case DecisionType.STAFF:
-    case DecisionType.PRISONER:
     case DecisionType.OFFICER:
       if (!decisionForm.selectedDecisionData.userId) {
         return {
           href: `#userSearchInput${selectedDecisionId}`,
           text: 'Enter their name or user Id',
+        }
+      }
+      break
+    case DecisionType.PRISONER:
+      if (!decisionForm.selectedDecisionData.userId) {
+        return {
+          href: `#userSearchInput${selectedDecisionId}`,
+          text: 'Enter their name or prison number',
         }
       }
       break
