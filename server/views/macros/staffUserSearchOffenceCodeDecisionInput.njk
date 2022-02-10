@@ -5,7 +5,19 @@
 {% macro staffUserSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, userId, userSearchInput, errors) %}
     {% if selectedDecisionId == questionId and userId != null %}
         <input type="hidden" name="userId{{ questionId }}" value="{{ userId }}" />
-        TODO
+        <div>
+            <p><span class="govuk-!-font-weight-bold">Name</span> - TODO </p>
+            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ userId }} </p>
+            <div>
+                {{ govukButton({
+                    text: 'Delete',
+                    classes: "govuk-button--secondary",
+                    type: "submit",
+                    name: "deleteUser",
+                    value: "deleteUser"
+                }) }}
+            </div>
+        </div>
     {% else %}
         <div class="flex-container flex-center">
             <div class="govuk-!-margin-right-3">
@@ -26,8 +38,7 @@
                 classes: "govuk-button--secondary conditionalRadioSearchButton",
                 type: "submit",
                 name: "searchUser",
-                value: "searchUser",
-                attributes: { "data-qa": "incite-prisoner-search" }
+                value: "searchUser"
             }) }}
         </div>
     {% endif %}

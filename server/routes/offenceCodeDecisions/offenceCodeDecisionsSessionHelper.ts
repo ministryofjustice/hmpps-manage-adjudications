@@ -3,13 +3,12 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { DecisionForm } from './decisionForm'
 
-// TODO rename
 // Methods to deal with add, removing and parsing a DecisionFrom from the session and requests
 export function setSessionDecisionForm(req: Request, form: DecisionForm) {
   req.session.sessionDecisionForm = form
 }
 
-function getSessionDecisionForm(req: Request) {
+function getSessionDecisionForm(req: Request): DecisionForm {
   return req.session.sessionDecisionForm as DecisionForm
 }
 

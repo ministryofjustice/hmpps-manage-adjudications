@@ -41,13 +41,13 @@ export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { error } = pageData
-    const decisionFormData = pageData
+    const decisionFormData = {
+      selectedDecisionId: pageData.selectedDecisionId,
+      selectedDecisionData: pageData.selectedDecisionData,
+    }
     const selectedDecisionViewData = viewDataFromDecisionForm(decisionFormData)
-
     const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
-    const path = req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, '')
-    const decision = decisionTree.findByUrl(path)
-
+    const decision = decisionTree.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const questions = decision.getChildren().map(d => {
       return {
@@ -70,7 +70,7 @@ export default class OffenceCodeRoutes {
     if (req.query.selectedPerson) {
       // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
       // then redirect to the view page after removing the request parameter.
-      updateSessionDecisionForm(req, req.query.selectedPerson[0])
+      updateSessionDecisionForm(req, req.query.selectedPerson as string)
       return res.redirect(
         url.format({
           pathname: `/offence-code-selection${req.path}`,
