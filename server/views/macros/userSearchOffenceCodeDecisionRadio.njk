@@ -2,8 +2,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro userSearchOffenceCodeDecisionRadio(selectedDecisionId, questionId, userId, errors) %}
-
+{% macro userSearchOffenceCodeDecisionRadio(selectedDecisionId, questionId, userId, userSearchInput, errors) %}
     {% if selectedDecisionId == questionId and userId != null %}
         TODO
     {% else %}
@@ -13,8 +12,8 @@
                     id: "userSearchInput" + questionId,
                     name: "userSearchInput" + questionId,
                     classes: "govuk-!-width-full-width",
-                    value: decisionFormData.selectedDecisionData.userSearchInput,
-                    errorMessage: errors | findErrors(['userSearchInput']),
+                    value: selectedDecisionId == questionId and userSearchInput,
+                    errorMessage: errors | findErrors(['userSearchInput' + questionId]),
                     label: {
                         text: "Enter their name or user Id",
                         classes: "govuk-!-font-weight-bold"

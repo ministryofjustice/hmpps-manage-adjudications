@@ -15,12 +15,13 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     {% set items = [] %}
     {% for question in questions %}
-        {% if question.type == 'OFFICER' %}
+        {% if question.type == 'OFFICER' or question.type == 'STAFF' %}
             {% set decisionHtml %}
                 {{  userSearchOffenceCodeDecisionRadio(
                     decisionFormData.selectedDecisionId,
                     question.id,
                     decisionFormData.selectedDecisionData.userId,
+                    decisionFormData.selectedDecisionData.userSearchInput,
                     errors
                 ) }}
             {% endset -%}
