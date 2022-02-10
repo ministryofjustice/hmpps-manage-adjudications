@@ -6,7 +6,7 @@ export type DecisionForm = {
 }
 export type SelectUserData = {
   userId?: string
-  userSearch?: string
+  userSearchInput?: string
 }
 
 export type StaffData = SelectUserData

@@ -7,7 +7,13 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { properCaseName } from '../../utils/utils'
 import { DecisionForm } from './decisionForm'
-import { DecisionType } from '../../offenceCodeDecisions/Decision'
+import {
+  decisionFormFromPost,
+  getAndDeleteSessionDecisionForm,
+  setSessionDecisionForm,
+  updateSessionDecisionForm,
+  viewDataFromDecisionForm,
+} from './offenceCodeDecisionsSessionHelper'
 
 type PageData = { error?: FormError } & DecisionForm
 
@@ -36,7 +42,7 @@ export default class OffenceCodeRoutes {
     const { adjudicationNumber, incidentRole } = req.params
     const { error } = pageData
     const decisionFormData = pageData
-    const selectedDecisionViewData = this.viewDataFromDecisionForm(decisionFormData)
+    const selectedDecisionViewData = viewDataFromDecisionForm(decisionFormData)
 
     const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
     const path = req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, '')
@@ -64,7 +70,7 @@ export default class OffenceCodeRoutes {
     if (req.query.selectedPerson) {
       // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
       // then redirect to the view page after removing the request parameter.
-      this.updateSessionDecisionForm(res, req.query.selectedPerson[0])
+      updateSessionDecisionForm(res, req.query.selectedPerson[0])
       return res.redirect(
         url.format({
           pathname: `/offence-code-selection${req.path}`,
@@ -73,17 +79,17 @@ export default class OffenceCodeRoutes {
     }
     // We are viewing this page. If we have come from a user selection then we should have the previous state of the
     // form in the session, so we render that now and remove it from the session.
-    return this.renderView(req, res, this.getAndDeleteSessionDecisionForm(res) || {})
+    return this.renderView(req, res, getAndDeleteSessionDecisionForm(res) || {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    const decisionForm = this.decisionFormFromPost(req)
+    const decisionForm = decisionFormFromPost(req)
 
     if (req.body.searchUser) {
       // We need to redirect the user to the search page, but before we do that we need to save the current data from
-      // the session
-      this.setSessionDecisionForm(res, decisionForm)
+      // the session.
+      setSessionDecisionForm(res, decisionForm)
       return res.redirect(
         url.format({
           pathname: 'TODO',
@@ -110,72 +116,5 @@ export default class OffenceCodeRoutes {
         pathname: redirectUrl,
       })
     )
-  }
-
-  // TODO all this in a helper class.
-  // Method to generate a DecisionForm backing object with data returned from a redirect
-  private updateSessionDecisionForm(res: Response, redirectData: string) {
-    const form = this.getSessionDecisionForm(res)
-    if (form) {
-      switch (decisionTree.findById(form.selectedDecisionId).getType()) {
-        case DecisionType.STAFF:
-        case DecisionType.PRISONER:
-        case DecisionType.OFFICER:
-          this.setSessionDecisionForm(res, {
-            selectedDecisionId: form.selectedDecisionId,
-            selectedDecisionData: { userId: redirectData },
-          })
-          break
-        default:
-          break
-      }
-    }
-  }
-
-  private setSessionDecisionForm(res: Response, form: DecisionForm) {
-    res.locals.sessionDecisionForm = form
-  }
-
-  private getSessionDecisionForm(res: Response) {
-    return res.locals.sessionDecisionForm as DecisionForm
-  }
-
-  private getAndDeleteSessionDecisionForm(res: Response): DecisionForm {
-    const sessionDecisionForm = this.getSessionDecisionForm(res)
-    this.setSessionDecisionForm(res, null)
-    return sessionDecisionForm
-  }
-
-  private viewDataFromDecisionForm(form?: DecisionForm) {
-    if (form && form?.selectedDecisionId) {
-      switch (decisionTree.findById(form.selectedDecisionId).getType()) {
-        case DecisionType.OFFICER:
-          return { name: 'TODO' }
-        default:
-          break
-      }
-    }
-    return {}
-  }
-
-  private decisionFormFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
-    if (selectedDecisionId) {
-      switch (decisionTree.findById(selectedDecisionId).getType()) {
-        case DecisionType.STAFF:
-        case DecisionType.PRISONER:
-        case DecisionType.OFFICER:
-          return {
-            selectedDecisionId,
-            selectedDecisionData: {
-              userId: req.body[`${selectedDecisionId}userId`],
-              userSearch: req.body[`${selectedDecisionId}userSearch`],
-            },
-          }
-        default:
-          break
-      }
-    }
-    return {}
   }
 }

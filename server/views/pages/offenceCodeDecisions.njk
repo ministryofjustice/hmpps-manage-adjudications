@@ -18,13 +18,12 @@
 
     {% for question in questions %}
         {% if question.type == 'OFFICER'%}
-
             {% set decisionHtml %}
                 <div class="flex-container flex-center">
                     <div class="govuk-!-margin-right-3">
                         {{ govukInput({
-                            id: "searchUserInput",
-                            name: "searchUserInput",
+                            id: "userSearchInput" + question.id,
+                            name: "userSearchInput" + question.id,
                             classes: "govuk-!-width-full-width",
                             value: inciteAnotherPrisonerInput,
                             errorMessage: errors | findErrors(['TODO']),
@@ -35,7 +34,7 @@
                         }) }}
                     </div>
                     {{ govukButton({
-                        text: 'Search',
+                        text: "Search",
                         classes: "govuk-button--secondary conditionalRadioSearchButton",
                         type: "submit",
                         name: "searchUser",
@@ -44,7 +43,11 @@
                     }) }}
                 </div>
             {% endset -%}
+        {%  else %}
+            {% set decisionHtml %}
+            {% endset %}
         {% endif %}
+
 
         {% set items = (items.push(
             {
@@ -78,11 +81,11 @@
 
 
         {{ govukButton({
-            text: 'qqrp',
+            text: 'Cancel',
             classes: "govuk-button--secondary",
             type: "submit",
-            name: "qqrp",
-            value: "qqrp",
+            name: "decisionFormCancel",
+            value: "decisionFormCancel",
             attributes: { "data-qa": "incite-prisoner-delete" }
         }) }}
 
