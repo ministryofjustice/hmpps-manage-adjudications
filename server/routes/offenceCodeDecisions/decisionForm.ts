@@ -2,5 +2,13 @@
 // we can repopulate it when returning from a user lookup.
 export type DecisionForm = {
   selectedDecisionId?: string
-  userLookup?: string
+  selectedDecisionData?: StaffData | OfficerData | PrisonerData
 }
+export type SelectUserData = {
+  userId?: string
+  userSearch?: string
+}
+
+export type StaffData = SelectUserData
+export type OfficerData = SelectUserData
+export type PrisonerData = SelectUserData

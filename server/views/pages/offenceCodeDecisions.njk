@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
@@ -16,9 +17,32 @@
     {% set items = [] %}
 
     {% for question in questions %}
-        {% if question.type == 'PRISONER' %}
-            {% set qqRP %}
-                <div>hello</div>
+        {% if question.type == 'OFFICER'%}
+
+            {% set decisionHtml %}
+                <div class="flex-container flex-center">
+                    <div class="govuk-!-margin-right-3">
+                        {{ govukInput({
+                            id: "searchUserInput",
+                            name: "searchUserInput",
+                            classes: "govuk-!-width-full-width",
+                            value: inciteAnotherPrisonerInput,
+                            errorMessage: errors | findErrors(['TODO']),
+                            label: {
+                                text: "TODO",
+                                classes: "govuk-!-font-weight-bold"
+                            }
+                        }) }}
+                    </div>
+                    {{ govukButton({
+                        text: 'Search',
+                        classes: "govuk-button--secondary conditionalRadioSearchButton",
+                        type: "submit",
+                        name: "searchUser",
+                        value: "searchUser",
+                        attributes: { "data-qa": "incite-prisoner-search" }
+                    }) }}
+                </div>
             {% endset -%}
         {% endif %}
 
@@ -27,14 +51,13 @@
                 value: question.id,
                 text: question.label,
                 conditional: {
-                    html: qqRP
+                    html: decisionHtml
                 }
             }
         ), items) %}
     {% endfor %}
 
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input type="hidden" name="0:0userLookup" value="TODO" />
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
             idPrefix: 'selectedDecisionId',
@@ -51,6 +74,16 @@
             name: "decisionFormSubmit",
             classes: "govuk-button--submit govuk-!-margin-right-2",
             attributes: { "data-qa": "assault-submit" }
+        }) }}
+
+
+        {{ govukButton({
+            text: 'qqrp',
+            classes: "govuk-button--secondary",
+            type: "submit",
+            name: "qqrp",
+            value: "qqrp",
+            attributes: { "data-qa": "incite-prisoner-delete" }
         }) }}
 
     </form>
