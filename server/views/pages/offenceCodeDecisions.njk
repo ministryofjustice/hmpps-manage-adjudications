@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../macros/userSearchOffenceCodeDecisionRadio.njk" import userSearchOffenceCodeDecisionRadio %}
 
 {% set title = pageTitle %}
 
@@ -19,33 +20,12 @@
     {% for question in questions %}
         {% if question.type == 'OFFICER' %}
             {% set decisionHtml %}
-               {% if decisionFormData.selectedDecisionId == question.id and decisionFormData.selectedDecisionData.userId != null %}
-                   TODO
-               {% else %}
-                    <div class="flex-container flex-center">
-                        <div class="govuk-!-margin-right-3">
-                            {{ govukInput({
-                                id: "userSearchInput" + question.id,
-                                name: "userSearchInput" + question.id,
-                                classes: "govuk-!-width-full-width",
-                                value: decisionFormData.selectedDecisionData.userSearchInput,
-                                errorMessage: errors | findErrors(['TODO']),
-                                label: {
-                                    text: "TODO",
-                                    classes: "govuk-!-font-weight-bold"
-                                }
-                            }) }}
-                        </div>
-                        {{ govukButton({
-                            text: "Search",
-                            classes: "govuk-button--secondary conditionalRadioSearchButton",
-                            type: "submit",
-                            name: "searchUser",
-                            value: "searchUser",
-                            attributes: { "data-qa": "incite-prisoner-search" }
-                        }) }}
-                    </div>
-                {% endif %}
+                {{  userSearchOffenceCodeDecisionRadio(
+                    decisionFormData.selectedDecisionId,
+                    question.id,
+                    decisionFormData.selectedDecisionData.userId,
+                    errors
+                ) }}
             {% endset -%}
         {% else %}
             {% set decisionHtml = null %}

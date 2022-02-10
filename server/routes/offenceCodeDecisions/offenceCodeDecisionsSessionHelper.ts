@@ -1,10 +1,10 @@
-// TODO all this in a helper class.
-// Method to generate a DecisionForm backing object with data returned from a redirect
 import { Request, Response } from 'express'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { DecisionForm } from './decisionForm'
 
+// TODO rename
+// Methods to deal with add, removing and parsing a DecisionFrom from the session and requests
 export function setSessionDecisionForm(req: Request, form: DecisionForm) {
   req.session.sessionDecisionForm = form
 }

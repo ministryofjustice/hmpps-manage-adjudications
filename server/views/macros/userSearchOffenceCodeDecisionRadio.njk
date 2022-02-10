@@ -1,0 +1,35 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro userSearchOffenceCodeDecisionRadio(selectedDecisionId, questionId, userId, errors) %}
+
+    {% if selectedDecisionId == questionId and userId != null %}
+        TODO
+    {% else %}
+        <div class="flex-container flex-center">
+            <div class="govuk-!-margin-right-3">
+                {{ govukInput({
+                    id: "userSearchInput" + questionId,
+                    name: "userSearchInput" + questionId,
+                    classes: "govuk-!-width-full-width",
+                    value: decisionFormData.selectedDecisionData.userSearchInput,
+                    errorMessage: errors | findErrors(['TODO']),
+                    label: {
+                        text: "Enter their name or user Id",
+                        classes: "govuk-!-font-weight-bold"
+                    }
+                }) }}
+            </div>
+            {{ govukButton({
+                text: "Search",
+                classes: "govuk-button--secondary conditionalRadioSearchButton",
+                type: "submit",
+                name: "searchUser",
+                value: "searchUser",
+                attributes: { "data-qa": "incite-prisoner-search" }
+            }) }}
+        </div>
+    {% endif %}
+
+{% endmacro %}
