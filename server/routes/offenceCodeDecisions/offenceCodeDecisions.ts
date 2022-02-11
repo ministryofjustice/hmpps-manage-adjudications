@@ -12,31 +12,14 @@ import {
   getAndDeleteSessionDecisionForm,
   setSessionDecisionForm,
   updateSessionDecisionForm,
-  viewDataFromDecisionForm,
+  getRedirectUrlForUserSearch,
 } from './offenceCodeDecisionsSessionHelper'
+import { DecisionType } from '../../offenceCodeDecisions/Decision'
 
 type PageData = { error?: FormError } & DecisionForm
 
 export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
-
-  private async placeholderValues(adjudicationNumber: string, res: Response) {
-    const { user } = res.locals
-    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
-    const prisonerDetails = await this.placeOnReportService.getPrisonerDetails(
-      draftAdjudication.draftAdjudication.prisonerNumber,
-      user
-    )
-    return {
-      offenderFirstName: properCaseName(prisonerDetails.firstName),
-      offenderLastName: properCaseName(prisonerDetails.lastName),
-      assistedFirstName: 'TODO',
-      assistedLastName: 'TODO',
-    }
-  }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
@@ -45,7 +28,7 @@ export default class OffenceCodeRoutes {
       selectedDecisionId: pageData.selectedDecisionId,
       selectedDecisionData: pageData.selectedDecisionData,
     }
-    const selectedDecisionViewData = viewDataFromDecisionForm(decisionFormData)
+    const selectedDecisionViewData = this.viewDataFromDecisionForm(decisionFormData)
     const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
     const decision = decisionTree.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
@@ -73,7 +56,7 @@ export default class OffenceCodeRoutes {
       updateSessionDecisionForm(req, req.query.selectedPerson as string)
       return res.redirect(
         url.format({
-          pathname: `/offence-code-selection${req.path}`,
+          pathname: this.urlHere(req),
         })
       )
     }
@@ -85,18 +68,6 @@ export default class OffenceCodeRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const decisionForm = decisionFormFromPost(req)
-
-    if (req.body.searchUser) {
-      // We need to redirect the user to the search page, but before we do that we need to save the current data from
-      // the session.
-      setSessionDecisionForm(req, decisionForm)
-      return res.redirect(
-        url.format({
-          pathname: 'TODO',
-        })
-      )
-    }
-
     const error = validateForm(decisionForm)
 
     if (error) {
@@ -107,6 +78,15 @@ export default class OffenceCodeRoutes {
     }
 
     const selectedDecision = decisionTree.findById(decisionForm.selectedDecisionId)
+
+    if (req.body.searchUser) {
+      // We need to redirect the user to the search page, but before we do that we need to save the current data from
+      // the session.
+      setSessionDecisionForm(req, decisionForm)
+      req.session.redirectUrl = this.urlHere(req) // TODO add functionality to allow simply passing a parameter in the redirect
+      return this.redirect(getRedirectUrlForUserSearch(decisionForm), res)
+    }
+
     const redirectUrl = selectedDecision.getCode()
       ? `/TODO`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
@@ -116,5 +96,50 @@ export default class OffenceCodeRoutes {
         pathname: redirectUrl,
       })
     )
+  }
+
+  private async placeholderValues(adjudicationNumber: string, res: Response) {
+    const { user } = res.locals
+    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
+      Number(adjudicationNumber),
+      user
+    )
+    const prisonerDetails = await this.placeOnReportService.getPrisonerDetails(
+      draftAdjudication.draftAdjudication.prisonerNumber,
+      user
+    )
+    // qq: UserService
+    // qq.getStaffFromUsername()
+    // draftAdjudication.draftAdjudication.incidentRole.associatedPrisonersNumber
+    return {
+      offenderFirstName: properCaseName(prisonerDetails.firstName),
+      offenderLastName: properCaseName(prisonerDetails.lastName),
+      assistedFirstName: 'TODO',
+      assistedLastName: 'TODO',
+    }
+  }
+
+  private async viewDataFromDecisionForm(form?: DecisionForm) {
+    if (form && form?.selectedDecisionId) {
+      switch (decisionTree.findById(form.selectedDecisionId).getType()) {
+        case DecisionType.OFFICER:
+          return { name: 'TODO' }
+        default:
+          break
+      }
+    }
+    return {}
+  }
+
+  private redirect(path: string, res: Response) {
+    return res.redirect(
+      url.format({
+        pathname: path,
+      })
+    )
+  }
+
+  private urlHere(req: Request) {
+    return `/offence-code-selection${req.path}`
   }
 }

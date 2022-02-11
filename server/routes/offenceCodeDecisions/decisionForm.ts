@@ -4,11 +4,17 @@ export type DecisionForm = {
   selectedDecisionId?: string
   selectedDecisionData?: StaffData | OfficerData | PrisonerData
 }
-export type SelectUserData = {
+export type SelectPrisonerData = {
   userId?: string
   userSearchInput?: string
 }
 
-export type StaffData = SelectUserData
-export type OfficerData = SelectUserData
-export type PrisonerData = SelectUserData
+export type SelectStaffData = {
+  userId?: string
+  userSearchFirstNameInput?: string
+  userSearchLastNameInput?: string
+}
+
+export type StaffData = SelectStaffData
+export type OfficerData = SelectStaffData
+export type PrisonerData = SelectPrisonerData

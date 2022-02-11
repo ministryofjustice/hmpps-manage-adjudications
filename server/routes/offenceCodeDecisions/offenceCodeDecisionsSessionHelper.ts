@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
-import { DecisionForm } from './decisionForm'
+import { DecisionForm, SelectPrisonerData, SelectStaffData } from './decisionForm'
 
 // Methods to deal with add, removing and parsing a DecisionFrom from the session and requests
 export function setSessionDecisionForm(req: Request, form: DecisionForm) {
@@ -25,27 +25,12 @@ export function updateSessionDecisionForm(res: Request, redirectData: string) {
       case DecisionType.STAFF:
       case DecisionType.PRISONER:
       case DecisionType.OFFICER:
-        setSessionDecisionForm(res, {
-          selectedDecisionId: form.selectedDecisionId,
-          selectedDecisionData: { userId: redirectData },
-        })
+        form.selectedDecisionData.userId = redirectData
         break
       default:
         break
     }
   }
-}
-
-export function viewDataFromDecisionForm(form?: DecisionForm) {
-  if (form && form?.selectedDecisionId) {
-    switch (decisionTree.findById(form.selectedDecisionId).getType()) {
-      case DecisionType.OFFICER:
-        return { name: 'TODO' }
-      default:
-        break
-    }
-  }
-  return {}
 }
 
 export function decisionFormFromPost(req: Request): DecisionForm {
@@ -53,8 +38,16 @@ export function decisionFormFromPost(req: Request): DecisionForm {
   if (selectedDecisionId) {
     switch (decisionTree.findById(selectedDecisionId).getType()) {
       case DecisionType.STAFF:
-      case DecisionType.PRISONER:
       case DecisionType.OFFICER:
+        return {
+          selectedDecisionId,
+          selectedDecisionData: {
+            userId: req.body[`userId${selectedDecisionId}`],
+            userSearchFirstNameInput: req.body[`userSearchFirstNameInput${selectedDecisionId}`],
+            userSearchLastNameInput: req.body[`userSearchLastNameInput${selectedDecisionId}`],
+          },
+        }
+      case DecisionType.PRISONER:
         return {
           selectedDecisionId,
           selectedDecisionData: {
@@ -70,4 +63,20 @@ export function decisionFormFromPost(req: Request): DecisionForm {
     }
   }
   return {}
+}
+
+export function getRedirectUrlForUserSearch(form: DecisionForm): string {
+  switch (decisionTree.findById(form.selectedDecisionId).getType()) {
+    case DecisionType.OFFICER:
+    case DecisionType.STAFF:
+      return `/select-associated-staff?staffFirstName=${
+        (form.selectedDecisionData as SelectStaffData).userSearchFirstNameInput
+      }&staffLastName=${(form.selectedDecisionData as SelectStaffData).userSearchLastNameInput}`
+    case DecisionType.PRISONER:
+      return this.redirect(
+        `/select-associated-prisoner?searchTerm=${(form.selectedDecisionData as SelectPrisonerData).userSearchInput}`
+      )
+    default:
+      throw new Error(`There is no search url for type: ${decisionTree.findById(form.selectedDecisionId).getType()}`)
+  }
 }
