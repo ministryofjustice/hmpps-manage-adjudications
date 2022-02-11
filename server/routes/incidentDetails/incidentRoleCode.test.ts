@@ -1,4 +1,4 @@
-import { radioToIncidentRole } from './incidentRoleCode'
+import { radioToIncidentRole, incidentRoleToRadio } from './incidentRoleCode'
 
 describe('radioToIncidentRole', () => {
   it('null radio selection', () => {
@@ -15,5 +15,20 @@ describe('radioToIncidentRole', () => {
   })
   it('fourth radio selected', () => {
     expect(radioToIncidentRole('assistAnotherPrisoner')).toEqual('25c')
+  })
+})
+
+describe('incidentRoleToRadio', () => {
+  it('null incident role', () => {
+    expect(incidentRoleToRadio(null)).toEqual('onTheirOwn')
+  })
+  it('25a incident role', () => {
+    expect(incidentRoleToRadio('25a')).toEqual('attemptOnTheirOwn')
+  })
+  it('25b incident role', () => {
+    expect(incidentRoleToRadio('25b')).toEqual('inciteAnotherPrisoner')
+  })
+  it('25c incident role', () => {
+    expect(incidentRoleToRadio('25c')).toEqual('assistAnotherPrisoner')
   })
 })

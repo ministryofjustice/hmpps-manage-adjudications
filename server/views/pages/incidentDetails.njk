@@ -97,13 +97,13 @@
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "incident-details-submit" }
 			}) }}
-			{% if reportPreviouslySubmitted %}
+			{% if exitButtonHref %}
 				{{ govukButton({
-					text: 'Cancel',
+					text: 'Exit',
 					element: "a",
-					href: cancelButtonHref,
+					href: exitButtonHref,
 					classes: "govuk-button--secondary",
-					attributes: { "data-qa": "incident-details-cancel" }
+					attributes: { "data-qa": "incident-details-exit" }
 				}) }}
 			{% endif %}
 		</form>

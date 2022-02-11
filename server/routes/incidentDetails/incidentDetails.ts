@@ -68,14 +68,17 @@ export default class IncidentDetailsRoutes {
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
-    const data = {
-      incidentDate: this.getIncidentDate(incidentDate),
-      locationId,
-    }
-
     const associatedPrisonerName = selectedPerson
       ? await this.getCurrentAssociatedPrisonerDetails(associatedPrisonersNumber, selectedPerson, user)
       : null
+
+    const data = {
+      incidentDate: this.getIncidentDate(incidentDate),
+      locationId,
+      originalRadioSelection,
+      associatedPrisonerNumber: selectedPerson,
+      associatedPrisonerName,
+    }
 
     return res.render(`pages/incidentDetails`, {
       errors: error ? [error] : [],
@@ -85,12 +88,8 @@ export default class IncidentDetailsRoutes {
       data,
       reportingOfficer: reporter || '',
       submitButtonText: 'Save and continue',
-      reportPreviouslySubmitted: false,
-      originalRadioSelection,
       inciteAnotherPrisonerInput,
       assistAnotherPrisonerInput,
-      associatedPrisonerNumber: selectedPerson,
-      associatedPrisonerName,
     })
   }
 

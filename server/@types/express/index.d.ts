@@ -14,6 +14,7 @@ declare module 'express-session' {
     incidentLocation: number
     originalRadioSelection: string
     sessionDecisionForm: DecisionForm
+    originalAssociatedPrisonerNumber: string
   }
 }
 

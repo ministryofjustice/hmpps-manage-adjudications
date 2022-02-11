@@ -3,10 +3,10 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
  {% set inciteAnotherPrisoner %}
-{% if (originalRadioSelection === 'inciteAnotherPrisoner') and (associatedPrisonerName) %}
+{% if (data.originalRadioSelection === 'inciteAnotherPrisoner') and (data.associatedPrisonerName) %}
   <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPrisonerName }} </p> 
-    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPrisonerNumber }} </p> 
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonerName }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonerNumber }} </p> 
     <div>
       {{ govukButton({
           text: 'Delete',
@@ -46,10 +46,10 @@
 {% endset -%}
 
  {% set assistAnotherPrisoner %}
-{% if (originalRadioSelection === 'assistAnotherPrisoner') and (associatedPrisonerName) %}
+{% if (data.originalRadioSelection === 'assistAnotherPrisoner') and (data.associatedPrisonerName) %}
   <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ associatedPrisonerName }} </p> 
-    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ associatedPrisonerNumber }} </p> 
+    <p data-qa="assist-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonerName }} </p> 
+    <p data-qa="assist-prisoner-prn"><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonerNumber }} </p> 
     <div>
     {{ govukButton({
         text: 'Delete',
@@ -68,7 +68,7 @@
   id: "assistAnotherPrisonerInput",
   name: "assistAnotherPrisonerInput",
   classes: "govuk-!-width-full-width",
-  value: assistAnotherPrisoner,
+  value: assistAnotherPrisonerInput,
   errorMessage: errors | findErrors(['assistAnotherPrisonerInput']),
   label: {
     text: "Enter their name or prison number",
@@ -106,28 +106,28 @@
     {
       value: "onTheirOwn",
       text: "Committed this incident on their own",
-      checked: originalRadioSelection === "onTheirOwn"
+      checked: data.originalRadioSelection === "onTheirOwn"
     },
     {
       value: "attemptOnTheirOwn",
       text: "Attempted to commit this incident on their own",
-      checked: originalRadioSelection === "attemptOnTheirOwn"
+      checked: data.originalRadioSelection === "attemptOnTheirOwn"
     },
     {
       value: "inciteAnotherPrisoner",
-      text: "Incited another prisoner of commit this incident",
+      text: "Incited another prisoner to commit this incident",
       conditional: {
         html: inciteAnotherPrisoner
       },
-      checked: originalRadioSelection === "inciteAnotherPrisoner"
+      checked: data.originalRadioSelection === "inciteAnotherPrisoner"
     },
     {
       value: "assistAnotherPrisoner",
-      text: "Assisted another prisoner to commit, or attempt to commit, this incident",
+      text: "Assisted another prisoner to commit, or attempt to commit this incident",
       conditional: {
         html: assistAnotherPrisoner
       },
-      checked: originalRadioSelection === "assistAnotherPrisoner"
+      checked: data.originalRadioSelection === "assistAnotherPrisoner"
     }
   ]
     }) }}

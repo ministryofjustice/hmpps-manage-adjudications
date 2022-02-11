@@ -11,7 +11,6 @@ type PageData = {
   staffFirstName: string
   staffLastName: string
   redirectUrl?: string
-  originalRadioSelection?: string
 }
 
 export default class SelectAssociatedPrisonerRoutes {
@@ -33,7 +32,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const { user } = res.locals
     const staffFirstName = JSON.stringify(req.query.staffFirstName)?.replace(/"/g, '')
     const staffLastName = JSON.stringify(req.query.staffLastName)?.replace(/"/g, '')
-    const { redirectUrl, originalRadioSelection } = req.session
+    const { redirectUrl } = req.session
 
     if (!staffFirstName || !staffLastName)
       return res.render(`pages/notFound.njk`, { url: req.headers.referer || `/place-a-prisoner-on-report` })
@@ -45,7 +44,6 @@ export default class SelectAssociatedPrisonerRoutes {
       staffFirstName,
       staffLastName,
       redirectUrl,
-      originalRadioSelection,
     })
   }
 

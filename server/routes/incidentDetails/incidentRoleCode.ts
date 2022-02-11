@@ -1,7 +1,5 @@
 export const radioToIncidentRole = (radio: string): string => {
   switch (radio) {
-    case 'onTheirOwn':
-      return null
     case 'attemptOnTheirOwn':
       return '25a'
     case 'inciteAnotherPrisoner':
@@ -13,6 +11,20 @@ export const radioToIncidentRole = (radio: string): string => {
   }
 }
 
+export const incidentRoleToRadio = (radio: string): string => {
+  switch (radio) {
+    case '25a':
+      return 'attemptOnTheirOwn'
+    case '25b':
+      return 'inciteAnotherPrisoner'
+    case '25c':
+      return 'assistAnotherPrisoner'
+    default:
+      return 'onTheirOwn'
+  }
+}
+
 export default {
   radioToIncidentRole,
+  incidentRoleToRadio,
 }
