@@ -27,7 +27,7 @@
                 name: "userSearchFirstNameInput" + questionId,
                 classes: "govuk-!-width-one-third",
                 value: selectedDecisionId == questionId and userSearchFirstNameInput,
-                errorMessage: errors | findErrors(['userSearchFirstNameInput'+ questionId , 'userSearchFullNameInput' + questionId ]),
+                errorMessage: errors | findErrors(['userSearchFirstNameInput' + questionId]),
                 label: {
                     text: "First name"
                 }
@@ -37,7 +37,7 @@
                 name: "userSearchLastNameInput" + questionId,
                 classes: "govuk-!-width-one-third",
                 value: selectedDecisionId == questionId and userSearchLastNameInput,
-                errorMessage: errors | findErrors(['userSearchLastNameInput' + questionId, 'userSearchFullNameInput' + questionId]),
+                errorMessage: errors | findErrors(['userSearchLastNameInput' + questionId]),
                 label: {
                     text: "Last name"
                 }

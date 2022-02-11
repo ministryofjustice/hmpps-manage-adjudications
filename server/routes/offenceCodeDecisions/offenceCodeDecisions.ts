@@ -18,14 +18,14 @@ import {
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { User } from '../../data/hmppsAuthClient'
 
-type PageData = { error?: FormError } & DecisionForm
+type PageData = { errors?: FormError[] } & DecisionForm
 
 export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    const { error } = pageData
+    const { errors } = pageData
     const { user } = res.locals
     const decisionForm = pageData // The form backing this page
     const placeholderValues = await this.placeholderValues(adjudicationNumber, user)
@@ -40,7 +40,7 @@ export default class OffenceCodeRoutes {
     })
     const selectedDecisionViewData = await this.viewDataFromDecisionForm(decisionForm, user)
     return res.render(`pages/offenceCodeDecisions`, {
-      errors: error ? [error] : [],
+      errors: errors || [],
       decisionForm,
       selectedDecisionViewData,
       questions,
@@ -69,11 +69,11 @@ export default class OffenceCodeRoutes {
     const { adjudicationNumber, incidentRole } = req.params
     const decisionForm = decisionFormFromPost(req)
     const searching = !!req.body.searchUser // Is this a standard submit or are we searching for a user.
-    const error = validateForm(decisionForm, searching)
+    const errors = validateForm(decisionForm, searching)
 
-    if (error) {
+    if (errors) {
       return this.renderView(req, res, {
-        error,
+        errors,
         ...decisionForm,
       })
     }
