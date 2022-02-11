@@ -3,7 +3,7 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { DecisionForm, SelectPrisonerData, SelectStaffData } from './decisionForm'
 
-// Methods to deal with add, removing and parsing a DecisionFrom from the session and requests
+// Methods to deal with add, removing and parsing a DecisionFrom from the session and requests.
 export function setSessionDecisionForm(req: Request, form: DecisionForm) {
   req.session.sessionDecisionForm = form
 }
@@ -33,6 +33,7 @@ export function updateSessionDecisionForm(res: Request, redirectData: string) {
   }
 }
 
+// This method is tightly bound to the parameters in the njk files.
 export function decisionFormFromPost(req: Request): DecisionForm {
   const { selectedDecisionId } = req.body
   if (selectedDecisionId) {
@@ -65,6 +66,7 @@ export function decisionFormFromPost(req: Request): DecisionForm {
   return {}
 }
 
+// This method is tightly bound to the search functionality to find a prisoner and a member of staff.
 export function getRedirectUrlForUserSearch(form: DecisionForm): {
   pathname: string
   query: { [key: string]: string }

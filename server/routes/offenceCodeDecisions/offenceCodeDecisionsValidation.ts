@@ -4,6 +4,7 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 
 // What is valid depends on whether this is a normal submit or one searching for a user.
+// This method is tightly bound to the njk page validation names.
 export default function validateForm(decisionForm: DecisionForm, searching: boolean): FormError | null {
   const { selectedDecisionId } = decisionForm
   if (!selectedDecisionId) {

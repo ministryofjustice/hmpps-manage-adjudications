@@ -4,29 +4,31 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { FormError } from '../../@types/template'
 import validateForm from './offenceCodeDecisionsValidation'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import UserService from '../../services/userService'
 import IncidentRole from '../../incidentRole/IncidentRole'
-import { properCaseName } from '../../utils/utils'
+import { properCaseName, formatName } from '../../utils/utils'
 import { DecisionForm } from './decisionForm'
-import HmppsAuthClient, { User } from '../../data/hmppsAuthClient'
 import {
   decisionFormFromPost,
   getAndDeleteSessionDecisionForm,
+  getRedirectUrlForUserSearch,
   setSessionDecisionForm,
   updateSessionDecisionForm,
-  getRedirectUrlForUserSearch,
 } from './offenceCodeDecisionsSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
+import { User } from '../../data/hmppsAuthClient'
 
 type PageData = { error?: FormError } & DecisionForm
 
 export default class OffenceCodeRoutes {
-  constructor(private readonly placeOnReportService: PlaceOnReportService) {}
+  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { error } = pageData
+    const { user } = res.locals
     const decisionForm = pageData // The form backing this page
-    const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
+    const placeholderValues = await this.placeholderValues(adjudicationNumber, user)
     const decision = decisionTree.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const questions = decision.getChildren().map(d => {
@@ -36,7 +38,7 @@ export default class OffenceCodeRoutes {
         type: d.getType().toString(),
       }
     })
-    const selectedDecisionViewData = this.viewDataFromDecisionForm(decisionForm)
+    const selectedDecisionViewData = await this.viewDataFromDecisionForm(decisionForm, user)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: error ? [error] : [],
       decisionForm,
@@ -82,7 +84,7 @@ export default class OffenceCodeRoutes {
       // We need to redirect the user to the search page, but before we do that we need to save the current data from
       // the session.
       setSessionDecisionForm(req, decisionForm)
-      req.session.redirectUrl = this.urlHere(req) // TODO add functionality to allow simply passing a parameter in the redirect
+      req.session.redirectUrl = this.urlHere(req) // TODO add functionality to allow simply passing a parameter in the redirect?
       return this.redirect(getRedirectUrlForUserSearch(decisionForm), res)
     }
 
@@ -97,8 +99,7 @@ export default class OffenceCodeRoutes {
     )
   }
 
-  private async placeholderValues(adjudicationNumber: string, res: Response) {
-    const { user } = res.locals
+  private async placeholderValues(adjudicationNumber: string, user: User) {
     const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
       Number(adjudicationNumber),
       user
@@ -115,14 +116,20 @@ export default class OffenceCodeRoutes {
     }
   }
 
-  private async viewDataFromDecisionForm(form?: DecisionForm) {
-    // qq: UserService
-    // qq.getStaffFromUsername()
-    // draftAdjudication.draftAdjudication.incidentRole.associatedPrisonersNumber
-    if (form && form?.selectedDecisionId) {
+  // If a member of staff or prisoner has been searched for then additional view data is displayed.
+  private async viewDataFromDecisionForm(form: DecisionForm, user: User) {
+    const userId = form?.selectedDecisionData?.userId // This could be a staff username or a prisoner number
+    if (form?.selectedDecisionData?.userId) {
       switch (decisionTree.findById(form.selectedDecisionId).getType()) {
         case DecisionType.OFFICER:
-          return { name: 'TODO' }
+        case DecisionType.STAFF: {
+          const decisionStaff = await this.userService.getStaffFromUsername(userId, user)
+          return { staffName: properCaseName(decisionStaff.name) }
+        }
+        case DecisionType.PRISONER: {
+          const decisionPrisoner = await this.prisonerDetails(userId, user)
+          return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
+        }
         default:
           break
       }
