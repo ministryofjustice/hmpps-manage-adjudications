@@ -7,6 +7,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { properCaseName } from '../../utils/utils'
 import { DecisionForm } from './decisionForm'
+import HmppsAuthClient, { User } from '../../data/hmppsAuthClient'
 import {
   decisionFormFromPost,
   getAndDeleteSessionDecisionForm,
@@ -24,11 +25,7 @@ export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { error } = pageData
-    const decisionFormData = {
-      selectedDecisionId: pageData.selectedDecisionId,
-      selectedDecisionData: pageData.selectedDecisionData,
-    }
-    const selectedDecisionViewData = this.viewDataFromDecisionForm(decisionFormData)
+    const decisionForm = pageData // The form backing this page
     const placeholderValues = await this.placeholderValues(adjudicationNumber, res)
     const decision = decisionTree.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
@@ -39,9 +36,10 @@ export default class OffenceCodeRoutes {
         type: d.getType().toString(),
       }
     })
+    const selectedDecisionViewData = this.viewDataFromDecisionForm(decisionForm)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: error ? [error] : [],
-      decisionFormData,
+      decisionForm,
       selectedDecisionViewData,
       questions,
       pageTitle,
@@ -68,7 +66,7 @@ export default class OffenceCodeRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const decisionForm = decisionFormFromPost(req)
-    const searching = !!req.body.searchUser
+    const searching = !!req.body.searchUser // Is this a standard submit or are we searching for a user.
     const error = validateForm(decisionForm, searching)
 
     if (error) {
@@ -105,22 +103,22 @@ export default class OffenceCodeRoutes {
       Number(adjudicationNumber),
       user
     )
-    const prisonerDetails = await this.placeOnReportService.getPrisonerDetails(
-      draftAdjudication.draftAdjudication.prisonerNumber,
-      user
-    )
-    // qq: UserService
-    // qq.getStaffFromUsername()
-    // draftAdjudication.draftAdjudication.incidentRole.associatedPrisonersNumber
+    const [prisonerDetails, associatedPrisoner] = await Promise.all([
+      this.prisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user),
+      this.prisonerDetails(draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber, user),
+    ])
     return {
-      offenderFirstName: properCaseName(prisonerDetails.firstName),
-      offenderLastName: properCaseName(prisonerDetails.lastName),
-      assistedFirstName: 'TODO',
-      assistedLastName: 'TODO',
+      offenderFirstName: properCaseName(prisonerDetails?.firstName),
+      offenderLastName: properCaseName(prisonerDetails?.lastName),
+      assistedFirstName: properCaseName(associatedPrisoner?.firstName),
+      assistedLastName: properCaseName(associatedPrisoner?.lastName),
     }
   }
 
   private async viewDataFromDecisionForm(form?: DecisionForm) {
+    // qq: UserService
+    // qq.getStaffFromUsername()
+    // draftAdjudication.draftAdjudication.incidentRole.associatedPrisonersNumber
     if (form && form?.selectedDecisionId) {
       switch (decisionTree.findById(form.selectedDecisionId).getType()) {
         case DecisionType.OFFICER:
@@ -130,6 +128,13 @@ export default class OffenceCodeRoutes {
       }
     }
     return {}
+  }
+
+  private async prisonerDetails(prisonerNumber: string, user: User) {
+    if (prisonerNumber) {
+      return this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    }
+    return null
   }
 
   private redirect(pathAndQuery: { pathname: string; query: { [key: string]: string } }, res: Response) {

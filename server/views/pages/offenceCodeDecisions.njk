@@ -19,21 +19,21 @@
         {% if question.type == 'OFFICER' or question.type == 'STAFF' %}
             {% set decisionHtml %}
                 {{  staffUserSearchOffenceCodeDecisionInput(
-                    decisionFormData.selectedDecisionId,
+                    decisionForm.selectedDecisionId,
                     question.id,
-                    decisionFormData.selectedDecisionData.userId,
-                    decisionFormData.selectedDecisionData.userSearchFirstNameInput,
-                    decisionFormData.selectedDecisionData.userSearchLastNameInput,
+                    decisionForm.selectedDecisionData.userId,
+                    decisionForm.selectedDecisionData.userSearchFirstNameInput,
+                    decisionForm.selectedDecisionData.userSearchLastNameInput,
                     errors
                 ) }}
             {% endset -%}
         {% elseif question.type == 'PRISONER' %}
             {% set decisionHtml %}
                 {{  prisonerSearchOffenceCodeDecisionInput(
-                    decisionFormData.selectedDecisionId,
+                    decisionForm.selectedDecisionId,
                     question.id,
-                    decisionFormData.selectedDecisionData.userId,
-                    decisionFormData.selectedDecisionData.userSearchInput,
+                    decisionForm.selectedDecisionData.userId,
+                    decisionForm.selectedDecisionData.userSearchInput,
                     errors
                 ) }}
             {% endset -%}
@@ -46,7 +46,7 @@
             conditional: {
                 html: decisionHtml
             },
-            checked: decisionFormData.selectedDecisionId == question.id
+            checked: decisionForm.selectedDecisionId == question.id
         }), items) %}
     {% endfor %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">

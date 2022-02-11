@@ -3,6 +3,7 @@ import { DecisionForm, SelectPrisonerData, SelectStaffData } from './decisionFor
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 
+// What is valid depends on whether this is a normal submit or one searching for a user.
 export default function validateForm(decisionForm: DecisionForm, searching: boolean): FormError | null {
   const { selectedDecisionId } = decisionForm
   if (!selectedDecisionId) {
@@ -27,19 +28,19 @@ export default function validateForm(decisionForm: DecisionForm, searching: bool
         if (!(decisionForm.selectedDecisionData as SelectStaffData).userSearchFirstNameInput) {
           return {
             href: `#userSearchFirstNameInput${selectedDecisionId}`,
-            text: 'Enter their name',
+            text: 'Enter their first name',
           }
         }
         if (!(decisionForm.selectedDecisionData as SelectStaffData).userSearchLastNameInput) {
           return {
             href: `#userSearchLastNameInput${selectedDecisionId}`,
-            text: 'Enter their name',
+            text: 'Enter their last name',
           }
         }
         if (!searching) {
           return {
             href: `#userSearchFullNameInput${selectedDecisionId}`,
-            text: 'Search TODO message',
+            text: 'Search for a user',
           }
         }
       }
@@ -55,7 +56,7 @@ export default function validateForm(decisionForm: DecisionForm, searching: bool
         if (!searching) {
           return {
             href: `#userSearchInput${selectedDecisionId}`,
-            text: 'Search TODO message',
+            text: 'Search for a prisoner',
           }
         }
       }
