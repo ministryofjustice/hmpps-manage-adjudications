@@ -65,17 +65,27 @@ export function decisionFormFromPost(req: Request): DecisionForm {
   return {}
 }
 
-export function getRedirectUrlForUserSearch(form: DecisionForm): string {
+export function getRedirectUrlForUserSearch(form: DecisionForm): {
+  pathname: string
+  query: { [key: string]: string }
+} {
   switch (decisionTree.findById(form.selectedDecisionId).getType()) {
     case DecisionType.OFFICER:
     case DecisionType.STAFF:
-      return `/select-associated-staff?staffFirstName=${
-        (form.selectedDecisionData as SelectStaffData).userSearchFirstNameInput
-      }&staffLastName=${(form.selectedDecisionData as SelectStaffData).userSearchLastNameInput}`
+      return {
+        pathname: '/select-associated-staff',
+        query: {
+          staffFirstName: (form.selectedDecisionData as SelectStaffData).userSearchFirstNameInput,
+          staffLastName: (form.selectedDecisionData as SelectStaffData).userSearchLastNameInput,
+        },
+      }
     case DecisionType.PRISONER:
-      return this.redirect(
-        `/select-associated-prisoner?searchTerm=${(form.selectedDecisionData as SelectPrisonerData).userSearchInput}`
-      )
+      return {
+        pathname: '/select-associated-prisoner',
+        query: {
+          searchTerm: (form.selectedDecisionData as SelectPrisonerData).userSearchInput,
+        },
+      }
     default:
       throw new Error(`There is no search url for type: ${decisionTree.findById(form.selectedDecisionId).getType()}`)
   }

@@ -3,7 +3,7 @@ import { DecisionForm, SelectPrisonerData, SelectStaffData } from './decisionFor
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 
-export default function validateForm(decisionForm: DecisionForm): FormError | null {
+export default function validateForm(decisionForm: DecisionForm, searching: boolean): FormError | null {
   const { selectedDecisionId } = decisionForm
   if (!selectedDecisionId) {
     return {
@@ -36,9 +36,11 @@ export default function validateForm(decisionForm: DecisionForm): FormError | nu
             text: 'Enter their name',
           }
         }
-        return {
-          href: `#userSearchFullNameInput${selectedDecisionId}`,
-          text: 'TODO message',
+        if (!searching) {
+          return {
+            href: `#userSearchFullNameInput${selectedDecisionId}`,
+            text: 'Search TODO message',
+          }
         }
       }
       break
@@ -50,9 +52,11 @@ export default function validateForm(decisionForm: DecisionForm): FormError | nu
             text: 'Enter their name or prison number',
           }
         }
-        return {
-          href: `#userSearchInput${selectedDecisionId}`,
-          text: 'TODO message',
+        if (!searching) {
+          return {
+            href: `#userSearchInput${selectedDecisionId}`,
+            text: 'Search TODO message',
+          }
         }
       }
       break

@@ -68,7 +68,8 @@ export default class OffenceCodeRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const decisionForm = decisionFormFromPost(req)
-    const error = validateForm(decisionForm)
+    const searching = !!req.body.searchUser
+    const error = validateForm(decisionForm, searching)
 
     if (error) {
       return this.renderView(req, res, {
@@ -79,7 +80,7 @@ export default class OffenceCodeRoutes {
 
     const selectedDecision = decisionTree.findById(decisionForm.selectedDecisionId)
 
-    if (req.body.searchUser) {
+    if (searching) {
       // We need to redirect the user to the search page, but before we do that we need to save the current data from
       // the session.
       setSessionDecisionForm(req, decisionForm)
@@ -131,12 +132,8 @@ export default class OffenceCodeRoutes {
     return {}
   }
 
-  private redirect(path: string, res: Response) {
-    return res.redirect(
-      url.format({
-        pathname: path,
-      })
-    )
+  private redirect(pathAndQuery: { pathname: string; query: { [key: string]: string } }, res: Response) {
+    return res.redirect(url.format(pathAndQuery))
   }
 
   private urlHere(req: Request) {
