@@ -88,7 +88,6 @@ export default class IncidentDetailsRoutes {
       data,
       reportingOfficer: reporter || '',
       submitButtonText: 'Save and continue',
-      reportPreviouslySubmitted: false,
       inciteAnotherPrisonerInput,
       assistAnotherPrisonerInput,
     })

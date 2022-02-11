@@ -97,22 +97,13 @@
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "incident-details-submit" }
 			}) }}
-			{% if exitIncidentDetailsEditPage %}
+			{% if exitButtonHref %}
 				{{ govukButton({
 					text: 'Exit',
 					element: "a",
 					href: exitButtonHref,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "incident-details-exit" }
-				}) }}
-			{% endif %}
-			{% if reportPreviouslySubmitted %}
-				{{ govukButton({
-					text: 'Cancel',
-					element: "a",
-					href: cancelButtonHref,
-					classes: "govuk-button--secondary",
-					attributes: { "data-qa": "incident-details-cancel" }
 				}) }}
 			{% endif %}
 		</form>

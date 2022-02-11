@@ -81,8 +81,6 @@ export default class IncidentDetailsEditRoutes {
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
-    const location = error ? locationId : existingDraftIncidentDetails.locationId
-
     const radioButtonSelected =
       originalRadioSelection || incidentRoleToRadio(existingDraftIncidentDetails.incidentRole.roleCode)
 
@@ -96,7 +94,7 @@ export default class IncidentDetailsEditRoutes {
 
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(existingDraftIncidentDetails.dateTime),
-      locationId: location,
+      locationId: locationId || existingDraftIncidentDetails.locationId,
       originalRadioSelection: radioButtonSelected,
       associatedPrisonerNumber,
       associatedPrisonerName,
@@ -108,9 +106,7 @@ export default class IncidentDetailsEditRoutes {
       data,
       reportingOfficer: reporter || '',
       submitButtonText: 'Save and continue',
-      exitIncidentDetailsEditPage: true,
       exitButtonHref: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
-      reportPreviouslySubmitted: false,
       inciteAnotherPrisonerInput,
       assistAnotherPrisonerInput,
     })

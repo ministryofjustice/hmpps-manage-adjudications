@@ -34,6 +34,10 @@ beforeEach(() => {
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
+    incidentRole: {
+      associatedPrisonersNumber: 'T3345XV',
+      roleCode: '25b',
+    },
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
     adjudicationNumber: 1524493,
@@ -108,29 +112,68 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
 })
 
-describe.skip('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
+describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   it('should redirect to check your answers page - reporter', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/report')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'onTheirOwn',
+      })
       .expect(302)
       .expect('Location', '/check-your-answers/G6415GD/34/report')
   })
   it('should redirect to check your answers page - reviewer', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'onTheirOwn',
+      })
       .expect(302)
       .expect('Location', '/check-your-answers/G6415GD/34/review')
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'onTheirOwn',
+      })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
         expect(res.text).toContain('Enter an hour which is 23 or less')
+      })
+  })
+  it('should render an error summary with correct validation message - user does not search for associated prisoner when required', () => {
+    return request(app)
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'inciteAnotherPrisoner',
+      })
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter their name or prison number.')
+      })
+  })
+  it('should throw an error on PUT endpoint failure', () => {
+    placeOnReportService.editDraftIncidentDetails.mockRejectedValue(new Error('Internal Error'))
+    return request(app)
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'onTheirOwn',
+      })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Error: Internal Error')
       })
   })
 })
