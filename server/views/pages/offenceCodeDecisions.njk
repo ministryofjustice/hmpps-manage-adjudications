@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../macros/staffUserSearchOffenceCodeDecisionInput.njk" import staffUserSearchOffenceCodeDecisionInput %}
+{% from "../macros/officerUserSearchOffenceCodeDecisionInput.njk" import officerUserSearchOffenceCodeDecisionInput %}
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 
 {% set title = pageTitle %}
@@ -16,15 +17,27 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     {% set items = [] %}
     {% for question in questions %}
-        {% if question.type == 'OFFICER' or question.type == 'STAFF' %}
+        {% if question.type == 'OFFICER' %}
+            {% set decisionHtml %}
+                {{  officerUserSearchOffenceCodeDecisionInput(
+                    decisionForm.selectedDecisionId,
+                    question.id,
+                    decisionForm.selectedDecisionData.officerId,
+                    selectedDecisionViewData.officerName,
+                    decisionForm.selectedDecisionData.officerSearchFirstNameInput,
+                    decisionForm.selectedDecisionData.officerSearchLastNameInput,
+                    errors
+                ) }}
+            {% endset -%}
+        {% elseif question.type == 'STAFF' %}
             {% set decisionHtml %}
                 {{  staffUserSearchOffenceCodeDecisionInput(
                     decisionForm.selectedDecisionId,
                     question.id,
-                    decisionForm.selectedDecisionData.userId,
+                    decisionForm.selectedDecisionData.staffId,
                     selectedDecisionViewData.staffName,
-                    decisionForm.selectedDecisionData.userSearchFirstNameInput,
-                    decisionForm.selectedDecisionData.userSearchLastNameInput,
+                    decisionForm.selectedDecisionData.staffSearchFirstNameInput,
+                    decisionForm.selectedDecisionData.staffSearchLastNameInput,
                     errors
                 ) }}
             {% endset -%}
@@ -33,9 +46,9 @@
                 {{  prisonerSearchOffenceCodeDecisionInput(
                     decisionForm.selectedDecisionId,
                     question.id,
-                    decisionForm.selectedDecisionData.userId,
+                    decisionForm.selectedDecisionData.prisonerId,
                     selectedDecisionViewData.prisonerName,
-                    decisionForm.selectedDecisionData.userSearchInput,
+                    decisionForm.selectedDecisionData.prisonerSearchNameInput,
                     errors
                 ) }}
             {% endset -%}

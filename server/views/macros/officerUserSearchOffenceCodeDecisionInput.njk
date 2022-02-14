@@ -2,12 +2,12 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro staffUserSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, staffId, staffName, staffSearchFirstNameInput, staffSearchLastNameInput, errors) %}
-    {% if selectedDecisionId == questionId and staffId != null %}
-        <input type="hidden" name="staffId" value="{{ staffId }}" />
+{% macro officerUserSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, officerId, officerName, officerSearchFirstNameInput, officerSearchLastNameInput, errors) %}
+    {% if selectedDecisionId == questionId and officerId != null %}
+        <input type="hidden" name="officerId" value="{{ officerId }}" />
         <div>
-            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }} </p>
-            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }} </p>
+            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
+            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
             <div>
                 {{ govukButton({
                     text: 'Delete',
@@ -21,23 +21,23 @@
     {% else %}
 
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
-        <div id="staffFullName" class="govuk-form-group flex-container flex-column">
+        <div id="officerFullName" class="govuk-form-group flex-container flex-column">
             {{ govukInput({
-                id: "staffSearchFirstNameInput",
-                name: "staffSearchFirstNameInput",
+                id: "officerSearchFirstNameInput",
+                name: "officerSearchFirstNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedDecisionId == questionId and staffSearchFirstNameInput,
-                errorMessage: errors | findErrors(["staffSearchFirstNameInput"]),
+                value: selectedDecisionId == questionId and officerSearchFirstNameInput,
+                errorMessage: errors | findErrors(["officerSearchFirstNameInput"]),
                 label: {
                     text: "First name"
                 }
             }) }}
             {{ govukInput({
-                id: "staffSearchLastNameInput",
-                name: "staffSearchLastNameInput",
+                id: "officerSearchLastNameInput",
+                name: "officerSearchLastNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedDecisionId == questionId and staffSearchLastNameInput,
-                errorMessage: errors | findErrors(["staffSearchLastNameInput"]),
+                value: selectedDecisionId == questionId and officerSearchLastNameInput,
+                errorMessage: errors | findErrors(["officerSearchLastNameInput"]),
                 label: {
                     text: "Last name"
                 }

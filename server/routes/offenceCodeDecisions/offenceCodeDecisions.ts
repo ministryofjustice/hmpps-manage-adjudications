@@ -7,7 +7,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { properCaseName, formatName } from '../../utils/utils'
-import { DecisionForm } from './decisionForm'
+import { DecisionForm, OfficerData, PrisonerData, StaffData } from './decisionForm'
 import {
   decisionFormFromPost,
   getAndDeleteSessionDecisionForm,
@@ -73,13 +73,8 @@ export default class OffenceCodeRoutes {
     const deleteUser = !!req.body.deleteUser // Are we removing a selected user?
 
     if (cancel) {
-      return this.redirect(
-        `/place-the-prisoner-on-report/${await this.getPrisonerNumberFromDraftAdjudicationNumber(
-          adjudicationNumber,
-          user
-        )}/${adjudicationNumber}`,
-        res
-      )
+      const prisonerNumber = await this.getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber, user)
+      return this.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`, res)
     }
     if (deleteUser) {
       return this.redirect(this.urlHere(req), res)
@@ -89,7 +84,7 @@ export default class OffenceCodeRoutes {
     const decisionForm = decisionFormFromPost(req)
     const errors = validateForm(decisionForm, searching)
 
-    if (errors || errors.length === 0) {
+    if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...decisionForm, adjudicationNumber, incidentRole })
     }
 
@@ -131,20 +126,37 @@ export default class OffenceCodeRoutes {
     return prisonerDetails.prisonerNumber
   }
 
-  // If a member of staff or prisoner has been searched for then additional view data is displayed.
+  // If an officer, member of staff or prisoner has been searched for then additional view data is displayed.
   private async viewDataFromDecisionForm(form: DecisionForm, user: User) {
-    const userId = form?.selectedDecisionData?.userId // This could be a staff username or a prisoner number
-    if (form?.selectedDecisionData?.userId) {
+    if (form?.selectedDecisionData) {
       switch (decisionTree.findById(form.selectedDecisionId).getType()) {
         case DecisionType.OFFICER:
-        case DecisionType.STAFF: {
-          const decisionStaff = await this.userService.getStaffFromUsername(userId, user)
-          return { staffName: properCaseName(decisionStaff.name) }
-        }
-        case DecisionType.PRISONER: {
-          const decisionPrisoner = await this.getPrisonerDetails(userId, user)
-          return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
-        }
+          {
+            const officerId = (form.selectedDecisionData as OfficerData)?.officerId
+            if (officerId) {
+              const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
+              return { officerName: properCaseName(decisionOfficer.name) }
+            }
+          }
+          break
+        case DecisionType.STAFF:
+          {
+            const staffId = (form.selectedDecisionData as StaffData)?.staffId
+            if (staffId) {
+              const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
+              return { staffName: properCaseName(decisionStaff.name) }
+            }
+          }
+          break
+        case DecisionType.PRISONER:
+          {
+            const prisonerId = (form.selectedDecisionData as PrisonerData)?.prisonerId
+            if (prisonerId) {
+              const decisionPrisoner = await this.getPrisonerDetails(prisonerId, user)
+              return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
+            }
+          }
+          break
         default:
           break
       }

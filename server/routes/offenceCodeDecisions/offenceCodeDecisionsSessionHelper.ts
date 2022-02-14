@@ -1,19 +1,18 @@
 import { Request } from 'express'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
-import { DecisionForm, SelectPrisonerData, SelectStaffData } from './decisionForm'
+import { DecisionForm, PrisonerData, StaffData, OfficerData } from './decisionForm'
 
 // Methods to deal with add, removing and parsing a DecisionFrom from the session and requests.
 export function setSessionDecisionForm(req: Request, form: DecisionForm, draftAdjudicationNumber: string) {
-  if (req.session.sessionDecisionForms) {
-    req.session.sessionDecisionForms.set(draftAdjudicationNumber, form)
-  } else {
-    req.session.sessionDecisionForms = new Map([[draftAdjudicationNumber, form]])
+  if (!req.session.sessionDecisionForms) {
+    req.session.sessionDecisionForms = {}
   }
+  req.session.sessionDecisionForms[draftAdjudicationNumber] = form
 }
 
 function getSessionDecisionForm(req: Request, draftAdjudicationNumber: string): DecisionForm {
-  return (req.session.sessionDecisionForms as Map<string, DecisionForm>).get(draftAdjudicationNumber)
+  return req.session.sessionDecisionForms?.[draftAdjudicationNumber]
 }
 
 export function getAndDeleteSessionDecisionForm(req: Request, draftAdjudicationNumber: string): DecisionForm {
@@ -27,9 +26,13 @@ export function updateSessionDecisionForm(res: Request, redirectData: string, dr
   if (form) {
     switch (decisionTree.findById(form.selectedDecisionId).getType()) {
       case DecisionType.STAFF:
+        ;(form.selectedDecisionData as StaffData).staffId = redirectData
+        break
       case DecisionType.PRISONER:
+        ;(form.selectedDecisionData as PrisonerData).prisonerId = redirectData
+        break
       case DecisionType.OFFICER:
-        form.selectedDecisionData.userId = redirectData
+        ;(form.selectedDecisionData as OfficerData).officerId = redirectData
         break
       default:
         break
@@ -43,21 +46,29 @@ export function decisionFormFromPost(req: Request): DecisionForm {
   if (selectedDecisionId) {
     switch (decisionTree.findById(selectedDecisionId).getType()) {
       case DecisionType.STAFF:
+        return {
+          selectedDecisionId,
+          selectedDecisionData: {
+            staffId: req.body.staffId,
+            staffSearchFirstNameInput: req.body.staffSearchFirstNameInput,
+            staffSearchLastNameInput: req.body.staffSearchLastNameInput,
+          },
+        }
       case DecisionType.OFFICER:
         return {
           selectedDecisionId,
           selectedDecisionData: {
-            userId: req.body[`userId${selectedDecisionId}`],
-            userSearchFirstNameInput: req.body[`userSearchFirstNameInput${selectedDecisionId}`],
-            userSearchLastNameInput: req.body[`userSearchLastNameInput${selectedDecisionId}`],
+            officerId: req.body.officerId,
+            officerSearchFirstNameInput: req.body.officerSearchFirstNameInput,
+            officerSearchLastNameInput: req.body.officerSearchLastNameInput,
           },
         }
       case DecisionType.PRISONER:
         return {
           selectedDecisionId,
           selectedDecisionData: {
-            userId: req.body[`userId${selectedDecisionId}`],
-            userSearchInput: req.body[`userSearchInput${selectedDecisionId}`],
+            prisonerId: req.body.prisonerId,
+            prisonerSearchNameInput: req.body.prisonerSearchNameInput,
           },
         }
       default:
@@ -77,19 +88,26 @@ export function getRedirectUrlForUserSearch(form: DecisionForm): {
 } {
   switch (decisionTree.findById(form.selectedDecisionId).getType()) {
     case DecisionType.OFFICER:
+      return {
+        pathname: '/select-associated-staff',
+        query: {
+          staffFirstName: (form.selectedDecisionData as OfficerData).officerSearchFirstNameInput,
+          staffLastName: (form.selectedDecisionData as OfficerData).officerSearchLastNameInput,
+        },
+      }
     case DecisionType.STAFF:
       return {
         pathname: '/select-associated-staff',
         query: {
-          staffFirstName: (form.selectedDecisionData as SelectStaffData).userSearchFirstNameInput,
-          staffLastName: (form.selectedDecisionData as SelectStaffData).userSearchLastNameInput,
+          staffFirstName: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
+          staffLastName: (form.selectedDecisionData as StaffData).staffSearchLastNameInput,
         },
       }
     case DecisionType.PRISONER:
       return {
         pathname: '/select-associated-prisoner',
         query: {
-          searchTerm: (form.selectedDecisionData as SelectPrisonerData).userSearchInput,
+          searchTerm: (form.selectedDecisionData as PrisonerData).prisonerSearchNameInput,
         },
       }
     default:

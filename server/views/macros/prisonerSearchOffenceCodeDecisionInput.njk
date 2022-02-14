@@ -2,12 +2,12 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro prisonerSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, userId, prisonerName, userSearchInput, errors) %}
-    {% if selectedDecisionId == questionId and userId != null %}
-        <input type="hidden" name="userId{{ questionId }}" value="{{ userId }}" />
+{% macro prisonerSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, prisonerId, prisonerName, prisonerSearchNameInput, errors) %}
+    {% if selectedDecisionId == questionId and prisonerId != null %}
+        <input type="hidden" name="prisonerId" value="{{ prisonerId }}" />
         <div>
             <p><span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }} </p>
-            <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ userId }} </p>
+            <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }} </p>
             <div>
                 {{ govukButton({
                     text: 'Delete',
@@ -22,11 +22,11 @@
         <div class="flex-container flex-center">
             <div class="govuk-!-margin-right-3">
                 {{ govukInput({
-                    id: "userSearchInput" + questionId,
-                    name: "userSearchInput" + questionId,
+                    id: "prisonerSearchNameInput",
+                    name: "prisonerSearchNameInput",
                     classes: "govuk-!-width-full-width",
-                    value: selectedDecisionId == questionId and userSearchInput,
-                    errorMessage: errors | findErrors(['userSearchInput' + questionId]),
+                    value: selectedDecisionId == questionId and prisonerSearchNameInput,
+                    errorMessage: errors | findErrors(["prisonerSearchNameInput"]),
                     label: {
                         text: "Enter their name or prison number",
                         classes: "govuk-!-font-weight-bold"
