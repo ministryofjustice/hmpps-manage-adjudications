@@ -18,14 +18,13 @@ import {
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { User } from '../../data/hmppsAuthClient'
 
-type PageData = { errors?: FormError[] } & DecisionForm
+type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
 
 export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { adjudicationNumber, incidentRole } = req.params
-    const { errors } = pageData
+    const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
     const decisionForm = pageData // The form backing this page
     const placeholderValues = await this.placeholderValues(adjudicationNumber, user)
@@ -50,32 +49,48 @@ export default class OffenceCodeRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
+    const { adjudicationNumber, incidentRole } = req.params
     if (req.query.selectedPerson) {
       // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
       // then redirect to the view page after removing the request parameter.
-      updateSessionDecisionForm(req, req.query.selectedPerson as string)
-      return res.redirect(
-        url.format({
-          pathname: this.urlHere(req),
-        })
-      )
+      updateSessionDecisionForm(req, req.query.selectedPerson as string, adjudicationNumber)
+      return this.redirect(this.urlHere(req), res)
     }
     // We are viewing this page. If we have come from a user selection then we should have the previous state of the
     // form in the session, so we render that now and remove it from the session.
-    return this.renderView(req, res, getAndDeleteSessionDecisionForm(req) || {})
+    return this.renderView(req, res, {
+      ...(getAndDeleteSessionDecisionForm(req, adjudicationNumber) || {}),
+      adjudicationNumber,
+      incidentRole,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
+    const { user } = res.locals
+    const searching = !!req.body.searchUser // Are we searching for a user?
+    const cancel = !!req.body.decisionFormCancel // Are we cancelling the flow?
+    const deleteUser = !!req.body.deleteUser // Are we removing a selected user?
+
+    if (cancel) {
+      return this.redirect(
+        `/place-the-prisoner-on-report/${await this.getPrisonerNumberFromDraftAdjudicationNumber(
+          adjudicationNumber,
+          user
+        )}/${adjudicationNumber}`,
+        res
+      )
+    }
+    if (deleteUser) {
+      return this.redirect(this.urlHere(req), res)
+    }
+
+    // Now we need to know about what else has been posted.
     const decisionForm = decisionFormFromPost(req)
-    const searching = !!req.body.searchUser // Is this a standard submit or are we searching for a user.
     const errors = validateForm(decisionForm, searching)
 
-    if (errors) {
-      return this.renderView(req, res, {
-        errors,
-        ...decisionForm,
-      })
+    if (errors || errors.length === 0) {
+      return this.renderView(req, res, { errors, ...decisionForm, adjudicationNumber, incidentRole })
     }
 
     const selectedDecision = decisionTree.findById(decisionForm.selectedDecisionId)
@@ -83,7 +98,7 @@ export default class OffenceCodeRoutes {
     if (searching) {
       // We need to redirect the user to the search page, but before we do that we need to save the current data from
       // the session.
-      setSessionDecisionForm(req, decisionForm)
+      setSessionDecisionForm(req, decisionForm, adjudicationNumber)
       req.session.redirectUrl = this.urlHere(req) // TODO add functionality to allow simply passing a parameter in the redirect?
       return this.redirect(getRedirectUrlForUserSearch(decisionForm), res)
     }
@@ -92,21 +107,15 @@ export default class OffenceCodeRoutes {
       ? `/TODO`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
-    return res.redirect(
-      url.format({
-        pathname: redirectUrl,
-      })
-    )
+    return this.redirect(redirectUrl, res)
   }
 
+  // This information is used to fill out specific details in questions and titles.
   private async placeholderValues(adjudicationNumber: string, user: User) {
-    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
+    const draftAdjudication = await this.getDraftAdjudication(adjudicationNumber, user)
     const [prisonerDetails, associatedPrisoner] = await Promise.all([
-      this.prisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user),
-      this.prisonerDetails(draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber, user),
+      this.getPrisonerDetails(draftAdjudication.prisonerNumber, user),
+      this.getPrisonerDetails(draftAdjudication?.incidentRole?.associatedPrisonersNumber, user),
     ])
     return {
       offenderFirstName: properCaseName(prisonerDetails?.firstName),
@@ -114,6 +123,12 @@ export default class OffenceCodeRoutes {
       assistedFirstName: properCaseName(associatedPrisoner?.firstName),
       assistedLastName: properCaseName(associatedPrisoner?.lastName),
     }
+  }
+
+  private async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: string, user: User) {
+    const draftAdjudication = await this.getDraftAdjudication(adjudicationNumber, user)
+    const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
+    return prisonerDetails.prisonerNumber
   }
 
   // If a member of staff or prisoner has been searched for then additional view data is displayed.
@@ -127,7 +142,7 @@ export default class OffenceCodeRoutes {
           return { staffName: properCaseName(decisionStaff.name) }
         }
         case DecisionType.PRISONER: {
-          const decisionPrisoner = await this.prisonerDetails(userId, user)
+          const decisionPrisoner = await this.getPrisonerDetails(userId, user)
           return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
         }
         default:
@@ -137,14 +152,25 @@ export default class OffenceCodeRoutes {
     return {}
   }
 
-  private async prisonerDetails(prisonerNumber: string, user: User) {
+  private async getPrisonerDetails(prisonerNumber: string, user: User) {
     if (prisonerNumber) {
       return this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
     }
     return null
   }
 
-  private redirect(pathAndQuery: { pathname: string; query: { [key: string]: string } }, res: Response) {
+  private async getDraftAdjudication(adjudicationNumber: string, user: User) {
+    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
+      Number(adjudicationNumber),
+      user
+    )
+    return draftAdjudication?.draftAdjudication
+  }
+
+  private redirect(pathAndQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
+    if (typeof pathAndQuery === 'string') {
+      return res.redirect(pathAndQuery)
+    }
     return res.redirect(url.format(pathAndQuery))
   }
 

@@ -13,7 +13,7 @@ declare module 'express-session' {
     incidentDate: SubmittedDateTime
     incidentLocation: number
     originalRadioSelection: string
-    sessionDecisionForm: DecisionForm
+    sessionDecisionForms: Map<string, DecisionForm> // Key draft adjudication number.
     originalAssociatedPrisonerNumber: string
   }
 }

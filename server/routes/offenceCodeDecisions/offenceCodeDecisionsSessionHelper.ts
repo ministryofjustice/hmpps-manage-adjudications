@@ -4,22 +4,26 @@ import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { DecisionForm, SelectPrisonerData, SelectStaffData } from './decisionForm'
 
 // Methods to deal with add, removing and parsing a DecisionFrom from the session and requests.
-export function setSessionDecisionForm(req: Request, form: DecisionForm) {
-  req.session.sessionDecisionForm = form
+export function setSessionDecisionForm(req: Request, form: DecisionForm, draftAdjudicationNumber: string) {
+  if (req.session.sessionDecisionForms) {
+    req.session.sessionDecisionForms.set(draftAdjudicationNumber, form)
+  } else {
+    req.session.sessionDecisionForms = new Map([[draftAdjudicationNumber, form]])
+  }
 }
 
-function getSessionDecisionForm(req: Request): DecisionForm {
-  return req.session.sessionDecisionForm as DecisionForm
+function getSessionDecisionForm(req: Request, draftAdjudicationNumber: string): DecisionForm {
+  return (req.session.sessionDecisionForms as Map<string, DecisionForm>).get(draftAdjudicationNumber)
 }
 
-export function getAndDeleteSessionDecisionForm(req: Request): DecisionForm {
-  const sessionDecisionForm = getSessionDecisionForm(req)
-  setSessionDecisionForm(req, null)
+export function getAndDeleteSessionDecisionForm(req: Request, draftAdjudicationNumber: string): DecisionForm {
+  const sessionDecisionForm = getSessionDecisionForm(req, draftAdjudicationNumber)
+  setSessionDecisionForm(req, null, draftAdjudicationNumber)
   return sessionDecisionForm
 }
 
-export function updateSessionDecisionForm(res: Request, redirectData: string) {
-  const form = getSessionDecisionForm(res)
+export function updateSessionDecisionForm(res: Request, redirectData: string, draftAdjudicationNumber: string) {
+  const form = getSessionDecisionForm(res, draftAdjudicationNumber)
   if (form) {
     switch (decisionTree.findById(form.selectedDecisionId).getType()) {
       case DecisionType.STAFF:
