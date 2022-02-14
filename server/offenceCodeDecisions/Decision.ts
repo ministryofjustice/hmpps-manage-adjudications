@@ -1,6 +1,5 @@
 import Title from './Title'
 import Question from './Question'
-import { Code } from './Code'
 import IncidentRole from '../incidentRole/IncidentRole'
 
 export class Decision {
@@ -10,11 +9,11 @@ export class Decision {
 
   private readonly decisionQuestion: Question
 
-  private decisionCode: Code
+  private decisionCode: string
 
   private decisionTitle: Title
 
-  private decisionType: DecisionType = DecisionType.DEFAULT
+  private decisionType: DecisionType = DecisionType.RADIO_SELECTION_ONLY
 
   private decisionUrl: string
 
@@ -54,8 +53,8 @@ export class Decision {
     return this
   }
 
-  code(code: Code) {
-    this.decisionCode = code
+  code(code: string | number) {
+    this.decisionCode = `${code}`
     return this
   }
 
@@ -133,7 +132,7 @@ export class Decision {
     return matches
   }
 
-  allCodes(): Array<Code> {
+  allCodes(): Array<string> {
     const codes = [].concat(...this.getChildren().map(c => c.allCodes()))
     if (this.getCode()) {
       codes.push(this.getCode())
@@ -152,8 +151,8 @@ export class Decision {
     return questions
   }
 
-  findByCode(code: Code): Decision {
-    return this.findBy(d => d.getCode()?.getId() === code?.getId())
+  findByCode(code: string): Decision {
+    return this.findBy(d => d.getCode() === code)
   }
 
   toString(indent = 0): string {
@@ -165,8 +164,8 @@ export class Decision {
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
     }
-    if (this.getCode()?.getId()) {
-      output = `${output}\r\n${this.getCode().toString(indent)}`
+    if (this.getCode()) {
+      output = `${output}\r\n${padding}Code: ${this.getCode()}`
     }
     if (this.getChildren().length) {
       output = `${output}\r\n${this.getChildren()
@@ -183,7 +182,7 @@ export function decision(question: Question | string) {
 
 // eslint-disable-next-line no-shadow
 export enum DecisionType {
-  DEFAULT = 'DEFAULT',
+  RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
   PRISONER = 'PRISONER',
   OFFICER = 'OFFICER',
   STAFF = 'STAFF',

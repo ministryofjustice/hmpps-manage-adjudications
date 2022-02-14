@@ -42,7 +42,7 @@ describe('decisions', () => {
   })
 
   it('no duplicate code ids', () => {
-    const allCodeIds = decisionTree.allCodes().map(code => code.getId())
+    const allCodeIds = decisionTree.allCodes()
     const duplicates = findDuplicates(allCodeIds)
     expect(duplicates).toHaveLength(0)
   })
