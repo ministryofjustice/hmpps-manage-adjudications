@@ -44,7 +44,7 @@ describe('GET /select-associated-prisoner', () => {
           expect(res.text).toContain('Select a prisoner')
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain(
-            '<a href="/incident-details/G6123VU/1234?selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner</a>'
+            '<a href="/incident-details/G6123VU/1234?selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner<span class="govuk-visually-hidden"> for John Smith</span></a>'
           )
         })
     })
