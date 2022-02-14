@@ -1,5 +1,5 @@
 import { FormError } from '../../@types/template'
-import { DecisionForm, PrisonerData, StaffData, OfficerData } from './decisionForm'
+import { AnotherData, DecisionForm, OfficerData, PrisonerData, StaffData } from './decisionForm'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 
@@ -16,6 +16,7 @@ enum ErrorType {
   OFFICER_MISSING_LAST_NAME_INPUT_SEARCH = 'OFFICER_MISSING_LAST_NAME_INPUT_SEARCH',
   PRISONER_MISSING_NAME_INPUT_SEARCH = 'PRISONER_MISSING_NAME_INPUT_SEARCH',
   PRISONER_MISSING_NAME_INPUT_SUBMIT = 'PRISONER_MISSING_NAME_INPUT_SUBMIT',
+  ANOTHER_MISSING_NAME_INPUT = 'ANOTHER_MISSING_NAME_INPUT',
 }
 
 const error: { [key in ErrorType]: FormError } = {
@@ -63,6 +64,10 @@ const error: { [key in ErrorType]: FormError } = {
     href: `#prisonerSearchNameInput`,
     text: 'Search for a prisoner',
   },
+  ANOTHER_MISSING_NAME_INPUT: {
+    href: `#anotherNameInput`,
+    text: 'You must enter a name',
+  },
 }
 
 // What is valid depends on whether this is a normal submit or one searching for a user.
@@ -79,6 +84,8 @@ export default function validateForm(decisionForm: DecisionForm, searching: bool
       return officerValidation(decisionForm.selectedDecisionData as OfficerData, searching)
     case DecisionType.PRISONER:
       return prisonerValidation(decisionForm.selectedDecisionData as PrisonerData, searching)
+    case DecisionType.ANOTHER:
+      return anotherValidation(decisionForm.selectedDecisionData as AnotherData)
     default:
       break
   }
@@ -127,6 +134,13 @@ function officerValidation(officerData: OfficerData, searching: boolean): FormEr
   }
   if (!officerData.officerId && !searching) {
     return [error.OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT, error.OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT]
+  }
+  return []
+}
+
+function anotherValidation(anotherData: AnotherData): FormError[] {
+  if (!anotherData.anotherNameInput) {
+    return [error.ANOTHER_MISSING_NAME_INPUT]
   }
   return []
 }

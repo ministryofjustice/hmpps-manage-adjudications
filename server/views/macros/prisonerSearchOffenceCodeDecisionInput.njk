@@ -1,8 +1,11 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro prisonerSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, prisonerId, prisonerName, prisonerSearchNameInput, errors) %}
+{% macro prisonerSearchOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
+    {% set selectedDecisionId = decisionForm.selectedDecisionId %}
+    {% set prisonerId = decisionForm.selectedDecisionData.prisonerId %}
+    {% set prisonerSearchNameInput = decisionForm.selectedDecisionData.prisonerSearchNameInput %}
+    {% set prisonerName = selectedDecisionViewData.prisonerName %}
     {% if selectedDecisionId == questionId and prisonerId != null %}
         <input type="hidden" name="prisonerId" value="{{ prisonerId }}" />
         <div>

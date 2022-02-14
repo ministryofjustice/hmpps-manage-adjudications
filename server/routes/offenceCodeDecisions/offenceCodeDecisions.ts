@@ -14,7 +14,7 @@ import {
   getRedirectUrlForUserSearch,
   setSessionDecisionForm,
   updateSessionDecisionForm,
-} from './offenceCodeDecisionsSessionHelper'
+} from './offenceCodeDecisionFormHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { User } from '../../data/hmppsAuthClient'
 
@@ -80,10 +80,9 @@ export default class OffenceCodeRoutes {
       return this.redirect(this.urlHere(req), res)
     }
 
-    // Now we need to know about what else has been posted.
+    // Now we can validate
     const decisionForm = decisionFormFromPost(req)
     const errors = validateForm(decisionForm, searching)
-
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...decisionForm, adjudicationNumber, incidentRole })
     }
@@ -91,8 +90,7 @@ export default class OffenceCodeRoutes {
     const selectedDecision = decisionTree.findById(decisionForm.selectedDecisionId)
 
     if (searching) {
-      // We need to redirect the user to the search page, but before we do that we need to save the current data from
-      // the session.
+      // Redirect the user to the search page, but before we do that we need to save the current data from the session.
       setSessionDecisionForm(req, decisionForm, adjudicationNumber)
       req.session.redirectUrl = this.urlHere(req) // TODO add functionality to allow simply passing a parameter in the redirect?
       return this.redirect(getRedirectUrlForUserSearch(decisionForm), res)
@@ -118,12 +116,6 @@ export default class OffenceCodeRoutes {
       assistedFirstName: properCaseName(associatedPrisoner?.firstName),
       assistedLastName: properCaseName(associatedPrisoner?.lastName),
     }
-  }
-
-  private async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: string, user: User) {
-    const draftAdjudication = await this.getDraftAdjudication(adjudicationNumber, user)
-    const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
-    return prisonerDetails.prisonerNumber
   }
 
   // If an officer, member of staff or prisoner has been searched for then additional view data is displayed.
@@ -162,6 +154,12 @@ export default class OffenceCodeRoutes {
       }
     }
     return {}
+  }
+
+  private async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: string, user: User) {
+    const draftAdjudication = await this.getDraftAdjudication(adjudicationNumber, user)
+    const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
+    return prisonerDetails.prisonerNumber
   }
 
   private async getPrisonerDetails(prisonerNumber: string, user: User) {

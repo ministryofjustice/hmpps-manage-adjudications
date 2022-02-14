@@ -1,8 +1,13 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro officerUserSearchOffenceCodeDecisionInput(selectedDecisionId, questionId, officerId, officerName, officerSearchFirstNameInput, officerSearchLastNameInput, errors) %}
+{% macro officerSearchOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
+    {% set selectedDecisionId = decisionForm.selectedDecisionId %}
+    {% set officerId = decisionForm.selectedDecisionData.officerId %}
+    {% set officerSearchFirstNameInput = decisionForm.selectedDecisionData.officerSearchFirstNameInput %}
+    {% set officerSearchLastNameInput = decisionForm.selectedDecisionData.officerSearchLastNameInput %}
+    {% set officerName = selectedDecisionViewData.officerName %}
+
     {% if selectedDecisionId == questionId and officerId != null %}
         <input type="hidden" name="officerId" value="{{ officerId }}" />
         <div>
@@ -21,7 +26,7 @@
     {% else %}
 
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
-        <div id="officerFullName" class="govuk-form-group flex-container flex-column">
+        <div id="officerName" class="govuk-form-group flex-container flex-column">
             {{ govukInput({
                 id: "officerSearchFirstNameInput",
                 name: "officerSearchFirstNameInput",

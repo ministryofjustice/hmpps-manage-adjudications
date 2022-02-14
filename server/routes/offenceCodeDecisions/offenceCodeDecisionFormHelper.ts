@@ -71,6 +71,13 @@ export function decisionFormFromPost(req: Request): DecisionForm {
             prisonerSearchNameInput: req.body.prisonerSearchNameInput,
           },
         }
+      case DecisionType.ANOTHER:
+        return {
+          selectedDecisionId,
+          selectedDecisionData: {
+            anotherNameInput: req.body.anotherNameInput,
+          },
+        }
       default:
         return {
           selectedDecisionId,
