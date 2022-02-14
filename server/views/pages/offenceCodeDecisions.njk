@@ -1,7 +1,10 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../macros/staffUserSearchOffenceCodeDecisionInput.njk" import staffUserSearchOffenceCodeDecisionInput %}
+{% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 
 {% set title = pageTitle %}
 
@@ -11,18 +14,43 @@
 
 {% block content %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
-
     {% set items = [] %}
-
     {% for question in questions %}
-        {% set items = (items.push(
-            {
-                value: question.id,
-                text: question.label
-            }
-        ), items) %}
+        {% if question.type == 'OFFICER' or question.type == 'STAFF' %}
+            {% set decisionHtml %}
+                {{  staffUserSearchOffenceCodeDecisionInput(
+                    decisionForm.selectedDecisionId,
+                    question.id,
+                    decisionForm.selectedDecisionData.userId,
+                    selectedDecisionViewData.staffName,
+                    decisionForm.selectedDecisionData.userSearchFirstNameInput,
+                    decisionForm.selectedDecisionData.userSearchLastNameInput,
+                    errors
+                ) }}
+            {% endset -%}
+        {% elseif question.type == 'PRISONER' %}
+            {% set decisionHtml %}
+                {{  prisonerSearchOffenceCodeDecisionInput(
+                    decisionForm.selectedDecisionId,
+                    question.id,
+                    decisionForm.selectedDecisionData.userId,
+                    selectedDecisionViewData.prisonerName,
+                    decisionForm.selectedDecisionData.userSearchInput,
+                    errors
+                ) }}
+            {% endset -%}
+        {% else %}
+            {% set decisionHtml = null %}
+        {% endif %}
+        {% set items = (items.push({
+            value: question.id,
+            text: question.label,
+            conditional: {
+                html: decisionHtml
+            },
+            checked: decisionForm.selectedDecisionId == question.id
+        }), items) %}
     {% endfor %}
-
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
@@ -40,6 +68,16 @@
             name: "decisionFormSubmit",
             classes: "govuk-button--submit govuk-!-margin-right-2",
             attributes: { "data-qa": "assault-submit" }
+        }) }}
+
+
+        {{ govukButton({
+            text: 'Cancel',
+            classes: "govuk-button--secondary",
+            type: "submit",
+            name: "decisionFormCancel",
+            value: "decisionFormCancel",
+            attributes: { "data-qa": "incite-prisoner-delete" }
         }) }}
 
     </form>

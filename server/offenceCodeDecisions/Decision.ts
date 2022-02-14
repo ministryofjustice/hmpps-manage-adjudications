@@ -1,20 +1,19 @@
 import Title from './Title'
 import Question from './Question'
-import Code from './Code'
 import IncidentRole from '../incidentRole/IncidentRole'
 
-export default class Decision {
+export class Decision {
   private parentDecision: Decision
 
   private childrenDecisions: Array<Decision> = new Array<Decision>()
 
   private readonly decisionQuestion: Question
 
-  private decisionCode: Code
+  private decisionCode: string
 
   private decisionTitle: Title
 
-  private decisionPage: Page
+  private decisionType: DecisionType = DecisionType.RADIO_SELECTION_ONLY
 
   private decisionUrl: string
 
@@ -43,11 +42,6 @@ export default class Decision {
     return this
   }
 
-  page(page: Page) {
-    this.decisionPage = page
-    return this
-  }
-
   title(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
     if (title instanceof Title) {
       this.decisionTitle = title
@@ -59,14 +53,23 @@ export default class Decision {
     return this
   }
 
-  code(code: Code) {
-    this.decisionCode = code
+  code(code: string | number) {
+    this.decisionCode = `${code}`
     return this
   }
 
   url(url: string) {
     this.decisionUrl = url
     return this
+  }
+
+  type(decisionType: DecisionType) {
+    this.decisionType = decisionType
+    return this
+  }
+
+  getType() {
+    return this.decisionType
   }
 
   getId() {
@@ -91,10 +94,6 @@ export default class Decision {
 
   getUrl(): string {
     return this.decisionUrl || this.id()
-  }
-
-  getPage(): string {
-    return this.decisionPage
   }
 
   getCode() {
@@ -133,7 +132,7 @@ export default class Decision {
     return matches
   }
 
-  allCodes(): Array<Code> {
+  allCodes(): Array<string> {
     const codes = [].concat(...this.getChildren().map(c => c.allCodes()))
     if (this.getCode()) {
       codes.push(this.getCode())
@@ -152,8 +151,8 @@ export default class Decision {
     return questions
   }
 
-  findByCode(code: Code): Decision {
-    return this.findBy(d => d.getCode()?.code === code?.code)
+  findByCode(code: string): Decision {
+    return this.findBy(d => d.getCode() === code)
   }
 
   toString(indent = 0): string {
@@ -165,8 +164,8 @@ export default class Decision {
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
     }
-    if (this.getCode()?.code) {
-      output = `${output}\r\n${this.getCode().toString(indent)}`
+    if (this.getCode()) {
+      output = `${output}\r\n${padding}Code: ${this.getCode()}`
     }
     if (this.getChildren().length) {
       output = `${output}\r\n${this.getChildren()
@@ -177,7 +176,15 @@ export default class Decision {
   }
 }
 
+export function decision(question: Question | string) {
+  return new Decision(question)
+}
+
 // eslint-disable-next-line no-shadow
-enum Page {
-  DEFAULT = 'DEFAULT',
+export enum DecisionType {
+  RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
+  PRISONER = 'PRISONER',
+  OFFICER = 'OFFICER',
+  STAFF = 'STAFF',
+  ANOTHER = 'ANOTHER',
 }

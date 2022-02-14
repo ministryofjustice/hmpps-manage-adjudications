@@ -1,5 +1,5 @@
 import decisionTree from './DecisionTree'
-import Decision from './Decision'
+import { Decision } from './Decision'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
@@ -28,8 +28,7 @@ describe('decisions', () => {
         (decision.getChildren().length !== 0 && decision.getTitle() == null) ||
         (decision.getUrl() != null &&
           decision.matching(d => d !== decision && d.getUrl() === decision.getUrl()).length !== 0) ||
-        (decision.getUrl() != null && decision.getUrl().startsWith('/')) ||
-        (decision.getPage() != null && decision.getPage().startsWith('/'))
+        (decision.getUrl() != null && decision.getUrl().startsWith('/'))
       )
     }
     const invalidDecisions = decisionTree.matching(invalid)
@@ -39,6 +38,12 @@ describe('decisions', () => {
   it('no duplicate urls', () => {
     const allUrls = decisionTree.allUrls()
     const duplicates = findDuplicates(allUrls)
+    expect(duplicates).toHaveLength(0)
+  })
+
+  it('no duplicate code ids', () => {
+    const allCodeIds = decisionTree.allCodes()
+    const duplicates = findDuplicates(allCodeIds)
     expect(duplicates).toHaveLength(0)
   })
 })

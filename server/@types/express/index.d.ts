@@ -1,4 +1,5 @@
 import { SubmittedDateTime } from '../template'
+import { DecisionForm } from '../../routes/offenceCodeDecisions/decisionForm'
 
 export default {}
 
@@ -12,6 +13,7 @@ declare module 'express-session' {
     incidentDate: SubmittedDateTime
     incidentLocation: number
     originalRadioSelection: string
+    sessionDecisionForm: DecisionForm
     originalAssociatedPrisonerNumber: string
   }
 }
