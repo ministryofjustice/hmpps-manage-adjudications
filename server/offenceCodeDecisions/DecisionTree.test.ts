@@ -1,5 +1,5 @@
 import decisionTree from './DecisionTree'
-import { Decision, DecisionType } from './Decision'
+import { Decision } from './Decision'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
