@@ -2,11 +2,10 @@ import { Request } from 'express'
 import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
-import PlaceOnReportService from '../../services/placeOnReportService'
 
 export default class DecisionHelper {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  viewDataFromDecisionForm(decisionForm: DecisionForm, user: User): Promise<any> {
+  viewDataFromDecisionForm(decisionForm: DecisionForm, user: User): Promise<unknown> {
     return new Promise(resolve => {
       resolve({})
     })

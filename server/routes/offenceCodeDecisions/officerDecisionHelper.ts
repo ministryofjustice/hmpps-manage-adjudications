@@ -90,7 +90,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return []
   }
 
-  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<any> {
+  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<unknown> {
     const officerId = (form.selectedDecisionData as OfficerData)?.officerId
     if (officerId) {
       const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)

@@ -72,7 +72,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     return []
   }
 
-  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<any> {
+  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<unknown> {
     const prisonerId = (form.selectedDecisionData as PrisonerData)?.prisonerId
     if (prisonerId) {
       const decisionPrisoner = await this.placeOnReportService.getPrisonerDetails(prisonerId, user)
