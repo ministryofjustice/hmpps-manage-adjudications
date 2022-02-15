@@ -94,7 +94,7 @@ export default class OffenceCodeRoutes {
 
     // Are there more decisions to be made?
     const selectedDecision = this.decisions.findById(decisionForm.selectedDecisionId)
-    const redirectUrl = selectedDecision.getCode()
+    const redirectUrl = selectedDecision.getOffenceCode()
       ? `/TODO`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
@@ -126,6 +126,7 @@ export default class OffenceCodeRoutes {
     })
   }
 
+  // Get any view data that we might need to show depending on what has been selected.
   private async selectedDecisionViewData(decisionForm: DecisionForm, user: User) {
     if (decisionForm?.selectedDecisionId)
       return this.helper(decisionForm).viewDataFromDecisionForm(
@@ -173,6 +174,17 @@ export default class OffenceCodeRoutes {
     return draftAdjudication?.draftAdjudication
   }
 
+  // The helper that knows how to deal with the specifics of a particular decision type.
+  private helper(decisionFormOrSelectedDecisionId: DecisionForm | string): DecisionHelper {
+    let selectedDecisionId = ''
+    if (typeof decisionFormOrSelectedDecisionId === 'string') {
+      selectedDecisionId = decisionFormOrSelectedDecisionId
+    } else {
+      selectedDecisionId = decisionFormOrSelectedDecisionId?.selectedDecisionId
+    }
+    return selectedDecisionId && this.helpers.get(this.decisions.findById(selectedDecisionId).getType())
+  }
+
   private redirect(pathAndQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
     if (typeof pathAndQuery === 'string') {
       return res.redirect(pathAndQuery)
@@ -182,15 +194,5 @@ export default class OffenceCodeRoutes {
 
   private urlHere(req: Request) {
     return `/offence-code-selection${req.path}`
-  }
-
-  private helper(decisionFormOrSelectedDecisionId: DecisionForm | string): DecisionHelper {
-    let selectedDecisionId = ''
-    if (typeof decisionFormOrSelectedDecisionId === 'string') {
-      selectedDecisionId = decisionFormOrSelectedDecisionId
-    } else {
-      selectedDecisionId = decisionFormOrSelectedDecisionId?.selectedDecisionId
-    }
-    return selectedDecisionId && this.helpers.get(this.decisions.findById(selectedDecisionId).getType())
   }
 }

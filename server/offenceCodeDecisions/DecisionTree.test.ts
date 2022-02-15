@@ -24,7 +24,7 @@ describe('decisions', () => {
   it('no invalid decisions', () => {
     function invalid(decision: Decision): boolean {
       return (
-        (decision.getChildren().length === 0 && decision.getCode() == null) ||
+        (decision.getChildren().length === 0 && decision.getOffenceCode() == null) ||
         (decision.getChildren().length !== 0 && decision.getTitle() == null) ||
         (decision.getUrl() != null &&
           decision.matching(d => d !== decision && d.getUrl() === decision.getUrl()).length !== 0) ||
