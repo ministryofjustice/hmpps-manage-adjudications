@@ -138,14 +138,19 @@ export default class IncidentDetailsEditRoutes {
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     const { originalRadioSelection } = req.session
 
+    const newlySelectedAssociatedPrisonersNumber =
+      isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
+
+    const associatedPrisonersNumber =
+      newlySelectedAssociatedPrisonersNumber || req.session.originalAssociatedPrisonerNumber
+    delete req.session.originalAssociatedPrisonerNumber
+
     if (deleteAssociatedPrisoner) {
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
-      delete req.session.originalRadioSelection
-      delete req.session.redirectUrl
-
-      // TODO: In here we need to redirect to the delete page, and on the submit button do a PUT request to remove the associated prisoner and incident rolecode, then redirect back to /incident-details/<PRN>/<id>/edit
-      return res.redirect(`/delete-person`)
+      // delete req.session.originalRadioSelection
+      // delete req.session.redirectUrl
+      return res.redirect(`/delete-person?associatedPersonId=${associatedPrisonersNumber}`)
     }
 
     if (search) {
@@ -167,13 +172,6 @@ export default class IncidentDetailsEditRoutes {
       req.session.incidentLocation = locationId
       return res.redirect(`/select-associated-prisoner?searchTerm=${searchValue}`)
     }
-
-    const newlySelectedAssociatedPrisonersNumber =
-      isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
-
-    const associatedPrisonersNumber =
-      newlySelectedAssociatedPrisonersNumber || req.session.originalAssociatedPrisonerNumber
-    delete req.session.originalAssociatedPrisonerNumber
 
     const error = validateForm({
       incidentDate,

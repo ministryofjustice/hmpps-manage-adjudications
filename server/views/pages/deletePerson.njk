@@ -1,0 +1,59 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% set title = "Do you want to delete this person?" %}
+
+{% block content %}
+
+  <form method="POST" novalidate="novalidate" data-qa="delete-person-form">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+  	{% if errors | length %}
+		{{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+	{% endif %}
+
+{{ govukRadios({
+  classes: "govuk-radios--inline",
+  idPrefix: "delete-person",
+  id: "delete-person",
+  name: "delete-person",
+  fieldset: {
+    legend: {
+      text: "Do you want to delete " + associatedPersonFriendlyName + "?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  items: [
+    {
+      value: "yes",
+      text: "Yes"
+    },
+    {
+      value: "no",
+      text: "No"
+    }
+  ]
+}) }}
+
+    {{ govukButton({
+      text: "Confirm",
+      type: "submit",
+      classes: "govuk-button--submit",
+      attributes: { "data-qa": "delete-person-submit" }
+    }) }}
+  </div>
+</form>
+
+{% endblock %}
