@@ -15,8 +15,8 @@ const error: { [key in ErrorType]: FormError } = {
   },
 }
 
-export default class StaffDecisionHelper extends DecisionHelper {
-  decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm {
+export default class AnotherDecisionHelper extends DecisionHelper {
+  decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -26,7 +26,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, searching: boolean): FormError[] {
+  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const anotherData = form.selectedDecisionData as AnotherData
     if (!anotherData.anotherNameInput) {
       return [error.ANOTHER_MISSING_NAME_INPUT]

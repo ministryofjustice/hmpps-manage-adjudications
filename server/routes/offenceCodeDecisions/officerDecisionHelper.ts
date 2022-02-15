@@ -1,6 +1,6 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { DecisionForm, OfficerData, PrisonerData, StaffData } from './decisionForm'
+import { DecisionForm, OfficerData, StaffData } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
@@ -35,7 +35,17 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class OfficerDecisionHelper extends DecisionHelper {
-  decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm {
+  getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+    return {
+      pathname: '/select-associated-staff',
+      query: {
+        staffFirstName: (form.selectedDecisionData as OfficerData).officerSearchFirstNameInput,
+        staffLastName: (form.selectedDecisionData as OfficerData).officerSearchLastNameInput,
+      },
+    }
+  }
+
+  decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -58,8 +68,9 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, searching: boolean): FormError[] {
+  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const officerData = form.selectedDecisionData as OfficerData
+    const searching = !!req.body.searchUser
     if (searching) {
       const errors = []
       if (!officerData.officerSearchFirstNameInput) {

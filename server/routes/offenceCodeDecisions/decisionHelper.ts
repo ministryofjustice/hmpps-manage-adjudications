@@ -5,7 +5,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 
-export default abstract class DecisionHelper {
+export default class DecisionHelper {
   viewDataFromDecisionForm(
     decisionForm: DecisionForm,
     user: User,
@@ -17,9 +17,23 @@ export default abstract class DecisionHelper {
     })
   }
 
-  abstract validateDecisionForm(decisionForm: DecisionForm, searching: boolean): FormError[]
+  validateDecisionForm(decisionForm: DecisionForm, req: Request): FormError[] {
+    return []
+  }
 
-  abstract decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm
+  decisionFormFromPost(req: Request): DecisionForm {
+    const { selectedDecisionId } = req.body
+    return {
+      selectedDecisionId,
+    }
+  }
+
+  getRedirectUrlForUserSearch(form: DecisionForm): {
+    pathname: string
+    query: { [key: string]: string }
+  } {
+    return null
+  }
 
   updatedDecisionForm(decisionForm: DecisionForm, redirectData: string): DecisionForm {
     return decisionForm

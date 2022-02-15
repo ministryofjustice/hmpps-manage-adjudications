@@ -25,7 +25,16 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class PrisonerDecisionHelper extends DecisionHelper {
-  decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm {
+  getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+    return {
+      pathname: '/select-associated-prisoner',
+      query: {
+        searchTerm: (form.selectedDecisionData as PrisonerData).prisonerSearchNameInput,
+      },
+    }
+  }
+
+  decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -46,8 +55,9 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, searching: boolean): FormError[] {
+  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const prisonerData = form.selectedDecisionData as PrisonerData
+    const searching = !!req.body.searchUser
     if (searching) {
       if (!prisonerData.prisonerSearchNameInput) {
         return [error.PRISONER_MISSING_NAME_INPUT_SEARCH]

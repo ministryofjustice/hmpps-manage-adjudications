@@ -4,6 +4,7 @@ export type DecisionForm = {
   selectedDecisionId?: string
   selectedDecisionData?: StaffData | OfficerData | PrisonerData | AnotherData
 }
+// TODO put in the helper classes.
 export type StaffData = {
   staffId?: string
   staffSearchFirstNameInput?: string

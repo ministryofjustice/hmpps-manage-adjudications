@@ -2,62 +2,55 @@ import { Request, Response } from 'express'
 import url from 'url'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { FormError } from '../../@types/template'
-import validateForm from './offenceCodeDecisionsValidation'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import IncidentRole from '../../incidentRole/IncidentRole'
-import { properCaseName, formatName } from '../../utils/utils'
-import { DecisionForm, OfficerData, PrisonerData, StaffData } from './decisionForm'
-import {
-  decisionFormFromPost,
-  getAndDeleteSessionDecisionForm,
-  getRedirectUrlForUserSearch,
-  setSessionDecisionForm,
-  updateSessionDecisionForm,
-} from './offenceCodeDecisionFormHelper'
+import { properCaseName } from '../../utils/utils'
+import { DecisionForm } from './decisionForm'
+import { getAndDeleteSessionDecisionForm, setSessionDecisionForm } from './offenceCodeDecisionSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { User } from '../../data/hmppsAuthClient'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
+import StaffDecisionHelper from './staffDecisionHelper'
+import OfficerDecisionHelper from './officerDecisionHelper'
+import AnotherDecisionHelper from './anotherDecisionHelper'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
 
-export const helpers = new Map<DecisionType, DecisionHelper>([[DecisionType.PRISONER, new PrisonerDecisionHelper()]])
+// eslint-disable-next-line no-shadow
+enum ErrorType {
+  MISSING_DECISION = 'MISSING_DECISION',
+}
+
+const error: { [key in ErrorType]: FormError } = {
+  MISSING_DECISION: {
+    href: '#selectedDecisionId',
+    text: 'Please make a choice',
+  },
+}
 
 export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
-  private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { adjudicationNumber, incidentRole, errors } = pageData
-    const { user } = res.locals
-    const decisionForm = pageData // The form backing this page
-    const placeholderValues = await this.placeholderValues(adjudicationNumber, user)
-    const decision = decisionTree.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
-    const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
-    const questions = decision.getChildren().map(d => {
-      return {
-        id: d.id(),
-        label: d.getQuestion().getProcessedText(placeholderValues),
-        type: d.getType().toString(),
-      }
-    })
-    const selectedDecisionViewData = await this.viewDataFromDecisionForm(decisionForm, user)
-    return res.render(`pages/offenceCodeDecisions`, {
-      errors: errors || [],
-      decisionForm,
-      selectedDecisionViewData,
-      questions,
-      pageTitle,
-      pageData,
-    })
-  }
+  private helpers = new Map<DecisionType, DecisionHelper>([
+    [DecisionType.PRISONER, new PrisonerDecisionHelper()],
+    [DecisionType.STAFF, new StaffDecisionHelper()],
+    [DecisionType.OFFICER, new OfficerDecisionHelper()],
+    [DecisionType.ANOTHER, new AnotherDecisionHelper()],
+    [DecisionType.RADIO_SELECTION_ONLY, new DecisionHelper()],
+  ])
+
+  private decisions = decisionTree
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     if (req.query.selectedPerson) {
       // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
       // then redirect to the view page after removing the request parameter.
-      updateSessionDecisionForm(req, req.query.selectedPerson as string, adjudicationNumber)
+      const currentForm = getAndDeleteSessionDecisionForm(req, adjudicationNumber)
+      const updatedForm = this.helper(currentForm).updatedDecisionForm(currentForm, req.query.selectedPerson as string)
+      setSessionDecisionForm(req, updatedForm, adjudicationNumber)
       return this.redirect(this.urlHere(req), res)
     }
     // We are viewing this page. If we have come from a user selection then we should have the previous state of the
@@ -72,39 +65,76 @@ export default class OffenceCodeRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { user } = res.locals
-    const searching = !!req.body.searchUser // Are we searching for a user?
-    const cancel = !!req.body.decisionFormCancel // Are we cancelling the flow?
-    const deleteUser = !!req.body.deleteUser // Are we removing a selected user?
-
-    if (cancel) {
+    // Perform actions we don't need to validate for
+    if (req.body.decisionFormCancel) {
       const prisonerNumber = await this.getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber, user)
       return this.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`, res)
     }
-    if (deleteUser) {
+    if (req.body.deleteUser) {
       return this.redirect(this.urlHere(req), res)
     }
-
-    // Now we can validate
-    const decisionForm = decisionFormFromPost(req)
-    const errors = validateForm(decisionForm, searching)
+    // Default Validation
+    const { selectedDecisionId } = req.body
+    if (!selectedDecisionId) {
+      return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber, incidentRole })
+    }
+    // Validate
+    const helper = this.helper(selectedDecisionId)
+    const decisionForm = helper.decisionFormFromPost(req)
+    const errors = helper.validateDecisionForm(decisionForm, req)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...decisionForm, adjudicationNumber, incidentRole })
     }
-
-    const selectedDecision = decisionTree.findById(decisionForm.selectedDecisionId)
-
-    if (searching) {
-      // Redirect the user to the search page, but before we do that we need to save the current data from the session.
+    // We are navigating away from this page, we need save the state of the page on the session.
+    if (req.body.searchUser) {
       setSessionDecisionForm(req, decisionForm, adjudicationNumber)
-      req.session.redirectUrl = this.urlHere(req) // TODO add functionality to allow simply passing a parameter in the redirect?
-      return this.redirect(getRedirectUrlForUserSearch(decisionForm), res)
+      req.session.redirectUrl = this.urlHere(req)
+      return this.redirect(helper.getRedirectUrlForUserSearch(decisionForm), res)
     }
 
+    // Are there more decisions to be made?
+    const selectedDecision = this.decisions.findById(decisionForm.selectedDecisionId)
     const redirectUrl = selectedDecision.getCode()
       ? `/TODO`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
     return this.redirect(redirectUrl, res)
+  }
+
+  private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
+    const { adjudicationNumber, incidentRole, errors } = pageData
+    const { user } = res.locals
+    const decisionForm = pageData
+    const placeholderValues = await this.placeholderValues(adjudicationNumber, user)
+    const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
+    const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
+    const questions = decision.getChildren().map(d => {
+      return {
+        id: d.id(),
+        label: d.getQuestion().getProcessedText(placeholderValues),
+        type: d.getType().toString(),
+      }
+    })
+    const selectedDecisionViewData = await this.selectedDecisionViewData(decisionForm, user)
+    return res.render(`pages/offenceCodeDecisions`, {
+      errors: errors || [],
+      decisionForm,
+      selectedDecisionViewData,
+      questions,
+      pageTitle,
+      pageData,
+    })
+  }
+
+  private async selectedDecisionViewData(decisionForm: DecisionForm, user: User) {
+    if (decisionForm?.selectedDecisionId)
+      return this.helper(decisionForm).viewDataFromDecisionForm(
+        decisionForm,
+        user,
+        this.userService,
+        this.placeOnReportService
+      )
+    return {}
   }
 
   // This information is used to fill out specific details in questions and titles.
@@ -120,44 +150,6 @@ export default class OffenceCodeRoutes {
       assistedFirstName: properCaseName(associatedPrisoner?.firstName),
       assistedLastName: properCaseName(associatedPrisoner?.lastName),
     }
-  }
-
-  // If an officer, member of staff or prisoner has been searched for then additional view data is displayed.
-  private async viewDataFromDecisionForm(form: DecisionForm, user: User) {
-    if (form?.selectedDecisionData) {
-      switch (decisionTree.findById(form.selectedDecisionId).getType()) {
-        case DecisionType.OFFICER:
-          {
-            const officerId = (form.selectedDecisionData as OfficerData)?.officerId
-            if (officerId) {
-              const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
-              return { officerName: properCaseName(decisionOfficer.name) }
-            }
-          }
-          break
-        case DecisionType.STAFF:
-          {
-            const staffId = (form.selectedDecisionData as StaffData)?.staffId
-            if (staffId) {
-              const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
-              return { staffName: properCaseName(decisionStaff.name) }
-            }
-          }
-          break
-        case DecisionType.PRISONER:
-          {
-            const prisonerId = (form.selectedDecisionData as PrisonerData)?.prisonerId
-            if (prisonerId) {
-              const decisionPrisoner = await this.getPrisonerDetails(prisonerId, user)
-              return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
-            }
-          }
-          break
-        default:
-          break
-      }
-    }
-    return {}
   }
 
   private async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: string, user: User) {
@@ -190,5 +182,15 @@ export default class OffenceCodeRoutes {
 
   private urlHere(req: Request) {
     return `/offence-code-selection${req.path}`
+  }
+
+  private helper(decisionFormOrSelectedDecisionId: DecisionForm | string): DecisionHelper {
+    let selectedDecisionId = ''
+    if (typeof decisionFormOrSelectedDecisionId === 'string') {
+      selectedDecisionId = decisionFormOrSelectedDecisionId
+    } else {
+      selectedDecisionId = decisionFormOrSelectedDecisionId?.selectedDecisionId
+    }
+    return selectedDecisionId && this.helpers.get(this.decisions.findById(selectedDecisionId).getType())
   }
 }

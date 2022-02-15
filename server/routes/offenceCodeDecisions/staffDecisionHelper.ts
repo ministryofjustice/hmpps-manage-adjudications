@@ -35,7 +35,17 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class StaffDecisionHelper extends DecisionHelper {
-  decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm {
+  getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+    return {
+      pathname: '/select-associated-staff',
+      query: {
+        staffFirstName: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
+        staffLastName: (form.selectedDecisionData as StaffData).staffSearchLastNameInput,
+      },
+    }
+  }
+
+  decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -58,8 +68,9 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, searching: boolean): FormError[] {
+  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const staffData = form.selectedDecisionData as StaffData
+    const searching = !!req.body.searchUser
     if (searching) {
       const errors = []
       if (!staffData.staffSearchFirstNameInput) {
