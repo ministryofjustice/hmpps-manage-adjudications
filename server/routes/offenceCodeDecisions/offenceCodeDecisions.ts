@@ -5,11 +5,9 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import IncidentRole from '../../incidentRole/IncidentRole'
-import { properCaseName } from '../../utils/utils'
 import { DecisionForm } from './decisionForm'
 import { getAndDeleteSessionDecisionForm, setSessionDecisionForm } from './offenceCodeDecisionSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
-import { User } from '../../data/hmppsAuthClient'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
@@ -67,7 +65,10 @@ export default class OffenceCodeRoutes {
     const { user } = res.locals
     // Perform actions we don't need to validate for
     if (req.body.decisionFormCancel) {
-      const prisonerNumber = await this.getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber, user)
+      const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
+        Number(adjudicationNumber),
+        user
+      )
       return this.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`, res)
     }
     if (req.body.deleteUser) {
@@ -105,7 +106,7 @@ export default class OffenceCodeRoutes {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
     const decisionForm = pageData
-    const placeholderValues = await this.placeholderValues(adjudicationNumber, user)
+    const placeholderValues = await this.placeOnReportService.getPlaceholderValues(Number(adjudicationNumber), user)
     const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const questions = decision.getChildren().map(d => {
@@ -124,42 +125,6 @@ export default class OffenceCodeRoutes {
       pageTitle,
       pageData,
     })
-  }
-
-  // This information is used to fill out specific details in questions and titles.
-  private async placeholderValues(adjudicationNumber: string, user: User) {
-    const draftAdjudication = await this.getDraftAdjudication(adjudicationNumber, user)
-    const [prisonerDetails, associatedPrisoner] = await Promise.all([
-      this.getPrisonerDetails(draftAdjudication.prisonerNumber, user),
-      this.getPrisonerDetails(draftAdjudication?.incidentRole?.associatedPrisonersNumber, user),
-    ])
-    return {
-      offenderFirstName: properCaseName(prisonerDetails?.firstName),
-      offenderLastName: properCaseName(prisonerDetails?.lastName),
-      assistedFirstName: properCaseName(associatedPrisoner?.firstName),
-      assistedLastName: properCaseName(associatedPrisoner?.lastName),
-    }
-  }
-
-  private async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: string, user: User) {
-    const draftAdjudication = await this.getDraftAdjudication(adjudicationNumber, user)
-    const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
-    return prisonerDetails.prisonerNumber
-  }
-
-  private async getPrisonerDetails(prisonerNumber: string, user: User) {
-    if (prisonerNumber) {
-      return this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
-    }
-    return null
-  }
-
-  private async getDraftAdjudication(adjudicationNumber: string, user: User) {
-    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
-    return draftAdjudication?.draftAdjudication
   }
 
   // The helper that knows how to deal with the specifics of a particular decision type.

@@ -1,6 +1,13 @@
 import { Readable } from 'stream'
 
-import { convertToTitleCase, formatLocation, getDate, getFormattedReporterName, getTime } from '../utils/utils'
+import {
+  convertToTitleCase,
+  formatLocation,
+  getDate,
+  getFormattedReporterName,
+  getTime,
+  properCaseName,
+} from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -266,5 +273,25 @@ export default class PlaceOnReportService {
         return { ...staffMember, currentLocation: currentLocation.locationFullName }
       })
     )
+  }
+
+  async getPlaceholderValues(adjudicationNumber: number, user: User) {
+    const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
+    const [prisonerDetails, associatedPrisoner] = await Promise.all([
+      this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user),
+      this.getPrisonerDetails(draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber, user),
+    ])
+    return {
+      offenderFirstName: properCaseName(prisonerDetails?.firstName),
+      offenderLastName: properCaseName(prisonerDetails?.lastName),
+      assistedFirstName: properCaseName(associatedPrisoner?.firstName),
+      assistedLastName: properCaseName(associatedPrisoner?.lastName),
+    }
+  }
+
+  async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: number, user: User) {
+    const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
+    const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
+    return prisonerDetails.prisonerNumber
   }
 }
