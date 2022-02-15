@@ -98,7 +98,7 @@ export default class OffenceCodeRoutes {
     // Are there more decisions to be made?
     const selectedDecision = this.decisions.findById(form.selectedDecisionId)
     const redirectUrl = selectedDecision.getOffenceCode()
-      ? `/TODO`
+      ? `/details-of-offence/${adjudicationNumber}`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
     return this.redirect(redirectUrl, res)

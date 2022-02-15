@@ -1,6 +1,6 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { DecisionForm, OfficerData, StaffData } from './decisionForm'
+import { DecisionForm, OfficerData, PrisonerData, StaffData } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
@@ -101,6 +101,9 @@ export default class OfficerDecisionHelper extends DecisionHelper {
   }
 
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
-    return { victimOfficer: (form.selectedDecisionData as OfficerData).officerId }
+    return {
+      victimOfficer: (form.selectedDecisionData as OfficerData).officerId,
+      ...super.updatedAnswers(currentAnswers, form),
+    }
   }
 }

@@ -4,4 +4,5 @@ export type DecisionAnswers = {
   victimStaff?: string
   victimPrisoner?: string
   victimAnother?: string
+  offenceCode: number
 }

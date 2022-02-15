@@ -102,6 +102,9 @@ export default class StaffDecisionHelper extends DecisionHelper {
   }
 
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
-    return { victimStaff: (form.selectedDecisionData as StaffData).staffId }
+    return {
+      victimStaff: (form.selectedDecisionData as StaffData).staffId,
+      ...super.updatedAnswers(currentAnswers, form),
+    }
   }
 }

@@ -3,8 +3,11 @@ import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
 import { DecisionAnswers } from './decisionAnswers'
+import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 
 export default class DecisionHelper {
+  private decision = decisionTree
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
     return new Promise(resolve => {
@@ -37,8 +40,13 @@ export default class DecisionHelper {
     return form
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updatedAnswers(answers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
-    return answers
+  updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+    return {
+      victimAnother: currentAnswers.victimAnother,
+      victimOfficer: currentAnswers.victimOfficer,
+      victimPrisoner: currentAnswers.victimPrisoner,
+      victimStaff: currentAnswers.victimStaff,
+      offenceCode: this.decision.findById(form.selectedDecisionId).getOffenceCode(),
+    }
   }
 }

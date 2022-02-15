@@ -1,6 +1,6 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { AnotherData, DecisionForm, OfficerData } from './decisionForm'
+import { AnotherData, DecisionForm, OfficerData, PrisonerData } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { DecisionAnswers } from './decisionAnswers'
@@ -36,6 +36,9 @@ export default class AnotherDecisionHelper extends DecisionHelper {
   }
 
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
-    return { victimAnother: (form.selectedDecisionData as AnotherData).anotherNameInput }
+    return {
+      victimAnother: (form.selectedDecisionData as AnotherData).anotherNameInput,
+      ...super.updatedAnswers(currentAnswers, form),
+    }
   }
 }

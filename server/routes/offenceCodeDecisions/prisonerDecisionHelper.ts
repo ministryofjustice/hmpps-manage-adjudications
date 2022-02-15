@@ -83,6 +83,9 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
   }
 
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
-    return { victimPrisoner: (form.selectedDecisionData as PrisonerData).prisonerId }
+    return {
+      victimPrisoner: (form.selectedDecisionData as PrisonerData).prisonerId,
+      ...super.updatedAnswers(currentAnswers, form),
+    }
   }
 }
