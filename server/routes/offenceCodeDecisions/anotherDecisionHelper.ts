@@ -1,8 +1,9 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { AnotherData, DecisionForm } from './decisionForm'
+import { AnotherData, DecisionForm, OfficerData } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
+import { DecisionAnswers } from './decisionAnswers'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -16,7 +17,7 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class AnotherDecisionHelper extends DecisionHelper {
-  decisionFormFromPost(req: Request): DecisionForm {
+  formFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -26,11 +27,15 @@ export default class AnotherDecisionHelper extends DecisionHelper {
     }
   }
 
-  override validateDecisionForm(form: DecisionForm): FormError[] {
+  override validateForm(form: DecisionForm): FormError[] {
     const anotherData = form.selectedDecisionData as AnotherData
     if (!anotherData.anotherNameInput) {
       return [error.ANOTHER_MISSING_NAME_INPUT]
     }
     return []
+  }
+
+  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+    return { victimAnother: (form.selectedDecisionData as AnotherData).anotherNameInput }
   }
 }

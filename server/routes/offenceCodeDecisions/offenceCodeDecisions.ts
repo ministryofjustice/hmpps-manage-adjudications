@@ -6,7 +6,12 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
-import { getAndDeleteSessionDecisionForm, setSessionDecisionForm } from './offenceCodeDecisionSessionHelper'
+import {
+  getAndDeleteSessionAnswers,
+  getAndDeleteSessionForm,
+  setSessionAnswers,
+  setSessionForm,
+} from './decisionSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
@@ -46,15 +51,15 @@ export default class OffenceCodeRoutes {
     if (req.query.selectedPerson) {
       // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
       // then redirect to the view page after removing the request parameter.
-      const currentForm = getAndDeleteSessionDecisionForm(req, adjudicationNumber)
-      const updatedForm = this.helper(currentForm).updatedDecisionForm(currentForm, req.query.selectedPerson as string)
-      setSessionDecisionForm(req, updatedForm, adjudicationNumber)
+      const currentForm = getAndDeleteSessionForm(req, adjudicationNumber)
+      const updatedForm = this.helper(currentForm).updatedForm(currentForm, req.query.selectedPerson as string)
+      setSessionForm(req, updatedForm, adjudicationNumber)
       return this.redirect(this.urlHere(req), res)
     }
     // We are viewing this page. If we have come from a user selection then we should have the previous state of the
     // form in the session, so we render that now and remove it from the session.
     return this.renderView(req, res, {
-      ...(getAndDeleteSessionDecisionForm(req, adjudicationNumber) || {}),
+      ...(getAndDeleteSessionForm(req, adjudicationNumber) || {}),
       adjudicationNumber,
       incidentRole,
     })
@@ -81,20 +86,23 @@ export default class OffenceCodeRoutes {
     }
     // Validate
     const helper = this.helper(selectedDecisionId)
-    const decisionForm = helper.decisionFormFromPost(req)
-    const errors = helper.validateDecisionForm(decisionForm, req)
+    const form = helper.formFromPost(req)
+    const errors = helper.validateForm(form, req)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, { errors, ...decisionForm, adjudicationNumber, incidentRole })
+      return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
     // We are navigating away from this page, we need save the state of the page on the session.
     if (req.body.searchUser) {
-      setSessionDecisionForm(req, decisionForm, adjudicationNumber)
+      setSessionForm(req, form, adjudicationNumber)
       req.session.redirectUrl = this.urlHere(req)
-      return this.redirect(helper.getRedirectUrlForUserSearch(decisionForm), res)
+      return this.redirect(helper.getRedirectUrlForUserSearch(form), res)
     }
-
+    // Save any data associated with the decisions on the session.
+    const currentAnswers = getAndDeleteSessionAnswers(req, adjudicationNumber)
+    const updatedAnswers = helper.updatedAnswers(currentAnswers, form)
+    setSessionAnswers(req, updatedAnswers, adjudicationNumber)
     // Are there more decisions to be made?
-    const selectedDecision = this.decisions.findById(decisionForm.selectedDecisionId)
+    const selectedDecision = this.decisions.findById(form.selectedDecisionId)
     const redirectUrl = selectedDecision.getOffenceCode()
       ? `/TODO`
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
@@ -105,7 +113,7 @@ export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
-    const decisionForm = pageData
+    const form = pageData
     const placeholderValues = await this.placeOnReportService.getPlaceholderValues(Number(adjudicationNumber), user)
     const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
@@ -116,10 +124,10 @@ export default class OffenceCodeRoutes {
         type: d.getType().toString(),
       }
     })
-    const selectedDecisionViewData = await this.helper(decisionForm)?.viewDataFromDecisionForm(decisionForm, user)
+    const selectedDecisionViewData = await this.helper(form)?.viewDataFromForm(form, user)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
-      decisionForm,
+      decisionForm: form,
       selectedDecisionViewData,
       questions,
       pageTitle,

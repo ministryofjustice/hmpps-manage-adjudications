@@ -2,21 +2,22 @@ import { Request } from 'express'
 import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
+import { DecisionAnswers } from './decisionAnswers'
 
 export default class DecisionHelper {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  viewDataFromDecisionForm(decisionForm: DecisionForm, user: User): Promise<unknown> {
+  viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
     return new Promise(resolve => {
       resolve({})
     })
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  validateDecisionForm(decisionForm: DecisionForm, req: Request): FormError[] {
+  validateForm(form: DecisionForm, req: Request): FormError[] {
     return []
   }
 
-  decisionFormFromPost(req: Request): DecisionForm {
+  formFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -32,7 +33,12 @@ export default class DecisionHelper {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updatedDecisionForm(decisionForm: DecisionForm, redirectData: string): DecisionForm {
-    return decisionForm
+  updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
+    return form
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updatedAnswers(answers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+    return answers
   }
 }

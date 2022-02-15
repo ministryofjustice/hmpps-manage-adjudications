@@ -1,11 +1,12 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { DecisionForm, PrisonerData } from './decisionForm'
+import { DecisionForm, PrisonerData, StaffData } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { formatName } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import { DecisionAnswers } from './decisionAnswers'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -37,7 +38,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override decisionFormFromPost(req: Request): DecisionForm {
+  override formFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -48,7 +49,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
     return {
       selectedDecisionId: form.selectedDecisionId,
       selectedDecisionData: {
@@ -58,7 +59,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
+  override validateForm(form: DecisionForm, req: Request): FormError[] {
     const prisonerData = form.selectedDecisionData as PrisonerData
     const searching = !!req.body.searchUser
     if (searching) {
@@ -72,12 +73,16 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     return []
   }
 
-  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<unknown> {
+  override async viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
     const prisonerId = (form.selectedDecisionData as PrisonerData)?.prisonerId
     if (prisonerId) {
       const decisionPrisoner = await this.placeOnReportService.getPrisonerDetails(prisonerId, user)
       return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
     }
     return {}
+  }
+
+  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+    return { victimPrisoner: (form.selectedDecisionData as PrisonerData).prisonerId }
   }
 }
