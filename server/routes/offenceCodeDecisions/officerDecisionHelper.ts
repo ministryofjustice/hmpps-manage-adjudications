@@ -102,8 +102,8 @@ export default class OfficerDecisionHelper extends DecisionHelper {
 
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
     return {
-      victimOfficer: (form.selectedDecisionData as OfficerData).officerId,
       ...super.updatedAnswers(currentAnswers, form),
+      victimOfficer: (form.selectedDecisionData as OfficerData).officerId,
     }
   }
 }

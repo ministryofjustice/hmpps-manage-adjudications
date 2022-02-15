@@ -37,8 +37,8 @@ export default class AnotherDecisionHelper extends DecisionHelper {
 
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
     return {
-      victimAnother: (form.selectedDecisionData as AnotherData).anotherNameInput,
       ...super.updatedAnswers(currentAnswers, form),
+      victimAnother: (form.selectedDecisionData as AnotherData).anotherNameInput,
     }
   }
 }
