@@ -3,20 +3,16 @@ import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import UserService from '../../services/userService'
 
 export default class DecisionHelper {
-  viewDataFromDecisionForm(
-    decisionForm: DecisionForm,
-    user: User,
-    userService: UserService,
-    placeOnReportService: PlaceOnReportService
-  ): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  viewDataFromDecisionForm(decisionForm: DecisionForm, user: User): Promise<any> {
     return new Promise(resolve => {
       resolve({})
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validateDecisionForm(decisionForm: DecisionForm, req: Request): FormError[] {
     return []
   }
@@ -28,6 +24,7 @@ export default class DecisionHelper {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRedirectUrlForUserSearch(form: DecisionForm): {
     pathname: string
     query: { [key: string]: string }
@@ -35,14 +32,8 @@ export default class DecisionHelper {
     return null
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updatedDecisionForm(decisionForm: DecisionForm, redirectData: string): DecisionForm {
     return decisionForm
-  }
-
-  async getPrisonerDetails(prisonerNumber: string, user: User, placeOnReportService: PlaceOnReportService) {
-    if (prisonerNumber) {
-      return placeOnReportService.getPrisonerDetails(prisonerNumber, user)
-    }
-    return null
   }
 }

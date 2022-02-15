@@ -34,9 +34,9 @@ export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
   private helpers = new Map<DecisionType, DecisionHelper>([
-    [DecisionType.PRISONER, new PrisonerDecisionHelper()],
-    [DecisionType.STAFF, new StaffDecisionHelper()],
-    [DecisionType.OFFICER, new OfficerDecisionHelper()],
+    [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService)],
+    [DecisionType.STAFF, new StaffDecisionHelper(this.userService)],
+    [DecisionType.OFFICER, new OfficerDecisionHelper(this.userService)],
     [DecisionType.ANOTHER, new AnotherDecisionHelper()],
     [DecisionType.RADIO_SELECTION_ONLY, new DecisionHelper()],
   ])
@@ -115,7 +115,7 @@ export default class OffenceCodeRoutes {
         type: d.getType().toString(),
       }
     })
-    const selectedDecisionViewData = await this.selectedDecisionViewData(decisionForm, user)
+    const selectedDecisionViewData = await this.helper(decisionForm)?.viewDataFromDecisionForm(decisionForm, user)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm,
@@ -124,18 +124,6 @@ export default class OffenceCodeRoutes {
       pageTitle,
       pageData,
     })
-  }
-
-  // Get any view data that we might need to show depending on what has been selected.
-  private async selectedDecisionViewData(decisionForm: DecisionForm, user: User) {
-    if (decisionForm?.selectedDecisionId)
-      return this.helper(decisionForm).viewDataFromDecisionForm(
-        decisionForm,
-        user,
-        this.userService,
-        this.placeOnReportService
-      )
-    return {}
   }
 
   // This information is used to fill out specific details in questions and titles.

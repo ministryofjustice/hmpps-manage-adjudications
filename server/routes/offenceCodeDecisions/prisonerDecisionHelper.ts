@@ -6,7 +6,6 @@ import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { formatName } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import UserService from '../../services/userService'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -25,7 +24,11 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class PrisonerDecisionHelper extends DecisionHelper {
-  getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+  constructor(private readonly placeOnReportService: PlaceOnReportService) {
+    super()
+  }
+
+  override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
     return {
       pathname: '/select-associated-prisoner',
       query: {
@@ -34,7 +37,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  decisionFormFromPost(req: Request): DecisionForm {
+  override decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -45,7 +48,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
     return {
       selectedDecisionId: form.selectedDecisionId,
       selectedDecisionData: {
@@ -55,7 +58,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
+  override validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const prisonerData = form.selectedDecisionData as PrisonerData
     const searching = !!req.body.searchUser
     if (searching) {
@@ -69,15 +72,10 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     return []
   }
 
-  async viewDataFromDecisionForm(
-    form: DecisionForm,
-    user: User,
-    userService: UserService,
-    placeOnReportService: PlaceOnReportService
-  ): Promise<any> {
+  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<any> {
     const prisonerId = (form.selectedDecisionData as PrisonerData)?.prisonerId
     if (prisonerId) {
-      const decisionPrisoner = await placeOnReportService.getPrisonerDetails(prisonerId, user)
+      const decisionPrisoner = await this.placeOnReportService.getPrisonerDetails(prisonerId, user)
       return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
     }
     return {}

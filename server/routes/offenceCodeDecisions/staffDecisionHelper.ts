@@ -35,7 +35,11 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class StaffDecisionHelper extends DecisionHelper {
-  getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+  constructor(private readonly userService: UserService) {
+    super()
+  }
+
+  override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
     return {
       pathname: '/select-associated-staff',
       query: {
@@ -45,7 +49,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  decisionFormFromPost(req: Request): DecisionForm {
+  override decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -57,7 +61,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
     return {
       selectedDecisionId: form.selectedDecisionId,
       selectedDecisionData: {
@@ -68,7 +72,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
+  override validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const staffData = form.selectedDecisionData as StaffData
     const searching = !!req.body.searchUser
     if (searching) {
@@ -87,15 +91,10 @@ export default class StaffDecisionHelper extends DecisionHelper {
     return []
   }
 
-  async viewDataFromDecisionForm(
-    form: DecisionForm,
-    user: User,
-    userService: UserService,
-    placeOnReportService: PlaceOnReportService
-  ): Promise<any> {
+  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<any> {
     const staffId = (form.selectedDecisionData as StaffData)?.staffId
     if (staffId) {
-      const decisionStaff = await userService.getStaffFromUsername(staffId, user)
+      const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
       return { staffName: properCaseName(decisionStaff.name) }
     }
     return null

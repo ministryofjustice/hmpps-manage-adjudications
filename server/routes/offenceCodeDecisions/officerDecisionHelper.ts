@@ -5,7 +5,6 @@ import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { properCaseName } from '../../utils/utils'
-import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 
 // eslint-disable-next-line no-shadow
@@ -35,7 +34,11 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class OfficerDecisionHelper extends DecisionHelper {
-  getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+  constructor(private readonly userService: UserService) {
+    super()
+  }
+
+  override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
     return {
       pathname: '/select-associated-staff',
       query: {
@@ -45,7 +48,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  decisionFormFromPost(req: Request): DecisionForm {
+  override decisionFormFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
@@ -57,7 +60,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
     return {
       selectedDecisionId: form.selectedDecisionId,
       selectedDecisionData: {
@@ -68,7 +71,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
+  override validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
     const officerData = form.selectedDecisionData as OfficerData
     const searching = !!req.body.searchUser
     if (searching) {
@@ -87,15 +90,10 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return []
   }
 
-  async viewDataFromDecisionForm(
-    form: DecisionForm,
-    user: User,
-    userService: UserService,
-    placeOnReportService: PlaceOnReportService
-  ): Promise<any> {
+  override async viewDataFromDecisionForm(form: DecisionForm, user: User): Promise<any> {
     const officerId = (form.selectedDecisionData as OfficerData)?.officerId
     if (officerId) {
-      const decisionOfficer = await userService.getStaffFromUsername(officerId, user)
+      const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
       return { officerName: properCaseName(decisionOfficer.name) }
     }
     return null
