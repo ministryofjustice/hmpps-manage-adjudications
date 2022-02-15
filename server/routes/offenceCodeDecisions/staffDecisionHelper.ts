@@ -1,0 +1,92 @@
+// All functionality that knows about the prison decision.
+import { Request } from 'express'
+import { DecisionForm, PrisonerData, StaffData } from './decisionForm'
+import { User } from '../../data/hmppsAuthClient'
+import DecisionHelper from './decisionHelper'
+import { FormError } from '../../@types/template'
+import { properCaseName } from '../../utils/utils'
+import PlaceOnReportService from '../../services/placeOnReportService'
+import UserService from '../../services/userService'
+
+// eslint-disable-next-line no-shadow
+enum ErrorType {
+  STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT = 'STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT',
+  STAFF_MISSING_LAST_NAME_INPUT_SUBMIT = 'STAFF_MISSING_LAST_NAME_INPUT_SUBMIT',
+  STAFF_MISSING_FIRST_NAME_INPUT_SEARCH = 'STAFF_MISSING_FIRST_NAME_INPUT_SEARCH',
+  STAFF_MISSING_LAST_NAME_INPUT_SEARCH = 'STAFF_MISSING_LAST_NAME_INPUT_SEARCH',
+}
+const error: { [key in ErrorType]: FormError } = {
+  STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT: {
+    href: '#staffSearchFirstNameInput',
+    text: 'Search for a member of staff',
+  },
+  STAFF_MISSING_LAST_NAME_INPUT_SUBMIT: {
+    href: '#staffSearchLastNameInput',
+    text: 'Search for a member of staff',
+  },
+  STAFF_MISSING_FIRST_NAME_INPUT_SEARCH: {
+    href: '#staffSearchFirstNameInput',
+    text: 'Enter their first name',
+  },
+  STAFF_MISSING_LAST_NAME_INPUT_SEARCH: {
+    href: '#staffSearchLastNameInput',
+    text: 'Enter their last name',
+  },
+}
+
+export default class StaffDecisionHelper extends DecisionHelper {
+  decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm {
+    const { selectedDecisionId } = req.body
+    return {
+      selectedDecisionId,
+      selectedDecisionData: {
+        staffId: req.body.staffId,
+        staffSearchFirstNameInput: req.body.staffSearchFirstNameInput,
+        staffSearchLastNameInput: req.body.staffSearchLastNameInput,
+      },
+    }
+  }
+
+  updatedDecisionForm(form: DecisionForm, redirectData: string): DecisionForm {
+    return {
+      selectedDecisionId: form.selectedDecisionId,
+      selectedDecisionData: {
+        staffId: redirectData,
+        staffSearchFirstNameInput: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
+        staffSearchLastNameInput: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
+      },
+    }
+  }
+
+  validateDecisionForm(form: DecisionForm, searching: boolean): FormError[] {
+    const staffData = form.selectedDecisionData as StaffData
+    if (searching) {
+      const errors = []
+      if (!staffData.staffSearchFirstNameInput) {
+        errors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SEARCH)
+      }
+      if (!staffData.staffSearchLastNameInput) {
+        errors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SEARCH)
+      }
+      return errors
+    }
+    if (!staffData.staffId && !searching) {
+      return [error.STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT, error.STAFF_MISSING_LAST_NAME_INPUT_SUBMIT]
+    }
+    return []
+  }
+
+  async viewDataFromDecisionForm(
+    form: DecisionForm,
+    user: User,
+    userService: UserService,
+    placeOnReportService: PlaceOnReportService
+  ): Promise<any> {
+    const staffId = (form.selectedDecisionData as StaffData)?.staffId
+    if (staffId) {
+      const decisionStaff = await userService.getStaffFromUsername(staffId, user)
+      return { staffName: properCaseName(decisionStaff.name) }
+    }
+    return null
+  }
+}

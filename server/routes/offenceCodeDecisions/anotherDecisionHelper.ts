@@ -1,0 +1,36 @@
+// All functionality that knows about the prison decision.
+import { Request } from 'express'
+import { AnotherData, DecisionForm } from './decisionForm'
+import DecisionHelper from './decisionHelper'
+import { FormError } from '../../@types/template'
+
+// eslint-disable-next-line no-shadow
+enum ErrorType {
+  ANOTHER_MISSING_NAME_INPUT = 'ANOTHER_MISSING_NAME_INPUT',
+}
+const error: { [key in ErrorType]: FormError } = {
+  ANOTHER_MISSING_NAME_INPUT: {
+    href: `#anotherNameInput`,
+    text: 'You must enter a name',
+  },
+}
+
+export default class StaffDecisionHelper extends DecisionHelper {
+  decisionFormFromPost(decisionForm: DecisionForm, req: Request): DecisionForm {
+    const { selectedDecisionId } = req.body
+    return {
+      selectedDecisionId,
+      selectedDecisionData: {
+        anotherNameInput: req.body.anotherNameInput,
+      },
+    }
+  }
+
+  validateDecisionForm(form: DecisionForm, searching: boolean): FormError[] {
+    const anotherData = form.selectedDecisionData as AnotherData
+    if (!anotherData.anotherNameInput) {
+      return [error.ANOTHER_MISSING_NAME_INPUT]
+    }
+    return []
+  }
+}

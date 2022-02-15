@@ -17,8 +17,12 @@ import {
 } from './offenceCodeDecisionFormHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import { User } from '../../data/hmppsAuthClient'
+import PrisonerDecisionHelper from './prisonerDecisionHelper'
+import DecisionHelper from './decisionHelper'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
+
+export const helpers = new Map<DecisionType, DecisionHelper>([[DecisionType.PRISONER, new PrisonerDecisionHelper()]])
 
 export default class OffenceCodeRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
