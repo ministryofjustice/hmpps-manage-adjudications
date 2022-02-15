@@ -1,6 +1,6 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { AnotherData, DecisionForm, OfficerData, PrisonerData } from './decisionForm'
+import { AnotherData, DecisionForm } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { DecisionAnswers } from './decisionAnswers'
