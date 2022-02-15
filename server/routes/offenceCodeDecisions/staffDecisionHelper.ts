@@ -5,7 +5,6 @@ import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { properCaseName } from '../../utils/utils'
-import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 
 // eslint-disable-next-line no-shadow

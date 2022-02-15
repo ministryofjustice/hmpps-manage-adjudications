@@ -26,7 +26,7 @@ export default class AnotherDecisionHelper extends DecisionHelper {
     }
   }
 
-  override validateDecisionForm(form: DecisionForm, req: Request): FormError[] {
+  override validateDecisionForm(form: DecisionForm): FormError[] {
     const anotherData = form.selectedDecisionData as AnotherData
     if (!anotherData.anotherNameInput) {
       return [error.ANOTHER_MISSING_NAME_INPUT]
