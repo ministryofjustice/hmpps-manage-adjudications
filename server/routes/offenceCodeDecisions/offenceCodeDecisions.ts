@@ -66,36 +66,30 @@ export default class OffenceCodeRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber, incidentRole } = req.params
-    const { user } = res.locals
-    // Perform actions we don't need to validate for
     if (req.body.decisionFormCancel) {
-      const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
-        Number(adjudicationNumber),
-        user
-      )
-      return this.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`, res)
+      return this.cancel(req, res)
     }
     if (req.body.deleteUser) {
-      return this.redirect(this.urlHere(req), res)
+      return this.deleteUser(req, res)
     }
-    // Default Validation
+    if (req.body.searchUser) {
+      return this.search(req, res)
+    }
+    return this.submitDecision(req, res)
+  }
+
+  submitDecision = async (req: Request, res: Response): Promise<void> => {
+    const { adjudicationNumber, incidentRole } = req.params
     const { selectedDecisionId } = req.body
+    // Validation
     if (!selectedDecisionId) {
       return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber, incidentRole })
     }
-    // Validate
     const helper = this.helper(selectedDecisionId)
     const form = helper.formFromPost(req)
     const errors = helper.validateForm(form, req)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
-    }
-    // We are navigating away from this page, we need save the state of the page on the session.
-    if (req.body.searchUser) {
-      setSessionForm(req, form, adjudicationNumber)
-      req.session.redirectUrl = this.urlHere(req)
-      return this.redirect(helper.getRedirectUrlForUserSearch(form), res)
     }
     // Save any data associated with the decisions on the session.
     const currentAnswers = getAndDeleteSessionAnswers(req, adjudicationNumber)
@@ -108,6 +102,34 @@ export default class OffenceCodeRoutes {
       : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
 
     return this.redirect(redirectUrl, res)
+  }
+
+  cancel = async (req: Request, res: Response): Promise<void> => {
+    const { adjudicationNumber } = req.params
+    const { user } = res.locals
+    const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
+      Number(adjudicationNumber),
+      user
+    )
+    return this.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`, res)
+  }
+
+  deleteUser = async (req: Request, res: Response): Promise<void> => {
+    return this.redirect(this.urlHere(req), res)
+  }
+
+  search = async (req: Request, res: Response): Promise<void> => {
+    const { adjudicationNumber, incidentRole } = req.params
+    const { selectedDecisionId } = req.body
+    const helper = this.helper(selectedDecisionId)
+    const form = helper.formFromPost(req)
+    const errors = helper.validateForm(form, req)
+    if (errors && errors.length !== 0) {
+      return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
+    }
+    setSessionForm(req, form, adjudicationNumber)
+    req.session.redirectUrl = this.urlHere(req)
+    return this.redirect(helper.getRedirectUrlForUserSearch(form), res)
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {

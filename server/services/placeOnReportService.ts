@@ -279,7 +279,8 @@ export default class PlaceOnReportService {
     const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
     const [prisonerDetails, associatedPrisoner] = await Promise.all([
       this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user),
-      this.getPrisonerDetails(draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber, user),
+      draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber &&
+        this.getPrisonerDetails(draftAdjudication.draftAdjudication.incidentRole.associatedPrisonersNumber, user),
     ])
     return {
       offenderFirstName: properCaseName(prisonerDetails?.firstName),
