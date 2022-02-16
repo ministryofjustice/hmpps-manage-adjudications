@@ -46,10 +46,12 @@ export default class IncidentDetailsEditRoutes {
   private getAssociatedPrisonerNumber = (
     selectedRadio: string,
     previouslyReportedAssociatedPrisoner: string,
-    newAssociatedPrisoner: string
+    newAssociatedPrisoner: string,
+    personDeleted: string
   ): string => {
     if (selectedRadio === 'onTheirOwn' || selectedRadio === 'attemptOnTheirOwn') return null
-    if (newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
+    if (personDeleted === 'true') return null
+    if (newAssociatedPrisoner && newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
     if (previouslyReportedAssociatedPrisoner !== undefined) return previouslyReportedAssociatedPrisoner
     return null
   }
@@ -65,6 +67,7 @@ export default class IncidentDetailsEditRoutes {
     } = pageData
     const { prisonerNumber, id } = req.params
     const { user } = res.locals
+    const { personDeleted } = req.query
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
 
     const IdNumberValue: number = parseInt(id as string, 10)
@@ -87,7 +90,8 @@ export default class IncidentDetailsEditRoutes {
     const associatedPrisonerNumber = this.getAssociatedPrisonerNumber(
       radioButtonSelected,
       existingDraftIncidentDetails.incidentRole.associatedPrisonersNumber,
-      selectedPerson
+      selectedPerson,
+      personDeleted as string
     )
 
     const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonerNumber, user)
@@ -99,6 +103,7 @@ export default class IncidentDetailsEditRoutes {
       associatedPrisonerNumber,
       associatedPrisonerName,
     }
+
     return res.render(`pages/incidentDetails`, {
       errors: error ? [error] : [],
       prisoner,
@@ -120,6 +125,8 @@ export default class IncidentDetailsEditRoutes {
     }
     delete req.session.incidentDate
     delete req.session.incidentLocation
+    delete req.session.redirectUrl
+    delete req.session.originalAssociatedPrisonerNumber
     return this.renderView(req, res, pageData)
   }
 
@@ -135,21 +142,25 @@ export default class IncidentDetailsEditRoutes {
     } = req.body
     const { user } = res.locals
     const { prisonerNumber, id } = req.params
+    const { personDeleted } = req.query
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     const { originalRadioSelection } = req.session
 
     const newlySelectedAssociatedPrisonersNumber =
       isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
 
-    const associatedPrisonersNumber =
-      newlySelectedAssociatedPrisonersNumber || req.session.originalAssociatedPrisonerNumber
+    const associatedPrisonersNumber = this.getAssociatedPrisonerNumber(
+      currentRadioSelected,
+      req.session.originalAssociatedPrisonerNumber,
+      newlySelectedAssociatedPrisonersNumber,
+      personDeleted as string
+    )
     delete req.session.originalAssociatedPrisonerNumber
 
     if (deleteAssociatedPrisoner) {
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
-      // delete req.session.originalRadioSelection
-      // delete req.session.redirectUrl
+      req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/edit`
       return res.redirect(`/delete-person?associatedPersonId=${associatedPrisonersNumber}`)
     }
 
@@ -185,7 +196,6 @@ export default class IncidentDetailsEditRoutes {
         incidentDate,
         locationId,
         originalRadioSelection: currentRadioSelected,
-        associatedPrisonersNumber,
       })
 
     const IdNumberValue: number = parseInt(id as string, 10)

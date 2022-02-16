@@ -320,13 +320,16 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.inciteAssociatedPrisonerDeleteButton().click()
-    // TODO: Once the /delete-person page is created, it will redirect automatically to this page so the next line can be removed
-    cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review`)
+    cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check()
+    cy.get('[data-qa="delete-person-submit"]').click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq('/incident-details/G6415GD/34/submitted/edit')
+      expect(loc.search).to.eq('?referrer=/prisoner-report/G6123VU/1524455/review&personDeleted=true')
+    })
     incidentDetailsPage.timeInputHours().should('have.value', '13')
     incidentDetailsPage.timeInputMinutes().should('have.value', '00')
     incidentDetailsPage.locationSelector().contains('Workshop 2')
-    // TODO: Once the /delete-person page is created, the next line should be true
-    // incidentDetailsPage.radioButtons().find('input[value="onTheirOwn"]').should('be.checked')
+    incidentDetailsPage.radioButtons().find('input[value="inciteAnotherPrisoner"]').should('be.checked')
   })
   it('should redirect to the task list page if the user exists the page', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review`)

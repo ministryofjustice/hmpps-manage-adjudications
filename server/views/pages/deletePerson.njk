@@ -25,9 +25,10 @@
 
 {{ govukRadios({
   classes: "govuk-radios--inline",
-  idPrefix: "delete-person",
-  id: "delete-person",
-  name: "delete-person",
+  idPrefix: "deletePerson",
+  id: "deletePerson",
+  name: "deletePerson",
+  attributes: { "data-qa": "radio-buttons" },
   fieldset: {
     legend: {
       text: "Do you want to delete " + associatedPersonFriendlyName + "?",

@@ -7,8 +7,8 @@ const errors: { [key: string]: FormError } = {
   },
 }
 
-export default function validateForm({ radioSelection }: { radioSelection: string }): FormError | null {
-  if (!radioSelection) {
+export default function validateForm({ deletePerson }: { deletePerson: string }): FormError | null {
+  if (!deletePerson) {
     return errors.MISSING_RADIO
   }
   return null

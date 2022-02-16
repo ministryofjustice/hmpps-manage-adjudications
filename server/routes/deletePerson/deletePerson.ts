@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import validateForm from './deletePersonValidation'
+import { convertToTitleCase } from '../../utils/utils'
 import { User } from '../../data/hmppsAuthClient'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
@@ -21,7 +22,7 @@ export default class DeletePersonRoutes {
 
   private getAssociatedStaffName = async (associatedStaffUsername: string, user: User) => {
     const associatedStaff = await this.userService.getStaffFromUsername(associatedStaffUsername, user)
-    return associatedStaff.name
+    return convertToTitleCase(associatedStaff.name)
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -44,16 +45,20 @@ export default class DeletePersonRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { radioSelection } = req.body
+    const { deletePerson } = req.body
+    const { redirectUrl } = req.session
+    const { associatedPersonId } = req.query
 
-    const error = validateForm({ radioSelection })
+    const error = validateForm({ deletePerson })
     if (error)
       return this.renderView(req, res, {
         error,
       })
-    // if 'yes' delete person from adjudication
-    // if 'no' just redirect
-    // redirect user back to previous page - use redirectUrl on session?
-    return res.redirect('/somewhere')
+    const queryConnector = redirectUrl.includes('?') ? '&' : '?'
+    const redirect =
+      deletePerson === 'yes'
+        ? `${redirectUrl}${queryConnector}personDeleted=true`
+        : `${redirectUrl}${queryConnector}selectedPerson=${associatedPersonId}`
+    return res.redirect(redirect)
   }
 }
