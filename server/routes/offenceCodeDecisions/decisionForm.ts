@@ -1,20 +1,24 @@
-// Form data backing a decision. Used in form submits and to allow the saving of form data on a decision page so that
-// we can repopulate it when returning from a user lookup.
+// Form data backing a decision. Used in form submits and to allow the saving of form data on a decision page. This
+// allows consistent validation and saving backing state when navigating away from a page to do e.f. prisoner search.
 export type DecisionForm = {
   selectedDecisionId?: string
-  selectedDecisionData?: StaffData | OfficerData | PrisonerData
+  selectedDecisionData?: StaffData | OfficerData | PrisonerData | OtherPersonData
 }
-export type SelectPrisonerData = {
-  userId?: string
-  userSearchInput?: string
+export type StaffData = {
+  staffId?: string
+  staffSearchFirstNameInput?: string
+  staffSearchLastNameInput?: string
+}
+export type OfficerData = {
+  officerId?: string
+  officerSearchFirstNameInput?: string
+  officerSearchLastNameInput?: string
+}
+export type PrisonerData = {
+  prisonerId?: string
+  prisonerSearchNameInput?: string
 }
 
-export type SelectStaffData = {
-  userId?: string
-  userSearchFirstNameInput?: string
-  userSearchLastNameInput?: string
+export type OtherPersonData = {
+  otherPersonNameInput?: string
 }
-
-export type StaffData = SelectStaffData
-export type OfficerData = SelectStaffData
-export type PrisonerData = SelectPrisonerData

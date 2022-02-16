@@ -1,0 +1,60 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro officerSearchOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
+    {% set selectedDecisionId = decisionForm.selectedDecisionId %}
+    {% set officerId = decisionForm.selectedDecisionData.officerId %}
+    {% set officerSearchFirstNameInput = decisionForm.selectedDecisionData.officerSearchFirstNameInput %}
+    {% set officerSearchLastNameInput = decisionForm.selectedDecisionData.officerSearchLastNameInput %}
+    {% set officerName = selectedDecisionViewData.officerName %}
+
+    {% if selectedDecisionId == questionId and officerId != null %}
+        <input type="hidden" name="officerId" value="{{ officerId }}" />
+        <div>
+            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
+            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
+            <div>
+                {{ govukButton({
+                    text: 'Delete',
+                    classes: "govuk-button--secondary",
+                    type: "submit",
+                    name: "deleteUser",
+                    value: "deleteUser"
+                }) }}
+            </div>
+        </div>
+    {% else %}
+
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+        <div id="officerName" class="govuk-form-group flex-container flex-column">
+            {{ govukInput({
+                id: "officerSearchFirstNameInput",
+                name: "officerSearchFirstNameInput",
+                classes: "govuk-!-width-one-third",
+                value: selectedDecisionId == questionId and officerSearchFirstNameInput,
+                errorMessage: errors | findErrors(["officerSearchFirstNameInput"]),
+                label: {
+                    text: "First name"
+                }
+            }) }}
+            {{ govukInput({
+                id: "officerSearchLastNameInput",
+                name: "officerSearchLastNameInput",
+                classes: "govuk-!-width-one-third",
+                value: selectedDecisionId == questionId and officerSearchLastNameInput,
+                errorMessage: errors | findErrors(["officerSearchLastNameInput"]),
+                label: {
+                    text: "Last name"
+                }
+            }) }}
+        </div>
+            {{ govukButton({
+                text: "Search",
+                classes: "govuk-button--secondary conditionalRadioSearchButton",
+                type: "submit",
+                name: "searchUser",
+                value: "searchUser"
+            }) }}
+    {% endif %}
+
+{% endmacro %}

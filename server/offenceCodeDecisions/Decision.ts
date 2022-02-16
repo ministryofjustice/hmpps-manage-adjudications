@@ -9,7 +9,7 @@ export class Decision {
 
   private readonly decisionQuestion: Question
 
-  private decisionCode: string
+  private offenceCode: number
 
   private decisionTitle: Title
 
@@ -53,8 +53,8 @@ export class Decision {
     return this
   }
 
-  code(code: string | number) {
-    this.decisionCode = `${code}`
+  code(offenceCode: number) {
+    this.offenceCode = offenceCode
     return this
   }
 
@@ -70,10 +70,6 @@ export class Decision {
 
   getType() {
     return this.decisionType
-  }
-
-  getId() {
-    return this.id()
   }
 
   getTitle() {
@@ -96,8 +92,8 @@ export class Decision {
     return this.decisionUrl || this.id()
   }
 
-  getCode() {
-    return this.decisionCode
+  getOffenceCode() {
+    return this.offenceCode
   }
 
   allUrls(): Array<string> {
@@ -134,8 +130,8 @@ export class Decision {
 
   allCodes(): Array<string> {
     const codes = [].concat(...this.getChildren().map(c => c.allCodes()))
-    if (this.getCode()) {
-      codes.push(this.getCode())
+    if (this.getOffenceCode()) {
+      codes.push(this.getOffenceCode())
     }
     return codes.sort()
   }
@@ -151,8 +147,8 @@ export class Decision {
     return questions
   }
 
-  findByCode(code: string): Decision {
-    return this.findBy(d => d.getCode() === code)
+  findByCode(offenceCode: number): Decision {
+    return this.findBy(d => d.getOffenceCode() === offenceCode)
   }
 
   toString(indent = 0): string {
@@ -164,8 +160,8 @@ export class Decision {
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
     }
-    if (this.getCode()) {
-      output = `${output}\r\n${padding}Code: ${this.getCode()}`
+    if (this.getOffenceCode()) {
+      output = `${output}\r\n${padding}Offence Code: ${this.getOffenceCode()}`
     }
     if (this.getChildren().length) {
       output = `${output}\r\n${this.getChildren()
@@ -186,5 +182,5 @@ export enum DecisionType {
   PRISONER = 'PRISONER',
   OFFICER = 'OFFICER',
   STAFF = 'STAFF',
-  ANOTHER = 'ANOTHER',
+  OTHER_PERSON = 'OTHER_PERSON',
 }

@@ -3,8 +3,10 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "../macros/staffUserSearchOffenceCodeDecisionInput.njk" import staffUserSearchOffenceCodeDecisionInput %}
+{% from "../macros/staffSearchOffenceCodeDecisionInput.njk" import staffSearchOffenceCodeDecisionInput %}
+{% from "../macros/officerSearchOffenceCodeDecisionInput.njk" import officerSearchOffenceCodeDecisionInput %}
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
+{% from "../macros/otherPersonOffenceCodeDecisionInput.njk" import otherPersonOffenceCodeDecisionInput %}
 
 {% set title = pageTitle %}
 
@@ -16,28 +18,21 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     {% set items = [] %}
     {% for question in questions %}
-        {% if question.type == 'OFFICER' or question.type == 'STAFF' %}
+        {% if question.type == 'OFFICER' %}
             {% set decisionHtml %}
-                {{  staffUserSearchOffenceCodeDecisionInput(
-                    decisionForm.selectedDecisionId,
-                    question.id,
-                    decisionForm.selectedDecisionData.userId,
-                    selectedDecisionViewData.staffName,
-                    decisionForm.selectedDecisionData.userSearchFirstNameInput,
-                    decisionForm.selectedDecisionData.userSearchLastNameInput,
-                    errors
-                ) }}
+                {{ officerSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+            {% endset -%}
+        {% elseif question.type == 'STAFF' %}
+            {% set decisionHtml %}
+                {{ staffSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+            {% endset -%}
+        {% elseif question.type == 'OTHER_PERSON' %}
+            {% set decisionHtml %}
+                {{ otherPersonOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
         {% elseif question.type == 'PRISONER' %}
             {% set decisionHtml %}
-                {{  prisonerSearchOffenceCodeDecisionInput(
-                    decisionForm.selectedDecisionId,
-                    question.id,
-                    decisionForm.selectedDecisionData.userId,
-                    selectedDecisionViewData.prisonerName,
-                    decisionForm.selectedDecisionData.userSearchInput,
-                    errors
-                ) }}
+                {{ prisonerSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
         {% else %}
             {% set decisionHtml = null %}
