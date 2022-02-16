@@ -62,13 +62,11 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  override updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override formAfterSearch(selectedDecisionId: string, selectedPerson: string): DecisionForm {
     return {
-      selectedDecisionId: form.selectedDecisionId,
+      selectedDecisionId,
       selectedDecisionData: {
-        staffId: redirectData,
-        staffSearchFirstNameInput: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
-        staffSearchLastNameInput: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
+        staffId: selectedPerson,
       },
     }
   }

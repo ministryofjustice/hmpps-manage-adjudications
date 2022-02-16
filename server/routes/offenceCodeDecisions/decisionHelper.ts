@@ -36,8 +36,8 @@ export default class DecisionHelper {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
-    return form
+  formAfterSearch(selectedDecisionId: string, selectedUser: string): DecisionForm {
+    return null
   }
 
   updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {

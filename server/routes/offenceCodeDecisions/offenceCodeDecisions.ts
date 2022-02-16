@@ -6,12 +6,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import IncidentRole from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
-import {
-  getAndDeleteSessionAnswers,
-  getAndDeleteSessionForm,
-  setSessionAnswers,
-  setSessionForm,
-} from './decisionSessionHelper'
+import { getAndDeleteSessionAnswers, setSessionAnswers } from './decisionSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
@@ -48,21 +43,16 @@ export default class OffenceCodeRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    if (req.query.selectedPerson) {
-      // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
-      // then redirect to the view page after removing the request parameter.
-      const currentForm = getAndDeleteSessionForm(req, adjudicationNumber)
-      const updatedForm = this.helper(currentForm).updatedForm(currentForm, req.query.selectedPerson as string)
-      setSessionForm(req, updatedForm, adjudicationNumber)
-      return this.redirect(this.urlHere(req), res)
+    if (req.query.selectedPerson && req.query.selectedDecisionId) {
+      // We are coming back from a user selection.
+      const selectedPerson = req.query.selectedPerson as string
+      const selectedDecisionId = req.query.selectedDecisionId as string
+      const helper = this.helper(selectedDecisionId)
+      const form = helper.formAfterSearch(selectedDecisionId, selectedPerson)
+      return this.renderView(req, res, { ...form, adjudicationNumber, incidentRole })
     }
-    // We are viewing this page. If we have come from a user selection then we should have the previous state of the
-    // form in the session, so we render that now and remove it from the session.
-    return this.renderView(req, res, {
-      ...(getAndDeleteSessionForm(req, adjudicationNumber) || {}),
-      adjudicationNumber,
-      incidentRole,
-    })
+    // We are viewing the page normally
+    return this.renderView(req, res, { adjudicationNumber, incidentRole })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -95,13 +85,13 @@ export default class OffenceCodeRoutes {
     const currentAnswers = getAndDeleteSessionAnswers(req, adjudicationNumber)
     const updatedAnswers = helper.updatedAnswers(currentAnswers, form)
     setSessionAnswers(req, updatedAnswers, adjudicationNumber)
-    // Are there more decisions to be made?
+    // Where we redirect to depends on if we are at the end or not.
     const selectedDecision = this.decisions.findById(form.selectedDecisionId)
-    const redirectUrl = selectedDecision.getOffenceCode()
-      ? `/details-of-offence/${adjudicationNumber}`
-      : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
-
-    return this.redirect(redirectUrl, res)
+    if (!selectedDecision.getOffenceCode()) {
+      const nextDecisionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
+      return this.redirect(nextDecisionUrl, res)
+    }
+    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}`, query: updatedAnswers }, res)
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
@@ -127,8 +117,7 @@ export default class OffenceCodeRoutes {
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
-    setSessionForm(req, form, adjudicationNumber)
-    req.session.redirectUrl = this.urlHere(req)
+    req.session.redirectUrl = `${this.urlHere(req)}?selectedDecisionId=${selectedDecisionId}`
     return this.redirect(helper.getRedirectUrlForUserSearch(form), res)
   }
 
@@ -171,11 +160,11 @@ export default class OffenceCodeRoutes {
     return selectedDecisionId && this.helpers.get(this.decisions.findById(selectedDecisionId).getType())
   }
 
-  private redirect(pathAndQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
-    if (typeof pathAndQuery === 'string') {
-      return res.redirect(pathAndQuery)
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string | number } } | string, res: Response) {
+    if (typeof urlQuery === 'string') {
+      return res.redirect(urlQuery)
     }
-    return res.redirect(url.format(pathAndQuery))
+    return res.redirect(url.format(urlQuery))
   }
 
   private urlHere(req: Request) {

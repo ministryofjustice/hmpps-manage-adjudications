@@ -61,13 +61,11 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override formAfterSearch(selectedDecisionId: string, selectedPerson: string): DecisionForm {
     return {
-      selectedDecisionId: form.selectedDecisionId,
+      selectedDecisionId,
       selectedDecisionData: {
-        officerId: redirectData,
-        officerSearchFirstNameInput: (form.selectedDecisionData as OfficerData).officerSearchFirstNameInput,
-        officerSearchLastNameInput: (form.selectedDecisionData as OfficerData).officerSearchLastNameInput,
+        officerId: selectedPerson,
       },
     }
   }

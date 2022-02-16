@@ -49,12 +49,11 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override formAfterSearch(selectedDecisionId: string, selectedPerson: string): DecisionForm {
     return {
-      selectedDecisionId: form.selectedDecisionId,
+      selectedDecisionId,
       selectedDecisionData: {
-        prisonerId: redirectData,
-        prisonerSearchNameInput: (form.selectedDecisionData as PrisonerData).prisonerSearchNameInput,
+        prisonerId: selectedPerson,
       },
     }
   }
