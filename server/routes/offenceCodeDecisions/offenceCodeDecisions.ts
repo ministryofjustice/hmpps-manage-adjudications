@@ -136,7 +136,10 @@ export default class OffenceCodeRoutes {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
     const form = pageData
-    const placeholderValues = await this.placeOnReportService.getPlaceholderValues(Number(adjudicationNumber), user)
+    const placeholderValues = await this.placeOnReportService.getOffenceSelectionPlaceholderValues(
+      Number(adjudicationNumber),
+      user
+    )
     const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const questions = decision.getChildren().map(d => {

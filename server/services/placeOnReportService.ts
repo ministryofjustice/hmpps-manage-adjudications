@@ -275,7 +275,7 @@ export default class PlaceOnReportService {
     )
   }
 
-  async getPlaceholderValues(adjudicationNumber: number, user: User) {
+  async getOffenceSelectionPlaceholderValues(adjudicationNumber: number, user: User) {
     const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
     const { prisonerNumber } = draftAdjudication.draftAdjudication
     const associatedPrisonerNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber
