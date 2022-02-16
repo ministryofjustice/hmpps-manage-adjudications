@@ -30,7 +30,7 @@ export default function routes(
   router.use('/offence-code-selection', offenceCodeDecisionsRoutes({ placeOnReportService, userService }))
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/offence-details', typeOfOffenceRoutes())
-  router.use('/details-of-offence', detailsOfOffenceRoutes())
+  router.use('/details-of-offence', detailsOfOffenceRoutes({ placeOnReportService }))
   router.use('/assault', assaultRoutes({ placeOnReportService, userService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService, locationService }))

@@ -85,13 +85,13 @@ export default class OffenceCodeRoutes {
     const currentAnswers = getAndDeleteSessionAnswers(req, adjudicationNumber)
     const updatedAnswers = helper.updatedAnswers(currentAnswers, form)
     setSessionAnswers(req, updatedAnswers, adjudicationNumber)
-    // Where we redirect to depends on if we are at the end or not.
+    // We redirect to the next decision or the details of offence page if this is the last.
     const selectedDecision = this.decisions.findById(form.selectedDecisionId)
     if (!selectedDecision.getOffenceCode()) {
       const nextDecisionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
       return this.redirect(nextDecisionUrl, res)
     }
-    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}`, query: updatedAnswers }, res)
+    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: updatedAnswers }, res)
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
@@ -160,7 +160,7 @@ export default class OffenceCodeRoutes {
     return selectedDecisionId && this.helpers.get(this.decisions.findById(selectedDecisionId).getType())
   }
 
-  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string | number } } | string, res: Response) {
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
     if (typeof urlQuery === 'string') {
       return res.redirect(urlQuery)
     }

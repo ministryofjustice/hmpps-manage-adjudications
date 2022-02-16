@@ -147,8 +147,9 @@ export class Decision {
     return questions
   }
 
-  findByCode(offenceCode: number): Decision {
-    return this.findBy(d => d.getOffenceCode() === offenceCode)
+  findByCode(offenceCode: number | string): Decision {
+    const offenceCodeToSearch = typeof offenceCode === 'string' ? Number(offenceCode) : offenceCode
+    return this.findBy(d => d.getOffenceCode() === offenceCodeToSearch)
   }
 
   toString(indent = 0): string {
