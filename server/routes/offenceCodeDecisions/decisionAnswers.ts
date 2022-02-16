@@ -3,6 +3,6 @@ export type DecisionAnswers = {
   victimOfficer?: string
   victimStaff?: string
   victimPrisoner?: string
-  victimAnother?: string
+  victimOtherPerson?: string
   offenceCode: number
 }

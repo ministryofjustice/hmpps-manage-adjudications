@@ -182,5 +182,5 @@ export enum DecisionType {
   PRISONER = 'PRISONER',
   OFFICER = 'OFFICER',
   STAFF = 'STAFF',
-  ANOTHER = 'ANOTHER',
+  OTHER_PERSON = 'OTHER_PERSON',
 }

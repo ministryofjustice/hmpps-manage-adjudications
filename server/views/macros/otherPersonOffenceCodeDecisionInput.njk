@@ -1,16 +1,16 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro anotherOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
+{% macro otherPersonOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
     {% set selectedDecisionId = decisionForm.selectedDecisionId %}
-    {% set anotherNameInput = decisionForm.selectedDecisionData.anotherNameInput %}
+    {% set anotherNameInput = decisionForm.selectedDecisionData.otherPersonNameInput %}
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter a name</p>
-        <div id="anotherName" class="govuk-form-group flex-container flex-column">
+        <div id="otherPersonName" class="govuk-form-group flex-container flex-column">
             {{ govukInput({
-                id: "anotherNameInput",
-                name: "anotherNameInput",
+                id: "otherPersonNameInput",
+                name: "otherPersonNameInput",
                 classes: "govuk-!-width-one-third",
                 value: selectedDecisionId == questionId and staffSearchFirstNameInput,
-                errorMessage: errors | findErrors(["anotherNameInput"]),
+                errorMessage: errors | findErrors(["otherPersonNameInput"]),
                 label: {
                     text: "Enter a name"
                 }

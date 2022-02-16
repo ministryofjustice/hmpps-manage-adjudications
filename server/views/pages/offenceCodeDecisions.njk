@@ -6,7 +6,7 @@
 {% from "../macros/staffSearchOffenceCodeDecisionInput.njk" import staffSearchOffenceCodeDecisionInput %}
 {% from "../macros/officerSearchOffenceCodeDecisionInput.njk" import officerSearchOffenceCodeDecisionInput %}
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
-{% from "../macros/anotherOffenceCodeDecisionInput.njk" import anotherOffenceCodeDecisionInput %}
+{% from "../macros/otherPersonOffenceCodeDecisionInput.njk" import otherPersonOffenceCodeDecisionInput %}
 
 {% set title = pageTitle %}
 
@@ -26,9 +26,9 @@
             {% set decisionHtml %}
                 {{ staffSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
-        {% elseif question.type == 'ANOTHER' %}
+        {% elseif question.type == 'OTHER_PERSON' %}
             {% set decisionHtml %}
-                {{ anotherOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ otherPersonOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
         {% elseif question.type == 'PRISONER' %}
             {% set decisionHtml %}

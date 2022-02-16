@@ -17,7 +17,7 @@ import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
 import OfficerDecisionHelper from './officerDecisionHelper'
-import AnotherDecisionHelper from './anotherDecisionHelper'
+import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
 
@@ -40,7 +40,7 @@ export default class OffenceCodeRoutes {
     [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService)],
     [DecisionType.STAFF, new StaffDecisionHelper(this.userService)],
     [DecisionType.OFFICER, new OfficerDecisionHelper(this.userService)],
-    [DecisionType.ANOTHER, new AnotherDecisionHelper()],
+    [DecisionType.OTHER_PERSON, new OtherPersonDecisionHelper()],
     [DecisionType.RADIO_SELECTION_ONLY, new DecisionHelper()],
   ])
 

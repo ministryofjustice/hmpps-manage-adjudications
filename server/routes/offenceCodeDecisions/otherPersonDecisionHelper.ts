@@ -1,36 +1,36 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { AnotherData, DecisionForm } from './decisionForm'
+import { OtherPersonData, DecisionForm } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { DecisionAnswers } from './decisionAnswers'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
-  ANOTHER_MISSING_NAME_INPUT = 'ANOTHER_MISSING_NAME_INPUT',
+  OTHER_PERSON_MISSING_NAME_INPUT = 'OTHER_PERSON_MISSING_NAME_INPUT',
 }
 const error: { [key in ErrorType]: FormError } = {
-  ANOTHER_MISSING_NAME_INPUT: {
-    href: `#anotherNameInput`,
+  OTHER_PERSON_MISSING_NAME_INPUT: {
+    href: `#otherPersonNameInput`,
     text: 'You must enter a name',
   },
 }
 
-export default class AnotherDecisionHelper extends DecisionHelper {
+export default class OtherPersonDecisionHelper extends DecisionHelper {
   formFromPost(req: Request): DecisionForm {
     const { selectedDecisionId } = req.body
     return {
       selectedDecisionId,
       selectedDecisionData: {
-        anotherNameInput: req.body.anotherNameInput,
+        otherPersonNameInput: req.body.otherPersonNameInput,
       },
     }
   }
 
   override validateForm(form: DecisionForm): FormError[] {
-    const anotherData = form.selectedDecisionData as AnotherData
-    if (!anotherData.anotherNameInput) {
-      return [error.ANOTHER_MISSING_NAME_INPUT]
+    const otherPersonData = form.selectedDecisionData as OtherPersonData
+    if (!otherPersonData.otherPersonNameInput) {
+      return [error.OTHER_PERSON_MISSING_NAME_INPUT]
     }
     return []
   }
@@ -38,7 +38,7 @@ export default class AnotherDecisionHelper extends DecisionHelper {
   override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
     return {
       ...super.updatedAnswers(currentAnswers, form),
-      victimAnother: (form.selectedDecisionData as AnotherData).anotherNameInput,
+      victimOtherPerson: (form.selectedDecisionData as OtherPersonData).otherPersonNameInput,
     }
   }
 }

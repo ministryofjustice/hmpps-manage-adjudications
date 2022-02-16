@@ -2,7 +2,7 @@
 // allows consistent validation and saving backing state when navigating away from a page to do e.f. prisoner search.
 export type DecisionForm = {
   selectedDecisionId?: string
-  selectedDecisionData?: StaffData | OfficerData | PrisonerData | AnotherData
+  selectedDecisionData?: StaffData | OfficerData | PrisonerData | OtherPersonData
 }
 export type StaffData = {
   staffId?: string
@@ -19,6 +19,6 @@ export type PrisonerData = {
   prisonerSearchNameInput?: string
 }
 
-export type AnotherData = {
-  anotherNameInput?: string
+export type OtherPersonData = {
+  otherPersonNameInput?: string
 }
