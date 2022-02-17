@@ -77,7 +77,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
       this.placeOnReportService.getDraftIncidentDetailsForEditing(IdNumberValue, user),
     ])
-    req.session.originalAssociatedPrisonerNumber = adjudicationDetails.incidentRole.associatedPrisonersNumber
+    req.session.originalAssociatedPrisonersNumber = adjudicationDetails.incidentRole.associatedPrisonersNumber
 
     const reporter = await this.placeOnReportService.getReporterName(adjudicationDetails.startedByUserId, user)
     const { agencyId } = prisoner.assignedLivingUnit
@@ -129,7 +129,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
     delete req.session.incidentDate
     delete req.session.incidentLocation
     delete req.session.redirectUrl
-    delete req.session.originalAssociatedPrisonerNumber
+    delete req.session.originalAssociatedPrisonersNumber
     return this.renderView(req, res, pageData)
   }
 
@@ -174,11 +174,11 @@ export default class IncidentDetailsSubmittedEditRoutes {
 
     const associatedPrisonersNumber = this.getAssociatedPrisonerNumber(
       currentRadioSelected,
-      req.session.originalAssociatedPrisonerNumber,
+      req.session.originalAssociatedPrisonersNumber,
       newlySelectedAssociatedPrisonersNumber,
       personDeleted as string
     )
-    delete req.session.originalAssociatedPrisonerNumber
+    delete req.session.originalAssociatedPrisonersNumber
 
     if (deleteAssociatedPrisoner) {
       req.session.incidentDate = incidentDate
