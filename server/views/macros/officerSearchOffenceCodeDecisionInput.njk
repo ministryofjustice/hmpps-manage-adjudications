@@ -1,14 +1,14 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro officerSearchOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
+{% macro officerSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedDecisionViewData, errors) %}
     {% set selectedDecisionId = decisionForm.selectedDecisionId %}
     {% set officerId = decisionForm.selectedDecisionData.officerId %}
     {% set officerSearchFirstNameInput = decisionForm.selectedDecisionData.officerSearchFirstNameInput %}
     {% set officerSearchLastNameInput = decisionForm.selectedDecisionData.officerSearchLastNameInput %}
     {% set officerName = selectedDecisionViewData.officerName %}
 
-    {% if selectedDecisionId == questionId and officerId != null %}
+    {% if selectedDecisionId == answerId and officerId != null %}
         <input type="hidden" name="officerId" value="{{ officerId }}" />
         <div>
             <p><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
@@ -31,7 +31,7 @@
                 id: "officerSearchFirstNameInput",
                 name: "officerSearchFirstNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedDecisionId == questionId and officerSearchFirstNameInput,
+                value: selectedDecisionId == answerId and officerSearchFirstNameInput,
                 errorMessage: errors | findErrors(["officerSearchFirstNameInput"]),
                 label: {
                     text: "First name"
@@ -41,7 +41,7 @@
                 id: "officerSearchLastNameInput",
                 name: "officerSearchLastNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedDecisionId == questionId and officerSearchLastNameInput,
+                value: selectedDecisionId == answerId and officerSearchLastNameInput,
                 errorMessage: errors | findErrors(["officerSearchLastNameInput"]),
                 label: {
                     text: "Last name"

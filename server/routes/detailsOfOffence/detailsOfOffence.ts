@@ -32,7 +32,7 @@ export default class DetailsOfOffenceRoutes {
       const questionsAndAnswers = decisions.map(d => {
         return {
           question: d.getTitle()?.getProcessedText(placeHolderValues, incidentRole),
-          answer: d.getQuestion(),
+          answer: d.getAnswer(),
         }
       })
       return {

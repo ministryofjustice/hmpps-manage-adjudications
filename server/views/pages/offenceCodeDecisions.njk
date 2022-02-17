@@ -17,33 +17,33 @@
 {% block content %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
     {% set items = [] %}
-    {% for question in questions %}
-        {% if question.type == 'OFFICER' %}
+    {% for answer in answers %}
+        {% if answer.type == 'OFFICER' %}
             {% set decisionHtml %}
-                {{ officerSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ officerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
-        {% elseif question.type == 'STAFF' %}
+        {% elseif answer.type == 'STAFF' %}
             {% set decisionHtml %}
-                {{ staffSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ staffSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
-        {% elseif question.type == 'OTHER_PERSON' %}
+        {% elseif answer.type == 'OTHER_PERSON' %}
             {% set decisionHtml %}
-                {{ otherPersonOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ otherPersonOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
-        {% elseif question.type == 'PRISONER' %}
+        {% elseif answer.type == 'PRISONER' %}
             {% set decisionHtml %}
-                {{ prisonerSearchOffenceCodeDecisionInput(question.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ prisonerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
             {% endset -%}
         {% else %}
             {% set decisionHtml = null %}
         {% endif %}
         {% set items = (items.push({
-            value: question.id,
-            text: question.label,
+            value: answer.id,
+            text: answer.label,
             conditional: {
                 html: decisionHtml
             },
-            checked: decisionForm.selectedDecisionId == question.id
+            checked: decisionForm.selectedDecisionId == answer.id
         }), items) %}
     {% endfor %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">

@@ -132,10 +132,10 @@ export default class OffenceCodeRoutes {
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
     const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
-    const questions = decision.getChildren().map(d => {
+    const answers = decision.getChildren().map(d => {
       return {
         id: d.id(),
-        label: d.getQuestion().getProcessedText(placeholderValues),
+        label: d.getAnswer().getProcessedText(placeholderValues),
         type: d.getType().toString(),
       }
     })
@@ -144,7 +144,7 @@ export default class OffenceCodeRoutes {
       errors: errors || [],
       decisionForm: pageData,
       selectedDecisionViewData,
-      questions,
+      answers,
       pageTitle,
       pageData,
     })

@@ -1,5 +1,5 @@
 import Title from './Title'
-import Question from './Question'
+import Answer from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Decision {
@@ -7,7 +7,7 @@ export class Decision {
 
   private childrenDecisions: Array<Decision> = new Array<Decision>()
 
-  private readonly decisionQuestion: Question
+  private readonly decisionAnswer: Answer
 
   private offenceCode: number
 
@@ -17,11 +17,11 @@ export class Decision {
 
   private decisionUrl: string
 
-  constructor(question?: Question | string) {
-    if (question instanceof Question) {
-      this.decisionQuestion = question
-    } else if (typeof question === 'string') {
-      this.decisionQuestion = new Question(question)
+  constructor(answer?: Answer | string) {
+    if (answer instanceof Answer) {
+      this.decisionAnswer = answer
+    } else if (typeof answer === 'string') {
+      this.decisionAnswer = new Answer(answer)
     }
   }
 
@@ -76,8 +76,8 @@ export class Decision {
     return this.decisionTitle
   }
 
-  getQuestion() {
-    return this.decisionQuestion
+  getAnswer() {
+    return this.decisionAnswer
   }
 
   getChildren() {
@@ -136,16 +136,12 @@ export class Decision {
     return codes.sort()
   }
 
-  questionsToGetHere(): Array<Question> {
-    return this.decisionsToGetHere().map(d => d.getQuestion())
-  }
-
   decisionsToGetHere(): Array<Decision> {
     let decisions = new Array<Decision>()
     if (this.getParent()) {
       decisions = this.getParent().decisionsToGetHere()
     }
-    if (this.getQuestion()) {
+    if (this.getAnswer()) {
       decisions.push(this)
     }
     return decisions
@@ -159,8 +155,8 @@ export class Decision {
   toString(indent = 0): string {
     const padding = new Array(indent).join(' ')
     let output = `${padding}Id: ${this.id()}`
-    if (this.getQuestion()?.question) {
-      output = `${output}\r\n${padding}Question: ${this.getQuestion()?.question}`
+    if (this.getAnswer()?.text) {
+      output = `${output}\r\n${padding}Answer: ${this.getAnswer()?.text}`
     }
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
@@ -177,8 +173,8 @@ export class Decision {
   }
 }
 
-export function decision(question: Question | string) {
-  return new Decision(question)
+export function decision(answer: Answer | string) {
+  return new Decision(answer)
 }
 
 // eslint-disable-next-line no-shadow

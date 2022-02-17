@@ -1,12 +1,12 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro prisonerSearchOffenceCodeDecisionInput(questionId, decisionForm, selectedDecisionViewData, errors) %}
+{% macro prisonerSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedDecisionViewData, errors) %}
     {% set selectedDecisionId = decisionForm.selectedDecisionId %}
     {% set prisonerId = decisionForm.selectedDecisionData.prisonerId %}
     {% set prisonerSearchNameInput = decisionForm.selectedDecisionData.prisonerSearchNameInput %}
     {% set prisonerName = selectedDecisionViewData.prisonerName %}
-    {% if selectedDecisionId == questionId and prisonerId != null %}
+    {% if selectedDecisionId == answerId and prisonerId != null %}
         <input type="hidden" name="prisonerId" value="{{ prisonerId }}" />
         <div>
             <p><span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }} </p>
@@ -28,7 +28,7 @@
                     id: "prisonerSearchNameInput",
                     name: "prisonerSearchNameInput",
                     classes: "govuk-!-width-full-width",
-                    value: selectedDecisionId == questionId and prisonerSearchNameInput,
+                    value: selectedDecisionId == answerId and prisonerSearchNameInput,
                     errorMessage: errors | findErrors(["prisonerSearchNameInput"]),
                     label: {
                         text: "Enter their name or prison number",

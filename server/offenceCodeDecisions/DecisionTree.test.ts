@@ -32,7 +32,7 @@ describe('decisions', () => {
       )
     }
     const invalidDecisions = decisionTree.matching(invalid)
-    expect(invalidDecisions.map(d => d.getQuestion())).toHaveLength(0)
+    expect(invalidDecisions.map(d => d.getAnswer())).toHaveLength(0)
   })
 
   it('no duplicate urls', () => {
