@@ -3,10 +3,11 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import { addSessionOffence, getSessionOffences } from './detailsOfOffenceSessionHelper'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
-import { incidentRoleFromCode } from '../../incidentRole/IncidentRole'
-import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
+import { IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
+import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = Array<OffenceData>
+type QuestionAndAnswer = { question: string; answer: string }
 
 export default class DetailsOfOffenceRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -28,17 +29,10 @@ export default class DetailsOfOffenceRoutes {
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner)
 
     const offences = pageData.map(offenceData => {
-      const questionsAndAnswersTemplates = this.decisions
-        .findByCode(offenceData.offenceCode)
-        .getQuestionsAndAnswersToGetHere()
-      const questionsAndAnswers = questionsAndAnswersTemplates.map(questionAndAnswer => {
-        const { question, answer } = questionAndAnswer
-        return {
-          question: question.getProcessedText(placeHolderValues, incidentRole),
-          answer: answer.getProcessedText(placeHolderValues),
-        }
-      })
-      return { questionsAndAnswers }
+      const questionsAndAnswers = this.questionsAndAnswers(offenceData, placeHolderValues, incidentRole)
+      return {
+        questionsAndAnswers,
+      }
     })
 
     return res.render(`pages/detailsOfOffence`, {
@@ -62,6 +56,17 @@ export default class DetailsOfOffenceRoutes {
     addSessionOffence(req, offenceToAdd, adjudicationNumber)
 
     return res.redirect(`/details-of-offence/${adjudicationNumber}`)
+  }
+
+  private questionsAndAnswers(data: OffenceData, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
+    const questionsAndAnswers = this.decisions.findByCode(data.offenceCode).getQuestionsAndAnswersToGetHere()
+    return questionsAndAnswers.map(questionAndAnswer => {
+      const { question, answer } = questionAndAnswer
+      return {
+        question: question.getProcessedText(placeHolderValues, incidentRole),
+        answer: answer.getProcessedText(placeHolderValues),
+      }
+    })
   }
 
   private populateSessionIfEmpty(adjudicationNumber: string): Array<OffenceData> {
