@@ -3,7 +3,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import OffenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
-import IncidentRole from '../../incidentRole/IncidentRole'
+import { IncidentRole } from '../../incidentRole/IncidentRole'
 import UserService from '../../services/userService'
 
 export default function offenceCodeDecisionsRoutes({

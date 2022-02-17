@@ -3,6 +3,8 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import { DecisionAnswers } from '../offenceCodeDecisions/decisionAnswers'
 import { addSessionOffence, getSessionOffences } from './detailsOfOffenceSessionHelper'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
+import { incidentRoleFromCode } from '../../incidentRole/IncidentRole'
+import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = Array<DecisionAnswers>
 
@@ -18,16 +20,28 @@ export default class DetailsOfOffenceRoutes {
       Number(adjudicationNumber),
       user
     )
-    const prisoner = await this.placeOnReportService.getPrisonerDetails(
-      draftAdjudication.draftAdjudication.prisonerNumber,
+    const incidentRole = incidentRoleFromCode(draftAdjudication.draftAdjudication.incidentRole.roleCode)
+    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getPrisonerDetailsForAdjudication(
+      Number(adjudicationNumber),
       user
     )
-    const questions = pageData.map(o => {
-      return { questions: this.decisions.findByCode(o.offenceCode).questionsToGetHere() }
+    const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner)
+
+    const offences = pageData.map(decisionAnswers => {
+      const decisions = this.decisions.findByCode(decisionAnswers.offenceCode).decisionsToGetHere()
+      const questionsAndAnswers = decisions.map(d => {
+        return {
+          question: d.getTitle()?.getProcessedText(placeHolderValues, incidentRole),
+          answer: d.getQuestion(),
+        }
+      })
+      return {
+        questionsAndAnswers,
+      }
     })
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
-      questions,
+      offences,
     })
   }
 

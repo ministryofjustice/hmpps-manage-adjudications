@@ -4,7 +4,7 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
-import IncidentRole from '../../incidentRole/IncidentRole'
+import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import { getAndDeleteSessionAnswers, setSessionAnswers } from './decisionSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
@@ -13,6 +13,7 @@ import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
 import OfficerDecisionHelper from './officerDecisionHelper'
 import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
+import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
 
@@ -124,11 +125,11 @@ export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
-    const form = pageData
-    const placeholderValues = await this.placeOnReportService.getOffenceSelectionPlaceholderValues(
+    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getPrisonerDetailsForAdjudication(
       Number(adjudicationNumber),
       user
     )
+    const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
     const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const questions = decision.getChildren().map(d => {
@@ -138,10 +139,10 @@ export default class OffenceCodeRoutes {
         type: d.getType().toString(),
       }
     })
-    const selectedDecisionViewData = await this.helper(form)?.viewDataFromForm(form, user)
+    const selectedDecisionViewData = await this.helper(pageData)?.viewDataFromForm(pageData, user)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
-      decisionForm: form,
+      decisionForm: pageData,
       selectedDecisionViewData,
       questions,
       pageTitle,

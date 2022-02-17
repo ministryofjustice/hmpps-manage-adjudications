@@ -1,14 +1,14 @@
 import { Decision, DecisionType as Type, decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
-import Role from '../incidentRole/IncidentRole'
+import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default new Decision()
   .title([
-    [Role.COMMITTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} commit?`],
-    [Role.ATTEMPTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} attempt to commit?`],
-    [Role.ASSISTED, `What type of offence did ${Text.OFFENDER_FULL_NAME} assist another prisoner to commit?`],
-    [Role.INCITED, `What type of offence did ${Text.OFFENDER_FULL_NAME} incite another prisoner to commit?`],
+    [Role.COMMITTED, `What type of offence did ${Text.PRISONER_FULL_NAME} commit?`],
+    [Role.ATTEMPTED, `What type of offence did ${Text.PRISONER_FULL_NAME} attempt to commit?`],
+    [Role.ASSISTED, `What type of offence did ${Text.PRISONER_FULL_NAME} assist another prisoner to commit?`],
+    [Role.INCITED, `What type of offence did ${Text.PRISONER_FULL_NAME} incite another prisoner to commit?`],
   ])
   .child(
     decision('Assault, fighting, or endangering the health or personal safety of others')
@@ -17,9 +17,12 @@ export default new Decision()
         decision('Assaulting someone')
           .title([
             [Role.COMMITTED, 'Who was assaulted?'],
-            [Role.ATTEMPTED, `Who did Who did ${Text.OFFENDER_FULL_NAME} attempt to assault?`],
-            [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to assault?`],
-            [Role.INCITED, `Who did Who did ${Text.OFFENDER_FULL_NAME} assist ${Text.ASSISTED_FULL_NAME} to assault?`],
+            [Role.ATTEMPTED, `Who did Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
+            [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
+            [
+              Role.INCITED,
+              `Who did Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
+            ],
           ])
           .url('incident-involved/1')
           .child(
@@ -76,7 +79,7 @@ export default new Decision()
           )
           .child(
             decision('Sells or gives an unauthorised article to another person')
-              .title(`Was the article only for ${Text.OFFENDER_FULL_NAME}'s personal user`)
+              .title(`Was the article only for ${Text.PRISONER_FULL_NAME}'s personal user`)
               .child(decision('Yes').code(14001))
               .child(decision('No').code(13001))
           )
@@ -115,10 +118,10 @@ export default new Decision()
       .child(
         decision('Disrespectful behaviour')
           .title([
-            [Role.COMMITTED, `Who was ${Text.OFFENDER_FULL_NAME} disrespectful to?`],
-            [Role.ATTEMPTED, `Who was ${Text.OFFENDER_FULL_NAME} attempting to be disrespectful to?`],
-            [Role.INCITED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to be disrespectful to?`],
-            [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} assist another prisoner to be disrespectful to?`],
+            [Role.COMMITTED, `Who was ${Text.PRISONER_FULL_NAME} disrespectful to?`],
+            [Role.ATTEMPTED, `Who was ${Text.PRISONER_FULL_NAME} attempting to be disrespectful to?`],
+            [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to be disrespectful to?`],
+            [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist another prisoner to be disrespectful to?`],
           ])
           .child(decision('A prison officer').type(Type.OFFICER).code(19001))
           .child(decision('A member of staff who is not a prison officer').type(Type.PRISONER).code(19002))
@@ -140,10 +143,10 @@ export default new Decision()
   .child(
     decision('Detains another person')
       .title([
-        [Role.COMMITTED, `Who did ${Text.OFFENDER_FULL_NAME} detain?`],
-        [Role.ATTEMPTED, `Who did ${Text.OFFENDER_FULL_NAME} attempt to detain?`],
-        [Role.INCITED, `Who did ${Text.OFFENDER_FULL_NAME} incite another prisoner to detain?`],
-        [Role.ASSISTED, `Who did ${Text.OFFENDER_FULL_NAME} assist ${Text.ASSISTED_FULL_NAME} to detain?`],
+        [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} detain?`],
+        [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to detain?`],
+        [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to detain?`],
+        [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to detain?`],
       ])
       .child(decision('Another prisoner').type(Type.PRISONER).code(2001))
       .child(decision('A prison officer').type(Type.OFFICER).code(2002))

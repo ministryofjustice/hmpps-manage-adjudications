@@ -1,6 +1,6 @@
 import Title from './Title'
 import Question from './Question'
-import IncidentRole from '../incidentRole/IncidentRole'
+import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Decision {
   private parentDecision: Decision
@@ -137,14 +137,18 @@ export class Decision {
   }
 
   questionsToGetHere(): Array<Question> {
-    let questions = new Array<Question>()
+    return this.decisionsToGetHere().map(d => d.getQuestion())
+  }
+
+  decisionsToGetHere(): Array<Decision> {
+    let decisions = new Array<Decision>()
     if (this.getParent()) {
-      questions = this.getParent().questionsToGetHere()
+      decisions = this.getParent().decisionsToGetHere()
     }
     if (this.getQuestion()) {
-      questions.push(this.getQuestion())
+      decisions.push(this)
     }
-    return questions
+    return decisions
   }
 
   findByCode(offenceCode: number | string): Decision {

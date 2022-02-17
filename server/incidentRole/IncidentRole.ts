@@ -6,4 +6,17 @@ enum IncidentRole {
   ASSISTED = 'assisted',
 }
 
-export default IncidentRole
+const incidentRoleFromCode = (roleCode: string): IncidentRole => {
+  switch (roleCode) {
+    case '25a':
+      return IncidentRole.ATTEMPTED
+    case '25b':
+      return IncidentRole.INCITED
+    case '25c':
+      return IncidentRole.ASSISTED
+    default:
+      return IncidentRole.COMMITTED
+  }
+}
+
+export { IncidentRole, incidentRoleFromCode }
