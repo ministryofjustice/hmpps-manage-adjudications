@@ -68,7 +68,7 @@ export default function validateForm({
   locationId,
   incidentRole,
   associatedPrisonersNumber,
-}: incidentDetailsForm): FormError | FormError[] | null {
+}: incidentDetailsForm): FormError | null {
   if (!incidentDate.date) {
     return errors.MISSING_DATE
   }
