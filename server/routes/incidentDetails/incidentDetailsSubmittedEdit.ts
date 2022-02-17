@@ -46,10 +46,12 @@ export default class IncidentDetailsSubmittedEditRoutes {
   private getAssociatedPrisonerNumber = (
     selectedRadio: string,
     previouslyReportedAssociatedPrisoner: string,
-    newAssociatedPrisoner: string
+    newAssociatedPrisoner: string,
+    personDeleted: string
   ): string => {
     if (selectedRadio === 'onTheirOwn' || selectedRadio === 'attemptOnTheirOwn') return null
-    if (newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
+    if (personDeleted === 'true') return null
+    if (newAssociatedPrisoner && newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
     if (previouslyReportedAssociatedPrisoner !== undefined) return previouslyReportedAssociatedPrisoner
     return null
   }
@@ -66,6 +68,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { prisonerNumber, id } = req.params
     const { referrer } = req.query
     const { user } = res.locals
+    const { personDeleted } = req.query
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
 
     const IdNumberValue: number = parseInt(id as string, 10)
@@ -85,7 +88,8 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const associatedPrisonerNumber = this.getAssociatedPrisonerNumber(
       radioButtonSelected,
       adjudicationDetails.incidentRole.associatedPrisonersNumber,
-      selectedPerson
+      selectedPerson,
+      personDeleted as string
     )
 
     const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonerNumber, user)
@@ -124,6 +128,8 @@ export default class IncidentDetailsSubmittedEditRoutes {
     }
     delete req.session.incidentDate
     delete req.session.incidentLocation
+    delete req.session.redirectUrl
+    delete req.session.originalAssociatedPrisonerNumber
     return this.renderView(req, res, pageData)
   }
 
@@ -141,17 +147,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { prisonerNumber, id } = req.params
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     const { originalRadioSelection } = req.session
-    const { referrer } = req.query
-
-    if (deleteAssociatedPrisoner) {
-      req.session.incidentDate = incidentDate
-      req.session.incidentLocation = locationId
-      delete req.session.originalRadioSelection
-      delete req.session.redirectUrl
-
-      // TODO: In here we need to redirect to the delete page, and on the submit button do a PUT request to remove the associated prisoner and incident rolecode, then redirect back to /incident-details/<PRN>/<id>/edit
-      return res.redirect(`/delete-person`)
-    }
+    const { referrer, personDeleted } = req.query
 
     if (search) {
       const searchValue =
@@ -176,9 +172,20 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const newlySelectedAssociatedPrisonersNumber =
       isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
 
-    const associatedPrisonersNumber =
-      newlySelectedAssociatedPrisonersNumber || req.session.originalAssociatedPrisonerNumber
+    const associatedPrisonersNumber = this.getAssociatedPrisonerNumber(
+      currentRadioSelected,
+      req.session.originalAssociatedPrisonerNumber,
+      newlySelectedAssociatedPrisonersNumber,
+      personDeleted as string
+    )
     delete req.session.originalAssociatedPrisonerNumber
+
+    if (deleteAssociatedPrisoner) {
+      req.session.incidentDate = incidentDate
+      req.session.incidentLocation = locationId
+      req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/submitted/edit?referrer=${referrer}`
+      return res.redirect(`/delete-person?associatedPersonId=${associatedPrisonersNumber}`)
+    }
 
     const error = validateForm({
       incidentDate,
@@ -192,7 +199,6 @@ export default class IncidentDetailsSubmittedEditRoutes {
         incidentDate,
         locationId,
         originalRadioSelection: currentRadioSelected,
-        associatedPrisonersNumber,
       })
 
     const IdNumberValue: number = parseInt(id as string, 10)
