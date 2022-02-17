@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 
 export default class DecisionHelper {
@@ -40,7 +40,7 @@ export default class DecisionHelper {
     return null
   }
 
-  updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       victimOtherPerson: currentAnswers?.victimOtherPerson,
       victimPrisoner: currentAnswers?.victimPrisoner,

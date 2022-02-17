@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { DecisionAnswers } from '../offenceCodeDecisions/decisionAnswers'
+import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import { addSessionOffence, getSessionOffences } from './detailsOfOffenceSessionHelper'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
-type PageData = Array<DecisionAnswers>
+type PageData = Array<OffenceData>
 
 export default class DetailsOfOffenceRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -27,18 +27,20 @@ export default class DetailsOfOffenceRoutes {
     )
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner)
 
-    const offences = pageData.map(decisionAnswers => {
-      const decisions = this.decisions.findByCode(decisionAnswers.offenceCode).decisionsToGetHere()
-      const questionsAndAnswers = decisions.map(d => {
+    const offences = pageData.map(offenceData => {
+      const questionsAndAnswersTemplates = this.decisions
+        .findByCode(offenceData.offenceCode)
+        .getQuestionsAndAnswersToGetHere()
+      const questionsAndAnswers = questionsAndAnswersTemplates.map(questionAndAnswer => {
+        const { question, answer } = questionAndAnswer
         return {
-          question: d.getTitle()?.getProcessedText(placeHolderValues, incidentRole),
-          answer: d.getAnswer(),
+          question: question.getProcessedText(placeHolderValues, incidentRole),
+          answer: answer.getProcessedText(placeHolderValues),
         }
       })
-      return {
-        questionsAndAnswers,
-      }
+      return { questionsAndAnswers }
     })
+
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
       offences,
@@ -56,13 +58,13 @@ export default class DetailsOfOffenceRoutes {
     const { adjudicationNumber } = req.params
     this.populateSessionIfEmpty(adjudicationNumber)
     // Get the offence to be added from the request and put it on the session
-    const offenceToAdd: DecisionAnswers = { ...req.query }
+    const offenceToAdd: OffenceData = { ...req.query }
     addSessionOffence(req, offenceToAdd, adjudicationNumber)
 
     return res.redirect(`/details-of-offence/${adjudicationNumber}`)
   }
 
-  private populateSessionIfEmpty(adjudicationNumber: string): Array<DecisionAnswers> {
+  private populateSessionIfEmpty(adjudicationNumber: string): Array<OffenceData> {
     return []
   }
 }

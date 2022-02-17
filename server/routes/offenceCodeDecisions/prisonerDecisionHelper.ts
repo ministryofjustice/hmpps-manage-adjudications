@@ -6,7 +6,7 @@ import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { formatName } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -81,9 +81,9 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     return {}
   }
 
-  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      offenceCode: super.updatedAnswers(currentAnswers, form).offenceCode,
+      offenceCode: super.updatedOffenceData(currentAnswers, form).offenceCode,
       victimPrisoner: (form.selectedDecisionData as PrisonerData).prisonerId,
     }
   }

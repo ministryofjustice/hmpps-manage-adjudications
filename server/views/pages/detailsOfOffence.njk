@@ -23,7 +23,7 @@
     {% for offence in offences %}
         {% for questionAndAnswer in offence.questionsAndAnswers %}
             <p class="govuk-!-margin-bottom-1 govuk-label--s">{{ questionAndAnswer.question }}</p>
-            <p class="govuk-!-margin-bottom-1 govuk-label--xs" data-qa={{ questionAndAnswer.answer }}>
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ questionAndAnswer.answer }}</p>
         {% endfor %}
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     {% endfor %}

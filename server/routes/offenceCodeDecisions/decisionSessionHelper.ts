@@ -1,20 +1,20 @@
 import { Request } from 'express'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // Methods to deal with adding and removing to and from the session
-export function setSessionAnswers(req: Request, answers: DecisionAnswers, draftAdjudicationNumber: string) {
-  if (!req.session.decisionAnswers) {
-    req.session.decisionAnswers = {}
+export function setOffenceData(req: Request, answers: OffenceData, draftAdjudicationNumber: string) {
+  if (!req.session.offenceData) {
+    req.session.offenceData = {}
   }
-  req.session.decisionAnswers[draftAdjudicationNumber] = answers
+  req.session.offenceData[draftAdjudicationNumber] = answers
 }
 
-export function getSessionAnswers(req: Request, draftAdjudicationNumber: string): DecisionAnswers {
-  return req.session.decisionAnswers?.[draftAdjudicationNumber]
+export function getOffenceData(req: Request, draftAdjudicationNumber: string): OffenceData {
+  return req.session.offenceData?.[draftAdjudicationNumber]
 }
 
-export function getAndDeleteSessionAnswers(req: Request, draftAdjudicationNumber: string): DecisionAnswers {
-  const decisionAnswers = getSessionAnswers(req, draftAdjudicationNumber)
-  setSessionAnswers(req, null, draftAdjudicationNumber)
-  return decisionAnswers
+export function getAndDeleteOffenceData(req: Request, draftAdjudicationNumber: string): OffenceData {
+  const offenceData = getOffenceData(req, draftAdjudicationNumber)
+  setOffenceData(req, null, draftAdjudicationNumber)
+  return offenceData
 }

@@ -1,5 +1,5 @@
 import { SubmittedDateTime } from '../template'
-import { DecisionAnswers } from '../../routes/offenceCodeDecisions/decisionAnswers'
+import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
 
 export default {}
 
@@ -14,8 +14,8 @@ declare module 'express-session' {
     incidentLocation: number
     originalRadioSelection: string
     originalAssociatedPrisonerNumber: string
-    decisionAnswers: { [key: string]; decisionAnswers?: DecisionAnswers }
-    offences: { [key: string]; offences?: Array<DecisionAnswers> }
+    offenceData: { [key: string]; offenceData?: OffenceData }
+    offences: { [key: string]; offences?: Array<OffenceData> }
   }
 }
 

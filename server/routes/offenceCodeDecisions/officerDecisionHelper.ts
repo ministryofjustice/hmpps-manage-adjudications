@@ -6,7 +6,7 @@ import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { properCaseName } from '../../utils/utils'
 import UserService from '../../services/userService'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -98,9 +98,9 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return null
   }
 
-  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      ...super.updatedAnswers(currentAnswers, form),
+      ...super.updatedOffenceData(currentAnswers, form),
       // Note that we update the victim staff reference here, even though it is an officer. This is because the
       // distinction is purely a UI one and at this point we are using a data structure mirroring the database.
       victimStaff: (form.selectedDecisionData as OfficerData).officerId,

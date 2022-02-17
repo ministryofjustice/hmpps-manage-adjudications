@@ -76,7 +76,12 @@ export class Decision {
     return this.decisionTitle
   }
 
+  // TODO
   getAnswer() {
+    return this.decisionAnswer
+  }
+
+  getProceedingAnswer() {
     return this.decisionAnswer
   }
 
@@ -136,15 +141,13 @@ export class Decision {
     return codes.sort()
   }
 
-  decisionsToGetHere(): Array<Decision> {
-    let decisions = new Array<Decision>()
+  getQuestionsAndAnswersToGetHere(): Array<{ question: Title; answer: Answer }> {
     if (this.getParent()) {
-      decisions = this.getParent().decisionsToGetHere()
+      const questionsAndAnswers = this.getParent().getQuestionsAndAnswersToGetHere()
+      questionsAndAnswers.push({ question: this.getParent()?.getTitle(), answer: this.getAnswer() })
+      return questionsAndAnswers
     }
-    if (this.getAnswer()) {
-      decisions.push(this)
-    }
-    return decisions
+    return []
   }
 
   findByCode(offenceCode: number | string): Decision {

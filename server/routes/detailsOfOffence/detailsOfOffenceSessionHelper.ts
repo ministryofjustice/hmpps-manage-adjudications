@@ -1,8 +1,8 @@
 import { Request } from 'express'
-import { DecisionAnswers } from '../offenceCodeDecisions/decisionAnswers'
+import { OffenceData } from '../offenceCodeDecisions/offenceData'
 
 // Methods to deal with adding and removing to and from the session
-export function addSessionOffence(req: Request, answers: DecisionAnswers, draftAdjudicationNumber: string) {
+export function addSessionOffence(req: Request, answers: OffenceData, draftAdjudicationNumber: string) {
   if (!req.session.offences) {
     req.session.offences = {}
   }
@@ -16,6 +16,6 @@ export function deleteSessionOffence(req: Request, index: number, draftAdjudicat
   req.session.offences[draftAdjudicationNumber]?.splice(index)
 }
 
-export function getSessionOffences(req: Request, draftAdjudicationNumber: string): Array<DecisionAnswers> {
+export function getSessionOffences(req: Request, draftAdjudicationNumber: string): Array<OffenceData> {
   return req.session?.offences[draftAdjudicationNumber]
 }

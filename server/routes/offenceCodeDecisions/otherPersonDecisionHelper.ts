@@ -3,7 +3,7 @@ import { Request } from 'express'
 import { OtherPersonData, DecisionForm } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -35,9 +35,9 @@ export default class OtherPersonDecisionHelper extends DecisionHelper {
     return []
   }
 
-  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      ...super.updatedAnswers(currentAnswers, form),
+      ...super.updatedOffenceData(currentAnswers, form),
       victimOtherPerson: (form.selectedDecisionData as OtherPersonData).otherPersonNameInput,
     }
   }

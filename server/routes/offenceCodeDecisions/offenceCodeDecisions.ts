@@ -6,7 +6,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
-import { getAndDeleteSessionAnswers, setSessionAnswers } from './decisionSessionHelper'
+import { getAndDeleteOffenceData, setOffenceData } from './decisionSessionHelper'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
@@ -83,16 +83,16 @@ export default class OffenceCodeRoutes {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
     // Save any data associated with the decisions on the session.
-    const currentAnswers = getAndDeleteSessionAnswers(req, adjudicationNumber)
-    const updatedAnswers = helper.updatedAnswers(currentAnswers, form)
-    setSessionAnswers(req, updatedAnswers, adjudicationNumber)
+    const currentOffenceData = getAndDeleteOffenceData(req, adjudicationNumber)
+    const updatedOffenceData = helper.updatedOffenceData(currentOffenceData, form)
+    setOffenceData(req, updatedOffenceData, adjudicationNumber)
     // We redirect to the next decision or the details of offence page if this is the last.
     const selectedDecision = this.decisions.findById(form.selectedDecisionId)
     if (!selectedDecision.getOffenceCode()) {
       const nextDecisionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
       return this.redirect(nextDecisionUrl, res)
     }
-    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: updatedAnswers }, res)
+    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: updatedOffenceData }, res)
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
