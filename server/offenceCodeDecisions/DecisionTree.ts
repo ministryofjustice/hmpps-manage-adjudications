@@ -1,6 +1,7 @@
 import { Decision, DecisionType as Type, decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
+import { answer } from './Answer'
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default new Decision()
@@ -148,9 +149,24 @@ export default new Decision()
         [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to detain?`],
         [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to detain?`],
       ])
-      .child(decision('Another prisoner').type(Type.PRISONER).code(2001))
-      .child(decision('A prison officer').type(Type.OFFICER).code(2002))
-      .child(decision('A member of staff who is not a prison officer').type(Type.STAFF).code(2003))
+      .child(
+        decision(['Another prisoner', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+          .type(Type.PRISONER)
+          .code(2001)
+      )
+      .child(
+        decision(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+          .type(Type.OFFICER)
+          .code(2002)
+      )
+      .child(
+        decision([
+          'A member of staff who is not a prison officer',
+          `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+        ])
+          .type(Type.STAFF)
+          .code(2003)
+      )
       .child(decision('Another person not listed above').type(Type.OTHER_PERSON).code(2004))
   )
   .child(

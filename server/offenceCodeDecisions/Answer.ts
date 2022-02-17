@@ -1,13 +1,35 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 
-export default class Answer {
-  text: string
+export class Answer {
+  private readonly answerText: string
 
-  constructor(text: string) {
-    this.text = text
+  private readonly answerReplayText: string
+
+  constructor(text: string | [string, string]) {
+    if (typeof text === 'string') {
+      this.answerText = text
+    } else if (text instanceof Array) {
+      ;[this.answerText, this.answerReplayText] = text
+    }
+  }
+
+  getText() {
+    return this.answerText
+  }
+
+  getReplayText() {
+    return this.answerText
   }
 
   getProcessedText(placeholderValues: PlaceholderValues): string {
-    return getProcessedText(this.text, placeholderValues)
+    return getProcessedText(this.answerText, placeholderValues)
   }
+
+  getProcessedReplayText(placeholderValues: PlaceholderValues): string {
+    return getProcessedText(this.answerReplayText || this.answerText, placeholderValues)
+  }
+}
+
+export function answer(text: string) {
+  return new Answer(text)
 }

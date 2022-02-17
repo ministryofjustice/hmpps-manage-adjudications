@@ -1,5 +1,5 @@
 import Title from './Title'
-import Answer from './Answer'
+import { Answer } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Decision {
@@ -17,10 +17,10 @@ export class Decision {
 
   private decisionUrl: string
 
-  constructor(answer?: Answer | string) {
+  constructor(answer?: Answer | string | [string, string]) {
     if (answer instanceof Answer) {
       this.decisionAnswer = answer
-    } else if (typeof answer === 'string') {
+    } else {
       this.decisionAnswer = new Answer(answer)
     }
   }
@@ -158,8 +158,8 @@ export class Decision {
   toString(indent = 0): string {
     const padding = new Array(indent).join(' ')
     let output = `${padding}Id: ${this.id()}`
-    if (this.getAnswer()?.text) {
-      output = `${output}\r\n${padding}Answer: ${this.getAnswer()?.text}`
+    if (this.getAnswer()?.getText()) {
+      output = `${output}\r\n${padding}Answer: ${this.getAnswer()?.getText()}`
     }
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
@@ -176,7 +176,7 @@ export class Decision {
   }
 }
 
-export function decision(answer: Answer | string) {
+export function decision(answer: Answer | string | [string, string]) {
   return new Decision(answer)
 }
 

@@ -5,35 +5,36 @@ import { addSessionOffence, getSessionOffences } from './detailsOfOffenceSession
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { IncidentRole, incidentRoleFromCode, incidentRule } from '../../incidentRole/IncidentRole'
 import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
+import { User } from '../../data/hmppsAuthClient'
+import UserService from '../../services/userService'
 
 type PageData = Array<OffenceData>
 
 export default class DetailsOfOffenceRoutes {
-  constructor(private readonly placeOnReportService: PlaceOnReportService) {}
+  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
   private decisions = decisionTree
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
+    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
     const incidentRole = incidentRoleFromCode(draftAdjudication.draftAdjudication.incidentRole.roleCode)
     const { prisoner, associatedPrisoner } = await this.placeOnReportService.getPrisonerDetailsForAdjudication(
-      Number(adjudicationNumber),
+      adjudicationNumber,
       user
     )
-    const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner)
 
     const offences = await Promise.all(
       pageData.map(async offenceData => {
-        const questionsAndAnswers = this.questionsAndAnswers(offenceData, placeHolderValues, incidentRole)
+        const answerData = await this.answerData(offenceData, user)
+        const offenceCode = Number(offenceData.offenceCode)
+        const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
+        const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
         return {
           questionsAndAnswers,
           incidentRule: incidentRule(incidentRole),
-          offenceRule: await this.placeOnReportService.getOffenceRule(Number(offenceData.offenceCode), user),
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
         }
       })
     )
@@ -61,13 +62,26 @@ export default class DetailsOfOffenceRoutes {
     return res.redirect(`/details-of-offence/${adjudicationNumber}`)
   }
 
-  private questionsAndAnswers(data: OffenceData, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
-    const questionsAndAnswers = this.decisions.findByCode(data.offenceCode).getQuestionsAndAnswersToGetHere()
+  private async answerData(data: OffenceData, user: User) {
+    const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
+      data.victimOtherPerson,
+      data.victimPrisoner && this.placeOnReportService.getPrisonerDetails(data.victimPrisoner, user),
+      data.victimStaff && this.userService.getStaffFromUsername(data.victimStaff, user),
+    ])
+    return {
+      victimOtherPerson,
+      victimPrisoner,
+      victimStaff,
+    }
+  }
+
+  private questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
+    const questionsAndAnswers = this.decisions.findByCode(offenceCode).getQuestionsAndAnswersToGetHere()
     return questionsAndAnswers.map(questionAndAnswer => {
       const { question, answer } = questionAndAnswer
       return {
         question: question.getProcessedText(placeHolderValues, incidentRole),
-        answer: answer.getProcessedText(placeHolderValues),
+        answer: answer.getProcessedReplayText(placeHolderValues),
       }
     })
   }
