@@ -27,7 +27,7 @@ export default new Decision()
           ])
           .url('incident-involved/1')
           .child(
-            decision('Another prisoner')
+            decision(['Another prisoner', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
               .type(Type.PRISONER)
               .title('Was the incident a racially aggravated assault?')
               .child(decision('Yes').code(1001))
