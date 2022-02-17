@@ -12,10 +12,21 @@ export default class DetailsOfOffenceRoutes {
   private decisions = decisionTree
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
+    const { adjudicationNumber } = req.params
+    const { user } = res.locals
+    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
+      Number(adjudicationNumber),
+      user
+    )
+    const prisoner = await this.placeOnReportService.getPrisonerDetails(
+      draftAdjudication.draftAdjudication.prisonerNumber,
+      user
+    )
     const questions = pageData.map(o => {
       return { questions: this.decisions.findByCode(o.offenceCode).questionsToGetHere() }
     })
     return res.render(`pages/detailsOfOffence`, {
+      prisoner,
       questions,
     })
   }
