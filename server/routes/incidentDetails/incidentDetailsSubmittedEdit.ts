@@ -149,24 +149,6 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { originalRadioSelection } = req.session
     const { referrer, personDeleted } = req.query
 
-    const newlySelectedAssociatedPrisonersNumber =
-      isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
-
-    const associatedPrisonersNumber = this.getAssociatedPrisonerNumber(
-      currentRadioSelected,
-      req.session.originalAssociatedPrisonerNumber,
-      newlySelectedAssociatedPrisonersNumber,
-      personDeleted as string
-    )
-    delete req.session.originalAssociatedPrisonerNumber
-
-    if (deleteAssociatedPrisoner) {
-      req.session.incidentDate = incidentDate
-      req.session.incidentLocation = locationId
-      req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/submitted/edit?referrer=${referrer}`
-      return res.redirect(`/delete-person?associatedPersonId=${associatedPrisonersNumber}`)
-    }
-
     if (search) {
       const searchValue =
         search === 'inciteAnotherPrisonerSearchSubmit' ? inciteAnotherPrisonerInput : assistAnotherPrisonerInput
@@ -185,6 +167,24 @@ export default class IncidentDetailsSubmittedEditRoutes {
       req.session.incidentDate = incidentDate
       req.session.incidentLocation = locationId
       return res.redirect(`/select-associated-prisoner?searchTerm=${searchValue}`)
+    }
+
+    const newlySelectedAssociatedPrisonersNumber =
+      isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
+
+    const associatedPrisonersNumber = this.getAssociatedPrisonerNumber(
+      currentRadioSelected,
+      req.session.originalAssociatedPrisonerNumber,
+      newlySelectedAssociatedPrisonersNumber,
+      personDeleted as string
+    )
+    delete req.session.originalAssociatedPrisonerNumber
+
+    if (deleteAssociatedPrisoner) {
+      req.session.incidentDate = incidentDate
+      req.session.incidentLocation = locationId
+      req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/submitted/edit?referrer=${referrer}`
+      return res.redirect(`/delete-person?associatedPersonId=${associatedPrisonersNumber}`)
     }
 
     const error = validateForm({
