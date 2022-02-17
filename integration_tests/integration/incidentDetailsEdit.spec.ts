@@ -320,6 +320,10 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.inciteAssociatedPrisonerDeleteButton().click()
     cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check()
     cy.get('[data-qa="delete-person-submit"]').click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq('/incident-details/G6415GD/34/edit')
+      expect(loc.search).to.eq('?personDeleted=true')
+    })
     incidentDetailsPage.timeInputHours().should('have.value', '13')
     incidentDetailsPage.timeInputMinutes().should('have.value', '00')
     incidentDetailsPage.locationSelector().contains('Workshop 2')
