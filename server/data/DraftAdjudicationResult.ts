@@ -59,3 +59,8 @@ export type TaskListDetails = {
   statementPresent: boolean
   statementComplete: boolean
 }
+
+export type OffenceRule = {
+  paragraphNumber?: string
+  paragraphDescription?: string
+}

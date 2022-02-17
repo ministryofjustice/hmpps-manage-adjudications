@@ -18,11 +18,11 @@ export default new Decision()
           .title([
             [Role.COMMITTED, 'Who was assaulted?'],
             [Role.ATTEMPTED, `Who did Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
-            [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
             [
-              Role.INCITED,
+              Role.ASSISTED,
               `Who did Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
             ],
+            [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
           ])
           .url('incident-involved/1')
           .child(

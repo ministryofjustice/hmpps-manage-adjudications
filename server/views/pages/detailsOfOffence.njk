@@ -13,21 +13,22 @@
 {% endblock %}
 
 {% block content %}
-
     <h1 class="govuk-heading-l">{{ title }}</h1>
-
     <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
         {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
     </div>
-
     {% for offence in offences %}
         {% for questionAndAnswer in offence.questionsAndAnswers %}
             <p class="govuk-!-margin-bottom-1 govuk-label--s">{{ questionAndAnswer.question }}</p>
             <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ questionAndAnswer.answer }}</p>
         {% endfor %}
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
+        {% if offence.incidentRule %}
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription }}</p>
+        {% endif %}
+        <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription }}</p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     {% endfor %}
-
-
-
 {% endblock %}

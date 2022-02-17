@@ -6,6 +6,7 @@ import {
   IncidentDetails,
   EditedIncidentDetails,
   IncidentRole,
+  OffenceRule,
 } from './DraftAdjudicationResult'
 import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
@@ -100,6 +101,12 @@ export default class ManageAdjudicationsClient {
   async createDraftFromCompleteAdjudication(adjudicationNumber: number): Promise<DraftAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/create-draft-adjudication`,
+    })
+  }
+
+  async getOffenceRule(offenceCode: number): Promise<OffenceRule> {
+    return this.restClient.get({
+      path: `/draft-adjudications/offence-rule/${offenceCode}`,
     })
   }
 }

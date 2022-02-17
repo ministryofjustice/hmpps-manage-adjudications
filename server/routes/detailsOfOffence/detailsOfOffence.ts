@@ -3,11 +3,10 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import { addSessionOffence, getSessionOffences } from './detailsOfOffenceSessionHelper'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
-import { IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
+import { IncidentRole, incidentRoleFromCode, incidentRule } from '../../incidentRole/IncidentRole'
 import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = Array<OffenceData>
-type QuestionAndAnswer = { question: string; answer: string }
 
 export default class DetailsOfOffenceRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -28,12 +27,16 @@ export default class DetailsOfOffenceRoutes {
     )
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner)
 
-    const offences = pageData.map(offenceData => {
-      const questionsAndAnswers = this.questionsAndAnswers(offenceData, placeHolderValues, incidentRole)
-      return {
-        questionsAndAnswers,
-      }
-    })
+    const offences = await Promise.all(
+      pageData.map(async offenceData => {
+        const questionsAndAnswers = this.questionsAndAnswers(offenceData, placeHolderValues, incidentRole)
+        return {
+          questionsAndAnswers,
+          incidentRule: incidentRule(incidentRole),
+          offenceRule: await this.placeOnReportService.getOffenceRule(Number(offenceData.offenceCode), user),
+        }
+      })
+    )
 
     return res.render(`pages/detailsOfOffence`, {
       prisoner,

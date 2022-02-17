@@ -287,4 +287,10 @@ export default class PlaceOnReportService {
     const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
     return prisonerDetails.prisonerNumber
   }
+
+  async getOffenceRule(offenceCode: number, user: User) {
+    const client = new ManageAdjudicationsClient(user.token)
+    const qq = await client.getOffenceRule(offenceCode)
+    return qq
+  }
 }
