@@ -4,4 +4,4 @@ assets
 cypress.json
 reporter-config.json
 dist/
-server/offenceCodeDecisions/DecisionTree.ts
+server/offenceCodeDecisions/
