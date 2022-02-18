@@ -1,4 +1,5 @@
 /* eslint-disable */
+// @ts-ignore
 import { Decision, DecisionType as Type, decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
