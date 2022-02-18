@@ -21,9 +21,9 @@ export default class DecisionHelper {
   }
 
   formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
+      selectedAnswerId,
     }
   }
 
@@ -36,7 +36,7 @@ export default class DecisionHelper {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formAfterSearch(selectedDecisionId: string, selectedUser: string): DecisionForm {
+  formAfterSearch(selectedAnswerId: string, selectedUser: string): DecisionForm {
     return null
   }
 
@@ -45,7 +45,7 @@ export default class DecisionHelper {
       victimOtherPerson: currentAnswers?.victimOtherPerson,
       victimPrisoner: currentAnswers?.victimPrisoner,
       victimStaff: currentAnswers?.victimStaff,
-      offenceCode: `${this.decision.findById(form.selectedDecisionId).getOffenceCode()}`,
+      offenceCode: `${this.decision.findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
     }
   }
 }

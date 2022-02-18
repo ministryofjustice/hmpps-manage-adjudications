@@ -20,19 +20,19 @@
     {% for answer in answers %}
         {% if answer.type == 'OFFICER' %}
             {% set decisionHtml %}
-                {{ officerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ officerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
             {% endset -%}
         {% elseif answer.type == 'STAFF' %}
             {% set decisionHtml %}
-                {{ staffSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ staffSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
             {% endset -%}
         {% elseif answer.type == 'OTHER_PERSON' %}
             {% set decisionHtml %}
-                {{ otherPersonOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ otherPersonOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
             {% endset -%}
         {% elseif answer.type == 'PRISONER' %}
             {% set decisionHtml %}
-                {{ prisonerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedDecisionViewData, errors) }}
+                {{ prisonerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
             {% endset -%}
         {% else %}
             {% set decisionHtml = null %}
@@ -43,18 +43,18 @@
             conditional: {
                 html: decisionHtml
             },
-            checked: decisionForm.selectedDecisionId == answer.id
+            checked: decisionForm.selectedAnswerId == answer.id
         }), items) %}
     {% endfor %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
-            idPrefix: 'selectedDecisionId',
-            name: 'selectedDecisionId',
-            id: 'selectedDecisionId',
+            idPrefix: 'selectedAnswerId',
+            name: 'selectedAnswerId',
+            id: 'selectedAnswerId',
             attributes: { "data-qa": "radio-buttons" },
             items: items,
-            errorMessage: "selectedDecisionId" | findError(errors)
+            errorMessage: "selectedAnswerId" | findError(errors)
         }) }}
 
         {{ govukButton({

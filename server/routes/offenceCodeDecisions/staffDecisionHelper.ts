@@ -44,17 +44,17 @@ export default class StaffDecisionHelper extends DecisionHelper {
     return {
       pathname: '/select-associated-staff',
       query: {
-        staffFirstName: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
-        staffLastName: (form.selectedDecisionData as StaffData).staffSearchLastNameInput,
+        staffFirstName: (form.selectedAnswerData as StaffData).staffSearchFirstNameInput,
+        staffLastName: (form.selectedAnswerData as StaffData).staffSearchLastNameInput,
       },
     }
   }
 
   override formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
-      selectedDecisionData: {
+      selectedAnswerId,
+      selectedAnswerData: {
         staffId: req.body.staffId,
         staffSearchFirstNameInput: req.body.staffSearchFirstNameInput,
         staffSearchLastNameInput: req.body.staffSearchLastNameInput,
@@ -62,17 +62,17 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  override formAfterSearch(selectedDecisionId: string, selectedPerson: string): DecisionForm {
+  override formAfterSearch(selectedAnswerId: string, selectedPerson: string): DecisionForm {
     return {
-      selectedDecisionId,
-      selectedDecisionData: {
+      selectedAnswerId,
+      selectedAnswerData: {
         staffId: selectedPerson,
       },
     }
   }
 
   override validateForm(form: DecisionForm, req: Request): FormError[] {
-    const staffData = form.selectedDecisionData as StaffData
+    const staffData = form.selectedAnswerData as StaffData
     const searching = !!req.body.searchUser
     if (searching) {
       const errors = []
@@ -91,7 +91,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
   }
 
   override async viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
-    const staffId = (form.selectedDecisionData as StaffData)?.staffId
+    const staffId = (form.selectedAnswerData as StaffData)?.staffId
     if (staffId) {
       const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
       return { staffName: properCaseName(decisionStaff.name) }
@@ -102,7 +102,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       offenceCode: super.updatedOffenceData(currentAnswers, form).offenceCode,
-      victimStaff: (form.selectedDecisionData as StaffData).staffId,
+      victimStaff: (form.selectedAnswerData as StaffData).staffId,
     }
   }
 }

@@ -18,17 +18,17 @@ const error: { [key in ErrorType]: FormError } = {
 
 export default class OtherPersonDecisionHelper extends DecisionHelper {
   formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
-      selectedDecisionData: {
+      selectedAnswerId,
+      selectedAnswerData: {
         otherPersonNameInput: req.body.otherPersonNameInput,
       },
     }
   }
 
   override validateForm(form: DecisionForm): FormError[] {
-    const otherPersonData = form.selectedDecisionData as OtherPersonData
+    const otherPersonData = form.selectedAnswerData as OtherPersonData
     if (!otherPersonData.otherPersonNameInput) {
       return [error.OTHER_PERSON_MISSING_NAME_INPUT]
     }
@@ -38,7 +38,7 @@ export default class OtherPersonDecisionHelper extends DecisionHelper {
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       ...super.updatedOffenceData(currentAnswers, form),
-      victimOtherPerson: (form.selectedDecisionData as OtherPersonData).otherPersonNameInput,
+      victimOtherPerson: (form.selectedAnswerData as OtherPersonData).otherPersonNameInput,
     }
   }
 }

@@ -1,8 +1,8 @@
 // Form data backing a decision. Used in form submits and to allow the saving of form data on a decision page. This
 // allows consistent validation and saving backing state when navigating away from a page to do e.f. prisoner search.
 export type DecisionForm = {
-  selectedDecisionId?: string
-  selectedDecisionData?: StaffData | OfficerData | PrisonerData | OtherPersonData
+  selectedAnswerId?: string
+  selectedAnswerData?: StaffData | OfficerData | PrisonerData | OtherPersonData
 }
 export type StaffData = {
   staffId?: string

@@ -76,11 +76,12 @@ export default class DetailsOfOffenceRoutes {
   }
 
   private questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
-    const questionsAndAnswers = this.decisions.findByCode(offenceCode).getQuestionsAndAnswersToGetHere()
+    const lastAnswer = this.decisions.findAnswerByCode(offenceCode)
+    const questionsAndAnswers = lastAnswer.getQuestionsAndAnswersToGetHere()
     return questionsAndAnswers.map(questionAndAnswer => {
       const { question, answer } = questionAndAnswer
       return {
-        question: question.getProcessedText(placeHolderValues, incidentRole),
+        question: question.getTitle().getProcessedText(placeHolderValues, incidentRole),
         answer: answer.getProcessedReplayText(placeHolderValues),
       }
     })

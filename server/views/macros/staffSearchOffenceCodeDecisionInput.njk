@@ -1,14 +1,14 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro staffSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedDecisionViewData, errors) %}
-    {% set selectedDecisionId = decisionForm.selectedDecisionId %}
-    {% set staffId = decisionForm.selectedDecisionData.staffId %}
-    {% set staffSearchFirstNameInput = decisionForm.selectedDecisionData.staffSearchFirstNameInput %}
-    {% set staffSearchLastNameInput = decisionForm.selectedDecisionData.staffSearchLastNameInput %}
-    {% set staffName = selectedDecisionViewData.staffName %}
+{% macro staffSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedAnswerViewData, errors) %}
+    {% set selectedAnswerId = decisionForm.selectedAnswerId %}
+    {% set staffId = decisionForm.selectedAnswerData.staffId %}
+    {% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
+    {% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
+    {% set staffName = selectedAnswerViewData.staffName %}
 
-    {% if selectedDecisionId == answerId and staffId != null %}
+    {% if selectedAnswerId == answerId and staffId != null %}
         <input type="hidden" name="staffId" value="{{ staffId }}" />
         <div>
             <p><span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }} </p>
@@ -31,7 +31,7 @@
                 id: "staffSearchFirstNameInput",
                 name: "staffSearchFirstNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedDecisionId == answerId and staffSearchFirstNameInput,
+                value: selectedAnswerId == answerId and staffSearchFirstNameInput,
                 errorMessage: errors | findErrors(["staffSearchFirstNameInput"]),
                 label: {
                     text: "First name"
@@ -41,7 +41,7 @@
                 id: "staffSearchLastNameInput",
                 name: "staffSearchLastNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedDecisionId == answerId and staffSearchLastNameInput,
+                value: selectedAnswerId == answerId and staffSearchLastNameInput,
                 errorMessage: errors | findErrors(["staffSearchLastNameInput"]),
                 label: {
                     text: "Last name"
