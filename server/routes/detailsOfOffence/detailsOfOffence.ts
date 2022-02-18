@@ -86,6 +86,7 @@ export default class DetailsOfOffenceRoutes {
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private populateSessionIfEmpty(adjudicationNumber: string): Array<OffenceData> {
     return []
   }
