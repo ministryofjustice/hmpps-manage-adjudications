@@ -14,8 +14,7 @@ export default new Decision()
     [Role.INCITED, `What type of offence did ${Text.PRISONER_FULL_NAME} incite another prisoner to commit?`],
   ])
   .child(
-    decision('Assault, fighting, or endangering the health or personal safety of others')
-      .title('What did the incident involve?')
+    decision('Assault, fighting, or endangering the health or personal safety of others').title('What did the incident involve?')
       .child(
         decision('Assaulting someone')
           .title([
