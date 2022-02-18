@@ -1,9 +1,11 @@
+/* eslint-disable */
 import { Decision, DecisionType as Type, decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { answer } from './Answer'
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
+
 export default new Decision()
   .title([
     [Role.COMMITTED, `What type of offence did ${Text.PRISONER_FULL_NAME} commit?`],
