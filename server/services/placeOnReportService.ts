@@ -290,7 +290,6 @@ export default class PlaceOnReportService {
 
   async getOffenceRule(offenceCode: number, user: User) {
     const client = new ManageAdjudicationsClient(user.token)
-    const qq = await client.getOffenceRule(offenceCode)
-    return qq
+    return client.getOffenceRule(offenceCode)
   }
 }
