@@ -41,7 +41,7 @@ describe('decisions', () => {
     function urlsStartingWithSlash(decision: Decision) {
       return decision.getUrl() != null && decision.getUrl().startsWith('/')
     }
-    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingDecisions(duplicateUrls)
+    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingDecisions(urlsStartingWithSlash)
     expect(decisionsWithUrlsStartingWithSlash.map(a => a.getTitle())).toHaveLength(0)
   })
 
