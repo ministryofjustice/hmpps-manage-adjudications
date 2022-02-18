@@ -11,7 +11,7 @@ import { User } from '../../data/hmppsAuthClient'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 
 type PageData = {
-  error?: FormError | FormError[]
+  error?: FormError
   incidentDate?: SubmittedDateTime
   locationId?: string
   originalRadioSelection?: string
@@ -43,13 +43,18 @@ export default class IncidentDetailsSubmittedEditRoutes {
     return associatedPrisoner.displayName
   }
 
-  private getAssociatedPrisonerNumber = (
+  private getAssociatedPrisonersNumber = (
     selectedRadio: string,
     previouslyReportedAssociatedPrisoner: string,
-    newAssociatedPrisoner: string
+    newAssociatedPrisoner: string,
+    personDeleted: string,
+    radioButtonChanged: boolean,
+    prnError: boolean
   ): string => {
     if (selectedRadio === 'onTheirOwn' || selectedRadio === 'attemptOnTheirOwn') return null
-    if (newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
+    if (personDeleted === 'true') return null
+    if (newAssociatedPrisoner && newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
+    if (radioButtonChanged || prnError) return null // if the user has changed the radio button and not searched for a new prisoner, this will disregard their previously selected prisoner and render an empty field - prnError is for VIEW and radioButtonChanged is for SUBMIT
     if (previouslyReportedAssociatedPrisoner !== undefined) return previouslyReportedAssociatedPrisoner
     return null
   }
@@ -66,6 +71,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { prisonerNumber, id } = req.params
     const { referrer } = req.query
     const { user } = res.locals
+    const { personDeleted } = req.query
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
 
     const IdNumberValue: number = parseInt(id as string, 10)
@@ -74,27 +80,32 @@ export default class IncidentDetailsSubmittedEditRoutes {
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
       this.placeOnReportService.getDraftIncidentDetailsForEditing(IdNumberValue, user),
     ])
-    req.session.originalAssociatedPrisonerNumber = adjudicationDetails.incidentRole.associatedPrisonersNumber
+    req.session.originalAssociatedPrisonersNumber = adjudicationDetails.incidentRole.associatedPrisonersNumber
+    req.session.originalRadioSelection = incidentRoleToRadio(adjudicationDetails.incidentRole.roleCode)
 
     const reporter = await this.placeOnReportService.getReporterName(adjudicationDetails.startedByUserId, user)
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
     const radioButtonSelected = originalRadioSelection || incidentRoleToRadio(adjudicationDetails.incidentRole.roleCode)
+    const prnError = error && error.href.includes('AnotherPrisoner')
 
-    const associatedPrisonerNumber = this.getAssociatedPrisonerNumber(
+    const associatedPrisonersNumber = this.getAssociatedPrisonersNumber(
       radioButtonSelected,
       adjudicationDetails.incidentRole.associatedPrisonersNumber,
-      selectedPerson
+      selectedPerson,
+      personDeleted as string,
+      null,
+      prnError
     )
 
-    const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonerNumber, user)
+    const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonersNumber, user)
 
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(adjudicationDetails.dateTime),
       locationId: locationId || adjudicationDetails.locationId,
       originalRadioSelection: radioButtonSelected,
-      associatedPrisonerNumber,
+      associatedPrisonersNumber,
       associatedPrisonerName,
     }
 
@@ -124,6 +135,8 @@ export default class IncidentDetailsSubmittedEditRoutes {
     }
     delete req.session.incidentDate
     delete req.session.incidentLocation
+    delete req.session.redirectUrl
+    delete req.session.originalAssociatedPrisonersNumber
     return this.renderView(req, res, pageData)
   }
 
@@ -140,18 +153,10 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { user } = res.locals
     const { prisonerNumber, id } = req.params
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
-    const { originalRadioSelection } = req.session
-    const { referrer } = req.query
+    const { referrer, personDeleted } = req.query
 
-    if (deleteAssociatedPrisoner) {
-      req.session.incidentDate = incidentDate
-      req.session.incidentLocation = locationId
-      delete req.session.originalRadioSelection
-      delete req.session.redirectUrl
-
-      // TODO: In here we need to redirect to the delete page, and on the submit button do a PUT request to remove the associated prisoner and incident rolecode, then redirect back to /incident-details/<PRN>/<id>/edit
-      return res.redirect(`/delete-person`)
-    }
+    const originalRadioSelection =
+      req.session.originalRadioSelection || incidentRoleToRadio(req.session.originalRadioSelection)
 
     if (search) {
       const searchValue =
@@ -173,12 +178,27 @@ export default class IncidentDetailsSubmittedEditRoutes {
       return res.redirect(`/select-associated-prisoner?searchTerm=${searchValue}`)
     }
 
-    const newlySelectedAssociatedPrisonersNumber =
-      isPrisonerIdentifier(selectedPerson) && currentRadioSelected === originalRadioSelection ? selectedPerson : null
+    const newlySelectedAssociatedPrisonersNumber = isPrisonerIdentifier(selectedPerson) && selectedPerson
 
-    const associatedPrisonersNumber =
-      newlySelectedAssociatedPrisonersNumber || req.session.originalAssociatedPrisonerNumber
-    delete req.session.originalAssociatedPrisonerNumber
+    const radioButtonChanged = currentRadioSelected !== originalRadioSelection
+    const associatedPrisonersNumber = this.getAssociatedPrisonersNumber(
+      currentRadioSelected,
+      req.session.originalAssociatedPrisonersNumber,
+      newlySelectedAssociatedPrisonersNumber,
+      personDeleted as string,
+      radioButtonChanged,
+      null
+    )
+    delete req.session.originalAssociatedPrisonersNumber
+
+    if (deleteAssociatedPrisoner) {
+      req.session.incidentDate = incidentDate
+      req.session.incidentLocation = locationId
+      req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/submitted/edit?referrer=${referrer}`
+      req.session.originalRadioSelection = currentRadioSelected
+      const prisonerToDelete = associatedPrisonersNumber || selectedPerson
+      return res.redirect(`/delete-person?associatedPersonId=${prisonerToDelete}`)
+    }
 
     const error = validateForm({
       incidentDate,
@@ -192,7 +212,6 @@ export default class IncidentDetailsSubmittedEditRoutes {
         incidentDate,
         locationId,
         originalRadioSelection: currentRadioSelected,
-        associatedPrisonersNumber,
       })
 
     const IdNumberValue: number = parseInt(id as string, 10)

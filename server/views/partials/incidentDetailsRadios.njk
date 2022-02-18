@@ -6,7 +6,7 @@
 {% if (data.originalRadioSelection === 'inciteAnotherPrisoner') and (data.associatedPrisonerName) %}
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonerName }} </p> 
-    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonerNumber }} </p> 
+    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
     <div>
       {{ govukButton({
           text: 'Delete',
@@ -49,7 +49,7 @@
 {% if (data.originalRadioSelection === 'assistAnotherPrisoner') and (data.associatedPrisonerName) %}
   <div>  
     <p data-qa="assist-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonerName }} </p> 
-    <p data-qa="assist-prisoner-prn"><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonerNumber }} </p> 
+    <p data-qa="assist-prisoner-prn"><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
     <div>
     {{ govukButton({
         text: 'Delete',
