@@ -14,6 +14,19 @@ export type IncidentStatement = {
   completed?: boolean
 }
 
+export type OffenceRule = {
+  paragraphDescription: string
+  paragraphNumber: string
+}
+
+export type OffenceDetails = {
+  offenceCode: number
+  offenceRule: OffenceRule
+  victimOtherPersonsName: string
+  victimPrisonersNumber: string
+  victimStaffUsername: string
+}
+
 export type DraftAdjudication = {
   id: number
   adjudicationNumber?: number
@@ -22,6 +35,7 @@ export type DraftAdjudication = {
   incidentDetails: IncidentDetails
   incidentRole: IncidentRole
   incidentStatement?: IncidentStatement
+  offenceDetails?: OffenceDetails[]
 }
 
 export type DraftAdjudicationResult = {
@@ -58,4 +72,5 @@ export type TaskListDetails = {
   handoverDeadline: string
   statementPresent: boolean
   statementComplete: boolean
+  offenceDetailsComplete: boolean
 }

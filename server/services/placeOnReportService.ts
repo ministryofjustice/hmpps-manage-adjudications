@@ -247,6 +247,7 @@ export default class PlaceOnReportService {
       handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
       statementPresent: !!draftAdjudication.incidentStatement,
       statementComplete: draftAdjudication.incidentStatement?.completed || false,
+      offenceDetailsComplete: draftAdjudication.offenceDetails?.length > 0,
     }
   }
 
