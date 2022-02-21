@@ -15,7 +15,7 @@ type PageData = {
 export default class DeletePersonRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
 
-  private getAssociatedPrisonerName = async (associatedPrisonersNumber: string, user: User) => {
+  private getAssociatedPrisonersName = async (associatedPrisonersNumber: string, user: User) => {
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.friendlyName
   }
@@ -38,7 +38,7 @@ export default class DeletePersonRoutes {
     const associatedPersonId = JSON.stringify(req.query.associatedPersonId)?.replace(/"/g, '')
 
     const associatedPersonFriendlyName = isPrisonerIdentifier(associatedPersonId)
-      ? await this.getAssociatedPrisonerName(associatedPersonId, user)
+      ? await this.getAssociatedPrisonersName(associatedPersonId, user)
       : await this.getAssociatedStaffName(associatedPersonId, user)
 
     this.renderView(req, res, { associatedPersonFriendlyName })

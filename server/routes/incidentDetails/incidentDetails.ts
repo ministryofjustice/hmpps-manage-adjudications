@@ -68,7 +68,7 @@ export default class IncidentDetailsRoutes {
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
-    const associatedPrisonerName = selectedPerson
+    const associatedPrisonersName = selectedPerson
       ? await this.getCurrentAssociatedPrisonerDetails(associatedPrisonersNumber, selectedPerson, user)
       : null
 
@@ -76,8 +76,8 @@ export default class IncidentDetailsRoutes {
       incidentDate: this.getIncidentDate(incidentDate),
       locationId,
       originalRadioSelection,
-      associatedPrisonerNumber: selectedPerson,
-      associatedPrisonerName,
+      associatedPrisonersNumber: selectedPerson,
+      associatedPrisonersName,
     }
 
     return res.render(`pages/incidentDetails`, {
