@@ -278,10 +278,10 @@ export default class PlaceOnReportService {
   async getOffenceSelectionPlaceholderValues(adjudicationNumber: number, user: User) {
     const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
     const { prisonerNumber } = draftAdjudication.draftAdjudication
-    const associatedPrisonerNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber
+    const associatedPrisonersNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber
     const [prisonerDetails, associatedPrisoner] = await Promise.all([
       this.getPrisonerDetails(prisonerNumber, user),
-      associatedPrisonerNumber && this.getPrisonerDetails(associatedPrisonerNumber, user),
+      associatedPrisonersNumber && this.getPrisonerDetails(associatedPrisonersNumber, user),
     ])
     return {
       offenderFirstName: properCaseName(prisonerDetails?.firstName),

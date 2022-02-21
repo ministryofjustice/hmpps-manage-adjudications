@@ -37,7 +37,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
     return null
   }
 
-  private getCurrentAssociatedPrisonerName = async (associatedPrisonersNumber: string, user: User) => {
+  private getCurrentAssociatedPrisonersName = async (associatedPrisonersNumber: string, user: User) => {
     if (associatedPrisonersNumber === null) return null
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
@@ -99,14 +99,14 @@ export default class IncidentDetailsSubmittedEditRoutes {
       prnError
     )
 
-    const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonersNumber, user)
+    const associatedPrisonersName = await this.getCurrentAssociatedPrisonersName(associatedPrisonersNumber, user)
 
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(adjudicationDetails.dateTime),
       locationId: locationId || adjudicationDetails.locationId,
       originalRadioSelection: radioButtonSelected,
       associatedPrisonersNumber,
-      associatedPrisonerName,
+      associatedPrisonersName,
     }
 
     const exitButtonHref = (referrer as string)?.includes('review')
