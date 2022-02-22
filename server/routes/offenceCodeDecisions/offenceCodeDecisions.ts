@@ -48,8 +48,8 @@ export default class OffenceCodeRoutes {
       // We are coming back from a user selection.
       const selectedPerson = req.query.selectedPerson as string
       const selectedAnswerId = req.query.selectedAnswerId as string
-      const helper = this.helper(selectedAnswerId)
-      const form = helper.formAfterSearch(selectedAnswerId, selectedPerson)
+      const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
+      const form = answerTypeHelper.formAfterSearch(selectedAnswerId, selectedPerson)
       return this.renderView(req, res, { ...form, adjudicationNumber, incidentRole })
     }
     // We are viewing the page normally
@@ -76,15 +76,15 @@ export default class OffenceCodeRoutes {
     if (!selectedAnswerId) {
       return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber, incidentRole })
     }
-    const helper = this.helper(selectedAnswerId)
-    const form = helper.formFromPost(req)
-    const errors = helper.validateForm(form, req)
+    const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
+    const form = answerTypeHelper.formFromPost(req)
+    const errors = answerTypeHelper.validateForm(form, req)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
     // Save any data associated with the decisions on the session.
     const currentOffenceData = getAndDeleteOffenceData(req, adjudicationNumber)
-    const updatedOffenceData = helper.updatedOffenceData(currentOffenceData, form)
+    const updatedOffenceData = answerTypeHelper.updatedOffenceData(currentOffenceData, form)
     setOffenceData(req, updatedOffenceData, adjudicationNumber)
     // We redirect to the next decision or the details of offence page if this is the last.
     const selectedAnswer = this.decisions.findAnswerById(form.selectedAnswerId)
@@ -114,14 +114,14 @@ export default class OffenceCodeRoutes {
   search = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
     const { selectedAnswerId } = req.body
-    const helper = this.helper(selectedAnswerId)
-    const form = helper.formFromPost(req)
-    const errors = helper.validateForm(form, req)
+    const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
+    const form = answerTypeHelper.formFromPost(req)
+    const errors = answerTypeHelper.validateForm(form, req)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
     req.session.redirectUrl = `${this.urlHere(req)}?selectedAnswerId=${selectedAnswerId}`
-    return this.redirect(helper.getRedirectUrlForUserSearch(form), res)
+    return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -141,7 +141,7 @@ export default class OffenceCodeRoutes {
         type: a.getType().toString(),
       }
     })
-    const selectedAnswerViewData = await this.helper(pageData)?.viewDataFromForm(pageData, user)
+    const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm: pageData,
@@ -153,7 +153,7 @@ export default class OffenceCodeRoutes {
   }
 
   // The helper that knows how to deal with the specifics of a particular decision type.
-  private helper(decisionFormOrSelectedAnswerId: DecisionForm | string): DecisionHelper {
+  private answerTypeHelper(decisionFormOrSelectedAnswerId: DecisionForm | string): DecisionHelper {
     let selectedAnswerId = ''
     if (typeof decisionFormOrSelectedAnswerId === 'string') {
       selectedAnswerId = decisionFormOrSelectedAnswerId
