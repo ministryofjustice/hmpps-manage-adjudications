@@ -39,8 +39,9 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T00:00:00',
-        statementPresent: true,
+        statementPresent: false,
         statementComplete: false,
+        offenceDetailsComplete: false,
       })
     })
     it('should load the continue report page', () => {
@@ -50,8 +51,10 @@ describe('GET /place-the-prisoner-on-report', () => {
         .expect(response => {
           expect(response.text).toContain('Incident details')
           expect(response.text).toContain('COMPLETED')
+          expect(response.text).toContain('Offence details')
+          expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain('Incident statement')
-          expect(response.text).toContain('IN PROGRESS')
+          expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain('Accept details and place on report')
           expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain(

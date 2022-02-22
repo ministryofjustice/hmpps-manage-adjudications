@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro taskList(prisonerNo, adjudicationId, statementPresent, statementComplete, attributes) %}
+{% macro taskList(prisonerNo, adjudicationId, statementPresent, statementComplete, offenceDetailsComplete, attributes) %}
 
   {% set data = [
    [
@@ -8,6 +8,20 @@
     { html: '<strong class="govuk-tag">COMPLETED</strong>' }
    ]
   ] %}
+
+  {% if offenceDetailsComplete == false %}
+    {% set data = (data.push([
+    { html: "<a href='/offence-details/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='offence-details-link'>Offence details</a>" },
+    { html: '<strong class="govuk-tag govuk-tag--grey">NOT STARTED</strong>' }
+   ]), data)
+    %}
+  {% else %}
+    {% set data = (data.push([
+    { html: "<p class='task' data-qa='offence-details'>Offence details</p>" },
+    { html: '<strong class="govuk-tag">COMPLETED</strong>' }
+   ]), data)
+    %}
+  {% endif %}
 
   {% if statementPresent == false %}
     {% set data = (data.push([

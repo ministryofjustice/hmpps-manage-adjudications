@@ -3,9 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
  {% set inciteAnotherPrisoner %}
-{% if (data.originalRadioSelection === 'inciteAnotherPrisoner') and (data.associatedPrisonerName) %}
+{% if (data.originalRadioSelection === 'inciteAnotherPrisoner') and (data.associatedPrisonersName) %}
   <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonerName }} </p> 
+    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonersName }} </p> 
     <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
     <div>
       {{ govukButton({
@@ -46,9 +46,9 @@
 {% endset -%}
 
  {% set assistAnotherPrisoner %}
-{% if (data.originalRadioSelection === 'assistAnotherPrisoner') and (data.associatedPrisonerName) %}
+{% if (data.originalRadioSelection === 'assistAnotherPrisoner') and (data.associatedPrisonersName) %}
   <div>  
-    <p data-qa="assist-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonerName }} </p> 
+    <p data-qa="assist-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonersName }} </p> 
     <p data-qa="assist-prisoner-prn"><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
     <div>
     {{ govukButton({

@@ -560,6 +560,35 @@ describe('placeOnReportService', () => {
     })
   })
   describe('getInfoForTaskListStatuses', () => {
+    it('returns the correct response when there are no offence details', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 104,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 357591,
+            dateTimeOfIncident: '2021-10-12T20:00:00',
+            handoverDeadline: '2021-10-14T20:00:00',
+          },
+          startedByUserId: 'TEST_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(104, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-10-14T20:00:00',
+        statementPresent: false,
+        statementComplete: false,
+        offenceDetailsComplete: false,
+      })
+    })
     it('returns the correct response when there is no incident statement', async () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: {
@@ -571,6 +600,26 @@ describe('placeOnReportService', () => {
             handoverDeadline: '2021-10-14T20:00:00',
           },
           startedByUserId: 'TEST_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -578,6 +627,7 @@ describe('placeOnReportService', () => {
         handoverDeadline: '2021-10-14T20:00:00',
         statementPresent: false,
         statementComplete: false,
+        offenceDetailsComplete: true,
       })
     })
     it('returns the correct response when there is an incomplete incident statement', async () => {
@@ -595,6 +645,26 @@ describe('placeOnReportService', () => {
             completed: false,
           },
           startedByUserId: 'TEST_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -602,6 +672,7 @@ describe('placeOnReportService', () => {
         handoverDeadline: '2021-10-14T20:00:00',
         statementPresent: true,
         statementComplete: false,
+        offenceDetailsComplete: true,
       })
     })
     it('returns the correct response when there is a complete incident statement', async () => {
@@ -619,6 +690,26 @@ describe('placeOnReportService', () => {
             completed: true,
           },
           startedByUserId: 'NCLAMP_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
         },
       })
       const response = await service.getInfoForTaskListStatuses(92, user)
@@ -626,6 +717,7 @@ describe('placeOnReportService', () => {
         handoverDeadline: '2021-11-23T00:00:00',
         statementPresent: true,
         statementComplete: true,
+        offenceDetailsComplete: true,
       })
     })
   })

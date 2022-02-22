@@ -36,7 +36,7 @@ export default class IncidentDetailsEditRoutes {
     return null
   }
 
-  private getCurrentAssociatedPrisonerName = async (associatedPrisonersNumber: string, user: User) => {
+  private getCurrentAssociatedPrisonersName = async (associatedPrisonersNumber: string, user: User) => {
     if (associatedPrisonersNumber === null) return null
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
@@ -100,14 +100,14 @@ export default class IncidentDetailsEditRoutes {
       prnError
     )
 
-    const associatedPrisonerName = await this.getCurrentAssociatedPrisonerName(associatedPrisonersNumber, user)
+    const associatedPrisonersName = await this.getCurrentAssociatedPrisonersName(associatedPrisonersNumber, user)
 
     const data = {
       incidentDate: this.getIncidentDate(incidentDate) || this.getIncidentDate(existingDraftIncidentDetails.dateTime),
       locationId: locationId || existingDraftIncidentDetails.locationId,
       originalRadioSelection: radioButtonSelected,
       associatedPrisonersNumber,
-      associatedPrisonerName,
+      associatedPrisonersName,
     }
 
     return res.render(`pages/incidentDetails`, {

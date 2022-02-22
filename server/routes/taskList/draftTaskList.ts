@@ -23,6 +23,7 @@ export default class DraftTaskListRoutes {
       adjudicationId: id,
       statementPresent: taskListDetails.statementPresent,
       statementComplete: taskListDetails.statementComplete,
+      offenceDetailsComplete: taskListDetails.offenceDetailsComplete,
       prisonerFirstAndLastName: prisoner.friendlyName,
       expirationTime: formatTimestampToTime(taskListDetails.handoverDeadline),
       expirationDay: formatTimestampToDate(taskListDetails.handoverDeadline, 'D MMMM YYYY'),
