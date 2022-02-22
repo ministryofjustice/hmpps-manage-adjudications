@@ -87,21 +87,17 @@ export class Answer {
   }
 
   allCodes(): Array<number> {
-    let answerAllCodes = this.getOffenceCode() ? [this.getOffenceCode()] : []
-    if (this.getChildDecision()?.getChildAnswers()) {
-      const childCodes = [].concat(
-        ...this.getChildDecision()
-          .getChildAnswers()
-          .map(a => a.allCodes())
-      )
-      answerAllCodes = answerAllCodes.concat(childCodes)
+    const childAnswers = this.getChildDecision()?.getChildAnswers()
+    const childCodes = childAnswers ? [].concat(...childAnswers.map(a => a.allCodes())) : []
+    if (this.getOffenceCode()) {
+      childCodes.push(this.getOffenceCode())
     }
-    return answerAllCodes.sort()
+    return childCodes.sort()
   }
 
   getQuestionsAndAnswersToGetHere(): Array<{ question: Decision; answer: Answer }> {
     let questionsAndAnswers = [] as { question: Decision; answer: Answer }[]
-    if (this.getParentDecision().getParent()) {
+    if (this.getParentDecision().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
         this.getParentDecision().getParent().getQuestionsAndAnswersToGetHere()
       )
@@ -119,19 +115,12 @@ export class Answer {
   }
 
   matchingAnswer(fn: (d: Answer) => boolean): Array<Answer> {
-    let matches: Answer[] = []
-    if (this.getChildDecision()?.getChildAnswers()) {
-      const childMatches = [].concat(
-        ...this.getChildDecision()
-          .getChildAnswers()
-          .map(a => a.matchingAnswer(fn))
-      )
-      matches = matches.concat(childMatches)
-    }
+    const childAnswers = this.getChildDecision()?.getChildAnswers()
+    const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswer(fn))) : []
     if (fn(this)) {
-      matches.push(this)
+      childMatches.push(this)
     }
-    return matches
+    return childMatches
   }
 
   toString(indent = 0): string {
