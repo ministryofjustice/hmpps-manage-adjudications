@@ -269,7 +269,7 @@ export default class PlaceOnReportService {
     )
   }
 
-  async getPrisonerDetailsForAdjudication(adjudicationNumber: number, user: User) {
+  async getOffencePrisonerDetails(adjudicationNumber: number, user: User) {
     const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
     const { prisonerNumber } = draftAdjudication.draftAdjudication
     const associatedPrisonerNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber

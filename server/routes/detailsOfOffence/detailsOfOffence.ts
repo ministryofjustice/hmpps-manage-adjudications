@@ -20,7 +20,7 @@ export default class DetailsOfOffenceRoutes {
     const { user } = res.locals
     const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
     const incidentRole = incidentRoleFromCode(draftAdjudication.draftAdjudication.incidentRole.roleCode)
-    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getPrisonerDetailsForAdjudication(
+    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
       adjudicationNumber,
       user
     )

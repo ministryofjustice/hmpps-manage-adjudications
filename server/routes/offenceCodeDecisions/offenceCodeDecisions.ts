@@ -127,7 +127,7 @@ export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
-    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getPrisonerDetailsForAdjudication(
+    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
       Number(adjudicationNumber),
       user
     )
