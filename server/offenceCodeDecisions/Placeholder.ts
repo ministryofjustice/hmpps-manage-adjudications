@@ -38,7 +38,7 @@ export function getPlaceholderValues(
     prisonerLastName: properCaseName(prisoner.lastName),
     associatedPrisonerFirstName: associatedPrisoner && properCaseName(associatedPrisoner?.firstName),
     associatedPrisonerLastName: associatedPrisoner && properCaseName(associatedPrisoner?.lastName),
-    victimStaffFullName: answerData?.victimStaff && answerData.victimStaff.name,
+    victimStaffFullName: answerData?.victimStaff && properCaseName(answerData.victimStaff.name),
     victimPrisonerFirstName: answerData?.victimPrisoner && properCaseName(answerData.victimPrisoner.firstName),
     victimPrisonerLastName: answerData?.victimPrisoner && properCaseName(answerData.victimPrisoner.lastName),
     victimOtherPersonFullName: answerData?.victimOtherPerson,

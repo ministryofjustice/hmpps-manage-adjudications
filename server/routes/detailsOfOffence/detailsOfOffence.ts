@@ -3,7 +3,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
-import { IncidentRole, incidentRoleFromCode, incidentRule } from '../../incidentRole/IncidentRole'
+import { IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { User } from '../../data/hmppsAuthClient'
 import UserService from '../../services/userService'
@@ -22,8 +22,8 @@ export default class DetailsOfOffenceRoutes {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
-    const incidentRole = incidentRoleFromCode(draftAdjudication.draftAdjudication.incidentRole.roleCode)
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+    const incidentRole = incidentRoleFromCode(draftAdjudication.incidentRole.roleCode)
     const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
       adjudicationNumber,
       user
@@ -37,7 +37,7 @@ export default class DetailsOfOffenceRoutes {
         const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
         return {
           questionsAndAnswers,
-          incidentRule: incidentRule(incidentRole),
+          incidentRule: draftAdjudication.incidentRole.offenceRule,
           offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
         }
       })
