@@ -103,7 +103,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
       ...super.updatedOffenceData(currentAnswers, form),
       // Note that we update the victim staff reference here, even though it is an officer. This is because the
       // distinction is purely a UI one and at this point we are using a data structure mirroring the database.
-      victimStaff: (form.selectedAnswerData as OfficerData).officerId,
+      victimStaffUsername: (form.selectedAnswerData as OfficerData).officerId,
     }
   }
 }

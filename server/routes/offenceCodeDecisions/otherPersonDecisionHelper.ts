@@ -38,7 +38,7 @@ export default class OtherPersonDecisionHelper extends DecisionHelper {
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       ...super.updatedOffenceData(currentAnswers, form),
-      victimOtherPerson: (form.selectedAnswerData as OtherPersonData).otherPersonNameInput,
+      victimOtherPersonsName: (form.selectedAnswerData as OtherPersonData).otherPersonNameInput,
     }
   }
 }

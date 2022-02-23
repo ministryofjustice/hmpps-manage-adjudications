@@ -96,9 +96,12 @@ export default class OffenceCodeRoutes {
       const nextQuestionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedAnswer
         .getChildDecision()
         .getUrl()}`
-      return this.redirect(nextQuestionUrl, res)
+      return res.redirect(nextQuestionUrl)
     }
-    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: updatedOffenceData }, res)
+    // We have finished - remove the offence data from the session and redirect to the details of offence page with the
+    // offence data payload
+    const finalOffenceData = this.offenceSessionService.deleteOffenceData(req, adjudicationNumber)
+    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: finalOffenceData }, res)
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
@@ -108,11 +111,11 @@ export default class OffenceCodeRoutes {
       Number(adjudicationNumber),
       user
     )
-    return this.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`, res)
+    return res.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`)
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {
-    return this.redirect(this.urlHere(req), res)
+    return res.redirect(this.urlHere(req))
   }
 
   search = async (req: Request, res: Response): Promise<void> => {
@@ -167,10 +170,7 @@ export default class OffenceCodeRoutes {
     return selectedAnswerId && this.helpers.get(this.decisions.findAnswerById(selectedAnswerId).getType())
   }
 
-  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
-    if (typeof urlQuery === 'string') {
-      return res.redirect(urlQuery)
-    }
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
     return res.redirect(url.format(urlQuery))
   }
 

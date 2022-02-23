@@ -42,9 +42,9 @@ export default class DecisionHelper {
 
   updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      victimOtherPerson: currentAnswers?.victimOtherPerson,
-      victimPrisoner: currentAnswers?.victimPrisoner,
-      victimStaff: currentAnswers?.victimStaff,
+      victimOtherPersonsName: currentAnswers?.victimOtherPersonsName,
+      victimPrisonersNumber: currentAnswers?.victimPrisonersNumber,
+      victimStaffUsername: currentAnswers?.victimStaffUsername,
       offenceCode: `${this.decision.findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
     }
   }
