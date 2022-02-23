@@ -14,6 +14,8 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import LocationService from '../../services/locationService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import OffenceSessionService from '../../services/offenceSessionService'
+import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 const user = {
   name: 'john smith',
@@ -103,6 +105,8 @@ export default function appWithAllRoutes(
       prisonerSearchService: {} as PrisonerSearchService,
       locationService: {} as LocationService,
       reportedAdjudicationsService: {} as ReportedAdjudicationsService,
+      offenceSessionService: {} as OffenceSessionService,
+      allOffencesSessionService: {} as AllOffencesSessionService,
       ...overrides,
     }),
     production,

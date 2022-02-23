@@ -6,6 +6,8 @@ import CuriousApiService from './curiousApiService'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import PrisonerSearchService from './prisonerSearchService'
 import LocationService from './locationService'
+import OffenceSessionService from './offenceSessionService'
+import AllOffencesSessionService from './allOffencesSessionService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
@@ -18,6 +20,8 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   locationService
 )
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
+const offenceSessionService = new OffenceSessionService()
+const allOffencesSessionService = new AllOffencesSessionService()
 
 export const services = {
   userService,
@@ -25,6 +29,8 @@ export const services = {
   reportedAdjudicationsService,
   prisonerSearchService,
   locationService,
+  offenceSessionService,
+  allOffencesSessionService,
 }
 
 export type Services = typeof services

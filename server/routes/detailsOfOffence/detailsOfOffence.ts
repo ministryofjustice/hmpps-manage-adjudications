@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
-import { addSessionOffence, getSessionOffences } from './detailsOfOffenceSessionHelper'
+import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { IncidentRole, incidentRoleFromCode, incidentRule } from '../../incidentRole/IncidentRole'
 import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
@@ -11,7 +11,11 @@ import UserService from '../../services/userService'
 type PageData = Array<OffenceData>
 
 export default class DetailsOfOffenceRoutes {
-  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
+  constructor(
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly userService: UserService,
+    private readonly allOffencesSessionService: AllOffencesSessionService
+  ) {}
 
   private decisions = decisionTree
 
@@ -48,7 +52,7 @@ export default class DetailsOfOffenceRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber } = req.params
     this.populateSessionIfEmpty(adjudicationNumber)
-    return this.renderView(req, res, getSessionOffences(req, adjudicationNumber))
+    return this.renderView(req, res, this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber))
   }
 
   addOffence = async (req: Request, res: Response): Promise<void> => {
@@ -57,7 +61,7 @@ export default class DetailsOfOffenceRoutes {
     this.populateSessionIfEmpty(adjudicationNumber)
     // Get the offence to be added from the request and put it on the session
     const offenceToAdd: OffenceData = { ...req.query }
-    addSessionOffence(req, offenceToAdd, adjudicationNumber)
+    this.allOffencesSessionService.addSessionOffence(req, offenceToAdd, adjudicationNumber)
 
     return res.redirect(`/details-of-offence/${adjudicationNumber}`)
   }

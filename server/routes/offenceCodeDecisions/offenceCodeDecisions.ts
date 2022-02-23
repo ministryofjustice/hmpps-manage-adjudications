@@ -6,7 +6,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
-import { getAndDeleteOffenceData, setOffenceData } from './decisionSessionHelper'
+import OffenceSessionService from '../../services/offenceSessionService'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
@@ -30,7 +30,11 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class OffenceCodeRoutes {
-  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
+  constructor(
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly userService: UserService,
+    private readonly offenceSessionService: OffenceSessionService
+  ) {}
 
   private helpers = new Map<DecisionType, DecisionHelper>([
     [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService)],
@@ -83,9 +87,9 @@ export default class OffenceCodeRoutes {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
     // Save any data associated with the decisions on the session.
-    const currentOffenceData = getAndDeleteOffenceData(req, adjudicationNumber)
+    const currentOffenceData = this.offenceSessionService.getAndDeleteOffenceData(req, adjudicationNumber)
     const updatedOffenceData = answerTypeHelper.updatedOffenceData(currentOffenceData, form)
-    setOffenceData(req, updatedOffenceData, adjudicationNumber)
+    this.offenceSessionService.setOffenceData(req, updatedOffenceData, adjudicationNumber)
     // We redirect to the next decision or the details of offence page if this is the last.
     const selectedAnswer = this.decisions.findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {

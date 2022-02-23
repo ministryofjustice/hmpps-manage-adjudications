@@ -26,12 +26,26 @@ import { Services } from '../services'
 
 export default function routes(
   router: Router,
-  { placeOnReportService, locationService, prisonerSearchService, reportedAdjudicationsService, userService }: Services
+  {
+    placeOnReportService,
+    locationService,
+    prisonerSearchService,
+    reportedAdjudicationsService,
+    userService,
+    offenceSessionService,
+    allOffencesSessionService,
+  }: Services
 ): Router {
-  router.use('/offence-code-selection', offenceCodeDecisionsRoutes({ placeOnReportService, userService }))
+  router.use(
+    '/offence-code-selection',
+    offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService })
+  )
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/offence-details', typeOfOffenceRoutes())
-  router.use('/details-of-offence', detailsOfOffenceRoutes({ placeOnReportService, userService }))
+  router.use(
+    '/details-of-offence',
+    detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService })
+  )
   router.use('/assault', assaultRoutes({ placeOnReportService, userService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService, locationService }))
