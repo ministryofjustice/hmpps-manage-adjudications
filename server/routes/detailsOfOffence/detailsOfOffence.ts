@@ -51,26 +51,38 @@ export default class DetailsOfOffenceRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber } = req.params
-    this.populateSessionIfEmpty(adjudicationNumber)
-    return this.renderView(req, res, this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber))
+    const sessionOffences = await this.populateSessionIfEmpty(adjudicationNumber, req, res)
+    return this.renderView(req, res, sessionOffences)
+  }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    const { adjudicationNumber } = req.params
+    const { user } = res.locals
+    // TODO save to the api
+    // const sessionOffences = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
+
+    const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
+      Number(adjudicationNumber),
+      user
+    )
+    return res.redirect(`/incident-statement/${prisonerNumber}/${adjudicationNumber}`)
   }
 
   addOffence = async (req: Request, res: Response): Promise<void> => {
     // If the session has not yet been populated from the database we need to do that.
     const { adjudicationNumber } = req.params
-    this.populateSessionIfEmpty(adjudicationNumber)
+    await this.populateSessionIfEmpty(adjudicationNumber, req, res)
     // Get the offence to be added from the request and put it on the session
     const offenceToAdd: OffenceData = { ...req.query }
     this.allOffencesSessionService.addSessionOffence(req, offenceToAdd, adjudicationNumber)
-
     return res.redirect(`/details-of-offence/${adjudicationNumber}`)
   }
 
   private async answerData(data: OffenceData, user: User) {
     const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
-      data.victimOtherPerson,
-      data.victimPrisoner && this.placeOnReportService.getPrisonerDetails(data.victimPrisoner, user),
-      data.victimStaff && this.userService.getStaffFromUsername(data.victimStaff, user),
+      data.victimOtherPersonsName,
+      data.victimPrisonersNumber && this.placeOnReportService.getPrisonerDetails(data.victimPrisonersNumber, user),
+      data.victimStaffUsername && this.userService.getStaffFromUsername(data.victimStaffUsername, user),
     ])
     return {
       victimOtherPerson,
@@ -91,8 +103,21 @@ export default class DetailsOfOffenceRoutes {
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private populateSessionIfEmpty(adjudicationNumber: string): Array<OffenceData> {
-    return []
+  private async populateSessionIfEmpty(adjudicationNumber: string, req: Request, res: Response) {
+    const { user } = res.locals
+    const allOffencesOnSession = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
+    if (allOffencesOnSession) {
+      return allOffencesOnSession
+    }
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(
+      Number(adjudicationNumber),
+      user
+    )
+    return draftAdjudication.offenceDetails.map(offenceDetails => {
+      return {
+        ...offenceDetails,
+        offenceCode: `${offenceDetails.offenceCode}`,
+      }
+    })
   }
 }

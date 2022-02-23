@@ -84,7 +84,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       offenceCode: super.updatedOffenceData(currentAnswers, form).offenceCode,
-      victimPrisoner: (form.selectedAnswerData as PrisonerData).prisonerId,
+      victimPrisonersNumber: (form.selectedAnswerData as PrisonerData).prisonerId,
     }
   }
 }

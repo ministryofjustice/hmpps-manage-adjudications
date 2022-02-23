@@ -20,9 +20,11 @@ export default function detailsOfOffenceRoutes({
   const detailsOfOffence = new DetailsOfOffenceRoutes(placeOnReportService, userService, allOffencesSessionService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get('/:adjudicationNumber/add', detailsOfOffence.addOffence)
   get('/:adjudicationNumber', detailsOfOffence.view)
+  post('/:adjudicationNumber', detailsOfOffence.submit)
 
   return router
 }

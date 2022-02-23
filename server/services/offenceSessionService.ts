@@ -15,7 +15,13 @@ export default class OffenceSessionService {
 
   getAndDeleteOffenceData(req: Request, draftAdjudicationNumber: string): OffenceData {
     const offenceData = this.getOffenceData(req, draftAdjudicationNumber)
-    this.setOffenceData(req, null, draftAdjudicationNumber)
+    this.deleteOffenceData(req, draftAdjudicationNumber)
+    return offenceData
+  }
+
+  deleteOffenceData(req: Request, draftAdjudicationNumber: string): OffenceData {
+    const offenceData = this.getOffenceData(req, draftAdjudicationNumber)
+    delete req.session.offences[draftAdjudicationNumber]
     return offenceData
   }
 }
