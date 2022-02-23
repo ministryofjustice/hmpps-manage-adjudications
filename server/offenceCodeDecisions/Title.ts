@@ -1,6 +1,6 @@
 import type { PlaceholderValues } from './Placeholder'
 import { getProcessedText } from './Placeholder'
-import IncidentRole from '../incidentRole/IncidentRole'
+import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export default class Title {
   titles: Map<IncidentRole, string> = new Map<IncidentRole, string>()

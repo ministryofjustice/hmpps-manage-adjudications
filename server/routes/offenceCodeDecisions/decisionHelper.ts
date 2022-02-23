@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 
 export default class DecisionHelper {
@@ -21,9 +21,9 @@ export default class DecisionHelper {
   }
 
   formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
+      selectedAnswerId,
     }
   }
 
@@ -36,17 +36,16 @@ export default class DecisionHelper {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
-    return form
+  formAfterSearch(selectedAnswerId: string, selectedUser: string): DecisionForm {
+    return null
   }
 
-  updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       victimOtherPerson: currentAnswers?.victimOtherPerson,
-      victimOfficer: currentAnswers?.victimOfficer,
       victimPrisoner: currentAnswers?.victimPrisoner,
       victimStaff: currentAnswers?.victimStaff,
-      offenceCode: this.decision.findById(form.selectedDecisionId).getOffenceCode(),
+      offenceCode: `${this.decision.findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
     }
   }
 }

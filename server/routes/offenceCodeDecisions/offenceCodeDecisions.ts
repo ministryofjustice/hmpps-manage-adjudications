@@ -4,20 +4,16 @@ import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
-import IncidentRole from '../../incidentRole/IncidentRole'
+import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
-import {
-  getAndDeleteSessionAnswers,
-  getAndDeleteSessionForm,
-  setSessionAnswers,
-  setSessionForm,
-} from './decisionSessionHelper'
+import OffenceSessionService from '../../services/offenceSessionService'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
 import OfficerDecisionHelper from './officerDecisionHelper'
 import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
+import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
 
@@ -28,13 +24,17 @@ enum ErrorType {
 
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {
-    href: '#selectedDecisionId',
+    href: '#selectedAnswerId',
     text: 'Please make a choice',
   },
 }
 
 export default class OffenceCodeRoutes {
-  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
+  constructor(
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly userService: UserService,
+    private readonly offenceSessionService: OffenceSessionService
+  ) {}
 
   private helpers = new Map<DecisionType, DecisionHelper>([
     [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService)],
@@ -48,21 +48,16 @@ export default class OffenceCodeRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    if (req.query.selectedPerson) {
-      // We are coming back from a user selection. We want to record this in the DecisionForm stored on the session and
-      // then redirect to the view page after removing the request parameter.
-      const currentForm = getAndDeleteSessionForm(req, adjudicationNumber)
-      const updatedForm = this.helper(currentForm).updatedForm(currentForm, req.query.selectedPerson as string)
-      setSessionForm(req, updatedForm, adjudicationNumber)
-      return this.redirect(this.urlHere(req), res)
+    if (req.query.selectedPerson && req.query.selectedAnswerId) {
+      // We are coming back from a user selection.
+      const selectedPerson = req.query.selectedPerson as string
+      const selectedAnswerId = req.query.selectedAnswerId as string
+      const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
+      const form = answerTypeHelper.formAfterSearch(selectedAnswerId, selectedPerson)
+      return this.renderView(req, res, { ...form, adjudicationNumber, incidentRole })
     }
-    // We are viewing this page. If we have come from a user selection then we should have the previous state of the
-    // form in the session, so we render that now and remove it from the session.
-    return this.renderView(req, res, {
-      ...(getAndDeleteSessionForm(req, adjudicationNumber) || {}),
-      adjudicationNumber,
-      incidentRole,
-    })
+    // We are viewing the page normally
+    return this.renderView(req, res, { adjudicationNumber, incidentRole })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -80,28 +75,30 @@ export default class OffenceCodeRoutes {
 
   submitDecision = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     // Validation
-    if (!selectedDecisionId) {
+    if (!selectedAnswerId) {
       return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber, incidentRole })
     }
-    const helper = this.helper(selectedDecisionId)
-    const form = helper.formFromPost(req)
-    const errors = helper.validateForm(form, req)
+    const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
+    const form = answerTypeHelper.formFromPost(req)
+    const errors = answerTypeHelper.validateForm(form, req)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
     // Save any data associated with the decisions on the session.
-    const currentAnswers = getAndDeleteSessionAnswers(req, adjudicationNumber)
-    const updatedAnswers = helper.updatedAnswers(currentAnswers, form)
-    setSessionAnswers(req, updatedAnswers, adjudicationNumber)
-    // Are there more decisions to be made?
-    const selectedDecision = this.decisions.findById(form.selectedDecisionId)
-    const redirectUrl = selectedDecision.getOffenceCode()
-      ? `/details-of-offence/${adjudicationNumber}`
-      : `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedDecision.getUrl()}`
-
-    return this.redirect(redirectUrl, res)
+    const currentOffenceData = this.offenceSessionService.getAndDeleteOffenceData(req, adjudicationNumber)
+    const updatedOffenceData = answerTypeHelper.updatedOffenceData(currentOffenceData, form)
+    this.offenceSessionService.setOffenceData(req, updatedOffenceData, adjudicationNumber)
+    // We redirect to the next decision or the details of offence page if this is the last.
+    const selectedAnswer = this.decisions.findAnswerById(form.selectedAnswerId)
+    if (!selectedAnswer.getOffenceCode()) {
+      const nextQuestionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedAnswer
+        .getChildDecision()
+        .getUrl()}`
+      return this.redirect(nextQuestionUrl, res)
+    }
+    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: updatedOffenceData }, res)
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
@@ -120,62 +117,61 @@ export default class OffenceCodeRoutes {
 
   search = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber, incidentRole } = req.params
-    const { selectedDecisionId } = req.body
-    const helper = this.helper(selectedDecisionId)
-    const form = helper.formFromPost(req)
-    const errors = helper.validateForm(form, req)
+    const { selectedAnswerId } = req.body
+    const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
+    const form = answerTypeHelper.formFromPost(req)
+    const errors = answerTypeHelper.validateForm(form, req)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
-    setSessionForm(req, form, adjudicationNumber)
-    req.session.redirectUrl = this.urlHere(req)
-    return this.redirect(helper.getRedirectUrlForUserSearch(form), res)
+    req.session.redirectUrl = `${this.urlHere(req)}?selectedAnswerId=${selectedAnswerId}`
+    return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
-    const form = pageData
-    const placeholderValues = await this.placeOnReportService.getOffenceSelectionPlaceholderValues(
+    const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
       Number(adjudicationNumber),
       user
     )
-    const decision = this.decisions.findByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
+    const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
+    const decision = this.decisions.findDecisionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
-    const questions = decision.getChildren().map(d => {
+    const answers = decision.getChildAnswers().map(a => {
       return {
-        id: d.id(),
-        label: d.getQuestion().getProcessedText(placeholderValues),
-        type: d.getType().toString(),
+        id: a.id(),
+        label: a.getProcessedText(placeholderValues),
+        type: a.getType().toString(),
       }
     })
-    const selectedDecisionViewData = await this.helper(form)?.viewDataFromForm(form, user)
+    const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
-      decisionForm: form,
-      selectedDecisionViewData,
-      questions,
+      decisionForm: pageData,
+      selectedAnswerViewData,
+      answers,
       pageTitle,
       pageData,
     })
   }
 
   // The helper that knows how to deal with the specifics of a particular decision type.
-  private helper(decisionFormOrSelectedDecisionId: DecisionForm | string): DecisionHelper {
-    let selectedDecisionId = ''
-    if (typeof decisionFormOrSelectedDecisionId === 'string') {
-      selectedDecisionId = decisionFormOrSelectedDecisionId
+  private answerTypeHelper(decisionFormOrSelectedAnswerId: DecisionForm | string): DecisionHelper {
+    let selectedAnswerId = ''
+    if (typeof decisionFormOrSelectedAnswerId === 'string') {
+      selectedAnswerId = decisionFormOrSelectedAnswerId
     } else {
-      selectedDecisionId = decisionFormOrSelectedDecisionId?.selectedDecisionId
+      selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedDecisionId && this.helpers.get(this.decisions.findById(selectedDecisionId).getType())
+    return selectedAnswerId && this.helpers.get(this.decisions.findAnswerById(selectedAnswerId).getType())
   }
 
-  private redirect(pathAndQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
-    if (typeof pathAndQuery === 'string') {
-      return res.redirect(pathAndQuery)
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } } | string, res: Response) {
+    if (typeof urlQuery === 'string') {
+      return res.redirect(urlQuery)
     }
-    return res.redirect(url.format(pathAndQuery))
+    return res.redirect(url.format(urlQuery))
   }
 
   private urlHere(req: Request) {

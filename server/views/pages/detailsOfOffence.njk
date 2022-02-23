@@ -1,25 +1,34 @@
 {% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
 {% set title = "Offence details" %}
 
 {% block pageTitle %}
-	{{ title }}
+    {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-	{% if errors | length %}
-		{{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: errors,
-      attributes: { "data-qa": "error-summary" }
-    }) }}
-	{% endif %}
-
     <h1 class="govuk-heading-l">{{ title }}</h1>
-
-    <p class="govuk-body">
-        <a href="/incident-statement/{{ prisonerNumber }}/{{ id }}" class="govuk-link">Go to incident statement page</a>
-    </p>
-
-
+    <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+        {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+    </div>
+    {% for offence in offences %}
+        {% for questionAndAnswer in offence.questionsAndAnswers %}
+            <p class="govuk-!-margin-bottom-1 govuk-label--s">{{ questionAndAnswer.question }}</p>
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ questionAndAnswer.answer }}</p>
+        {% endfor %}
+        <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
+        {% if offence.incidentRule %}
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription }}</p>
+        {% endif %}
+        <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription }}</p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    {% endfor %}
 {% endblock %}

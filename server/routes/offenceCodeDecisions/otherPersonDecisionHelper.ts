@@ -3,7 +3,7 @@ import { Request } from 'express'
 import { OtherPersonData, DecisionForm } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -18,27 +18,27 @@ const error: { [key in ErrorType]: FormError } = {
 
 export default class OtherPersonDecisionHelper extends DecisionHelper {
   formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
-      selectedDecisionData: {
+      selectedAnswerId,
+      selectedAnswerData: {
         otherPersonNameInput: req.body.otherPersonNameInput,
       },
     }
   }
 
   override validateForm(form: DecisionForm): FormError[] {
-    const otherPersonData = form.selectedDecisionData as OtherPersonData
+    const otherPersonData = form.selectedAnswerData as OtherPersonData
     if (!otherPersonData.otherPersonNameInput) {
       return [error.OTHER_PERSON_MISSING_NAME_INPUT]
     }
     return []
   }
 
-  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      ...super.updatedAnswers(currentAnswers, form),
-      victimOtherPerson: (form.selectedDecisionData as OtherPersonData).otherPersonNameInput,
+      ...super.updatedOffenceData(currentAnswers, form),
+      victimOtherPerson: (form.selectedAnswerData as OtherPersonData).otherPersonNameInput,
     }
   }
 }

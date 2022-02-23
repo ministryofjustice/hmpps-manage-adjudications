@@ -6,7 +6,7 @@ import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { properCaseName } from '../../utils/utils'
 import UserService from '../../services/userService'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -44,17 +44,17 @@ export default class StaffDecisionHelper extends DecisionHelper {
     return {
       pathname: '/select-associated-staff',
       query: {
-        staffFirstName: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
-        staffLastName: (form.selectedDecisionData as StaffData).staffSearchLastNameInput,
+        staffFirstName: (form.selectedAnswerData as StaffData).staffSearchFirstNameInput,
+        staffLastName: (form.selectedAnswerData as StaffData).staffSearchLastNameInput,
       },
     }
   }
 
   override formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
-      selectedDecisionData: {
+      selectedAnswerId,
+      selectedAnswerData: {
         staffId: req.body.staffId,
         staffSearchFirstNameInput: req.body.staffSearchFirstNameInput,
         staffSearchLastNameInput: req.body.staffSearchLastNameInput,
@@ -62,19 +62,17 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  override updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override formAfterSearch(selectedAnswerId: string, selectedPerson: string): DecisionForm {
     return {
-      selectedDecisionId: form.selectedDecisionId,
-      selectedDecisionData: {
-        staffId: redirectData,
-        staffSearchFirstNameInput: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
-        staffSearchLastNameInput: (form.selectedDecisionData as StaffData).staffSearchFirstNameInput,
+      selectedAnswerId,
+      selectedAnswerData: {
+        staffId: selectedPerson,
       },
     }
   }
 
   override validateForm(form: DecisionForm, req: Request): FormError[] {
-    const staffData = form.selectedDecisionData as StaffData
+    const staffData = form.selectedAnswerData as StaffData
     const searching = !!req.body.searchUser
     if (searching) {
       const errors = []
@@ -93,7 +91,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
   }
 
   override async viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
-    const staffId = (form.selectedDecisionData as StaffData)?.staffId
+    const staffId = (form.selectedAnswerData as StaffData)?.staffId
     if (staffId) {
       const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
       return { staffName: properCaseName(decisionStaff.name) }
@@ -101,10 +99,10 @@ export default class StaffDecisionHelper extends DecisionHelper {
     return null
   }
 
-  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      offenceCode: super.updatedAnswers(currentAnswers, form).offenceCode,
-      victimStaff: (form.selectedDecisionData as StaffData).staffId,
+      offenceCode: super.updatedOffenceData(currentAnswers, form).offenceCode,
+      victimStaff: (form.selectedAnswerData as StaffData).staffId,
     }
   }
 }

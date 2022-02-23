@@ -1,5 +1,6 @@
 import decisionTree from './DecisionTree'
 import { Decision } from './Decision'
+import { Answer } from './Answer'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
@@ -15,24 +16,33 @@ function findDuplicates<T>(toCheck: Array<T>) {
 }
 
 describe('decisions', () => {
-  it.skip('toString', () => {
+  it('toString', () => {
     // Not a test but useful output
     // eslint-disable-next-line no-console
     console.log(decisionTree.toString())
   })
 
   it('no invalid decisions', () => {
-    function invalid(decision: Decision): boolean {
+    function missingOffenceCode(answer: Answer): boolean {
+      return !answer.getChildDecision() && !answer.getOffenceCode()
+    }
+    const answersWithMissingOffenceCodes = decisionTree.matchingAnswers(missingOffenceCode)
+    expect(answersWithMissingOffenceCodes.map(a => a.getText())).toHaveLength(0)
+
+    function duplicateUrls(decision: Decision) {
       return (
-        (decision.getChildren().length === 0 && decision.getOffenceCode() == null) ||
-        (decision.getChildren().length !== 0 && decision.getTitle() == null) ||
-        (decision.getUrl() != null &&
-          decision.matching(d => d !== decision && d.getUrl() === decision.getUrl()).length !== 0) ||
-        (decision.getUrl() != null && decision.getUrl().startsWith('/'))
+        decision.getUrl() != null &&
+        decision.matchingDecisions(d => d !== decision && d.getUrl() === decision.getUrl()).length !== 0
       )
     }
-    const invalidDecisions = decisionTree.matching(invalid)
-    expect(invalidDecisions.map(d => d.getQuestion())).toHaveLength(0)
+    const decisionsWithDuplicateUrls = decisionTree.matchingDecisions(duplicateUrls)
+    expect(decisionsWithDuplicateUrls.map(a => a.getTitle())).toHaveLength(0)
+
+    function urlsStartingWithSlash(decision: Decision) {
+      return decision.getUrl() != null && decision.getUrl().startsWith('/')
+    }
+    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingDecisions(urlsStartingWithSlash)
+    expect(decisionsWithUrlsStartingWithSlash.map(a => a.getTitle())).toHaveLength(0)
   })
 
   it('no duplicate urls', () => {

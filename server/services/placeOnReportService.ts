@@ -1,13 +1,6 @@
 import { Readable } from 'stream'
 
-import {
-  convertToTitleCase,
-  formatLocation,
-  getDate,
-  getFormattedReporterName,
-  getTime,
-  properCaseName,
-} from '../utils/utils'
+import { convertToTitleCase, formatLocation, getDate, getFormattedReporterName, getTime } from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -276,19 +269,17 @@ export default class PlaceOnReportService {
     )
   }
 
-  async getOffenceSelectionPlaceholderValues(adjudicationNumber: number, user: User) {
+  async getOffencePrisonerDetails(adjudicationNumber: number, user: User) {
     const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
     const { prisonerNumber } = draftAdjudication.draftAdjudication
-    const associatedPrisonersNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber
-    const [prisonerDetails, associatedPrisoner] = await Promise.all([
+    const associatedPrisonerNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber
+    const [prisoner, associatedPrisoner] = await Promise.all([
       this.getPrisonerDetails(prisonerNumber, user),
-      associatedPrisonersNumber && this.getPrisonerDetails(associatedPrisonersNumber, user),
+      associatedPrisonerNumber && this.getPrisonerDetails(associatedPrisonerNumber, user),
     ])
     return {
-      offenderFirstName: properCaseName(prisonerDetails?.firstName),
-      offenderLastName: properCaseName(prisonerDetails?.lastName),
-      assistedFirstName: properCaseName(associatedPrisoner?.firstName),
-      assistedLastName: properCaseName(associatedPrisoner?.lastName),
+      prisoner,
+      associatedPrisoner,
     }
   }
 
@@ -296,5 +287,10 @@ export default class PlaceOnReportService {
     const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
     const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
     return prisonerDetails.prisonerNumber
+  }
+
+  async getOffenceRule(offenceCode: number, user: User) {
+    const client = new ManageAdjudicationsClient(user.token)
+    return client.getOffenceRule(offenceCode)
   }
 }

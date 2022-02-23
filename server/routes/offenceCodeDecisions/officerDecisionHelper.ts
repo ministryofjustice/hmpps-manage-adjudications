@@ -6,7 +6,7 @@ import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { properCaseName } from '../../utils/utils'
 import UserService from '../../services/userService'
-import { DecisionAnswers } from './decisionAnswers'
+import { OffenceData } from './offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -43,17 +43,17 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return {
       pathname: '/select-associated-staff',
       query: {
-        staffFirstName: (form.selectedDecisionData as OfficerData).officerSearchFirstNameInput,
-        staffLastName: (form.selectedDecisionData as OfficerData).officerSearchLastNameInput,
+        staffFirstName: (form.selectedAnswerData as OfficerData).officerSearchFirstNameInput,
+        staffLastName: (form.selectedAnswerData as OfficerData).officerSearchLastNameInput,
       },
     }
   }
 
   override formFromPost(req: Request): DecisionForm {
-    const { selectedDecisionId } = req.body
+    const { selectedAnswerId } = req.body
     return {
-      selectedDecisionId,
-      selectedDecisionData: {
+      selectedAnswerId,
+      selectedAnswerData: {
         officerId: req.body.officerId,
         officerSearchFirstNameInput: req.body.officerSearchFirstNameInput,
         officerSearchLastNameInput: req.body.officerSearchLastNameInput,
@@ -61,19 +61,17 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override updatedForm(form: DecisionForm, redirectData: string): DecisionForm {
+  override formAfterSearch(selectedAnswerId: string, selectedPerson: string): DecisionForm {
     return {
-      selectedDecisionId: form.selectedDecisionId,
-      selectedDecisionData: {
-        officerId: redirectData,
-        officerSearchFirstNameInput: (form.selectedDecisionData as OfficerData).officerSearchFirstNameInput,
-        officerSearchLastNameInput: (form.selectedDecisionData as OfficerData).officerSearchLastNameInput,
+      selectedAnswerId,
+      selectedAnswerData: {
+        officerId: selectedPerson,
       },
     }
   }
 
   override validateForm(form: DecisionForm, req: Request): FormError[] {
-    const officerData = form.selectedDecisionData as OfficerData
+    const officerData = form.selectedAnswerData as OfficerData
     const searching = !!req.body.searchUser
     if (searching) {
       const errors = []
@@ -92,7 +90,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
   }
 
   override async viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
-    const officerId = (form.selectedDecisionData as OfficerData)?.officerId
+    const officerId = (form.selectedAnswerData as OfficerData)?.officerId
     if (officerId) {
       const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
       return { officerName: properCaseName(decisionOfficer.name) }
@@ -100,10 +98,12 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return null
   }
 
-  override updatedAnswers(currentAnswers: DecisionAnswers, form: DecisionForm): DecisionAnswers {
+  override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      ...super.updatedAnswers(currentAnswers, form),
-      victimOfficer: (form.selectedDecisionData as OfficerData).officerId,
+      ...super.updatedOffenceData(currentAnswers, form),
+      // Note that we update the victim staff reference here, even though it is an officer. This is because the
+      // distinction is purely a UI one and at this point we are using a data structure mirroring the database.
+      victimStaff: (form.selectedAnswerData as OfficerData).officerId,
     }
   }
 }

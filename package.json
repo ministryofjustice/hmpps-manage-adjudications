@@ -75,7 +75,11 @@
     "ext": "js,json,html,njk"
   },
   "lint-staged": {
-    "*.{ts,js,css}": [
+    "*.{js,css}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "!(*DecisionTree).ts": [
       "prettier --write",
       "eslint --fix"
     ],
