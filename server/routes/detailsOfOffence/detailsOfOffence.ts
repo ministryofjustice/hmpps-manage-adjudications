@@ -58,8 +58,8 @@ export default class DetailsOfOffenceRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { adjudicationNumber } = req.params
     const { user } = res.locals
-    const sessionOffences = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
     // TODO save to the api
+    // const sessionOffences = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
 
     const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
       Number(adjudicationNumber),
