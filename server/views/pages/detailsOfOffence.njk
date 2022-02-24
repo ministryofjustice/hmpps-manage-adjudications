@@ -16,27 +16,37 @@
 {% block content %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
             {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
         </div>
-        {% for offence in offences %}
-            {% for questionAndAnswer in offence.questionsAndAnswers %}
-                <p class="govuk-!-margin-bottom-1 govuk-label--s">{{ questionAndAnswer.question }}</p>
-                <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ questionAndAnswer.answer }}</p>
-            {% endfor %}
-            <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
-            {% if offence.incidentRule %}
-                <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
-                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
-                <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription }}</p>
-            {% endif %}
-            <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
-                paragraph {{ offence.offenceRule.paragraphNumber }}</p>
-            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription }}</p>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-        {% endfor %}
-
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                {% for offence in offences %}
+                    {% set offenceIndex = loop.index - 1 %}
+                    {% for questionAndAnswer in offence.questionsAndAnswers %}
+                        <div class="flex-container details-of-offence-question-heading">
+                            <p class="govuk-!-margin-bottom-1 govuk-label--s">{{ questionAndAnswer.question }}</p>
+                            {% if loop.first == true %}
+                                <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}'>Delete</a>
+                            {%  endif %}
+                        </div>
+                        <p class="govuk-!-margin-bottom-5 govuk-label--xs">{{ questionAndAnswer.answer }}</p>
+                    {% endfor %}
+                    <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
+                    {% if offence.incidentRule %}
+                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
+                            paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription }}</p>
+                    {% endif %}
+                    <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
+                        paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+                    <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription }}</p>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                {% endfor %}
+            </div>
+        </div>
+        <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}">Add another offence</a></p>
         {{ govukButton({
             text: "Save and continue",
             type: "submit",

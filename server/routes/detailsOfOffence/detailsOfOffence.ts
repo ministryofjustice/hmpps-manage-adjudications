@@ -46,6 +46,8 @@ export default class DetailsOfOffenceRoutes {
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
       offences,
+      adjudicationNumber,
+      incidentRole,
     })
   }
 

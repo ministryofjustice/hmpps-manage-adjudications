@@ -7,7 +7,7 @@ import { answer } from './Answer'
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default decision([
   [Role.COMMITTED, `What type of offence did ${Text.PRISONER_FULL_NAME} commit?`],
-  [Role.ATTEMPTED, `What type of offence did ${Text.PRISONER_FULL_NAME} attempt to commit?`],
+  [Role.ATTEMPTED, `What type of offence did ${Text.PRISONER_FULL_NAME} attempt to commit or attempt to commit?`],
   [Role.ASSISTED, `What type of offence did ${Text.PRISONER_FULL_NAME} assist another prisoner to commit?`],
   [Role.INCITED, `What type of offence did ${Text.PRISONER_FULL_NAME} incite another prisoner to commit?`],
 ])
