@@ -64,7 +64,7 @@ export default class DetailsOfOffenceRoutes {
       .map(offenceData => {
         return { ...offenceData, offenceCode: Number(offenceData.offenceCode) }
       })
-    // TODO await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
+    await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
     const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
       adjudicationNumber,
       user

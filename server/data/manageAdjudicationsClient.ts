@@ -111,9 +111,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[]) {
+  async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[]) {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/incident-details`,
+      path: `/draft-adjudications/${adjudicationNumber}/offence-details`,
       data: { offenceDetails },
     })
   }
