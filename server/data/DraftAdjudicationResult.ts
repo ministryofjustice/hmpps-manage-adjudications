@@ -22,10 +22,10 @@ export type OffenceRule = {
 
 export type OffenceDetails = {
   offenceCode: number
-  offenceRule: OffenceRule
-  victimOtherPersonsName: string
-  victimPrisonersNumber: string
-  victimStaffUsername: string
+  offenceRule?: OffenceRule
+  victimOtherPersonsName?: string
+  victimPrisonersNumber?: string
+  victimStaffUsername?: string
 }
 
 export type DraftAdjudication = {

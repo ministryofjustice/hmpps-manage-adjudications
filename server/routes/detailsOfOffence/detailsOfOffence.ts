@@ -58,10 +58,13 @@ export default class DetailsOfOffenceRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    // TODO
-    // const sessionOffences = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
-    // await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, null, user)
 
+    const offenceDetails = this.allOffencesSessionService
+      .getAndDeleteAllSessionOffences(req, adjudicationNumber)
+      .map(offenceData => {
+        return { ...offenceData, offenceCode: Number(offenceData.offenceCode) }
+      })
+    // TODO await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
     const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
       adjudicationNumber,
       user
@@ -106,19 +109,18 @@ export default class DetailsOfOffenceRoutes {
 
   private async populateSessionIfEmpty(adjudicationNumber: number, req: Request, res: Response) {
     const { user } = res.locals
-    const allOffencesOnSession = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
+    const allOffencesOnSession = this.allOffencesSessionService.getAllSessionOffences(req, adjudicationNumber)
     if (allOffencesOnSession) {
       return allOffencesOnSession
     }
-    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
-    return draftAdjudication.offenceDetails.map(offenceDetails => {
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+    const allOffenceData = draftAdjudication.offenceDetails.map(offenceDetails => {
       return {
         ...offenceDetails,
         offenceCode: `${offenceDetails.offenceCode}`,
       }
     })
+    this.allOffencesSessionService.setAllSessionOffences(req, allOffenceData, adjudicationNumber)
+    return allOffenceData
   }
 }
