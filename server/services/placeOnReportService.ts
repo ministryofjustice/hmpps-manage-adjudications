@@ -13,6 +13,7 @@ import {
   CheckYourAnswers,
   DraftAdjudication,
   TaskListDetails,
+  OffenceDetails,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -292,5 +293,10 @@ export default class PlaceOnReportService {
   async getOffenceRule(offenceCode: number, user: User) {
     const client = new ManageAdjudicationsClient(user.token)
     return client.getOffenceRule(offenceCode)
+  }
+
+  async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[], user: User) {
+    const client = new ManageAdjudicationsClient(user.token)
+    return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
   }
 }

@@ -15,7 +15,7 @@ import OfficerDecisionHelper from './officerDecisionHelper'
 import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
-type PageData = { errors?: FormError[]; adjudicationNumber: string; incidentRole: string } & DecisionForm
+type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -47,7 +47,8 @@ export default class OffenceCodeRoutes {
   private decisions = decisionTree
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber, incidentRole } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { incidentRole } = req.params
     if (req.query.selectedPerson && req.query.selectedAnswerId) {
       // We are coming back from a user selection.
       const selectedPerson = req.query.selectedPerson as string
@@ -74,7 +75,8 @@ export default class OffenceCodeRoutes {
   }
 
   submitDecision = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber, incidentRole } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { incidentRole } = req.params
     const { selectedAnswerId } = req.body
     // Validation
     if (!selectedAnswerId) {
@@ -105,10 +107,10 @@ export default class OffenceCodeRoutes {
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
     const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
-      Number(adjudicationNumber),
+      adjudicationNumber,
       user
     )
     return res.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`)
@@ -119,7 +121,8 @@ export default class OffenceCodeRoutes {
   }
 
   search = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber, incidentRole } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { incidentRole } = req.params
     const { selectedAnswerId } = req.body
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)

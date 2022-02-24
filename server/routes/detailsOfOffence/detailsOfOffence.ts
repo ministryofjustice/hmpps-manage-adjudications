@@ -50,19 +50,23 @@ export default class DetailsOfOffenceRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const sessionOffences = await this.populateSessionIfEmpty(adjudicationNumber, req, res)
     return this.renderView(req, res, sessionOffences)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    // TODO save to the api
-    // const sessionOffences = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
 
+    const offenceDetails = this.allOffencesSessionService
+      .getAndDeleteAllSessionOffences(req, adjudicationNumber)
+      .map(offenceData => {
+        return { ...offenceData, offenceCode: Number(offenceData.offenceCode) }
+      })
+    await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
     const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
-      Number(adjudicationNumber),
+      adjudicationNumber,
       user
     )
     return res.redirect(`/incident-statement/${prisonerNumber}/${adjudicationNumber}`)
@@ -70,7 +74,7 @@ export default class DetailsOfOffenceRoutes {
 
   addOffence = async (req: Request, res: Response): Promise<void> => {
     // If the session has not yet been populated from the database we need to do that.
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     await this.populateSessionIfEmpty(adjudicationNumber, req, res)
     // Get the offence to be added from the request and put it on the session
     const offenceToAdd: OffenceData = { ...req.query }
@@ -103,21 +107,20 @@ export default class DetailsOfOffenceRoutes {
     })
   }
 
-  private async populateSessionIfEmpty(adjudicationNumber: string, req: Request, res: Response) {
+  private async populateSessionIfEmpty(adjudicationNumber: number, req: Request, res: Response) {
     const { user } = res.locals
-    const allOffencesOnSession = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
+    const allOffencesOnSession = this.allOffencesSessionService.getAllSessionOffences(req, adjudicationNumber)
     if (allOffencesOnSession) {
       return allOffencesOnSession
     }
-    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
-    return draftAdjudication.offenceDetails.map(offenceDetails => {
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+    const allOffenceData = draftAdjudication.offenceDetails.map(offenceDetails => {
       return {
         ...offenceDetails,
         offenceCode: `${offenceDetails.offenceCode}`,
       }
     })
+    this.allOffencesSessionService.setAllSessionOffences(req, allOffenceData, adjudicationNumber)
+    return allOffenceData
   }
 }
