@@ -25,6 +25,7 @@ export default function offenceCodeDecisionsRoutes({
       get(`/:adjudicationNumber/:incidentRole(${IncidentRole[key]})/${url}`, offenceCodeDecisions.view)
       post(`/:adjudicationNumber/:incidentRole(${IncidentRole[key]})/${url}`, offenceCodeDecisions.submit)
     })
+    get(`/:adjudicationNumber/:incidentRole(${IncidentRole[key]})/`, offenceCodeDecisions.redirectToRoot)
   })
   return router
 }

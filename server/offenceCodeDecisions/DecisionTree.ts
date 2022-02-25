@@ -8,7 +8,7 @@ import { answer } from './Answer'
 export default decision([
   [Role.COMMITTED, `What type of offence did ${Text.PRISONER_FULL_NAME} commit?`],
   [Role.ATTEMPTED, `What type of offence did ${Text.PRISONER_FULL_NAME} attempt to commit?`],
-  [Role.ASSISTED, `What type of offence did ${Text.PRISONER_FULL_NAME} assist another prisoner to commit?`],
+  [Role.ASSISTED, `What type of offence did ${Text.PRISONER_FULL_NAME} assist another prisoner to commit or attempt to commit?`],
   [Role.INCITED, `What type of offence did ${Text.PRISONER_FULL_NAME} incite another prisoner to commit?`],
 ])
   .child(answer('Assault, fighting, or endangering the health or personal safety of others')

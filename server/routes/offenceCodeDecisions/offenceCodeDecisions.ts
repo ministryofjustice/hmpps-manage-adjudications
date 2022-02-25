@@ -134,6 +134,12 @@ export default class OffenceCodeRoutes {
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
+  redirectToRoot = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { incidentRole } = req.params
+    res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}/${this.decisions.id()}`)
+  }
+
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals

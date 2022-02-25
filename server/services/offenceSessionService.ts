@@ -21,7 +21,7 @@ export default class OffenceSessionService {
 
   deleteOffenceData(req: Request, draftAdjudicationNumber: number): OffenceData {
     const offenceData = this.getOffenceData(req, draftAdjudicationNumber)
-    delete req.session?.offences?.[draftAdjudicationNumber]
+    delete req.session?.offenceData?.[draftAdjudicationNumber]
     return offenceData
   }
 }
