@@ -7,7 +7,6 @@ import { IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentR
 import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { User } from '../../data/hmppsAuthClient'
 import UserService from '../../services/userService'
-import adjudications from '../../../integration_tests/mockApis/adjudications'
 
 type PageData = Array<OffenceData>
 
