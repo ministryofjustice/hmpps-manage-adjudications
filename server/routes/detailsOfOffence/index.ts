@@ -23,6 +23,7 @@ export default function detailsOfOffenceRoutes({
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get('/:adjudicationNumber/add', detailsOfOffence.addOffence)
+  get('/:adjudicationNumber/delete/:index', detailsOfOffence.deleteOffence)
   get('/:adjudicationNumber', detailsOfOffence.view)
   post('/:adjudicationNumber', detailsOfOffence.submit)
 
