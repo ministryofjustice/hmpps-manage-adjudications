@@ -2,8 +2,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
- {% set inciteAnotherPrisoner %}
-{% if (data.originalRadioSelection === 'inciteAnotherPrisoner') and (data.associatedPrisonersName) %}
+ {% set incited %}
+{% if (data.originalRadioSelection === 'incited') and (data.associatedPrisonersName) %}
   <div>  
     <p><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonersName }} </p> 
     <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
@@ -13,7 +13,7 @@
           classes: "govuk-button--secondary",
             type: "submit",
             name: "deleteAssociatedPrisoner",
-            value: "inciteAnotherPrisonerDelete",
+            value: "incitedDelete",
           attributes: { "data-qa": "incite-prisoner-delete" }
       }) }}
     </div>
@@ -22,11 +22,11 @@
 <div class="flex-container flex-center">
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
-  id: "inciteAnotherPrisonerInput",
-  name: "inciteAnotherPrisonerInput",
+  id: "incitedInput",
+  name: "incitedInput",
   classes: "govuk-!-width-full-width",
-  value: inciteAnotherPrisonerInput,
-  errorMessage: errors | findErrors(['inciteAnotherPrisonerInput']),
+  value: incitedInput,
+  errorMessage: errors | findErrors(['incitedInput']),
   label: {
     text: "Enter their name or prison number",
     classes: "govuk-!-font-weight-bold"
@@ -38,15 +38,15 @@
         classes: "govuk-button--secondary conditionalRadioSearchButton",
     type: "submit",
     name: "search",
-    value: "inciteAnotherPrisonerSearchSubmit",
+    value: "incitedSearchSubmit",
         attributes: { "data-qa": "incite-prisoner-search" }
     }) }}
 </div>
 {% endif %}
 {% endset -%}
 
- {% set assistAnotherPrisoner %}
-{% if (data.originalRadioSelection === 'assistAnotherPrisoner') and (data.associatedPrisonersName) %}
+ {% set assisted %}
+{% if (data.originalRadioSelection === 'assisted') and (data.associatedPrisonersName) %}
   <div>  
     <p data-qa="assist-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonersName }} </p> 
     <p data-qa="assist-prisoner-prn"><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
@@ -56,7 +56,7 @@
         classes: "govuk-button--secondary",
           type: "submit",
           name: "deleteAssociatedPrisoner",
-          value: "assistAnotherPrisonerDelete",
+          value: "assistedDelete",
         attributes: { "data-qa": "assist-prisoner-delete" }
     }) }}
     </div>
@@ -65,11 +65,11 @@
 <div class="flex-container flex-center">
 <div class="govuk-!-margin-right-3">
 {{ govukInput({
-  id: "assistAnotherPrisonerInput",
-  name: "assistAnotherPrisonerInput",
+  id: "assistedInput",
+  name: "assistedInput",
   classes: "govuk-!-width-full-width",
-  value: assistAnotherPrisonerInput,
-  errorMessage: errors | findErrors(['assistAnotherPrisonerInput']),
+  value: assistedInput,
+  errorMessage: errors | findErrors(['assistedInput']),
   label: {
     text: "Enter their name or prison number",
     classes: "govuk-!-font-weight-bold"
@@ -81,7 +81,7 @@
         classes: "govuk-button--secondary conditionalRadioSearchButton",
     type: "submit",
     name: "search",
-    value: "assistAnotherPrisonerSearchSubmit",
+    value: "assistedSearchSubmit",
         attributes: { "data-qa": "assist-prisoner-search" }
     }) }}
 </div>
@@ -104,30 +104,30 @@
     },
     items: [
     {
-      value: "onTheirOwn",
+      value: "committed",
       text: "Committed this incident on their own",
-      checked: data.originalRadioSelection === "onTheirOwn"
+      checked: data.originalRadioSelection === "committed"
     },
     {
-      value: "attemptOnTheirOwn",
+      value: "attempted",
       text: "Attempted to commit this incident on their own",
-      checked: data.originalRadioSelection === "attemptOnTheirOwn"
+      checked: data.originalRadioSelection === "attempted"
     },
     {
-      value: "inciteAnotherPrisoner",
+      value: "incited",
       text: "Incited another prisoner to commit this incident",
       conditional: {
-        html: inciteAnotherPrisoner
+        html: incited
       },
-      checked: data.originalRadioSelection === "inciteAnotherPrisoner"
+      checked: data.originalRadioSelection === "incited"
     },
     {
-      value: "assistAnotherPrisoner",
+      value: "assisted",
       text: "Assisted another prisoner to commit, or attempt to commit this incident",
       conditional: {
-        html: assistAnotherPrisoner
+        html: assisted
       },
-      checked: data.originalRadioSelection === "assistAnotherPrisoner"
+      checked: data.originalRadioSelection === "assisted"
     }
   ]
     }) }}

@@ -178,22 +178,22 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'inciteAnotherPrisoner',
+          incidentRole: 'incited',
           associatedPrisonersNumber: null,
         })
       ).toEqual({
-        href: '#inciteAnotherPrisonerInput',
+        href: '#incitedInput',
         text: 'Enter their name or prison number.',
       })
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'assistAnotherPrisoner',
+          incidentRole: 'assisted',
           associatedPrisonersNumber: null,
         })
       ).toEqual({
-        href: '#assistAnotherPrisonerInput',
+        href: '#assistedInput',
         text: 'Enter their name or prison number.',
       })
     })

@@ -6,17 +6,17 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
-import { incidentRoleToRadio, radioToIncidentRole } from './incidentRoleCode'
 import { User } from '../../data/hmppsAuthClient'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
+import { codeFromIncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 
 type PageData = {
   error?: FormError
   incidentDate?: SubmittedDateTime
   locationId?: string
   originalRadioSelection?: string
-  inciteAnotherPrisonerInput?: string
-  assistAnotherPrisonerInput?: string
+  incitedInput?: string
+  assistedInput?: string
   associatedPrisonersNumber?: string
 }
 
@@ -60,14 +60,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const {
-      error,
-      incidentDate,
-      locationId,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
-      originalRadioSelection,
-    } = pageData
+    const { error, incidentDate, locationId, incitedInput, assistedInput, originalRadioSelection } = pageData
     const { prisonerNumber, id } = req.params
     const { referrer } = req.query
     const { user } = res.locals
@@ -81,13 +74,14 @@ export default class IncidentDetailsSubmittedEditRoutes {
       this.placeOnReportService.getDraftIncidentDetailsForEditing(IdNumberValue, user),
     ])
     req.session.originalAssociatedPrisonersNumber = adjudicationDetails.incidentRole.associatedPrisonersNumber
-    req.session.originalRadioSelection = incidentRoleToRadio(adjudicationDetails.incidentRole.roleCode)
+    req.session.originalRadioSelection = incidentRoleFromCode(adjudicationDetails.incidentRole.roleCode)
 
     const reporter = await this.placeOnReportService.getReporterName(adjudicationDetails.startedByUserId, user)
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
-    const radioButtonSelected = originalRadioSelection || incidentRoleToRadio(adjudicationDetails.incidentRole.roleCode)
+    const radioButtonSelected =
+      originalRadioSelection || incidentRoleFromCode(adjudicationDetails.incidentRole.roleCode)
     const prnError = error && error.href.includes('AnotherPrisoner')
 
     const associatedPrisonersNumber = this.getAssociatedPrisonersNumber(
@@ -122,8 +116,8 @@ export default class IncidentDetailsSubmittedEditRoutes {
       submitButtonText: 'Save and continue',
       exitButtonHref: exitButtonHref || '/place-a-prisoner-on-report',
       adjudicationNumber: adjudicationDetails.adjudicationNumber,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
     })
   }
 
@@ -147,8 +141,8 @@ export default class IncidentDetailsSubmittedEditRoutes {
       currentRadioSelected,
       search,
       deleteAssociatedPrisoner,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
     } = req.body
     const { user } = res.locals
     const { prisonerNumber, id } = req.params
@@ -156,11 +150,10 @@ export default class IncidentDetailsSubmittedEditRoutes {
     const { referrer, personDeleted } = req.query
 
     const originalRadioSelection =
-      req.session.originalRadioSelection || incidentRoleToRadio(req.session.originalRadioSelection)
+      req.session.originalRadioSelection || incidentRoleFromCode(req.session.originalRadioSelection)
 
     if (search) {
-      const searchValue =
-        search === 'inciteAnotherPrisonerSearchSubmit' ? inciteAnotherPrisonerInput : assistAnotherPrisonerInput
+      const searchValue = search === 'incitedSearchSubmit' ? incitedInput : assistedInput
       const error = validatePrisonerSearch({ searchTerm: searchValue, inputId: currentRadioSelected })
       if (error)
         return this.renderView(req, res, {
@@ -168,8 +161,8 @@ export default class IncidentDetailsSubmittedEditRoutes {
           incidentDate,
           locationId,
           originalRadioSelection: currentRadioSelected,
-          inciteAnotherPrisonerInput,
-          assistAnotherPrisonerInput,
+          incitedInput,
+          assistedInput,
         })
       req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/submitted/edit?referrer=${referrer}`
       req.session.originalRadioSelection = currentRadioSelected
@@ -219,7 +212,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
       ? `/check-your-answers/${prisonerNumber}/${id}/review`
       : `/check-your-answers/${prisonerNumber}/${id}/report`
 
-    const incidentRoleCode = radioToIncidentRole(currentRadioSelected)
+    const incidentRoleCode = codeFromIncidentRole(currentRadioSelected)
     try {
       await this.placeOnReportService.editDraftIncidentDetails(
         IdNumberValue,

@@ -54,11 +54,11 @@ const errors: { [key: string]: FormError } = {
     text: 'Select the prisoner’s role in this incident.',
   },
   MISSING_ASSOCIATED_PRISONER_INCITE: {
-    href: '#inciteAnotherPrisonerInput',
+    href: '#incitedInput',
     text: 'Enter their name or prison number.',
   },
   MISSING_ASSOCIATED_PRISONER_ASSIST: {
-    href: '#assistAnotherPrisonerInput',
+    href: '#assistedInput',
     text: 'Enter their name or prison number.',
   },
 }
@@ -102,10 +102,10 @@ export default function validateForm({
   if (!incidentRole) {
     return errors.MISSING_ROLE
   }
-  if (incidentRole === 'inciteAnotherPrisoner' && !associatedPrisonersNumber) {
+  if (incidentRole === 'incited' && !associatedPrisonersNumber) {
     return errors.MISSING_ASSOCIATED_PRISONER_INCITE
   }
-  if (incidentRole === 'assistAnotherPrisoner' && !associatedPrisonersNumber) {
+  if (incidentRole === 'assisted' && !associatedPrisonersNumber) {
     return errors.MISSING_ASSOCIATED_PRISONER_ASSIST
   }
 

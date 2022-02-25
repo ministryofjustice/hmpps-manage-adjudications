@@ -6,17 +6,17 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
-import { radioToIncidentRole } from './incidentRoleCode'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 import { User } from '../../data/hmppsAuthClient'
+import { codeFromIncidentRole } from '../../incidentRole/IncidentRole'
 
 type PageData = {
   error?: FormError | FormError[]
   incidentDate?: SubmittedDateTime
   locationId?: string | number
   originalRadioSelection?: string
-  inciteAnotherPrisonerInput?: string
-  assistAnotherPrisonerInput?: string
+  incitedInput?: string
+  assistedInput?: string
   associatedPrisonersNumber?: string
 }
 
@@ -52,8 +52,8 @@ export default class IncidentDetailsRoutes {
       error,
       incidentDate,
       locationId,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
       originalRadioSelection,
       associatedPrisonersNumber,
     } = pageData
@@ -88,8 +88,8 @@ export default class IncidentDetailsRoutes {
       data,
       reportingOfficer: reporter || '',
       submitButtonText: 'Save and continue',
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
     })
   }
 
@@ -113,8 +113,8 @@ export default class IncidentDetailsRoutes {
       currentRadioSelected,
       search,
       deleteAssociatedPrisoner,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
     } = req.body
     const { user } = res.locals
     const { prisonerNumber } = req.params
@@ -129,8 +129,7 @@ export default class IncidentDetailsRoutes {
     }
 
     if (search) {
-      const searchValue =
-        search === 'inciteAnotherPrisonerSearchSubmit' ? inciteAnotherPrisonerInput : assistAnotherPrisonerInput
+      const searchValue = search === 'incitedSearchSubmit' ? incitedInput : assistedInput
       const error = validatePrisonerSearch({ searchTerm: searchValue, inputId: currentRadioSelected })
       if (error)
         return this.renderView(req, res, {
@@ -138,8 +137,8 @@ export default class IncidentDetailsRoutes {
           incidentDate,
           locationId,
           originalRadioSelection: currentRadioSelected,
-          inciteAnotherPrisonerInput,
-          assistAnotherPrisonerInput,
+          incitedInput,
+          assistedInput,
         })
       req.session.redirectUrl = `/incident-details/${prisonerNumber}`
       req.session.incidentDate = incidentDate
@@ -167,7 +166,7 @@ export default class IncidentDetailsRoutes {
         associatedPrisonersNumber,
       })
 
-    const incidentRoleCode = radioToIncidentRole(currentRadioSelected)
+    const incidentRoleCode = codeFromIncidentRole(currentRadioSelected)
 
     try {
       const newAdjudication = await this.placeOnReportService.startNewDraftAdjudication(

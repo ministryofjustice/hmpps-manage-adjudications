@@ -115,7 +115,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'inciteAnotherPrisoner',
+        currentRadioSelected: 'incited',
       })
       .expect(res => {
         expect(res.text).toContain('There is a problem')

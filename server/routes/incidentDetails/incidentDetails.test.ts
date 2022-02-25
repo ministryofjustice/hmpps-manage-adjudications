@@ -16,7 +16,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, locationService },
-    { originalRadioSelection: 'inciteAnotherPrisoner' }
+    { originalRadioSelection: 'incited' }
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
@@ -77,7 +77,7 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'inciteAnotherPrisoner',
+        currentRadioSelected: 'incited',
       })
       .expect(302)
       .expect('Location', '/offence-details/G6415GD/1')
@@ -88,7 +88,7 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'inciteAnotherPrisoner',
+        currentRadioSelected: 'incited',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -125,7 +125,7 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'inciteAnotherPrisoner',
+        currentRadioSelected: 'incited',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
