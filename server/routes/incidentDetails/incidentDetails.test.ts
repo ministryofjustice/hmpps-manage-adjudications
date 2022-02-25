@@ -80,7 +80,7 @@ describe('POST /incident-details', () => {
         currentRadioSelected: 'incited',
       })
       .expect(302)
-      .expect('Location', '/offence-details/G6415GD/1')
+      .expect('Location', '/offence-code-selection/1/incited')
   })
   it('should render an error summary with correct validation message if the selected person has been tampered with in the URL', () => {
     return request(app)

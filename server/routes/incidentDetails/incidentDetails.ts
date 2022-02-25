@@ -8,7 +8,7 @@ import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 import { User } from '../../data/hmppsAuthClient'
-import { codeFromIncidentRole } from '../../incidentRole/IncidentRole'
+import { codeFromIncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -180,7 +180,7 @@ export default class IncidentDetailsRoutes {
       delete req.session.redirectUrl
       delete req.session.originalRadioSelection
       const { id } = newAdjudication.draftAdjudication
-      return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
+      return res.redirect(`/offence-code-selection/${id}/${incidentRoleFromCode(incidentRoleCode)}`)
     } catch (postError) {
       logger.error(`Failed to post incident details for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`

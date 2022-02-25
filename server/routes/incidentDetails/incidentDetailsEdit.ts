@@ -216,7 +216,7 @@ export default class IncidentDetailsEditRoutes {
       )
       delete req.session.redirectUrl
       delete req.session.originalRadioSelection
-      return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
+      return res.redirect(`/offence-code-selection/${id}/${incidentRoleFromCode(incidentRoleCode)}`)
     } catch (postError) {
       logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${id}`

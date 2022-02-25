@@ -93,7 +93,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
         currentRadioSelected: 'committed',
       })
       .expect(302)
-      .expect('Location', '/offence-details/G6415GD/34')
+      .expect('Location', '/offence-code-selection/34/committed')
   })
   it('should render an error summary with correct validation message - user enters invalid hour', () => {
     return request(app)
