@@ -90,7 +90,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'onTheirOwn',
+        currentRadioSelected: 'committed',
       })
       .expect(302)
       .expect('Location', '/offence-details/G6415GD/34')
@@ -129,7 +129,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'onTheirOwn',
+        currentRadioSelected: 'committed',
       })
       .expect('Content-Type', /html/)
       .expect(res => {

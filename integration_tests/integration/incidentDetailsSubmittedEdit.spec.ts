@@ -176,7 +176,7 @@ context('Incident details (edit after completion of report)', () => {
   it('should submit form successfully if radio button changed from one which requires an associated prisoner PRN to one which does not', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtons().find('input[value="attemptOnTheirOwn"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/review')

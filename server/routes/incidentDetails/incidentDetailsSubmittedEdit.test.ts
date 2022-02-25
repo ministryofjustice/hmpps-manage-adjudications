@@ -119,7 +119,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'onTheirOwn',
+        currentRadioSelected: 'committed',
       })
       .expect(302)
       .expect('Location', '/check-your-answers/G6415GD/34/report')
@@ -130,7 +130,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'onTheirOwn',
+        currentRadioSelected: 'committed',
       })
       .expect(302)
       .expect('Location', '/check-your-answers/G6415GD/34/review')
@@ -141,7 +141,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'onTheirOwn',
+        currentRadioSelected: 'committed',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -169,7 +169,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'onTheirOwn',
+        currentRadioSelected: 'committed',
       })
       .expect('Content-Type', /html/)
       .expect(res => {

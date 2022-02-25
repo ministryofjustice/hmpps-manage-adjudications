@@ -51,7 +51,7 @@ export default class IncidentDetailsSubmittedEditRoutes {
     radioButtonChanged: boolean,
     prnError: boolean
   ): string => {
-    if (selectedRadio === 'onTheirOwn' || selectedRadio === 'attemptOnTheirOwn') return null
+    if (selectedRadio === 'committed' || selectedRadio === 'attempted') return null
     if (personDeleted === 'true') return null
     if (newAssociatedPrisoner && newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
     if (radioButtonChanged || prnError) return null // if the user has changed the radio button and not searched for a new prisoner, this will disregard their previously selected prisoner and render an empty field - prnError is for VIEW and radioButtonChanged is for SUBMIT

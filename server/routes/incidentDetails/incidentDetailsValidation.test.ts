@@ -7,7 +7,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toBeNull()
@@ -19,7 +19,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -41,7 +41,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { minute: '23' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -54,7 +54,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -67,7 +67,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -80,7 +80,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -93,7 +93,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: {} },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -106,7 +106,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -119,7 +119,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -137,7 +137,7 @@ describe('validateForm', () => {
             time: { hour: `09`, minute: `22` },
           },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -151,7 +151,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
         })
       ).toEqual({
@@ -202,7 +202,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'onTheirOwn',
+          incidentRole: 'committed',
           associatedPrisonersNumber: null,
         })
       ).toBeNull()
@@ -210,7 +210,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          incidentRole: 'attemptOnTheirOwn',
+          incidentRole: 'attempted',
           associatedPrisonersNumber: null,
         })
       ).toBeNull()

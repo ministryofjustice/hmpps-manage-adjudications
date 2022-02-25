@@ -216,7 +216,7 @@ context('Incident details', () => {
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
-    incidentDetailsPage.radioButtons().find('input[value="attemptOnTheirOwn"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
@@ -321,7 +321,7 @@ context('Incident details', () => {
     incidentDetailsPage.timeInputHours().type('03')
     incidentDetailsPage.timeInputMinutes().type('20')
     incidentDetailsPage.locationSelector().select('Workshop 19 - Braille')
-    incidentDetailsPage.radioButtons().find('input[value="onTheirOwn"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="committed"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
