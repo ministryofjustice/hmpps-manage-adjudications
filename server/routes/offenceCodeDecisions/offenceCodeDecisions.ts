@@ -5,7 +5,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
-import { DecisionForm } from './decisionForm'
+import { DecisionForm, PrisonerData } from './decisionForm'
 import OffenceSessionService from '../../services/offenceSessionService'
 import { DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
@@ -49,13 +49,17 @@ export default class OffenceCodeRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { incidentRole } = req.params
-    if (req.query.selectedPerson && req.query.selectedAnswerId) {
+    const selectedAnswerId = req.query.selectedAnswerId as string
+    const selectedPerson = req.query.selectedPerson as string
+    if (selectedPerson && selectedAnswerId) {
       // We are coming back from a user selection.
-      const selectedPerson = req.query.selectedPerson as string
-      const selectedAnswerId = req.query.selectedAnswerId as string
       const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
       const form = answerTypeHelper.formAfterSearch(selectedAnswerId, selectedPerson)
       return this.renderView(req, res, { ...form, adjudicationNumber, incidentRole })
+    }
+    if (req.query.selectedAnswerId) {
+      // We are coming from delete.
+      return this.renderView(req, res, { adjudicationNumber, incidentRole, selectedAnswerId })
     }
     // We are viewing the page normally
     return this.renderView(req, res, { adjudicationNumber, incidentRole })
@@ -117,7 +121,8 @@ export default class OffenceCodeRoutes {
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {
-    return res.redirect(this.urlHere(req))
+    const { selectedAnswerId } = req.body
+    return this.redirect({ pathname: this.urlHere(req), query: { selectedAnswerId } }, res)
   }
 
   search = async (req: Request, res: Response): Promise<void> => {
