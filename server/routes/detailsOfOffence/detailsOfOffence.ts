@@ -74,6 +74,13 @@ export default class DetailsOfOffenceRoutes {
     return res.redirect(`/incident-statement/${prisonerNumber}/${adjudicationNumber}`)
   }
 
+  deleteOffence = async (req: Request, res: Response): Promise<void> => {
+    const index = Number(req.params.index)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    this.allOffencesSessionService.deleteSessionOffence(req, index, adjudicationNumber)
+    return res.redirect(`/details-of-offence/${adjudicationNumber}`)
+  }
+
   addOffence = async (req: Request, res: Response): Promise<void> => {
     // If the session has not yet been populated from the database we need to do that.
     const adjudicationNumber = Number(req.params.adjudicationNumber)
