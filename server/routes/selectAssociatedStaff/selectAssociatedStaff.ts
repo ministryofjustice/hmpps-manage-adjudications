@@ -49,13 +49,12 @@ export default class SelectAssociatedPrisonerRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { staffFirstName, staffLastName } = req.body
-    const { prisonerNumber, id } = req.params
     const { redirectUrl } = req.session
     const error = validateForm({ staffFirstName, staffLastName })
     if (error) return this.renderView(req, res, { error, staffFirstName, staffLastName })
     return res.redirect(
       url.format({
-        pathname: `/select-associated-staff/${prisonerNumber}/${id}`,
+        pathname: `/select-associated-staff`,
         query: { staffFirstName, staffLastName, redirectUrl },
       })
     )
