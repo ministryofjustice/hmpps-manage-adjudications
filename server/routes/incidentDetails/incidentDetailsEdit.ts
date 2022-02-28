@@ -6,17 +6,17 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
-import { incidentRoleToRadio, radioToIncidentRole } from './incidentRoleCode'
 import { isPrisonerIdentifier } from '../../services/prisonerSearchService'
 import { User } from '../../data/hmppsAuthClient'
+import { codeFromIncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 
 type PageData = {
   error?: FormError
   incidentDate?: SubmittedDateTime
   locationId?: string
   originalRadioSelection?: string
-  inciteAnotherPrisonerInput?: string
-  assistAnotherPrisonerInput?: string
+  incitedInput?: string
+  assistedInput?: string
 }
 
 export default class IncidentDetailsEditRoutes {
@@ -50,7 +50,7 @@ export default class IncidentDetailsEditRoutes {
     radioButtonChanged: boolean,
     prnError: boolean
   ): string => {
-    if (selectedRadio === 'onTheirOwn' || selectedRadio === 'attemptOnTheirOwn') return null
+    if (selectedRadio === 'committed' || selectedRadio === 'attempted') return null
     if (personDeleted === 'true') return null
     if (newAssociatedPrisoner && newAssociatedPrisoner !== undefined) return newAssociatedPrisoner
     if (radioButtonChanged || prnError) return null // if the user has changed the radio button and not searched for a new prisoner, this will disregard their previously selected prisoner and render an empty field - prnError is for VIEW and radioButtonChanged is for SUBMIT
@@ -59,14 +59,7 @@ export default class IncidentDetailsEditRoutes {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const {
-      error,
-      incidentDate,
-      locationId,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
-      originalRadioSelection,
-    } = pageData
+    const { error, incidentDate, locationId, incitedInput, assistedInput, originalRadioSelection } = pageData
     const { prisonerNumber, id } = req.params
     const { user } = res.locals
     const { personDeleted } = req.query
@@ -80,7 +73,7 @@ export default class IncidentDetailsEditRoutes {
     ])
 
     req.session.originalAssociatedPrisonersNumber = existingDraftIncidentDetails.incidentRole.associatedPrisonersNumber
-    req.session.originalRadioSelection = incidentRoleToRadio(existingDraftIncidentDetails.incidentRole.roleCode)
+    req.session.originalRadioSelection = incidentRoleFromCode(existingDraftIncidentDetails.incidentRole.roleCode)
 
     const { startedByUserId } = existingDraftIncidentDetails
     const reporter = await this.placeOnReportService.getReporterName(startedByUserId, user)
@@ -88,7 +81,7 @@ export default class IncidentDetailsEditRoutes {
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
     const radioButtonSelected =
-      originalRadioSelection || incidentRoleToRadio(existingDraftIncidentDetails.incidentRole.roleCode)
+      originalRadioSelection || incidentRoleFromCode(existingDraftIncidentDetails.incidentRole.roleCode)
 
     const prnError = error && error.href.includes('AnotherPrisoner')
     const associatedPrisonersNumber = this.getAssociatedPrisonersNumber(
@@ -118,8 +111,8 @@ export default class IncidentDetailsEditRoutes {
       reportingOfficer: reporter || '',
       submitButtonText: 'Save and continue',
       exitButtonHref: `/place-the-prisoner-on-report/${prisonerNumber}/${id}`,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
     })
   }
 
@@ -143,8 +136,8 @@ export default class IncidentDetailsEditRoutes {
       currentRadioSelected,
       search,
       deleteAssociatedPrisoner,
-      inciteAnotherPrisonerInput,
-      assistAnotherPrisonerInput,
+      incitedInput,
+      assistedInput,
     } = req.body
     const { user } = res.locals
     const { prisonerNumber, id } = req.params
@@ -152,11 +145,10 @@ export default class IncidentDetailsEditRoutes {
     const selectedPerson = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
 
     const originalRadioSelection =
-      req.session.originalRadioSelection || incidentRoleToRadio(req.session.originalRadioSelection)
+      req.session.originalRadioSelection || incidentRoleFromCode(req.session.originalRadioSelection)
 
     if (search) {
-      const searchValue =
-        search === 'inciteAnotherPrisonerSearchSubmit' ? inciteAnotherPrisonerInput : assistAnotherPrisonerInput
+      const searchValue = search === 'incitedSearchSubmit' ? incitedInput : assistedInput
       const error = validatePrisonerSearch({ searchTerm: searchValue, inputId: currentRadioSelected })
       if (error)
         return this.renderView(req, res, {
@@ -164,8 +156,8 @@ export default class IncidentDetailsEditRoutes {
           incidentDate,
           locationId,
           originalRadioSelection: currentRadioSelected,
-          inciteAnotherPrisonerInput,
-          assistAnotherPrisonerInput,
+          incitedInput,
+          assistedInput,
         })
       req.session.redirectUrl = `/incident-details/${prisonerNumber}/${id}/edit`
       req.session.originalRadioSelection = currentRadioSelected
@@ -211,7 +203,7 @@ export default class IncidentDetailsEditRoutes {
       })
 
     const IdNumberValue: number = parseInt(id as string, 10)
-    const incidentRoleCode = radioToIncidentRole(currentRadioSelected)
+    const incidentRoleCode = codeFromIncidentRole(currentRadioSelected)
 
     try {
       await this.placeOnReportService.editDraftIncidentDetails(
@@ -224,7 +216,7 @@ export default class IncidentDetailsEditRoutes {
       )
       delete req.session.redirectUrl
       delete req.session.originalRadioSelection
-      return res.redirect(`/offence-details/${prisonerNumber}/${id}`)
+      return res.redirect(`/offence-code-selection/${id}/${incidentRoleFromCode(incidentRoleCode)}`)
     } catch (postError) {
       logger.error(`Failed to post edited incident details for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${id}`

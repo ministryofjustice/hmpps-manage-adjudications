@@ -21,9 +21,9 @@ export default class IncidentDetailsEditPage extends Page {
 
   radioButtonLegend = (): PageElement => cy.get('legend')
 
-  conditionalInputIncite = (): PageElement => cy.get('#inciteAnotherPrisonerInput')
+  conditionalInputIncite = (): PageElement => cy.get('#incitedInput')
 
-  conditionalInputAssist = (): PageElement => cy.get('#assistAnotherPrisonerInput')
+  conditionalInputAssist = (): PageElement => cy.get('#assistedInput')
 
   searchButtonIncite = (): PageElement => cy.get('[data-qa="incite-prisoner-search"]')
 

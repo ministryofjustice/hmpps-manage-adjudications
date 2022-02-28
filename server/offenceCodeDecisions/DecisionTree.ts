@@ -16,8 +16,8 @@ export default decision([
       .child(answer('Assaulting someone')
         .child(decision([
           [Role.COMMITTED, 'Who was assaulted?'],
-          [Role.ATTEMPTED, `Who did Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
-          [Role.ASSISTED, `Who did Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,],
+          [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
+          [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,],
           [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
         ])
           .child(answer(['Another prisoner', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER)

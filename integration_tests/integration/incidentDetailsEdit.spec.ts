@@ -177,10 +177,10 @@ context('Incident details (edit) - statement incomplete', () => {
   it('should submit form successfully if radio button changed from one which requires an associated prisoner PRN to one which does not', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtons().find('input[value="attemptOnTheirOwn"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/attempted/0')
     })
   })
   it('should submit form successfully if radio button changed from one which does not require an associated prisoner PRN to one which does', () => {
@@ -208,7 +208,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtons().find('input[value="inciteAnotherPrisoner"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="incited"]').check()
     incidentDetailsPage.conditionalInputIncite().type('T3356FU')
     incidentDetailsPage.searchButtonIncite().click()
     cy.get('[data-qa="select-prisoner-link"]').click()
@@ -217,7 +217,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/0')
     })
   })
   it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
@@ -243,7 +243,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtons().find('input[value="assistAnotherPrisoner"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="assisted"]').check()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -259,7 +259,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/0')
     })
   })
   it('should submit form successfully if all data entered and redirect to /offence-details page - change time', () => {
@@ -271,7 +271,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/0')
     })
   })
   it('should submit form successfully if all data entered and redirect to /offence-details page - change location', () => {
@@ -280,7 +280,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/0')
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
@@ -291,7 +291,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('27008')
-    incidentDetailsPage.radioButtons().find('input[value="assistAnotherPrisoner"]').check()
+    incidentDetailsPage.radioButtons().find('input[value="assisted"]').check()
     incidentDetailsPage.conditionalInputAssist().type('T3356FU')
     incidentDetailsPage.searchButtonAssist().click()
     cy.get('[data-qa="select-prisoner-link"]').click()
@@ -301,12 +301,12 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputHours().should('have.value', '15')
     incidentDetailsPage.timeInputMinutes().should('have.value', '30')
     incidentDetailsPage.locationSelector().should('have.value', '27008')
-    incidentDetailsPage.radioButtons().find('input[value="assistAnotherPrisoner"]').should('be.checked')
+    incidentDetailsPage.radioButtons().find('input[value="assisted"]').should('be.checked')
     incidentDetailsPage.prisonerNameAssist().contains('Jones, James')
     incidentDetailsPage.prisonerPrnAssist().contains('T3356FU')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-details/G6415GD/34')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/0')
     })
   })
   it('should remember the changed location and time once it comes back to this page after deleting an associated prisoner', () => {
@@ -327,7 +327,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputHours().should('have.value', '13')
     incidentDetailsPage.timeInputMinutes().should('have.value', '00')
     incidentDetailsPage.locationSelector().contains('Workshop 2')
-    incidentDetailsPage.radioButtons().find('input[value="inciteAnotherPrisoner"]').should('be.checked')
+    incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
   })
   it('should redirect to the task list page if the user exists the page', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)

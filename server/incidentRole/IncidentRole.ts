@@ -19,4 +19,17 @@ const incidentRoleFromCode = (roleCode: string): IncidentRole => {
   }
 }
 
-export { IncidentRole, incidentRoleFromCode }
+const codeFromIncidentRole = (incidentRole: IncidentRole): string => {
+  switch (incidentRole) {
+    case IncidentRole.ATTEMPTED:
+      return '25a'
+    case IncidentRole.INCITED:
+      return '25b'
+    case IncidentRole.ASSISTED:
+      return '25c'
+    default:
+      return null
+  }
+}
+
+export { IncidentRole, incidentRoleFromCode, codeFromIncidentRole }
