@@ -57,7 +57,7 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-staff/G6123VU/1234?staffFirstName=john&staffLastName=smith')
+        .get('/select-associated-staff?staffFirstName=john&staffLastName=smith')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
@@ -78,7 +78,7 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-staff/G6123VU/1234?staffFirstName=john&staffLastName=smith')
+        .get('/select-associated-staff?staffFirstName=john&staffLastName=smith')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
@@ -92,17 +92,17 @@ describe('GET /select-associated-staff', () => {
 describe('POST /select-associated-staff', () => {
   it('should redirect to select staff member page with the correct search text and redirect URL intact', () => {
     return request(app)
-      .post('/select-associated-staff/G6123VU/1234')
+      .post('/select-associated-staff')
       .send({ staffFirstName: 'john', staffLastName: 'doe' })
       .expect(
         'Location',
-        '/select-associated-staff/G6123VU/1234?staffFirstName=john&staffLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3ForiginalRadioSelection%3DassaultedPrisonOfficer'
+        '/select-associated-staff?staffFirstName=john&staffLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3ForiginalRadioSelection%3DassaultedPrisonOfficer'
       )
   })
 
   it('should render validation messages', () => {
     return request(app)
-      .post('/select-associated-staff/G6123VU/1234')
+      .post('/select-associated-staff')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Select a staff member')
