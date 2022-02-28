@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import url from 'url'
-import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'

@@ -3,7 +3,6 @@ import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
-import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { Decision } from '../../offenceCodeDecisions/Decision'
 
