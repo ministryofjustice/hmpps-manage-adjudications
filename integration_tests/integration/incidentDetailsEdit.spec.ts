@@ -180,7 +180,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/attempted/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/attempted/1')
     })
   })
   it('should submit form successfully if radio button changed from one which does not require an associated prisoner PRN to one which does', () => {
@@ -217,7 +217,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
     })
   })
   it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
@@ -259,7 +259,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
     })
   })
   it('should submit form successfully if all data entered and redirect to /offence-details page - change time', () => {
@@ -271,7 +271,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
     })
   })
   it('should submit form successfully if all data entered and redirect to /offence-details page - change location', () => {
@@ -280,7 +280,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
@@ -306,7 +306,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.prisonerPrnAssist().contains('T3356FU')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
     })
   })
   it('should remember the changed location and time once it comes back to this page after deleting an associated prisoner', () => {
