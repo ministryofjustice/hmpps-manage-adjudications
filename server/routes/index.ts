@@ -45,7 +45,7 @@ export default function routes(
   router.use('/offence-details', typeOfOffenceRoutes())
   router.use(
     '/details-of-offence',
-    detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService })
+    detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService, decisionTreeService })
   )
   router.use('/assault', assaultRoutes({ placeOnReportService, userService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))

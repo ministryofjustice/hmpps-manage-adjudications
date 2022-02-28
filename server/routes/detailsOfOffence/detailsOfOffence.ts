@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
-import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { getPlaceholderValues, PlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { User } from '../../data/hmppsAuthClient'
 import UserService from '../../services/userService'
+import DecisionTreeService from '../../services/decisionTreeService'
+import { Decision } from '../../offenceCodeDecisions/Decision'
 
 type PageData = Array<OffenceData>
 
@@ -14,10 +15,9 @@ export default class DetailsOfOffenceRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
-    private readonly allOffencesSessionService: AllOffencesSessionService
+    private readonly allOffencesSessionService: AllOffencesSessionService,
+    private readonly decisionTreeService: DecisionTreeService
   ) {}
-
-  private decisions = decisionTree
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -105,7 +105,7 @@ export default class DetailsOfOffenceRoutes {
   }
 
   private questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
-    const lastAnswer = this.decisions.findAnswerByCode(offenceCode)
+    const lastAnswer = this.decisions().findAnswerByCode(offenceCode)
     const questionsAndAnswers = lastAnswer.getQuestionsAndAnswersToGetHere()
     return questionsAndAnswers.map(questionAndAnswer => {
       const { question, answer } = questionAndAnswer
@@ -131,5 +131,9 @@ export default class DetailsOfOffenceRoutes {
     })
     this.allOffencesSessionService.setAllSessionOffences(req, allOffenceData, adjudicationNumber)
     return allOffenceData
+  }
+
+  private decisions(): Decision {
+    return this.decisionTreeService.getDecisionTree()
   }
 }
