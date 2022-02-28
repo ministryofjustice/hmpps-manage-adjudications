@@ -26,7 +26,7 @@ export class Decision {
     if (this.getParentAnswer()) {
       return this.getParentAnswer().id()
     }
-    return '0'
+    return '1'
   }
 
   parent(parent: Answer) {
@@ -107,7 +107,13 @@ export class Decision {
     return matches
   }
 
-  matchingAnswers(fn: (d: Answer) => boolean): Array<Answer> {
+  findAnswerBy(fn: (a: Answer) => boolean): Answer {
+    return this.getChildAnswers()
+      .map(childAnswer => childAnswer.findAnswerBy(fn))
+      .find(a => !!a)
+  }
+
+  matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
     if (this.getChildAnswers()) {
       return [].concat(...this.getChildAnswers().map(a => a.matchingAnswer(fn)))
     }
@@ -118,16 +124,16 @@ export class Decision {
     return [].concat(...this.getChildAnswers().map(a => a.allCodes()))
   }
 
+  matchingAnswersByText(text: string): Answer[] {
+    return this.matchingAnswers(a => a.getText() === text)
+  }
+
   findAnswerByCode(offenceCode: number): Answer {
-    return this.getChildAnswers()
-      .map(childAnswer => childAnswer.findAnswerBy(a => a.getOffenceCode() === offenceCode))
-      .find(a => !!a)
+    return this.findAnswerBy(a => a.getOffenceCode() === offenceCode)
   }
 
   findAnswerById(id: string): Answer {
-    return this.getChildAnswers()
-      .map(childAnswer => childAnswer.findAnswerBy(a => a.id() === id))
-      .find(a => !!a)
+    return this.findAnswerBy(a => a.id() === id)
   }
 
   toString(indent = 0): string {

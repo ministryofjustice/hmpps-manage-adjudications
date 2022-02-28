@@ -25,7 +25,7 @@ export class Answer {
 
   id() {
     const parentId = this.getParentDecision().id()
-    const index = this.getParentDecision().getChildAnswers().indexOf(this)
+    const index = this.getParentDecision().getChildAnswers().indexOf(this) + 1
     return `${parentId}-${index}`
   }
 

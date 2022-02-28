@@ -34,11 +34,12 @@ export default function routes(
     userService,
     offenceSessionService,
     allOffencesSessionService,
+    decisionTreeService,
   }: Services
 ): Router {
   router.use(
     '/offence-code-selection',
-    offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService })
+    offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })
   )
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use('/offence-details', typeOfOffenceRoutes())

@@ -7,13 +7,14 @@ import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import OffenceSessionService from '../../services/offenceSessionService'
-import { DecisionType } from '../../offenceCodeDecisions/Decision'
+import { Decision, DecisionType } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
 import OfficerDecisionHelper from './officerDecisionHelper'
 import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -33,18 +34,17 @@ export default class OffenceCodeRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
-    private readonly offenceSessionService: OffenceSessionService
+    private readonly offenceSessionService: OffenceSessionService,
+    private readonly decisionTreeService: DecisionTreeService
   ) {}
 
   private helpers = new Map<DecisionType, DecisionHelper>([
-    [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService)],
-    [DecisionType.STAFF, new StaffDecisionHelper(this.userService)],
-    [DecisionType.OFFICER, new OfficerDecisionHelper(this.userService)],
-    [DecisionType.OTHER_PERSON, new OtherPersonDecisionHelper()],
-    [DecisionType.RADIO_SELECTION_ONLY, new DecisionHelper()],
+    [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
+    [DecisionType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
+    [DecisionType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
+    [DecisionType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
+    [DecisionType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
   ])
-
-  private decisions = decisionTree
 
   view = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -97,7 +97,7 @@ export default class OffenceCodeRoutes {
     const updatedOffenceData = answerTypeHelper.updatedOffenceData(currentOffenceData, form)
     this.offenceSessionService.setOffenceData(req, updatedOffenceData, adjudicationNumber)
     // We redirect to the next decision or the details of offence page if this is the last.
-    const selectedAnswer = this.decisions.findAnswerById(form.selectedAnswerId)
+    const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
       const nextQuestionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedAnswer
         .getChildDecision()
@@ -142,7 +142,7 @@ export default class OffenceCodeRoutes {
   redirectToRoot = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { incidentRole } = req.params
-    res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}/${this.decisions.id()}`)
+    res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}/${this.decisions().id()}`)
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -153,7 +153,7 @@ export default class OffenceCodeRoutes {
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const decision = this.decisions.findDecisionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
+    const decision = this.decisions().findDecisionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const answers = decision.getChildAnswers().map(a => {
       return {
@@ -181,7 +181,7 @@ export default class OffenceCodeRoutes {
     } else {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedAnswerId && this.helpers.get(this.decisions.findAnswerById(selectedAnswerId).getType())
+    return selectedAnswerId && this.helpers.get(this.decisions().findAnswerById(selectedAnswerId).getType())
   }
 
   private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
@@ -190,5 +190,9 @@ export default class OffenceCodeRoutes {
 
   private urlHere(req: Request) {
     return `/offence-code-selection${req.path}`
+  }
+
+  private decisions(): Decision {
+    return this.decisionTreeService.getDecisionTree()
   }
 }

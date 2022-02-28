@@ -4,9 +4,15 @@ import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
+import DecisionTreeService from '../../services/decisionTreeService'
+import { Decision } from '../../offenceCodeDecisions/Decision'
 
 export default class DecisionHelper {
-  private decision = decisionTree
+  constructor(readonly decisionTreeService: DecisionTreeService) {}
+
+  decision(): Decision {
+    return this.decisionTreeService.getDecisionTree()
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
@@ -45,7 +51,7 @@ export default class DecisionHelper {
       victimOtherPersonsName: currentAnswers?.victimOtherPersonsName,
       victimPrisonersNumber: currentAnswers?.victimPrisonersNumber,
       victimStaffUsername: currentAnswers?.victimStaffUsername,
-      offenceCode: `${this.decision.findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
+      offenceCode: `${this.decision().findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
     }
   }
 }
