@@ -3,25 +3,35 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { Decision, decision, DecisionType as Type } from '../../offenceCodeDecisions/Decision'
+import { decision, DecisionType as Type } from '../../offenceCodeDecisions/Decision'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
-import { Answer, answer } from '../../offenceCodeDecisions/Answer'
+import { answer } from '../../offenceCodeDecisions/Answer'
 import OffenceSessionService from '../../services/offenceSessionService'
+import UserService from '../../services/userService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/decisionTreeService.ts')
+jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const userService = new UserService(null) as jest.Mocked<UserService>
 const decisionTreeService = new DecisionTreeService() as jest.Mocked<DecisionTreeService>
 
 const aPrisonerAnswerText = 'Another prisoner answer'
+const aPrisonerAnswer = answer(aPrisonerAnswerText)
 const aPrisonOfficerAnswerText = 'A prison officer answer'
+const aPrisonOfficerAnswer = answer(aPrisonOfficerAnswerText)
 const aMemberOfStaffAnswerText = 'A member of staff answer'
+const aMemberOfStaffAnswer = answer(aMemberOfStaffAnswerText)
 const anotherPersonAnswerText = 'Another person answer'
+const anotherPersonAnswer = answer(anotherPersonAnswerText)
 const aStandardAnswerText = 'A standard answer'
+const aStandardAnswer = answer(aStandardAnswerText)
 const aStandardAnswerWithChildQuestionText = 'A standard answer with child question'
-const aStandardChildAnswer = 'A standard child answer'
+const aStandardAnswerWithChildQuestion = answer(aStandardAnswerWithChildQuestionText)
+const aStandardChildAnswerText = 'A standard child answer'
+const aStandardChildAnswer = answer(aStandardChildAnswerText)
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -29,15 +39,13 @@ const testDecisionsTree = decision([
   [Role.ASSISTED, `Assisted: ${Text.PRISONER_FULL_NAME}. Associated: ${Text.ASSOCIATED_PRISONER_FULL_NAME}`],
   [Role.INCITED, `Incited: ${Text.PRISONER_FULL_NAME}. Associated: ${Text.ASSOCIATED_PRISONER_FULL_NAME}`],
 ])
-  .child(answer(aPrisonerAnswerText).type(Type.PRISONER).offenceCode(1))
-  .child(answer(aPrisonOfficerAnswerText).type(Type.OFFICER).offenceCode(2))
-  .child(answer(aMemberOfStaffAnswerText).type(Type.STAFF).offenceCode(3))
-  .child(answer(anotherPersonAnswerText).type(Type.OTHER_PERSON).offenceCode(4))
-  .child(answer(aStandardAnswerText).offenceCode(5))
+  .child(aPrisonerAnswer.type(Type.PRISONER).offenceCode(1))
+  .child(aPrisonOfficerAnswer.type(Type.OFFICER).offenceCode(2))
+  .child(aMemberOfStaffAnswer.type(Type.STAFF).offenceCode(3))
+  .child(anotherPersonAnswer.type(Type.OTHER_PERSON).offenceCode(4))
+  .child(aStandardAnswer.offenceCode(5))
   .child(
-    answer(aStandardAnswerWithChildQuestionText).child(
-      decision('A child question').child(answer(aStandardChildAnswer).offenceCode(6))
-    )
+    aStandardAnswerWithChildQuestion.child(decision('A child question').child(aStandardChildAnswer.offenceCode(6)))
   )
 
 let app: Express
@@ -45,11 +53,33 @@ let app: Express
 beforeEach(() => {
   decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
 
+  userService.getStaffFromUsername.mockResolvedValue({
+    username: undefined,
+    name: 'A_STAFF_NAME',
+    activeCaseLoadId: undefined,
+    token: undefined,
+    authSource: undefined,
+    email: undefined,
+  })
+
+  placeOnReportService.getPrisonerDetails.mockResolvedValue({
+    offenderNo: undefined,
+    firstName: 'A_PRISONER_FIRST_NAME',
+    lastName: 'A_PRISONER_LAST_NAME',
+    categoryCode: undefined,
+    language: undefined,
+    friendlyName: undefined,
+    displayName: undefined,
+    prisonerNumber: undefined,
+    currentLocation: undefined,
+    assignedLivingUnit: undefined,
+  })
+
   placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
     prisoner: {
       offenderNo: undefined,
-      firstName: 'TOM',
-      lastName: 'SAMUELS',
+      firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
+      lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
       categoryCode: undefined,
       language: undefined,
       friendlyName: undefined,
@@ -60,8 +90,8 @@ beforeEach(() => {
     },
     associatedPrisoner: {
       offenderNo: undefined,
-      firstName: 'ALESSANDRO',
-      lastName: 'SWAN',
+      firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
+      lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
       categoryCode: undefined,
       language: undefined,
       friendlyName: undefined,
@@ -72,24 +102,25 @@ beforeEach(() => {
     },
   })
   const offenceSessionService = new OffenceSessionService()
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, decisionTreeService, offenceSessionService })
+  app = appWithAllRoutes(
+    { production: false },
+    { placeOnReportService, decisionTreeService, offenceSessionService, userService }
+  )
 })
-
-function findAnswerByText(rootDecision: Decision, text: string): Answer {
-  return rootDecision.findAnswerBy(a => a.getText() === text)
-}
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /offence-code-selection/100/assisted/1', () => {
+describe('GET /offence-code-selection/100/assisted/1 view', () => {
   it('should load the first page of the offence code select pages', () => {
     return request(app)
       .get('/offence-code-selection/100/assisted/1')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Assisted: Tom Samuels. Associated: Alessandro Swan')
+        expect(res.text).toContain(
+          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
+        )
         expect(res.text).toContain(aPrisonerAnswerText)
         expect(res.text).toContain(aPrisonOfficerAnswerText)
         expect(res.text).toContain(aMemberOfStaffAnswerText)
@@ -100,7 +131,7 @@ describe('GET /offence-code-selection/100/assisted/1', () => {
   })
 })
 
-describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
+describe('POST /offence-code-selection/100/assisted/1 validation', () => {
   it('should validate on submit when no answer is selected', () => {
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
@@ -110,7 +141,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.OTHER_PERSON} answer when no name is added`, () => {
-    const anotherPersonAnswer = findAnswerByText(testDecisionsTree, anotherPersonAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -122,7 +152,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.PRISONER} answer when no prisoner id is present`, () => {
-    const aPrisonerAnswer = findAnswerByText(testDecisionsTree, aPrisonerAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -135,7 +164,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.PRISONER} answer when searching and no search text`, () => {
-    const aPrisonerAnswer = findAnswerByText(testDecisionsTree, aPrisonerAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -148,7 +176,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.OFFICER} question when no staff id is present and not searching`, () => {
-    const aPrisonOfficerAnswer = findAnswerByText(testDecisionsTree, aPrisonOfficerAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -160,7 +187,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.OFFICER} question when searching and no search text`, () => {
-    const aPrisonOfficerAnswer = findAnswerByText(testDecisionsTree, aPrisonOfficerAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -174,7 +200,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.STAFF} question when no staff id is present and not searching`, () => {
-    const aMemberOfStaffAnswer = findAnswerByText(testDecisionsTree, aMemberOfStaffAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -186,7 +211,6 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 
   it(`should validate a ${Type.STAFF} question when searching and no search text`, () => {
-    const aMemberOfStaffAnswer = findAnswerByText(testDecisionsTree, aMemberOfStaffAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -200,33 +224,8 @@ describe('POST /offence-code-selection/100/assisted/1 VALIDATION', () => {
   })
 })
 
-describe('POST /offence-code-selection/100/assisted/1 REDIRECTION', () => {
-  it('should redirect to the detail of offence page when selecting a standard answer with a offenceCode', () => {
-    const aStandardAnswer = findAnswerByText(testDecisionsTree, aStandardAnswerText)
-    return request(app)
-      .post('/offence-code-selection/100/assisted/1')
-      .send({
-        selectedAnswerId: aStandardAnswer.id(),
-      })
-      .expect(302)
-      .expect(
-        'Location',
-        `/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${aStandardAnswer.getOffenceCode()}`
-      )
-  })
-
-  it('should redirect to the next page when selecting a standard answer with a child', () => {
-    return request(app)
-      .post('/offence-code-selection/100/assisted/1')
-      .send({
-        selectedAnswerId: findAnswerByText(testDecisionsTree, aStandardAnswerWithChildQuestionText).id(),
-      })
-      .expect(302)
-      .expect('Location', '/offence-code-selection/100/assisted/1-6')
-  })
-
+describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () => {
   it(`A ${Type.PRISONER} answer should redirect to search when searching`, () => {
-    const aPrisonerAnswer = findAnswerByText(testDecisionsTree, aPrisonerAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -239,7 +238,6 @@ describe('POST /offence-code-selection/100/assisted/1 REDIRECTION', () => {
   })
 
   it(`A ${Type.OFFICER} answer should redirect to search when searching`, () => {
-    const aPrisonOfficerAnswer = findAnswerByText(testDecisionsTree, aPrisonOfficerAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -253,7 +251,6 @@ describe('POST /offence-code-selection/100/assisted/1 REDIRECTION', () => {
   })
 
   it(`A ${Type.STAFF} answer should redirect to search when searching`, () => {
-    const aMemberOfStaffAnswer = findAnswerByText(testDecisionsTree, aMemberOfStaffAnswerText)
     return request(app)
       .post('/offence-code-selection/100/assisted/1')
       .send({
@@ -264,5 +261,107 @@ describe('POST /offence-code-selection/100/assisted/1 REDIRECTION', () => {
       })
       .expect(302)
       .expect('Location', `/select-associated-staff?staffFirstName=FirstName&staffLastName=LastName`)
+  })
+})
+
+describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => {
+  it(`A ${Type.PRISONER} answer should should be selected and have the prison number hidden input when returning from search`, () => {
+    return request(app)
+      .get(`/offence-code-selection/100/assisted/1?selectedAnswerId=${aPrisonerAnswer.id()}&selectedPerson=PRISONER_ID`)
+      .expect(res => {
+        expect(res.text).toContain(`value="${aPrisonerAnswer.id()}" checked`)
+        expect(res.text).toContain('name="prisonerId" value="PRISONER_ID"')
+      })
+  })
+
+  it(`A ${Type.OFFICER} answer should should be selected and have the staff username hidden input when returning from search`, () => {
+    return request(app)
+      .get(
+        `/offence-code-selection/100/assisted/1?selectedAnswerId=${aPrisonOfficerAnswer.id()}&selectedPerson=STAFF_USERNAME`
+      )
+      .expect(res => {
+        expect(res.text).toContain(`value="${aPrisonOfficerAnswer.id()}" checked`)
+        expect(res.text).toContain('name="officerId" value="STAFF_USERNAME"')
+      })
+  })
+
+  it(`A ${Type.STAFF} answer should should be selected and have the staff username hidden input when returning from search`, () => {
+    return request(app)
+      .get(
+        `/offence-code-selection/100/assisted/1?selectedAnswerId=${aMemberOfStaffAnswer.id()}&selectedPerson=STAFF_USERNAME`
+      )
+      .expect(res => {
+        expect(res.text).toContain(`value="${aMemberOfStaffAnswer.id()}" checked`)
+        expect(res.text).toContain('name="staffId" value="STAFF_USERNAME"')
+      })
+  })
+})
+
+describe('POST /offence-code-selection/100/assisted/1 next page', () => {
+  it('should redirect to the next page when selecting a standard answer with a child', () => {
+    return request(app)
+      .post('/offence-code-selection/100/assisted/1')
+      .send({
+        selectedAnswerId: aStandardAnswerWithChildQuestion.id(),
+      })
+      .expect(302)
+      .expect('Location', '/offence-code-selection/100/assisted/1-6')
+  })
+})
+
+describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
+  it('An end standard answer should redirect to the detail of offence page with an offence code added to the output', () => {
+    return request(app)
+      .post('/offence-code-selection/100/assisted/1')
+      .send({
+        selectedAnswerId: aStandardAnswer.id(),
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${aStandardAnswer.getOffenceCode()}`
+      )
+  })
+
+  it(`An end ${Type.OFFICER} answer should redirect to the detail of offence page with a victimStaffUsername and offence code added to the output`, () => {
+    return request(app)
+      .post('/offence-code-selection/100/assisted/1')
+      .send({
+        selectedAnswerId: aPrisonOfficerAnswer.id(),
+        officerId: 'USERNAME',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aPrisonOfficerAnswer.getOffenceCode()}`
+      )
+  })
+
+  it(`An end ${Type.STAFF} answer should redirect to the detail of offence page with a victimStaffUsername and offence code added to the output`, () => {
+    return request(app)
+      .post('/offence-code-selection/100/assisted/1')
+      .send({
+        selectedAnswerId: aMemberOfStaffAnswer.id(),
+        staffId: 'USERNAME',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aMemberOfStaffAnswer.getOffenceCode()}`
+      )
+  })
+
+  it(`An end ${Type.OTHER_PERSON} answer should redirect to the detail of offence page with a victimStaffUsername and offence code added to the output`, () => {
+    return request(app)
+      .post('/offence-code-selection/100/assisted/1')
+      .send({
+        selectedAnswerId: anotherPersonAnswer.id(),
+        otherPersonNameInput: 'FIRSTNAME LASTNAME',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `/details-of-offence/100/add?victimOtherPersonsName=FIRSTNAME%20LASTNAME&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${anotherPersonAnswer.getOffenceCode()}`
+      )
   })
 })
