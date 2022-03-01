@@ -124,10 +124,6 @@ export class Decision {
     return [].concat(...this.getChildAnswers().map(a => a.allCodes()))
   }
 
-  matchingAnswersByText(text: string): Answer[] {
-    return this.matchingAnswers(a => a.getText() === text)
-  }
-
   findAnswerByCode(offenceCode: number): Answer {
     return this.findAnswerBy(a => a.getOffenceCode() === offenceCode)
   }
