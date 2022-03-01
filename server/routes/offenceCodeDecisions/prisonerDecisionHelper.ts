@@ -7,6 +7,7 @@ import { FormError } from '../../@types/template'
 import { formatName } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from './offenceData'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -25,8 +26,11 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class PrisonerDecisionHelper extends DecisionHelper {
-  constructor(private readonly placeOnReportService: PlaceOnReportService) {
-    super()
+  constructor(
+    private readonly placeOnReportService: PlaceOnReportService,
+    readonly decisionTreeService: DecisionTreeService
+  ) {
+    super(decisionTreeService)
   }
 
   override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {

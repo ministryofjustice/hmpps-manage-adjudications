@@ -35,7 +35,7 @@ export default decision([
           .child(answer(['Another person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON)
             .child(decision('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1007))
-              .child(answer('Yes').offenceCode(1008))))))
+              .child(answer('No').offenceCode(1008))))))
       .child(answer('Fighting with someone').offenceCode(4001))
       .child(answer('Endangering the health or personal safety of someone').offenceCode(5001))))
   .child(answer('Escape or failure to comply with temporary release conditions')

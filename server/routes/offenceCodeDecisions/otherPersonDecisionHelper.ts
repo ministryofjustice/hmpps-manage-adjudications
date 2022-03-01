@@ -4,6 +4,7 @@ import { OtherPersonData, DecisionForm } from './decisionForm'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -17,6 +18,10 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class OtherPersonDecisionHelper extends DecisionHelper {
+  constructor(readonly decisionTreeService: DecisionTreeService) {
+    super(decisionTreeService)
+  }
+
   formFromPost(req: Request): DecisionForm {
     const { selectedAnswerId } = req.body
     return {

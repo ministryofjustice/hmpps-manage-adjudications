@@ -219,7 +219,7 @@ context('Incident details', () => {
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/3456/attempted/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/attempted/1')
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner incited', () => {
@@ -236,7 +236,7 @@ context('Incident details', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/3456/incited/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/incited/1')
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner assisted', () => {
@@ -269,7 +269,7 @@ context('Incident details', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/3456/assisted/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/assisted/1')
     })
   })
   it('should submit form successfully with correct data if the user changes their radio selection after searching', () => {
@@ -293,7 +293,7 @@ context('Incident details', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/3456/incited/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/incited/1')
     })
   })
   it('should show error summary if an associated prisoner is not entered', () => {
@@ -324,7 +324,7 @@ context('Incident details', () => {
     incidentDetailsPage.radioButtons().find('input[value="committed"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/3456/committed/0')
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/committed/1')
     })
   })
 })
