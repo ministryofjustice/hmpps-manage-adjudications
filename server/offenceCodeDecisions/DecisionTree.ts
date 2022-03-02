@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { DecisionType as Type, decision } from './Decision'
+import { AnswerType as Type, decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { answer } from './Answer'

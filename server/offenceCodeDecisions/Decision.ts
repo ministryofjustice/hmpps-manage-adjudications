@@ -6,7 +6,7 @@ import { IncidentRole } from '../incidentRole/IncidentRole'
 export class Decision {
   private decisionParent: Answer
 
-  private decisionChildren: Array<Answer> = new Array<Answer>()
+  private decisionChildren: Answer[] = []
 
   private readonly decisionTitle: Title
 
@@ -86,15 +86,16 @@ export class Decision {
     return this.findDecisionBy(d => d.getUrl() === url)
   }
 
-  findDecisionBy(fn: (d: Decision) => boolean): Decision {
-    const matching = this.matchingDecisions(fn)
-    if (matching.length !== 0) {
-      return matching[0]
-    }
-    return null
+  findDecisionById(id: string): Decision {
+    return this.findDecisionBy(d => d.id() === id)
   }
 
-  matchingDecisions(fn: (d: Decision) => boolean): Array<Decision> {
+  findDecisionBy(fn: (d: Decision) => boolean): Decision {
+    const matching = this.matchingDecisions(fn)
+    return this.uniqueOrThrow(matching)
+  }
+
+  matchingDecisions(fn: (d: Decision) => boolean): Decision[] {
     const matches = [].concat(
       ...this.getChildAnswers()
         .map(a => a.getChildDecision())
@@ -108,9 +109,10 @@ export class Decision {
   }
 
   findAnswerBy(fn: (a: Answer) => boolean): Answer {
-    return this.getChildAnswers()
+    const matching = this.getChildAnswers()
       .map(childAnswer => childAnswer.findAnswerBy(fn))
-      .find(a => !!a)
+      .filter(a => !!a)
+    return this.uniqueOrThrow(matching)
   }
 
   matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
@@ -146,6 +148,16 @@ export class Decision {
     }
     return output
   }
+
+  private uniqueOrThrow<T>(list: T[]): T {
+    if (list.length === 1) {
+      return list[0]
+    }
+    if (list.length !== 0) {
+      throw new Error(`Duplicates found at ${this.id()}`)
+    }
+    return null
+  }
 }
 
 export function decision(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
@@ -153,7 +165,7 @@ export function decision(title: Title | string | (readonly (readonly [IncidentRo
 }
 
 // eslint-disable-next-line no-shadow
-export enum DecisionType {
+export enum AnswerType {
   RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
   PRISONER = 'PRISONER',
   OFFICER = 'OFFICER',

@@ -1,6 +1,6 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
-import { Decision, DecisionType } from './Decision'
+import { Decision, AnswerType } from './Decision'
 
 export class Answer {
   private readonly answerText: string
@@ -13,7 +13,7 @@ export class Answer {
 
   private answerParent: Decision
 
-  private answerType: DecisionType = DecisionType.RADIO_SELECTION_ONLY
+  private answerType: AnswerType = AnswerType.RADIO_SELECTION_ONLY
 
   constructor(text: string | [string, string]) {
     if (typeof text === 'string') {
@@ -40,7 +40,7 @@ export class Answer {
     return this
   }
 
-  type(answerType: DecisionType) {
+  type(answerType: AnswerType) {
     this.answerType = answerType
     return this
   }
