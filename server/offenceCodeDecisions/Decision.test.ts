@@ -19,7 +19,6 @@ describe('find', () => {
   it('question', () => {
     const withUniqueUrl = template()
     withUniqueUrl.getChildAnswers()[0].getChildDecision().url('unique')
-
     const withNonUniqueUrl = template()
     withNonUniqueUrl.getChildAnswers()[0].getChildDecision().url('non-unique')
     withNonUniqueUrl.getChildAnswers()[1].getChildDecision().url('non-unique')
@@ -83,15 +82,33 @@ describe('match', () => {
 })
 
 describe('id', () => {
-  it('question', () => {
+  it('id', () => {
+    // Note id is based on position in child arrays.
     expect(template().getChildAnswers()[1].getChildDecision().id()).toEqual('1-2')
   })
 
   it('is unique', () => {
     const list = template()
-      .matchingDecisions(a => true)
+      .matchingDecisions(a => true) // Bring back everything
       .map(q => q.id())
-    const set = new Set(list) // Duplicates removed
-    expect(list).toHaveLength(set.size)
+    const duplicatesRemoved = new Set(list)
+    expect(list.length).toBeGreaterThan(0)
+    expect(list).toHaveLength(duplicatesRemoved.size)
   })
 })
+
+describe('all codes', () => {
+  it('all code', () => {
+    const list = template().allCodes()
+    expect(list.sort()).toEqual([1, 2, 3])
+  })
+})
+
+describe('all urls', () => {
+  it('all urls', () => {
+    const list = template().allUrls()
+    const duplicatesRemoved = new Set(list)
+    expect(list.sort()).toEqual(['1', '1-1', '1-1-2', '1-2',])
+  })
+})
+

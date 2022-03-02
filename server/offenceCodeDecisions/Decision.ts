@@ -117,7 +117,7 @@ export class Decision {
 
   matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
     if (this.getChildAnswers()) {
-      return [].concat(...this.getChildAnswers().map(a => a.matchingAnswer(fn)))
+      return [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn)))
     }
     return []
   }
@@ -154,7 +154,7 @@ export class Decision {
       return list[0]
     }
     if (list.length !== 0) {
-      throw new Error(`Duplicates found at ${this.id()}`)
+      throw new Error(`Duplicates found in decision ${this.id()}`)
     }
     return null
   }

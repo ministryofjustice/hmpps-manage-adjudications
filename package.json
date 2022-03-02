@@ -79,7 +79,7 @@
       "prettier --write",
       "eslint --fix"
     ],
-    "!(*DecisionTree|*Decision.test|*DecisionTree.test).ts": [
+    "!(*DecisionTree|*Decision.test|*DecisionTree.test|*Answer.test).ts": [
       "prettier --write",
       "eslint --fix"
     ],

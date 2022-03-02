@@ -24,8 +24,9 @@ export class Answer {
   }
 
   id() {
-    const parentId = this.getParentDecision().id()
-    const index = this.getParentDecision().getChildAnswers().indexOf(this) + 1
+    // We should always have a parent but if we don't we assume the parent would have id 1 and be the root.
+    const parentId = this.getParentDecision()?.id() || 1
+    const index = (this.getParentDecision()?.getChildAnswers().indexOf(this) || 0) + 1
     return `${parentId}-${index}`
   }
 
@@ -86,7 +87,7 @@ export class Answer {
     return this.answerChild
   }
 
-  allCodes(): Array<number> {
+  allCodes(): number[] {
     const childAnswers = this.getChildDecision()?.getChildAnswers()
     const childCodes = childAnswers ? [].concat(...childAnswers.map(a => a.allCodes())) : []
     if (this.getOffenceCode()) {
@@ -95,7 +96,7 @@ export class Answer {
     return childCodes.sort()
   }
 
-  getQuestionsAndAnswersToGetHere(): Array<{ question: Decision; answer: Answer }> {
+  getQuestionsAndAnswersToGetHere(): { question: Decision; answer: Answer }[] {
     let questionsAndAnswers = [] as { question: Decision; answer: Answer }[]
     if (this.getParentDecision().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
@@ -107,16 +108,13 @@ export class Answer {
   }
 
   findAnswerBy(fn: (d: Answer) => boolean): Answer {
-    const matching = this.matchingAnswer(fn)
-    if (matching.length !== 0) {
-      return matching[0]
-    }
-    return null
+    const matching = this.matchingAnswers(fn)
+    return this.uniqueOrThrow(matching)
   }
 
-  matchingAnswer(fn: (d: Answer) => boolean): Array<Answer> {
+  matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
     const childAnswers = this.getChildDecision()?.getChildAnswers()
-    const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswer(fn))) : []
+    const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswers(fn))) : []
     if (fn(this)) {
       childMatches.push(this)
     }
@@ -136,6 +134,16 @@ export class Answer {
       output = `${output}\r\n${this.getChildDecision().toString(indent + 4)}`
     }
     return output
+  }
+
+  private uniqueOrThrow<T>(list: T[]): T {
+    if (list.length === 1) {
+      return list[0]
+    }
+    if (list.length !== 0) {
+      throw new Error(`Duplicates found in answer ${this.id()}`)
+    }
+    return null
   }
 }
 
