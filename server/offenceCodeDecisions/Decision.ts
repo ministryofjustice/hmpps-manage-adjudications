@@ -163,12 +163,3 @@ export class Decision {
 export function decision(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
   return new Decision(title)
 }
-
-// eslint-disable-next-line no-shadow
-export enum AnswerType {
-  RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
-  PRISONER = 'PRISONER',
-  OFFICER = 'OFFICER',
-  STAFF = 'STAFF',
-  OTHER_PERSON = 'OTHER_PERSON',
-}

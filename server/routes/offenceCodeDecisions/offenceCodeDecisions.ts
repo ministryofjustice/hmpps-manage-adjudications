@@ -6,7 +6,7 @@ import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import OffenceSessionService from '../../services/offenceSessionService'
-import { Decision, AnswerType } from '../../offenceCodeDecisions/Decision'
+import { Decision } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
@@ -14,6 +14,7 @@ import OfficerDecisionHelper from './officerDecisionHelper'
 import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { AnswerType } from '../../offenceCodeDecisions/Answer'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 

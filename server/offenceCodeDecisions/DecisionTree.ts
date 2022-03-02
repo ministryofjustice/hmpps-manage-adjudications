@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { AnswerType as Type, decision } from './Decision'
+import { decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
-import { answer } from './Answer'
+import { AnswerType as Type, answer } from './Answer'
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default decision([

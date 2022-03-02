@@ -1,6 +1,6 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
-import { Decision, AnswerType } from './Decision'
+import { Decision } from './Decision'
 
 export class Answer {
   private readonly answerText: string
@@ -149,4 +149,13 @@ export class Answer {
 
 export function answer(text: string | [string, string]) {
   return new Answer(text)
+}
+
+// eslint-disable-next-line no-shadow
+export enum AnswerType {
+  RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
+  PRISONER = 'PRISONER',
+  OFFICER = 'OFFICER',
+  STAFF = 'STAFF',
+  OTHER_PERSON = 'OTHER_PERSON',
 }
