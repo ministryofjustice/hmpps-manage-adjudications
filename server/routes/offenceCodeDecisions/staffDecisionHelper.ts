@@ -102,7 +102,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
 
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
-      offenceCode: super.updatedOffenceData(currentAnswers, form).offenceCode,
+      ...super.updatedOffenceData(currentAnswers, form),
       victimStaffUsername: (form.selectedAnswerData as StaffData).staffId,
     }
   }
