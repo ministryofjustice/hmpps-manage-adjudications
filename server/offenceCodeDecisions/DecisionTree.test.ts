@@ -1,6 +1,7 @@
+/* eslint-disable */
 import decisionTree from './DecisionTree'
-import { Decision } from './Decision'
-import { Answer } from './Answer'
+import { decision, Decision } from './Decision'
+import { answer, Answer } from './Answer'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
@@ -15,6 +16,31 @@ function findDuplicates<T>(toCheck: Array<T>) {
     .filter(item => item != null)
 }
 
+function missingOffenceCode(answerToCheck: Answer): boolean {
+  return !answerToCheck.getChildDecision() && !answerToCheck.getOffenceCode()
+}
+
+function duplicateUrls(decisionToCheck: Decision) {
+  return (
+    decisionToCheck.getUrl() != null &&
+    decisionToCheck.matchingDecisions(d => d !== decisionToCheck && d.getUrl() === decisionToCheck.getUrl()).length !== 0
+  )
+}
+
+function urlsStartingWithSlash(decisionToCheck: Decision) {
+  return decisionToCheck.getUrl() != null && decisionToCheck.getUrl().startsWith('/')
+}
+
+function template() {
+  return decision('question 1')
+    .child(answer('answer 1-1')
+      .child(decision('question 1-1')
+        .child(answer('answer 1-1-1'))))
+    .child(answer('answer 1-2')
+      .child(decision('question 1-2')
+        .child(answer('answer 1-2-1'))))
+}
+
 describe('decisions', () => {
   it('toString', () => {
     // Not a test but useful output
@@ -22,38 +48,54 @@ describe('decisions', () => {
     console.log(decisionTree.toString())
   })
 
-  it('no invalid decisions', () => {
-    function missingOffenceCode(answer: Answer): boolean {
-      return !answer.getChildDecision() && !answer.getOffenceCode()
-    }
+  it('no answers missing offence codes', () => {
     const answersWithMissingOffenceCodes = decisionTree.matchingAnswers(missingOffenceCode)
-    expect(answersWithMissingOffenceCodes.map(a => a.getText())).toHaveLength(0)
+    expect(answersWithMissingOffenceCodes).toHaveLength(0)
+  })
 
-    function duplicateUrls(decision: Decision) {
-      return (
-        decision.getUrl() != null &&
-        decision.matchingDecisions(d => d !== decision && d.getUrl() === decision.getUrl()).length !== 0
-      )
-    }
+  it('check we find answers with missing offence codes when they exist', () => {
+    const withMissingOffenceCode = template() // The template does not have offence codes
+    const answersWithMissingOffenceCodes = withMissingOffenceCode.matchingAnswers(missingOffenceCode)
+    expect(answersWithMissingOffenceCodes.length).toBeGreaterThan(0)
+  })
+
+  it('no questions with duplicate urls', () => {
     const decisionsWithDuplicateUrls = decisionTree.matchingDecisions(duplicateUrls)
-    expect(decisionsWithDuplicateUrls.map(a => a.getTitle())).toHaveLength(0)
+    expect(decisionsWithDuplicateUrls).toHaveLength(0)
+  })
 
-    function urlsStartingWithSlash(decision: Decision) {
-      return decision.getUrl() != null && decision.getUrl().startsWith('/')
-    }
+  it('check we find questions with duplicate urls when they exist', () => {
+    const withDuplicateUrls = template()
+    withDuplicateUrls.findDecisionById('1-1').url('not-unique')
+    withDuplicateUrls.findDecisionById('1-2').url('not-unique')
+    const questionsWithDuplicateUrls = withDuplicateUrls.matchingDecisions(duplicateUrls)
+    expect(questionsWithDuplicateUrls).toHaveLength(0)
+  })
+
+  it('no questions with urls starting with a slash', () => {
     const decisionsWithUrlsStartingWithSlash = decisionTree.matchingDecisions(urlsStartingWithSlash)
-    expect(decisionsWithUrlsStartingWithSlash.map(a => a.getTitle())).toHaveLength(0)
+    expect(decisionsWithUrlsStartingWithSlash).toHaveLength(0)
   })
 
-  it('no duplicate urls', () => {
-    const allUrls = decisionTree.allUrls()
-    const duplicates = findDuplicates(allUrls)
-    expect(duplicates).toHaveLength(0)
+  it('check we find questions with urls starting with a slash when they exist', () => {
+    const withUrlStartingWithASlash = template()
+    withUrlStartingWithASlash.findDecisionById('1-1').url('/starts-with-a-slash')
+    const questionsWithUrlsStartingWithSlash = withUrlStartingWithASlash.matchingDecisions(urlsStartingWithSlash)
+    expect(questionsWithUrlsStartingWithSlash.length).toBeGreaterThan(0)
   })
 
-  it('no duplicate code ids', () => {
+  it('no answers with duplicate offence codes', () => {
     const allCodeIds = decisionTree.allCodes()
     const duplicates = findDuplicates(allCodeIds)
     expect(duplicates).toHaveLength(0)
+  })
+
+  it('check we answers with duplicate offence codes when they exist', () => {
+    const shouldBeDuplicates = decision('question 1')
+      .child(answer('answer 1-1').offenceCode(1))
+      .child(answer('answer 1-2').offenceCode(1))
+      .allCodes()
+    const duplicates = findDuplicates(shouldBeDuplicates)
+    expect(duplicates).toHaveLength(1)
   })
 })

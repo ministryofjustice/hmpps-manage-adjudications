@@ -6,7 +6,7 @@ import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import OffenceSessionService from '../../services/offenceSessionService'
-import { Decision, DecisionType } from '../../offenceCodeDecisions/Decision'
+import { Decision } from '../../offenceCodeDecisions/Decision'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
@@ -14,6 +14,7 @@ import OfficerDecisionHelper from './officerDecisionHelper'
 import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { AnswerType } from '../../offenceCodeDecisions/Answer'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -37,12 +38,12 @@ export default class OffenceCodeRoutes {
     private readonly decisionTreeService: DecisionTreeService
   ) {}
 
-  private helpers = new Map<DecisionType, DecisionHelper>([
-    [DecisionType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
-    [DecisionType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
-    [DecisionType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
-    [DecisionType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
-    [DecisionType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
+  private helpers = new Map<AnswerType, DecisionHelper>([
+    [AnswerType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
+    [AnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
+    [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
+    [AnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
+    [AnswerType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
   ])
 
   view = async (req: Request, res: Response): Promise<void> => {

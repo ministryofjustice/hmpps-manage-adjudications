@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { DecisionType as Type, decision } from './Decision'
+import { decision } from './Decision'
 import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
-import { answer } from './Answer'
+import { AnswerType as Type, answer } from './Answer'
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default decision([
@@ -39,7 +39,7 @@ export default decision([
       .child(answer('Fighting with someone').offenceCode(4001))
       .child(answer('Endangering the health or personal safety of someone').offenceCode(5001))))
   .child(answer('Escape or failure to comply with temporary release conditions')
-    .child(decision('Escape or failure to comply with temporary release conditions')
+    .child(decision('What did the incident involve?')
       .child(answer('Escaping').offenceCode(7001))
       .child(answer('Absconding from either prison or legal custody').offenceCode(7002))
       .child(answer('Failing to comply with any conditions of a temporary release').offenceCode(8001))
@@ -53,7 +53,7 @@ export default decision([
               .child(answer('Yes').offenceCode(12001))
               .child(answer('No').offenceCode(12002))))
           .child(answer('Sells or gives an unauthorised article to another person')
-            .child(decision(`Was the article only for ${Text.PRISONER_FULL_NAME}'s personal user`)
+            .child(decision(`Was the article only for ${Text.PRISONER_FULL_NAME}’s personal use?`)
               .child(answer('Yes').offenceCode(14001))
               .child(answer('No').offenceCode(13001))))
           .child(answer('Takes an article from another person without permission').offenceCode(15001))))
@@ -76,7 +76,7 @@ export default decision([
       .child(answer('Sets fire to any part of the prison or any property').offenceCode(16001))
       .child(answer('Racially aggravated damage').offenceCode(24101))
       .child(answer('Destroys or damages any part of the prison').offenceCode(17001))
-      .child(answer("Destroys or damages someone else's property").offenceCode(17002))))
+      .child(answer("Destroys or damages someone else’s property").offenceCode(17002))))
   .child(answer('Disrespectful, threatening, abusive, or insulting')
     .child(decision('What did the incident involve?')
       .child(answer('Disrespectful behaviour')
