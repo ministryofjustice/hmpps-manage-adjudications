@@ -20,7 +20,6 @@ describe('title', () => {
       victimPrisonerLastName: undefined,
       victimStaffFullName: undefined,
     }
-    // qqRP
     expect(testTokenReplacementDecisionTitle.getProcessedText(placeholderValues, Role.COMMITTED)).toEqual(
       'Committed: PRISONER_FIRST_NAME PRISONER_LAST_NAME'
     )
