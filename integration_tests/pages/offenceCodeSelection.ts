@@ -21,12 +21,25 @@ export default class OffenceCodeSelection extends Page {
 
   victimPrisonerName = (): PageElement => cy.get('[data-qa="victim-prisoner-name"]')
 
-  search = (): PageElement => cy.get('button[name="searchUser"]').eq(0)
+  victimOfficerSearchFirstNameInput = (): PageElement => cy.get('input[id="officerSearchFirstNameInput"]')
+
+  victimOfficerSearchLastNameInput = (): PageElement => cy.get('input[id="officerSearchLastNameInput"]')
+
+  victimOfficerPrisonerHiddenInput = (): PageElement => cy.get('input[id="officerId"]')
+
+  victimOfficerName = (): PageElement => cy.get('[data-qa="victim-officer-name"]')
+
+  search = (): PageElement => cy.get('button[name="searchUser"]').filter(':visible')
 
   delete = (): PageElement => cy.get('button[name="deleteUser"]')
 
   simulateReturnFromPrisonerSearch = (questionId: string, selectedAnswerId: string, prisonerId: string) =>
     cy.visit(
       `/offence-code-selection/100/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`
+    )
+
+  simulateReturnFromStaffSearch = (questionId: string, selectedAnswerId: string, staffId: string) =>
+    cy.visit(
+      `/offence-code-selection/100/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
     )
 }

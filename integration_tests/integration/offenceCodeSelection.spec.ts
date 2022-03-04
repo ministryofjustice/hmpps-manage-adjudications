@@ -132,6 +132,23 @@ context('Incident details', () => {
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
+    // Prison officer victim
+    cy.task('stubGetUserFromUsername', {
+      username: 'AOWENS',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Adam Owens',
+        username: 'AOWENS',
+        authSource: 'auth',
+      },
+    })
+    cy.task('stubGetEmail', {
+      username: 'AOWENS',
+      response: {
+        username: 'AOWENS',
+        email: 'aowens@justice.gov.uk',
+      },
+    })
   })
 
   it('the first page for committing an offence title', () => {
@@ -224,5 +241,24 @@ context('Incident details', () => {
     committedPage.continue().click()
     committedPage.form().contains('Search for a prisoner')
     committedPage.victimPrisonerSearchInput().should('have.value', 'Paul Wright')
+  })
+
+  it('select an officer question', () => {
+    const prisonOfficerAnswerId = '1-1-1-2'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(prisonOfficerAnswerId).check()
+    whoWasAssaultedPage.radioLabel(prisonOfficerAnswerId).contains('A prison officer')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam Owens')
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Adam Owens')
+    whoWasAssaultedPage.search().click()
+    cy.url().should('include', '/select-associated-staff?staffFirstName=Adam%20Owens&staffLastName=Adam%20Owens')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch(whoWasAssaultedQuestionId, prisonOfficerAnswerId, 'AOWENS')
+    whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
+    whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
+    whoWasAssaultedPage.continue().click()
+    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    wasTheIncidentRacial.checkOnPage()
   })
 })
