@@ -13,6 +13,8 @@ export default class OffenceCodeSelection extends Page {
 
   continue = (): PageElement => cy.get('[data-qa="offence-code-decision-continue"]')
 
+  cancel = (): PageElement => cy.get('[data-qa="offence-code-decision-cancel"]')
+
   form = (): PageElement => cy.get('[data-qa="offence-code-decision-form"]')
 
   victimPrisonerSearchInput = (): PageElement => cy.get('input[id="prisonerSearchNameInput"]')
