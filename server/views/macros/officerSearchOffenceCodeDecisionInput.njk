@@ -9,9 +9,9 @@
     {% set officerName = selectedAnswerViewData.officerName %}
 
     {% if selectedAnswerId == answerId and officerId != null %}
-        <input type="hidden" name="officerId" value="{{ officerId }}" />
+        <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}" />
         <div>
-            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
+            <p data-qa="victim-officer-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
             <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
             <div>
                 {{ govukButton({
@@ -24,7 +24,6 @@
             </div>
         </div>
     {% else %}
-
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
         <div id="officerName" class="govuk-form-group flex-container flex-column">
             {{ govukInput({
@@ -54,7 +53,8 @@
                 classes: "govuk-button--secondary conditionalRadioSearchButton",
                 type: "submit",
                 name: "searchUser",
-                value: "searchUser"
+                value: "searchUser",
+                attributes: {"data-qa": "officer-search"}
             }) }}
         </div>
     {% endif %}

@@ -1,5 +1,5 @@
 import PrisonerResult from '../data/prisonerResult'
-import { properCaseName } from '../utils/utils'
+import { convertToTitleCase } from '../utils/utils'
 import { User } from '../data/hmppsAuthClient'
 
 export type PlaceholderValues = {
@@ -34,13 +34,13 @@ export function getPlaceholderValues(
   answerData?: AnswerData
 ): PlaceholderValues {
   return {
-    prisonerFirstName: properCaseName(prisoner.firstName),
-    prisonerLastName: properCaseName(prisoner.lastName),
-    associatedPrisonerFirstName: associatedPrisoner && properCaseName(associatedPrisoner?.firstName),
-    associatedPrisonerLastName: associatedPrisoner && properCaseName(associatedPrisoner?.lastName),
-    victimStaffFullName: answerData?.victimStaff && properCaseName(answerData.victimStaff.name),
-    victimPrisonerFirstName: answerData?.victimPrisoner && properCaseName(answerData.victimPrisoner.firstName),
-    victimPrisonerLastName: answerData?.victimPrisoner && properCaseName(answerData.victimPrisoner.lastName),
+    prisonerFirstName: convertToTitleCase(prisoner.firstName),
+    prisonerLastName: convertToTitleCase(prisoner.lastName),
+    associatedPrisonerFirstName: associatedPrisoner && convertToTitleCase(associatedPrisoner?.firstName),
+    associatedPrisonerLastName: associatedPrisoner && convertToTitleCase(associatedPrisoner?.lastName),
+    victimStaffFullName: answerData?.victimStaff && convertToTitleCase(answerData.victimStaff.name),
+    victimPrisonerFirstName: answerData?.victimPrisoner && convertToTitleCase(answerData.victimPrisoner.firstName),
+    victimPrisonerLastName: answerData?.victimPrisoner && convertToTitleCase(answerData.victimPrisoner.lastName),
     victimOtherPersonFullName: answerData?.victimOtherPerson,
   }
 }

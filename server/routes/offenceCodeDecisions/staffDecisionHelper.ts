@@ -4,7 +4,7 @@ import { DecisionForm, StaffData } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
-import { properCaseName } from '../../utils/utils'
+import { convertToTitleCase } from '../../utils/utils'
 import UserService from '../../services/userService'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
@@ -95,7 +95,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     const staffId = (form.selectedAnswerData as StaffData)?.staffId
     if (staffId) {
       const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
-      return { staffName: properCaseName(decisionStaff.name) }
+      return { staffName: convertToTitleCase(decisionStaff.name) }
     }
     return null
   }

@@ -4,7 +4,7 @@ import { DecisionForm, PrisonerData } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
-import { formatName } from '../../utils/utils'
+import { convertToTitleCase } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
@@ -80,7 +80,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
     const prisonerId = (form.selectedAnswerData as PrisonerData)?.prisonerId
     if (prisonerId) {
       const decisionPrisoner = await this.placeOnReportService.getPrisonerDetails(prisonerId, user)
-      return { prisonerName: formatName(decisionPrisoner.firstName, decisionPrisoner.lastName) }
+      return { prisonerName: convertToTitleCase(`${decisionPrisoner.firstName} ${decisionPrisoner.lastName}`) }
     }
     return {}
   }

@@ -132,8 +132,41 @@ context('Incident details', () => {
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
+    // Prison officer victim
+    cy.task('stubGetUserFromUsername', {
+      username: 'AOWENS',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Adam Owens',
+        username: 'AOWENS',
+        authSource: 'auth',
+      },
+    })
+    cy.task('stubGetEmail', {
+      username: 'AOWENS',
+      response: {
+        username: 'AOWENS',
+        email: 'aowens@justice.gov.uk',
+      },
+    })
+    // Staff victim
+    cy.task('stubGetUserFromUsername', {
+      username: 'CSTANLEY',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Carl Stanley',
+        username: 'CSTANLEY',
+        authSource: 'auth',
+      },
+    })
+    cy.task('stubGetEmail', {
+      username: 'CSTANLEY',
+      response: {
+        username: 'AOWENS',
+        email: 'cstanley@justice.gov.uk',
+      },
+    })
   })
-
   it('the first page for committing an offence title', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
     new OffenceCodeSelection('What type of offence did John Smith commit?').checkOnPage()
@@ -147,37 +180,45 @@ context('Incident details', () => {
   it('the first page should have the expected radios', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
     // These are very specific to the current decision data so don't check too many.
-    const committedPage = new OffenceCodeSelection('What type of offence did John Smith commit?')
-    committedPage.radios().should('exist')
-    committedPage.radio('1-1').should('exist')
-    committedPage
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radios().should('exist')
+    whatTypeOfOffencePage.radio('1-1').should('exist')
+    whatTypeOfOffencePage
       .radioLabel('1-1')
       .contains('Assault, fighting, or endangering the health or personal safety of others')
-    committedPage.radio('1-1').should('exist')
-    committedPage
+    whatTypeOfOffencePage.radio('1-1').should('exist')
+    whatTypeOfOffencePage
       .radioLabel('1-9')
       .contains('Being absent without authorisation, being in an unauthorised place, or failing to work correctly')
   })
 
   it('check validation when there is no radio selected', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
-    const committedPage = new OffenceCodeSelection('What type of offence did John Smith commit?')
-    committedPage.continue().click()
-    committedPage.form().contains('Please make a choice')
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.continue().click()
+    whatTypeOfOffencePage.form().contains('Please make a choice')
+  })
+
+  it('cancel', () => {
+    cy.visit(`/offence-code-selection/100/committed/1`)
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.cancel().click()
+    cy.url().should('include', 'place-the-prisoner-on-report/G6415GD/100')
   })
 
   it('select another radio and check that we get sent to the page we expect', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
     // This is specific to the current decision data so only check one.
-    const committedPage = new OffenceCodeSelection('What type of offence did John Smith commit?')
-    committedPage.radio('1-1').should('exist').check()
-    committedPage
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-1').should('exist').check()
+    whatTypeOfOffencePage
       .radioLabel('1-1')
       .contains('Assault, fighting, or endangering the health or personal safety of others')
     // Go to the next page
-    committedPage.continue().click()
-    committedPage.radio('1-1-1').should('exist')
-    committedPage.radioLabel('1-1-1').contains('Assaulting someone')
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
+    whatDidTheIncidentInvolve.radio('1-1-1').should('exist')
+    whatDidTheIncidentInvolve.radioLabel('1-1-1').contains('Assaulting someone')
   })
 
   it('select a prisoner question', () => {
@@ -188,7 +229,7 @@ context('Incident details', () => {
     whoWasAssaultedPage.radio(prisonerAnswerId).check()
     whoWasAssaultedPage.radioLabel(prisonerAnswerId).contains('Another prisoner')
     whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
-    whoWasAssaultedPage.search().click()
+    whoWasAssaultedPage.searchPrisoner().click()
     cy.url().should('include', 'select-associated-prisoner?searchTerm=Paul%20Wright')
     whoWasAssaultedPage.simulateReturnFromPrisonerSearch(whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
     whoWasAssaultedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
@@ -202,27 +243,138 @@ context('Incident details', () => {
     const prisonerAnswerId = '1-1-1-1'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
-    const committedPage = new OffenceCodeSelection('Who was assaulted?')
-    committedPage.simulateReturnFromPrisonerSearch(whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
-    committedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
-    committedPage.delete().click()
-    committedPage.victimPrisonerSearchInput().should('exist')
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
+    whoWasAssaultedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
+    whoWasAssaultedPage.delete().click()
+    whoWasAssaultedPage.victimPrisonerSearchInput().should('exist')
   })
 
   it('select a prisoner question - validation', () => {
     const prisonerAnswerId = '1-1-1-1'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
-    const committedPage = new OffenceCodeSelection('Who was assaulted?')
-    committedPage.radio(prisonerAnswerId).check()
-    committedPage.radioLabel(prisonerAnswerId).contains('Another prisoner')
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(prisonerAnswerId).check()
     // Search without search text for validation
-    committedPage.search().click()
-    committedPage.form().contains('Enter their name or prison number')
+    whoWasAssaultedPage.searchPrisoner().click()
+    whoWasAssaultedPage.form().contains('Enter their name or prison number')
     // Enter search text and submit instead of searching
-    committedPage.victimPrisonerSearchInput().type('Paul Wright')
-    committedPage.continue().click()
-    committedPage.form().contains('Search for a prisoner')
-    committedPage.victimPrisonerSearchInput().should('have.value', 'Paul Wright')
+    whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
+    whoWasAssaultedPage.continue().click()
+    whoWasAssaultedPage.form().contains('Search for a prisoner')
+    whoWasAssaultedPage.victimPrisonerSearchInput().should('have.value', 'Paul Wright')
+  })
+
+  it('select an officer question', () => {
+    const officerAnswerId = '1-1-1-2'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(officerAnswerId).check()
+    whoWasAssaultedPage.radioLabel(officerAnswerId).contains('A prison officer')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
+    whoWasAssaultedPage.searchOfficer().click()
+    cy.url().should('include', '/select-associated-staff?staffFirstName=Adam&staffLastName=Owens')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch(whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
+    whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
+    whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
+    whoWasAssaultedPage.continue().click()
+    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    wasTheIncidentRacial.checkOnPage()
+  })
+
+  it('select an officer question - delete', () => {
+    const officerAnswerId = '1-1-1-2'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch(whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
+    whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
+    whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
+    whoWasAssaultedPage.delete().click()
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().should('exist')
+  })
+
+  it('select an officer question - validation', () => {
+    const officerAnswerId = '1-1-1-2'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(officerAnswerId).check()
+    // Search without search text for validation
+    whoWasAssaultedPage.searchOfficer().click()
+    whoWasAssaultedPage.form().contains('Enter their first name')
+    whoWasAssaultedPage.form().contains('Enter their last name')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')
+    whoWasAssaultedPage.searchOfficer().click()
+    whoWasAssaultedPage.form().should('not.contain', 'Enter their first name')
+    whoWasAssaultedPage.form().contains('Enter their last name')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().should('have.value', 'Adam')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().clear()
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
+    whoWasAssaultedPage.searchOfficer().click()
+    whoWasAssaultedPage.form().contains('Enter their first name')
+    whoWasAssaultedPage.form().should('not.contain', 'Enter their last name')
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().should('have.value', 'Owens')
+    // Enter search text and submit instead of searching
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().clear()
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
+    whoWasAssaultedPage.continue().click()
+    whoWasAssaultedPage.form().contains('Search for a prison officer')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().should('have.value', 'Adam')
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().should('have.value', 'Owens')
+  })
+
+  it('select another person question', () => {
+    const anotherPersonAnswerId = '1-1-1-4'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
+    whoWasAssaultedPage.radioLabel(anotherPersonAnswerId).contains('Another person')
+    whoWasAssaultedPage.victimOtherPersonSearchNameInput().type('James Peterson')
+    whoWasAssaultedPage.continue().click()
+    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    wasTheIncidentRacial.checkOnPage()
+  })
+
+  it('select another person - validation', () => {
+    const anotherPersonAnswerId = '1-1-1-4'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
+    // Submit without entering any text
+    // Enter search text and submit instead of searching
+    whoWasAssaultedPage.continue().click()
+    whoWasAssaultedPage.form().contains('You must enter a name')
+  })
+
+  it('end to end', () => {
+    cy.visit(`/offence-code-selection/100/committed/1`)
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio('1-1-1-3').check()
+    whoWasAssaultedPage.victimStaffSearchFirstNameInput().type('Carl')
+    whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Stanley')
+    whoWasAssaultedPage.searchStaff().click()
+    cy.url().should('include', '/select-associated-staff?staffFirstName=Carl&staffLastName=Stanley')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch('1-1-1', '1-1-1-3', 'CSTANLEY')
+    whoWasAssaultedPage.continue().click()
+    const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    raciallyAggravated.radio('1-1-1-3-1').click()
+    whoWasAssaultedPage.continue().click()
+    cy.url().should(
+      'include',
+      '/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=CSTANLEY&offenceCode=1005'
+    )
   })
 })
