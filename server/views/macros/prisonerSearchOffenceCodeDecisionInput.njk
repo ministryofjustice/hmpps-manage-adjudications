@@ -7,9 +7,9 @@
     {% set prisonerSearchNameInput = decisionForm.selectedAnswerData.prisonerSearchNameInput %}
     {% set prisonerName = selectedAnswerViewData.prisonerName %}
     {% if selectedAnswerId == answerId and prisonerId != null %}
-        <input type="hidden" name="prisonerId" value="{{ prisonerId }}" />
+        <input type="hidden" name="prisonerId" value="{{ prisonerId }}" id="prisonerId"/>
         <div>
-            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }} </p>
+            <p data-qa="victim-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }} </p>
             <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }} </p>
             <div>
                 {{ govukButton({

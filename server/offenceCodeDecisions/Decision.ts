@@ -69,7 +69,7 @@ export class Decision {
     return this.decisionUrl || this.id()
   }
 
-  allUrls(): Array<string> {
+  allUrls(): string[] {
     const urls = [].concat(
       ...this.getChildAnswers()
         .map(a => a.getChildDecision())

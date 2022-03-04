@@ -46,7 +46,7 @@
             checked: decisionForm.selectedAnswerId == answer.id
         }), items) %}
     {% endfor %}
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-decision-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
             idPrefix: 'selectedAnswerId',
@@ -62,7 +62,7 @@
             type: "submit",
             name: "decisionFormSubmit",
             classes: "govuk-button--submit govuk-!-margin-right-2",
-            attributes: { "data-qa": "assault-submit" }
+            attributes: { "data-qa": "offence-code-decision-continue" }
         }) }}
 
 
@@ -72,7 +72,7 @@
             type: "submit",
             name: "decisionFormCancel",
             value: "decisionFormCancel",
-            attributes: { "data-qa": "incite-prisoner-delete" }
+            attributes: { "data-qa": "offence-code-decision-cancel" }
         }) }}
 
     </form>
