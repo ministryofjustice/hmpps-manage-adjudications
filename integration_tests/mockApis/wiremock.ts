@@ -22,7 +22,7 @@ const verifyRequest = ({
   method: string
   body?: unknown
   queryParameters?: unknown
-}) => {
+}): SuperAgentRequest => {
   const bodyPatterns =
     (body && {
       bodyPatterns: [{ equalToJson: JSON.stringify(body) }],

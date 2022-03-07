@@ -1,6 +1,7 @@
-import OffenceCodeSelection from '../pages/offenceCodeSelection'
+import request from 'superagent'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
+import OffenceCodeSelection from '../pages/offenceCodeSelection'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -228,7 +229,7 @@ context('Incident details', () => {
           victimPrisonersNumber: 'G5512G',
         },
       ],
-    }).then((val: any) => {
+    }).then((val: request.Response) => {
       expect(JSON.parse(val.text).count).to.equal(1)
     })
   })
