@@ -1,4 +1,6 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
+import Page from '../pages/page'
+import DetailsOfOffence from '../pages/detailsOfOffence'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -166,6 +168,14 @@ context('Incident details', () => {
         email: 'cstanley@justice.gov.uk',
       },
     })
+    // Offence rules
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1005,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
   })
   it('the first page for committing an offence title', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
@@ -328,6 +338,18 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimOfficerSearchLastNameInput().should('have.value', 'Owens')
   })
 
+  it('select another person - validation', () => {
+    const anotherPersonAnswerId = '1-1-1-4'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
+    // Submit without entering any text
+    // Enter search text and submit instead of searching
+    whoWasAssaultedPage.continue().click()
+    whoWasAssaultedPage.form().contains('You must enter a name')
+  })
+
   it('select another person question', () => {
     const anotherPersonAnswerId = '1-1-1-4'
     const whoWasAssaultedQuestionId = '1-1-1'
@@ -339,18 +361,6 @@ context('Incident details', () => {
     whoWasAssaultedPage.continue().click()
     const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     wasTheIncidentRacial.checkOnPage()
-  })
-
-  it('select another person - validation', () => {
-    const anotherPersonAnswerId = '1-1-1-4'
-    const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
-    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
-    whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
-    // Submit without entering any text
-    // Enter search text and submit instead of searching
-    whoWasAssaultedPage.continue().click()
-    whoWasAssaultedPage.form().contains('You must enter a name')
   })
 
   it('end to end', () => {
@@ -372,9 +382,6 @@ context('Incident details', () => {
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     raciallyAggravated.radio('1-1-1-3-1').click()
     whoWasAssaultedPage.continue().click()
-    cy.url().should(
-      'include',
-      '/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=CSTANLEY&offenceCode=1005'
-    )
+    Page.verifyOnPage(DetailsOfOffence)
   })
 })
