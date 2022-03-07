@@ -8,12 +8,12 @@ context('Incident details', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.signIn()
-    // Assisted draft
+    // Draft to add offences to
     cy.task('stubGetDraftAdjudication', {
-      id: 203,
+      id: 200,
       response: {
         draftAdjudication: {
-          id: 203,
+          id: 200,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-06T13:10:00',
             handoverDeadline: '2021-11-08T13:10:00',
@@ -37,6 +37,40 @@ context('Incident details', () => {
         },
       },
     })
+    // Draft with already saved with offence
+    cy.task('stubGetDraftAdjudication', {
+      id: 201,
+      response: {
+        draftAdjudication: {
+          id: 201,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            handoverDeadline: '2021-11-05T13:10:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER1',
+          incidentRole: {
+            associatedPrisonersNumber: undefined,
+            roleCode: undefined,
+          },
+          offenceDetails: [
+            {
+              offenceCode: 4001,
+              offenceRule: {
+                paragraphNumber: '4',
+                paragraphDescription: 'Fights with any person',
+              },
+            },
+          ],
+        },
+      },
+    })
+
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
@@ -93,7 +127,7 @@ context('Incident details', () => {
 
   it('select and offence for the first time and see it on the offence details page.', () => {
     // Choose a complex offence so that we test all of the functionality.
-    cy.visit(`/offence-code-selection/203/assisted/1`)
+    cy.visit(`/offence-code-selection/200/assisted/1`)
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -106,7 +140,7 @@ context('Incident details', () => {
     whoWasAssaultedPage.radio('1-1-1-1').check()
     whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
     whoWasAssaultedPage.searchPrisoner().click()
-    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(203, '1-1-1', '1-1-1-1', 'G5512G')
+    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-1', '1-1-1-1', 'G5512G')
     whoWasAssaultedPage.continue().click()
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     raciallyAggravated.radio('1-1-1-1-1').click()
@@ -140,7 +174,7 @@ context('Incident details', () => {
   })
 
   it('select multiple offences and see them all', () => {
-    cy.visit(`/offence-code-selection/203/assisted/1`)
+    cy.visit(`/offence-code-selection/200/assisted/1`)
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -164,5 +198,18 @@ context('Incident details', () => {
     // We should be on the offence details page again. There should be two offences.
     detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Fighting with someone')
     detailsOfOffence.questionAnswerSectionAnswer(1, 1).contains('Endangering the health or personal safety of someone')
+  })
+
+  it('offence details page when there is already an offence saved', () => {
+    cy.visit(`/details-of-offence/201`)
+    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffence.questionAnswerSectionQuestion(0, 0).contains('What type of offence did John Smith commit?')
+    detailsOfOffence
+      .questionAnswerSectionAnswer(0, 0)
+      .contains('Assault, fighting, or endangering the health or personal safety of others')
+    detailsOfOffence.questionAnswerSectionQuestion(0, 1).contains('What did the incident involve?')
+    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Fighting with someone')
+    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 4')
+    detailsOfOffence.offenceSection(0).contains('Fights with any person')
   })
 })

@@ -123,12 +123,13 @@ export default class DetailsOfOffenceRoutes {
       return allOffencesOnSession
     }
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
-    const allOffenceData = draftAdjudication.offenceDetails?.map(offenceDetails => {
-      return {
-        ...offenceDetails,
-        offenceCode: `${offenceDetails.offenceCode}`,
-      }
-    })
+    const allOffenceData =
+      draftAdjudication.offenceDetails?.map(offenceDetails => {
+        return {
+          ...offenceDetails,
+          offenceCode: `${offenceDetails.offenceCode}`,
+        }
+      }) || []
     this.allOffencesSessionService.setAllSessionOffences(req, allOffenceData, adjudicationNumber)
     return allOffenceData
   }
