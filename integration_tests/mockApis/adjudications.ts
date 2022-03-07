@@ -254,6 +254,27 @@ const stubCreateDraftFromCompleteAdjudication = ({
     },
   })
 
+const stubGetOffenceRule = ({
+  offenceCode,
+  response = {},
+}: {
+  offenceCode: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/draft-adjudications/offence-rule/${offenceCode}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -267,4 +288,5 @@ export default {
   stubGetYourReportedAdjudications,
   stubGetAllReportedAdjudications,
   stubCreateDraftFromCompleteAdjudication,
+  stubGetOffenceRule,
 }

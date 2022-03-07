@@ -1,4 +1,6 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
+import DetailsOfOffence from '../pages/detailsOfOffence'
+import Page from '../pages/page'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -26,6 +28,11 @@ context('Incident details', () => {
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25c',
+            offenceRule: {
+              paragraphNumber: '25(c)',
+              paragraphDescription:
+                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+            },
           },
         },
       },
@@ -60,8 +67,32 @@ context('Incident details', () => {
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1001,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 5001,
+      response: {
+        paragraphNumber: '5',
+        paragraphDescription:
+          'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 4001,
+      response: {
+        paragraphNumber: '4',
+        paragraphDescription: 'Fights with any person',
+      },
+    })
   })
+
   it('select and offence for the first time and see it on the offence details page.', () => {
+    // Choose a complex offence so that we test all of the functionality.
     cy.visit(`/offence-code-selection/203/assisted/1`)
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
@@ -70,7 +101,7 @@ context('Incident details', () => {
     whatTypeOfOffencePage.continue().click()
     const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
     whatDidTheIncidentInvolve.radio('1-1-1').check()
-    whatTypeOfOffencePage.continue().click()
+    whatDidTheIncidentInvolve.continue().click()
     const whoWasAssaultedPage = new OffenceCodeSelection('Who did John Smith assist James Jones to assault?')
     whoWasAssaultedPage.radio('1-1-1-1').check()
     whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
@@ -81,5 +112,57 @@ context('Incident details', () => {
     raciallyAggravated.radio('1-1-1-1-1').click()
     whoWasAssaultedPage.continue().click()
     // We should now be on the offence details page.
+    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+    // Prisoner playback
+    detailsOfOffence.prisonerNameDiv().contains('Smith, John')
+    // Questions and Answers
+    detailsOfOffence
+      .questionAnswerSectionQuestion(0, 0)
+      .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
+    detailsOfOffence
+      .questionAnswerSectionAnswer(0, 0)
+      .contains('Assault, fighting, or endangering the health or personal safety of others')
+    detailsOfOffence.questionAnswerSectionQuestion(0, 1).contains('What did the incident involve?')
+    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Assaulting someone')
+    detailsOfOffence.questionAnswerSectionQuestion(0, 2).contains('Who did John Smith assist James Jones to assault?')
+    detailsOfOffence.questionAnswerSectionAnswer(0, 2).contains('Another prisoner - Paul Wright')
+    detailsOfOffence.questionAnswerSectionQuestion(0, 3).contains('Was the incident a racially aggravated assault?')
+    detailsOfOffence.questionAnswerSectionAnswer(0, 3).contains('Yes')
+    // Offence details
+    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 25(c)')
+    detailsOfOffence
+      .offenceSection(0)
+      .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
+    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 1')
+    detailsOfOffence.offenceSection(0).contains('Commits any assault')
+    // Delete link
+    detailsOfOffence.deleteLink(0).should('exist')
+  })
+
+  it('select multiple offences and see them all', () => {
+    cy.visit(`/offence-code-selection/203/assisted/1`)
+    const whatTypeOfOffencePage = new OffenceCodeSelection(
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+    )
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
+    whatDidTheIncidentInvolve.radio('1-1-2').check()
+    whatDidTheIncidentInvolve.continue().click()
+    // We should now be on the offence details page
+    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+    // Add another offence
+    detailsOfOffence.addAnotherOffence().click()
+    const whatTypeOfOffencePage2 = new OffenceCodeSelection(
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+    )
+    whatTypeOfOffencePage2.radio('1-1').check()
+    whatTypeOfOffencePage2.continue().click()
+    const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What did the incident involve?')
+    whatDidTheIncidentInvolve2.radio('1-1-3').check()
+    whatDidTheIncidentInvolve2.continue().click()
+    // We should be on the offence details page again. There should be two offences.
+    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Fighting with someone')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 1).contains('Endangering the health or personal safety of someone')
   })
 })

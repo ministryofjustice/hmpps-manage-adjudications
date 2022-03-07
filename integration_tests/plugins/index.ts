@@ -48,5 +48,6 @@ export default (on: (string, Record) => void): void => {
     stubGetYourReportedAdjudications: adjudications.stubGetYourReportedAdjudications,
     stubGetAllReportedAdjudications: adjudications.stubGetAllReportedAdjudications,
     stubCreateDraftFromCompleteAdjudication: adjudications.stubCreateDraftFromCompleteAdjudication,
+    stubGetOffenceRule: adjudications.stubGetOffenceRule,
   })
 }
