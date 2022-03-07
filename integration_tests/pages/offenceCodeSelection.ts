@@ -46,7 +46,7 @@ export default class OffenceCodeSelection extends Page {
   delete = (): PageElement => cy.get('button[name="deleteUser"]')
 
   simulateReturnFromPrisonerSearch = (
-    adjudicationId: string,
+    adjudicationId: number,
     questionId: string,
     selectedAnswerId: string,
     prisonerId: string
@@ -56,7 +56,7 @@ export default class OffenceCodeSelection extends Page {
     )
 
   simulateReturnFromStaffSearch = (
-    adjudicationId: string,
+    adjudicationId: number,
     questionId: string,
     selectedAnswerId: string,
     staffId: string
