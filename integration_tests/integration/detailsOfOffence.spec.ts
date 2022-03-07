@@ -212,4 +212,13 @@ context('Incident details', () => {
     detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 4')
     detailsOfOffence.offenceSection(0).contains('Fights with any person')
   })
+
+  it('offence details page when there is already an offence saved', () => {
+    cy.visit(`/details-of-offence/201`)
+    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffence.saveAndContinue().click()
+    cy.task('verifySaveOffenceDetails').then((val: any) => {
+      expect(JSON.parse(val.text).count).to.equal(1)
+    })
+  })
 })
