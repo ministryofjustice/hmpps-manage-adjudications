@@ -64,7 +64,13 @@ export default class DetailsOfOffenceRoutes {
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)
       .map(offenceData => {
-        return { ...offenceData, offenceCode: Number(offenceData.offenceCode) }
+        return {
+          // Copy across only what we require
+          victimOtherPersonsName: offenceData.victimOtherPersonsName,
+          victimPrisonersNumber: offenceData.victimPrisonersNumber,
+          victimStaffUsername: offenceData.victimStaffUsername,
+          offenceCode: Number(offenceData.offenceCode),
+        }
       })
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
     const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
@@ -126,7 +132,10 @@ export default class DetailsOfOffenceRoutes {
     const allOffenceData =
       draftAdjudication.offenceDetails?.map(offenceDetails => {
         return {
-          ...offenceDetails,
+          // Copy across only what we require
+          victimOtherPersonsName: offenceDetails.victimOtherPersonsName,
+          victimPrisonersNumber: offenceDetails.victimPrisonersNumber,
+          victimStaffUsername: offenceDetails.victimStaffUsername,
           offenceCode: `${offenceDetails.offenceCode}`,
         }
       }) || []

@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
+import { OffenceDetails } from '../../server/data/DraftAdjudicationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -275,20 +276,18 @@ const stubGetOffenceRule = ({
     },
   })
 
-const verifySaveOffenceDetails = () =>
+const verifySaveOffenceDetails = ({
+  adjudicationNumber,
+  offenceDetails,
+}: {
+  adjudicationNumber: number
+  offenceDetails: OffenceDetails[]
+}) =>
   verifyRequest({
-    requestUrlPattern: '/adjudications/draft-adjudications/201/offence-details',
+    requestUrlPattern: `/adjudications/draft-adjudications/${adjudicationNumber}/offence-details`,
     method: 'PUT',
     body: {
-      offenceDetails: [
-        {
-          offenceCode: 4001,
-          offenceRule: {
-            paragraphNumber: '4',
-            paragraphDescription: 'Fights with any person',
-          },
-        },
-      ],
+      offenceDetails,
     },
   })
 

@@ -60,11 +60,12 @@ context('Incident details', () => {
           },
           offenceDetails: [
             {
-              offenceCode: 4001,
+              offenceCode: 1001,
               offenceRule: {
                 paragraphNumber: '4',
                 paragraphDescription: 'Fights with any person',
               },
+              victimPrisonersNumber: 'G5512G',
             },
           ],
         },
@@ -208,16 +209,26 @@ context('Incident details', () => {
       .questionAnswerSectionAnswer(0, 0)
       .contains('Assault, fighting, or endangering the health or personal safety of others')
     detailsOfOffence.questionAnswerSectionQuestion(0, 1).contains('What did the incident involve?')
-    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Fighting with someone')
-    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 4')
-    detailsOfOffence.offenceSection(0).contains('Fights with any person')
+    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Assaulting someone')
+    detailsOfOffence.questionAnswerSectionQuestion(0, 2).contains('Who was assaulted?')
+    detailsOfOffence.questionAnswerSectionAnswer(0, 2).contains('Another prisoner - Paul Wright')
+    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 1')
+    detailsOfOffence.offenceSection(0).contains('Commits any assault')
   })
 
-  it('offence details page when there is already an offence saved', () => {
+  it('offence details saves as expected', () => {
     cy.visit(`/details-of-offence/201`)
     const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffence.saveAndContinue().click()
-    cy.task('verifySaveOffenceDetails').then((val: any) => {
+    cy.task('verifySaveOffenceDetails', {
+      adjudicationNumber: 201,
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+    }).then((val: any) => {
       expect(JSON.parse(val.text).count).to.equal(1)
     })
   })
