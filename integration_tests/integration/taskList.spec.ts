@@ -155,7 +155,7 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.offenceDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/offence-details/G6415GD/3456')
+        expect(loc.pathname).to.eq('/details-of-offence/3456')
       })
     })
   })
@@ -254,11 +254,6 @@ context('Task list', () => {
         'contain.text',
         'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
       )
-    })
-    it('Link for the offence details page should be removed', () => {
-      cy.visit(`/place-the-prisoner-on-report/G6415GD/3456`)
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.offenceDetailsLink().should('not.exist')
     })
   })
   context('Statement complete', () => {

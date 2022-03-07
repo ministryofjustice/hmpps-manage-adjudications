@@ -9,7 +9,7 @@ export default class CheckYourAnswersPage extends Page {
 
   incidentDetailsLink = (): PageElement => cy.get('[data-qa="incident-details-link"]')
 
-  offenceDetailsLink = (): PageElement => cy.get('[data-qa="offence-details-link"]')
+  offenceDetailsLink = (): PageElement => cy.get('[data-qa="details-of-offence-link"]')
 
   incidentStatementLink = (): PageElement => cy.get('[data-qa="incident-statement-link"]')
 
