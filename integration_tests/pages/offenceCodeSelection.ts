@@ -45,13 +45,23 @@ export default class OffenceCodeSelection extends Page {
 
   delete = (): PageElement => cy.get('button[name="deleteUser"]')
 
-  simulateReturnFromPrisonerSearch = (questionId: string, selectedAnswerId: string, prisonerId: string) =>
+  simulateReturnFromPrisonerSearch = (
+    adjudicationId: string,
+    questionId: string,
+    selectedAnswerId: string,
+    prisonerId: string
+  ) =>
     cy.visit(
-      `/offence-code-selection/100/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`
+      `/offence-code-selection/${adjudicationId}/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`
     )
 
-  simulateReturnFromStaffSearch = (questionId: string, selectedAnswerId: string, staffId: string) =>
+  simulateReturnFromStaffSearch = (
+    adjudicationId: string,
+    questionId: string,
+    selectedAnswerId: string,
+    staffId: string
+  ) =>
     cy.visit(
-      `/offence-code-selection/100/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
+      `/offence-code-selection/${adjudicationId}/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
     )
 }
