@@ -22,7 +22,7 @@ export default class AllOffencesSessionService {
     return allSessionOffences
   }
 
-  getAllSessionOffences(req: Request, draftAdjudicationNumber: number): Array<OffenceData> {
+  getAllSessionOffences(req: Request, draftAdjudicationNumber: number): OffenceData[] {
     return req.session?.offences?.[draftAdjudicationNumber]
   }
 

@@ -1,4 +1,6 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
+import Page from '../pages/page'
+import DetailsOfOffence from '../pages/detailsOfOffence'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -166,6 +168,14 @@ context('Incident details', () => {
         email: 'cstanley@justice.gov.uk',
       },
     })
+    // Offence rules
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1005,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
   })
   it('the first page for committing an offence title', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
@@ -231,7 +241,7 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
     whoWasAssaultedPage.searchPrisoner().click()
     cy.url().should('include', 'select-associated-prisoner?searchTerm=Paul%20Wright')
-    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
+    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(100, whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
     whoWasAssaultedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
     whoWasAssaultedPage.victimPrisonerName().contains('Paul Wright')
     whoWasAssaultedPage.continue().click()
@@ -244,7 +254,7 @@ context('Incident details', () => {
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
-    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
+    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(100, whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
     whoWasAssaultedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
     whoWasAssaultedPage.delete().click()
     whoWasAssaultedPage.victimPrisonerSearchInput().should('exist')
@@ -277,7 +287,7 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
     whoWasAssaultedPage.searchOfficer().click()
     cy.url().should('include', '/select-associated-staff?staffFirstName=Adam&staffLastName=Owens')
-    whoWasAssaultedPage.simulateReturnFromStaffSearch(whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch(100, whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
     whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
     whoWasAssaultedPage.continue().click()
@@ -290,7 +300,7 @@ context('Incident details', () => {
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
-    whoWasAssaultedPage.simulateReturnFromStaffSearch(whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch(100, whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
     whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
     whoWasAssaultedPage.delete().click()
@@ -328,6 +338,18 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimOfficerSearchLastNameInput().should('have.value', 'Owens')
   })
 
+  it('select another person - validation', () => {
+    const anotherPersonAnswerId = '1-1-1-4'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
+    // Submit without entering any text
+    // Enter search text and submit instead of searching
+    whoWasAssaultedPage.continue().click()
+    whoWasAssaultedPage.form().contains('You must enter a name')
+  })
+
   it('select another person question', () => {
     const anotherPersonAnswerId = '1-1-1-4'
     const whoWasAssaultedQuestionId = '1-1-1'
@@ -339,18 +361,6 @@ context('Incident details', () => {
     whoWasAssaultedPage.continue().click()
     const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     wasTheIncidentRacial.checkOnPage()
-  })
-
-  it('select another person - validation', () => {
-    const anotherPersonAnswerId = '1-1-1-4'
-    const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
-    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
-    whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
-    // Submit without entering any text
-    // Enter search text and submit instead of searching
-    whoWasAssaultedPage.continue().click()
-    whoWasAssaultedPage.form().contains('You must enter a name')
   })
 
   it('end to end', () => {
@@ -367,14 +377,11 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Stanley')
     whoWasAssaultedPage.searchStaff().click()
     cy.url().should('include', '/select-associated-staff?staffFirstName=Carl&staffLastName=Stanley')
-    whoWasAssaultedPage.simulateReturnFromStaffSearch('1-1-1', '1-1-1-3', 'CSTANLEY')
+    whoWasAssaultedPage.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     whoWasAssaultedPage.continue().click()
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     raciallyAggravated.radio('1-1-1-3-1').click()
     whoWasAssaultedPage.continue().click()
-    cy.url().should(
-      'include',
-      '/details-of-offence/100/add?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=CSTANLEY&offenceCode=1005'
-    )
+    Page.verifyOnPage(DetailsOfOffence)
   })
 })

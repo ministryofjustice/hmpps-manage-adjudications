@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
-import { stubFor } from './wiremock'
+import { stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
+import { OffenceDetails } from '../../server/data/DraftAdjudicationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -254,6 +255,42 @@ const stubCreateDraftFromCompleteAdjudication = ({
     },
   })
 
+const stubGetOffenceRule = ({
+  offenceCode,
+  response = {},
+}: {
+  offenceCode: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/draft-adjudications/offence-rule/${offenceCode}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const verifySaveOffenceDetails = ({
+  adjudicationNumber,
+  offenceDetails,
+}: {
+  adjudicationNumber: number
+  offenceDetails: OffenceDetails[]
+}) =>
+  verifyRequest({
+    requestUrlPattern: `/adjudications/draft-adjudications/${adjudicationNumber}/offence-details`,
+    method: 'PUT',
+    body: {
+      offenceDetails,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -267,4 +304,6 @@ export default {
   stubGetYourReportedAdjudications,
   stubGetAllReportedAdjudications,
   stubCreateDraftFromCompleteAdjudication,
+  stubGetOffenceRule,
+  verifySaveOffenceDetails,
 }
