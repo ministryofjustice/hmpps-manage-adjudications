@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/offenceQuestionsAndAnswers.njk" import offenceQuestionsAndAnswers %}
 
 {% set title = "Offence details" %}
 
@@ -24,18 +25,7 @@
             <div class="govuk-grid-column-three-quarters">
                 {% for offence in offences %}
                     {% set offenceIndex = loop.index - 1 %}
-                    {% for questionAndAnswer in offence.questionsAndAnswers %}
-                        {% set questionAndAnswerIndex = loop.index - 1 %}
-                        <div data-qa="question-answer-section-{{ offenceIndex }}">
-                            <div class="flex-container details-of-offence-question-heading">
-                                <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
-                                {% if loop.first == true %}
-                                    <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}' data-qa="delete-{{ offenceIndex }}">Delete</a>
-                                {%  endif %}
-                            </div>
-                            <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.answer }}</p>
-                        </div>
-                    {% endfor %}
+                    {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
                     <div data-qa="offence-broke-section-{{ offenceIndex }}">
                         <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
                         {% if offence.incidentRule %}

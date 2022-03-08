@@ -9,7 +9,7 @@ import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { Decision } from '../../offenceCodeDecisions/Decision'
 
-type PageData = Array<OffenceData>
+type PageData = OffenceData[]
 
 export default class DetailsOfOffenceRoutes {
   constructor(
@@ -78,13 +78,6 @@ export default class DetailsOfOffenceRoutes {
       user
     )
     return res.redirect(`/incident-statement/${prisonerNumber}/${adjudicationNumber}`)
-  }
-
-  deleteOffence = async (req: Request, res: Response): Promise<void> => {
-    const index = Number(req.params.index)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    this.allOffencesSessionService.deleteSessionOffence(req, index, adjudicationNumber)
-    return res.redirect(`/details-of-offence/${adjudicationNumber}`)
   }
 
   addOffence = async (req: Request, res: Response): Promise<void> => {

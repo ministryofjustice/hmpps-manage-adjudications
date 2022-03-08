@@ -1,0 +1,19 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro offenceQuestionsAndAnswers(questionsAndAnswers, adjudicationNumber, offenceIndex) %}
+    {% for questionAndAnswer in questionsAndAnswers %}
+        {% set questionAndAnswerIndex = loop.index - 1 %}
+
+        <div data-qa="question-answer-section-{{ offenceIndex }}">
+            <div class="flex-container details-of-offence-question-heading">
+                <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
+                {% if loop.first == true %}
+                    <a href='/delete-offence/{{ adjudicationNumber }}/{{ offenceIndex }}' data-qa="delete-{{ offenceIndex }}">Delete</a>
+                {%  endif %}
+            </div>
+            <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.answer }}</p>
+        </div>
+    {% endfor %}
+
+{% endmacro %}
