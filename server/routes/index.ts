@@ -23,7 +23,6 @@ import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
 
 import { Services } from '../services'
-import deleteOffenceRoutes from './deleteOffence'
 
 export default function routes(
   router: Router,
@@ -47,10 +46,6 @@ export default function routes(
   router.use(
     '/details-of-offence',
     detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService, decisionTreeService })
-  )
-  router.use(
-    '/delete-offence',
-    deleteOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService, decisionTreeService })
   )
   router.use('/assault', assaultRoutes({ placeOnReportService, userService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))

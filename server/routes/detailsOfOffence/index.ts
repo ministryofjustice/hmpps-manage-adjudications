@@ -6,6 +6,8 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import AddOffenceRoutes from './addOffence'
+import DeleteOffenceRoutes from './deleteOffence'
 
 export default function detailsOfOffenceRoutes({
   placeOnReportService,
@@ -27,12 +29,27 @@ export default function detailsOfOffenceRoutes({
     decisionTreeService
   )
 
+  const addOffence = new AddOffenceRoutes(
+    placeOnReportService,
+    userService,
+    allOffencesSessionService,
+    decisionTreeService
+  )
+
+  const deleteOffence = new DeleteOffenceRoutes(
+    placeOnReportService,
+    userService,
+    allOffencesSessionService,
+    decisionTreeService
+  )
+
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/:adjudicationNumber/add', detailsOfOffence.addOffence)
+  get('/:adjudicationNumber/add', addOffence.add)
   get('/:adjudicationNumber', detailsOfOffence.view)
   post('/:adjudicationNumber', detailsOfOffence.submit)
+  get('/:adjudicationNumber/delete/:offenceIndex', deleteOffence.view)
 
   return router
 }

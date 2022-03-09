@@ -26,6 +26,10 @@ export default class AllOffencesSessionService {
     return req.session?.offences?.[draftAdjudicationNumber]
   }
 
+  getSessionOffence(req: Request, index: number, draftAdjudicationNumber: number): OffenceData {
+    return req.session.offences?.[draftAdjudicationNumber][index]
+  }
+
   private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
     if (!req.session.offences) {
       req.session.offences = {}
