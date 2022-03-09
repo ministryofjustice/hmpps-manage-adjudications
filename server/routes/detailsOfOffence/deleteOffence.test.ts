@@ -108,55 +108,48 @@ afterEach(() => {
 describe('GET /details-of-offence/102/delete/1 view', () => {
   it('should show the offence to delete', async () => {
     const agent = request.agent(app)
-    return agent
-      .get('/details-of-offence/102/')
-      .expect(200)
-      .then(() =>
-        agent
-          .get('/details-of-offence/102/delete/2')
-          .expect(200)
-          // Title
-          .expect(res => {
-            expect(res.text).toContain('Do you want to delete this offence?')
-            expect(res.text).toContain('A standard answer with child question')
-            // Second offence - second question and answer
-            expect(res.text).toContain('A child question')
-            expect(res.text).toContain('A standard child answer')
-          })
-      )
+    return agent.get('/details-of-offence/102/').then(() =>
+      agent
+        .get('/details-of-offence/102/delete/2')
+        .expect(200)
+        // Title
+        .expect(res => {
+          expect(res.text).toContain('Do you want to delete this offence?')
+          expect(res.text).toContain('A standard answer with child question')
+          // Second offence - second question and answer
+          expect(res.text).toContain('A child question')
+          expect(res.text).toContain('A standard child answer')
+        })
+    )
   })
 })
 
 describe('POST /details-of-offence/102/delete/1 validation', () => {
   it('should show the offence to delete', async () => {
     const agent = request.agent(app)
-    return agent
-      .get('/details-of-offence/102/')
-      .expect(200)
-      .then(() =>
-        agent
-          .get('/details-of-offence/102/delete/2')
-          .expect(200)
-          .then(() =>
-            agent.post('/details-of-offence/102/delete/2').expect(res => {
-              expect(res.text).toContain('Please make a choice')
-            })
-          )
-      )
+    return agent.get('/details-of-offence/102/').then(() =>
+      agent
+        .get('/details-of-offence/102/delete/2')
+        .expect(200)
+        .then(() =>
+          agent.post('/details-of-offence/102/delete/2').expect(res => {
+            expect(res.text).toContain('Please make a choice')
+          })
+        )
+    )
   })
 })
 
 describe('POST /details-of-offence/102/delete/1', () => {
   it('should remove the offence', async () => {
     const agent = request.agent(app)
-    return agent
-      .get('/details-of-offence/102')
-      .expect(200)
-      .then(() =>
-        agent
-          .get('/details-of-offence/102/delete/2')
-          .expect(200)
-          .then(() =>
+    return (
+      agent
+        .get('/details-of-offence/102')
+        // We will delete the offence with this answer
+        .expect(res => expect(res.text).toContain('A standard answer with child question'))
+        .then(() =>
+          agent.get('/details-of-offence/102/delete/2').then(() =>
             agent
               .post('/details-of-offence/102/delete/2')
               .send({ confirmDelete: 'yes' })
@@ -166,22 +159,23 @@ describe('POST /details-of-offence/102/delete/1', () => {
                 agent
                   .get('/details-of-offence/102')
                   .expect(200)
+                  // The offence with this answer should be removed
                   .expect(res => expect(res.text).not.toContain('A standard answer with child question'))
               )
           )
-      )
+        )
+    )
   })
 
-  it('should remove not reomve the offence', async () => {
+  it('should remove not remove the offence', async () => {
     const agent = request.agent(app)
-    return agent
-      .get('/details-of-offence/102')
-      .expect(200)
-      .then(() =>
-        agent
-          .get('/details-of-offence/102/delete/2')
-          .expect(200)
-          .then(() =>
+    return (
+      agent
+        .get('/details-of-offence/102')
+        // We will decide not to delete the offence with this answer
+        .expect(res => expect(res.text).toContain('A standard answer with child question'))
+        .then(() =>
+          agent.get('/details-of-offence/102/delete/2').then(() =>
             agent
               .post('/details-of-offence/102/delete/2')
               .send({ confirmDelete: 'no' })
@@ -191,9 +185,11 @@ describe('POST /details-of-offence/102/delete/1', () => {
                 agent
                   .get('/details-of-offence/102')
                   .expect(200)
+                  // The offence with this answer should still be present
                   .expect(res => expect(res.text).toContain('A standard answer with child question'))
               )
           )
-      )
+        )
+    )
   })
 })
