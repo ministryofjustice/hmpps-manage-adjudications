@@ -50,6 +50,7 @@ export default function detailsOfOffenceRoutes({
   get('/:adjudicationNumber', detailsOfOffence.view)
   post('/:adjudicationNumber', detailsOfOffence.submit)
   get('/:adjudicationNumber/delete/:offenceIndex', deleteOffence.view)
+  post('/:adjudicationNumber/delete/:offenceIndex', deleteOffence.submit)
 
   return router
 }
