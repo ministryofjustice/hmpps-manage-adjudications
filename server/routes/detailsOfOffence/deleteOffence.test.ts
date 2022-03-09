@@ -51,7 +51,7 @@ beforeEach(() => {
         handoverDeadline: '2021-12-11T10:30:00',
       },
       incidentRole: {
-        roleCode: '25c',
+        roleCode: undefined,
       },
       offenceDetails: [
         {
@@ -92,18 +92,7 @@ beforeEach(() => {
       currentLocation: undefined,
       assignedLivingUnit: undefined,
     },
-    associatedPrisoner: {
-      offenderNo: undefined,
-      firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
-      lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-    },
+    associatedPrisoner: undefined,
   })
   const allOffencesSessionService = new AllOffencesSessionService()
   app = appWithAllRoutes(
@@ -152,6 +141,58 @@ describe('POST /details-of-offence/102/delete/1 validation', () => {
             agent.post('/details-of-offence/102/delete/2').expect(res => {
               expect(res.text).toContain('Please make a choice')
             })
+          )
+      )
+  })
+})
+
+describe('POST /details-of-offence/102/delete/1', () => {
+  it('should remove the offence', async () => {
+    const agent = request.agent(app)
+    return agent
+      .get('/details-of-offence/102')
+      .expect(200)
+      .then(() =>
+        agent
+          .get('/details-of-offence/102/delete/2')
+          .expect(200)
+          .then(() =>
+            agent
+              .post('/details-of-offence/102/delete/2')
+              .send({ confirmDelete: 'yes' })
+              .expect(302)
+              .expect('Location', '/details-of-offence/102')
+              .then(() =>
+                agent
+                  .get('/details-of-offence/102')
+                  .expect(200)
+                  .expect(res => expect(res.text).not.toContain('A standard answer with child question'))
+              )
+          )
+      )
+  })
+
+  it('should remove not reomve the offence', async () => {
+    const agent = request.agent(app)
+    return agent
+      .get('/details-of-offence/102')
+      .expect(200)
+      .then(() =>
+        agent
+          .get('/details-of-offence/102/delete/2')
+          .expect(200)
+          .then(() =>
+            agent
+              .post('/details-of-offence/102/delete/2')
+              .send({ confirmDelete: 'no' })
+              .expect(302)
+              .expect('Location', '/details-of-offence/102')
+              .then(() =>
+                agent
+                  .get('/details-of-offence/102')
+                  .expect(200)
+                  .expect(res => expect(res.text).toContain('A standard answer with child question'))
+              )
           )
       )
   })
