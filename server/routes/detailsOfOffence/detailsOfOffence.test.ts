@@ -140,3 +140,24 @@ describe('GET /details-of-offence/100 view', () => {
       })
   })
 })
+
+describe('POST /details-of-offence/100 view', () => {
+  it('should save the offence', async () => {
+    const agent = request.agent(app) // Require the agent for session state.
+    return agent
+      .get('/details-of-offence/100/')
+      .expect(200)
+      .then(() =>
+        agent
+          .post('/details-of-offence/100/')
+          .expect(302)
+          .then(() =>
+            expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
+              100,
+              [{ offenceCode: 1, victimPrisonersNumber: 'G5512G' }, { offenceCode: 2 }],
+              expect.anything()
+            )
+          )
+      )
+  })
+})
