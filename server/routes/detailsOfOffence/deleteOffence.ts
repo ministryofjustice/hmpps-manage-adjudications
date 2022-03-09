@@ -14,7 +14,7 @@ enum ErrorType {
 
 const error: { [key in ErrorType]: FormError } = {
   MISSING_SELECTION: {
-    href: '#selectedAnswerId',
+    href: '#confirmDelete',
     text: 'Please make a choice',
   },
 }
@@ -51,7 +51,7 @@ export default class DeleteOffenceRoutes {
       placeHolderValues,
       incidentRole
     )
-    return res.render(`pages/deleteOffence`, { questionsAndAnswers })
+    return res.render(`pages/deleteOffence`, { questionsAndAnswers, errors })
   }
 
   submit = async (req: Request, res: Response) => {

@@ -24,7 +24,7 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
                 {% for offence in offences %}
-                    {% set offenceIndex = loop.index - 1 %}
+                    {% set offenceIndex = loop.index %}
                     <div class="details-of-offence-questions-and-answers">
                         <div>
                             {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
