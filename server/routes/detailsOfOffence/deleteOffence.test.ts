@@ -42,7 +42,7 @@ beforeEach(() => {
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: {
-      id: 100,
+      id: 102,
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
       incidentDetails: {
@@ -116,47 +116,42 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /details-of-offence/100 view', () => {
-  it('should load the offence details page', () => {
-    return request(app)
-      .get('/details-of-offence/100/')
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        // Title
-        expect(res.text).toContain('Offence details')
-        // First offence - first question and answer
-        expect(res.text).toContain(
-          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
-        )
-        expect(res.text).toContain('Prisoner victim: A_prisoner_first_name A_prisoner_last_name')
-        // Second offence - first question and answer
-        expect(res.text).toContain(
-          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
-        )
-        expect(res.text).toContain('A standard answer with child question')
-        // Second offence - second question and answer
-        expect(res.text).toContain('A child question')
-        expect(res.text).toContain('A standard child answer')
-      })
-  })
-})
-
-describe('POST /details-of-offence/100', () => {
-  it('should save the offence', async () => {
+describe('GET /details-of-offence/102/delete/1 view', () => {
+  it('should show the offence to delete', async () => {
     const agent = request.agent(app)
     return agent
-      .get('/details-of-offence/100/')
+      .get('/details-of-offence/102/')
       .expect(200)
       .then(() =>
         agent
-          .post('/details-of-offence/100/')
-          .expect(302)
+          .get('/details-of-offence/102/delete/2')
+          .expect(200)
+          // Title
+          .expect(res => {
+            expect(res.text).toContain('Do you want to delete this offence?')
+            expect(res.text).toContain('A standard answer with child question')
+            // Second offence - second question and answer
+            expect(res.text).toContain('A child question')
+            expect(res.text).toContain('A standard child answer')
+          })
+      )
+  })
+})
+
+describe('POST /details-of-offence/102/delete/1 validation', () => {
+  it('should show the offence to delete', async () => {
+    const agent = request.agent(app)
+    return agent
+      .get('/details-of-offence/102/')
+      .expect(200)
+      .then(() =>
+        agent
+          .get('/details-of-offence/102/delete/2')
+          .expect(200)
           .then(() =>
-            expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
-              100,
-              [{ offenceCode: 1, victimPrisonersNumber: 'G5512G' }, { offenceCode: 2 }],
-              expect.anything()
-            )
+            agent.post('/details-of-offence/102/delete/2').expect(res => {
+              expect(res.text).toContain('Please make a choice')
+            })
           )
       )
   })
