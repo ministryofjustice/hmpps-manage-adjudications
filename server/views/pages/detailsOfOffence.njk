@@ -25,7 +25,15 @@
             <div class="govuk-grid-column-three-quarters">
                 {% for offence in offences %}
                     {% set offenceIndex = loop.index - 1 %}
-                    {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
+                    <div class="details-of-offence-questions-and-answers">
+                        <div>
+                            {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
+                        </div>
+                        <div>
+                            <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}'
+                               data-qa="delete-{{ offenceIndex }}">Delete</a>
+                        </div>
+                    </div>
                     <div data-qa="offence-broke-section-{{ offenceIndex }}">
                         <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
                         {% if offence.incidentRule %}
@@ -41,7 +49,8 @@
                 {% endfor %}
             </div>
         </div>
-        <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}" data-qa="add-another-offence">Add another offence</a></p>
+        <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}"
+                                 data-qa="add-another-offence">Add another offence</a></p>
         {{ govukButton({
             text: "Save and continue",
             type: "submit",

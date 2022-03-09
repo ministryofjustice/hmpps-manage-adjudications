@@ -2,18 +2,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% macro offenceQuestionsAndAnswers(questionsAndAnswers, adjudicationNumber, offenceIndex, showDelete) %}
-    {% for questionAndAnswer in questionsAndAnswers %}
-        {% set questionAndAnswerIndex = loop.index - 1 %}
-
-        <div data-qa="question-answer-section-{{ offenceIndex }}">
-            <div class="flex-container details-of-offence-question-heading">
-                <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
-                {% if loop.first == true %}
-                    <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}' data-qa="delete-{{ offenceIndex }}">Delete</a>
-                {%  endif %}
-            </div>
-            <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.answer }}</p>
-        </div>
-    {% endfor %}
-
+    <div data-qa="question-answer-section-{{ offenceIndex }}">
+        {% for questionAndAnswer in questionsAndAnswers %}
+            {% set questionAndAnswerIndex = loop.index - 1 %}
+            <p class="govuk-!-margin-bottom-1 govuk-label--s"
+               data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
+            <p class="govuk-!-margin-bottom-5 govuk-label--xs"
+               data-qa="answer-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.answer }}</p>
+        {% endfor %}
+    </div>
 {% endmacro %}
