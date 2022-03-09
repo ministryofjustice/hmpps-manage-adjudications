@@ -4,7 +4,7 @@
 {% macro offenceQuestionsAndAnswers(questionsAndAnswers, adjudicationNumber, offenceIndex, showDelete) %}
     <div data-qa="question-answer-section-{{ offenceIndex }}">
         {% for questionAndAnswer in questionsAndAnswers %}
-            {% set questionAndAnswerIndex = loop.index - 1 %}
+            {% set questionAndAnswerIndex = loop.index %}
             <p class="govuk-!-margin-bottom-1 govuk-label--s"
                data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
             <p class="govuk-!-margin-bottom-5 govuk-label--xs"
