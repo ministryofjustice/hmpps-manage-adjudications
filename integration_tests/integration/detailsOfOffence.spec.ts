@@ -153,26 +153,26 @@ context('Incident details', () => {
     detailsOfOffence.prisonerNameDiv().contains('Smith, John')
     // Questions and Answers
     detailsOfOffence
-      .questionAnswerSectionQuestion(0, 0)
+      .questionAnswerSectionQuestion(1, 1)
       .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
     detailsOfOffence
-      .questionAnswerSectionAnswer(0, 0)
+      .questionAnswerSectionAnswer(1, 1)
       .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffence.questionAnswerSectionQuestion(0, 1).contains('What did the incident involve?')
-    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Assaulting someone')
-    detailsOfOffence.questionAnswerSectionQuestion(0, 2).contains('Who did John Smith assist James Jones to assault?')
-    detailsOfOffence.questionAnswerSectionAnswer(0, 2).contains('Another prisoner - Paul Wright')
-    detailsOfOffence.questionAnswerSectionQuestion(0, 3).contains('Was the incident a racially aggravated assault?')
-    detailsOfOffence.questionAnswerSectionAnswer(0, 3).contains('Yes')
+    detailsOfOffence.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
+    detailsOfOffence.questionAnswerSectionQuestion(1, 3).contains('Who did John Smith assist James Jones to assault?')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
+    detailsOfOffence.questionAnswerSectionQuestion(1, 4).contains('Was the incident a racially aggravated assault?')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 4).contains('Yes')
     // Offence details
-    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 25(c)')
+    detailsOfOffence.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
     detailsOfOffence
-      .offenceSection(0)
+      .offenceSection(1)
       .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
-    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 1')
-    detailsOfOffence.offenceSection(0).contains('Commits any assault')
+    detailsOfOffence.offenceSection(1).contains('Prison rule 51, paragraph 1')
+    detailsOfOffence.offenceSection(1).contains('Commits any assault')
     // Delete link
-    detailsOfOffence.deleteLink(0).should('exist')
+    detailsOfOffence.deleteLink(1).should('exist')
   })
 
   it('select multiple offences and see them all', () => {
@@ -198,23 +198,23 @@ context('Incident details', () => {
     whatDidTheIncidentInvolve2.radio('1-1-3').check()
     whatDidTheIncidentInvolve2.continue().click()
     // We should be on the offence details page again. There should be two offences.
-    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Fighting with someone')
-    detailsOfOffence.questionAnswerSectionAnswer(1, 1).contains('Endangering the health or personal safety of someone')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
+    detailsOfOffence.questionAnswerSectionAnswer(2, 2).contains('Endangering the health or personal safety of someone')
   })
 
   it('offence details page when there is already an offence saved', () => {
     cy.visit(`/details-of-offence/201`)
     const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.questionAnswerSectionQuestion(0, 0).contains('What type of offence did John Smith commit?')
+    detailsOfOffence.questionAnswerSectionQuestion(1, 1).contains('What type of offence did John Smith commit?')
     detailsOfOffence
-      .questionAnswerSectionAnswer(0, 0)
+      .questionAnswerSectionAnswer(1, 1)
       .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffence.questionAnswerSectionQuestion(0, 1).contains('What did the incident involve?')
-    detailsOfOffence.questionAnswerSectionAnswer(0, 1).contains('Assaulting someone')
-    detailsOfOffence.questionAnswerSectionQuestion(0, 2).contains('Who was assaulted?')
-    detailsOfOffence.questionAnswerSectionAnswer(0, 2).contains('Another prisoner - Paul Wright')
-    detailsOfOffence.offenceSection(0).contains('Prison rule 51, paragraph 1')
-    detailsOfOffence.offenceSection(0).contains('Commits any assault')
+    detailsOfOffence.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
+    detailsOfOffence.questionAnswerSectionQuestion(1, 3).contains('Who was assaulted?')
+    detailsOfOffence.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
+    detailsOfOffence.offenceSection(1).contains('Prison rule 51, paragraph 1')
+    detailsOfOffence.offenceSection(1).contains('Commits any assault')
   })
 
   it('offence details saves as expected', () => {

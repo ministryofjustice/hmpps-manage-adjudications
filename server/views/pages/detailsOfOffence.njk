@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/offenceQuestionsAndAnswers.njk" import offenceQuestionsAndAnswers %}
 
 {% set title = "Offence details" %}
 
@@ -23,19 +24,16 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
                 {% for offence in offences %}
-                    {% set offenceIndex = loop.index - 1 %}
-                    {% for questionAndAnswer in offence.questionsAndAnswers %}
-                        {% set questionAndAnswerIndex = loop.index - 1 %}
-                        <div data-qa="question-answer-section-{{ offenceIndex }}">
-                            <div class="flex-container details-of-offence-question-heading">
-                                <p class="govuk-!-margin-bottom-1 govuk-label--s" data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
-                                {% if loop.first == true %}
-                                    <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}' data-qa="delete-{{ offenceIndex }}">Delete</a>
-                                {%  endif %}
-                            </div>
-                            <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.answer }}</p>
+                    {% set offenceIndex = loop.index %}
+                    <div class="details-of-offence-questions-and-answers">
+                        <div>
+                            {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
                         </div>
-                    {% endfor %}
+                        <div>
+                            <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}'
+                               data-qa="delete-{{ offenceIndex }}">Delete</a>
+                        </div>
+                    </div>
                     <div data-qa="offence-broke-section-{{ offenceIndex }}">
                         <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
                         {% if offence.incidentRule %}
@@ -51,7 +49,8 @@
                 {% endfor %}
             </div>
         </div>
-        <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}" data-qa="add-another-offence">Add another offence</a></p>
+        <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}"
+                                 data-qa="add-another-offence">Add another offence</a></p>
         {{ govukButton({
             text: "Save and continue",
             type: "submit",

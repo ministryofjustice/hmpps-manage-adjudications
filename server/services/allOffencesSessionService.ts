@@ -8,7 +8,7 @@ export default class AllOffencesSessionService {
   }
 
   deleteSessionOffence(req: Request, index: number, draftAdjudicationNumber: number) {
-    req.session.offences?.[draftAdjudicationNumber]?.splice(index, 1)
+    req.session.offences?.[draftAdjudicationNumber]?.splice(index - 1, 1)
   }
 
   setAllSessionOffences(req: Request, offenceData: OffenceData[], draftAdjudicationNumber: number) {
@@ -24,6 +24,10 @@ export default class AllOffencesSessionService {
 
   getAllSessionOffences(req: Request, draftAdjudicationNumber: number): OffenceData[] {
     return req.session?.offences?.[draftAdjudicationNumber]
+  }
+
+  getSessionOffence(req: Request, index: number, draftAdjudicationNumber: number): OffenceData {
+    return req.session.offences?.[draftAdjudicationNumber][index - 1]
   }
 
   private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {

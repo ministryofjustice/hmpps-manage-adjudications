@@ -1,6 +1,7 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
 import { Decision } from './Decision'
+import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Answer {
   private readonly answerText: string
@@ -105,6 +106,18 @@ export class Answer {
     }
     questionsAndAnswers.push({ question: this.getParentDecision(), answer: this })
     return questionsAndAnswers
+  }
+
+  getProcessedQuestionsAndAnswersToGetHere(
+    placeHolderValues: PlaceholderValues,
+    incidentRole: IncidentRole
+  ): { question: string; answer: string }[] {
+    return this.getQuestionsAndAnswersToGetHere().map(questionAndAnswer => {
+      return {
+        question: questionAndAnswer.question.getTitle().getProcessedText(placeHolderValues, incidentRole),
+        answer: questionAndAnswer.answer.getProcessedReplayText(placeHolderValues),
+      }
+    })
   }
 
   findAnswerBy(fn: (d: Answer) => boolean): Answer {
