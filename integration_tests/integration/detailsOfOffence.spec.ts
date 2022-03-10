@@ -127,7 +127,7 @@ context('Incident details', () => {
     })
   })
 
-  it('select and offence for the first time and see it on the offence details page.', () => {
+  it('select offence for for deletion', () => {
     // Choose a complex offence so that we test all of the functionality.
     cy.visit(`/offence-code-selection/200/assisted/1`)
     const whatTypeOfOffencePage = new OffenceCodeSelection(
@@ -135,6 +135,7 @@ context('Incident details', () => {
     )
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
+
     const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
     whatDidTheIncidentInvolve.radio('1-1-1').check()
     whatDidTheIncidentInvolve.continue().click()
