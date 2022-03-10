@@ -2,7 +2,6 @@ import type { Router } from 'express'
 
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
-import typeOfOffenceRoutes from './typeOfOffence'
 import detailsOfOffenceRoutes from './detailsOfOffence'
 import checkYourAnswersRoutes from './checkYourAnswers'
 import confirmedOnReportRoutes from './confirmedOnReport'
@@ -41,7 +40,6 @@ export default function routes(
     offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })
   )
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
-  router.use('/offence-details', typeOfOffenceRoutes())
   router.use(
     '/details-of-offence',
     detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService, decisionTreeService })
