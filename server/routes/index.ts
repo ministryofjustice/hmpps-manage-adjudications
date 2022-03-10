@@ -16,7 +16,6 @@ import continueReportSelectRoutes from './continueReport'
 import prisonerReportRoutes from './prisonerReport'
 import homepageRoutes from './homepage'
 import printReportRoutes from './printReport'
-import assaultRoutes from './assault'
 import selectAssociatedPrisonerRoutes from './selectAssociatedPrisoner'
 import selectAssociatedStaffRoutes from './selectAssociatedStaff'
 import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
@@ -47,7 +46,6 @@ export default function routes(
     '/details-of-offence',
     detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService, decisionTreeService })
   )
-  router.use('/assault', assaultRoutes({ placeOnReportService, userService }))
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use('/check-your-answers', checkYourAnswersRoutes({ placeOnReportService, locationService }))
   router.use('/prisoner-placed-on-report', confirmedOnReportRoutes({ reportedAdjudicationsService }))

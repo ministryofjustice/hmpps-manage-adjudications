@@ -16,7 +16,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { userService, placeOnReportService },
-    { redirectUrl: '/assault/G6123VU/1234?originalRadioSelection=assaultedPrisonOfficer' }
+    { redirectUrl: '/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3' }
   )
 })
 
@@ -65,7 +65,7 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            '<a href="/assault/G6123VU/1234?originalRadioSelection=assaultedPrisonOfficer&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
+            '<a href="/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
           )
         })
     })
@@ -96,7 +96,7 @@ describe('POST /select-associated-staff', () => {
       .send({ staffFirstName: 'john', staffLastName: 'doe' })
       .expect(
         'Location',
-        '/select-associated-staff?staffFirstName=john&staffLastName=doe&redirectUrl=%2Fassault%2FG6123VU%2F1234%3ForiginalRadioSelection%3DassaultedPrisonOfficer'
+        '/select-associated-staff?staffFirstName=john&staffLastName=doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3'
       )
   })
 
