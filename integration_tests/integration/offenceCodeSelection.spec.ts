@@ -1,7 +1,6 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
 import DetailsOfOffence from '../pages/detailsOfOffence'
-import IncidentDetailsEditPage from '../pages/incidentDetailsEdit'
 import CheckYourAnswersPage from '../pages/taskList'
 
 context('Incident details', () => {
