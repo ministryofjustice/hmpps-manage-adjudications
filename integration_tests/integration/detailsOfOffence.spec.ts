@@ -38,7 +38,7 @@ context('Incident details', () => {
         },
       },
     })
-    // Draft with already saved with offence
+    // Draft with saved offences
     cy.task('stubGetDraftAdjudication', {
       id: 201,
       response: {
@@ -63,8 +63,8 @@ context('Incident details', () => {
             {
               offenceCode: 1001,
               offenceRule: {
-                paragraphNumber: '4',
-                paragraphDescription: 'Fights with any person',
+                paragraphNumber: '1',
+                paragraphDescription: 'Commits any assault',
               },
               victimPrisonersNumber: 'G5512G',
             },
