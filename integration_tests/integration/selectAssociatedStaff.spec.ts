@@ -66,20 +66,5 @@ context('Continue a report - select report', () => {
           expect($data.get(4).innerText).to.contain('Select staff member')
         })
     })
-    it('should take you to the task list for the report you wish to continue', () => {
-      // puts redirectURL into session by starting on a previous page
-      cy.visit(`/assault/G2996UX/1`)
-      cy.get('#outerRadio-2').check()
-      cy.get('#assaultedPrisonOfficerFirstname').type('Bob')
-      cy.get('#assaultedPrisonOfficerLastname').type('Smith')
-      cy.get('[data-qa="assault-prison-officer-search"]').click()
-
-      const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
-      selectAssociatedStaffPage.selectStaffMemberLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/assault/G2996UX/1')
-        expect(loc.search).to.eq('?originalRadioSelection=assaultedPrisonOfficer&selectedPerson=BSMITH_GEN')
-      })
-    })
   })
 })
