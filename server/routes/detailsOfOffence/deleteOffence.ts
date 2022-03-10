@@ -51,7 +51,7 @@ export default class DeleteOffenceRoutes {
       placeHolderValues,
       incidentRole
     )
-    return res.render(`pages/deleteOffence`, { questionsAndAnswers, errors })
+    return res.render(`pages/deleteOffence`, { offenceIndex, questionsAndAnswers, errors })
   }
 
   submit = async (req: Request, res: Response) => {
