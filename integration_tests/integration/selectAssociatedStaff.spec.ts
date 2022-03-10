@@ -111,7 +111,7 @@ context('Select associated staff', () => {
         expect($data.get(4).innerText).to.contain('Select staff member')
       })
   })
-  it.only('returns to the previous page with the selected staff member details', () => {
+  it('returns to the previous page with the selected staff member details', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
