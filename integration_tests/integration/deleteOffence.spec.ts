@@ -1,7 +1,5 @@
-import request from 'superagent'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
-import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import DeleteOffence from '../pages/deleteOffence'
 
 context('Incident details', () => {
