@@ -1,6 +1,8 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
 import DetailsOfOffence from '../pages/detailsOfOffence'
+import IncidentDetailsEditPage from '../pages/incidentDetailsEdit'
+import CheckYourAnswersPage from '../pages/taskList'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -185,6 +187,13 @@ context('Incident details', () => {
     cy.visit(`/offence-code-selection/102/incited/1`)
     new OffenceCodeSelection('What type of offence did John Smith incite another prisoner to commit?').checkOnPage()
     cy.visit(`/offence-code-selection/103/assisted/1`)
+  })
+
+  it('the cancel button', () => {
+    cy.visit(`/offence-code-selection/100/committed/1`)
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.cancel().click()
+    Page.verifyOnPage(CheckYourAnswersPage)
   })
 
   it('the first page should have the expected radios', () => {
