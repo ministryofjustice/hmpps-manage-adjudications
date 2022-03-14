@@ -64,7 +64,6 @@ export default class checkYourAnswersRoutes {
       offences,
       editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${adjudicationNumber}/edit`,
       editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${adjudicationNumber}`,
-      offencesURL: `/offence-code-selection/${adjudicationNumber}/committed/1`, // TODO: this needs checking
       statementEditable: true,
       creationJourney: true,
       submitButtonText: 'Accept and place on report',
