@@ -36,7 +36,7 @@ export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
   currentLocation: string
 }
 
-type ExistingDraftIncidentDetails = {
+export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   locationId: number
   startedByUserId: string
