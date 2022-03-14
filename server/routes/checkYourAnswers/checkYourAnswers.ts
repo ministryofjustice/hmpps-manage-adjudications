@@ -33,7 +33,6 @@ export default class checkYourAnswersRoutes {
     const { prisonerNumber } = req.params
     const { user } = res.locals
 
-    // const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
     const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.helper.adjudicationData(Number(req.params.adjudicationNumber), user)
     const incidentLocations = await this.locationService.getIncidentLocations(
@@ -65,6 +64,7 @@ export default class checkYourAnswersRoutes {
       offences,
       editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${adjudicationNumber}/edit`,
       editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${adjudicationNumber}`,
+      offencesURL: `/offence-code-selection/${adjudicationNumber}/commited/1`,
       statementEditable: true,
       creationJourney: true,
       submitButtonText: 'Accept and place on report',

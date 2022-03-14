@@ -279,13 +279,12 @@ context('Check Your Answers', () => {
       expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
     })
   })
-  // TODO
-  it.skip('should go to the type of offence page if the offence details change link is clicked', () => {
+  it('should go to the type of offence page if the offence details change link is clicked', () => {
     cy.visit(`/check-your-answers/G6415GD/3456`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/3456/')
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/commited/1')
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {
