@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { debug } from 'console'
 import validateForm from './incidentDetailsValidation'
 import validatePrisonerSearch from './incidentDetailsSearchValidation'
 import { FormError, SubmittedDateTime } from '../../@types/template'
@@ -74,12 +75,12 @@ type StashedIncidentDetails = {
   temporaryData?: TemporarilySavedData
 }
 
-// TODO - Remove as data is elsewhere now
+// TODONOW - Remove as data is elsewhere now
 type ExistingDraftInformation = {
   draftId: number
 }
 
-enum PageRequestType {
+export enum PageRequestType {
   CREATION,
   EDIT,
   EDIT_SUBMITTED,
@@ -93,7 +94,7 @@ enum PageRequestAction {
 
 enum NextPageSelectionAfterEdit {
   OFFENCE_SELECTION,
-  CONFIRM_DELETE_ALL_OFFENCES,
+  CHECK_YOUR_ANSWERS,
   TASK_LIST,
 }
 
@@ -103,9 +104,13 @@ class PageOptions {
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT || this.pageType === PageRequestType.EDIT_SUBMITTED
   }
+
+  isPreviouslySubmitted(): boolean {
+    return this.pageType === PageRequestType.EDIT_SUBMITTED
+  }
 }
 
-export default class IncidentDetailsEditRoutes {
+export default class IncidentDetailsPage {
   pageOptions: PageOptions
 
   constructor(
@@ -123,7 +128,6 @@ export default class IncidentDetailsEditRoutes {
 
     let data: StashedIncidentDetails = null
     if (requestData !== PageRequestAction.STANDARD) {
-      // TODO - Get stuff from req!
       const sessionData = popDataFromSessionAndReset(req)
       if (requestData === PageRequestAction.SEARCH_FOR_PRISONER) {
         data = updateDataOnSearchReturn(sessionData, requestValues)
@@ -189,7 +193,12 @@ export default class IncidentDetailsEditRoutes {
         await this.saveToApiUpdate(existingDraftInformation, incidentDetailsToSave, user as User)
 
         // TODO - THis probably isn't enough - we need to delete the existing offences don't we?
+        let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
+        if (this.pageOptions.isPreviouslySubmitted()) {
+          defaultNextPage = NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS
+        }
         const nextPageChoice = chooseNextPageAfterEdit(
+          defaultNextPage,
           postValues.originalIncidentRoleSelection,
           incidentDetailsToSave.currentIncidentRoleSelection
         )
@@ -200,6 +209,8 @@ export default class IncidentDetailsEditRoutes {
               existingDraftInformation.draftId,
               incidentDetailsToSave.currentIncidentRoleSelection
             )
+          case NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS:
+            return redirectToCheckYourAnswers(res, postValues.prisonerNumber, existingDraftInformation.draftId)
           default:
           // Fall through
         }
@@ -246,7 +257,7 @@ export default class IncidentDetailsEditRoutes {
     data: IncidentDetails,
     currentUser: User
   ): Promise<any> => {
-    return this.placeOnReportService.editDraftIncidentDetails(
+    return await this.placeOnReportService.editDraftIncidentDetails(
       draftInformation.draftId,
       formatDate(data.incidentDate),
       data.locationId,
@@ -279,7 +290,7 @@ export default class IncidentDetailsEditRoutes {
     }
   }
 
-  // TODO - Duplicate - combine!
+  // TODONOW - Duplicate - combine!
   getPageDataOnPost = async (
     postValues: SubmittedFormData,
     data: IncidentDetails,
@@ -308,7 +319,7 @@ export default class IncidentDetailsEditRoutes {
     currentUser: User,
     currentSelectedPerson?: string
   ): Promise<DisplayData> => {
-    // TODO - Sort out stuff in incidentDetailsEdit (getAssociatedPrisonersNumber)
+    // TODONOW - Sort out stuff in incidentDetailsEdit (getAssociatedPrisonersNumber)
     const [prisoner, reporter] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, currentUser),
       this.placeOnReportService.getReporterName(currentUser.username, currentUser),
@@ -316,7 +327,7 @@ export default class IncidentDetailsEditRoutes {
     const { agencyId } = prisoner.assignedLivingUnit
     const possibleLocations = await this.locationService.getIncidentLocations(agencyId, currentUser)
 
-    // TODO -= selectedPerson -> associatedPrisonerNumber
+    // TODONOW -= selectedPerson -> associatedPrisonerNumber
     const associatedPrisonersName = currentSelectedPerson
       ? await this.getCurrentAssociatedPrisonersName(currentSelectedPerson, currentUser)
       : null
@@ -330,26 +341,28 @@ export default class IncidentDetailsEditRoutes {
   }
 
   getCurrentAssociatedPrisonersName = async (associatedPrisonersNumber: string, user: User) => {
-    if (associatedPrisonersNumber === null) return null
+    if (!associatedPrisonersNumber) return null
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
   }
 }
 
 const extractValuesFromRequest = (req: Request): RequestValues => {
-  return {
+  const values = {
     draftId: getDraftIdFromString(req.params.draftId),
     prisonerNumber: req.params.prisonerNumber,
     selectedPerson: JSON.stringify(req.query.selectedPerson)?.replace(/"/g, ''),
     deleteWanted: req.query.personDeleted as string,
   }
+  debug(values)
+  return values
 }
 
 const getPageActionFromRequest = (reqData: RequestValues): PageRequestAction => {
-  if (reqData.selectedPerson !== null) {
+  if (reqData.selectedPerson) {
     return PageRequestAction.SEARCH_FOR_PRISONER
   }
-  if (reqData.deleteWanted !== null) {
+  if (reqData.deleteWanted) {
     return PageRequestAction.DELETE_PRISONER
   }
   return PageRequestAction.STANDARD
@@ -358,13 +371,13 @@ const getPageActionFromRequest = (reqData: RequestValues): PageRequestAction => 
 const popDataFromSessionAndReset = (req: Request): StashedIncidentDetails => {
   const { incidentDate } = req.session
   const locationId = req.session.incidentLocation
-  // TODO - MOSSING SESSION RADIO SELECTION
+  // TODONOW - MOSSING SESSION RADIO SELECTION
   const currentIncidentRoleSelection = incidentRoleFromCode(req.session.originalRadioSelection)
   const currentSelectedPerson = req.session.originalAssociatedPrisonersNumber
   const originalIncidentRoleSelection = incidentRoleFromCode(req.session.originalRadioSelection)
   delete req.session.incidentDate
   delete req.session.incidentLocation
-  // TODO - MOSSING SESSION RADIO SELECTION
+  // TODONOW - MOSSING SESSION RADIO SELECTION
   delete req.session.originalRadioSelection
   delete req.session.originalAssociatedPrisonersNumber
   delete req.session.originalRadioSelection
@@ -384,7 +397,7 @@ const popDataFromSessionAndReset = (req: Request): StashedIncidentDetails => {
 const stashDataOnSession = (dataToStore: StashedIncidentDetails, req: Request) => {
   req.session.incidentDate = dataToStore.incidentDetails.incidentDate
   req.session.incidentLocation = dataToStore.incidentDetails.locationId
-  // TODO - MOSSING SESSION RADIO SELECTION
+  // TODONOW - MOSSING SESSION RADIO SELECTION
   req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.incidentDetails.currentIncidentRoleSelection)
   req.session.originalAssociatedPrisonersNumber = dataToStore.incidentDetails.currentSelectedPerson
   req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.temporaryData.originalIncidentRoleSelection)
@@ -427,7 +440,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
   if (currentIncidentRoleSelection === IncidentRole.ASSISTED) {
     currentSelectedPerson = req.body.assistedInput
   }
-  return {
+  const values = {
     prisonerNumber: req.params.prisonerNumber,
     draftId: getDraftIdFromString(req.params.draftId),
     postType: req.body.search,
@@ -441,6 +454,8 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
     },
     originalIncidentRoleSelection: incidentRoleFromRadioSelection(req.body.originalRadioSelected),
   }
+  debug(values)
+  return values
 }
 
 const getPageActionFromPost = (reqData: SubmittedFormData): PageRequestAction => {
@@ -494,7 +509,7 @@ const updateDataOnSearchReturn = (
   stashedData: StashedIncidentDetails,
   requestData: RequestValues
 ): StashedIncidentDetails => {
-  if (requestData.selectedPerson === null) {
+  if (!requestData.selectedPerson) {
     return stashedData
   }
   return {
@@ -510,7 +525,7 @@ const updateDataOnDeleteReturn = (
   stashedData: StashedIncidentDetails,
   requestData: RequestValues
 ): StashedIncidentDetails => {
-  if (requestData.deleteWanted === null || requestData.deleteWanted !== 'true') {
+  if (!requestData.deleteWanted || requestData.deleteWanted !== 'true') {
     return stashedData
   }
   return {
@@ -531,7 +546,7 @@ const getDraftIdFromString = (draftId: string): number => {
 }
 
 const radioSelectionCodeFromIncidentRole = (incidentRole: IncidentRole): string => {
-  if (incidentRole === null) {
+  if (!incidentRole) {
     return null
   }
   let radioSelectionCode = null
@@ -555,7 +570,7 @@ const radioSelectionCodeFromIncidentRole = (incidentRole: IncidentRole): string 
 }
 
 const incidentRoleFromRadioSelection = (radioSelectionCode: string): IncidentRole => {
-  if (radioSelectionCode === null) {
+  if (!radioSelectionCode) {
     return null
   }
   if (radioSelectionCode === 'attempted') {
@@ -582,7 +597,7 @@ const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
 }
 
 const getTaskListUrl = (prisonerNumber: string, draftId: number) => {
-  return `//place-the-prisoner-on-report/${prisonerNumber}/${draftId}`
+  return `/place-the-prisoner-on-report/${prisonerNumber}/${draftId}`
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
@@ -595,6 +610,11 @@ const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => 
 
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
   return res.redirect(`/offence-code-selection/${draftId}/${incidentRoleFromCode(incidentRoleCode)}`)
+}
+
+const redirectToCheckYourAnswers = (res: Response, prisonerNumber: string, draftId: number) => {
+  // TODONOW -     const exitButtonHref = (referrer as string)?.includes('review')
+  return res.redirect(`/check-your-answers/${prisonerNumber}/${draftId}/review`)
 }
 
 const redirectToTaskList = (
@@ -621,11 +641,12 @@ const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, er
 }
 
 const chooseNextPageAfterEdit = (
+  defaultNextPage: NextPageSelectionAfterEdit,
   originalIncidentRole: IncidentRole,
   currentIncidentRole: IncidentRole
 ): NextPageSelectionAfterEdit => {
   if (originalIncidentRole !== currentIncidentRole) {
     return NextPageSelectionAfterEdit.OFFENCE_SELECTION
   }
-  return NextPageSelectionAfterEdit.TASK_LIST
+  return defaultNextPage
 }
