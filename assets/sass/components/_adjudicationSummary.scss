@@ -6,7 +6,7 @@
 	}
 }
 
-.adjudicationsSummary-incidentDetails, .adjudicationsSummary-incidentStatement{
+.adjudicationsSummary-incidentDetails, .adjudicationsSummary-incidentStatement, .adjudicationsSummary-offenceDetails{
 	@media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
 		max-width: 60%;
 	}

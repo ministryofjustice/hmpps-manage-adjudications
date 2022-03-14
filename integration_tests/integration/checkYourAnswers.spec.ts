@@ -6,6 +6,7 @@ context('Check Your Answers', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: {
@@ -18,6 +19,26 @@ context('Check Your Answers', () => {
           { alertType: 'T', alertCode: 'TCPA' },
           { alertType: 'X', alertCode: 'XCU' },
         ],
+      },
+    })
+    // Associated prisoner
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'T3356FU',
+      response: {
+        offenderNo: 'T3356FU',
+        firstName: 'JAMES',
+        lastName: 'JONES',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+      },
+    })
+    // Prisoner victim
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G5512G',
+      response: {
+        offenderNo: 'G5512G',
+        firstName: 'PAUL',
+        lastName: 'WRIGHT',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
     cy.task('stubStartNewDraftAdjudication', {
@@ -58,6 +79,7 @@ context('Check Your Answers', () => {
           prisonerNumber: 'G6415GD',
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
+            handoverDeadline: '2021-11-05T11:09:42',
             locationId: 234,
           },
           incidentStatement: {
@@ -66,7 +88,48 @@ context('Check Your Answers', () => {
             completed: true,
           },
           startedByUserId: 'TEST_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            roleCode: '25c',
+            offenceRule: {
+              paragraphNumber: '25(c)',
+              paragraphDescription:
+                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+            },
+          },
+          offenceDetails: [
+            {
+              offenceCode: 1001,
+              offenceRule: {
+                paragraphNumber: '1',
+                paragraphDescription: 'Commits any assault',
+              },
+              victimPrisonersNumber: 'G5512G',
+            },
+          ],
         },
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1001,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 5001,
+      response: {
+        paragraphNumber: '5',
+        paragraphDescription:
+          'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 4001,
+      response: {
+        paragraphNumber: '4',
+        paragraphDescription: 'Fights with any person',
       },
     })
     cy.task('stubGetLocations', {
@@ -127,6 +190,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary().should('exist')
+    CheckYourAnswersPage.offenceDetailsSummary().should('exist')
     CheckYourAnswersPage.incidentStatement().should('exist')
     CheckYourAnswersPage.submitButton().should('exist')
     CheckYourAnswersPage.submitButton().contains('Accept and place on report')
@@ -153,6 +217,36 @@ context('Check Your Answers', () => {
         expect($summaryData.get(1).innerText).to.contain('3 November 2021')
         expect($summaryData.get(2).innerText).to.contain('11:09')
         expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+      })
+  })
+  it('should contain the correct offence details', () => {
+    cy.visit(`/check-your-answers/G6415GD/3456`)
+    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+
+    CheckYourAnswersPage.offenceDetailsSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain(
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+        )
+        expect($summaryLabels.get(1).innerText).to.contain('What did the incident involve?')
+        expect($summaryLabels.get(2).innerText).to.contain('Who did John Smith assist James Jones to assault?')
+        expect($summaryLabels.get(3).innerText).to.contain('Was the incident a racially aggravated assault?')
+        expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+      })
+
+    CheckYourAnswersPage.offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+        expect($summaryData.get(1).innerText).to.contain('Assaulting someone')
+        expect($summaryData.get(2).innerText).to.contain('Another prisoner - Paul Wright')
+        expect($summaryData.get(3).innerText).to.contain('Yes')
+        expect($summaryData.get(4).innerText).to.contain(
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+        )
       })
   })
   it('should contain the correct incident statement', () => {
@@ -183,6 +277,15 @@ context('Check Your Answers', () => {
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+    })
+  })
+  // TODO
+  it.skip('should go to the type of offence page if the offence details change link is clicked', () => {
+    cy.visit(`/check-your-answers/G6415GD/3456`)
+    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+    CheckYourAnswersPage.offenceDetailsChangeLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq('/offence-code-selection/3456/')
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {

@@ -3,33 +3,106 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import UserService from '../../services/userService'
+import DecisionTreeService from '../../services/decisionTreeService'
+import AllOffencesSessionService from '../../services/allOffencesSessionService'
+import { decision } from '../../offenceCodeDecisions/Decision'
+import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
+import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
+import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
+jest.mock('../../services/userService.ts')
+jest.mock('../../services/decisionTreeService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const userService = new UserService(null) as jest.Mocked<UserService>
+const decisionTreeService = new DecisionTreeService() as jest.Mocked<DecisionTreeService>
+
+const testDecisionsTree = decision([
+  [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
+  [Role.ATTEMPTED, `Attempted: ${Text.PRISONER_FULL_NAME}`],
+  [Role.ASSISTED, `Assisted: ${Text.PRISONER_FULL_NAME}. Associated: ${Text.ASSOCIATED_PRISONER_FULL_NAME}`],
+  [Role.INCITED, `Incited: ${Text.PRISONER_FULL_NAME}. Associated: ${Text.ASSOCIATED_PRISONER_FULL_NAME}`],
+])
+  .child(
+    answer(['Prisoner victim', `Prisoner victim: ${Text.VICTIM_PRISONER_FULL_NAME}`])
+      .type(Type.PRISONER)
+      .offenceCode(1)
+  )
+  .child(
+    answer('A standard answer with child question').child(
+      decision('A child question').child(answer('A standard child answer').offenceCode(2))
+    )
+  )
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
+  decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
+
+  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
+    draftAdjudication: {
+      id: 100,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        handoverDeadline: '2021-12-11T10:30:00',
+      },
+      incidentRole: {
+        roleCode: '25c',
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1,
+          victimPrisonersNumber: 'G5512G',
+        },
+        {
+          offenceCode: 2,
+        },
+      ],
+      startedByUserId: 'TEST_GEN',
     },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
-    currentLocation: 'Moorland (HMP & YOI)',
+  })
+
+  placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
+    prisoner: {
+      offenderNo: undefined,
+      firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
+      lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
+      categoryCode: undefined,
+      language: undefined,
+      friendlyName: undefined,
+      displayName: undefined,
+      prisonerNumber: undefined,
+      currentLocation: undefined,
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 25928,
+        description: '4-2-001',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+    },
+    associatedPrisoner: {
+      offenderNo: undefined,
+      firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
+      lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
+      categoryCode: undefined,
+      language: undefined,
+      friendlyName: undefined,
+      displayName: undefined,
+      prisonerNumber: undefined,
+      currentLocation: undefined,
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 25928,
+        description: '4-2-001',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+    },
   })
 
   locationService.getIncidentLocations.mockResolvedValue([
@@ -64,6 +137,12 @@ beforeEach(() => {
   })
 
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
+
+  const allOffencesSessionService = new AllOffencesSessionService()
+  app = appWithAllRoutes(
+    { production: false },
+    { placeOnReportService, locationService, decisionTreeService, allOffencesSessionService, userService }
+  )
 })
 
 afterEach(() => {

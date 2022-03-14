@@ -1,6 +1,7 @@
-{% from "../macros/incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
+{% from "./incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
+{% from "./offenceQAndASummaryList.njk" import offenceQAndASummaryList %}
 
-{% macro adjudicationSummary(detailsURL, statementURL, incidentData, statementEditable) %}
+{% macro adjudicationSummary(detailsURL, statementURL, incidentData, offences, statementEditable) %}
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
    <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink">Change</a></p>
@@ -8,6 +9,17 @@
   <div class="adjudicationsSummary-incidentDetails">
    {{ incidentDetailsSummaryList(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
   </div>
+
+    <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
+      <h2 class="govuk-heading-m">Offence details</h2>
+      <p class="govuk-body"><a class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink">Change</a></p>
+    </div>
+      <div class="adjudicationsSummary-offenceDetails">
+        {% for offence in offences %}
+          {{ offenceQAndASummaryList(offence, { "data-qa": "offence-summary-table" }) }}
+        {% endfor %}
+      </div>
+
 
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
    <h2 class="govuk-heading-m">Incident statement</h2>

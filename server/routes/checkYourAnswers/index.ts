@@ -7,17 +7,32 @@ import CheckYourAnswersBeforeChangeReviewerRoutes from './checkYourAnswersBefore
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import UserService from '../../services/userService'
+import AllOffencesSessionService from '../../services/allOffencesSessionService'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 export default function CheckAnswersRoutes({
   placeOnReportService,
   locationService,
+  userService,
+  allOffencesSessionService,
+  decisionTreeService,
 }: {
   placeOnReportService: PlaceOnReportService
   locationService: LocationService
+  userService: UserService
+  allOffencesSessionService: AllOffencesSessionService
+  decisionTreeService: DecisionTreeService
 }): Router {
   const router = express.Router()
 
-  const checkYourAnswers = new CheckYourAnswersRoutes(placeOnReportService, locationService)
+  const checkYourAnswers = new CheckYourAnswersRoutes(
+    placeOnReportService,
+    locationService,
+    userService,
+    allOffencesSessionService,
+    decisionTreeService
+  )
   const checkYourAnswersBeforeChangeReviewerRoutes = new CheckYourAnswersBeforeChangeReviewerRoutes(
     placeOnReportService,
     locationService
@@ -30,8 +45,8 @@ export default function CheckAnswersRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/:prisonerNumber/:id', checkYourAnswers.view)
-  post('/:prisonerNumber/:id', checkYourAnswers.submit)
+  get('/:prisonerNumber/:adjudicationNumber', checkYourAnswers.view)
+  post('/:prisonerNumber/:adjudicationNumber', checkYourAnswers.submit)
   get('/:prisonerNumber/:id/report', checkYourAnswersBeforeChangeReporter.view)
   post('/:prisonerNumber/:id/report', checkYourAnswersBeforeChangeReporter.submit)
   get('/:prisonerNumber/:id/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
