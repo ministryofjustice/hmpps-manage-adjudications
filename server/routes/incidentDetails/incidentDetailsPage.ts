@@ -84,11 +84,6 @@ type StashedIncidentDetails = {
   temporaryData?: TemporarilySavedData
 }
 
-// TODONOW - Remove as data is elsewhere now
-type ExistingDraftInformation = {
-  draftId: number
-}
-
 export enum PageRequestType {
   CREATION,
   EDIT,
@@ -216,8 +211,7 @@ export default class IncidentDetailsPage {
 
     try {
       if (this.pageOptions.isEdit()) {
-        const existingDraftInformation = getExistingDraftInformation(req)
-        await this.saveToApiUpdate(existingDraftInformation, incidentDetailsToSave, user as User)
+        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
 
         // TODO - THis probably isn't enough - we need to delete the existing offences don't we?
         let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
@@ -233,21 +227,16 @@ export default class IncidentDetailsPage {
           case NextPageSelectionAfterEdit.OFFENCE_SELECTION:
             return redirectToOffenceSelection(
               res,
-              existingDraftInformation.draftId,
+              postValues.draftId,
               incidentDetailsToSave.currentIncidentRoleSelection
             )
           case NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS:
             const isReviewerPage = isReviewer(postValues.originalPageReferrerUrl)
-            return redirectToCheckYourAnswers(
-              res,
-              postValues.prisonerNumber,
-              existingDraftInformation.draftId,
-              isReviewerPage
-            )
+            return redirectToCheckYourAnswers(res, postValues.prisonerNumber, postValues.draftId, isReviewerPage)
           default:
           // Fall through
         }
-        return redirectToTaskList(res, postValues.prisonerNumber, existingDraftInformation)
+        return redirectToTaskList(res, postValues.prisonerNumber, postValues.draftId)
       }
       const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
       return redirectToOffenceSelection(
@@ -257,8 +246,7 @@ export default class IncidentDetailsPage {
       )
     } catch (postError) {
       if (this.pageOptions.isEdit()) {
-        const existingDraftInformation = getExistingDraftInformation(req)
-        setUpRedirectForEditError(res, postValues.prisonerNumber, postError, existingDraftInformation)
+        setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
       } else {
         setUpRedirectForCreationError(res, postValues.prisonerNumber, postError)
       }
@@ -286,12 +274,12 @@ export default class IncidentDetailsPage {
   }
 
   saveToApiUpdate = async (
-    draftInformation: ExistingDraftInformation,
+    draftId: number,
     data: IncidentDetails,
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
     return await this.placeOnReportService.editDraftIncidentDetails(
-      draftInformation.draftId,
+      draftId,
       formatDate(data.incidentDate),
       data.locationId,
       data.currentSelectedPerson,
@@ -328,7 +316,6 @@ export default class IncidentDetailsPage {
     }
   }
 
-  // TODONOW - Duplicate - combine!
   getPageDataOnPost = async (
     postValues: SubmittedFormData,
     data: IncidentDetails,
@@ -362,7 +349,6 @@ export default class IncidentDetailsPage {
     currentUser: User,
     currentSelectedPerson?: string
   ): Promise<DisplayData> => {
-    // TODONOW - Sort out stuff in incidentDetailsEdit (getAssociatedPrisonersNumber)
     const [prisoner, reporter] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, currentUser),
       // TODONOW - Sort out reporter - is it relevant on new draft? Where does it come from?
@@ -371,7 +357,7 @@ export default class IncidentDetailsPage {
     const { agencyId } = prisoner.assignedLivingUnit
     const possibleLocations = await this.locationService.getIncidentLocations(agencyId, currentUser)
 
-    // TODONOW -= selectedPerson -> currentAssociatedPrisonerNumber
+    // TODO -= selectedPerson -> currentAssociatedPrisonerNumber
     const associatedPrisonersName = currentSelectedPerson
       ? await this.getCurrentAssociatedPrisonersName(currentSelectedPerson, currentUser)
       : null
@@ -448,12 +434,6 @@ const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetai
   req.session.currentRadioSelection = codeFromIncidentRole(dataToStore.incidentDetails.currentIncidentRoleSelection)
   req.session.currentAssociatedPrisonersNumber = dataToStore.incidentDetails.currentSelectedPerson
   req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.temporaryData.originalIncidentRoleSelection)
-}
-
-const getExistingDraftInformation = (req: Request): ExistingDraftInformation => {
-  return {
-    draftId: getDraftIdFromString(req.params.id as string),
-  }
 }
 
 const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): IncidentDetails => {
@@ -571,7 +551,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
   })
 }
 
-const updateDataOnSearchReturn = (
+export const updateDataOnSearchReturn = (
   stashedData: StashedIncidentDetails,
   requestData: RequestValues
 ): StashedIncidentDetails => {
@@ -580,14 +560,14 @@ const updateDataOnSearchReturn = (
   }
   return {
     incidentDetails: {
-      currentSelectedPerson: requestData.selectedPerson,
       ...stashedData.incidentDetails,
+      currentSelectedPerson: requestData.selectedPerson,
     },
-    ...stashedData,
+    temporaryData: stashedData.temporaryData,
   }
 }
 
-const updateDataOnDeleteReturn = (
+export const updateDataOnDeleteReturn = (
   stashedData: StashedIncidentDetails,
   requestData: RequestValues
 ): StashedIncidentDetails => {
@@ -599,7 +579,7 @@ const updateDataOnDeleteReturn = (
       currentSelectedPerson: null,
       ...stashedData.incidentDetails,
     },
-    ...stashedData,
+    temporaryData: stashedData.temporaryData,
   }
 }
 
@@ -695,23 +675,13 @@ const redirectToCheckYourAnswers = (
   return res.redirect(`/check-your-answers/${prisonerNumber}/${draftId}/${isReviewerPage ? 'review' : 'report'}`)
 }
 
-// TODONOW - Redirect to the wrong page?
-const redirectToTaskList = (
-  res: Response,
-  prisonerNumber: string,
-  existingDraftInformation: ExistingDraftInformation
-) => {
-  return res.redirect(getTaskListUrl(prisonerNumber, existingDraftInformation.draftId))
+const redirectToTaskList = (res: Response, prisonerNumber: string, draftId: number) => {
+  return res.redirect(getTaskListUrl(prisonerNumber, draftId))
 }
 
-const setUpRedirectForEditError = (
-  res: Response,
-  prisonerNumber: string,
-  error: any,
-  existingDraftInformation: ExistingDraftInformation
-) => {
+const setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
   logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
-  res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${existingDraftInformation.draftId}`
+  res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${draftId}`
 }
 
 const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, error: any) => {

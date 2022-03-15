@@ -37,6 +37,7 @@
         "no-return-await": "off",
         "no-case-declarations": "off",
         "@typescript-eslint/no-explicit-any": "off",
+        "no-unused-expressions": "off",
         // fix for enum failures
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"],
