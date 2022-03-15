@@ -13,8 +13,9 @@ declare module 'express-session' {
     incidentDate: SubmittedDateTime
     incidentLocation: number
     originalRadioSelection: string
+    currentRadioSelection: string
+    currentAssociatedPrisonersNumber: string
     sessionDecisionForm: DecisionForm
-    originalAssociatedPrisonersNumber: string
     offenceData: { [key: string]; offenceData?: OffenceData }
     offences: { [key: string]; offences?: Array<OffenceData> }
   }
