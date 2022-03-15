@@ -507,7 +507,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
       currentIncidentRoleSelection,
       currentSelectedPerson,
     },
-    originalIncidentRoleSelection: incidentRoleFromRadioSelection(req.body.originalRadioSelection),
+    originalIncidentRoleSelection: incidentRoleFromRadioSelection(req.body.originalIncidentRoleSelection),
     originalPageReferrerUrl: req.query.referrer as string,
   }
   debug(values)
