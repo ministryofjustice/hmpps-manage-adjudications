@@ -36,6 +36,7 @@
         "max-classes-per-file": ["error", 2],
         "no-return-await": "off",
         "no-case-declarations": "off",
+        "no-explicit-any": "off",
         // fix for enum failures
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"],

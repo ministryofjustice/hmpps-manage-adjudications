@@ -289,7 +289,7 @@ export default class IncidentDetailsPage {
     draftInformation: ExistingDraftInformation,
     data: IncidentDetails,
     currentUser: User
-  ): Promise<any> => {
+  ): Promise<DraftAdjudicationResult> => {
     return await this.placeOnReportService.editDraftIncidentDetails(
       draftInformation.draftId,
       formatDate(data.incidentDate),
