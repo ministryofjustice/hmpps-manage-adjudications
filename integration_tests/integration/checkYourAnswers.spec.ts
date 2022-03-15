@@ -14,11 +14,6 @@ context('Check Your Answers', () => {
         firstName: 'JOHN',
         lastName: 'SMITH',
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
       },
     })
     // Associated prisoner
@@ -39,36 +34,6 @@ context('Check Your Answers', () => {
         firstName: 'PAUL',
         lastName: 'WRIGHT',
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
-    })
-    cy.task('stubStartNewDraftAdjudication', {
-      draftAdjudication: {
-        id: 3456,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-03T11:09:42',
-          locationId: 234,
-        },
-        incidentStatement: {},
-        prisonerNumber: 'G6415GD',
-      },
-    })
-    cy.task('stubPostDraftIncidentStatement', {
-      id: 3456,
-      response: {
-        draftAdjudication: {
-          id: 3456,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 234,
-          },
-          incidentStatement: {
-            id: 23,
-            statement: 'This is my statement',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-        },
       },
     })
     cy.task('stubGetDraftAdjudication', {
@@ -116,21 +81,6 @@ context('Check Your Answers', () => {
       response: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
-      },
-    })
-    cy.task('stubGetOffenceRule', {
-      offenceCode: 5001,
-      response: {
-        paragraphNumber: '5',
-        paragraphDescription:
-          'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered',
-      },
-    })
-    cy.task('stubGetOffenceRule', {
-      offenceCode: 4001,
-      response: {
-        paragraphNumber: '4',
-        paragraphDescription: 'Fights with any person',
       },
     })
     cy.task('stubGetLocations', {
