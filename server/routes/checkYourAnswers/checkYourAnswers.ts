@@ -38,7 +38,7 @@ export default class checkYourAnswersRoutes {
         const answerData = await this.decisionTreeService.answerData(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
+        const questionsAndAnswers = await this.decisionTreeService.questionsAndAnswers(
           offenceCode,
           placeHolderValues,
           incidentRole
