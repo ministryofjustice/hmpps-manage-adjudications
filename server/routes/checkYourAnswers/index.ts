@@ -14,25 +14,15 @@ import DecisionTreeService from '../../services/decisionTreeService'
 export default function CheckAnswersRoutes({
   placeOnReportService,
   locationService,
-  userService,
-  allOffencesSessionService,
   decisionTreeService,
 }: {
   placeOnReportService: PlaceOnReportService
   locationService: LocationService
-  userService: UserService
-  allOffencesSessionService: AllOffencesSessionService
   decisionTreeService: DecisionTreeService
 }): Router {
   const router = express.Router()
 
-  const checkYourAnswers = new CheckYourAnswersRoutes(
-    placeOnReportService,
-    locationService,
-    userService,
-    allOffencesSessionService,
-    decisionTreeService
-  )
+  const checkYourAnswers = new CheckYourAnswersRoutes(placeOnReportService, locationService, decisionTreeService)
   const checkYourAnswersBeforeChangeReviewerRoutes = new CheckYourAnswersBeforeChangeReviewerRoutes(
     placeOnReportService,
     locationService

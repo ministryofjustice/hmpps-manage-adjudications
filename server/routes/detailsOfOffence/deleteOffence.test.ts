@@ -16,7 +16,10 @@ jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService() as jest.Mocked<DecisionTreeService>
+const decisionTreeService = new DecisionTreeService(
+  placeOnReportService,
+  userService
+) as jest.Mocked<DecisionTreeService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],

@@ -23,7 +23,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 const offenceSessionService = new OffenceSessionService()
 const allOffencesSessionService = new AllOffencesSessionService()
-const decisionTreeService = new DecisionTreeService()
+const decisionTreeService = new DecisionTreeService(placeOnReportService, userService)
 
 export const services = {
   userService,

@@ -50,8 +50,6 @@ export default function routes(
     checkYourAnswersRoutes({
       placeOnReportService,
       locationService,
-      userService,
-      allOffencesSessionService,
       decisionTreeService,
     })
   )

@@ -5,7 +5,6 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { decision } from '../../offenceCodeDecisions/Decision'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
@@ -19,7 +18,10 @@ jest.mock('../../services/decisionTreeService.ts')
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService() as jest.Mocked<DecisionTreeService>
+const decisionTreeService = new DecisionTreeService(
+  placeOnReportService,
+  userService
+) as jest.Mocked<DecisionTreeService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -42,6 +44,60 @@ let app: Express
 
 beforeEach(() => {
   decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
+  decisionTreeService.adjudicationData.mockReturnValue({
+    // @ts-expect-error: TODO sort type error
+    adjudicationNumber: 100,
+    draftAdjudication: {
+      id: 100,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        handoverDeadline: '2021-12-11T10:30:00',
+      },
+      incidentRole: {
+        roleCode: '25c',
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1,
+          victimPrisonersNumber: 'G5512G',
+        },
+        {
+          offenceCode: 2,
+        },
+      ],
+      startedByUserId: 'TEST_GEN',
+    },
+    incidentRole: 'assisted',
+    prisoner: {
+      offenderNo: 'A8383DY',
+      firstName: 'PHYLLIS',
+      lastName: 'SMITH',
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 4012,
+        description: 'RECP',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+      categoryCode: undefined,
+      language: undefined,
+      prisonerNumber: 'A8383DY',
+      friendlyName: 'Phyllis Smith',
+      displayName: 'Smith, Phyllis',
+      currentLocation: 'RECP',
+    },
+    associatedPrisoner: undefined,
+  })
+
+  decisionTreeService.allOffences.mockResolvedValue([
+    {
+      victimOtherPersonsName: undefined,
+      victimPrisonersNumber: 'G6123VU',
+      victimStaffUsername: undefined,
+      offenceCode: '2001',
+    },
+  ])
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: {
@@ -138,11 +194,7 @@ beforeEach(() => {
 
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 
-  const allOffencesSessionService = new AllOffencesSessionService()
-  app = appWithAllRoutes(
-    { production: false },
-    { placeOnReportService, locationService, decisionTreeService, allOffencesSessionService, userService }
-  )
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
 })
 
 afterEach(() => {

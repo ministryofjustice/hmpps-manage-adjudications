@@ -2,10 +2,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import DetailsOfOffenceHelper from '../detailsOfOffence/detailsOfOffenceHelper'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = {
@@ -16,17 +13,8 @@ export default class checkYourAnswersRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService,
-    private readonly allOffencesSessionService: AllOffencesSessionService,
     private readonly decisionTreeService: DecisionTreeService
   ) {}
-
-  private helper = new DetailsOfOffenceHelper(
-    this.placeOnReportService,
-    this.userService,
-    this.allOffencesSessionService,
-    this.decisionTreeService
-  )
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
@@ -34,18 +22,27 @@ export default class checkYourAnswersRoutes {
     const { user } = res.locals
 
     const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.helper.adjudicationData(Number(req.params.adjudicationNumber), user)
+      await this.decisionTreeService.adjudicationData(Number(req.params.adjudicationNumber), user)
+
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,
       user
     )
-    const allOffences = await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
+
+    const data = await this.placeOnReportService.getCheckYourAnswersInfo(adjudicationNumber, incidentLocations, user)
+
+    const allOffenceData = await this.decisionTreeService.allOffences(adjudicationNumber, user)
+
     const offences = await Promise.all(
-      allOffences.map(async offenceData => {
-        const answerData = await this.helper.answerData(offenceData, user)
+      allOffenceData.map(async offenceData => {
+        const answerData = await this.decisionTreeService.answerData(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = this.helper.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
+        const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
+          offenceCode,
+          placeHolderValues,
+          incidentRole
+        )
         return {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole.offenceRule,
@@ -53,8 +50,6 @@ export default class checkYourAnswersRoutes {
         }
       })
     )
-
-    const data = await this.placeOnReportService.getCheckYourAnswersInfo(adjudicationNumber, incidentLocations, user)
 
     return res.render(`pages/checkYourAnswers`, {
       errors: error ? [error] : [],
