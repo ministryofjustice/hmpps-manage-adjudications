@@ -7,8 +7,6 @@ import CheckYourAnswersBeforeChangeReviewerRoutes from './checkYourAnswersBefore
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import UserService from '../../services/userService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
 
 export default function CheckAnswersRoutes({
