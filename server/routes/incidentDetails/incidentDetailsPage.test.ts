@@ -36,6 +36,7 @@ describe('updateDataOnDeleteReturn', () => {
       deleteWanted: 'true',
     }
     const updatedIncidentDetails = updateDataOnDeleteReturn(originalIncidentDetails, requestData)
+    // eslint-disable-next-line no-unused-expressions
     expect(updatedIncidentDetails.incidentDetails.currentAssociatedPrisonerNumber).toBeNull
   })
 
