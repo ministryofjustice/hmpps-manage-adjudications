@@ -565,6 +565,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     originalIncidentRoleSelection: pageData.formData.originalIncidentRoleSelection,
     lastIncidentRoleSelection: pageData.formData.lastIncidentRoleSelection,
     lastAssociatedPrisonerNumberSelection: pageData.formData.lastAssociatedPrisonerNumberSelection,
+    originalReporterUsername: pageData.formData.originalReporterUsername,
   })
 }
 
