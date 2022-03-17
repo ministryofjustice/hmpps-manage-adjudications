@@ -5,7 +5,6 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
-import { answer } from '../../offenceCodeDecisions/Answer'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
