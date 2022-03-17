@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
-import PlaceOnReportService from '../../services/placeOnReportService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
 
@@ -20,16 +18,9 @@ const error: { [key in ErrorType]: FormError } = {
 
 export default class DeleteOffenceRoutes {
   constructor(
-    private readonly placeOnReportService: PlaceOnReportService,
     private readonly allOffencesSessionService: AllOffencesSessionService,
     private readonly decisionTreeService: DecisionTreeService
   ) {}
-
-  private helper = new DetailsOfOffenceHelper(
-    this.placeOnReportService,
-    this.allOffencesSessionService,
-    this.decisionTreeService
-  )
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, [])
 

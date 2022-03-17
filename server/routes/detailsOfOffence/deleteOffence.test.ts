@@ -119,7 +119,7 @@ beforeEach(() => {
     },
   ])
 
-  decisionTreeService.questionsAndAnswers.mockResolvedValue([
+  const twoQuestions = [
     {
       question:
         'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name',
@@ -134,7 +134,23 @@ beforeEach(() => {
       question: 'A child question',
       answer: 'A standard child answer',
     },
-  ])
+  ]
+
+  const singleQuestion = [
+    {
+      question:
+        'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name',
+      answer: 'Prisoner victim: A_prisoner_first_name A_prisoner_last_name',
+    },
+  ]
+
+  decisionTreeService.questionsAndAnswers
+    .mockResolvedValueOnce(twoQuestions)
+    .mockResolvedValueOnce(twoQuestions)
+    .mockResolvedValueOnce(twoQuestions)
+    .mockResolvedValueOnce(singleQuestion)
+    .mockResolvedValueOnce(twoQuestions)
+    .mockResolvedValueOnce(twoQuestions)
 
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: undefined,
@@ -213,8 +229,7 @@ describe('POST /details-of-offence/102/delete/1 validation', () => {
 })
 
 describe('POST /details-of-offence/102/delete/1', () => {
-  // TODO: Can we fix this?
-  it.skip('should remove the offence when selecting yes', async () => {
+  it('should remove the offence when selecting yes', async () => {
     const agent = request.agent(app)
     return agent
       .get('/details-of-offence/102') // This call will populate the session, which we need for the delete page.

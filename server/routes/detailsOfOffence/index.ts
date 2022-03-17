@@ -27,7 +27,7 @@ export default function detailsOfOffenceRoutes({
 
   const addOffence = new AddOffenceRoutes(placeOnReportService, allOffencesSessionService, decisionTreeService)
 
-  const deleteOffence = new DeleteOffenceRoutes(placeOnReportService, allOffencesSessionService, decisionTreeService)
+  const deleteOffence = new DeleteOffenceRoutes(allOffencesSessionService, decisionTreeService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
