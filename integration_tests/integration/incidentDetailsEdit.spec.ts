@@ -262,7 +262,8 @@ context('Incident details (edit) - statement incomplete', () => {
       expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
     })
   })
-  it('should submit form successfully if all data entered and redirect to /offence-details page - change time', () => {
+  // TODO - To be changed - goes to task list
+  it('should submit form successfully if all data entered and redirect to task list page - change time', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -271,16 +272,17 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G6415GD/34')
     })
   })
-  it('should submit form successfully if all data entered and redirect to /offence-details page - change location', () => {
+  // TODO - To be changed - goes to task list
+  it('should submit form successfully if all data entered and redirect to task list page - change location', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G6415GD/34')
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
@@ -329,7 +331,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.locationSelector().contains('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
   })
-  it('should redirect to the task list page if the user exists the page', () => {
+  it('should redirect to the task list page if the user exits the page', () => {
     cy.visit(`/incident-details/G6415GD/34/edit`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()
