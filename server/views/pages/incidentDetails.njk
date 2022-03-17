@@ -49,6 +49,9 @@
             {% if lastAssociatedPrisonerNumberSelection != null %}
                 <input type="hidden" name="lastAssociatedPrisonerNumberSelection" value="{{ lastAssociatedPrisonerNumberSelection }}" id="lastAssociatedPrisonerNumberSelection"/>
             {% endif %}
+            {% if originalReporterUsername != null %}
+                <input type="hidden" name="originalReporterUsername" value="{{ originalReporterUsername }}" id="originalReporterUsername"/>
+            {% endif %}
 
 			{% include "../partials/reportingOfficer.njk" %}
 

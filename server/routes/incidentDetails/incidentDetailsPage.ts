@@ -35,9 +35,10 @@ type InitialFormData = {
   originalIncidentRoleSelection: IncidentRole
   lastIncidentRoleSelection?: IncidentRole
   lastAssociatedPrisonerNumberSelection?: string
+  originalReporterUsername: string
 }
 
-// TDODO Initial and Submitted have a lot in common!
+// TODO Initial and Submitted have a lot in common!
 type SubmittedFormData = {
   // From URL
   prisonerNumber: string
@@ -51,6 +52,7 @@ type SubmittedFormData = {
   originalIncidentRoleSelection: IncidentRole
   lastIncidentRoleSelection?: IncidentRole
   lastAssociatedPrisonerNumberSelection?: string
+  originalReporterUsername: string
 }
 
 type ExitButtonData = {
@@ -77,11 +79,16 @@ type IncidentDetails = {
 
 type TemporarilySavedData = {
   originalIncidentRoleSelection: IncidentRole
+  originalReporterUsername: string
 }
 
 type StashedIncidentDetails = {
   incidentDetails: IncidentDetails
   temporaryData?: TemporarilySavedData
+}
+
+type ApiIncidentDetails = IncidentDetails & {
+  reporterUsername: string
 }
 
 export enum PageRequestType {
@@ -129,8 +136,8 @@ export default class IncidentDetailsPage {
     const requestValues = extractValuesFromRequest(req)
     const requestData = getPageActionFromRequest(requestValues)
     const { user } = res.locals
-    debug(requestValues)
-    debug(requestData)
+    debugData('GET', requestValues)
+    debugData('GET action', requestData)
 
     let data: StashedIncidentDetails = null
     if (requestData !== PageRequestAction.STANDARD) {
@@ -146,13 +153,19 @@ export default class IncidentDetailsPage {
         incidentDetails: draftIncidentDetails,
         temporaryData: {
           originalIncidentRoleSelection: draftIncidentDetails.currentIncidentRoleSelection,
+          originalReporterUsername: draftIncidentDetails.reporterUsername,
         },
       }
     }
+    // TODO - When best to delete 'cos if it fails after here then cannot resubmit!
     deleteSessionData(req)
-    debug(data)
+    debugData('GET DATA', data)
 
-    const pageData = await this.getPageDataOnGet(requestValues, data, user)
+    let originalReporterUsernameForPage = user.username
+    if (this.pageOptions.isEdit()) {
+      originalReporterUsernameForPage = data.temporaryData?.originalReporterUsername
+    }
+    const pageData = await this.getPageDataOnGet(requestValues, originalReporterUsernameForPage, data, user)
     renderData(res, pageData, null)
   }
 
@@ -160,8 +173,8 @@ export default class IncidentDetailsPage {
     const postValues = extractValuesFromPost(req)
     const postData = getPageActionFromPost(postValues)
     const { user } = res.locals
-    debug(postValues)
-    debug(postData)
+    debugData('POST', postValues)
+    debugData('POST action', postData)
 
     if (postData !== PageRequestAction.STANDARD) {
       const dataToSaveAfterRedirect = transformFormDataToStashedData(postValues)
@@ -188,7 +201,7 @@ export default class IncidentDetailsPage {
         })
         if (searchValidationError) {
           // Could stash to session and redirect here
-          const pageData = await this.getPageDataOnPost(postValues, postValues.incidentDetails, user)
+          const pageData = await this.getPageDataOnPost(postValues, user)
           return renderData(res, pageData, searchValidationError)
         }
         return redirectToSearchForPersonPage(res, postValues.incidentDetails.currentSelectedPerson)
@@ -203,7 +216,7 @@ export default class IncidentDetailsPage {
     })
     if (validationError) {
       // Could stash to session and redirect here
-      const pageData = await this.getPageDataOnPost(postValues, postValues.incidentDetails, user)
+      const pageData = await this.getPageDataOnPost(postValues, user)
       return renderData(res, pageData, validationError)
     }
 
@@ -213,7 +226,7 @@ export default class IncidentDetailsPage {
       if (this.pageOptions.isEdit()) {
         await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
 
-        // TODO - THis probably isn't enough - we need to delete the existing offences don't we?
+        // TODO - THis probably isn't enough - we need to delete the existing offences don't we? Check with team
         let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
         if (this.pageOptions.isPreviouslySubmitted()) {
           defaultNextPage = NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS
@@ -254,7 +267,7 @@ export default class IncidentDetailsPage {
     }
   }
 
-  readFromApi = async (draftId: number, user: User): Promise<IncidentDetails> => {
+  readFromApi = async (draftId: number, user: User): Promise<ApiIncidentDetails> => {
     return extractIncidentDetails(await this.placeOnReportService.getDraftIncidentDetailsForEditing(draftId, user))
   }
 
@@ -290,6 +303,7 @@ export default class IncidentDetailsPage {
 
   getPageDataOnGet = async (
     requestValues: RequestValues,
+    originalReporterUsername: string,
     data: StashedIncidentDetails,
     currentUser: User
   ): Promise<PageData> => {
@@ -308,19 +322,16 @@ export default class IncidentDetailsPage {
     return {
       displayData: await this.getDisplayData(
         requestValues.prisonerNumber,
+        originalReporterUsername,
         currentUser,
         data.incidentDetails?.currentSelectedPerson
       ),
       exitButtonData,
-      formData: transformStashedDataToFormData(data),
+      formData: transformStashedDataToFormData(data, originalReporterUsername),
     }
   }
 
-  getPageDataOnPost = async (
-    postValues: SubmittedFormData,
-    data: IncidentDetails,
-    currentUser: User
-  ): Promise<PageData> => {
+  getPageDataOnPost = async (postValues: SubmittedFormData, currentUser: User): Promise<PageData> => {
     let exitButtonData: ExitButtonData = null
     if (this.pageOptions.isEdit()) {
       let prisonerReportUrl = null
@@ -336,6 +347,7 @@ export default class IncidentDetailsPage {
     return {
       displayData: await this.getDisplayData(
         postValues.prisonerNumber,
+        postValues.originalReporterUsername,
         currentUser,
         postValues.incidentDetails?.currentSelectedPerson
       ),
@@ -346,13 +358,13 @@ export default class IncidentDetailsPage {
 
   getDisplayData = async (
     prisonerNumber: string,
+    originalReporterUsername: string,
     currentUser: User,
     currentSelectedPerson?: string
   ): Promise<DisplayData> => {
     const [prisoner, reporter] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, currentUser),
-      // TODONOW - Sort out reporter - is it relevant on new draft? Where does it come from?
-      this.placeOnReportService.getReporterName(currentUser.username, currentUser),
+      this.placeOnReportService.getReporterName(originalReporterUsername, currentUser),
     ])
     const { agencyId } = prisoner.assignedLivingUnit
     const possibleLocations = await this.locationService.getIncidentLocations(agencyId, currentUser)
@@ -385,7 +397,6 @@ const extractValuesFromRequest = (req: Request): RequestValues => {
     deleteWanted: req.query.personDeleted as string,
     originalPageReferrerUrl: req.query.referrer as string,
   }
-  debug(values)
   return values
 }
 
@@ -405,6 +416,7 @@ const popDataFromSession = (req: Request): StashedIncidentDetails => {
   const currentIncidentRoleSelection = incidentRoleFromCode(req.session.currentRadioSelection)
   const currentSelectedPerson = req.session.currentAssociatedPrisonersNumber
   const originalIncidentRoleSelection = incidentRoleFromCode(req.session.originalRadioSelection)
+  const { originalReporterUsername } = req.session
   return {
     incidentDetails: {
       incidentDate,
@@ -414,6 +426,7 @@ const popDataFromSession = (req: Request): StashedIncidentDetails => {
     },
     temporaryData: {
       originalIncidentRoleSelection,
+      originalReporterUsername,
     },
   }
 }
@@ -425,6 +438,7 @@ const deleteSessionData = (req: Request) => {
   delete req.session.currentRadioSelection
   delete req.session.currentAssociatedPrisonersNumber
   delete req.session.originalRadioSelection
+  delete req.session.originalReporterUsername
 }
 
 const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetails, req: Request) => {
@@ -434,14 +448,16 @@ const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetai
   req.session.currentRadioSelection = codeFromIncidentRole(dataToStore.incidentDetails.currentIncidentRoleSelection)
   req.session.currentAssociatedPrisonersNumber = dataToStore.incidentDetails.currentSelectedPerson
   req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.temporaryData.originalIncidentRoleSelection)
+  req.session.originalReporterUsername = dataToStore.temporaryData.originalReporterUsername
 }
 
-const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): IncidentDetails => {
+const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
   return {
     incidentDate: readDraftIncidentDetails.dateTime,
     locationId: readDraftIncidentDetails.locationId,
     currentIncidentRoleSelection: incidentRoleFromCode(readDraftIncidentDetails.incidentRole.roleCode),
     currentSelectedPerson: readDraftIncidentDetails.incidentRole?.associatedPrisonersNumber,
+    reporterUsername: readDraftIncidentDetails.startedByUserId,
   }
 }
 
@@ -450,16 +466,21 @@ const transformFormDataToStashedData = (formData: SubmittedFormData): StashedInc
     incidentDetails: formData.incidentDetails,
     temporaryData: {
       originalIncidentRoleSelection: formData.originalIncidentRoleSelection,
+      originalReporterUsername: formData.originalReporterUsername,
     },
   }
 }
 
-const transformStashedDataToFormData = (data: StashedIncidentDetails): InitialFormData => {
+const transformStashedDataToFormData = (
+  data: StashedIncidentDetails,
+  originalReporterUsername: string
+): InitialFormData => {
   return {
     incidentDetails: data.incidentDetails,
     originalIncidentRoleSelection: data.temporaryData?.originalIncidentRoleSelection,
     lastIncidentRoleSelection: data.incidentDetails?.currentIncidentRoleSelection,
     lastAssociatedPrisonerNumberSelection: data.incidentDetails?.currentSelectedPerson,
+    originalReporterUsername,
   }
 }
 
@@ -486,16 +507,16 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
       locationId: req.body.locationId,
       currentIncidentRoleSelection,
       currentSelectedPerson,
+      reporterUsername: req.body.originalReporterUsername,
     },
     originalIncidentRoleSelection: incidentRoleFromRadioSelection(req.body.originalIncidentRoleSelection),
     originalPageReferrerUrl: req.query.referrer as string,
+    originalReporterUsername: req.body.originalReporterUsername,
   }
-  debug(values)
   return values
 }
 
 const getPageActionFromPost = (reqData: SubmittedFormData): PageRequestAction => {
-  // TODO - i don't think we need to distinguihs between input types as we know from the radio button selected which one they have pressed?!
   if (
     reqData.searchForPersonRequest === 'incitedSearchSubmit' ||
     reqData.searchForPersonRequest === 'assistedSearchSubmit'
@@ -584,13 +605,10 @@ export const updateDataOnDeleteReturn = (
 }
 
 const getDraftIdFromString = (draftId: string): number => {
-  debug(`DRAFT ${draftId}`)
   let draftIdValue: number = null
   if (draftId) {
     draftIdValue = parseInt(draftId, 10)
-    debug(`DO IT`)
   }
-  debug(`DRAFTV ${draftIdValue}`)
   return draftIdValue
 }
 
@@ -635,7 +653,6 @@ const incidentRoleFromRadioSelection = (radioSelectionCode: string): IncidentRol
 }
 
 const isReviewer = (originalPageReferrer?: string): boolean => {
-  // TODO - Is there not a better way? Why is the referrer even passed in?
   return originalPageReferrer?.includes('review')
 }
 
@@ -698,4 +715,9 @@ const chooseNextPageAfterEdit = (
     return NextPageSelectionAfterEdit.OFFENCE_SELECTION
   }
   return defaultNextPage
+}
+
+// TODO - How best to debug (if at all). We need some unoffical way of logging - do not invoke App Insights
+const debugData = (outputId: string, data: any) => {
+  debug(`${outputId}: ${data}`)
 }

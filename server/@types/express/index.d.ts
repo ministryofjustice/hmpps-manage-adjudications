@@ -12,9 +12,11 @@ declare module 'express-session' {
     redirectUrl: string
     incidentDate: SubmittedDateTime
     incidentLocation: number
+    // TODO - Have we broken anything by our changes?
     originalRadioSelection: string
     currentRadioSelection: string
     currentAssociatedPrisonersNumber: string
+    originalReporterUsername: string
     sessionDecisionForm: DecisionForm
     offenceData: { [key: string]; offenceData?: OffenceData }
     offences: { [key: string]; offences?: Array<OffenceData> }
