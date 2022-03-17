@@ -36,9 +36,9 @@
         // TODO -Remove //@no-retrun-await
         // "max-classes-per-file": ["error", 2],
         // "no-return-await": "off",
-        "no-case-declarations": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "no-unused-expressions": "off",
+        // "no-case-declarations": "off",
+        // "@typescript-eslint/no-explicit-any": "off",
+        // "no-unused-expressions": "off",
         // fix for enum failures https://github.com/typescript-eslint/typescript-eslint/issues/2484
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"],
