@@ -73,6 +73,7 @@ context('Check Your Answers', () => {
       response: {
         draftAdjudication: {
           id: 3456,
+          adjudicationNumber: 234,
           prisonerNumber: 'G6415GD',
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
@@ -250,7 +251,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/3456/review')
+      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/234/review')
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {

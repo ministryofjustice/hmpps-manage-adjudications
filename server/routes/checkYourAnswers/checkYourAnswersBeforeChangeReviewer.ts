@@ -62,7 +62,7 @@ export default class checkYourAnswersRoutes {
       creationJourney: false,
       submitButtonText: 'Confirm changes',
       secondaryButtonText: 'Cancel',
-      exitUrl: `/prisoner-report/${prisonerNumber}/${adjudicationNumber}/review`,
+      exitUrl: `/prisoner-report/${prisonerNumber}/${data.adjudicationNumber}/review`,
     })
   }
 
