@@ -42,7 +42,7 @@ export default function routes(
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use(
     '/details-of-offence',
-    detailsOfOffenceRoutes({ placeOnReportService, userService, allOffencesSessionService, decisionTreeService })
+    detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
   )
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
   router.use(

@@ -2,21 +2,18 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
-import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
 
 export default class AddOffenceRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly userService: UserService,
     private readonly allOffencesSessionService: AllOffencesSessionService,
     private readonly decisionTreeService: DecisionTreeService
   ) {}
 
   private helper = new DetailsOfOffenceHelper(
     this.placeOnReportService,
-    this.userService,
     this.allOffencesSessionService,
     this.decisionTreeService
   )

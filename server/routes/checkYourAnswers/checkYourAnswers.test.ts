@@ -22,8 +22,16 @@ const decisionTreeService = new DecisionTreeService(
 let app: Express
 
 beforeEach(() => {
-  decisionTreeService.adjudicationData.mockReturnValue({
-    // @ts-expect-error: TODO weird type error here
+  decisionTreeService.allOffences.mockResolvedValue([
+    {
+      victimOtherPersonsName: undefined,
+      victimPrisonersNumber: 'G6123VU',
+      victimStaffUsername: undefined,
+      offenceCode: '2001',
+    },
+  ])
+
+  decisionTreeService.adjudicationData.mockResolvedValue({
     draftAdjudication: {
       id: 100,
       prisonerNumber: 'G6415GD',
@@ -48,6 +56,7 @@ beforeEach(() => {
       startedByUserId: 'TEST_GEN',
     },
     adjudicationNumber: 100,
+    // @ts-expect-error: Type '"assisted"' is not assignable to type 'IncidentRole'.
     incidentRole: 'assisted',
     prisoner: {
       offenderNo: 'A8383DY',
@@ -68,15 +77,6 @@ beforeEach(() => {
     },
     associatedPrisoner: undefined,
   })
-
-  decisionTreeService.allOffences.mockResolvedValue([
-    {
-      victimOtherPersonsName: undefined,
-      victimPrisonersNumber: 'G6123VU',
-      victimStaffUsername: undefined,
-      offenceCode: '2001',
-    },
-  ])
 
   locationService.getIncidentLocations.mockResolvedValue([
     { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
@@ -121,7 +121,7 @@ afterEach(() => {
 describe('GET /check-your-answers', () => {
   it('should load the check-your-answers page', () => {
     return request(app)
-      .get('/check-your-answers/G6415GD/1')
+      .get('/check-your-answers/G6415GD/100')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
@@ -137,7 +137,7 @@ describe('GET /check-your-answers', () => {
 describe('POST /check-your-answers', () => {
   it('should redirect to the correct page if details is complete', () => {
     return request(app)
-      .post('/check-your-answers/G6415GD/1')
+      .post('/check-your-answers/G6415GD/100')
       .expect(302)
       .expect('Location', '/prisoner-placed-on-report/2342')
   })
@@ -145,7 +145,7 @@ describe('POST /check-your-answers', () => {
   it('should throw an error on api failure', () => {
     placeOnReportService.completeDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/check-your-answers/G6415GD/1')
+      .post('/check-your-answers/G6415GD/100')
       .expect(response => {
         expect(response.text).toContain('Error: Internal Error')
       })

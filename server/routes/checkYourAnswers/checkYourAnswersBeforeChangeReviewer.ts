@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import DecisionTreeService from '../../services/decisionTreeService'
+import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -10,34 +12,57 @@ type PageData = {
 export default class checkYourAnswersRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
+    private readonly decisionTreeService: DecisionTreeService
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
-    const { prisonerNumber, id } = req.params
+    const { prisonerNumber } = req.params
     const { user } = res.locals
 
-    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
+      await this.decisionTreeService.adjudicationData(Number(req.params.adjudicationNumber), user)
+
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,
       user
     )
 
-    const IdNumberValue: number = parseInt(id as string, 10)
-    const data = await this.placeOnReportService.getCheckYourAnswersInfo(IdNumberValue, incidentLocations, user)
+    const data = await this.placeOnReportService.getCheckYourAnswersInfo(adjudicationNumber, incidentLocations, user)
+
+    const allOffenceData = await this.decisionTreeService.allOffences(adjudicationNumber, user)
+
+    const offences = await Promise.all(
+      allOffenceData.map(async offenceData => {
+        const answerData = await this.decisionTreeService.answerData(offenceData, user)
+        const offenceCode = Number(offenceData.offenceCode)
+        const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
+        const questionsAndAnswers = await this.decisionTreeService.questionsAndAnswers(
+          offenceCode,
+          placeHolderValues,
+          incidentRole
+        )
+        return {
+          questionsAndAnswers,
+          incidentRule: draftAdjudication.incidentRole.offenceRule,
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
+        }
+      })
+    )
 
     return res.render(`pages/checkYourAnswers`, {
       errors: error ? [error] : [],
       prisoner,
       data,
-      IdNumberValue,
-      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${IdNumberValue}/submitted/edit?referrer=/check-your-answers/${prisoner.prisonerNumber}/${IdNumberValue}/review`,
+      offences,
+      adjudicationNumber,
+      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${prisoner.prisonerNumber}/${adjudicationNumber}/review`,
       statementEditable: false,
       creationJourney: false,
       submitButtonText: 'Confirm changes',
       secondaryButtonText: 'Cancel',
-      exitUrl: `/prisoner-report/${prisonerNumber}/${data.adjudicationNumber}/review`,
+      exitUrl: `/prisoner-report/${prisonerNumber}/${adjudicationNumber}/review`,
     })
   }
 
@@ -45,10 +70,12 @@ export default class checkYourAnswersRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { id } = req.params
-    const IdNumberValue: number = parseInt(id as string, 10)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     try {
-      const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(IdNumberValue, user)
+      const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(
+        adjudicationNumber,
+        user
+      )
       return res.redirect(`/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/review`)
     } catch (postError) {
       res.locals.redirectUrl = `/all-completed-reports`

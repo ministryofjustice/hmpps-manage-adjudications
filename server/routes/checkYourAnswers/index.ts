@@ -23,11 +23,13 @@ export default function CheckAnswersRoutes({
   const checkYourAnswers = new CheckYourAnswersRoutes(placeOnReportService, locationService, decisionTreeService)
   const checkYourAnswersBeforeChangeReviewerRoutes = new CheckYourAnswersBeforeChangeReviewerRoutes(
     placeOnReportService,
-    locationService
+    locationService,
+    decisionTreeService
   )
   const checkYourAnswersBeforeChangeReporter = new CheckYourAnswersBeforeChangeReporterRoutes(
     placeOnReportService,
-    locationService
+    locationService,
+    decisionTreeService
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -35,10 +37,10 @@ export default function CheckAnswersRoutes({
 
   get('/:prisonerNumber/:adjudicationNumber', checkYourAnswers.view)
   post('/:prisonerNumber/:adjudicationNumber', checkYourAnswers.submit)
-  get('/:prisonerNumber/:id/report', checkYourAnswersBeforeChangeReporter.view)
-  post('/:prisonerNumber/:id/report', checkYourAnswersBeforeChangeReporter.submit)
-  get('/:prisonerNumber/:id/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
-  post('/:prisonerNumber/:id/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
+  get('/:prisonerNumber/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.view)
+  post('/:prisonerNumber/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.submit)
+  get('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
+  post('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
 
   return router
 }
