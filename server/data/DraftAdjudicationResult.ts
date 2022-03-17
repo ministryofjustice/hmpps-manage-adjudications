@@ -51,7 +51,6 @@ export type CheckYourAnswers = {
   incidentDetails: SummarySectionItems[]
   statement: string
   adjudicationNumber?: number
-  offences?: unknown
 }
 
 export interface PrisonerReport extends CheckYourAnswers {
