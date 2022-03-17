@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { debug } from 'console'
 import validateForm from './incidentDetailsValidation'
@@ -241,6 +242,7 @@ export default class IncidentDetailsPage {
               incidentDetailsToSave.currentIncidentRoleSelection
             )
           case NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS:
+            // eslint-disable-next-line no-case-declarations
             const isReviewerPage = isReviewer(postValues.originalPageReferrerUrl)
             return redirectToCheckYourAnswers(res, postValues.prisonerNumber, postValues.draftId, isReviewerPage)
           default:
@@ -273,6 +275,7 @@ export default class IncidentDetailsPage {
     data: IncidentDetails,
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
+    // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.startNewDraftAdjudication(
       formatDate(data.incidentDate),
       data.locationId,
@@ -288,6 +291,7 @@ export default class IncidentDetailsPage {
     data: IncidentDetails,
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
+    // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.editDraftIncidentDetails(
       draftId,
       formatDate(data.incidentDate),
@@ -693,11 +697,13 @@ const redirectToTaskList = (res: Response, prisonerNumber: string, draftId: numb
   return res.redirect(getTaskListUrl(prisonerNumber, draftId))
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
   logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
   res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${draftId}`
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, error: any) => {
   logger.error(`Failed to post incident details for draft adjudication: ${error}`)
   res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`
@@ -715,6 +721,7 @@ const chooseNextPageAfterEdit = (
 }
 
 // TODO - How best to debug (if at all). We need some unoffical way of logging - do not invoke App Insights
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const debugData = (outputId: string, data: any) => {
   debug(outputId)
   debug(data)
