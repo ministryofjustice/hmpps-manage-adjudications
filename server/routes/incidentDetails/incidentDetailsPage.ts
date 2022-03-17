@@ -186,7 +186,7 @@ export default class IncidentDetailsPage {
           returnUrl = `/incident-details/${postValues.prisonerNumber}/${postValues.draftId}/edit`
         }
       } else {
-        returnUrl = `/incident-details/${postValues.prisonerNumber}/${postValues.draftId}`
+        returnUrl = `/incident-details/${postValues.prisonerNumber}`
       }
       stashDataOnSession(returnUrl, dataToSaveAfterRedirect, req)
       if (postData === PageRequestAction.DELETE_PRISONER) {
