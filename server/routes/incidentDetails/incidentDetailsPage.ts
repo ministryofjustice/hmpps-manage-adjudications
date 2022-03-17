@@ -321,7 +321,7 @@ export default class IncidentDetailsPage {
         requestValues.prisonerNumber,
         originalReporterUsername,
         currentUser,
-        data.incidentDetails?.currentAssociatedPrisonerNumber
+        data?.incidentDetails?.currentAssociatedPrisonerNumber
       ),
       exitButtonData,
       formData: transformStashedDataToFormData(data, originalReporterUsername),
@@ -472,10 +472,10 @@ const transformStashedDataToFormData = (
   originalReporterUsername: string
 ): InitialFormData => {
   return {
-    incidentDetails: data.incidentDetails,
-    originalIncidentRoleSelection: data.temporaryData?.originalIncidentRoleSelection,
-    lastIncidentRoleSelection: data.incidentDetails?.currentIncidentRoleSelection,
-    lastAssociatedPrisonerNumberSelection: data.incidentDetails?.currentAssociatedPrisonerNumber,
+    incidentDetails: data?.incidentDetails,
+    originalIncidentRoleSelection: data?.temporaryData?.originalIncidentRoleSelection,
+    lastIncidentRoleSelection: data?.incidentDetails?.currentIncidentRoleSelection,
+    lastAssociatedPrisonerNumberSelection: data?.incidentDetails?.currentAssociatedPrisonerNumber,
     originalReporterUsername,
   }
 }
@@ -715,5 +715,6 @@ const chooseNextPageAfterEdit = (
 
 // TODO - How best to debug (if at all). We need some unoffical way of logging - do not invoke App Insights
 const debugData = (outputId: string, data: any) => {
-  debug(`${outputId}: ${data}`)
+  debug(outputId)
+  debug(data)
 }
