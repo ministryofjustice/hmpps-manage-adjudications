@@ -331,8 +331,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.locationSelector().contains('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
   })
-  // TODO - task list?
-  it('should redirect to the task list page if the user exists the page', () => {
+  it('should redirect to the prisoner report page if the user exists the page', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()

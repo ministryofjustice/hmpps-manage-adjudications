@@ -12,7 +12,7 @@ const originalIncidentDetails = {
     },
     locationId: 123,
     currentIncidentRoleSelection: IncidentRole.ASSISTED,
-    currentSelectedPerson: 'AA1234A',
+    currentAssociatedPrisonerNumber: 'AA1234A',
   },
 }
 
@@ -24,7 +24,7 @@ describe('updateDataOnSearchReturn', () => {
       selectedPerson: 'CC3456C',
     }
     const updatedIncidentDetails = updateDataOnSearchReturn(originalIncidentDetails, requestData)
-    expect(updatedIncidentDetails.incidentDetails.currentSelectedPerson).toEqual('CC3456C')
+    expect(updatedIncidentDetails.incidentDetails.currentAssociatedPrisonerNumber).toEqual('CC3456C')
   })
 })
 
@@ -36,7 +36,7 @@ describe('updateDataOnDeleteReturn', () => {
       deleteWanted: 'true',
     }
     const updatedIncidentDetails = updateDataOnDeleteReturn(originalIncidentDetails, requestData)
-    expect(updatedIncidentDetails.incidentDetails.currentSelectedPerson).toBeNull
+    expect(updatedIncidentDetails.incidentDetails.currentAssociatedPrisonerNumber).toBeNull
   })
 
   it('should preserve the associated prisoner from the returned incident details', () => {
@@ -46,6 +46,6 @@ describe('updateDataOnDeleteReturn', () => {
       deleteWanted: 'false',
     }
     const updatedIncidentDetails = updateDataOnDeleteReturn(originalIncidentDetails, requestData)
-    expect(updatedIncidentDetails.incidentDetails.currentSelectedPerson).toEqual('AA1234A')
+    expect(updatedIncidentDetails.incidentDetails.currentAssociatedPrisonerNumber).toEqual('AA1234A')
   })
 })
