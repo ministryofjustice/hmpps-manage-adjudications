@@ -11,15 +11,10 @@ import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService(
-  placeOnReportService,
-  userService
-) as jest.Mocked<DecisionTreeService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -38,89 +33,11 @@ const testDecisionsTree = decision([
     )
   )
 
+const decisionTreeService = new DecisionTreeService(placeOnReportService, userService, testDecisionsTree)
+
 let app: Express
 
 beforeEach(() => {
-  decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
-  decisionTreeService.adjudicationData.mockResolvedValue({
-    draftAdjudication: {
-      id: 100,
-      adjudicationNumber: 1524493,
-      prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentRole: {
-        roleCode: '25c',
-      },
-      offenceDetails: [
-        {
-          offenceCode: 1,
-          victimPrisonersNumber: 'G5512G',
-        },
-        {
-          offenceCode: 2,
-        },
-      ],
-      startedByUserId: 'TEST_GEN',
-    },
-    adjudicationNumber: 100,
-    // @ts-expect-error: Type '"assisted"' is not assignable to type 'IncidentRole'.
-    incidentRole: 'assisted',
-    prisoner: {
-      offenderNo: undefined,
-      firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
-      lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-    },
-    associatedPrisoner: {
-      offenderNo: undefined,
-      firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
-      lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-    },
-  })
-
-  decisionTreeService.allOffences.mockResolvedValue([
-    {
-      victimOtherPersonsName: undefined,
-      victimPrisonersNumber: 'G5512G',
-      victimStaffUsername: undefined,
-      offenceCode: '2001',
-    },
-  ])
-
-  decisionTreeService.questionsAndAnswers.mockResolvedValue([
-    {
-      question:
-        'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name',
-      answer: 'Prisoner victim: A_prisoner_first_name A_prisoner_last_name',
-    },
-    {
-      question:
-        'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name',
-      answer: 'A standard answer with child question',
-    },
-    {
-      question: 'A child question',
-      answer: 'A standard child answer',
-    },
-  ])
-
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: {
       id: 100,
@@ -147,6 +64,45 @@ beforeEach(() => {
     },
   })
 
+  placeOnReportService.getPrisonerDetails.mockResolvedValue({
+    offenderNo: undefined,
+    firstName: 'A_PRISONER_FIRST_NAME',
+    lastName: 'A_PRISONER_LAST_NAME',
+    categoryCode: undefined,
+    language: undefined,
+    friendlyName: undefined,
+    displayName: undefined,
+    prisonerNumber: undefined,
+    currentLocation: undefined,
+    assignedLivingUnit: undefined,
+  })
+
+  placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
+    prisoner: {
+      offenderNo: undefined,
+      firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
+      lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
+      categoryCode: undefined,
+      language: undefined,
+      friendlyName: undefined,
+      displayName: undefined,
+      prisonerNumber: undefined,
+      currentLocation: undefined,
+      assignedLivingUnit: undefined,
+    },
+    associatedPrisoner: {
+      offenderNo: undefined,
+      firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
+      lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
+      categoryCode: undefined,
+      language: undefined,
+      friendlyName: undefined,
+      displayName: undefined,
+      prisonerNumber: undefined,
+      currentLocation: undefined,
+      assignedLivingUnit: undefined,
+    },
+  })
   const allOffencesSessionService = new AllOffencesSessionService()
   app = appWithAllRoutes(
     { production: false },

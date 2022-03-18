@@ -3,21 +3,16 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { IncidentRole } from '../../incidentRole/IncidentRole'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
-jest.mock('../../services/userService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
-const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService(
-  placeOnReportService,
-  userService
-) as jest.Mocked<DecisionTreeService>
+const decisionTreeService = new DecisionTreeService(null, null, null) as jest.Mocked<DecisionTreeService>
 
 let app: Express
 
@@ -56,8 +51,7 @@ beforeEach(() => {
       startedByUserId: 'TEST_GEN',
     },
     adjudicationNumber: 100,
-    // @ts-expect-error: Type '"assisted"' is not assignable to type 'IncidentRole'.
-    incidentRole: 'assisted',
+    incidentRole: IncidentRole.ASSISTED,
     prisoner: {
       offenderNo: 'A8383DY',
       firstName: 'PHYLLIS',

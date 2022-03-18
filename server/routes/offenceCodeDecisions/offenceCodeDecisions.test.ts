@@ -11,15 +11,10 @@ import OffenceSessionService from '../../services/offenceSessionService'
 import UserService from '../../services/userService'
 
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService(
-  placeOnReportService,
-  userService
-) as jest.Mocked<DecisionTreeService>
 
 const aPrisonerAnswerText = 'Another prisoner answer'
 const aPrisonerAnswer = answer(aPrisonerAnswerText)
@@ -51,11 +46,10 @@ const testDecisionsTree = decision([
     aStandardAnswerWithChildQuestion.child(decision('A child question').child(aStandardChildAnswer.offenceCode(6)))
   )
 
+const decisionTreeService = new DecisionTreeService(placeOnReportService, userService, testDecisionsTree)
 let app: Express
 
 beforeEach(() => {
-  decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
-
   userService.getStaffFromUsername.mockResolvedValue({
     username: undefined,
     name: 'A_STAFF_NAME',

@@ -1,4 +1,3 @@
-import decisionTree from '../offenceCodeDecisions/DecisionTree'
 import { Decision } from '../offenceCodeDecisions/Decision'
 import PlaceOnReportService from './placeOnReportService'
 import UserService from './userService'
@@ -8,10 +7,14 @@ import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { AnswerData, PlaceholderValues } from '../offenceCodeDecisions/Placeholder'
 
 export default class DecisionTreeService {
-  constructor(private readonly placeOnReportService: PlaceOnReportService, private readonly userService: UserService) {}
+  constructor(
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly userService: UserService,
+    private readonly decisionTree: Decision
+  ) {}
 
   getDecisionTree(): Decision {
-    return decisionTree
+    return this.decisionTree
   }
 
   async adjudicationData(adjudicationNumber: number, user: User) {
