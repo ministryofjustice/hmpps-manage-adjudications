@@ -49,15 +49,8 @@ export default class DetailsOfOffenceRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { adjudicationNumber, incidentRole } = await this.helper.adjudicationData(
-      Number(req.params.adjudicationNumber),
-      user
-    )
-    const { addOffence } = req.body
-    if (addOffence) {
-      return res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}`)
-    }
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)
       .map(offenceData => {
