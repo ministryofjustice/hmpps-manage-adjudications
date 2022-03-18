@@ -37,33 +37,60 @@ const testDecisionsTree = decision([
 
 let app: Express
 
+const adjudicationWithOffences = {
+  draftAdjudication: {
+    id: 100,
+    adjudicationNumber: 1524493,
+    prisonerNumber: 'G6415GD',
+    incidentDetails: {
+      locationId: 197682,
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      handoverDeadline: '2021-12-11T10:30:00',
+    },
+    incidentRole: {
+      roleCode: '25c',
+    },
+    offenceDetails: [
+      {
+        offenceCode: 1,
+        victimPrisonersNumber: 'G5512G',
+      },
+      {
+        offenceCode: 2,
+      },
+    ],
+    startedByUserId: 'TEST_GEN',
+  },
+}
+
+const adjudicationWithoutOffences = {
+  draftAdjudication: {
+    id: 101,
+    adjudicationNumber: 1524493,
+    prisonerNumber: 'G6415GD',
+    incidentDetails: {
+      locationId: 197682,
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      handoverDeadline: '2021-12-11T10:30:00',
+    },
+    incidentRole: {
+      roleCode: '25c',
+    },
+    startedByUserId: 'TEST_GEN',
+  },
+}
+
 beforeEach(() => {
   decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
 
-  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: {
-      id: 100,
-      adjudicationNumber: 1524493,
-      prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentRole: {
-        roleCode: '25c',
-      },
-      offenceDetails: [
-        {
-          offenceCode: 1,
-          victimPrisonersNumber: 'G5512G',
-        },
-        {
-          offenceCode: 2,
-        },
-      ],
-      startedByUserId: 'TEST_GEN',
-    },
+  placeOnReportService.getDraftAdjudicationDetails.mockImplementation(adjudicationId => {
+    if (adjudicationWithOffences.draftAdjudication.id === adjudicationId) {
+      return Promise.resolve(adjudicationWithOffences)
+    }
+    if (adjudicationWithoutOffences.draftAdjudication.id === adjudicationId) {
+      return Promise.resolve(adjudicationWithoutOffences)
+    }
+    return Promise.resolve(null)
   })
 
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
@@ -105,6 +132,9 @@ beforeEach(() => {
       assignedLivingUnit: undefined,
     },
   })
+
+  placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber.mockResolvedValue('G6415GD')
+
   const allOffencesSessionService = new AllOffencesSessionService()
   app = appWithAllRoutes(
     { production: false },
@@ -151,6 +181,7 @@ describe('POST /details-of-offence/100', () => {
         agent
           .post('/details-of-offence/100/')
           .expect(302)
+          .expect('Location', '/incident-statement/G6415GD/100')
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
               100,
@@ -158,6 +189,20 @@ describe('POST /details-of-offence/100', () => {
               expect.anything()
             )
           )
+      )
+  })
+
+  it('should redirect to the start of choose offence when there are no offences', async () => {
+    const agent = request.agent(app)
+    return agent
+      .get('/details-of-offence/101/')
+      .expect(200)
+      .then(() =>
+        agent
+          .post('/details-of-offence/101/')
+          .send({ addOffence: 'addOffence' })
+          .expect(302)
+          .expect('Location', '/offence-code-selection/101/assisted')
       )
   })
 })

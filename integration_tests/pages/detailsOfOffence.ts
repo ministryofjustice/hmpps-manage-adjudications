@@ -20,7 +20,9 @@ export default class DetailsOfOffence extends Page {
 
   deleteLink = (offenceIndex: number): PageElement => cy.get(`[data-qa="delete-${offenceIndex}"]`)
 
-  addAnotherOffence = (): PageElement => cy.get(`[data-qa="add-another-offence"]`)
+  addAnotherOffence = (): PageElement => cy.get('[data-qa="add-another-offence"]')
 
-  saveAndContinue = (): PageElement => cy.get(`[data-qa="details-of-offence-submit"]`)
+  saveAndContinue = (): PageElement => cy.get('[data-qa="details-of-offence-submit"]')
+
+  continue = (): PageElement => cy.get('[data-qa="details-of-offence-continue"]')
 }
