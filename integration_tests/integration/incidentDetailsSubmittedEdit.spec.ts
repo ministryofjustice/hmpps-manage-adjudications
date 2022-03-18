@@ -179,7 +179,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/review')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/attempted/1')
     })
   })
   it('should submit form successfully if radio button changed from one which does not require an associated prisoner PRN to one which does', () => {
@@ -216,7 +216,7 @@ context('Incident details (edit after completion of report)', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/review')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
     })
   })
   it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
@@ -258,7 +258,7 @@ context('Incident details (edit after completion of report)', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/report')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
     })
   })
   it('should submit form successfully if all data entered and redirect to CHECK YOUR ANSWERS page - reporter version', () => {
@@ -308,7 +308,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.prisonerPrnAssist().contains('T3356FU')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/review')
+      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
     })
   })
   it('should remember the changed location and time once it comes back to this page after deleting an associated prisoner', () => {
@@ -331,12 +331,12 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.locationSelector().contains('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
   })
-  it('should redirect to the task list page if the user exists the page', () => {
+  it('should redirect to the prisoner report page if the user exists the page', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524455/review')
+      expect(loc.pathname).to.eq('/prisoner-report/G6123VU/1524455/review')
     })
   })
 })

@@ -179,6 +179,7 @@ describe('POST /details-of-offence/100', () => {
         agent
           .post('/details-of-offence/100/')
           .expect(302)
+          .expect('Location', '/incident-statement/G6415GD/100')
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
               100,
@@ -186,6 +187,20 @@ describe('POST /details-of-offence/100', () => {
               expect.anything()
             )
           )
+      )
+  })
+
+  it('should redirect to the start of choose offence when there are no offences', async () => {
+    const agent = request.agent(app)
+    return agent
+      .get('/details-of-offence/101/')
+      .expect(200)
+      .then(() =>
+        agent
+          .post('/details-of-offence/101/')
+          .send({ addOffence: 'addOffence' })
+          .expect(302)
+          .expect('Location', '/offence-code-selection/101/assisted')
       )
   })
 })

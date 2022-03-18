@@ -12,9 +12,12 @@ declare module 'express-session' {
     redirectUrl: string
     incidentDate: SubmittedDateTime
     incidentLocation: number
+    // TODO - We are going to remove this - we will go to the task list or check your answeers on radio edit regardless
     originalRadioSelection: string
+    currentRadioSelection: string
+    currentAssociatedPrisonersNumber: string
+    originalReporterUsername: string
     sessionDecisionForm: DecisionForm
-    originalAssociatedPrisonersNumber: string
     offenceData: { [key: string]; offenceData?: OffenceData }
     offences: { [key: string]; offences?: Array<OffenceData> }
   }

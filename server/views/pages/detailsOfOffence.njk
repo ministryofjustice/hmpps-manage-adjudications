@@ -21,41 +21,54 @@
         <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
             {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
         </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                {% for offence in offences %}
-                    {% set offenceIndex = loop.index %}
-                    <div class="details-of-offence-questions-and-answers">
-                        <div>
-                            {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
+        {% if offences | length > 0 %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-three-quarters">
+                    {% for offence in offences %}
+                        {% set offenceIndex = loop.index %}
+                        <div class="details-of-offence-questions-and-answers">
+                            <div>
+                                {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
+                            </div>
+                            <div>
+                                <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}'
+                                   data-qa="delete-{{ offenceIndex }}">Delete</a>
+                            </div>
                         </div>
-                        <div>
-                            <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}'
-                               data-qa="delete-{{ offenceIndex }}">Delete</a>
-                        </div>
-                    </div>
-                    <div data-qa="offence-broke-section-{{ offenceIndex }}">
-                        <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
-                        {% if offence.incidentRule %}
+                        <div data-qa="offence-broke-section-{{ offenceIndex }}">
+                            <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
+                            {% if offence.incidentRule %}
+                                <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
+                                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+                                <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription }}</p>
+                            {% endif %}
                             <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
-                                paragraph {{ offence.incidentRule.paragraphNumber }}</p>
-                            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription }}</p>
-                        {% endif %}
-                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">Prison rule 51,
-                            paragraph {{ offence.offenceRule.paragraphNumber }}</p>
-                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription }}</p>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                {% endfor %}
+                                paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+                            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription }}</p>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}"
-                                 data-qa="add-another-offence">Add another offence</a></p>
-        {{ govukButton({
-            text: "Save and continue",
-            type: "submit",
-            classes: "govuk-button--submit",
-            attributes: { "data-qa": "details-of-offence-submit" }
-        }) }}
+            <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}"
+                                     data-qa="add-another-offence">Add another offence</a></p>
+            {{ govukButton({
+                text: "Save and continue",
+                type: "submit",
+                classes: "govuk-button--submit",
+                attributes: { "data-qa": "details-of-offence-submit" }
+            }) }}
+        {% else %}
+            <p class="govuk-body">This report does not currently have any details</p>
+            <p class="govuk-body">You must add offence details</p>
+            {{ govukButton({
+                text: "Continue",
+                type: "submit",
+                name: "addOffence",
+                value: "addOffence",
+                classes: "govuk-button--submit",
+                attributes: { "data-qa": "details-of-offence-continue" }
+            }) }}
+        {% endif %}
     </form>
 {% endblock %}
