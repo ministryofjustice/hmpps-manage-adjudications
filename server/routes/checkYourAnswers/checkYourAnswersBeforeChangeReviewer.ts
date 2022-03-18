@@ -3,7 +3,6 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = {
   error?: FormError | FormError[]
