@@ -3,7 +3,7 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 
-context('Incident details', () => {
+context('Details of offence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -217,7 +217,7 @@ context('Incident details', () => {
     detailsOfOffence.offenceSection(1).contains('Commits any assault')
   })
 
-  it('offence details page when there is no offences', () => {
+  it.only('offence details page when there is no offences', () => {
     cy.visit(`/details-of-offence/200`)
     const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffence.continue().click()

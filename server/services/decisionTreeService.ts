@@ -4,7 +4,16 @@ import UserService from './userService'
 import { User } from '../data/hmppsAuthClient'
 import { IncidentRole, incidentRoleFromCode } from '../incidentRole/IncidentRole'
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
-import { AnswerData, PlaceholderValues } from '../offenceCodeDecisions/Placeholder'
+import { AnswerData, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
+import prisonerResult from '../data/prisonerResult'
+import { DraftAdjudication } from '../data/DraftAdjudicationResult'
+
+export type AllOffenceData = {
+  victimOtherPersonsName?: string
+  victimPrisonersNumber?: string
+  victimStaffUsername?: string
+  offenceCode?: string
+}
 
 export default class DecisionTreeService {
   constructor(
@@ -32,6 +41,29 @@ export default class DecisionTreeService {
       prisoner,
       associatedPrisoner,
     }
+  }
+
+  async getAdjudicationOffences(
+    allOffenceData: AllOffenceData[],
+    prisoner: prisonerResult,
+    associatedPrisoner: prisonerResult,
+    incidentRole: IncidentRole,
+    draftAdjudication: DraftAdjudication,
+    user: User
+  ) {
+    return Promise.all(
+      allOffenceData.map(async offenceData => {
+        const answerData = await this.answerData(offenceData, user)
+        const offenceCode = Number(offenceData.offenceCode)
+        const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
+        const questionsAndAnswers = await this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
+        return {
+          questionsAndAnswers,
+          incidentRule: draftAdjudication.incidentRole.offenceRule,
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
+        }
+      })
+    )
   }
 
   async allOffences(adjudicationNumber: number, user: User) {

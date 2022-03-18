@@ -3,7 +3,6 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -33,22 +32,13 @@ export default class checkYourAnswersRoutes {
 
     const allOffenceData = await this.decisionTreeService.allOffences(adjudicationNumber, user)
 
-    const offences = await Promise.all(
-      allOffenceData.map(async offenceData => {
-        const answerData = await this.decisionTreeService.answerData(offenceData, user)
-        const offenceCode = Number(offenceData.offenceCode)
-        const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = await this.decisionTreeService.questionsAndAnswers(
-          offenceCode,
-          placeHolderValues,
-          incidentRole
-        )
-        return {
-          questionsAndAnswers,
-          incidentRule: draftAdjudication.incidentRole.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
-        }
-      })
+    const offences = await this.decisionTreeService.getAdjudicationOffences(
+      allOffenceData,
+      prisoner,
+      associatedPrisoner,
+      incidentRole,
+      draftAdjudication,
+      user
     )
 
     return res.render(`pages/checkYourAnswers`, {
