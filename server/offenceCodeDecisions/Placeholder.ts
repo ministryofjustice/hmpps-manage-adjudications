@@ -1,16 +1,16 @@
 import PrisonerResult from '../data/prisonerResult'
-import { convertToTitleCase } from '../utils/utils'
+import { convertToTitleCase, possessive } from '../utils/utils'
 import { User } from '../data/hmppsAuthClient'
 
 export type PlaceholderValues = {
   prisonerFirstName: string
   prisonerLastName: string
-  associatedPrisonerFirstName: string
-  associatedPrisonerLastName: string
-  victimStaffFullName: string
-  victimPrisonerFirstName: string
-  victimPrisonerLastName: string
-  victimOtherPersonFullName: string
+  associatedPrisonerFirstName?: string
+  associatedPrisonerLastName?: string
+  victimStaffFullName?: string
+  victimPrisonerFirstName?: string
+  victimPrisonerLastName?: string
+  victimOtherPersonFullName?: string
 }
 
 export type AnswerData = {
@@ -19,9 +19,9 @@ export type AnswerData = {
   victimOtherPerson?: string
 }
 
-// eslint-disable-next-line no-shadow
-export const enum PlaceholderText {
+export enum PlaceholderText {
   PRISONER_FULL_NAME = '{PRISONER_FULL_NAME}',
+  PRISONER_FULL_NAME_POSSESSIVE = '{PRISONER_FULL_NAME_POSSESSIVE}',
   ASSOCIATED_PRISONER_FULL_NAME = '{ASSOCIATED_PRISONER_FULL_NAME}',
   VICTIM_STAFF_FULL_NAME = '{VICTIM_STAFF_FULL_NAME}',
   VICTIM_PRISONER_FULL_NAME = '{VICTIM_PRISONER_FULL_NAME}',
@@ -34,31 +34,35 @@ export function getPlaceholderValues(
   answerData?: AnswerData
 ): PlaceholderValues {
   return {
-    prisonerFirstName: convertToTitleCase(prisoner.firstName),
-    prisonerLastName: convertToTitleCase(prisoner.lastName),
-    associatedPrisonerFirstName: associatedPrisoner && convertToTitleCase(associatedPrisoner?.firstName),
-    associatedPrisonerLastName: associatedPrisoner && convertToTitleCase(associatedPrisoner?.lastName),
-    victimStaffFullName: answerData?.victimStaff && convertToTitleCase(answerData.victimStaff.name),
-    victimPrisonerFirstName: answerData?.victimPrisoner && convertToTitleCase(answerData.victimPrisoner.firstName),
-    victimPrisonerLastName: answerData?.victimPrisoner && convertToTitleCase(answerData.victimPrisoner.lastName),
+    prisonerFirstName: prisoner.firstName,
+    prisonerLastName: prisoner.lastName,
+    associatedPrisonerFirstName: associatedPrisoner?.firstName,
+    associatedPrisonerLastName: associatedPrisoner?.lastName,
+    victimStaffFullName: answerData?.victimStaff?.name,
+    victimPrisonerFirstName: answerData?.victimPrisoner?.firstName,
+    victimPrisonerLastName: answerData?.victimPrisoner?.lastName,
     victimOtherPersonFullName: answerData?.victimOtherPerson,
   }
 }
 
-export function getProcessedText(template: string, placeholderValues: PlaceholderValues): string {
+export function getProcessedText(template: string, values: PlaceholderValues): string {
   return (template || '')
     .replace(
       PlaceholderText.PRISONER_FULL_NAME,
-      `${placeholderValues.prisonerFirstName} ${placeholderValues.prisonerLastName}`
+      convertToTitleCase(`${values.prisonerFirstName || ''} ${values.prisonerLastName || ''}`)
+    )
+    .replace(
+      PlaceholderText.PRISONER_FULL_NAME_POSSESSIVE,
+      possessive(convertToTitleCase(`${values.prisonerFirstName || ''} ${values.prisonerLastName || ''}`))
     )
     .replace(
       PlaceholderText.ASSOCIATED_PRISONER_FULL_NAME,
-      `${placeholderValues.associatedPrisonerFirstName} ${placeholderValues.associatedPrisonerLastName}`
+      convertToTitleCase(`${values.associatedPrisonerFirstName || ''} ${values.associatedPrisonerLastName || ''}`)
     )
-    .replace(PlaceholderText.VICTIM_STAFF_FULL_NAME, placeholderValues.victimStaffFullName)
+    .replace(PlaceholderText.VICTIM_STAFF_FULL_NAME, convertToTitleCase(values.victimStaffFullName || ''))
     .replace(
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,
-      `${placeholderValues.victimPrisonerFirstName} ${placeholderValues.victimPrisonerLastName}`
+      convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`)
     )
-    .replace(PlaceholderText.VICTIM_OTHER_PERSON_FULL_NAME, placeholderValues.victimOtherPersonFullName)
+    .replace(PlaceholderText.VICTIM_OTHER_PERSON_FULL_NAME, convertToTitleCase(values.victimOtherPersonFullName || ''))
 }

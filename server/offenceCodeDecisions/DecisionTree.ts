@@ -53,7 +53,7 @@ export default decision([
               .child(answer('Yes').offenceCode(12001))
               .child(answer('No').offenceCode(12002))))
           .child(answer('Sells or gives an unauthorised article to another person')
-            .child(decision(`Was the article only for ${Text.PRISONER_FULL_NAME}’s personal use?`)
+            .child(decision(`Was the article only for ${Text.PRISONER_FULL_NAME_POSSESSIVE} personal use?`)
               .child(answer('Yes').offenceCode(14001))
               .child(answer('No').offenceCode(13001))))
           .child(answer('Takes an article from another person without permission').offenceCode(15001))))
