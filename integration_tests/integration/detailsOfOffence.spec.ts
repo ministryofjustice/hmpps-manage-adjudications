@@ -217,7 +217,7 @@ context('Details of offence', () => {
     detailsOfOffence.offenceSection(1).contains('Commits any assault')
   })
 
-  it.only('offence details page when there is no offences', () => {
+  it('offence details page when there is no offences', () => {
     cy.visit(`/details-of-offence/200`)
     const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffence.continue().click()
