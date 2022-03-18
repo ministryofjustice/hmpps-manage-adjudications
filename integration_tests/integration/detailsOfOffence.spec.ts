@@ -3,7 +3,7 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 
-context('Incident details', () => {
+context('Details of offence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

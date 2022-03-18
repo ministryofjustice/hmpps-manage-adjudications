@@ -3,33 +3,73 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import DecisionTreeService from '../../services/decisionTreeService'
+import { IncidentRole } from '../../incidentRole/IncidentRole'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
+jest.mock('../../services/decisionTreeService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const decisionTreeService = new DecisionTreeService(null, null, null) as jest.Mocked<DecisionTreeService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
+  decisionTreeService.allOffences.mockResolvedValue([
+    {
+      victimOtherPersonsName: undefined,
+      victimPrisonersNumber: 'G6123VU',
+      victimStaffUsername: undefined,
+      offenceCode: '2001',
     },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
-    currentLocation: 'Moorland (HMP & YOI)',
+  ])
+
+  decisionTreeService.adjudicationData.mockResolvedValue({
+    draftAdjudication: {
+      id: 100,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        handoverDeadline: '2021-12-11T10:30:00',
+      },
+      incidentRole: {
+        roleCode: '25c',
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1,
+          victimPrisonersNumber: 'G5512G',
+        },
+        {
+          offenceCode: 2,
+        },
+      ],
+      incidentStatement: { statement: 'text here', completed: true },
+      startedByUserId: 'TEST_GEN',
+    },
+    adjudicationNumber: 100,
+    incidentRole: IncidentRole.ASSISTED,
+    prisoner: {
+      offenderNo: 'A8383DY',
+      firstName: 'PHYLLIS',
+      lastName: 'SMITH',
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 4012,
+        description: 'RECP',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+      categoryCode: undefined,
+      language: undefined,
+      prisonerNumber: 'A8383DY',
+      friendlyName: 'Phyllis Smith',
+      displayName: 'Smith, Phyllis',
+      currentLocation: 'RECP',
+    },
+    associatedPrisoner: undefined,
   })
 
   locationService.getIncidentLocations.mockResolvedValue([
@@ -64,6 +104,8 @@ beforeEach(() => {
   })
 
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
+
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
 })
 
 afterEach(() => {
@@ -73,7 +115,7 @@ afterEach(() => {
 describe('GET /check-your-answers', () => {
   it('should load the check-your-answers page', () => {
     return request(app)
-      .get('/check-your-answers/G6415GD/1')
+      .get('/check-your-answers/G6415GD/100')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
@@ -89,7 +131,7 @@ describe('GET /check-your-answers', () => {
 describe('POST /check-your-answers', () => {
   it('should redirect to the correct page if details is complete', () => {
     return request(app)
-      .post('/check-your-answers/G6415GD/1')
+      .post('/check-your-answers/G6415GD/100')
       .expect(302)
       .expect('Location', '/prisoner-placed-on-report/2342')
   })
@@ -97,7 +139,7 @@ describe('POST /check-your-answers', () => {
   it('should throw an error on api failure', () => {
     placeOnReportService.completeDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/check-your-answers/G6415GD/1')
+      .post('/check-your-answers/G6415GD/100')
       .expect(response => {
         expect(response.text).toContain('Error: Internal Error')
       })

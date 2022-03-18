@@ -1,0 +1,52 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro offenceQAndASummaryList(offence, attributes = {}, classes='') %}
+  {% set rows = [] %}
+
+    {# Add questions and answers to table rows #}
+    {% for questionAndAnswer in offence.questionsAndAnswers %}
+        {% set value = {text: questionAndAnswer.answer} %}
+        {% set rows = (rows.push(
+        {
+            key: {
+                text: questionAndAnswer.question
+            },
+            value: value
+        }
+        ), rows) %}
+    {% endfor %}
+
+    {# Add final row - the paragraph numbers #}
+    {% if offence.incidentRule %}
+        {% set offencesValue = { html:
+            '<p>Prison rule 51, paragraph ' + offence.incidentRule.paragraphNumber + '</p>' +
+            '<p>' + offence.incidentRule.paragraphDescription + '</p>' +
+            '<p>Prison rule 51, paragraph ' + offence.offenceRule.paragraphNumber + '</p>' +
+            '<p>' + offence.offenceRule.paragraphDescription + '</p>'
+        } %}
+    {% else %}
+        {% set offencesValue = { html:
+            '<p>Prison rule 51, paragraph ' + offence.offenceRule.paragraphNumber + '</p>' +
+            '<p>' + offence.offenceRule.paragraphDescription + '</p>'
+        } %}
+     {% endif %}
+    {% set rows = (rows.push(
+        {
+            key: {
+                text: 'This offence broke'
+            },
+            value: offencesValue
+        }
+    ), rows) %}
+
+
+
+  {% if rows.length %}
+    {{ govukSummaryList({
+      rows: rows,
+      classes: classes,
+      attributes: attributes
+    }) }}
+  {% endif %}
+
+{% endmacro %}

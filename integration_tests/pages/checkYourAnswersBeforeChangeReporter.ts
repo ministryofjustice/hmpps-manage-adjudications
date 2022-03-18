@@ -9,9 +9,13 @@ export default class CheckYourAnswersPage extends Page {
 
   incidentStatement = (): PageElement => cy.get('[data-qa="adjudicationsSummary-incidentStatement"]')
 
+  offenceDetailsSummary = (): PageElement => cy.get('[data-qa="offence-summary-table"]')
+
   incidentDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-details-changeLink"]')
 
   incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-statement-changeLink"]')
+
+  offenceDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-offence-changeLink"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="check-answers-submit"]')
 

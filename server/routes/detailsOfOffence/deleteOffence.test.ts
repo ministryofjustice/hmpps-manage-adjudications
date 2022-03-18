@@ -11,12 +11,10 @@ import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService() as jest.Mocked<DecisionTreeService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -34,12 +32,10 @@ const testDecisionsTree = decision([
       decision('A child question').child(answer('A standard child answer').offenceCode(2))
     )
   )
-
+const decisionTreeService = new DecisionTreeService(placeOnReportService, userService, testDecisionsTree)
 let app: Express
 
 beforeEach(() => {
-  decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
-
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: {
       id: 102,

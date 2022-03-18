@@ -3,42 +3,84 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
+jest.mock('../../services/decisionTreeService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const decisionTreeService = new DecisionTreeService(null, null, null) as jest.Mocked<DecisionTreeService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
     assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
+      agencyId: undefined,
+      locationId: undefined,
+      description: undefined,
+      agencyName: undefined,
     },
     categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
-    currentLocation: 'Moorland (HMP & YOI)',
+    language: undefined,
+    friendlyName: undefined,
+    displayName: undefined,
+    prisonerNumber: undefined,
+    currentLocation: undefined,
+  })
+
+  decisionTreeService.adjudicationData.mockResolvedValue({
+    draftAdjudication: {
+      id: 1,
+      adjudicationNumber: 123,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        locationId: 6,
+        dateTimeOfIncident: undefined,
+        handoverDeadline: undefined,
+      },
+      incidentRole: {
+        roleCode: '25a',
+      },
+      offenceDetails: [
+        {
+          offenceCode: 4,
+          victimPrisonersNumber: '',
+        },
+      ],
+      incidentStatement: { statement: '', completed: true },
+      startedByUserId: undefined,
+    },
+    adjudicationNumber: 1,
+    incidentRole: undefined,
+    prisoner: {
+      offenderNo: 'G6415GD',
+      firstName: undefined,
+      lastName: undefined,
+      assignedLivingUnit: {
+        agencyId: undefined,
+        locationId: undefined,
+        description: undefined,
+        agencyName: undefined,
+      },
+      categoryCode: undefined,
+      language: undefined,
+      friendlyName: undefined,
+      displayName: undefined,
+      prisonerNumber: undefined,
+      currentLocation: undefined,
+    },
+    associatedPrisoner: undefined,
   })
 
   locationService.getIncidentLocations.mockResolvedValue([
-    { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
     { locationId: 6, locationPrefix: 'OC', userDescription: 'Rivendell' },
-    { locationId: 2, locationPrefix: 'P2', userDescription: 'Hogwarts' },
-    { locationId: 4, locationPrefix: 'P4', userDescription: 'Arundel' },
-    { locationId: 1, locationPrefix: 'P1', userDescription: 'Timbuktu' },
-    { locationId: 3, locationPrefix: 'P3', userDescription: 'Narnia' },
   ])
 
   placeOnReportService.getCheckYourAnswersInfo.mockResolvedValue({
@@ -50,11 +92,11 @@ beforeEach(() => {
       },
       {
         label: 'Date',
-        value: '8 March 2020',
+        value: '9 December 2021',
       },
       {
         label: 'Time',
-        value: '10:45',
+        value: '10:30',
       },
       {
         label: 'Location',
@@ -63,6 +105,7 @@ beforeEach(() => {
     ],
   })
 
+  decisionTreeService.allOffences.mockResolvedValue([])
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 })
 

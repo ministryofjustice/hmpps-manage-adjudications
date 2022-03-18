@@ -31,7 +31,7 @@
 	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-		{{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data, statementEditable) }}
+		{{ adjudicationSummary(editIncidentDetailsURL, editIncidentStatementURL, data, statementEditable, offences) }}
 
 		{% if creationJourney %}
 		<h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>

@@ -11,12 +11,10 @@ import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/userService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const decisionTreeService = new DecisionTreeService() as jest.Mocked<DecisionTreeService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -34,6 +32,8 @@ const testDecisionsTree = decision([
       decision('A child question').child(answer('A standard child answer').offenceCode(2))
     )
   )
+
+const decisionTreeService = new DecisionTreeService(placeOnReportService, userService, testDecisionsTree)
 
 let app: Express
 
@@ -81,8 +81,6 @@ const adjudicationWithoutOffences = {
 }
 
 beforeEach(() => {
-  decisionTreeService.getDecisionTree.mockReturnValue(testDecisionsTree)
-
   placeOnReportService.getDraftAdjudicationDetails.mockImplementation(adjudicationId => {
     if (adjudicationWithOffences.draftAdjudication.id === adjudicationId) {
       return Promise.resolve(adjudicationWithOffences)
@@ -181,7 +179,6 @@ describe('POST /details-of-offence/100', () => {
         agent
           .post('/details-of-offence/100/')
           .expect(302)
-          .expect('Location', '/incident-statement/G6415GD/100')
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
               100,
@@ -189,20 +186,6 @@ describe('POST /details-of-offence/100', () => {
               expect.anything()
             )
           )
-      )
-  })
-
-  it('should redirect to the start of choose offence when there are no offences', async () => {
-    const agent = request.agent(app)
-    return agent
-      .get('/details-of-offence/101/')
-      .expect(200)
-      .then(() =>
-        agent
-          .post('/details-of-offence/101/')
-          .send({ addOffence: 'addOffence' })
-          .expect(302)
-          .expect('Location', '/offence-code-selection/101/assisted')
       )
   })
 })
