@@ -21,16 +21,16 @@ describe('title', () => {
       victimStaffFullName: undefined,
     }
     expect(testTokenReplacementDecisionTitle.getProcessedText(placeholderValues, Role.COMMITTED)).toEqual(
-      'Committed: PRISONER_FIRST_NAME PRISONER_LAST_NAME'
+      'Committed: Prisoner_first_name Prisoner_last_name'
     )
     expect(testTokenReplacementDecisionTitle.getProcessedText(placeholderValues, Role.ATTEMPTED)).toEqual(
-      'Attempted: PRISONER_FIRST_NAME PRISONER_LAST_NAME'
+      'Attempted: Prisoner_first_name Prisoner_last_name'
     )
     expect(testTokenReplacementDecisionTitle.getProcessedText(placeholderValues, Role.ASSISTED)).toEqual(
-      'Assisted: PRISONER_FIRST_NAME PRISONER_LAST_NAME. Associated: ASSOCIATED_PRISONER_FIRST_NAME ASSOCIATED_PRISONER_LAST_NAME'
+      'Assisted: Prisoner_first_name Prisoner_last_name. Associated: Associated_prisoner_first_name Associated_prisoner_last_name'
     )
     expect(testTokenReplacementDecisionTitle.getProcessedText(placeholderValues, Role.INCITED)).toEqual(
-      'Incited: PRISONER_FIRST_NAME PRISONER_LAST_NAME. Associated: ASSOCIATED_PRISONER_FIRST_NAME ASSOCIATED_PRISONER_LAST_NAME'
+      'Incited: Prisoner_first_name Prisoner_last_name. Associated: Associated_prisoner_first_name Associated_prisoner_last_name'
     )
   })
 })
