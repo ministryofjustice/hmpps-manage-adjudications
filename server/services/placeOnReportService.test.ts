@@ -455,6 +455,7 @@ describe('placeOnReportService', () => {
         12123123,
         'G2996UX',
         '25b',
+        false,
         user
       )
       expect(response).toEqual(expectedResult)
@@ -465,6 +466,7 @@ describe('placeOnReportService', () => {
           associatedPrisonersNumber: 'G2996UX',
           roleCode: '25b',
         },
+        removeExistingOffences: false,
       })
     })
   })

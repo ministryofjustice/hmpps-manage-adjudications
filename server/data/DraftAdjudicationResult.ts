@@ -67,6 +67,7 @@ export type EditedIncidentDetails = {
   dateTimeOfIncident: string
   locationId: number
   incidentRole?: IncidentRole
+  removeExistingOffences?: boolean
 }
 
 export type TaskListDetails = {
