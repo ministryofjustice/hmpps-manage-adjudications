@@ -8,7 +8,7 @@ import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { PrisonerReport } from '../data/DraftAdjudicationResult'
+import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
@@ -171,17 +171,19 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getPrisonerReport(
-    user: User,
-    adjudicationNumber: number,
-    locations: PrisonLocation[]
-  ): Promise<PrisonerReport> {
+  async createDraftFromCompleteAdjudication(user: User, adjudicationNumber: number): Promise<number> {
     const newDraftAdjudicationData = await new ManageAdjudicationsClient(
       user.token
     ).createDraftFromCompleteAdjudication(adjudicationNumber)
-    const { draftAdjudication } = newDraftAdjudicationData
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
+    return newDraftAdjudicationData.draftAdjudication.id
+  }
 
+  async getPrisonerReport(
+    user: User,
+    locations: PrisonLocation[],
+    draftAdjudication: DraftAdjudication
+  ): Promise<PrisonerReport> {
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')
     const time = getTime(dateTime)
@@ -208,8 +210,6 @@ export default class ReportedAdjudicationsService {
     ]
 
     return {
-      reportNo: adjudicationNumber,
-      draftId: draftAdjudication.id,
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
     }

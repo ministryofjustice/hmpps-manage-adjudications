@@ -463,10 +463,24 @@ describe('reportedAdjudicationsService', () => {
         { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
         { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
       ]
-      const result = await service.getPrisonerReport(user, 1234, locations)
+      const draftAdjudication = {
+        id: 10,
+        prisonerNumber: 'G6123VU',
+        incidentDetails: {
+          locationId: 26152,
+          dateTimeOfIncident: '2021-11-04T07:20:00',
+        },
+        incidentStatement: {
+          statement: 'Statement for a test',
+        },
+        startedByUserId: 'TEST_GEN',
+        incidentRole: {
+          associatedPrisonersNumber: 'G6415GD',
+          roleCode: '25b',
+        },
+      }
+      const result = await service.getPrisonerReport(user, locations, draftAdjudication)
       const expectedResult = {
-        reportNo: 1234,
-        draftId: 10,
         incidentDetails: [
           {
             label: 'Reporting Officer',

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
