@@ -68,7 +68,6 @@ export default function routes(
     '/prisoner-report',
     prisonerReportRoutes({
       reportedAdjudicationsService,
-      placeOnReportService,
       locationService,
       userService,
       decisionTreeService,

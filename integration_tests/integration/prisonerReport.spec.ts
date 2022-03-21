@@ -1,7 +1,7 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 
-context('Prisoner report', () => {
+context('Prisoner report - reporter view', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
