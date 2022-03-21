@@ -47,6 +47,7 @@ const getVariablesForPageType = (
   }
   if (pageOptions.isEditByReviewer()) {
     return {
+      // We don't have the editIncidentStatementURL variable here as reviewers cannot change the statement.
       editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${prisonerNumber}/${adjudicationNumber}/review`,
       exitUrl: `/prisoner-report/${prisonerNumber}/${incidentDetailsData.adjudicationNumber}/review`,
     }
@@ -90,31 +91,28 @@ export default class CheckYourAnswersPage {
 
     const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.decisionTreeService.adjudicationData(Number(req.params.adjudicationNumber), user)
+
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,
       user
     )
-    const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
-      adjudicationNumber,
-      incidentLocations,
-      user
-    )
-    const allOffenceData = await this.decisionTreeService.allOffences(adjudicationNumber, user)
-    const offences = await this.decisionTreeService.getAdjudicationOffences(
-      allOffenceData,
-      prisoner,
-      associatedPrisoner,
-      incidentRole,
-      draftAdjudication,
-      user
-    )
 
-    const checkAnswersVariations = getVariablesForPageType(
-      this.pageOptions,
-      prisoner.prisonerNumber,
-      adjudicationNumber,
-      incidentDetailsData
-    )
+    const [incidentDetailsData, allOffenceData] = await Promise.all([
+      this.placeOnReportService.getCheckYourAnswersInfo(adjudicationNumber, incidentLocations, user),
+      this.decisionTreeService.allOffences(adjudicationNumber, user),
+    ])
+
+    const [offences, checkAnswersVariations] = await Promise.all([
+      this.decisionTreeService.getAdjudicationOffences(
+        allOffenceData,
+        prisoner,
+        associatedPrisoner,
+        incidentRole,
+        draftAdjudication,
+        user
+      ),
+      getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, adjudicationNumber, incidentDetailsData),
+    ])
 
     return res.render(`pages/checkYourAnswers`, {
       errors: error ? [error] : [],
