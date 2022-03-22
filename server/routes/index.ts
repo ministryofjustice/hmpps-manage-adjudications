@@ -66,7 +66,12 @@ export default function routes(
   router.use('/print-report', printReportRoutes({ reportedAdjudicationsService }))
   router.use(
     '/prisoner-report',
-    prisonerReportRoutes({ reportedAdjudicationsService, placeOnReportService, locationService, userService })
+    prisonerReportRoutes({
+      reportedAdjudicationsService,
+      locationService,
+      userService,
+      decisionTreeService,
+    })
   )
   router.use('/delete-person', deletePersonRoutes({ placeOnReportService, userService }))
   router.use('/', homepageRoutes({ userService }))

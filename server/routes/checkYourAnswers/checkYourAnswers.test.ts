@@ -35,16 +35,15 @@ beforeEach(() => {
         dateTimeOfIncident: '2021-12-09T10:30:00',
         handoverDeadline: '2021-12-11T10:30:00',
       },
-      incidentRole: {
-        roleCode: '25c',
-      },
+      incidentRole: {},
       offenceDetails: [
         {
-          offenceCode: 1,
-          victimPrisonersNumber: 'G5512G',
-        },
-        {
-          offenceCode: 2,
+          offenceCode: 1002,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G6123VU',
         },
       ],
       incidentStatement: { statement: 'text here', completed: true },
@@ -103,6 +102,24 @@ beforeEach(() => {
     ],
   })
 
+  const qAndAs = [
+    {
+      question: 'What type of offence did Phyllis Smith commit?',
+      answer: 'Assault, fighting, or endangering the health or personal safety of others',
+    },
+  ]
+
+  decisionTreeService.getAdjudicationOffences.mockResolvedValue([
+    {
+      questionsAndAnswers: qAndAs,
+      incidentRule: undefined,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    },
+  ])
+
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 
   app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
@@ -123,6 +140,11 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain(
           'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'
         )
+        expect(response.text).toContain('What type of offence did Phyllis Smith commit?')
+        expect(response.text).toContain('Assault, fighting, or endangering the health or personal safety of others')
+        expect(response.text).toContain('This offence broke')
+        expect(response.text).toContain('Prison rule 51, paragraph 1')
+        expect(response.text).toContain('Commits any assault')
         expect(placeOnReportService.getCheckYourAnswersInfo).toHaveBeenCalledTimes(1)
       })
   })

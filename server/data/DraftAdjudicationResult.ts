@@ -53,11 +53,6 @@ export type CheckYourAnswers = {
   adjudicationNumber?: number
 }
 
-export interface PrisonerReport extends CheckYourAnswers {
-  reportNo: number
-  draftId: number
-}
-
 type SummarySectionItems = {
   label: string
   value: string
@@ -75,3 +70,5 @@ export type TaskListDetails = {
   statementComplete: boolean
   offenceDetailsComplete: boolean
 }
+
+export type PrisonerReport = CheckYourAnswers

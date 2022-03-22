@@ -1,43 +1,27 @@
 import { Request, Response } from 'express'
-import PlaceOnReportService from '../../services/placeOnReportService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import LocationService from '../../services/locationService'
+import DecisionTreeService from '../../services/decisionTreeService'
+import PrisonerReportPage, { PageRequestType } from './prisonerReportPage'
 
 export default class prisonerReportRoutes {
+  page: PrisonerReportPage
+
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly placeOnReportService: PlaceOnReportService,
-    private readonly locationService: LocationService
-  ) {}
-
-  private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { prisonerNumber, adjudicationNumber } = req.params
-    const { user } = res.locals
-
-    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
-    const incidentLocations = await this.locationService.getIncidentLocations(
-      prisoner.assignedLivingUnit.agencyId,
-      user
+    private readonly locationService: LocationService,
+    private readonly decisionTreeService: DecisionTreeService
+  ) {
+    this.page = new PrisonerReportPage(
+      PageRequestType.REPORTER,
+      reportedAdjudicationsService,
+      locationService,
+      null,
+      decisionTreeService
     )
-
-    const adjudicationNumberValue: number = parseInt(adjudicationNumber as string, 10)
-    const data = await this.reportedAdjudicationsService.getPrisonerReport(
-      user,
-      adjudicationNumberValue,
-      incidentLocations
-    )
-
-    return res.render(`pages/prisonerReport`, {
-      prisoner,
-      data,
-      printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${prisoner.prisonerNumber}/${adjudicationNumber}/report`,
-      editIncidentDetailsURL: `/incident-details/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit?referrer=/prisoner-report/${prisoner.prisonerNumber}/${adjudicationNumber}/report`,
-      editIncidentStatementURL: `/incident-statement/${prisoner.prisonerNumber}/${data.draftId}/submitted/edit`,
-      statementEditable: true,
-      returnLinkURL: `/your-completed-reports`,
-      returnLinkContent: 'Return to your completed reports',
-    })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
+  view = async (req: Request, res: Response): Promise<void> => {
+    await this.page.view(req, res)
+  }
 }
