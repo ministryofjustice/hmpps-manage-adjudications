@@ -18,5 +18,6 @@ export default function prisonerConfirmedOnReportRoutes({
 
   get('/:adjudicationNumber', printReport.view)
 
+  // get('/pdf-print', printReport.renderPdf)
   return router
 }
