@@ -44,7 +44,7 @@
     {% endif %}
   {% endif %}
 
-  {% if statementComplete %}
+  {% if statementComplete and offenceDetailsComplete %}
     {% set data = (data.push([
    { html: "<a href='/check-your-answers/"+prisonerNo+"/"+adjudicationId+"' class='task' data-qa='accept-details-link'>Accept details and place on report</a>" },
    { html: '<strong class="govuk-tag govuk-tag--grey">NOT STARTED</strong>' }
