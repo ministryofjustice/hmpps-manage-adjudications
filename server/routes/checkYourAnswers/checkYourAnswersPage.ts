@@ -132,7 +132,6 @@ export default class CheckYourAnswersPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    // TODO: prisonerNumber to be removed
     const { prisonerNumber } = req.params
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
