@@ -69,10 +69,6 @@ export default class DetailsOfOffenceRoutes {
         }
       })
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
-    const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
-      adjudicationNumber,
-      user
-    )
-    return res.redirect(`/incident-statement/${prisonerNumber}/${adjudicationNumber}`)
+    return res.redirect(`/incident-statement/${adjudicationNumber}`)
   }
 }

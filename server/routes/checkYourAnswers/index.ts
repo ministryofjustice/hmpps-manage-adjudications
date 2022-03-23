@@ -35,11 +35,11 @@ export default function CheckAnswersRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/:prisonerNumber/:adjudicationNumber', checkYourAnswers.view)
-  post('/:prisonerNumber/:adjudicationNumber', checkYourAnswers.submit)
-  get('/:prisonerNumber/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.view)
-  post('/:prisonerNumber/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.submit)
-  get('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
-  post('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
+  get('/:adjudicationNumber', checkYourAnswers.view)
+  post('/:adjudicationNumber', checkYourAnswers.submit)
+  get('/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.view)
+  post('/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.submit)
+  get('/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
+  post('/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
   return router
 }

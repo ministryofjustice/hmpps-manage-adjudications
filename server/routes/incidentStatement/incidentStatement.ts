@@ -10,18 +10,14 @@ type PageData = {
   error?: FormError
   incidentStatement?: string
   incidentStatementComplete?: string
-  prisonerData?: PrisonerResult
+  prisoner?: PrisonerResult
 }
 
 export default class IncidentStatementRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, incidentStatement, incidentStatementComplete } = pageData
-    const { prisonerNumber } = req.params
-    const { user } = res.locals
-
-    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    const { error, incidentStatement, incidentStatementComplete, prisoner } = pageData
 
     return res.render(`pages/incidentStatement`, {
       errors: error ? [error] : [],
@@ -34,21 +30,27 @@ export default class IncidentStatementRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
+    const { adjudicationNumber } = req.params
     const { user } = res.locals
 
-    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(Number(id), user)
+    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(
+      Number(adjudicationNumber),
+      user
+    )
+    const { draftAdjudication } = draftAdjudicationResult
+    const prisoner = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
 
     return this.renderView(req, res, {
-      incidentStatement: draftAdjudicationResult?.draftAdjudication.incidentStatement?.statement,
-      incidentStatementComplete: draftAdjudicationResult?.draftAdjudication.incidentStatement?.completed ? 'yes' : null,
+      prisoner,
+      incidentStatement: draftAdjudication.incidentStatement?.statement,
+      incidentStatementComplete: draftAdjudication.incidentStatement?.completed ? 'yes' : null,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
     const { user } = res.locals
-    const { id, prisonerNumber } = req.params
+    const { adjudicationNumber } = req.params
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
@@ -57,7 +59,7 @@ export default class IncidentStatementRoutes {
 
     try {
       const draftAdjudicationResult = await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
-        Number(id),
+        Number(adjudicationNumber),
         incidentStatement,
         statementComplete,
         user
@@ -68,14 +70,14 @@ export default class IncidentStatementRoutes {
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = `/incident-statement/${prisonerNumber}/${id}`
+      res.locals.redirectUrl = `/incident-statement/${adjudicationNumber}`
       throw postError
     }
   }
 
   getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
     if (incidentStatementComplete && draftAdjudication.offenceDetails.length)
-      return `/check-your-answers/${draftAdjudication.prisonerNumber}/${draftAdjudication.id}`
+      return `/check-your-answers/${draftAdjudication.id}`
     return `/place-the-prisoner-on-report/${draftAdjudication.id}`
   }
 }

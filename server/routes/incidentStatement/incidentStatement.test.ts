@@ -11,7 +11,7 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
+  placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue({
     offenderNo: 'A7937DY',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
@@ -56,7 +56,7 @@ afterEach(() => {
 describe('GET /incident-statement', () => {
   it('should load the incident statement page', () => {
     return request(app)
-      .get('/incident-statement/A7937DY/1041')
+      .get('/incident-statement/1041')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident statement')
@@ -88,7 +88,7 @@ describe('POST /incident-statement', () => {
     })
     it('should redirect to the task page', () => {
       return request(app)
-        .post('/incident-statement/A7937DY/1041')
+        .post('/incident-statement/1041')
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
         .expect('Location', '/place-the-prisoner-on-report/1041')
     })
@@ -116,7 +116,7 @@ describe('POST /incident-statement', () => {
     })
     it('should redirect to the task page', () => {
       return request(app)
-        .post('/incident-statement/A7937DY/1041')
+        .post('/incident-statement/1041')
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
         .expect('Location', '/place-the-prisoner-on-report/1041')
     })
@@ -152,9 +152,9 @@ describe('POST /incident-statement', () => {
     })
     it('should redirect to check your answers page ', () => {
       return request(app)
-        .post('/incident-statement/A7937DY/1041')
+        .post('/incident-statement/1041')
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-        .expect('Location', '/check-your-answers/A7937DY/1041')
+        .expect('Location', '/check-your-answers/1041')
         .expect(_ => {
           expect(placeOnReportService.addOrUpdateDraftIncidentStatement).toHaveBeenLastCalledWith(
             1041,
@@ -166,7 +166,7 @@ describe('POST /incident-statement', () => {
     })
     it('should render error summary with correct validation message', () => {
       return request(app)
-        .post('/incident-statement/A7937DY/1041')
+        .post('/incident-statement/1041')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('There is a problem')
@@ -176,7 +176,7 @@ describe('POST /incident-statement', () => {
     it('should throw an error on api failure', () => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
       return request(app)
-        .post('/incident-statement/A7937DY/1041')
+        .post('/incident-statement/1041')
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
         .expect('Content-Type', /html/)
         .expect(res => {

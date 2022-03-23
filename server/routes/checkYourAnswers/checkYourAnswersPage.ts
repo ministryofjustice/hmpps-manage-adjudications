@@ -40,21 +40,21 @@ const getVariablesForPageType = (
 ) => {
   if (pageOptions.isEditByReporter()) {
     return {
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${prisonerNumber}/${adjudicationNumber}/report`,
-      editIncidentStatementURL: `/incident-statement/${prisonerNumber}/${adjudicationNumber}/submitted/edit`,
+      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/report`,
+      editIncidentStatementURL: `/incident-statement/${adjudicationNumber}/submitted/edit`,
       exitUrl: `/prisoner-report/${prisonerNumber}/${incidentDetailsData.adjudicationNumber}/report`,
     }
   }
   if (pageOptions.isEditByReviewer()) {
     return {
       // We don't have the editIncidentStatementURL variable here as reviewers cannot change the statement.
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${prisonerNumber}/${adjudicationNumber}/review`,
+      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/review`,
       exitUrl: `/prisoner-report/${prisonerNumber}/${incidentDetailsData.adjudicationNumber}/review`,
     }
   }
   return {
     editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/edit`,
-    editIncidentStatementURL: `/incident-statement/${prisonerNumber}/${adjudicationNumber}`,
+    editIncidentStatementURL: `/incident-statement/${adjudicationNumber}`,
     exitUrl: `/place-the-prisoner-on-report/${adjudicationNumber}`,
   }
 }
@@ -67,7 +67,7 @@ const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: n
   return `/prisoner-placed-on-report/${completeAdjudicationNumber}`
 }
 
-const getErrorRedirectUrl = (pageOptions: PageOptions, prisonerNumber: string, adjudicationNumber: number) => {
+const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
   if (pageOptions.isEditByReporter()) return `/your-completed-reports`
   if (pageOptions.isEditByReviewer()) return `/all-completed-reports`
   return `/place-the-prisoner-on-report/${adjudicationNumber}`
@@ -132,7 +132,6 @@ export default class CheckYourAnswersPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { prisonerNumber } = req.params
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     try {
@@ -143,7 +142,7 @@ export default class CheckYourAnswersPage {
       const redirectUrl = getRedirectUrls(this.pageOptions, completeAdjudicationNumber)
       return res.redirect(redirectUrl)
     } catch (postError) {
-      const errorRedirectUrl = getErrorRedirectUrl(this.pageOptions, prisonerNumber, adjudicationNumber)
+      const errorRedirectUrl = getErrorRedirectUrl(this.pageOptions, adjudicationNumber)
       res.locals.redirectUrl = errorRedirectUrl
       throw postError
     }

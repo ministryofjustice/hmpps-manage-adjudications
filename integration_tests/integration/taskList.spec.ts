@@ -86,7 +86,7 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.incidentStatementLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/incident-statement/G6415GD/3456')
+        expect(loc.pathname).to.eq('/incident-statement/3456')
       })
     })
   })
@@ -362,7 +362,7 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.acceptDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/check-your-answers/G6415GD/3456')
+        expect(loc.pathname).to.eq('/check-your-answers/3456')
       })
     })
   })

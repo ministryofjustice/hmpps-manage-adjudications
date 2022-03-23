@@ -123,7 +123,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         originalIncidentRoleSelection: 'committed',
       })
       .expect(302)
-      .expect('Location', '/check-your-answers/G6415GD/34/report')
+      .expect('Location', '/check-your-answers/34/report')
   })
   it('should redirect to check your answers page - reviewer', () => {
     return request(app)
@@ -135,7 +135,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         originalIncidentRoleSelection: 'committed',
       })
       .expect(302)
-      .expect('Location', '/check-your-answers/G6415GD/34/review')
+      .expect('Location', '/check-your-answers/34/review')
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)

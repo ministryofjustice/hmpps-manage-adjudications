@@ -61,7 +61,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 00:00 on 23 November 2021.'
           )
           expect(response.text).not.toContain(
-            "<a href='/check-your-answers/G6415GD/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
+            "<a href='/check-your-answers/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
           )
         })
     })
@@ -92,7 +92,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 00:00 on 23 November 2021.'
           )
           expect(response.text).not.toContain(
-            "<a href='/check-your-answers/G6415GD/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
+            "<a href='/check-your-answers/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
           )
         })
     })
@@ -123,7 +123,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 20:45 on 23 November 2021.'
           )
           expect(response.text).not.toContain(
-            "<a href='/check-your-answers/G6415GD/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
+            "<a href='/check-your-answers/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
           )
         })
     })
@@ -154,7 +154,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 15:11 on 23 November 2021.'
           )
           expect(response.text).toContain(
-            "<a href='/check-your-answers/G6415GD/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
+            "<a href='/check-your-answers/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
           )
         })
     })
@@ -185,7 +185,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             'You need to provide Udfsanaye Aidetria with a printed copy of this report by 15:11 on 23 November 2021.'
           )
           expect(response.text).not.toContain(
-            "<a href='/check-your-answers/G6415GD/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
+            "<a href='/check-your-answers/104' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>"
           )
         })
     })
