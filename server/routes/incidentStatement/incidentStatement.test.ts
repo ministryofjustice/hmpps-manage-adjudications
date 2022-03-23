@@ -12,7 +12,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
+    offenderNo: 'A7937DY',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
     assignedLivingUnit: {
@@ -25,23 +25,23 @@ beforeEach(() => {
     language: 'English',
     friendlyName: 'Udfsanaye Aidetria',
     displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
+    prisonerNumber: 'A7937DY',
     currentLocation: 'Moorland (HMP & YOI)',
   })
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: {
-      id: 436,
-      adjudicationNumber: 1524493,
-      prisonerNumber: 'G6415GD',
+      id: 1041,
+      prisonerNumber: 'A7937DY',
       incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
+        locationId: 27022,
+        dateTimeOfIncident: '2022-03-23T09:10:00',
+        handoverDeadline: '2022-03-25T09:10:00',
       },
       incidentRole: {},
+      offenceDetails: [],
       incidentStatement: {
-        statement: 'This is the statement about the event',
+        statement: 'Lorem Ipsum',
         completed: true,
       },
       startedByUserId: 'TEST2_GEN',
@@ -56,7 +56,7 @@ afterEach(() => {
 describe('GET /incident-statement', () => {
   it('should load the incident statement page', () => {
     return request(app)
-      .get('/incident-statement/G6415GD/1')
+      .get('/incident-statement/A7937DY/1041')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident statement')
@@ -65,46 +65,123 @@ describe('GET /incident-statement', () => {
 })
 
 describe('POST /incident-statement', () => {
-  it('should redirect to check your answers page if statement is complete', () => {
-    return request(app)
-      .post('/incident-statement/G6415GD/1')
-      .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-      .expect('Location', '/check-your-answers/G6415GD/1')
-      .expect(_ => {
-        expect(placeOnReportService.addOrUpdateDraftIncidentStatement).toHaveBeenLastCalledWith(
-          1,
-          'Lorem Ipsum',
-          true,
-          expect.anything()
-        )
+  describe('Statement complete, offence details incomplete', () => {
+    beforeEach(() => {
+      placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
+        draftAdjudication: {
+          id: 1041,
+          prisonerNumber: 'A7937DY',
+          incidentDetails: {
+            locationId: 27022,
+            dateTimeOfIncident: '2022-03-23T09:10:00',
+            handoverDeadline: '2022-03-25T09:10:00',
+          },
+          incidentRole: {},
+          offenceDetails: [],
+          incidentStatement: {
+            statement: 'Lorem Ipsum',
+            completed: true,
+          },
+          startedByUserId: 'TEST2_GEN',
+        },
       })
+    })
+    it('should redirect to the task page', () => {
+      return request(app)
+        .post('/incident-statement/A7937DY/1041')
+        .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
+        .expect('Location', '/place-the-prisoner-on-report/A7937DY/1041')
+    })
+  })
+  describe('Statement incomplete', () => {
+    beforeEach(() => {
+      placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
+        draftAdjudication: {
+          id: 1041,
+          prisonerNumber: 'A7937DY',
+          incidentDetails: {
+            locationId: 27022,
+            dateTimeOfIncident: '2022-03-23T09:10:00',
+            handoverDeadline: '2022-03-25T09:10:00',
+          },
+          incidentRole: {},
+          offenceDetails: [],
+          incidentStatement: {
+            statement: 'Lorem Ipsum',
+            completed: false,
+          },
+          startedByUserId: 'TEST2_GEN',
+        },
+      })
+    })
+    it('should redirect to the task page', () => {
+      return request(app)
+        .post('/incident-statement/A7937DY/1041')
+        .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
+        .expect('Location', '/place-the-prisoner-on-report/A7937DY/1041')
+    })
   })
 
-  it('should redirect to the task page if the statement is incomplete', () => {
-    return request(app)
-      .post('/incident-statement/G6415GD/1')
-      .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
-      .expect('Location', '/place-the-prisoner-on-report/G6415GD/1')
-  })
-
-  it('should render error summary with correct validation message', () => {
-    return request(app)
-      .post('/incident-statement/G6415GD/1')
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select yes if you have completed your statement')
+  describe('Incident statement AND offence details are complete', () => {
+    beforeEach(() => {
+      placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
+        draftAdjudication: {
+          id: 1041,
+          prisonerNumber: 'A7937DY',
+          incidentDetails: {
+            locationId: 27022,
+            dateTimeOfIncident: '2022-03-23T09:10:00',
+            handoverDeadline: '2022-03-25T09:10:00',
+          },
+          incidentRole: {
+            roleCode: '25a',
+          },
+          offenceDetails: [
+            {
+              offenceCode: 4,
+              victimPrisonersNumber: '',
+            },
+          ],
+          incidentStatement: {
+            statement: 'Lorem Ipsum',
+            completed: true,
+          },
+          startedByUserId: 'TEST2_GEN',
+        },
       })
-  })
-
-  it('should throw an error on api failure', () => {
-    placeOnReportService.addOrUpdateDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
-    return request(app)
-      .post('/incident-statement/G6415GD/1')
-      .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Error: error message content')
-      })
+    })
+    it('should redirect to check your answers page ', () => {
+      return request(app)
+        .post('/incident-statement/A7937DY/1041')
+        .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
+        .expect('Location', '/check-your-answers/A7937DY/1041')
+        .expect(_ => {
+          expect(placeOnReportService.addOrUpdateDraftIncidentStatement).toHaveBeenLastCalledWith(
+            1041,
+            'Lorem Ipsum',
+            true,
+            expect.anything()
+          )
+        })
+    })
+    it('should render error summary with correct validation message', () => {
+      return request(app)
+        .post('/incident-statement/A7937DY/1041')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('There is a problem')
+          expect(res.text).toContain('Select yes if you have completed your statement')
+        })
+    })
+    it('should throw an error on api failure', () => {
+      placeOnReportService.addOrUpdateDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
+      return request(app)
+        .post('/incident-statement/A7937DY/1041')
+        .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Error: error message content')
+        })
+    })
   })
 })
