@@ -179,6 +179,7 @@ export default class PlaceOnReportService {
     location: number,
     associatedPrisonersNumber: string,
     roleCode: string,
+    removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
@@ -189,6 +190,7 @@ export default class PlaceOnReportService {
         associatedPrisonersNumber,
         roleCode,
       },
+      removeExistingOffences,
     }
     const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication

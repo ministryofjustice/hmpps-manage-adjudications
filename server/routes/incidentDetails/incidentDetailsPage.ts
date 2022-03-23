@@ -223,17 +223,16 @@ export default class IncidentDetailsPage {
 
     try {
       if (this.pageOptions.isEdit()) {
-        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
+        const incidentRoleChanged =
+          postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
+        const removeExistingOffences = incidentRoleChanged
+        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
 
         let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
         if (this.pageOptions.isPreviouslySubmitted()) {
           defaultNextPage = NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS
         }
-        const nextPageChoice = chooseNextPageAfterEdit(
-          defaultNextPage,
-          postValues.originalIncidentRoleSelection,
-          incidentDetailsToSave.currentIncidentRoleSelection
-        )
+        const nextPageChoice = chooseNextPageAfterEdit(defaultNextPage, incidentRoleChanged)
         switch (nextPageChoice) {
           case NextPageSelectionAfterEdit.OFFENCE_SELECTION:
             return redirectToOffenceSelection(
@@ -289,6 +288,7 @@ export default class IncidentDetailsPage {
   saveToApiUpdate = async (
     draftId: number,
     data: IncidentDetails,
+    removeExistingOffences: boolean,
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
@@ -298,6 +298,7 @@ export default class IncidentDetailsPage {
       data.locationId,
       data.currentAssociatedPrisonerNumber,
       codeFromIncidentRole(data.currentIncidentRoleSelection),
+      removeExistingOffences,
       currentUser
     )
   }
@@ -711,10 +712,9 @@ const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, er
 
 const chooseNextPageAfterEdit = (
   defaultNextPage: NextPageSelectionAfterEdit,
-  originalIncidentRole: IncidentRole,
-  currentIncidentRole: IncidentRole
+  incidentRoleChanged: boolean
 ): NextPageSelectionAfterEdit => {
-  if (originalIncidentRole !== currentIncidentRole) {
+  if (incidentRoleChanged) {
     return NextPageSelectionAfterEdit.OFFENCE_SELECTION
   }
   return defaultNextPage
