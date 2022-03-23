@@ -55,7 +55,7 @@ const getVariablesForPageType = (
   return {
     editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/edit`,
     editIncidentStatementURL: `/incident-statement/${prisonerNumber}/${adjudicationNumber}`,
-    exitUrl: `/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`,
+    exitUrl: `/place-the-prisoner-on-report/${adjudicationNumber}`,
   }
 }
 
@@ -70,7 +70,7 @@ const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: n
 const getErrorRedirectUrl = (pageOptions: PageOptions, prisonerNumber: string, adjudicationNumber: number) => {
   if (pageOptions.isEditByReporter()) return `/your-completed-reports`
   if (pageOptions.isEditByReviewer()) return `/all-completed-reports`
-  return `/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`
+  return `/place-the-prisoner-on-report/${adjudicationNumber}`
 }
 
 export default class CheckYourAnswersPage {

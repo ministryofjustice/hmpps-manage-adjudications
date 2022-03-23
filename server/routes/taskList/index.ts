@@ -16,7 +16,7 @@ export default function draftTaskListRoutesRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/:prisonerNumber/:id', draftTaskList.view)
+  get('/:id', draftTaskList.view)
 
   return router
 }

@@ -221,7 +221,7 @@ context('Incident details', () => {
     cy.visit(`/offence-code-selection/100/committed/1`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.cancel().click()
-    cy.url().should('include', 'place-the-prisoner-on-report/G6415GD/100')
+    cy.url().should('include', 'place-the-prisoner-on-report/100')
   })
 
   it('select another radio and check that we get sent to the page we expect', () => {

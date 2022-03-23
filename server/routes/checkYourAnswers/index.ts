@@ -41,6 +41,5 @@ export default function CheckAnswersRoutes({
   post('/:prisonerNumber/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.submit)
   get('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
   post('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
-
   return router
 }

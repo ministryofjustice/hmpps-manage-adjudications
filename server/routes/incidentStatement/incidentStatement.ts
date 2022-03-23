@@ -53,16 +53,18 @@ export default class IncidentStatementRoutes {
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
+    const statementComplete: boolean = incidentStatementComplete === 'yes'
+
     try {
       const draftAdjudicationResult = await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
         Number(id),
         incidentStatement,
-        incidentStatementComplete === 'yes',
+        statementComplete,
         user
       )
       const { draftAdjudication } = draftAdjudicationResult
 
-      const pathname = this.getNextPage(incidentStatementComplete === 'yes', draftAdjudication)
+      const pathname = this.getNextPage(statementComplete, draftAdjudication)
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
@@ -72,10 +74,8 @@ export default class IncidentStatementRoutes {
   }
 
   getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
-    if (incidentStatementComplete) {
-      if (draftAdjudication.offenceDetails.length)
-        return `/check-your-answers/${draftAdjudication.prisonerNumber}/${draftAdjudication.id}`
-    }
-    return `/place-the-prisoner-on-report/${draftAdjudication.prisonerNumber}/${draftAdjudication.id}`
+    if (incidentStatementComplete && draftAdjudication.offenceDetails.length)
+      return `/check-your-answers/${draftAdjudication.prisonerNumber}/${draftAdjudication.id}`
+    return `/place-the-prisoner-on-report/${draftAdjudication.id}`
   }
 }
