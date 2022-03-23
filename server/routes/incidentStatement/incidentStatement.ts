@@ -4,6 +4,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
+import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 
 type PageData = {
   error?: FormError
@@ -53,21 +54,28 @@ export default class IncidentStatementRoutes {
     if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
     try {
-      await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
+      const draftAdjudicationResult = await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
         Number(id),
         incidentStatement,
         incidentStatementComplete === 'yes',
         user
       )
-      const pathname =
-        incidentStatementComplete === 'yes'
-          ? `/check-your-answers/${prisonerNumber}/${id}`
-          : `/place-the-prisoner-on-report/${prisonerNumber}/${id}`
+      const { draftAdjudication } = draftAdjudicationResult
+
+      const pathname = this.getNextPage(incidentStatementComplete === 'yes', draftAdjudication)
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
       res.locals.redirectUrl = `/incident-statement/${prisonerNumber}/${id}`
       throw postError
     }
+  }
+
+  getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
+    if (incidentStatementComplete) {
+      if (draftAdjudication.offenceDetails.length)
+        return `/check-your-answers/${draftAdjudication.prisonerNumber}/${draftAdjudication.id}`
+    }
+    return `/place-the-prisoner-on-report/${draftAdjudication.prisonerNumber}/${draftAdjudication.id}`
   }
 }
