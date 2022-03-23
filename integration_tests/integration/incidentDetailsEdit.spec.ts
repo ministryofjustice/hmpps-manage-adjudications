@@ -272,7 +272,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G6415GD/34')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
     })
   })
   // TODO - To be changed - goes to task list
@@ -282,7 +282,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G6415GD/34')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
@@ -336,7 +336,7 @@ context('Incident details (edit) - statement incomplete', () => {
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G6415GD/34')
+      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
     })
   })
 })

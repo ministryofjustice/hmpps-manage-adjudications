@@ -11,7 +11,7 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
+  placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
@@ -46,7 +46,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/G6415GD/104')
+        .get('/place-the-prisoner-on-report/104')
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -77,7 +77,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/G6415GD/104')
+        .get('/place-the-prisoner-on-report/104')
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -108,7 +108,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/G6415GD/104')
+        .get('/place-the-prisoner-on-report/104')
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -139,7 +139,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/G6415GD/104')
+        .get('/place-the-prisoner-on-report/104')
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -170,7 +170,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should not contain a link to confirm the adjudication', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/G6415GD/104')
+        .get('/place-the-prisoner-on-report/104')
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')

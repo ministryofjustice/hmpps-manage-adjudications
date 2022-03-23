@@ -90,7 +90,7 @@ describe('POST /incident-statement', () => {
       return request(app)
         .post('/incident-statement/A7937DY/1041')
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-        .expect('Location', '/place-the-prisoner-on-report/A7937DY/1041')
+        .expect('Location', '/place-the-prisoner-on-report/1041')
     })
   })
   describe('Statement incomplete', () => {
@@ -118,7 +118,7 @@ describe('POST /incident-statement', () => {
       return request(app)
         .post('/incident-statement/A7937DY/1041')
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
-        .expect('Location', '/place-the-prisoner-on-report/A7937DY/1041')
+        .expect('Location', '/place-the-prisoner-on-report/1041')
     })
   })
 

@@ -41,6 +41,6 @@ export default function CheckAnswersRoutes({
   post('/:prisonerNumber/:adjudicationNumber/report', checkYourAnswersBeforeChangeReporter.submit)
   get('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.view)
   post('/:prisonerNumber/:adjudicationNumber/review', checkYourAnswersBeforeChangeReviewerRoutes.submit)
-
+  // TODO: views don't need prisonerNumber anyway, remove from submit when task list url changed
   return router
 }

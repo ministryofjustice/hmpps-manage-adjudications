@@ -247,7 +247,7 @@ export default class IncidentDetailsPage {
           default:
           // Fall through
         }
-        return redirectToTaskList(res, postValues.prisonerNumber, postValues.draftId)
+        return redirectToTaskList(res, postValues.draftId)
       }
       const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
       return redirectToOffenceSelection(
@@ -536,7 +536,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     if (pageData.exitButtonData.prisonerReportUrl) {
       exitButtonHref = pageData.exitButtonData.prisonerReportUrl
     } else {
-      exitButtonHref = getTaskListUrl(pageData.exitButtonData.prisonerNumber, pageData.exitButtonData.draftId)
+      exitButtonHref = getTaskListUrl(pageData.exitButtonData.draftId)
     }
   }
   const currentIncidentRoleSelection = pageData.formData.incidentDetails?.currentIncidentRoleSelection
@@ -669,8 +669,8 @@ const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
   return null
 }
 
-const getTaskListUrl = (prisonerNumber: string, draftId: number) => {
-  return `/place-the-prisoner-on-report/${prisonerNumber}/${draftId}`
+const getTaskListUrl = (draftId: number) => {
+  return `/place-the-prisoner-on-report/${draftId}`
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
@@ -694,8 +694,8 @@ const redirectToCheckYourAnswers = (
   return res.redirect(`/check-your-answers/${prisonerNumber}/${draftId}/${isReviewerPage ? 'review' : 'report'}`)
 }
 
-const redirectToTaskList = (res: Response, prisonerNumber: string, draftId: number) => {
-  return res.redirect(getTaskListUrl(prisonerNumber, draftId))
+const redirectToTaskList = (res: Response, draftId: number) => {
+  return res.redirect(getTaskListUrl(draftId))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
