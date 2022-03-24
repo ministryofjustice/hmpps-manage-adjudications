@@ -337,4 +337,27 @@ context('Incident details (edit) - statement incomplete', () => {
       expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
     })
   })
+  context('Redirect on error', () => {
+    beforeEach(() => {
+      cy.task('stubEditDraftIncidentDetails', { id: 34, response: {}, status: 500 })
+    })
+    it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
+      cy.visit(`/incident-details/G6415GD/34/edit`)
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.timeInputHours().clear()
+      incidentDetailsPage.timeInputHours().type('14')
+      incidentDetailsPage.timeInputMinutes().clear()
+      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.not.eq('/place-the-prisoner-on-report/34')
+      })
+      incidentDetailsPage.errorContinueButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq('/incident-details/G6415GD/34/edit')
+      })
+      incidentDetailsPage.timeInputHours().should('have.value', '13')
+      incidentDetailsPage.timeInputMinutes().should('have.value', '10')
+    })
+  })
 })

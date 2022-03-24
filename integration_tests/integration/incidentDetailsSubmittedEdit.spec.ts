@@ -331,12 +331,35 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.locationSelector().contains('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
   })
-  it('should redirect to the prisoner report page if the user exists the page', () => {
+  it('should redirect to the prisoner report page if the user exits the page', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/prisoner-report/1524455/review')
+    })
+  })
+  context('Redirect on error', () => {
+    beforeEach(() => {
+      cy.task('stubEditDraftIncidentDetails', { id: 34, response: {}, status: 500 })
+    })
+    it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
+      cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review`)
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.timeInputHours().clear()
+      incidentDetailsPage.timeInputHours().type('14')
+      incidentDetailsPage.timeInputMinutes().clear()
+      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.not.eq('/prisoner-report/1524455/review')
+      })
+      incidentDetailsPage.errorContinueButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq('/incident-details/G6415GD/34/submitted/edit')
+      })
+      incidentDetailsPage.timeInputHours().should('have.value', '13')
+      incidentDetailsPage.timeInputMinutes().should('have.value', '10')
     })
   })
 })

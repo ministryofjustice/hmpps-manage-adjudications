@@ -313,7 +313,7 @@ context('Incident details', () => {
         expect($errors.get(0).innerText).to.contain('Enter their name or prison number')
       })
   })
-  it('should redirect the user to /offence-details if form is incomplete', () => {
+  it('should redirect the user to /offence-code-selection/ if form is incomplete', () => {
     const today = new Date()
     cy.visit(`/incident-details/G6415GD`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
@@ -325,6 +325,33 @@ context('Incident details', () => {
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/offence-code-selection/3456/committed/1')
+    })
+  })
+  context('Redirect on error', () => {
+    beforeEach(() => {
+      cy.task('stubStartNewDraftAdjudication', { response: {}, status: 500 })
+    })
+    it('should redirect back to incident details if an error occurs whilst calling the API', () => {
+      const today = new Date()
+      cy.visit(`/incident-details/G6415GD`)
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
+      incidentDetailsPage.timeInputHours().type('12')
+      incidentDetailsPage.timeInputMinutes().type('30')
+      incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.not.eq('/offence-code-selection/3456/attempted/1')
+      })
+      incidentDetailsPage.errorContinueButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq('/incident-details/G6415GD')
+      })
+      incidentDetailsPage.timeInputHours().should('have.value', '')
+      incidentDetailsPage.timeInputMinutes().should('have.value', '')
+      incidentDetailsPage.locationSelector().should('have.value', '')
+      incidentDetailsPage.radioButtons().should('have.value', '')
     })
   })
 })
