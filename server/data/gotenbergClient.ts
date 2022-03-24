@@ -2,7 +2,7 @@ import superagent from 'superagent'
 import logger from '../../logger'
 
 export type PdfOptions = {
-  headerHtml?: string
+  // headerHtml?: string
   footerHtml?: string
   marginTop?: string
   marginBottom?: string
@@ -17,8 +17,8 @@ export default class GotenbergClient {
     this.gotenbergHost = gotenbergHost
   }
 
-  async renderPdfFromHtml(html: string, options: PdfOptions = {}): Promise<Buffer> {
-    const { headerHtml, footerHtml, marginBottom, marginLeft, marginRight, marginTop } = options
+  async renderPdfFromHtml(html: string, headerHtml: string, options: PdfOptions = {}): Promise<Buffer> {
+    const { footerHtml, marginBottom, marginLeft, marginRight, marginTop } = options
     try {
       const request = superagent
         .post(`${this.gotenbergHost}/convert/html`)

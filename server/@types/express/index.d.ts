@@ -1,6 +1,6 @@
 import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
-import { PdfPageData } from '../../utils/pdfRenderer'
+import { PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
 
 export default {}
 
@@ -37,7 +37,13 @@ export declare global {
     }
 
     interface Response {
-      renderPdf(view: string, pageData: PdfPageData, options: Record<string, unknown>): void
+      renderPdf(
+        page: string,
+        pageData: PdfPageData,
+        header: string,
+        headerData: PdfHeaderData,
+        options: Record<string, unknown>
+      ): void
     }
   }
 }

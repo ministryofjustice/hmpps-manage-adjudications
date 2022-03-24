@@ -77,6 +77,8 @@ export default class PrintReportRoutes {
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport2`,
       { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
+      `pages/noticeOfBeingPlacedOnReportHeader2`,
+      {},
       {
         filename: `adjudication-report-${adjudicationNumber}`,
         pdfOptions: {
