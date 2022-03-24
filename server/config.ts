@@ -48,10 +48,10 @@ export default {
     gotenberg: {
       apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
       pdfMargins: {
-        marginTop: '1.0',
+        marginTop: '0.9',
         marginBottom: '1.0',
-        marginLeft: '0.55',
-        marginRight: '0.35',
+        marginLeft: '0.0',
+        marginRight: '0.0',
       },
       adjudicationsUrl: get('ADJUDICATIONS_URL', 'http://host.docker.internal:3000', requiredInProduction),
     },

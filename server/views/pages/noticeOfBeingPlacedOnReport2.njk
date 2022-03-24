@@ -2,6 +2,8 @@
 {% from "../macros/noticeOfBeingPlacedOnReportDetails2.njk" import noticeOfBeingPlacedOnReportDetails2 %}
 {% from "../macros/noticeOfBeingPlacedOnReportLegal2.njk" import noticeOfBeingPlacedOnReportLegal2 %}
 {% block content %}
-    {{ noticeOfBeingPlacedOnReportDetails2(noticeOfBeingPlacedOnReportData) }}
-    {{ noticeOfBeingPlacedOnReportLegal2( noticeOfBeingPlacedOnReportData.adjudicationNumber ) }}
+    <div class='adjudication-pdf'>
+        {{ noticeOfBeingPlacedOnReportDetails2(noticeOfBeingPlacedOnReportData) }}
+        {{ noticeOfBeingPlacedOnReportLegal2( noticeOfBeingPlacedOnReportData.adjudicationNumber ) }}
+    </div>
 {% endblock %}

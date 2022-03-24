@@ -1,22 +1,27 @@
 <html>
 <head>
     <style>
-        body{-webkit-print-color-adjust:exact}
-        .adjudication-print-form-header {
-            background-color: #D8D8D8;
-            color: red;
+        body {
+            -webkit-print-color-adjust: exact
+        }
+
+        .adjudication-pdf-header {
+            background-color: #d8d8d8;
             width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 8rem;
-            border: red;
+        }
+
+        .adjudication-pdf-heading-m {
+            font-family: arial;
+            font-size: 18px;
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px
         }
     </style>
 </head>
 <body>
-<div class='adjudication-print-form-header'>
-    <h1 class='govuk-heading-m govuk-!-margin-2'>Notice of being put on report</h1>
-</div>
+    <div class='adjudication-pdf-header'>
+        <h1 class='adjudication-pdf-heading-m'>Notice of being put on report</h1>
+    </div>
 </body>
 </html>
