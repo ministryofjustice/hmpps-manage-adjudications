@@ -257,9 +257,9 @@ export default class IncidentDetailsPage {
       )
     } catch (postError) {
       if (this.pageOptions.isEdit()) {
-        setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
+        this.setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
       } else {
-        setUpRedirectForCreationError(res, postValues.draftId, postError)
+        this.setUpRedirectForCreationError(res, postValues.prisonerNumber, postValues.draftId, postError)
       }
       throw postError
     }
@@ -387,6 +387,20 @@ export default class IncidentDetailsPage {
     if (!associatedPrisonersNumber) return null
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
+    logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
+    res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
+      ? `/incident-details/${prisonerNumber}/${draftId}/submitted/edit`
+      : `/incident-details/${prisonerNumber}/${draftId}/edit`
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setUpRedirectForCreationError = (res: Response, prisonerNumber: string, draftId: number, error: any) => {
+    logger.error(`Failed to post incident details for draft adjudication: ${error}`)
+    res.locals.redirectUrl = `/incident-details/${prisonerNumber}`
   }
 }
 
@@ -696,19 +710,6 @@ const redirectToCheckYourAnswers = (
 
 const redirectToTaskList = (res: Response, draftId: number) => {
   return res.redirect(getTaskListUrl(draftId))
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
-  logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
-  // TODO I'm unsure this URL is correct - should it be /offence-code-selection/ ?
-  res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${draftId}`
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const setUpRedirectForCreationError = (res: Response, draftId: number, error: any) => {
-  logger.error(`Failed to post incident details for draft adjudication: ${error}`)
-  res.locals.redirectUrl = `/incident-statement/${draftId}`
 }
 
 const chooseNextPageAfterEdit = (
