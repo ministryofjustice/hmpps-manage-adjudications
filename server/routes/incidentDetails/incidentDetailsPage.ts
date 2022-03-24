@@ -691,7 +691,7 @@ const redirectToCheckYourAnswers = (
   draftId: number,
   isReviewerPage: boolean
 ) => {
-  return res.redirect(`/check-your-answers/${prisonerNumber}/${draftId}/${isReviewerPage ? 'review' : 'report'}`)
+  return res.redirect(`/check-your-answers/${draftId}/${isReviewerPage ? 'review' : 'report'}`)
 }
 
 const redirectToTaskList = (res: Response, draftId: number) => {
@@ -707,6 +707,7 @@ const setUpRedirectForEditError = (res: Response, prisonerNumber: string, error:
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, error: any) => {
   logger.error(`Failed to post incident details for draft adjudication: ${error}`)
+  // TODO: @steve not sure this URL is correct - shouldn't it be /id ?
   res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`
 }
 

@@ -36,7 +36,7 @@ const getVariablesForPageType = (
   return {
     printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${prisonerNumber}/${adjudicationNumber}/report`,
     editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${prisonerNumber}/${adjudicationNumber}/report`,
-    editIncidentStatementURL: `/incident-statement/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit`,
+    editIncidentStatementURL: `/incident-statement/${draftAdjudicationNumber}/submitted/edit`,
     returnLinkURL: `/your-completed-reports`,
     returnLinkContent: 'Return to your completed reports',
   }

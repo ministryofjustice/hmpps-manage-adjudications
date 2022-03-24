@@ -168,7 +168,7 @@ context('Check Your Answers', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary().should('exist')
@@ -179,7 +179,7 @@ context('Check Your Answers', () => {
     CheckYourAnswersPage.exitButton().contains('Cancel')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary()
@@ -201,13 +201,13 @@ context('Check Your Answers', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
   })
   it('should contain the correct offence details', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.offenceDetailsSummary()
@@ -237,7 +237,7 @@ context('Check Your Answers', () => {
       })
   })
   it('should go to the completion page (changed) if the user submits changes to the report', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
@@ -245,7 +245,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the prisoner report page if the user cancels', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
@@ -253,7 +253,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
@@ -261,19 +261,19 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident details page if the offence details change link is clicked - to reenter new offences', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/submitted/edit')
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(`/check-your-answers/G6415GD/3456/report`)
+    cy.visit(`/check-your-answers/3456/report`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/3456/submitted/edit')
+      expect(loc.pathname).to.eq('/incident-statement/3456/submitted/edit')
     })
   })
 })

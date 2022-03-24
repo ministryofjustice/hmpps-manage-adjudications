@@ -270,7 +270,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/report')
+      expect(loc.pathname).to.eq('/check-your-answers/34/report')
     })
   })
   it('should submit form successfully if all data entered and redirect to CHECK YOUR ANSWERS page - reviewer version', () => {
@@ -282,7 +282,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/34/review')
+      expect(loc.pathname).to.eq('/check-your-answers/34/review')
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
