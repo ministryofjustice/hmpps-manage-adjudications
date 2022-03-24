@@ -259,7 +259,7 @@ export default class IncidentDetailsPage {
       if (this.pageOptions.isEdit()) {
         setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
       } else {
-        setUpRedirectForCreationError(res, postValues.prisonerNumber, postError)
+        setUpRedirectForCreationError(res, postValues.draftId, postError)
       }
       throw postError
     }
@@ -701,14 +701,14 @@ const redirectToTaskList = (res: Response, draftId: number) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
   logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
+  // TODO I'm unsure this URL is correct - should it be /offence-code-selection/ ?
   res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${draftId}`
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, error: any) => {
+const setUpRedirectForCreationError = (res: Response, draftId: number, error: any) => {
   logger.error(`Failed to post incident details for draft adjudication: ${error}`)
-  // TODO: @steve not sure this URL is correct - shouldn't it be /id ?
-  res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`
+  res.locals.redirectUrl = `/incident-statement/${draftId}`
 }
 
 const chooseNextPageAfterEdit = (

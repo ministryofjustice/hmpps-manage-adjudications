@@ -76,7 +76,7 @@ afterEach(() => {
 describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
   it('should load the incident details edit page with report referrer', () => {
     return request(app)
-      .get('/incident-details/G6415GD/5/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/report')
+      .get('/incident-details/G6415GD/5/submitted/edit?referrer=/prisoner-report/1524455/report')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident details')
@@ -85,7 +85,7 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
   it('should load the incident details edit page with review referrer', () => {
     return request(app)
-      .get('/incident-details/G6415GD/5/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .get('/incident-details/G6415GD/5/submitted/edit?referrer=/prisoner-report/1524455/review')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident details')
@@ -115,7 +115,7 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
 describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   it('should redirect to check your answers page - reporter', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/report')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/report')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -127,7 +127,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
   it('should redirect to check your answers page - reviewer', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -139,7 +139,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
@@ -153,7 +153,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
   it('should render an error summary with correct validation message - user does not search for associated prisoner when required', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -167,7 +167,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   it('should throw an error on PUT endpoint failure', () => {
     placeOnReportService.editDraftIncidentDetails.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -180,7 +180,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
   it('should retain existing offences if the radio selection is not changed', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
@@ -202,7 +202,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
   })
   it('should remove existing offences if the radio selection is changed', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review')
+      .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
