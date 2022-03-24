@@ -53,19 +53,7 @@ export default {
         marginLeft: '0.55',
         marginRight: '0.35',
       },
-      watermark: get('LICENCE_WATERMARK', false),
-
-      /*
-       This is specific to the machine type you use locally:
-       - For Mac or Docker-for-Windows users,  http://host.docker.internal:3000 finds the docker host
-       - For Linux users, this will also work, and is defined as an extra_host in the gotenberg
-         container specification.
-       - In Cloud Platform environments, this value is overridden with a URL with the container name
-         You can check if this works using curl from within the Gotenberg container:
-         $ docker exec -it <gotenberg-container-id> /bin/bash
-         $ curl http://host.docker.internal:3000  (should show redirect /login)
-       */
-      licencesUrl: get('LICENCES_URL', 'http://host.docker.internal:3000', requiredInProduction),
+      adjudicationsUrl: get('ADJUDICATIONS_URL', 'http://host.docker.internal:3000', requiredInProduction),
     },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),

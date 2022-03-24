@@ -21,7 +21,6 @@ export default class PrintReportRoutes {
       adjudicationNumberValue,
       user
     )
-
     return res.render(`pages/printReport`, {
       adjudicationNumber: adjudicationNumberValue,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
@@ -36,6 +35,38 @@ export default class PrintReportRoutes {
       exitUrl: referrer,
       noticeOfBeingPlacedOnReportData: new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails),
     })
+
+    // return res.renderPDF(
+    //   `pages/printReport`,
+    //   {
+    //     adjudicationNumber: adjudicationNumberValue,
+    //     expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
+    //     expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'dddd D MMMM'),
+    //     prisonerFirstAndLastName: formatName(
+    //       adjudicationDetails.prisonerFirstName,
+    //       adjudicationDetails.prisonerLastName
+    //     ),
+    //     showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage != null,
+    //     prisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
+    //     showPrisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages?.length > 0,
+    //     prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
+    //     showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
+    //     prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
+    //     exitUrl: referrer,
+    //     noticeOfBeingPlacedOnReportData: new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails),
+    //   },
+    //   {
+    //     filename: 'qqrpfilename',
+    //     pdfOptions: {
+    //       headerHtml: null,
+    //       footerHtml: this.getPdfFooter(),
+    //       marginTop: '0.8',
+    //       marginBottom: '1.0',
+    //       marginLeft: '0.55',
+    //       marginRight: '0.35',
+    //     },
+    //   }
+    // )
   }
 
   getPdfFooter = (): string => {
@@ -57,6 +88,10 @@ export default class PrintReportRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
+
+  renderPdfqq = async (req: Request, res: Response): Promise<void> => {
+    res.render(`pages/qqrptest2`)
+  }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     res.renderPDF(

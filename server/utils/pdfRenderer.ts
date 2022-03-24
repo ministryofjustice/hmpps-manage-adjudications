@@ -20,10 +20,8 @@ export default function pdfRenderer(client: GotenbergClient) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       pageData: any,
       options: { filename: string; pdfOptions: PdfOptions } = { filename: 'document.pdf', pdfOptions: {} }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ): any => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      res.render(view, pageData, (error: any, html: any) => {
+    ) => {
+      res.render(view, pageData, (error: Error, html: string) => {
         if (error) {
           throw error
         }
@@ -32,11 +30,11 @@ export default function pdfRenderer(client: GotenbergClient) {
         res.header('Content-Transfer-Encoding', 'binary')
         res.header('Content-Disposition', `inline; filename=${options.filename}`)
 
-        return client
+        client
           .renderPdfFromHtml(html, options?.pdfOptions)
           .then(buffer => res.send(buffer))
           .catch(reason => {
-            logger.warn(reason)
+            logger.error(reason)
           })
       })
     }
