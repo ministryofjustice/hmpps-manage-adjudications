@@ -47,7 +47,7 @@ export default {
   apis: {
     gotenberg: {
       apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
-      pdfOptions: {
+      pdfMargins: {
         marginTop: '0.8',
         marginBottom: '0.7',
         marginLeft: '0.55',

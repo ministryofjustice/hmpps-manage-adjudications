@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 import NoticeOfBeingPlacedOnReportData from './noticeOfBeingPlacedOnReportData'
+import config from '../../config'
 
 export default class PrintReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -102,20 +103,18 @@ export default class PrintReportRoutes {
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
+    const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails)
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport2`,
-      { ...noticeOfBeingPlacedOnReportData },
+      { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
       {
         filename: `adjudication-report-${adjudicationNumber}`,
         pdfOptions: {
           headerHtml: this.getPdfHeader(),
           footerHtml: this.getPdfFooter(),
-          marginTop: '1.0',
-          marginBottom: '1.0',
-          marginLeft: '0.55',
-          marginRight: '0.35',
+          ...pdfMargins,
         },
       }
     )

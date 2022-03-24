@@ -1,16 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import GotenbergClient, { PdfOptions } from '../data/gotenbergClient'
-import logger from '../../logger'
 
-export type PdfPageData = { url: string } & Record<string, unknown>
+export type PdfPageData = { adjudicationsUrl: string } & Record<string, unknown>
 
 export function pdfRenderer(client: GotenbergClient) {
   return (req: Request, res: Response, next: NextFunction) => {
-    res.renderPdf = (
-      view: string,
-      pageData: PdfPageData,
-      options: { filename: string; pdfOptions: PdfOptions } = { filename: 'document.pdf', pdfOptions: {} }
-    ) => {
+    res.renderPdf = (view: string, pageData: PdfPageData, options: { filename: string; pdfOptions: PdfOptions }) => {
       res.render(view, pageData, (error: Error, html: string) => {
         if (error) {
           throw error
@@ -20,12 +15,7 @@ export function pdfRenderer(client: GotenbergClient) {
         res.header('Content-Transfer-Encoding', 'binary')
         res.header('Content-Disposition', `inline; filename=${options.filename}`)
 
-        client
-          .renderPdfFromHtml(html, options?.pdfOptions)
-          .then(buffer => res.send(buffer))
-          .catch(reason => {
-            logger.error(reason)
-          })
+        client.renderPdfFromHtml(html, options?.pdfOptions).then(buffer => res.send(buffer))
       })
     }
     next()
