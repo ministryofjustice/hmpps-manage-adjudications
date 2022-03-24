@@ -38,11 +38,11 @@ export declare global {
 
     interface Response {
       renderPdf(
-        page: string,
+        pageView: string,
         pageData: PdfPageData,
-        header: string,
+        headerView: string,
         headerData: PdfHeaderData,
-        footer: string,
+        footerView: string,
         footerData: PdfFooterData,
         options: Record<string, unknown>
       ): void
