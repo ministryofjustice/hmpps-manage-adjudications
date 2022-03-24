@@ -107,15 +107,6 @@ describe('GET /prisoner-placed-on-report', () => {
       })
   })
 
-  it('should throw an error if an invalid adjudication number provided', () => {
-    return request(app)
-      .get('/prisoner-placed-on-report/BadNumber')
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Error: No adjudication number provided')
-      })
-  })
-
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)

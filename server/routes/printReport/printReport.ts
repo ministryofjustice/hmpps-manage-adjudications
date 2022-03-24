@@ -8,21 +8,13 @@ export default class PrintReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { referrer } = req.query
     const { user } = res.locals
 
-    const adjudicationNumberValue: number = parseInt(adjudicationNumber as string, 10)
-    if (Number.isNaN(adjudicationNumberValue)) {
-      throw new Error('No adjudication number provided')
-    }
-
-    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(
-      adjudicationNumberValue,
-      user
-    )
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
     return res.render(`pages/printReport`, {
-      adjudicationNumber: adjudicationNumberValue,
+      adjudicationNumber,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'dddd D MMMM'),
       prisonerFirstAndLastName: formatName(adjudicationDetails.prisonerFirstName, adjudicationDetails.prisonerLastName),
@@ -87,22 +79,40 @@ export default class PrintReportRoutes {
      </span>`
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
-
-  renderPdfqq = async (req: Request, res: Response): Promise<void> => {
-    res.render(`pages/qqrptest2`)
+  getPdfHeader = (): string => {
+    return `
+      <span style="${pdfHeaderFooterStyle}">
+        <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
+          <tr>
+            <td style="text-align: center;">NOMS No: <span style="font-weight: bold;">qqRP</span></td>
+            <td style="text-align: center;">Booking No: <span style="font-weight: bold;">qqRp</span></td>
+            <td style="text-align: center;">CRO No: <span style="font-weight: bold;">qqRP</span></td>
+            <td style="text-align: center;">PNC ID: <span style="font-weight: bold;">qqRP</span></td>
+            <td style="text-align: center;">Prison: <span style="font-weight: bold;">qqRP</span></td>
+          </tr>
+        </table>
+        <p>
+        Page <span class="pageNumber"></span> of <span class="totalPages"></span>
+        </p>
+     </span>`
   }
 
+  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
+
   renderPdf = async (req: Request, res: Response): Promise<void> => {
-    res.renderPDF(
-      `pages/qqrptest`,
-      {},
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
+    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails)
+    res.renderPdf(
+      `pages/noticeOfBeingPlacedOnReport2`,
+      { ...noticeOfBeingPlacedOnReportData },
       {
-        filename: 'qqrpfilename',
+        filename: `adjudication-report-${adjudicationNumber}`,
         pdfOptions: {
-          headerHtml: null,
+          headerHtml: this.getPdfHeader(),
           footerHtml: this.getPdfFooter(),
-          marginTop: '0.8',
+          marginTop: '1.0',
           marginBottom: '1.0',
           marginLeft: '0.55',
           marginRight: '0.35',

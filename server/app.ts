@@ -18,7 +18,7 @@ import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import { Services } from './services'
-import pdfRenderer from './utils/pdfRenderer'
+import { pdfRenderer } from './utils/pdfRenderer'
 
 export default function createApp(services: Services): express.Application {
   const app = express()

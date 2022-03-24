@@ -12,7 +12,7 @@ declare module 'express-session' {
     redirectUrl: string
     incidentDate: SubmittedDateTime
     incidentLocation: number
-    // TODO - We are going to remove this - we will go to the task list or check your answeers on radio edit regardless
+    // TODO - We are going to remove this - we will go to the task list or check your answers on radio edit regardless
     originalRadioSelection: string
     currentRadioSelection: string
     currentAssociatedPrisonersNumber: string
@@ -36,7 +36,7 @@ export declare global {
     }
 
     interface Response {
-      renderPDF(view: string, pageData: Record<string, unknown>, options: Record<string, unknown>): void
+      renderPdf(view: string, pageData: Record<string, unknown>, options: Record<string, unknown>): void
     }
   }
 }

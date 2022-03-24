@@ -2,23 +2,13 @@ import { Request, Response, NextFunction } from 'express'
 import GotenbergClient, { PdfOptions } from '../data/gotenbergClient'
 import logger from '../../logger'
 
-/*
- * This function accepts a Gotenberg client as its only argument.
- * It returns a handler function to render a normal HTML view template to
- * produce the raw HTML (including images, stylesheet etc). It then uses a
- * callback function to pass rendered HTML view into the Gotenberg client
- * to produce and return a PDF document.
- */
+export type PdfPageData = { url: string } & Record<string, unknown>
 
-// TODO: Revisit to fully define these types for the "any" placeholders
-export default function pdfRenderer(client: GotenbergClient) {
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
+export function pdfRenderer(client: GotenbergClient) {
   return (req: Request, res: Response, next: NextFunction) => {
-    res.renderPDF = (
+    res.renderPdf = (
       view: string,
-      // Define the pageData as - { url: string, licence: Licence, otherData: type? }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      pageData: any,
+      pageData: PdfPageData,
       options: { filename: string; pdfOptions: PdfOptions } = { filename: 'document.pdf', pdfOptions: {} }
     ) => {
       res.render(view, pageData, (error: Error, html: string) => {

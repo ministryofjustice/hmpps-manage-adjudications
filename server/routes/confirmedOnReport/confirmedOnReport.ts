@@ -8,18 +8,10 @@ export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
 
-    const adjudicationNumberValue: number = parseInt(adjudicationNumber as string, 10)
-    if (Number.isNaN(adjudicationNumberValue)) {
-      throw new Error('No adjudication number provided')
-    }
-
-    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(
-      adjudicationNumberValue,
-      user
-    )
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
 
     const prisonerFirstAndLastName = formatName(
       adjudicationDetails.prisonerFirstName,
@@ -27,7 +19,7 @@ export default class ConfirmedOnReportRoutes {
     )
 
     return res.render(`pages/confirmedOnReport`, {
-      adjudicationNumber: adjudicationNumberValue,
+      adjudicationNumber,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
       prisonerFirstAndLastName,
