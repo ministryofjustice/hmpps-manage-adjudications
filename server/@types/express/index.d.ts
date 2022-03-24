@@ -1,6 +1,6 @@
 import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
-import { PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
+import { PdfFooterData, PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
 
 export default {}
 
@@ -42,6 +42,8 @@ export declare global {
         pageData: PdfPageData,
         header: string,
         headerData: PdfHeaderData,
+        footer: string,
+        footerData: PdfFooterData,
         options: Record<string, unknown>
       ): void
     }

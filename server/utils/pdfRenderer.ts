@@ -3,6 +3,7 @@ import GotenbergClient, { PdfOptions } from '../data/gotenbergClient'
 
 export type PdfPageData = { adjudicationsUrl: string } & Record<string, unknown>
 export type PdfHeaderData = Record<string, unknown>
+export type PdfFooterData = Record<string, unknown>
 
 export function pdfRenderer(client: GotenbergClient) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -11,22 +12,31 @@ export function pdfRenderer(client: GotenbergClient) {
       pageData: PdfPageData,
       header: string,
       headerData: PdfHeaderData,
+      footer: string,
+      footerData: PdfFooterData,
       options: { filename: string; pdfOptions: PdfOptions }
     ) => {
-      res.render(header, pageData, (headerError: Error, headerHtml: string) => {
+      res.render(header, headerData, (headerError: Error, headerHtml: string) => {
         if (headerError) {
           throw headerError
         }
-        res.render(page, pageData, (bodyError: Error, html: string) => {
-          if (bodyError) {
-            throw bodyError
+        res.render(footer, footerData, (footerError: Error, footerHtml: string) => {
+          if (footerError) {
+            throw footerError
           }
+          res.render(page, pageData, (bodyError: Error, pageHtml: string) => {
+            if (bodyError) {
+              throw bodyError
+            }
 
-          res.header('Content-Type', 'application/pdf')
-          res.header('Content-Transfer-Encoding', 'binary')
-          res.header('Content-Disposition', `inline; filename=${options.filename}`)
+            res.header('Content-Type', 'application/pdf')
+            res.header('Content-Transfer-Encoding', 'binary')
+            res.header('Content-Disposition', `inline; filename=${options.filename}`)
 
-          client.renderPdfFromHtml(html, headerHtml, options?.pdfOptions).then(buffer => res.send(buffer))
+            client
+              .renderPdfFromHtml(pageHtml, headerHtml, footerHtml, options?.pdfOptions)
+              .then(buffer => res.send(buffer))
+          })
         })
       })
     }

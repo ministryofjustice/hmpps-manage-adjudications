@@ -1,0 +1,36 @@
+<html>
+<head>
+    <style>
+        body {
+            -webkit-print-color-adjust: exact;
+            font-family: arial;
+        }
+        h2 {
+            font-size: 10px;
+            font-weight: normal;
+        }
+        .adjudication-pdf-footer {
+            background-color: #d8d8d8;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .adjudication-pdf-footer-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class='adjudication-pdf-footer'>
+        <h2>
+            <span class='adjudication-pdf-footer-bold'>Report number:</span> {{ adjudicationNumber }}
+        </h2>
+        <h2>
+            Page <span class="pageNumber"></span> of <span class="totalPages"></span>
+        </h2>
+    </div>
+</body>
+</html>
