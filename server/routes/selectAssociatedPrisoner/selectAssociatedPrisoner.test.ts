@@ -81,14 +81,14 @@ describe('POST /select-associated-prisoner', () => {
     app = appWithAllRoutes(
       { production: false },
       { prisonerSearchService },
-      { redirectUrl: '/incident-details/G6123VU/1234/submitted/edit?referrer=/prisoner-report/G6123VU/1524455/review' }
+      { redirectUrl: '/incident-details/G6123VU/1234/submitted/edit?referrer=/prisoner-report/1524455/review' }
     )
     return request(app)
       .post('/select-associated-prisoner')
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        '/select-associated-prisoner?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2FG6123VU%2F1524455%2Freview'
+        '/select-associated-prisoner?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview'
       )
   })
 

@@ -147,7 +147,7 @@ afterEach(() => {
 describe('GET /prisoner-report', () => {
   it('should load the prisoner report page', () => {
     return request(app)
-      .get('/prisoner-report/G6415GD/12345/report')
+      .get('/prisoner-report/12345/report')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Bobby Da Smith Jones’ report')

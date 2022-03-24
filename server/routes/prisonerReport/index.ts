@@ -32,8 +32,8 @@ export default function prisonerReportRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/:prisonerNumber/:adjudicationNumber/report', prisonerReport.view)
-  get('/:prisonerNumber/:adjudicationNumber/review', prisonerReportReview.view)
+  get('/:adjudicationNumber/report', prisonerReport.view)
+  get('/:adjudicationNumber/review', prisonerReportReview.view)
 
   return router
 }

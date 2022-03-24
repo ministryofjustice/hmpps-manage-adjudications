@@ -42,14 +42,14 @@ const getVariablesForPageType = (
     return {
       editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/report`,
       editIncidentStatementURL: `/incident-statement/${adjudicationNumber}/submitted/edit`,
-      exitUrl: `/prisoner-report/${prisonerNumber}/${incidentDetailsData.adjudicationNumber}/report`,
+      exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/report`,
     }
   }
   if (pageOptions.isEditByReviewer()) {
     return {
       // We don't have the editIncidentStatementURL variable here as reviewers cannot change the statement.
       editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/review`,
-      exitUrl: `/prisoner-report/${prisonerNumber}/${incidentDetailsData.adjudicationNumber}/review`,
+      exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/review`,
     }
   }
   return {

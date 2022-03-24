@@ -101,7 +101,7 @@ context('Incident Statement', () => {
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.cancelButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524493/report')
+      expect(loc.pathname).to.eq('/prisoner-report/1524493/report')
     })
   })
 })

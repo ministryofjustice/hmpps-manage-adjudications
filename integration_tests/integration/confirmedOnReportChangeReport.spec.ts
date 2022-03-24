@@ -72,7 +72,7 @@ context('Prisoner has been placed on report', () => {
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524493/report')
+      expect(loc.pathname).to.eq('/prisoner-report/1524493/report')
     })
   })
 })

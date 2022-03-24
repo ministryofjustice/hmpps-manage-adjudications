@@ -249,7 +249,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/234/report')
+      expect(loc.pathname).to.eq('/prisoner-report/234/report')
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
