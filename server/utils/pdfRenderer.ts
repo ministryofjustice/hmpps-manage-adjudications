@@ -8,23 +8,23 @@ export type PdfFooterData = Record<string, unknown>
 export function pdfRenderer(client: GotenbergClient) {
   return (req: Request, res: Response, next: NextFunction) => {
     res.renderPdf = (
-      page: string,
+      pageView: string,
       pageData: PdfPageData,
-      header: string,
+      headerView: string,
       headerData: PdfHeaderData,
-      footer: string,
+      footerView: string,
       footerData: PdfFooterData,
       options: { filename: string; pdfOptions: PdfOptions }
     ) => {
-      res.render(header, headerData, (headerError: Error, headerHtml: string) => {
+      res.render(headerView, headerData, (headerError: Error, headerHtml: string) => {
         if (headerError) {
           throw headerError
         }
-        res.render(footer, footerData, (footerError: Error, footerHtml: string) => {
+        res.render(footerView, footerData, (footerError: Error, footerHtml: string) => {
           if (footerError) {
             throw footerError
           }
-          res.render(page, pageData, (bodyError: Error, pageHtml: string) => {
+          res.render(pageView, pageData, (bodyError: Error, pageHtml: string) => {
             if (bodyError) {
               throw bodyError
             }
