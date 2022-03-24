@@ -40,8 +40,19 @@
                 in {{ noticeOfBeingPlacedOnReportData.incidentLocationDescription }}</li>
         </ul>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-        <h2>The reporting
-            officer’s statement about the incident</h2>
+        <h2>Details of the alleged offence</h2>
+
+        {% for offence in noticeOfBeingPlacedOnReportData.offences %}
+            <div>
+                {% for questionAndAnswer in offence.questionsAndAnswers %}
+                    <p>{{ questionAndAnswer.question }}</p>
+                    <p>{{ questionAndAnswer.answer }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <h2>The reporting officer’s statement about the incident</h2>
         <div class='adjudication-print-form-statement-paragraph' data-qa='notice-of-being-placed-on-report-statement'>
             {{ noticeOfBeingPlacedOnReportData.statement | formatStatement('"govuk-!-margin-bottom-2"') | safe }}
         </div>
