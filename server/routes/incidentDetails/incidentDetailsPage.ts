@@ -392,7 +392,9 @@ export default class IncidentDetailsPage {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
     logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
-    res.locals.redirectUrl = setRedirectUrlForError(this.pageOptions, prisonerNumber, draftId)
+    res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
+      ? `/incident-details/${prisonerNumber}/${draftId}/submitted/edit`
+      : `/incident-details/${prisonerNumber}/${draftId}/edit`
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -708,11 +710,6 @@ const redirectToCheckYourAnswers = (
 
 const redirectToTaskList = (res: Response, draftId: number) => {
   return res.redirect(getTaskListUrl(draftId))
-}
-
-const setRedirectUrlForError = (pageOptions: PageOptions, prisonerNumber: string, draftId: number) => {
-  if (pageOptions.isPreviouslySubmitted()) return `/incident-details/${prisonerNumber}/${draftId}/submitted/edit`
-  return `/incident-details/${prisonerNumber}/${draftId}/edit`
 }
 
 const chooseNextPageAfterEdit = (
