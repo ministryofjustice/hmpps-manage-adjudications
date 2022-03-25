@@ -49,7 +49,7 @@ export default {
       apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
       pdfMargins: {
         marginTop: '0.9',
-        marginBottom: '1.0',
+        marginBottom: '0.8',
         marginLeft: '0.0',
         marginRight: '0.0',
       },
