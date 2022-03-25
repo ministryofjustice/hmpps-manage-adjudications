@@ -7,6 +7,8 @@ import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { AnswerData, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
 import prisonerResult from '../data/prisonerResult'
 import { DraftAdjudication } from '../data/DraftAdjudicationResult'
+import ReportedAdjudicationsService from './reportedAdjudicationsService'
+import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
 export type AllOffenceData = {
   victimOtherPersonsName?: string
@@ -19,6 +21,7 @@ export default class DecisionTreeService {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
+    private readonly reportedAdjudicationService: ReportedAdjudicationsService,
     private readonly decisionTree: Decision
   ) {}
 
@@ -35,6 +38,30 @@ export default class DecisionTreeService {
     )
     return {
       draftAdjudication,
+      incidentRole,
+      prisoner,
+      associatedPrisoner,
+    }
+  }
+
+  async reportedAdjudicationIncidentData(adjudicationNumber: number, user: User) {
+    const { reportedAdjudication } = await this.reportedAdjudicationService.getReportedAdjudicationDetails(
+      adjudicationNumber,
+      user
+    )
+    return this.adjudicationIncidentData(reportedAdjudication, user)
+  }
+
+  private async adjudicationIncidentData(adjudication: DraftAdjudication | ReportedAdjudication, user: User) {
+    const incidentRole = incidentRoleFromCode(adjudication.incidentRole.roleCode)
+    const { prisonerNumber } = adjudication
+    const associatedPrisonerNumber = adjudication?.incidentRole?.associatedPrisonersNumber
+    const [prisoner, associatedPrisoner] = await Promise.all([
+      this.placeOnReportService.getPrisonerDetails(prisonerNumber, user),
+      associatedPrisonerNumber && this.placeOnReportService.getPrisonerDetails(associatedPrisonerNumber, user),
+    ])
+    return {
+      adjudication,
       incidentRole,
       prisoner,
       associatedPrisoner,

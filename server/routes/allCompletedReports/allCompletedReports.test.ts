@@ -3,6 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { IncidentRole } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -39,6 +40,7 @@ beforeEach(() => {
       incidentStatement: {
         statement: 'My second incident',
       },
+      incidentRole: {},
     },
     {
       displayName: 'Moriarty, James',
@@ -59,6 +61,7 @@ beforeEach(() => {
       incidentStatement: {
         statement: 'My first incident',
       },
+      incidentRole: {},
     },
   ]
   reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
