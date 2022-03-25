@@ -150,7 +150,7 @@ context('Continue a report - select report', () => {
       continueReportSelectPage.continueLink().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/place-the-prisoner-on-report/G2996UX/1')
+        expect(loc.pathname).to.eq('/place-the-prisoner-on-report/1')
       })
     })
   })

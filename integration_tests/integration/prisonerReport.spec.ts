@@ -141,7 +141,7 @@ context('Prisoner report - reporter view', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary().should('exist')
@@ -151,7 +151,7 @@ context('Prisoner report - reporter view', () => {
     PrisonerReportPage.returnLink().should('exist')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary()
@@ -173,7 +173,7 @@ context('Prisoner report - reporter view', () => {
       })
   })
   it('should contain the correct offence details', () => {
-    cy.visit(`prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.offenceDetailsSummary()
@@ -203,19 +203,19 @@ context('Prisoner report - reporter view', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
   })
   it('should contain the correct report number', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
@@ -223,7 +223,7 @@ context('Prisoner report - reporter view', () => {
     })
   })
   it('should go to the incident details page if the offence details change link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
@@ -231,15 +231,15 @@ context('Prisoner report - reporter view', () => {
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/G6415GD/177/submitted/edit')
+      expect(loc.pathname).to.eq('/incident-statement/177/submitted/edit')
     })
   })
   it('should go to /your-completed-reports if the return link is clicked', () => {
-    cy.visit(`/prisoner-report/G6415GD/12345/report`)
+    cy.visit(`/prisoner-report/12345/report`)
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.returnLink().click()
     cy.location().should(loc => {

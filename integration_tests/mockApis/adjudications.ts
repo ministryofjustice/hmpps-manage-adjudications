@@ -16,14 +16,14 @@ const stubPing = (status = 200): SuperAgentRequest =>
     },
   })
 
-const stubStartNewDraftAdjudication = (response = {}): SuperAgentRequest =>
+const stubStartNewDraftAdjudication = (response = {}, status = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
       url: '/adjudications/draft-adjudications',
     },
     response: {
-      status: 200,
+      status,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
@@ -118,9 +118,11 @@ const stubSubmitCompleteDraftAdjudication = ({
 const stubEditDraftIncidentDetails = ({
   id,
   response = {},
+  status = 200,
 }: {
   id: number
   response: Record<string, unknown>
+  status: number
 }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -128,7 +130,7 @@ const stubEditDraftIncidentDetails = ({
       url: `/adjudications/draft-adjudications/${id}/incident-details`,
     },
     response: {
-      status: 200,
+      status,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },

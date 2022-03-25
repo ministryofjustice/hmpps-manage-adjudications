@@ -66,7 +66,7 @@ context('Incident Statement', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(`/incident-statement/G6415GD/3456/submitted/edit`)
+    cy.visit(`/incident-statement/3456/submitted/edit`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().should('exist')
     incidentStatementPage.submitButton().should('exist')
@@ -74,7 +74,7 @@ context('Incident Statement', () => {
   })
 
   it('should show validation message if there is no statement given', () => {
-    cy.visit(`/incident-statement/G6415GD/3456/submitted/edit`)
+    cy.visit(`/incident-statement/3456/submitted/edit`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.submitButton().click()
@@ -86,22 +86,22 @@ context('Incident Statement', () => {
       })
   })
   it('should redirect the user to /check-your-answers if statement is complete', () => {
-    cy.visit(`/incident-statement/G6415GD/3456/submitted/edit`)
+    cy.visit(`/incident-statement/3456/submitted/edit`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.statementTextArea().type('The prisoner was badly behaved today.')
     incidentStatementPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/G6415GD/3456/report')
+      expect(loc.pathname).to.eq('/check-your-answers/3456/report')
     })
   })
   it('should redirect the user to /prisoner-report if the user clicks cancel', () => {
-    cy.visit(`/incident-statement/G6415GD/3456/submitted/edit`)
+    cy.visit(`/incident-statement/3456/submitted/edit`)
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.cancelButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524493/report')
+      expect(loc.pathname).to.eq('/prisoner-report/1524493/report')
     })
   })
 })

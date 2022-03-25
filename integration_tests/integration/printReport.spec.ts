@@ -137,11 +137,11 @@ context('Print a copy of this report', () => {
   })
 
   it('should redirect the user to the referrer on finish', () => {
-    cy.visit(`/print-report/1524242?referrer=/prisoner-report/G6415GD/1524242/report`)
+    cy.visit(`/print-report/1524242?referrer=/prisoner-report/1524242/report`)
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/G6415GD/1524242/report')
+      expect(loc.pathname).to.eq('/prisoner-report/1524242/report')
     })
   })
 })
