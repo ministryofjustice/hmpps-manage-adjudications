@@ -1,5 +1,4 @@
 import superagent from 'superagent'
-import logger from '../../logger'
 
 export type PdfOptions = {
   marginTop?: string
