@@ -1,6 +1,7 @@
 import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
 import { PdfFooterData, PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
+import { PdfMargins } from '../../data/gotenbergClient'
 
 export default {}
 
@@ -44,7 +45,7 @@ export declare global {
         headerData: PdfHeaderData,
         footerView: string,
         footerData: PdfFooterData,
-        options: Record<string, unknown>
+        options: { filename: string; pdfMargins: PdfMargins }
       ): void
     }
   }
