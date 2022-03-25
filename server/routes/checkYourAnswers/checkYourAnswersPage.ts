@@ -88,9 +88,9 @@ export default class CheckYourAnswersPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
     const { user } = res.locals
-
-    const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(Number(req.params.adjudicationNumber), user)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
+      await this.decisionTreeService.adjudicationData(adjudicationNumber, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,

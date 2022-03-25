@@ -57,7 +57,6 @@ beforeEach(() => {
       incidentStatement: { statement: '', completed: true },
       startedByUserId: undefined,
     },
-    adjudicationNumber: 1,
     incidentRole: undefined,
     prisoner: {
       offenderNo: 'G6415GD',

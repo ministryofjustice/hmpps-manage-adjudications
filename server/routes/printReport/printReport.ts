@@ -4,9 +4,13 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 import NoticeOfBeingPlacedOnReportData from './noticeOfBeingPlacedOnReportData'
 import config from '../../config'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 export default class PrintReportRoutes {
-  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
+  constructor(
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly decisionTreeService: DecisionTreeService
+  ) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)

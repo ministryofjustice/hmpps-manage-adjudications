@@ -35,7 +35,6 @@ export default class DecisionTreeService {
     )
 
     return {
-      adjudicationNumber,
       draftAdjudication,
       incidentRole,
       prisoner,
@@ -56,7 +55,7 @@ export default class DecisionTreeService {
         const answerData = await this.answerData(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = await this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
+        const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
         return {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole.offenceRule,
@@ -94,7 +93,7 @@ export default class DecisionTreeService {
     }
   }
 
-  async questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
+  questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
     return this.getDecisionTree()
       .findAnswerByCode(offenceCode)
       .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole)

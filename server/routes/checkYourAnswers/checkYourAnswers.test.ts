@@ -49,7 +49,6 @@ beforeEach(() => {
       incidentStatement: { statement: 'text here', completed: true },
       startedByUserId: 'TEST_GEN',
     },
-    adjudicationNumber: 100,
     incidentRole: IncidentRole.ASSISTED,
     prisoner: {
       offenderNo: 'A8383DY',
