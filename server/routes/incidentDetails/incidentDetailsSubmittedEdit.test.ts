@@ -113,7 +113,7 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
 })
 
 describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
-  it('should redirect to check your answers page - reporter', () => {
+  it('should redirect to offence details page - reporter', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/report')
       .send({
@@ -123,9 +123,9 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         originalIncidentRoleSelection: 'committed',
       })
       .expect(302)
-      .expect('Location', '/check-your-answers/34/report')
+      .expect('Location', '/details-of-offence/34')
   })
-  it('should redirect to check your answers page - reviewer', () => {
+  it('should redirect to offence details page - reviewer', () => {
     return request(app)
       .post('/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review')
       .send({
@@ -135,7 +135,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         originalIncidentRoleSelection: 'committed',
       })
       .expect(302)
-      .expect('Location', '/check-your-answers/34/review')
+      .expect('Location', '/details-of-offence/34')
   })
   it('should render an error summary with correct validation message', () => {
     return request(app)
