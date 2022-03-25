@@ -7,7 +7,7 @@ export default class DraftTaskListRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { prisonerNumber, id } = req.params
+    const { id } = req.params
     const { user } = res.locals
 
     const idValue: number = parseInt(id as string, 10)
@@ -15,7 +15,7 @@ export default class DraftTaskListRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user)
     const taskListDetails = await this.placeOnReportService.getInfoForTaskListStatuses(idValue, user)
 
     return res.render(`pages/draftTaskList`, {

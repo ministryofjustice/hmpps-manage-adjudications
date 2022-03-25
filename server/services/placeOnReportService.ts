@@ -67,6 +67,11 @@ export default class PlaceOnReportService {
     return enhancedResult
   }
 
+  async getPrisonerDetailsFromAdjNumber(adjudicationNumber: number, user: User): Promise<PrisonerResultSummary> {
+    const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
+    return this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
+  }
+
   async getReporterName(username: string, user: User): Promise<string> {
     const userDetails = await this.hmppsAuthClient.getUserFromUsername(username, user.token)
     return userDetails.name
@@ -179,6 +184,7 @@ export default class PlaceOnReportService {
     location: number,
     associatedPrisonersNumber: string,
     roleCode: string,
+    removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
@@ -189,6 +195,7 @@ export default class PlaceOnReportService {
         associatedPrisonersNumber,
         roleCode,
       },
+      removeExistingOffences,
     }
     const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication

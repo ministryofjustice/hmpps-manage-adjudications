@@ -32,4 +32,6 @@ export default class IncidentDetailsPage extends Page {
   submitButton = (): PageElement => cy.get('[data-qa="incident-details-submit"]')
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
+
+  errorContinueButton = (): PageElement => cy.get('[data-qa="continue-after-error"]')
 }

@@ -27,16 +27,16 @@ const getVariablesForPageType = (
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${prisonerNumber}/${adjudicationNumber}/review`,
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${prisonerNumber}/${adjudicationNumber}/review`,
+      printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/review`,
+      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${adjudicationNumber}/review`,
       returnLinkURL: `/all-completed-reports`,
       returnLinkContent: 'Return to all completed reports',
     }
   }
   return {
-    printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${prisonerNumber}/${adjudicationNumber}/report`,
-    editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${prisonerNumber}/${adjudicationNumber}/report`,
-    editIncidentStatementURL: `/incident-statement/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit`,
+    editIncidentStatementURL: `/incident-statement/${draftAdjudicationNumber}/submitted/edit`,
+    printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/report`,
+    editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${adjudicationNumber}/report`,
     returnLinkURL: `/your-completed-reports`,
     returnLinkContent: 'Return to your completed reports',
   }

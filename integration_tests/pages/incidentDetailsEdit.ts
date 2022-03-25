@@ -40,4 +40,6 @@ export default class IncidentDetailsEditPage extends Page {
   exitButton = (): PageElement => cy.get('[data-qa="incident-details-exit"]')
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
+
+  errorContinueButton = (): PageElement => cy.get('[data-qa="continue-after-error"]')
 }

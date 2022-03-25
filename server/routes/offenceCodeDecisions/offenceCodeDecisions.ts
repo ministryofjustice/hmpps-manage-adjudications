@@ -112,12 +112,7 @@ export default class OffenceCodeRoutes {
 
   cancel = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { user } = res.locals
-    const prisonerNumber = await this.placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber(
-      adjudicationNumber,
-      user
-    )
-    return res.redirect(`/place-the-prisoner-on-report/${prisonerNumber}/${adjudicationNumber}`)
+    return res.redirect(`/place-the-prisoner-on-report/${adjudicationNumber}`)
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {

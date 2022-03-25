@@ -153,7 +153,7 @@ describe('GET /prisoner-report', () => {
   it('should load the prisoner report page if the user has the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .get('/prisoner-report/G6415GD/12345/review')
+      .get('/prisoner-report/12345/review')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Bobby Da Smith Jones’ report')
@@ -176,7 +176,7 @@ describe('GET /prisoner-report', () => {
   it('should not load the prisoner report page if no role present', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .get('/prisoner-report/G6415GD/12345/review')
+      .get('/prisoner-report/12345/review')
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Page not found')

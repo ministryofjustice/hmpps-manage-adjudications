@@ -102,7 +102,7 @@ enum PageRequestAction {
 
 enum NextPageSelectionAfterEdit {
   OFFENCE_SELECTION,
-  CHECK_YOUR_ANSWERS,
+  OFFENCE_DETAILS,
   TASK_LIST,
 }
 
@@ -223,17 +223,16 @@ export default class IncidentDetailsPage {
 
     try {
       if (this.pageOptions.isEdit()) {
-        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
+        const incidentRoleChanged =
+          postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
+        const removeExistingOffences = incidentRoleChanged
+        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
 
         let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
         if (this.pageOptions.isPreviouslySubmitted()) {
-          defaultNextPage = NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS
+          defaultNextPage = NextPageSelectionAfterEdit.OFFENCE_DETAILS
         }
-        const nextPageChoice = chooseNextPageAfterEdit(
-          defaultNextPage,
-          postValues.originalIncidentRoleSelection,
-          incidentDetailsToSave.currentIncidentRoleSelection
-        )
+        const nextPageChoice = chooseNextPageAfterEdit(defaultNextPage, incidentRoleChanged)
         switch (nextPageChoice) {
           case NextPageSelectionAfterEdit.OFFENCE_SELECTION:
             return redirectToOffenceSelection(
@@ -241,14 +240,12 @@ export default class IncidentDetailsPage {
               postValues.draftId,
               incidentDetailsToSave.currentIncidentRoleSelection
             )
-          case NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS:
-            // eslint-disable-next-line no-case-declarations
-            const isReviewerPage = isReviewer(postValues.originalPageReferrerUrl)
-            return redirectToCheckYourAnswers(res, postValues.prisonerNumber, postValues.draftId, isReviewerPage)
+          case NextPageSelectionAfterEdit.OFFENCE_DETAILS:
+            return redirectToOffenceDetails(res, postValues.draftId)
           default:
           // Fall through
         }
-        return redirectToTaskList(res, postValues.prisonerNumber, postValues.draftId)
+        return redirectToTaskList(res, postValues.draftId)
       }
       const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
       return redirectToOffenceSelection(
@@ -258,9 +255,9 @@ export default class IncidentDetailsPage {
       )
     } catch (postError) {
       if (this.pageOptions.isEdit()) {
-        setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
+        this.setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
       } else {
-        setUpRedirectForCreationError(res, postValues.prisonerNumber, postError)
+        this.setUpRedirectForCreationError(res, postValues.prisonerNumber, postValues.draftId, postError)
       }
       throw postError
     }
@@ -289,6 +286,7 @@ export default class IncidentDetailsPage {
   saveToApiUpdate = async (
     draftId: number,
     data: IncidentDetails,
+    removeExistingOffences: boolean,
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
@@ -298,6 +296,7 @@ export default class IncidentDetailsPage {
       data.locationId,
       data.currentAssociatedPrisonerNumber,
       codeFromIncidentRole(data.currentIncidentRoleSelection),
+      removeExistingOffences,
       currentUser
     )
   }
@@ -386,6 +385,20 @@ export default class IncidentDetailsPage {
     if (!associatedPrisonersNumber) return null
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
+    logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
+    res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
+      ? `/incident-details/${prisonerNumber}/${draftId}/submitted/edit`
+      : `/incident-details/${prisonerNumber}/${draftId}/edit`
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setUpRedirectForCreationError = (res: Response, prisonerNumber: string, draftId: number, error: any) => {
+    logger.error(`Failed to post incident details for draft adjudication: ${error}`)
+    res.locals.redirectUrl = `/incident-details/${prisonerNumber}`
   }
 }
 
@@ -535,7 +548,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     if (pageData.exitButtonData.prisonerReportUrl) {
       exitButtonHref = pageData.exitButtonData.prisonerReportUrl
     } else {
-      exitButtonHref = getTaskListUrl(pageData.exitButtonData.prisonerNumber, pageData.exitButtonData.draftId)
+      exitButtonHref = getTaskListUrl(pageData.exitButtonData.draftId)
     }
   }
   const currentIncidentRoleSelection = pageData.formData.incidentDetails?.currentIncidentRoleSelection
@@ -653,10 +666,6 @@ const incidentRoleFromRadioSelection = (radioSelectionCode: string): IncidentRol
   return IncidentRole.COMMITTED
 }
 
-const isReviewer = (originalPageReferrer?: string): boolean => {
-  return originalPageReferrer?.includes('review')
-}
-
 const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
   if (userProvidedValue) {
     const {
@@ -668,8 +677,8 @@ const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
   return null
 }
 
-const getTaskListUrl = (prisonerNumber: string, draftId: number) => {
-  return `/place-the-prisoner-on-report/${prisonerNumber}/${draftId}`
+const getTaskListUrl = (draftId: number) => {
+  return `/place-the-prisoner-on-report/${draftId}`
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
@@ -684,37 +693,19 @@ const redirectToOffenceSelection = (res: Response, draftId: number, incidentRole
   return res.redirect(`/offence-code-selection/${draftId}/${radioSelectionCodeFromIncidentRole(incidentRoleCode)}`)
 }
 
-const redirectToCheckYourAnswers = (
-  res: Response,
-  prisonerNumber: string,
-  draftId: number,
-  isReviewerPage: boolean
-) => {
-  return res.redirect(`/check-your-answers/${prisonerNumber}/${draftId}/${isReviewerPage ? 'review' : 'report'}`)
+const redirectToOffenceDetails = (res: Response, draftId: number) => {
+  return res.redirect(`/details-of-offence/${draftId}`)
 }
 
-const redirectToTaskList = (res: Response, prisonerNumber: string, draftId: number) => {
-  return res.redirect(getTaskListUrl(prisonerNumber, draftId))
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
-  logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
-  res.locals.redirectUrl = `/offence-details/${prisonerNumber}/${draftId}`
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const setUpRedirectForCreationError = (res: Response, prisonerNumber: string, error: any) => {
-  logger.error(`Failed to post incident details for draft adjudication: ${error}`)
-  res.locals.redirectUrl = `/incident-statement/${prisonerNumber}`
+const redirectToTaskList = (res: Response, draftId: number) => {
+  return res.redirect(getTaskListUrl(draftId))
 }
 
 const chooseNextPageAfterEdit = (
   defaultNextPage: NextPageSelectionAfterEdit,
-  originalIncidentRole: IncidentRole,
-  currentIncidentRole: IncidentRole
+  incidentRoleChanged: boolean
 ): NextPageSelectionAfterEdit => {
-  if (originalIncidentRole !== currentIncidentRole) {
+  if (incidentRoleChanged) {
     return NextPageSelectionAfterEdit.OFFENCE_SELECTION
   }
   return defaultNextPage

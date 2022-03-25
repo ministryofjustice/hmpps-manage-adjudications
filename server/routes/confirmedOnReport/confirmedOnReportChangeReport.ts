@@ -35,7 +35,7 @@ export default class ConfirmedOnReportChangeReportRoutes {
       bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed`,
       bannerHTML: null,
       buttonClass: 'govuk-button',
-      buttonHref: `/prisoner-report/${adjudicationDetails.prisonerNumber}/${adjudicationNumber}/report`,
+      buttonHref: `/prisoner-report/${adjudicationNumber}/report`,
     })
   }
 
