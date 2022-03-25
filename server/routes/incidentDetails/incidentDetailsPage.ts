@@ -666,10 +666,6 @@ const incidentRoleFromRadioSelection = (radioSelectionCode: string): IncidentRol
   return IncidentRole.COMMITTED
 }
 
-const isReviewer = (originalPageReferrer?: string): boolean => {
-  return originalPageReferrer?.includes('review')
-}
-
 const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
   if (userProvidedValue) {
     const {
