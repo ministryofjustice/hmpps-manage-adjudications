@@ -3,7 +3,6 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { IncidentRole } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
