@@ -35,7 +35,7 @@ beforeEach(() => {
     currentLocation: undefined,
   })
 
-  decisionTreeService.adjudicationData.mockResolvedValue({
+  decisionTreeService.draftAdjudicationData.mockResolvedValue({
     draftAdjudication: {
       id: 1,
       adjudicationNumber: 123,

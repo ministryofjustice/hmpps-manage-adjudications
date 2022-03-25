@@ -22,7 +22,7 @@ export default class DetailsOfOffenceRoutes {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(adjudicationNumber, user)
+      await this.decisionTreeService.draftAdjudicationData(adjudicationNumber, user)
     const allOffences = await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
     const offences = await Promise.all(
       allOffences.map(async offenceData => {
@@ -52,7 +52,7 @@ export default class DetailsOfOffenceRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { incidentRole } = await this.decisionTreeService.adjudicationData(adjudicationNumber, user)
+    const { incidentRole } = await this.decisionTreeService.draftAdjudicationData(adjudicationNumber, user)
     const { addOffence } = req.body
     if (addOffence) {
       return res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}`)

@@ -27,7 +27,7 @@ export default class DeleteOffenceRoutes {
   private async renderView(req: Request, res: Response, errors: FormError[]) {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { incidentRole, prisoner, associatedPrisoner } = await this.decisionTreeService.adjudicationData(
+    const { incidentRole, prisoner, associatedPrisoner } = await this.decisionTreeService.draftAdjudicationData(
       adjudicationNumber,
       user
     )

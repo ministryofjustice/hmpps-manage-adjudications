@@ -26,7 +26,7 @@ beforeEach(() => {
     },
   ])
 
-  decisionTreeService.adjudicationData.mockResolvedValue({
+  decisionTreeService.draftAdjudicationData.mockResolvedValue({
     draftAdjudication: {
       id: 100,
       prisonerNumber: 'G6415GD',

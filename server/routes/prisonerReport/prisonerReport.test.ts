@@ -23,7 +23,7 @@ let app: Express
 beforeEach(() => {
   reportedAdjudicationsService.createDraftFromCompleteAdjudication.mockResolvedValue(12345)
 
-  decisionTreeService.adjudicationData.mockResolvedValue({
+  decisionTreeService.draftAdjudicationData.mockResolvedValue({
     draftAdjudication: {
       id: 12345,
       adjudicationNumber: 1524661,

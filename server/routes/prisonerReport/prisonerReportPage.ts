@@ -64,7 +64,7 @@ export default class prisonerReportRoutes {
     )
 
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(newDraftAdjudicationId, user)
+      await this.decisionTreeService.draftAdjudicationData(newDraftAdjudicationId, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,

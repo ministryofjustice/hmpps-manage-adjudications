@@ -90,7 +90,7 @@ export default class CheckYourAnswersPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(adjudicationNumber, user)
+      await this.decisionTreeService.draftAdjudicationData(adjudicationNumber, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,
