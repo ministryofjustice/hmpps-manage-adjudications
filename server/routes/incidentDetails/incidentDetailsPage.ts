@@ -102,7 +102,7 @@ enum PageRequestAction {
 
 enum NextPageSelectionAfterEdit {
   OFFENCE_SELECTION,
-  CHECK_YOUR_ANSWERS,
+  OFFENCE_DETAILS,
   TASK_LIST,
 }
 
@@ -230,7 +230,7 @@ export default class IncidentDetailsPage {
 
         let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
         if (this.pageOptions.isPreviouslySubmitted()) {
-          defaultNextPage = NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS
+          defaultNextPage = NextPageSelectionAfterEdit.OFFENCE_DETAILS
         }
         const nextPageChoice = chooseNextPageAfterEdit(defaultNextPage, incidentRoleChanged)
         switch (nextPageChoice) {
@@ -240,10 +240,8 @@ export default class IncidentDetailsPage {
               postValues.draftId,
               incidentDetailsToSave.currentIncidentRoleSelection
             )
-          case NextPageSelectionAfterEdit.CHECK_YOUR_ANSWERS:
-            // eslint-disable-next-line no-case-declarations
-            const isReviewerPage = isReviewer(postValues.originalPageReferrerUrl)
-            return redirectToCheckYourAnswers(res, postValues.prisonerNumber, postValues.draftId, isReviewerPage)
+          case NextPageSelectionAfterEdit.OFFENCE_DETAILS:
+            return redirectToOffenceDetails(res, postValues.draftId)
           default:
           // Fall through
         }
@@ -668,10 +666,6 @@ const incidentRoleFromRadioSelection = (radioSelectionCode: string): IncidentRol
   return IncidentRole.COMMITTED
 }
 
-const isReviewer = (originalPageReferrer?: string): boolean => {
-  return originalPageReferrer?.includes('review')
-}
-
 const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
   if (userProvidedValue) {
     const {
@@ -699,13 +693,8 @@ const redirectToOffenceSelection = (res: Response, draftId: number, incidentRole
   return res.redirect(`/offence-code-selection/${draftId}/${radioSelectionCodeFromIncidentRole(incidentRoleCode)}`)
 }
 
-const redirectToCheckYourAnswers = (
-  res: Response,
-  prisonerNumber: string,
-  draftId: number,
-  isReviewerPage: boolean
-) => {
-  return res.redirect(`/check-your-answers/${draftId}/${isReviewerPage ? 'review' : 'report'}`)
+const redirectToOffenceDetails = (res: Response, draftId: number) => {
+  return res.redirect(`/details-of-offence/${draftId}`)
 }
 
 const redirectToTaskList = (res: Response, draftId: number) => {

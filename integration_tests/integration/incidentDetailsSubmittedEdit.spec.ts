@@ -261,7 +261,7 @@ context('Incident details (edit after completion of report)', () => {
       expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
     })
   })
-  it('should submit form successfully if all data entered and redirect to CHECK YOUR ANSWERS page - reporter version', () => {
+  it('should submit form successfully if all data entered and redirect to offence details page - reporter version', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/report`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -270,10 +270,10 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/34/report')
+      expect(loc.pathname).to.eq('/details-of-offence/34')
     })
   })
-  it('should submit form successfully if all data entered and redirect to CHECK YOUR ANSWERS page - reviewer version', () => {
+  it('should submit form successfully if all data entered and redirect to details of offence page - reviewer version', () => {
     cy.visit(`/incident-details/G6415GD/34/submitted/edit?referrer=/prisoner-report/1524455/review`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -282,7 +282,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/34/review')
+      expect(loc.pathname).to.eq('/details-of-offence/34')
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
