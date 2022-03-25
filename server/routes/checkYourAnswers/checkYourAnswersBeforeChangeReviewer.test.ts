@@ -39,7 +39,7 @@ beforeEach(() => {
     { locationId: 6, locationPrefix: 'OC', userDescription: 'Rivendell' },
   ])
 
-  decisionTreeService.draftAdjudicationData.mockResolvedValue({
+  decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: {
       id: 1,
       adjudicationNumber: 123,

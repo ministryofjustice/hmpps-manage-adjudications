@@ -29,7 +29,7 @@ export default class DecisionTreeService {
     return this.decisionTree
   }
 
-  async draftAdjudicationData(adjudicationNumber: number, user: User) {
+  async draftAdjudicationIncidentData(adjudicationNumber: number, user: User) {
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
     const incidentRole = incidentRoleFromCode(draftAdjudication.incidentRole.roleCode)
     const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
