@@ -18,6 +18,7 @@ generic-service:
     SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
     PRISONER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
+    GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
