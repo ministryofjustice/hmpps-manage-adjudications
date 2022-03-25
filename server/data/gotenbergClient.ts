@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 
-export type PdfOptions = {
+export type PdfMargins = {
   marginTop?: string
   marginBottom?: string
   marginLeft?: string
@@ -18,7 +18,7 @@ export default class GotenbergClient {
     html: string,
     headerHtml: string,
     footerHtml: string,
-    options: PdfOptions = {}
+    options: PdfMargins = {}
   ): Promise<Buffer> {
     const { marginBottom, marginLeft, marginRight, marginTop } = options
     const request = superagent

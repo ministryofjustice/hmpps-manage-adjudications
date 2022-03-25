@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import GotenbergClient, { PdfOptions } from '../data/gotenbergClient'
+import GotenbergClient, { PdfMargins } from '../data/gotenbergClient'
 
 export type PdfPageData = { adjudicationsUrl: string } & Record<string, unknown>
 export type PdfHeaderData = Record<string, unknown>
@@ -14,7 +14,7 @@ export function pdfRenderer(client: GotenbergClient) {
       headerData: PdfHeaderData,
       footerView: string,
       footerData: PdfFooterData,
-      options: { filename: string; pdfOptions: PdfOptions }
+      options: { filename: string; pdfMargins: PdfMargins }
     ) => {
       res.render(headerView, headerData, (headerError: Error, headerHtml: string) => {
         if (headerError) {
@@ -34,7 +34,7 @@ export function pdfRenderer(client: GotenbergClient) {
             res.header('Content-Disposition', `inline; filename=${options.filename}`)
 
             client
-              .renderPdfFromHtml(pageHtml, headerHtml, footerHtml, options?.pdfOptions)
+              .renderPdfFromHtml(pageHtml, headerHtml, footerHtml, options?.pdfMargins)
               .then(buffer => res.send(buffer))
           })
         })

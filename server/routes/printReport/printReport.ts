@@ -47,7 +47,7 @@ export default class PrintReportRoutes {
       { adjudicationNumber },
       {
         filename: `adjudication-report-${adjudicationNumber}`,
-        pdfOptions: pdfMargins,
+        pdfMargins,
       }
     )
   }
