@@ -1,0 +1,67 @@
+{% macro noticeOfBeingPlacedOnReportDetails2(noticeOfBeingPlacedOnReportData) %}
+    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
+            <div class='adjudication-print-form-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
+                    {{ noticeOfBeingPlacedOnReportData.prisonerDisplayName }}
+                </p>
+            </div>
+            <div class='adjudication-print-form-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='notice-of-being-placed-on-report-prisoner-number'>
+                    {{ noticeOfBeingPlacedOnReportData.prisonerNumber }}
+                </p>
+            </div>
+            <div class='adjudication-print-form-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
+                    {{ noticeOfBeingPlacedOnReportData.prisonerLocationDescription }}
+                </p>
+            </div>
+        </div>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <p class='govuk-!-margin-bottom-1'>You need to attend an adjudication hearing and you will be told when this
+            will be. This hearing will not be held in the first 2 hours after you receive this notice of being placed on
+            report.
+        </p>
+        <p class='govuk-!-font-weight-bold govuk-!-margin-bottom-1'>It is alleged that an incident happened:</p>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-date'>
+                on {{ noticeOfBeingPlacedOnReportData.incidentDate }}</li>
+            <li class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-time'>
+                at {{ noticeOfBeingPlacedOnReportData.incidentTime }}</li>
+            <li class='govuk-!-margin-bottom-1'
+                data-qa='notice-of-being-placed-on-report-incident-location-description'>
+                in {{ noticeOfBeingPlacedOnReportData.incidentLocationDescription }}</li>
+        </ul>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <h2>Details of the alleged offence</h2>
+
+        {% for offence in noticeOfBeingPlacedOnReportData.offences %}
+            <div>
+                {% for questionAndAnswer in offence.questionsAndAnswers %}
+                    <p>{{ questionAndAnswer.question }}</p>
+                    <p>{{ questionAndAnswer.answer }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        <h2>The reporting officer’s statement about the incident</h2>
+        <div class='adjudication-print-form-statement-paragraph' data-qa='notice-of-being-placed-on-report-statement'>
+            {{ noticeOfBeingPlacedOnReportData.statement | formatStatement('"govuk-!-margin-bottom-2"') | safe }}
+        </div>
+        <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-reporting-officer'>Reporting
+            officer: {{ noticeOfBeingPlacedOnReportData.reportingOfficer }}</p>
+        <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-date'>
+            Date: {{ noticeOfBeingPlacedOnReportData.reportedDate }}</p>
+        <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-time'>
+            Time: {{ noticeOfBeingPlacedOnReportData.reportedTime }}</p>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+    </div>
+{% endmacro %}

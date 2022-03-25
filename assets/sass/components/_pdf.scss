@@ -1,0 +1,13 @@
+body.pdf {
+  p, li, h2 {
+    font-family: "GDS Transport", arial, sans-serif;
+  }
+  .page-break-before-always {
+    page-break-before: always
+  }
+  .break-inside-avoid {
+    break-inside: avoid;
+  }
+}
+
+

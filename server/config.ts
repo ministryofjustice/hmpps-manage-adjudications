@@ -45,6 +45,16 @@ export default {
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
   apis: {
+    gotenberg: {
+      apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      pdfMargins: {
+        marginTop: '0.9',
+        marginBottom: '0.8',
+        marginLeft: '0.0',
+        marginRight: '0.0',
+      },
+      adjudicationsUrl: get('ADJUDICATIONS_URL', 'http://host.docker.internal:3000', requiredInProduction),
+    },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),

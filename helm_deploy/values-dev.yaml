@@ -17,6 +17,7 @@ generic-service:
     PRISON_API_URL: https://api-dev.prison.service.justice.gov.uk
     SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
     PRISONER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
+    ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     
   allowlist: null
 

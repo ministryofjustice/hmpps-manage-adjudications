@@ -1,0 +1,34 @@
+div.adjudication-pdf {
+  p, li {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+  h2 {
+    font-size: 14px;
+  }
+}
+
+.adjudication-pdf-prisoner-statement {
+  height: 400px;
+  width: 100%;
+  border-width: thin;
+  border-style: solid;
+}
+
+.adjudication-pdf-section-prisoner {
+  display: flex;
+  align-items: end;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    padding-right: govuk-spacing(3);
+    width: 20%;
+    &:last-child {
+      width: 60%;
+    }
+  }
+}
+

@@ -2,7 +2,7 @@ import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../../utils/utils'
 
 export default class noticeOfBeingPlacedOnReportData {
-  adjudicationNumber: string
+  adjudicationNumber: number
 
   statement: string
 
@@ -24,7 +24,7 @@ export default class noticeOfBeingPlacedOnReportData {
 
   reportedTime: string
 
-  constructor(adjudicationNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
+  constructor(adjudicationNumber: number, confirmedOnReportData: ConfirmedOnReportData) {
     this.adjudicationNumber = adjudicationNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(
