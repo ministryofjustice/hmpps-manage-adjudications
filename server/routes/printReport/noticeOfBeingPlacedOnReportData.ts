@@ -1,6 +1,5 @@
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../../utils/utils'
-import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import { IncidentAndOffences } from '../../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
