@@ -12,11 +12,7 @@ export default class DetailsOfOffenceRoutes {
     private readonly decisionTreeService: DecisionTreeService
   ) {}
 
-  private helper = new DetailsOfOffenceHelper(
-    this.placeOnReportService,
-    this.allOffencesSessionService,
-    this.decisionTreeService
-  )
+  private helper = new DetailsOfOffenceHelper(this.placeOnReportService, this.allOffencesSessionService)
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
