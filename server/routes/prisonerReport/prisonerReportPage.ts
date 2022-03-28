@@ -71,7 +71,6 @@ export default class prisonerReportRoutes {
       user
     )
 
-    const allOffenceData = this.decisionTreeService.allOffences(draftAdjudication)
     const prisonerReportData = await this.reportedAdjudicationsService.getPrisonerReport(
       user,
       incidentLocations,
@@ -79,7 +78,7 @@ export default class prisonerReportRoutes {
     )
 
     const offences = await this.decisionTreeService.getAdjudicationOffences(
-      allOffenceData,
+      draftAdjudication.offenceDetails,
       prisoner,
       associatedPrisoner,
       draftAdjudication.incidentRole,

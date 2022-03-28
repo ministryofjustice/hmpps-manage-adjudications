@@ -6,7 +6,7 @@ import { IncidentRole as IncidentRoleEnum, incidentRoleFromCode } from '../incid
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { AnswerData, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
 import PrisonerResult from '../data/prisonerResult'
-import { DraftAdjudication, IncidentRole } from '../data/DraftAdjudicationResult'
+import { DraftAdjudication, IncidentRole, OffenceDetails } from '../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
@@ -70,14 +70,14 @@ export default class DecisionTreeService {
   }
 
   async getAdjudicationOffences(
-    allOffenceData: AllOffenceData[],
+    allOffenceData: OffenceDetails[],
     prisoner: PrisonerResult,
     associatedPrisoner: PrisonerResult,
     incidentRole: IncidentRole,
     user: User
   ) {
     return Promise.all(
-      allOffenceData.map(async offenceData => {
+      allOffenceData?.map(async offenceData => {
         const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
         const answerData = await this.answerData(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
@@ -105,13 +105,17 @@ export default class DecisionTreeService {
     )
   }
 
-  async answerData(data: OffenceData, user: User): Promise<AnswerData> {
+  // TODO rename
+  async answerData(
+    answerData: { victimOtherPersonsName?: string; victimPrisonersNumber?: string; victimStaffUsername?: string },
+    user: User
+  ): Promise<AnswerData> {
     const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
-      data.victimOtherPersonsName,
-      data.victimPrisonersNumber && this.placeOnReportService.getPrisonerDetails(data.victimPrisonersNumber, user),
-      data.victimStaffUsername && this.userService.getStaffFromUsername(data.victimStaffUsername, user),
+      answerData.victimOtherPersonsName,
+      answerData.victimPrisonersNumber &&
+        this.placeOnReportService.getPrisonerDetails(answerData.victimPrisonersNumber, user),
+      answerData.victimStaffUsername && this.userService.getStaffFromUsername(answerData.victimStaffUsername, user),
     ])
-
     return {
       victimOtherPerson,
       victimPrisoner,

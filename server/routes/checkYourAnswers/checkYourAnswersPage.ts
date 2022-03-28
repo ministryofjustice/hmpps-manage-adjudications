@@ -97,7 +97,6 @@ export default class CheckYourAnswersPage {
       user
     )
 
-    const allOffenceData = this.decisionTreeService.allOffences(draftAdjudication)
     const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
       adjudicationNumber,
       incidentLocations,
@@ -106,7 +105,7 @@ export default class CheckYourAnswersPage {
 
     const [offences, checkAnswersVariations] = await Promise.all([
       this.decisionTreeService.getAdjudicationOffences(
-        allOffenceData,
+        draftAdjudication.offenceDetails,
         prisoner,
         associatedPrisoner,
         draftAdjudication.incidentRole,
