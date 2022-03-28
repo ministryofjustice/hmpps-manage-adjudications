@@ -68,7 +68,7 @@ beforeEach(() => {
     associatedPrisoner: undefined,
   })
 
-  decisionTreeService.allOffences.mockResolvedValue([
+  decisionTreeService.allOffences.mockReturnValue([
     {
       victimOtherPersonsName: undefined,
       victimPrisonersNumber: 'G6123VU',

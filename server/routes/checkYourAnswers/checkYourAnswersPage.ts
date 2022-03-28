@@ -97,10 +97,12 @@ export default class CheckYourAnswersPage {
       user
     )
 
-    const [incidentDetailsData, allOffenceData] = await Promise.all([
-      this.placeOnReportService.getCheckYourAnswersInfo(adjudicationNumber, incidentLocations, user),
-      this.decisionTreeService.allOffences(adjudicationNumber, user),
-    ])
+    const allOffenceData = this.decisionTreeService.allOffences(draftAdjudication)
+    const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
+      adjudicationNumber,
+      incidentLocations,
+      user
+    )
 
     const [offences, checkAnswersVariations] = await Promise.all([
       this.decisionTreeService.getAdjudicationOffences(

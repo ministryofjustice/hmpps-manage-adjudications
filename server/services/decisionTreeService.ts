@@ -92,10 +92,9 @@ export default class DecisionTreeService {
     )
   }
 
-  async allOffences(adjudicationNumber: number, user: User) {
-    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+  allOffences(adjudication: DraftAdjudication | ReportedAdjudication) {
     return (
-      draftAdjudication.offenceDetails?.map(offenceDetails => {
+      adjudication.offenceDetails?.map(offenceDetails => {
         return {
           victimOtherPersonsName: offenceDetails.victimOtherPersonsName,
           victimPrisonersNumber: offenceDetails.victimPrisonersNumber,

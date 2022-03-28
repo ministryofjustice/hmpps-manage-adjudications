@@ -40,6 +40,7 @@ beforeEach(() => {
         statement: 'My second incident',
       },
       incidentRole: {},
+      offenceDetails: [{ offenceCode: 1001 }],
     },
     {
       displayName: 'Moriarty, James',
@@ -61,6 +62,7 @@ beforeEach(() => {
         statement: 'My first incident',
       },
       incidentRole: {},
+      offenceDetails: [{ offenceCode: 1001 }],
     },
   ]
   reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
