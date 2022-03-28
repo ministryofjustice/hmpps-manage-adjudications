@@ -107,8 +107,7 @@ export default class CheckYourAnswersPage {
         allOffenceData,
         prisoner,
         associatedPrisoner,
-        incidentRole,
-        draftAdjudication,
+        draftAdjudication.incidentRole,
         user
       ),
       getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, adjudicationNumber, incidentDetailsData),

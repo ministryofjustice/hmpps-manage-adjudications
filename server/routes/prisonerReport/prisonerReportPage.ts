@@ -63,7 +63,7 @@ export default class prisonerReportRoutes {
       Number(req.params.adjudicationNumber)
     )
 
-    const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
+    const { draftAdjudication, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(
@@ -80,8 +80,7 @@ export default class prisonerReportRoutes {
       allOffenceData,
       prisoner,
       associatedPrisoner,
-      incidentRole,
-      draftAdjudication,
+      draftAdjudication.incidentRole,
       user
     )
 

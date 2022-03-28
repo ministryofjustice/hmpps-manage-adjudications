@@ -2,11 +2,11 @@ import { Decision } from '../offenceCodeDecisions/Decision'
 import PlaceOnReportService from './placeOnReportService'
 import UserService from './userService'
 import { User } from '../data/hmppsAuthClient'
-import { IncidentRole, incidentRoleFromCode } from '../incidentRole/IncidentRole'
+import { IncidentRole as IncidentRoleEnum, incidentRoleFromCode } from '../incidentRole/IncidentRole'
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { AnswerData, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
-import prisonerResult from '../data/prisonerResult'
-import { DraftAdjudication } from '../data/DraftAdjudicationResult'
+import PrisonerResult from '../data/prisonerResult'
+import { DraftAdjudication, IncidentRole } from '../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
@@ -33,7 +33,7 @@ export default class DecisionTreeService {
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
     const data = await this.adjudicationIncidentData(draftAdjudication, user)
     return {
-      draftAdjudication: data.adjudication as DraftAdjudication,
+      draftAdjudication,
       incidentRole: data.incidentRole,
       associatedPrisoner: data.associatedPrisoner,
       prisoner: data.prisoner,
@@ -47,7 +47,7 @@ export default class DecisionTreeService {
     )
     const data = await this.adjudicationIncidentData(reportedAdjudication, user)
     return {
-      reportedAdjudication: data.adjudication as ReportedAdjudication,
+      reportedAdjudication,
       incidentRole: data.incidentRole,
       associatedPrisoner: data.associatedPrisoner,
       prisoner: data.prisoner,
@@ -63,7 +63,6 @@ export default class DecisionTreeService {
       associatedPrisonerNumber && this.placeOnReportService.getPrisonerDetails(associatedPrisonerNumber, user),
     ])
     return {
-      adjudication,
       incidentRole,
       prisoner,
       associatedPrisoner,
@@ -72,21 +71,21 @@ export default class DecisionTreeService {
 
   async getAdjudicationOffences(
     allOffenceData: AllOffenceData[],
-    prisoner: prisonerResult,
-    associatedPrisoner: prisonerResult,
+    prisoner: PrisonerResult,
+    associatedPrisoner: PrisonerResult,
     incidentRole: IncidentRole,
-    draftAdjudication: DraftAdjudication,
     user: User
   ) {
     return Promise.all(
       allOffenceData.map(async offenceData => {
+        const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
         const answerData = await this.answerData(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRole)
+        const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum)
         return {
           questionsAndAnswers,
-          incidentRule: draftAdjudication.incidentRole.offenceRule,
+          incidentRule: incidentRole.offenceRule,
           offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
         }
       })
@@ -121,7 +120,7 @@ export default class DecisionTreeService {
     }
   }
 
-  questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRole) {
+  questionsAndAnswers(offenceCode: number, placeHolderValues: PlaceholderValues, incidentRole: IncidentRoleEnum) {
     return this.getDecisionTree()
       .findAnswerByCode(offenceCode)
       .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole)
