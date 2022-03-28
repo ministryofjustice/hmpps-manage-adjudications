@@ -5,7 +5,7 @@ import { User } from '../data/hmppsAuthClient'
 import { IncidentRole as IncidentRoleEnum, incidentRoleFromCode } from '../incidentRole/IncidentRole'
 import { AnswerDataDetails, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
 import PrisonerResult from '../data/prisonerResult'
-import { DraftAdjudication, IncidentRole, OffenceDetails } from '../data/DraftAdjudicationResult'
+import { DraftAdjudication, IncidentRole, OffenceDetails, OffenceRule } from '../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
@@ -13,6 +13,12 @@ export type AnswerData = {
   victimOtherPersonsName?: string
   victimPrisonersNumber?: string
   victimStaffUsername?: string
+}
+
+export type IncidentAndOffences = {
+  questionsAndAnswers: { question: string; answer: string }[]
+  incidentRule: OffenceRule
+  offenceRule: OffenceRule
 }
 
 export default class DecisionTreeService {
@@ -73,7 +79,7 @@ export default class DecisionTreeService {
     associatedPrisoner: PrisonerResult,
     incidentRole: IncidentRole,
     user: User
-  ) {
+  ): Promise<IncidentAndOffences[]> {
     return Promise.all(
       allOffenceData?.map(async offenceData => {
         const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)

@@ -41,15 +41,20 @@ export default class PrintReportRoutes {
     const { user } = res.locals
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
-    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails)
+
     const { reportedAdjudication, associatedPrisoner, prisoner } =
       await this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user)
-    const offences = this.decisionTreeService.getAdjudicationOffences(
+    const offences = await this.decisionTreeService.getAdjudicationOffences(
       reportedAdjudication.offenceDetails,
       prisoner,
       associatedPrisoner,
       reportedAdjudication.incidentRole,
       user
+    )
+    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
+      adjudicationNumber,
+      adjudicationDetails,
+      offences
     )
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport2`,
