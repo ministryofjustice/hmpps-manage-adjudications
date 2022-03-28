@@ -9,7 +9,7 @@ export type ReportedAdjudication = {
   incidentDetails: IncidentDetails
   incidentStatement: IncidentStatement
   incidentRole: IncidentRole
-  offences: OffenceDetails[]
+  offenceDetails: OffenceDetails[]
 }
 
 export type ReportedAdjudicationResult = {

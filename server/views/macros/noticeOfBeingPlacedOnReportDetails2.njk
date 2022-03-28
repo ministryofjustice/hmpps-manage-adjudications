@@ -40,28 +40,46 @@
                 in {{ noticeOfBeingPlacedOnReportData.incidentLocationDescription }}</li>
         </ul>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-        <h2>Details of the alleged offence</h2>
+        {% if noticeOfBeingPlacedOnReportData.offences.length > 1 %}
+            <h2>Details of the alleged offences</h2>
+        {% else %}
+            <h2>Details of the alleged offence</h2>
+        {% endif %}
 
         {% for offence in noticeOfBeingPlacedOnReportData.offences %}
-            <div>
+            <div class='break-inside-avoid'>
                 {% for questionAndAnswer in offence.questionsAndAnswers %}
-                    <p>{{ questionAndAnswer.question }}</p>
-                    <p>{{ questionAndAnswer.answer }}</p>
+                    <p class='govuk-!-margin-bottom-0'>{{ questionAndAnswer.question }}</p>
+                    <p class='govuk-!-margin-bottom-2'>{{ questionAndAnswer.answer }}</p>
                 {% endfor %}
             </div>
+            <div>
+                <p class='govuk-!-margin-bottom-0'>This offence broke:</p>
+                {% if offence.incidentRule %}
+                    <p class='govuk-!-margin-bottom-0'>Prison rule 51, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+                    <p class='govuk-!-margin-bottom-0'>{{ offence.incidentRule.paragraphDescription }}</p>
+                {% endif %}
+                <p class='govuk-!-margin-bottom-0'>Prison rule 51, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+                <p class='govuk-!-margin-bottom-0'>{{ offence.offenceRule.paragraphDescription }}</p>
+            </div>
+            {% if not loop.last %}
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            {% endif %}
         {% endfor %}
 
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-        <h2>The reporting officer’s statement about the incident</h2>
-        <div class='adjudication-print-form-statement-paragraph' data-qa='notice-of-being-placed-on-report-statement'>
-            {{ noticeOfBeingPlacedOnReportData.statement | formatStatement('"govuk-!-margin-bottom-2"') | safe }}
+        <div class='break-inside-avoid'>
+            <h2>The reporting officer’s statement about the incident</h2>
+            <div class='adjudication-print-form-statement-paragraph' data-qa='notice-of-being-placed-on-report-statement'>
+                {{ noticeOfBeingPlacedOnReportData.statement | formatStatement('"govuk-!-margin-bottom-2"') | safe }}
+            </div>
+            <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-reporting-officer'>Reporting
+                officer: {{ noticeOfBeingPlacedOnReportData.reportingOfficer }}</p>
+            <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-date'>
+                Date: {{ noticeOfBeingPlacedOnReportData.reportedDate }}</p>
+            <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-time'>
+                Time: {{ noticeOfBeingPlacedOnReportData.reportedTime }}</p>
+            <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         </div>
-        <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-reporting-officer'>Reporting
-            officer: {{ noticeOfBeingPlacedOnReportData.reportingOfficer }}</p>
-        <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-date'>
-            Date: {{ noticeOfBeingPlacedOnReportData.reportedDate }}</p>
-        <p class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-time'>
-            Time: {{ noticeOfBeingPlacedOnReportData.reportedTime }}</p>
-        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
     </div>
 {% endmacro %}
