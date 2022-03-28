@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import DecisionTreeService from '../../services/decisionTreeService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 export default class DetailsOfOffenceHelper {
