@@ -1,13 +1,11 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import DecisionTreeService from '../../services/decisionTreeService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 export default class DetailsOfOffenceHelper {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly allOffencesSessionService: AllOffencesSessionService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly allOffencesSessionService: AllOffencesSessionService
   ) {}
 
   populateSessionIfEmpty = async (adjudicationNumber: number, req: Request, res: Response) => {
@@ -29,9 +27,5 @@ export default class DetailsOfOffenceHelper {
       }) || []
     this.allOffencesSessionService.setAllSessionOffences(req, allOffenceData, adjudicationNumber)
     return allOffenceData
-  }
-
-  private decisions() {
-    return this.decisionTreeService.getDecisionTree()
   }
 }

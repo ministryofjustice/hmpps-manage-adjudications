@@ -88,27 +88,27 @@ export default class CheckYourAnswersPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
     const { user } = res.locals
-
-    const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(Number(req.params.adjudicationNumber), user)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { draftAdjudication, prisoner, associatedPrisoner } =
+      await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,
       user
     )
 
-    const [incidentDetailsData, allOffenceData] = await Promise.all([
-      this.placeOnReportService.getCheckYourAnswersInfo(adjudicationNumber, incidentLocations, user),
-      this.decisionTreeService.allOffences(adjudicationNumber, user),
-    ])
+    const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
+      adjudicationNumber,
+      incidentLocations,
+      user
+    )
 
     const [offences, checkAnswersVariations] = await Promise.all([
       this.decisionTreeService.getAdjudicationOffences(
-        allOffenceData,
+        draftAdjudication.offenceDetails,
         prisoner,
         associatedPrisoner,
-        incidentRole,
-        draftAdjudication,
+        draftAdjudication.incidentRole,
         user
       ),
       getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, adjudicationNumber, incidentDetailsData),

@@ -63,25 +63,25 @@ export default class prisonerReportRoutes {
       Number(req.params.adjudicationNumber)
     )
 
-    const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(newDraftAdjudicationId, user)
+    const { draftAdjudication, prisoner, associatedPrisoner } =
+      await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(
       prisoner.assignedLivingUnit.agencyId,
       user
     )
 
-    const [prisonerReportData, allOffenceData] = await Promise.all([
-      this.reportedAdjudicationsService.getPrisonerReport(user, incidentLocations, draftAdjudication),
-      this.decisionTreeService.allOffences(newDraftAdjudicationId, user),
-    ])
+    const prisonerReportData = await this.reportedAdjudicationsService.getPrisonerReport(
+      user,
+      incidentLocations,
+      draftAdjudication
+    )
 
     const offences = await this.decisionTreeService.getAdjudicationOffences(
-      allOffenceData,
+      draftAdjudication.offenceDetails,
       prisoner,
       associatedPrisoner,
-      incidentRole,
-      draftAdjudication,
+      draftAdjudication.incidentRole,
       user
     )
 

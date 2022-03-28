@@ -1,7 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
-import PlaceOnReportService from '../../services/placeOnReportService'
+import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { decision } from '../../offenceCodeDecisions/Decision'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
@@ -9,12 +9,19 @@ import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
+jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -33,15 +40,59 @@ const testDecisionsTree = decision([
     )
   )
 
-const decisionTreeService = new DecisionTreeService(placeOnReportService, userService, testDecisionsTree)
+const decisionTreeService = new DecisionTreeService(
+  placeOnReportService,
+  userService,
+  reportedAdjudicationsService,
+  testDecisionsTree
+)
 
 let app: Express
+
+const adjudicationPrisonerDetails: PrisonerResultSummary = {
+  offenderNo: 'G6415GD',
+  prisonerNumber: 'G6415GD',
+  firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
+  lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
+  categoryCode: undefined,
+  language: undefined,
+  friendlyName: undefined,
+  displayName: undefined,
+  currentLocation: undefined,
+  assignedLivingUnit: undefined,
+}
+
+const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = {
+  offenderNo: 'G7824GD',
+  prisonerNumber: 'G7824GD',
+  firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
+  lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
+  categoryCode: undefined,
+  language: undefined,
+  friendlyName: undefined,
+  displayName: undefined,
+  currentLocation: undefined,
+  assignedLivingUnit: undefined,
+}
+
+const victimPrisonerDetails: PrisonerResultSummary = {
+  offenderNo: 'G5512G',
+  prisonerNumber: 'G5512G',
+  firstName: 'A_PRISONER_FIRST_NAME',
+  lastName: 'A_PRISONER_LAST_NAME',
+  categoryCode: undefined,
+  language: undefined,
+  friendlyName: undefined,
+  displayName: undefined,
+  currentLocation: undefined,
+  assignedLivingUnit: undefined,
+}
 
 const adjudicationWithOffences = {
   draftAdjudication: {
     id: 100,
     adjudicationNumber: 1524493,
-    prisonerNumber: 'G6415GD',
+    prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     incidentDetails: {
       locationId: 197682,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -49,11 +100,12 @@ const adjudicationWithOffences = {
     },
     incidentRole: {
       roleCode: '25c',
+      associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
     },
     offenceDetails: [
       {
         offenceCode: 1,
-        victimPrisonersNumber: 'G5512G',
+        victimPrisonersNumber: victimPrisonerDetails.offenderNo,
       },
       {
         offenceCode: 2,
@@ -67,7 +119,7 @@ const adjudicationWithoutOffences = {
   draftAdjudication: {
     id: 101,
     adjudicationNumber: 1524493,
-    prisonerNumber: 'G6415GD',
+    prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
     incidentDetails: {
       locationId: 197682,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -82,53 +134,27 @@ const adjudicationWithoutOffences = {
 
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockImplementation(adjudicationId => {
-    if (adjudicationWithOffences.draftAdjudication.id === adjudicationId) {
-      return Promise.resolve(adjudicationWithOffences)
+    switch (adjudicationId) {
+      case adjudicationWithOffences.draftAdjudication.id:
+        return Promise.resolve(adjudicationWithOffences)
+      case adjudicationWithoutOffences.draftAdjudication.id:
+        return Promise.resolve(adjudicationWithoutOffences)
+      default:
+        return Promise.resolve(null)
     }
-    if (adjudicationWithoutOffences.draftAdjudication.id === adjudicationId) {
-      return Promise.resolve(adjudicationWithoutOffences)
-    }
-    return Promise.resolve(null)
   })
 
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: undefined,
-    firstName: 'A_PRISONER_FIRST_NAME',
-    lastName: 'A_PRISONER_LAST_NAME',
-    categoryCode: undefined,
-    language: undefined,
-    friendlyName: undefined,
-    displayName: undefined,
-    prisonerNumber: undefined,
-    currentLocation: undefined,
-    assignedLivingUnit: undefined,
-  })
-
-  placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
-    prisoner: {
-      offenderNo: undefined,
-      firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
-      lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-    },
-    associatedPrisoner: {
-      offenderNo: undefined,
-      firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
-      lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-    },
+  placeOnReportService.getPrisonerDetails.mockImplementation(prisonerNumber => {
+    switch (prisonerNumber) {
+      case adjudicationPrisonerDetails.prisonerNumber:
+        return Promise.resolve(adjudicationPrisonerDetails)
+      case adjudicationAssociatedPrisonerDetails.prisonerNumber:
+        return Promise.resolve(adjudicationAssociatedPrisonerDetails)
+      case victimPrisonerDetails.prisonerNumber:
+        return Promise.resolve(victimPrisonerDetails)
+      default:
+        return Promise.resolve(null)
+    }
   })
 
   placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber.mockResolvedValue('G6415GD')

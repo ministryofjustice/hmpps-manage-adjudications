@@ -4,9 +4,13 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 import NoticeOfBeingPlacedOnReportData from './noticeOfBeingPlacedOnReportData'
 import config from '../../config'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 export default class PrintReportRoutes {
-  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
+  constructor(
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly decisionTreeService: DecisionTreeService
+  ) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -37,7 +41,21 @@ export default class PrintReportRoutes {
     const { user } = res.locals
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
-    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails)
+
+    const { reportedAdjudication, associatedPrisoner, prisoner } =
+      await this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user)
+    const offences = await this.decisionTreeService.getAdjudicationOffences(
+      reportedAdjudication.offences,
+      prisoner,
+      associatedPrisoner,
+      reportedAdjudication.incidentRole,
+      user
+    )
+    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
+      adjudicationNumber,
+      adjudicationDetails,
+      offences
+    )
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport2`,
       { adjudicationsUrl, noticeOfBeingPlacedOnReportData },

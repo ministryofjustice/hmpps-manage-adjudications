@@ -12,21 +12,12 @@ jest.mock('../../services/decisionTreeService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
-const decisionTreeService = new DecisionTreeService(null, null, null) as jest.Mocked<DecisionTreeService>
+const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
 
 let app: Express
 
 beforeEach(() => {
-  decisionTreeService.allOffences.mockResolvedValue([
-    {
-      victimOtherPersonsName: undefined,
-      victimPrisonersNumber: 'G6123VU',
-      victimStaffUsername: undefined,
-      offenceCode: '2001',
-    },
-  ])
-
-  decisionTreeService.adjudicationData.mockResolvedValue({
+  decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: {
       id: 100,
       prisonerNumber: 'G6415GD',
@@ -49,7 +40,6 @@ beforeEach(() => {
       incidentStatement: { statement: 'text here', completed: true },
       startedByUserId: 'TEST_GEN',
     },
-    adjudicationNumber: 100,
     incidentRole: IncidentRole.ASSISTED,
     prisoner: {
       offenderNo: 'A8383DY',

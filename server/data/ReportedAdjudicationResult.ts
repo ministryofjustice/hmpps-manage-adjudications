@@ -1,4 +1,4 @@
-import { IncidentDetails, IncidentStatement } from './DraftAdjudicationResult'
+import { IncidentDetails, IncidentRole, IncidentStatement, OffenceDetails } from './DraftAdjudicationResult'
 
 export type ReportedAdjudication = {
   adjudicationNumber: number
@@ -8,6 +8,8 @@ export type ReportedAdjudication = {
   createdByUserId: string
   incidentDetails: IncidentDetails
   incidentStatement: IncidentStatement
+  incidentRole: IncidentRole
+  offences: OffenceDetails[]
 }
 
 export type ReportedAdjudicationResult = {
