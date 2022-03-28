@@ -25,7 +25,7 @@ export default function detailsOfOffenceRoutes({
     decisionTreeService
   )
 
-  const addOffence = new AddOffenceRoutes(placeOnReportService, allOffencesSessionService, decisionTreeService)
+  const addOffence = new AddOffenceRoutes(placeOnReportService, allOffencesSessionService)
 
   const deleteOffence = new DeleteOffenceRoutes(allOffencesSessionService, decisionTreeService)
 

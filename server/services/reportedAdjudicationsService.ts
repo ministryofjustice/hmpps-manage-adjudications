@@ -3,7 +3,11 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
-import { ReportedAdjudication, ReportedAdjudicationEnhanced } from '../data/ReportedAdjudicationResult'
+import {
+  ReportedAdjudication,
+  ReportedAdjudicationEnhanced,
+  ReportedAdjudicationResult,
+} from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
@@ -24,6 +28,10 @@ export default class ReportedAdjudicationsService {
     private readonly curiousApiService: CuriousApiService,
     private readonly locationService: LocationService
   ) {}
+
+  async getReportedAdjudicationDetails(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+  }
 
   async getConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)

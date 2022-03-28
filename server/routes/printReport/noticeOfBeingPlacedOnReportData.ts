@@ -1,5 +1,6 @@
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../../utils/utils'
+import { IncidentAndOffences } from '../../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
   adjudicationNumber: number
@@ -24,7 +25,13 @@ export default class noticeOfBeingPlacedOnReportData {
 
   reportedTime: string
 
-  constructor(adjudicationNumber: number, confirmedOnReportData: ConfirmedOnReportData) {
+  offences: IncidentAndOffences[]
+
+  constructor(
+    adjudicationNumber: number,
+    confirmedOnReportData: ConfirmedOnReportData,
+    offences: IncidentAndOffences[] = []
+  ) {
     this.adjudicationNumber = adjudicationNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(
@@ -38,5 +45,6 @@ export default class noticeOfBeingPlacedOnReportData {
     this.incidentTime = formatTimestampTo(confirmedOnReportData.incidentDate, 'HH:mm')
     this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
     this.reportedTime = formatTimestampTo(confirmedOnReportData.createdDateTime, 'HH:mm')
+    this.offences = offences
   }
 }

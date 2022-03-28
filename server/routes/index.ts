@@ -63,7 +63,7 @@ export default function routes(
   router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
-  router.use('/print-report', printReportRoutes({ reportedAdjudicationsService }))
+  router.use('/print-report', printReportRoutes({ reportedAdjudicationsService, decisionTreeService }))
   router.use(
     '/prisoner-report',
     prisonerReportRoutes({

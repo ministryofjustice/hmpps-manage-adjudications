@@ -12,23 +12,20 @@ export default class DetailsOfOffenceRoutes {
     private readonly decisionTreeService: DecisionTreeService
   ) {}
 
-  private helper = new DetailsOfOffenceHelper(
-    this.placeOnReportService,
-    this.allOffencesSessionService,
-    this.decisionTreeService
-  )
+  private helper = new DetailsOfOffenceHelper(this.placeOnReportService, this.allOffencesSessionService)
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { adjudicationNumber, draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.adjudicationData(Number(req.params.adjudicationNumber), user)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
+      await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const allOffences = await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
     const offences = await Promise.all(
       allOffences.map(async offenceData => {
-        const answerData = await this.decisionTreeService.answerData(offenceData, user)
+        const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = await this.decisionTreeService.questionsAndAnswers(
+        const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
           offenceCode,
           placeHolderValues,
           incidentRole
@@ -50,10 +47,8 @@ export default class DetailsOfOffenceRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { adjudicationNumber, incidentRole } = await this.decisionTreeService.adjudicationData(
-      Number(req.params.adjudicationNumber),
-      user
-    )
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { incidentRole } = await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const { addOffence } = req.body
     if (addOffence) {
       return res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}`)

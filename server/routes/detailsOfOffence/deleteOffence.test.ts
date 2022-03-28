@@ -9,12 +9,19 @@ import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
+jest.mock('../../services/reportedAdjudicationsService')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 const testDecisionsTree = decision([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
@@ -32,7 +39,12 @@ const testDecisionsTree = decision([
       decision('A child question').child(answer('A standard child answer').offenceCode(2))
     )
   )
-const decisionTreeService = new DecisionTreeService(placeOnReportService, userService, testDecisionsTree)
+const decisionTreeService = new DecisionTreeService(
+  placeOnReportService,
+  userService,
+  reportedAdjudicationsService,
+  testDecisionsTree
+)
 let app: Express
 
 beforeEach(() => {
