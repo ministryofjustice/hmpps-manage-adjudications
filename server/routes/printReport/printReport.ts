@@ -45,7 +45,7 @@ export default class PrintReportRoutes {
     const { reportedAdjudication, associatedPrisoner, prisoner } =
       await this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user)
     const offences = await this.decisionTreeService.getAdjudicationOffences(
-      reportedAdjudication.offenceDetails,
+      reportedAdjudication.offences,
       prisoner,
       associatedPrisoner,
       reportedAdjudication.incidentRole,
