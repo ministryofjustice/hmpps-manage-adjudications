@@ -68,15 +68,6 @@ beforeEach(() => {
     associatedPrisoner: undefined,
   })
 
-  decisionTreeService.allOffences.mockReturnValue([
-    {
-      victimOtherPersonsName: undefined,
-      victimPrisonersNumber: 'G6123VU',
-      victimStaffUsername: undefined,
-      offenceCode: '2001',
-    },
-  ])
-
   locationService.getIncidentLocations.mockResolvedValue([
     { locationId: 6, locationPrefix: 'OC', userDescription: 'Yard' },
     { locationId: 2, locationPrefix: 'P2', userDescription: 'Gym' },

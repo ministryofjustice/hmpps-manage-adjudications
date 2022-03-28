@@ -104,7 +104,6 @@ beforeEach(() => {
     ],
   })
 
-  decisionTreeService.allOffences.mockReturnValue([])
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 })
 

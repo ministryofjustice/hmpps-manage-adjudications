@@ -17,15 +17,6 @@ const decisionTreeService = new DecisionTreeService(null, null, null, null) as j
 let app: Express
 
 beforeEach(() => {
-  decisionTreeService.allOffences.mockReturnValue([
-    {
-      victimOtherPersonsName: undefined,
-      victimPrisonersNumber: 'G6123VU',
-      victimStaffUsername: undefined,
-      offenceCode: '2001',
-    },
-  ])
-
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: {
       id: 100,

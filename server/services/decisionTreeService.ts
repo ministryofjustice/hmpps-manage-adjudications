@@ -92,19 +92,6 @@ export default class DecisionTreeService {
     )
   }
 
-  allOffences(adjudication: DraftAdjudication | ReportedAdjudication) {
-    return (
-      adjudication.offenceDetails?.map(offenceDetails => {
-        return {
-          victimOtherPersonsName: offenceDetails.victimOtherPersonsName,
-          victimPrisonersNumber: offenceDetails.victimPrisonersNumber,
-          victimStaffUsername: offenceDetails.victimStaffUsername,
-          offenceCode: `${offenceDetails.offenceCode}`,
-        }
-      }) || []
-    )
-  }
-
   // TODO rename
   async answerData(
     answerData: { victimOtherPersonsName?: string; victimPrisonersNumber?: string; victimStaffUsername?: string },
