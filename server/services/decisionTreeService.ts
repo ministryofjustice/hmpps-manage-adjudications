@@ -79,7 +79,7 @@ export default class DecisionTreeService {
     return Promise.all(
       allOffenceData?.map(async offenceData => {
         const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
-        const answerData = await this.answerData(offenceData, user)
+        const answerData = await this.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
         const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum)
@@ -92,8 +92,7 @@ export default class DecisionTreeService {
     )
   }
 
-  // TODO rename
-  async answerData(
+  async answerDataDetails(
     answerData: { victimOtherPersonsName?: string; victimPrisonersNumber?: string; victimStaffUsername?: string },
     user: User
   ): Promise<AnswerData> {

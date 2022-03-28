@@ -26,7 +26,7 @@ export default class DetailsOfOffenceRoutes {
     const allOffences = await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
     const offences = await Promise.all(
       allOffences.map(async offenceData => {
-        const answerData = await this.decisionTreeService.answerData(offenceData, user)
+        const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
         const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(

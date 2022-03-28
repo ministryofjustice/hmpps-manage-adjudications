@@ -33,7 +33,7 @@ export default class DeleteOffenceRoutes {
     )
     const offenceIndex = Number(req.params.offenceIndex)
     const offenceData = this.allOffencesSessionService.getSessionOffence(req, offenceIndex, adjudicationNumber)
-    const answerData = await this.decisionTreeService.answerData(offenceData, user)
+    const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
       Number(offenceData.offenceCode),
