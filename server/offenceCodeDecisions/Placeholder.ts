@@ -13,7 +13,7 @@ export type PlaceholderValues = {
   victimOtherPersonFullName?: string
 }
 
-export type AnswerData = {
+export type AnswerDataDetails = {
   victimStaff?: User
   victimPrisoner?: PrisonerResult
   victimOtherPerson?: string
@@ -31,17 +31,17 @@ export enum PlaceholderText {
 export function getPlaceholderValues(
   prisoner: PrisonerResult,
   associatedPrisoner?: PrisonerResult,
-  answerData?: AnswerData
+  answerDataDetails?: AnswerDataDetails
 ): PlaceholderValues {
   return {
     prisonerFirstName: prisoner.firstName,
     prisonerLastName: prisoner.lastName,
     associatedPrisonerFirstName: associatedPrisoner?.firstName,
     associatedPrisonerLastName: associatedPrisoner?.lastName,
-    victimStaffFullName: answerData?.victimStaff?.name,
-    victimPrisonerFirstName: answerData?.victimPrisoner?.firstName,
-    victimPrisonerLastName: answerData?.victimPrisoner?.lastName,
-    victimOtherPersonFullName: answerData?.victimOtherPerson,
+    victimStaffFullName: answerDataDetails?.victimStaff?.name,
+    victimPrisonerFirstName: answerDataDetails?.victimPrisoner?.firstName,
+    victimPrisonerLastName: answerDataDetails?.victimPrisoner?.lastName,
+    victimOtherPersonFullName: answerDataDetails?.victimOtherPerson,
   }
 }
 

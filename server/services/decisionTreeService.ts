@@ -3,18 +3,16 @@ import PlaceOnReportService from './placeOnReportService'
 import UserService from './userService'
 import { User } from '../data/hmppsAuthClient'
 import { IncidentRole as IncidentRoleEnum, incidentRoleFromCode } from '../incidentRole/IncidentRole'
-import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
-import { AnswerData, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
+import { AnswerDataDetails, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
 import PrisonerResult from '../data/prisonerResult'
 import { DraftAdjudication, IncidentRole, OffenceDetails } from '../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
-export type AllOffenceData = {
+export type AnswerData = {
   victimOtherPersonsName?: string
   victimPrisonersNumber?: string
   victimStaffUsername?: string
-  offenceCode?: string
 }
 
 export default class DecisionTreeService {
@@ -92,10 +90,7 @@ export default class DecisionTreeService {
     )
   }
 
-  async answerDataDetails(
-    answerData: { victimOtherPersonsName?: string; victimPrisonersNumber?: string; victimStaffUsername?: string },
-    user: User
-  ): Promise<AnswerData> {
+  async answerDataDetails(answerData: AnswerData, user: User): Promise<AnswerDataDetails> {
     const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
       answerData.victimOtherPersonsName,
       answerData.victimPrisonersNumber &&
