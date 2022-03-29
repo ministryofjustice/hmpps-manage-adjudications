@@ -14,12 +14,17 @@ const originalIncidentDetails = {
     currentIncidentRoleSelection: IncidentRole.ASSISTED,
     currentAssociatedPrisonerNumber: 'AA1234A',
   },
+  temporaryData: {
+    originalIncidentRoleSelection: IncidentRole.COMMITTED,
+    originalReporterUsername: '',
+    prisonerNumber: 'BB2345B',
+  },
 }
 
 describe('updateDataOnSearchReturn', () => {
   it('should use the search data in the returned incident details', () => {
     const requestData = {
-      prisonerNumber: 'BB2345B',
+      createDraftPrisonerNumber: 'BB2345B',
       draftId: 123,
       selectedPerson: 'CC3456C',
     }
@@ -31,7 +36,7 @@ describe('updateDataOnSearchReturn', () => {
 describe('updateDataOnDeleteReturn', () => {
   it('should remove the associated prisoner from the returned incident details', () => {
     const requestData = {
-      prisonerNumber: 'BB2345B',
+      createDraftPrisonerNumber: 'BB2345B',
       draftId: 123,
       deleteWanted: 'true',
     }
@@ -42,7 +47,7 @@ describe('updateDataOnDeleteReturn', () => {
 
   it('should preserve the associated prisoner from the returned incident details', () => {
     const requestData = {
-      prisonerNumber: 'BB2345B',
+      createDraftPrisonerNumber: 'BB2345B',
       draftId: 123,
       deleteWanted: 'false',
     }

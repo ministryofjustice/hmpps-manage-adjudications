@@ -52,6 +52,9 @@
             {% if originalReporterUsername != null %}
                 <input type="hidden" name="originalReporterUsername" value="{{ originalReporterUsername }}" id="originalReporterUsername"/>
             {% endif %}
+            {% if prisonerNumber != null %}
+                <input type="hidden" name="prisonerNumber" value="{{ prisonerNumber }}" id="prisonerNumber"/>
+            {% endif %}
 
 			{% include "../partials/reportingOfficer.njk" %}
 

@@ -40,6 +40,7 @@ beforeEach(() => {
       associatedPrisonersNumber: 'T3345XV',
       roleCode: '25b',
     },
+    prisonerNumber: 'G6415GD',
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({

@@ -40,6 +40,7 @@ export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   locationId: number
   startedByUserId: string
+  prisonerNumber: string
   adjudicationNumber?: number
   incidentRole?: { associatedPrisonersNumber: string; roleCode: string }
 }
@@ -170,6 +171,7 @@ export default class PlaceOnReportService {
       dateTime: { date, time: { hour, minute } },
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
+      prisonerNumber: response.draftAdjudication.prisonerNumber,
       adjudicationNumber: response.draftAdjudication.adjudicationNumber,
       incidentRole: {
         associatedPrisonersNumber: response.draftAdjudication.incidentRole.associatedPrisonersNumber,

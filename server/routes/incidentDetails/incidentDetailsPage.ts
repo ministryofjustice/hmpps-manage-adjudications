@@ -35,6 +35,7 @@ type HiddenFormData = {
   lastIncidentRoleSelection?: IncidentRole
   lastAssociatedPrisonerNumberSelection?: string
   originalReporterUsername: string
+  prisonerNumber: string
 }
 
 type InitialFormData = HiddenFormData & {
@@ -59,12 +60,12 @@ type ExitButtonData = {
 }
 
 type RequestValues = {
-  // This PRN/DraftID stuff is duplicated a lot - extract?
-  prisonerNumber: string
   draftId?: number
   selectedPerson?: string
   deleteWanted?: string
   originalPageReferrerUrl?: string
+  // THis data is only available when creating a draft
+  createDraftPrisonerNumber: string
 }
 
 type IncidentDetails = {
@@ -75,17 +76,20 @@ type IncidentDetails = {
 }
 
 type TemporarilySavedData = {
+  // THis data is not available on the initial view call when creating a draft
   originalIncidentRoleSelection: IncidentRole
   originalReporterUsername: string
+  prisonerNumber: string
 }
 
 type StashedIncidentDetails = {
   incidentDetails: IncidentDetails
-  temporaryData?: TemporarilySavedData
+  temporaryData: TemporarilySavedData
 }
 
 type ApiIncidentDetails = IncidentDetails & {
   reporterUsername: string
+  prisonerNumber: string
 }
 
 export enum PageRequestType {
@@ -130,7 +134,7 @@ export default class IncidentDetailsPage {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const requestValues = extractValuesFromRequest(req)
+    const requestValues = extractValuesFromRequest(req, !this.pageOptions.isEdit())
     const requestData = getPageActionFromRequest(requestValues)
     const { user } = res.locals
     debugData('GET', requestValues)
@@ -151,16 +155,25 @@ export default class IncidentDetailsPage {
         temporaryData: {
           originalIncidentRoleSelection: draftIncidentDetails.currentIncidentRoleSelection,
           originalReporterUsername: draftIncidentDetails.reporterUsername,
+          prisonerNumber: draftIncidentDetails.prisonerNumber,
         },
       }
     }
     debugData('GET DATA', data)
 
     let originalReporterUsernameForPage = user.username
+    let suppliedPrisonerNumber = requestValues.createDraftPrisonerNumber
     if (this.pageOptions.isEdit()) {
-      originalReporterUsernameForPage = data.temporaryData?.originalReporterUsername
+      originalReporterUsernameForPage = data?.temporaryData.originalReporterUsername
+      suppliedPrisonerNumber = data?.temporaryData.prisonerNumber
     }
-    const pageData = await this.getPageDataOnGet(requestValues, originalReporterUsernameForPage, data, user)
+    const pageData = await this.getPageDataOnGet(
+      requestValues,
+      originalReporterUsernameForPage,
+      suppliedPrisonerNumber,
+      data,
+      user
+    )
     renderData(res, pageData, null)
 
     // Only delete session data when the page is successfully shown.
@@ -304,6 +317,7 @@ export default class IncidentDetailsPage {
   getPageDataOnGet = async (
     requestValues: RequestValues,
     originalReporterUsername: string,
+    suppliedPrisonerNumber: string,
     data: StashedIncidentDetails,
     currentUser: User
   ): Promise<PageData> => {
@@ -314,20 +328,20 @@ export default class IncidentDetailsPage {
         prisonerReportUrl = requestValues.originalPageReferrerUrl
       }
       exitButtonData = {
-        prisonerNumber: requestValues.prisonerNumber,
+        prisonerNumber: suppliedPrisonerNumber,
         draftId: requestValues.draftId,
         prisonerReportUrl,
       }
     }
     return {
       displayData: await this.getDisplayData(
-        requestValues.prisonerNumber,
+        suppliedPrisonerNumber,
         originalReporterUsername,
         currentUser,
-        data?.incidentDetails?.currentAssociatedPrisonerNumber
+        data?.incidentDetails.currentAssociatedPrisonerNumber
       ),
       exitButtonData,
-      formData: transformStashedDataToFormData(data, originalReporterUsername),
+      formData: transformStashedDataToFormData(data, originalReporterUsername, suppliedPrisonerNumber),
     }
   }
 
@@ -402,13 +416,17 @@ export default class IncidentDetailsPage {
   }
 }
 
-const extractValuesFromRequest = (req: Request): RequestValues => {
+const extractValuesFromRequest = (req: Request, isCreateDraft: boolean): RequestValues => {
+  let createDraftPrisonerNumber = null
+  if (isCreateDraft) {
+    createDraftPrisonerNumber = req.params.prisonerNumber
+  }
   const values = {
     draftId: getDraftIdFromString(req.params.id),
-    prisonerNumber: req.params.prisonerNumber,
     selectedPerson: JSON.stringify(req.query.selectedPerson)?.replace(/"/g, ''),
     deleteWanted: req.query.personDeleted as string,
     originalPageReferrerUrl: req.query.referrer as string,
+    createDraftPrisonerNumber,
   }
   return values
 }
@@ -440,6 +458,7 @@ const popDataFromSession = (req: Request): StashedIncidentDetails => {
     temporaryData: {
       originalIncidentRoleSelection,
       originalReporterUsername,
+      prisonerNumber: req.session.prisonerNumber,
     },
   }
 }
@@ -452,6 +471,7 @@ const deleteSessionData = (req: Request) => {
   delete req.session.currentAssociatedPrisonersNumber
   delete req.session.originalRadioSelection
   delete req.session.originalReporterUsername
+  delete req.session.prisonerNumber
 }
 
 const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetails, req: Request) => {
@@ -462,6 +482,7 @@ const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetai
   req.session.currentAssociatedPrisonersNumber = dataToStore.incidentDetails.currentAssociatedPrisonerNumber
   req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.temporaryData.originalIncidentRoleSelection)
   req.session.originalReporterUsername = dataToStore.temporaryData.originalReporterUsername
+  req.session.prisonerNumber = dataToStore.temporaryData.prisonerNumber
 }
 
 const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
@@ -471,6 +492,7 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
     currentIncidentRoleSelection: incidentRoleFromCode(readDraftIncidentDetails.incidentRole.roleCode),
     currentAssociatedPrisonerNumber: readDraftIncidentDetails.incidentRole?.associatedPrisonersNumber,
     reporterUsername: readDraftIncidentDetails.startedByUserId,
+    prisonerNumber: readDraftIncidentDetails.prisonerNumber,
   }
 }
 
@@ -480,20 +502,23 @@ const transformFormDataToStashedData = (formData: SubmittedFormData): StashedInc
     temporaryData: {
       originalIncidentRoleSelection: formData.originalIncidentRoleSelection,
       originalReporterUsername: formData.originalReporterUsername,
+      prisonerNumber: formData.prisonerNumber,
     },
   }
 }
 
 const transformStashedDataToFormData = (
   data: StashedIncidentDetails,
-  originalReporterUsername: string
+  originalReporterUsername: string,
+  suppliedPrisonerNumber: string
 ): InitialFormData => {
   return {
     incidentDetails: data?.incidentDetails,
-    originalIncidentRoleSelection: data?.temporaryData?.originalIncidentRoleSelection,
-    lastIncidentRoleSelection: data?.incidentDetails?.currentIncidentRoleSelection,
-    lastAssociatedPrisonerNumberSelection: data?.incidentDetails?.currentAssociatedPrisonerNumber,
+    originalIncidentRoleSelection: data?.temporaryData.originalIncidentRoleSelection,
+    lastIncidentRoleSelection: data?.incidentDetails.currentIncidentRoleSelection,
+    lastAssociatedPrisonerNumberSelection: data?.incidentDetails.currentAssociatedPrisonerNumber,
     originalReporterUsername,
+    prisonerNumber: suppliedPrisonerNumber,
   }
 }
 

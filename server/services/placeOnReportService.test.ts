@@ -406,6 +406,7 @@ describe('placeOnReportService', () => {
           associatedPrisonersNumber: 'G2996UX',
           roleCode: '25b',
         },
+        prisonerNumber: 'A12345',
       }
 
       getDraftAdjudication.mockResolvedValue({

@@ -41,6 +41,7 @@ beforeEach(() => {
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
     adjudicationNumber: 1524493,
+    prisonerNumber: 'G6415GD',
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
