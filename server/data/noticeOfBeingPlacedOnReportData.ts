@@ -1,6 +1,6 @@
-import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
-import { convertToTitleCase, formatTimestampTo } from '../../utils/utils'
-import { IncidentAndOffences } from '../../services/decisionTreeService'
+import { ConfirmedOnReportData } from './ConfirmedOnReportData'
+import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
+import { IncidentAndOffences } from '../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
   adjudicationNumber: number

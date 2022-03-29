@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
-import NoticeOfBeingPlacedOnReportData from '../printReport/noticeOfBeingPlacedOnReportData'
+import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnReportData'
 
 export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}

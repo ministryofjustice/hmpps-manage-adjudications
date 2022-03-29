@@ -2,15 +2,10 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
-import NoticeOfBeingPlacedOnReportData from './noticeOfBeingPlacedOnReportData'
-import config from '../../config'
-import DecisionTreeService from '../../services/decisionTreeService'
+import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnReportData'
 
 export default class PrintReportRoutes {
-  constructor(
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly decisionTreeService: DecisionTreeService
-  ) {}
+  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -35,38 +30,4 @@ export default class PrintReportRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
-
-  renderPdf = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { user } = res.locals
-    const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
-    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
-
-    const { reportedAdjudication, associatedPrisoner, prisoner } =
-      await this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user)
-    const offences = await this.decisionTreeService.getAdjudicationOffences(
-      reportedAdjudication.offenceDetails,
-      prisoner,
-      associatedPrisoner,
-      reportedAdjudication.incidentRole,
-      user
-    )
-    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
-      adjudicationNumber,
-      adjudicationDetails,
-      offences
-    )
-    res.renderPdf(
-      `pages/noticeOfBeingPlacedOnReport2`,
-      { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
-      `pages/noticeOfBeingPlacedOnReportHeader`,
-      {},
-      `pages/noticeOfBeingPlacedOnReportFooter`,
-      { adjudicationNumber },
-      {
-        filename: `adjudication-report-${adjudicationNumber}`,
-        pdfMargins,
-      }
-    )
-  }
 }
