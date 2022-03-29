@@ -21,6 +21,7 @@ import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
 
 import { Services } from '../services'
+import adjudicationPdfRoutes from './adjudicationPdf'
 
 export default function routes(
   router: Router,
@@ -63,7 +64,8 @@ export default function routes(
   router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
-  router.use('/print-report', printReportRoutes({ reportedAdjudicationsService, decisionTreeService }))
+  router.use('/print-report', printReportRoutes({ reportedAdjudicationsService }))
+  router.use('/print', adjudicationPdfRoutes({ reportedAdjudicationsService, decisionTreeService }))
   router.use(
     '/prisoner-report',
     prisonerReportRoutes({
