@@ -1,47 +1,161 @@
-import { Request, Response } from 'express'
+import { Express, Response, Request } from 'express'
 
+import appWithAllRoutes from '../testutils/appSetup'
+import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnReportData'
-import config from '../../config'
 import DecisionTreeService from '../../services/decisionTreeService'
+import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
+import { decision } from '../../offenceCodeDecisions/Decision'
+import { answer, AnswerType as Type } from '../../offenceCodeDecisions/Answer'
+import { OffenceRule } from '../../data/DraftAdjudicationResult'
+import AdjudicationPdf from './adjudicationPdf'
+import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 
-export default class AdjudicationPdf {
-  constructor(
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly decisionTreeService: DecisionTreeService
-  ) {}
+jest.mock('../../services/reportedAdjudicationsService.ts')
+jest.mock('../../services/userService.ts')
+jest.mock('../../services/placeOnReportService.ts')
 
-  renderPdf = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { user } = res.locals
-    const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
-    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
+const testDecisionsTree = decision('A question').child(answer('An answer').type(Type.PRISONER).offenceCode(1))
 
-    const { reportedAdjudication, associatedPrisoner, prisoner } =
-      await this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user)
-    const offences = await this.decisionTreeService.getAdjudicationOffences(
-      reportedAdjudication.offenceDetails,
-      prisoner,
-      associatedPrisoner,
-      reportedAdjudication.incidentRole,
-      user
-    )
-    const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
-      adjudicationNumber,
-      adjudicationDetails,
-      offences
-    )
-    res.renderPdf(
-      `pages/noticeOfBeingPlacedOnReport`,
-      { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
-      `pages/noticeOfBeingPlacedOnReportHeader`,
-      {},
-      `pages/noticeOfBeingPlacedOnReportFooter`,
-      { adjudicationNumber },
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
+const userService = new UserService(null) as jest.Mocked<UserService>
+
+const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const decisionTreeService = new DecisionTreeService(
+  placeOnReportService,
+  userService,
+  reportedAdjudicationsService,
+  testDecisionsTree
+)
+
+let app: Express
+
+const offenceRule: OffenceRule = {
+  paragraphDescription: 'Commits any assault',
+  paragraphNumber: '1',
+}
+
+const reportedAdjudication: ReportedAdjudication = {
+  adjudicationNumber: 1524493,
+  prisonerNumber: 'G6415GD',
+  bookingId: 1,
+  createdDateTime: undefined,
+  createdByUserId: undefined,
+  incidentDetails: {
+    locationId: 197682,
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+    handoverDeadline: '2021-12-11T10:30:00',
+  },
+  incidentStatement: undefined,
+  incidentRole: {
+    roleCode: undefined,
+  },
+  offenceDetails: [{ offenceCode: 1, offenceRule }],
+}
+
+const prisonerResultSummary: PrisonerResultSummary = {
+  offenderNo: 'G6415GD',
+  firstName: 'John',
+  lastName: 'Smith',
+  categoryCode: undefined,
+  language: undefined,
+  friendlyName: undefined,
+  displayName: undefined,
+  prisonerNumber: undefined,
+  currentLocation: undefined,
+  assignedLivingUnit: undefined,
+}
+const confirmedOnReportData: ConfirmedOnReportData = {
+  reportExpirationDateTime: '2020-12-23T07:21',
+  prisonerFirstName: 'John',
+  prisonerLastName: 'Smith',
+  prisonerNumber: 'H5123BY',
+  prisonerPreferredNonEnglishLanguage: 'French',
+  prisonerOtherLanguages: ['English', 'Spanish'],
+  prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
+  incidentAgencyName: 'Moorland (HMP & YOI)',
+  incidentLocationName: 'Adj',
+  statement: 'A statement',
+  reportingOfficer: 'An officer',
+  prisonerAgencyName: 'Moorland (HMP & YOI)',
+  prisonerLivingUnitName: '5-2-A-050',
+  incidentDate: '2020-12-21T07:21',
+  createdDateTime: '2020-12-21T10:45',
+}
+
+beforeEach(() => {
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService, decisionTreeService })
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({ reportedAdjudication })
+  placeOnReportService.getOffenceRule.mockResolvedValue(offenceRule)
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerResultSummary)
+  reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
+})
+
+afterEach(() => {
+  jest.resetAllMocks()
+})
+
+describe('GET /all-completed-reports', () => {
+  it('should render a PDF view of an adjudication', async () => {
+    const res: Response = {
+      render: jest.fn(),
+      renderPdf: jest.fn(),
+      redirect: jest.fn(),
+      locals: {},
+    } as unknown as Response
+
+    const req: Request = {
+      params: { adjudicationNumber: reportedAdjudication.adjudicationNumber },
+    } as unknown as Request
+    await new AdjudicationPdf(reportedAdjudicationsService, decisionTreeService).renderPdf(req, res)
+    expect(res.renderPdf).toHaveBeenCalled()
+    expect(res.renderPdf).toHaveBeenCalledWith(
+      'pages/noticeOfBeingPlacedOnReport',
       {
-        filename: `adjudication-report-${adjudicationNumber}`,
-        pdfMargins,
+        adjudicationsUrl: 'http://host.docker.internal:3000',
+        noticeOfBeingPlacedOnReportData: {
+          adjudicationNumber: 1524493,
+          incidentDate: '21 December 2020',
+          incidentLocationDescription: 'Moorland (HMP & YOI) - Adj',
+          incidentTime: '07:21',
+          offences: [
+            {
+              incidentRule: undefined,
+              offenceRule: {
+                paragraphDescription: 'Commits any assault',
+                paragraphNumber: '1',
+              },
+              questionsAndAnswers: [
+                {
+                  answer: 'An answer',
+                  question: 'A question',
+                },
+              ],
+            },
+          ],
+
+          prisonerDisplayName: 'John, Smith',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
+          prisonerNumber: 'H5123BY',
+          reportedDate: '21 December 2020',
+          reportedTime: '10:45',
+          reportingOfficer: 'An officer',
+          statement: 'A statement',
+        },
+      },
+      'pages/noticeOfBeingPlacedOnReportHeader',
+      {},
+      'pages/noticeOfBeingPlacedOnReportFooter',
+      { adjudicationNumber: 1524493 },
+      {
+        filename: 'adjudication-report-1524493',
+        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '0.9' },
       }
     )
-  }
-}
+  })
+})
