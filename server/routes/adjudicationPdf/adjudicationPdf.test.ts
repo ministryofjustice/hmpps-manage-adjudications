@@ -1,6 +1,5 @@
-import { Express, Response, Request } from 'express'
+import { Response, Request } from 'express'
 
-import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../services/decisionTreeService'
@@ -32,8 +31,6 @@ const decisionTreeService = new DecisionTreeService(
   reportedAdjudicationsService,
   testDecisionsTree
 )
-
-let app: Express
 
 const offenceRule: OffenceRule = {
   paragraphDescription: 'Commits any assault',
@@ -89,7 +86,6 @@ const confirmedOnReportData: ConfirmedOnReportData = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService, decisionTreeService })
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({ reportedAdjudication })
   placeOnReportService.getOffenceRule.mockResolvedValue(offenceRule)
   placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerResultSummary)
