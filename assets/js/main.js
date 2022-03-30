@@ -17,7 +17,4 @@ jQuery(function () {
 
     $(element).attr('readonly', 'true')
   })
-  $('.print-page').on('click', function () {
-    window.print()
-  })
 })

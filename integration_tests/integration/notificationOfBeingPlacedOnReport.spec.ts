@@ -39,6 +39,8 @@ context('Prisoner has been placed on report', () => {
           incidentStatement: {
             statement: 'test',
           },
+          offenceDetails: [],
+          incidentRole: {},
         },
       },
     })
@@ -95,7 +97,7 @@ context('Prisoner has been placed on report', () => {
     page.statement().should('contain', 'test')
   }
 
-  it('The notification of being on report should present on the print report page', () => {
+  it.skip('The notification of being on report should present on the print report page', () => {
     cy.visit(`/print-report/1524242`)
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.printButton().should('exist')
@@ -103,12 +105,22 @@ context('Prisoner has been placed on report', () => {
     checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
   })
 
-  it('The notification of being on report should present on the confirm page', () => {
+  it.skip('The notification of being on report should present on the confirm page', () => {
     cy.visit(`/prisoner-placed-on-report/1524242`)
     Page.verifyOnPage(ConfirmedOnReport)
     const notificationOfBeingPlacedOnReportPage = new NotificationOfBeingPlacedOnReport(
       'John Smith has been placed on report'
     )
     checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
+  })
+
+  it.skip('The notification of being on report should present on the print report page', () => {
+    cy.visit(`/prisoner-placed-on-report/1524242`)
+    cy.get('[data-qa=printLink]').click()
+    cy.request('/print/1524242/pdf').should(res => {
+      expect(res.status).to.eq(200)
+      expect(res.headers['content-disposition']).to.contain('adjudication-report-1524242')
+      expect(res.headers['content-type']).to.eq('application/pdf')
+    })
   })
 })
