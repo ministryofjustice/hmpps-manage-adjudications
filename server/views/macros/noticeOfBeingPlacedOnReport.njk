@@ -1,6 +1,0 @@
-{% from "../macros/noticeOfBeingPlacedOnReportDetails.njk" import noticeOfBeingPlacedOnReportDetails %}
-{% from "../macros/noticeOfBeingPlacedOnReportLegal.njk" import noticeOfBeingPlacedOnReportLegal %}
-{% macro noticeOfBeingPlacedOnReport(noticeOfBeingPlacedOnReportData) %}
-    {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
-    {{ noticeOfBeingPlacedOnReportLegal( noticeOfBeingPlacedOnReportData.adjudicationNumber ) }}
-{% endmacro %}

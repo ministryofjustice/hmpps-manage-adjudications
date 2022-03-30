@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
-import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnReportData'
 
 export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -35,7 +34,6 @@ export default class ConfirmedOnReportRoutes {
       bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
       buttonClass: 'govuk-button--secondary',
       buttonHref: '/place-a-prisoner-on-report',
-      noticeOfBeingPlacedOnReportData: new NoticeOfBeingPlacedOnReportData(adjudicationNumber, adjudicationDetails),
     })
   }
 

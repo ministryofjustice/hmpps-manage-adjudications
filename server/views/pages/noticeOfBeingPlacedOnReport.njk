@@ -1,0 +1,9 @@
+{% extends "../partials/pdfLayout.njk" %}
+{% from "../macros/noticeOfBeingPlacedOnReportDetails.njk" import noticeOfBeingPlacedOnReportDetails %}
+{% from "../macros/noticeOfBeingPlacedOnReportLegal.njk" import noticeOfBeingPlacedOnReportLegal %}
+{% block content %}
+    <div class='adjudication-pdf'>
+        {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
+        {{ noticeOfBeingPlacedOnReportLegal( noticeOfBeingPlacedOnReportData.adjudicationNumber ) }}
+    </div>
+{% endblock %}
