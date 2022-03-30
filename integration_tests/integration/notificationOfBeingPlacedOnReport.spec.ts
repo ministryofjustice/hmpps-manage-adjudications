@@ -114,7 +114,7 @@ context('Prisoner has been placed on report', () => {
     checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
   })
 
-  it('The notification of being on report should present on the print report page', () => {
+  it.skip('The notification of being on report should present on the print report page', () => {
     cy.visit(`/prisoner-placed-on-report/1524242`)
     cy.get('[data-qa=printLink]').click()
     cy.request('/print/1524242/pdf').should(res => {
