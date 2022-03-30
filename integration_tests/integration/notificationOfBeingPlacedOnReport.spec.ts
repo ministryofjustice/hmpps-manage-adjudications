@@ -1,8 +1,3 @@
-import ConfirmedOnReport from '../pages/confirmedOnReport'
-import Page from '../pages/page'
-import PrintReport from '../pages/printReport'
-import NotificationOfBeingPlacedOnReport from '../pages/notificationOfBeingPlacedOnReport'
-
 context('Prisoner has been placed on report', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -83,35 +78,6 @@ context('Prisoner has been placed on report', () => {
     cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
 
     cy.signIn()
-  })
-
-  const checkNotificationOfBeingPlacedOnReportPage = (page: NotificationOfBeingPlacedOnReport): void => {
-    page.section().should('exist')
-    page.adjudicationNumber().should('contain', '1524242')
-    page.prisonerDisplayName().should('contain', 'John, Smith')
-    page.prisonerNumber().should('contain', 'G6415GD')
-    page.prisonerLocationDescription().should('contain', 'Moorland (HMP & YOI) - 1-2-015')
-    page.incidentDate().should('contain', '6 December 2020')
-    page.incidentTime().should('contain', '10:00')
-    page.incidentLocationDescription().should('contain', 'Moorland (HMP & YOI) - Adj')
-    page.statement().should('contain', 'test')
-  }
-
-  it.skip('The notification of being on report should present on the print report page', () => {
-    cy.visit(`/print-report/1524242`)
-    const printReportPage = Page.verifyOnPage(PrintReport)
-    printReportPage.printButton().should('exist')
-    const notificationOfBeingPlacedOnReportPage = new NotificationOfBeingPlacedOnReport('Print a copy of this report')
-    checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
-  })
-
-  it.skip('The notification of being on report should present on the confirm page', () => {
-    cy.visit(`/prisoner-placed-on-report/1524242`)
-    Page.verifyOnPage(ConfirmedOnReport)
-    const notificationOfBeingPlacedOnReportPage = new NotificationOfBeingPlacedOnReport(
-      'John Smith has been placed on report'
-    )
-    checkNotificationOfBeingPlacedOnReportPage(notificationOfBeingPlacedOnReportPage)
   })
 
   it.skip('The notification of being on report should present on the print report page', () => {

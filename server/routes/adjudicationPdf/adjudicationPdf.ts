@@ -32,7 +32,7 @@ export default class AdjudicationPdf {
       offences
     )
     res.renderPdf(
-      `pages/noticeOfBeingPlacedOnReport2`,
+      `pages/noticeOfBeingPlacedOnReport`,
       { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
       `pages/noticeOfBeingPlacedOnReportHeader`,
       {},
