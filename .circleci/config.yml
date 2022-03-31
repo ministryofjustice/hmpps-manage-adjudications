@@ -17,6 +17,24 @@ parameters:
     type: string
     default: 14.17-browsers
 
+executors:
+  integration-tests:
+    docker:
+      - image: 'cimg/node:<<parameters.node_tag>>'
+      - image: 'circleci/redis:<<parameters.redis_tag>>'
+    working_directory: ~/app
+    resource_class: <<parameters.resource_class>>
+    parameters:
+      resource_class:
+        default: medium
+        type: string
+      node_tag:
+        default: "14.16-browsers"
+        type: string
+      redis_tag:
+        default: "buster"
+        type: string
+
 jobs:
   build:
     executor:
@@ -95,10 +113,7 @@ jobs:
           path: test-results/unit-test-reports.html
 
   integration_test:
-    executor:
-      name: hmpps/node_redis
-      node_tag: << pipeline.parameters.node-version >>
-      redis_tag: buster
+    executor: integration-tests
     steps:
       - checkout
       - attach_workspace:
