@@ -7,6 +7,7 @@ import { IncidentRole } from '../../incidentRole/IncidentRole'
 import UserService from '../../services/userService'
 import OffenceSessionService from '../../services/offenceSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { offenceCodeSelection } from '../../utils/urlGenerator'
 
 export default function offenceCodeDecisionsRoutes({
   placeOnReportService,
@@ -30,10 +31,10 @@ export default function offenceCodeDecisionsRoutes({
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
   Object.keys(IncidentRole).forEach(key => {
     decisionTree.allUrls().forEach(url => {
-      get(`/:adjudicationNumber/:incidentRole(${IncidentRole[key]})/${url}`, offenceCodeDecisions.view)
-      post(`/:adjudicationNumber/:incidentRole(${IncidentRole[key]})/${url}`, offenceCodeDecisions.submit)
+      get(offenceCodeSelection.path(key as IncidentRole, url), offenceCodeDecisions.view)
+      post(offenceCodeSelection.path(key as IncidentRole, url), offenceCodeDecisions.submit)
     })
-    get(`/:adjudicationNumber/:incidentRole(${IncidentRole[key]})/`, offenceCodeDecisions.redirectToRoot)
+    get(offenceCodeSelection.pathToStart(key as IncidentRole), offenceCodeDecisions.redirectToStart)
   })
   return router
 }
