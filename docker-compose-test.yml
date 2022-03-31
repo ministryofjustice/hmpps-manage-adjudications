@@ -32,7 +32,7 @@ services:
       - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
       - DISABLE_UNOCONV=1
       - DEFAULT_WAIT_TIMEOUT=30
-      - DEFAULT_LISTEN_PORT=4000
+      - DEFAULT_LISTEN_PORT=3001
     restart: always
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
