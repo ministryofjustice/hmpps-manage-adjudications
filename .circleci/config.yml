@@ -22,6 +22,11 @@ executors:
     docker:
       - image: 'cimg/node:<<parameters.node_tag>>'
       - image: 'circleci/redis:<<parameters.redis_tag>>'
+      - image: 'thecodingmachine/gotenberg:<<parameters.gotenberg_tag>>'
+        environment:
+          - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
+          - DISABLE_UNOCONV=1
+          - DEFAULT_WAIT_TIMEOUT=30
     working_directory: ~/app
     resource_class: <<parameters.resource_class>>
     parameters:
@@ -33,6 +38,9 @@ executors:
         type: string
       redis_tag:
         default: "buster"
+        type: string
+      gotenberg_tag:
+        default: "6.4.3"
         type: string
 
 jobs:
