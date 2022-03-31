@@ -27,11 +27,12 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "3000:3000"
+      - "3001:4000"
     environment:
       - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
       - DISABLE_UNOCONV=1
       - DEFAULT_WAIT_TIMEOUT=30
+      - DEFAULT_LISTEN_PORT=4000
     restart: always
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
