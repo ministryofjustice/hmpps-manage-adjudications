@@ -17,6 +17,33 @@ parameters:
     type: string
     default: 14.17-browsers
 
+executors:
+  integration-tests:
+    docker:
+      - image: 'cimg/node:<<parameters.node_tag>>'
+      - image: 'circleci/redis:<<parameters.redis_tag>>'
+      - image: 'thecodingmachine/gotenberg:<<parameters.gotenberg_tag>>'
+        environment:
+          - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
+          - DISABLE_UNOCONV=1
+          - DEFAULT_WAIT_TIMEOUT=30
+          - DEFAULT_LISTEN_PORT=3001
+    working_directory: ~/app
+    resource_class: <<parameters.resource_class>>
+    parameters:
+      resource_class:
+        default: medium
+        type: string
+      node_tag:
+        default: "14.16-browsers"
+        type: string
+      redis_tag:
+        default: "buster"
+        type: string
+      gotenberg_tag:
+        default: "6.4.3"
+        type: string
+
 jobs:
   build:
     executor:
@@ -95,10 +122,7 @@ jobs:
           path: test-results/unit-test-reports.html
 
   integration_test:
-    executor:
-      name: hmpps/node_redis
-      node_tag: << pipeline.parameters.node-version >>
-      redis_tag: buster
+    executor: integration-tests
     steps:
       - checkout
       - attach_workspace:
