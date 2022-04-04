@@ -31,7 +31,6 @@
         {% endset -%}
         {% set continueReportlLinkHtml %}
         <a href="{{ taskListUrl }}/{{ report.id }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a>
-        {# <a href="/place-the-prisoner-on-report/{{ report.id }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a> #}
         {% endset -%}
         {% set rows = (rows.push([
       {
