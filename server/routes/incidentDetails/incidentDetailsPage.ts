@@ -15,6 +15,7 @@ import { User } from '../../data/hmppsAuthClient'
 import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
+import { offenceCodeSelection } from '../../utils/urlGenerator'
 
 type PageData = {
   displayData: DisplayData
@@ -690,7 +691,7 @@ const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => 
 }
 
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
-  return res.redirect(`/offence-code-selection/${draftId}/${radioSelectionCodeFromIncidentRole(incidentRoleCode)}`)
+  return res.redirect(offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode)))
 }
 
 const redirectToOffenceDetails = (res: Response, draftId: number) => {

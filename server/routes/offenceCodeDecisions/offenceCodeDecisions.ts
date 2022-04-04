@@ -15,6 +15,7 @@ import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { AnswerType } from '../../offenceCodeDecisions/Answer'
+import { offenceCodeSelection } from '../../utils/urlGenerator'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -137,7 +138,7 @@ export default class OffenceCodeRoutes {
   redirectToStart = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { incidentRole } = req.params
-    res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}/${this.decisions().id()}`)
+    res.redirect(offenceCodeSelection.urls.question(adjudicationNumber, incidentRole, this.decisions().id()))
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -184,7 +185,7 @@ export default class OffenceCodeRoutes {
   }
 
   private urlHere(req: Request) {
-    return `/offence-code-selection${req.path}`
+    return `${offenceCodeSelection.root}/${req.path}`
   }
 
   private decisions(): Decision {

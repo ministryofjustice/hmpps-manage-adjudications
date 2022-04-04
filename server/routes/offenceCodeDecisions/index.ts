@@ -31,10 +31,10 @@ export default function offenceCodeDecisionsRoutes({
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
   Object.keys(IncidentRole).forEach(key => {
     decisionTree.allUrls().forEach(url => {
-      get(offenceCodeSelection.path(key as IncidentRole, url), offenceCodeDecisions.view)
-      post(offenceCodeSelection.path(key as IncidentRole, url), offenceCodeDecisions.submit)
+      get(offenceCodeSelection.matchers.question(key as IncidentRole, url), offenceCodeDecisions.view)
+      post(offenceCodeSelection.matchers.question(key as IncidentRole, url), offenceCodeDecisions.submit)
     })
-    get(offenceCodeSelection.pathToStart(key as IncidentRole), offenceCodeDecisions.redirectToStart)
+    get(offenceCodeSelection.matchers.start(key as IncidentRole), offenceCodeDecisions.redirectToStart)
   })
   return router
 }
