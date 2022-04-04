@@ -5,6 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
+import { taskList } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -55,7 +56,7 @@ const getVariablesForPageType = (
   return {
     editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/edit`,
     editIncidentStatementURL: `/incident-statement/${adjudicationNumber}`,
-    exitUrl: `/place-the-prisoner-on-report/${adjudicationNumber}`,
+    exitUrl: taskList.urls.start(adjudicationNumber),
   }
 }
 
@@ -70,7 +71,7 @@ const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: n
 const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
   if (pageOptions.isEditByReporter()) return `/your-completed-reports`
   if (pageOptions.isEditByReviewer()) return `/all-completed-reports`
-  return `/place-the-prisoner-on-report/${adjudicationNumber}`
+  return taskList.urls.start(adjudicationNumber)
 }
 
 export default class CheckYourAnswersPage {

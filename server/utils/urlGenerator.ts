@@ -15,3 +15,13 @@ export const offenceCodeSelection = {
 }
 
 export const detailsOfOffence = {}
+
+export const taskList = {
+  root: '/place-the-prisoner-on-report',
+  matchers: {
+    start: '/:id',
+  },
+  urls: {
+    start: (id: number) => `${taskList.root}/${id}`,
+  },
+}

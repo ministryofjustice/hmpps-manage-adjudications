@@ -15,7 +15,7 @@ import { User } from '../../data/hmppsAuthClient'
 import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
-import { offenceCodeSelection } from '../../utils/urlGenerator'
+import { offenceCodeSelection, taskList } from '../../utils/urlGenerator'
 
 type PageData = {
   displayData: DisplayData
@@ -679,7 +679,7 @@ const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
 }
 
 const getTaskListUrl = (draftId: number) => {
-  return `/place-the-prisoner-on-report/${draftId}`
+  return taskList.urls.start(draftId)
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {

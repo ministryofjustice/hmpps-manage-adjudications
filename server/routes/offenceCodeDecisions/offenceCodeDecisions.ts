@@ -15,7 +15,7 @@ import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { AnswerType } from '../../offenceCodeDecisions/Answer'
-import { offenceCodeSelection } from '../../utils/urlGenerator'
+import { offenceCodeSelection, taskList } from '../../utils/urlGenerator'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -113,7 +113,7 @@ export default class OffenceCodeRoutes {
 
   cancel = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return res.redirect(`/place-the-prisoner-on-report/${adjudicationNumber}`)
+    return res.redirect(taskList.urls.start(adjudicationNumber))
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {

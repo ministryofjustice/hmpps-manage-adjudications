@@ -22,7 +22,7 @@ import deletePersonRoutes from './deletePerson'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
-import { offenceCodeSelection } from '../utils/urlGenerator'
+import { offenceCodeSelection, taskList } from '../utils/urlGenerator'
 
 export default function routes(
   router: Router,
@@ -56,7 +56,7 @@ export default function routes(
     })
   )
   router.use('/prisoner-placed-on-report', confirmedOnReportRoutes({ reportedAdjudicationsService }))
-  router.use('/place-the-prisoner-on-report', taskListRoutes({ placeOnReportService }))
+  router.use(taskList.root, taskListRoutes({ placeOnReportService }))
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
   router.use('/search-for-prisoner', prisonerSearchRoutes())
   router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))

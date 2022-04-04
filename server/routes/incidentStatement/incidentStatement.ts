@@ -5,6 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import { taskList } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -78,6 +79,6 @@ export default class IncidentStatementRoutes {
   getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
     if (incidentStatementComplete && draftAdjudication.offenceDetails.length)
       return `/check-your-answers/${draftAdjudication.id}`
-    return `/place-the-prisoner-on-report/${draftAdjudication.id}`
+    return taskList.urls.start(draftAdjudication.id)
   }
 }
