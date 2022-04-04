@@ -185,7 +185,7 @@ export default class OffenceCodeRoutes {
   }
 
   private urlHere(req: Request) {
-    return `${offenceCodeSelection.root}/${req.path}`
+    return `${offenceCodeSelection.root}${req.path}`
   }
 
   private decisions(): Decision {
