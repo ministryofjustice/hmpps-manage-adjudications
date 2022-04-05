@@ -5,7 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
-import { taskList } from '../../utils/urlGenerator'
+import { confirmedOnReport, taskList } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -61,11 +61,9 @@ const getVariablesForPageType = (
 }
 
 const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: number) => {
-  if (pageOptions.isEditByReporter())
-    return `/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/report`
-  if (pageOptions.isEditByReviewer())
-    return `/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/review`
-  return `/prisoner-placed-on-report/${completeAdjudicationNumber}`
+  if (pageOptions.isEditByReporter()) return confirmedOnReport.urls.reporterView(completeAdjudicationNumber)
+  if (pageOptions.isEditByReviewer()) return confirmedOnReport.urls.reviewerView(completeAdjudicationNumber)
+  return confirmedOnReport.urls.start(completeAdjudicationNumber)
 }
 
 const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {

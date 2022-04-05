@@ -38,3 +38,19 @@ export const taskList = {
     start: (id: number) => `${taskList.root}/${id}`,
   },
 }
+
+export const confirmedOnReport = {
+  root: '/prisoner-placed-on-report',
+  matchers: {
+    start: '/:adjudicationNumber',
+    reporterView: '/:adjudicationNumber/changes-confirmed/report',
+    reviewerView: '/:adjudicationNumber/changes-confirmed/review',
+  },
+  urls: {
+    start: (adjudicationNumber: number) => `${confirmedOnReport.root}/${adjudicationNumber}`,
+    reporterView: (adjudicationNumber: number) =>
+      `${confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/report`,
+    reviewerView: (adjudicationNumber: number) =>
+      `${confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/review`,
+  },
+}
