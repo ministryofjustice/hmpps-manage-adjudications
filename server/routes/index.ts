@@ -29,6 +29,7 @@ import {
   confirmedOnReport,
   incidentDetails,
   incidentStatementUrls,
+  searchForPrisoner,
 } from '../utils/urlGenerator'
 
 export default function routes(
@@ -65,7 +66,7 @@ export default function routes(
   router.use(confirmedOnReport.root, confirmedOnReportRoutes({ reportedAdjudicationsService }))
   router.use(taskList.root, taskListRoutes({ placeOnReportService }))
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
-  router.use('/search-for-prisoner', prisonerSearchRoutes())
+  router.use(searchForPrisoner.root, prisonerSearchRoutes())
   router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
   router.use('/select-associated-prisoner', selectAssociatedPrisonerRoutes({ prisonerSearchService }))
   router.use('/select-associated-staff', selectAssociatedStaffRoutes({ userService, placeOnReportService }))

@@ -81,3 +81,10 @@ export const incidentStatementUrls = {
     submittedEdit: (adjudicationNumber: number) => `${incidentStatementUrls.root}/${adjudicationNumber}/submitted/edit`,
   },
 }
+
+export const searchForPrisoner = {
+  root: '/search-for-prisoner',
+  matchers: {
+    start: '/',
+  },
+}

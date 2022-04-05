@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import UserService from '../../services/userService'
+import { searchForPrisoner } from '../../utils/urlGenerator'
 import { hasAnyRole } from '../../utils/utils'
 
 type TaskType = {
@@ -16,7 +17,7 @@ export const tasks: TaskType[] = [
     id: 'start-a-new-report',
     heading: 'Start a new report',
     description: 'Start creating a new report.',
-    href: '/search-for-prisoner',
+    href: searchForPrisoner.root,
     roles: null,
     enabled: true,
   },
