@@ -5,6 +5,7 @@ import SelectAssociatedStaffRoutes from './selectAssociatedStaff'
 
 import UserService from '../../services/userService'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import { selectAssociatedStaff } from '../../utils/urlGenerator'
 
 export default function selectAssociatedStaffRoutes({
   userService,
@@ -15,13 +16,13 @@ export default function selectAssociatedStaffRoutes({
 }): Router {
   const router = express.Router()
 
-  const selectAssociatedStaff = new SelectAssociatedStaffRoutes(userService, placeOnReportService)
+  const selectAssociatedStaffRoute = new SelectAssociatedStaffRoutes(userService, placeOnReportService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/', selectAssociatedStaff.view)
-  post('/', selectAssociatedStaff.submit)
+  get(selectAssociatedStaff.matchers.start, selectAssociatedStaffRoute.view)
+  post(selectAssociatedStaff.matchers.start, selectAssociatedStaffRoute.submit)
 
   return router
 }

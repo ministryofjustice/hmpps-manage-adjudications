@@ -116,3 +116,10 @@ export const selectAssociatedPrisoner = {
     start: '/',
   },
 }
+
+export const selectAssociatedStaff = {
+  root: '/select-associated-staff',
+  matchers: {
+    start: '/',
+  },
+}

@@ -33,6 +33,7 @@ import {
   checkYourAnswers,
   selectPrisoner,
   selectAssociatedPrisoner,
+  selectAssociatedStaff,
 } from '../utils/urlGenerator'
 
 export default function routes(
@@ -72,7 +73,7 @@ export default function routes(
   router.use(searchForPrisoner.root, prisonerSearchRoutes())
   router.use(selectPrisoner.root, prisonerSelectRoutes({ prisonerSearchService }))
   router.use(selectAssociatedPrisoner.root, selectAssociatedPrisonerRoutes({ prisonerSearchService }))
-  router.use('/select-associated-staff', selectAssociatedStaffRoutes({ userService, placeOnReportService }))
+  router.use(selectAssociatedStaff.root, selectAssociatedStaffRoutes({ userService, placeOnReportService }))
   router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
