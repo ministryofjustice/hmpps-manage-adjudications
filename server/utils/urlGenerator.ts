@@ -54,3 +54,18 @@ export const confirmedOnReport = {
       `${confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/review`,
   },
 }
+
+export const incidentDetails = {
+  root: '/incident-details',
+  matchers: {
+    start: '/:prisonerNumber',
+    edit: '/:prisonerNumber/:id/edit',
+    submittedEdit: '/:prisonerNumber/:id/submitted/edit',
+  },
+  urls: {
+    start: (prisonerNumber: string) => `${incidentDetails.root}/${prisonerNumber}`,
+    edit: (prisonerNumber: string, id: number) => `${incidentDetails.root}/${prisonerNumber}/${id}/edit`,
+    submittedEdit: (prisonerNumber: string, id: number) =>
+      `${incidentDetails.root}/${prisonerNumber}/${id}/submitted/edit`,
+  },
+}

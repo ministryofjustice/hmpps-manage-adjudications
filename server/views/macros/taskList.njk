@@ -1,10 +1,10 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro taskList(prisonerNo, adjudicationId, statementPresent, statementComplete, offenceDetailsComplete, detailsOfOffenceUrl, attributes) %}
+{% macro taskList(prisonerNo, adjudicationId, statementPresent, statementComplete, offenceDetailsComplete, incidentDetailsUrl, detailsOfOffenceUrl, attributes) %}
 
   {% set data = [
    [
-    { html: "<a href='/incident-details/"+ prisonerNo + "/" + adjudicationId + "/edit' class='task' data-qa='incident-details-link'>Incident details</a>" },
+    { html: "<a href='" + incidentDetailsUrl + "' class='task' data-qa='incident-details-link'>Incident details</a>" },
     { html: '<strong class="govuk-tag">COMPLETED</strong>' }
    ]
   ] %}

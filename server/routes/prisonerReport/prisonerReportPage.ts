@@ -4,6 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import UserService from '../../services/userService'
+import { incidentDetails } from '../../utils/urlGenerator'
 
 export enum PageRequestType {
   REPORTER,
@@ -28,7 +29,10 @@ const getVariablesForPageType = (
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
       printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/review`,
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${adjudicationNumber}/review`,
+      editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+        prisonerNumber,
+        draftAdjudicationNumber
+      )}?referrer=/prisoner-report/${adjudicationNumber}/review`,
       returnLinkURL: `/all-completed-reports`,
       returnLinkContent: 'Return to all completed reports',
     }
@@ -36,7 +40,10 @@ const getVariablesForPageType = (
   return {
     editIncidentStatementURL: `/incident-statement/${draftAdjudicationNumber}/submitted/edit`,
     printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/report`,
-    editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${draftAdjudicationNumber}/submitted/edit?referrer=/prisoner-report/${adjudicationNumber}/report`,
+    editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+      prisonerNumber,
+      draftAdjudicationNumber
+    )}?referrer=/prisoner-report/${adjudicationNumber}/report`,
     returnLinkURL: `/your-completed-reports`,
     returnLinkContent: 'Return to your completed reports',
   }

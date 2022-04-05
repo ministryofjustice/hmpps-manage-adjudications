@@ -5,7 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
-import { confirmedOnReport, taskList } from '../../utils/urlGenerator'
+import { confirmedOnReport, incidentDetails, taskList } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -41,7 +41,10 @@ const getVariablesForPageType = (
 ) => {
   if (pageOptions.isEditByReporter()) {
     return {
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/report`,
+      editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+        prisonerNumber,
+        adjudicationNumber
+      )}?referrer=/check-your-answers/${adjudicationNumber}/report`,
       editIncidentStatementURL: `/incident-statement/${adjudicationNumber}/submitted/edit`,
       exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/report`,
     }
@@ -49,12 +52,15 @@ const getVariablesForPageType = (
   if (pageOptions.isEditByReviewer()) {
     return {
       // We don't have the editIncidentStatementURL variable here as reviewers cannot change the statement.
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/review`,
+      editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+        prisonerNumber,
+        adjudicationNumber
+      )}?referrer=/check-your-answers/${adjudicationNumber}/review`,
       exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/review`,
     }
   }
   return {
-    editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/edit`,
+    editIncidentDetailsURL: incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
     editIncidentStatementURL: `/incident-statement/${adjudicationNumber}`,
     exitUrl: taskList.urls.start(adjudicationNumber),
   }
