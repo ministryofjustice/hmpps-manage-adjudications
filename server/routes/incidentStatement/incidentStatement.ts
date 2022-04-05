@@ -5,7 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
-import { taskList } from '../../utils/urlGenerator'
+import { taskList, incidentStatementUrls } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -57,10 +57,11 @@ export default class IncidentStatementRoutes {
     if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
     const statementComplete: boolean = incidentStatementComplete === 'yes'
+    const adjudicationNumberValue = Number(adjudicationNumber)
 
     try {
       const draftAdjudicationResult = await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
-        Number(adjudicationNumber),
+        adjudicationNumberValue,
         incidentStatement,
         statementComplete,
         user
@@ -71,7 +72,7 @@ export default class IncidentStatementRoutes {
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = `/incident-statement/${adjudicationNumber}`
+      res.locals.redirectUrl = incidentStatementUrls.urls.start(adjudicationNumberValue)
       throw postError
     }
   }

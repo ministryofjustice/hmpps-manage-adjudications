@@ -28,6 +28,7 @@ import {
   taskList,
   confirmedOnReport,
   incidentDetails,
+  incidentStatementUrls,
 } from '../utils/urlGenerator'
 
 export default function routes(
@@ -52,7 +53,7 @@ export default function routes(
     detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
   )
-  router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
+  router.use(incidentStatementUrls.root, incidentStatementRoutes({ placeOnReportService }))
   router.use(
     '/check-your-answers',
     checkYourAnswersRoutes({

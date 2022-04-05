@@ -4,7 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import UserService from '../../services/userService'
-import { incidentDetails } from '../../utils/urlGenerator'
+import { incidentDetails, incidentStatementUrls } from '../../utils/urlGenerator'
 
 export enum PageRequestType {
   REPORTER,
@@ -38,7 +38,7 @@ const getVariablesForPageType = (
     }
   }
   return {
-    editIncidentStatementURL: `/incident-statement/${draftAdjudicationNumber}/submitted/edit`,
+    editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(draftAdjudicationNumber),
     printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/report`,
     editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
       prisonerNumber,
