@@ -102,3 +102,10 @@ export const checkYourAnswers = {
     review: (adjudicationNumber: number) => `${checkYourAnswers.root}/${adjudicationNumber}/review`,
   },
 }
+
+export const selectPrisoner = {
+  root: '/select-prisoner',
+  matchers: {
+    start: '/',
+  },
+}

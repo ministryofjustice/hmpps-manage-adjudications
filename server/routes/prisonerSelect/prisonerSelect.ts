@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
-import { searchForPrisoner } from '../../utils/urlGenerator'
+import { searchForPrisoner, selectPrisoner } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -18,7 +18,7 @@ export default class PrisonerSelectRoutes {
 
     return res.render('pages/prisonerSelect', {
       errors: error ? [error] : [],
-      journeyStartUrl: `/select-prisoner?searchTerm=${searchTerm}`,
+      journeyStartUrl: `${selectPrisoner.root}?searchTerm=${searchTerm}`,
       searchResults,
       searchTerm,
     })
@@ -47,7 +47,7 @@ export default class PrisonerSelectRoutes {
 
     return res.redirect(
       url.format({
-        pathname: '/select-prisoner',
+        pathname: selectPrisoner.root,
         query: { searchTerm },
       })
     )
