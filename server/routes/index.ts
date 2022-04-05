@@ -22,7 +22,7 @@ import deletePersonRoutes from './deletePerson'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
-import { offenceCodeSelection, taskList } from '../utils/urlGenerator'
+import { offenceCodeSelection, detailsOfOffence, taskList } from '../utils/urlGenerator'
 
 export default function routes(
   router: Router,
@@ -43,7 +43,7 @@ export default function routes(
   )
   router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use(
-    '/details-of-offence',
+    detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
   )
   router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))

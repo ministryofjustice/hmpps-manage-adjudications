@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { taskList } from '../../utils/urlGenerator'
 
 export default class ContinueReportSelectRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -12,7 +11,6 @@ export default class ContinueReportSelectRoutes {
 
     return res.render(`pages/continueReportSelect`, {
       reports,
-      taskListUrl: taskList.root,
     })
   }
 }

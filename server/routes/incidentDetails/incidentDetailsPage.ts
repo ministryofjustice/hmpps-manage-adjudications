@@ -15,7 +15,7 @@ import { User } from '../../data/hmppsAuthClient'
 import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
-import { offenceCodeSelection, taskList } from '../../utils/urlGenerator'
+import { detailsOfOffence, offenceCodeSelection, taskList } from '../../utils/urlGenerator'
 
 type PageData = {
   displayData: DisplayData
@@ -695,7 +695,7 @@ const redirectToOffenceSelection = (res: Response, draftId: number, incidentRole
 }
 
 const redirectToOffenceDetails = (res: Response, draftId: number) => {
-  return res.redirect(`/details-of-offence/${draftId}`)
+  return res.redirect(detailsOfOffence.urls.start(draftId))
 }
 
 const redirectToTaskList = (res: Response, draftId: number) => {

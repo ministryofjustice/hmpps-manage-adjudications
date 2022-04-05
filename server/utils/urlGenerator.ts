@@ -14,7 +14,20 @@ export const offenceCodeSelection = {
   },
 }
 
-export const detailsOfOffence = {}
+export const detailsOfOffence = {
+  root: '/details-of-offence',
+  matchers: {
+    start: '/:adjudicationNumber',
+    add: '/:adjudicationNumber/add',
+    delete: '/:adjudicationNumber/delete/:offenceIndex',
+  },
+  urls: {
+    start: (adjudicationNumber: number) => `${detailsOfOffence.root}/${adjudicationNumber}`,
+    add: (adjudicationNumber: number) => `${detailsOfOffence.root}/${adjudicationNumber}/add`,
+    delete: (adjudicationNumber: number, offenceIndex: number) =>
+      `${detailsOfOffence.root}/${adjudicationNumber}/delete/${offenceIndex}`,
+  },
+}
 
 export const taskList = {
   root: '/place-the-prisoner-on-report',

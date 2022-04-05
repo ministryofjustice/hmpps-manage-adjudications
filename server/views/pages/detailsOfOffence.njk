@@ -31,7 +31,7 @@
                                 {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
                             </div>
                             <div>
-                                <a href='/details-of-offence/{{ adjudicationNumber }}/delete/{{ offenceIndex }}'
+                                <a href='{{ offence.deleteOffenceUrl }}'
                                    data-qa="delete-{{ offenceIndex }}">Delete</a>
                             </div>
                         </div>
