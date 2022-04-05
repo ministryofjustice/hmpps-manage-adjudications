@@ -5,7 +5,13 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
-import { confirmedOnReport, incidentDetails, incidentStatementUrls, taskList } from '../../utils/urlGenerator'
+import {
+  checkYourAnswers,
+  confirmedOnReport,
+  incidentDetails,
+  incidentStatementUrls,
+  taskList,
+} from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -44,7 +50,7 @@ const getVariablesForPageType = (
       editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
         prisonerNumber,
         adjudicationNumber
-      )}?referrer=/check-your-answers/${adjudicationNumber}/report`,
+      )}?referrer=${checkYourAnswers.urls.report(adjudicationNumber)}`,
       editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(adjudicationNumber),
       exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/report`,
     }
@@ -55,7 +61,7 @@ const getVariablesForPageType = (
       editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
         prisonerNumber,
         adjudicationNumber
-      )}?referrer=/check-your-answers/${adjudicationNumber}/review`,
+      )}?referrer=${checkYourAnswers.urls.review(adjudicationNumber)}`,
       exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/review`,
     }
   }

@@ -30,6 +30,7 @@ import {
   incidentDetails,
   incidentStatementUrls,
   searchForPrisoner,
+  checkYourAnswers,
 } from '../utils/urlGenerator'
 
 export default function routes(
@@ -56,7 +57,7 @@ export default function routes(
   )
   router.use(incidentStatementUrls.root, incidentStatementRoutes({ placeOnReportService }))
   router.use(
-    '/check-your-answers',
+    checkYourAnswers.root,
     checkYourAnswersRoutes({
       placeOnReportService,
       locationService,

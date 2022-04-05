@@ -88,3 +88,17 @@ export const searchForPrisoner = {
     start: '/',
   },
 }
+
+export const checkYourAnswers = {
+  root: '/check-your-answers',
+  matchers: {
+    start: '/:adjudicationNumber',
+    reporterView: '/:adjudicationNumber/report',
+    reviewerView: '/:adjudicationNumber/review',
+  },
+  urls: {
+    start: (adjudicationNumber: number) => `${checkYourAnswers.root}/${adjudicationNumber}`,
+    report: (adjudicationNumber: number) => `${checkYourAnswers.root}/${adjudicationNumber}/report`,
+    review: (adjudicationNumber: number) => `${checkYourAnswers.root}/${adjudicationNumber}/review`,
+  },
+}
