@@ -109,3 +109,10 @@ export const selectPrisoner = {
     start: '/',
   },
 }
+
+export const selectAssociatedPrisoner = {
+  root: '/select-associated-prisoner',
+  matchers: {
+    start: '/',
+  },
+}

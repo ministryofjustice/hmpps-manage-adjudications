@@ -8,6 +8,7 @@ import { convertToTitleCase } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { selectAssociatedPrisoner } from '../../utils/urlGenerator'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -35,7 +36,7 @@ export default class PrisonerDecisionHelper extends DecisionHelper {
 
   override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
     return {
-      pathname: '/select-associated-prisoner',
+      pathname: selectAssociatedPrisoner.root,
       query: {
         searchTerm: (form.selectedAnswerData as PrisonerData).prisonerSearchNameInput,
       },

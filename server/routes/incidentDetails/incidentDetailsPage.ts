@@ -15,7 +15,13 @@ import { User } from '../../data/hmppsAuthClient'
 import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
-import { detailsOfOffence, incidentDetails, offenceCodeSelection, taskList } from '../../utils/urlGenerator'
+import {
+  detailsOfOffence,
+  incidentDetails,
+  offenceCodeSelection,
+  selectAssociatedPrisoner,
+  taskList,
+} from '../../utils/urlGenerator'
 
 type PageData = {
   displayData: DisplayData
@@ -683,7 +689,7 @@ const getTaskListUrl = (draftId: number) => {
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
-  return res.redirect(`/select-associated-prisoner?searchTerm=${searchTerm}`)
+  return res.redirect(`${selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
 }
 
 const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {

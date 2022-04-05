@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
+import { selectAssociatedPrisoner } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -62,7 +63,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.redirect(
       url.format({
-        pathname: `/select-associated-prisoner`,
+        pathname: selectAssociatedPrisoner.root,
         query: { searchTerm, redirectUrl },
       })
     )
