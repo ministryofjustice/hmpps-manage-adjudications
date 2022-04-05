@@ -34,6 +34,7 @@ import {
   selectPrisoner,
   selectAssociatedPrisoner,
   selectAssociatedStaff,
+  yourCompletedReports,
 } from '../utils/urlGenerator'
 
 export default function routes(
@@ -74,7 +75,7 @@ export default function routes(
   router.use(selectPrisoner.root, prisonerSelectRoutes({ prisonerSearchService }))
   router.use(selectAssociatedPrisoner.root, selectAssociatedPrisonerRoutes({ prisonerSearchService }))
   router.use(selectAssociatedStaff.root, selectAssociatedStaffRoutes({ userService, placeOnReportService }))
-  router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
+  router.use(yourCompletedReports.root, yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
   router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
   router.use('/print-report', printReportRoutes({ reportedAdjudicationsService }))

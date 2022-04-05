@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import UserService from '../../services/userService'
-import { searchForPrisoner } from '../../utils/urlGenerator'
+import { searchForPrisoner, yourCompletedReports } from '../../utils/urlGenerator'
 import { hasAnyRole } from '../../utils/utils'
 
 type TaskType = {
@@ -34,7 +34,7 @@ export const tasks: TaskType[] = [
     heading: 'View your completed reports',
     description:
       'View your completed reports. You can also make changes to a report you have completed in the last 48 hours.',
-    href: '/your-completed-reports',
+    href: yourCompletedReports.root,
     roles: null,
     enabled: true,
   },

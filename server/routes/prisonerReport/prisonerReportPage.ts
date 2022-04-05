@@ -4,7 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import UserService from '../../services/userService'
-import { incidentDetails, incidentStatementUrls } from '../../utils/urlGenerator'
+import { incidentDetails, incidentStatementUrls, yourCompletedReports } from '../../utils/urlGenerator'
 
 export enum PageRequestType {
   REPORTER,
@@ -44,7 +44,7 @@ const getVariablesForPageType = (
       prisonerNumber,
       draftAdjudicationNumber
     )}?referrer=/prisoner-report/${adjudicationNumber}/report`,
-    returnLinkURL: `/your-completed-reports`,
+    returnLinkURL: yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
   }
 }

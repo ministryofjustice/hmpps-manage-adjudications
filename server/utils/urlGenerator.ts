@@ -123,3 +123,10 @@ export const selectAssociatedStaff = {
     start: '/',
   },
 }
+
+export const yourCompletedReports = {
+  root: '/your-completed-reports',
+  matchers: {
+    start: '/',
+  },
+}

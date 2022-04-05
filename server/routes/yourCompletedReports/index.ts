@@ -4,6 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import YourCompletedReports from './yourCompletedReports'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { yourCompletedReports } from '../../utils/urlGenerator'
 
 export default function yourCompletedReportsRoutes({
   reportedAdjudicationsService,
@@ -12,11 +13,11 @@ export default function yourCompletedReportsRoutes({
 }): Router {
   const router = express.Router()
 
-  const yourCompletedReports = new YourCompletedReports(reportedAdjudicationsService)
+  const yourCompletedReportsRoute = new YourCompletedReports(reportedAdjudicationsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/', yourCompletedReports.view)
+  get(yourCompletedReports.matchers.start, yourCompletedReportsRoute.view)
 
   return router
 }

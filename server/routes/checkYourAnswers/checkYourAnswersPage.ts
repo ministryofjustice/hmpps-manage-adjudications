@@ -11,6 +11,7 @@ import {
   incidentDetails,
   incidentStatementUrls,
   taskList,
+  yourCompletedReports,
 } from '../../utils/urlGenerator'
 
 type PageData = {
@@ -79,7 +80,7 @@ const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: n
 }
 
 const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
-  if (pageOptions.isEditByReporter()) return `/your-completed-reports`
+  if (pageOptions.isEditByReporter()) return yourCompletedReports.root
   if (pageOptions.isEditByReviewer()) return `/all-completed-reports`
   return taskList.urls.start(adjudicationNumber)
 }
