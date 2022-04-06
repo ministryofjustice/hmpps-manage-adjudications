@@ -162,6 +162,7 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My second incident',
           },
+          prisonerReportUrl: '/prisoner-report/2/report',
         },
         {
           displayName: 'Moriarty, James',
@@ -181,6 +182,7 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My first incident',
           },
+          prisonerReportUrl: '/prisoner-report/1/report',
         },
       ]
 
@@ -398,6 +400,7 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'Something happened',
           },
+          prisonerReportUrl: '/prisoner-report/1524427/review',
         },
 
         {
@@ -418,6 +421,7 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:00',
+          prisonerReportUrl: '/prisoner-report/1524425/review',
         },
       ]
 

@@ -4,7 +4,14 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import UserService from '../../services/userService'
-import { incidentDetails, incidentStatementUrls, yourCompletedReports } from '../../utils/urlGenerator'
+import {
+  allCompletedReports,
+  incidentDetails,
+  incidentStatementUrls,
+  printReport,
+  prisonerReport,
+  yourCompletedReports,
+} from '../../utils/urlGenerator'
 
 export enum PageRequestType {
   REPORTER,
@@ -28,22 +35,21 @@ const getVariablesForPageType = (
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/review`,
+      printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.review}`,
       editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=/prisoner-report/${adjudicationNumber}/review`,
-      returnLinkURL: `/all-completed-reports`,
+      )}?referrer=${prisonerReport.urls.review}`,
+      returnLinkURL: allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
     }
   }
   return {
     editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(draftAdjudicationNumber),
-    printHref: `/print-report/${adjudicationNumber}?referrer=/prisoner-report/${adjudicationNumber}/report`,
-    editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
-      prisonerNumber,
-      draftAdjudicationNumber
-    )}?referrer=/prisoner-report/${adjudicationNumber}/report`,
+    printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.report}`,
+    editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(prisonerNumber, draftAdjudicationNumber)}?referrer=${
+      prisonerReport.urls.report
+    }`,
     returnLinkURL: yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
   }

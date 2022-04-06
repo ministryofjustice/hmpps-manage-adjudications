@@ -6,10 +6,12 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
 import {
+  allCompletedReports,
   checkYourAnswers,
   confirmedOnReport,
   incidentDetails,
   incidentStatementUrls,
+  prisonerReport,
   taskList,
   yourCompletedReports,
 } from '../../utils/urlGenerator'
@@ -53,7 +55,7 @@ const getVariablesForPageType = (
         adjudicationNumber
       )}?referrer=${checkYourAnswers.urls.report(adjudicationNumber)}`,
       editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(adjudicationNumber),
-      exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/report`,
+      exitUrl: prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
     }
   }
   if (pageOptions.isEditByReviewer()) {
@@ -63,7 +65,7 @@ const getVariablesForPageType = (
         prisonerNumber,
         adjudicationNumber
       )}?referrer=${checkYourAnswers.urls.review(adjudicationNumber)}`,
-      exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/review`,
+      exitUrl: prisonerReport.urls.review(incidentDetailsData.adjudicationNumber),
     }
   }
   return {
@@ -81,7 +83,7 @@ const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: n
 
 const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
   if (pageOptions.isEditByReporter()) return yourCompletedReports.root
-  if (pageOptions.isEditByReviewer()) return `/all-completed-reports`
+  if (pageOptions.isEditByReviewer()) return allCompletedReports.root
   return taskList.urls.start(adjudicationNumber)
 }
 

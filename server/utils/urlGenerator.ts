@@ -130,3 +130,49 @@ export const yourCompletedReports = {
     start: '/',
   },
 }
+
+export const allCompletedReports = {
+  root: '/all-completed-reports',
+  matchers: {
+    start: '/',
+  },
+}
+
+export const selectReport = {
+  root: '/select-report',
+  matchers: {
+    start: '/',
+  },
+}
+
+export const printReport = {
+  root: '/print-report',
+  matchers: {
+    start: '/:adjudicationNumber',
+  },
+  urls: {
+    start: (adjudicationNumber: number) => `${printReport.root}/${adjudicationNumber}`,
+  },
+}
+
+export const printPdf = {
+  root: '/print',
+  matchers: {
+    start: '/:adjudicationNumber/pdf',
+  },
+  urls: {
+    start: (adjudicationNumber: number) => `${printPdf.root}/${adjudicationNumber}/pdf`,
+  },
+}
+
+export const prisonerReport = {
+  root: '/prisoner-report',
+  matchers: {
+    report: '/:adjudicationNumber/report',
+    review: '/:adjudicationNumber/review',
+  },
+  urls: {
+    report: (adjudicationNumber: number) => `${prisonerReport.root}/${adjudicationNumber}/report`,
+    review: (adjudicationNumber: number) => `${prisonerReport.root}/${adjudicationNumber}/review`,
+  },
+}

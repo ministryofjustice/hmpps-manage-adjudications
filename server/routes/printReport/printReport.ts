@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { printPdf } from '../../utils/urlGenerator'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 
 export default class PrintReportRoutes {
@@ -24,6 +25,7 @@ export default class PrintReportRoutes {
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
       exitUrl: referrer,
+      printPdfUrl: printPdf.urls.start(adjudicationNumber),
     })
   }
 
