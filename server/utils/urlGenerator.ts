@@ -176,3 +176,10 @@ export const prisonerReport = {
     review: (adjudicationNumber: number) => `${prisonerReport.root}/${adjudicationNumber}/review`,
   },
 }
+
+export const deletePerson = {
+  root: '/delete-person',
+  matchers: {
+    start: '/',
+  },
+}

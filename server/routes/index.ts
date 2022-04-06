@@ -40,6 +40,7 @@ import {
   printReport,
   printPdf,
   prisonerReport,
+  deletePerson,
 } from '../utils/urlGenerator'
 
 export default function routes(
@@ -94,7 +95,7 @@ export default function routes(
       decisionTreeService,
     })
   )
-  router.use('/delete-person', deletePersonRoutes({ placeOnReportService, userService }))
+  router.use(deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use('/', homepageRoutes({ userService }))
   return router
 }

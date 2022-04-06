@@ -16,6 +16,7 @@ import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
 import {
+  deletePerson,
   detailsOfOffence,
   incidentDetails,
   offenceCodeSelection,
@@ -693,7 +694,7 @@ const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
 }
 
 const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {
-  return res.redirect(`/delete-person?associatedPersonId=${prisonerToDelete}`)
+  return res.redirect(`${deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
 }
 
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
