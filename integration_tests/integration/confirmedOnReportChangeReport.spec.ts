@@ -1,3 +1,4 @@
+import { prisonerReport } from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReportChangeReport'
 import Page from '../pages/page'
 
@@ -67,12 +68,12 @@ context('Prisoner has been placed on report', () => {
     )
   })
 
-  it('should redirect the user to /prisoner-report on finish', () => {
+  it('should redirect the user to prisoner report on finish', () => {
     cy.visit(`/prisoner-placed-on-report/1524493/changes-confirmed/report`)
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/1524493/report')
+      expect(loc.pathname).to.eq(prisonerReport.urls.report(1524493))
     })
   })
 })

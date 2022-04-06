@@ -1,3 +1,4 @@
+import { prisonerReport } from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
 
@@ -249,7 +250,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/234/report')
+      expect(loc.pathname).to.eq(`${prisonerReport.urls.report(234)}`)
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {

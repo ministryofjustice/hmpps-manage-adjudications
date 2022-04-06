@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
+import { prisonerReport } from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/prisonerSearchService')
@@ -81,7 +82,7 @@ describe('POST /select-associated-prisoner', () => {
     app = appWithAllRoutes(
       { production: false },
       { prisonerSearchService },
-      { redirectUrl: '/incident-details/G6123VU/1234/submitted/edit?referrer=/prisoner-report/1524455/review' }
+      { redirectUrl: `/incident-details/G6123VU/1234/submitted/edit?referrer=${prisonerReport.urls.review(1524455)}` }
     )
     return request(app)
       .post('/select-associated-prisoner')

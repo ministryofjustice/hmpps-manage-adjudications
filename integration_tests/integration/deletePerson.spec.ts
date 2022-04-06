@@ -1,5 +1,6 @@
 import DeletePerson from '../pages/deletePerson'
 import Page from '../pages/page'
+import { deletePerson } from '../../server/utils/urlGenerator'
 
 context('Delete person - page contents', () => {
   beforeEach(() => {
@@ -43,7 +44,7 @@ context('Delete person - page contents', () => {
     cy.signIn()
   })
   it('should contain the required page elements - prn provided', () => {
-    cy.visit(`/delete-person?associatedPersonId=G6415GD`)
+    cy.visit(`${deletePerson.root}?associatedPersonId=G6415GD`)
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 
     DeletePersonPage.radioButtons().should('exist')
@@ -53,7 +54,7 @@ context('Delete person - page contents', () => {
     DeletePersonPage.errorSummary().should('not.exist')
   })
   it('should contain the required page elements - username provided', () => {
-    cy.visit(`/delete-person?associatedPersonId=TEST_GEN`)
+    cy.visit(`${deletePerson.root}?associatedPersonId=TEST_GEN`)
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 
     DeletePersonPage.radioButtons().should('exist')
@@ -63,7 +64,7 @@ context('Delete person - page contents', () => {
     DeletePersonPage.errorSummary().should('not.exist')
   })
   it('should show error message if no radio is selected', () => {
-    cy.visit(`/delete-person?associatedPersonId=G6415GD`)
+    cy.visit(`${deletePerson.root}?associatedPersonId=G6415GD`)
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 
     DeletePersonPage.submitButton().click()
@@ -189,7 +190,7 @@ context('Delete person - full journey', () => {
     cy.visit(`/incident-details/G6123VU/34/edit`)
     cy.get('[data-qa="incite-prisoner-delete"]').click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/delete-person')
+      expect(loc.pathname).to.eq(`${deletePerson.root}`)
       expect(loc.search).to.eq('?associatedPersonId=G6415GD')
     })
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
@@ -206,7 +207,7 @@ context('Delete person - full journey', () => {
     cy.visit(`/incident-details/G6123VU/34/edit`)
     cy.get('[data-qa="incite-prisoner-delete"]').click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/delete-person')
+      expect(loc.pathname).to.eq(`${deletePerson.root}`)
       expect(loc.search).to.eq('?associatedPersonId=G6415GD')
     })
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
