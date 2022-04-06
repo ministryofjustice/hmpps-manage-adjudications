@@ -4,6 +4,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
+import { detailsOfOffence, incidentStatementUrls } from '../../utils/urlGenerator'
 
 export default class DetailsOfOffenceRoutes {
   constructor(
@@ -21,7 +22,7 @@ export default class DetailsOfOffenceRoutes {
       await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const allOffences = await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
     const offences = await Promise.all(
-      allOffences.map(async offenceData => {
+      allOffences.map(async (offenceData, index) => {
         const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
@@ -34,6 +35,7 @@ export default class DetailsOfOffenceRoutes {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole.offenceRule,
           offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
+          deleteOffenceUrl: detailsOfOffence.urls.delete(adjudicationNumber, index + 1), // index+1 to match the offenceIndex generated from the loop.index
         }
       })
     )
@@ -64,6 +66,6 @@ export default class DetailsOfOffenceRoutes {
         }
       })
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
-    return res.redirect(`/incident-statement/${adjudicationNumber}`)
+    return res.redirect(incidentStatementUrls.urls.start(adjudicationNumber))
   }
 }

@@ -22,6 +22,26 @@ import deletePersonRoutes from './deletePerson'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
+import {
+  offenceCodeSelection,
+  detailsOfOffence,
+  taskList,
+  confirmedOnReport,
+  incidentDetails,
+  incidentStatementUrls,
+  searchForPrisoner,
+  checkYourAnswers,
+  selectPrisoner,
+  selectAssociatedPrisoner,
+  selectAssociatedStaff,
+  yourCompletedReports,
+  allCompletedReports,
+  selectReport,
+  printReport,
+  printPdf,
+  prisonerReport,
+  deletePerson,
+} from '../utils/urlGenerator'
 
 export default function routes(
   router: Router,
@@ -37,37 +57,37 @@ export default function routes(
   }: Services
 ): Router {
   router.use(
-    '/offence-code-selection',
+    offenceCodeSelection.root,
     offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })
   )
-  router.use('/incident-details', incidentDetailsRoutes({ placeOnReportService, locationService }))
+  router.use(incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use(
-    '/details-of-offence',
+    detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
   )
-  router.use('/incident-statement', incidentStatementRoutes({ placeOnReportService }))
+  router.use(incidentStatementUrls.root, incidentStatementRoutes({ placeOnReportService }))
   router.use(
-    '/check-your-answers',
+    checkYourAnswers.root,
     checkYourAnswersRoutes({
       placeOnReportService,
       locationService,
       decisionTreeService,
     })
   )
-  router.use('/prisoner-placed-on-report', confirmedOnReportRoutes({ reportedAdjudicationsService }))
-  router.use('/place-the-prisoner-on-report', taskListRoutes({ placeOnReportService }))
+  router.use(confirmedOnReport.root, confirmedOnReportRoutes({ reportedAdjudicationsService }))
+  router.use(taskList.root, taskListRoutes({ placeOnReportService }))
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
-  router.use('/search-for-prisoner', prisonerSearchRoutes())
-  router.use('/select-prisoner', prisonerSelectRoutes({ prisonerSearchService }))
-  router.use('/select-associated-prisoner', selectAssociatedPrisonerRoutes({ prisonerSearchService }))
-  router.use('/select-associated-staff', selectAssociatedStaffRoutes({ userService, placeOnReportService }))
-  router.use('/your-completed-reports', yourCompletedReportsRoutes({ reportedAdjudicationsService }))
-  router.use('/all-completed-reports', allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
-  router.use('/select-report', continueReportSelectRoutes({ placeOnReportService }))
-  router.use('/print-report', printReportRoutes({ reportedAdjudicationsService }))
-  router.use('/print', adjudicationPdfRoutes({ reportedAdjudicationsService, decisionTreeService }))
+  router.use(searchForPrisoner.root, prisonerSearchRoutes())
+  router.use(selectPrisoner.root, prisonerSelectRoutes({ prisonerSearchService }))
+  router.use(selectAssociatedPrisoner.root, selectAssociatedPrisonerRoutes({ prisonerSearchService }))
+  router.use(selectAssociatedStaff.root, selectAssociatedStaffRoutes({ userService, placeOnReportService }))
+  router.use(yourCompletedReports.root, yourCompletedReportsRoutes({ reportedAdjudicationsService }))
+  router.use(allCompletedReports.root, allCompletedReportsRoutes({ reportedAdjudicationsService, userService }))
+  router.use(selectReport.root, continueReportSelectRoutes({ placeOnReportService }))
+  router.use(printReport.root, printReportRoutes({ reportedAdjudicationsService }))
+  router.use(printPdf.root, adjudicationPdfRoutes({ reportedAdjudicationsService, decisionTreeService }))
   router.use(
-    '/prisoner-report',
+    prisonerReport.root,
     prisonerReportRoutes({
       reportedAdjudicationsService,
       locationService,
@@ -75,7 +95,7 @@ export default function routes(
       decisionTreeService,
     })
   )
-  router.use('/delete-person', deletePersonRoutes({ placeOnReportService, userService }))
+  router.use(deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use('/', homepageRoutes({ userService }))
   return router
 }

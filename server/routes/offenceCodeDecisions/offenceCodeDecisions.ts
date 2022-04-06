@@ -15,6 +15,7 @@ import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { AnswerType } from '../../offenceCodeDecisions/Answer'
+import { detailsOfOffence, offenceCodeSelection, taskList } from '../../utils/urlGenerator'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -107,12 +108,12 @@ export default class OffenceCodeRoutes {
     // We have finished - remove the offence data from the session and redirect to the details of offence page with the
     // offence data payload
     const finalOffenceData = this.offenceSessionService.deleteOffenceData(req, adjudicationNumber)
-    return this.redirect({ pathname: `/details-of-offence/${adjudicationNumber}/add`, query: finalOffenceData }, res)
+    return this.redirect({ pathname: detailsOfOffence.urls.add(adjudicationNumber), query: finalOffenceData }, res)
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return res.redirect(`/place-the-prisoner-on-report/${adjudicationNumber}`)
+    return res.redirect(taskList.urls.start(adjudicationNumber))
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {
@@ -134,10 +135,10 @@ export default class OffenceCodeRoutes {
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
-  redirectToRoot = async (req: Request, res: Response): Promise<void> => {
+  redirectToStart = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { incidentRole } = req.params
-    res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}/${this.decisions().id()}`)
+    res.redirect(offenceCodeSelection.urls.question(adjudicationNumber, incidentRole, this.decisions().id()))
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -184,7 +185,7 @@ export default class OffenceCodeRoutes {
   }
 
   private urlHere(req: Request) {
-    return `/offence-code-selection${req.path}`
+    return `${offenceCodeSelection.root}${req.path}`
   }
 
   private decisions(): Decision {

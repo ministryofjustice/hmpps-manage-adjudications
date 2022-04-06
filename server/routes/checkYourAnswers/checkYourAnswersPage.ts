@@ -5,6 +5,16 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
+import {
+  allCompletedReports,
+  checkYourAnswers,
+  confirmedOnReport,
+  incidentDetails,
+  incidentStatementUrls,
+  prisonerReport,
+  taskList,
+  yourCompletedReports,
+} from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -40,37 +50,41 @@ const getVariablesForPageType = (
 ) => {
   if (pageOptions.isEditByReporter()) {
     return {
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/report`,
-      editIncidentStatementURL: `/incident-statement/${adjudicationNumber}/submitted/edit`,
-      exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/report`,
+      editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+        prisonerNumber,
+        adjudicationNumber
+      )}?referrer=${checkYourAnswers.urls.report(adjudicationNumber)}`,
+      editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(adjudicationNumber),
+      exitUrl: prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
     }
   }
   if (pageOptions.isEditByReviewer()) {
     return {
       // We don't have the editIncidentStatementURL variable here as reviewers cannot change the statement.
-      editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/submitted/edit?referrer=/check-your-answers/${adjudicationNumber}/review`,
-      exitUrl: `/prisoner-report/${incidentDetailsData.adjudicationNumber}/review`,
+      editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+        prisonerNumber,
+        adjudicationNumber
+      )}?referrer=${checkYourAnswers.urls.review(adjudicationNumber)}`,
+      exitUrl: prisonerReport.urls.review(incidentDetailsData.adjudicationNumber),
     }
   }
   return {
-    editIncidentDetailsURL: `/incident-details/${prisonerNumber}/${adjudicationNumber}/edit`,
-    editIncidentStatementURL: `/incident-statement/${adjudicationNumber}`,
-    exitUrl: `/place-the-prisoner-on-report/${adjudicationNumber}`,
+    editIncidentDetailsURL: incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
+    editIncidentStatementURL: incidentStatementUrls.urls.start(adjudicationNumber),
+    exitUrl: taskList.urls.start(adjudicationNumber),
   }
 }
 
 const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: number) => {
-  if (pageOptions.isEditByReporter())
-    return `/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/report`
-  if (pageOptions.isEditByReviewer())
-    return `/prisoner-placed-on-report/${completeAdjudicationNumber}/changes-confirmed/review`
-  return `/prisoner-placed-on-report/${completeAdjudicationNumber}`
+  if (pageOptions.isEditByReporter()) return confirmedOnReport.urls.reporterView(completeAdjudicationNumber)
+  if (pageOptions.isEditByReviewer()) return confirmedOnReport.urls.reviewerView(completeAdjudicationNumber)
+  return confirmedOnReport.urls.start(completeAdjudicationNumber)
 }
 
 const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
-  if (pageOptions.isEditByReporter()) return `/your-completed-reports`
-  if (pageOptions.isEditByReviewer()) return `/all-completed-reports`
-  return `/place-the-prisoner-on-report/${adjudicationNumber}`
+  if (pageOptions.isEditByReporter()) return yourCompletedReports.root
+  if (pageOptions.isEditByReviewer()) return allCompletedReports.root
+  return taskList.urls.start(adjudicationNumber)
 }
 
 export default class CheckYourAnswersPage {

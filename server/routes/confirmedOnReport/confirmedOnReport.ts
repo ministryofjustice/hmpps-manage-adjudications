@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { printPdf } from '../../utils/urlGenerator'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 
 export default class ConfirmedOnReportRoutes {
@@ -34,6 +35,7 @@ export default class ConfirmedOnReportRoutes {
       bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
       buttonClass: 'govuk-button--secondary',
       buttonHref: '/place-a-prisoner-on-report',
+      printPdfUrl: printPdf.urls.start(adjudicationNumber),
     })
   }
 

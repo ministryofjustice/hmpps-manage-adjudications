@@ -14,6 +14,7 @@ import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
+import { prisonerReport } from '../utils/urlGenerator'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -115,13 +116,17 @@ export default class ReportedAdjudicationsService {
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
-    return this.mapData(pageResponse, reportedAdjudication =>
-      this.enhanceReportedAdjudication(
+    return this.mapData(pageResponse, reportedAdjudication => {
+      const enhancedAdjudication = this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         null
       )
-    )
+      return {
+        ...enhancedAdjudication,
+        prisonerReportUrl: prisonerReport.urls.report(reportedAdjudication.adjudicationNumber),
+      }
+    })
   }
 
   async getAllCompletedAdjudications(
@@ -146,13 +151,17 @@ export default class ReportedAdjudicationsService {
       )) || []
     const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
-    return this.mapData(pageResponse, reportedAdjudication =>
-      this.enhanceReportedAdjudication(
+    return this.mapData(pageResponse, reportedAdjudication => {
+      const enhancedAdjudication = this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId)
       )
-    )
+      return {
+        ...enhancedAdjudication,
+        prisonerReportUrl: prisonerReport.urls.review(reportedAdjudication.adjudicationNumber),
+      }
+    })
   }
 
   enhanceReportedAdjudication(

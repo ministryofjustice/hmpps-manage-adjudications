@@ -3,6 +3,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
+import { detailsOfOffence } from '../../utils/urlGenerator'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -53,6 +54,6 @@ export default class DeleteOffenceRoutes {
     if (confirmDelete === 'yes') {
       this.allOffencesSessionService.deleteSessionOffence(req, offenceIndex, adjudicationNumber)
     }
-    return res.redirect(`/details-of-offence/${adjudicationNumber}`)
+    return res.redirect(detailsOfOffence.urls.start(adjudicationNumber))
   }
 }

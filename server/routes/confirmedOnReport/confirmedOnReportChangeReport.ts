@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { prisonerReport } from '../../utils/urlGenerator'
 import { formatName, formatTimestampToDate, formatTimestampToTime, possessive } from '../../utils/utils'
 
 export default class ConfirmedOnReportChangeReportRoutes {
@@ -35,7 +36,7 @@ export default class ConfirmedOnReportChangeReportRoutes {
       bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed`,
       bannerHTML: null,
       buttonClass: 'govuk-button',
-      buttonHref: `/prisoner-report/${adjudicationNumber}/report`,
+      buttonHref: prisonerReport.urls.report(adjudicationNumberValue),
     })
   }
 

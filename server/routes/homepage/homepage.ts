@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import UserService from '../../services/userService'
+import { allCompletedReports, searchForPrisoner, selectReport, yourCompletedReports } from '../../utils/urlGenerator'
 import { hasAnyRole } from '../../utils/utils'
 
 type TaskType = {
@@ -16,7 +17,7 @@ export const tasks: TaskType[] = [
     id: 'start-a-new-report',
     heading: 'Start a new report',
     description: 'Start creating a new report.',
-    href: '/search-for-prisoner',
+    href: searchForPrisoner.root,
     roles: null,
     enabled: true,
   },
@@ -24,7 +25,7 @@ export const tasks: TaskType[] = [
     id: 'continue-a-report',
     heading: 'Continue a report',
     description: 'Continue a report that you have already started.',
-    href: '/select-report',
+    href: selectReport.root,
     roles: null,
     enabled: true,
   },
@@ -33,7 +34,7 @@ export const tasks: TaskType[] = [
     heading: 'View your completed reports',
     description:
       'View your completed reports. You can also make changes to a report you have completed in the last 48 hours.',
-    href: '/your-completed-reports',
+    href: yourCompletedReports.root,
     roles: null,
     enabled: true,
   },
@@ -41,7 +42,7 @@ export const tasks: TaskType[] = [
     id: 'view-all-completed-reports',
     heading: 'View all completed reports',
     description: 'View all completed reports in your establishment.',
-    href: '/all-completed-reports',
+    href: allCompletedReports.root,
     roles: ['ADJUDICATIONS_REVIEWER'],
     enabled: true,
   },

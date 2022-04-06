@@ -4,6 +4,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
+import { checkYourAnswers, prisonerReport } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -11,6 +12,7 @@ type PageData = {
   incidentStatementComplete?: string
   prisoner?: PrisonerResult
   adjudicationNumber?: number
+  prisonerReportUrl?: string
 }
 
 export default class IncidentStatementSubmittedEditRoutes {
@@ -26,6 +28,7 @@ export default class IncidentStatementSubmittedEditRoutes {
       adjudicationEdited: true,
       submitButtonText: 'Continue',
       adjudicationNumber,
+      prisonerReportUrl: prisonerReport.urls.report(adjudicationNumber),
     })
   }
 
@@ -55,18 +58,20 @@ export default class IncidentStatementSubmittedEditRoutes {
     const error = validateForm({ incidentStatement, incidentStatementComplete: 'yes', adjudicationEdited: true })
     if (error) return this.renderView(req, res, { error, incidentStatement })
 
+    const adjudicationNumberValue = Number(adjudicationNumber)
+
     try {
       await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
-        Number(adjudicationNumber),
+        adjudicationNumberValue,
         incidentStatement,
         true,
         user
       )
 
-      return res.redirect(`/check-your-answers/${adjudicationNumber}/report`)
+      return res.redirect(checkYourAnswers.urls.report(adjudicationNumberValue))
     } catch (postError) {
       logger.error(`Failed to post the edited incident statement for adjudication: ${postError}`)
-      res.locals.redirectUrl = `/check-your-answers/${adjudicationNumber}/report`
+      res.locals.redirectUrl = checkYourAnswers.urls.report(adjudicationNumberValue)
       throw postError
     }
   }

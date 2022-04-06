@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import { formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import { checkYourAnswers, detailsOfOffence, incidentDetails, incidentStatementUrls } from '../../utils/urlGenerator'
 
 export default class DraftTaskListRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -27,6 +28,10 @@ export default class DraftTaskListRoutes {
       prisonerFirstAndLastName: prisoner.friendlyName,
       expirationTime: formatTimestampToTime(taskListDetails.handoverDeadline),
       expirationDay: formatTimestampToDate(taskListDetails.handoverDeadline, 'D MMMM YYYY'),
+      detailsOfOffenceUrl: detailsOfOffence.urls.start(idValue),
+      incidentDetailsUrl: incidentDetails.urls.edit(prisoner.prisonerNumber, idValue),
+      incidentStatementUrl: incidentStatementUrls.urls.start(idValue),
+      checkYourAnswersUrl: checkYourAnswers.urls.start(idValue),
     })
   }
 

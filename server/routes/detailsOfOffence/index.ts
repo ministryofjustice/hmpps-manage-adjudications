@@ -7,6 +7,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import AddOffenceRoutes from './addOffence'
 import DeleteOffenceRoutes from './deleteOffence'
+import { detailsOfOffence } from '../../utils/urlGenerator'
 
 export default function detailsOfOffenceRoutes({
   placeOnReportService,
@@ -19,7 +20,7 @@ export default function detailsOfOffenceRoutes({
 }): Router {
   const router = express.Router()
 
-  const detailsOfOffence = new DetailsOfOffenceRoutes(
+  const detailsOfOffenceRoute = new DetailsOfOffenceRoutes(
     placeOnReportService,
     allOffencesSessionService,
     decisionTreeService
@@ -32,11 +33,11 @@ export default function detailsOfOffenceRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get('/:adjudicationNumber/add', addOffence.add)
-  get('/:adjudicationNumber', detailsOfOffence.view)
-  post('/:adjudicationNumber', detailsOfOffence.submit)
-  get('/:adjudicationNumber/delete/:offenceIndex', deleteOffence.view)
-  post('/:adjudicationNumber/delete/:offenceIndex', deleteOffence.submit)
+  get(detailsOfOffence.matchers.add, addOffence.add)
+  get(detailsOfOffence.matchers.start, detailsOfOffenceRoute.view)
+  post(detailsOfOffence.matchers.start, detailsOfOffenceRoute.submit)
+  get(detailsOfOffence.matchers.delete, deleteOffence.view)
+  post(detailsOfOffence.matchers.delete, deleteOffence.submit)
 
   return router
 }

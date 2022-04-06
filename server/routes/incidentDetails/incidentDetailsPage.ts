@@ -15,6 +15,14 @@ import { User } from '../../data/hmppsAuthClient'
 import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
+import {
+  deletePerson,
+  detailsOfOffence,
+  incidentDetails,
+  offenceCodeSelection,
+  selectAssociatedPrisoner,
+  taskList,
+} from '../../utils/urlGenerator'
 
 type PageData = {
   displayData: DisplayData
@@ -180,14 +188,14 @@ export default class IncidentDetailsPage {
       let returnUrl = null
       if (this.pageOptions.isEdit()) {
         if (this.pageOptions.isPreviouslySubmitted()) {
-          returnUrl = `/incident-details/${postValues.prisonerNumber}/${postValues.draftId}/submitted/edit${
+          returnUrl = `${incidentDetails.urls.submittedEdit(postValues.prisonerNumber, postValues.draftId)}${
             postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''
           }`
         } else {
-          returnUrl = `/incident-details/${postValues.prisonerNumber}/${postValues.draftId}/edit`
+          returnUrl = incidentDetails.urls.edit(postValues.prisonerNumber, postValues.draftId)
         }
       } else {
-        returnUrl = `/incident-details/${postValues.prisonerNumber}`
+        returnUrl = incidentDetails.urls.start(postValues.prisonerNumber)
       }
       stashDataOnSession(returnUrl, dataToSaveAfterRedirect, req)
       if (postData === PageRequestAction.DELETE_PRISONER) {
@@ -391,14 +399,14 @@ export default class IncidentDetailsPage {
   setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
     logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
     res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
-      ? `/incident-details/${prisonerNumber}/${draftId}/submitted/edit`
-      : `/incident-details/${prisonerNumber}/${draftId}/edit`
+      ? incidentDetails.urls.submittedEdit(prisonerNumber, draftId)
+      : incidentDetails.urls.edit(prisonerNumber, draftId)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setUpRedirectForCreationError = (res: Response, prisonerNumber: string, draftId: number, error: any) => {
     logger.error(`Failed to post incident details for draft adjudication: ${error}`)
-    res.locals.redirectUrl = `/incident-details/${prisonerNumber}`
+    res.locals.redirectUrl = incidentDetails.urls.start(prisonerNumber)
   }
 }
 
@@ -678,23 +686,23 @@ const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
 }
 
 const getTaskListUrl = (draftId: number) => {
-  return `/place-the-prisoner-on-report/${draftId}`
+  return taskList.urls.start(draftId)
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
-  return res.redirect(`/select-associated-prisoner?searchTerm=${searchTerm}`)
+  return res.redirect(`${selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
 }
 
 const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {
-  return res.redirect(`/delete-person?associatedPersonId=${prisonerToDelete}`)
+  return res.redirect(`${deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
 }
 
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
-  return res.redirect(`/offence-code-selection/${draftId}/${radioSelectionCodeFromIncidentRole(incidentRoleCode)}`)
+  return res.redirect(offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode)))
 }
 
 const redirectToOffenceDetails = (res: Response, draftId: number) => {
-  return res.redirect(`/details-of-offence/${draftId}`)
+  return res.redirect(detailsOfOffence.urls.start(draftId))
 }
 
 const redirectToTaskList = (res: Response, draftId: number) => {

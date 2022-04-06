@@ -6,6 +6,7 @@ import ConfirmedOnReportChangeReportRoutes from './confirmedOnReportChangeReport
 import ConfirmedOnReportChangeReviewRoutes from './confirmedOnReportChangeReview'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { confirmedOnReport } from '../../utils/urlGenerator'
 
 export default function prisonerConfirmedOnReportRoutes({
   reportedAdjudicationsService,
@@ -14,15 +15,15 @@ export default function prisonerConfirmedOnReportRoutes({
 }): Router {
   const router = express.Router()
 
-  const confirmedOnReport = new ConfirmedOnReportRoutes(reportedAdjudicationsService)
+  const confirmedOnReportRoute = new ConfirmedOnReportRoutes(reportedAdjudicationsService)
   const confirmedOnReportChangeReportRoutes = new ConfirmedOnReportChangeReportRoutes(reportedAdjudicationsService)
   const confirmedOnReportChangeReviewRoutes = new ConfirmedOnReportChangeReviewRoutes(reportedAdjudicationsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/:adjudicationNumber', confirmedOnReport.view)
-  get('/:adjudicationNumber/changes-confirmed/report', confirmedOnReportChangeReportRoutes.view)
-  get('/:adjudicationNumber/changes-confirmed/review', confirmedOnReportChangeReviewRoutes.view)
+  get(confirmedOnReport.matchers.start, confirmedOnReportRoute.view)
+  get(confirmedOnReport.matchers.reporterView, confirmedOnReportChangeReportRoutes.view)
+  get(confirmedOnReport.matchers.reviewerView, confirmedOnReportChangeReviewRoutes.view)
 
   return router
 }

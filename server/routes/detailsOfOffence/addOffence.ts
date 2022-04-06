@@ -3,6 +3,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
+import { detailsOfOffence } from '../../utils/urlGenerator'
 
 export default class AddOffenceRoutes {
   constructor(
@@ -19,6 +20,6 @@ export default class AddOffenceRoutes {
     // Get the offence to be added from the request and put it on the session
     const offenceToAdd: OffenceData = { ...req.query }
     this.allOffencesSessionService.addSessionOffence(req, offenceToAdd, adjudicationNumber)
-    return res.redirect(`/details-of-offence/${adjudicationNumber}`)
+    return res.redirect(detailsOfOffence.urls.start(adjudicationNumber))
   }
 }
