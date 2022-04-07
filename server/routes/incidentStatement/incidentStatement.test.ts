@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { checkYourAnswers } from '../../utils/urlGenerator'
+import { checkYourAnswers, incidentStatementUrls } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -57,7 +57,7 @@ afterEach(() => {
 describe('GET /incident-statement', () => {
   it('should load the incident statement page', () => {
     return request(app)
-      .get('/incident-statement/1041')
+      .get(`${incidentStatementUrls.urls.start(1041)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident statement')
@@ -89,7 +89,7 @@ describe('POST /incident-statement', () => {
     })
     it('should redirect to the task page', () => {
       return request(app)
-        .post('/incident-statement/1041')
+        .post(`${incidentStatementUrls.urls.start(1041)}`)
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
         .expect('Location', '/place-the-prisoner-on-report/1041')
     })
@@ -117,7 +117,7 @@ describe('POST /incident-statement', () => {
     })
     it('should redirect to the task page', () => {
       return request(app)
-        .post('/incident-statement/1041')
+        .post(`${incidentStatementUrls.urls.start(1041)}`)
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
         .expect('Location', '/place-the-prisoner-on-report/1041')
     })
@@ -153,7 +153,7 @@ describe('POST /incident-statement', () => {
     })
     it('should redirect to check your answers page ', () => {
       return request(app)
-        .post('/incident-statement/1041')
+        .post(`${incidentStatementUrls.urls.start(1041)}`)
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
         .expect('Location', `${checkYourAnswers.urls.start(1041)}`)
         .expect(_ => {
@@ -167,7 +167,7 @@ describe('POST /incident-statement', () => {
     })
     it('should render error summary with correct validation message', () => {
       return request(app)
-        .post('/incident-statement/1041')
+        .post(`${incidentStatementUrls.urls.start(1041)}`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('There is a problem')
@@ -177,7 +177,7 @@ describe('POST /incident-statement', () => {
     it('should throw an error on api failure', () => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
       return request(app)
-        .post('/incident-statement/1041')
+        .post(`${incidentStatementUrls.urls.start(1041)}`)
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
         .expect('Content-Type', /html/)
         .expect(res => {

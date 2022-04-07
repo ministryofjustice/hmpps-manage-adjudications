@@ -1,6 +1,6 @@
 import TaskList from '../pages/taskList'
 import Page from '../pages/page'
-import { checkYourAnswers } from '../../server/utils/urlGenerator'
+import { checkYourAnswers, incidentStatementUrls } from '../../server/utils/urlGenerator'
 
 context('Task list', () => {
   context('Just incident details completed', () => {
@@ -87,7 +87,7 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.incidentStatementLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/incident-statement/3456')
+        expect(loc.pathname).to.eq(`${incidentStatementUrls.urls.start(3456)}`)
       })
     })
   })

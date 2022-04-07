@@ -1,4 +1,4 @@
-import { checkYourAnswers } from '../../server/utils/urlGenerator'
+import { checkYourAnswers, incidentStatementUrls } from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
 
@@ -244,7 +244,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-statement/3456')
+      expect(loc.pathname).to.eq(incidentStatementUrls.urls.start(3456))
     })
   })
 })
