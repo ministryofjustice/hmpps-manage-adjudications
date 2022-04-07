@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { checkYourAnswers } from '../../utils/urlGenerator'
+import { checkYourAnswers, taskList } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -47,7 +47,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/104')
+        .get(`${taskList.urls.start(104)}`)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -80,7 +80,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/104')
+        .get(`${taskList.urls.start(3456)}`)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -113,7 +113,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/104')
+        .get(`${taskList.urls.start(3456)}`)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -146,7 +146,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/104')
+        .get(`${taskList.urls.start(104)}`)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')
@@ -179,7 +179,7 @@ describe('GET /place-the-prisoner-on-report', () => {
     })
     it('should not contain a link to confirm the adjudication', () => {
       return request(app)
-        .get('/place-the-prisoner-on-report/104')
+        .get(`${taskList.urls.start(3456)}`)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Incident details')

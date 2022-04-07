@@ -3,6 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
+import { incidentDetails, offenceCodeSelection } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -74,7 +75,7 @@ afterEach(() => {
 describe('GET /incident-details/<PRN>/<id>/edit', () => {
   it('should load the incident details edit page', () => {
     return request(app)
-      .get('/incident-details/G6415GD/5/edit')
+      .get(`${incidentDetails.urls.edit('G6415GD', 5)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident details')
@@ -86,18 +87,18 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
 describe('POST /incident-details/<PRN>/<id>/edit', () => {
   it('should redirect to offence details page if details are complete after changing information', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/edit')
+      .post(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         currentRadioSelected: 'committed',
       })
       .expect(302)
-      .expect('Location', '/offence-code-selection/34/committed')
+      .expect('Location', offenceCodeSelection.urls.start(34, 'committed'))
   })
   it('should render an error summary with correct validation message - user enters invalid hour', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/edit')
+      .post(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
@@ -111,7 +112,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
   })
   it('should render an error summary with correct validation message - user does not search for associated prisoner when required', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/edit')
+      .post(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -125,7 +126,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
   it('should throw an error on PUT endpoint failure', () => {
     placeOnReportService.editDraftIncidentDetails.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/incident-details/G6415GD/34/edit')
+      .post(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
@@ -138,7 +139,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
   })
   it('should retain existing offences if the radio selection is not changed', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/edit')
+      .post(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
@@ -160,7 +161,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
   })
   it('should remove existing offences if the radio selection is changed', () => {
     return request(app)
-      .post('/incident-details/G6415GD/34/edit')
+      .post(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,

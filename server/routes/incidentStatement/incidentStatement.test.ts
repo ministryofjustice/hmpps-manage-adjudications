@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { checkYourAnswers, incidentStatementUrls } from '../../utils/urlGenerator'
+import { checkYourAnswers, incidentStatementUrls, taskList } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -91,7 +91,7 @@ describe('POST /incident-statement', () => {
       return request(app)
         .post(`${incidentStatementUrls.urls.start(1041)}`)
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-        .expect('Location', '/place-the-prisoner-on-report/1041')
+        .expect('Location', `${taskList.urls.start(1041)}`)
     })
   })
   describe('Statement incomplete', () => {
@@ -119,7 +119,7 @@ describe('POST /incident-statement', () => {
       return request(app)
         .post(`${incidentStatementUrls.urls.start(1041)}`)
         .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'no' })
-        .expect('Location', '/place-the-prisoner-on-report/1041')
+        .expect('Location', `${taskList.urls.start(1041)}`)
     })
   })
 

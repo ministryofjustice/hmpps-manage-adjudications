@@ -1,7 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
-import { selectPrisoner } from '../../utils/urlGenerator'
+import { incidentDetails, selectPrisoner } from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/prisonerSearchService')
@@ -29,7 +29,7 @@ describe('GET /select-prisoner', () => {
           friendlyName: 'John Smith',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
-          incidentDetailsUrl: '/incident-details/A1234AA',
+          incidentDetailsUrl: incidentDetails.urls.start('A1234AA'),
         } as PrisonerSearchSummary,
       ])
     })
@@ -47,7 +47,9 @@ describe('GET /select-prisoner', () => {
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('1-2-015')
           expect(res.text).toContain(
-            '<a href="/incident-details/A1234AA" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>'
+            `<a href="${incidentDetails.urls.start(
+              'A1234AA'
+            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`
           )
         })
     })

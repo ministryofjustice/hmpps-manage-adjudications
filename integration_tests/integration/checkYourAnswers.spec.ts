@@ -1,4 +1,10 @@
-import { checkYourAnswers, incidentStatementUrls } from '../../server/utils/urlGenerator'
+import {
+  checkYourAnswers,
+  confirmedOnReport,
+  incidentDetails,
+  incidentStatementUrls,
+  taskList,
+} from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
 
@@ -212,7 +218,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234')
+      expect(loc.pathname).to.eq(confirmedOnReport.urls.start(234))
     })
   })
   it('should go to the task page if the user exits without submitting', () => {
@@ -220,7 +226,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/3456')
+      expect(loc.pathname).to.eq(`${taskList.urls.start(3456)}`)
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
@@ -228,7 +234,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.edit('G6415GD', 3456)}`)
     })
   })
   it('should go to the incident details page if the offence details change link is clicked - to reenter new offences', () => {
@@ -236,7 +242,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.edit('G6415GD', 3456)}`)
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {

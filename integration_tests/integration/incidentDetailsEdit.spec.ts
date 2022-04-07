@@ -1,3 +1,4 @@
+import { incidentDetails, offenceCodeSelection, taskList } from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
 
@@ -124,7 +125,7 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('exist')
     incidentDetailsPage.reportingOfficerName().should('exist')
@@ -138,13 +139,13 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.exitButton().should('exist')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
     incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
   it('should show error if one of the time fields is not filled in correctly', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputMinutes().clear()
@@ -158,7 +159,7 @@ context('Incident details (edit) - statement incomplete', () => {
       })
   })
   it('should show error if a location is not selected', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Select')
     incidentDetailsPage.submitButton().click()
@@ -170,17 +171,17 @@ context('Incident details (edit) - statement incomplete', () => {
       })
   })
   it('should show the prisoners name in the radio button question', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
   })
   it('should submit form successfully if radio button changed from one which requires an associated prisoner PRN to one which does not', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/attempted/1')
+      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'attempted', '1')}`)
     })
   })
   it('should submit form successfully if radio button changed from one which does not require an associated prisoner PRN to one which does', () => {
@@ -206,7 +207,7 @@ context('Incident details (edit) - statement incomplete', () => {
         },
       },
     })
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtons().find('input[value="incited"]').check()
     incidentDetailsPage.conditionalInputIncite().type('T3356FU')
@@ -217,7 +218,7 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/incited/1')
+      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'incited', '1')}`)
     })
   })
   it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
@@ -241,7 +242,7 @@ context('Incident details (edit) - statement incomplete', () => {
         },
       },
     })
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtons().find('input[value="assisted"]').check()
     incidentDetailsPage.submitButton().click()
@@ -259,11 +260,11 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
+      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'assisted', '1')}`)
     })
   })
   it('should submit form successfully if all data entered and redirect to task list page - change time', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputHours().type('13')
@@ -271,20 +272,20 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
+      expect(loc.pathname).to.eq(`${taskList.urls.start(34)}`)
     })
   })
   it('should submit form successfully if all data entered and redirect to task list page - change location', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
+      expect(loc.pathname).to.eq(`${taskList.urls.start(34)}`)
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputHours().type('15')
@@ -306,11 +307,11 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.prisonerPrnAssist().contains('T3356FU')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/offence-code-selection/34/assisted/1')
+      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'assisted', '1')}`)
     })
   })
   it('should remember the changed location and time once it comes back to this page after deleting an associated prisoner', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputHours().type('13')
@@ -321,7 +322,7 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check()
     cy.get('[data-qa="delete-person-submit"]').click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/34/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       expect(loc.search).to.eq('?personDeleted=true')
     })
     incidentDetailsPage.timeInputHours().should('have.value', '13')
@@ -330,11 +331,11 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
   })
   it('should redirect to the task list page if the user exits the page', () => {
-    cy.visit(`/incident-details/G6415GD/34/edit`)
+    cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-the-prisoner-on-report/34')
+      expect(loc.pathname).to.eq(`${taskList.urls.start(34)}`)
     })
   })
   context('Redirect on error', () => {
@@ -342,7 +343,7 @@ context('Incident details (edit) - statement incomplete', () => {
       cy.task('stubEditDraftIncidentDetails', { id: 34, response: {}, status: 500 })
     })
     it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
-      cy.visit(`/incident-details/G6415GD/34/edit`)
+      cy.visit(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.timeInputHours().clear()
       incidentDetailsPage.timeInputHours().type('14')
@@ -350,11 +351,11 @@ context('Incident details (edit) - statement incomplete', () => {
       incidentDetailsPage.timeInputMinutes().type('00')
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.not.eq('/place-the-prisoner-on-report/34')
+        expect(loc.pathname).to.not.eq(`${taskList.urls.start(34)}`)
       })
       incidentDetailsPage.errorContinueButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/incident-details/G6415GD/34/edit')
+        expect(loc.pathname).to.eq(`${incidentDetails.urls.edit('G6415GD', 34)}`)
       })
       incidentDetailsPage.timeInputHours().should('have.value', '13')
       incidentDetailsPage.timeInputMinutes().should('have.value', '10')

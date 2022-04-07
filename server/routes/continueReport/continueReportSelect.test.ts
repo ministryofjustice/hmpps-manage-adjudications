@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { selectReport } from '../../utils/urlGenerator'
+import { selectReport, taskList } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -56,7 +56,7 @@ describe('GET /select-report', () => {
           friendlyName: 'Udfsanaye Aidetria',
           incidentDate: '12 October 2021',
           incidentTime: '20:00',
-          taskListUrl: '/place-the-prisoner-on-report/31',
+          taskListUrl: `${taskList.urls.start(31)}`,
         },
         {
           id: 58,
@@ -75,7 +75,7 @@ describe('GET /select-report', () => {
           friendlyName: 'Carroll Babik',
           incidentDate: '11 November 2021',
           incidentTime: '15:15',
-          taskListUrl: '/place-the-prisoner-on-report/58',
+          taskListUrl: `${taskList.urls.start(58)}`,
         },
       ])
     })

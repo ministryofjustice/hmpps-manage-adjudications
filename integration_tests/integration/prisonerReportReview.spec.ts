@@ -1,6 +1,6 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
-import { allCompletedReports, prisonerReport } from '../../server/utils/urlGenerator'
+import { allCompletedReports, incidentDetails, prisonerReport } from '../../server/utils/urlGenerator'
 
 context('Prisoner report - reviewer view', () => {
   beforeEach(() => {
@@ -221,7 +221,7 @@ context('Prisoner report - reviewer view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/177/submitted/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 177)}`)
     })
   })
   it('should go to the incident details page if the offence details change link is clicked', () => {
@@ -229,7 +229,7 @@ context('Prisoner report - reviewer view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/177/submitted/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 177)}`)
     })
   })
   it('should not show a link to edit the incident statement', () => {

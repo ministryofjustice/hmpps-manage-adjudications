@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
-import { selectAssociatedStaff } from '../../utils/urlGenerator'
+import { offenceCodeSelection, selectAssociatedStaff } from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/userService')
@@ -17,7 +17,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { userService, placeOnReportService },
-    { redirectUrl: '/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3' }
+    { redirectUrl: `${offenceCodeSelection.urls.question(893, 'committed', '1-1-1')}?selectedAnswerId=1-1-1-3` }
   )
 })
 
@@ -66,7 +66,11 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            '<a href="/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
+            `<a href="${offenceCodeSelection.urls.question(
+              893,
+              'committed',
+              '1-1-1'
+            )}?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>`
           )
         })
     })

@@ -3,7 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
-import { deletePerson } from '../../utils/urlGenerator'
+import { deletePerson, incidentDetails } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -17,7 +17,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, userService },
-    { redirectUrl: '/incident-details/G6123VU/466/edit' }
+    { redirectUrl: incidentDetails.urls.edit('G6123VU', 466) }
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
@@ -78,7 +78,7 @@ describe('POST /delete-person', () => {
         deletePerson: 'yes',
       })
       .expect(302)
-      .expect('Location', '/incident-details/G6123VU/466/edit?personDeleted=true')
+      .expect('Location', `${incidentDetails.urls.edit('G6123VU', 466)}?personDeleted=true`)
   })
   it('should redirect to the redirectUrl provided on the session with selected person query if no option selected', () => {
     return request(app)
@@ -87,7 +87,7 @@ describe('POST /delete-person', () => {
         deletePerson: 'no',
       })
       .expect(302)
-      .expect('Location', '/incident-details/G6123VU/466/edit?selectedPerson=G6415GD')
+      .expect('Location', `${incidentDetails.urls.edit('G6123VU', 466)}?selectedPerson=G6415GD`)
   })
   it('should render an error summary if no radio is selected', () => {
     return request(app)

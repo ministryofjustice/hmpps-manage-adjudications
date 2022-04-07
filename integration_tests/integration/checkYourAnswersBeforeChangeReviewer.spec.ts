@@ -1,4 +1,4 @@
-import { checkYourAnswers, prisonerReport } from '../../server/utils/urlGenerator'
+import { checkYourAnswers, confirmedOnReport, incidentDetails, prisonerReport } from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReviewer'
 import Page from '../pages/page'
 
@@ -244,7 +244,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234/changes-confirmed/review')
+      expect(loc.pathname).to.eq(confirmedOnReport.urls.reviewerView(234))
     })
   })
   it('should go to the prisoner report page if the user cancels', () => {
@@ -260,7 +260,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/submitted/edit')
+      expect(loc.pathname).to.eq(incidentDetails.urls.submittedEdit('G6415GD', 3456))
       expect(loc.href).to.include(`?referrer=${checkYourAnswers.urls.review(3456)}`)
     })
   })
@@ -269,7 +269,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+      expect(loc.pathname).to.eq(incidentDetails.urls.edit('G6415GD', 3456))
     })
   })
 })

@@ -1,6 +1,11 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
-import { incidentStatementUrls, prisonerReport, yourCompletedReports } from '../../server/utils/urlGenerator'
+import {
+  incidentDetails,
+  incidentStatementUrls,
+  prisonerReport,
+  yourCompletedReports,
+} from '../../server/utils/urlGenerator'
 
 context('Prisoner report - reporter view', () => {
   beforeEach(() => {
@@ -220,7 +225,7 @@ context('Prisoner report - reporter view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/177/submitted/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 177)}`)
     })
   })
   it('should go to the incident details page if the offence details change link is clicked', () => {
@@ -228,7 +233,7 @@ context('Prisoner report - reporter view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/177/submitted/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 177)}`)
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {

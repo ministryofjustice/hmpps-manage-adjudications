@@ -2,7 +2,7 @@ import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
-import { selectAssociatedStaff } from '../../server/utils/urlGenerator'
+import { offenceCodeSelection, selectAssociatedStaff } from '../../server/utils/urlGenerator'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -180,24 +180,24 @@ context('Incident details', () => {
     })
   })
   it('the first page for committing an offence title', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     new OffenceCodeSelection('What type of offence did John Smith commit?').checkOnPage()
-    cy.visit(`/offence-code-selection/101/attempted/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(101, 'attempted')}`)
     new OffenceCodeSelection('What type of offence did John Smith attempt to commit?').checkOnPage()
-    cy.visit(`/offence-code-selection/102/incited/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(102, 'incited')}`)
     new OffenceCodeSelection('What type of offence did John Smith incite another prisoner to commit?').checkOnPage()
-    cy.visit(`/offence-code-selection/103/assisted/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(103, 'assisted')}`)
   })
 
   it('the cancel button', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.cancel().click()
     Page.verifyOnPage(CheckYourAnswersPage)
   })
 
   it('the first page should have the expected radios', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     // These are very specific to the current decision data so don't check too many.
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radios().should('exist')
@@ -212,21 +212,21 @@ context('Incident details', () => {
   })
 
   it('check validation when there is no radio selected', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.continue().click()
     whatTypeOfOffencePage.form().contains('Please make a choice')
   })
 
   it('cancel', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.cancel().click()
     cy.url().should('include', 'place-the-prisoner-on-report/100')
   })
 
   it('select another radio and check that we get sent to the page we expect', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     // This is specific to the current decision data so only check one.
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').should('exist').check()
@@ -243,7 +243,7 @@ context('Incident details', () => {
   it('select a prisoner question', () => {
     const prisonerAnswerId = '1-1-1-1'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(prisonerAnswerId).check()
     whoWasAssaultedPage.radioLabel(prisonerAnswerId).contains('Another prisoner')
@@ -261,7 +261,7 @@ context('Incident details', () => {
   it('select a prisoner question - delete', () => {
     const prisonerAnswerId = '1-1-1-1'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.simulateReturnFromPrisonerSearch(100, whoWasAssaultedQuestionId, prisonerAnswerId, 'G5512G')
     whoWasAssaultedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
@@ -272,7 +272,7 @@ context('Incident details', () => {
   it('select a prisoner question - validation', () => {
     const prisonerAnswerId = '1-1-1-1'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(prisonerAnswerId).check()
     // Search without search text for validation
@@ -288,7 +288,7 @@ context('Incident details', () => {
   it('select an officer question', () => {
     const officerAnswerId = '1-1-1-2'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(officerAnswerId).check()
     whoWasAssaultedPage.radioLabel(officerAnswerId).contains('A prison officer')
@@ -307,7 +307,7 @@ context('Incident details', () => {
   it('select an officer question - delete', () => {
     const officerAnswerId = '1-1-1-2'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
@@ -319,7 +319,7 @@ context('Incident details', () => {
   it('select an officer question - validation', () => {
     const officerAnswerId = '1-1-1-2'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(officerAnswerId).check()
     // Search without search text for validation
@@ -350,7 +350,7 @@ context('Incident details', () => {
   it('select another person - validation', () => {
     const anotherPersonAnswerId = '1-1-1-4'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
     // Submit without entering any text
@@ -362,7 +362,7 @@ context('Incident details', () => {
   it('select another person question', () => {
     const anotherPersonAnswerId = '1-1-1-4'
     const whoWasAssaultedQuestionId = '1-1-1'
-    cy.visit(`/offence-code-selection/100/committed/${whoWasAssaultedQuestionId}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId)}`)
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(anotherPersonAnswerId).check()
     whoWasAssaultedPage.radioLabel(anotherPersonAnswerId).contains('Another person')
@@ -373,7 +373,7 @@ context('Incident details', () => {
   })
 
   it('end to end', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()

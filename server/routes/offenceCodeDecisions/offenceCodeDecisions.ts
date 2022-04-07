@@ -100,9 +100,11 @@ export default class OffenceCodeRoutes {
     // We redirect to the next decision or the details of offence page if this is the last.
     const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
-      const nextQuestionUrl = `/offence-code-selection/${adjudicationNumber}/${incidentRole}/${selectedAnswer
-        .getChildDecision()
-        .getUrl()}`
+      const nextQuestionUrl = `${offenceCodeSelection.urls.question(
+        adjudicationNumber,
+        incidentRole,
+        selectedAnswer.getChildDecision().getUrl()
+      )}`
       return res.redirect(nextQuestionUrl)
     }
     // We have finished - remove the offence data from the session and redirect to the details of offence page with the

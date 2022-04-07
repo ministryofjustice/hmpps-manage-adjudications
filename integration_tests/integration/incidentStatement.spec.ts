@@ -1,4 +1,4 @@
-import { checkYourAnswers, incidentStatementUrls } from '../../server/utils/urlGenerator'
+import { checkYourAnswers, incidentStatementUrls, taskList } from '../../server/utils/urlGenerator'
 import IncidentStatement from '../pages/incidentStatement'
 import Page from '../pages/page'
 
@@ -144,7 +144,7 @@ context('Incident Statement', () => {
       incidentStatementPage.radioNo().check()
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/place-the-prisoner-on-report/3456')
+        expect(loc.pathname).to.eq(`${taskList.urls.start(3456)}`)
       })
     })
   })
@@ -230,7 +230,7 @@ context('Incident Statement', () => {
       incidentStatementPage.radioYes().check()
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/place-the-prisoner-on-report/3456')
+        expect(loc.pathname).to.eq(`${taskList.urls.start(3456)}`)
       })
     })
     it('should redirect the user to /place-the-prisoner-on-report if statement is incomplete', () => {
@@ -240,7 +240,7 @@ context('Incident Statement', () => {
       incidentStatementPage.radioNo().check()
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/place-the-prisoner-on-report/3456')
+        expect(loc.pathname).to.eq(`${taskList.urls.start(3456)}`)
       })
     })
   })

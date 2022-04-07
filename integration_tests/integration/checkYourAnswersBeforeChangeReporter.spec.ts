@@ -1,4 +1,10 @@
-import { checkYourAnswers, incidentStatementUrls, prisonerReport } from '../../server/utils/urlGenerator'
+import {
+  checkYourAnswers,
+  confirmedOnReport,
+  incidentDetails,
+  incidentStatementUrls,
+  prisonerReport,
+} from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
 
@@ -242,7 +248,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234/changes-confirmed/report')
+      expect(loc.pathname).to.eq(confirmedOnReport.urls.reporterView(234))
     })
   })
   it('should go to the prisoner report page if the user cancels', () => {
@@ -258,7 +264,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/submitted/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 3456)}`)
     })
   })
   it('should go to the incident details page if the offence details change link is clicked - to reenter new offences', () => {
@@ -266,7 +272,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/submitted/edit')
+      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 3456)}`)
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {

@@ -1,4 +1,4 @@
-import { selectReport } from '../../server/utils/urlGenerator'
+import { selectReport, taskList } from '../../server/utils/urlGenerator'
 import ContinueReportSelect from '../pages/continueReportSelect'
 import Page from '../pages/page'
 
@@ -151,7 +151,7 @@ context('Continue a report - select report', () => {
       continueReportSelectPage.continueLink().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/place-the-prisoner-on-report/1')
+        expect(loc.pathname).to.eq(`${taskList.urls.start(1)}`)
       })
     })
   })

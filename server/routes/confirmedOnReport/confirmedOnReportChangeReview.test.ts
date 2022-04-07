@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { confirmedOnReport } from '../../utils/urlGenerator'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -34,7 +35,7 @@ afterEach(() => {
 describe('GET /prisoner-placed-on-report - edited adjudication', () => {
   it('should load the confirmation of placed on report page', () => {
     return request(app)
-      .get('/prisoner-placed-on-report/123/changes-confirmed/review')
+      .get(`${confirmedOnReport.urls.reviewerView(123)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('John Smith’s report has been changed')
@@ -53,7 +54,7 @@ describe('GET /prisoner-placed-on-report - edited adjudication', () => {
       new Error('error message content')
     )
     return request(app)
-      .get('/prisoner-placed-on-report/123/changes-confirmed/review')
+      .get(`${confirmedOnReport.urls.reviewerView(123)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: error message content')

@@ -1,7 +1,7 @@
 import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
-import { selectAssociatedStaff } from '../../server/utils/urlGenerator'
+import { offenceCodeSelection, selectAssociatedStaff } from '../../server/utils/urlGenerator'
 
 context('Select associated staff', () => {
   beforeEach(() => {
@@ -113,7 +113,7 @@ context('Select associated staff', () => {
       })
   })
   it('returns to the previous page with the selected staff member details', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
@@ -130,7 +130,11 @@ context('Select associated staff', () => {
     SelectStaffMemberPage.selectStaffMemberLink().click()
     cy.url().should(
       'include',
-      '/offence-code-selection/100/committed/1-1-1?selectedAnswerId=1-1-1-3&selectedPerson=BSMITH_GEN'
+      `${offenceCodeSelection.urls.question(
+        100,
+        'committed',
+        '1-1-1'
+      )}?selectedAnswerId=1-1-1-3&selectedPerson=BSMITH_GEN`
     )
   })
 })

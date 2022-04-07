@@ -10,6 +10,7 @@ import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { detailsOfOffence, incidentDetails } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -116,10 +117,10 @@ afterEach(() => {
 describe('GET /details-of-offence/102/delete/1 view', () => {
   it('should show the offence to delete', async () => {
     const agent = request.agent(app)
-    return agent.get('/details-of-offence/102/').then(() =>
+    return agent.get(`${detailsOfOffence.urls.start(102)}`).then(() =>
       // This call will populate the session, which we need for the delete page.
       agent
-        .get('/details-of-offence/102/delete/2')
+        .get(`${detailsOfOffence.urls.delete(102, 2)}`)
         .expect(200)
         // Title
         .expect(res => {
@@ -136,13 +137,13 @@ describe('GET /details-of-offence/102/delete/1 view', () => {
 describe('POST /details-of-offence/102/delete/1 validation', () => {
   it('should show the offence to delete', async () => {
     const agent = request.agent(app)
-    return agent.get('/details-of-offence/102/').then(() =>
+    return agent.get(`${detailsOfOffence.urls.start(102)}`).then(() =>
       // This call will populate the session, which we need for the delete page.
       agent
-        .get('/details-of-offence/102/delete/2')
+        .get(`${detailsOfOffence.urls.delete(102, 2)}`)
         .expect(200)
         .then(() =>
-          agent.post('/details-of-offence/102/delete/2').expect(res => {
+          agent.post(`${detailsOfOffence.urls.delete(102, 2)}`).expect(res => {
             expect(res.text).toContain('Please make a choice')
           })
         )
@@ -154,18 +155,18 @@ describe('POST /details-of-offence/102/delete/1', () => {
   it('should remove the offence when selecting yes', async () => {
     const agent = request.agent(app)
     return agent
-      .get('/details-of-offence/102') // This call will populate the session, which we need for the delete page.
+      .get(`${detailsOfOffence.urls.start(102)}`) // This call will populate the session, which we need for the delete page.
       .expect(res => expect(res.text).toContain('A standard answer with child question')) // We will delete the offence with this answer
       .then(() =>
-        agent.get('/details-of-offence/102/delete/2').then(() =>
+        agent.get(`${detailsOfOffence.urls.delete(102, 2)}`).then(() =>
           agent
-            .post('/details-of-offence/102/delete/2')
+            .post(`${detailsOfOffence.urls.delete(102, 2)}`)
             .send({ confirmDelete: 'yes' })
             .expect(302)
-            .expect('Location', '/details-of-offence/102')
+            .expect('Location', `${detailsOfOffence.urls.start(102)}`)
             .then(() =>
               agent
-                .get('/details-of-offence/102')
+                .get(`${detailsOfOffence.urls.start(102)}`)
                 .expect(200)
                 // The offence with this answer should be removed
                 .expect(res => expect(res.text).not.toContain('A standard answer with child question'))
@@ -177,18 +178,18 @@ describe('POST /details-of-offence/102/delete/1', () => {
   it('should remove not remove the offence when selecting no', async () => {
     const agent = request.agent(app)
     return agent
-      .get('/details-of-offence/102') // This call will populate the session, which we need for the delete page.
+      .get(`${detailsOfOffence.urls.start(102)}`) // This call will populate the session, which we need for the delete page.
       .expect(res => expect(res.text).toContain('A standard answer with child question')) // We will decide not to delete the offence with this answer
       .then(() =>
-        agent.get('/details-of-offence/102/delete/2').then(() =>
+        agent.get(`${detailsOfOffence.urls.delete(102, 2)}`).then(() =>
           agent
-            .post('/details-of-offence/102/delete/2')
+            .post(`${detailsOfOffence.urls.delete(102, 2)}`)
             .send({ confirmDelete: 'no' })
             .expect(302)
-            .expect('Location', '/details-of-offence/102')
+            .expect('Location', `${detailsOfOffence.urls.start(102)}`)
             .then(() =>
               agent
-                .get('/details-of-offence/102')
+                .get(`${detailsOfOffence.urls.start(102)}`)
                 .expect(200)
                 // The offence with this answer should still be present
                 .expect(res => expect(res.text).toContain('A standard answer with child question'))

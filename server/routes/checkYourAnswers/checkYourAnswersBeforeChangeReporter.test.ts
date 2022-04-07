@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { checkYourAnswers } from '../../utils/urlGenerator'
+import { checkYourAnswers, confirmedOnReport } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -133,7 +133,7 @@ describe('POST /check-your-answers', () => {
     return request(app)
       .post(`${checkYourAnswers.urls.report(1)}`)
       .expect(302)
-      .expect('Location', '/prisoner-placed-on-report/2342/changes-confirmed/report')
+      .expect('Location', `${confirmedOnReport.urls.reporterView(2342)}`)
   })
 
   it('should throw an error on api failure', () => {
