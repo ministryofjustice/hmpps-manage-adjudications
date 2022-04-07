@@ -10,7 +10,7 @@ import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { detailsOfOffence, incidentDetails } from '../../utils/urlGenerator'
+import { detailsOfOffence } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
