@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import { checkYourAnswers } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -68,7 +69,7 @@ describe('POST /incident-statement', () => {
     return request(app)
       .post('/incident-statement/1/submitted/edit')
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-      .expect('Location', '/check-your-answers/1/report')
+      .expect('Location', `${checkYourAnswers.urls.report(1)}`)
       .expect(_ => {
         expect(placeOnReportService.addOrUpdateDraftIncidentStatement).toHaveBeenLastCalledWith(
           1,

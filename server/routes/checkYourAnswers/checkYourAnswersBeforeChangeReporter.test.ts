@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { checkYourAnswers } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -114,7 +115,7 @@ afterEach(() => {
 describe('GET /check-your-answers', () => {
   it('should load the check-your-answers page', () => {
     return request(app)
-      .get('/check-your-answers/1/report')
+      .get(`${checkYourAnswers.urls.report(1)}`)
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
@@ -130,7 +131,7 @@ describe('GET /check-your-answers', () => {
 describe('POST /check-your-answers', () => {
   it('should redirect to the correct page if details is complete', () => {
     return request(app)
-      .post('/check-your-answers/1/report')
+      .post(`${checkYourAnswers.urls.report(1)}`)
       .expect(302)
       .expect('Location', '/prisoner-placed-on-report/2342/changes-confirmed/report')
   })
@@ -138,7 +139,7 @@ describe('POST /check-your-answers', () => {
   it('should throw an error on api failure', () => {
     placeOnReportService.completeDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post('/check-your-answers/1/report')
+      .post(`${checkYourAnswers.urls.report(1)}`)
       .expect(response => {
         expect(response.text).toContain('Error: Internal Error')
       })

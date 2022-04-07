@@ -10,6 +10,7 @@ import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import OffenceSessionService from '../../services/offenceSessionService'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { selectAssociatedPrisoner, selectAssociatedStaff } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -243,7 +244,7 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
         prisonerSearchNameInput: 'FirstName LastName',
       })
       .expect(302)
-      .expect('Location', `/select-associated-prisoner?searchTerm=FirstName%20LastName`)
+      .expect('Location', `${selectAssociatedPrisoner.root}?searchTerm=FirstName%20LastName`)
   })
 
   it(`A ${Type.OFFICER} answer should redirect to search when searching`, () => {
@@ -256,7 +257,7 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
         officerSearchLastNameInput: 'LastName',
       })
       .expect(302)
-      .expect('Location', `/select-associated-staff?staffFirstName=FirstName&staffLastName=LastName`)
+      .expect('Location', `${selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`)
   })
 
   it(`A ${Type.STAFF} answer should redirect to search when searching`, () => {
@@ -269,7 +270,7 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
         staffSearchLastNameInput: 'LastName',
       })
       .expect(302)
-      .expect('Location', `/select-associated-staff?staffFirstName=FirstName&staffLastName=LastName`)
+      .expect('Location', `${selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`)
   })
 })
 

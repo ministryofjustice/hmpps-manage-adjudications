@@ -1,6 +1,7 @@
 import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
+import { selectAssociatedStaff } from '../../server/utils/urlGenerator'
 
 context('Select associated staff', () => {
   beforeEach(() => {
@@ -78,7 +79,7 @@ context('Select associated staff', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
+    cy.visit(`${selectAssociatedStaff.root}?staffFirstName=Bob&staffLastName=Smith`)
     const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
 
     selectAssociatedStaffPage.firstNameInput().should('exist')
@@ -87,7 +88,7 @@ context('Select associated staff', () => {
     selectAssociatedStaffPage.noResultsMessage().should('not.exist')
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
+    cy.visit(`${selectAssociatedStaff.root}?staffFirstName=Bob&staffLastName=Smith`)
     const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
 
     selectAssociatedStaffPage
@@ -125,7 +126,7 @@ context('Select associated staff', () => {
     whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Smith')
     whoWasAssaultedPage.searchStaff().click()
     const SelectStaffMemberPage = new SelectAssociatedStaff()
-    cy.url().should('include', '/select-associated-staff?staffFirstName=Bob&staffLastName=Smith')
+    cy.url().should('include', `${selectAssociatedStaff.root}?staffFirstName=Bob&staffLastName=Smith`)
     SelectStaffMemberPage.selectStaffMemberLink().click()
     cy.url().should(
       'include',

@@ -1,5 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
+import { selectPrisoner } from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 let app: Express
@@ -29,7 +30,7 @@ describe('POST /search-for-prisoner', () => {
     return request(app)
       .post('/search-for-prisoner')
       .send({ searchTerm: 'Smith' })
-      .expect('Location', '/select-prisoner?searchTerm=Smith')
+      .expect('Location', `${selectPrisoner.root}?searchTerm=Smith`)
   })
 
   it('should render validation messages', () => {

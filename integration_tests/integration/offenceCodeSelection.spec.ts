@@ -2,6 +2,7 @@ import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
+import { selectAssociatedStaff } from '../../server/utils/urlGenerator'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -294,7 +295,7 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')
     whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
     whoWasAssaultedPage.searchOfficer().click()
-    cy.url().should('include', '/select-associated-staff?staffFirstName=Adam&staffLastName=Owens')
+    cy.url().should('include', `${selectAssociatedStaff.root}?staffFirstName=Adam&staffLastName=Owens`)
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
     whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
@@ -384,7 +385,7 @@ context('Incident details', () => {
     whoWasAssaultedPage.victimStaffSearchFirstNameInput().type('Carl')
     whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Stanley')
     whoWasAssaultedPage.searchStaff().click()
-    cy.url().should('include', '/select-associated-staff?staffFirstName=Carl&staffLastName=Stanley')
+    cy.url().should('include', `${selectAssociatedStaff.root}?staffFirstName=Carl&staffLastName=Stanley`)
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     whoWasAssaultedPage.continue().click()
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')

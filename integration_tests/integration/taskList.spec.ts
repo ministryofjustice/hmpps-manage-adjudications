@@ -1,5 +1,6 @@
 import TaskList from '../pages/taskList'
 import Page from '../pages/page'
+import { checkYourAnswers } from '../../server/utils/urlGenerator'
 
 context('Task list', () => {
   context('Just incident details completed', () => {
@@ -362,7 +363,7 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.acceptDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/check-your-answers/3456')
+        expect(loc.pathname).to.eq(`${checkYourAnswers.urls.start(3456)}`)
       })
     })
   })

@@ -1,4 +1,4 @@
-import { prisonerReport } from '../../server/utils/urlGenerator'
+import { checkYourAnswers, prisonerReport } from '../../server/utils/urlGenerator'
 import IncidentStatement from '../pages/incidentStatementSubmittedEdit'
 import Page from '../pages/page'
 
@@ -93,7 +93,7 @@ context('Incident Statement', () => {
     incidentStatementPage.statementTextArea().type('The prisoner was badly behaved today.')
     incidentStatementPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/check-your-answers/3456/report')
+      expect(loc.pathname).to.eq(`${checkYourAnswers.urls.report(3456)}`)
     })
   })
   it('should redirect the user to prisoner report if the user clicks cancel', () => {

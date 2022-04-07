@@ -1,3 +1,4 @@
+import { checkYourAnswers } from '../../server/utils/urlGenerator'
 import IncidentStatement from '../pages/incidentStatement'
 import Page from '../pages/page'
 
@@ -133,7 +134,7 @@ context('Incident Statement', () => {
       incidentStatementPage.radioYes().check()
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/check-your-answers/3456')
+        expect(loc.pathname).to.eq(`${checkYourAnswers.urls.start(3456)}`)
       })
     })
     it('should redirect the user to /place-the-prisoner-on-report if statement is incomplete', () => {
