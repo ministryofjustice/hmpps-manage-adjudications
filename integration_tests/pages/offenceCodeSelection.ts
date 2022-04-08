@@ -1,3 +1,4 @@
+import { offenceCodeSelection } from '../../server/utils/urlGenerator'
 import Page, { PageElement } from './page'
 
 export default class OffenceCodeSelection extends Page {
@@ -52,7 +53,11 @@ export default class OffenceCodeSelection extends Page {
     prisonerId: string
   ) =>
     cy.visit(
-      `/offence-code-selection/${adjudicationId}/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`
+      `${offenceCodeSelection.urls.question(
+        adjudicationId,
+        'committed',
+        questionId
+      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`
     )
 
   simulateReturnFromStaffSearch = (
@@ -62,6 +67,10 @@ export default class OffenceCodeSelection extends Page {
     staffId: string
   ) =>
     cy.visit(
-      `/offence-code-selection/${adjudicationId}/committed/${questionId}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
+      `${offenceCodeSelection.urls.question(
+        adjudicationId,
+        'committed',
+        questionId
+      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
     )
 }

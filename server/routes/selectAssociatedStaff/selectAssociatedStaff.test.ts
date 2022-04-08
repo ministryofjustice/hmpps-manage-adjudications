@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
+import { offenceCodeSelection, selectAssociatedStaff } from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/userService')
@@ -16,7 +17,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { userService, placeOnReportService },
-    { redirectUrl: '/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3' }
+    { redirectUrl: `${offenceCodeSelection.urls.question(893, 'committed', '1-1-1')}?selectedAnswerId=1-1-1-3` }
   )
 })
 
@@ -57,7 +58,7 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-staff?staffFirstName=john&staffLastName=smith')
+        .get(`${selectAssociatedStaff.root}?staffFirstName=john&staffLastName=smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
@@ -65,7 +66,11 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            '<a href="/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>'
+            `<a href="${offenceCodeSelection.urls.question(
+              893,
+              'committed',
+              '1-1-1'
+            )}?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>`
           )
         })
     })
@@ -78,7 +83,7 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-associated-staff?staffFirstName=john&staffLastName=smith')
+        .get(`${selectAssociatedStaff.root}?staffFirstName=john&staffLastName=smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
@@ -92,17 +97,17 @@ describe('GET /select-associated-staff', () => {
 describe('POST /select-associated-staff', () => {
   it('should redirect to select staff member page with the correct search text and redirect URL intact', () => {
     return request(app)
-      .post('/select-associated-staff')
+      .post(selectAssociatedStaff.root)
       .send({ staffFirstName: 'john', staffLastName: 'doe' })
       .expect(
         'Location',
-        '/select-associated-staff?staffFirstName=john&staffLastName=doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3'
+        `${selectAssociatedStaff.root}?staffFirstName=john&staffLastName=doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3`
       )
   })
 
   it('should render validation messages', () => {
     return request(app)
-      .post('/select-associated-staff')
+      .post(selectAssociatedStaff.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Select a staff member')

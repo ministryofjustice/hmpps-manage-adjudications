@@ -7,7 +7,6 @@ import UserService from '../../services/userService'
 import {
   allCompletedReports,
   incidentDetails,
-  incidentStatementUrls,
   printReport,
   prisonerReport,
   yourCompletedReports,
@@ -35,11 +34,13 @@ const getVariablesForPageType = (
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.review}`,
+      printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.review(
+        adjudicationNumber
+      )}`,
       editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=${prisonerReport.urls.review}`,
+      )}?referrer=${prisonerReport.urls.review(adjudicationNumber)}`,
       returnLinkURL: allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
     }

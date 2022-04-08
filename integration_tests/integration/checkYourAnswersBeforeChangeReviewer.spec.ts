@@ -1,3 +1,4 @@
+import { checkYourAnswers, confirmedOnReport, incidentDetails, prisonerReport } from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReviewer'
 import Page from '../pages/page'
 
@@ -169,7 +170,7 @@ context('Check Your Answers', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary().should('exist')
@@ -181,7 +182,7 @@ context('Check Your Answers', () => {
     CheckYourAnswersPage.exitButton().contains('Cancel')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary()
@@ -203,13 +204,13 @@ context('Check Your Answers', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
   })
   it('should contain the correct offence details', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.offenceDetailsSummary()
@@ -239,36 +240,36 @@ context('Check Your Answers', () => {
       })
   })
   it('should go to the completion page (changed - reviewer) if the user submits changes to the report', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-placed-on-report/234/changes-confirmed/review')
+      expect(loc.pathname).to.eq(confirmedOnReport.urls.reviewerView(234))
     })
   })
   it('should go to the prisoner report page if the user cancels', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/prisoner-report/234/review')
+      expect(loc.pathname).to.eq(`${prisonerReport.urls.review(234)}`)
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(`/check-your-answers/3456/review`)
+    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/submitted/edit')
-      expect(loc.href).to.include('?referrer=/check-your-answers/3456/review')
+      expect(loc.pathname).to.eq(incidentDetails.urls.submittedEdit('G6415GD', 3456))
+      expect(loc.href).to.include(`?referrer=${checkYourAnswers.urls.review(3456)}`)
     })
   })
   it('should go to the incident details page if the offence details change link is clicked - to enter new offences', () => {
-    cy.visit(`/check-your-answers/3456`)
+    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+      expect(loc.pathname).to.eq(incidentDetails.urls.edit('G6415GD', 3456))
     })
   })
 })

@@ -4,7 +4,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
-import { detailsOfOffence, incidentStatementUrls } from '../../utils/urlGenerator'
+import { detailsOfOffence, incidentStatementUrls, offenceCodeSelection } from '../../utils/urlGenerator'
 
 export default class DetailsOfOffenceRoutes {
   constructor(
@@ -44,6 +44,7 @@ export default class DetailsOfOffenceRoutes {
       offences,
       adjudicationNumber,
       incidentRole,
+      offenceCodeSelectionUrl: `${offenceCodeSelection.urls.start(adjudicationNumber, incidentRole)}`,
     })
   }
 
@@ -53,7 +54,7 @@ export default class DetailsOfOffenceRoutes {
     const { incidentRole } = await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const { addOffence } = req.body
     if (addOffence) {
-      return res.redirect(`/offence-code-selection/${adjudicationNumber}/${incidentRole}`)
+      return res.redirect(offenceCodeSelection.urls.start(adjudicationNumber, incidentRole))
     }
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)

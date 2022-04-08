@@ -2,6 +2,7 @@ import request from 'superagent'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
+import { detailsOfOffence, offenceCodeSelection } from '../../server/utils/urlGenerator'
 
 context('Details of offence', () => {
   beforeEach(() => {
@@ -129,7 +130,7 @@ context('Details of offence', () => {
 
   it('select and offence for the first time and see it on the offence details page.', () => {
     // Choose a complex offence so that we test all of the functionality.
-    cy.visit(`/offence-code-selection/200/assisted/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(200, 'assisted')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -148,35 +149,37 @@ context('Details of offence', () => {
     raciallyAggravated.radio('1-1-1-1-1').click()
     whoWasAssaultedPage.continue().click()
     // We should now be on the offence details page.
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     // Prisoner playback
-    detailsOfOffence.prisonerNameDiv().contains('Smith, John')
+    detailsOfOffencePage.prisonerNameDiv().contains('Smith, John')
     // Questions and Answers
-    detailsOfOffence
+    detailsOfOffencePage
       .questionAnswerSectionQuestion(1, 1)
       .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
-    detailsOfOffence
+    detailsOfOffencePage
       .questionAnswerSectionAnswer(1, 1)
       .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffence.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffence.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
-    detailsOfOffence.questionAnswerSectionQuestion(1, 3).contains('Who did John Smith assist James Jones to assault?')
-    detailsOfOffence.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
-    detailsOfOffence.questionAnswerSectionQuestion(1, 4).contains('Was the incident a racially aggravated assault?')
-    detailsOfOffence.questionAnswerSectionAnswer(1, 4).contains('Yes')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
+    detailsOfOffencePage
+      .questionAnswerSectionQuestion(1, 3)
+      .contains('Who did John Smith assist James Jones to assault?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 4).contains('Was the incident a racially aggravated assault?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 4).contains('Yes')
     // Offence details
-    detailsOfOffence.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
-    detailsOfOffence
+    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
+    detailsOfOffencePage
       .offenceSection(1)
       .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
-    detailsOfOffence.offenceSection(1).contains('Prison rule 51, paragraph 1')
-    detailsOfOffence.offenceSection(1).contains('Commits any assault')
+    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
+    detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
     // Delete link
-    detailsOfOffence.deleteLink(1).should('exist')
+    detailsOfOffencePage.deleteLink(1).should('exist')
   })
 
   it('select multiple offences and see them all', () => {
-    cy.visit(`/offence-code-selection/200/assisted/1`)
+    cy.visit(`${offenceCodeSelection.urls.start(200, 'assisted')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -186,9 +189,9 @@ context('Details of offence', () => {
     whatDidTheIncidentInvolve.radio('1-1-2').check()
     whatDidTheIncidentInvolve.continue().click()
     // We should now be on the offence details page
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     // Add another offence
-    detailsOfOffence.addAnotherOffence().click()
+    detailsOfOffencePage.addAnotherOffence().click()
     const whatTypeOfOffencePage2 = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -198,38 +201,40 @@ context('Details of offence', () => {
     whatDidTheIncidentInvolve2.radio('1-1-3').check()
     whatDidTheIncidentInvolve2.continue().click()
     // We should be on the offence details page again. There should be two offences.
-    detailsOfOffence.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
-    detailsOfOffence.questionAnswerSectionAnswer(2, 2).contains('Endangering the health or personal safety of someone')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
+    detailsOfOffencePage
+      .questionAnswerSectionAnswer(2, 2)
+      .contains('Endangering the health or personal safety of someone')
   })
 
   it('offence details page when there is already an offence saved', () => {
-    cy.visit(`/details-of-offence/201`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.questionAnswerSectionQuestion(1, 1).contains('What type of offence did John Smith commit?')
-    detailsOfOffence
+    cy.visit(`${detailsOfOffence.urls.start(201)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 1).contains('What type of offence did John Smith commit?')
+    detailsOfOffencePage
       .questionAnswerSectionAnswer(1, 1)
       .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffence.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffence.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
-    detailsOfOffence.questionAnswerSectionQuestion(1, 3).contains('Who was assaulted?')
-    detailsOfOffence.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
-    detailsOfOffence.offenceSection(1).contains('Prison rule 51, paragraph 1')
-    detailsOfOffence.offenceSection(1).contains('Commits any assault')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 3).contains('Who was assaulted?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
+    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
+    detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
   })
 
   it('offence details page when there is no offences', () => {
-    cy.visit(`/details-of-offence/200`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.continue().click()
+    cy.visit(`${detailsOfOffence.urls.start(200)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.continue().click()
     new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     ).checkOnPage()
   })
 
   it('offence details saves as expected', () => {
-    cy.visit(`/details-of-offence/201`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.saveAndContinue().click()
+    cy.visit(`${detailsOfOffence.urls.start(201)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {
       adjudicationNumber: 201,
       offenceDetails: [
