@@ -3,6 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { allCompletedReports } from '../../utils/urlGenerator'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -81,7 +82,7 @@ describe('GET /all-completed-reports', () => {
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .get('/all-completed-reports')
+      .get(allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('All completed reports')
@@ -91,7 +92,7 @@ describe('GET /all-completed-reports', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 
     return request(app)
-      .get('/all-completed-reports')
+      .get(allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('All completed reports')
@@ -100,7 +101,7 @@ describe('GET /all-completed-reports', () => {
   it('should load the correct details', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .get('/all-completed-reports')
+      .get(allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Smith, John')

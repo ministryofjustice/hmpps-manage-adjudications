@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import { selectReport, taskList } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -55,7 +56,7 @@ describe('GET /select-report', () => {
           friendlyName: 'Udfsanaye Aidetria',
           incidentDate: '12 October 2021',
           incidentTime: '20:00',
-          taskListUrl: '/place-the-prisoner-on-report/31',
+          taskListUrl: `${taskList.urls.start(31)}`,
         },
         {
           id: 58,
@@ -74,13 +75,13 @@ describe('GET /select-report', () => {
           friendlyName: 'Carroll Babik',
           incidentDate: '11 November 2021',
           incidentTime: '15:15',
-          taskListUrl: '/place-the-prisoner-on-report/58',
+          taskListUrl: `${taskList.urls.start(58)}`,
         },
       ])
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get('/select-report')
+        .get(selectReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Select a report')
@@ -99,7 +100,7 @@ describe('GET /select-report', () => {
     })
     it('shows default message', () => {
       return request(app)
-        .get('/select-report')
+        .get(selectReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Select a report')

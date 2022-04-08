@@ -3,6 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
+import { deletePerson, incidentDetails } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -16,7 +17,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, userService },
-    { redirectUrl: '/incident-details/G6123VU/466/edit' }
+    { redirectUrl: incidentDetails.urls.edit('G6123VU', 466) }
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
@@ -53,7 +54,7 @@ afterEach(() => {
 describe('GET /delete-person', () => {
   it('should load the delete person page and render the correct name - prn', () => {
     return request(app)
-      .get('/delete-person?associatedPersonId=G6415GD')
+      .get(`${deletePerson.root}?associatedPersonId=G6415GD`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Do you want to delete Udfsanaye Aidetria?')
@@ -61,7 +62,7 @@ describe('GET /delete-person', () => {
   })
   it('should load the delete person page and render the correct name - user id', () => {
     return request(app)
-      .get('/delete-person?associatedPersonId=NTEST_GEN')
+      .get(`${deletePerson.root}?associatedPersonId=NTEST_GEN`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Do you want to delete Naomi Test?')
@@ -72,25 +73,25 @@ describe('GET /delete-person', () => {
 describe('POST /delete-person', () => {
   it('should redirect to the redirectUrl provided on the session with deleted person query if yes option selected', () => {
     return request(app)
-      .post('/delete-person?associatedPersonId=G6415GD')
+      .post(`${deletePerson.root}?associatedPersonId=G6415GD`)
       .send({
         deletePerson: 'yes',
       })
       .expect(302)
-      .expect('Location', '/incident-details/G6123VU/466/edit?personDeleted=true')
+      .expect('Location', `${incidentDetails.urls.edit('G6123VU', 466)}?personDeleted=true`)
   })
   it('should redirect to the redirectUrl provided on the session with selected person query if no option selected', () => {
     return request(app)
-      .post('/delete-person?associatedPersonId=G6415GD')
+      .post(`${deletePerson.root}?associatedPersonId=G6415GD`)
       .send({
         deletePerson: 'no',
       })
       .expect(302)
-      .expect('Location', '/incident-details/G6123VU/466/edit?selectedPerson=G6415GD')
+      .expect('Location', `${incidentDetails.urls.edit('G6123VU', 466)}?selectedPerson=G6415GD`)
   })
   it('should render an error summary if no radio is selected', () => {
     return request(app)
-      .post('/delete-person?associatedPersonId=G6415GD')
+      .post(`${deletePerson.root}?associatedPersonId=G6415GD`)
       .send({})
       .expect(res => {
         expect(res.text).toContain('There is a problem')

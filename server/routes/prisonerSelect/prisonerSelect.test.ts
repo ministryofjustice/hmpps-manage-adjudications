@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
+import { incidentDetails, selectPrisoner } from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/prisonerSearchService')
@@ -28,14 +29,14 @@ describe('GET /select-prisoner', () => {
           friendlyName: 'John Smith',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
-          incidentDetailsUrl: '/incident-details/A1234AA',
+          incidentDetailsUrl: incidentDetails.urls.start('A1234AA'),
         } as PrisonerSearchSummary,
       ])
     })
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-prisoner?searchTerm=Smith')
+        .get(`${selectPrisoner.root}?searchTerm=Smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
@@ -46,7 +47,9 @@ describe('GET /select-prisoner', () => {
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('1-2-015')
           expect(res.text).toContain(
-            '<a href="/incident-details/A1234AA" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>'
+            `<a href="${incidentDetails.urls.start(
+              'A1234AA'
+            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`
           )
         })
     })
@@ -59,7 +62,7 @@ describe('GET /select-prisoner', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get('/select-prisoner?searchTerm=Smith')
+        .get(`${selectPrisoner.root}?searchTerm=Smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
@@ -72,14 +75,14 @@ describe('GET /select-prisoner', () => {
 describe('POST /select-prisoner', () => {
   it('should redirect to select prisoner page with the correct search text', () => {
     return request(app)
-      .post('/select-prisoner')
+      .post(selectPrisoner.root)
       .send({ searchTerm: 'Smith' })
-      .expect('Location', '/select-prisoner?searchTerm=Smith')
+      .expect('Location', `${selectPrisoner.root}?searchTerm=Smith`)
   })
 
   it('should render validation messages', () => {
     return request(app)
-      .post('/select-prisoner')
+      .post(selectPrisoner.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Select a prisoner')

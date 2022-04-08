@@ -1,5 +1,6 @@
 import SelectAssociatedPrisoner from '../pages/selectAssociatedPrisoner'
 import Page from '../pages/page'
+import { selectAssociatedPrisoner } from '../../server/utils/urlGenerator'
 
 context('Select an associated prisoner', () => {
   context('with data', () => {
@@ -27,7 +28,7 @@ context('Select an associated prisoner', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/select-associated-prisoner?searchTerm=T3356FU`)
+      cy.visit(`${selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
       const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
 
       SelectAssociatedPrisonerPage.searchTermInput().should('exist')
@@ -35,7 +36,7 @@ context('Select an associated prisoner', () => {
       SelectAssociatedPrisonerPage.noResultsMessage().should('not.exist')
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/select-associated-prisoner?searchTerm=T3356FU`)
+      cy.visit(`${selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
       const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
 
       SelectAssociatedPrisonerPage.resultsTable()
@@ -79,7 +80,7 @@ context('Select an associated prisoner', () => {
           },
         ],
       })
-      cy.visit(`/select-associated-prisoner?searchTerm=T3356FU`)
+      cy.visit(`${selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
       const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
       SelectAssociatedPrisonerPage.searchTermInput().clear().type('Jones')
       SelectAssociatedPrisonerPage.submitButton().click()
@@ -97,7 +98,7 @@ context('Select an associated prisoner', () => {
         })
     })
     it('should show error message if nothing is entered into search box on submit', () => {
-      cy.visit(`/select-associated-prisoner?searchTerm=T3356FU`)
+      cy.visit(`${selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
       const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
       SelectAssociatedPrisonerPage.searchTermInput().clear()
       SelectAssociatedPrisonerPage.submitButton().click()

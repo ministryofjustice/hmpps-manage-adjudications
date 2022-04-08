@@ -5,6 +5,7 @@ import LocationService from '../../services/locationService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
+import { prisonerReport } from '../../utils/urlGenerator'
 
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
@@ -134,10 +135,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /prisoner-report', () => {
+describe('GET prisoner report', () => {
   it('should load the prisoner report page', () => {
     return request(app)
-      .get('/prisoner-report/12345/report')
+      .get(prisonerReport.urls.report(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Bobby Da Smith Jones’ report')

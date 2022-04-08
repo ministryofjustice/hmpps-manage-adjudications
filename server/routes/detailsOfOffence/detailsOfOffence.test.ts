@@ -10,6 +10,7 @@ import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { detailsOfOffence } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -173,7 +174,7 @@ afterEach(() => {
 describe('GET /details-of-offence/100 view', () => {
   it('should load the offence details page', () => {
     return request(app)
-      .get('/details-of-offence/100/')
+      .get(`${detailsOfOffence.urls.start(100)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         // Title
@@ -199,11 +200,11 @@ describe('POST /details-of-offence/100', () => {
   it('should save the offence', async () => {
     const agent = request.agent(app)
     return agent
-      .get('/details-of-offence/100/')
+      .get(`${detailsOfOffence.urls.start(100)}`)
       .expect(200)
       .then(() =>
         agent
-          .post('/details-of-offence/100/')
+          .post(`${detailsOfOffence.urls.start(100)}`)
           .expect(302)
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(

@@ -1,6 +1,7 @@
 import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
+import { taskList } from '../utils/urlGenerator'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
@@ -535,7 +536,7 @@ describe('placeOnReportService', () => {
           },
           incidentTime: '09:45',
           prisonerNumber: 'G2996UX',
-          taskListUrl: '/place-the-prisoner-on-report/2',
+          taskListUrl: `${taskList.urls.start(2)}`,
         },
         {
           startedByUserId: 'user1',
@@ -553,7 +554,7 @@ describe('placeOnReportService', () => {
           },
           incidentTime: '14:15',
           prisonerNumber: 'A12345',
-          taskListUrl: '/place-the-prisoner-on-report/1',
+          taskListUrl: `${taskList.urls.start(1)}`,
         },
       ])
     })
