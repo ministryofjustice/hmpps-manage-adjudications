@@ -4,6 +4,7 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
+const getBatchPrisonerDetails = jest.fn()
 const postDraftIncidentStatement = jest.fn()
 const startNewDraftAdjudication = jest.fn()
 const getDraftAdjudication = jest.fn()
@@ -16,7 +17,7 @@ const getAgency = jest.fn()
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getPrisonerImage, getPrisonerDetails, getAgency }
+    return { getPrisonerImage, getPrisonerDetails, getAgency, getBatchPrisonerDetails }
   })
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
@@ -473,20 +474,22 @@ describe('placeOnReportService', () => {
 
   describe('getAllDraftAdjudicationsForUser', () => {
     it('gets all the users draft reports and enhances them, and then sorts by surname', async () => {
-      getPrisonerDetails.mockResolvedValueOnce({
-        offenderNo: 'A12345',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015' },
-        categoryCode: 'C',
-      })
-      getPrisonerDetails.mockResolvedValueOnce({
-        offenderNo: 'G2996UX',
-        firstName: 'JACK',
-        lastName: 'BURROWS',
-        assignedLivingUnit: { description: '1-2-015' },
-        categoryCode: 'C',
-      })
+      getBatchPrisonerDetails.mockResolvedValue([
+        {
+          offenderNo: 'A12345',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          assignedLivingUnit: { description: '1-2-015' },
+          categoryCode: 'C',
+        },
+        {
+          offenderNo: 'G2996UX',
+          firstName: 'JACK',
+          lastName: 'BURROWS',
+          assignedLivingUnit: { description: '1-2-015' },
+          categoryCode: 'C',
+        },
+      ])
       getAllDraftAdjudicationsForUser.mockResolvedValue({
         draftAdjudications: [
           {
