@@ -156,6 +156,7 @@ export default class OffenceCodeRoutes {
         id: a.id(),
         label: a.getProcessedText(placeholderValues),
         type: a.getType().toString(),
+        offenceCode: a.getOffenceCode(),
       }
     })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
