@@ -1,4 +1,5 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
+import { offenceCodeSelection } from '../../server/utils/urlGenerator'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -500,7 +501,7 @@ context('Incident details', () => {
 })
 
 const getToAssaultPage = (): OffenceCodeSelection => {
-  cy.visit(`/offence-code-selection/100/committed/1`)
+  cy.visit(offenceCodeSelection.urls.start(100, 'committed'))
   const page = new OffenceCodeSelection('What type of offence did John Smith commit?')
   page.radioLabelFromText('Assault, fighting, or endangering the health or personal safety of others').click()
   page.continue().click()
@@ -510,7 +511,7 @@ const getToAssaultPage = (): OffenceCodeSelection => {
 }
 
 const checkSimpleDecisionPath = (labels: string[], endOffenceCode: number) => {
-  cy.visit(`/offence-code-selection/100/committed/1`)
+  cy.visit(offenceCodeSelection.urls.start(100, 'committed'))
   const page = new OffenceCodeSelection('What type of offence did John Smith commit?')
   labels.forEach((label, index) => {
     if (labels.length - 1 === index) {
