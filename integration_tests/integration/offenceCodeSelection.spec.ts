@@ -4,7 +4,7 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
 import { offenceCodeSelection, selectAssociatedStaff } from '../../server/utils/urlGenerator'
 
-context('Incident details', () => {
+context('Offence details', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -180,24 +180,24 @@ context('Incident details', () => {
     })
   })
   it('the first page for committing an offence title', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     new OffenceCodeSelection('What type of offence did John Smith commit?').checkOnPage()
-    cy.visit(`${offenceCodeSelection.urls.start(101, 'attempted')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(101, 'attempted', '1')}`)
     new OffenceCodeSelection('What type of offence did John Smith attempt to commit?').checkOnPage()
-    cy.visit(`${offenceCodeSelection.urls.start(102, 'incited')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(102, 'incited', '1')}`)
     new OffenceCodeSelection('What type of offence did John Smith incite another prisoner to commit?').checkOnPage()
-    cy.visit(`${offenceCodeSelection.urls.start(103, 'assisted')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(103, 'assisted', '1')}`)
   })
 
   it('the cancel button', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.cancel().click()
     Page.verifyOnPage(CheckYourAnswersPage)
   })
 
   it('the first page should have the expected radios', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     // These are very specific to the current decision data so don't check too many.
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radios().should('exist')
@@ -212,21 +212,21 @@ context('Incident details', () => {
   })
 
   it('check validation when there is no radio selected', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.continue().click()
     whatTypeOfOffencePage.form().contains('Please make a choice')
   })
 
   it('cancel', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.cancel().click()
     cy.url().should('include', 'place-the-prisoner-on-report/100')
   })
 
   it('select another radio and check that we get sent to the page we expect', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     // This is specific to the current decision data so only check one.
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').should('exist').check()
@@ -373,7 +373,7 @@ context('Incident details', () => {
   })
 
   it('end to end', () => {
-    cy.visit(`${offenceCodeSelection.urls.start(100, 'committed')}`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
