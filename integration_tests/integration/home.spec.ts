@@ -1,3 +1,4 @@
+import { homepageUrl } from '../../server/utils/urlGenerator'
 import Homepage from '../pages/home'
 import Page from '../pages/page'
 
@@ -10,13 +11,13 @@ context('Home page', () => {
   })
 
   it('should see the feedback banner', () => {
-    cy.visit(`/place-a-prisoner-on-report`)
+    cy.visit(homepageUrl.root)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
   })
 
   it('should only see some tiles without the reviewer role', () => {
-    cy.visit(`/place-a-prisoner-on-report`)
+    cy.visit(homepageUrl.root)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
@@ -27,7 +28,7 @@ context('Home page', () => {
 
   it('should see all the tiles with the reviewer role', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.visit(`/place-a-prisoner-on-report`)
+    cy.visit(homepageUrl.root)
     const homepage: Homepage = Page.verifyOnPage(Homepage)
     homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')

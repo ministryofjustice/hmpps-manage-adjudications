@@ -144,7 +144,7 @@ context('Check Your Answers', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary().should('exist')
@@ -178,7 +178,7 @@ context('Check Your Answers', () => {
       })
   })
   it('should contain the correct offence details', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.offenceDetailsSummary()
@@ -208,13 +208,13 @@ context('Check Your Answers', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
   })
   it('should go to the completion page if the user submits', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
@@ -238,7 +238,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident details page if the offence details change link is clicked - to reenter new offences', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
@@ -246,7 +246,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {

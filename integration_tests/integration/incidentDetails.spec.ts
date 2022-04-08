@@ -127,7 +127,7 @@ context('Incident details', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('exist')
     incidentDetailsPage.reportingOfficerName().should('exist')
@@ -140,18 +140,18 @@ context('Incident details', () => {
     incidentDetailsPage.submitButton().should('exist')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
     incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
   it('should show the prisoners name in the radio button question', () => {
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
   })
   it('should show error if a date is not selected', () => {
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
@@ -166,7 +166,7 @@ context('Incident details', () => {
   })
   it('should show error if one of the time fields is not filled in correctly', () => {
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputMinutes().type('30')
@@ -181,7 +181,7 @@ context('Incident details', () => {
   })
   it('should show error if a location is not selected', () => {
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('12')
@@ -211,7 +211,7 @@ context('Incident details', () => {
       },
     })
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('12')
@@ -220,12 +220,12 @@ context('Incident details', () => {
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(3456, 'attempted', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(3456, 'attempted', '1'))
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner incited', () => {
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('12')
@@ -237,7 +237,7 @@ context('Incident details', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(3456, 'incited', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(3456, 'incited', '1'))
     })
   })
   it('should submit form successfully if all data entered - associated prisoner required - prisoner assisted', () => {
@@ -258,7 +258,7 @@ context('Incident details', () => {
       },
     })
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('12')
@@ -270,12 +270,12 @@ context('Incident details', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(3456, 'assisted', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(3456, 'assisted', '1'))
     })
   })
   it('should submit form successfully with correct data if the user changes their radio selection after searching', () => {
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('12')
@@ -294,12 +294,12 @@ context('Incident details', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(3456, 'incited', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(3456, 'incited', '1'))
     })
   })
   it('should show error summary if an associated prisoner is not entered', () => {
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('12')
@@ -316,7 +316,7 @@ context('Incident details', () => {
   })
   it('should redirect the user to /offence-code-selection/ if form is incomplete', () => {
     const today = new Date()
-    cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+    cy.visit(incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
     incidentDetailsPage.timeInputHours().type('03')
@@ -325,7 +325,7 @@ context('Incident details', () => {
     incidentDetailsPage.radioButtons().find('input[value="committed"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(3456, 'committed', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(3456, 'committed', '1'))
     })
   })
   context('Redirect on error', () => {
@@ -334,7 +334,7 @@ context('Incident details', () => {
     })
     it('should redirect back to incident details if an error occurs whilst calling the API', () => {
       const today = new Date()
-      cy.visit(`${incidentDetails.urls.start('G6415GD')}`)
+      cy.visit(incidentDetails.urls.start('G6415GD'))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
       incidentDetailsPage.timeInputHours().type('12')
@@ -343,11 +343,11 @@ context('Incident details', () => {
       incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.not.eq(`${offenceCodeSelection.urls.question(3456, 'attempted', '1')}`)
+        expect(loc.pathname).to.not.eq(offenceCodeSelection.urls.question(3456, 'attempted', '1'))
       })
       incidentDetailsPage.errorContinueButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(`${incidentDetails.urls.start('G6415GD')}`)
+        expect(loc.pathname).to.eq(incidentDetails.urls.start('G6415GD'))
       })
       incidentDetailsPage.timeInputHours().should('have.value', '')
       incidentDetailsPage.timeInputMinutes().should('have.value', '')

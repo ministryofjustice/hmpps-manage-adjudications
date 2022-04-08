@@ -83,7 +83,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('The notification of being on report should present on the print report page', () => {
-    cy.visit(`${confirmedOnReport.urls.start(1524242)}`)
+    cy.visit(confirmedOnReport.urls.start(1524242))
     cy.get('[data-qa=printLink]').click()
     cy.request(printPdf.urls.start(1524242)).should(res => {
       expect(res.status).to.eq(200)

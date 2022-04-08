@@ -1,4 +1,4 @@
-import { confirmedOnReport } from '../../server/utils/urlGenerator'
+import { confirmedOnReport, homepageUrl } from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReport'
 import Page from '../pages/page'
 
@@ -84,7 +84,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(`${confirmedOnReport.urls.start(1524242)}`)
+    cy.visit(confirmedOnReport.urls.start(1524242))
     Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('Your report number is')
     cy.contains('1524242')
@@ -97,11 +97,11 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
-    cy.visit(`${confirmedOnReport.urls.start(1524242)}`)
+    cy.visit(confirmedOnReport.urls.start(1524242))
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq('/place-a-prisoner-on-report')
+      expect(loc.pathname).to.eq(homepageUrl.root)
     })
   })
 })

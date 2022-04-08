@@ -4,7 +4,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
-import { checkYourAnswers, prisonerReport } from '../../utils/urlGenerator'
+import { checkYourAnswers } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -12,7 +12,6 @@ type PageData = {
   incidentStatementComplete?: string
   prisoner?: PrisonerResult
   adjudicationNumber?: number
-  prisonerReportUrl?: string
 }
 
 export default class IncidentStatementSubmittedEditRoutes {
@@ -28,7 +27,6 @@ export default class IncidentStatementSubmittedEditRoutes {
       adjudicationEdited: true,
       submitButtonText: 'Continue',
       adjudicationNumber,
-      prisonerReportUrl: prisonerReport.urls.report(adjudicationNumber),
     })
   }
 

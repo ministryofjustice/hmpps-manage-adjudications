@@ -183,3 +183,10 @@ export const deletePerson = {
     start: '/',
   },
 }
+
+export const homepageUrl = {
+  root: '/place-a-prisoner-on-report',
+  matchers: {
+    start: '/',
+  },
+}

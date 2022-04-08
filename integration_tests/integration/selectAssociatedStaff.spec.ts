@@ -113,7 +113,7 @@ context('Select associated staff', () => {
       })
   })
   it('returns to the previous page with the selected staff member details', () => {
-    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
+    cy.visit(offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
