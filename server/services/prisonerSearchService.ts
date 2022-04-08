@@ -5,13 +5,11 @@ import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchResult from '../data/prisonerSearchResult'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import { convertToTitleCase } from '../utils/utils'
-import { incidentDetails } from '../utils/urlGenerator'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
   displayName: string
   friendlyName: string
   displayCellLocation: string
-  incidentDetailsUrl: string
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
@@ -56,7 +54,6 @@ export default class PrisonerSearchService {
       return {
         ...prisoner,
         ...PrisonerSearchService.enhancePrisoner(prisoner),
-        incidentDetailsUrl: incidentDetails.urls.start(prisoner.prisonerNumber),
       }
     })
 

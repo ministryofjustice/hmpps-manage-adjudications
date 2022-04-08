@@ -6,6 +6,14 @@ import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive } from './utils'
+import {
+  offenceCodeSelection,
+  detailsOfOffence,
+  incidentDetails,
+  incidentStatementUrls,
+  checkYourAnswers,
+  taskList,
+} from './urlGenerator'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -122,4 +130,12 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addFilter('offenceCodeSelection', offenceCodeSelection.urls.start)
+  njkEnv.addFilter('detailsOfOffence', detailsOfOffence.urls.start)
+  njkEnv.addFilter('incidentDetailsStart', incidentDetails.urls.start)
+  njkEnv.addFilter('incidentDetailsEdit', incidentDetails.urls.edit)
+  njkEnv.addFilter('incidentStatement', incidentStatementUrls.urls.start)
+  njkEnv.addFilter('incidentStatementSubmittedEdit', incidentStatementUrls.urls.submittedEdit)
+  njkEnv.addFilter('checkYourAnswers', checkYourAnswers.urls.start)
+  njkEnv.addFilter('taskList', taskList.urls.start)
 }

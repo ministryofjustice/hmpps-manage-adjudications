@@ -50,7 +50,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <p class="govuk-body"><a href="/offence-code-selection/{{ adjudicationNumber }}/{{ incidentRole }}"
+            <p class="govuk-body"><a href="{{ adjudicationNumber | offenceCodeSelection(incidentRole) }}"
                                      data-qa="add-another-offence">Add another offence</a></p>
             {{ govukButton({
                 text: "Save and continue",

@@ -535,7 +535,6 @@ describe('placeOnReportService', () => {
           },
           incidentTime: '09:45',
           prisonerNumber: 'G2996UX',
-          taskListUrl: '/place-the-prisoner-on-report/2',
         },
         {
           startedByUserId: 'user1',
@@ -553,7 +552,6 @@ describe('placeOnReportService', () => {
           },
           incidentTime: '14:15',
           prisonerNumber: 'A12345',
-          taskListUrl: '/place-the-prisoner-on-report/1',
         },
       ])
     })

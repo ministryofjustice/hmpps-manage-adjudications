@@ -45,7 +45,6 @@ const getVariablesForPageType = (
     }
   }
   return {
-    editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(draftAdjudicationNumber),
     printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.report}`,
     editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(prisonerNumber, draftAdjudicationNumber)}?referrer=${
       prisonerReport.urls.report
@@ -109,6 +108,7 @@ export default class prisonerReportRoutes {
       prisoner,
       prisonerReportData,
       reportNo: draftAdjudication.adjudicationNumber,
+      draftAdjudicationNumber: draftAdjudication.id,
       offences,
       statementEditable: !this.pageOptions.isReviewerView(),
       ...prisonerReportVariables,
