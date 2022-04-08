@@ -220,20 +220,24 @@ export default class PlaceOnReportService {
       user.activeCaseLoadId
     )
 
-    const enhanceReport = async (authToken: string, report: DraftAdjudication) => {
-      const prisoner = await new PrisonApiClient(authToken).getPrisonerDetails(report.prisonerNumber)
-      const displayName = convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`)
-      const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
-      const incidentDate = getDate(report.incidentDetails.dateTimeOfIncident, 'D MMMM YYYY')
-      const incidentTime = getTime(report.incidentDetails.dateTimeOfIncident)
-      const taskListUrl = taskList.urls.start(report.id)
-      return { ...report, displayName, friendlyName, incidentDate, incidentTime, taskListUrl }
-    }
+    const prisonerDetails = new Map(
+      (
+        await new PrisonApiClient(user.token).getBatchPrisonerDetails(
+          allAdjudications.draftAdjudications.map(report => report.prisonerNumber)
+        )
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+    )
 
     const getEnhancedReportsByUser = async () => {
-      return Promise.all(
-        allAdjudications.draftAdjudications.map((report: DraftAdjudication) => enhanceReport(token, report))
-      )
+      return allAdjudications.draftAdjudications.map(report => {
+        const prisoner = prisonerDetails.get(report.prisonerNumber)
+        const displayName = convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`)
+        const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
+        const incidentDate = getDate(report.incidentDetails.dateTimeOfIncident, 'D MMMM YYYY')
+        const incidentTime = getTime(report.incidentDetails.dateTimeOfIncident)
+        const taskListUrl = taskList.urls.start(report.id)
+        return { ...report, displayName, friendlyName, incidentDate, incidentTime, taskListUrl }
+      })
     }
 
     return getEnhancedReportsByUser().then(reportsByUser =>

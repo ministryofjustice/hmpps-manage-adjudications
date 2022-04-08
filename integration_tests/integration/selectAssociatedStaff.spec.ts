@@ -1,6 +1,7 @@
 import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
+import { offenceCodeSelection, selectAssociatedStaff } from '../../server/utils/urlGenerator'
 
 context('Select associated staff', () => {
   beforeEach(() => {
@@ -78,7 +79,7 @@ context('Select associated staff', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
+    cy.visit(`${selectAssociatedStaff.root}?staffFirstName=Bob&staffLastName=Smith`)
     const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
 
     selectAssociatedStaffPage.firstNameInput().should('exist')
@@ -87,7 +88,7 @@ context('Select associated staff', () => {
     selectAssociatedStaffPage.noResultsMessage().should('not.exist')
   })
   it('should contain the required page elements', () => {
-    cy.visit(`/select-associated-staff?staffFirstName=Bob&staffLastName=Smith`)
+    cy.visit(`${selectAssociatedStaff.root}?staffFirstName=Bob&staffLastName=Smith`)
     const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
 
     selectAssociatedStaffPage
@@ -112,7 +113,7 @@ context('Select associated staff', () => {
       })
   })
   it('returns to the previous page with the selected staff member details', () => {
-    cy.visit(`/offence-code-selection/100/committed/1`)
+    cy.visit(`${offenceCodeSelection.urls.question(100, 'committed', '1')}`)
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
@@ -125,11 +126,15 @@ context('Select associated staff', () => {
     whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Smith')
     whoWasAssaultedPage.searchStaff().click()
     const SelectStaffMemberPage = new SelectAssociatedStaff()
-    cy.url().should('include', '/select-associated-staff?staffFirstName=Bob&staffLastName=Smith')
+    cy.url().should('include', `${selectAssociatedStaff.root}?staffFirstName=Bob&staffLastName=Smith`)
     SelectStaffMemberPage.selectStaffMemberLink().click()
     cy.url().should(
       'include',
-      '/offence-code-selection/100/committed/1-1-1?selectedAnswerId=1-1-1-3&selectedPerson=BSMITH_GEN'
+      `${offenceCodeSelection.urls.question(
+        100,
+        'committed',
+        '1-1-1'
+      )}?selectedAnswerId=1-1-1-3&selectedPerson=BSMITH_GEN`
     )
   })
 })

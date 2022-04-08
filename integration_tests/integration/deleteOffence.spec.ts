@@ -1,6 +1,7 @@
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import DeleteOffence from '../pages/deleteOffence'
+import { detailsOfOffence } from '../../server/utils/urlGenerator'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -88,44 +89,44 @@ context('Incident details', () => {
   })
 
   it('Go to the delete offence page', () => {
-    cy.visit(`/details-of-offence/300`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.questionAnswerSectionAnswer(2, 2).contains('Fighting with someone')
-    detailsOfOffence.deleteLink(2).click()
+    cy.visit(`${detailsOfOffence.urls.start(300)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.questionAnswerSectionAnswer(2, 2).contains('Fighting with someone')
+    detailsOfOffencePage.deleteLink(2).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.questionAnswerSectionAnswer(2, 2).contains('Fighting with someone')
   })
 
   it('Go to the delete offence page and get a validation failure', () => {
-    cy.visit(`/details-of-offence/300`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.deleteLink(2).click()
+    cy.visit(`${detailsOfOffence.urls.start(300)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.deleteLink(2).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.confirm().click()
     deleteOffence.form().contains('Please make a choice')
   })
 
   it('Go to the delete offence page and select yes', () => {
-    cy.visit(`/details-of-offence/300`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.questionAnswerSection(2).should('exist')
-    detailsOfOffence.deleteLink(2).click()
+    cy.visit(`${detailsOfOffence.urls.start(300)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.questionAnswerSection(2).should('exist')
+    detailsOfOffencePage.deleteLink(2).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.yesRadio().click()
     deleteOffence.confirm().click()
-    detailsOfOffence.checkOnPage()
-    detailsOfOffence.questionAnswerSection(2).should('not.exist')
+    detailsOfOffencePage.checkOnPage()
+    detailsOfOffencePage.questionAnswerSection(2).should('not.exist')
   })
 
   it('Go to the delete offence page and select no', () => {
-    cy.visit(`/details-of-offence/300`)
-    const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffence.questionAnswerSection(2).should('exist')
-    detailsOfOffence.deleteLink(2).click()
+    cy.visit(`${detailsOfOffence.urls.start(300)}`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.questionAnswerSection(2).should('exist')
+    detailsOfOffencePage.deleteLink(2).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.noRadio().click()
     deleteOffence.confirm().click()
-    detailsOfOffence.checkOnPage()
-    detailsOfOffence.questionAnswerSection(2).should('exist')
+    detailsOfOffencePage.checkOnPage()
+    detailsOfOffencePage.questionAnswerSection(2).should('exist')
   })
 })

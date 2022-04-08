@@ -1,5 +1,12 @@
 import TaskList from '../pages/taskList'
 import Page from '../pages/page'
+import {
+  checkYourAnswers,
+  detailsOfOffence,
+  incidentDetails,
+  incidentStatementUrls,
+  taskList,
+} from '../../server/utils/urlGenerator'
 
 context('Task list', () => {
   context('Just incident details completed', () => {
@@ -39,7 +46,7 @@ context('Task list', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
 
       TaskListPage.taskList().should('exist')
@@ -50,7 +57,7 @@ context('Task list', () => {
       TaskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.taskList()
         .find('td')
@@ -66,7 +73,7 @@ context('Task list', () => {
         })
     })
     it('should have the correct expiration date and time', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.expirationNotice().should(
         'contain.text',
@@ -74,19 +81,19 @@ context('Task list', () => {
       )
     })
     it('should route to the incident page if you click the link', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.incidentDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/incident-details/G6415GD/3456/edit')
+        expect(loc.pathname).to.eq(`${incidentDetails.urls.edit('G6415GD', 3456)}`)
       })
     })
     it('should route to the incident statement if you click the link', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.incidentStatementLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/incident-statement/3456')
+        expect(loc.pathname).to.eq(`${incidentStatementUrls.urls.start(3456)}`)
       })
     })
   })
@@ -135,7 +142,7 @@ context('Task list', () => {
       cy.signIn()
     })
     it('should have the correct statuses', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.taskList()
         .find('td')
@@ -151,16 +158,16 @@ context('Task list', () => {
         })
     })
     it('should not have an active accept details link', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.acceptDetailsLink().should('not.exist')
     })
     it('should route to the offence details page if you click the link', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.offenceDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/details-of-offence/3456')
+        expect(loc.pathname).to.eq(`${detailsOfOffence.urls.start(3456)}`)
       })
     })
   })
@@ -226,7 +233,7 @@ context('Task list', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
 
       TaskListPage.taskList().should('exist')
@@ -237,7 +244,7 @@ context('Task list', () => {
       TaskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.taskList()
         .find('td')
@@ -253,7 +260,7 @@ context('Task list', () => {
         })
     })
     it('should have the correct expiration date and time', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.expirationNotice().should(
         'contain.text',
@@ -323,7 +330,7 @@ context('Task list', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
 
       TaskListPage.taskList().should('exist')
@@ -334,7 +341,7 @@ context('Task list', () => {
       TaskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.taskList()
         .find('td')
@@ -350,7 +357,7 @@ context('Task list', () => {
         })
     })
     it('should have the correct expiration date and time', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.expirationNotice().should(
         'contain.text',
@@ -358,11 +365,11 @@ context('Task list', () => {
       )
     })
     it('should route to the check your answers page if you click the link', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.acceptDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/check-your-answers/3456')
+        expect(loc.pathname).to.eq(`${checkYourAnswers.urls.start(3456)}`)
       })
     })
   })
@@ -416,7 +423,7 @@ context('Task list', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
 
       TaskListPage.taskList().should('exist')
@@ -427,7 +434,7 @@ context('Task list', () => {
       TaskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.taskList()
         .find('td')
@@ -443,7 +450,7 @@ context('Task list', () => {
         })
     })
     it('should have the correct expiration date and time', () => {
-      cy.visit(`/place-the-prisoner-on-report/3456`)
+      cy.visit(`${taskList.urls.start(3456)}`)
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.expirationNotice().should(
         'contain.text',

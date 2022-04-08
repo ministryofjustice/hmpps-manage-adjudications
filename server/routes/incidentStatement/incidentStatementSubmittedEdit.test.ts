@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import { checkYourAnswers, incidentStatementUrls } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -55,7 +56,7 @@ afterEach(() => {
 describe('GET /incident-statement', () => {
   it('should load the incident statement page', () => {
     return request(app)
-      .get('/incident-statement/1/submitted/edit')
+      .get(`${incidentStatementUrls.urls.submittedEdit(1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident statement')
@@ -66,9 +67,9 @@ describe('GET /incident-statement', () => {
 describe('POST /incident-statement', () => {
   it('should redirect to check your answers page (edit version for after submission)', () => {
     return request(app)
-      .post('/incident-statement/1/submitted/edit')
+      .post(`${incidentStatementUrls.urls.submittedEdit(1)}`)
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
-      .expect('Location', '/check-your-answers/1/report')
+      .expect('Location', `${checkYourAnswers.urls.report(1)}`)
       .expect(_ => {
         expect(placeOnReportService.addOrUpdateDraftIncidentStatement).toHaveBeenLastCalledWith(
           1,
@@ -81,7 +82,7 @@ describe('POST /incident-statement', () => {
 
   it('should render error summary with correct validation message', () => {
     return request(app)
-      .post('/incident-statement/1/submitted/edit')
+      .post(`${incidentStatementUrls.urls.submittedEdit(1)}`)
       .send({ incidentStatement: '', incidentStatementComplete: 'yes' })
       .expect(res => {
         expect(res.text).toContain('There is a problem')
@@ -92,7 +93,7 @@ describe('POST /incident-statement', () => {
   it('should throw an error on api failure', () => {
     placeOnReportService.addOrUpdateDraftIncidentStatement.mockRejectedValue(new Error('error message content'))
     return request(app)
-      .post('/incident-statement/1/submitted/edit')
+      .post(`${incidentStatementUrls.urls.submittedEdit(1)}`)
       .send({ incidentStatement: 'Lorem Ipsum', incidentStatementComplete: 'yes' })
       .expect('Content-Type', /html/)
       .expect(res => {

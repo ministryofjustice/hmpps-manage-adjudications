@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { printReport } from '../../utils/urlGenerator'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -44,7 +45,7 @@ afterEach(() => {
 describe('GET /print-report', () => {
   it('should load the print page', () => {
     return request(app)
-      .get('/print-report/123')
+      .get(printReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Print a copy of this report')
@@ -63,7 +64,7 @@ describe('GET /print-report', () => {
       prisonerNeurodiversities: null,
     })
     return request(app)
-      .get('/print-report/123')
+      .get(printReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('They have recorded disabilities')
@@ -76,7 +77,7 @@ describe('GET /print-report', () => {
       prisonerPreferredNonEnglishLanguage: null,
     })
     return request(app)
-      .get('/print-report/123')
+      .get(printReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('John Smith’s preferred language is')
@@ -90,7 +91,7 @@ describe('GET /print-report', () => {
       prisonerOtherLanguages: null,
     })
     return request(app)
-      .get('/print-report/123')
+      .get(printReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('John Smith’s preferred language is')
@@ -110,7 +111,7 @@ describe('GET /print-report', () => {
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)
-      .get('/print-report/123')
+      .get(printReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: error message content')

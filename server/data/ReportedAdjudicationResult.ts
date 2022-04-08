@@ -22,5 +22,4 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   formattedDateTimeOfIncident: string
   dateTimeOfIncident: string
   reportingOfficer?: string
-  prisonerReportUrl?: string
 }
