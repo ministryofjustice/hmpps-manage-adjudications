@@ -38,36 +38,10 @@ context('Continue a report - select report', () => {
           },
         ],
       })
-      cy.task('stubGetPrisonerDetails', {
-        prisonerNumber: 'G2996UX',
-        response: {
-          offenderNo: 'G2996UX',
-          firstName: 'ABE',
-          lastName: 'SMITH',
-          assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)' },
-          categoryCode: 'C',
-          language: 'French',
-          alerts: [
-            { alertType: 'T', alertCode: 'TCPA' },
-            { alertType: 'X', alertCode: 'XCU' },
-          ],
-        },
-      })
-      cy.task('stubGetPrisonerDetails', {
-        prisonerNumber: 'G2996UP',
-        response: {
-          offenderNo: 'G2996UP',
-          firstName: 'SANDY',
-          lastName: 'BROOM',
-          assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)' },
-          categoryCode: 'C',
-          language: 'German',
-          alerts: [
-            { alertType: 'T', alertCode: 'TCPA' },
-            { alertType: 'X', alertCode: 'XCU' },
-          ],
-        },
-      })
+      cy.task('stubGetBatchPrisonerDetails', [
+        { offenderNo: 'G2996UX', firstName: 'ABE', lastName: 'SMITH' },
+        { offenderNo: 'G2996UP', firstName: 'SANDY', lastName: 'BROOM' },
+      ])
       cy.signIn()
     })
     it('should contain the required page elements', () => {
@@ -163,6 +137,7 @@ context('Continue a report - select report', () => {
       cy.task('stubGetAllDraftAdjudicationsForUser', {
         draftAdjudications: [],
       })
+      cy.task('stubGetBatchPrisonerDetails', [])
       cy.signIn()
     })
     it('should contain the required page elements', () => {
