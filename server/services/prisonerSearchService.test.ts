@@ -2,7 +2,6 @@ import PrisonerSearchService, { PrisonerSearchSummary } from './prisonerSearchSe
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import { incidentDetails } from '../utils/urlGenerator'
 
 const search = jest.fn()
 const getPrisonerImage = jest.fn()
