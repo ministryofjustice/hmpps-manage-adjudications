@@ -20,7 +20,7 @@
 
   {% for completedReport in allCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ completedReport.adjudicationNumber | prisonerReportReviewerView }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
       { text: completedReport.displayName },

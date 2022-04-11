@@ -4,7 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import PrisonerSelectRoutes from './prisonerSelect'
 
 import PrisonerSearchService from '../../services/prisonerSearchService'
-import { selectPrisoner } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function selectPrisonerRoutes({
   prisonerSearchService,
@@ -18,8 +18,8 @@ export default function selectPrisonerRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(selectPrisoner.matchers.start, prisonerSelect.view)
-  post(selectPrisoner.matchers.start, prisonerSelect.submit)
+  get(adjudicationUrls.selectPrisoner.matchers.start, prisonerSelect.view)
+  post(adjudicationUrls.selectPrisoner.matchers.start, prisonerSelect.submit)
 
   return router
 }

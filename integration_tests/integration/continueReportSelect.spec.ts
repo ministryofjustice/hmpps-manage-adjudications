@@ -1,4 +1,4 @@
-import { selectReport, taskList } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 import ContinueReportSelect from '../pages/continueReportSelect'
 import Page from '../pages/page'
 
@@ -45,14 +45,14 @@ context('Continue a report - select report', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(selectReport.root)
+      cy.visit(adjudicationUrls.selectReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
       continueReportSelectPage.resultsTable().should('exist')
       continueReportSelectPage.noResultsMessage().should('not.exist')
     })
     it('should contain the correct incident details', () => {
-      cy.visit(selectReport.root)
+      cy.visit(adjudicationUrls.selectReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
       continueReportSelectPage
@@ -79,7 +79,7 @@ context('Continue a report - select report', () => {
         })
     })
     it('should reorder the table entries when you manually sort on prisoner name', () => {
-      cy.visit(selectReport.root)
+      cy.visit(adjudicationUrls.selectReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
       continueReportSelectPage.nameSort().click()
@@ -99,7 +99,7 @@ context('Continue a report - select report', () => {
         })
     })
     it('should reorder the table entries when you manually sort on date', () => {
-      cy.visit(selectReport.root)
+      cy.visit(adjudicationUrls.selectReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
       continueReportSelectPage.dateSort().click()
@@ -119,13 +119,13 @@ context('Continue a report - select report', () => {
         })
     })
     it('should take you to the task list for the report you wish to continue', () => {
-      cy.visit(selectReport.root)
+      cy.visit(adjudicationUrls.selectReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
       continueReportSelectPage.continueLink().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(`${taskList.urls.start(1)}`)
+        expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(1))
       })
     })
   })
@@ -141,7 +141,7 @@ context('Continue a report - select report', () => {
       cy.signIn()
     })
     it('should contain the required page elements', () => {
-      cy.visit(selectReport.root)
+      cy.visit(adjudicationUrls.selectReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
       continueReportSelectPage.resultsTable().should('not.exist')

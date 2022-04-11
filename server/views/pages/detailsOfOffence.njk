@@ -31,7 +31,7 @@
                                 {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
                             </div>
                             <div>
-                                <a href='{{ adjudicationNumber | deleteOffence(offenceIndex) }}'
+                                <a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceIndex) }}'
                                    data-qa="delete-{{ offenceIndex }}">Delete</a>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <p class="govuk-body"><a href="{{ adjudicationNumber | offenceCodeSelection(incidentRole) }}"
+            <p class="govuk-body"><a href="{{ adjudicationUrls.offenceCodeSelection.urls.start(adjudicationNumber,incidentRole) }}"
                                      data-qa="add-another-offence">Add another offence</a></p>
             {{ govukButton({
                 text: "Save and continue",

@@ -2,7 +2,7 @@ import request from 'superagent'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
-import { detailsOfOffence, offenceCodeSelection } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Details of offence', () => {
   beforeEach(() => {
@@ -130,7 +130,7 @@ context('Details of offence', () => {
 
   it('select and offence for the first time and see it on the offence details page.', () => {
     // Choose a complex offence so that we test all of the functionality.
-    cy.visit(offenceCodeSelection.urls.start(200, 'assisted'))
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -179,7 +179,7 @@ context('Details of offence', () => {
   })
 
   it('select multiple offences and see them all', () => {
-    cy.visit(offenceCodeSelection.urls.start(200, 'assisted'))
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -208,7 +208,7 @@ context('Details of offence', () => {
   })
 
   it('offence details page when there is already an offence saved', () => {
-    cy.visit(detailsOfOffence.urls.start(201))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.questionAnswerSectionQuestion(1, 1).contains('What type of offence did John Smith commit?')
     detailsOfOffencePage
@@ -223,7 +223,7 @@ context('Details of offence', () => {
   })
 
   it('offence details page when there is no offences', () => {
-    cy.visit(detailsOfOffence.urls.start(200))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(200))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.continue().click()
     new OffenceCodeSelection(
@@ -232,7 +232,7 @@ context('Details of offence', () => {
   })
 
   it('offence details saves as expected', () => {
-    cy.visit(detailsOfOffence.urls.start(201))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {

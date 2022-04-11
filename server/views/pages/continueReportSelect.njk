@@ -29,8 +29,8 @@
         {% set incidentTimeHtml %}
         <p class="govuk-body continue-report-text" data-qa="incident-time-text">{{ report.incidentTime }}</p>
         {% endset -%}
-        {% set continueReportlLinkHtml %}
-        <a href="{{ report.id | taskList }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a>
+        {% set continueReportLinkHtml %}
+        <a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a>
         {% endset -%}
         {% set rows = (rows.push([
       {
@@ -43,7 +43,7 @@
           "data-sort-value": report.incidentDetails.dateTimeOfIncident
         } },
       { html: incidentTimeHtml },
-      { html: continueReportlLinkHtml }
+      { html: continueReportLinkHtml }
     ]), rows) %}
       {% endfor %}
 

@@ -4,7 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ContinueReportSelectRoutes from './continueReportSelect'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { selectReport } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function CheckAnswersRoutes({
   placeOnReportService,
@@ -17,7 +17,7 @@ export default function CheckAnswersRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(selectReport.matchers.start, continueReportRoute.view)
+  get(adjudicationUrls.selectReport.matchers.start, continueReportRoute.view)
 
   return router
 }

@@ -15,14 +15,7 @@ import { User } from '../../data/hmppsAuthClient'
 import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
-import {
-  deletePerson,
-  detailsOfOffence,
-  incidentDetails,
-  offenceCodeSelection,
-  selectAssociatedPrisoner,
-  taskList,
-} from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = {
   displayData: DisplayData
@@ -188,14 +181,15 @@ export default class IncidentDetailsPage {
       let returnUrl = null
       if (this.pageOptions.isEdit()) {
         if (this.pageOptions.isPreviouslySubmitted()) {
-          returnUrl = `${incidentDetails.urls.submittedEdit(postValues.prisonerNumber, postValues.draftId)}${
-            postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''
-          }`
+          returnUrl = `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+            postValues.prisonerNumber,
+            postValues.draftId
+          )}${postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''}`
         } else {
-          returnUrl = incidentDetails.urls.edit(postValues.prisonerNumber, postValues.draftId)
+          returnUrl = adjudicationUrls.incidentDetails.urls.edit(postValues.prisonerNumber, postValues.draftId)
         }
       } else {
-        returnUrl = incidentDetails.urls.start(postValues.prisonerNumber)
+        returnUrl = adjudicationUrls.incidentDetails.urls.start(postValues.prisonerNumber)
       }
       stashDataOnSession(returnUrl, dataToSaveAfterRedirect, req)
       if (postData === PageRequestAction.DELETE_PRISONER) {
@@ -399,14 +393,14 @@ export default class IncidentDetailsPage {
   setUpRedirectForEditError = (res: Response, prisonerNumber: string, error: any, draftId: number) => {
     logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
     res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
-      ? incidentDetails.urls.submittedEdit(prisonerNumber, draftId)
-      : incidentDetails.urls.edit(prisonerNumber, draftId)
+      ? adjudicationUrls.incidentDetails.urls.submittedEdit(prisonerNumber, draftId)
+      : adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, draftId)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setUpRedirectForCreationError = (res: Response, prisonerNumber: string, draftId: number, error: any) => {
     logger.error(`Failed to post incident details for draft adjudication: ${error}`)
-    res.locals.redirectUrl = incidentDetails.urls.start(prisonerNumber)
+    res.locals.redirectUrl = adjudicationUrls.incidentDetails.urls.start(prisonerNumber)
   }
 }
 
@@ -686,23 +680,25 @@ const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
 }
 
 const getTaskListUrl = (draftId: number) => {
-  return taskList.urls.start(draftId)
+  return adjudicationUrls.taskList.urls.start(draftId)
 }
 
 const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
-  return res.redirect(`${selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
+  return res.redirect(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
 }
 
 const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {
-  return res.redirect(`${deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
+  return res.redirect(`${adjudicationUrls.deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
 }
 
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
-  return res.redirect(offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode)))
+  return res.redirect(
+    adjudicationUrls.offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode))
+  )
 }
 
 const redirectToOffenceDetails = (res: Response, draftId: number) => {
-  return res.redirect(detailsOfOffence.urls.start(draftId))
+  return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
 }
 
 const redirectToTaskList = (res: Response, draftId: number) => {

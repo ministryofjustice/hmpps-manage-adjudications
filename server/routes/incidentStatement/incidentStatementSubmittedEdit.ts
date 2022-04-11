@@ -4,7 +4,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
-import { checkYourAnswers } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -66,10 +66,10 @@ export default class IncidentStatementSubmittedEditRoutes {
         user
       )
 
-      return res.redirect(checkYourAnswers.urls.report(adjudicationNumberValue))
+      return res.redirect(adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumberValue))
     } catch (postError) {
       logger.error(`Failed to post the edited incident statement for adjudication: ${postError}`)
-      res.locals.redirectUrl = checkYourAnswers.urls.report(adjudicationNumberValue)
+      res.locals.redirectUrl = adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumberValue)
       throw postError
     }
   }

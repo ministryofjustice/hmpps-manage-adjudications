@@ -7,7 +7,7 @@ import IncidentDetailsSubmittedEditRoutes from './incidentDetailsSubmittedEdit'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import { incidentDetails } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function prisonerIncidentDetailsRoutes({
   placeOnReportService,
@@ -25,12 +25,12 @@ export default function prisonerIncidentDetailsRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(incidentDetails.matchers.start, incidentDetailsRoute.view)
-  post(incidentDetails.matchers.start, incidentDetailsRoute.submit)
-  get(incidentDetails.matchers.edit, incidentDetailsEdit.view)
-  post(incidentDetails.matchers.edit, incidentDetailsEdit.submit)
-  get(incidentDetails.matchers.submittedEdit, incidentDetailsSubmittedEdit.view)
-  post(incidentDetails.matchers.submittedEdit, incidentDetailsSubmittedEdit.submit)
+  get(adjudicationUrls.incidentDetails.matchers.start, incidentDetailsRoute.view)
+  post(adjudicationUrls.incidentDetails.matchers.start, incidentDetailsRoute.submit)
+  get(adjudicationUrls.incidentDetails.matchers.edit, incidentDetailsEdit.view)
+  post(adjudicationUrls.incidentDetails.matchers.edit, incidentDetailsEdit.submit)
+  get(adjudicationUrls.incidentDetails.matchers.submittedEdit, incidentDetailsSubmittedEdit.view)
+  post(adjudicationUrls.incidentDetails.matchers.submittedEdit, incidentDetailsSubmittedEdit.submit)
 
   return router
 }

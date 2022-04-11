@@ -4,13 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import UserService from '../../services/userService'
-import {
-  allCompletedReports,
-  incidentDetails,
-  printReport,
-  prisonerReport,
-  yourCompletedReports,
-} from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export enum PageRequestType {
   REPORTER,
@@ -34,23 +28,26 @@ const getVariablesForPageType = (
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.review(
+      printHref: `${adjudicationUrls.printReport.urls.start(
         adjudicationNumber
-      )}`,
-      editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=${prisonerReport.urls.review(adjudicationNumber)}`,
-      returnLinkURL: allCompletedReports.root,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
     }
   }
   return {
-    printHref: `${printReport.urls.start(adjudicationNumber)}?referrer=${prisonerReport.urls.report}`,
-    editIncidentDetailsURL: `${incidentDetails.urls.submittedEdit(prisonerNumber, draftAdjudicationNumber)}?referrer=${
-      prisonerReport.urls.report
+    printHref: `${adjudicationUrls.printReport.urls.start(adjudicationNumber)}?referrer=${
+      adjudicationUrls.prisonerReport.urls.report
     }`,
-    returnLinkURL: yourCompletedReports.root,
+    editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+      prisonerNumber,
+      draftAdjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report}`,
+    returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
   }
 }

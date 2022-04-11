@@ -1,7 +1,7 @@
 import HomepagePage from '../pages/home'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
-import { homepage } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Sign in', () => {
   beforeEach(() => {
@@ -11,7 +11,7 @@ context('Sign in', () => {
   })
 
   it('Unauthenticated user directed to auth', () => {
-    cy.visit(homepage.root)
+    cy.visit(adjudicationUrls.homepage.root)
     Page.verifyOnPage(AuthSignInPage)
   })
 

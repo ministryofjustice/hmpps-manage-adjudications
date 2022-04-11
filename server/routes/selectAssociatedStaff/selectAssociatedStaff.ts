@@ -4,7 +4,7 @@ import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import validateForm from './staffSearchValidation'
 import PlaceOnReportService, { StaffSearchWithCurrentLocation } from '../../services/placeOnReportService'
-import { homepage, selectAssociatedStaff } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -36,7 +36,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const { redirectUrl } = req.session
 
     if (!staffFirstName || !staffLastName)
-      return res.render(`pages/notFound.njk`, { url: req.headers.referer || homepage.root })
+      return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
 
     const results = await this.userService.getStaffFromNames(staffFirstName, staffLastName, user)
     const searchResults = await this.placeOnReportService.getAssociatedStaffDetails(results, user)
@@ -55,7 +55,7 @@ export default class SelectAssociatedPrisonerRoutes {
     if (error) return this.renderView(req, res, { error, staffFirstName, staffLastName })
     return res.redirect(
       url.format({
-        pathname: selectAssociatedStaff.root,
+        pathname: adjudicationUrls.selectAssociatedStaff.root,
         query: { staffFirstName, staffLastName, redirectUrl },
       })
     )

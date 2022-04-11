@@ -5,7 +5,7 @@ import AllCompletedReports from './allCompletedReports'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
-import { allCompletedReports } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function allCompletedReportsRoutes({
   reportedAdjudicationsService,
@@ -20,7 +20,7 @@ export default function allCompletedReportsRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(allCompletedReports.matchers.start, allCompletedReportsRoute.view)
+  get(adjudicationUrls.allCompletedReports.matchers.start, allCompletedReportsRoute.view)
 
   return router
 }

@@ -1,4 +1,4 @@
-import { homepage } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 import HomepagePage from '../pages/home'
 import Page from '../pages/page'
 
@@ -11,13 +11,13 @@ context('Home page', () => {
   })
 
   it('should see the feedback banner', () => {
-    cy.visit(homepage.root)
+    cy.visit(adjudicationUrls.homepage.root)
     const homepageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepageMockup.feedbackBanner().should('exist')
   })
 
   it('should only see some tiles without the reviewer role', () => {
-    cy.visit(homepage.root)
+    cy.visit(adjudicationUrls.homepage.root)
     const homepageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepageMockup.feedbackBanner().should('exist')
     homepageMockup.startANewReportLink().should('exist')
@@ -28,7 +28,7 @@ context('Home page', () => {
 
   it('should see all the tiles with the reviewer role', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.visit(homepage.root)
+    cy.visit(adjudicationUrls.homepage.root)
     const homepageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepageMockup.feedbackBanner().should('exist')
     homepageMockup.startANewReportLink().should('exist')

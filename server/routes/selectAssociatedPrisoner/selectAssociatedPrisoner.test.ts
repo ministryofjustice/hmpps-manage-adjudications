@@ -1,7 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
-import { selectAssociatedPrisoner, prisonerReport, incidentDetails } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 jest.mock('../../services/prisonerSearchService')
@@ -14,7 +14,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { prisonerSearchService },
-    { redirectUrl: incidentDetails.urls.edit('G6123VU', 1234) }
+    { redirectUrl: adjudicationUrls.incidentDetails.urls.edit('G6123VU', 1234) }
   )
 })
 
@@ -39,13 +39,13 @@ describe('GET /select-associated-prisoner', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get(`${selectAssociatedPrisoner.root}?searchTerm=Smith`)
+        .get(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain(
-            `<a href="${incidentDetails.urls.edit(
+            `<a href="${adjudicationUrls.incidentDetails.urls.edit(
               'G6123VU',
               1234
             )}?selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner<span class="govuk-visually-hidden"> for John Smith</span></a>`
@@ -61,7 +61,7 @@ describe('GET /select-associated-prisoner', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get(`${selectAssociatedPrisoner.root}?searchTerm=Smith`)
+        .get(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
@@ -74,11 +74,11 @@ describe('GET /select-associated-prisoner', () => {
 describe('POST /select-associated-prisoner', () => {
   it('should redirect to select prisoner page with the correct search text and redirect URL intact', () => {
     return request(app)
-      .post(selectAssociatedPrisoner.root)
+      .post(adjudicationUrls.selectAssociatedPrisoner.root)
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        `${selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fedit`
+        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fedit`
       )
   })
   it('should redirect to select prisoner page with the correct search text and redirect URL intact - with query', () => {
@@ -86,23 +86,24 @@ describe('POST /select-associated-prisoner', () => {
       { production: false },
       { prisonerSearchService },
       {
-        redirectUrl: `${incidentDetails.urls.submittedEdit('G6123VU', 1234)}?referrer=${prisonerReport.urls.review(
-          1524455
-        )}`,
+        redirectUrl: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+          'G6123VU',
+          1234
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524455)}`,
       }
     )
     return request(app)
-      .post(selectAssociatedPrisoner.root)
+      .post(adjudicationUrls.selectAssociatedPrisoner.root)
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        `${selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview`
+        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview`
       )
   })
 
   it('should render validation messages', () => {
     return request(app)
-      .post(selectAssociatedPrisoner.root)
+      .post(adjudicationUrls.selectAssociatedPrisoner.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Select a prisoner')

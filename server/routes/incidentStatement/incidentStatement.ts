@@ -5,7 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
-import { taskList, incidentStatement as incidentStatementUrls, checkYourAnswers } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -72,14 +72,14 @@ export default class IncidentStatementRoutes {
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = incidentStatementUrls.urls.start(adjudicationNumberValue)
+      res.locals.redirectUrl = adjudicationUrls.incidentStatement.urls.start(adjudicationNumberValue)
       throw postError
     }
   }
 
   getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
     if (incidentStatementComplete && draftAdjudication.offenceDetails.length)
-      return checkYourAnswers.urls.start(draftAdjudication.id)
-    return taskList.urls.start(draftAdjudication.id)
+      return adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id)
+    return adjudicationUrls.taskList.urls.start(draftAdjudication.id)
   }
 }

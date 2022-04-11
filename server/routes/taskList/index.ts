@@ -4,7 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import DraftTaskListRoutes from './draftTaskList'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { taskList } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function draftTaskListRoutesRoutes({
   placeOnReportService,
@@ -17,7 +17,7 @@ export default function draftTaskListRoutesRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(taskList.matchers.start, draftTaskList.view)
+  get(adjudicationUrls.taskList.matchers.start, draftTaskList.view)
 
   return router
 }

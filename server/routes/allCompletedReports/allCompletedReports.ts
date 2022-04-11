@@ -5,7 +5,7 @@ import { ReportedAdjudicationEnhanced } from '../../data/ReportedAdjudicationRes
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
-import { homepage } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class AllCompletedReportsRoutes {
   constructor(
@@ -29,7 +29,7 @@ export default class AllCompletedReportsRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
-      return res.render('pages/notFound.njk', { url: req.headers.referer || homepage.root })
+      return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
     const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
       res.locals.user,

@@ -3,7 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import { incidentDetails, offenceCodeSelection } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -63,7 +63,7 @@ afterEach(() => {
 describe('GET /incident-details', () => {
   it('should load the incident details page', () => {
     return request(app)
-      .get(`${incidentDetails.urls.start('G6415GD')}`)
+      .get(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Incident details')
@@ -74,7 +74,7 @@ describe('GET /incident-details', () => {
 describe('POST /incident-details', () => {
   it('should redirect to type of offence page if details are complete', () => {
     return request(app)
-      .post(`${incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -82,11 +82,11 @@ describe('POST /incident-details', () => {
         incitedInput: 'G2678PF',
       })
       .expect(302)
-      .expect('Location', offenceCodeSelection.urls.start(1, 'incited'))
+      .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(1, 'incited'))
   })
   it('should render an error summary with correct validation message if the selected person has been tampered with in the URL', () => {
     return request(app)
-      .post(`${incidentDetails.urls.start('G6415GD')}?selectedPerson=gobbledegook`)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=gobbledegook`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
@@ -100,7 +100,7 @@ describe('POST /incident-details', () => {
   })
   it('should render an error summary with correct validation message - missing radio button selection', () => {
     return request(app)
-      .post(`${incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '11', minute: '30' } },
         locationId: 2,
@@ -112,7 +112,7 @@ describe('POST /incident-details', () => {
   })
   it('should render an error summary with correct validation message - incorrect time entered', () => {
     return request(app)
-      .post(`${incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -123,7 +123,7 @@ describe('POST /incident-details', () => {
   it('should throw an error on api failure', () => {
     placeOnReportService.startNewDraftAdjudication.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post(`${incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
