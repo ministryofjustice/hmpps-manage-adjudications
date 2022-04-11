@@ -1,5 +1,11 @@
 {% macro noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <div>
+            <p>A copy of this report should be given to {{ noticeOfBeingPlacedOnReportData.prisonerFirstAndLastName }}
+                by {{ noticeOfBeingPlacedOnReportData.expirationTime }} on
+                {{ noticeOfBeingPlacedOnReportData.expirationDay }}
+            </p>
+        </div>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
             <div class='adjudication-pdf-section-prisoner__item'>

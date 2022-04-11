@@ -1,5 +1,11 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
-import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
+import {
+  convertToTitleCase,
+  formatName,
+  formatTimestampTo,
+  formatTimestampToDate,
+  formatTimestampToTime,
+} from '../utils/utils'
 import { IncidentAndOffences } from '../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
@@ -27,6 +33,12 @@ export default class noticeOfBeingPlacedOnReportData {
 
   offences: IncidentAndOffences[]
 
+  expirationTime: string
+
+  expirationDay: any
+
+  prisonerFirstAndLastName: string
+
   constructor(
     adjudicationNumber: number,
     confirmedOnReportData: ConfirmedOnReportData,
@@ -35,7 +47,7 @@ export default class noticeOfBeingPlacedOnReportData {
     this.adjudicationNumber = adjudicationNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerFirstName}, ${confirmedOnReportData.prisonerLastName}`
+      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.reportingOfficer = confirmedOnReportData.reportingOfficer
@@ -46,5 +58,11 @@ export default class noticeOfBeingPlacedOnReportData {
     this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
     this.reportedTime = formatTimestampTo(confirmedOnReportData.createdDateTime, 'HH:mm')
     this.offences = offences
+    this.expirationTime = formatTimestampToTime(confirmedOnReportData.reportExpirationDateTime)
+    this.expirationDay = formatTimestampToDate(confirmedOnReportData.reportExpirationDateTime, 'dddd D MMMM')
+    this.prisonerFirstAndLastName = formatName(
+      confirmedOnReportData.prisonerFirstName,
+      confirmedOnReportData.prisonerLastName
+    )
   }
 }
