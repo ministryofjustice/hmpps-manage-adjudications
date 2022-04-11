@@ -28,7 +28,7 @@ import {
   taskList,
   confirmedOnReport,
   incidentDetails,
-  incidentStatementUrls,
+  incidentStatement,
   searchForPrisoner,
   checkYourAnswers,
   selectPrisoner,
@@ -65,7 +65,7 @@ export default function routes(
     detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
   )
-  router.use(incidentStatementUrls.root, incidentStatementRoutes({ placeOnReportService }))
+  router.use(incidentStatement.root, incidentStatementRoutes({ placeOnReportService }))
   router.use(
     checkYourAnswers.root,
     checkYourAnswersRoutes({

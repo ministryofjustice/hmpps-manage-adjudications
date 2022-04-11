@@ -10,7 +10,7 @@ import {
   checkYourAnswers,
   confirmedOnReport,
   incidentDetails,
-  incidentStatementUrls,
+  incidentStatement,
   prisonerReport,
   taskList,
   yourCompletedReports,
@@ -54,7 +54,7 @@ const getVariablesForPageType = (
         prisonerNumber,
         adjudicationNumber
       )}?referrer=${checkYourAnswers.urls.report(adjudicationNumber)}`,
-      editIncidentStatementURL: incidentStatementUrls.urls.submittedEdit(adjudicationNumber),
+      editIncidentStatementURL: incidentStatement.urls.submittedEdit(adjudicationNumber),
       exitUrl: prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
     }
   }
@@ -70,7 +70,7 @@ const getVariablesForPageType = (
   }
   return {
     editIncidentDetailsURL: incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
-    editIncidentStatementURL: incidentStatementUrls.urls.start(adjudicationNumber),
+    editIncidentStatementURL: incidentStatement.urls.start(adjudicationNumber),
     exitUrl: taskList.urls.start(adjudicationNumber),
   }
 }

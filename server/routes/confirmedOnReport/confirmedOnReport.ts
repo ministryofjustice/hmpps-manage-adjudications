@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { homepageUrl } from '../../utils/urlGenerator'
+import { homepage } from '../../utils/urlGenerator'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 
 export default class ConfirmedOnReportRoutes {
@@ -34,7 +34,7 @@ export default class ConfirmedOnReportRoutes {
       bannerText: `${prisonerFirstAndLastName} has been placed on report`,
       bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
       buttonClass: 'govuk-button--secondary',
-      buttonHref: homepageUrl.root,
+      buttonHref: homepage.root,
     })
   }
 

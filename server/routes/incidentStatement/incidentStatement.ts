@@ -5,7 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerResult from '../../data/prisonerResult'
 import logger from '../../../logger'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
-import { taskList, incidentStatementUrls, checkYourAnswers } from '../../utils/urlGenerator'
+import { taskList, incidentStatement as incidentStatementUrls, checkYourAnswers } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError

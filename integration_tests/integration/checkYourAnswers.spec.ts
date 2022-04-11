@@ -2,7 +2,7 @@ import {
   checkYourAnswers,
   confirmedOnReport,
   incidentDetails,
-  incidentStatementUrls,
+  incidentStatement,
   taskList,
 } from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
@@ -250,7 +250,7 @@ context('Check Your Answers', () => {
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(incidentStatementUrls.urls.start(3456))
+      expect(loc.pathname).to.eq(incidentStatement.urls.start(3456))
     })
   })
 })

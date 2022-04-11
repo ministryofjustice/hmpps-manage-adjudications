@@ -4,7 +4,7 @@ import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import validateForm from './staffSearchValidation'
 import PlaceOnReportService, { StaffSearchWithCurrentLocation } from '../../services/placeOnReportService'
-import { homepageUrl, selectAssociatedStaff } from '../../utils/urlGenerator'
+import { homepage, selectAssociatedStaff } from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -36,7 +36,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const { redirectUrl } = req.session
 
     if (!staffFirstName || !staffLastName)
-      return res.render(`pages/notFound.njk`, { url: req.headers.referer || homepageUrl.root })
+      return res.render(`pages/notFound.njk`, { url: req.headers.referer || homepage.root })
 
     const results = await this.userService.getStaffFromNames(staffFirstName, staffLastName, user)
     const searchResults = await this.placeOnReportService.getAssociatedStaffDetails(results, user)

@@ -1,5 +1,5 @@
-import { homepageUrl } from '../../server/utils/urlGenerator'
-import Homepage from '../pages/home'
+import { homepage } from '../../server/utils/urlGenerator'
+import HomepagePage from '../pages/home'
 import Page from '../pages/page'
 
 context('Home page', () => {
@@ -11,29 +11,29 @@ context('Home page', () => {
   })
 
   it('should see the feedback banner', () => {
-    cy.visit(homepageUrl.root)
-    const homepage: Homepage = Page.verifyOnPage(Homepage)
-    homepage.feedbackBanner().should('exist')
+    cy.visit(homepage.root)
+    const homepageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepageMockup.feedbackBanner().should('exist')
   })
 
   it('should only see some tiles without the reviewer role', () => {
-    cy.visit(homepageUrl.root)
-    const homepage: Homepage = Page.verifyOnPage(Homepage)
-    homepage.feedbackBanner().should('exist')
-    homepage.startANewReportLink().should('exist')
-    homepage.continueAReportLink().should('exist')
-    homepage.viewYourCompletedReportsLink().should('exist')
-    homepage.viewAllCompletedReportsLink().should('not.exist')
+    cy.visit(homepage.root)
+    const homepageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepageMockup.feedbackBanner().should('exist')
+    homepageMockup.startANewReportLink().should('exist')
+    homepageMockup.continueAReportLink().should('exist')
+    homepageMockup.viewYourCompletedReportsLink().should('exist')
+    homepageMockup.viewAllCompletedReportsLink().should('not.exist')
   })
 
   it('should see all the tiles with the reviewer role', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.visit(homepageUrl.root)
-    const homepage: Homepage = Page.verifyOnPage(Homepage)
-    homepage.feedbackBanner().should('exist')
-    homepage.startANewReportLink().should('exist')
-    homepage.continueAReportLink().should('exist')
-    homepage.viewYourCompletedReportsLink().should('exist')
-    homepage.viewAllCompletedReportsLink().should('exist')
+    cy.visit(homepage.root)
+    const homepageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepageMockup.feedbackBanner().should('exist')
+    homepageMockup.startANewReportLink().should('exist')
+    homepageMockup.continueAReportLink().should('exist')
+    homepageMockup.viewYourCompletedReportsLink().should('exist')
+    homepageMockup.viewAllCompletedReportsLink().should('exist')
   })
 })

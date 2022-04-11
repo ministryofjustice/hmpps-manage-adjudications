@@ -5,7 +5,7 @@ import IncidentStatementRoutes from './incidentStatement'
 import IncidentStatementSubmittedEditRoutes from './incidentStatementSubmittedEdit'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { incidentStatementUrls } from '../../utils/urlGenerator'
+import { incidentStatement } from '../../utils/urlGenerator'
 
 export default function prisonerIncidentStatementsRoutes({
   placeOnReportService,
@@ -20,10 +20,10 @@ export default function prisonerIncidentStatementsRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(incidentStatementUrls.matchers.start, incidentStatementRoute.view)
-  post(incidentStatementUrls.matchers.start, incidentStatementRoute.submit)
-  get(incidentStatementUrls.matchers.submittedEdit, incidentStatementSubmittedEdit.view)
-  post(incidentStatementUrls.matchers.submittedEdit, incidentStatementSubmittedEdit.submit)
+  get(incidentStatement.matchers.start, incidentStatementRoute.view)
+  post(incidentStatement.matchers.start, incidentStatementRoute.submit)
+  get(incidentStatement.matchers.submittedEdit, incidentStatementSubmittedEdit.view)
+  post(incidentStatement.matchers.submittedEdit, incidentStatementSubmittedEdit.submit)
 
   return router
 }

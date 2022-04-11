@@ -1,4 +1,4 @@
-import { confirmedOnReport, homepageUrl } from '../../server/utils/urlGenerator'
+import { confirmedOnReport, homepage } from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReport'
 import Page from '../pages/page'
 
@@ -101,7 +101,7 @@ context('Prisoner has been placed on report', () => {
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(homepageUrl.root)
+      expect(loc.pathname).to.eq(homepage.root)
     })
   })
 })

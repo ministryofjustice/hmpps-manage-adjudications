@@ -4,7 +4,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
-import { incidentStatementUrls, offenceCodeSelection } from '../../utils/urlGenerator'
+import { incidentStatement, offenceCodeSelection } from '../../utils/urlGenerator'
 
 export default class DetailsOfOffenceRoutes {
   constructor(
@@ -65,6 +65,6 @@ export default class DetailsOfOffenceRoutes {
         }
       })
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
-    return res.redirect(incidentStatementUrls.urls.start(adjudicationNumber))
+    return res.redirect(incidentStatement.urls.start(adjudicationNumber))
   }
 }

@@ -2,7 +2,7 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import {
   incidentDetails,
-  incidentStatementUrls,
+  incidentStatement,
   prisonerReport,
   yourCompletedReports,
 } from '../../server/utils/urlGenerator'
@@ -241,7 +241,7 @@ context('Prisoner report - reporter view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentStatementChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${incidentStatementUrls.urls.submittedEdit(177)}`)
+      expect(loc.pathname).to.eq(`${incidentStatement.urls.submittedEdit(177)}`)
     })
   })
   it('should go to /your-completed-reports if the return link is clicked', () => {

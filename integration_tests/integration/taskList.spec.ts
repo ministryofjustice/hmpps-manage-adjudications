@@ -4,7 +4,7 @@ import {
   checkYourAnswers,
   detailsOfOffence,
   incidentDetails,
-  incidentStatementUrls,
+  incidentStatement,
   taskList,
 } from '../../server/utils/urlGenerator'
 
@@ -93,7 +93,7 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.incidentStatementLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(`${incidentStatementUrls.urls.start(3456)}`)
+        expect(loc.pathname).to.eq(`${incidentStatement.urls.start(3456)}`)
       })
     })
   })

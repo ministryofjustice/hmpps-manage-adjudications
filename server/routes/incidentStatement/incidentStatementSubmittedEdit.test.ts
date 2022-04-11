@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { checkYourAnswers, incidentStatementUrls } from '../../utils/urlGenerator'
+import { checkYourAnswers, incidentStatement as incidentStatementUrls } from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 

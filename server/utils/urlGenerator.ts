@@ -70,15 +70,15 @@ export const incidentDetails = {
   },
 }
 
-export const incidentStatementUrls = {
+export const incidentStatement = {
   root: '/incident-statement',
   matchers: {
     start: '/:adjudicationNumber',
     submittedEdit: '/:adjudicationNumber/submitted/edit',
   },
   urls: {
-    start: (adjudicationNumber: number) => `${incidentStatementUrls.root}/${adjudicationNumber}`,
-    submittedEdit: (adjudicationNumber: number) => `${incidentStatementUrls.root}/${adjudicationNumber}/submitted/edit`,
+    start: (adjudicationNumber: number) => `${incidentStatement.root}/${adjudicationNumber}`,
+    submittedEdit: (adjudicationNumber: number) => `${incidentStatement.root}/${adjudicationNumber}/submitted/edit`,
   },
 }
 
@@ -184,7 +184,7 @@ export const deletePerson = {
   },
 }
 
-export const homepageUrl = {
+export const homepage = {
   root: '/place-a-prisoner-on-report',
   matchers: {
     start: '/',
