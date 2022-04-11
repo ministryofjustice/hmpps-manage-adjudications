@@ -2,7 +2,6 @@ import PrisonerSearchService, { PrisonerSearchSummary } from './prisonerSearchSe
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import { incidentDetails } from '../utils/urlGenerator'
 
 const search = jest.fn()
 const getPrisonerImage = jest.fn()
@@ -74,7 +73,6 @@ describe('prisonerSearchService', () => {
           lastName: 'JONES',
           prisonName: 'HMP Moorland',
           prisonerNumber: 'A1234AB',
-          incidentDetailsUrl: incidentDetails.urls.start('A1234AB'),
         },
         {
           cellLocation: '1-2-015',
@@ -85,7 +83,6 @@ describe('prisonerSearchService', () => {
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
-          incidentDetailsUrl: incidentDetails.urls.start('A1234AA'),
         } as PrisonerSearchSummary,
       ])
       expect(PrisonerSearchClient).toBeCalledWith(user.token)
@@ -113,7 +110,6 @@ describe('prisonerSearchService', () => {
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
-          incidentDetailsUrl: incidentDetails.urls.start('A1234AA'),
         } as PrisonerSearchSummary,
       ])
       expect(PrisonerSearchClient).toBeCalledWith(user.token)

@@ -14,7 +14,6 @@ import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
-import { prisonerReport } from '../utils/urlGenerator'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -124,7 +123,6 @@ export default class ReportedAdjudicationsService {
       )
       return {
         ...enhancedAdjudication,
-        prisonerReportUrl: prisonerReport.urls.report(reportedAdjudication.adjudicationNumber),
       }
     })
   }
@@ -159,7 +157,6 @@ export default class ReportedAdjudicationsService {
       )
       return {
         ...enhancedAdjudication,
-        prisonerReportUrl: prisonerReport.urls.review(reportedAdjudication.adjudicationNumber),
       }
     })
   }

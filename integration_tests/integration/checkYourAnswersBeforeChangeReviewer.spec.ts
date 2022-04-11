@@ -170,7 +170,7 @@ context('Check Your Answers', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary().should('exist')
@@ -182,7 +182,7 @@ context('Check Your Answers', () => {
     CheckYourAnswersPage.exitButton().contains('Cancel')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentDetailsSummary()
@@ -204,13 +204,13 @@ context('Check Your Answers', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
   })
   it('should contain the correct offence details', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
     CheckYourAnswersPage.offenceDetailsSummary()
@@ -240,7 +240,7 @@ context('Check Your Answers', () => {
       })
   })
   it('should go to the completion page (changed - reviewer) if the user submits changes to the report', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.submitButton().click()
     cy.location().should(loc => {
@@ -248,7 +248,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the prisoner report page if the user cancels', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.exitButton().click()
     cy.location().should(loc => {
@@ -256,7 +256,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(`${checkYourAnswers.urls.review(3456)}`)
+    cy.visit(checkYourAnswers.urls.review(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
@@ -265,7 +265,7 @@ context('Check Your Answers', () => {
     })
   })
   it('should go to the incident details page if the offence details change link is clicked - to enter new offences', () => {
-    cy.visit(`${checkYourAnswers.urls.start(3456)}`)
+    cy.visit(checkYourAnswers.urls.start(3456))
     const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
     CheckYourAnswersPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {

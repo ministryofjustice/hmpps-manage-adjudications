@@ -35,7 +35,7 @@
       <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
-      <a href="{{ prisoner.incidentDetailsUrl }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>
+      <a href="{{ prisoner.prisonerNumber | incidentDetailsStart }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
       { html: prisonerImageHtml },

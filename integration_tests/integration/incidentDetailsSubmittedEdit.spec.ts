@@ -130,7 +130,7 @@ context('Incident details (edit after completion of report)', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(`${incidentDetails.urls.submittedEdit('G6415GD', 34)}`)
+    cy.visit(incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('exist')
     incidentDetailsPage.reportingOfficerName().should('exist')
@@ -143,13 +143,13 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.submitButton().should('exist')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
-    cy.visit(`${incidentDetails.urls.submittedEdit('G6415GD', 34)}`)
+    cy.visit(incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
     incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
   it('should show error if one of the time fields is not filled in correctly', () => {
-    cy.visit(`${incidentDetails.urls.submittedEdit('G6415GD', 34)}`)
+    cy.visit(incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputMinutes().clear()
@@ -163,7 +163,7 @@ context('Incident details (edit after completion of report)', () => {
       })
   })
   it('should show error if a location is not selected', () => {
-    cy.visit(`${incidentDetails.urls.submittedEdit('G6415GD', 34)}`)
+    cy.visit(incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Select')
     incidentDetailsPage.submitButton().click()
@@ -175,7 +175,7 @@ context('Incident details (edit after completion of report)', () => {
       })
   })
   it('should show the prisoners name in the radio button question', () => {
-    cy.visit(`${incidentDetails.urls.submittedEdit('G6415GD', 34)}`)
+    cy.visit(incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
   })
@@ -185,7 +185,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'attempted', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(34, 'attempted', '1'))
     })
   })
   it('should submit form successfully if radio button changed from one which does not require an associated prisoner PRN to one which does', () => {
@@ -222,7 +222,7 @@ context('Incident details (edit after completion of report)', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'incited', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(34, 'incited', '1'))
     })
   })
   it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
@@ -264,7 +264,7 @@ context('Incident details (edit after completion of report)', () => {
     })
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${offenceCodeSelection.urls.question(34, 'assisted', '1')}`)
+      expect(loc.pathname).to.eq(offenceCodeSelection.urls.question(34, 'assisted', '1'))
     })
   })
   it('should submit form successfully if all data entered and redirect to offence details page - reporter version', () => {
@@ -288,7 +288,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${detailsOfOffence.urls.start(34)}`)
+      expect(loc.pathname).to.eq(detailsOfOffence.urls.start(34))
     })
   })
   it('should remember the changed location and time once it comes back to this page from the search page', () => {
@@ -362,7 +362,7 @@ context('Incident details (edit after completion of report)', () => {
       })
       incidentDetailsPage.errorContinueButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 34)}`)
+        expect(loc.pathname).to.eq(incidentDetails.urls.submittedEdit('G6415GD', 34))
       })
       incidentDetailsPage.timeInputHours().should('have.value', '13')
       incidentDetailsPage.timeInputMinutes().should('have.value', '10')
