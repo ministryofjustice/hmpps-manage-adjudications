@@ -70,7 +70,7 @@ export default decision([
       .child(answer('Alcohol')
         .child(decision('What happened?')
           .child(answer('Consumes any alcoholic drink').offenceCode(10001))
-          .child(answer('Consumes any alcoholic drink other than that provided to them under rule 25(1)').offenceCode(10002))))))
+          .child(answer('Consumes any alcoholic drink other than that provided to them under rule 25(1)').offenceCode(11001))))))
   .child(answer('Sets fire to, or damages, the prison or any property')
     .child(decision('What did the incident involve?')
       .child(answer('Sets fire to any part of the prison or any property').offenceCode(16001))

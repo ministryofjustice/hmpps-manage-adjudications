@@ -333,7 +333,7 @@ context('Incident details', () => {
         'Alcohol',
         'Consumes any alcoholic drink other than that provided to them under rule 25(1)',
       ],
-      10002
+      11001
     )
   })
   it('line 35', () => {
