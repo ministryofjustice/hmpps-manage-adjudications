@@ -38,6 +38,7 @@
             {% set decisionHtml = null %}
         {% endif %}
         {% set items = (items.push({
+            attributes: { offenceCode: answer.offenceCode },
             value: answer.id,
             text: answer.label,
             conditional: {
