@@ -37,7 +37,7 @@ export default class noticeOfBeingPlacedOnReportData {
 
   expirationDay: any
 
-  prisonerFirstAndLastName: string
+  prisonerFriendlyName: string
 
   constructor(
     adjudicationNumber: number,
@@ -49,8 +49,11 @@ export default class noticeOfBeingPlacedOnReportData {
     this.prisonerDisplayName = convertToTitleCase(
       `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
+    this.prisonerFriendlyName = convertToTitleCase(
+      `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
+    )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
-    this.reportingOfficer = confirmedOnReportData.reportingOfficer
+    this.reportingOfficer = convertToTitleCase(confirmedOnReportData.reportingOfficer)
     this.incidentLocationDescription = `${confirmedOnReportData.incidentAgencyName} - ${confirmedOnReportData.incidentLocationName}`
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${confirmedOnReportData.prisonerLivingUnitName}`
     this.incidentDate = formatTimestampTo(confirmedOnReportData.incidentDate, 'D MMMM YYYY')
@@ -60,9 +63,5 @@ export default class noticeOfBeingPlacedOnReportData {
     this.offences = offences
     this.expirationTime = formatTimestampToTime(confirmedOnReportData.reportExpirationDateTime)
     this.expirationDay = formatTimestampToDate(confirmedOnReportData.reportExpirationDateTime, 'dddd D MMMM')
-    this.prisonerFirstAndLastName = formatName(
-      confirmedOnReportData.prisonerFirstName,
-      confirmedOnReportData.prisonerLastName
-    )
   }
 }
