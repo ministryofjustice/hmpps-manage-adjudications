@@ -1,11 +1,5 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
-import {
-  convertToTitleCase,
-  formatName,
-  formatTimestampTo,
-  formatTimestampToDate,
-  formatTimestampToTime,
-} from '../utils/utils'
+import { convertToTitleCase, formatTimestampTo, formatTimestampToDate, formatTimestampToTime } from '../utils/utils'
 import { IncidentAndOffences } from '../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
@@ -35,7 +29,7 @@ export default class noticeOfBeingPlacedOnReportData {
 
   expirationTime: string
 
-  expirationDay: any
+  expirationDay: string
 
   prisonerFriendlyName: string
 
