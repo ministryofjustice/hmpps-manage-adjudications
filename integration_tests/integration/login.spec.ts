@@ -17,15 +17,15 @@ context('Sign in', () => {
 
   it('User name visible in header', () => {
     cy.signIn()
-    const homePageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homePageMockup.signInName().contains('J. Smith')
-    homePageMockup.activeLocation().contains('Moorland')
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.signInName().contains('J. Smith')
+    homepage.activeLocation().contains('Moorland')
   })
 
   it('User can log out', () => {
     cy.signIn()
-    const homePageMockup: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homePageMockup.signOut().click()
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
   })
 })
