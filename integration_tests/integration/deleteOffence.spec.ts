@@ -1,7 +1,7 @@
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import DeleteOffence from '../pages/deleteOffence'
-import { detailsOfOffence } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -89,7 +89,7 @@ context('Incident details', () => {
   })
 
   it('Go to the delete offence page', () => {
-    cy.visit(detailsOfOffence.urls.start(300))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.questionAnswerSectionAnswer(2, 2).contains('Fighting with someone')
     detailsOfOffencePage.deleteLink(2).click()
@@ -98,7 +98,7 @@ context('Incident details', () => {
   })
 
   it('Go to the delete offence page and get a validation failure', () => {
-    cy.visit(detailsOfOffence.urls.start(300))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.deleteLink(2).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
@@ -107,7 +107,7 @@ context('Incident details', () => {
   })
 
   it('Go to the delete offence page and select yes', () => {
-    cy.visit(detailsOfOffence.urls.start(300))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.questionAnswerSection(2).should('exist')
     detailsOfOffencePage.deleteLink(2).click()
@@ -119,7 +119,7 @@ context('Incident details', () => {
   })
 
   it('Go to the delete offence page and select no', () => {
-    cy.visit(detailsOfOffence.urls.start(300))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.questionAnswerSection(2).should('exist')
     detailsOfOffencePage.deleteLink(2).click()

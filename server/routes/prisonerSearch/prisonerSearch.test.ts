@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
-import { searchForPrisoner, selectPrisoner } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 
 let app: Express
@@ -16,7 +16,7 @@ afterEach(() => {
 describe('GET /search-for-prisoner', () => {
   it('should load the search for a prisoner page', () => {
     return request(app)
-      .get(searchForPrisoner.root)
+      .get(adjudicationUrls.searchForPrisoner.root)
       .expect('Content-Type', /html/)
       .expect(200)
       .expect(res => {
@@ -28,14 +28,14 @@ describe('GET /search-for-prisoner', () => {
 describe('POST /search-for-prisoner', () => {
   it('should redirect to select prisoner page with the correct search text', () => {
     return request(app)
-      .post(searchForPrisoner.root)
+      .post(adjudicationUrls.searchForPrisoner.root)
       .send({ searchTerm: 'Smith' })
-      .expect('Location', `${selectPrisoner.root}?searchTerm=Smith`)
+      .expect('Location', `${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith`)
   })
 
   it('should render validation messages', () => {
     return request(app)
-      .post(searchForPrisoner.root)
+      .post(adjudicationUrls.searchForPrisoner.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Search for a prisoner')

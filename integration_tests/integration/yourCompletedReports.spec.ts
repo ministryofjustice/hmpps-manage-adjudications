@@ -2,7 +2,7 @@ import YourCompletedReportsPage from '../pages/yourCompletedReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication } from '../../server/data/ReportedAdjudicationResult'
-import { yourCompletedReports } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Your Completed Reports', () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ context('Your Completed Reports', () => {
   it('should say when there are no results', () => {
     cy.task('stubGetYourReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
-    cy.visit(yourCompletedReports.root)
+    cy.visit(adjudicationUrls.yourCompletedReports.root)
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
 
     yourCompletedReportsPage.noResultsMessage().should('exist')
@@ -33,6 +33,12 @@ context('Your Completed Reports', () => {
         },
         incidentStatement: null,
         createdByUserId: 'TEST_GEN',
+        createdDateTime: undefined,
+        incidentRole: {
+          associatedPrisonersNumber: undefined,
+          roleCode: undefined,
+        },
+        offenceDetails: undefined,
       }
     })
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
@@ -41,7 +47,7 @@ context('Your Completed Reports', () => {
     cy.task('stubGetYourReportedAdjudications', { number: 14, allContent: manyReportedAdjudications }) // Page 15
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     // Page 1
-    cy.visit(yourCompletedReports.root)
+    cy.visit(adjudicationUrls.yourCompletedReports.root)
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
     yourCompletedReportsPage.previousLink().should('not.exist')
     yourCompletedReportsPage.nextLink().should('exist')

@@ -1,6 +1,6 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
-import { allCompletedReports, incidentDetails, prisonerReport } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Prisoner report - reviewer view', () => {
   beforeEach(() => {
@@ -143,7 +143,7 @@ context('Prisoner report - reviewer view', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary().should('exist')
@@ -153,7 +153,7 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.returnLink().should('exist')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary()
@@ -175,7 +175,7 @@ context('Prisoner report - reviewer view', () => {
       })
   })
   it('should contain the correct offence details', () => {
-    cy.visit(`prisoner-report/12345/review`)
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.offenceDetailsSummary()
@@ -205,44 +205,44 @@ context('Prisoner report - reviewer view', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
   })
   it('should contain the correct report number', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
   })
   it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 177)}`)
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
     })
   })
   it('should go to the incident details page if the offence details change link is clicked', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.offenceDetailsChangeLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(`${incidentDetails.urls.submittedEdit('G6415GD', 177)}`)
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
     })
   })
   it('should not show a link to edit the incident statement', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentStatementChangeLink().should('not.exist')
   })
   it('should go to /all-completed-reports if the return link is clicked', () => {
-    cy.visit(prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.returnLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(allCompletedReports.root)
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
     })
   })
 })

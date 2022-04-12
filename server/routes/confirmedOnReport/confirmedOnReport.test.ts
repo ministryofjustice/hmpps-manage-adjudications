@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { confirmedOnReport } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -45,7 +45,7 @@ afterEach(() => {
 describe('GET /prisoner-placed-on-report', () => {
   it('should load the confirmation of placed on report page', () => {
     return request(app)
-      .get(`${confirmedOnReport.urls.start(123)}`)
+      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('John Smith has been placed on report')
@@ -64,7 +64,7 @@ describe('GET /prisoner-placed-on-report', () => {
       prisonerNeurodiversities: null,
     })
     return request(app)
-      .get(`${confirmedOnReport.urls.start(123)}`)
+      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
 
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -78,7 +78,7 @@ describe('GET /prisoner-placed-on-report', () => {
       prisonerPreferredNonEnglishLanguage: null,
     })
     return request(app)
-      .get(`${confirmedOnReport.urls.start(123)}`)
+      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
 
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -93,7 +93,7 @@ describe('GET /prisoner-placed-on-report', () => {
       prisonerOtherLanguages: null,
     })
     return request(app)
-      .get(`${confirmedOnReport.urls.start(123)}`)
+      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
 
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -114,7 +114,7 @@ describe('GET /prisoner-placed-on-report', () => {
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)
-      .get(`${confirmedOnReport.urls.start(123)}`)
+      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
 
       .expect('Content-Type', /html/)
       .expect(res => {

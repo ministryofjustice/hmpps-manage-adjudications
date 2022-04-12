@@ -4,7 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import PrintReportRoutes from './printReport'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { printReport } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function prisonerConfirmedOnReportRoutes({
   reportedAdjudicationsService,
@@ -17,7 +17,7 @@ export default function prisonerConfirmedOnReportRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(printReport.matchers.start, printReportRoute.view)
+  get(adjudicationUrls.printReport.matchers.start, printReportRoute.view)
 
   return router
 }

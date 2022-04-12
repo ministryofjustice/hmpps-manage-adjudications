@@ -8,7 +8,7 @@ import { convertToTitleCase } from '../../utils/utils'
 import UserService from '../../services/userService'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { selectAssociatedStaff } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -44,7 +44,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
 
   override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
     return {
-      pathname: selectAssociatedStaff.root,
+      pathname: adjudicationUrls.selectAssociatedStaff.root,
       query: {
         staffFirstName: (form.selectedAnswerData as StaffData).staffSearchFirstNameInput,
         staffLastName: (form.selectedAnswerData as StaffData).staffSearchLastNameInput,

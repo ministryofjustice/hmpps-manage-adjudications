@@ -4,7 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import AdjudicationPdf from './adjudicationPdf'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { printPdf } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function adjudicationPdfRoutes({
   reportedAdjudicationsService,
@@ -19,7 +19,7 @@ export default function adjudicationPdfRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(printPdf.matchers.start, adjudicationPdf.renderPdf)
+  get(adjudicationUrls.printPdf.matchers.start, adjudicationPdf.renderPdf)
 
   return router
 }

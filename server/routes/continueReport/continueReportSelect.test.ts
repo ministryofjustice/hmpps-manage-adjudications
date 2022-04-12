@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import { selectReport } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -79,7 +79,7 @@ describe('GET /select-report', () => {
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get(selectReport.root)
+        .get(adjudicationUrls.selectReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Select a report')
@@ -98,7 +98,7 @@ describe('GET /select-report', () => {
     })
     it('shows default message', () => {
       return request(app)
-        .get(selectReport.root)
+        .get(adjudicationUrls.selectReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Select a report')

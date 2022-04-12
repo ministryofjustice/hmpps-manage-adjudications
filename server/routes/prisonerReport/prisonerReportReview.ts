@@ -6,7 +6,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import PrisonerReportPage, { PageRequestType } from './prisonerReportPage'
 
 import { hasAnyRole } from '../../utils/utils'
-import { homepageUrl } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class prisonerReportReviewRoutes {
   page: PrisonerReportPage
@@ -29,7 +29,7 @@ export default class prisonerReportReviewRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
-      return res.render('pages/notFound.njk', { url: req.headers.referer || homepageUrl.root })
+      return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
     return this.page.view(req, res)
   }

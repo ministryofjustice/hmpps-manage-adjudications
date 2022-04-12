@@ -1,4 +1,4 @@
-import { printReport, prisonerReport } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page from '../pages/page'
 import PrintReport from '../pages/printReport'
 
@@ -127,7 +127,7 @@ context('Print a copy of this report', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(printReport.urls.start(1524242))
+    cy.visit(adjudicationUrls.printReport.urls.start(1524242))
     Page.verifyOnPage(PrintReport)
     cy.contains('John Smith must be given a copy of this report by 10:00 on Tuesday 8 December')
     cy.contains('John Smith’s preferred language is:')
@@ -138,11 +138,15 @@ context('Print a copy of this report', () => {
   })
 
   it('should redirect the user to the referrer on finish', () => {
-    cy.visit(`${printReport.urls.start(1524242)}?referrer=${prisonerReport.urls.report(1524242)}`)
+    cy.visit(
+      `${adjudicationUrls.printReport.urls.start(1524242)}?referrer=${adjudicationUrls.prisonerReport.urls.report(
+        1524242
+      )}`
+    )
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.exitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(prisonerReport.urls.report(1524242))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(1524242))
     })
   })
 })

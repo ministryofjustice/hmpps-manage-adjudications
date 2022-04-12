@@ -8,7 +8,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { prisonerReport } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function prisonerReportRoutes({
   reportedAdjudicationsService,
@@ -37,8 +37,8 @@ export default function prisonerReportRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(prisonerReport.matchers.report, prisonerReportRoute.view)
-  get(prisonerReport.matchers.review, prisonerReportReview.view)
+  get(adjudicationUrls.prisonerReport.matchers.report, prisonerReportRoute.view)
+  get(adjudicationUrls.prisonerReport.matchers.review, prisonerReportReview.view)
 
   return router
 }

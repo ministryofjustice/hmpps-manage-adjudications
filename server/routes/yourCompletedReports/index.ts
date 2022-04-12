@@ -4,7 +4,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import YourCompletedReports from './yourCompletedReports'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { yourCompletedReports } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function yourCompletedReportsRoutes({
   reportedAdjudicationsService,
@@ -17,7 +17,7 @@ export default function yourCompletedReportsRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(yourCompletedReports.matchers.start, yourCompletedReportsRoute.view)
+  get(adjudicationUrls.yourCompletedReports.matchers.start, yourCompletedReportsRoute.view)
 
   return router
 }

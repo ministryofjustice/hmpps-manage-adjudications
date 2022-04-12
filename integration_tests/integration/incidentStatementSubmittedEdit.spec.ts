@@ -1,4 +1,4 @@
-import { checkYourAnswers, incidentStatementUrls, prisonerReport } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentStatement from '../pages/incidentStatementSubmittedEdit'
 import Page from '../pages/page'
 
@@ -67,7 +67,7 @@ context('Incident Statement', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(incidentStatementUrls.urls.submittedEdit(3456))
+    cy.visit(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().should('exist')
     incidentStatementPage.submitButton().should('exist')
@@ -75,7 +75,7 @@ context('Incident Statement', () => {
   })
 
   it('should show validation message if there is no statement given', () => {
-    cy.visit(incidentStatementUrls.urls.submittedEdit(3456))
+    cy.visit(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.submitButton().click()
@@ -87,22 +87,22 @@ context('Incident Statement', () => {
       })
   })
   it('should redirect the user to /check-your-answers if statement is complete', () => {
-    cy.visit(incidentStatementUrls.urls.submittedEdit(3456))
+    cy.visit(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.statementTextArea().type('The prisoner was badly behaved today.')
     incidentStatementPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(checkYourAnswers.urls.report(3456))
+      expect(loc.pathname).to.eq(adjudicationUrls.checkYourAnswers.urls.report(3456))
     })
   })
   it('should redirect the user to prisoner report if the user clicks cancel', () => {
-    cy.visit(incidentStatementUrls.urls.submittedEdit(3456))
+    cy.visit(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
     const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
     incidentStatementPage.statementTextArea().clear()
     incidentStatementPage.cancelButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(prisonerReport.urls.report(1524493))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(1524493))
     })
   })
 })
