@@ -40,13 +40,13 @@ const getVariablesForPageType = (
     }
   }
   return {
-    printHref: `${adjudicationUrls.printReport.urls.start(adjudicationNumber)}?referrer=${
-      adjudicationUrls.prisonerReport.urls.report
-    }`,
+    printHref: `${adjudicationUrls.printReport.urls.start(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
     editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
       prisonerNumber,
       draftAdjudicationNumber
-    )}?referrer=${adjudicationUrls.prisonerReport.urls.report}`,
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
   }
