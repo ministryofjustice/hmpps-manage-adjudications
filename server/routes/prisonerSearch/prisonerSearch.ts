@@ -2,7 +2,7 @@ import url from 'url'
 import { Request, Response } from 'express'
 import validateForm from './prisonerSearchValidation'
 import { FormError } from '../../@types/template'
-import { selectPrisoner } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class PrisonerSearchRoutes {
   private renderView = async (req: Request, res: Response, error?: FormError): Promise<void> => {
@@ -22,7 +22,7 @@ export default class PrisonerSearchRoutes {
 
     return res.redirect(
       url.format({
-        pathname: selectPrisoner.root,
+        pathname: adjudicationUrls.selectPrisoner.root,
         query: { searchTerm },
       })
     )

@@ -2,7 +2,7 @@ import AllCompletedReportsPage from '../pages/allCompletedReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication } from '../../server/data/ReportedAdjudicationResult'
-import { allCompletedReports } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -16,7 +16,7 @@ context('All Completed Reports', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
 
-    cy.visit(allCompletedReports.root)
+    cy.visit(adjudicationUrls.allCompletedReports.root)
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
 
     allCompletedReportsPage.noResultsMessage().should('exist')
@@ -51,7 +51,7 @@ context('All Completed Reports', () => {
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(allCompletedReports.root)
+    cy.visit(adjudicationUrls.allCompletedReports.root)
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.resultsTable().should('exist')
     allCompletedReportsPage
@@ -106,7 +106,7 @@ context('All Completed Reports', () => {
     cy.task('stubGetAllReportedAdjudications', { number: 14, allContent: manyReportedAdjudications }) // Page 15
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     // Page 1
-    cy.visit(allCompletedReports.root)
+    cy.visit(adjudicationUrls.allCompletedReports.root)
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.previousLink().should('not.exist')
     allCompletedReportsPage.nextLink().should('exist')

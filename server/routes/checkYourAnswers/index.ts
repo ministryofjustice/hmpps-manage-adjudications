@@ -8,7 +8,7 @@ import CheckYourAnswersBeforeChangeReviewerRoutes from './checkYourAnswersBefore
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { checkYourAnswers } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function CheckAnswersRoutes({
   placeOnReportService,
@@ -36,11 +36,11 @@ export default function CheckAnswersRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(checkYourAnswers.matchers.start, checkYourAnswersRoute.view)
-  post(checkYourAnswers.matchers.start, checkYourAnswersRoute.submit)
-  get(checkYourAnswers.matchers.reporterView, checkYourAnswersBeforeChangeReporter.view)
-  post(checkYourAnswers.matchers.reporterView, checkYourAnswersBeforeChangeReporter.submit)
-  get(checkYourAnswers.matchers.reviewerView, checkYourAnswersBeforeChangeReviewerRoutes.view)
-  post(checkYourAnswers.matchers.reviewerView, checkYourAnswersBeforeChangeReviewerRoutes.submit)
+  get(adjudicationUrls.checkYourAnswers.matchers.start, checkYourAnswersRoute.view)
+  post(adjudicationUrls.checkYourAnswers.matchers.start, checkYourAnswersRoute.submit)
+  get(adjudicationUrls.checkYourAnswers.matchers.reporterView, checkYourAnswersBeforeChangeReporter.view)
+  post(adjudicationUrls.checkYourAnswers.matchers.reporterView, checkYourAnswersBeforeChangeReporter.submit)
+  get(adjudicationUrls.checkYourAnswers.matchers.reviewerView, checkYourAnswersBeforeChangeReviewerRoutes.view)
+  post(adjudicationUrls.checkYourAnswers.matchers.reviewerView, checkYourAnswersBeforeChangeReviewerRoutes.submit)
   return router
 }

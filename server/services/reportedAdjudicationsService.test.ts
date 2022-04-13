@@ -5,7 +5,6 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
-import { prisonerReport } from '../utils/urlGenerator'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -163,7 +162,6 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My second incident',
           },
-          prisonerReportUrl: prisonerReport.urls.report(2),
         },
         {
           displayName: 'Moriarty, James',
@@ -183,7 +181,6 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My first incident',
           },
-          prisonerReportUrl: prisonerReport.urls.report(1),
         },
       ]
 
@@ -401,7 +398,6 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'Something happened',
           },
-          prisonerReportUrl: prisonerReport.urls.review(1524427),
         },
 
         {
@@ -422,7 +418,6 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:00',
-          prisonerReportUrl: prisonerReport.urls.review(1524425),
         },
       ]
 

@@ -10,12 +10,7 @@ import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
 import OffenceSessionService from '../../services/offenceSessionService'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import {
-  detailsOfOffence,
-  offenceCodeSelection,
-  selectAssociatedPrisoner,
-  selectAssociatedStaff,
-} from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -130,7 +125,7 @@ afterEach(() => {
 describe('GET /offence-code-selection/100/assisted/1 view', () => {
   it('should load the first page of the offence code select pages', () => {
     return request(app)
-      .get(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .get(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
@@ -149,7 +144,7 @@ describe('GET /offence-code-selection/100/assisted/1 view', () => {
 describe('POST /offence-code-selection/100/assisted/1 validation', () => {
   it('should validate on submit when no answer is selected', () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .expect(res => {
         expect(res.text).toContain('Please make a choice')
       })
@@ -157,7 +152,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.OTHER_PERSON} answer when no name is added`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: anotherPersonAnswer.id(),
       })
@@ -168,7 +163,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.PRISONER} answer when no prisoner id is present`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonerAnswer.id(),
         prisonerSearchNameInput: 'FirstName LastName',
@@ -180,7 +175,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.PRISONER} answer when searching and no search text`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonerAnswer.id(),
         searchUser: 'searchUser',
@@ -192,7 +187,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.OFFICER} question when no staff id is present and not searching`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonOfficerAnswer.id(),
       })
@@ -203,7 +198,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.OFFICER} question when searching and no search text`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonOfficerAnswer.id(),
         searchUser: 'searchUser',
@@ -216,7 +211,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.STAFF} question when no staff id is present and not searching`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aMemberOfStaffAnswer.id(),
       })
@@ -227,7 +222,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 
   it(`should validate a ${Type.STAFF} question when searching and no search text`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aMemberOfStaffAnswer.id(),
         searchUser: 'searchUser',
@@ -242,19 +237,19 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
 describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () => {
   it(`A ${Type.PRISONER} answer should redirect to search when searching`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonerAnswer.id(),
         searchUser: 'searchUser',
         prisonerSearchNameInput: 'FirstName LastName',
       })
       .expect(302)
-      .expect('Location', `${selectAssociatedPrisoner.root}?searchTerm=FirstName%20LastName`)
+      .expect('Location', `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=FirstName%20LastName`)
   })
 
   it(`A ${Type.OFFICER} answer should redirect to search when searching`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonOfficerAnswer.id(),
         searchUser: 'searchUser',
@@ -262,12 +257,15 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
         officerSearchLastNameInput: 'LastName',
       })
       .expect(302)
-      .expect('Location', `${selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`
+      )
   })
 
   it(`A ${Type.STAFF} answer should redirect to search when searching`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aMemberOfStaffAnswer.id(),
         searchUser: 'searchUser',
@@ -275,7 +273,10 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
         staffSearchLastNameInput: 'LastName',
       })
       .expect(302)
-      .expect('Location', `${selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`
+      )
   })
 })
 
@@ -283,7 +284,7 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
   it(`A ${Type.PRISONER} answer should should be selected and have the prison number hidden input when returning from search`, () => {
     return request(app)
       .get(
-        `${offenceCodeSelection.urls.question(
+        `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
           '1'
@@ -298,7 +299,7 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
   it(`A ${Type.OFFICER} answer should should be selected and have the staff username hidden input when returning from search`, () => {
     return request(app)
       .get(
-        `${offenceCodeSelection.urls.question(
+        `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
           '1'
@@ -313,7 +314,7 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
   it(`A ${Type.STAFF} answer should should be selected and have the staff username hidden input when returning from search`, () => {
     return request(app)
       .get(
-        `${offenceCodeSelection.urls.question(
+        `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
           '1'
@@ -329,26 +330,26 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
 describe('POST /offence-code-selection/100/assisted/1 next page', () => {
   it('should redirect to the next page when selecting a standard answer with a child', () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aStandardAnswerWithChildQuestion.id(),
       })
       .expect(302)
-      .expect('Location', `${offenceCodeSelection.urls.question(100, 'assisted', '1-6')}`)
+      .expect('Location', `${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1-6')}`)
   })
 })
 
 describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
   it('An end standard answer should redirect to the detail of offence page with an offence code added to the output', () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aStandardAnswer.id(),
       })
       .expect(302)
       .expect(
         'Location',
-        `${detailsOfOffence.urls.add(
+        `${adjudicationUrls.detailsOfOffence.urls.add(
           100
         )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${aStandardAnswer.getOffenceCode()}`
       )
@@ -356,7 +357,7 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
 
   it(`An end ${Type.OFFICER} answer should redirect to the detail of offence page with a victimStaffUsername and offence code added to the output`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonOfficerAnswer.id(),
         officerId: 'USERNAME',
@@ -364,7 +365,7 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(302)
       .expect(
         'Location',
-        `${detailsOfOffence.urls.add(
+        `${adjudicationUrls.detailsOfOffence.urls.add(
           100
         )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aPrisonOfficerAnswer.getOffenceCode()}`
       )
@@ -372,7 +373,7 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
 
   it(`An end ${Type.STAFF} answer should redirect to the detail of offence page with a victimStaffUsername and offence code added to the output`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aMemberOfStaffAnswer.id(),
         staffId: 'USERNAME',
@@ -380,7 +381,7 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(302)
       .expect(
         'Location',
-        `${detailsOfOffence.urls.add(
+        `${adjudicationUrls.detailsOfOffence.urls.add(
           100
         )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aMemberOfStaffAnswer.getOffenceCode()}`
       )
@@ -388,7 +389,7 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
 
   it(`An end ${Type.OTHER_PERSON} answer should redirect to the detail of offence page with a victimStaffUsername and offence code added to the output`, () => {
     return request(app)
-      .post(`${offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: anotherPersonAnswer.id(),
         otherPersonNameInput: 'FIRSTNAME LASTNAME',
@@ -396,7 +397,7 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(302)
       .expect(
         'Location',
-        `${detailsOfOffence.urls.add(
+        `${adjudicationUrls.detailsOfOffence.urls.add(
           100
         )}?victimOtherPersonsName=FIRSTNAME%20LASTNAME&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${anotherPersonAnswer.getOffenceCode()}`
       )

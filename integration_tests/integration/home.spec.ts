@@ -1,4 +1,5 @@
-import Homepage from '../pages/home'
+import adjudicationUrls from '../../server/utils/urlGenerator'
+import HomepagePage from '../pages/home'
 import Page from '../pages/page'
 
 context('Home page', () => {
@@ -10,14 +11,14 @@ context('Home page', () => {
   })
 
   it('should see the feedback banner', () => {
-    cy.visit(`/place-a-prisoner-on-report`)
-    const homepage: Homepage = Page.verifyOnPage(Homepage)
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.feedbackBanner().should('exist')
   })
 
   it('should only see some tiles without the reviewer role', () => {
-    cy.visit(`/place-a-prisoner-on-report`)
-    const homepage: Homepage = Page.verifyOnPage(Homepage)
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
@@ -27,8 +28,8 @@ context('Home page', () => {
 
   it('should see all the tiles with the reviewer role', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.visit(`/place-a-prisoner-on-report`)
-    const homepage: Homepage = Page.verifyOnPage(Homepage)
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')

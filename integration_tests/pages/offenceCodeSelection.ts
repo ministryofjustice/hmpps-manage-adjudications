@@ -1,4 +1,4 @@
-import { offenceCodeSelection } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page, { PageElement } from './page'
 
 export default class OffenceCodeSelection extends Page {
@@ -10,7 +10,9 @@ export default class OffenceCodeSelection extends Page {
 
   radio = (value: string) => this.radios().find(`input[value="${value}"]`)
 
-  radioLabel = (value: string) => this.radio(value).siblings('label').should('have.length', 1)
+  radioLabelFromValue = (value: string) => this.radio(value).siblings('label').should('have.length', 1)
+
+  radioLabelFromText = (text: string) => cy.get('label').contains(text)
 
   continue = (): PageElement => cy.get('[data-qa="offence-code-decision-continue"]')
 
@@ -53,7 +55,7 @@ export default class OffenceCodeSelection extends Page {
     prisonerId: string
   ) =>
     cy.visit(
-      `${offenceCodeSelection.urls.question(
+      `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationId,
         'committed',
         questionId
@@ -67,10 +69,13 @@ export default class OffenceCodeSelection extends Page {
     staffId: string
   ) =>
     cy.visit(
-      `${offenceCodeSelection.urls.question(
+      `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationId,
         'committed',
         questionId
       )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
     )
+
+  checkOffenceCode = (offenceCode: number, text: string): PageElement =>
+    cy.get('label').contains(text).siblings(`input[offenceCode="${offenceCode}"]`).should('exist')
 }

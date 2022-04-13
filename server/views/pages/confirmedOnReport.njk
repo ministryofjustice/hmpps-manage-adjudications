@@ -48,7 +48,7 @@
         {% else %}
           {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
 
-          {{ printLink('Print a copy of this report', printPdfUrl, "left", "govuk-!-padding-right-0", "_blank") }}
+          {{ printLink('Print a copy of this report', adjudicationUrls.printPdf.urls.start(adjudicationNumber), "left", "govuk-!-padding-right-0", "_blank") }}
           <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
         {% endif %}
         {{ govukButton({

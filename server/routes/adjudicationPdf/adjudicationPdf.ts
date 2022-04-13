@@ -26,6 +26,7 @@ export default class AdjudicationPdf {
       reportedAdjudication.incidentRole,
       user
     )
+
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
       adjudicationNumber,
       adjudicationDetails,

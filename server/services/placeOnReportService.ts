@@ -17,7 +17,6 @@ import {
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
-import { taskList } from '../utils/urlGenerator'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -31,7 +30,6 @@ interface DraftAdjudicationEnhanced extends DraftAdjudication {
   friendlyName: string
   incidentDate: string
   incidentTime: string
-  taskListUrl: string
 }
 
 export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
@@ -235,8 +233,7 @@ export default class PlaceOnReportService {
         const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
         const incidentDate = getDate(report.incidentDetails.dateTimeOfIncident, 'D MMMM YYYY')
         const incidentTime = getTime(report.incidentDetails.dateTimeOfIncident)
-        const taskListUrl = taskList.urls.start(report.id)
-        return { ...report, displayName, friendlyName, incidentDate, incidentTime, taskListUrl }
+        return { ...report, displayName, friendlyName, incidentDate, incidentTime }
       })
     }
 

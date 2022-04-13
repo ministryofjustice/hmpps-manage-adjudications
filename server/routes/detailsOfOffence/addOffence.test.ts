@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
-import { detailsOfOffence } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
@@ -43,8 +43,8 @@ afterEach(() => {
 describe('GET /details-of-offence/100/add view', () => {
   it('should load the offence details page', () => {
     return request(app)
-      .get(`${detailsOfOffence.urls.add(100)}?offenceCode=1`)
+      .get(`${adjudicationUrls.detailsOfOffence.urls.add(100)}?offenceCode=1`)
       .expect(302)
-      .expect('Location', `${detailsOfOffence.urls.start(100)}`)
+      .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(100))
   })
 })

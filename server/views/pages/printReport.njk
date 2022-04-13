@@ -26,7 +26,7 @@
                 </div>
                 {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
             </div>
-            {{ printLink('Print this report', printPdfUrl, "left", "govuk-!-padding-right-0", "_blank") }}
+            {{ printLink('Print this report', adjudicationUrls.printPdf.urls.start(adjudicationNumber), "left", "govuk-!-padding-right-0", "_blank") }}
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
             <div class="govuk-!-margin-top-7 govuk-!-padding-left-2">

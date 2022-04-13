@@ -1,4 +1,4 @@
-import { confirmedOnReport, printPdf } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Prisoner has been placed on report', () => {
   beforeEach(() => {
@@ -83,9 +83,9 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('The notification of being on report should present on the print report page', () => {
-    cy.visit(`${confirmedOnReport.urls.start(1524242)}`)
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.start(1524242))
     cy.get('[data-qa=printLink]').click()
-    cy.request(printPdf.urls.start(1524242)).should(res => {
+    cy.request(adjudicationUrls.printPdf.urls.start(1524242)).should(res => {
       expect(res.status).to.eq(200)
       expect(res.headers['content-disposition']).to.contain('adjudication-report-1524242')
       expect(res.headers['content-type']).to.eq('application/pdf')

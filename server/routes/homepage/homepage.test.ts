@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/userService.ts')
 
@@ -21,7 +22,7 @@ afterEach(() => {
 describe('GET /place-a-prisoner-on-report', () => {
   it('should get the home page', () => {
     return request(app)
-      .get('/place-a-prisoner-on-report')
+      .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Place a prisoner on report')
@@ -30,7 +31,7 @@ describe('GET /place-a-prisoner-on-report', () => {
   it('the review tile should not be visible without the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['NOT_THE_ADJUDICATIONS_REVIEWER_ROLE'])
     return request(app)
-      .get('/place-a-prisoner-on-report')
+      .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('View all completed reports')
@@ -39,7 +40,7 @@ describe('GET /place-a-prisoner-on-report', () => {
   it('the review tile should not be visible without the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .get('/place-a-prisoner-on-report')
+      .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('View all completed reports')

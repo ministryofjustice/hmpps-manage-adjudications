@@ -15,7 +15,7 @@ import OtherPersonDecisionHelper from './otherPersonDecisionHelper'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { AnswerType } from '../../offenceCodeDecisions/Answer'
-import { detailsOfOffence, offenceCodeSelection, taskList } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -100,7 +100,7 @@ export default class OffenceCodeRoutes {
     // We redirect to the next decision or the details of offence page if this is the last.
     const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
-      const nextQuestionUrl = `${offenceCodeSelection.urls.question(
+      const nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationNumber,
         incidentRole,
         selectedAnswer.getChildDecision().getUrl()
@@ -110,12 +110,15 @@ export default class OffenceCodeRoutes {
     // We have finished - remove the offence data from the session and redirect to the details of offence page with the
     // offence data payload
     const finalOffenceData = this.offenceSessionService.deleteOffenceData(req, adjudicationNumber)
-    return this.redirect({ pathname: detailsOfOffence.urls.add(adjudicationNumber), query: finalOffenceData }, res)
+    return this.redirect(
+      { pathname: adjudicationUrls.detailsOfOffence.urls.add(adjudicationNumber), query: finalOffenceData },
+      res
+    )
   }
 
   cancel = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return res.redirect(taskList.urls.start(adjudicationNumber))
+    return res.redirect(adjudicationUrls.taskList.urls.start(adjudicationNumber))
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {
@@ -140,7 +143,9 @@ export default class OffenceCodeRoutes {
   redirectToStart = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { incidentRole } = req.params
-    res.redirect(offenceCodeSelection.urls.question(adjudicationNumber, incidentRole, this.decisions().id()))
+    res.redirect(
+      adjudicationUrls.offenceCodeSelection.urls.question(adjudicationNumber, incidentRole, this.decisions().id())
+    )
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -158,6 +163,7 @@ export default class OffenceCodeRoutes {
         id: a.id(),
         label: a.getProcessedText(placeholderValues),
         type: a.getType().toString(),
+        offenceCode: a.getOffenceCode(),
       }
     })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
@@ -187,7 +193,7 @@ export default class OffenceCodeRoutes {
   }
 
   private urlHere(req: Request) {
-    return `${offenceCodeSelection.root}${req.path}`
+    return `${adjudicationUrls.offenceCodeSelection.root}${req.path}`
   }
 
   private decisions(): Decision {

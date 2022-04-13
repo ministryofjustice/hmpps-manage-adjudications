@@ -1,6 +1,6 @@
 import PrisonerSearch from '../pages/prisonerSearch'
 import Page from '../pages/page'
-import { searchForPrisoner } from '../../server/utils/urlGenerator'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Prisoner Search', () => {
   beforeEach(() => {
@@ -11,14 +11,14 @@ context('Prisoner Search', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(searchForPrisoner.root)
+    cy.visit(adjudicationUrls.searchForPrisoner.root)
     const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
     prisonerSearchPage.submitButton().should('exist')
     prisonerSearchPage.searchTermInput().should('exist')
   })
 
   it('should show validation message if there is no input', () => {
-    cy.visit(searchForPrisoner.root)
+    cy.visit(adjudicationUrls.searchForPrisoner.root)
     const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
     prisonerSearchPage.submitButton().click()
     prisonerSearchPage
@@ -47,7 +47,7 @@ context('Prisoner Search', () => {
       ],
     })
 
-    cy.visit(searchForPrisoner.root)
+    cy.visit(adjudicationUrls.searchForPrisoner.root)
     const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
     prisonerSearchPage.searchTermInput().type('Smith')
     prisonerSearchPage.submitButton().click()
@@ -73,7 +73,7 @@ context('Prisoner Search', () => {
       ],
     })
 
-    cy.visit(searchForPrisoner.root)
+    cy.visit(adjudicationUrls.searchForPrisoner.root)
     const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
     prisonerSearchPage.searchTermInput().type('A1234AA')
     prisonerSearchPage.submitButton().click()

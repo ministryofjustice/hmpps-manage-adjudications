@@ -1,6 +1,7 @@
-import Homepage from '../pages/home'
+import HomepagePage from '../pages/home'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Sign in', () => {
   beforeEach(() => {
@@ -10,21 +11,21 @@ context('Sign in', () => {
   })
 
   it('Unauthenticated user directed to auth', () => {
-    cy.visit('/place-a-prisoner-on-report')
+    cy.visit(adjudicationUrls.homepage.root)
     Page.verifyOnPage(AuthSignInPage)
   })
 
   it('User name visible in header', () => {
     cy.signIn()
-    const homePage: Homepage = Page.verifyOnPage(Homepage)
-    homePage.signInName().contains('J. Smith')
-    homePage.activeLocation().contains('Moorland')
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.signInName().contains('J. Smith')
+    homepage.activeLocation().contains('Moorland')
   })
 
   it('User can log out', () => {
     cy.signIn()
-    const homePage: Homepage = Page.verifyOnPage(Homepage)
-    homePage.signOut().click()
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
   })
 })

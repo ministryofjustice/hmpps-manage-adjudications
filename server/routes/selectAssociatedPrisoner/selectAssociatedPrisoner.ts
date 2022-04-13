@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
-import { selectAssociatedPrisoner } from '../../utils/urlGenerator'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = {
   error?: FormError
@@ -32,7 +32,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const searchTerm = JSON.stringify(req.query.searchTerm)?.replace(/"/g, '')
     const { redirectUrl } = req.session
     if (!searchTerm)
-      return res.render(`pages/notFound.njk`, { url: req.headers.referer || `/place-a-prisoner-on-report` })
+      return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
 
     const searchResults = await this.prisonerSearchService.search(
       { searchTerm, prisonIds: [user.activeCaseLoad.caseLoadId] },
@@ -63,7 +63,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     return res.redirect(
       url.format({
-        pathname: selectAssociatedPrisoner.root,
+        pathname: adjudicationUrls.selectAssociatedPrisoner.root,
         query: { searchTerm, redirectUrl },
       })
     )

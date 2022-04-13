@@ -6,6 +6,7 @@ import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive } from './utils'
+import adjudicationUrls from './urlGenerator'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -122,4 +123,5 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
 }
