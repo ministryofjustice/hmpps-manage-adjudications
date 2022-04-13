@@ -57,6 +57,26 @@ context('Prisoner report - reporter view', () => {
         },
       },
     })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 56789,
+      response: {
+        draftAdjudication: {
+          id: 177,
+          adjudicationNumber: 12345,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 234,
+            dateTimeOfIncident: '2021-12-01T09:40:00',
+            handoverDeadline: '2021-12-03T09:40:00',
+          },
+          incidentStatement: {
+            statement: 'TESTING',
+            completed: true,
+          },
+          startedByUserId: 'USER1',
+        },
+      },
+    })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
       response: [
@@ -81,6 +101,52 @@ context('Prisoner report - reporter view', () => {
           userDescription: 'Workshop 4 - PICTA',
         },
       ],
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12345,
+      response: {
+        reportedAdjudication: {
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1,
+          createdDateTime: undefined,
+          createdByUserId: undefined,
+          incidentDetails: {
+            locationId: 197682,
+            dateTimeOfIncident: '2021-12-09T10:30:00',
+            handoverDeadline: '2021-12-11T10:30:00',
+          },
+          incidentStatement: undefined,
+          incidentRole: {
+            roleCode: undefined,
+          },
+          offenceDetails: [],
+          status: 'AWAITING_REVIEW',
+        },
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 56789,
+      response: {
+        reportedAdjudication: {
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1,
+          createdDateTime: undefined,
+          createdByUserId: undefined,
+          incidentDetails: {
+            locationId: 197682,
+            dateTimeOfIncident: '2021-12-09T10:30:00',
+            handoverDeadline: '2021-12-11T10:30:00',
+          },
+          incidentStatement: undefined,
+          incidentRole: {
+            roleCode: undefined,
+          },
+          offenceDetails: [],
+          status: 'REJECTED',
+        },
+      },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
@@ -141,110 +207,130 @@ context('Prisoner report - reporter view', () => {
     })
     cy.signIn()
   })
-  it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+  describe('test prisoners', () => {
+    ;[
+      { id: 12345, readOnly: false },
+      { id: 56789, readOnly: true },
+    ].forEach(prisoner => {
+      it('should contain the required page elements', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-    PrisonerReportPage.incidentDetailsSummary().should('exist')
-    PrisonerReportPage.offenceDetailsSummary().should('exist')
-    PrisonerReportPage.incidentStatement().should('exist')
-    PrisonerReportPage.reportNumber().should('exist')
-    PrisonerReportPage.returnLink().should('exist')
-  })
-  it('should contain the correct incident details', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        PrisonerReportPage.incidentDetailsSummary().should('exist')
+        PrisonerReportPage.offenceDetailsSummary().should('exist')
+        PrisonerReportPage.incidentStatement().should('exist')
+        PrisonerReportPage.reportNumber().should('exist')
+        PrisonerReportPage.returnLink().should('exist')
+      })
+      it('should contain the correct incident details', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-    PrisonerReportPage.incidentDetailsSummary()
-      .find('dt')
-      .then($summaryLabels => {
-        expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
-        expect($summaryLabels.get(1).innerText).to.contain('Date')
-        expect($summaryLabels.get(2).innerText).to.contain('Time')
-        expect($summaryLabels.get(3).innerText).to.contain('Location')
+        PrisonerReportPage.incidentDetailsSummary()
+          .find('dt')
+          .then($summaryLabels => {
+            expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
+            expect($summaryLabels.get(1).innerText).to.contain('Date')
+            expect($summaryLabels.get(2).innerText).to.contain('Time')
+            expect($summaryLabels.get(3).innerText).to.contain('Location')
+          })
+
+        PrisonerReportPage.incidentDetailsSummary()
+          .find('dd')
+          .then($summaryData => {
+            expect($summaryData.get(0).innerText).to.contain('T. User')
+            expect($summaryData.get(1).innerText).to.contain('1 December 2021')
+            expect($summaryData.get(2).innerText).to.contain('09:40')
+            expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+          })
+      })
+      it('should contain the correct offence details', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+
+        PrisonerReportPage.offenceDetailsSummary()
+          .find('dt')
+          .then($summaryLabels => {
+            expect($summaryLabels.get(0).innerText).to.contain(
+              'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+            )
+            expect($summaryLabels.get(1).innerText).to.contain('What did the incident involve?')
+            expect($summaryLabels.get(2).innerText).to.contain('Who did John Smith assist James Jones to assault?')
+            expect($summaryLabels.get(3).innerText).to.contain('Was the incident a racially aggravated assault?')
+            expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+          })
+
+        PrisonerReportPage.offenceDetailsSummary()
+          .find('dd')
+          .then($summaryData => {
+            expect($summaryData.get(0).innerText).to.contain(
+              'Assault, fighting, or endangering the health or personal safety of others'
+            )
+            expect($summaryData.get(1).innerText).to.contain('Assaulting someone')
+            expect($summaryData.get(2).innerText).to.contain('Another prisoner - Paul Wright')
+            expect($summaryData.get(3).innerText).to.contain('Yes')
+            expect($summaryData.get(4).innerText).to.contain(
+              'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+            )
+          })
+      })
+      it('should contain the correct incident statement', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+
+        PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
+      })
+      it('should contain the correct report number', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+
+        PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
       })
 
-    PrisonerReportPage.incidentDetailsSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain('T. User')
-        expect($summaryData.get(1).innerText).to.contain('1 December 2021')
-        expect($summaryData.get(2).innerText).to.contain('09:40')
-        expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+      it('should go to the incident details page if the incident details change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        if (prisoner.readOnly) {
+          PrisonerReportPage.incidentDetailsChangeLink().should('not.exist')
+        } else {
+          PrisonerReportPage.incidentDetailsChangeLink().click()
+          cy.location().should(loc => {
+            expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
+          })
+        }
       })
-  })
-  it('should contain the correct offence details', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-
-    PrisonerReportPage.offenceDetailsSummary()
-      .find('dt')
-      .then($summaryLabels => {
-        expect($summaryLabels.get(0).innerText).to.contain(
-          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-        )
-        expect($summaryLabels.get(1).innerText).to.contain('What did the incident involve?')
-        expect($summaryLabels.get(2).innerText).to.contain('Who did John Smith assist James Jones to assault?')
-        expect($summaryLabels.get(3).innerText).to.contain('Was the incident a racially aggravated assault?')
-        expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+      it('should go to the incident details page if the offence details change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        if (prisoner.readOnly) {
+          PrisonerReportPage.offenceDetailsChangeLink().should('not.exist')
+        } else {
+          PrisonerReportPage.offenceDetailsChangeLink().click()
+          cy.location().should(loc => {
+            expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
+          })
+        }
       })
-
-    PrisonerReportPage.offenceDetailsSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
-        )
-        expect($summaryData.get(1).innerText).to.contain('Assaulting someone')
-        expect($summaryData.get(2).innerText).to.contain('Another prisoner - Paul Wright')
-        expect($summaryData.get(3).innerText).to.contain('Yes')
-        expect($summaryData.get(4).innerText).to.contain(
-          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
-        )
+      it('should go to the incident statement page if the incident statement change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        if (prisoner.readOnly) {
+          PrisonerReportPage.incidentStatementChangeLink().should('not.exist')
+        } else {
+          PrisonerReportPage.incidentStatementChangeLink().click()
+          cy.location().should(loc => {
+            expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.submittedEdit(177))
+          })
+        }
       })
-  })
-  it('should contain the correct incident statement', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-
-    PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
-  })
-  it('should contain the correct report number', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-
-    PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
-  })
-  it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.incidentDetailsChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
-    })
-  })
-  it('should go to the incident details page if the offence details change link is clicked', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.offenceDetailsChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
-    })
-  })
-  it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.incidentStatementChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.submittedEdit(177))
-    })
-  })
-  it('should go to /your-completed-reports if the return link is clicked', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.returnLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+      it('should go to /your-completed-reports if the return link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        PrisonerReportPage.returnLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+        })
+      })
     })
   })
 })

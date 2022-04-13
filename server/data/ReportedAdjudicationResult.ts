@@ -10,6 +10,7 @@ export type ReportedAdjudication = {
   incidentStatement: IncidentStatement
   incidentRole: IncidentRole
   offenceDetails: OffenceDetails[]
+  status: string
 }
 
 export type ReportedAdjudicationResult = {

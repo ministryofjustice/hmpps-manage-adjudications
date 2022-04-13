@@ -38,6 +38,29 @@ context('Prisoner report - reviewer view', () => {
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12345,
+      response: {
+        reportedAdjudication: {
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1,
+          createdDateTime: undefined,
+          createdByUserId: undefined,
+          incidentDetails: {
+            locationId: 197682,
+            dateTimeOfIncident: '2021-12-09T10:30:00',
+            handoverDeadline: '2021-12-11T10:30:00',
+          },
+          incidentStatement: undefined,
+          incidentRole: {
+            roleCode: undefined,
+          },
+          offenceDetails: [],
+          status: 'AWAITING_REVIEW',
+        },
+      },
+    })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 12345,
       response: {
