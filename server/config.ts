@@ -110,6 +110,9 @@ export default {
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
   },
+  analytics: {
+    tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
+  },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   digitalPrisonServiceUrl: get('DIGITAL_PRISON_SERVICE_URL', 'http://localhost:3002', requiredInProduction),
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
