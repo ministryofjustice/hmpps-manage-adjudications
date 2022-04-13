@@ -287,7 +287,7 @@ context('Prisoner report - reporter view', () => {
         PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
       })
 
-      it('should go to the incident details page if the incident details change link is clicked', () => {
+      it(`should go to the incident details page if the incident details change link is clicked and false = ${prisoner.readOnly}`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
@@ -299,7 +299,7 @@ context('Prisoner report - reporter view', () => {
           })
         }
       })
-      it('should go to the incident details page if the offence details change link is clicked', () => {
+      it(`should go to the incident details page if the offence details change link is clicked and false = ${prisoner.readOnly}`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
@@ -311,7 +311,7 @@ context('Prisoner report - reporter view', () => {
           })
         }
       })
-      it('should go to the incident statement page if the incident statement change link is clicked', () => {
+      it(`should go to the incident statement page if the incident statement change link is clicked and false = ${prisoner.readOnly}`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
