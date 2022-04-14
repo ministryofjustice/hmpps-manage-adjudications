@@ -68,10 +68,12 @@ export default class prisonerReportRoutes {
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
 
-    const newDraftAdjudicationId = await this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(
-      user,
-      Number(req.params.adjudicationNumber)
-    )
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+
+    const [newDraftAdjudicationId, reportedAdjudication] = await Promise.all([
+      this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, adjudicationNumber),
+      this.reportedAdjudicationsService.getReportedAdjudicationDetails(adjudicationNumber, user),
+    ])
 
     const { draftAdjudication, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
@@ -110,6 +112,7 @@ export default class prisonerReportRoutes {
       offences,
       statementEditable: !this.pageOptions.isReviewerView(),
       ...prisonerReportVariables,
+      readOnly: ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status),
     })
   }
 

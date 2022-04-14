@@ -6,12 +6,15 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
+import UserService from '../../services/userService'
 
 jest.mock('../../services/locationService.ts')
+jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -23,6 +26,27 @@ let app: Express
 
 beforeEach(() => {
   reportedAdjudicationsService.createDraftFromCompleteAdjudication.mockResolvedValue(12345)
+
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+    reportedAdjudication: {
+      adjudicationNumber: 1524493,
+      prisonerNumber: 'G6415GD',
+      bookingId: 1,
+      createdDateTime: undefined,
+      createdByUserId: undefined,
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        handoverDeadline: '2021-12-11T10:30:00',
+      },
+      incidentStatement: undefined,
+      incidentRole: {
+        roleCode: undefined,
+      },
+      offenceDetails: [],
+      status: 'AWAITING_REVIEW',
+    },
+  })
 
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: {
@@ -128,7 +152,10 @@ beforeEach(() => {
     },
   ])
 
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, decisionTreeService })
+  app = appWithAllRoutes(
+    { production: false },
+    { reportedAdjudicationsService, locationService, userService, decisionTreeService }
+  )
 })
 
 afterEach(() => {
@@ -156,6 +183,39 @@ describe('GET prisoner report', () => {
         expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(response.text).toContain('Commits any assault')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
+      })
+  })
+  it('should load the prisoner report page if the user has the correct role', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+    return request(app)
+      .get(adjudicationUrls.prisonerReport.urls.review(12345))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Bobby Da Smith Jones’ report')
+        expect(response.text).toContain('10:45')
+        expect(response.text).toContain('Chapel')
+        expect(response.text).toContain('What type of offence did Bobby Da Smith Jones commit?')
+        expect(response.text).toContain('Assault, fighting, or endangering the health or personal safety of others')
+        expect(response.text).toContain('What did the incident involve?')
+        expect(response.text).toContain('Assaulting someone')
+        expect(response.text).toContain('Who was assaulted?')
+        expect(response.text).toContain('Another prisoner - John Saunders')
+        expect(response.text).toContain('Was the incident a racially aggravated assault?')
+        expect(response.text).toContain('No')
+        expect(response.text).toContain('This offence broke')
+        expect(response.text).toContain('Prison rule 51, paragraph 1')
+        expect(response.text).toContain('Commits any assault')
+        expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
+      })
+  })
+  it('should not load the prisoner report page if no role present', () => {
+    userService.getUserRoles.mockResolvedValue([])
+    return request(app)
+      .get(adjudicationUrls.prisonerReport.urls.review(12345))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Page not found')
+        expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(0)
       })
   })
 })

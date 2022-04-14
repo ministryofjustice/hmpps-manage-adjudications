@@ -1,10 +1,12 @@
 {% from "./incidentDetailsSummaryList.njk" import incidentDetailsSummaryList %}
 {% from "./offenceQAndASummaryList.njk" import offenceQAndASummaryList %}
 
-{% macro adjudicationSummary(detailsURL, statementURL, incidentData, statementEditable, offences) %}
+{% macro adjudicationSummary(detailsURL, statementURL, incidentData, statementEditable, readOnly, offences) %}
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
+  {% if not readOnly %}
    <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink">Change</a></p>
+  {% endif %}
   </div>
   <div class="adjudicationsSummary-incidentDetails">
    {{ incidentDetailsSummaryList(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
@@ -12,7 +14,9 @@
 
     <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
       <h2 class="govuk-heading-m">Offence details</h2>
+     {% if not readOnly %}
       <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink">Change</a></p>
+     {% endif %}
     </div>
       <div class="adjudicationsSummary-offenceDetails">
         {% for offence in offences %}
@@ -23,7 +27,7 @@
 
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
    <h2 class="govuk-heading-m">Incident statement</h2>
-   {% if statementEditable %}
+   {% if (statementEditable) and (not readOnly) %}
     <p class="govuk-body"><a href={{ statementURL }} class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink">Change</a></p>
    {% endif %}
   </div>

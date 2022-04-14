@@ -53,6 +53,7 @@ const reportedAdjudication: ReportedAdjudication = {
     roleCode: undefined,
   },
   offenceDetails: [{ offenceCode: 1, offenceRule }],
+  status: 'AWAITING_REVIEW',
 }
 
 const prisonerResultSummary: PrisonerResultSummary = {
