@@ -118,6 +118,9 @@ const adjudicationUrls = {
   },
   yourCompletedReports: {
     root: '/your-completed-reports',
+    urls: {
+      start: () => adjudicationUrls.yourCompletedReports.root,
+    },
     matchers: {
       start: '/',
     },
