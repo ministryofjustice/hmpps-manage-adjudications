@@ -16,8 +16,10 @@ export default function yourCompletedReportsRoutes({
   const yourCompletedReportsRoute = new YourCompletedReports(reportedAdjudicationsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.yourCompletedReports.matchers.start, yourCompletedReportsRoute.view)
+  post(adjudicationUrls.yourCompletedReports.matchers.start, yourCompletedReportsRoute.submit)
 
   return router
 }
