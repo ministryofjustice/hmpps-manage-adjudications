@@ -138,7 +138,7 @@ describe('reportedAdjudicationsService', () => {
     })
 
     it('returns the correct data', async () => {
-      const result = await service.getYourCompletedAdjudications(user, {
+      const result = await service.getYourCompletedAdjudications(user, null, {
         size: 20,
         number: 0,
       })

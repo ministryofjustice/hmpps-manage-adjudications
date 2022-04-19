@@ -6,6 +6,7 @@
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Your completed reports" %}
@@ -29,7 +30,7 @@
         id: 'fromDate[date]',
         label: 'Date from',
         name: 'fromDate[date]',
-        date: filter.fromDate,
+        date: filter.fromDateString,
         attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
         classes: 'govuk-input--width-10'
       }) }}
@@ -37,10 +38,20 @@
         id: 'toDate[date]',
         label: 'Date to',
         name: 'toDate[date]',
-        date: filter.toDate,
+        date: filter.toDateString,
         attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
         classes: 'govuk-input--width-10'
       }) }}
+
+      {{ govukSelect({
+        id: 'status',
+        name: 'status',
+        label: {
+          text: 'Status'
+        },
+        items: statuses | toSelect('value', 'key', '' )
+      }) }}
+
       {{ govukButton({
         text: "Apply",
         type: "submit",

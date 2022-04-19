@@ -1,4 +1,5 @@
 import nock from 'nock'
+import moment from 'moment'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
 
@@ -301,11 +302,15 @@ describe('manageAdjudicationsClient', () => {
 
     it('should return a page of completed adjudications', async () => {
       fakeManageAdjudicationsApi
-        .get(`/reported-adjudications/my/agency/MDI?page=0&size=20`)
+        .get(`/reported-adjudications/my/agency/MDI?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 
-      const result = await client.getYourCompletedAdjudications('MDI', request)
+      const result = await client.getYourCompletedAdjudications(
+        'MDI',
+        { toDate: moment('2022-01-01', 'YYYY-MM-DD'), fromDate: moment('2022-01-01', 'YYYY-MM-DD') },
+        request
+      )
       expect(result).toEqual(response)
     })
   })

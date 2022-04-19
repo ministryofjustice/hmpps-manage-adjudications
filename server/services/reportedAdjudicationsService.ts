@@ -6,6 +6,7 @@ import CuriousApiService from './curiousApiService'
 import {
   ReportedAdjudication,
   ReportedAdjudicationEnhanced,
+  ReportedAdjudicationFilter,
   ReportedAdjudicationResult,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
@@ -14,6 +15,7 @@ import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
+import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationStatus'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -102,10 +104,12 @@ export default class ReportedAdjudicationsService {
 
   async getYourCompletedAdjudications(
     user: User,
+    filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user.token).getYourCompletedAdjudications(
       user.activeCaseLoadId,
+      filter,
       pageRequest
     )
 

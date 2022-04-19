@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationStatus'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -42,6 +43,7 @@ beforeEach(() => {
       },
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
+      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
     },
     {
       displayName: 'Moriarty, James',
@@ -64,6 +66,7 @@ beforeEach(() => {
       },
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
+      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
     },
   ]
   reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
