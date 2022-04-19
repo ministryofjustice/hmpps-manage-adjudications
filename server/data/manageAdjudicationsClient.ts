@@ -92,8 +92,8 @@ export default class ManageAdjudicationsClient {
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     let path = `/reported-adjudications/my/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`
-    path += (filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''
     path += (filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''
+    path += (filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''
     path += (filter.status && `&status=${filter.status}`) || ''
     return this.restClient.get({
       path,

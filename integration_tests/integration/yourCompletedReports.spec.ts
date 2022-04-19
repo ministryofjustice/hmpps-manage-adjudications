@@ -1,7 +1,8 @@
+import moment from 'moment'
 import YourCompletedReportsPage from '../pages/yourCompletedReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
-import { ReportedAdjudication } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Your Completed Reports', () => {
@@ -39,6 +40,7 @@ context('Your Completed Reports', () => {
           roleCode: undefined,
         },
         offenceDetails: undefined,
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       }
     })
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
