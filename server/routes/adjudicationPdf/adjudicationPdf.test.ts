@@ -8,9 +8,8 @@ import { decision } from '../../offenceCodeDecisions/Decision'
 import { answer, AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import { OffenceRule } from '../../data/DraftAdjudicationResult'
 import AdjudicationPdf from './adjudicationPdf'
-import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationStatus'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')

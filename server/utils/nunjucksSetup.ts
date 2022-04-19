@@ -77,16 +77,16 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return null
   })
 
-  njkEnv.addFilter('toSelect', (array, valueKey, textKey, value) => {
+  njkEnv.addFilter('toSelect', (array, valueKey, textKey, value, emptyOptionText) => {
     const emptyOption = {
       value: '',
-      text: 'Select',
+      text: emptyOptionText || 'Select',
       selected: value === '',
     }
     const items = array.map((item: Record<string, unknown>) => ({
       value: item[valueKey],
       text: item[textKey],
-      selected: item[valueKey] === Number(value),
+      selected: item[valueKey] === value,
     }))
     return [emptyOption, ...items]
   })

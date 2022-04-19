@@ -8,6 +8,7 @@ import {
   ReportedAdjudicationEnhanced,
   ReportedAdjudicationFilter,
   ReportedAdjudicationResult,
+  reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
@@ -15,7 +16,6 @@ import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
-import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationStatus'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -186,6 +186,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'D MMMM YYYY - HH:mm'
       ),
+      statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
     }
   }
 

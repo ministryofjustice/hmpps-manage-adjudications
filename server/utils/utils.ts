@@ -65,6 +65,12 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
   }
 }
 
+export const momentDateToDatePicker = (mom: moment.Moment): string => mom.format('DD/MM/YYYY')
+
+export const datePickerDateToMoment = (dataPicker: string): moment.Moment => moment(dataPicker, 'DD/MM/YYYY')
+
+export const momentDateToApi = (mom: moment.Moment): string => mom.format('YYYY-MM-DD')
+
 export const hasAnyRole = (requiredRoles: string[], userRoles: string[]): boolean =>
   !requiredRoles || (!!userRoles && requiredRoles.some(role => userRoles.includes(role)))
 
