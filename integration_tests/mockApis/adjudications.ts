@@ -3,7 +3,7 @@ import moment from 'moment'
 import { stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
 import { OffenceDetails } from '../../server/data/DraftAdjudicationResult'
-import { ReportedAdjudicationFilter, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
