@@ -22,7 +22,8 @@
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
 
-  <form method="POST" novalidate="novalidate" data-qa="your-completed-reports-form">
+  <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="your-completed-reports-form">
+    <h2 class="govuk-heading-m">View by</h2>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
     <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
@@ -69,7 +70,7 @@
 
   {% for completedReport in yourCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.report(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.report(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
       { text: completedReport.displayName },
@@ -97,6 +98,7 @@
           "aria-sort": "descending"
         }
         },
+        { text: "Status" },
         { text: "" }
       ],
       rows: rows,
