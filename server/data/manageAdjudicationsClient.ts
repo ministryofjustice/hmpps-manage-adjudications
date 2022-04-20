@@ -9,9 +9,14 @@ import {
   OffenceRule,
   OffenceDetails,
 } from './DraftAdjudicationResult'
-import { ReportedAdjudicationResult, ReportedAdjudication } from './ReportedAdjudicationResult'
+import {
+  ReportedAdjudicationResult,
+  ReportedAdjudication,
+  ReportedAdjudicationFilter,
+} from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
+import { momentDateToApi } from '../utils/utils'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -83,10 +88,15 @@ export default class ManageAdjudicationsClient {
 
   async getYourCompletedAdjudications(
     agencyId: string,
+    filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    let path = `/reported-adjudications/my/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`
+    path += (filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''
+    path += (filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''
+    path += (filter.status && `&status=${filter.status}`) || ''
     return this.restClient.get({
-      path: `/reported-adjudications/my/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`,
+      path,
     })
   }
 

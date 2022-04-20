@@ -1,7 +1,9 @@
 import { SuperAgentRequest } from 'superagent'
+import moment from 'moment'
 import { stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
 import { OffenceDetails } from '../../server/data/DraftAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -179,21 +181,31 @@ const stubGetYourReportedAdjudications = ({
   number = 0,
   size = 20,
   allContent = [],
+  filter = { status: null, toDate: moment().format('YYYY-MM-DD'), fromDate: moment().format('YYYY-MM-DD') },
 }: {
   agencyId: string
   number: number
   size: number
   allContent: unknown[]
+  filter: {
+    status: ReportedAdjudicationStatus
+    fromDate: string
+    toDate: string
+  }
 }): SuperAgentRequest => {
   const apiRequest = {
     size,
     number,
   }
   const apiResponse = apiPageResponseFrom(apiRequest, allContent)
+  let path = `/adjudications/reported-adjudications/my/agency/${agencyId}?page=${number}&size=${size}`
+  path += (filter.fromDate && `&startDate=${filter.toDate}`) || ''
+  path += (filter.toDate && `&endDate=${filter.toDate}`) || ''
+  path += (filter.status && `&status=${filter.status}`) || ''
   return stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/reported-adjudications/my/agency/${agencyId}?page=${number}&size=${size}`,
+      url: path,
     },
     response: {
       status: 200,

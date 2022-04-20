@@ -5,6 +5,7 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
+import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -100,6 +101,7 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My second incident',
           },
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         },
         {
           adjudicationNumber: 1,
@@ -114,6 +116,7 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My first incident',
           },
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         },
       ]
       const batchPrisonerDetails = [
@@ -138,7 +141,7 @@ describe('reportedAdjudicationsService', () => {
     })
 
     it('returns the correct data', async () => {
-      const result = await service.getYourCompletedAdjudications(user, {
+      const result = await service.getYourCompletedAdjudications(user, null, {
         size: 20,
         number: 0,
       })
@@ -162,6 +165,8 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My second incident',
           },
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          statusDisplayName: 'Awaiting Review',
         },
         {
           displayName: 'Moriarty, James',
@@ -181,6 +186,8 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'My first incident',
           },
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          statusDisplayName: 'Awaiting Review',
         },
       ]
 
@@ -332,6 +339,7 @@ describe('reportedAdjudicationsService', () => {
           },
           incidentStatement: { statement: 'Something happened' },
           createdByUserId: 'TEST_GEN',
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         },
         {
           adjudicationNumber: 1524425,
@@ -344,6 +352,7 @@ describe('reportedAdjudicationsService', () => {
           },
           incidentStatement: { statement: 'efe er3d 32r §' },
           createdByUserId: 'TEST_GEN',
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         },
       ]
       const batchPrisonerDetails = [
@@ -398,6 +407,8 @@ describe('reportedAdjudicationsService', () => {
           incidentStatement: {
             statement: 'Something happened',
           },
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          statusDisplayName: 'Awaiting Review',
         },
 
         {
@@ -418,6 +429,8 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:00',
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          statusDisplayName: 'Awaiting Review',
         },
       ]
 

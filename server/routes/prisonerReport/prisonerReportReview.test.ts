@@ -7,6 +7,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
+import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/userService.ts')
@@ -44,7 +45,7 @@ beforeEach(() => {
         roleCode: undefined,
       },
       offenceDetails: [],
-      status: 'AWAITING_REVIEW',
+      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
     },
   })
 

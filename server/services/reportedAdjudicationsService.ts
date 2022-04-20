@@ -6,7 +6,9 @@ import CuriousApiService from './curiousApiService'
 import {
   ReportedAdjudication,
   ReportedAdjudicationEnhanced,
+  ReportedAdjudicationFilter,
   ReportedAdjudicationResult,
+  reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
@@ -102,10 +104,12 @@ export default class ReportedAdjudicationsService {
 
   async getYourCompletedAdjudications(
     user: User,
+    filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user.token).getYourCompletedAdjudications(
       user.activeCaseLoadId,
+      filter,
       pageRequest
     )
 
@@ -182,6 +186,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'D MMMM YYYY - HH:mm'
       ),
+      statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
     }
   }
 

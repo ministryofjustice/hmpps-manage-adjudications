@@ -1,4 +1,4 @@
-import { Response, Request } from 'express'
+import { Request, Response } from 'express'
 
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
@@ -8,7 +8,7 @@ import { decision } from '../../offenceCodeDecisions/Decision'
 import { answer, AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import { OffenceRule } from '../../data/DraftAdjudicationResult'
 import AdjudicationPdf from './adjudicationPdf'
-import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
@@ -53,7 +53,7 @@ const reportedAdjudication: ReportedAdjudication = {
     roleCode: undefined,
   },
   offenceDetails: [{ offenceCode: 1, offenceRule }],
-  status: 'AWAITING_REVIEW',
+  status: ReportedAdjudicationStatus.AWAITING_REVIEW,
 }
 
 const prisonerResultSummary: PrisonerResultSummary = {

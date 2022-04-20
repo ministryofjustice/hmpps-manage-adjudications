@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { IncidentDetails, IncidentRole, IncidentStatement, OffenceDetails } from './DraftAdjudicationResult'
 
 export type ReportedAdjudication = {
@@ -10,7 +11,7 @@ export type ReportedAdjudication = {
   incidentStatement: IncidentStatement
   incidentRole: IncidentRole
   offenceDetails: OffenceDetails[]
-  status: string
+  status: ReportedAdjudicationStatus
 }
 
 export type ReportedAdjudicationResult = {
@@ -23,4 +24,34 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   formattedDateTimeOfIncident: string
   dateTimeOfIncident: string
   reportingOfficer?: string
+  statusDisplayName: string
+}
+
+export type ReportedAdjudicationFilter = {
+  fromDate: moment.Moment
+  toDate: moment.Moment
+  status?: ReportedAdjudicationStatus
+}
+
+// This enum needs to be kept in sync with the enum in the API.
+export enum ReportedAdjudicationStatus {
+  AWAITING_REVIEW = 'AWAITING_REVIEW',
+  RETURNED = 'RETURNED',
+  REJECTED = 'REJECTED',
+  ACCEPTED = 'ACCEPTED',
+}
+
+export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicationStatus) {
+  switch (status) {
+    case ReportedAdjudicationStatus.AWAITING_REVIEW:
+      return 'Awaiting Review'
+    case ReportedAdjudicationStatus.RETURNED:
+      return 'Returned'
+    case ReportedAdjudicationStatus.REJECTED:
+      return 'Rejected'
+    case ReportedAdjudicationStatus.ACCEPTED:
+      return 'Accepted'
+    default:
+      return null
+  }
 }
