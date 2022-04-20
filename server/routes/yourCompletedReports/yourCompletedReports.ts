@@ -32,8 +32,8 @@ export default class YourCompletedReportsRoutes {
     return res.render(`pages/yourCompletedReports`, {
       yourCompletedReports: results,
       filter: {
-        fromDate: momentDateToDatePicker(filter.toDate),
-        toDate: momentDateToDatePicker(filter.fromDate),
+        fromDate: momentDateToDatePicker(filter.fromDate),
+        toDate: momentDateToDatePicker(filter.toDate),
         status: filter.status,
       },
       statuses,
