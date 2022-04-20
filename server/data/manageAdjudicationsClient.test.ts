@@ -2,6 +2,7 @@ import nock from 'nock'
 import moment from 'moment'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
+import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
 
 jest.mock('../../logger')
 
@@ -302,13 +303,19 @@ describe('manageAdjudicationsClient', () => {
 
     it('should return a page of completed adjudications', async () => {
       fakeManageAdjudicationsApi
-        .get(`/reported-adjudications/my/agency/MDI?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01`)
+        .get(
+          `/reported-adjudications/my/agency/MDI?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01&status=AWAITING_REVIEW`
+        )
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 
       const result = await client.getYourCompletedAdjudications(
         'MDI',
-        { toDate: moment('2022-01-01', 'YYYY-MM-DD'), fromDate: moment('2022-01-01', 'YYYY-MM-DD') },
+        {
+          toDate: moment('2022-01-01', 'YYYY-MM-DD'),
+          fromDate: moment('2022-01-01', 'YYYY-MM-DD'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        },
         request
       )
       expect(result).toEqual(response)
