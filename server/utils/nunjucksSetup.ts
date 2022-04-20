@@ -3,6 +3,7 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import * as pathModule from 'path'
 import escapeHtml from 'escape-html'
+import { isNumber } from 'util'
 import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive } from './utils'
@@ -83,11 +84,15 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       text: emptyOptionText || 'Select',
       selected: value === '',
     }
-    const items = array.map((item: Record<string, unknown>) => ({
-      value: item[valueKey],
-      text: item[textKey],
-      selected: item[valueKey] === value,
-    }))
+    const items = array.map((item: Record<string, unknown>) => {
+      const selected =
+        item[valueKey] === value || (typeof Number(value) === 'number' && Number(item[valueKey]) === Number(value))
+      return {
+        value: item[valueKey],
+        text: item[textKey],
+        selected,
+      }
+    })
     return [emptyOption, ...items]
   })
 
