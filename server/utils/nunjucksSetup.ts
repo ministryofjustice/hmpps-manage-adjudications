@@ -84,12 +84,10 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       selected: value === '',
     }
     const items = array.map((item: Record<string, unknown>) => {
-      const selected =
-        item[valueKey] === value || (typeof Number(value) === 'number' && Number(item[valueKey]) === Number(value))
       return {
         value: item[valueKey],
         text: item[textKey],
-        selected,
+        selected: `${item[valueKey]}` === `${value}`,
       }
     })
     return [emptyOption, ...items]
