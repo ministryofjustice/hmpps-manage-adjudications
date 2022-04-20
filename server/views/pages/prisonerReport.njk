@@ -15,7 +15,7 @@
 {% block content %}
 
  <h1 class="govuk-heading-l">{{ prisoner.friendlyName | possessive }} report</h1>
-
+ 
  <div class="prisonerPlaybackSection">
   {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
  </div>
@@ -26,7 +26,7 @@
    {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
  </div>
 
- {{ adjudicationSummary(editIncidentDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, statementEditable, offences) }}
+ {{ adjudicationSummary(editIncidentDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, statementEditable, readOnly, offences) }}
 
  <p class="govuk-body">
   <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>

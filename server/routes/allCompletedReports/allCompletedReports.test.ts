@@ -47,7 +47,7 @@ beforeEach(() => {
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      statusDisplayName: reportedAdjudicationStatusDisplayName(ReportedAdjudicationStatus.AWAITING_REVIEW),
+      statusDisplayName: 'AWAITING_REVIEW',
     },
     {
       displayName: 'Moriarty, James',
@@ -71,7 +71,7 @@ beforeEach(() => {
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      statusDisplayName: reportedAdjudicationStatusDisplayName(ReportedAdjudicationStatus.AWAITING_REVIEW),
+      statusDisplayName: 'AWAITING_REVIEW',
     },
   ]
   reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
