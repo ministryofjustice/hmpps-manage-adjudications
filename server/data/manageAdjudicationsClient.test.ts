@@ -369,11 +369,21 @@ describe('manageAdjudicationsClient', () => {
 
     it('should return a page of completed adjudications', async () => {
       fakeManageAdjudicationsApi
-        .get(`/reported-adjudications/agency/MDI?page=0&size=20`)
+        .get(
+          `/reported-adjudications/agency/MDI?page=0&size=20&startDate=2021-01-01&endDate=2021-01-01&status=AWAITING_REVIEW`
+        )
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, response)
 
-      const result = await client.getAllCompletedAdjudications('MDI', request)
+      const result = await client.getAllCompletedAdjudications(
+        'MDI',
+        {
+          fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          toDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        },
+        request
+      )
       expect(result).toEqual(response)
     })
   })

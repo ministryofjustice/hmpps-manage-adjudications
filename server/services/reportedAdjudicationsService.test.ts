@@ -383,7 +383,7 @@ describe('reportedAdjudicationsService', () => {
       })
     })
     it('returns the data', async () => {
-      const result = await service.getAllCompletedAdjudications(user, {
+      const result = await service.getAllCompletedAdjudications(user, null, {
         size: 20,
         number: 0,
       })

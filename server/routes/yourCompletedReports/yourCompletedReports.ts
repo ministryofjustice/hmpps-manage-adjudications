@@ -6,19 +6,12 @@ import {
   ReportedAdjudication,
   ReportedAdjudicationFilter,
   ReportedAdjudicationStatus,
-  reportedAdjudicationStatusDisplayName,
+  reportedAdjudicationStatuses,
 } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { datePickerDateToMoment, momentDateToDatePicker } from '../../utils/utils'
-
-const statuses = Object.keys(ReportedAdjudicationStatus).map(key => {
-  return {
-    value: key,
-    text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-  }
-})
 
 export default class YourCompletedReportsRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -36,7 +29,7 @@ export default class YourCompletedReportsRoutes {
         toDate: momentDateToDatePicker(filter.toDate),
         status: filter.status,
       },
-      statuses,
+      statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)

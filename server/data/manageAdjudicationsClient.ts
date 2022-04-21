@@ -91,22 +91,27 @@ export default class ManageAdjudicationsClient {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
-    let path = `/reported-adjudications/my/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`
-    path += (filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''
-    path += (filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''
-    path += (filter.status && `&status=${filter.status}`) || ''
     return this.restClient.get({
-      path,
+      path: `/reported-adjudications/my/${this.filterPath(agencyId, filter, pageRequest)}`,
     })
   }
 
   async getAllCompletedAdjudications(
     agencyId: string,
+    filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     return this.restClient.get({
-      path: `/reported-adjudications/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`,
+      path: `/reported-adjudications/${this.filterPath(agencyId, filter, pageRequest)}`,
     })
+  }
+
+  private filterPath(agencyId: string, filter: ReportedAdjudicationFilter, pageRequest: ApiPageRequest) {
+    let path = `agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`
+    path += (filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''
+    path += (filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''
+    path += (filter.status && `&status=${filter.status}`) || ''
+    return path
   }
 
   async createDraftFromCompleteAdjudication(adjudicationNumber: number): Promise<DraftAdjudicationResult> {
