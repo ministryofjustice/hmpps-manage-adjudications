@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
 export enum PageRequestType {
@@ -59,7 +58,6 @@ export default class prisonerReportRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService
   ) {
     this.pageOptions = new PageOptions(pageType)
@@ -104,6 +102,10 @@ export default class prisonerReportRoutes {
       newDraftAdjudicationId
     )
 
+    const readOnly =
+      this.pageOptions.isReviewerView() ||
+      ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status)
+
     return res.render(`pages/prisonerReport`, {
       prisoner,
       prisonerReportData,
@@ -112,7 +114,7 @@ export default class prisonerReportRoutes {
       offences,
       statementEditable: !this.pageOptions.isReviewerView(),
       ...prisonerReportVariables,
-      readOnly: ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status),
+      readOnly,
     })
   }
 
