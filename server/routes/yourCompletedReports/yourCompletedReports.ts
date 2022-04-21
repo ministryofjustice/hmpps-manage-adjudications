@@ -59,14 +59,12 @@ export default class YourCompletedReportsRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const urlQuery = {
-      pathname: adjudicationUrls.yourCompletedReports.root,
-      query: {
-        fromDate: req.body.fromDate.date,
-        toDate: req.body.toDate.date,
-        status: req.body.status as ReportedAdjudicationStatus,
-      },
-    }
-    return res.redirect(url.format(urlQuery))
+    return res.redirect(
+      adjudicationUrls.yourCompletedReports.urls.filter(
+        req.body.fromDate.date,
+        req.body.toDate.date,
+        req.body.status as ReportedAdjudicationStatus
+      )
+    )
   }
 }

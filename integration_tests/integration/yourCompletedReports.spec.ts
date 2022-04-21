@@ -87,4 +87,50 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage.paginationLink(15).should('not.exist')
     yourCompletedReportsPage.paginationLink(16).should('not.exist')
   })
+
+  it('filtering should work', () => {
+    // The empty results to return when first landing on your completed reports page.
+    cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: [] })
+    // The result to return when filtering for the dates we will enter in the date picker and status selected.
+    cy.task('stubGetYourReportedAdjudications', {
+      number: 0,
+      allContent: [
+        {
+          adjudicationNumber: 1,
+          prisonerNumber: 'A1234AA',
+          bookingId: 1,
+          incidentDetails: {
+            locationId: 1,
+            dateTimeOfIncident: '2021-01-01T11:30:00',
+            handoverDeadline: '2021-01-03T11:30:00',
+          },
+          incidentStatement: null,
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: undefined,
+          incidentRole: {
+            associatedPrisonersNumber: undefined,
+            roleCode: undefined,
+          },
+          offenceDetails: undefined,
+          status: ReportedAdjudicationStatus.ACCEPTED,
+        },
+      ],
+      filter: { status: ReportedAdjudicationStatus.ACCEPTED, toDate: '2022-01-09', fromDate: '2022-01-01' },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
+    cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
+    const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
+    yourCompletedReportsPage
+      .noResultsMessage()
+      .should('contain', 'There are no results for the details you have entered')
+    yourCompletedReportsPage.forceFromDate(1, 1, 2022)
+    yourCompletedReportsPage.forceToDate(9, 1, 2022)
+    yourCompletedReportsPage.selectStatus().select('ACCEPTED')
+    yourCompletedReportsPage.applyButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=ACCEPTED')
+    })
+    yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+  })
 })
