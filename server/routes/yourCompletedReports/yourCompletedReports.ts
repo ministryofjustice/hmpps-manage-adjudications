@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import url from 'url'
 import moment from 'moment'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import {
