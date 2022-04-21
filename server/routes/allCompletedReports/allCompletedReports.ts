@@ -1,11 +1,13 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import url from 'url'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import { datePickerDateToMoment, hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import {
   ReportedAdjudicationEnhanced,
   ReportedAdjudicationFilter,
   ReportedAdjudicationStatus,
+  reportedAdjudicationStatuses,
 } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
@@ -31,6 +33,7 @@ export default class AllCompletedReportsRoutes {
         toDate: momentDateToDatePicker(filter.toDate),
         status: filter.status,
       },
+      statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -54,5 +57,17 @@ export default class AllCompletedReportsRoutes {
     )
 
     return this.renderView(req, res, filter, results)
+  }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    const urlQuery = {
+      pathname: adjudicationUrls.allCompletedReports.root,
+      query: {
+        fromDate: req.body.fromDate.date,
+        toDate: req.body.toDate.date,
+        status: req.body.status as ReportedAdjudicationStatus,
+      },
+    }
+    return res.redirect(url.format(urlQuery))
   }
 }
