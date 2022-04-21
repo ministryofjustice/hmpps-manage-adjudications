@@ -122,7 +122,7 @@ describe('GET /your-completed-reports', () => {
   })
 })
 
-describe('POST /select-prisoner', () => {
+describe('POST /your-completed-reports', () => {
   it('should redirect with the correct filter parameters', () => {
     return request(app)
       .post(adjudicationUrls.yourCompletedReports.root)
