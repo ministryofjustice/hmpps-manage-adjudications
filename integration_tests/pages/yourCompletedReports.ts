@@ -1,5 +1,4 @@
 import Page, { PageElement } from './page'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 export default class YourCompletedReportsPage extends Page {
   constructor() {
