@@ -239,21 +239,15 @@ context('Prisoner report - reviewer view', () => {
 
     PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
   })
-  it('should go to the incident details page if the incident details change link is clicked', () => {
+  it('should not show a link to the edit incident details page', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.incidentDetailsChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
-    })
+    PrisonerReportPage.incidentDetailsChangeLink().should('not.exist')
   })
-  it('should go to the incident details page if the offence details change link is clicked', () => {
+  it('should not show a link to the incident details page', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.offenceDetailsChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
-    })
+    PrisonerReportPage.offenceDetailsChangeLink().should('not.exist')
   })
   it('should not show a link to edit the incident statement', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))

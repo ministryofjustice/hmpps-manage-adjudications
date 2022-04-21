@@ -21,7 +21,6 @@ export default class prisonerReportReviewRoutes {
       PageRequestType.REVIEWER,
       reportedAdjudicationsService,
       locationService,
-      userService,
       decisionTreeService
     )
   }
