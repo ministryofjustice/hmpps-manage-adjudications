@@ -3,11 +3,17 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import IncidentDetailsPage, { PageRequestType } from './incidentDetailsPage'
 
-export default class IncidentDetailsRoutes {
+export default class IncidentDetailsRoutes /* extends AdjudicationRoute */ {
   page: IncidentDetailsPage
+  journeyPage: IncidentDetailsCreate
 
   constructor(placeOnReportService: PlaceOnReportService, locationService: LocationService) {
-    this.page = new IncidentDetailsPage(PageRequestType.CREATION, placeOnReportService, locationService)
+    this.journeyPage = new IncidentDetailsCreate()
+    this.page = new IncidentDetailsPage(PageRequestType.CREATION, this.journeyPage, placeOnReportService, locationService)
+  }
+
+  matcher = (): string => {
+    return this.journeyPage.url.matchers.start
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

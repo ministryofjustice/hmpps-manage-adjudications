@@ -37,6 +37,7 @@ export default function routes(
     decisionTreeService,
   }: Services
 ): Router {
+  DraftJourney.setupRoutes(router)
   router.use(
     adjudicationUrls.offenceCodeSelection.root,
     offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })

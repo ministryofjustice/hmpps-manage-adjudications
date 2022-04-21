@@ -35,6 +35,7 @@
       <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
+      {# TODO - need to use url from "prisoner" var #}
       <a href="{{ adjudicationUrls.incidentDetails.urls.start(prisoner.prisonerNumber) }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([

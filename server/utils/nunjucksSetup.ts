@@ -129,5 +129,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addFilter('possessive', possessive)
+  // TODO - remove
   njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
 }

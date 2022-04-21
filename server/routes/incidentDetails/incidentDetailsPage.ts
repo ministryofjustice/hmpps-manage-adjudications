@@ -124,6 +124,7 @@ export default class IncidentDetailsPage {
 
   constructor(
     pageType: PageRequestType,
+    private readonly journeyPage: IncidentDetailsPages,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService
   ) {
@@ -693,7 +694,7 @@ const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => 
 
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
   return res.redirect(
-    adjudicationUrls.offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode))
+    this.journeyPage.offenceCreate.url(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode))
   )
 }
 

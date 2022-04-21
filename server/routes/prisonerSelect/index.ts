@@ -18,8 +18,8 @@ export default function selectPrisonerRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.selectPrisoner.matchers.start, prisonerSelect.view)
-  post(adjudicationUrls.selectPrisoner.matchers.start, prisonerSelect.submit)
+  get(prisonerSelect.matchers(), prisonerSelect.view)
+  post(prisonerSelect.matchers(), prisonerSelect.submit)
 
   return router
 }
