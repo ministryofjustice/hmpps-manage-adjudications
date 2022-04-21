@@ -16,12 +16,12 @@
     <span class="govuk-!-margin-bottom-1 govuk-label--s">Location: </span>
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
-  {{ adjudicationFilter(filter, statuses, csrfToken) }}
+  {{ adjudicationFilter(filter, statuses, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
   {% set rows = [] %}
 
   {% for completedReport in allCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
       { text: completedReport.displayName },
@@ -59,7 +59,7 @@
   </div>
     {{ mojPagination(pagination) }}
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no completed reports.</p>
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
   {% endif %}
 
 {% endblock %}

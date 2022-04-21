@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-{% macro adjudicationFilter(filter, statuses, csrfToken) %}
+{% macro adjudicationFilter(filter, statuses, clearUrl, csrfToken) %}
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
         <h2 class="govuk-heading-m">View by</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -40,7 +40,7 @@
                 classes: "govuk-button--submit",
                 attributes: { "data-qa": "filter-apply" }
             }) }}
-            <a class='govuk-link' href='{{ adjudicationUrls.yourCompletedReports.urls.start() }}'
+            <a class='govuk-link' href='{{ clearUrl }}'
                data-qa='clear-filter'>Clear</a>
         </div>
     </form>
