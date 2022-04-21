@@ -210,7 +210,7 @@ describe('reportedAdjudicationsService', () => {
     })
   })
 
-  describe('getReportedAdjudication', () => {
+  describe('getConfirmationDetails', () => {
     describe('with valid adjudication number', () => {
       beforeEach(() => {
         getReportedAdjudication.mockResolvedValue({
@@ -226,6 +226,7 @@ describe('reportedAdjudicationsService', () => {
             incidentStatement: {
               statement: 'Example statement',
             },
+            status: ReportedAdjudicationStatus.AWAITING_REVIEW,
           },
         })
 
@@ -307,6 +308,7 @@ describe('reportedAdjudicationsService', () => {
             incidentStatement: {
               statement: 'Example statement',
             },
+            status: ReportedAdjudicationStatus.AWAITING_REVIEW,
           },
         })
 

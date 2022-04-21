@@ -117,6 +117,7 @@ describe('manageAdjudicationsClient', () => {
           incidentStatement: {
             statement: 'test',
           },
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         },
       }
 
@@ -264,8 +265,8 @@ describe('manageAdjudicationsClient', () => {
         bookingId: 2,
         incidentDetails: {
           locationId: 3,
-          dateTimeOfIncident: '2021-11-15T11:45:00',
-          handoverDeadline: '2021-11-17T11:45:00',
+          dateTimeOfIncident: '2021-01-01T11:45:00',
+          handoverDeadline: '2021-01-03T11:45:00',
         },
         incidentRole: {
           roleCode: '25c',
@@ -274,6 +275,7 @@ describe('manageAdjudicationsClient', () => {
         incidentStatement: {
           statement: 'My second incident',
         },
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       },
       {
         adjudicationNumber: 1,
@@ -281,13 +283,14 @@ describe('manageAdjudicationsClient', () => {
         bookingId: 1,
         incidentDetails: {
           locationId: 3,
-          dateTimeOfIncident: '2021-11-15T11:30:00',
-          handoverDeadline: '2021-11-17T11:30:00',
+          dateTimeOfIncident: '2021-01-01T11:30:00',
+          handoverDeadline: '2021-01-01T11:30:00',
         },
         incidentRole: {},
         incidentStatement: {
           statement: 'My first incident',
         },
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       },
     ]
     const request = {
@@ -340,6 +343,7 @@ describe('manageAdjudicationsClient', () => {
         incidentStatement: {
           statement: 'My second incident',
         },
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       },
       {
         adjudicationNumber: 1,
@@ -354,6 +358,7 @@ describe('manageAdjudicationsClient', () => {
         incidentStatement: {
           statement: 'My first incident',
         },
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       },
     ]
     const request = {
