@@ -199,9 +199,10 @@ const stubGetYourReportedAdjudications = ({
   }
   const apiResponse = apiPageResponseFrom(apiRequest, allContent)
   let path = `/adjudications/reported-adjudications/my/agency/${agencyId}?page=${number}&size=${size}`
-  path += (filter.fromDate && `&startDate=${filter.toDate}`) || ''
+  path += (filter.fromDate && `&startDate=${filter.fromDate}`) || ''
   path += (filter.toDate && `&endDate=${filter.toDate}`) || ''
   path += (filter.status && `&status=${filter.status}`) || ''
+  // throw Error(path)
   return stubFor({
     request: {
       method: 'GET',

@@ -1,3 +1,6 @@
+import url from 'url'
+import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+
 const adjudicationUrls = {
   offenceCodeSelection: {
     root: '/offence-code-selection',
@@ -120,6 +123,15 @@ const adjudicationUrls = {
     root: '/your-completed-reports',
     urls: {
       start: () => adjudicationUrls.yourCompletedReports.root,
+      filter: (fromDate: string, toDate: string, status: ReportedAdjudicationStatus) =>
+        url.format({
+          pathname: adjudicationUrls.yourCompletedReports.root,
+          query: {
+            fromDate,
+            toDate,
+            status,
+          },
+        }),
     },
     matchers: {
       start: '/',
