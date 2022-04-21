@@ -153,7 +153,7 @@ context('Your Completed Reports', () => {
           roleCode: undefined,
         },
         offenceDetails: undefined,
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        status: ReportedAdjudicationStatus.ACCEPTED,
       }
     })
     // The empty results to return when first landing on your completed reports page.
