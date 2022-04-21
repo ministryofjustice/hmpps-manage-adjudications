@@ -176,7 +176,7 @@ export default class ReportedAdjudicationsService {
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
-    const reportingOfficer = reporterName || ''
+    const reportingOfficer = (reporterName && convertToTitleCase(reporterName)) || ''
 
     return {
       ...reportedAdjudication,
