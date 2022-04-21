@@ -24,7 +24,6 @@
                 attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
                 classes: 'govuk-input--width-10'
             }) }}
-
             {{ govukSelect({
                 id: 'status',
                 name: 'status',
@@ -33,7 +32,6 @@
                 },
                 items: statuses | toSelect('value', 'text', filter.status, 'All' )
             }) }}
-
             {{ govukButton({
                 text: "Apply",
                 type: "submit",

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 
 import PrisonApiClient from '../data/prisonApiClient'
@@ -85,7 +86,7 @@ describe('reportedAdjudicationsService', () => {
     jest.clearAllMocks()
   })
 
-  describe('getReportedAdjudication', () => {
+  describe('getYourCompletedAdjudications', () => {
     beforeEach(() => {
       const completedAdjudicationsContent = [
         {
@@ -95,8 +96,8 @@ describe('reportedAdjudicationsService', () => {
           createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
-            dateTimeOfIncident: '2021-11-15T11:45:00',
-            handoverDeadline: '2021-11-17T11:45:00',
+            dateTimeOfIncident: '2021-01-01T11:45:00',
+            handoverDeadline: '2021-01-03T11:45:00',
           },
           incidentStatement: {
             statement: 'My second incident',
@@ -110,8 +111,8 @@ describe('reportedAdjudicationsService', () => {
           createdByUserId: 'NCLAMP_GEN',
           incidentDetails: {
             locationId: 3,
-            dateTimeOfIncident: '2021-11-15T11:30:00',
-            handoverDeadline: '2021-11-17T11:30:00',
+            dateTimeOfIncident: '2021-01-01T11:30:00',
+            handoverDeadline: '2021-01-03T11:30:00',
           },
           incidentStatement: {
             statement: 'My first incident',
@@ -141,16 +142,23 @@ describe('reportedAdjudicationsService', () => {
     })
 
     it('returns the correct data', async () => {
-      const result = await service.getYourCompletedAdjudications(user, null, {
-        size: 20,
-        number: 0,
-      })
-
+      const result = await service.getYourCompletedAdjudications(
+        user,
+        {
+          fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          toDate: moment('01/09/2021', 'DD/MM/YYYY'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        },
+        {
+          size: 20,
+          number: 0,
+        }
+      )
       const expectedAdjudicationContent = [
         {
           displayName: 'Smith, John',
-          formattedDateTimeOfIncident: '15 November 2021 - 11:45',
-          dateTimeOfIncident: '2021-11-15T11:45:00',
+          formattedDateTimeOfIncident: '1 January 2021 - 11:45',
+          dateTimeOfIncident: '2021-01-01T11:45:00',
           friendlyName: 'John Smith',
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
@@ -159,8 +167,8 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: '',
           incidentDetails: {
             locationId: 3,
-            dateTimeOfIncident: '2021-11-15T11:45:00',
-            handoverDeadline: '2021-11-17T11:45:00',
+            dateTimeOfIncident: '2021-01-01T11:45:00',
+            handoverDeadline: '2021-01-03T11:45:00',
           },
           incidentStatement: {
             statement: 'My second incident',
@@ -170,8 +178,8 @@ describe('reportedAdjudicationsService', () => {
         },
         {
           displayName: 'Moriarty, James',
-          formattedDateTimeOfIncident: '15 November 2021 - 11:30',
-          dateTimeOfIncident: '2021-11-15T11:30:00',
+          formattedDateTimeOfIncident: '1 January 2021 - 11:30',
+          dateTimeOfIncident: '2021-01-01T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
           createdByUserId: 'NCLAMP_GEN',
@@ -180,8 +188,8 @@ describe('reportedAdjudicationsService', () => {
           bookingId: 1,
           incidentDetails: {
             locationId: 3,
-            dateTimeOfIncident: '2021-11-15T11:30:00',
-            handoverDeadline: '2021-11-17T11:30:00',
+            dateTimeOfIncident: '2021-01-01T11:30:00',
+            handoverDeadline: '2021-01-03T11:30:00',
           },
           incidentStatement: {
             statement: 'My first incident',
@@ -383,10 +391,18 @@ describe('reportedAdjudicationsService', () => {
       })
     })
     it('returns the data', async () => {
-      const result = await service.getAllCompletedAdjudications(user, null, {
-        size: 20,
-        number: 0,
-      })
+      const result = await service.getAllCompletedAdjudications(
+        user,
+        {
+          fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          toDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        },
+        {
+          size: 20,
+          number: 0,
+        }
+      )
 
       const expectedAdjudicationContent = [
         {
