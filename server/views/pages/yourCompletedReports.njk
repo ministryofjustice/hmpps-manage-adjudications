@@ -2,12 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
-{% from "../macros/datePicker.njk" import datePicker %}
-
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
 
 {% set title = "Your completed reports" %}
 
@@ -21,50 +16,7 @@
     <span class="govuk-!-margin-bottom-1 govuk-label--s">Location: </span>
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
-
-  <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="your-completed-reports-form">
-    <h2 class="govuk-heading-m">View by</h2>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-    <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
-      {{ datePicker({
-        id: 'fromDate[date]',
-        label: 'Date from',
-        name: 'fromDate[date]',
-        date: filter.fromDate,
-        attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
-        classes: 'govuk-input--width-10'
-      }) }}
-      {{ datePicker({
-        id: 'toDate[date]',
-        label: 'Date to',
-        name: 'toDate[date]',
-        date: filter.toDate,
-        attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
-        classes: 'govuk-input--width-10'
-      }) }}
-
-      {{ govukSelect({
-        id: 'status',
-        name: 'status',
-        label: {
-          text: 'Status'
-        },
-        items: statuses | toSelect('value', 'text', filter.status, 'All' )
-      }) }}
-
-      {{ govukButton({
-        text: "Apply",
-        type: "submit",
-        classes: "govuk-button--submit",
-        attributes: { "data-qa": "filter-apply" }
-      }) }}
-      <a class='govuk-link' href='{{ adjudicationUrls.yourCompletedReports.urls.start() }}'
-         data-qa='clear-filter'>Clear</a>
-    </div>
-  </form>
-
-
+  {{ adjudicationFilter(filter, statuses, csrfToken) }}
   {% set rows = [] %}
 
   {% for completedReport in yourCompletedReports.content %}
