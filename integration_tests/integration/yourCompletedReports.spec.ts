@@ -101,8 +101,8 @@ context('Your Completed Reports', () => {
           bookingId: 1,
           incidentDetails: {
             locationId: 1,
-            dateTimeOfIncident: '2021-01-01T11:30:00',
-            handoverDeadline: '2021-01-03T11:30:00',
+            dateTimeOfIncident: '2022-01-01T11:30:00',
+            handoverDeadline: '2022-01-03T11:30:00',
           },
           incidentStatement: null,
           createdByUserId: 'TEST_GEN',
@@ -115,7 +115,7 @@ context('Your Completed Reports', () => {
           status: ReportedAdjudicationStatus.ACCEPTED,
         },
       ],
-      filter: { status: ReportedAdjudicationStatus.ACCEPTED, toDate: '2022-01-09', fromDate: '2022-01-01' },
+      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2022-01-01', toDate: '2022-01-09' },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
@@ -132,5 +132,62 @@ context('Your Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=ACCEPTED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+  })
+
+  it('filtering and pagination should work together', () => {
+    const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
+      return {
+        adjudicationNumber: _,
+        prisonerNumber: 'A1234AA',
+        bookingId: 1,
+        incidentDetails: {
+          locationId: 1,
+          dateTimeOfIncident: '2021-10-10T11:30:00',
+          handoverDeadline: '2021-10-12T11:30:00',
+        },
+        incidentStatement: null,
+        createdByUserId: 'TEST_GEN',
+        createdDateTime: undefined,
+        incidentRole: {
+          associatedPrisonersNumber: undefined,
+          roleCode: undefined,
+        },
+        offenceDetails: undefined,
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+      }
+    })
+    // The empty results to return when first landing on your completed reports page.
+    cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: [] })
+    // The results to return when initially filtering
+    cy.task('stubGetYourReportedAdjudications', {
+      number: 0, // Page 1
+      allContent: manyReportedAdjudications,
+      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2021-10-10', toDate: '2021-10-19' },
+    })
+    // The results to return after going to another page after having filtered previously
+    cy.task('stubGetYourReportedAdjudications', {
+      number: 1, // Page 2
+      allContent: manyReportedAdjudications,
+      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2021-10-10', toDate: '2021-10-19' },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
+    cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
+    const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
+    yourCompletedReportsPage.forceFromDate(10, 10, 2021)
+    yourCompletedReportsPage.forceToDate(19, 10, 2021)
+    yourCompletedReportsPage.selectStatus().select('ACCEPTED')
+    yourCompletedReportsPage.applyButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=ACCEPTED')
+    })
+    yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
+    yourCompletedReportsPage.paginationLink(2).click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+      // We expect the initial filter parameters to have been passed through on the links.
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=ACCEPTED&pageNumber=2')
+    })
+    yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
   })
 })
