@@ -10,7 +10,10 @@ import {
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { datePickerDateToMoment, momentDateToDatePicker } from '../../utils/utils'
+import {
+  reportedAdjudicationFilterFromRequestParameters,
+  uiFilterFromReportedAdjudicationFilter,
+} from '../../utils/adjudicationFilterHelper'
 
 export default class YourCompletedReportsRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -23,11 +26,7 @@ export default class YourCompletedReportsRoutes {
   ): Promise<void> => {
     return res.render(`pages/yourCompletedReports`, {
       yourCompletedReports: results,
-      filter: {
-        fromDate: momentDateToDatePicker(filter.fromDate),
-        toDate: momentDateToDatePicker(filter.toDate),
-        status: filter.status,
-      },
+      filter: uiFilterFromReportedAdjudicationFilter(filter),
       statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
@@ -37,11 +36,7 @@ export default class YourCompletedReportsRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const filter = {
-      fromDate: (req.query.fromDate && datePickerDateToMoment(req.query.fromDate as string)) || moment(),
-      toDate: (req.query.toDate && datePickerDateToMoment(req.query.toDate as string)) || moment(),
-      status: (req.query.status as ReportedAdjudicationStatus) || null,
-    }
+    const filter = reportedAdjudicationFilterFromRequestParameters(req)
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
       filter,

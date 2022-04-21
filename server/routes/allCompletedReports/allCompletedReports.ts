@@ -13,6 +13,10 @@ import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import {
+  reportedAdjudicationFilterFromRequestParameters,
+  uiFilterFromReportedAdjudicationFilter,
+} from '../../utils/adjudicationFilterHelper'
 
 export default class AllCompletedReportsRoutes {
   constructor(
@@ -28,11 +32,7 @@ export default class AllCompletedReportsRoutes {
   ): Promise<void> =>
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
-      filter: {
-        fromDate: momentDateToDatePicker(filter.fromDate),
-        toDate: momentDateToDatePicker(filter.toDate),
-        status: filter.status,
-      },
+      filter: uiFilterFromReportedAdjudicationFilter(filter),
       statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
@@ -45,11 +45,7 @@ export default class AllCompletedReportsRoutes {
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
-    const filter = {
-      fromDate: (req.query.fromDate && datePickerDateToMoment(req.query.fromDate as string)) || moment(),
-      toDate: (req.query.toDate && datePickerDateToMoment(req.query.toDate as string)) || moment(),
-      status: (req.query.status as ReportedAdjudicationStatus) || null,
-    }
+    const filter = reportedAdjudicationFilterFromRequestParameters(req)
     const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
       res.locals.user,
       filter,
@@ -60,14 +56,12 @@ export default class AllCompletedReportsRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const urlQuery = {
-      pathname: adjudicationUrls.allCompletedReports.root,
-      query: {
-        fromDate: req.body.fromDate.date,
-        toDate: req.body.toDate.date,
-        status: req.body.status as ReportedAdjudicationStatus,
-      },
-    }
-    return res.redirect(url.format(urlQuery))
+    return res.redirect(
+      adjudicationUrls.allCompletedReports.urls.filter(
+        req.body.fromDate.date,
+        req.body.toDate.date,
+        req.body.status as ReportedAdjudicationStatus
+      )
+    )
   }
 }
