@@ -49,16 +49,8 @@ export class Question {
     return this.decisionTitle
   }
 
-  getChildren() {
-    return this.decisionChildren
-  }
-
   getChildAnswers() {
     return this.decisionChildren
-  }
-
-  getParent() {
-    return this.decisionParent
   }
 
   getParentAnswer() {

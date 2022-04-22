@@ -72,16 +72,8 @@ export class Answer {
     return getProcessedText(this.answerReplayText || this.answerText, placeholderValues)
   }
 
-  getParent() {
-    return this.answerChild
-  }
-
   getParentDecision() {
     return this.answerParent
-  }
-
-  getChild() {
-    return this.answerChild
   }
 
   getChildDecision() {
@@ -101,7 +93,7 @@ export class Answer {
     let questionsAndAnswers = [] as { question: Question; answer: Answer }[]
     if (this.getParentDecision().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
-        this.getParentDecision().getParent().getQuestionsAndAnswersToGetHere()
+        this.getParentDecision().getParentAnswer().getQuestionsAndAnswersToGetHere()
       )
     }
     questionsAndAnswers.push({ question: this.getParentDecision(), answer: this })
