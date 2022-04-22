@@ -3,7 +3,6 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import CheckYourAnswersRoutes from './checkYourAnswers'
 import CheckYourAnswersBeforeChangeReporterRoutes from './checkYourAnswersBeforeChangeReporter'
-import CheckYourAnswersBeforeChangeReviewerRoutes from './checkYourAnswersBeforeChangeReviewer'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
@@ -22,11 +21,6 @@ export default function CheckAnswersRoutes({
   const router = express.Router()
 
   const checkYourAnswersRoute = new CheckYourAnswersRoutes(placeOnReportService, locationService, decisionTreeService)
-  const checkYourAnswersBeforeChangeReviewerRoutes = new CheckYourAnswersBeforeChangeReviewerRoutes(
-    placeOnReportService,
-    locationService,
-    decisionTreeService
-  )
   const checkYourAnswersBeforeChangeReporter = new CheckYourAnswersBeforeChangeReporterRoutes(
     placeOnReportService,
     locationService,
@@ -40,7 +34,5 @@ export default function CheckAnswersRoutes({
   post(adjudicationUrls.checkYourAnswers.matchers.start, checkYourAnswersRoute.submit)
   get(adjudicationUrls.checkYourAnswers.matchers.reporterView, checkYourAnswersBeforeChangeReporter.view)
   post(adjudicationUrls.checkYourAnswers.matchers.reporterView, checkYourAnswersBeforeChangeReporter.submit)
-  get(adjudicationUrls.checkYourAnswers.matchers.reviewerView, checkYourAnswersBeforeChangeReviewerRoutes.view)
-  post(adjudicationUrls.checkYourAnswers.matchers.reviewerView, checkYourAnswersBeforeChangeReviewerRoutes.submit)
   return router
 }
