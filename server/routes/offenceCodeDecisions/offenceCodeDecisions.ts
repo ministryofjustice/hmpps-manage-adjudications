@@ -6,7 +6,7 @@ import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import OffenceSessionService from '../../services/offenceSessionService'
-import { Decision } from '../../offenceCodeDecisions/Decision'
+import { Question } from '../../offenceCodeDecisions/Question'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
@@ -196,7 +196,7 @@ export default class OffenceCodeRoutes {
     return `${adjudicationUrls.offenceCodeSelection.root}${req.path}`
   }
 
-  private decisions(): Decision {
+  private decisions(): Question {
     return this.decisionTreeService.getDecisionTree()
   }
 }

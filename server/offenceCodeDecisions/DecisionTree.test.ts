@@ -1,6 +1,6 @@
 /* eslint-disable */
 import decisionTree from './DecisionTree'
-import { decision, Decision } from './Decision'
+import { decision, Question } from './Question'
 import { answer, Answer } from './Answer'
 
 function findDuplicates<T>(toCheck: Array<T>) {
@@ -20,14 +20,14 @@ function missingOffenceCode(answerToCheck: Answer): boolean {
   return !answerToCheck.getChildDecision() && !answerToCheck.getOffenceCode()
 }
 
-function duplicateUrls(decisionToCheck: Decision) {
+function duplicateUrls(decisionToCheck: Question) {
   return (
     decisionToCheck.getUrl() != null &&
     decisionToCheck.matchingDecisions(d => d !== decisionToCheck && d.getUrl() === decisionToCheck.getUrl()).length !== 0
   )
 }
 
-function urlsStartingWithSlash(decisionToCheck: Decision) {
+function urlsStartingWithSlash(decisionToCheck: Question) {
   return decisionToCheck.getUrl() != null && decisionToCheck.getUrl().startsWith('/')
 }
 

@@ -1,6 +1,6 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
-import { Decision } from './Decision'
+import { Question } from './Question'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Answer {
@@ -10,9 +10,9 @@ export class Answer {
 
   private answerOffenceCode: number
 
-  private answerChild: Decision
+  private answerChild: Question
 
-  private answerParent: Decision
+  private answerParent: Question
 
   private answerType: AnswerType = AnswerType.RADIO_SELECTION_ONLY
 
@@ -31,13 +31,13 @@ export class Answer {
     return `${parentId}-${index}`
   }
 
-  child(child: Decision) {
+  child(child: Question) {
     this.answerChild = child
     child.parent(this)
     return this
   }
 
-  parent(parent: Decision) {
+  parent(parent: Question) {
     this.answerParent = parent
     return this
   }
@@ -97,8 +97,8 @@ export class Answer {
     return childCodes.sort()
   }
 
-  getQuestionsAndAnswersToGetHere(): { question: Decision; answer: Answer }[] {
-    let questionsAndAnswers = [] as { question: Decision; answer: Answer }[]
+  getQuestionsAndAnswersToGetHere(): { question: Question; answer: Answer }[] {
+    let questionsAndAnswers = [] as { question: Question; answer: Answer }[]
     if (this.getParentDecision().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
         this.getParentDecision().getParent().getQuestionsAndAnswersToGetHere()

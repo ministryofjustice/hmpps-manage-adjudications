@@ -1,4 +1,4 @@
-import { Decision } from '../offenceCodeDecisions/Decision'
+import { Question } from '../offenceCodeDecisions/Question'
 import PlaceOnReportService from './placeOnReportService'
 import UserService from './userService'
 import { User } from '../data/hmppsAuthClient'
@@ -26,10 +26,10 @@ export default class DecisionTreeService {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly reportedAdjudicationService: ReportedAdjudicationsService,
-    private readonly decisionTree: Decision
+    private readonly decisionTree: Question
   ) {}
 
-  getDecisionTree(): Decision {
+  getDecisionTree(): Question {
     return this.decisionTree
   }
 

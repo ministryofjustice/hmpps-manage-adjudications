@@ -3,7 +3,7 @@ import Title from './Title'
 import { Answer } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
-export class Decision {
+export class Question {
   private decisionParent: Answer
 
   private decisionChildren: Answer[] = []
@@ -82,20 +82,20 @@ export class Decision {
     return urls.sort()
   }
 
-  findDecisionByUrl(url: string): Decision {
+  findDecisionByUrl(url: string): Question {
     return this.findDecisionBy(d => d.getUrl() === url)
   }
 
-  findDecisionById(id: string): Decision {
+  findDecisionById(id: string): Question {
     return this.findDecisionBy(d => d.id() === id)
   }
 
-  findDecisionBy(fn: (d: Decision) => boolean): Decision {
+  findDecisionBy(fn: (d: Question) => boolean): Question {
     const matching = this.matchingDecisions(fn)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingDecisions(fn: (d: Decision) => boolean): Decision[] {
+  matchingDecisions(fn: (d: Question) => boolean): Question[] {
     const matches = [].concat(
       ...this.getChildAnswers()
         .map(a => a.getChildDecision())
@@ -161,5 +161,5 @@ export class Decision {
 }
 
 export function decision(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
-  return new Decision(title)
+  return new Question(title)
 }

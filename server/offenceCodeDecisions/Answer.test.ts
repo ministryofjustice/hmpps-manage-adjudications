@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {  decision } from './Decision'
+import {  decision } from './Question'
 import { AnswerType, Answer, answer } from './Answer'
 
 function template() {
