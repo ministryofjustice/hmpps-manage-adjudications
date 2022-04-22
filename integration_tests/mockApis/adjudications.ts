@@ -176,87 +176,53 @@ const stubGetAllDraftAdjudicationsForUser = (response = {}): SuperAgentRequest =
     },
   })
 
-const stubGetYourReportedAdjudications = ({
-  agencyId = 'MDI',
-  number = 0,
-  size = 20,
-  allContent = [],
-  filter = { status: null, toDate: moment().format('YYYY-MM-DD'), fromDate: moment().format('YYYY-MM-DD') },
-}: {
-  agencyId: string
-  number: number
-  size: number
-  allContent: unknown[]
-  filter: {
-    status: ReportedAdjudicationStatus
-    fromDate: string
-    toDate: string
-  }
-}): SuperAgentRequest => {
-  const apiRequest = {
-    size,
-    number,
-  }
-  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
-  let path = `/adjudications/reported-adjudications/my/agency/${agencyId}?page=${number}&size=${size}`
-  path += (filter.fromDate && `&startDate=${filter.fromDate}`) || ''
-  path += (filter.toDate && `&endDate=${filter.toDate}`) || ''
-  path += (filter.status && `&status=${filter.status}`) || ''
-  return stubFor({
-    request: {
-      method: 'GET',
-      url: path,
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+const stubGetReportedAdjudications =
+  (prefix: string) =>
+  ({
+    agencyId = 'MDI',
+    number = 0,
+    size = 20,
+    allContent = [],
+    filter = { status: null, toDate: moment().format('YYYY-MM-DD'), fromDate: moment().format('YYYY-MM-DD') },
+  }: {
+    agencyId: string
+    number: number
+    size: number
+    allContent: unknown[]
+    filter: {
+      status: ReportedAdjudicationStatus
+      fromDate: string
+      toDate: string
+    }
+  }): SuperAgentRequest => {
+    const apiRequest = {
+      size,
+      number,
+    }
+    const apiResponse = apiPageResponseFrom(apiRequest, allContent)
+    const path =
+      `${prefix}agency/${agencyId}?page=${number}&size=${size}` +
+      `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
+      `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
+      `${(filter.status && `&status=${filter.status}`) || ''}`
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: path,
       },
-      jsonBody: apiResponse,
-    },
-  })
-}
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: apiResponse,
+      },
+    })
+  }
 
-const stubGetAllReportedAdjudications = ({
-  agencyId = 'MDI',
-  number = 0,
-  size = 20,
-  allContent = [],
-  filter = { status: null, toDate: moment().format('YYYY-MM-DD'), fromDate: moment().format('YYYY-MM-DD') },
-}: {
-  agencyId: string
-  number: number
-  size: number
-  allContent: unknown[]
-  filter: {
-    status: ReportedAdjudicationStatus
-    fromDate: string
-    toDate: string
-  }
-}): SuperAgentRequest => {
-  const apiRequest = {
-    size,
-    number,
-  }
-  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
-  let path = `/adjudications/reported-adjudications/agency/${agencyId}?page=${number}&size=${size}`
-  path += (filter.fromDate && `&startDate=${filter.fromDate}`) || ''
-  path += (filter.toDate && `&endDate=${filter.toDate}`) || ''
-  path += (filter.status && `&status=${filter.status}`) || ''
-  return stubFor({
-    request: {
-      method: 'GET',
-      url: path,
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: apiResponse,
-    },
-  })
-}
+const stubGetAllReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/')
+
+const stubGetYourReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/my/')
 
 const stubCreateDraftFromCompleteAdjudication = ({
   adjudicationNumber,

@@ -3,7 +3,7 @@ import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import FilterAdjudications from '../pages/filterAdjudications'
+import AdjudicationsFilter from '../pages/adjudicationsFilter'
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -203,11 +203,11 @@ context('All Completed Reports', () => {
     allCompletedReportsPage
       .noResultsMessage()
       .should('contain', 'There are no results for the details you have entered')
-    const filterAdjudications: FilterAdjudications = new FilterAdjudications()
-    filterAdjudications.forceFromDate(1, 1, 2022)
-    filterAdjudications.forceToDate(9, 1, 2022)
-    filterAdjudications.selectStatus().select('ACCEPTED')
-    filterAdjudications.applyButton().click()
+    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
+    adjudicationsFilter.forceFromDate(1, 1, 2022)
+    adjudicationsFilter.forceToDate(9, 1, 2022)
+    adjudicationsFilter.selectStatus().select('ACCEPTED')
+    adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=ACCEPTED')

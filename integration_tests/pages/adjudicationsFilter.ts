@@ -1,6 +1,6 @@
 import { PageElement } from './page'
 
-export default class FilterAdjudications {
+export default class AdjudicationsFilter {
   // In order to bypass the date picker we force the input to accept text and then press escape so the date picker
   // disappears allowing us to interact with other fields.
   private forceDateInput = (dateInput: PageElement, day: number, month: number, year: number): PageElement =>
