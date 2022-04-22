@@ -4,15 +4,14 @@ import { AnswerType, Answer, answer } from './Answer'
 
 function template() {
   return decision('question 1')
-    .child(answer('answer 1-1')
-      .child(decision('question 1-1')
-        .child(answer('answer 1-1-1').offenceCode(1))
-        .child(answer('answer 1-1-2')
-          .child(decision('answer 1-1-2')
-            .child(answer('answer 1-1-2-1').offenceCode(2))))))
-    .child(answer('answer 1-2')
-      .child(decision('question 1-2')
-        .child(answer('answer 1-2-1').offenceCode(3))))
+    .child(
+      answer('answer 1-1').child(
+        decision('question 1-1')
+          .child(answer('answer 1-1-1').offenceCode(1))
+          .child(answer('answer 1-1-2').child(decision('answer 1-1-2').child(answer('answer 1-1-2-1').offenceCode(2))))
+      )
+    )
+    .child(answer('answer 1-2').child(decision('question 1-2').child(answer('answer 1-2-1').offenceCode(3))))
 }
 
 describe('find', () => {
@@ -108,7 +107,6 @@ describe('all urls', () => {
   it('all urls', () => {
     const list = template().allUrls()
     const duplicatesRemoved = new Set(list)
-    expect(list.sort()).toEqual(['1', '1-1', '1-1-2', '1-2',])
+    expect(list.sort()).toEqual(['1', '1-1', '1-1-2', '1-2'])
   })
 })
-
