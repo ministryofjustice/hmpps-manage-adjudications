@@ -173,7 +173,7 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.offenceDetailsSummary().should('exist')
     PrisonerReportPage.incidentStatement().should('exist')
     PrisonerReportPage.reportNumber().should('exist')
-    PrisonerReportPage.returnLink().should('exist')
+    PrisonerReportPage.reviewerPanel().should('exist')
   })
   it('should contain the correct incident details', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
@@ -254,12 +254,64 @@ context('Prisoner report - reviewer view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentStatementChangeLink().should('not.exist')
   })
-  it('should go to /all-completed-reports if the return link is clicked', () => {
+  it('should go to /all-completed-reports if the exit button is pressed', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    PrisonerReportPage.returnLink().click()
+    PrisonerReportPage.reviewExit().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
     })
+  })
+  it('should go to /all-completed-reports if status is accepted and save is pressed and form is valid', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewStatus().find('input[value="accepted"]').check()
+    PrisonerReportPage.reviewSubmit().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+    })
+  })
+  it('should go to /all-completed-reports if status is rejected and save is pressed and form is valid', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
+    PrisonerReportPage.reviewRejectReason().select('expired')
+    PrisonerReportPage.reviewRejectDetail().type('123')
+    PrisonerReportPage.reviewSubmit().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+    })
+  })
+  it('should go to /all-completed-reports if status is returned and save is pressed and form is valid', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewStatus().find('input[value="returned"]').check()
+    PrisonerReportPage.reviewReportReason().select('offence')
+    PrisonerReportPage.reviewReportDetail().type('123')
+    PrisonerReportPage.reviewSubmit().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+    })
+  })
+  it('should display an error if no status is selected and save is pressed', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewSubmit().click()
+    cy.get('*[class^="govuk-error-message"]').contains('A review outcome is required')
+  })
+
+  it('should display an error if rejected is selected without a reason and save is pressed', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
+    PrisonerReportPage.reviewSubmit().click()
+    cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
+  })
+  it('should display an error if returned is selected without a reason and save is pressed', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewStatus().find('input[value="returned"]').check()
+    PrisonerReportPage.reviewSubmit().click()
+    cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
   })
 })

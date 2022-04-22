@@ -19,5 +19,21 @@ export default class PrisonerReportPage extends Page {
 
   offenceDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-offence-changeLink"]')
 
+  reviewerPanel = (): PageElement => cy.get('[data-qa="adjudication-review-panel"]')
+
+  reviewStatus = (): PageElement => cy.get('[data-qa="review-radio-buttons"]')
+
+  reviewRejectReason = (): PageElement => cy.get('select[name="rejectedReasonId"]')
+
+  reviewRejectDetail = (): PageElement => cy.get('[data-qa="rejected-details-input"]')
+
+  reviewReportReason = (): PageElement => cy.get('select[name="returnedReasonId"]')
+
+  reviewReportDetail = (): PageElement => cy.get('[data-qa="returned-details-input"]')
+
+  reviewExit = (): PageElement => cy.get('[data-qa="review-exit"]')
+
+  reviewSubmit = (): PageElement => cy.get('[data-qa="review-submit"]')
+
   returnLink = (): PageElement => cy.get('[data-qa="prisoner-report-return-link"]')
 }

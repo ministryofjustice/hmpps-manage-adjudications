@@ -184,6 +184,7 @@ describe('GET prisoner report', () => {
         expect(response.text).toContain('This offence broke')
         expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(response.text).toContain('Commits any assault')
+        expect(response.text).toContain('What would you like to do with this report?')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
       })
   })
