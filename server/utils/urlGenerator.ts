@@ -139,6 +139,18 @@ const adjudicationUrls = {
   },
   allCompletedReports: {
     root: '/all-completed-reports',
+    urls: {
+      start: () => adjudicationUrls.allCompletedReports.root,
+      filter: (fromDate: string, toDate: string, status: ReportedAdjudicationStatus) =>
+        url.format({
+          pathname: adjudicationUrls.allCompletedReports.root,
+          query: {
+            fromDate,
+            toDate,
+            status,
+          },
+        }),
+    },
     matchers: {
       start: '/',
     },

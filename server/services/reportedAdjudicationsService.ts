@@ -133,10 +133,12 @@ export default class ReportedAdjudicationsService {
 
   async getAllCompletedAdjudications(
     user: User,
+    filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user.token).getAllCompletedAdjudications(
       user.activeCaseLoadId,
+      filter,
       pageRequest
     )
 
@@ -174,7 +176,7 @@ export default class ReportedAdjudicationsService {
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
-    const reportingOfficer = reporterName || ''
+    const reportingOfficer = (reporterName && convertToTitleCase(reporterName)) || ''
 
     return {
       ...reportedAdjudication,

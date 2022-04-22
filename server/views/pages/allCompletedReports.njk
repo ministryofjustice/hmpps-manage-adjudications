@@ -2,6 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
 
 {% set title = "All completed reports" %}
 
@@ -15,12 +16,12 @@
     <span class="govuk-!-margin-bottom-1 govuk-label--s">Location: </span>
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
-
+  {{ adjudicationFilter(filter, statuses, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
   {% set rows = [] %}
 
   {% for completedReport in allCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
       { text: completedReport.displayName },
@@ -31,6 +32,7 @@
       }
       },
       { text: completedReport.reportingOfficer },
+      { text: completedReport.statusDisplayName },
       { html: viewCompletedReportlLinkHtml }
     ]), rows) %}
   {% endfor %}
@@ -49,6 +51,7 @@
         }
         },
         { text: "Reporting officer" },
+        { text: "Status" },
         { text: "" }
       ],
       rows: rows,
@@ -58,7 +61,7 @@
   </div>
     {{ mojPagination(pagination) }}
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no completed reports.</p>
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
   {% endif %}
 
 {% endblock %}

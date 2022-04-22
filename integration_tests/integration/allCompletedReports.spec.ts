@@ -1,7 +1,7 @@
 import AllCompletedReportsPage from '../pages/allCompletedReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
-import { ReportedAdjudication } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('All Completed Reports', () => {
@@ -46,6 +46,10 @@ context('All Completed Reports', () => {
           handoverDeadline: '2021-11-17T11:30:00',
         },
         incidentStatement: null,
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        incidentRole: undefined,
+        offenceDetails: undefined,
+        createdDateTime: '2021-11-15T14:30:00',
       }
     })
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
@@ -62,6 +66,7 @@ context('All Completed Reports', () => {
         expect($headings.get(1).innerText).to.contain('Prison number')
         expect($headings.get(2).innerText).to.contain('Date and time of incident')
         expect($headings.get(3).innerText).to.contain('Reporting officer')
+        expect($headings.get(4).innerText).to.contain('Status')
       })
     allCompletedReportsPage
       .resultsTable()
@@ -71,7 +76,8 @@ context('All Completed Reports', () => {
         expect($data.get(1).innerText).to.contain('A1234AA')
         expect($data.get(2).innerText).to.contain('15 November 2021 - 11:30')
         expect($data.get(3).innerText).to.contain('Test User')
-        expect($data.get(4).innerText).to.contain('View')
+        expect($data.get(4).innerText).to.contain('Awaiting Review')
+        expect($data.get(5).innerText).to.contain('View report')
       })
   })
 
@@ -98,6 +104,10 @@ context('All Completed Reports', () => {
           handoverDeadline: '2021-11-17T11:30:00',
         },
         incidentStatement: null,
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        incidentRole: undefined,
+        offenceDetails: undefined,
+        createdDateTime: '2021-11-15T14:30:00',
       }
     })
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1

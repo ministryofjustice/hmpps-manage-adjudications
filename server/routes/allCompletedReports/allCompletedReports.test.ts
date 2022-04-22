@@ -32,7 +32,7 @@ beforeEach(() => {
       bookingId: 2,
       createdDateTime: '2021-11-15T11:45:00',
       createdByUserId: 'TEST_ER',
-      reportingOfficer: '',
+      reportingOfficer: 'Seamus Parkinson',
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:45:00',
@@ -53,7 +53,7 @@ beforeEach(() => {
       friendlyName: 'James Moriarty',
       adjudicationNumber: 1,
       createdByUserId: 'TEST_ER',
-      reportingOfficer: '',
+      reportingOfficer: 'Penelope Conroy',
       prisonerNumber: 'G6174VU',
       bookingId: 1,
       createdDateTime: '2021-11-15T11:30:00',
@@ -68,7 +68,7 @@ beforeEach(() => {
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      statusDisplayName: 'Awaiting Review',
+      statusDisplayName: 'Accepted',
     },
   ]
   reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
@@ -112,9 +112,34 @@ describe('GET /all-completed-reports', () => {
         expect(response.text).toContain('Smith, John')
         expect(response.text).toContain('G6123VU')
         expect(response.text).toContain('15 November 2021 - 11:45')
+        expect(response.text).toContain('Seamus Parkinson')
+        expect(response.text).toContain('Awaiting Review')
         expect(response.text).toContain('Moriarty, James')
         expect(response.text).toContain('G6174VU')
         expect(response.text).toContain('15 November 2021 - 11:30')
+        expect(response.text).toContain('Penelope Conroy')
+        expect(response.text).toContain('Accepted')
+      })
+  })
+})
+
+describe('POST /all-completed-reports', () => {
+  it('should redirect with the correct filter parameters', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+    return request(app)
+      .post(adjudicationUrls.allCompletedReports.root)
+      .send({ fromDate: { date: '01/01/2022' }, toDate: { date: '02/01/2022' }, status: 'AWAITING_REVIEW' })
+      .expect(
+        'Location',
+        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2022&toDate=02%2F01%2F2022&status=AWAITING_REVIEW`
+      )
+  })
+  it('should render the not found page without the correct role', () => {
+    userService.getUserRoles.mockResolvedValue([])
+    return request(app)
+      .post(adjudicationUrls.allCompletedReports.root)
+      .expect(res => {
+        expect(res.text).not.toContain('All completed reports')
       })
   })
 })

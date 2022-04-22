@@ -202,7 +202,6 @@ const stubGetYourReportedAdjudications = ({
   path += (filter.fromDate && `&startDate=${filter.fromDate}`) || ''
   path += (filter.toDate && `&endDate=${filter.toDate}`) || ''
   path += (filter.status && `&status=${filter.status}`) || ''
-  // throw Error(path)
   return stubFor({
     request: {
       method: 'GET',
@@ -223,21 +222,31 @@ const stubGetAllReportedAdjudications = ({
   number = 0,
   size = 20,
   allContent = [],
+  filter = { status: null, toDate: moment().format('YYYY-MM-DD'), fromDate: moment().format('YYYY-MM-DD') },
 }: {
   agencyId: string
   number: number
   size: number
   allContent: unknown[]
+  filter: {
+    status: ReportedAdjudicationStatus
+    fromDate: string
+    toDate: string
+  }
 }): SuperAgentRequest => {
   const apiRequest = {
     size,
     number,
   }
   const apiResponse = apiPageResponseFrom(apiRequest, allContent)
+  let path = `/adjudications/reported-adjudications/agency/${agencyId}?page=${number}&size=${size}`
+  path += (filter.fromDate && `&startDate=${filter.fromDate}`) || ''
+  path += (filter.toDate && `&endDate=${filter.toDate}`) || ''
+  path += (filter.status && `&status=${filter.status}`) || ''
   return stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/reported-adjudications/agency/${agencyId}?page=${number}&size=${size}`,
+      url: path,
     },
     response: {
       status: 200,

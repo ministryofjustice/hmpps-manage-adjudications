@@ -1,0 +1,45 @@
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% macro adjudicationFilter(filter, statuses, clearUrl, csrfToken) %}
+    <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
+        <h2 class="govuk-heading-m">View by</h2>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <div class="horizontal-form govuk-!-margin-bottom-3" id="adjudicationFilter">
+            {{ datePicker({
+                id: 'fromDate[date]',
+                label: 'Date from',
+                name: 'fromDate[date]',
+                date: filter.fromDate,
+                attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
+                classes: 'govuk-input--width-10'
+            }) }}
+            {{ datePicker({
+                id: 'toDate[date]',
+                label: 'Date to',
+                name: 'toDate[date]',
+                date: filter.toDate,
+                attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
+                classes: 'govuk-input--width-10'
+            }) }}
+            {{ govukSelect({
+                id: 'status',
+                name: 'status',
+                label: {
+                    text: 'Status'
+                },
+                items: statuses | toSelect('value', 'text', filter.status, 'All' )
+            }) }}
+            {{ govukButton({
+                text: "Apply",
+                type: "submit",
+                classes: "govuk-button--submit",
+                attributes: { "data-qa": "filter-apply" }
+            }) }}
+            <a class='govuk-link' href='{{ clearUrl }}'
+               data-qa='clear-filter'>Clear</a>
+        </div>
+    </form>
+{% endmacro %}

@@ -1,23 +1,18 @@
 import { Request, Response } from 'express'
-import moment from 'moment'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import {
   ReportedAdjudication,
   ReportedAdjudicationFilter,
   ReportedAdjudicationStatus,
-  reportedAdjudicationStatusDisplayName,
+  reportedAdjudicationStatuses,
 } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { datePickerDateToMoment, momentDateToDatePicker } from '../../utils/utils'
-
-const statuses = Object.keys(ReportedAdjudicationStatus).map(key => {
-  return {
-    value: key,
-    text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-  }
-})
+import {
+  reportedAdjudicationFilterFromRequestParameters,
+  uiFilterFromReportedAdjudicationFilter,
+} from '../../utils/adjudicationFilterHelper'
 
 export default class YourCompletedReportsRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -30,12 +25,8 @@ export default class YourCompletedReportsRoutes {
   ): Promise<void> => {
     return res.render(`pages/yourCompletedReports`, {
       yourCompletedReports: results,
-      filter: {
-        fromDate: momentDateToDatePicker(filter.fromDate),
-        toDate: momentDateToDatePicker(filter.toDate),
-        status: filter.status,
-      },
-      statuses,
+      filter: uiFilterFromReportedAdjudicationFilter(filter),
+      statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -44,11 +35,7 @@ export default class YourCompletedReportsRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const filter = {
-      fromDate: (req.query.fromDate && datePickerDateToMoment(req.query.fromDate as string)) || moment(),
-      toDate: (req.query.toDate && datePickerDateToMoment(req.query.toDate as string)) || moment(),
-      status: (req.query.status as ReportedAdjudicationStatus) || null,
-    }
+    const filter = reportedAdjudicationFilterFromRequestParameters(req)
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
       filter,
