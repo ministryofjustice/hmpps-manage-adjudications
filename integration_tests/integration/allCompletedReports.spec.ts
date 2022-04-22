@@ -3,6 +3,7 @@ import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import FilterAdjudications from '../pages/filterAdjudications'
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -154,5 +155,63 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationLink(6).should('exist')
     allCompletedReportsPage.paginationLink(15).should('not.exist')
     allCompletedReportsPage.paginationLink(16).should('not.exist')
+  })
+
+  it('filtering should work', () => {
+    // The empty results to return when first landing on your completed reports page.
+    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
+    // The result to return when filtering for the dates we will enter in the date picker and status selected.
+    cy.task('stubGetAllReportedAdjudications', {
+      number: 0,
+      allContent: [
+        {
+          adjudicationNumber: 1,
+          prisonerNumber: 'A1234AA',
+          bookingId: 1,
+          incidentDetails: {
+            locationId: 1,
+            dateTimeOfIncident: '2022-01-01T11:30:00',
+            handoverDeadline: '2022-01-03T11:30:00',
+          },
+          incidentStatement: null,
+          createdByUserId: 'TEST_GEN',
+          createdDateTime: undefined,
+          incidentRole: {
+            associatedPrisonersNumber: undefined,
+            roleCode: undefined,
+          },
+          offenceDetails: undefined,
+          status: ReportedAdjudicationStatus.ACCEPTED,
+        },
+      ],
+      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2022-01-01', toDate: '2022-01-09' },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
+    cy.task('stubGetUserFromUsername', {
+      username: 'TEST_GEN',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'TEST_GEN',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
+
+    cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    allCompletedReportsPage
+      .noResultsMessage()
+      .should('contain', 'There are no results for the details you have entered')
+    const filterAdjudications: FilterAdjudications = new FilterAdjudications()
+    filterAdjudications.forceFromDate(1, 1, 2022)
+    filterAdjudications.forceToDate(9, 1, 2022)
+    filterAdjudications.selectStatus().select('ACCEPTED')
+    filterAdjudications.applyButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=ACCEPTED')
+    })
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
 })
