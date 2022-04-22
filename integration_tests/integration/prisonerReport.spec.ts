@@ -286,6 +286,11 @@ context('Prisoner report - reporter view', () => {
 
         PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
       })
+      it('should not contain the review panel', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        PrisonerReportPage.reviewerPanel().should('not.exist')
+      })
 
       it(`should  ${
         prisoner.readOnly ? 'not' : ''

@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../macros/adjudicationSummary.njk" import adjudicationSummary %}
+{% from "../macros/adjudicationReviewPanel.njk" import adjudicationReviewPanel %}
 {% from "../macros/printLink.njk" import printLink %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
@@ -26,10 +27,16 @@
    {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
  </div>
 
- {{ adjudicationSummary(editIncidentDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, statementEditable, readOnly, offences) }}
+ {{ adjudicationSummary(editIncidentDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, offences) }}
+  
+ {% if review %}
+   {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }} 
+ {% endif %}
 
- <p class="govuk-body">
-  <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
- </p>
+ {% if not review %}
+   <p class="govuk-body">
+     <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
+   </p>
+{% endif %}
 
 {% endblock %}
