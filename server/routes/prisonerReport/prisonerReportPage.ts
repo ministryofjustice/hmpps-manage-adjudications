@@ -4,6 +4,15 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
+import { FormError } from '../../@types/template'
+
+type PageData = {
+  errors?: FormError[]
+  status?: ReviewStatus
+  reason?: string
+  details?: string
+}
 
 export enum PageRequestType {
   REPORTER,
@@ -63,7 +72,7 @@ export default class prisonerReportRoutes {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  private renderView = async (req: Request, res: Response): Promise<void> => {
+  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
 
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -107,16 +116,61 @@ export default class prisonerReportRoutes {
       ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status)
 
     return res.render(`pages/prisonerReport`, {
+      pageData,
       prisoner,
       prisonerReportData,
       reportNo: draftAdjudication.adjudicationNumber,
       draftAdjudicationNumber: draftAdjudication.id,
       offences,
-      statementEditable: !this.pageOptions.isReviewerView(),
       ...prisonerReportVariables,
       readOnly,
+      review: this.pageOptions.isReviewerView(),
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
+  reviewStatus = (selected: string): ReviewStatus => {
+    if (!selected) {
+      return null
+    }
+    if (selected === 'rejected') {
+      return ReviewStatus.REJECTED
+    }
+    if (selected === 'returned') {
+      return ReviewStatus.RETURNED
+    }
+    return ReviewStatus.ACCEPTED
+  }
+
+  reason = (status: ReviewStatus, req: Request): string => {
+    if (status === ReviewStatus.REJECTED) {
+      return req.body.rejectedReasonId
+    }
+    if (status === ReviewStatus.RETURNED) {
+      return req.body.returnedReasonId
+    }
+    return ''
+  }
+
+  details = (status: ReviewStatus, req: Request): string => {
+    if (status === ReviewStatus.REJECTED) {
+      return req.body.rejectedDetails
+    }
+    if (status === ReviewStatus.RETURNED) {
+      return req.body.returnedDetails
+    }
+    return ''
+  }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    const status = this.reviewStatus(req.body.currentStatusSelected)
+    const reason = this.reason(status, req)
+    const details = this.details(status, req)
+
+    const error = validateForm({ status, reason, details })
+    if (error) return this.renderView(req, res, { errors: [error], status, reason, details })
+
+    return res.redirect(adjudicationUrls.allCompletedReports.root)
+  }
+
+  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
 }

@@ -14,22 +14,17 @@ type PageData = {
 export enum PageRequestType {
   CREATION,
   EDIT_REPORTER,
-  EDIT_REVIEWER,
 }
 
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
   isCreation(): boolean {
-    return this.pageType !== PageRequestType.EDIT_REPORTER && this.pageType !== PageRequestType.EDIT_REVIEWER
+    return this.pageType !== PageRequestType.EDIT_REPORTER
   }
 
   isEditByReporter(): boolean {
     return this.pageType === PageRequestType.EDIT_REPORTER
-  }
-
-  isEditByReviewer(): boolean {
-    return this.pageType === PageRequestType.EDIT_REVIEWER
   }
 }
 
@@ -49,16 +44,6 @@ const getVariablesForPageType = (
       exitUrl: adjudicationUrls.prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
     }
   }
-  if (pageOptions.isEditByReviewer()) {
-    return {
-      // We don't have the editIncidentStatementURL variable here as reviewers cannot change the statement.
-      editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
-        prisonerNumber,
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.checkYourAnswers.urls.review(adjudicationNumber)}`,
-      exitUrl: adjudicationUrls.prisonerReport.urls.review(incidentDetailsData.adjudicationNumber),
-    }
-  }
   return {
     editIncidentDetailsURL: adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
     editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.start(adjudicationNumber),
@@ -69,14 +54,11 @@ const getVariablesForPageType = (
 const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: number) => {
   if (pageOptions.isEditByReporter())
     return adjudicationUrls.confirmedOnReport.urls.reporterView(completeAdjudicationNumber)
-  if (pageOptions.isEditByReviewer())
-    return adjudicationUrls.confirmedOnReport.urls.reviewerView(completeAdjudicationNumber)
   return adjudicationUrls.confirmedOnReport.urls.start(completeAdjudicationNumber)
 }
 
 const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
   if (pageOptions.isEditByReporter()) return adjudicationUrls.yourCompletedReports.root
-  if (pageOptions.isEditByReviewer()) return adjudicationUrls.allCompletedReports.root
   return adjudicationUrls.taskList.urls.start(adjudicationNumber)
 }
 
@@ -128,7 +110,7 @@ export default class CheckYourAnswersPage {
       adjudicationNumber,
       offences,
       creationJourney: this.pageOptions.isCreation(),
-      statementEditable: !this.pageOptions.isEditByReviewer(),
+      statementEditable: true,
       submitButtonText: this.pageOptions.isCreation() ? 'Accept and place on report' : 'Confirm changes',
       secondaryButtonText: this.pageOptions.isCreation() ? 'Exit' : 'Cancel',
       ...checkAnswersVariations,

@@ -45,14 +45,11 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       reporterView: '/:adjudicationNumber/changes-confirmed/report',
-      reviewerView: '/:adjudicationNumber/changes-confirmed/review',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}`,
       reporterView: (adjudicationNumber: number) =>
         `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/report`,
-      reviewerView: (adjudicationNumber: number) =>
-        `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/review`,
     },
   },
   incidentDetails: {
@@ -93,12 +90,10 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       reporterView: '/:adjudicationNumber/report',
-      reviewerView: '/:adjudicationNumber/review',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.checkYourAnswers.root}/${adjudicationNumber}`,
       report: (adjudicationNumber: number) => `${adjudicationUrls.checkYourAnswers.root}/${adjudicationNumber}/report`,
-      review: (adjudicationNumber: number) => `${adjudicationUrls.checkYourAnswers.root}/${adjudicationNumber}/review`,
     },
   },
   selectPrisoner: {

@@ -32,4 +32,8 @@ export default class prisonerReportReviewRoutes {
     }
     return this.page.view(req, res)
   }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    await this.page.submit(req, res)
+  }
 }

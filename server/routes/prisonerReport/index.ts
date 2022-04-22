@@ -36,9 +36,11 @@ export default function prisonerReportRoutes({
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.prisonerReport.matchers.report, prisonerReportRoute.view)
   get(adjudicationUrls.prisonerReport.matchers.review, prisonerReportReview.view)
+  post(adjudicationUrls.prisonerReport.matchers.review, prisonerReportReview.submit)
 
   return router
 }
