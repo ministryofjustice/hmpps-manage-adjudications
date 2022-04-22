@@ -3,11 +3,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-
-
 {% set rejected %}
-	{{
-				govukSelect({
+{{ govukSelect({
 					id: 'rejectedReasonId',
 					name: 'rejectedReasonId',
          	value: pageData.reason,	
@@ -32,11 +29,8 @@
           ] | toSelect('value', 'text'),
 					classes: '',
     			errorMessage: 'rejectedReasonId' | findError(pageData.errors)
-				})
-        }}
-
- {{
-      govukTextarea({
+				}) }}
+{{ govukTextarea({
 				name: "rejectedDetails",
 				id: "rejectedDetails",
         rows: '8',
@@ -50,13 +44,10 @@
 					'data-qa': "rejected-details-input"
 				},
 				errorMessage: "rejectedDetails" | findError(pageData.errors)
-				})
-			}}
+				}) }}
 {% endset -%}
-
 {% set returned %}
-	{{
-				govukSelect({
+{{ govukSelect({
 					id: 'returnedReasonId',
 					name: 'returnedReasonId',
         	value: pageData.reason,
@@ -82,7 +73,7 @@
 					classes: '',
     			errorMessage: 'returnedReasonId' | findError(pageData.errors)
 				}) }}
-         {{  govukTextarea({
+{{ govukTextarea({
 				name: "returnedDetails",
 				id: "returnedDetails",
         rows: '8',
@@ -96,11 +87,9 @@
 					'data-qa': "returned-details-input"
 				},
 				errorMessage: "returnedDetails" | findError(pageData.errors)
-				})
-			}}
+				}) }}
 {% endset -%}
-
-    {{ govukRadios({
+{{ govukRadios({
     errorMessage: "currentStatusSelected" | findError(pageData.errors),
     idPrefix: 'currentStatusSelected',
     id: 'currentStatusSelected',
@@ -137,4 +126,3 @@
     }
   ]
     }) }}
-
