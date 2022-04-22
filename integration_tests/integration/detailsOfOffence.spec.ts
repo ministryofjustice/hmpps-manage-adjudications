@@ -4,6 +4,65 @@ import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
+const adjudicationWithOffences = {
+  id: 201,
+  incidentDetails: {
+    dateTimeOfIncident: '2021-11-03T13:10:00',
+    handoverDeadline: '2021-11-05T13:10:00',
+    locationId: 27029,
+  },
+  incidentStatement: {
+    completed: false,
+    statement: 'Statement here',
+  },
+  prisonerNumber: 'G6415GD',
+  startedByUserId: 'USER1',
+  incidentRole: {
+    associatedPrisonersNumber: undefined,
+    roleCode: undefined,
+  },
+  offenceDetails: [
+    {
+      offenceCode: 1001,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+      victimPrisonersNumber: 'G5512G',
+    },
+  ],
+}
+
+const reportedAdjudicationWithOffences = {
+  id: 202,
+  adjudicationNumber: 1234,
+  incidentDetails: {
+    dateTimeOfIncident: '2021-11-03T13:10:00',
+    handoverDeadline: '2021-11-05T13:10:00',
+    locationId: 27029,
+  },
+  incidentStatement: {
+    completed: false,
+    statement: 'Statement here',
+  },
+  prisonerNumber: 'G6415GD',
+  startedByUserId: 'USER1',
+  incidentRole: {
+    associatedPrisonersNumber: undefined,
+    roleCode: undefined,
+  },
+  offenceDetails: [
+    {
+      offenceCode: 1001,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+      victimPrisonersNumber: 'G5512G',
+    },
+  ],
+}
+
 context('Details of offence', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -43,34 +102,14 @@ context('Details of offence', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 201,
       response: {
-        draftAdjudication: {
-          id: 201,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
-          prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER1',
-          incidentRole: {
-            associatedPrisonersNumber: undefined,
-            roleCode: undefined,
-          },
-          offenceDetails: [
-            {
-              offenceCode: 1001,
-              offenceRule: {
-                paragraphNumber: '1',
-                paragraphDescription: 'Commits any assault',
-              },
-              victimPrisonersNumber: 'G5512G',
-            },
-          ],
-        },
+        draftAdjudication: adjudicationWithOffences,
+      },
+    })
+    // Reported draft
+    cy.task('stubGetDraftAdjudication', {
+      id: 202,
+      response: {
+        draftAdjudication: reportedAdjudicationWithOffences,
       },
     })
 
@@ -125,6 +164,14 @@ context('Details of offence', () => {
         paragraphNumber: '4',
         paragraphDescription: 'Fights with any person',
       },
+    })
+    cy.task('stubSaveOffenceDetails', {
+      adjudicationNumber: 201,
+      response: adjudicationWithOffences,
+    })
+    cy.task('stubSaveOffenceDetails', {
+      adjudicationNumber: 202,
+      response: reportedAdjudicationWithOffences,
     })
   })
 
@@ -246,5 +293,19 @@ context('Details of offence', () => {
     }).then((val: request.Response) => {
       expect(JSON.parse(val.text).count).to.equal(1)
     })
+  })
+
+  it('goes to the reported adjudication statement edit page', () => {
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(202))
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.saveAndContinue().click()
+    cy.url().should('include', adjudicationUrls.incidentStatement.urls.submittedEdit(202))
+  })
+
+  it('goes to the draft statement edit page', () => {
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.saveAndContinue().click()
+    cy.url().should('include', adjudicationUrls.incidentStatement.urls.start(201))
   })
 })

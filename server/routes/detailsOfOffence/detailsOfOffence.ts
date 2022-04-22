@@ -49,7 +49,10 @@ export default class DetailsOfOffenceRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { incidentRole } = await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
+    const { draftAdjudication, incidentRole } = await this.decisionTreeService.draftAdjudicationIncidentData(
+      adjudicationNumber,
+      user
+    )
     const { addOffence } = req.body
     if (addOffence) {
       return res.redirect(adjudicationUrls.offenceCodeSelection.urls.start(adjudicationNumber, incidentRole))
@@ -65,6 +68,9 @@ export default class DetailsOfOffenceRoutes {
         }
       })
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
+    if (draftAdjudication.adjudicationNumber) {
+      return res.redirect(adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber))
+    }
     return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
   }
 }
