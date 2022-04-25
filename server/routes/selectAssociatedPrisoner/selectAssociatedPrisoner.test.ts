@@ -89,7 +89,7 @@ describe('POST /select-associated-prisoner', () => {
         redirectUrl: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6123VU',
           1234
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524455, '')}`,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524455)}`,
       }
     )
     return request(app)

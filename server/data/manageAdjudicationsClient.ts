@@ -97,33 +97,26 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getYourCompletedAdjudications(
-    agencyId: string,
-    filter: ReportedAdjudicationFilter,
-    pageRequest: ApiPageRequest
-  ): Promise<ApiPageResponse<ReportedAdjudication>> {
-    return this.restClient.get({
-      path: `/reported-adjudications/my/${this.filterPath(agencyId, filter, pageRequest)}`,
-    })
-  }
+  private getCompletedAdjudications =
+    (prefix: string) =>
+    async (
+      agencyId: string,
+      filter: ReportedAdjudicationFilter,
+      pageRequest: ApiPageRequest
+    ): Promise<ApiPageResponse<ReportedAdjudication>> => {
+      const path =
+        `${prefix}agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}` +
+        `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+        `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+        `${(filter.status && `&status=${filter.status}`) || ''}`
+      return this.restClient.get({
+        path,
+      })
+    }
 
-  async getAllCompletedAdjudications(
-    agencyId: string,
-    filter: ReportedAdjudicationFilter,
-    pageRequest: ApiPageRequest
-  ): Promise<ApiPageResponse<ReportedAdjudication>> {
-    return this.restClient.get({
-      path: `/reported-adjudications/${this.filterPath(agencyId, filter, pageRequest)}`,
-    })
-  }
+  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/')
 
-  private filterPath(agencyId: string, filter: ReportedAdjudicationFilter, pageRequest: ApiPageRequest) {
-    let path = `agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}`
-    path += (filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''
-    path += (filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''
-    path += (filter.status && `&status=${filter.status}`) || ''
-    return path
-  }
+  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my/')
 
   async createDraftFromCompleteAdjudication(adjudicationNumber: number): Promise<DraftAdjudicationResult> {
     return this.restClient.post({
