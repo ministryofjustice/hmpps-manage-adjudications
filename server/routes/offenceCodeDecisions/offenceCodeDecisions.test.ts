@@ -3,7 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { decision } from '../../offenceCodeDecisions/Question'
+import { question } from '../../offenceCodeDecisions/Question'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
@@ -39,7 +39,7 @@ const aStandardAnswerWithChildQuestion = answer(aStandardAnswerWithChildQuestion
 const aStandardChildAnswerText = 'A standard child answer'
 const aStandardChildAnswer = answer(aStandardChildAnswerText)
 
-const testDecisionsTree = decision([
+const testDecisionsTree = question([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
   [Role.ATTEMPTED, `Attempted: ${Text.PRISONER_FULL_NAME}`],
   [Role.ASSISTED, `Assisted: ${Text.PRISONER_FULL_NAME}. Associated: ${Text.ASSOCIATED_PRISONER_FULL_NAME}`],
@@ -51,7 +51,7 @@ const testDecisionsTree = decision([
   .child(anotherPersonAnswer.type(Type.OTHER_PERSON).offenceCode(4))
   .child(aStandardAnswer.offenceCode(5))
   .child(
-    aStandardAnswerWithChildQuestion.child(decision('A child question').child(aStandardChildAnswer.offenceCode(6)))
+    aStandardAnswerWithChildQuestion.child(question('A child question').child(aStandardChildAnswer.offenceCode(6)))
   )
 
 const decisionTreeService = new DecisionTreeService(

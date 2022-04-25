@@ -1,17 +1,17 @@
 /* eslint-disable */
-import { decision } from './Question'
+import { question } from './Question'
 import { AnswerType, Answer, answer } from './Answer'
 
 function template() {
-  return decision('question 1')
+  return question('question 1')
     .child(
       answer('answer 1-1').child(
-        decision('question 1-1')
+        question('question 1-1')
           .child(answer('answer 1-1-1').offenceCode(1))
-          .child(answer('answer 1-1-2').child(decision('answer 1-1-2').child(answer('answer 1-1-2-1').offenceCode(2))))
+          .child(answer('answer 1-1-2').child(question('answer 1-1-2').child(answer('answer 1-1-2-1').offenceCode(2))))
       )
     )
-    .child(answer('answer 1-2').child(decision('question 1-2').child(answer('answer 1-2-1').offenceCode(3))))
+    .child(answer('answer 1-2').child(question('question 1-2').child(answer('answer 1-2-1').offenceCode(3))))
 }
 
 describe('find', () => {

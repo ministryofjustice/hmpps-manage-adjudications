@@ -3,7 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { decision } from '../../offenceCodeDecisions/Question'
+import { question } from '../../offenceCodeDecisions/Question'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
@@ -24,7 +24,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 
-const testDecisionsTree = decision([
+const testDecisionsTree = question([
   [Role.COMMITTED, `Committed: ${Text.PRISONER_FULL_NAME}`],
   [Role.ATTEMPTED, `Attempted: ${Text.PRISONER_FULL_NAME}`],
   [Role.ASSISTED, `Assisted: ${Text.PRISONER_FULL_NAME}. Associated: ${Text.ASSOCIATED_PRISONER_FULL_NAME}`],
@@ -37,7 +37,7 @@ const testDecisionsTree = decision([
   )
   .child(
     answer('A standard answer with child question').child(
-      decision('A child question').child(answer('A standard child answer').offenceCode(2))
+      question('A child question').child(answer('A standard child answer').offenceCode(2))
     )
   )
 

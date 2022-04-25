@@ -152,6 +152,6 @@ export class Question {
   }
 }
 
-export function decision(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
+export function question(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
   return new Question(title)
 }

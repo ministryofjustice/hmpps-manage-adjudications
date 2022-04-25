@@ -1,6 +1,6 @@
 /* eslint-disable */
 import decisionTree from './DecisionTree'
-import { decision, Question } from './Question'
+import { question, Question } from './Question'
 import { answer, Answer } from './Answer'
 
 function findDuplicates<T>(toCheck: Array<T>) {
@@ -32,12 +32,12 @@ function urlsStartingWithSlash(decisionToCheck: Question) {
 }
 
 function template() {
-  return decision('question 1')
+  return question('question 1')
     .child(answer('answer 1-1')
-      .child(decision('question 1-1')
+      .child(question('question 1-1')
         .child(answer('answer 1-1-1'))))
     .child(answer('answer 1-2')
-      .child(decision('question 1-2')
+      .child(question('question 1-2')
         .child(answer('answer 1-2-1'))))
 }
 
@@ -91,7 +91,7 @@ describe('decisions', () => {
   })
 
   it('check we answers with duplicate offence codes when they exist', () => {
-    const shouldBeDuplicates = decision('question 1')
+    const shouldBeDuplicates = question('question 1')
       .child(answer('answer 1-1').offenceCode(1))
       .child(answer('answer 1-2').offenceCode(1))
       .allCodes()

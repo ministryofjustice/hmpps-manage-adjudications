@@ -4,7 +4,7 @@ import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
-import { decision } from '../../offenceCodeDecisions/Question'
+import { question } from '../../offenceCodeDecisions/Question'
 import { answer, AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import { OffenceRule } from '../../data/DraftAdjudicationResult'
 import AdjudicationPdf from './adjudicationPdf'
@@ -15,7 +15,7 @@ jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/placeOnReportService.ts')
 
-const testDecisionsTree = decision('A question').child(answer('An answer').type(Type.PRISONER).offenceCode(1))
+const testDecisionsTree = question('A question').child(answer('An answer').type(Type.PRISONER).offenceCode(1))
 
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
