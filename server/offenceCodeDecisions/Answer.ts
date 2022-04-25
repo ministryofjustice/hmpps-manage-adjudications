@@ -33,36 +33,36 @@ export class Answer {
     return `${parentId}-${index}`
   }
 
-  child(child: Question) {
+  child(child: Question): Answer {
     this.childQuestion = child
     child.parent(this)
     return this
   }
 
-  parent(parent: Question) {
+  parent(parent: Question): Answer {
     this.parentQuestion = parent
     return this
   }
 
-  type(answerType: AnswerType) {
+  type(answerType: AnswerType): Answer {
     this.answerType = answerType
     return this
   }
 
-  offenceCode(offenceCode: number) {
+  offenceCode(offenceCode: number): Answer {
     this.answerOffenceCode = offenceCode
     return this
   }
 
-  getType() {
+  getType(): AnswerType {
     return this.answerType
   }
 
-  getText() {
+  getText(): string {
     return this.answerText
   }
 
-  getOffenceCode() {
+  getOffenceCode(): number {
     return this.answerOffenceCode
   }
 
@@ -74,15 +74,15 @@ export class Answer {
     return getProcessedText(this.answerReplayText || this.answerText, placeholderValues)
   }
 
-  getParentQuestion() {
+  getParentQuestion(): Question {
     return this.parentQuestion
   }
 
-  getChildQuestion() {
+  getChildQuestion(): Question {
     return this.childQuestion
   }
 
-  getChildAnswers() {
+  getChildAnswers(): Answer[] {
     return this.getChildQuestion()?.getChildAnswers() || []
   }
 

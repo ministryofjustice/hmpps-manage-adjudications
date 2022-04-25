@@ -52,7 +52,7 @@ export default class Question {
   }
 
   getChildAnswers() {
-    return this.childAnswers || []
+    return this.childAnswers
   }
 
   getParentAnswer() {
