@@ -168,14 +168,14 @@ export default class ReportedAdjudicationsService {
     })
   }
 
-  async reviewAdjudication(
+  async updateAdjudicationStatus(
     adjudicationNumber: number,
     status: ReviewStatus,
     reason: string,
     details: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).reviewAdjudication(adjudicationNumber, {
+    return new ManageAdjudicationsClient(user.token).updateAdjudicationStatus(adjudicationNumber, {
       status,
       statusReason: reason,
       statusDetails: details,

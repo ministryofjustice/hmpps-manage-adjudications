@@ -87,7 +87,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async reviewAdjudication(
+  async updateAdjudicationStatus(
     adjudicationNumber: number,
     payload: ReviewAdjudication
   ): Promise<ReportedAdjudicationResult> {

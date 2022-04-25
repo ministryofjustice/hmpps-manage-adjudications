@@ -51,6 +51,6 @@ export default (on: (string, Record) => void): void => {
     stubGetOffenceRule: adjudications.stubGetOffenceRule,
     stubSaveOffenceDetails: adjudications.stubSaveOffenceDetails,
     verifySaveOffenceDetails: adjudications.verifySaveOffenceDetails,
-    stubReviewAdjudications: adjudications.stubReviewAdjudications,
+    stubUpdateAdjudicationStatus: adjudications.stubUpdateAdjudicationStatus,
   })
 }

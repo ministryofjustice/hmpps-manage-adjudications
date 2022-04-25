@@ -182,10 +182,8 @@ const adjudicationUrls = {
     },
     urls: {
       report: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/report`,
-      review: (adjudicationNumber: number, originalUrl = '') =>
-        originalUrl === ''
-          ? `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review`
-          : `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review?referrer=${originalUrl}`,
+      review: (adjudicationNumber: number, query: string) =>
+        `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review?reportQuery=${query}`,
     },
   },
   deletePerson: {

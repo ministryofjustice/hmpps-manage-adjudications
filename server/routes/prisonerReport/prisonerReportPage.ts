@@ -32,27 +32,19 @@ const getVariablesForPageType = (
   prisonerNumber: string,
   adjudicationNumber: number,
   draftAdjudicationNumber: number,
-  req: Request
+  allCompletedReports: string
 ) => {
   if (pageOptions.isReviewerView()) {
-    let returnLinkUrl = adjudicationUrls.allCompletedReports.root
-    if (req.query.referrer !== undefined) {
-      const url = req.query.referrer as string
-      const urlStatus = req.query.status as string
-      const urlToDate = req.query.toDate as string
-      returnLinkUrl = `${url}&toDate=${urlToDate}&status=${urlStatus}`
-    }
-
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
       printHref: `${adjudicationUrls.printReport.urls.start(
         adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber, returnLinkUrl)}`,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber, allCompletedReports)}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber, returnLinkUrl)}`,
-      returnLinkURL: returnLinkUrl,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber, allCompletedReports)}`,
+      returnLinkURL: allCompletedReports,
       returnLinkContent: 'Return to all completed reports',
     }
   }
@@ -118,7 +110,7 @@ export default class prisonerReportRoutes {
       prisoner.prisonerNumber,
       draftAdjudication.adjudicationNumber,
       newDraftAdjudicationId,
-      req
+      req.query.reportQuery as string
     )
 
     const readOnly =
@@ -186,29 +178,8 @@ export default class prisonerReportRoutes {
     const error = validateForm({ status, reason, details })
     if (error) return this.renderView(req, res, { errors: [error], status, reason, details })
 
-    const url = req.query.referrer as string
-    const urlStatus = req.query.status as string
-    const urlToDate = req.query.toDate as string
-
-    try {
-      await this.reportedAdjudicationsService.reviewAdjudication(adjudicationNumber, status, reason, details, user)
-      return res.redirect(`${url}&toDate=${urlToDate}&status=${urlStatus}`)
-    } catch (e) {
-      if (e.status === 400) {
-        return this.renderView(req, res, {
-          errors: [
-            {
-              href: '#currentStatusSelected',
-              text: e.data.userMessage,
-            },
-          ],
-          status,
-          reason,
-          details,
-        })
-      }
-      throw e
-    }
+    await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
+    return res.redirect(decodeURIComponent(req.query.reportQuery as string))
   }
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})

@@ -302,7 +302,7 @@ const verifySaveOffenceDetails = ({
     },
   })
 
-const stubReviewAdjudications = ({
+const stubUpdateAdjudicationStatus = ({
   adjudicationNumber,
   response,
 }: {
@@ -333,5 +333,5 @@ export default {
   stubGetOffenceRule,
   stubSaveOffenceDetails,
   verifySaveOffenceDetails,
-  stubReviewAdjudications,
+  stubUpdateAdjudicationStatus,
 }

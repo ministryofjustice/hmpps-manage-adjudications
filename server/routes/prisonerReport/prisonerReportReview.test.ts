@@ -200,3 +200,19 @@ describe('GET prisoner report', () => {
       })
   })
 })
+
+describe('POST prisoner report', () => {
+  it('should update the review status', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+    return request(app)
+      .post(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
+      .send({
+        currentStatusSelected: 'ACCEPTED',
+        rejectedReasonId: 'reason',
+        rejectedDetailsId: 'details',
+      })
+      .expect(response => {
+        expect(reportedAdjudicationsService.updateAdjudicationStatus).toHaveBeenCalledTimes(1)
+      })
+  })
+})
