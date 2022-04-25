@@ -32,18 +32,17 @@ const getVariablesForPageType = (
   prisonerNumber: string,
   adjudicationNumber: number,
   draftAdjudicationNumber: number,
-  allCompletedReports: string
+  allCompletedReports: string,
+  originalUrl: string
 ) => {
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `${adjudicationUrls.printReport.urls.start(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber, allCompletedReports)}`,
+      printHref: `${adjudicationUrls.printReport.urls.start(adjudicationNumber)}?referrer=${originalUrl}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber, allCompletedReports)}`,
+      )}?referrer=${originalUrl}`,
       returnLinkURL: allCompletedReports,
       returnLinkContent: 'Return to all completed reports',
     }
@@ -110,7 +109,8 @@ export default class prisonerReportRoutes {
       prisoner.prisonerNumber,
       draftAdjudication.adjudicationNumber,
       newDraftAdjudicationId,
-      req.query.reportQuery as string
+      req.query.reportQuery as string,
+      encodeURIComponent(req.originalUrl)
     )
 
     const readOnly =
