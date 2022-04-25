@@ -31,19 +31,19 @@ const getVariablesForPageType = (
   pageOptions: PageOptions,
   prisonerNumber: string,
   adjudicationNumber: number,
-  draftAdjudicationNumber: number,
-  allCompletedReports: string,
-  originalUrl: string
+  draftAdjudicationNumber: number
 ) => {
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `${adjudicationUrls.printReport.urls.start(adjudicationNumber)}?referrer=${originalUrl}`,
+      printHref: `${adjudicationUrls.printReport.urls.start(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=${originalUrl}`,
-      returnLinkURL: allCompletedReports,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
     }
   }
@@ -108,9 +108,7 @@ export default class prisonerReportRoutes {
       this.pageOptions,
       prisoner.prisonerNumber,
       draftAdjudication.adjudicationNumber,
-      newDraftAdjudicationId,
-      req.query.reportQuery as string,
-      encodeURIComponent(req.originalUrl)
+      newDraftAdjudicationId
     )
 
     const readOnly =
@@ -179,7 +177,7 @@ export default class prisonerReportRoutes {
     if (error) return this.renderView(req, res, { errors: [error], status, reason, details })
 
     await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
-    return res.redirect(decodeURIComponent(req.query.reportQuery as string))
+    return res.redirect(adjudicationUrls.allCompletedReports.root)
   }
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})

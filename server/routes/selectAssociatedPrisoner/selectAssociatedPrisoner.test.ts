@@ -89,7 +89,7 @@ describe('POST /select-associated-prisoner', () => {
         redirectUrl: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6123VU',
           1234
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524455, 'testing')}`,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524455)}`,
       }
     )
     return request(app)
@@ -97,7 +97,7 @@ describe('POST /select-associated-prisoner', () => {
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview%3FreportQuery%3Dtesting`
+        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview`
       )
   })
 

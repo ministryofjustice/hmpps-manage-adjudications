@@ -32,7 +32,6 @@ export default class AllCompletedReportsRoutes {
       allCompletedReports: results,
       filter: uiFilterFromReportedAdjudicationFilter(filter),
       statuses: reportedAdjudicationStatuses,
-      query: encodeURIComponent(req.originalUrl),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
