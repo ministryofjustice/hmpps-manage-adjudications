@@ -80,6 +80,10 @@ export class Answer {
     return this.childQuestion
   }
 
+  getChildAnswers() {
+    return this.getChildQuestion()?.getChildAnswers() || []
+  }
+
   allCodes(): number[] {
     const childAnswers = this.getChildQuestion()?.getChildAnswers()
     const childCodes = childAnswers ? [].concat(...childAnswers.map(a => a.allCodes())) : []
@@ -117,9 +121,12 @@ export class Answer {
     return this.uniqueOrThrow(matching)
   }
 
+  empty = (it: unknown) => it !== undefined
+
   matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
-    const childAnswers = this.getChildQuestion()?.getChildAnswers()
-    const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswers(fn))) : []
+    const childMatches = []
+      .concat(...this.getChildAnswers().map(childAnswer => childAnswer.matchingAnswers(fn)))
+      .filter(this.empty)
     if (fn(this)) {
       childMatches.push(this)
     }
