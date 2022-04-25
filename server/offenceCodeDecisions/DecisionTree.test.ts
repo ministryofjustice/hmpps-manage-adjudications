@@ -24,7 +24,7 @@ function missingOffenceCode(answerToCheck: Answer): boolean {
 function duplicateUrls(decisionToCheck: Question) {
   return (
     decisionToCheck.getUrl() != null &&
-    decisionToCheck.matchingDecisions(d => d !== decisionToCheck && d.getUrl() === decisionToCheck.getUrl()).length !== 0
+    decisionToCheck.matchingQuestion(d => d !== decisionToCheck && d.getUrl() === decisionToCheck.getUrl()).length !== 0
   )
 }
 
@@ -61,27 +61,27 @@ describe('decisions', () => {
   })
 
   it('no questions with duplicate urls', () => {
-    const decisionsWithDuplicateUrls = decisionTree.matchingDecisions(duplicateUrls)
+    const decisionsWithDuplicateUrls = decisionTree.matchingQuestion(duplicateUrls)
     expect(decisionsWithDuplicateUrls).toHaveLength(0)
   })
 
   it('check we find questions with duplicate urls when they exist', () => {
     const withDuplicateUrls = template()
-    withDuplicateUrls.findDecisionById('1-1').url('not-unique')
-    withDuplicateUrls.findDecisionById('1-2').url('not-unique')
-    const questionsWithDuplicateUrls = withDuplicateUrls.matchingDecisions(duplicateUrls)
+    withDuplicateUrls.findQuestionById('1-1').url('not-unique')
+    withDuplicateUrls.findQuestionById('1-2').url('not-unique')
+    const questionsWithDuplicateUrls = withDuplicateUrls.matchingQuestion(duplicateUrls)
     expect(questionsWithDuplicateUrls).toHaveLength(0)
   })
 
   it('no questions with urls starting with a slash', () => {
-    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingDecisions(urlsStartingWithSlash)
+    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingQuestion(urlsStartingWithSlash)
     expect(decisionsWithUrlsStartingWithSlash).toHaveLength(0)
   })
 
   it('check we find questions with urls starting with a slash when they exist', () => {
     const withUrlStartingWithASlash = template()
-    withUrlStartingWithASlash.findDecisionById('1-1').url('/starts-with-a-slash')
-    const questionsWithUrlsStartingWithSlash = withUrlStartingWithASlash.matchingDecisions(urlsStartingWithSlash)
+    withUrlStartingWithASlash.findQuestionById('1-1').url('/starts-with-a-slash')
+    const questionsWithUrlsStartingWithSlash = withUrlStartingWithASlash.matchingQuestion(urlsStartingWithSlash)
     expect(questionsWithUrlsStartingWithSlash.length).toBeGreaterThan(0)
   })
 

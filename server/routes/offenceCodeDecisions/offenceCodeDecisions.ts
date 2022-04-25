@@ -156,7 +156,7 @@ export default class OffenceCodeRoutes {
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const decision = this.decisions().findDecisionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
+    const decision = this.decisions().findQuestionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
     const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const answers = decision.getChildAnswers().map(a => {
       return {

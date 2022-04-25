@@ -22,9 +22,9 @@ describe('find', () => {
     withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
     withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
 
-    expect(() => withNonUniqueUrl.findDecisionBy(d => d.getUrl() === 'non-unique')).toThrow()
-    expect(withUniqueUrl.findDecisionBy(d => d.getUrl() === 'unique').getUrl()).toEqual('unique')
-    expect(template().findDecisionBy(d => d.getUrl() === 'a-url-that-does-not-exist')).toBe(null)
+    expect(() => withNonUniqueUrl.findQuestionBy(d => d.getUrl() === 'non-unique')).toThrow()
+    expect(withUniqueUrl.findQuestionBy(d => d.getUrl() === 'unique').getUrl()).toEqual('unique')
+    expect(template().findQuestionBy(d => d.getUrl() === 'a-url-that-does-not-exist')).toBe(null)
   })
 
   it('answer', () => {
@@ -44,12 +44,12 @@ describe('find', () => {
   it('question by url', () => {
     const withUniqueUrl = template()
     withUniqueUrl.getChildAnswers()[0].getChildQuestion().url('override-url')
-    expect(withUniqueUrl.findDecisionByUrl('override-url').id()).toEqual('1-1')
-    expect(withUniqueUrl.findDecisionByUrl('1-1')).toBe(null) // expect the overridden url to take preference
+    expect(withUniqueUrl.findQuestionByUrl('override-url').id()).toEqual('1-1')
+    expect(withUniqueUrl.findQuestionByUrl('1-1')).toBe(null) // expect the overridden url to take preference
   })
 
   it('question by id', () => {
-    expect(template().findDecisionById('1-2').id()).toEqual('1-2')
+    expect(template().findQuestionById('1-2').id()).toEqual('1-2')
   })
 
   it('answer by id', () => {
@@ -66,7 +66,7 @@ describe('match', () => {
     const withNonUniqueUrl = template()
     withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
     withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
-    const matching = withNonUniqueUrl.matchingDecisions(d => d.getUrl() === 'non-unique')
+    const matching = withNonUniqueUrl.matchingQuestion(d => d.getUrl() === 'non-unique')
     expect(matching).toHaveLength(2)
   })
 
@@ -88,7 +88,7 @@ describe('id', () => {
 
   it('is unique', () => {
     const list = template()
-      .matchingDecisions(a => true) // Bring back everything
+      .matchingQuestion(a => true) // Bring back everything
       .map(q => q.id())
     const duplicatesRemoved = new Set(list)
     expect(list.length).toBeGreaterThan(0)

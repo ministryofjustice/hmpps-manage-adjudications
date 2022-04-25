@@ -74,25 +74,25 @@ export default class Question {
     return urls.sort()
   }
 
-  findDecisionByUrl(url: string): Question {
-    return this.findDecisionBy(question => question.getUrl() === url)
+  findQuestionByUrl(url: string): Question {
+    return this.findQuestionBy(question => question.getUrl() === url)
   }
 
-  findDecisionById(id: string): Question {
-    return this.findDecisionBy(question => question.id() === id)
+  findQuestionById(id: string): Question {
+    return this.findQuestionBy(question => question.id() === id)
   }
 
-  findDecisionBy(fn: (question: Question) => boolean): Question {
-    const matching = this.matchingDecisions(fn)
+  findQuestionBy(fn: (question: Question) => boolean): Question {
+    const matching = this.matchingQuestion(fn)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingDecisions(fn: (question: Question) => boolean): Question[] {
+  matchingQuestion(fn: (question: Question) => boolean): Question[] {
     const matches = [].concat(
       ...this.getChildAnswers()
         .map(childAnswer => childAnswer.getChildQuestion())
         .filter(childQuestion => !!childQuestion)
-        .map(d => d.matchingDecisions(fn))
+        .map(d => d.matchingQuestion(fn))
     )
     if (fn(this)) {
       matches.push(this)
