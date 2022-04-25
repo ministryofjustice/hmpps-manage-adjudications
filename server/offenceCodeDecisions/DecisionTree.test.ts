@@ -17,7 +17,7 @@ function findDuplicates<T>(toCheck: Array<T>) {
 }
 
 function missingOffenceCode(answerToCheck: Answer): boolean {
-  return !answerToCheck.getChildDecision() && !answerToCheck.getOffenceCode()
+  return !answerToCheck.getChildQuestion() && !answerToCheck.getOffenceCode()
 }
 
 function duplicateUrls(decisionToCheck: Question) {

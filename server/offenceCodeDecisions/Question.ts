@@ -4,21 +4,21 @@ import { Answer } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Question {
-  private decisionParent: Answer
+  private parentAnswer: Answer
 
-  private decisionChildren: Answer[] = []
+  private childAnswers: Answer[] = []
 
-  private readonly decisionTitle: Title
+  private readonly questionTitle: Title
 
-  private decisionUrl: string
+  private questionUrl: string
 
   constructor(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
     if (title instanceof Title) {
-      this.decisionTitle = title
+      this.questionTitle = title
     } else if (typeof title === 'string') {
-      this.decisionTitle = new Title(title)
+      this.questionTitle = new Title(title)
     } else {
-      this.decisionTitle = new Title(title)
+      this.questionTitle = new Title(title)
     }
   }
 
@@ -30,41 +30,41 @@ export class Question {
   }
 
   parent(parent: Answer) {
-    this.decisionParent = parent
+    this.parentAnswer = parent
     return this
   }
 
   child(child: Answer) {
     child.parent(this)
-    this.decisionChildren.push(child)
+    this.childAnswers.push(child)
     return this
   }
 
   url(url: string) {
-    this.decisionUrl = url
+    this.questionUrl = url
     return this
   }
 
   getTitle() {
-    return this.decisionTitle
+    return this.questionTitle
   }
 
   getChildAnswers() {
-    return this.decisionChildren
+    return this.childAnswers
   }
 
   getParentAnswer() {
-    return this.decisionParent
+    return this.parentAnswer
   }
 
   getUrl(): string {
-    return this.decisionUrl || this.id()
+    return this.questionUrl || this.id()
   }
 
   allUrls(): string[] {
     const urls = [].concat(
       ...this.getChildAnswers()
-        .map(a => a.getChildDecision())
+        .map(a => a.getChildQuestion())
         .filter(d => !!d)
         .map(d => d.allUrls())
     )
@@ -90,7 +90,7 @@ export class Question {
   matchingDecisions(fn: (d: Question) => boolean): Question[] {
     const matches = [].concat(
       ...this.getChildAnswers()
-        .map(a => a.getChildDecision())
+        .map(a => a.getChildQuestion())
         .filter(d => !!d)
         .map(d => d.matchingDecisions(fn))
     )

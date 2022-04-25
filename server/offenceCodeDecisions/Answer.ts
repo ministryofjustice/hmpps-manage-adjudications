@@ -10,9 +10,9 @@ export class Answer {
 
   private answerOffenceCode: number
 
-  private answerChild: Question
+  private childQuestion: Question
 
-  private answerParent: Question
+  private parentQuestion: Question
 
   private answerType: AnswerType = AnswerType.RADIO_SELECTION_ONLY
 
@@ -26,19 +26,19 @@ export class Answer {
 
   id() {
     // We should always have a parent but if we don't we assume the parent would have id 1 and be the root.
-    const parentId = this.getParentDecision()?.id() || 1
-    const index = (this.getParentDecision()?.getChildAnswers().indexOf(this) || 0) + 1
+    const parentId = this.getParentQuestion()?.id() || 1
+    const index = (this.getParentQuestion()?.getChildAnswers().indexOf(this) || 0) + 1
     return `${parentId}-${index}`
   }
 
   child(child: Question) {
-    this.answerChild = child
+    this.childQuestion = child
     child.parent(this)
     return this
   }
 
   parent(parent: Question) {
-    this.answerParent = parent
+    this.parentQuestion = parent
     return this
   }
 
@@ -72,16 +72,16 @@ export class Answer {
     return getProcessedText(this.answerReplayText || this.answerText, placeholderValues)
   }
 
-  getParentDecision() {
-    return this.answerParent
+  getParentQuestion() {
+    return this.parentQuestion
   }
 
-  getChildDecision() {
-    return this.answerChild
+  getChildQuestion() {
+    return this.childQuestion
   }
 
   allCodes(): number[] {
-    const childAnswers = this.getChildDecision()?.getChildAnswers()
+    const childAnswers = this.getChildQuestion()?.getChildAnswers()
     const childCodes = childAnswers ? [].concat(...childAnswers.map(a => a.allCodes())) : []
     if (this.getOffenceCode()) {
       childCodes.push(this.getOffenceCode())
@@ -91,12 +91,12 @@ export class Answer {
 
   getQuestionsAndAnswersToGetHere(): { question: Question; answer: Answer }[] {
     let questionsAndAnswers = [] as { question: Question; answer: Answer }[]
-    if (this.getParentDecision().getParentAnswer()) {
+    if (this.getParentQuestion().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
-        this.getParentDecision().getParentAnswer().getQuestionsAndAnswersToGetHere()
+        this.getParentQuestion().getParentAnswer().getQuestionsAndAnswersToGetHere()
       )
     }
-    questionsAndAnswers.push({ question: this.getParentDecision(), answer: this })
+    questionsAndAnswers.push({ question: this.getParentQuestion(), answer: this })
     return questionsAndAnswers
   }
 
@@ -118,7 +118,7 @@ export class Answer {
   }
 
   matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
-    const childAnswers = this.getChildDecision()?.getChildAnswers()
+    const childAnswers = this.getChildQuestion()?.getChildAnswers()
     const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswers(fn))) : []
     if (fn(this)) {
       childMatches.push(this)
@@ -135,8 +135,8 @@ export class Answer {
     if (this.getOffenceCode()) {
       output = `${output}\r\n${padding}Offence Code: ${this.getOffenceCode()}`
     }
-    if (this.getChildDecision()) {
-      output = `${output}\r\n${this.getChildDecision().toString(indent + 4)}`
+    if (this.getChildQuestion()) {
+      output = `${output}\r\n${this.getChildQuestion().toString(indent + 4)}`
     }
     return output
   }

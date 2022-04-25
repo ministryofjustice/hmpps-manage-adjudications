@@ -17,10 +17,10 @@ function template() {
 describe('find', () => {
   it('question', () => {
     const withUniqueUrl = template()
-    withUniqueUrl.getChildAnswers()[0].getChildDecision().url('unique')
+    withUniqueUrl.getChildAnswers()[0].getChildQuestion().url('unique')
     const withNonUniqueUrl = template()
-    withNonUniqueUrl.getChildAnswers()[0].getChildDecision().url('non-unique')
-    withNonUniqueUrl.getChildAnswers()[1].getChildDecision().url('non-unique')
+    withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
+    withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
 
     expect(() => withNonUniqueUrl.findDecisionBy(d => d.getUrl() === 'non-unique')).toThrow()
     expect(withUniqueUrl.findDecisionBy(d => d.getUrl() === 'unique').getUrl()).toEqual('unique')
@@ -30,10 +30,10 @@ describe('find', () => {
   it('answer', () => {
     const withNoStaffAnswers = template()
     const withSingleStaffAnswer = template()
-    withSingleStaffAnswer.getChildAnswers()[0].getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
+    withSingleStaffAnswer.getChildAnswers()[0].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
     const withMultipleStaffAnswers = template()
-    withMultipleStaffAnswers.getChildAnswers()[0].getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildAnswers()[1].getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildAnswers()[0].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildAnswers()[1].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
     const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
 
     expect(() => withMultipleStaffAnswers.findAnswerBy(matchByStaffType)).toThrow()
@@ -43,7 +43,7 @@ describe('find', () => {
 
   it('question by url', () => {
     const withUniqueUrl = template()
-    withUniqueUrl.getChildAnswers()[0].getChildDecision().url('override-url')
+    withUniqueUrl.getChildAnswers()[0].getChildQuestion().url('override-url')
     expect(withUniqueUrl.findDecisionByUrl('override-url').id()).toEqual('1-1')
     expect(withUniqueUrl.findDecisionByUrl('1-1')).toBe(null) // expect the overridden url to take preference
   })
@@ -64,16 +64,16 @@ describe('find', () => {
 describe('match', () => {
   it('questions', () => {
     const withNonUniqueUrl = template()
-    withNonUniqueUrl.getChildAnswers()[0].getChildDecision().url('non-unique')
-    withNonUniqueUrl.getChildAnswers()[1].getChildDecision().url('non-unique')
+    withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
+    withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
     const matching = withNonUniqueUrl.matchingDecisions(d => d.getUrl() === 'non-unique')
     expect(matching).toHaveLength(2)
   })
 
   it('answers', () => {
     const withMultipleStaffAnswers = template()
-    withMultipleStaffAnswers.getChildAnswers()[0].getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildAnswers()[1].getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildAnswers()[0].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildAnswers()[1].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
     const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
 
     expect(withMultipleStaffAnswers.matchingAnswers(matchByStaffType)).toHaveLength(2)
@@ -83,7 +83,7 @@ describe('match', () => {
 describe('id', () => {
   it('id', () => {
     // Note id is based on position in child arrays.
-    expect(template().getChildAnswers()[1].getChildDecision().id()).toEqual('1-2')
+    expect(template().getChildAnswers()[1].getChildQuestion().id()).toEqual('1-2')
   })
 
   it('is unique', () => {

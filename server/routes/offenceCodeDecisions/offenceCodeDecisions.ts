@@ -103,7 +103,7 @@ export default class OffenceCodeRoutes {
       const nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationNumber,
         incidentRole,
-        selectedAnswer.getChildDecision().getUrl()
+        selectedAnswer.getChildQuestion().getUrl()
       )}`
       return res.redirect(nextQuestionUrl)
     }

@@ -20,10 +20,10 @@ describe('find', () => {
   it('answer', () => {
     const withNoStaffAnswers = templateFirstAnswer()
     const withSingleStaffAnswer = templateFirstAnswer()
-    withSingleStaffAnswer.getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
+    withSingleStaffAnswer.getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
     const withMultipleStaffAnswers = templateFirstAnswer()
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[1].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[1].type(AnswerType.STAFF)
     const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
 
     expect(() => withMultipleStaffAnswers.findAnswerBy(matchByStaffType)).toThrow()
@@ -35,8 +35,8 @@ describe('find', () => {
 describe('match', () => {
   it('answers', () => {
     const withMultipleStaffAnswers = templateFirstAnswer()
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[1].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[1].type(AnswerType.STAFF)
     const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
 
     expect(withMultipleStaffAnswers.matchingAnswers(matchByStaffType)).toHaveLength(2)
@@ -46,7 +46,7 @@ describe('match', () => {
 describe('id', () => {
   it('answer', () => {
     // Note id is based on position in child arrays.
-    expect(templateFirstAnswer().getChildDecision().getChildAnswers()[1].id()).toEqual('1-1-2')
+    expect(templateFirstAnswer().getChildQuestion().getChildAnswers()[1].id()).toEqual('1-1-2')
   })
 
   it('is unique', () => {
