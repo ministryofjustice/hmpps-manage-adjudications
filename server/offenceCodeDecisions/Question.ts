@@ -3,7 +3,7 @@ import Title from './Title'
 import { Answer } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
-export class Question {
+export default class Question {
   private parentAnswer: Answer
 
   private childAnswers: Answer[] = []
@@ -150,8 +150,4 @@ export class Question {
     }
     return null
   }
-}
-
-export function question(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
-  return new Question(title)
 }

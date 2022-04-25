@@ -4,7 +4,7 @@ import { User } from '../../data/hmppsAuthClient'
 import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { Question } from '../../offenceCodeDecisions/Question'
+import Question from '../../offenceCodeDecisions/Question'
 
 export default class DecisionHelper {
   constructor(readonly decisionTreeService: DecisionTreeService) {}

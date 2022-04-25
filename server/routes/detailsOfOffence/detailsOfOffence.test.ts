@@ -3,14 +3,14 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { question } from '../../offenceCodeDecisions/Question'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
-import { AnswerType as Type, answer } from '../../offenceCodeDecisions/Answer'
+import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { answer, question } from '../../offenceCodeDecisions/Decisions'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')

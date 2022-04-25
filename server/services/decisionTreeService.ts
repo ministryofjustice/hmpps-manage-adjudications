@@ -1,4 +1,4 @@
-import { Question } from '../offenceCodeDecisions/Question'
+import Question from '../offenceCodeDecisions/Question'
 import PlaceOnReportService from './placeOnReportService'
 import UserService from './userService'
 import { User } from '../data/hmppsAuthClient'

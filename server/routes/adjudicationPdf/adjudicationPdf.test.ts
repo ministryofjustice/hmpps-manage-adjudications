@@ -4,12 +4,12 @@ import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
-import { question } from '../../offenceCodeDecisions/Question'
-import { answer, AnswerType as Type } from '../../offenceCodeDecisions/Answer'
+import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import { OffenceRule } from '../../data/DraftAdjudicationResult'
 import AdjudicationPdf from './adjudicationPdf'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
+import { answer, question } from '../../offenceCodeDecisions/Decisions'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')

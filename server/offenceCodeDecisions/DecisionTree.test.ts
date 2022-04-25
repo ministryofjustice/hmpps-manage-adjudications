@@ -1,7 +1,8 @@
 /* eslint-disable */
 import decisionTree from './DecisionTree'
-import { question, Question } from './Question'
-import { answer, Answer } from './Answer'
+import Question from './Question'
+import { Answer } from './Answer'
+import { answer, question } from './Decisions'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)

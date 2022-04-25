@@ -1,6 +1,6 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
-import { Question } from './Question'
+import Question from './Question'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 
 export class Answer {
@@ -150,10 +150,6 @@ export class Answer {
     }
     return null
   }
-}
-
-export function answer(text: string | [string, string]) {
-  return new Answer(text)
 }
 
 // eslint-disable-next-line no-shadow
