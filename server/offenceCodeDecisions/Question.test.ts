@@ -66,7 +66,7 @@ describe('match', () => {
     const withNonUniqueUrl = template()
     withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
     withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
-    const matching = withNonUniqueUrl.matchingQuestion(d => d.getUrl() === 'non-unique')
+    const matching = withNonUniqueUrl.matchingQuestions(d => d.getUrl() === 'non-unique')
     expect(matching).toHaveLength(2)
   })
 
@@ -88,7 +88,7 @@ describe('id', () => {
 
   it('is unique', () => {
     const list = template()
-      .matchingQuestion(a => true) // Bring back everything
+      .matchingQuestions(a => true) // Bring back everything
       .map(q => q.id())
     const duplicatesRemoved = new Set(list)
     expect(list.length).toBeGreaterThan(0)

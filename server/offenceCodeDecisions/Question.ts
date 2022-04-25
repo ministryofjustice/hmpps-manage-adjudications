@@ -83,16 +83,16 @@ export default class Question {
   }
 
   findQuestionBy(fn: (question: Question) => boolean): Question {
-    const matching = this.matchingQuestion(fn)
+    const matching = this.matchingQuestions(fn)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingQuestion(fn: (question: Question) => boolean): Question[] {
+  matchingQuestions(fn: (question: Question) => boolean): Question[] {
     const matches = [].concat(
       ...this.getChildAnswers()
         .map(childAnswer => childAnswer.getChildQuestion())
         .filter(childQuestion => !!childQuestion)
-        .map(d => d.matchingQuestion(fn))
+        .map(d => d.matchingQuestions(fn))
     )
     if (fn(this)) {
       matches.push(this)
