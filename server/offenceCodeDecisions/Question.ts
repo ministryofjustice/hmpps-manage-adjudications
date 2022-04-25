@@ -64,9 +64,9 @@ export default class Question {
   allUrls(): string[] {
     const urls = [].concat(
       ...this.getChildAnswers()
-        .map(a => a.getChildQuestion())
-        .filter(d => !!d)
-        .map(d => d.allUrls())
+        .map(childAnswer => childAnswer.getChildQuestion())
+        .filter(childQuestion => !!childQuestion)
+        .map(childQuestion => childQuestion.allUrls())
     )
     if (this.getUrl()) {
       urls.push(this.getUrl())
@@ -75,23 +75,23 @@ export default class Question {
   }
 
   findDecisionByUrl(url: string): Question {
-    return this.findDecisionBy(d => d.getUrl() === url)
+    return this.findDecisionBy(question => question.getUrl() === url)
   }
 
   findDecisionById(id: string): Question {
-    return this.findDecisionBy(d => d.id() === id)
+    return this.findDecisionBy(question => question.id() === id)
   }
 
-  findDecisionBy(fn: (d: Question) => boolean): Question {
+  findDecisionBy(fn: (question: Question) => boolean): Question {
     const matching = this.matchingDecisions(fn)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingDecisions(fn: (d: Question) => boolean): Question[] {
+  matchingDecisions(fn: (question: Question) => boolean): Question[] {
     const matches = [].concat(
       ...this.getChildAnswers()
-        .map(a => a.getChildQuestion())
-        .filter(d => !!d)
+        .map(childAnswer => childAnswer.getChildQuestion())
+        .filter(childQuestion => !!childQuestion)
         .map(d => d.matchingDecisions(fn))
     )
     if (fn(this)) {
@@ -100,14 +100,14 @@ export default class Question {
     return matches
   }
 
-  findAnswerBy(fn: (a: Answer) => boolean): Answer {
+  findAnswerBy(fn: (answer: Answer) => boolean): Answer {
     const matching = this.getChildAnswers()
       .map(childAnswer => childAnswer.findAnswerBy(fn))
-      .filter(a => !!a)
+      .filter(childAnswer => !!childAnswer)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
+  matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
     if (this.getChildAnswers()) {
       return [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn)))
     }
@@ -115,20 +115,20 @@ export default class Question {
   }
 
   allCodes(): Array<number> {
-    return [].concat(...this.getChildAnswers().map(a => a.allCodes()))
+    return [].concat(...this.getChildAnswers().map(answer => answer.allCodes()))
   }
 
   findAnswerByCode(offenceCode: number): Answer {
-    return this.findAnswerBy(a => a.getOffenceCode() === offenceCode)
+    return this.findAnswerBy(answer => answer.getOffenceCode() === offenceCode)
   }
 
   findAnswerById(id: string): Answer {
-    return this.findAnswerBy(a => a.id() === id)
+    return this.findAnswerBy(answer => answer.id() === id)
   }
 
   toString(indent = 0): string {
     const padding = new Array(indent).join(' ')
-    let output = `${padding}Decision Id: ${this.id()}`
+    let output = `${padding}Question Id: ${this.id()}`
     if (this.getTitle()?.getTitles()) {
       output = `${output}\r\n${this.getTitle().toString(indent)}`
     }
@@ -146,7 +146,7 @@ export default class Question {
       return list[0]
     }
     if (list.length !== 0) {
-      throw new Error(`Duplicates found in decision ${this.id()}`)
+      throw new Error(`Duplicates found in question ${this.id()}`)
     }
     return null
   }

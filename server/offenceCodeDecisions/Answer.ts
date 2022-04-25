@@ -112,12 +112,12 @@ export class Answer {
     })
   }
 
-  findAnswerBy(fn: (d: Answer) => boolean): Answer {
+  findAnswerBy(fn: (answer: Answer) => boolean): Answer {
     const matching = this.matchingAnswers(fn)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
+  matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
     const childAnswers = this.getChildQuestion()?.getChildAnswers()
     const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswers(fn))) : []
     if (fn(this)) {
