@@ -24,11 +24,9 @@ export default class Question {
     }
   }
 
+  // The id is 1 when this is the top most question otherwise it is that of the parent answer.
   id(): string {
-    if (this.getParentAnswer()) {
-      return this.getParentAnswer().id()
-    }
-    return '1'
+    return this.getParentAnswer()?.id() || '1'
   }
 
   parent(parent: Answer) {

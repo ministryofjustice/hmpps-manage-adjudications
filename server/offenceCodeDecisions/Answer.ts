@@ -26,8 +26,9 @@ export class Answer {
     }
   }
 
+  // The id is that of the parent question with the answer index appended. There should always be a parent question but
+  // if not we assume its id would be 1. Note indexes are 1 based.
   id() {
-    // We should always have a parent but if we don't we assume the parent would have id 1 and be the root.
     const parentId = this.getParentQuestion()?.id() || 1
     const index = (this.getParentQuestion()?.getChildAnswers().indexOf(this) || 0) + 1
     return `${parentId}-${index}`
