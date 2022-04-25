@@ -115,6 +115,10 @@ export default class prisonerReportRoutes {
       this.pageOptions.isReviewerView() ||
       ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status)
 
+    const review =
+      this.pageOptions.isReviewerView() &&
+      ['RETURNED', 'AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
+
     return res.render(`pages/prisonerReport`, {
       pageData,
       prisoner,
@@ -124,7 +128,7 @@ export default class prisonerReportRoutes {
       offences,
       ...prisonerReportVariables,
       readOnly,
-      review: this.pageOptions.isReviewerView(),
+      review,
     })
   }
 
@@ -162,6 +166,9 @@ export default class prisonerReportRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
+
     const status = this.reviewStatus(req.body.currentStatusSelected)
     const reason = this.reason(status, req)
     const details = this.details(status, req)
@@ -169,6 +176,7 @@ export default class prisonerReportRoutes {
     const error = validateForm({ status, reason, details })
     if (error) return this.renderView(req, res, { errors: [error], status, reason, details })
 
+    await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
     return res.redirect(adjudicationUrls.allCompletedReports.root)
   }
 

@@ -4,39 +4,30 @@
 {% from "../macros/adjudicationReviewPanel.njk" import adjudicationReviewPanel %}
 {% from "../macros/printLink.njk" import printLink %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
-
 {% block pageTitle %}
-	Prisoner’s report
+  Prisoner’s report
 {% endblock %}
-
 {% block beforeContent %}
- {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
-
 {% block content %}
-
- <h1 class="govuk-heading-l">{{ prisoner.friendlyName | possessive }} report</h1>
- 
- <div class="prisonerPlaybackSection">
-  {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
- </div>
-
- <div class="prisoner-report-top-bar flex-center govuk-!-margin-top-5">
-  <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
-   <span class="govuk-!-font-weight-bold" >Report number: </span>{{ reportNo }}</p>
-   {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
- </div>
-
- {{ adjudicationSummary(editIncidentDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, offences) }}
-  
- {% if review %}
-   {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }} 
- {% endif %}
-
- {% if not review %}
-   <p class="govuk-body">
-     <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
-   </p>
-{% endif %}
-
+  <h1 class="govuk-heading-l">{{ prisoner.friendlyName | possessive }} report</h1>
+  <div class="prisonerPlaybackSection">
+    {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+  </div>
+  <div class="prisoner-report-top-bar flex-center govuk-!-margin-top-5">
+    <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
+      <span class="govuk-!-font-weight-bold">Report number:</span>
+      {{ reportNo }}</p>
+    {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
+  </div>
+  {{ adjudicationSummary(editIncidentDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, offences) }}
+  {% if review %}
+    {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}
+  {% endif %}
+  {% if not review %}
+    <p class="govuk-body">
+      <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
+    </p>
+  {% endif %}
 {% endblock %}

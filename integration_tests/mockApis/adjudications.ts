@@ -302,6 +302,21 @@ const verifySaveOffenceDetails = ({
     },
   })
 
+const stubUpdateAdjudicationStatus = ({
+  adjudicationNumber,
+  response,
+}: {
+  adjudicationNumber: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/status`,
+    },
+    response,
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -318,4 +333,5 @@ export default {
   stubGetOffenceRule,
   stubSaveOffenceDetails,
   verifySaveOffenceDetails,
+  stubUpdateAdjudicationStatus,
 }

@@ -16,6 +16,7 @@ import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
+import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -164,6 +165,20 @@ export default class ReportedAdjudicationsService {
       return {
         ...enhancedAdjudication,
       }
+    })
+  }
+
+  async updateAdjudicationStatus(
+    adjudicationNumber: number,
+    status: ReviewStatus,
+    reason: string,
+    details: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateAdjudicationStatus(adjudicationNumber, {
+      status,
+      statusReason: reason,
+      statusDetails: details,
     })
   }
 

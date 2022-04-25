@@ -145,7 +145,6 @@ context('Prisoner report - reviewer view', () => {
         },
       },
     })
-
     cy.task('stubGetOffenceRule', {
       offenceCode: 1001,
       response: {
@@ -161,6 +160,14 @@ context('Prisoner report - reviewer view', () => {
         username: 'USER1',
         token: 'token-1',
         authSource: 'auth',
+      },
+    })
+    cy.task('stubUpdateAdjudicationStatus', {
+      adjudicationNumber: 12345,
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
     cy.signIn()
@@ -237,7 +244,7 @@ context('Prisoner report - reviewer view', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-    PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
+    PrisonerReportPage.reportNumber().should('contain.text', '12345')
   })
   it('should not show a link to the edit incident details page', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
