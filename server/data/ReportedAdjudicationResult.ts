@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
 import { IncidentDetails, IncidentRole, IncidentStatement, OffenceDetails } from './DraftAdjudicationResult'
 
 export type ReportedAdjudication = {
@@ -31,6 +32,12 @@ export type ReportedAdjudicationFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
   status?: ReportedAdjudicationStatus
+}
+
+export type ReviewAdjudication = {
+  status: ReviewStatus
+  statusReason: string
+  statusDetails: string
 }
 
 // This enum needs to be kept in sync with the enum in the API.

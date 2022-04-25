@@ -13,6 +13,7 @@ import {
   ReportedAdjudicationResult,
   ReportedAdjudication,
   ReportedAdjudicationFilter,
+  ReviewAdjudication,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -83,6 +84,16 @@ export default class ManageAdjudicationsClient {
   async getReportedAdjudication(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.get({
       path: `/reported-adjudications/${adjudicationNumber}`,
+    })
+  }
+
+  async reviewAdjudication(
+    adjudicationNumber: number,
+    payload: ReviewAdjudication
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/status`,
+      data: payload,
     })
   }
 

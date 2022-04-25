@@ -2,6 +2,9 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
+const originalSearch = '?fromDate=01/04/2022&toDate=25/04/2022&status='
+const originalUrl = `/all-completed-reports${originalSearch}`
+
 context('Prisoner report - reviewer view', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -61,12 +64,55 @@ context('Prisoner report - reviewer view', () => {
         },
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 45678,
+      response: {
+        reportedAdjudication: {
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1,
+          createdDateTime: undefined,
+          createdByUserId: undefined,
+          incidentDetails: {
+            locationId: 197682,
+            dateTimeOfIncident: '2021-12-09T10:30:00',
+            handoverDeadline: '2021-12-11T10:30:00',
+          },
+          incidentStatement: undefined,
+          incidentRole: {
+            roleCode: undefined,
+          },
+          offenceDetails: [],
+          status: 'AWAITING_REVIEW',
+        },
+      },
+    })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 12345,
       response: {
         draftAdjudication: {
           id: 177,
           adjudicationNumber: 12345,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 234,
+            dateTimeOfIncident: '2021-12-01T09:40:00',
+            handoverDeadline: '2021-12-03T09:40:00',
+          },
+          incidentStatement: {
+            statement: 'TESTING',
+            completed: true,
+          },
+          startedByUserId: 'USER1',
+        },
+      },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 45678,
+      response: {
+        draftAdjudication: {
+          id: 177,
+          adjudicationNumber: 45678,
           prisonerNumber: 'G6415GD',
           incidentDetails: {
             locationId: 234,
@@ -145,7 +191,6 @@ context('Prisoner report - reviewer view', () => {
         },
       },
     })
-
     cy.task('stubGetOffenceRule', {
       offenceCode: 1001,
       response: {
@@ -163,10 +208,29 @@ context('Prisoner report - reviewer view', () => {
         authSource: 'auth',
       },
     })
+    cy.task('stubReviewAdjudications', {
+      adjudicationNumber: 12345,
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+    cy.task('stubReviewAdjudications', {
+      adjudicationNumber: 45678,
+      response: {
+        status: 400,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          userMessage: 'ReportedAdjudication 45678 cannot transition from ACCEPTED to ACCEPTED',
+        },
+      },
+    })
+
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary().should('exist')
@@ -176,7 +240,7 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.reviewerPanel().should('exist')
   })
   it('should contain the correct incident details', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentDetailsSummary()
@@ -198,7 +262,7 @@ context('Prisoner report - reviewer view', () => {
       })
   })
   it('should contain the correct offence details', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.offenceDetailsSummary()
@@ -228,51 +292,53 @@ context('Prisoner report - reviewer view', () => {
       })
   })
   it('should contain the correct incident statement', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
     PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
   })
   it('should contain the correct report number', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-    PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
+    PrisonerReportPage.reportNumber().should('contain.text', '12345')
   })
   it('should not show a link to the edit incident details page', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentDetailsChangeLink().should('not.exist')
   })
   it('should not show a link to the incident details page', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.offenceDetailsChangeLink().should('not.exist')
   })
   it('should not show a link to edit the incident statement', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.incidentStatementChangeLink().should('not.exist')
   })
   it('should go to /all-completed-reports if the exit button is pressed', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewExit().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq(originalSearch)
     })
   })
   it('should go to /all-completed-reports if status is accepted and save is pressed and form is valid', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="accepted"]').check()
     PrisonerReportPage.reviewSubmit().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq(originalSearch)
     })
   })
   it('should go to /all-completed-reports if status is rejected and save is pressed and form is valid', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
     PrisonerReportPage.reviewRejectReason().select('expired')
@@ -280,10 +346,11 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.reviewSubmit().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq(originalSearch)
     })
   })
   it('should go to /all-completed-reports if status is returned and save is pressed and form is valid', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="returned"]').check()
     PrisonerReportPage.reviewReportReason().select('offence')
@@ -291,27 +358,37 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.reviewSubmit().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq(originalSearch)
     })
   })
   it('should display an error if no status is selected and save is pressed', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewSubmit().click()
     cy.get('*[class^="govuk-error-message"]').contains('A review outcome is required')
   })
 
   it('should display an error if rejected is selected without a reason and save is pressed', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
     PrisonerReportPage.reviewSubmit().click()
     cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
   })
   it('should display an error if returned is selected without a reason and save is pressed', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="returned"]').check()
     PrisonerReportPage.reviewSubmit().click()
     cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
+  })
+  it('should display an error if the server returns a 400', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(45678, originalUrl))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewStatus().find('input[value="accepted"]').check()
+    PrisonerReportPage.reviewSubmit().click()
+    cy.get('*[class^="govuk-error-message"]').contains(
+      'ReportedAdjudication 45678 cannot transition from ACCEPTED to ACCEPTED'
+    )
   })
 })

@@ -14,6 +14,7 @@ jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 
+const originalUrl = '/all-completed-reports?fromDate=01/04/2022&toDate=25/04/2022&status='
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -167,7 +168,7 @@ describe('GET prisoner report', () => {
   it('should load the prisoner report page if the user has the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .get(adjudicationUrls.prisonerReport.urls.review(12345))
+      .get(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Bobby Da Smith Jones’ report')
@@ -191,7 +192,7 @@ describe('GET prisoner report', () => {
   it('should not load the prisoner report page if no role present', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .get(adjudicationUrls.prisonerReport.urls.review(12345))
+      .get(adjudicationUrls.prisonerReport.urls.review(12345, originalUrl))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Page not found')
