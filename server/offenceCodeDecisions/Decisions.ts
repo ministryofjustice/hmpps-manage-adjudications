@@ -15,4 +15,4 @@ export function answer(text: string | [string, string]) {
 
 export const notEmpty = (it: unknown) => it !== undefined
 
-export const all = (it: unknown) => true
+export const all = () => true
