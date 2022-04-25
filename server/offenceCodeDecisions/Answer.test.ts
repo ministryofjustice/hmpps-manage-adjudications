@@ -59,13 +59,6 @@ describe('id', () => {
   })
 })
 
-describe('all codes', () => {
-  it('all code', () => {
-    const list = templateFirstAnswer().allCodes()
-    expect(list.sort()).toEqual([1, 2])
-  })
-})
-
 describe('questions and answers to get here', () => {
   it('questions and answers to get here', () => {
     const questionsAndAnswers = template().findAnswerByCode(2).getQuestionsAndAnswersToGetHere()

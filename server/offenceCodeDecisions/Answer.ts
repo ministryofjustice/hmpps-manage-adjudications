@@ -2,6 +2,8 @@ import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
 import Question from './Question'
 import { IncidentRole } from '../incidentRole/IncidentRole'
+// eslint-disable-next-line import/no-cycle
+import { notEmpty } from './Decisions'
 
 export class Answer {
   private readonly answerText: string
@@ -84,15 +86,6 @@ export class Answer {
     return this.getChildQuestion()?.getChildAnswers() || []
   }
 
-  allCodes(): number[] {
-    const childAnswers = this.getChildQuestion()?.getChildAnswers()
-    const childCodes = childAnswers ? [].concat(...childAnswers.map(a => a.allCodes())) : []
-    if (this.getOffenceCode()) {
-      childCodes.push(this.getOffenceCode())
-    }
-    return childCodes.sort()
-  }
-
   getQuestionsAndAnswersToGetHere(): { question: Question; answer: Answer }[] {
     let questionsAndAnswers = [] as { question: Question; answer: Answer }[]
     if (this.getParentQuestion().getParentAnswer()) {
@@ -121,12 +114,10 @@ export class Answer {
     return this.uniqueOrThrow(matching)
   }
 
-  empty = (it: unknown) => it !== undefined
-
   matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
     const childMatches = []
       .concat(...this.getChildAnswers().map(childAnswer => childAnswer.matchingAnswers(fn)))
-      .filter(this.empty)
+      .filter(notEmpty)
     if (fn(this)) {
       childMatches.push(this)
     }

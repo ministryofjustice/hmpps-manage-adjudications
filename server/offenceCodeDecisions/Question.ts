@@ -2,6 +2,8 @@ import Title from './Title'
 // eslint-disable-next-line import/no-cycle
 import { Answer } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
+// eslint-disable-next-line import/no-cycle
+import { all, notEmpty } from './Decisions'
 
 export default class Question {
   private parentAnswer: Answer
@@ -50,7 +52,7 @@ export default class Question {
   }
 
   getChildAnswers() {
-    return this.childAnswers
+    return this.childAnswers || []
   }
 
   getParentAnswer() {
@@ -62,7 +64,7 @@ export default class Question {
   }
 
   allUrls(): string[] {
-    return this.matchingQuestions(() => true)
+    return this.matchingQuestions(all)
       .map(question => question.getUrl())
       .sort()
   }
@@ -99,11 +101,11 @@ export default class Question {
   }
 
   matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
-    return this.getChildAnswers() ? [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn))) : []
+    return [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn))).filter(notEmpty)
   }
 
   allCodes(): Array<number> {
-    return [].concat(...this.getChildAnswers().map(answer => answer.allCodes()))
+    return this.matchingAnswers(answer => !!answer.getOffenceCode()).map(answer => answer.getOffenceCode())
   }
 
   findAnswerByCode(offenceCode: number): Answer {
