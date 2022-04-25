@@ -94,17 +94,12 @@ export default class Question {
   }
 
   findAnswerBy(fn: (answer: Answer) => boolean): Answer {
-    const matching = this.getChildAnswers()
-      .map(childAnswer => childAnswer.findAnswerBy(fn))
-      .filter(childAnswer => !!childAnswer)
+    const matching = this.matchingAnswers(fn)
     return this.uniqueOrThrow(matching)
   }
 
   matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
-    if (this.getChildAnswers()) {
-      return [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn)))
-    }
-    return []
+    return this.getChildAnswers() ? [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn))) : []
   }
 
   allCodes(): Array<number> {
