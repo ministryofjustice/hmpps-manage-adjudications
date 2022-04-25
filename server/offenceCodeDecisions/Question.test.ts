@@ -106,7 +106,6 @@ describe('all codes', () => {
 describe('all urls', () => {
   it('all urls', () => {
     const list = template().allUrls()
-    const duplicatesRemoved = new Set(list)
     expect(list.sort()).toEqual(['1', '1-1', '1-1-2', '1-2'])
   })
 })

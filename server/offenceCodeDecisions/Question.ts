@@ -62,16 +62,9 @@ export default class Question {
   }
 
   allUrls(): string[] {
-    const urls = [].concat(
-      ...this.getChildAnswers()
-        .map(childAnswer => childAnswer.getChildQuestion())
-        .filter(childQuestion => !!childQuestion)
-        .map(childQuestion => childQuestion.allUrls())
-    )
-    if (this.getUrl()) {
-      urls.push(this.getUrl())
-    }
-    return urls.sort()
+    return this.matchingQuestions(() => true)
+      .map(question => question.getUrl())
+      .sort()
   }
 
   findQuestionByUrl(url: string): Question {
