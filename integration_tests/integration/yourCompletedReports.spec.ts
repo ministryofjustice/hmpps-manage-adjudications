@@ -3,6 +3,7 @@ import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import AdjudicationsFilter from '../pages/adjudicationsFilter'
 
 context('Your Completed Reports', () => {
   beforeEach(() => {
@@ -123,10 +124,11 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage
       .noResultsMessage()
       .should('contain', 'There are no results for the details you have entered')
-    yourCompletedReportsPage.forceFromDate(1, 1, 2022)
-    yourCompletedReportsPage.forceToDate(9, 1, 2022)
-    yourCompletedReportsPage.selectStatus().select('ACCEPTED')
-    yourCompletedReportsPage.applyButton().click()
+    const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
+    filterAdjudication.forceFromDate(1, 1, 2022)
+    filterAdjudication.forceToDate(9, 1, 2022)
+    filterAdjudication.selectStatus().select('ACCEPTED')
+    filterAdjudication.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=ACCEPTED')
@@ -173,10 +175,11 @@ context('Your Completed Reports', () => {
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
-    yourCompletedReportsPage.forceFromDate(10, 10, 2021)
-    yourCompletedReportsPage.forceToDate(19, 10, 2021)
-    yourCompletedReportsPage.selectStatus().select('ACCEPTED')
-    yourCompletedReportsPage.applyButton().click()
+    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
+    adjudicationsFilter.forceFromDate(10, 10, 2021)
+    adjudicationsFilter.forceToDate(19, 10, 2021)
+    adjudicationsFilter.selectStatus().select('ACCEPTED')
+    adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=ACCEPTED')

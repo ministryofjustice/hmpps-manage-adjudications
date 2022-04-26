@@ -284,7 +284,7 @@ context('Prisoner report - reporter view', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-        PrisonerReportPage.reportNumber().should('contain.text', 'Report number: 12345')
+        PrisonerReportPage.reportNumber().should('contain.text', '12345')
       })
       it('should not contain the review panel', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
