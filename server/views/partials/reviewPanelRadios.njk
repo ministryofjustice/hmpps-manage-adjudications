@@ -7,8 +7,7 @@
 {{ govukSelect({
 					id: 'rejectedReasonId',
 					name: 'rejectedReasonId',
-         	value: pageData.reason,	
-					label: {
+        	label: {
 						text: 'What is the reason?',
 						isPageHeading: false,
 						classes: ''
@@ -26,9 +25,12 @@
                value: "expired",
                text: "More than 48 hours have elapsed since the incident"
              }
-          ] | toSelect('value', 'text'),
+          ] | toSelect('value', 'text', pageData.reason),
 					classes: '',
-    			errorMessage: 'rejectedReasonId' | findError(pageData.errors)
+          attributes: {
+				   	'data-qa': "rejected-reason"
+				  },
+					errorMessage: 'rejectedReasonId' | findError(pageData.errors)
 				}) }}
 {{ govukTextarea({
 				name: "rejectedDetails",
@@ -50,8 +52,7 @@
 {{ govukSelect({
 					id: 'returnedReasonId',
 					name: 'returnedReasonId',
-        	value: pageData.reason,
-					label: {
+        	label: {
 						text: 'What is the reason?',
 						isPageHeading: false,
 						classes: ''
@@ -69,9 +70,13 @@
                      value: "offence",
                      text: "Incorrect offence chosen"
                    }
-                 ] | toSelect('value', 'text'),
+                 ] | toSelect('value', 'text', pageData.reason),
 					classes: '',
-    			errorMessage: 'returnedReasonId' | findError(pageData.errors)
+                    attributes: {
+				   	'data-qa': "rejected-reason"
+				  },
+
+					errorMessage: 'returnedReasonId' | findError(pageData.errors)
 				}) }}
 {{ govukTextarea({
 				name: "returnedDetails",
