@@ -1,7 +1,9 @@
 import { getProcessedText, PlaceholderValues } from './Placeholder'
 // eslint-disable-next-line import/no-cycle
-import { Decision } from './Decision'
+import Question from './Question'
 import { IncidentRole } from '../incidentRole/IncidentRole'
+// eslint-disable-next-line import/no-cycle
+import { notEmpty } from './Decisions'
 
 export class Answer {
   private readonly answerText: string
@@ -10,9 +12,9 @@ export class Answer {
 
   private answerOffenceCode: number
 
-  private answerChild: Decision
+  private childQuestion: Question
 
-  private answerParent: Decision
+  private parentQuestion: Question
 
   private answerType: AnswerType = AnswerType.RADIO_SELECTION_ONLY
 
@@ -24,43 +26,44 @@ export class Answer {
     }
   }
 
+  // The id is that of the parent question with the answer index appended. There should always be a parent question but
+  // if not we assume its id would be 1. Note indexes are 1 based.
   id() {
-    // We should always have a parent but if we don't we assume the parent would have id 1 and be the root.
-    const parentId = this.getParentDecision()?.id() || 1
-    const index = (this.getParentDecision()?.getChildAnswers().indexOf(this) || 0) + 1
+    const parentId = this.getParentQuestion()?.id() || 1
+    const index = (this.getParentQuestion()?.getChildAnswers().indexOf(this) || 0) + 1
     return `${parentId}-${index}`
   }
 
-  child(child: Decision) {
-    this.answerChild = child
+  child(child: Question): Answer {
+    this.childQuestion = child
     child.parent(this)
     return this
   }
 
-  parent(parent: Decision) {
-    this.answerParent = parent
+  parent(parent: Question): Answer {
+    this.parentQuestion = parent
     return this
   }
 
-  type(answerType: AnswerType) {
+  type(answerType: AnswerType): Answer {
     this.answerType = answerType
     return this
   }
 
-  offenceCode(offenceCode: number) {
+  offenceCode(offenceCode: number): Answer {
     this.answerOffenceCode = offenceCode
     return this
   }
 
-  getType() {
+  getType(): AnswerType {
     return this.answerType
   }
 
-  getText() {
+  getText(): string {
     return this.answerText
   }
 
-  getOffenceCode() {
+  getOffenceCode(): number {
     return this.answerOffenceCode
   }
 
@@ -72,39 +75,26 @@ export class Answer {
     return getProcessedText(this.answerReplayText || this.answerText, placeholderValues)
   }
 
-  getParent() {
-    return this.answerChild
+  getParentQuestion(): Question {
+    return this.parentQuestion
   }
 
-  getParentDecision() {
-    return this.answerParent
+  getChildQuestion(): Question {
+    return this.childQuestion
   }
 
-  getChild() {
-    return this.answerChild
+  getChildAnswers(): Answer[] {
+    return this.getChildQuestion()?.getChildAnswers() || []
   }
 
-  getChildDecision() {
-    return this.answerChild
-  }
-
-  allCodes(): number[] {
-    const childAnswers = this.getChildDecision()?.getChildAnswers()
-    const childCodes = childAnswers ? [].concat(...childAnswers.map(a => a.allCodes())) : []
-    if (this.getOffenceCode()) {
-      childCodes.push(this.getOffenceCode())
-    }
-    return childCodes.sort()
-  }
-
-  getQuestionsAndAnswersToGetHere(): { question: Decision; answer: Answer }[] {
-    let questionsAndAnswers = [] as { question: Decision; answer: Answer }[]
-    if (this.getParentDecision().getParentAnswer()) {
+  getQuestionsAndAnswersToGetHere(): { question: Question; answer: Answer }[] {
+    let questionsAndAnswers = [] as { question: Question; answer: Answer }[]
+    if (this.getParentQuestion().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
-        this.getParentDecision().getParent().getQuestionsAndAnswersToGetHere()
+        this.getParentQuestion().getParentAnswer().getQuestionsAndAnswersToGetHere()
       )
     }
-    questionsAndAnswers.push({ question: this.getParentDecision(), answer: this })
+    questionsAndAnswers.push({ question: this.getParentQuestion(), answer: this })
     return questionsAndAnswers
   }
 
@@ -120,14 +110,15 @@ export class Answer {
     })
   }
 
-  findAnswerBy(fn: (d: Answer) => boolean): Answer {
+  findAnswerBy(fn: (answer: Answer) => boolean): Answer {
     const matching = this.matchingAnswers(fn)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingAnswers(fn: (d: Answer) => boolean): Answer[] {
-    const childAnswers = this.getChildDecision()?.getChildAnswers()
-    const childMatches = childAnswers ? [].concat(...childAnswers.map(a => a.matchingAnswers(fn))) : []
+  matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
+    const childMatches = []
+      .concat(...this.getChildAnswers().map(childAnswer => childAnswer.matchingAnswers(fn)))
+      .filter(notEmpty)
     if (fn(this)) {
       childMatches.push(this)
     }
@@ -143,8 +134,8 @@ export class Answer {
     if (this.getOffenceCode()) {
       output = `${output}\r\n${padding}Offence Code: ${this.getOffenceCode()}`
     }
-    if (this.getChildDecision()) {
-      output = `${output}\r\n${this.getChildDecision().toString(indent + 4)}`
+    if (this.getChildQuestion()) {
+      output = `${output}\r\n${this.getChildQuestion().toString(indent + 4)}`
     }
     return output
   }
@@ -158,10 +149,6 @@ export class Answer {
     }
     return null
   }
-}
-
-export function answer(text: string | [string, string]) {
-  return new Answer(text)
 }
 
 // eslint-disable-next-line no-shadow

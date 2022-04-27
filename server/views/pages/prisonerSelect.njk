@@ -32,7 +32,7 @@
       <img src="/prisoner/{{ prisoner.prisonerNumber }}/image" alt="Photograph of {{ prisoner.displayName }}" class="results-table__image" />
     {% endset -%}
     {% set prisonerLinkHtml %}
-      <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">{{ prisoner.displayName }}</a>
+      <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">View profile</a>
     {% endset -%}
     {% set startReportlLinkHtml %}
       <a href="{{ adjudicationUrls.incidentDetails.urls.start(prisoner.prisonerNumber) }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>
@@ -40,13 +40,14 @@
     {% set rows = (rows.push([
       { html: prisonerImageHtml },
       {
-        html: prisonerLinkHtml,
+        text: prisoner.displayName,
         attributes: {
           "data-sort-value": prisoner.displayName
         }
       },
       { text: prisoner.prisonerNumber },
       { text: prisoner.displayCellLocation },
+      { html: prisonerLinkHtml },
       { html: startReportlLinkHtml }
     ]), rows) %}
   {% endfor %}
@@ -71,6 +72,7 @@
               "aria-sort": "none"
             }
           },
+          { text: "" },
           { text: "" }
         ],
         rows: rows,

@@ -1,14 +1,14 @@
 /* eslint-disable */
-import {  decision } from './Decision'
-import { AnswerType, Answer, answer } from './Answer'
+import { AnswerType, Answer } from './Answer'
+import { answer, question } from './Decisions'
 
 function template() {
-    return decision('question 1')
+    return question('question 1')
       .child(answer('answer 1-1')
-        .child(decision('question 1-1')
+        .child(question('question 1-1')
           .child(answer('answer 1-1-1').offenceCode(1))
           .child(answer('answer 1-1-2')
-            .child(decision('answer 1-1-2')
+            .child(question('answer 1-1-2')
             .child(answer('answer 1-1-2-1').offenceCode(2))))))
 }
 
@@ -20,10 +20,10 @@ describe('find', () => {
   it('answer', () => {
     const withNoStaffAnswers = templateFirstAnswer()
     const withSingleStaffAnswer = templateFirstAnswer()
-    withSingleStaffAnswer.getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
+    withSingleStaffAnswer.getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
     const withMultipleStaffAnswers = templateFirstAnswer()
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[1].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[1].type(AnswerType.STAFF)
     const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
 
     expect(() => withMultipleStaffAnswers.findAnswerBy(matchByStaffType)).toThrow()
@@ -35,8 +35,8 @@ describe('find', () => {
 describe('match', () => {
   it('answers', () => {
     const withMultipleStaffAnswers = templateFirstAnswer()
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildDecision().getChildAnswers()[1].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
+    withMultipleStaffAnswers.getChildQuestion().getChildAnswers()[1].type(AnswerType.STAFF)
     const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
 
     expect(withMultipleStaffAnswers.matchingAnswers(matchByStaffType)).toHaveLength(2)
@@ -46,7 +46,7 @@ describe('match', () => {
 describe('id', () => {
   it('answer', () => {
     // Note id is based on position in child arrays.
-    expect(templateFirstAnswer().getChildDecision().getChildAnswers()[1].id()).toEqual('1-1-2')
+    expect(templateFirstAnswer().getChildQuestion().getChildAnswers()[1].id()).toEqual('1-1-2')
   })
 
   it('is unique', () => {
@@ -56,13 +56,6 @@ describe('id', () => {
     const duplicatesRemoved = new Set(list)
     expect(list.length).toBeGreaterThan(0)
     expect(list).toHaveLength(duplicatesRemoved.size)
-  })
-})
-
-describe('all codes', () => {
-  it('all code', () => {
-    const list = templateFirstAnswer().allCodes()
-    expect(list.sort()).toEqual([1, 2])
   })
 })
 

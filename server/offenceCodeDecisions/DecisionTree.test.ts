@@ -1,7 +1,8 @@
 /* eslint-disable */
 import decisionTree from './DecisionTree'
-import { decision, Decision } from './Decision'
-import { answer, Answer } from './Answer'
+import Question from './Question'
+import { Answer } from './Answer'
+import { answer, question } from './Decisions'
 
 function findDuplicates<T>(toCheck: Array<T>) {
   const unique = new Set(toCheck)
@@ -17,27 +18,27 @@ function findDuplicates<T>(toCheck: Array<T>) {
 }
 
 function missingOffenceCode(answerToCheck: Answer): boolean {
-  return !answerToCheck.getChildDecision() && !answerToCheck.getOffenceCode()
+  return !answerToCheck.getChildQuestion() && !answerToCheck.getOffenceCode()
 }
 
-function duplicateUrls(decisionToCheck: Decision) {
+function duplicateUrls(decisionToCheck: Question) {
   return (
     decisionToCheck.getUrl() != null &&
-    decisionToCheck.matchingDecisions(d => d !== decisionToCheck && d.getUrl() === decisionToCheck.getUrl()).length !== 0
+    decisionToCheck.matchingQuestions(d => d !== decisionToCheck && d.getUrl() === decisionToCheck.getUrl()).length !== 0
   )
 }
 
-function urlsStartingWithSlash(decisionToCheck: Decision) {
+function urlsStartingWithSlash(decisionToCheck: Question) {
   return decisionToCheck.getUrl() != null && decisionToCheck.getUrl().startsWith('/')
 }
 
 function template() {
-  return decision('question 1')
+  return question('question 1')
     .child(answer('answer 1-1')
-      .child(decision('question 1-1')
+      .child(question('question 1-1')
         .child(answer('answer 1-1-1'))))
     .child(answer('answer 1-2')
-      .child(decision('question 1-2')
+      .child(question('question 1-2')
         .child(answer('answer 1-2-1'))))
 }
 
@@ -60,27 +61,27 @@ describe('decisions', () => {
   })
 
   it('no questions with duplicate urls', () => {
-    const decisionsWithDuplicateUrls = decisionTree.matchingDecisions(duplicateUrls)
+    const decisionsWithDuplicateUrls = decisionTree.matchingQuestions(duplicateUrls)
     expect(decisionsWithDuplicateUrls).toHaveLength(0)
   })
 
   it('check we find questions with duplicate urls when they exist', () => {
     const withDuplicateUrls = template()
-    withDuplicateUrls.findDecisionById('1-1').url('not-unique')
-    withDuplicateUrls.findDecisionById('1-2').url('not-unique')
-    const questionsWithDuplicateUrls = withDuplicateUrls.matchingDecisions(duplicateUrls)
+    withDuplicateUrls.findQuestionById('1-1').url('not-unique')
+    withDuplicateUrls.findQuestionById('1-2').url('not-unique')
+    const questionsWithDuplicateUrls = withDuplicateUrls.matchingQuestions(duplicateUrls)
     expect(questionsWithDuplicateUrls).toHaveLength(0)
   })
 
   it('no questions with urls starting with a slash', () => {
-    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingDecisions(urlsStartingWithSlash)
+    const decisionsWithUrlsStartingWithSlash = decisionTree.matchingQuestions(urlsStartingWithSlash)
     expect(decisionsWithUrlsStartingWithSlash).toHaveLength(0)
   })
 
   it('check we find questions with urls starting with a slash when they exist', () => {
     const withUrlStartingWithASlash = template()
-    withUrlStartingWithASlash.findDecisionById('1-1').url('/starts-with-a-slash')
-    const questionsWithUrlsStartingWithSlash = withUrlStartingWithASlash.matchingDecisions(urlsStartingWithSlash)
+    withUrlStartingWithASlash.findQuestionById('1-1').url('/starts-with-a-slash')
+    const questionsWithUrlsStartingWithSlash = withUrlStartingWithASlash.matchingQuestions(urlsStartingWithSlash)
     expect(questionsWithUrlsStartingWithSlash.length).toBeGreaterThan(0)
   })
 
@@ -91,7 +92,7 @@ describe('decisions', () => {
   })
 
   it('check we answers with duplicate offence codes when they exist', () => {
-    const shouldBeDuplicates = decision('question 1')
+    const shouldBeDuplicates = question('question 1')
       .child(answer('answer 1-1').offenceCode(1))
       .child(answer('answer 1-2').offenceCode(1))
       .allCodes()

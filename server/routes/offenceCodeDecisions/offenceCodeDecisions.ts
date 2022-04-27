@@ -6,7 +6,7 @@ import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import OffenceSessionService from '../../services/offenceSessionService'
-import { Decision } from '../../offenceCodeDecisions/Decision'
+import Question from '../../offenceCodeDecisions/Question'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
@@ -103,7 +103,7 @@ export default class OffenceCodeRoutes {
       const nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationNumber,
         incidentRole,
-        selectedAnswer.getChildDecision().getUrl()
+        selectedAnswer.getChildQuestion().getUrl()
       )}`
       return res.redirect(nextQuestionUrl)
     }
@@ -156,9 +156,9 @@ export default class OffenceCodeRoutes {
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const decision = this.decisions().findDecisionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
-    const pageTitle = decision.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
-    const answers = decision.getChildAnswers().map(a => {
+    const question = this.decisions().findQuestionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
+    const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
+    const answers = question.getChildAnswers().map(a => {
       return {
         id: a.id(),
         label: a.getProcessedText(placeholderValues),
@@ -196,7 +196,7 @@ export default class OffenceCodeRoutes {
     return `${adjudicationUrls.offenceCodeSelection.root}${req.path}`
   }
 
-  private decisions(): Decision {
+  private decisions(): Question {
     return this.decisionTreeService.getDecisionTree()
   }
 }
