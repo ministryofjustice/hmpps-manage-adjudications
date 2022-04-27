@@ -12,8 +12,10 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import {
-  reportedAdjudicationFilterFromRequestParameters,
-  uiFilterFromReportedAdjudicationFilter,
+  filterFromUiFilter,
+  UiFilter,
+  uiFilterFromBody,
+  uiFilterFromRequest,
 } from '../../utils/adjudicationFilterHelper'
 
 export default class AllCompletedReportsRoutes {
@@ -25,12 +27,12 @@ export default class AllCompletedReportsRoutes {
   private renderView = async (
     req: Request,
     res: Response,
-    filter: ReportedAdjudicationFilter,
+    filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>
   ): Promise<void> =>
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
-      filter: uiFilterFromReportedAdjudicationFilter(filter),
+      filter,
       statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
@@ -40,26 +42,22 @@ export default class AllCompletedReportsRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
-      const filter = reportedAdjudicationFilterFromRequestParameters(req)
+      const uiFilter = uiFilterFromRequest(req)
+      const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
         filter,
         pageRequestFrom(20, +req.query.pageNumber || 1)
       )
-      return this.renderView(req, res, filter, results)
+      return this.renderView(req, res, uiFilter, results)
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    return this.validateRoles(req, res, async () =>
-      res.redirect(
-        adjudicationUrls.allCompletedReports.urls.filter(
-          req.body.fromDate.date,
-          req.body.toDate.date,
-          req.body.status as ReportedAdjudicationStatus
-        )
-      )
-    )
+    return this.validateRoles(req, res, async () => {
+      const uiFilter = uiFilterFromBody(req)
+      return res.redirect(adjudicationUrls.allCompletedReports.urls.filter(uiFilter))
+    })
   }
 
   private validateRoles = async (req: Request, res: Response, thenCall: () => Promise<void>) => {

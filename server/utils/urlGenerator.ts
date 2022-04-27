@@ -1,5 +1,6 @@
 import url from 'url'
 import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { UiFilter } from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
   offenceCodeSelection: {
@@ -118,14 +119,10 @@ const adjudicationUrls = {
     root: '/your-completed-reports',
     urls: {
       start: () => adjudicationUrls.yourCompletedReports.root,
-      filter: (fromDate: string, toDate: string, status: ReportedAdjudicationStatus) =>
+      filter: (filter: UiFilter) =>
         url.format({
           pathname: adjudicationUrls.yourCompletedReports.root,
-          query: {
-            fromDate,
-            toDate,
-            status,
-          },
+          query: { ...filter },
         }),
     },
     matchers: {
@@ -136,14 +133,10 @@ const adjudicationUrls = {
     root: '/all-completed-reports',
     urls: {
       start: () => adjudicationUrls.allCompletedReports.root,
-      filter: (fromDate: string, toDate: string, status: ReportedAdjudicationStatus) =>
+      filter: (filter: UiFilter) =>
         url.format({
           pathname: adjudicationUrls.allCompletedReports.root,
-          query: {
-            fromDate,
-            toDate,
-            status,
-          },
+          query: { ...filter },
         }),
     },
     matchers: {
