@@ -2,6 +2,54 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
+const prisonerResponse = (offenderNo: string, firstName: string, lastName: string) => {
+  return {
+    offenderNo,
+    firstName,
+    lastName,
+    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+  }
+}
+
+const reportedAdjudication = (status: string) => {
+  return {
+    adjudicationNumber: 1524493,
+    prisonerNumber: 'G6415GD',
+    bookingId: 1,
+    createdDateTime: undefined,
+    createdByUserId: undefined,
+    incidentDetails: {
+      locationId: 197682,
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      handoverDeadline: '2021-12-11T10:30:00',
+    },
+    incidentStatement: undefined,
+    incidentRole: {
+      roleCode: undefined,
+    },
+    offenceDetails: [],
+    status,
+  }
+}
+
+const draftAdjudication = (adjudicationNumber: number) => {
+  return {
+    id: 177,
+    adjudicationNumber,
+    prisonerNumber: 'G6415GD',
+    incidentDetails: {
+      locationId: 234,
+      dateTimeOfIncident: '2021-12-01T09:40:00',
+      handoverDeadline: '2021-12-03T09:40:00',
+    },
+    incidentStatement: {
+      statement: 'TESTING',
+      completed: true,
+    },
+    startedByUserId: 'USER1',
+  }
+}
+
 context('Prisoner report - reviewer view', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -10,75 +58,65 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
-      prisonerNumber: 'G6415GD',
-      response: {
-        offenderNo: 'G6415GD',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      prisonerNumber: 'T3356FU',
+      response: prisonerResponse('T3356FU', 'JAMES', 'JONES'),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {
-      prisonerNumber: 'T3356FU',
-      response: {
-        offenderNo: 'T3356FU',
-        firstName: 'JAMES',
-        lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      prisonerNumber: 'G6415GD',
+      response: prisonerResponse('G6415GD', 'JOHN', 'SMITH'),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: {
-        offenderNo: 'G5512G',
-        firstName: 'PAUL',
-        lastName: 'WRIGHT',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerResponse('G5512G', 'PAUL', 'WRIGHT'),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
       response: {
-        reportedAdjudication: {
-          adjudicationNumber: 1524493,
-          prisonerNumber: 'G6415GD',
-          bookingId: 1,
-          createdDateTime: undefined,
-          createdByUserId: undefined,
-          incidentDetails: {
-            locationId: 197682,
-            dateTimeOfIncident: '2021-12-09T10:30:00',
-            handoverDeadline: '2021-12-11T10:30:00',
-          },
-          incidentStatement: undefined,
-          incidentRole: {
-            roleCode: undefined,
-          },
-          offenceDetails: [],
-          status: 'AWAITING_REVIEW',
-        },
+        reportedAdjudication: reportedAdjudication('AWAITING_REVIEW'),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 56789,
+      response: {
+        reportedAdjudication: reportedAdjudication('RETURNED'),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 456789,
+      response: {
+        reportedAdjudication: reportedAdjudication('ACCEPTED'),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 356789,
+      response: {
+        reportedAdjudication: reportedAdjudication('REJECTED'),
       },
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 12345,
       response: {
-        draftAdjudication: {
-          id: 177,
-          adjudicationNumber: 12345,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
-          incidentStatement: {
-            statement: 'TESTING',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-        },
+        draftAdjudication: draftAdjudication(12345),
+      },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 56789,
+      response: {
+        draftAdjudication: draftAdjudication(56789),
+      },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 356789,
+      response: {
+        draftAdjudication: draftAdjudication(356789),
+      },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 456789,
+      response: {
+        draftAdjudication: draftAdjudication(456789),
       },
     })
     cy.task('stubGetLocations', {
@@ -320,5 +358,20 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.reviewStatus().find('input[value="returned"]').check()
     PrisonerReportPage.reviewSubmit().click()
     cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
+  })
+  it('should not contain the review panel if status is RETURNED', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(56789))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewerPanel().should('not.exist')
+  })
+  it('should not contain the review panel if status is REJECTED', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(356789))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewerPanel().should('not.exist')
+  })
+  it('should not contain the review panel if status is ACCEPTED', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(456789))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewerPanel().should('not.exist')
   })
 })

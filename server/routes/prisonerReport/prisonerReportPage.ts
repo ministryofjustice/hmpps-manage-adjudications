@@ -117,7 +117,7 @@ export default class prisonerReportRoutes {
 
     const review =
       this.pageOptions.isReviewerView() &&
-      ['RETURNED', 'AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
+      ['AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
 
     return res.render(`pages/prisonerReport`, {
       pageData,
@@ -173,8 +173,8 @@ export default class prisonerReportRoutes {
     const reason = this.reason(status, req)
     const details = this.details(status, req)
 
-    const error = validateForm({ status, reason, details })
-    if (error) return this.renderView(req, res, { errors: [error], status, reason, details })
+    const errors = validateForm({ status, reason, details })
+    if (errors) return this.renderView(req, res, { errors, status, reason, details })
 
     await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
     return res.redirect(adjudicationUrls.allCompletedReports.root)

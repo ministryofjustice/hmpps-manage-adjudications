@@ -43,18 +43,23 @@ export const errors: { [key: string]: FormError } = {
   },
 }
 
-export default function validateForm({ status, reason, details }: reviewForm): FormError | null {
-  if (!status) return errors.MISSING_STATUS
+export default function validateForm({ status, reason, details }: reviewForm): FormError[] | null {
+  if (!status) return [errors.MISSING_STATUS]
 
+  const returnedErrors: FormError[] = []
   if (status === ReviewStatus.REJECTED) {
-    if (!reason) return errors.MISSING_REJECT_REASON
-    if (!details) return errors.MISSING_REJECT_DETAILS
-    if (details.length > 4000) return errors.REJECT_DETAILS_WORD_COUNT_EXCEEDED
+    if (!reason) returnedErrors.push(errors.MISSING_REJECT_REASON)
+    if (!details) returnedErrors.push(errors.MISSING_REJECT_DETAILS)
+
+    if (returnedErrors.length !== 0) return returnedErrors
+
+    if (details.length > 4000) return [errors.REJECT_DETAILS_WORD_COUNT_EXCEEDED]
   }
   if (status === ReviewStatus.RETURNED) {
-    if (!reason) return errors.MISSING_RETURN_REASON
-    if (!details) return errors.MISSING_RETURN_DETAILS
-    if (details.length > 4000) return errors.RETURN_DETAILS_WORD_COUNT_EXCEEDED
+    if (!reason) returnedErrors.push(errors.MISSING_RETURN_REASON)
+    if (!details) returnedErrors.push(errors.MISSING_RETURN_DETAILS)
+    if (returnedErrors.length !== 0) return returnedErrors
+    if (details.length > 4000) return [errors.RETURN_DETAILS_WORD_COUNT_EXCEEDED]
   }
 
   return null
