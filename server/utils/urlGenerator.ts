@@ -5,8 +5,8 @@ const adjudicationUrls = {
   offenceCodeSelection: {
     root: '/offence-code-selection',
     matchers: {
-      question: (incidentRole: string, questionUrl: string) =>
-        `/:adjudicationNumber/:incidentRole(${incidentRole})/${questionUrl}`,
+      question: (incidentRole: string, questionId: string) =>
+        `/:adjudicationNumber/:incidentRole(${incidentRole})/:questionId(${questionId})`,
       start: (incidentRole: string) => `/:adjudicationNumber/:incidentRole(${incidentRole})`,
     },
     urls: {
