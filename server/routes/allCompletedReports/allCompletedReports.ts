@@ -1,12 +1,7 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import { hasAnyRole } from '../../utils/utils'
-import {
-  ReportedAdjudicationEnhanced,
-  ReportedAdjudicationFilter,
-  ReportedAdjudicationStatus,
-  reportedAdjudicationStatuses,
-} from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationEnhanced, reportedAdjudicationStatuses } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
