@@ -30,10 +30,10 @@ export default function offenceCodeDecisionsRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
   Object.keys(IncidentRole).forEach(key => {
-    decisionTree.allUrls().forEach(url => {
-      get(adjudicationUrls.offenceCodeSelection.matchers.question(key as IncidentRole, url), offenceCodeDecisions.view)
+    decisionTree.allIds().forEach(id => {
+      get(adjudicationUrls.offenceCodeSelection.matchers.question(key as IncidentRole, id), offenceCodeDecisions.view)
       post(
-        adjudicationUrls.offenceCodeSelection.matchers.question(key as IncidentRole, url),
+        adjudicationUrls.offenceCodeSelection.matchers.question(key as IncidentRole, id),
         offenceCodeDecisions.submit
       )
     })

@@ -12,8 +12,6 @@ export default class Question {
 
   private readonly questionTitle: Title
 
-  private questionUrl: string
-
   constructor(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
     if (title instanceof Title) {
       this.questionTitle = title
@@ -40,11 +38,6 @@ export default class Question {
     return this
   }
 
-  url(url: string) {
-    this.questionUrl = url
-    return this
-  }
-
   getTitle() {
     return this.questionTitle
   }
@@ -57,18 +50,10 @@ export default class Question {
     return this.parentAnswer
   }
 
-  getUrl(): string {
-    return this.questionUrl || this.id()
-  }
-
-  allUrls(): string[] {
+  allIds(): string[] {
     return this.matchingQuestions(all)
-      .map(question => question.getUrl())
+      .map(question => question.id())
       .sort()
-  }
-
-  findQuestionByUrl(url: string): Question {
-    return this.findQuestionBy(question => question.getUrl() === url)
   }
 
   findQuestionById(id: string): Question {

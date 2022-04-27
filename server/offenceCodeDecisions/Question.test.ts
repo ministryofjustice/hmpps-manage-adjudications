@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { AnswerType, Answer } from './Answer'
 import { answer, question } from './Decisions'
 
 function template() {
@@ -16,36 +15,29 @@ function template() {
 
 describe('find', () => {
   it('question', () => {
-    const withUniqueUrl = template()
-    withUniqueUrl.getChildAnswers()[0].getChildQuestion().url('unique')
-    const withNonUniqueUrl = template()
-    withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
-    withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
-
-    expect(() => withNonUniqueUrl.findQuestionBy(d => d.getUrl() === 'non-unique')).toThrow()
-    expect(withUniqueUrl.findQuestionBy(d => d.getUrl() === 'unique').getUrl()).toEqual('unique')
-    expect(template().findQuestionBy(d => d.getUrl() === 'a-url-that-does-not-exist')).toBe(null)
+    // Expect find to throw when more than one match
+    expect(() => template().findQuestionBy(question => question.id().startsWith('1-1'))).toThrow()
+    // Expect find to return the correct value when there is only one match.
+    expect(
+      template()
+        .findQuestionBy(question => question.id() === '1-1')
+        .id()
+    ).toEqual('1-1')
+    // Expect find to return null if there are no matches
+    expect(template().findQuestionBy(question => question.id() === 'none_existent_id')).toBe(null)
   })
 
   it('answer', () => {
-    const withNoStaffAnswers = template()
-    const withSingleStaffAnswer = template()
-    withSingleStaffAnswer.getChildAnswers()[0].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
-    const withMultipleStaffAnswers = template()
-    withMultipleStaffAnswers.getChildAnswers()[0].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildAnswers()[1].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
-    const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
-
-    expect(() => withMultipleStaffAnswers.findAnswerBy(matchByStaffType)).toThrow()
-    expect(withSingleStaffAnswer.findAnswerBy(matchByStaffType).getType()).toEqual(AnswerType.STAFF)
-    expect(withNoStaffAnswers.findAnswerBy(matchByStaffType)).toBe(null)
-  })
-
-  it('question by url', () => {
-    const withUniqueUrl = template()
-    withUniqueUrl.getChildAnswers()[0].getChildQuestion().url('override-url')
-    expect(withUniqueUrl.findQuestionByUrl('override-url').id()).toEqual('1-1')
-    expect(withUniqueUrl.findQuestionByUrl('1-1')).toBe(null) // expect the overridden url to take preference
+    // Expect find to throw when more than one match
+    expect(() => template().findAnswerBy(answer => answer.id().startsWith('1-1'))).toThrow()
+    // Expect find to return the correct value when there is only one match.
+    expect(
+      template()
+        .findAnswerBy(answer => answer.id() === '1-1')
+        .id()
+    ).toEqual('1-1')
+    // Expect find to return null if there are no matches
+    expect(template().findAnswerBy(answer => answer.id() === 'none_existent_id')).toBe(null)
   })
 
   it('question by id', () => {
@@ -63,20 +55,15 @@ describe('find', () => {
 
 describe('match', () => {
   it('questions', () => {
-    const withNonUniqueUrl = template()
-    withNonUniqueUrl.getChildAnswers()[0].getChildQuestion().url('non-unique')
-    withNonUniqueUrl.getChildAnswers()[1].getChildQuestion().url('non-unique')
-    const matching = withNonUniqueUrl.matchingQuestions(d => d.getUrl() === 'non-unique')
-    expect(matching).toHaveLength(2)
+    // Match should bring back all matches
+    const matching = template().matchingQuestions(question => question.id().startsWith('1-1'))
+    expect(matching.map(question => question.id()).sort()).toEqual(['1-1', '1-1-2'])
   })
 
   it('answers', () => {
-    const withMultipleStaffAnswers = template()
-    withMultipleStaffAnswers.getChildAnswers()[0].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
-    withMultipleStaffAnswers.getChildAnswers()[1].getChildQuestion().getChildAnswers()[0].type(AnswerType.STAFF)
-    const matchByStaffType = (a: Answer) => a.getType() === AnswerType.STAFF
-
-    expect(withMultipleStaffAnswers.matchingAnswers(matchByStaffType)).toHaveLength(2)
+    // Match should bring back all matches
+    const matching = template().matchingAnswers(answer => answer.id().startsWith('1-1'))
+    expect(matching.map(answer => answer.id()).sort()).toEqual(['1-1', '1-1-1', '1-1-2', '1-1-2-1'])
   })
 })
 
@@ -103,9 +90,9 @@ describe('all codes', () => {
   })
 })
 
-describe('all urls', () => {
-  it('all urls', () => {
-    const list = template().allUrls()
+describe('all ids', () => {
+  it('all ids', () => {
+    const list = template().allIds()
     expect(list.sort()).toEqual(['1', '1-1', '1-1-2', '1-2'])
   })
 })

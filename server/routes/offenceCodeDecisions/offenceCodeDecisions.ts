@@ -103,7 +103,7 @@ export default class OffenceCodeRoutes {
       const nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationNumber,
         incidentRole,
-        selectedAnswer.getChildQuestion().getUrl()
+        selectedAnswer.getChildQuestion().id()
       )}`
       return res.redirect(nextQuestionUrl)
     }
@@ -151,12 +151,13 @@ export default class OffenceCodeRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, incidentRole, errors } = pageData
     const { user } = res.locals
+    const { questionId } = req.params
     const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
       Number(adjudicationNumber),
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const question = this.decisions().findQuestionByUrl(req.path.replace(`/${adjudicationNumber}/${incidentRole}/`, ''))
+    const question = this.decisions().findQuestionById(questionId)
     const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const answers = question.getChildAnswers().map(a => {
       return {
