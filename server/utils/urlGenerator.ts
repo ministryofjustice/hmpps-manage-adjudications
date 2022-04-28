@@ -1,5 +1,4 @@
 import url from 'url'
-import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import { UiFilter } from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
