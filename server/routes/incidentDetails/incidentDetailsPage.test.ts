@@ -36,8 +36,7 @@ describe('updateDataOnDeleteReturn', () => {
       deleteWanted: 'true',
     }
     const updatedIncidentDetails = updateDataOnDeleteReturn(originalIncidentDetails, requestData)
-    // eslint-disable-next-line no-unused-expressions
-    expect(updatedIncidentDetails.incidentDetails.currentAssociatedPrisonerNumber).toBeNull
+    expect(updatedIncidentDetails.incidentDetails.currentAssociatedPrisonerNumber).toBeNull()
   })
 
   it('should preserve the associated prisoner from the returned incident details', () => {
