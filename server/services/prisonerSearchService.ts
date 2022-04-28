@@ -48,7 +48,8 @@ export default class PrisonerSearchService {
       ? searchByPrisonerIdentifier(searchTerm, prisonIds)
       : searchByName(searchTerm, prisonIds)
 
-    const results = await new PrisonerSearchClient(user.token).search(searchRequest)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const results = await new PrisonerSearchClient(token).search(searchRequest)
 
     const enhancedResults = results.map(prisoner => {
       return {
