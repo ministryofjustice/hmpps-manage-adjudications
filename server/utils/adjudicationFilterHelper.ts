@@ -11,7 +11,7 @@ export type UiFilter = {
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
-    fromDate: (req.query.fromDate || momentDateToDatePicker(moment().subtract(1, 'days'))) as string,
+    fromDate: (req.query.fromDate || momentDateToDatePicker(moment().subtract(2, 'days'))) as string,
     toDate: (req.query.toDate || momentDateToDatePicker(moment())) as string,
     status: req.query.status as ReportedAdjudicationStatus,
   }

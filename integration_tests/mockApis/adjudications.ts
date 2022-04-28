@@ -183,7 +183,11 @@ const stubGetReportedAdjudications =
     number = 0,
     size = 20,
     allContent = [],
-    filter = { status: null, toDate: moment().format('YYYY-MM-DD'), fromDate: moment().format('YYYY-MM-DD') },
+    filter = {
+      status: null,
+      toDate: moment().format('YYYY-MM-DD'),
+      fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+    },
   }: {
     agencyId: string
     number: number
