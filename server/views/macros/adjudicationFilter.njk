@@ -8,7 +8,7 @@
         <h2 class="govuk-heading-m">View by</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
-        <div {% if fromDateError %}class="govuk-form-group--error"{% endif %}>
+        <div {% if fromDateError %}class="govuk-form-group--error"{% endif %} data-qa='filter-bar'>
             {% if fromDateError %}
             <p id="fromDate[date]-error" class="govuk-error-message">
                 <span class="govuk-visually-hidden">Error:</span>{{ fromDateError.text }}

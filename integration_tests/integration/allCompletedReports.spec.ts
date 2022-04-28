@@ -293,4 +293,15 @@ context('All Completed Reports', () => {
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
   })
+
+  it('date range validation works', () => {
+    cy.task('stubGetAllReportedAdjudications', {})
+    cy.task('stubGetBatchPrisonerDetails')
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
+    adjudicationsFilter.forceFromDate(19, 10, 2021)
+    adjudicationsFilter.forceToDate(10, 10, 2021)
+    adjudicationsFilter.applyButton().click()
+    adjudicationsFilter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
+  })
 })
