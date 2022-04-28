@@ -1,20 +1,54 @@
 import { Request } from 'express'
 import moment from 'moment'
-import { ReportedAdjudicationFilter, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
+import { FormError } from '../@types/template'
 
-export const reportedAdjudicationFilterFromRequestParameters = (req: Request) => {
+// eslint-disable-next-line no-shadow
+enum ErrorType {
+  FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
+}
+
+const error: { [key in ErrorType]: FormError } = {
+  FROM_DATE_AFTER_TO_DATE: {
+    href: '#fromDate[date]',
+    text: 'Enter a date that is before or the same as the ‘date to’',
+  },
+}
+
+export type UiFilter = {
+  fromDate: string
+  toDate: string
+  status: ReportedAdjudicationStatus
+}
+
+export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
-    fromDate: (req.query.fromDate && datePickerDateToMoment(req.query.fromDate as string)) || moment(),
-    toDate: (req.query.toDate && datePickerDateToMoment(req.query.toDate as string)) || moment(),
-    status: (req.query.status as ReportedAdjudicationStatus) || null,
+    fromDate: (req.query.fromDate || momentDateToDatePicker(moment().subtract(2, 'days'))) as string,
+    toDate: (req.query.toDate || momentDateToDatePicker(moment())) as string,
+    status: req.query.status as ReportedAdjudicationStatus,
   }
 }
 
-export const uiFilterFromReportedAdjudicationFilter = (filter: ReportedAdjudicationFilter) => {
+export const uiFilterFromBody = (req: Request) => {
   return {
-    fromDate: momentDateToDatePicker(filter.fromDate),
-    toDate: momentDateToDatePicker(filter.toDate),
+    fromDate: req.body.fromDate.date,
+    toDate: req.body.toDate.date,
+    status: req.body.status as ReportedAdjudicationStatus,
+  }
+}
+
+export const filterFromUiFilter = (filter: UiFilter) => {
+  return {
+    fromDate: datePickerDateToMoment(filter.fromDate),
+    toDate: datePickerDateToMoment(filter.toDate),
     status: filter.status,
   }
+}
+
+export const validate = (uiFilter: UiFilter): FormError[] => {
+  if (datePickerDateToMoment(uiFilter.fromDate).isAfter(datePickerDateToMoment(uiFilter.toDate))) {
+    return [error.FROM_DATE_AFTER_TO_DATE]
+  }
+  return []
 }
