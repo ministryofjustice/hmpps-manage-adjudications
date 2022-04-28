@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import moment from 'moment'
-import { ReportedAdjudicationFilter, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 
 export type UiFilter = {
