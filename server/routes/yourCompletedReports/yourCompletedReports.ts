@@ -9,7 +9,9 @@ import {
   UiFilter,
   uiFilterFromBody,
   uiFilterFromRequest,
+  validate,
 } from '../../utils/adjudicationFilterHelper'
+import { FormError } from '../../@types/template'
 
 export default class YourCompletedReportsRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -18,7 +20,8 @@ export default class YourCompletedReportsRoutes {
     req: Request,
     res: Response,
     uiFilter: UiFilter,
-    results: ApiPageResponse<ReportedAdjudication>
+    results: ApiPageResponse<ReportedAdjudication>,
+    errors: FormError[]
   ): Promise<void> => {
     return res.render(`pages/yourCompletedReports`, {
       yourCompletedReports: results,
@@ -28,6 +31,7 @@ export default class YourCompletedReportsRoutes {
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
+      errors,
     })
   }
 
@@ -39,11 +43,15 @@ export default class YourCompletedReportsRoutes {
       filter,
       pageRequestFrom(20, +req.query.pageNumber || 1)
     )
-    return this.renderView(req, res, uiFilter, results)
+    return this.renderView(req, res, uiFilter, results, [])
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const uiFilter = uiFilterFromBody(req)
+    const errors = validate(uiFilter)
+    if (errors && errors.length !== 0) {
+      return this.renderView(req, res, uiFilter, null, errors)
+    }
     return res.redirect(adjudicationUrls.yourCompletedReports.urls.filter(uiFilter))
   }
 }
