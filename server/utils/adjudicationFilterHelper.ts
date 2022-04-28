@@ -11,7 +11,7 @@ enum ErrorType {
 
 const error: { [key in ErrorType]: FormError } = {
   FROM_DATE_AFTER_TO_DATE: {
-    href: '#fromDate',
+    href: '#fromDate[date]',
     text: 'The from date cannot be after the to date',
   },
 }

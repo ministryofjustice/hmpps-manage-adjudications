@@ -14,7 +14,7 @@
     </span>
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
-  {{ adjudicationFilter(filter, statuses, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
+  {{ adjudicationFilter(filter, statuses, errors, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
   {% set rows = [] %}
   {% for completedReport in allCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}

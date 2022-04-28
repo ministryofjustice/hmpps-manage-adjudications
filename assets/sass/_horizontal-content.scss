@@ -10,6 +10,7 @@
     * {
       width: auto;
       margin-bottom: 0;
+      align-self: flex-end;
     }
 
     > div {
@@ -23,11 +24,6 @@
     button {
       margin-right: govuk-spacing(3);
       margin-bottom: $govuk-border-width-form-element;
-    }
-
-    button,
-    a {
-      align-self: flex-end;
     }
   }
 }
