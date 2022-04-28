@@ -50,7 +50,7 @@ export default class YourCompletedReportsRoutes {
     const uiFilter = uiFilterFromBody(req)
     const errors = validate(uiFilter)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, uiFilter, null, errors)
+      return this.renderView(req, res, uiFilter, { size: 20, number: 0, totalElements: 0, content: [] }, errors)
     }
     return res.redirect(adjudicationUrls.yourCompletedReports.urls.filter(uiFilter))
   }
