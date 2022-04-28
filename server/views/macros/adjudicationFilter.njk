@@ -7,16 +7,21 @@
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
         <h2 class="govuk-heading-m">View by</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <div>
+        {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
+        <div {% if fromDateError %}class="govuk-form-group--error"{% endif %}>
+            {% if fromDateError %}
+            <p id="fromDate[date]-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span>{{ fromDateError.text }}
+            </p>
+            {% endif %}
             <div class="horizontal-form govuk-!-margin-bottom-3" id="adjudicationFilter">
                 {{ datePicker({
                     id: 'fromDate[date]',
                     label: 'Date from',
                     name: 'fromDate[date]',
                     date: filter.fromDate,
-                    errorMessage: errors | findErrors(['fromDate[date]']),
                     attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
-                    classes: 'govuk-input--width-10'
+                    classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
                 }) }}
                 {{ datePicker({
                     id: 'toDate[date]',
