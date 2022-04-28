@@ -24,9 +24,17 @@ export type UiFilter = {
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
-    fromDate: (req.query.fromDate || momentDateToDatePicker(moment().subtract(2, 'days'))) as string,
-    toDate: (req.query.toDate || momentDateToDatePicker(moment())) as string,
+    fromDate: req.query.fromDate as string,
+    toDate: req.query.toDate as string,
     status: req.query.status as ReportedAdjudicationStatus,
+  }
+}
+
+export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
+  return {
+    fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
+    toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
+    status: uiFilter.status,
   }
 }
 
