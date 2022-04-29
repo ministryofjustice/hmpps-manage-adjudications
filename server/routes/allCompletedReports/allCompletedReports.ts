@@ -7,6 +7,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import {
+  fillInDefaults,
   filterFromUiFilter,
   UiFilter,
   uiFilterFromBody,
@@ -41,7 +42,7 @@ export default class AllCompletedReportsRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
-      const uiFilter = uiFilterFromRequest(req)
+      const uiFilter = fillInDefaults(uiFilterFromRequest(req))
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,

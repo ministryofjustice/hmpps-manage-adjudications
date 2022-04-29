@@ -19,4 +19,6 @@ export default class AdjudicationsFilter {
   selectStatus = () => cy.get('#status')
 
   applyButton = () => cy.get('[data-qa="filter-apply"]')
+
+  filterBar = () => cy.get('[data-qa="filter-bar"]')
 }

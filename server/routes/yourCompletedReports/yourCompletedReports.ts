@@ -5,6 +5,7 @@ import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import {
+  fillInDefaults,
   filterFromUiFilter,
   UiFilter,
   uiFilterFromBody,
@@ -36,7 +37,7 @@ export default class YourCompletedReportsRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const uiFilter = uiFilterFromRequest(req)
+    const uiFilter = fillInDefaults(uiFilterFromRequest(req))
     const filter = filterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
