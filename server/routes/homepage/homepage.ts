@@ -33,7 +33,7 @@ export const tasks: TaskType[] = [
     id: 'view-your-completed-reports',
     heading: 'View your completed reports',
     description:
-      'View your completed reports. You can also make changes to a report you have completed in the last 48 hours.',
+      'View your completed reports. You can also make changes to a report for up to 48 hours, unless the report has been accepted by the reviewer.',
     href: adjudicationUrls.yourCompletedReports.root,
     roles: null,
     enabled: true,
