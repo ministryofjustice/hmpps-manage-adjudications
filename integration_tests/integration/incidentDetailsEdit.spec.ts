@@ -329,6 +329,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().should('have.value', '00')
     incidentDetailsPage.locationSelector().contains('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="incited"]').should('be.checked')
+    incidentDetailsPage.inciteAssociatedPrisonerDeleteButton().should('not.exist')
   })
   it('should redirect to the task list page if the user exits the page', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))

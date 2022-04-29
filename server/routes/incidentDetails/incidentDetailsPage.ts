@@ -613,8 +613,8 @@ export const updateDataOnDeleteReturn = (
   }
   return {
     incidentDetails: {
-      currentAssociatedPrisonerNumber: null,
       ...stashedData.incidentDetails,
+      currentAssociatedPrisonerNumber: null,
     },
     temporaryData: stashedData.temporaryData,
   }
