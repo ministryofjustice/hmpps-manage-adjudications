@@ -1,3 +1,4 @@
+import moment from 'moment'
 import YourCompletedReportsPage from '../pages/yourCompletedReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
@@ -203,5 +204,14 @@ context('Your Completed Reports', () => {
     adjudicationsFilter.forceToDate(10, 10, 2021)
     adjudicationsFilter.applyButton().click()
     adjudicationsFilter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
+  })
+
+  it('default date range is as expected', () => {
+    cy.task('stubGetYourReportedAdjudications', {})
+    cy.task('stubGetBatchPrisonerDetails')
+    cy.visit(adjudicationUrls.yourCompletedReports.root)
+    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
+    adjudicationsFilter.toDateInput().should('have.value', moment().format('DD/MM/YYYY'))
+    adjudicationsFilter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
   })
 })

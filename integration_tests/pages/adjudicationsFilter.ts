@@ -10,11 +10,15 @@ export default class AdjudicationsFilter {
 
   // This bypasses the date picker and manually forces the date field.
   forceFromDate = (day: number, month: number, year: number): PageElement =>
-    this.forceDateInput(cy.get('[data-qa="from-date"]'), day, month, year)
+    this.forceDateInput(this.fromDateInput(), day, month, year)
 
   // This bypasses the date picker and manually forces the date field.
   forceToDate = (day: number, month: number, year: number): PageElement =>
-    this.forceDateInput(cy.get('[data-qa="to-date"]'), day, month, year)
+    this.forceDateInput(this.toDateInput(), day, month, year)
+
+  toDateInput = () => cy.get('[data-qa="to-date"]')
+
+  fromDateInput = () => cy.get('[data-qa="from-date"]')
 
   selectStatus = () => cy.get('#status')
 

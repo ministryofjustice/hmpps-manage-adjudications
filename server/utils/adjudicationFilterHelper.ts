@@ -30,6 +30,10 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
   }
 }
 
+// When no 'to' date is provided we use today. When no 'from' date is provided we use 2 days ago. This should provide a
+// default time window that covers at a minimum the last 48hrs. For reference if the 'to' and 'from' date are today we
+// get results for all of today, thus if set the 'to' date 2 days ago we should also get the proceeding 2 days.
+// The status default to null, which the api interprets as all statuses.
 export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
   return {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
