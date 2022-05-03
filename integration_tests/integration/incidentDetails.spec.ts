@@ -1,6 +1,7 @@
 import IncidentDetails from '../pages/incidentDetails'
 import Page, { PageElement } from '../pages/page'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import datePickerDriver from '../componentDrivers/datePickerDriver'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
