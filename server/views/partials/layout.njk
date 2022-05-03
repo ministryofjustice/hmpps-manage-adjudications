@@ -58,6 +58,8 @@
   <script src="/assets/govukFrontendInit.js"></script>
   <script src="/assets/moj/all.js"></script>
   <script src="/assets/mojFrontendInit.js"></script>
-  <script src="/assets/card.js"></script>
+  {% block pageScripts %}
+     <script src="/assets/card.js"></script>
+  {%  endblock %}
  
 {% endblock %}
