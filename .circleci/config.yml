@@ -7,11 +7,11 @@ orbs:
 parameters:
   alerts-slack-channel:
     type: string
-    default: dps_core_team
+    default: dps_alerts_security
 
   releases-slack-channel:
     type: string
-    default: dps_core_team
+    default: dps-releases
 
   node-version:
     type: string
