@@ -1,5 +1,7 @@
 div.adjudication-pdf {
-  p, li {
+  p,
+  li,
+  span {
     font-size: 12px;
     line-height: 1.3;
   }
@@ -8,13 +10,37 @@ div.adjudication-pdf {
   }
 }
 
-.adjudication-pdf-prisoner-statement {
-  height: 400px;
-  width: 100%;
+.adjudication-pdf-input {
   border-width: thin;
   border-style: solid;
 }
 
+.adjudication-pdf-input__square {
+  height: 30px;
+  width: 30px;
+}
+
+.adjudication-pdf-input-issuing-officer {
+  height: 30px;
+  width: 50%;
+}
+.adjudication-pdf-prisoner-statement {
+  height: 400px;
+  width: 100%;
+}
+
+.adjudication-pdf-section-issued-details {
+  display: flex;
+  align-items: space-between;
+
+  &__item {
+    padding-right: govuk-spacing(4);
+
+    &:last-child {
+      width: 60%;
+    }
+  }
+}
 .adjudication-pdf-section-prisoner {
   display: flex;
   align-items: end;
