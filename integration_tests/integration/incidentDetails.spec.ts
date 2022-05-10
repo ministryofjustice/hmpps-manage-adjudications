@@ -1,17 +1,9 @@
 import IncidentDetails from '../pages/incidentDetails'
-import Page, { PageElement } from '../pages/page'
+import Page from '../pages/page'
+import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import datePickerDriver from '../componentDrivers/datePickerDriver'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-
-// In order to bypass the date picker we force the input to accept text and then press escape so the date picker
-// disappears allowing us to interact with other fields.
-const forceDateInput = (day: number, month: number, year: number): PageElement =>
-  cy
-    .get('[data-qa="incident-details-date"]')
-    .clear({ force: true })
-    .type(`${`0${day}`.slice(-2)}/${`0${month}`.slice(-2)}/${year}{esc}`, { force: true })
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -162,7 +154,7 @@ context('Incident details', () => {
   it('should show error if a date is not selected', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.timeInputHours().type('12')
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
@@ -177,8 +169,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
@@ -193,9 +184,8 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('12')
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
@@ -224,9 +214,8 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('12')
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
@@ -239,9 +228,8 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('12')
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="incited"]').check()
@@ -273,9 +261,8 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('12')
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="assisted"]').check()
@@ -291,9 +278,8 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('12')
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="assisted"]').check()
@@ -316,9 +302,8 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    incidentDetailsPage.timeInputHours().type('12')
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.radioButtons().find('input[value="assisted"]').check()
@@ -334,8 +319,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-    // datePickerDriver(cy).pickDate(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('03')
     incidentDetailsPage.timeInputMinutes().type('20')
     incidentDetailsPage.locationSelector().select('Workshop 19 - Braille')
@@ -353,9 +337,8 @@ context('Incident details', () => {
       const today = new Date()
       cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      forceDateInput(today.getUTCDate(), today.getUTCMonth(), today.getUTCFullYear())
-      // datePickerDriver(cy).pickDate(today.getUTCDate() - 2, today.getUTCMonth(), today.getUTCFullYear())
-      incidentDetailsPage.timeInputHours().type('12')
+      forceDateInputWithDate(today)
+      incidentDetailsPage.timeInputHours().type('01')
       incidentDetailsPage.timeInputMinutes().type('30')
       incidentDetailsPage.locationSelector().select('Workshop 2')
       incidentDetailsPage.radioButtons().find('input[value="attempted"]').check()
