@@ -1,5 +1,5 @@
 import { PageElement } from './page'
-import forceDateInput from '../componentDrivers/DateInput'
+import { forceDateInput } from '../componentDrivers/dateInput'
 
 export default class AdjudicationsFilter {
   // This bypasses the date picker and manually forces the date field.

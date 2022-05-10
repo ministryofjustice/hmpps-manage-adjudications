@@ -2,12 +2,7 @@ import { PageElement } from '../pages/page'
 
 // In order to bypass the date picker we force the input to accept text and then press escape so the date picker
 // disappears allowing us to interact with other fields.
-const forceDateInput = (
-  day: number,
-  month: number,
-  year: number,
-  field = '[data-qa="incident-details-date"]'
-): PageElement =>
+export const forceDateInput = (day: number, month: number, year: number, field: string): PageElement =>
   cy
     .get(field)
     .clear({ force: true })
@@ -15,4 +10,13 @@ const forceDateInput = (
       force: true,
     })
 
-export default forceDateInput
+export const forceDateInputWithDate = (
+  date: Date = new Date(),
+  field = '[data-qa="incident-details-date"]'
+): PageElement => {
+  const day = date.getUTCDate()
+  const month = date.getUTCMonth() + 1
+  const year = date.getUTCFullYear()
+
+  return forceDateInput(day, month, year, field)
+}

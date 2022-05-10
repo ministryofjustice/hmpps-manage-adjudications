@@ -1,11 +1,9 @@
 import IncidentDetails from '../pages/incidentDetails'
 import Page from '../pages/page'
-import forceDateInput from '../componentDrivers/DateInput'
+import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import adjudicationUrls from '../../server/utils/urlGenerator'
-
-const month = new Date().getUTCMonth() + 1
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -171,7 +169,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
@@ -186,7 +184,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.submitButton().click()
@@ -216,7 +214,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
@@ -230,7 +228,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
@@ -263,7 +261,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
@@ -280,7 +278,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
@@ -304,7 +302,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('12')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Workshop 2')
@@ -321,7 +319,7 @@ context('Incident details', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+    forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('03')
     incidentDetailsPage.timeInputMinutes().type('20')
     incidentDetailsPage.locationSelector().select('Workshop 19 - Braille')
@@ -339,7 +337,7 @@ context('Incident details', () => {
       const today = new Date()
       cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      forceDateInput(today.getUTCDate(), month, today.getUTCFullYear())
+      forceDateInputWithDate(today)
       incidentDetailsPage.timeInputHours().type('12')
       incidentDetailsPage.timeInputMinutes().type('30')
       incidentDetailsPage.locationSelector().select('Workshop 2')
