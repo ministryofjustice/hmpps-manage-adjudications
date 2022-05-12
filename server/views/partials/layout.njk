@@ -5,6 +5,16 @@
   {% if tagManagerContainerId %}
     <!-- Google Tag Manager -->
     <script nonce="{{ cspNonce }}">window.dataLayer = window.dataLayer || [];</script>
+
+    <!-- Add user details to the dataLayer if present on this page load -->
+    {% if user %}
+      <script nonce="{{ cspNonce }}">window.dataLayer.push({
+          'user': {
+            'prisons': {{ user.activeCaseLoad.caseLoadId | safe }},
+          },
+        })</script>
+    {% endif %}
+
     <script nonce="{{ cspNonce }}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
