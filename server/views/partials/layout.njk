@@ -10,7 +10,7 @@
     {% if user %}
       <script nonce="{{ cspNonce }}">window.dataLayer.push({
           'user': {
-            'prison': {{ user.activeCaseLoad.caseLoadId | safe }},
+            'prison': '{{ user.activeCaseLoad.caseLoadId }}',
           },
         })</script>
     {% endif %}
