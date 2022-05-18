@@ -2,7 +2,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReportChangeReport'
 import Page from '../pages/page'
 
-context('Prisoner has been placed on report', () => {
+context('Report has been changed', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

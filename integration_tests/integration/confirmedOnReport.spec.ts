@@ -2,7 +2,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReport'
 import Page from '../pages/page'
 
-context('Prisoner has been placed on report', () => {
+context('Report has been submitted for review', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -86,7 +86,7 @@ context('Prisoner has been placed on report', () => {
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.confirmedOnReport.urls.start(1524242))
     Page.verifyOnPage(ConfirmedOnReport)
-    cy.contains('Your report number is')
+    cy.contains('The report number is')
     cy.contains('1524242')
     cy.contains('John Smith must be given a copy of this report by 10:00 on 8 December 2020')
     cy.contains('John Smith’s preferred language is:')

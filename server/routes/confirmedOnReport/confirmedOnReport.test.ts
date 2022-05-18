@@ -48,7 +48,7 @@ describe('GET /prisoner-placed-on-report', () => {
       .get(adjudicationUrls.confirmedOnReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('John Smith has been placed on report')
+        expect(res.text).toContain('Your report for John Smith has been submitted for review')
         expect(res.text).toContain('123')
         expect(res.text).toContain('John Smith’s preferred language is')
         expect(res.text).toContain('They have other languages of')
