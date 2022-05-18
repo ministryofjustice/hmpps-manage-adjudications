@@ -27,12 +27,12 @@
                     {% for offence in offences %}
                         {% set offenceIndex = loop.index %}
                         <div class="details-of-offence-questions-and-answers">
-                            <div>
+                            <div class="q-and-a">
                                 {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
                             </div>
                             <div>
-                                <a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceIndex) }}'
-                                   data-qa="delete-{{ offenceIndex }}">Delete</a>
+                                <p class="govuk-body"><a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceIndex) }}'
+                                   data-qa="delete-{{ offenceIndex }}" class="govuk-link">Remove this offence</a></p>
                             </div>
                         </div>
                         <div data-qa="offence-broke-section-{{ offenceIndex }}">
