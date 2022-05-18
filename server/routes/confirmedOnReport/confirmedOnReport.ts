@@ -31,8 +31,8 @@ export default class ConfirmedOnReportRoutes {
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
       adjudicationEdited: false,
       editedByReviewer: false,
-      bannerText: `${prisonerFirstAndLastName} has been placed on report`,
-      bannerHTML: `Your report number is: <br><strong>${adjudicationNumber}</strong>`,
+      bannerText: `Your report for ${prisonerFirstAndLastName} has been submitted for review`,
+      bannerHTML: `The report number is: <br><strong>${adjudicationNumber}</strong>`,
       buttonClass: 'govuk-button--secondary',
       buttonHref: adjudicationUrls.homepage.root,
     })
