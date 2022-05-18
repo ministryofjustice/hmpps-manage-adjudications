@@ -114,6 +114,19 @@ describe('validateForm', () => {
         text: 'Enter the hour using 2 numbers - for example, 08 or 18',
       })
     })
+    it('shows error if more than two digits entered for hours', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '008', minute: '30' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
+        href: '#incidentDate[time][hour]',
+        text: 'Enter the hour using 2 numbers - for example, 08 or 18',
+      })
+    })
     it('shows error if only one digit for minutes', () => {
       expect(
         validateForm({
@@ -125,6 +138,45 @@ describe('validateForm', () => {
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter the minute using 2 numbers - for example, 08 or 18',
+      })
+    })
+    it('shows error if more than two digits entered for minutes', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '001' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
+        href: '#incidentDate[time][minute]',
+        text: 'Enter the minute using 2 numbers - for example, 08 or 18',
+      })
+    })
+    it('shows error if letters are entered for the hour field', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: 'lll', minute: '50' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
+        href: '#incidentDate[time][hour]',
+        text: 'Enter an hour which is 23 or less',
+      })
+    })
+    it('shows error if letters are entered for the minute field', () => {
+      expect(
+        validateForm({
+          incidentDate: { date: '31/10/2021', time: { hour: '09', minute: 'fffff' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+        })
+      ).toEqual({
+        href: '#incidentDate[time][minute]',
+        text: 'Enter a minute which is 59 or less',
       })
     })
     it('shows error if the time entered is in the future (on the current day)', () => {
