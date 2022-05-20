@@ -4,7 +4,17 @@
 {% block head %}
   {% if tagManagerContainerId %}
     <!-- Google Tag Manager -->
-    <script nonce="{{ cspNonce }}">window.dataLayer = window.dataLayer || [];</script>
+    <script nonce="{{ cspNonce }}">
+      window.dataLayer = window.dataLayer || [];
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ tagManagerContainerId }}" nonce="{{ cspNonce }}"></script>
+    <script nonce="{{ cspNonce }}">
+      function gtag(){window.dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ tagManagerContainerId }}');
+    </script>
 
     <!-- Add user details to the dataLayer if present on this page load - for google analytics & tag manager -->
     {% if user %}
@@ -13,8 +23,7 @@
             'prison': '{{ user.activeCaseLoad.caseLoadId }}',
           },
         })</script>
-    {% endif %}
-
+    {% endif %} 
     <script nonce="{{ cspNonce }}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=

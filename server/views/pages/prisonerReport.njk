@@ -31,3 +31,9 @@
     </p>
   {% endif %}
 {% endblock %}
+
+{% block pageScripts %}
+  {% if review %}
+    <script src="/assets/js/reviewerAction.js" nonce="{{ cspNonce }}"></script>
+  {% endif %}
+{% endblock %}
