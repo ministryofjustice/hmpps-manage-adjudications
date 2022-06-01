@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.14
+  hmpps: ministryofjustice/hmpps@5.1
   slack: circleci/slack@4.4.2
 
 parameters:
@@ -15,7 +15,7 @@ parameters:
 
   node-version:
     type: string
-    default: 14.17-browsers
+    default: 16.15-browsers
 
 executors:
   integration-tests:
@@ -38,7 +38,7 @@ executors:
         default: "14.16-browsers"
         type: string
       redis_tag:
-        default: "buster"
+        default: "6.2"
         type: string
       gotenberg_tag:
         default: "6.4.3"
@@ -53,7 +53,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
