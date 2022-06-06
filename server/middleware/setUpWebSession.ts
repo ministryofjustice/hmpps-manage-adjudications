@@ -2,7 +2,7 @@ import session from 'express-session'
 import connectRedis from 'connect-redis'
 import addRequestId from 'express-request-id'
 import express, { Router } from 'express'
-import { createRedisClient } from '../data/tokenStore'
+import { createRedisClient } from '../data/redisClient'
 
 import config from '../config'
 
