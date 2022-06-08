@@ -17,10 +17,19 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import logger from '../logger'
 import { Services } from './services'
 import { pdfRenderer } from './utils/pdfRenderer'
 
 export default function createApp(services: Services): express.Application {
+  // We do not want the server to exit, partly because any log information will be lost.
+  // Instead, log the error so we can trace, diagnose and fix the problem.
+  process.on('uncaughtException', (err, origin) => {
+    logger.error(`Uncaught Exception`, err, origin)
+  })
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error(`Unhandled Rejection at: ${promise} reason: ${reason}`)
+  })
   const app = express()
 
   app.set('json spaces', 2)

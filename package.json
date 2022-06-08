@@ -28,8 +28,8 @@
     "clean": "rm -rf dist build node_modules stylesheets"
   },
   "engines": {
-    "node": "^14",
-    "npm": "^7"
+    "node": "^16",
+    "npm": "^8"
   },
   "jest": {
     "preset": "ts-jest",
