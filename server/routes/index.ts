@@ -2,6 +2,7 @@ import type { Router } from 'express'
 
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
+import incidentRoleRoutes from './incidentRole'
 import detailsOfOffenceRoutes from './detailsOfOffence'
 import checkYourAnswersRoutes from './checkYourAnswers'
 import confirmedOnReportRoutes from './confirmedOnReport'
@@ -42,6 +43,7 @@ export default function routes(
     offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })
   )
   router.use(adjudicationUrls.incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))
+  router.use(adjudicationUrls.incidentRole.root, incidentRoleRoutes({ placeOnReportService }))
   router.use(
     adjudicationUrls.detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })

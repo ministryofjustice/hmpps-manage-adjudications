@@ -12,6 +12,7 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     redirectUrl: string
+    prisonerNumber: string
     incidentDate: SubmittedDateTime
     incidentLocation: number
     // TODO - We are going to remove this - we will go to the task list or check your answers on radio edit regardless
