@@ -605,17 +605,6 @@ const incidentRoleFromRadioSelection = (radioSelectionCode: string): IncidentRol
   return IncidentRole.COMMITTED
 }
 
-const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
-  if (userProvidedValue) {
-    const {
-      date,
-      time: { hour, minute },
-    } = userProvidedValue
-    return { date, hour, minute }
-  }
-  return null
-}
-
 const getTaskListUrl = (draftId: number) => {
   return adjudicationUrls.taskList.urls.start(draftId)
 }
