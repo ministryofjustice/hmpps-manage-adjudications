@@ -23,6 +23,7 @@ beforeEach(() => {
       agencyName: 'Moorland (HMP & YOI)',
     },
     categoryCode: undefined,
+    dateOfBirth: undefined,
     language: 'English',
     friendlyName: 'Udfsanaye Aidetria',
     displayName: 'Aidetria, Udfsanaye',

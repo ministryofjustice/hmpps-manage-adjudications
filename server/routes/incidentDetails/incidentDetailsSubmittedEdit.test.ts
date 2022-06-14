@@ -17,6 +17,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
+    dateOfBirth: undefined,
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
     assignedLivingUnit: {

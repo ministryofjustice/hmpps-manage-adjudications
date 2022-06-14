@@ -183,6 +183,15 @@ const adjudicationUrls = {
       start: '/',
     },
   },
+  ageOfPrisoner: {
+    root: '/age-of-prisoner',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

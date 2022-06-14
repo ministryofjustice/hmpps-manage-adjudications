@@ -58,6 +58,7 @@ beforeEach(() => {
       friendlyName: 'Phyllis Smith',
       displayName: 'Smith, Phyllis',
       currentLocation: 'RECP',
+      dateOfBirth: undefined,
     },
     associatedPrisoner: undefined,
   })

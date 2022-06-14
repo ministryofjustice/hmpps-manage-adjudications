@@ -111,6 +111,16 @@ export const possessive = (string: string): string => {
   return `${string}${string.toLowerCase().endsWith('s') ? '’' : '’s'}`
 }
 
+export const calculateAge = (dateOfBirth: string, dateOfIncident: string) => {
+  const incidentDate: Date = new Date(dateOfIncident)
+  const birthday: Date = new Date(dateOfBirth)
+  const dateDifference = moment.duration(Number(birthday) - Number(incidentDate))
+  return {
+    years: Math.abs(dateDifference.years()),
+    months: Math.abs(dateDifference.months()),
+  }
+}
+
 export default {
   numberRange,
   convertToTitleCase,
@@ -121,4 +131,5 @@ export default {
   hasAnyRole,
   getFormattedReporterName,
   possessive,
+  calculateAge,
 }

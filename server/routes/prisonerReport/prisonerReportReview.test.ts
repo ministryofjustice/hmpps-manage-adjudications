@@ -76,6 +76,7 @@ beforeEach(() => {
     incidentRole: IncidentRole.COMMITTED,
     prisoner: {
       offenderNo: 'G5512GK',
+      dateOfBirth: undefined,
       firstName: 'BOBBY',
       lastName: 'DA SMITH JONES',
       assignedLivingUnit: {

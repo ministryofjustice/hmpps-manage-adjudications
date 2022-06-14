@@ -67,6 +67,7 @@ const prisonerResultSummary: PrisonerResultSummary = {
   prisonerNumber: undefined,
   currentLocation: undefined,
   assignedLivingUnit: undefined,
+  dateOfBirth: undefined,
 }
 const confirmedOnReportData: ConfirmedOnReportData = {
   reportExpirationDateTime: '2020-12-23T07:21',
