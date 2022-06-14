@@ -91,10 +91,6 @@ enum NextPageSelectionAfterEdit {
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
-  isEdit(): boolean {
-    return this.pageType === PageRequestType.EDIT || this.pageType === PageRequestType.EDIT_SUBMITTED
-  }
-
   isPreviouslySubmitted(): boolean {
     return this.pageType === PageRequestType.EDIT_SUBMITTED
   }
@@ -123,7 +119,7 @@ export default class IncidentRolePage {
       } else if (requestData === PageRequestAction.DELETE_PRISONER) {
         data = updateDataOnDeleteReturn(sessionData, requestValues)
       }
-    } else if (this.pageOptions.isEdit()) {
+    } else {
       data = {
         incidentDetails: draftIncidentDetails,
         temporaryData: {
@@ -158,14 +154,10 @@ export default class IncidentRolePage {
     if (postData !== PageRequestAction.STANDARD) {
       const dataToSaveAfterRedirect = transformFormDataToStashedData(postValues)
       let returnUrl = null
-      if (this.pageOptions.isEdit()) {
-        if (this.pageOptions.isPreviouslySubmitted()) {
-          returnUrl = `${adjudicationUrls.incidentRole.urls.submittedEdit(postValues.draftId)}${
-            postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''
-          }`
-        } else {
-          returnUrl = adjudicationUrls.incidentRole.urls.start(postValues.draftId)
-        }
+      if (this.pageOptions.isPreviouslySubmitted()) {
+        returnUrl = `${adjudicationUrls.incidentRole.urls.submittedEdit(postValues.draftId)}${
+          postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''
+        }`
       } else {
         returnUrl = adjudicationUrls.incidentRole.urls.start(postValues.draftId)
       }
@@ -224,11 +216,7 @@ export default class IncidentRolePage {
 
       return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
     } catch (postError) {
-      if (this.pageOptions.isEdit()) {
-        this.setUpRedirectForEditError(res, postError, postValues.draftId)
-      } else {
-        this.setUpRedirectForCreationError(res, postValues.draftId, postError)
-      }
+      this.setUpRedirectForEditError(res, postError, postValues.draftId)
       throw postError
     }
   }
@@ -260,16 +248,14 @@ export default class IncidentRolePage {
     currentUser: User
   ): Promise<PageData> => {
     let exitButtonData: ExitButtonData = null
-    if (this.pageOptions.isEdit()) {
-      let prisonerReportUrl = null
-      if (this.pageOptions.isPreviouslySubmitted()) {
-        prisonerReportUrl = requestValues.originalPageReferrerUrl
-      }
-      exitButtonData = {
-        prisonerNumber,
-        draftId: requestValues.draftId,
-        prisonerReportUrl,
-      }
+    let prisonerReportUrl = null
+    if (this.pageOptions.isPreviouslySubmitted()) {
+      prisonerReportUrl = requestValues.originalPageReferrerUrl
+    }
+    exitButtonData = {
+      prisonerNumber,
+      draftId: requestValues.draftId,
+      prisonerReportUrl,
     }
     return {
       displayData: await this.getDisplayData(
@@ -288,17 +274,16 @@ export default class IncidentRolePage {
     currentUser: User
   ): Promise<PageData> => {
     let exitButtonData: ExitButtonData = null
-    if (this.pageOptions.isEdit()) {
-      let prisonerReportUrl = null
-      if (this.pageOptions.isPreviouslySubmitted()) {
-        prisonerReportUrl = postValues.originalPageReferrerUrl
-      }
-      exitButtonData = {
-        prisonerNumber,
-        draftId: postValues.draftId,
-        prisonerReportUrl,
-      }
+    let prisonerReportUrl = null
+    if (this.pageOptions.isPreviouslySubmitted()) {
+      prisonerReportUrl = postValues.originalPageReferrerUrl
     }
+    exitButtonData = {
+      prisonerNumber,
+      draftId: postValues.draftId,
+      prisonerReportUrl,
+    }
+
     return {
       displayData: await this.getDisplayData(
         prisonerNumber,
