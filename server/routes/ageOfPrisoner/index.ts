@@ -4,8 +4,6 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import AgeOfPrisonerRoutes from './ageOfPrisoner'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
-// import LocationService from '../../services/locationService'
-// import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function CheckAnswersRoutes({

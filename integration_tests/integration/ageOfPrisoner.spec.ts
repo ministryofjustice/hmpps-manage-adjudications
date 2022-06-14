@@ -3,21 +3,36 @@ import AgeOfPrisoner from '../pages/ageofPrisoner'
 import Page from '../pages/page'
 
 context('Age of the prisoner', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: {
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+        dateOfBirth: '1990-10-11',
+      },
+    })
+  })
   context('No offences on draft', () => {
     beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn')
-      cy.task('stubAuthUser')
-      cy.task('stubGetPrisonerDetails', {
-        prisonerNumber: 'G6415GD',
-        response: {
-          offenderNo: 'G6415GD',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-          dateOfBirth: '1990-10-11',
-        },
-      })
+      // cy.task('reset')
+      // cy.task('stubSignIn')
+      // cy.task('stubAuthUser')
+      // cy.task('stubGetPrisonerDetails', {
+      //   prisonerNumber: 'G6415GD',
+      //   response: {
+      //     offenderNo: 'G6415GD',
+      //     firstName: 'JOHN',
+      //     lastName: 'SMITH',
+      //     assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+      //     dateOfBirth: '1990-10-11',
+      //   },
+      // })
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
@@ -80,19 +95,6 @@ context('Age of the prisoner', () => {
   })
   context('Offences on draft', () => {
     beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn')
-      cy.task('stubAuthUser')
-      cy.task('stubGetPrisonerDetails', {
-        prisonerNumber: 'G6415GD',
-        response: {
-          offenderNo: 'G6415GD',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-          dateOfBirth: '1990-10-11',
-        },
-      })
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
