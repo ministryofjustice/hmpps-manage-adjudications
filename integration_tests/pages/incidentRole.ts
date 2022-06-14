@@ -21,5 +21,9 @@ export default class IncidentRolePage extends Page {
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 
+  inciteAssociatedPrisonerDeleteButton = (): PageElement => cy.get('[data-qa="incite-prisoner-delete"]')
+
+  exitButton = (): PageElement => cy.get('[data-qa="incident-role-exit"]')
+
   errorContinueButton = (): PageElement => cy.get('[data-qa="continue-after-error"]')
 }

@@ -44,7 +44,7 @@ context('Incident role (edit after completion of report)', () => {
         },
       },
     })
-    cy.task('stubEditDraftIncidentDetails', {
+    cy.task('stubUpdateDraftIncidentRole', {
       id: 34,
       response: {
         draftAdjudication: {
@@ -307,7 +307,7 @@ context('Incident role (edit after completion of report)', () => {
   })
   context('Redirect on error', () => {
     beforeEach(() => {
-      cy.task('stubEditDraftIncidentDetails', { id: 34, response: {}, status: 500 })
+      cy.task('stubUpdateDraftIncidentRole', { id: 34, response: {}, status: 500 })
     })
     it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
       cy.visit(

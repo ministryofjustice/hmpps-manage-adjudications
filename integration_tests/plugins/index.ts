@@ -41,6 +41,7 @@ export default (on: (string, Record) => void): void => {
     stubGetDraftAdjudication: adjudications.stubGetDraftAdjudication,
     stubSubmitCompleteDraftAdjudication: adjudications.stubSubmitCompleteDraftAdjudication,
     stubEditDraftIncidentDetails: adjudications.stubEditDraftIncidentDetails,
+    stubUpdateDraftIncidentRole: adjudications.stubUpdateDraftIncidentRole,
     stubGetReportedAdjudication: adjudications.stubGetReportedAdjudication,
 
     stubGetLearnerProfile: curiousApi.stubGetLearnerProfile,

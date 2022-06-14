@@ -6,7 +6,7 @@ export default class IncidentRoleRoutes {
   page: IncidentRolePage
 
   constructor(placeOnReportService: PlaceOnReportService) {
-    this.page = new IncidentRolePage(PageRequestType.CREATION, placeOnReportService)
+    this.page = new IncidentRolePage(PageRequestType.EDIT, placeOnReportService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

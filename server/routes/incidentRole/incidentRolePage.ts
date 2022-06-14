@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 import { debug } from 'console'
 import validateForm from './incidentRoleValidation'
-import validatePrisonerSearch from './incidentRoleSearchValidation'
+import validatePrisonerSearch from '../util/incidentSearchValidation'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import logger from '../../../logger'
@@ -72,7 +72,6 @@ type StashedIncidentDetails = {
 }
 
 export enum PageRequestType {
-  CREATION,
   EDIT,
   EDIT_SUBMITTED,
 }
@@ -99,10 +98,6 @@ class PageOptions {
   isPreviouslySubmitted(): boolean {
     return this.pageType === PageRequestType.EDIT_SUBMITTED
   }
-
-  isCreation(): boolean {
-    return this.pageType === PageRequestType.CREATION
-  }
 }
 
 export default class IncidentRolePage {
@@ -122,7 +117,7 @@ export default class IncidentRolePage {
 
     let data: StashedIncidentDetails = null
     if (requestData !== PageRequestAction.STANDARD) {
-      const sessionData = popDataFromSession(req)
+      const sessionData = popDataFromSession(req, draftIncidentDetails.prisonerNumber)
       if (requestData === PageRequestAction.SEARCH_FOR_PRISONER) {
         data = updateDataOnSearchReturn(sessionData, requestValues)
       } else if (requestData === PageRequestAction.DELETE_PRISONER) {
@@ -169,7 +164,7 @@ export default class IncidentRolePage {
             postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''
           }`
         } else {
-          returnUrl = adjudicationUrls.incidentRole.urls.edit(postValues.draftId)
+          returnUrl = adjudicationUrls.incidentRole.urls.start(postValues.draftId)
         }
       } else {
         returnUrl = adjudicationUrls.incidentRole.urls.start(postValues.draftId)
@@ -208,13 +203,7 @@ export default class IncidentRolePage {
       const incidentRoleChanged =
         postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
       const removeExistingOffences = incidentRoleChanged
-      await this.saveToApiUpdate(
-        postValues.draftId,
-        incidentDetailsToSave,
-        removeExistingOffences,
-        user as User,
-        existingAdjudication
-      )
+      await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
 
       let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
       if (this.pageOptions.isPreviouslySubmitted()) {
@@ -229,7 +218,7 @@ export default class IncidentRolePage {
         default:
         // Fall through
       }
-      if (!this.pageOptions.isCreation()) {
+      if (this.pageOptions.isPreviouslySubmitted()) {
         return redirectToTaskList(res, postValues.draftId)
       }
 
@@ -252,15 +241,11 @@ export default class IncidentRolePage {
     draftId: number,
     data: IncidentDetails,
     removeExistingOffences: boolean,
-    currentUser: User,
-    existingAdjudication: DraftAdjudicationResult
+    currentUser: User
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
-    // TODO merge in the current values for location and date...
-    return this.placeOnReportService.editDraftIncidentDetails(
+    return this.placeOnReportService.updateDraftIncidentRole(
       draftId,
-      existingAdjudication.draftAdjudication.incidentDetails.dateTimeOfIncident,
-      existingAdjudication.draftAdjudication.incidentDetails.locationId,
       data.currentAssociatedPrisonerNumber,
       codeFromIncidentRole(data.currentIncidentRoleSelection),
       removeExistingOffences,
@@ -353,7 +338,7 @@ export default class IncidentRolePage {
     logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
     res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
       ? adjudicationUrls.incidentRole.urls.submittedEdit(draftId)
-      : adjudicationUrls.incidentRole.urls.edit(draftId)
+      : adjudicationUrls.incidentRole.urls.start(draftId)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -383,11 +368,10 @@ const getPageActionFromRequest = (reqData: RequestValues): PageRequestAction => 
   return PageRequestAction.STANDARD
 }
 
-const popDataFromSession = (req: Request): StashedIncidentDetails => {
+const popDataFromSession = (req: Request, prisonerNumber: string): StashedIncidentDetails => {
   const currentIncidentRoleSelection = incidentRoleFromCode(req.session.currentRadioSelection)
   const currentAssociatedPrisonerNumber = req.session.currentAssociatedPrisonersNumber
   const originalIncidentRoleSelection = incidentRoleFromCode(req.session.originalRadioSelection)
-  const { prisonerNumber } = req.session
   return {
     incidentDetails: {
       prisonerNumber,
@@ -402,12 +386,9 @@ const popDataFromSession = (req: Request): StashedIncidentDetails => {
 
 const deleteSessionData = (req: Request) => {
   delete req.session.redirectUrl
-  delete req.session.incidentDate
-  delete req.session.incidentLocation
   delete req.session.currentRadioSelection
   delete req.session.currentAssociatedPrisonersNumber
   delete req.session.originalRadioSelection
-  delete req.session.prisonerNumber
 }
 
 const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetails, req: Request) => {
@@ -415,7 +396,6 @@ const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetai
   req.session.currentRadioSelection = codeFromIncidentRole(dataToStore.incidentDetails.currentIncidentRoleSelection)
   req.session.currentAssociatedPrisonersNumber = dataToStore.incidentDetails.currentAssociatedPrisonerNumber
   req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.temporaryData.originalIncidentRoleSelection)
-  req.session.prisonerNumber = dataToStore.incidentDetails.prisonerNumber
 }
 
 const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult): IncidentDetails => {

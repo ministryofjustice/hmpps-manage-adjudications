@@ -201,6 +201,18 @@ export default class PlaceOnReportService {
     return editedAdjudication
   }
 
+  async updateDraftIncidentRole(
+    id: number,
+    associatedPrisonersNumber: string,
+    roleCode: string,
+    removeExistingOffences: boolean,
+    user: User
+  ): Promise<DraftAdjudicationResult> {
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const updatedAdjudication = await manageAdjudicationsClient.updateIncidentRole(id)
+    return updatedAdjudication
+  }
+
   async completeDraftAdjudication(id: number, user: User): Promise<number> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const completedAdjudication = await manageAdjudicationsClient.submitCompleteDraftAdjudication(id)

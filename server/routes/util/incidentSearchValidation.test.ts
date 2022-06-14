@@ -1,4 +1,4 @@
-import validateForm from './incidentDetailsSearchValidation'
+import validateForm from './incidentSearchValidation'
 
 describe('validateForm', () => {
   describe('Valid submit shows no errors', () => {

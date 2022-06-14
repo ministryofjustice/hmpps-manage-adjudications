@@ -69,11 +69,52 @@ context('Incident role', () => {
         },
       },
     })
-    cy.task('stubEditDraftIncidentDetails', {
+    cy.task('stubGetDraftAdjudication', {
+      id: 134,
+      response: {
+        draftAdjudication: {
+          id: 134,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            handoverDeadline: '2021-11-05T13:10:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER1',
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            roleCode: '25b',
+          },
+        },
+      },
+    })
+    cy.task('stubUpdateDraftIncidentRole', {
       id: 34,
       response: {
         draftAdjudication: {
           id: 34,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 27029,
+          },
+          incidentStatement: {},
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER2',
+          incidentRole: {
+            roleCode: '25a',
+          },
+        },
+      },
+    })
+    cy.task('stubUpdateDraftIncidentRole', {
+      id: 134,
+      response: {
+        draftAdjudication: {
+          id: 134,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             locationId: 27029,
@@ -285,9 +326,124 @@ context('Incident role', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'committed', '1'))
     })
   })
+  // EDIT tests moved over
+  it('should contain the required page elements', () => {
+    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
+    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
+    incidentRolePage.radioButtons().should('exist')
+    incidentRolePage.radioButtonLegend().should('exist')
+    incidentRolePage.submitButton().should('exist')
+    incidentRolePage.exitButton().should('exist')
+  })
+  it('should show the prisoners name in the radio button question', () => {
+    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
+    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
+    incidentRolePage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
+  })
+  it('should submit form successfully if radio button changed from one which requires an associated prisoner PRN to one which does not', () => {
+    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
+    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
+    incidentRolePage.radioButtons().find('input[value="attempted"]').check()
+    incidentRolePage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(134, 'attempted', '1'))
+    })
+  })
+  it('should submit form successfully if radio button changed from one which does not require an associated prisoner PRN to one which does', () => {
+    cy.task('stubGetDraftAdjudication', {
+      id: 134,
+      response: {
+        draftAdjudication: {
+          id: 134,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            handoverDeadline: '2021-11-05T13:10:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER1',
+          incidentRole: {
+            roleCode: '25a',
+          },
+        },
+      },
+    })
+    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
+    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
+    incidentRolePage.radioButtons().find('input[value="incited"]').check()
+    incidentRolePage.conditionalInputIncite().type('T3356FU')
+    incidentRolePage.searchButtonIncite().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    cy.location().should(loc => {
+      expect(loc.search).to.eq('?selectedPerson=T3356FU')
+    })
+    incidentRolePage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(134, 'incited', '1'))
+    })
+  })
+  it('should error if the user has changed the radio button but not searched for the associated prisoner', () => {
+    cy.task('stubGetDraftAdjudication', {
+      id: 134,
+      response: {
+        draftAdjudication: {
+          id: 134,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            handoverDeadline: '2021-11-05T13:10:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER1',
+          incidentRole: {},
+        },
+      },
+    })
+    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
+    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
+    incidentRolePage.radioButtons().find('input[value="assisted"]').check()
+    incidentRolePage.submitButton().click()
+    incidentRolePage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter their name or prison number')
+      })
+    incidentRolePage.conditionalInputAssist().type('T3356FU')
+    incidentRolePage.searchButtonAssist().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    cy.location().should(loc => {
+      expect(loc.search).to.eq('?selectedPerson=T3356FU')
+    })
+    incidentRolePage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(134, 'assisted', '1'))
+    })
+  })
+  it('should remember once it comes back to this page after deleting an associated prisoner', () => {
+    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
+    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
+    incidentRolePage.inciteAssociatedPrisonerDeleteButton().click()
+    cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check()
+    cy.get('[data-qa="delete-person-submit"]').click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.start(134))
+      expect(loc.search).to.eq('?personDeleted=true')
+    })
+    incidentRolePage.radioButtons().find('input[value="incited"]').should('be.checked')
+    incidentRolePage.inciteAssociatedPrisonerDeleteButton().should('not.exist')
+  })
   context('Redirect on error', () => {
     beforeEach(() => {
-      cy.task('stubEditDraftIncidentDetails', { id: 34, response: {}, status: 500 })
+      cy.task('stubUpdateDraftIncidentRole', { id: 34, response: {}, status: 500 })
     })
     it('should redirect back to incident role if an error occurs whilst calling the API', () => {
       cy.visit(adjudicationUrls.incidentRole.urls.start(34))

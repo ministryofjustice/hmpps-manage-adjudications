@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 import { debug } from 'console'
 import validateForm from './incidentDetailsValidation'
-import validatePrisonerSearch from './incidentDetailsSearchValidation'
+import validatePrisonerSearch from '../util/incidentSearchValidation'
 import { FormError, SubmittedDateTime } from '../../@types/template'
 import PlaceOnReportService, {
   ExistingDraftIncidentDetails,

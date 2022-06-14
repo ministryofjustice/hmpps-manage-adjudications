@@ -49,7 +49,7 @@ beforeEach(() => {
     },
   })
 
-  placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
+  placeOnReportService.updateDraftIncidentRole.mockResolvedValue({
     draftAdjudication: {
       startedByUserId: 'TEST_GEN',
       id: 100,
@@ -151,7 +151,7 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       })
   })
   it('should throw an error on PUT endpoint failure', () => {
-    placeOnReportService.editDraftIncidentDetails.mockRejectedValue(new Error('Internal Error'))
+    placeOnReportService.updateDraftIncidentRole.mockRejectedValue(new Error('Internal Error'))
     return request(app)
       .post(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(
@@ -183,10 +183,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       })
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.editDraftIncidentDetails).toHaveBeenCalledWith(
+        expect(placeOnReportService.updateDraftIncidentRole).toHaveBeenCalledWith(
           100,
-          '2021-10-27T12:30',
-          2,
           null,
           null,
           false, // RemoveOffences
@@ -209,10 +207,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       })
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.editDraftIncidentDetails).toHaveBeenCalledWith(
+        expect(placeOnReportService.updateDraftIncidentRole).toHaveBeenCalledWith(
           100,
-          '2021-10-27T12:30',
-          2,
           null,
           null,
           true, // RemoveOffences
