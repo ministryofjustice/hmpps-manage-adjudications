@@ -25,4 +25,7 @@ export default class PrisonerResult {
 
   @Expose()
   language: string
+
+  @Expose()
+  dateOfBirth: string
 }

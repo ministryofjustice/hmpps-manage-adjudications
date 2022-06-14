@@ -86,6 +86,7 @@ beforeEach(() => {
     prisonerNumber: undefined,
     currentLocation: undefined,
     assignedLivingUnit: undefined,
+    dateOfBirth: undefined,
   })
 
   placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
@@ -100,6 +101,7 @@ beforeEach(() => {
       prisonerNumber: undefined,
       currentLocation: undefined,
       assignedLivingUnit: undefined,
+      dateOfBirth: undefined,
     },
     associatedPrisoner: undefined,
   })

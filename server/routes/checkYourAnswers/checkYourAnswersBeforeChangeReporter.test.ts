@@ -29,6 +29,7 @@ beforeEach(() => {
       agencyName: undefined,
     },
     categoryCode: undefined,
+    dateOfBirth: undefined,
     language: undefined,
     friendlyName: undefined,
     displayName: undefined,
@@ -61,6 +62,7 @@ beforeEach(() => {
     incidentRole: undefined,
     prisoner: {
       offenderNo: 'G6415GD',
+      dateOfBirth: undefined,
       firstName: undefined,
       lastName: undefined,
       assignedLivingUnit: {

@@ -9,6 +9,7 @@ import {
   hasAnyRole,
   getFormattedReporterName,
   possessive,
+  calculateAge,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -155,5 +156,17 @@ describe('Possessive', () => {
   })
   it('Converts name with S correctly', () => {
     expect(possessive('David Jones')).toEqual('David Jones’')
+  })
+})
+
+describe('calculateAge', () => {
+  it('31 years old', () => {
+    expect(calculateAge('1990-10-11', '2022-06-14')).toEqual({ years: 31, months: 8 })
+  })
+  it('18 years old - on birthday', () => {
+    expect(calculateAge('2003-10-11', '2021-10-11')).toEqual({ years: 18, months: 0 })
+  })
+  it('17 years old - day before birthday', () => {
+    expect(calculateAge('2003-10-11', '2021-10-10')).toEqual({ years: 17, months: 11 })
   })
 })

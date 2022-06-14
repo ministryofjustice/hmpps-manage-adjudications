@@ -81,6 +81,7 @@ beforeEach(() => {
         description: '1-1-010',
         agencyName: 'Moorland (HMP & YOI)',
       },
+      dateOfBirth: undefined,
       categoryCode: undefined,
       language: undefined,
       friendlyName: 'Bobby Da Smith Jones',

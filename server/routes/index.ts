@@ -19,6 +19,7 @@ import selectAssociatedPrisonerRoutes from './selectAssociatedPrisoner'
 import selectAssociatedStaffRoutes from './selectAssociatedStaff'
 import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
+import ageOfPrisonerRoutes from './ageOfPrisoner'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -87,5 +88,6 @@ export default function routes(
   )
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use('/', homepageRoutes({ userService }))
+  router.use(adjudicationUrls.ageOfPrisoner.root, ageOfPrisonerRoutes({ placeOnReportService }))
   return router
 }

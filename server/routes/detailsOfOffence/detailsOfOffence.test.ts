@@ -61,6 +61,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = {
   displayName: undefined,
   currentLocation: undefined,
   assignedLivingUnit: undefined,
+  dateOfBirth: undefined,
 }
 
 const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = {
@@ -74,6 +75,7 @@ const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = {
   displayName: undefined,
   currentLocation: undefined,
   assignedLivingUnit: undefined,
+  dateOfBirth: undefined,
 }
 
 const victimPrisonerDetails: PrisonerResultSummary = {
@@ -87,6 +89,7 @@ const victimPrisonerDetails: PrisonerResultSummary = {
   displayName: undefined,
   currentLocation: undefined,
   assignedLivingUnit: undefined,
+  dateOfBirth: undefined,
 }
 
 const adjudicationWithOffences = {

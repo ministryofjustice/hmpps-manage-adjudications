@@ -1,0 +1,78 @@
+import { Request, Response } from 'express'
+
+import PlaceOnReportService from '../../services/placeOnReportService'
+import adjudicationUrls from '../../utils/urlGenerator'
+import validateForm from './ageOfPrisonerValidation'
+import { FormError } from '../../@types/template'
+import logger from '../../../logger'
+import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import { calculateAge } from '../../utils/utils'
+
+type PageData = {
+  error?: FormError
+  whichRuleChosen?: string
+}
+
+export default class AgeOfPrisonerRoutes {
+  constructor(private readonly placeOnReportService: PlaceOnReportService) {}
+
+  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
+    const { error, whichRuleChosen } = pageData
+    const { adjudicationNumber } = req.params
+    const { user } = res.locals
+
+    const idValue: number = parseInt(adjudicationNumber as string, 10)
+    if (Number.isNaN(idValue)) {
+      throw new Error('No adjudication number provided')
+    }
+
+    const [prisoner, adjudicationDetails] = await Promise.all([
+      this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
+      this.placeOnReportService.getDraftAdjudicationDetails(idValue, user),
+    ])
+
+    const ageOfPrisoner = calculateAge(
+      prisoner.dateOfBirth,
+      adjudicationDetails.draftAdjudication.incidentDetails.dateTimeOfIncident
+    )
+
+    const cancelButtonHref = this.getNextPageAfterCancel(adjudicationDetails.draftAdjudication)
+
+    return res.render(`pages/ageOfPrisoner`, {
+      errors: error ? [error] : [],
+      ageOfPrisoner,
+      whichRuleChosen,
+      cancelButtonHref,
+    })
+  }
+
+  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    const { whichRuleChosen } = req.body
+    const { adjudicationNumber } = req.params
+
+    const error = validateForm({ whichRuleChosen })
+
+    if (error) return this.renderView(req, res, { error, whichRuleChosen })
+
+    try {
+      // TODO: add api call in here to submit Rule to draft adjudication
+      // const draftAdjudicationResult = await this.placeOnReportService...
+
+      return res.redirect(`/incident-role/${adjudicationNumber}`) // TODO: Use adjudicationUrls for this when available
+    } catch (postError) {
+      logger.error(`Failed to post prison rule for draft adjudication: ${postError}`)
+      const idValue: number = parseInt(adjudicationNumber as string, 10)
+      res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(idValue)
+      throw postError
+    }
+  }
+
+  getNextPageAfterCancel = (draftAdjudication: DraftAdjudication) => {
+    if (draftAdjudication.offenceDetails?.length) {
+      return adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id)
+    }
+    return adjudicationUrls.taskList.urls.start(draftAdjudication.id)
+  }
+}

@@ -31,6 +31,7 @@ beforeEach(() => {
     displayName: 'Aidetria, Udfsanaye',
     prisonerNumber: 'G6415GD',
     currentLocation: 'Moorland (HMP & YOI)',
+    dateOfBirth: undefined,
   })
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({

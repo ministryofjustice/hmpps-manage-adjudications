@@ -81,6 +81,7 @@ describe('prisonApiClient', () => {
           description: '1-2-015',
         },
         categoryCode: 'C',
+        dateOfBirth: '2005-01-01',
         language: 'English',
       })
     })
