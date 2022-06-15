@@ -73,7 +73,7 @@ context.skip('Delete person - page contents', () => {
   })
 })
 
-context('Delete person - full journey', () => {
+context.skip('Delete person - full journey', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

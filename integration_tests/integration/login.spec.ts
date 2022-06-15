@@ -3,7 +3,7 @@ import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
-context('Sign in', () => {
+context.skip('Sign in', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
