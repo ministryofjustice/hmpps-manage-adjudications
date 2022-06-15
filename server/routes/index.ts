@@ -2,6 +2,7 @@ import type { Router } from 'express'
 
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
+import incidentRoleRoutes from './incidentRole'
 import detailsOfOffenceRoutes from './detailsOfOffence'
 import checkYourAnswersRoutes from './checkYourAnswers'
 import confirmedOnReportRoutes from './confirmedOnReport'
@@ -24,6 +25,7 @@ import ageOfPrisonerRoutes from './ageOfPrisoner'
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
+import config from '../config'
 
 export default function routes(
   router: Router,
@@ -43,6 +45,9 @@ export default function routes(
     offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })
   )
   router.use(adjudicationUrls.incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))
+  if (config.yoiNewPagesFeatureFlag) {
+    router.use(adjudicationUrls.incidentRole.root, incidentRoleRoutes({ placeOnReportService }))
+  }
   router.use(
     adjudicationUrls.detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })

@@ -81,6 +81,13 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async updateIncidentRole(id: number): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/draft-adjudications/${id}/incident-role`,
+      data: {},
+    })
+  }
+
   async getReportedAdjudication(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.get({
       path: `/reported-adjudications/${adjudicationNumber}`,

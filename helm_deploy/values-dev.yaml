@@ -19,6 +19,7 @@ generic-service:
     PRISONER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
+    YOI_NEW_PAGES_FEATURE_FLAG: true
     
   allowlist: null
 
