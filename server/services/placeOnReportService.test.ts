@@ -12,6 +12,7 @@ const submitCompleteDraftAdjudication = jest.fn()
 const editDraftIncidentDetails = jest.fn()
 const putDraftIncidentStatement = jest.fn()
 const getAllDraftAdjudicationsForUser = jest.fn()
+const updateIncidentRole = jest.fn()
 const getAgency = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
@@ -30,6 +31,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       submitCompleteDraftAdjudication,
       editDraftIncidentDetails,
       getAllDraftAdjudicationsForUser,
+      updateIncidentRole,
     }
   })
 })
@@ -772,6 +774,37 @@ describe('placeOnReportService', () => {
           currentLocation: 'Central Admin',
         },
       ])
+    })
+  })
+
+  describe('updateIncidentRole', () => {
+    it('creates the incident role object and sends', async () => {
+      const expectedResult = {
+        adjudicationNumber: 234,
+        incidentDetails: {
+          dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+          locationId: 12123123,
+        },
+        incidentRole: {
+          associatedPrisonersNumber: 'G2996UX',
+          roleCode: '25b',
+        },
+        incidentStatement: {
+          completed: false,
+          statement: 'string',
+        },
+        prisonerNumber: 'G2996UX',
+      }
+      updateIncidentRole.mockResolvedValue(expectedResult)
+      const response = await service.updateDraftIncidentRole(4, 'G2996UX', '25b', false, user)
+      expect(response).toEqual(expectedResult)
+      expect(updateIncidentRole).toBeCalledWith(4, {
+        incidentRole: {
+          associatedPrisonersNumber: 'G2996UX',
+          roleCode: '25b',
+        },
+        removeExistingOffences: false,
+      })
     })
   })
 })
