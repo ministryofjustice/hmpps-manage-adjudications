@@ -81,9 +81,9 @@ export default class PlaceOnReportService {
     dateTimeOfIncident: string,
     locationId: number,
     prisonerNumber: string,
-    associatedPrisonersNumber: string,
-    roleCode: string,
-    user: User
+    user: User,
+    associatedPrisonersNumber?: string,
+    roleCode?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
@@ -194,10 +194,10 @@ export default class PlaceOnReportService {
     id: number,
     dateTime: string,
     location: number,
-    associatedPrisonersNumber: string,
-    roleCode: string,
-    removeExistingOffences: boolean,
-    user: User
+    user: User,
+    associatedPrisonersNumber?: string,
+    roleCode?: string,
+    removeExistingOffences?: boolean
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editedIncidentDetails = {

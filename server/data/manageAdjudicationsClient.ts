@@ -5,7 +5,7 @@ import {
   IncidentStatement,
   IncidentDetails,
   EditedIncidentDetails,
-  IncidentRole,
+  // IncidentRole,
   OffenceRule,
   OffenceDetails,
   isYouthOffenderRule,
@@ -23,7 +23,7 @@ import { momentDateToApi } from '../utils/utils'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
-  incidentRole: IncidentRole
+  // incidentRole: IncidentRole
 }
 
 export default class ManageAdjudicationsClient {

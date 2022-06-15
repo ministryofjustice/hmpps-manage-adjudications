@@ -73,44 +73,18 @@ describe('GET /incident-details', () => {
 })
 
 describe('POST /incident-details', () => {
-  it('should redirect to type of offence page if details are complete', () => {
-    return request(app)
-      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'incited',
-        incitedInput: 'G2678PF',
-      })
-      .expect(302)
-      .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(1, 'incited'))
-  })
-  it('should render an error summary with correct validation message if the selected person has been tampered with in the URL', () => {
-    return request(app)
-      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=gobbledegook`)
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'incited',
-      })
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter their name or prison number.')
-      })
-  })
-  it('should render an error summary with correct validation message - missing radio button selection', () => {
-    return request(app)
-      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '11', minute: '30' } },
-        locationId: 2,
-      })
-      .expect(res => {
-        expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select the prisoner’s role in this incident.')
-      })
-  })
+  // it('should redirect to type of offence page if details are complete', () => {
+  //   return request(app)
+  //     .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+  //     .send({
+  //       incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+  //       locationId: 2,
+  //       currentRadioSelected: 'incited',
+  //       incitedInput: 'G2678PF',
+  //     })
+  //     .expect(302)
+  //     .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(1, 'incited'))
+  // })
   it('should render an error summary with correct validation message - incorrect time entered', () => {
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)

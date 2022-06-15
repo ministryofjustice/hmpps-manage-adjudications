@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import IncidentDetailsPage, { PageRequestType } from './incidentDetailsPage'
+import IncidentDetailsPage, { PageRequestType } from './incidentDetailsPageBasic'
 
 export default class IncidentDetailsEditRoutes {
   page: IncidentDetailsPage

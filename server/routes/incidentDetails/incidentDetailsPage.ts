@@ -279,9 +279,9 @@ export default class IncidentDetailsPage {
       formatDate(data.incidentDate),
       data.locationId,
       prisonerNumber,
+      currentUser,
       data.currentAssociatedPrisonerNumber,
-      codeFromIncidentRole(data.currentIncidentRoleSelection),
-      currentUser
+      codeFromIncidentRole(data.currentIncidentRoleSelection)
     )
   }
 
@@ -296,10 +296,10 @@ export default class IncidentDetailsPage {
       draftId,
       formatDate(data.incidentDate),
       data.locationId,
+      currentUser,
       data.currentAssociatedPrisonerNumber,
       codeFromIncidentRole(data.currentIncidentRoleSelection),
-      removeExistingOffences,
-      currentUser
+      removeExistingOffences
     )
   }
 

@@ -82,9 +82,9 @@ describe('placeOnReportService', () => {
         '2021-10-28T15:40:25.884',
         3,
         'G2996UX',
+        user,
         'T3356FU',
-        '25b',
-        user
+        '25b'
       )
       expect(startNewDraftAdjudication).toBeCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -454,10 +454,10 @@ describe('placeOnReportService', () => {
         4,
         '2021-11-09T13:55:34.143Z',
         12123123,
+        user,
         'G2996UX',
         '25b',
-        false,
-        user
+        false
       )
       expect(response).toEqual(expectedResult)
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
