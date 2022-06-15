@@ -209,7 +209,14 @@ export default class PlaceOnReportService {
     user: User
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
-    const updatedAdjudication = await manageAdjudicationsClient.updateIncidentRole(id)
+    const editIncidentRoleRequest = {
+      incidentRole: {
+        associatedPrisonersNumber,
+        roleCode,
+      },
+      removeExistingOffences,
+    }
+    const updatedAdjudication = await manageAdjudicationsClient.updateIncidentRole(id, editIncidentRoleRequest)
     return updatedAdjudication
   }
 

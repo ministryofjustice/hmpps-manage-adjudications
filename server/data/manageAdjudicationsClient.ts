@@ -5,6 +5,7 @@ import {
   IncidentStatement,
   IncidentDetails,
   EditedIncidentDetails,
+  EditIncidentRoleRequest,
   IncidentRole,
   OffenceRule,
   OffenceDetails,
@@ -81,10 +82,13 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async updateIncidentRole(id: number): Promise<DraftAdjudicationResult> {
+  async updateIncidentRole(
+    id: number,
+    editIncidentRoleRequest: EditIncidentRoleRequest
+  ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${id}/incident-role`,
-      data: {},
+      data: { ...editIncidentRoleRequest },
     })
   }
 

@@ -65,6 +65,11 @@ export type EditedIncidentDetails = {
   removeExistingOffences?: boolean
 }
 
+export type EditIncidentRoleRequest = {
+  incidentRole?: IncidentRole
+  removeExistingOffences?: boolean
+}
+
 export type TaskListDetails = {
   handoverDeadline: string
   statementPresent: boolean
