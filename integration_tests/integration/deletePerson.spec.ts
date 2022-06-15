@@ -2,7 +2,7 @@ import DeletePerson from '../pages/deletePerson'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
-context('Delete person - page contents', () => {
+context.skip('Delete person - page contents', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

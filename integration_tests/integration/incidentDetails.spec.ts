@@ -5,7 +5,7 @@ import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
-context('Incident details', () => {
+context.skip('Incident details', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

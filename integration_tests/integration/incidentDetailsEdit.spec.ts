@@ -2,7 +2,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
 
-context('Incident details (edit) - statement incomplete', () => {
+context.skip('Incident details (edit) - statement incomplete', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

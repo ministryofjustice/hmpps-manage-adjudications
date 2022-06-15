@@ -2,7 +2,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsSubmittedEdit'
 import Page from '../pages/page'
 
-context('Incident details (edit after completion of report)', () => {
+context.skip('Incident details (edit after completion of report)', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
