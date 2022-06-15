@@ -5,7 +5,6 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import validateForm from './ageOfPrisonerValidation'
 import { FormError } from '../../@types/template'
 import logger from '../../../logger'
-import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import { calculateAge } from '../../utils/utils'
 
 type PageData = {
@@ -36,13 +35,11 @@ export default class AgeOfPrisonerRoutes {
       adjudicationDetails.draftAdjudication.incidentDetails.dateTimeOfIncident
     )
 
-    const cancelButtonHref = this.getNextPageAfterCancel(adjudicationDetails.draftAdjudication)
-
     return res.render(`pages/ageOfPrisoner`, {
       errors: error ? [error] : [],
       ageOfPrisoner,
       whichRuleChosen,
-      cancelButtonHref,
+      cancelButtonHref: adjudicationUrls.taskList.urls.start(adjudicationDetails.draftAdjudication.id),
     })
   }
 
@@ -58,7 +55,7 @@ export default class AgeOfPrisonerRoutes {
 
     try {
       // TODO: add api call in here to submit Rule to draft adjudication
-      // const draftAdjudicationResult = await this.placeOnReportService...
+      // await this.placeOnReportService.addDraftYouthOffenderStatus(adjudicationNumber, whichRuleChosen === 'yoi')
 
       return res.redirect(`/incident-role/${adjudicationNumber}`) // TODO: Use adjudicationUrls for this when available
     } catch (postError) {
@@ -67,12 +64,5 @@ export default class AgeOfPrisonerRoutes {
       res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(idValue)
       throw postError
     }
-  }
-
-  getNextPageAfterCancel = (draftAdjudication: DraftAdjudication) => {
-    if (draftAdjudication.offenceDetails?.length) {
-      return adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id)
-    }
-    return adjudicationUrls.taskList.urls.start(draftAdjudication.id)
   }
 }

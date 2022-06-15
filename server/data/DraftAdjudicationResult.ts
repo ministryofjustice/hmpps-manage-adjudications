@@ -73,3 +73,7 @@ export type TaskListDetails = {
 }
 
 export type PrisonerReport = CheckYourAnswers
+
+export type isYouthOffenderRule = {
+  isYouthOffenderRule: boolean
+}
