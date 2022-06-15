@@ -8,6 +8,7 @@ import {
   IncidentRole,
   OffenceRule,
   OffenceDetails,
+  isYouthOffenderRule,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -141,6 +142,13 @@ export default class ManageAdjudicationsClient {
     return this.restClient.put({
       path: `/draft-adjudications/${adjudicationNumber}/offence-details`,
       data: { offenceDetails },
+    })
+  }
+
+  async saveYouthOffenderStatus(adjudicationNumber: number, isYOI: isYouthOffenderRule) {
+    this.restClient.put({
+      path: `draft-adjudications/${adjudicationNumber}/applicable-rules`,
+      data: { isYOI },
     })
   }
 }
