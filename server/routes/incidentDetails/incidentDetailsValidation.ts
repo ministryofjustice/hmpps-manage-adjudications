@@ -63,12 +63,7 @@ const errors: { [key: string]: FormError } = {
   // },
 }
 
-export default function validateForm({
-  incidentDate,
-  locationId,
-  incidentRole,
-  associatedPrisonersNumber,
-}: incidentDetailsForm): FormError | null {
+export default function validateForm({ incidentDate, locationId }: incidentDetailsForm): FormError | null {
   if (!incidentDate.date) {
     return errors.MISSING_DATE
   }

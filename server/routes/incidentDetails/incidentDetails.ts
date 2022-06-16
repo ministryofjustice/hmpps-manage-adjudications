@@ -6,12 +6,9 @@ import IncidentDetailsPageBasic from './incidentDetailsPageBasic'
 import config from '../../config'
 
 export default class IncidentDetailsRoutes {
-  page: IncidentDetailsPage
-
-  pageBasic: IncidentDetailsPageBasic
+  page: IncidentDetailsPage | IncidentDetailsPageBasic
 
   constructor(placeOnReportService: PlaceOnReportService, locationService: LocationService) {
-    // @ts-expect-error NEED TO FIGURE OUT THIS TS ERROR
     this.page =
       config.yoiNewPagesFeatureFlag === true
         ? new IncidentDetailsPageBasic(PageRequestType.CREATION, placeOnReportService, locationService)

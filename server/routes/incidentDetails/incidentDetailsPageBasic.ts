@@ -2,7 +2,6 @@
 import { Request, Response } from 'express'
 import { debug } from 'console'
 import validateForm from './incidentDetailsValidation'
-// import validatePrisonerSearch from '../util/incidentSearchValidation'
 import { FormError, SubmittedDateTime } from '../../@types/template'
 import PlaceOnReportService, {
   ExistingDraftIncidentDetails,
@@ -12,7 +11,6 @@ import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { formatDate } from '../../utils/utils'
 import { User } from '../../data/hmppsAuthClient'
-// import { codeFromIncidentRole, IncidentRole, incidentRoleFromCode } from '../../incidentRole/IncidentRole'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -28,13 +26,9 @@ type DisplayData = {
   reporter: string
   prisoner: PrisonerResultSummary
   possibleLocations: PrisonLocation[]
-  // associatedPrisonersName?: string
 }
 
 type HiddenFormData = {
-  // originalIncidentRoleSelection: IncidentRole
-  // lastIncidentRoleSelection?: IncidentRole
-  // lastAssociatedPrisonerNumberSelection?: string
   originalReporterUsername: string
 }
 
@@ -49,8 +43,6 @@ type SubmittedFormData = HiddenFormData & {
   originalPageReferrerUrl?: string
   // Input data
   incidentDetails: IncidentDetails
-  // searchForPersonRequest?: string
-  // deletePersonRequest?: string
 }
 
 type ExitButtonData = {
@@ -63,20 +55,15 @@ type RequestValues = {
   // This PRN/DraftID stuff is duplicated a lot - extract?
   prisonerNumber: string
   draftId?: number
-  // selectedPerson?: string
-  // deleteWanted?: string
   originalPageReferrerUrl?: string
 }
 
 type IncidentDetails = {
   incidentDate: SubmittedDateTime
   locationId: number
-  // currentIncidentRoleSelection: IncidentRole
-  // currentAssociatedPrisonerNumber?: string
 }
 
 type TemporarilySavedData = {
-  // originalIncidentRoleSelection: IncidentRole
   originalReporterUsername: string
 }
 
@@ -225,10 +212,9 @@ export default class IncidentDetailsPageBasic {
         await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
 
         // const defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
-        if (this.pageOptions.isPreviouslySubmitted()) {
-          // return redirectToOffenceSelection(res, postValues.draftId)
-          return redirectToPrisonRuleSelection(res, postValues.draftId)
-        }
+        // if (this.pageOptions.isPreviouslySubmitted()) {
+        // return redirectToOffenceSelection(res, postValues.draftId)
+        // }
         // const nextPageChoice = chooseNextPageAfterEdit(defaultNextPage, incidentRoleChanged)
         // switch (nextPageChoice) {
         //   case NextPageSelectionAfterEdit.OFFENCE_SELECTION:
@@ -242,7 +228,7 @@ export default class IncidentDetailsPageBasic {
         //   default:
         //   // Fall through
         // }
-        return redirectToTaskList(res, postValues.draftId)
+        return redirectToOffenceDetails(res, postValues.draftId)
       }
       const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
       // return redirectToOffenceSelection(
@@ -695,9 +681,9 @@ const redirectToPrisonRuleSelection = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.ageOfPrisoner.urls.start(draftId))
 }
 
-// const redirectToOffenceDetails = (res: Response, draftId: number) => {
-//   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
-// }
+const redirectToOffenceDetails = (res: Response, draftId: number) => {
+  return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
+}
 
 const redirectToTaskList = (res: Response, draftId: number) => {
   return res.redirect(getTaskListUrl(draftId))

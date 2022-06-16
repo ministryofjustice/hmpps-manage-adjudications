@@ -1,13 +1,18 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
-import IncidentDetailsPage, { PageRequestType } from './incidentDetailsPageBasic'
+import IncidentDetailsPage, { PageRequestType } from './incidentDetailsPage'
+import IncidentDetailsPageBasic from './incidentDetailsPageBasic'
+import config from '../../config'
 
 export default class IncidentDetailsEditRoutes {
-  page: IncidentDetailsPage
+  page: IncidentDetailsPage | IncidentDetailsPageBasic
 
   constructor(placeOnReportService: PlaceOnReportService, locationService: LocationService) {
-    this.page = new IncidentDetailsPage(PageRequestType.EDIT, placeOnReportService, locationService)
+    this.page =
+      config.yoiNewPagesFeatureFlag === true
+        ? new IncidentDetailsPageBasic(PageRequestType.EDIT, placeOnReportService, locationService)
+        : new IncidentDetailsPage(PageRequestType.EDIT, placeOnReportService, locationService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
