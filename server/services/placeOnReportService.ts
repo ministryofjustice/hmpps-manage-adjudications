@@ -99,17 +99,18 @@ export default class PlaceOnReportService {
     return client.startNewDraftAdjudication(requestBody)
   }
 
-  // async addDraftYouthOffenderStatus(
-  //   id: number,
-  //   isYouthOffenderRule: boolean,
-  //   user: User
-  // ): Promise<DraftAdjudicationResult> {
-  //   const client = new ManageAdjudicationsClient(user.token)
-  //   const requestBody = {
-  //     isYouthOffenderRule,
-  //   }
-  //   return client.saveYouthOffenderStatus(id, requestBody)
-  // }
+  async addDraftYouthOffenderStatus(
+    adjudicationNumber: number,
+    whichRuleChosen: string,
+    user: User
+  ): Promise<DraftAdjudicationResult> {
+    const client = new ManageAdjudicationsClient(user.token)
+    const requestBody = {
+      isYouthOffenderRule: whichRuleChosen === 'yoi',
+    }
+
+    return client.saveYouthOffenderStatus(adjudicationNumber, requestBody)
+  }
 
   async addOrUpdateDraftIncidentStatement(
     id: number,

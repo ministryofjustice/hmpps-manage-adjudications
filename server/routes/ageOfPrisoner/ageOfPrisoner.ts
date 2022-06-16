@@ -46,21 +46,19 @@ export default class AgeOfPrisonerRoutes {
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const { whichRuleChosen } = req.body
     const { adjudicationNumber } = req.params
+    const idValue: number = parseInt(adjudicationNumber as string, 10)
 
     const error = validateForm({ whichRuleChosen })
-
     if (error) return this.renderView(req, res, { error, whichRuleChosen })
 
     try {
-      // TODO: add api call in here to submit Rule to draft adjudication
-      // await this.placeOnReportService.addDraftYouthOffenderStatus(adjudicationNumber, whichRuleChosen === 'yoi')
-
-      return res.redirect(`/incident-role/${adjudicationNumber}`) // TODO: Use adjudicationUrls for this when available
+      await this.placeOnReportService.addDraftYouthOffenderStatus(idValue, whichRuleChosen, user)
+      return res.redirect(adjudicationUrls.incidentRole.urls.start(idValue))
     } catch (postError) {
       logger.error(`Failed to post prison rule for draft adjudication: ${postError}`)
-      const idValue: number = parseInt(adjudicationNumber as string, 10)
       res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(idValue)
       throw postError
     }

@@ -430,4 +430,32 @@ describe('manageAdjudicationsClient', () => {
       expect(response.draftAdjudication.incidentStatement.statement).toEqual('TESTING')
     })
   })
+  describe('saveYouthOffenderStatus', () => {
+    const result = {
+      draftAdjudication: {
+        id: 2469,
+        prisonerNumber: 'G6123VU',
+        incidentDetails: {
+          locationId: 26964,
+          dateTimeOfIncident: '2022-06-16T11:11:00',
+          handoverDeadline: '2022-06-18T11:11:00',
+        },
+        incidentRole: {},
+        startedByUserId: 'NCLAMP_GEN',
+        isYouthOffender: true,
+      },
+    }
+
+    const youthOffenderData = {
+      isYouthOffenderRule: true,
+    }
+    it('returns the updated draft adjudication', async () => {
+      fakeManageAdjudicationsApi
+        .put(`/draft-adjudications/2469/applicable-rules`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+      const response = await client.saveYouthOffenderStatus(2469, youthOffenderData)
+      expect(response).toEqual(result)
+    })
+  })
 })

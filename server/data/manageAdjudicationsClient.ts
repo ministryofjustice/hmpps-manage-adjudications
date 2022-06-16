@@ -149,9 +149,12 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async saveYouthOffenderStatus(adjudicationNumber: number, isYOI: isYouthOffenderRule) {
-    this.restClient.put({
-      path: `draft-adjudications/${adjudicationNumber}/applicable-rules`,
+  async saveYouthOffenderStatus(
+    adjudicationNumber: number,
+    isYOI: isYouthOffenderRule
+  ): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/draft-adjudications/${adjudicationNumber}/applicable-rules`,
       data: { isYOI },
     })
   }
