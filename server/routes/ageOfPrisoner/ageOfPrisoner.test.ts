@@ -1,4 +1,4 @@
-import { Express, response } from 'express'
+import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
