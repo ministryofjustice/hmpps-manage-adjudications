@@ -16,7 +16,7 @@ beforeEach(() => {
     offenderNo: 'A7937DY',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
-    dateOfBirth: undefined,
+    dateOfBirth: '1990-11-11',
 
     assignedLivingUnit: {
       agencyId: 'MDI',
@@ -72,9 +72,12 @@ describe('POST /age-of-prisoner', () => {
     return request(app)
       .post(adjudicationUrls.ageOfPrisoner.urls.start(1041))
       .send({ whichRuleChosen: 'adult' })
-      .expect('Location', '/incident-role/1041') // TODO: Use adjudicationUrls for this once it's available
+      .expect('Location', adjudicationUrls.incidentRole.urls.start(1041))
+      .expect(() => expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledTimes(1))
+      .expect(() =>
+        expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledWith(1041, 'adult', expect.anything())
+      )
   })
-  // TODO: Add test which makes sure the API is called with the correct parameters, once API call added in.
   it('should render error summary with correct validation message', () => {
     return request(app)
       .post(adjudicationUrls.ageOfPrisoner.urls.start(1041))
@@ -84,5 +87,14 @@ describe('POST /age-of-prisoner', () => {
         expect(res.text).toContain('Select which rules apply.')
       })
   })
-  // TODO: Add test for API call failure once API call is added into route
+  it('should throw an error on api failure', () => {
+    placeOnReportService.addDraftYouthOffenderStatus.mockRejectedValue(new Error('Internal Error'))
+    return request(app)
+      .post(`${adjudicationUrls.ageOfPrisoner.urls.start(1041)}`)
+      .send({ whichRuleChosen: 'yoi' })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Error: Internal Error')
+      })
+  })
 })

@@ -37,6 +37,7 @@ export type DraftAdjudication = {
   incidentRole: IncidentRole
   incidentStatement?: IncidentStatement
   offenceDetails?: OffenceDetails[]
+  isYouthOffender?: boolean
 }
 
 export type DraftAdjudicationResult = {
