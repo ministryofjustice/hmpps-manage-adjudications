@@ -30,10 +30,9 @@ export default class AgeOfPrisonerRoutes {
       this.placeOnReportService.getDraftAdjudicationDetails(idValue, user),
     ])
 
-    const ageOfPrisoner = calculateAge(
-      prisoner.dateOfBirth,
-      adjudicationDetails.draftAdjudication.incidentDetails.dateTimeOfIncident
-    )
+    const ageOfPrisoner =
+      calculateAge(prisoner.dateOfBirth, adjudicationDetails.draftAdjudication.incidentDetails.dateTimeOfIncident) ||
+      null
 
     return res.render(`pages/ageOfPrisoner`, {
       errors: error ? [error] : [],

@@ -7,6 +7,8 @@ export default class AgeOfPrisonerPage extends Page {
 
   ageOfPrisoner = (): PageElement => cy.get('[data-qa="age-of-prisoner"]')
 
+  ageOfPrisonerHint = (): PageElement => cy.get('[data-qa="age-of-prisoner-hint"]')
+
   prisonRuleRadios = (): PageElement => cy.get('[data-qa="age-of-prisoner-radio-buttons"]')
 
   radioYoi = (): PageElement => cy.get('#whichRuleChosen')

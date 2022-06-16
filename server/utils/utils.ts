@@ -112,6 +112,7 @@ export const possessive = (string: string): string => {
 }
 
 export const calculateAge = (dateOfBirth: string, dateOfIncident: string) => {
+  if (!dateOfBirth) return null
   const incidentDate: Date = new Date(dateOfIncident)
   const birthday: Date = new Date(dateOfBirth)
   const dateDifference = moment.duration(Number(birthday) - Number(incidentDate))
