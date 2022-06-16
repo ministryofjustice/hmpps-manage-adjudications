@@ -685,9 +685,9 @@ const redirectToOffenceDetails = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
 }
 
-const redirectToTaskList = (res: Response, draftId: number) => {
-  return res.redirect(getTaskListUrl(draftId))
-}
+// const redirectToTaskList = (res: Response, draftId: number) => {
+//   return res.redirect(getTaskListUrl(draftId))
+// }
 
 // const chooseNextPageAfterEdit = (
 //   defaultNextPage: NextPageSelectionAfterEdit,
