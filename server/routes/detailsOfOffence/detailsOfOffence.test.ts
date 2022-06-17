@@ -102,6 +102,7 @@ const adjudicationWithOffences = {
       dateTimeOfIncident: '2021-12-09T10:30:00',
       handoverDeadline: '2021-12-11T10:30:00',
     },
+    isYouthOffender: false,
     incidentRole: {
       roleCode: '25c',
       associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
@@ -129,10 +130,19 @@ const adjudicationWithoutOffences = {
       dateTimeOfIncident: '2021-12-09T10:30:00',
       handoverDeadline: '2021-12-11T10:30:00',
     },
+    isYouthOffender: true,
     incidentRole: {
       roleCode: '25c',
     },
     startedByUserId: 'TEST_GEN',
+  },
+}
+
+const youthAdjudicationWithOffences = {
+  draftAdjudication: {
+    ...adjudicationWithOffences.draftAdjudication,
+    id: 102,
+    isYouthOffender: true,
   },
 }
 
@@ -143,6 +153,8 @@ beforeEach(() => {
         return Promise.resolve(adjudicationWithOffences)
       case adjudicationWithoutOffences.draftAdjudication.id:
         return Promise.resolve(adjudicationWithoutOffences)
+      case youthAdjudicationWithOffences.draftAdjudication.id:
+        return Promise.resolve(youthAdjudicationWithOffences)
       default:
         return Promise.resolve(null)
     }
@@ -162,6 +174,28 @@ beforeEach(() => {
   })
 
   placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber.mockResolvedValue('G6415GD')
+
+  placeOnReportService.getOffenceRule.mockImplementation(offenceCode => {
+    switch (offenceCode) {
+      case 1:
+        return Promise.resolve({
+          paragraphDescription: 'Offence 1 description',
+          paragraphNumber: '21',
+        })
+      case 2:
+        return Promise.resolve({
+          paragraphDescription: 'Offence 2 description',
+          paragraphNumber: '22',
+        })
+      default:
+        return Promise.resolve(null)
+    }
+  })
+
+  // placeOnReportService.getOffenceRule.mockResolvedValue({
+  // paragraphDescription: 'Offence description',
+  // paragraphNumber: '22',
+  // })
 
   const allOffencesSessionService = new AllOffencesSessionService()
   app = appWithAllRoutes(
@@ -196,6 +230,48 @@ describe('GET /details-of-offence/100 view', () => {
         expect(res.text).toContain('A child question')
         expect(res.text).toContain('A standard child answer')
       })
+  })
+
+  it('should load the adult offence paragraph information', () => {
+    return request(app)
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Prison rule 51')
+        expect(res.text).not.toContain('Prison rule 55')
+        expect(res.text).toContain('paragraph 21')
+        expect(res.text).toContain('paragraph 22')
+      })
+  })
+
+  it('should get the offence rule related to adults', () => {
+    return request(app)
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect(200)
+      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(1, false, expect.anything()))
+      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(2, false, expect.anything()))
+  })
+})
+
+describe('GET /details-of-offence/102 view', () => {
+  it('should load the youth offence paragraph information', () => {
+    return request(app)
+      .get(adjudicationUrls.detailsOfOffence.urls.start(102))
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Prison rule 51')
+        expect(res.text).not.toContain('Prison rule 55')
+        expect(res.text).toContain('paragraph 21')
+        expect(res.text).toContain('paragraph 22')
+      })
+  })
+
+  it('should get the offence rule related to youth offenders', () => {
+    return request(app)
+      .get(adjudicationUrls.detailsOfOffence.urls.start(102))
+      .expect(200)
+      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(1, true, expect.anything()))
+      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(2, true, expect.anything()))
   })
 })
 

@@ -85,12 +85,14 @@ export default class DecisionTreeService {
         const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
         const answerData = await this.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
+        // TODO
+        const isYouthOffender = false
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
         const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum)
         return {
           questionsAndAnswers,
           incidentRule: incidentRole.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, user),
         }
       })
     )
