@@ -274,15 +274,17 @@ const stubCreateDraftFromCompleteAdjudication = ({
 
 const stubGetOffenceRule = ({
   offenceCode,
+  isYouthOffender = false,
   response = {},
 }: {
   offenceCode: number
+  isYouthOffender: boolean
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/draft-adjudications/offence-rule/${offenceCode}`,
+      url: `/adjudications/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}`,
     },
     response: {
       status: 200,
