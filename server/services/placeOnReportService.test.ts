@@ -14,6 +14,7 @@ const putDraftIncidentStatement = jest.fn()
 const getAllDraftAdjudicationsForUser = jest.fn()
 const updateIncidentRole = jest.fn()
 const getAgency = jest.fn()
+const saveYouthOffenderStatus = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -32,6 +33,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       editDraftIncidentDetails,
       getAllDraftAdjudicationsForUser,
       updateIncidentRole,
+      saveYouthOffenderStatus,
     }
   })
 })
@@ -804,6 +806,52 @@ describe('placeOnReportService', () => {
           roleCode: '25b',
         },
         removeExistingOffences: false,
+      })
+    })
+  })
+  describe('addDraftYouthOffenderStatus', () => {
+    it('creates the correct data payload if the prisoner is YOI and sends to the draft adjudication database', async () => {
+      const expectedResult = {
+        draftAdjudication: {
+          id: 2483,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 27187,
+            dateTimeOfIncident: '2022-06-16T22:12:00',
+            handoverDeadline: '2022-06-18T22:12:00',
+          },
+          incidentRole: {},
+          startedByUserId: 'BOOPBOOP',
+          isYouthOffender: true,
+        },
+      }
+      saveYouthOffenderStatus.mockResolvedValue(expectedResult)
+      const response = await service.addDraftYouthOffenderStatus(2483, 'yoi', user)
+      expect(response).toEqual(expectedResult)
+      expect(saveYouthOffenderStatus).toBeCalledWith(2483, {
+        isYouthOffenderRule: true,
+      })
+    })
+    it('creates the correct data payload if the prisoner is an adult and sends to the draft adjudication database', async () => {
+      const expectedResult = {
+        draftAdjudication: {
+          id: 2484,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 27187,
+            dateTimeOfIncident: '2022-06-16T22:12:00',
+            handoverDeadline: '2022-06-18T22:12:00',
+          },
+          incidentRole: {},
+          startedByUserId: 'BOOPBOOP',
+          isYouthOffender: false,
+        },
+      }
+      saveYouthOffenderStatus.mockResolvedValue(expectedResult)
+      const response = await service.addDraftYouthOffenderStatus(2484, 'adult', user)
+      expect(response).toEqual(expectedResult)
+      expect(saveYouthOffenderStatus).toBeCalledWith(2484, {
+        isYouthOffenderRule: false,
       })
     })
   })

@@ -155,7 +155,7 @@ export default class ManageAdjudicationsClient {
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${adjudicationNumber}/applicable-rules`,
-      data: { isYOI },
+      data: isYOI,
     })
   }
 }
