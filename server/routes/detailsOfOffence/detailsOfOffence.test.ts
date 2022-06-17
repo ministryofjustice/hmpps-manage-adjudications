@@ -192,11 +192,6 @@ beforeEach(() => {
     }
   })
 
-  // placeOnReportService.getOffenceRule.mockResolvedValue({
-  // paragraphDescription: 'Offence description',
-  // paragraphNumber: '22',
-  // })
-
   const allOffencesSessionService = new AllOffencesSessionService()
   app = appWithAllRoutes(
     { production: false },
