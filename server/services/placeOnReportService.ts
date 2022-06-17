@@ -333,9 +333,9 @@ export default class PlaceOnReportService {
     return prisonerDetails.prisonerNumber
   }
 
-  async getOffenceRule(offenceCode: number, user: User) {
+  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, user: User) {
     const client = new ManageAdjudicationsClient(user.token)
-    return client.getOffenceRule(offenceCode)
+    return client.getOffenceRule(offenceCode, isYouthOffender)
   }
 
   async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[], user: User) {

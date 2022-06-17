@@ -90,7 +90,10 @@ export default class DecisionTreeService {
         return {
           questionsAndAnswers,
           incidentRule: incidentRole.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
+          offenceRule: offenceData.offenceRule || {
+            paragraphNumber: '',
+            paragraphDescription: '',
+          },
         }
       })
     )
