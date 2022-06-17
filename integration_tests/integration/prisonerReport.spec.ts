@@ -61,7 +61,7 @@ context('Prisoner report - reporter view', () => {
       adjudicationNumber: 56789,
       response: {
         draftAdjudication: {
-          id: 177,
+          id: 188,
           adjudicationNumber: 12345,
           prisonerNumber: 'G6415GD',
           incidentDetails: {
@@ -165,6 +165,47 @@ context('Prisoner report - reporter view', () => {
             completed: true,
           },
           startedByUserId: 'USER1',
+          isYouthOffender: true,
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            roleCode: '25c',
+            offenceRule: {
+              paragraphNumber: '25(c)',
+              paragraphDescription:
+                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+            },
+          },
+          offenceDetails: [
+            {
+              offenceCode: 1001,
+              offenceRule: {
+                paragraphNumber: '1',
+                paragraphDescription: 'Commits any assault',
+              },
+              victimPrisonersNumber: 'G5512G',
+            },
+          ],
+        },
+      },
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 188,
+      response: {
+        draftAdjudication: {
+          id: 188,
+          adjudicationNumber: 56789,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 234,
+            dateTimeOfIncident: '2021-12-01T09:40:00',
+            handoverDeadline: '2021-12-03T09:40:00',
+          },
+          incidentStatement: {
+            statement: 'TESTING',
+            completed: true,
+          },
+          startedByUserId: 'USER1',
+          isYouthOffender: false,
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25c',
@@ -209,8 +250,8 @@ context('Prisoner report - reporter view', () => {
   })
   describe('test prisoners', () => {
     ;[
-      { id: 12345, readOnly: false },
-      { id: 56789, readOnly: true },
+      { id: 12345, readOnly: false, isYouthOffender: true },
+      { id: 56789, readOnly: true, isYouthOffender: false },
     ].forEach(prisoner => {
       it('should contain the required page elements', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
@@ -251,27 +292,41 @@ context('Prisoner report - reporter view', () => {
         PrisonerReportPage.offenceDetailsSummary()
           .find('dt')
           .then($summaryLabels => {
-            expect($summaryLabels.get(0).innerText).to.contain(
+            expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+            expect($summaryLabels.get(1).innerText).to.contain(
               'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
             )
-            expect($summaryLabels.get(1).innerText).to.contain('What did the incident involve?')
-            expect($summaryLabels.get(2).innerText).to.contain('Who did John Smith assist James Jones to assault?')
-            expect($summaryLabels.get(3).innerText).to.contain('Was the incident a racially aggravated assault?')
-            expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+            expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+            expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
+            expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+            expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
           })
 
         PrisonerReportPage.offenceDetailsSummary()
           .find('dd')
           .then($summaryData => {
-            expect($summaryData.get(0).innerText).to.contain(
+            if (prisoner.isYouthOffender) {
+              expect($summaryData.get(0).innerText).to.contain('YOI offences\n\nPrison rule 55')
+            } else {
+              expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+            }
+            expect($summaryData.get(1).innerText).to.contain(
               'Assault, fighting, or endangering the health or personal safety of others'
             )
-            expect($summaryData.get(1).innerText).to.contain('Assaulting someone')
-            expect($summaryData.get(2).innerText).to.contain('Another prisoner - Paul Wright')
-            expect($summaryData.get(3).innerText).to.contain('Yes')
-            expect($summaryData.get(4).innerText).to.contain(
-              'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
-            )
+            expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
+            expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+            expect($summaryData.get(4).innerText).to.contain('Yes')
+            if (prisoner.isYouthOffender) {
+              expect($summaryData.get(5).innerText).to.contain(
+                // TODO THIS NEEDS SORTING
+                // 'Prison rule 55, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 55, paragraph 1\n\nCommits any assault'
+                'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+              )
+            } else {
+              expect($summaryData.get(5).innerText).to.contain(
+                'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+              )
+            }
           })
       })
       it('should contain the correct incident statement', () => {
@@ -284,7 +339,11 @@ context('Prisoner report - reporter view', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-        PrisonerReportPage.reportNumber().should('contain.text', '12345')
+        if (prisoner.id === 12345) {
+          PrisonerReportPage.reportNumber().should('contain.text', '12345')
+        } else {
+          PrisonerReportPage.reportNumber().should('contain.text', '56789')
+        }
       })
       it('should not contain the review panel', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
