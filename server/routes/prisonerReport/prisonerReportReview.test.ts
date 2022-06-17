@@ -122,6 +122,7 @@ beforeEach(() => {
       },
     ],
     statement: 'text here',
+    isYouthOffender: false,
   })
 
   const qAndAs = [

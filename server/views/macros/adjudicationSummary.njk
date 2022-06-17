@@ -18,11 +18,11 @@
       <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink">Change</a></p>
      {% endif %}
     </div>
-      <div class="adjudicationsSummary-offenceDetails">
-        {% for offence in offences %}
-          {{ offenceQAndASummaryList(offence, { "data-qa": "offence-summary-table" }) }}
-        {% endfor %}
-      </div>
+    <div class="adjudicationsSummary-offenceDetails">
+      {% for offence in offences %}
+        {{ offenceQAndASummaryList(offence, incidentData.isYouthOffender, { "data-qa": "offence-summary-table" }) }}
+      {% endfor %}
+    </div>
 
 
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">

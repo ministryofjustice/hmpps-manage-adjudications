@@ -168,6 +168,7 @@ export default class PlaceOnReportService {
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
       adjudicationNumber: draftAdjudication.adjudicationNumber,
+      isYouthOffender: draftAdjudication.isYouthOffender,
     }
   }
 

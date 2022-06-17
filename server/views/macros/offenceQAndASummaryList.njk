@@ -1,7 +1,27 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro offenceQAndASummaryList(offence, attributes = {}, classes='') %}
+{% macro offenceQAndASummaryList(offence, isYouthOffender, attributes = {}, classes='') %}
   {% set rows = [] %}
+
+    {# Add YOI rule to table rows #}
+    {% if isYouthOffender %}
+        {% set ruleValue = { html:
+            '<p>YOI offences</p><p>Prison rule 55</p>'
+        } %}
+    {% else %}
+        {% set ruleValue = { html:
+            '<p>Adult offences</p><p>Prison rule 51</p>'
+        } %}
+    {% endif %}
+
+    {% set rows = (rows.push(
+        {
+            key: {
+                text: 'Which set of rules apply to the prisoner?'
+            },
+            value: ruleValue
+        }
+    ), rows) %}
 
     {# Add questions and answers to table rows #}
     {% for questionAndAnswer in offence.questionsAndAnswers %}
