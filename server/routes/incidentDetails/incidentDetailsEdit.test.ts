@@ -38,10 +38,6 @@ beforeEach(() => {
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
-    incidentRole: {
-      associatedPrisonersNumber: 'T3345XV',
-      roleCode: '25b',
-    },
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({

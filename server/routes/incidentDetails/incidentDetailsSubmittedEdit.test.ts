@@ -36,10 +36,6 @@ beforeEach(() => {
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
-    incidentRole: {
-      associatedPrisonersNumber: 'T3345XV',
-      roleCode: '25b',
-    },
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
     adjudicationNumber: 1524493,

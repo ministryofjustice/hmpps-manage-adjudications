@@ -24,7 +24,6 @@ import { momentDateToApi } from '../utils/utils'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
-  incidentRole: IncidentRole
 }
 
 export default class ManageAdjudicationsClient {

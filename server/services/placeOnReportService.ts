@@ -41,7 +41,6 @@ export type ExistingDraftIncidentDetails = {
   locationId: number
   startedByUserId: string
   adjudicationNumber?: number
-  incidentRole?: { associatedPrisonersNumber: string; roleCode: string }
 }
 
 export default class PlaceOnReportService {
@@ -81,8 +80,6 @@ export default class PlaceOnReportService {
     dateTimeOfIncident: string,
     locationId: number,
     prisonerNumber: string,
-    associatedPrisonersNumber: string,
-    roleCode: string,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
@@ -91,10 +88,6 @@ export default class PlaceOnReportService {
       agencyId: user.activeCaseLoadId,
       locationId,
       prisonerNumber,
-      incidentRole: {
-        roleCode,
-        associatedPrisonersNumber,
-      },
     }
     return client.startNewDraftAdjudication(requestBody)
   }
@@ -184,10 +177,6 @@ export default class PlaceOnReportService {
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
       adjudicationNumber: response.draftAdjudication.adjudicationNumber,
-      incidentRole: {
-        associatedPrisonersNumber: response.draftAdjudication.incidentRole.associatedPrisonersNumber,
-        roleCode: response.draftAdjudication.incidentRole.roleCode,
-      },
     }
   }
 
@@ -195,20 +184,14 @@ export default class PlaceOnReportService {
     id: number,
     dateTime: string,
     location: number,
-    associatedPrisonersNumber: string,
-    roleCode: string,
-    removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
-      incidentRole: {
-        associatedPrisonersNumber,
-        roleCode,
-      },
-      removeExistingOffences,
+      // TODO - Make this optional in API!
+      removeExistingOffences: false,
     }
     const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication

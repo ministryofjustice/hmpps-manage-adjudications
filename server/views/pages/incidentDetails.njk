@@ -40,15 +40,6 @@
 	<div>
 		<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-            {% if originalIncidentRoleSelection != null %}
-                <input type="hidden" name="originalIncidentRoleSelection" value="{{ originalIncidentRoleSelection }}" id="originalIncidentRoleSelection"/>
-            {% endif %}
-            {% if lastIncidentRoleSelection != null %}
-                <input type="hidden" name="lastIncidentRoleSelection" value="{{ lastIncidentRoleSelection }}" id="lastIncidentRoleSelection"/>
-            {% endif %}
-            {% if lastAssociatedPrisonerNumberSelection != null %}
-                <input type="hidden" name="lastAssociatedPrisonerNumberSelection" value="{{ lastAssociatedPrisonerNumberSelection }}" id="lastAssociatedPrisonerNumberSelection"/>
-            {% endif %}
             {% if originalReporterUsername != null %}
                 <input type="hidden" name="originalReporterUsername" value="{{ originalReporterUsername }}" id="originalReporterUsername"/>
             {% endif %}
@@ -99,9 +90,6 @@
 					errorMessage: 'locationId' | findError(errors)
 				})
 			}}
-
-			{% include "../partials/incidentDetailsRadios.njk" %}
-
 
 			{{ govukButton({
 					text: submitButtonText,
