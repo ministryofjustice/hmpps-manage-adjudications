@@ -136,9 +136,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getOffenceRule(offenceCode: number): Promise<OffenceRule> {
+  async getOffenceRule(offenceCode: number, isYouthOffender: boolean): Promise<OffenceRule> {
     return this.restClient.get({
-      path: `/draft-adjudications/offence-rule/${offenceCode}`,
+      path: `/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}`,
     })
   }
 
@@ -155,7 +155,7 @@ export default class ManageAdjudicationsClient {
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${adjudicationNumber}/applicable-rules`,
-      data: { isYOI },
+      data: isYOI,
     })
   }
 }

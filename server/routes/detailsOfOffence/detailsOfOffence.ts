@@ -25,6 +25,7 @@ export default class DetailsOfOffenceRoutes {
       allOffences.map(async offenceData => {
         const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
+        const isYouthOffender = draftAdjudication.isYouthOffender || false
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
         const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
           offenceCode,
@@ -34,7 +35,7 @@ export default class DetailsOfOffenceRoutes {
         return {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, user),
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, user),
         }
       })
     )

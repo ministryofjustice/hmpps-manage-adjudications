@@ -458,4 +458,19 @@ describe('manageAdjudicationsClient', () => {
       expect(response).toEqual(result)
     })
   })
+  describe('getOffenceRule', () => {
+    const result = {
+      paragraphNumber: '1',
+      paragraphDescription: 'A desc',
+    }
+
+    it('returns the relevant rules', async () => {
+      fakeManageAdjudicationsApi
+        .get(`/draft-adjudications/offence-rule/1234?youthOffender=true`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+      const response = await client.getOffenceRule(1234, true)
+      expect(response).toEqual(result)
+    })
+  })
 })
