@@ -30,7 +30,7 @@ export default function setUpWebSecurity(): Router {
           styleSrc: ["'self'", 'code.jquery.com', "'unsafe-inline'"],
           fontSrc: ["'self'"],
           imgSrc: ["'self'", 'https://www.googletagmanager.com', 'https://www.google-analytics.com', 'code.jquery.com'],
-          connectSrc: ["'self'", 'www.googletagmanager.com', 'https://www.google-analytics.com'],
+          connectSrc: ["'self'", 'https://www.googletagmanager.com', 'https://www.google-analytics.com'],
         },
       },
     })
