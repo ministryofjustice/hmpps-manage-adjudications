@@ -187,7 +187,7 @@ context('Delete person - full journey', () => {
   })
   it('should redirect to redirectUrl with correct query attached - yes selected', () => {
     // start on previous page to place redirectUrl on to session
-    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6123VU', 34))
+    cy.visit(adjudicationUrls.incidentRole.urls.start(34))
     cy.get('[data-qa="incite-prisoner-delete"]').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.deletePerson.root}`)
@@ -198,13 +198,13 @@ context('Delete person - full journey', () => {
     DeletePersonPage.radioButtons().find('input[value="yes"]').check()
     DeletePersonPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.edit('G6123VU', 34))
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.start(34))
       expect(loc.search).to.eq('?personDeleted=true')
     })
   })
   it('should redirect to redirectUrl with correct query attached - no selected', () => {
     // start on previous page to place redirectUrl on to session
-    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6123VU', 34))
+    cy.visit(adjudicationUrls.incidentRole.urls.start(34))
     cy.get('[data-qa="incite-prisoner-delete"]').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.deletePerson.root}`)
@@ -215,7 +215,7 @@ context('Delete person - full journey', () => {
     DeletePersonPage.radioButtons().find('input[value="no"]').check()
     DeletePersonPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.edit('G6123VU', 34))
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.start(34))
       expect(loc.search).to.eq('?selectedPerson=G6415GD')
     })
   })
