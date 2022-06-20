@@ -132,8 +132,6 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'committed',
-        originalIncidentRoleSelection: 'committed',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(34))
@@ -149,8 +147,6 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'committed',
-        originalIncidentRoleSelection: 'committed',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(34))
@@ -166,30 +162,11 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'committed',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
         expect(res.text).toContain('Enter an hour which is 23 or less')
-      })
-  })
-  it('should render an error summary with correct validation message - user does not search for associated prisoner when required', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.incidentDetails.urls.submittedEdit(
-          'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
-      )
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'incited',
-      })
-      .expect(res => {
-        expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter their name or prison number.')
       })
   })
   it('should throw an error on PUT endpoint failure', () => {
@@ -204,65 +181,10 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
-        currentRadioSelected: 'committed',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: Internal Error')
       })
-  })
-  it('should retain existing offences if the radio selection is not changed', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.incidentDetails.urls.submittedEdit(
-          'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
-      )
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'committed',
-        originalIncidentRoleSelection: 'committed',
-      })
-      .expect(302)
-      .then(() =>
-        expect(placeOnReportService.editDraftIncidentDetails).toHaveBeenCalledWith(
-          34,
-          '2021-10-27T12:30',
-          2,
-          null,
-          null,
-          false, // RemoveOffences
-          expect.anything()
-        )
-      )
-  })
-  it('should remove existing offences if the radio selection is changed', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.incidentDetails.urls.submittedEdit(
-          'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
-      )
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'committed',
-        originalIncidentRoleSelection: 'attempted',
-      })
-      .expect(302)
-      .then(() =>
-        expect(placeOnReportService.editDraftIncidentDetails).toHaveBeenCalledWith(
-          34,
-          '2021-10-27T12:30',
-          2,
-          null,
-          null,
-          true, // RemoveOffences
-          expect.anything()
-        )
-      )
   })
 })

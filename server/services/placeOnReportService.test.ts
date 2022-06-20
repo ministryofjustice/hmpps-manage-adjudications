@@ -88,11 +88,6 @@ describe('placeOnReportService', () => {
         locationId: 3,
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
-        // Added by temporary code to preserve APi compatibility
-        incidentRole: {
-          roleCode: '25b',
-          associatedPrisonersNumber: 'T3356FU',
-        },
       })
       expect(result).toEqual({
         draftAdjudication: {
@@ -400,10 +395,6 @@ describe('placeOnReportService', () => {
       const expectedResult = {
         dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
         locationId: 1234,
-        incidentRole: {
-          associatedPrisonersNumber: 'G2996UX',
-          roleCode: '25b',
-        },
       }
 
       getDraftAdjudication.mockResolvedValue({
@@ -436,10 +427,6 @@ describe('placeOnReportService', () => {
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
           locationId: 12123123,
         },
-        incidentRole: {
-          associatedPrisonersNumber: 'G2996UX',
-          roleCode: '25b',
-        },
         incidentStatement: {
           completed: false,
           statement: 'string',
@@ -452,10 +439,6 @@ describe('placeOnReportService', () => {
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         locationId: 12123123,
-        incidentRole: {
-          associatedPrisonersNumber: 'G2996UX',
-          roleCode: '25b',
-        },
         removeExistingOffences: false,
       })
     })
