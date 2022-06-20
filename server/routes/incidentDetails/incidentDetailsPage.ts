@@ -72,11 +72,6 @@ export enum PageRequestType {
   EDIT_SUBMITTED,
 }
 
-enum NextPageSelectionAfterEdit {
-  OFFENCE_DETAILS,
-  TASK_LIST,
-}
-
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 

@@ -6,7 +6,6 @@ import {
   IncidentDetails,
   EditedIncidentDetails,
   EditIncidentRoleRequest,
-  IncidentRole,
   OffenceRule,
   OffenceDetails,
   isYouthOffenderRule,
