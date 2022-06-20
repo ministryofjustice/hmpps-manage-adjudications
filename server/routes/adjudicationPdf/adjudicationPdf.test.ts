@@ -54,6 +54,7 @@ const reportedAdjudication: ReportedAdjudication = {
   },
   offenceDetails: [{ offenceCode: 1, offenceRule }],
   status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+  isYouthOffender: false,
 }
 
 const prisonerResultSummary: PrisonerResultSummary = {
@@ -85,6 +86,7 @@ const confirmedOnReportData: ConfirmedOnReportData = {
   prisonerLivingUnitName: '5-2-A-050',
   incidentDate: '2020-12-21T07:21',
   createdDateTime: '2020-12-21T10:45',
+  isYouthOffender: false,
 }
 
 beforeEach(() => {
@@ -122,6 +124,7 @@ describe('GET /all-completed-reports', () => {
           expirationTime: '07:21',
           incidentDate: '21 December 2020',
           incidentLocationDescription: 'Moorland (HMP & YOI) - Adj',
+          isYouthOffender: false,
           incidentTime: '07:21',
           offences: [
             {

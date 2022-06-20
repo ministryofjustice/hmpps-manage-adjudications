@@ -13,6 +13,7 @@ export type ReportedAdjudication = {
   incidentRole: IncidentRole
   offenceDetails: OffenceDetails[]
   status: ReportedAdjudicationStatus
+  isYouthOffender: boolean
 }
 
 export type ReportedAdjudicationResult = {

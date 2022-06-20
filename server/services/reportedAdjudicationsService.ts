@@ -76,6 +76,7 @@ export default class ReportedAdjudicationsService {
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
       incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
       createdDateTime: adjudicationData.reportedAdjudication.createdDateTime,
+      isYouthOffender: adjudicationData.reportedAdjudication.isYouthOffender,
     }
   }
 

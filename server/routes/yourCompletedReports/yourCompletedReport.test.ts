@@ -54,6 +54,7 @@ describe('GET /your-completed-reports', () => {
             offenceDetails: [{ offenceCode: 1001 }],
             status: ReportedAdjudicationStatus.AWAITING_REVIEW,
             statusDisplayName: 'Awaiting Review',
+            isYouthOffender: false,
           },
           {
             displayName: 'Moriarty, James',
@@ -78,6 +79,7 @@ describe('GET /your-completed-reports', () => {
             offenceDetails: [{ offenceCode: 1001 }],
             status: ReportedAdjudicationStatus.ACCEPTED,
             statusDisplayName: 'Accepted',
+            isYouthOffender: false,
           },
         ],
       })
