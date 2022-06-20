@@ -199,9 +199,12 @@ const adjudicationUrls = {
     root: '/age-of-prisoner',
     matchers: {
       start: '/:adjudicationNumber',
+      submittedEdit: '/:adjudicationNumber/submitted/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}`,
+      submittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit`,
     },
   },
   homepage: {

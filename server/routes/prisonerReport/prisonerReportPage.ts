@@ -6,6 +6,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../@types/template'
+import config from '../../config'
 
 type PageData = {
   errors?: FormError[]
@@ -45,6 +46,12 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
+      editOffencesDetailsURL: config.yoiNewPagesFeatureFlag
+        ? `${adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber)}`
+        : `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+            prisonerNumber,
+            draftAdjudicationNumber
+          )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
     }
   }
   return {
@@ -57,6 +64,12 @@ const getVariablesForPageType = (
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
+    editOffencesDetailsURL: config.yoiNewPagesFeatureFlag
+      ? `${adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber)}`
+      : `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+          prisonerNumber,
+          draftAdjudicationNumber
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
   }
 }
 

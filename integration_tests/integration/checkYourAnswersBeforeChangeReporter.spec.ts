@@ -1,6 +1,7 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
+import serverConfig from '../../server/config'
 
 context('Check Your Answers', () => {
   beforeEach(() => {
@@ -269,12 +270,16 @@ context('Check Your Answers', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
       })
     })
-    it('should go to the incident details page if the offence details change link is clicked - to reenter new offences', () => {
+    it('should go to the correct page if the offence details change link is clicked - to reenter new offences', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
       const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       CheckYourAnswersPage.offenceDetailsChangeLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
+        if (!serverConfig.yoiNewPagesFeatureFlag) {
+          expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
+        } else {
+          expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+        }
       })
     })
     it('should go to the incident statement page if the incident statement change link is clicked', () => {

@@ -6,6 +6,7 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
+import config from '../../config'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -41,11 +42,20 @@ const getVariablesForPageType = (
         adjudicationNumber
       )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumber)}`,
       editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber),
+      editOffenceDetailsURL: config.yoiNewPagesFeatureFlag
+        ? adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber)
+        : `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+            prisonerNumber,
+            adjudicationNumber
+          )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumber)}`,
       exitUrl: adjudicationUrls.prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
     }
   }
   return {
     editIncidentDetailsURL: adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
+    editOffenceDetailsURL: config.yoiNewPagesFeatureFlag
+      ? adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber)
+      : adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
     editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.start(adjudicationNumber),
     exitUrl: adjudicationUrls.taskList.urls.start(adjudicationNumber),
   }

@@ -1,6 +1,7 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import config from '../../server/config'
 
 context('Prisoner report - reporter view', () => {
   beforeEach(() => {
@@ -319,7 +320,6 @@ context('Prisoner report - reporter view', () => {
             if (prisoner.isYouthOffender) {
               expect($summaryData.get(5).innerText).to.contain(
                 // TODO THIS NEEDS SORTING
-                // 'Prison rule 55, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 55, paragraph 1\n\nCommits any assault'
                 'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
               )
             } else {
@@ -367,7 +367,7 @@ context('Prisoner report - reporter view', () => {
       })
       it(`should ${
         prisoner.readOnly ? 'not' : ''
-      } go to the incident details page if the offence details change link is clicked`, () => {
+      } go to the correct page if the offence details change link is clicked`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
@@ -375,7 +375,11 @@ context('Prisoner report - reporter view', () => {
         } else {
           PrisonerReportPage.offenceDetailsChangeLink().click()
           cy.location().should(loc => {
-            expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
+            if (config.yoiNewPagesFeatureFlag) {
+              expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(177))
+            } else {
+              expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
+            }
           })
         }
       })
