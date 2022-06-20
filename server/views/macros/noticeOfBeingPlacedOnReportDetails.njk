@@ -52,7 +52,7 @@
         {% endif %}
         
         <p class='govuk-!-margin-bottom-0'>Which set of rules apply to the prisoner?</p>
-        {% if isYouthOffender %}
+        {% if noticeOfBeingPlacedOnReportData.isYouthOffender %}
            <p class='govuk-!-margin-bottom-2'>YOI offences - Prison rule 55</p>
         {% else %}
            <p class='govuk-!-margin-bottom-2'>Adult offences - Prison rule 51</p>
