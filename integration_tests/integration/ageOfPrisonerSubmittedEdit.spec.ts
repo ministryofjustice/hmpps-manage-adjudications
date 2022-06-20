@@ -64,15 +64,14 @@ context('Age of the prisoner', () => {
     AgeOfPrisonerPage.submitButton().should('exist')
     AgeOfPrisonerPage.cancelButton().should('exist')
   })
-  it('should show validation message if there is no radio button selected', () => {
+  it('should already have a radio button selected from their previous selection', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    AgeOfPrisonerPage.prisonRuleRadios().find('input[value="adult"]').should('be.checked')
     AgeOfPrisonerPage.submitButton().click()
-    AgeOfPrisonerPage.errorSummary()
-      .find('li')
-      .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select which rules apply.')
-      })
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
+    })
   })
   it('should show the correct age of the prisoner based on the date of the incident report', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))

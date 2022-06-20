@@ -43,7 +43,7 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumber)}`,
       editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber),
       editOffenceDetailsURL: config.yoiNewPagesFeatureFlag
-        ? adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber)
+        ? adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber)
         : `${adjudicationUrls.incidentDetails.urls.submittedEdit(
             prisonerNumber,
             adjudicationNumber

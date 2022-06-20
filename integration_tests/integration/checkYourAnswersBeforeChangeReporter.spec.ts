@@ -278,7 +278,7 @@ context('Check Your Answers', () => {
         if (!serverConfig.yoiNewPagesFeatureFlag) {
           expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
         } else {
-          expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+          expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
         }
       })
     })

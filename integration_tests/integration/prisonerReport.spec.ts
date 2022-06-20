@@ -376,7 +376,7 @@ context('Prisoner report - reporter view', () => {
           PrisonerReportPage.offenceDetailsChangeLink().click()
           cy.location().should(loc => {
             if (config.yoiNewPagesFeatureFlag) {
-              expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(177))
+              expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(177))
             } else {
               expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
             }

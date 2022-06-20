@@ -31,7 +31,6 @@ context('Age of the prisoner', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
-            isYouthOffender: false,
           },
         },
       },
@@ -48,7 +47,6 @@ context('Age of the prisoner', () => {
             locationId: 234,
           },
           startedByUserId: 'TEST_GEN',
-          isYouthOffender: false,
         },
       },
     })

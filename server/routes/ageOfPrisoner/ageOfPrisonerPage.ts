@@ -7,6 +7,7 @@ import validateForm from './ageOfPrisonerValidation'
 import { FormError } from '../../@types/template'
 import logger from '../../../logger'
 import { calculateAge } from '../../utils/utils'
+import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 
 type PageData = {
   error?: FormError
@@ -33,6 +34,17 @@ const getRedirectUrls = (pageOptions: PageOptions, adjudicationNumber: number) =
   return adjudicationUrls.incidentRole.urls.start(adjudicationNumber)
 }
 
+const getPreviouslyChosenRule = (draftAdjudication: DraftAdjudication): string => {
+  switch (draftAdjudication.isYouthOffender) {
+    case true:
+      return 'yoi'
+    case false:
+      return 'adult'
+    default:
+      return undefined
+  }
+}
+
 export default class AgeOfPrisonerPage {
   pageOptions: PageOptions
 
@@ -41,7 +53,7 @@ export default class AgeOfPrisonerPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, whichRuleChosen } = pageData
+    const { error } = pageData
     const { adjudicationNumber } = req.params
     const { user } = res.locals
 
@@ -62,7 +74,7 @@ export default class AgeOfPrisonerPage {
     return res.render(`pages/ageOfPrisoner`, {
       errors: error ? [error] : [],
       ageOfPrisoner,
-      whichRuleChosen,
+      whichRuleChosen: getPreviouslyChosenRule(adjudicationDetails.draftAdjudication),
       cancelButtonHref: adjudicationUrls.taskList.urls.start(adjudicationDetails.draftAdjudication.id),
     })
   }

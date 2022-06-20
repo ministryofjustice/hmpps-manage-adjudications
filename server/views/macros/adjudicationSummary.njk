@@ -19,7 +19,6 @@
      {% endif %}
     </div>
     <div class="adjudicationsSummary-offenceDetails">
-      {{ incidentData.isYouthOffender }}
       {% for offence in offences %}
         {{ offenceQAndASummaryList(offence, incidentData.isYouthOffender, { "data-qa": "offence-summary-table" }) }}
       {% endfor %}
