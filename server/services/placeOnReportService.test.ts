@@ -585,6 +585,7 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
+          isYouthOffender: false,
           offenceDetails: [
             {
               offenceCode: 3,
@@ -630,6 +631,7 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
+          isYouthOffender: false,
           offenceDetails: [
             {
               offenceCode: 3,
@@ -675,6 +677,7 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
+          isYouthOffender: false,
           offenceDetails: [
             {
               offenceCode: 3,

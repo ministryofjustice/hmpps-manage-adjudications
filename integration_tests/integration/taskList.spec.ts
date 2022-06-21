@@ -122,14 +122,6 @@ context('Task list', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
-            incidentRole: {
-              associatedPrisonersNumber: 'G2996UX',
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              roleCode: '25a',
-            },
           },
         },
       })
@@ -156,12 +148,12 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.acceptDetailsLink().should('not.exist')
     })
-    it('should route to the offence details page if you click the link', () => {
+    it('should route to the applicable rules page if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.offenceDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
+        expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(3456))
       })
     })
   })
@@ -209,6 +201,7 @@ context('Task list', () => {
               },
               roleCode: '25a',
             },
+            isYouthOffender: false,
             offenceDetails: [
               {
                 offenceCode: 3,
@@ -261,6 +254,14 @@ context('Task list', () => {
         'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
       )
     })
+    it('should route to the offenders details page if you click the link', () => {
+      cy.visit(adjudicationUrls.taskList.urls.start(3456))
+      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+      TaskListPage.offenceDetailsLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
+      })
+    })
   })
   context('Statement complete', () => {
     beforeEach(() => {
@@ -292,6 +293,7 @@ context('Task list', () => {
               handoverDeadline: '2021-11-05T11:09:00',
               locationId: 234,
             },
+            isYouthOffender: false,
             incidentStatement: {
               id: 23,
               statement: 'This is my statement',

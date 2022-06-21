@@ -11,7 +11,7 @@
 
   {% if offenceDetailsComplete == false %}
     {% set data = (data.push([
-    { html: "<a href='" + adjudicationUrls.detailsOfOffence.urls.start(adjudicationId) + "' class='task' data-qa='details-of-offence-link'>Offence details</a>" },
+    { html: "<a href='" + adjudicationUrls.ageOfPrisoner.urls.start(adjudicationId) + "' class='task' data-qa='details-of-offence-link'>Offence details</a>" },
     { html: '<strong class="govuk-tag govuk-tag--grey">NOT STARTED</strong>' }
    ]), data)
   %}
