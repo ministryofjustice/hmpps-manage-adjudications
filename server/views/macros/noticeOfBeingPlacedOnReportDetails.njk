@@ -32,8 +32,7 @@
         </div>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         <p class='govuk-!-margin-bottom-1'>You need to attend an adjudication hearing and you will be told when this
-            will be. This hearing will not be held in the first 2 hours after you receive this notice of being placed on
-            report.
+            will be. 
         </p>
         <p class='govuk-!-font-weight-bold govuk-!-margin-bottom-1'>It is alleged that an incident happened:</p>
         <ul class='govuk-list govuk-list--bullet'>
@@ -51,7 +50,14 @@
         {% else %}
             <h2>Details of the alleged offence</h2>
         {% endif %}
-
+        
+        <p class='govuk-!-margin-bottom-0'>Which set of rules apply to the prisoner?</p>
+        {% if noticeOfBeingPlacedOnReportData.isYouthOffender %}
+           <p class='govuk-!-margin-bottom-2'>YOI offences - Prison rule 55</p>
+        {% else %}
+           <p class='govuk-!-margin-bottom-2'>Adult offences - Prison rule 51</p>
+        {% endif %}
+        
         {% for offence in noticeOfBeingPlacedOnReportData.offences %}
             <div class='break-inside-avoid'>
                 {% for questionAndAnswer in offence.questionsAndAnswers %}
@@ -88,6 +94,7 @@
             <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         </div>
          <div class='break-inside-avoid'>
+            <p class='govuk-!-margin-bottom-2'>This hearing will not be held in the first 2 hours after you receive this notice of being placed on report.</p>
             <div class='adjudication-pdf-section-issued-details'>
                 <div class='adjudication-pdf-section-issued-details__item'>
                     <p class='govuk-!-margin-bottom-1'>Time this form was issued (24-hour clock)</p>

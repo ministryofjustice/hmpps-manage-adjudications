@@ -43,6 +43,7 @@ beforeEach(() => {
       },
       offenceDetails: [],
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+      isYouthOffender: false,
     },
   })
 

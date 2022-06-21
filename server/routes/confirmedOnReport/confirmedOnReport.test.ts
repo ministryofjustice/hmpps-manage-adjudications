@@ -34,6 +34,7 @@ const reportedAdjudicationInformation = {
   prisonerLivingUnitName: '5-2-A-050',
   incidentDate: '2020-12-21T07:21',
   createdDateTime: '2020-12-21T10:45',
+  isYouthOffender: false,
 }
 
 reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)

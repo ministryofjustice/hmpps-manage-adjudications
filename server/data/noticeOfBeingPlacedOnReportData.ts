@@ -33,6 +33,8 @@ export default class noticeOfBeingPlacedOnReportData {
 
   prisonerFriendlyName: string
 
+  isYouthOffender: boolean
+
   constructor(
     adjudicationNumber: number,
     confirmedOnReportData: ConfirmedOnReportData,
@@ -57,5 +59,6 @@ export default class noticeOfBeingPlacedOnReportData {
     this.offences = offences
     this.expirationTime = formatTimestampToTime(confirmedOnReportData.reportExpirationDateTime)
     this.expirationDay = formatTimestampToDate(confirmedOnReportData.reportExpirationDateTime, 'dddd D MMMM')
+    this.isYouthOffender = confirmedOnReportData.isYouthOffender
   }
 }
