@@ -34,7 +34,7 @@ export type DraftAdjudication = {
   prisonerNumber: string
   startedByUserId: string
   incidentDetails: IncidentDetails
-  incidentRole: IncidentRole
+  incidentRole?: IncidentRole
   incidentStatement?: IncidentStatement
   offenceDetails?: OffenceDetails[]
   isYouthOffender?: boolean

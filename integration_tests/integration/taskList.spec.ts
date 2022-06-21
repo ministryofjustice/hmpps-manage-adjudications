@@ -122,14 +122,6 @@ context('Task list', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
-            incidentRole: {
-              associatedPrisonersNumber: 'G2996UX',
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              roleCode: '25a',
-            },
           },
         },
       })
@@ -209,6 +201,7 @@ context('Task list', () => {
               },
               roleCode: '25a',
             },
+            isYouthOffender: false,
             offenceDetails: [
               {
                 offenceCode: 3,
@@ -292,6 +285,7 @@ context('Task list', () => {
               handoverDeadline: '2021-11-05T11:09:00',
               locationId: 234,
             },
+            isYouthOffender: false,
             incidentStatement: {
               id: 23,
               statement: 'This is my statement',
