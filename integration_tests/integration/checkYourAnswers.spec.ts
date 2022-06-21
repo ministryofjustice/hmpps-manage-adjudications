@@ -1,7 +1,6 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
-import serverConfig from '../../server/config'
 
 context('Check Your Answers', () => {
   beforeEach(() => {

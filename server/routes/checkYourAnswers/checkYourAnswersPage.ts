@@ -6,7 +6,6 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
-import config from '../../config'
 
 type PageData = {
   error?: FormError | FormError[]
