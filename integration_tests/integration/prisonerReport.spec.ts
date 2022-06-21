@@ -1,7 +1,6 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import config from '../../server/config'
 
 context('Prisoner report - reporter view', () => {
   beforeEach(() => {
@@ -375,11 +374,7 @@ context('Prisoner report - reporter view', () => {
         } else {
           PrisonerReportPage.offenceDetailsChangeLink().click()
           cy.location().should(loc => {
-            if (config.yoiNewPagesFeatureFlag) {
-              expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(177))
-            } else {
-              expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
-            }
+            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(177))
           })
         }
       })

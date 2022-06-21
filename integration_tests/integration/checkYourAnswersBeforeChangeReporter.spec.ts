@@ -1,7 +1,6 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
-import serverConfig from '../../server/config'
 
 context('Check Your Answers', () => {
   beforeEach(() => {
@@ -275,11 +274,7 @@ context('Check Your Answers', () => {
       const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       CheckYourAnswersPage.offenceDetailsChangeLink().click()
       cy.location().should(loc => {
-        if (!serverConfig.yoiNewPagesFeatureFlag) {
-          expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
-        } else {
-          expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-        }
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
       })
     })
     it('should go to the incident statement page if the incident statement change link is clicked', () => {
