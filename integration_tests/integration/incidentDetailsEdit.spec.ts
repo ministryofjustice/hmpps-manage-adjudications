@@ -168,7 +168,7 @@ context('Incident details (edit) - statement incomplete', () => {
         expect($errors.get(0).innerText).to.contain('Select location of incident')
       })
   })
-  it('should submit form successfully if all data entered and redirect to task list page - change time', () => {
+  it('should submit form successfully if all data entered and redirect to offence details page - change time', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -177,16 +177,16 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(34))
+      expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
     })
   })
-  it('should submit form successfully if all data entered and redirect to task list page - change location', () => {
+  it('should submit form successfully if all data entered and redirect to offence details page - change location', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(34))
+      expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
     })
   })
   it('should redirect to the task list page if the user exits the page', () => {

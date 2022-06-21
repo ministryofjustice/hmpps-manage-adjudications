@@ -82,7 +82,7 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
 })
 
 describe('POST /incident-details/<PRN>/<id>/edit', () => {
-  it('should redirect to task list page if details are complete after changing information', () => {
+  it('should redirect to offence details page if details are complete after changing information', () => {
     return request(app)
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
@@ -90,7 +90,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
         locationId: 2,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.taskList.urls.start(34))
+      .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(34))
   })
   it('should render an error summary with correct validation message - user enters invalid hour', () => {
     return request(app)
