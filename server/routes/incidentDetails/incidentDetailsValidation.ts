@@ -49,26 +49,9 @@ const errors: { [key: string]: FormError } = {
     href: '#incidentDate[time]',
     text: 'Enter an incident time that is not in the future.',
   },
-  MISSING_ROLE: {
-    href: '#currentRadioSelected',
-    text: 'Select the prisoner’s role in this incident.',
-  },
-  MISSING_ASSOCIATED_PRISONER_INCITE: {
-    href: '#incitedInput',
-    text: 'Enter their name or prison number.',
-  },
-  MISSING_ASSOCIATED_PRISONER_ASSIST: {
-    href: '#assistedInput',
-    text: 'Enter their name or prison number.',
-  },
 }
 
-export default function validateForm({
-  incidentDate,
-  locationId,
-  incidentRole,
-  associatedPrisonersNumber,
-}: incidentDetailsForm): FormError | null {
+export default function validateForm({ incidentDate, locationId }: incidentDetailsForm): FormError | null {
   if (!incidentDate.date) {
     return errors.MISSING_DATE
   }
@@ -98,15 +81,6 @@ export default function validateForm({
   }
   if (new Date(formatDate(incidentDate)) > new Date()) {
     return errors.FUTURE_TIME
-  }
-  if (!incidentRole) {
-    return errors.MISSING_ROLE
-  }
-  if (incidentRole === 'incited' && !associatedPrisonersNumber) {
-    return errors.MISSING_ASSOCIATED_PRISONER_INCITE
-  }
-  if (incidentRole === 'assisted' && !associatedPrisonersNumber) {
-    return errors.MISSING_ASSOCIATED_PRISONER_ASSIST
   }
 
   return null
