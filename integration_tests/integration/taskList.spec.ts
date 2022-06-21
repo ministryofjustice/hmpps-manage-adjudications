@@ -148,12 +148,12 @@ context('Task list', () => {
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.acceptDetailsLink().should('not.exist')
     })
-    it('should route to the offence details page if you click the link', () => {
+    it('should route to the applicable rules page if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
       const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
       TaskListPage.offenceDetailsLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
+        expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(3456))
       })
     })
   })
@@ -253,6 +253,14 @@ context('Task list', () => {
         'contain.text',
         'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
       )
+    })
+    it('should route to the offenders details page if you click the link', () => {
+      cy.visit(adjudicationUrls.taskList.urls.start(3456))
+      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+      TaskListPage.offenceDetailsLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
+      })
     })
   })
   context('Statement complete', () => {
