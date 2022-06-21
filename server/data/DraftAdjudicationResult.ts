@@ -52,6 +52,7 @@ export type CheckYourAnswers = {
   incidentDetails: SummarySectionItems[]
   statement: string
   adjudicationNumber?: number
+  isYouthOffender: boolean
 }
 
 type SummarySectionItems = {

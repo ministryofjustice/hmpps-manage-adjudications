@@ -41,11 +41,13 @@ const getVariablesForPageType = (
         adjudicationNumber
       )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumber)}`,
       editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber),
+      editOffenceDetailsURL: adjudicationUrls.detailsOfOffence.urls.start(adjudicationNumber),
       exitUrl: adjudicationUrls.prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
     }
   }
   return {
     editIncidentDetailsURL: adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
+    editOffenceDetailsURL: adjudicationUrls.detailsOfOffence.urls.start(adjudicationNumber),
     editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.start(adjudicationNumber),
     exitUrl: adjudicationUrls.taskList.urls.start(adjudicationNumber),
   }

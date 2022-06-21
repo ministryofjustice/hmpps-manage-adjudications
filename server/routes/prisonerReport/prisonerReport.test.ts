@@ -101,6 +101,8 @@ beforeEach(() => {
   ])
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
+    isYouthOffender: false,
+
     incidentDetails: [
       {
         label: 'Reporting Officer',

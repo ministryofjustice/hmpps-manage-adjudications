@@ -249,6 +249,7 @@ export default class ReportedAdjudicationsService {
     return {
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
+      isYouthOffender: draftAdjudication.isYouthOffender,
     }
   }
 

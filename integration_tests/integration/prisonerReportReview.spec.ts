@@ -29,6 +29,7 @@ const reportedAdjudication = (status: string) => {
     },
     offenceDetails: [],
     status,
+    isYouthOffender: false,
   }
 }
 
@@ -47,6 +48,7 @@ const draftAdjudication = (adjudicationNumber: number) => {
       completed: true,
     },
     startedByUserId: 'USER1',
+    isYouthOffender: false,
   }
 }
 
@@ -170,6 +172,7 @@ context('Prisoner report - reviewer view', () => {
                 'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
             },
           },
+          isYouthOffender: false,
           offenceDetails: [
             {
               offenceCode: 1001,
@@ -249,25 +252,27 @@ context('Prisoner report - reviewer view', () => {
     PrisonerReportPage.offenceDetailsSummary()
       .find('dt')
       .then($summaryLabels => {
-        expect($summaryLabels.get(0).innerText).to.contain(
+        expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+        expect($summaryLabels.get(1).innerText).to.contain(
           'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
         )
-        expect($summaryLabels.get(1).innerText).to.contain('What did the incident involve?')
-        expect($summaryLabels.get(2).innerText).to.contain('Who did John Smith assist James Jones to assault?')
-        expect($summaryLabels.get(3).innerText).to.contain('Was the incident a racially aggravated assault?')
-        expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+        expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+        expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
+        expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+        expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
       })
 
     PrisonerReportPage.offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain(
+        expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+        expect($summaryData.get(1).innerText).to.contain(
           'Assault, fighting, or endangering the health or personal safety of others'
         )
-        expect($summaryData.get(1).innerText).to.contain('Assaulting someone')
-        expect($summaryData.get(2).innerText).to.contain('Another prisoner - Paul Wright')
-        expect($summaryData.get(3).innerText).to.contain('Yes')
-        expect($summaryData.get(4).innerText).to.contain(
+        expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
+        expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+        expect($summaryData.get(4).innerText).to.contain('Yes')
+        expect($summaryData.get(5).innerText).to.contain(
           'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
         )
       })

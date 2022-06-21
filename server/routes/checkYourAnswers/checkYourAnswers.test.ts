@@ -73,6 +73,7 @@ beforeEach(() => {
   ])
 
   placeOnReportService.getCheckYourAnswersInfo.mockResolvedValue({
+    isYouthOffender: false,
     statement: '',
     incidentDetails: [
       {

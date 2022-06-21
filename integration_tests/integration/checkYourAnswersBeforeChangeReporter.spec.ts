@@ -48,65 +48,6 @@ context('Check Your Answers', () => {
         prisonerNumber: 'G6415GD',
       },
     })
-    cy.task('stubPostDraftIncidentStatement', {
-      id: 3456,
-      response: {
-        draftAdjudication: {
-          id: 3456,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 234,
-          },
-          incidentStatement: {
-            id: 23,
-            statement: 'This is my statement',
-            completed: true,
-          },
-          startedByUserId: 'TEST_GEN',
-        },
-      },
-    })
-    cy.task('stubGetDraftAdjudication', {
-      id: 3456,
-      response: {
-        draftAdjudication: {
-          id: 3456,
-          adjudicationNumber: 234,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            handoverDeadline: '2021-11-05T11:09:42',
-            locationId: 234,
-          },
-          incidentStatement: {
-            id: 23,
-            statement: 'This is my statement',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25c',
-            offenceRule: {
-              paragraphNumber: '25(c)',
-              paragraphDescription:
-                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-            },
-          },
-          offenceDetails: [
-            {
-              offenceCode: 1001,
-              offenceRule: {
-                paragraphNumber: '1',
-                paragraphDescription: 'Commits any assault',
-              },
-              victimPrisonersNumber: 'G5512G',
-            },
-          ],
-        },
-      },
-    })
 
     cy.task('stubGetOffenceRule', {
       offenceCode: 1001,
@@ -150,131 +91,302 @@ context('Check Your Answers', () => {
         authSource: 'auth',
       },
     })
-    cy.task('stubSubmitCompleteDraftAdjudication', {
-      id: 3456,
-      response: {
-        adjudicationNumber: 234,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-03T11:09:42',
-          locationId: 234,
+  })
+  context('YOI offences', () => {
+    beforeEach(() => {
+      cy.task('stubPostDraftIncidentStatement', {
+        id: 3456,
+        response: {
+          draftAdjudication: {
+            id: 3456,
+            prisonerNumber: 'G6415GD',
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T11:09:42',
+              locationId: 234,
+            },
+            incidentStatement: {
+              id: 23,
+              statement: 'This is my statement',
+              completed: true,
+            },
+            startedByUserId: 'TEST_GEN',
+            isYouthOffender: true,
+          },
         },
-        incidentStatement: {
-          id: 23,
-          statement: 'This is my statement',
-          completed: true,
+      })
+      cy.task('stubGetDraftAdjudication', {
+        id: 3456,
+        response: {
+          draftAdjudication: {
+            id: 3456,
+            adjudicationNumber: 234,
+            prisonerNumber: 'G6415GD',
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T11:09:42',
+              handoverDeadline: '2021-11-05T11:09:42',
+              locationId: 234,
+            },
+            incidentStatement: {
+              id: 23,
+              statement: 'This is my statement',
+              completed: true,
+            },
+            startedByUserId: 'USER1',
+            isYouthOffender: true,
+            incidentRole: {
+              associatedPrisonersNumber: 'T3356FU',
+              roleCode: '25c',
+              offenceRule: {
+                paragraphNumber: '25(c)',
+                paragraphDescription:
+                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+              },
+            },
+            offenceDetails: [
+              {
+                offenceCode: 1001,
+                offenceRule: {
+                  paragraphNumber: '1',
+                  paragraphDescription: 'Commits any assault',
+                },
+                victimPrisonersNumber: 'G5512G',
+              },
+            ],
+          },
         },
-        prisonerNumber: 'G6415GD',
-      },
+      })
+      cy.task('stubSubmitCompleteDraftAdjudication', {
+        id: 3456,
+        response: {
+          adjudicationNumber: 234,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 234,
+          },
+          incidentStatement: {
+            id: 23,
+            statement: 'This is my statement',
+            completed: true,
+          },
+          prisonerNumber: 'G6415GD',
+          isYouthOffender: true,
+        },
+      })
+      cy.signIn()
     })
-    cy.signIn()
-  })
-  it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+    it('should contain the required page elements', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-    CheckYourAnswersPage.incidentDetailsSummary().should('exist')
-    CheckYourAnswersPage.incidentStatement().should('exist')
-    CheckYourAnswersPage.submitButton().should('exist')
-    CheckYourAnswersPage.submitButton().contains('Confirm changes')
-    CheckYourAnswersPage.exitButton().should('exist')
-    CheckYourAnswersPage.exitButton().contains('Cancel')
-  })
-  it('should contain the correct incident details', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.incidentDetailsSummary().should('exist')
+      CheckYourAnswersPage.incidentStatement().should('exist')
+      CheckYourAnswersPage.submitButton().should('exist')
+      CheckYourAnswersPage.submitButton().contains('Confirm changes')
+      CheckYourAnswersPage.exitButton().should('exist')
+      CheckYourAnswersPage.exitButton().contains('Cancel')
+    })
+    it('should contain the correct incident details', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-    CheckYourAnswersPage.incidentDetailsSummary()
-      .find('dt')
-      .then($summaryLabels => {
-        expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
-        expect($summaryLabels.get(1).innerText).to.contain('Date')
-        expect($summaryLabels.get(2).innerText).to.contain('Time')
-        expect($summaryLabels.get(3).innerText).to.contain('Location')
+      CheckYourAnswersPage.incidentDetailsSummary()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
+          expect($summaryLabels.get(1).innerText).to.contain('Date')
+          expect($summaryLabels.get(2).innerText).to.contain('Time')
+          expect($summaryLabels.get(3).innerText).to.contain('Location')
+        })
+
+      CheckYourAnswersPage.incidentDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('T. User')
+          expect($summaryData.get(1).innerText).to.contain('3 November 2021')
+          expect($summaryData.get(2).innerText).to.contain('11:09')
+          expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+        })
+    })
+    it('should contain the correct incident statement', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+
+      CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
+    })
+    it('should contain the correct offence details', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+
+      CheckYourAnswersPage.offenceDetailsSummary()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+          expect($summaryLabels.get(1).innerText).to.contain(
+            'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+          )
+          expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+          expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
+          expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+          expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
+        })
+
+      CheckYourAnswersPage.offenceDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('YOI offences\n\nPrison rule 55')
+          expect($summaryData.get(1).innerText).to.contain(
+            'Assault, fighting, or endangering the health or personal safety of others'
+          )
+          expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
+          expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+          expect($summaryData.get(4).innerText).to.contain('Yes')
+          // expect($summaryData.get(5).innerText).to.contain(
+          //   'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+          // )
+        })
+    })
+    it('should go to the completion page (changed) if the user submits changes to the report', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.reporterView(234))
+      })
+    })
+    it('should go to the prisoner report page if the user cancels', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(234))
+      })
+    })
+    it('should go to the incident details page if the incident details change link is clicked', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.incidentDetailsChangeLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
+      })
+    })
+    it('should go to the correct page if the offence details change link is clicked - to reenter new offences', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.offenceDetailsChangeLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
+      })
+    })
+    it('should go to the incident statement page if the incident statement change link is clicked', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.incidentStatementChangeLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
+      })
+    })
+  })
+  context('Adult offences', () => {
+    beforeEach(() => {
+      cy.task('stubPostDraftIncidentStatement', {
+        id: 3456,
+        response: {
+          draftAdjudication: {
+            id: 3456,
+            prisonerNumber: 'G6415GD',
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T11:09:42',
+              locationId: 234,
+            },
+            incidentStatement: {
+              id: 23,
+              statement: 'This is my statement',
+              completed: true,
+            },
+            startedByUserId: 'TEST_GEN',
+            isYouthOffender: false,
+          },
+        },
+      })
+      cy.task('stubGetDraftAdjudication', {
+        id: 3456,
+        response: {
+          draftAdjudication: {
+            id: 3456,
+            adjudicationNumber: 234,
+            prisonerNumber: 'G6415GD',
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T11:09:42',
+              handoverDeadline: '2021-11-05T11:09:42',
+              locationId: 234,
+            },
+            incidentStatement: {
+              id: 23,
+              statement: 'This is my statement',
+              completed: true,
+            },
+            startedByUserId: 'USER1',
+            isYouthOffender: false,
+            incidentRole: {
+              associatedPrisonersNumber: 'T3356FU',
+              roleCode: '25c',
+              offenceRule: {
+                paragraphNumber: '25(c)',
+                paragraphDescription:
+                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+              },
+            },
+            offenceDetails: [
+              {
+                offenceCode: 1001,
+                offenceRule: {
+                  paragraphNumber: '1',
+                  paragraphDescription: 'Commits any assault',
+                },
+                victimPrisonersNumber: 'G5512G',
+              },
+            ],
+          },
+        },
       })
 
-    CheckYourAnswersPage.incidentDetailsSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain('T. User')
-        expect($summaryData.get(1).innerText).to.contain('3 November 2021')
-        expect($summaryData.get(2).innerText).to.contain('11:09')
-        expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+      cy.task('stubSubmitCompleteDraftAdjudication', {
+        id: 3456,
+        response: {
+          adjudicationNumber: 234,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 234,
+          },
+          incidentStatement: {
+            id: 23,
+            statement: 'This is my statement',
+            completed: true,
+          },
+          prisonerNumber: 'G6415GD',
+          isYouthOffender: false,
+        },
       })
-  })
-  it('should contain the correct incident statement', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      cy.signIn()
+    })
+    it('should show the correct prison rule', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-    CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
-  })
-  it('should contain the correct offence details', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.offenceDetailsSummary()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+        })
 
-    CheckYourAnswersPage.offenceDetailsSummary()
-      .find('dt')
-      .then($summaryLabels => {
-        expect($summaryLabels.get(0).innerText).to.contain(
-          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-        )
-        expect($summaryLabels.get(1).innerText).to.contain('What did the incident involve?')
-        expect($summaryLabels.get(2).innerText).to.contain('Who did John Smith assist James Jones to assault?')
-        expect($summaryLabels.get(3).innerText).to.contain('Was the incident a racially aggravated assault?')
-        expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
-      })
-
-    CheckYourAnswersPage.offenceDetailsSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
-        )
-        expect($summaryData.get(1).innerText).to.contain('Assaulting someone')
-        expect($summaryData.get(2).innerText).to.contain('Another prisoner - Paul Wright')
-        expect($summaryData.get(3).innerText).to.contain('Yes')
-        expect($summaryData.get(4).innerText).to.contain(
-          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
-        )
-      })
-  })
-  it('should go to the completion page (changed) if the user submits changes to the report', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-    CheckYourAnswersPage.submitButton().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.reporterView(234))
-    })
-  })
-  it('should go to the prisoner report page if the user cancels', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-    CheckYourAnswersPage.exitButton().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(234))
-    })
-  })
-  it('should go to the incident details page if the incident details change link is clicked', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-    CheckYourAnswersPage.incidentDetailsChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
-    })
-  })
-  it('should go to the incident details page if the offence details change link is clicked - to reenter new offences', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-    CheckYourAnswersPage.offenceDetailsChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
-    })
-  })
-  it('should go to the incident statement page if the incident statement change link is clicked', () => {
-    cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-    const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-    CheckYourAnswersPage.incidentStatementChangeLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
+      CheckYourAnswersPage.offenceDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+          expect($summaryData.get(5).innerText).to.contain(
+            'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+          )
+        })
     })
   })
 })

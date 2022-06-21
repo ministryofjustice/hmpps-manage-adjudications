@@ -1,5 +1,5 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import AgeOfPrisoner from '../pages/ageofPrisoner'
+import AgeOfPrisoner from '../pages/ageofPrisonerSubmittedEdit'
 import Page from '../pages/page'
 
 context('Age of the prisoner', () => {
@@ -31,6 +31,7 @@ context('Age of the prisoner', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
+            isYouthOffender: false,
           },
         },
       },
@@ -47,6 +48,7 @@ context('Age of the prisoner', () => {
             locationId: 234,
           },
           startedByUserId: 'TEST_GEN',
+          isYouthOffender: false,
         },
       },
     })
@@ -54,7 +56,7 @@ context('Age of the prisoner', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+    cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     AgeOfPrisonerPage.ageOfPrisoner().should('exist')
     AgeOfPrisonerPage.ageOfPrisonerHint().should('exist')
@@ -62,18 +64,17 @@ context('Age of the prisoner', () => {
     AgeOfPrisonerPage.submitButton().should('exist')
     AgeOfPrisonerPage.cancelButton().should('exist')
   })
-  it('should show validation message if there is no radio button selected', () => {
-    cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+  it('should already have a radio button selected from their previous selection', () => {
+    cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    AgeOfPrisonerPage.prisonRuleRadios().find('input[value="adult"]').should('be.checked')
     AgeOfPrisonerPage.submitButton().click()
-    AgeOfPrisonerPage.errorSummary()
-      .find('li')
-      .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select which rules apply.')
-      })
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
+    })
   })
   it('should show the correct age of the prisoner based on the date of the incident report', () => {
-    cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+    cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     AgeOfPrisonerPage.ageOfPrisoner().should('have.text', '31 years, 0 months')
   })
@@ -87,22 +88,22 @@ context('Age of the prisoner', () => {
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
-    cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+    cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     AgeOfPrisonerPage.ageOfPrisoner().should('not.exist')
     AgeOfPrisonerPage.ageOfPrisonerHint().should('not.exist')
   })
   it('should redirect the user to the role page if the page receives a valid submission', () => {
-    cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+    cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     AgeOfPrisonerPage.radioAdult().click()
     AgeOfPrisonerPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.start(3456))
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
     })
   })
   it('should redirect the user to the task list page if they cancel', () => {
-    cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
+    cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     AgeOfPrisonerPage.radioYoi().click()
     AgeOfPrisonerPage.cancelButton().click()
