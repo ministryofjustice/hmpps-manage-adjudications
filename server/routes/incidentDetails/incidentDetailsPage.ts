@@ -136,12 +136,7 @@ export default class IncidentDetailsPage {
     try {
       if (this.pageOptions.isEdit()) {
         await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
-
-        // TODO - Are these the right screens?
-        if (this.pageOptions.isPreviouslySubmitted()) {
-          return redirectToOffenceDetails(res, postValues.draftId)
-        }
-        return redirectToTaskList(res, postValues.draftId)
+        return redirectToOffenceDetails(res, postValues.draftId)
       }
       const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
       return redirectToApplcableRule(res, newDraftData.draftAdjudication.id)
@@ -359,8 +354,4 @@ const redirectToApplcableRule = (res: Response, draftId: number) => {
 
 const redirectToOffenceDetails = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
-}
-
-const redirectToTaskList = (res: Response, draftId: number) => {
-  return res.redirect(getTaskListUrl(draftId))
 }
