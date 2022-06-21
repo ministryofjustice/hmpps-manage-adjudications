@@ -275,7 +275,6 @@ context('Prisoner report - reviewer view', () => {
         expect($summaryData.get(5).innerText).to.contain(
           'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
         )
-        // TODO THIS NEEDS CHANGING
       })
   })
   it('should contain the correct incident statement', () => {

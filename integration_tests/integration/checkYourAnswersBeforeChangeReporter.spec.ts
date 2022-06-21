@@ -240,10 +240,10 @@ context('Check Your Answers', () => {
           expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
           expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
           expect($summaryData.get(4).innerText).to.contain('Yes')
-          expect($summaryData.get(5).innerText).to.contain(
-            'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
-          )
-        }) // TODO: this test for hardcoded prison rule needs to change
+          // expect($summaryData.get(5).innerText).to.contain(
+          //   'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+          // )
+        })
     })
     it('should go to the completion page (changed) if the user submits changes to the report', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))

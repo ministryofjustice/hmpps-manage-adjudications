@@ -136,7 +136,7 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain('What type of offence did Phyllis Smith commit?')
         expect(response.text).toContain('Assault, fighting, or endangering the health or personal safety of others')
         expect(response.text).toContain('This offence broke')
-        expect(response.text).toContain('Prison rule 51, paragraph 1') // TODO this needs changing - not hardcoded anymore
+        expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(response.text).toContain('Commits any assault')
         expect(placeOnReportService.getCheckYourAnswersInfo).toHaveBeenCalledTimes(1)
       })

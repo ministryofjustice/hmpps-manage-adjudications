@@ -178,7 +178,7 @@ describe('GET prisoner report', () => {
         expect(response.text).toContain('Was the incident a racially aggravated assault?')
         expect(response.text).toContain('No')
         expect(response.text).toContain('This offence broke')
-        expect(response.text).toContain('Prison rule 51, paragraph 1') // TODO this needs changing - not hardcoded anymore
+        expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(response.text).toContain('Commits any assault')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
       })
