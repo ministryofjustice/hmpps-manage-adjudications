@@ -125,6 +125,13 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       .join('')
   })
 
+  njkEnv.addFilter('prisonRule', (isYouthOffender: boolean) => {
+    if (isYouthOffender) {
+      return 'Prison rule 55'
+    }
+    return 'Prison rule 51'
+  })
+
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)

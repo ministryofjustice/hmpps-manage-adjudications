@@ -386,7 +386,9 @@ const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetai
 const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult): IncidentDetails => {
   return {
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
-    currentIncidentRoleSelection: incidentRoleFromCode(draftAdjudicationResult.draftAdjudication.incidentRole.roleCode),
+    currentIncidentRoleSelection: incidentRoleFromCode(
+      draftAdjudicationResult.draftAdjudication.incidentRole?.roleCode
+    ),
     currentAssociatedPrisonerNumber: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersNumber,
   }
 }

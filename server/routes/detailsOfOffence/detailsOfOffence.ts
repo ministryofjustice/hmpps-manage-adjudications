@@ -36,6 +36,7 @@ export default class DetailsOfOffenceRoutes {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole.offenceRule,
           offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, user),
+          isYouthOffender,
         }
       })
     )

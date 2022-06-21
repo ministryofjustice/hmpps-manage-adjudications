@@ -53,9 +53,9 @@
         
         <p class='govuk-!-margin-bottom-0'>Which set of rules apply to the prisoner?</p>
         {% if noticeOfBeingPlacedOnReportData.isYouthOffender %}
-           <p class='govuk-!-margin-bottom-2'>YOI offences - Prison rule 55</p>
+           <p class='govuk-!-margin-bottom-2'>YOI offences - {{ true | prisonRule }}</p>
         {% else %}
-           <p class='govuk-!-margin-bottom-2'>Adult offences - Prison rule 51</p>
+           <p class='govuk-!-margin-bottom-2'>Adult offences - {{ false | prisonRule }}</p>
         {% endif %}
         
         {% for offence in noticeOfBeingPlacedOnReportData.offences %}
@@ -68,10 +68,10 @@
             <div>
                 <p class='govuk-!-margin-bottom-0'>This offence broke:</p>
                 {% if offence.incidentRule %}
-                    <p class='govuk-!-margin-bottom-0'>Prison rule 51, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+                    <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
                     <p class='govuk-!-margin-bottom-0'>{{ offence.incidentRule.paragraphDescription }}</p>
                 {% endif %}
-                <p class='govuk-!-margin-bottom-0'>Prison rule 51, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+                <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
                 <p class='govuk-!-margin-bottom-0'>{{ offence.offenceRule.paragraphDescription }}</p>
             </div>
             {% if not loop.last %}
