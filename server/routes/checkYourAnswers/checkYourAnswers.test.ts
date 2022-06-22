@@ -143,6 +143,31 @@ describe('GET /check-your-answers', () => {
   })
 })
 
+describe('GET /check-your-answers for youth offender', () => {
+  beforeEach(() => {
+    placeOnReportService.getCheckYourAnswersInfo.mockResolvedValue({
+      isYouthOffender: true,
+      statement: '',
+      incidentDetails: [
+        {
+          label: 'Reporting Officer',
+          value: 'Test McTest',
+        },
+      ],
+    })
+  })
+
+  it('should load the check-your-answers page with rule 55', () => {
+    return request(app)
+      .get(adjudicationUrls.checkYourAnswers.urls.start(100))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Prison rule 55')
+        expect(response.text).not.toContain('Prison rule 51')
+      })
+  })
+})
+
 describe('POST /check-your-answers', () => {
   it('should redirect to the correct page if details is complete', () => {
     return request(app)
