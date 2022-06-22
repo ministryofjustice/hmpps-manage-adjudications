@@ -6,11 +6,11 @@
     {# Add YOI rule to table rows #}
     {% if isYouthOffender %}
         {% set ruleValue = { html:
-            '<p>YOI offences</p><p>Prison rule 55</p>'
+            '<p>YOI offences</p><p>' + true | prisonRule + '</p>'
         } %}
     {% else %}
         {% set ruleValue = { html:
-            '<p>Adult offences</p><p>Prison rule 51</p>'
+            '<p>Adult offences</p><p>' + false | prisonRule + '</p>'
         } %}
     {% endif %}
 
@@ -39,14 +39,14 @@
     {# Add final row - the paragraph numbers #}
     {% if offence.incidentRule %}
         {% set offencesValue = { html:
-            '<p>Prison rule 51, paragraph ' + offence.incidentRule.paragraphNumber + '</p>' +
+            '<p>' + isYouthOffender | prisonRule + ', paragraph ' + offence.incidentRule.paragraphNumber + '</p>' +
             '<p>' + offence.incidentRule.paragraphDescription + '</p>' +
-            '<p>Prison rule 51, paragraph ' + offence.offenceRule.paragraphNumber + '</p>' +
+            '<p>' + isYouthOffender | prisonRule + ', paragraph ' + offence.offenceRule.paragraphNumber + '</p>' +
             '<p>' + offence.offenceRule.paragraphDescription + '</p>'
         } %}
     {% else %}
         {% set offencesValue = { html:
-            '<p>Prison rule 51, paragraph ' + offence.offenceRule.paragraphNumber + '</p>' +
+            '<p>' + isYouthOffender | prisonRule + ', paragraph ' + offence.offenceRule.paragraphNumber + '</p>' +
             '<p>' + offence.offenceRule.paragraphDescription + '</p>'
         } %}
      {% endif %}

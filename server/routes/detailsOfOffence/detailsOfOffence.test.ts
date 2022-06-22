@@ -254,8 +254,8 @@ describe('GET /details-of-offence/102 view', () => {
       .get(adjudicationUrls.detailsOfOffence.urls.start(102))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Prison rule 51')
-        expect(res.text).not.toContain('Prison rule 55')
+        expect(res.text).toContain('Prison rule 55')
+        expect(res.text).not.toContain('Prison rule 51')
         expect(res.text).toContain('paragraph 21')
         expect(res.text).toContain('paragraph 22')
       })
