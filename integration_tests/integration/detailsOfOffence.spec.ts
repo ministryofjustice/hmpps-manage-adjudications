@@ -98,6 +98,25 @@ context('Details of offence', () => {
         },
       },
     })
+    cy.task('stubGetDraftAdjudication', {
+      id: 404,
+      response: {
+        draftAdjudication: {
+          id: 404,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-06T13:10:00',
+            handoverDeadline: '2021-11-08T13:10:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER1',
+        },
+      },
+    })
     // Draft with saved offences
     cy.task('stubGetDraftAdjudication', {
       id: 201,
@@ -272,11 +291,11 @@ context('Details of offence', () => {
     detailsOfOffencePage.prisonRulePara().contains('Prison rule 51')
   })
 
-  it('offence details page when there is no offences', () => {
-    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(200))
+  it('offence details page when there is no offences, rules or roles', () => {
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(404))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.continue().click()
-    cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.start(200))
+    cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.start(404))
   })
 
   it('offence details saves as expected', () => {
