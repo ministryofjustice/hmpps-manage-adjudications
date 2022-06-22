@@ -51,13 +51,10 @@ export default class DetailsOfOffenceRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { draftAdjudication, incidentRole } = await this.decisionTreeService.draftAdjudicationIncidentData(
-      adjudicationNumber,
-      user
-    )
+    const { draftAdjudication } = await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const { addOffence } = req.body
     if (addOffence) {
-      return res.redirect(adjudicationUrls.offenceCodeSelection.urls.start(adjudicationNumber, incidentRole))
+      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber))
     }
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)

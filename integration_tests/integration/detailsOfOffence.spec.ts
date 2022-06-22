@@ -273,9 +273,7 @@ context('Details of offence', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(200))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.continue().click()
-    new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-    ).checkOnPage()
+    cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.start(200))
   })
 
   it('offence details saves as expected', () => {
