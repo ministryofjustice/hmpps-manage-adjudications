@@ -316,9 +316,15 @@ context('Prisoner report - reporter view', () => {
             expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
             expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
             expect($summaryData.get(4).innerText).to.contain('Yes')
-            // expect($summaryData.get(5).innerText).to.contain(
-            //   'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
-            // )
+            if (prisoner.isYouthOffender) {
+              expect($summaryData.get(5).innerText).to.contain(
+                'Prison rule 55, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 55, paragraph 1\n\nCommits any assault'
+              )
+            } else {
+              expect($summaryData.get(5).innerText).to.contain(
+                'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+              )
+            }
           })
       })
       it('should contain the correct incident statement', () => {
