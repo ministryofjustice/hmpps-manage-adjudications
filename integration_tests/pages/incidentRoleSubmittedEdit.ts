@@ -7,8 +7,6 @@ export default class IncidentRoleEditPage extends Page {
 
   radioButtons = (): PageElement => cy.get('[data-qa="radio-buttons"]')
 
-  radioButtonLegend = (): PageElement => cy.get('legend')
-
   conditionalInputIncite = (): PageElement => cy.get('#incitedInput')
 
   conditionalInputAssist = (): PageElement => cy.get('#assistedInput')

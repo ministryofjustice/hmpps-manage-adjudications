@@ -384,11 +384,13 @@ const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetai
 }
 
 const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult): IncidentDetails => {
+  let incidentRoleCode: IncidentRole = null
+  if (draftAdjudicationResult.draftAdjudication.incidentRole) {
+    incidentRoleCode = incidentRoleFromCode(draftAdjudicationResult.draftAdjudication.incidentRole.roleCode)
+  }
   return {
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
-    currentIncidentRoleSelection: incidentRoleFromCode(
-      draftAdjudicationResult.draftAdjudication.incidentRole?.roleCode
-    ),
+    currentIncidentRoleSelection: incidentRoleCode,
     currentAssociatedPrisonerNumber: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersNumber,
   }
 }

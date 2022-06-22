@@ -63,9 +63,9 @@ context('Incident role', () => {
           incidentStatement: {},
           prisonerNumber: 'G6415GD',
           startedByUserId: 'USER2',
-          incidentRole: {
+          /*  incidentRole: {
             roleCode: '25a',
-          },
+          }, */
         },
       },
     })
@@ -166,13 +166,11 @@ context('Incident role', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.start(34))
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
     incidentRolePage.radioButtons().should('exist')
-    incidentRolePage.radioButtonLegend().should('exist')
     incidentRolePage.submitButton().should('exist')
-  })
-  it('should show the prisoners name in the radio button question', () => {
-    cy.visit(adjudicationUrls.incidentRole.urls.start(34))
-    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
+    incidentRolePage.radioButtons().find('input[value="incited"]').should('not.be.checked')
+    incidentRolePage.radioButtons().find('input[value="assisted"]').should('not.be.checked')
+    incidentRolePage.radioButtons().find('input[value="committed"]').should('not.be.checked')
+    incidentRolePage.radioButtons().find('input[value="attempted"]').should('not.be.checked')
   })
   it('should submit form successfully if all data entered - no associated prisoner required', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.start(34))
@@ -331,14 +329,8 @@ context('Incident role', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.start(134))
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
     incidentRolePage.radioButtons().should('exist')
-    incidentRolePage.radioButtonLegend().should('exist')
     incidentRolePage.submitButton().should('exist')
     incidentRolePage.exitButton().should('exist')
-  })
-  it('should show the prisoners name in the radio button question', () => {
-    cy.visit(adjudicationUrls.incidentRole.urls.start(134))
-    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
   })
   it('should submit form successfully if radio button changed from one which requires an associated prisoner PRN to one which does not', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.start(134))

@@ -79,7 +79,7 @@ describe('GET /incident-role/<id>/submitted/edit', () => {
       )
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('What was Udfsanaye Aidetria’s role in the incident?')
+        expect(res.text).toContain('What was Udfsanaye Aidetria’s role in this incident?')
       })
   })
   it('should load the incident role edit page with no referrer', () => {
@@ -87,7 +87,7 @@ describe('GET /incident-role/<id>/submitted/edit', () => {
       .get(adjudicationUrls.incidentRole.urls.submittedEdit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('What was Udfsanaye Aidetria’s role in the incident?')
+        expect(res.text).toContain('What was Udfsanaye Aidetria’s role in this incident?')
       })
   })
   it('should throw an error on api failure', () => {
