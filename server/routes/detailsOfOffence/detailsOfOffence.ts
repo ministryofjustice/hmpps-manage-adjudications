@@ -21,6 +21,11 @@ export default class DetailsOfOffenceRoutes {
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const allOffences = await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
+    if (!allOffences || allOffences.length < 1) {
+      return res.render(`pages/detailsOfOffence`, {
+        prisoner,
+      })
+    }
     const isYouthOffender = draftAdjudication.isYouthOffender || false
     const offences = await Promise.all(
       allOffences.map(async offenceData => {
@@ -52,11 +57,11 @@ export default class DetailsOfOffenceRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { draftAdjudication } = await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
-    const { addOffence } = req.body
-    if (addOffence) {
+    const { addFirstOffence } = req.body
+    if (addFirstOffence) {
       return res.redirect(adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber))
     }
+    const { draftAdjudication } = await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)
       .map(offenceData => {
