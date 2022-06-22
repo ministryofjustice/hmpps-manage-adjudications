@@ -8,14 +8,14 @@
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 {% from "../macros/otherPersonOffenceCodeDecisionInput.njk" import otherPersonOffenceCodeDecisionInput %}
 
-{% set title = pageTitle %}
+{% set title = "Offence details" %}
 
 {% block beforeContent %}
     {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
     {% set items = [] %}
     {% for answer in answers %}
         {% if answer.type == 'OFFICER' %}
