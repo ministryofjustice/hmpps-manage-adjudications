@@ -5,6 +5,12 @@ export default class DetailsOfOffence extends Page {
     super('Offence details')
   }
 
+  prisonRule = (): PageElement => cy.get('[data-qa="question-applicable-rule"]')
+
+  prisonRuleDesc = (): PageElement => cy.get('[data-qa="answer-applicable-rule-desc"]')
+
+  prisonRulePara = (): PageElement => cy.get('[data-qa="answer-applicable-rule-para"]')
+
   prisonerNameDiv = (): PageElement => cy.get('[data-qa="playback-offender-name"]')
 
   offenceSection = (offenceIndex: number): PageElement => cy.get(`[data-qa="offence-broke-section-${offenceIndex}"]`)

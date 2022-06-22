@@ -45,6 +45,7 @@ export default class DetailsOfOffenceRoutes {
       offences,
       adjudicationNumber,
       incidentRole,
+      isYouthOffender: draftAdjudication.isYouthOffender,
     })
   }
 
