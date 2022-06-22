@@ -267,6 +267,9 @@ context('Details of offence', () => {
     detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
     detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
     detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
+    detailsOfOffencePage.prisonRule().contains('Which set of rules apply to this prisoner?')
+    detailsOfOffencePage.prisonRuleDesc().contains('Adult offences')
+    detailsOfOffencePage.prisonRulePara().contains('Prison rule 51')
   })
 
   it('offence details page when there is no offences', () => {

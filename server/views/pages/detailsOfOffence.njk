@@ -22,6 +22,17 @@
             {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
         </div>
         {% if offences | length > 0 %}
+            <div class="prisoner-rule govuk-!-margin-bottom-5">
+              <p class="govuk-!-margin-bottom-1 govuk-label--s"
+                  data-qa="question-applicable-rule">Which set of rules apply to this prisoner?</p>
+              {% if isYouthOffender %}
+                <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">YOI offences</p>
+                <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ true | prisonRule }}</p>
+              {% else %}  
+                <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">Adult offences</p>
+                <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ false | prisonRule }}</p>
+              {% endif %}
+            </div>  
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-three-quarters">
                     {% for offence in offences %}
