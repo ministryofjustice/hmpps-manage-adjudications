@@ -63,6 +63,8 @@ describe('GET /age-of-prisoner', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Age of the prisoner')
+        expect(res.text).toContain('Prison rule 51')
+        expect(res.text).toContain('Prison rule 55')
       })
   })
 })
