@@ -128,13 +128,7 @@ context('Incident role (edit after completion of report)', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.submittedEdit(34))
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
     incidentRolePage.radioButtons().should('exist')
-    incidentRolePage.radioButtonLegend().should('exist')
     incidentRolePage.submitButton().should('exist')
-  })
-  it('should show the prisoners name in the radio button question', () => {
-    cy.visit(adjudicationUrls.incidentRole.urls.submittedEdit(34))
-    const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtonLegend().should('contain.text', 'What was John Smith’s role in the incident?')
   })
   it('should submit form successfully if radio button changed from one which requires an associated prisoner PRN to one which does not', () => {
     cy.visit(

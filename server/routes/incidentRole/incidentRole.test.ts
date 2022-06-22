@@ -61,7 +61,7 @@ describe('GET /incident-role', () => {
       .get(adjudicationUrls.incidentRole.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('What was Udfsanaye Aidetria’s role in the incident?')
+        expect(res.text).toContain('What was Udfsanaye Aidetria’s role in this incident?')
       })
   })
 })
