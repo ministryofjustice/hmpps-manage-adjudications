@@ -5,7 +5,7 @@
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
   {% if not readOnly %}
-   <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink">Change</a></p>
+   <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink" id="adjudication-summary-details-change-link">Change</a></p>
   {% endif %}
   </div>
   <div class="adjudicationsSummary-incidentDetails">
@@ -15,7 +15,7 @@
     <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
       <h2 class="govuk-heading-m">Offence details</h2>
      {% if not readOnly %}
-      <p class="govuk-body"><a href={{ offenceDetailsURL }} class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink">Change</a></p>
+      <p class="govuk-body"><a href={{ offenceDetailsURL }} class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink" id="adjudication-summary-offence-change-link">Change</a></p>
      {% endif %}
     </div>
     <div class="adjudicationsSummary-offenceDetails">
@@ -28,7 +28,7 @@
   <div class="flex-container adjudicationsSummary-heading govuk-!-margin-top-9">
    <h2 class="govuk-heading-m">Incident statement</h2>
    {% if not readOnly %}
-    <p class="govuk-body"><a href={{ statementURL }} class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink">Change</a></p>
+    <p class="govuk-body"><a href={{ statementURL }} class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink" id="adjudication-summary-statement-change-link">Change</a></p>
    {% endif %}
   </div>
   <div class="adjudicationsSummary-incidentStatement" data-qa="adjudicationsSummary-incidentStatement">
