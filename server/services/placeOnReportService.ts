@@ -277,8 +277,9 @@ export default class PlaceOnReportService {
     user: User
   ): Promise<StaffSearchWithCurrentLocation[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const activeStaffMembers = staffMembers.filter(person => !!person.activeCaseLoadId)
 
-    const agencyIds = [...new Set(staffMembers.map(person => person.activeCaseLoadId))]
+    const agencyIds = [...new Set(activeStaffMembers.map(person => person.activeCaseLoadId))]
 
     const getLocationName = async (agencyId: string) => {
       if (isCentralAdminCaseload(agencyId)) return { agencyId, locationFullName: 'Central Admin' }
@@ -290,7 +291,7 @@ export default class PlaceOnReportService {
     const locations = await Promise.all(agencyIds.map((agencyId: string) => getLocationName(agencyId)))
 
     return Promise.all(
-      staffMembers.map((staffMember: StaffSearchByName) => {
+      activeStaffMembers.map((staffMember: StaffSearchByName) => {
         const currentLocation = locations.find(location => location.agencyId === staffMember.activeCaseLoadId)
         return { ...staffMember, currentLocation: currentLocation.locationFullName }
       })

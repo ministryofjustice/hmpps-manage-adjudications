@@ -722,6 +722,16 @@ describe('placeOnReportService', () => {
           username: 'RO_USER_TEST',
           verified: true,
         },
+        {
+          activeCaseLoadId: null,
+          email: 'testerPerson@justice.gov.uk',
+          firstName: 'Tester',
+          lastName: 'Person',
+          name: 'Tester Person',
+          staffId: 12345647891,
+          username: 'RO_USER_TEST',
+          verified: true,
+        },
       ]
 
       const response = await service.getAssociatedStaffDetails(staffMembers, user)
