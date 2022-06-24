@@ -20,7 +20,7 @@ services:
       - "9091:8080"
 
   gotenberg:
-    image: thecodingmachine/gotenberg:6.4.3
+    image: gotenberg/gotenberg:7
     networks:
       - hmpps_int
     container_name: gotenberg
@@ -35,7 +35,7 @@ services:
       - DEFAULT_LISTEN_PORT=3001
     restart: always
     healthcheck:
-      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
 networks:
   hmpps_int:

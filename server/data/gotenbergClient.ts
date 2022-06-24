@@ -22,7 +22,7 @@ export default class GotenbergClient {
   ): Promise<Buffer> {
     const { marginBottom, marginLeft, marginRight, marginTop } = options
     const request = superagent
-      .post(`${this.gotenbergHost}/convert/html`)
+      .post(`${this.gotenbergHost}/forms/chromium//convert/html`)
       .set('Content-Type', 'multi-part/form-data')
       .buffer(true)
       .attach('files', Buffer.from(html), 'index.html')

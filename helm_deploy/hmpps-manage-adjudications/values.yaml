@@ -64,8 +64,8 @@ gotenberg:
   replicaCount: 2
 
   image:
-    repository: thecodingmachine/gotenberg
-    tag: 6.3.0
+    repository: gotenberg/gotenberg
+    tag: 7
     port: 3000
 
   ingress:
@@ -73,7 +73,7 @@ gotenberg:
 
   livenessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 30
     initialDelaySeconds: 60
     timeoutSeconds: 20
@@ -81,7 +81,7 @@ gotenberg:
 
   readinessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 20
     initialDelaySeconds: 60
     timeoutSeconds: 30
