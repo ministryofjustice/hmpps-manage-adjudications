@@ -65,8 +65,11 @@ gotenberg:
 
   image:
     repository: gotenberg/gotenberg
-    tag: 7
+    tag: 7.5.3
     port: 3000
+  
+  containerCommand: ["gotenberg"]  
+  containerArgs: ["--chromium-ignore-certificate-errors","--api-timeout=30s", "--libreoffice-disable-routes=true","--pdfengines-engines=pdftk"]
 
   ingress:
     enabled: false
@@ -92,4 +95,5 @@ gotenberg:
 
   securityContext:
     runAsUser: 1001
+    privileged: false
     runAsNonRoot: true

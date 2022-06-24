@@ -25,7 +25,7 @@ services:
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
   gotenberg:
-    image: gotenberg/gotenberg:7
+    image: gotenberg/gotenberg:7.5.3
     networks:
       - hmpps
     container_name: gotenberg
