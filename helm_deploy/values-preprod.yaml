@@ -72,6 +72,4 @@ generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 
 gotenberg:
-  replicaCount: 1
-  env:
-    DISABLE_UNOCONV: 1   
+  replicaCount: 1 

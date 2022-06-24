@@ -73,5 +73,3 @@ generic-prometheus-alerts:
 
 gotenberg:
   replicaCount: 2
-  env:
-    DISABLE_UNOCONV: 1
