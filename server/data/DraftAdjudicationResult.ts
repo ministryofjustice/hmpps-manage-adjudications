@@ -81,6 +81,7 @@ export type TaskListDetails = {
 
 export type PrisonerReport = CheckYourAnswers
 
-export type isYouthOffenderRule = {
+export type ApplicableRules = {
   isYouthOffenderRule: boolean
+  removeExistingOffences: boolean
 }

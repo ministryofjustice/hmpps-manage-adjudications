@@ -8,7 +8,7 @@ import {
   EditIncidentRoleRequest,
   OffenceRule,
   OffenceDetails,
-  isYouthOffenderRule,
+  ApplicableRules,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -149,11 +149,11 @@ export default class ManageAdjudicationsClient {
 
   async saveYouthOffenderStatus(
     adjudicationNumber: number,
-    isYOI: isYouthOffenderRule
+    applicableRulesData: ApplicableRules
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${adjudicationNumber}/applicable-rules`,
-      data: isYOI,
+      data: applicableRulesData,
     })
   }
 }

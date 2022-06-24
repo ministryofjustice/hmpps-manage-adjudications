@@ -95,11 +95,13 @@ export default class PlaceOnReportService {
   async addDraftYouthOffenderStatus(
     adjudicationNumber: number,
     whichRuleChosen: string,
+    removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       isYouthOffenderRule: whichRuleChosen === 'yoi',
+      removeExistingOffences,
     }
 
     return client.saveYouthOffenderStatus(adjudicationNumber, requestBody)

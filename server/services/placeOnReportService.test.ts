@@ -807,10 +807,11 @@ describe('placeOnReportService', () => {
         },
       }
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)
-      const response = await service.addDraftYouthOffenderStatus(2483, 'yoi', user)
+      const response = await service.addDraftYouthOffenderStatus(2483, 'yoi', true, user)
       expect(response).toEqual(expectedResult)
       expect(saveYouthOffenderStatus).toBeCalledWith(2483, {
         isYouthOffenderRule: true,
+        removeExistingOffences: true,
       })
     })
     it('creates the correct data payload if the prisoner is an adult and sends to the draft adjudication database', async () => {
@@ -829,10 +830,11 @@ describe('placeOnReportService', () => {
         },
       }
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)
-      const response = await service.addDraftYouthOffenderStatus(2484, 'adult', user)
+      const response = await service.addDraftYouthOffenderStatus(2484, 'adult', false, user)
       expect(response).toEqual(expectedResult)
       expect(saveYouthOffenderStatus).toBeCalledWith(2484, {
         isYouthOffenderRule: false,
+        removeExistingOffences: false,
       })
     })
   })

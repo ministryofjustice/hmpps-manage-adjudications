@@ -36,6 +36,7 @@
 	<div>
 		<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+			<input type="hidden" name="originalRuleSelection" value="{{ whichRuleChosen }}"/>
 
 			{{ govukRadios({
 			idPrefix: 'whichRuleChosen',
