@@ -44,6 +44,45 @@ describe('GET /place-the-prisoner-on-report', () => {
         statementPresent: false,
         statementComplete: false,
         offenceDetailsComplete: false,
+        showLinkForAcceptDetails: false,
+        taskListDisplay: [
+          {
+            id: 'incident-details-info',
+            linkUrl: '/incident-details/G6415GD/104/edit',
+            linkAttributes: 'incident-details-link',
+            linkClass: 'task',
+            linkText: 'Incident details',
+            statusClass: 'govuk-tag',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'offence-details-info',
+            linkUrl: '/age-of-prisoner/104',
+            linkAttributes: 'details-of-offence-link',
+            linkClass: 'task',
+            linkText: 'Offence details',
+            statusClass: 'govuk-tag',
+            statusText: 'NOT STARTED',
+          },
+          {
+            id: 'incident-statement-info',
+            linkUrl: '/incident-statement/104',
+            linkAttributes: 'incident-statement-link',
+            linkClass: 'task',
+            linkText: 'Incident statement',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+          {
+            id: 'accept-details-info',
+            linkUrl: '/check-your-answers/104',
+            linkAttributes: 'accept-details-link',
+            linkClass: 'task',
+            linkText: 'Accept details and place on report',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+        ],
       })
     })
     it('should load the continue report page', () => {
@@ -77,6 +116,45 @@ describe('GET /place-the-prisoner-on-report', () => {
         statementPresent: false,
         statementComplete: false,
         offenceDetailsComplete: true,
+        showLinkForAcceptDetails: false,
+        taskListDisplay: [
+          {
+            id: 'incident-details-info',
+            linkUrl: '/incident-details/G6415GD/104/edit',
+            linkAttributes: 'incident-details-link',
+            linkClass: 'task',
+            linkText: 'Incident details',
+            statusClass: 'govuk-tag',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'offence-details-info',
+            linkUrl: '/details-of-offence/104',
+            linkAttributes: 'details-of-offence-link',
+            linkClass: 'task',
+            linkText: 'Offence details',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'incident-statement-info',
+            linkUrl: '/incident-statement/104',
+            linkAttributes: 'incident-statement-link',
+            linkClass: 'task',
+            linkText: 'Incident statement',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+          {
+            id: 'accept-details-info',
+            linkUrl: '/check-your-answers/104',
+            linkAttributes: 'accept-details-link',
+            linkClass: 'task',
+            linkText: 'Accept details and place on report',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+        ],
       })
     })
     it('should load the continue report page', () => {
@@ -110,9 +188,48 @@ describe('GET /place-the-prisoner-on-report', () => {
         statementPresent: true,
         statementComplete: false,
         offenceDetailsComplete: true,
+        showLinkForAcceptDetails: false,
+        taskListDisplay: [
+          {
+            id: 'incident-details-info',
+            linkUrl: '/incident-details/G6123VU/92/edit',
+            linkAttributes: 'incident-details-link',
+            linkClass: 'task',
+            linkText: 'Incident details',
+            statusClass: 'govuk-tag',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'offence-details-info',
+            linkUrl: '/details-of-offence/92',
+            linkAttributes: 'details-of-offence-link',
+            linkClass: 'task',
+            linkText: 'Offence details',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'incident-statement-info',
+            linkUrl: '/incident-statement/92',
+            linkAttributes: 'incident-statement-link',
+            linkClass: 'task',
+            linkText: 'Incident statement',
+            statusClass: 'govuk-tag govuk-tag--blue',
+            statusText: 'IN PROGRESS',
+          },
+          {
+            id: 'accept-details-info',
+            linkUrl: '/check-your-answers/92',
+            linkAttributes: 'accept-details-link',
+            linkClass: 'task',
+            linkText: 'Accept details and place on report',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+        ],
       })
     })
-    it('should load the continue report page', () => {
+    it.only('should load the continue report page', () => {
       return request(app)
         .get(adjudicationUrls.taskList.urls.start(3456))
         .expect('Content-Type', /html/)
@@ -143,6 +260,45 @@ describe('GET /place-the-prisoner-on-report', () => {
         statementPresent: true,
         statementComplete: true,
         offenceDetailsComplete: true,
+        showLinkForAcceptDetails: true,
+        taskListDisplay: [
+          {
+            id: 'incident-details-info',
+            linkUrl: '/incident-details/G6415GD/104/edit',
+            linkAttributes: 'incident-details-link',
+            linkClass: 'task',
+            linkText: 'Incident details',
+            statusClass: 'govuk-tag',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'offence-details-info',
+            linkUrl: '/details-of-offence/104',
+            linkAttributes: 'details-of-offence-link',
+            linkClass: 'task',
+            linkText: 'Offence details',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'incident-statement-info',
+            linkUrl: '/incident-statement/104',
+            linkAttributes: 'incident-statement-link',
+            linkClass: 'task',
+            linkText: 'Incident statement',
+            statusClass: 'govuk-tag govuk-tag--blue',
+            statusText: 'IN PROGRESS',
+          },
+          {
+            id: 'accept-details-info',
+            linkUrl: '/check-your-answers/104',
+            linkAttributes: 'accept-details-link',
+            linkClass: 'task',
+            linkText: 'Accept details and place on report',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+        ],
       })
     })
     it('should load the continue report page', () => {
@@ -176,6 +332,45 @@ describe('GET /place-the-prisoner-on-report', () => {
         statementPresent: true,
         statementComplete: true,
         offenceDetailsComplete: false,
+        showLinkForAcceptDetails: false,
+        taskListDisplay: [
+          {
+            id: 'incident-details-info',
+            linkUrl: '/incident-details/G6123VU/92/edit',
+            linkAttributes: 'incident-details-link',
+            linkClass: 'task',
+            linkText: 'Incident details',
+            statusClass: 'govuk-tag',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'offence-details-info',
+            linkUrl: '/details-of-offence/92',
+            linkAttributes: 'details-of-offence-link',
+            linkClass: 'task',
+            linkText: 'Offence details',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'incident-statement-info',
+            linkUrl: '/incident-statement/92',
+            linkAttributes: 'incident-statement-link',
+            linkClass: 'task',
+            linkText: 'Incident statement',
+            statusClass: 'govuk-tag',
+            statusText: 'COMPLETED',
+          },
+          {
+            id: 'accept-details-info',
+            linkUrl: '/check-your-answers/92',
+            linkAttributes: 'accept-details-link',
+            linkClass: 'task',
+            linkText: 'Accept details and place on report',
+            statusClass: 'govuk-tag govuk-tag--grey',
+            statusText: 'NOT STARTED',
+          },
+        ],
       })
     })
     it('should not contain a link to confirm the adjudication', () => {

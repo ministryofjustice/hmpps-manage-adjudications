@@ -136,10 +136,19 @@ export default class IncidentDetailsPage {
     try {
       if (this.pageOptions.isEdit()) {
         await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
-        return redirectToOffenceDetails(res, postValues.draftId)
+        const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(
+          postValues.draftId,
+          user
+        )
+        const offenceDetailsComplete = draftAdjudication.offenceDetails?.length > 0 || false
+        const nextPageUrl = await this.placeOnReportService.getNextOffencesUrl(
+          offenceDetailsComplete,
+          draftAdjudication.id
+        )
+        return res.redirect(nextPageUrl)
       }
       const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
-      return redirectToApplcableRule(res, newDraftData.draftAdjudication.id)
+      return redirectToApplicableRule(res, newDraftData.draftAdjudication.id)
     } catch (postError) {
       if (this.pageOptions.isEdit()) {
         this.setUpRedirectForEditError(res, postValues.prisonerNumber, postError, postValues.draftId)
@@ -348,7 +357,7 @@ const getTaskListUrl = (draftId: number) => {
   return adjudicationUrls.taskList.urls.start(draftId)
 }
 
-const redirectToApplcableRule = (res: Response, draftId: number) => {
+const redirectToApplicableRule = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.ageOfPrisoner.urls.start(draftId))
 }
 

@@ -15,18 +15,33 @@ export default class DraftTaskListRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user)
-    const taskListDetails = await this.placeOnReportService.getInfoForTaskListStatuses(idValue, user)
+    // const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user)
+    // const taskListDetails = await this.placeOnReportService.getInfoForTaskListStatuses(idValue, user)
+    const [prisoner, taskListDetails] = await Promise.all([
+      this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
+      this.placeOnReportService.getInfoForTaskListStatuses(idValue, user),
+    ])
+    const {
+      offenceDetailsComplete,
+      taskListDisplay,
+      showLinkForAcceptDetails,
+      handoverDeadline,
+      statementComplete,
+      statementPresent,
+    } = taskListDetails
+    // const offenceDetailsUrl = await this.placeOnReportService.getNextOffencesUrl(offenceDetailsComplete, idValue)
 
     return res.render(`pages/draftTaskList`, {
       prisoner,
       adjudicationId: id,
-      statementPresent: taskListDetails.statementPresent,
-      statementComplete: taskListDetails.statementComplete,
-      offenceDetailsComplete: taskListDetails.offenceDetailsComplete,
+      statementPresent,
+      statementComplete,
+      offenceDetailsComplete,
+      taskListDisplay,
       prisonerFirstAndLastName: prisoner.friendlyName,
-      expirationTime: formatTimestampToTime(taskListDetails.handoverDeadline),
-      expirationDay: formatTimestampToDate(taskListDetails.handoverDeadline, 'D MMMM YYYY'),
+      expirationTime: formatTimestampToTime(handoverDeadline),
+      expirationDay: formatTimestampToDate(handoverDeadline, 'D MMMM YYYY'),
+      showLinkForAcceptDetails,
     })
   }
 

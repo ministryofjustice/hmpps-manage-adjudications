@@ -77,6 +77,8 @@ export type TaskListDetails = {
   statementPresent: boolean
   statementComplete: boolean
   offenceDetailsComplete: boolean
+  taskListDisplay: TaskListDisplayItem[]
+  showLinkForAcceptDetails: boolean
 }
 
 export type PrisonerReport = CheckYourAnswers
@@ -84,4 +86,19 @@ export type PrisonerReport = CheckYourAnswers
 export type ApplicableRules = {
   isYouthOffenderRule: boolean
   removeExistingOffences: boolean
+}
+
+export type IncidentStatementStatus = {
+  classes: string
+  text: string
+}
+
+export type TaskListDisplayItem = {
+  id: string
+  linkUrl: string
+  linkAttributes: string
+  linkClass: string
+  linkText: string
+  statusClass: string
+  statusText: string
 }

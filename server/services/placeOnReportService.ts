@@ -14,9 +14,11 @@ import {
   DraftAdjudication,
   TaskListDetails,
   OffenceDetails,
+  IncidentStatementStatus,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
+import adjudicationUrls from '../utils/urlGenerator'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -266,12 +268,77 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
 
+    const offenceDetailsComplete = draftAdjudication.offenceDetails?.length > 0
+    const statementComplete = draftAdjudication.incidentStatement?.completed || false
+
+    const offenceDetailsUrl = this.getNextOffencesUrl(offenceDetailsComplete, draftAdjudication.id)
+    const incidentStatementStatus = this.getIncidentStatementStatus(
+      !!draftAdjudication.incidentStatement,
+      statementComplete
+    )
+
+    const taskListDisplay = [
+      // incident details
+      {
+        id: 'incident-details-info',
+        linkUrl: adjudicationUrls.incidentDetails.urls.edit(draftAdjudication.prisonerNumber, draftAdjudication.id),
+        linkAttributes: 'incident-details-link',
+        linkClass: 'task',
+        linkText: 'Incident details',
+        statusClass: 'govuk-tag',
+        statusText: 'COMPLETED',
+      },
+      // offence details
+      {
+        id: 'offence-details-info',
+        linkUrl: offenceDetailsUrl,
+        linkAttributes: 'details-of-offence-link',
+        linkClass: 'task',
+        linkText: 'Offence details',
+        statusClass: offenceDetailsComplete ? 'govuk-tag' : 'govuk-tag govuk-tag--grey',
+        statusText: offenceDetailsComplete ? 'COMPLETED' : 'NOT STARTED',
+      },
+      // incident statement
+      {
+        id: 'incident-statement-info',
+        linkUrl: adjudicationUrls.incidentStatement.urls.start(draftAdjudication.id),
+        linkAttributes: 'incident-statement-link',
+        linkClass: 'task',
+        linkText: 'Incident statement',
+        statusClass: incidentStatementStatus.classes,
+        statusText: incidentStatementStatus.text,
+      },
+      // accept details (check your answers)
+      {
+        id: 'accept-details-info',
+        linkUrl: adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id),
+        linkAttributes: 'accept-details-link',
+        linkClass: 'task',
+        linkText: 'Accept details and place on report',
+        statusClass: 'govuk-tag govuk-tag--grey',
+        statusText: 'NOT STARTED',
+      },
+    ]
+
     return {
       handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
       statementPresent: !!draftAdjudication.incidentStatement,
-      statementComplete: draftAdjudication.incidentStatement?.completed || false,
-      offenceDetailsComplete: draftAdjudication.offenceDetails?.length > 0,
+      statementComplete,
+      offenceDetailsComplete,
+      taskListDisplay,
+      showLinkForAcceptDetails: offenceDetailsComplete && statementComplete,
     }
+  }
+
+  getNextOffencesUrl(offenceDetailsComplete: boolean, adjudicationId: number): string {
+    if (offenceDetailsComplete) return adjudicationUrls.detailsOfOffence.urls.start(adjudicationId)
+    return adjudicationUrls.ageOfPrisoner.urls.start(adjudicationId)
+  }
+
+  getIncidentStatementStatus = (statementPresent: boolean, statementComplete: boolean): IncidentStatementStatus => {
+    if (!statementPresent) return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
+    if (statementComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
+    return { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
   }
 
   async getAssociatedStaffDetails(
