@@ -448,6 +448,7 @@ describe('manageAdjudicationsClient', () => {
 
     const youthOffenderData = {
       isYouthOffenderRule: true,
+      removeExistingOffences: true,
     }
     it('returns the updated draft adjudication', async () => {
       fakeManageAdjudicationsApi

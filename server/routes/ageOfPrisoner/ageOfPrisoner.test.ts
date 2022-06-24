@@ -77,7 +77,12 @@ describe('POST /age-of-prisoner', () => {
       .expect('Location', adjudicationUrls.incidentRole.urls.start(1041))
       .expect(() => expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledTimes(1))
       .expect(() =>
-        expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledWith(1041, 'adult', expect.anything())
+        expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledWith(
+          1041,
+          'adult',
+          true,
+          expect.anything()
+        )
       )
   })
   it('should render error summary with correct validation message', () => {
@@ -98,5 +103,38 @@ describe('POST /age-of-prisoner', () => {
       .expect(res => {
         expect(res.text).toContain('Error: Internal Error')
       })
+  })
+})
+
+describe('POST /age-of-prisoner with existing selection of adult', () => {
+  it('should request offence deletion if the value is changed', () => {
+    return request(app)
+      .post(adjudicationUrls.ageOfPrisoner.urls.start(1041))
+      .send({ whichRuleChosen: 'yoi', originalRuleSelection: 'adult' })
+      .expect('Location', adjudicationUrls.incidentRole.urls.start(1041))
+      .expect(() => expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledTimes(1))
+      .expect(() =>
+        expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledWith(
+          1041,
+          'yoi',
+          true,
+          expect.anything()
+        )
+      )
+  })
+  it('should not request offence deletion if the value is changed', () => {
+    return request(app)
+      .post(adjudicationUrls.ageOfPrisoner.urls.start(1041))
+      .send({ whichRuleChosen: 'adult', originalRuleSelection: 'adult' })
+      .expect('Location', adjudicationUrls.incidentRole.urls.start(1041))
+      .expect(() => expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledTimes(1))
+      .expect(() =>
+        expect(placeOnReportService.addDraftYouthOffenderStatus).toHaveBeenCalledWith(
+          1041,
+          'adult',
+          false,
+          expect.anything()
+        )
+      )
   })
 })

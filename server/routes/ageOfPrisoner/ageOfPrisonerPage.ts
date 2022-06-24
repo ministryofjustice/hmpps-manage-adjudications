@@ -83,15 +83,17 @@ export default class AgeOfPrisonerPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { whichRuleChosen } = req.body
+    const { whichRuleChosen, originalRuleSelection } = req.body
     const { adjudicationNumber } = req.params
     const idValue: number = parseInt(adjudicationNumber as string, 10)
 
     const error = validateForm({ whichRuleChosen })
     if (error) return this.renderView(req, res, { error, whichRuleChosen })
 
+    const applicableRuleChanged = originalRuleSelection !== whichRuleChosen
+
     try {
-      await this.placeOnReportService.addDraftYouthOffenderStatus(idValue, whichRuleChosen, user)
+      await this.placeOnReportService.addDraftYouthOffenderStatus(idValue, whichRuleChosen, applicableRuleChanged, user)
       const redirectUrl = getRedirectUrls(this.pageOptions, idValue)
       return res.redirect(redirectUrl)
     } catch (postError) {
