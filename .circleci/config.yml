@@ -22,12 +22,14 @@ executors:
     docker:
       - image: 'cimg/node:<<parameters.node_tag>>'
       - image: 'circleci/redis:<<parameters.redis_tag>>'
-      - image: 'thecodingmachine/gotenberg:<<parameters.gotenberg_tag>>'
-        environment:
-          - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
-          - DISABLE_UNOCONV=1
-          - DEFAULT_WAIT_TIMEOUT=30
-          - DEFAULT_LISTEN_PORT=3001
+      - image: 'gotenberg/gotenberg:<<parameters.gotenberg_tag>>'
+        command:
+          - "gotenberg"
+          - "--api-port=3001"  
+          - "--chromium-ignore-certificate-errors"
+          - "--api-timeout=30s"
+          - "--pdfengines-engines=pdftk"
+          - "--uno-listener-restart-threshold=0" 
     working_directory: ~/app
     resource_class: <<parameters.resource_class>>
     parameters:
@@ -41,7 +43,7 @@ executors:
         default: "6.2"
         type: string
       gotenberg_tag:
-        default: "6.4.3"
+        default: "7.5.3"
         type: string
 
 jobs:
