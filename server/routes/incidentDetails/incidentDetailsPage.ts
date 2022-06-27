@@ -360,7 +360,3 @@ const getTaskListUrl = (draftId: number) => {
 const redirectToApplicableRule = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.ageOfPrisoner.urls.start(draftId))
 }
-
-const redirectToOffenceDetails = (res: Response, draftId: number) => {
-  return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
-}
