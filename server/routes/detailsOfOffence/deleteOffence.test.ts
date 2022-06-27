@@ -146,7 +146,7 @@ describe('POST /details-of-offence/102/delete/1 validation', () => {
         .expect(200)
         .then(() =>
           agent.post(adjudicationUrls.detailsOfOffence.urls.delete(102, 2)).expect(res => {
-            expect(res.text).toContain('Please make a choice')
+            expect(res.text).toContain('Select yes if you want to delete this offence')
           })
         )
     )

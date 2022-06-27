@@ -69,7 +69,7 @@ context('Age of the prisoner', () => {
     AgeOfPrisonerPage.errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select which rules apply.')
+        expect($errors.get(0).innerText).to.contain('Select which rules apply')
       })
   })
   it('should show the correct age of the prisoner based on the date of the incident report', () => {

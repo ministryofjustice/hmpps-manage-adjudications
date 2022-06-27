@@ -96,7 +96,7 @@ describe('POST /delete-person', () => {
       .send({})
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select yes if you want to delete this person.')
+        expect(res.text).toContain('Select yes if you want to delete this person')
       })
   })
 })

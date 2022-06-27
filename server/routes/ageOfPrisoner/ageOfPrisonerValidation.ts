@@ -7,7 +7,7 @@ type AgeOfPrisonerForm = {
 const errors: { [key: string]: FormError } = {
   RADIO_OPTION_MISSING: {
     href: '#whichRuleChosen',
-    text: 'Select which rules apply.',
+    text: 'Select which rules apply',
   },
 }
 

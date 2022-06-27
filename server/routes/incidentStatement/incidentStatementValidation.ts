@@ -9,15 +9,15 @@ type incidentStatementForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_TEXT: {
     href: '#incidentStatement',
-    text: 'Write the full details of the alleged offence',
+    text: 'Enter the details of the incident',
   },
   WORD_COUNT_EXCEEDED: {
     href: '#incidentStatement',
-    text: 'Write your statement using 4,000 characters or less',
+    text: 'Your statement must be 4,000 characters or fewer',
   },
   RADIO_OPTION_MISSING: {
     href: '#incidentStatementComplete',
-    text: 'Select yes if you have completed your statement',
+    text: 'Select yes if you’ve completed your statement',
   },
 }
 

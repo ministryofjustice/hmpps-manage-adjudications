@@ -91,7 +91,7 @@ describe('POST /age-of-prisoner', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select which rules apply.')
+        expect(res.text).toContain('Select which rules apply')
       })
   })
   it('should throw an error on api failure', () => {

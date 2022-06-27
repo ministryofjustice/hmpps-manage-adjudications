@@ -69,7 +69,7 @@ context('Delete person - page contents', () => {
 
     DeletePersonPage.submitButton().click()
     DeletePersonPage.errorSummary().should('exist')
-    DeletePersonPage.errorSummary().contains('Select yes if you want to delete this person.')
+    DeletePersonPage.errorSummary().contains('Select yes if you want to delete this person')
   })
 })
 

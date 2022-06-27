@@ -9,7 +9,7 @@ describe('validateForm - incident statement', () => {
     it('returns the expected response for an invalid submit', () => {
       expect(validateForm({ incidentStatementComplete: 'yes', incidentStatement: '' })).toStrictEqual({
         href: '#incidentStatement',
-        text: 'Write the full details of the alleged offence',
+        text: 'Enter the details of the incident',
       })
     })
   })
@@ -27,7 +27,7 @@ describe('validateForm - incident statement', () => {
         validateForm({ incidentStatementComplete: 'yes', incidentStatement: wordLimitExceedingString })
       ).toStrictEqual({
         href: '#incidentStatement',
-        text: 'Write your statement using 4,000 characters or less',
+        text: 'Your statement must be 4,000 characters or fewer',
       })
     })
     it('returns the expected response for an invalid submit', () => {
@@ -35,7 +35,7 @@ describe('validateForm - incident statement', () => {
         validateForm({ incidentStatementComplete: 'no', incidentStatement: wordLimitExceedingString })
       ).toStrictEqual({
         href: '#incidentStatement',
-        text: 'Write your statement using 4,000 characters or less',
+        text: 'Your statement must be 4,000 characters or fewer',
       })
     })
   })
@@ -59,13 +59,13 @@ describe('validateForm - incident statement', () => {
     it('returns the expected response for an invalid submit with statement', () => {
       expect(validateForm({ incidentStatement: 'Lorem Ipsum' })).toStrictEqual({
         href: '#incidentStatementComplete',
-        text: 'Select yes if you have completed your statement',
+        text: 'Select yes if you’ve completed your statement',
       })
     })
     it('returns the expected response for an invalid submit with no statement', () => {
       expect(validateForm({ incidentStatement: '' })).toStrictEqual({
         href: '#incidentStatementComplete',
-        text: 'Select yes if you have completed your statement',
+        text: 'Select yes if you’ve completed your statement',
       })
     })
   })

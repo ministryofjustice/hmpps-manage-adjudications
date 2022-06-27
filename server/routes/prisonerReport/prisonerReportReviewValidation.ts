@@ -15,31 +15,31 @@ type reviewForm = {
 export const errors: { [key: string]: FormError } = {
   MISSING_STATUS: {
     href: '#currentStatusSelected',
-    text: 'A review outcome is required',
+    text: 'Enter a review outcome',
   },
   MISSING_REJECT_REASON: {
     href: '#rejectedReasonId',
-    text: 'A reason is required',
+    text: 'Enter a reason',
   },
   MISSING_RETURN_REASON: {
     href: '#returnedReasonId',
-    text: 'A reason is required',
+    text: 'Enter a reason',
   },
   MISSING_REJECT_DETAILS: {
     href: '#rejectedDetails',
-    text: 'Supporting information is required for the selected reason',
+    text: 'Enter supporting information',
   },
   REJECT_DETAILS_WORD_COUNT_EXCEEDED: {
     href: '#rejectedDetails',
-    text: 'Write your details using 4,000 characters or less',
+    text: 'Your statement must be 4,000 characters or less',
   },
   MISSING_RETURN_DETAILS: {
     href: '#returnedDetails',
-    text: 'Supporting information is required for the selected reason',
+    text: 'Enter supporting information',
   },
   RETURN_DETAILS_WORD_COUNT_EXCEEDED: {
     href: '#returnedDetails',
-    text: 'Write your details using 4,000 characters or less',
+    text: 'Your statement must be 4,000 characters or less',
   },
 }
 
