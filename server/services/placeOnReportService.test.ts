@@ -1,6 +1,7 @@
 import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
+import adjudicationUrls from '../utils/urlGenerator'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
@@ -561,9 +562,16 @@ describe('placeOnReportService', () => {
       const response = await service.getInfoForTaskListStatuses(104, user)
       expect(response).toEqual({
         handoverDeadline: '2021-10-14T20:00:00',
-        statementPresent: false,
-        statementComplete: false,
-        offenceDetailsComplete: false,
+        offenceDetailsStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        offenceDetailsUrl: '/age-of-prisoner/104',
       })
     })
     it('returns the correct response when there is no incident statement', async () => {
@@ -603,9 +611,16 @@ describe('placeOnReportService', () => {
       const response = await service.getInfoForTaskListStatuses(104, user)
       expect(response).toEqual({
         handoverDeadline: '2021-10-14T20:00:00',
-        statementPresent: false,
-        statementComplete: false,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        offenceDetailsUrl: '/details-of-offence/104',
       })
     })
     it('returns the correct response when there is an incomplete incident statement', async () => {
@@ -649,9 +664,16 @@ describe('placeOnReportService', () => {
       const response = await service.getInfoForTaskListStatuses(104, user)
       expect(response).toEqual({
         handoverDeadline: '2021-10-14T20:00:00',
-        statementPresent: true,
-        statementComplete: false,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--blue',
+          text: 'IN PROGRESS',
+        },
+        offenceDetailsUrl: '/details-of-offence/104',
       })
     })
     it('returns the correct response when there is a complete incident statement', async () => {
@@ -695,9 +717,16 @@ describe('placeOnReportService', () => {
       const response = await service.getInfoForTaskListStatuses(92, user)
       expect(response).toEqual({
         handoverDeadline: '2021-11-23T00:00:00',
-        statementPresent: true,
-        statementComplete: true,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: true,
+        incidentStatementStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        offenceDetailsUrl: '/details-of-offence/92',
       })
     })
   })
@@ -836,6 +865,75 @@ describe('placeOnReportService', () => {
         isYouthOffenderRule: false,
         removeExistingOffences: false,
       })
+    })
+  })
+  describe('getNextOffencesUrl', () => {
+    const offenceExample = [
+      {
+        offenceCode: 16001,
+        offenceRule: {
+          paragraphNumber: '16',
+          paragraphDescription: 'Intentionally or recklessly sets fire ...',
+        },
+      },
+    ]
+    it('returns the correct url if the offence details are complete', async () => {
+      const expectedResult = adjudicationUrls.detailsOfOffence.urls.start(2483)
+      const response = await service.getNextOffencesUrl(offenceExample, 2483)
+      expect(response).toEqual(expectedResult)
+    })
+    it('returns the correct url if the offence details are incomplete', async () => {
+      const expectedResult = adjudicationUrls.ageOfPrisoner.urls.start(2483)
+      const response = await service.getNextOffencesUrl(undefined, 2483)
+      expect(response).toEqual(expectedResult)
+    })
+  })
+  describe('getIncidentStatementStatus', () => {
+    it('returns the correct status for the statement - statement not present', async () => {
+      const expectedResult = { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
+      const response = await service.getIncidentStatementStatus(false, false)
+      expect(response).toEqual(expectedResult)
+    })
+    it('returns the correct status for the statement - statement present, complete', async () => {
+      const expectedResult = { classes: 'govuk-tag', text: 'COMPLETED' }
+      const response = await service.getIncidentStatementStatus(true, true)
+      expect(response).toEqual(expectedResult)
+    })
+    it('returns the correct status for the statement - statement present, not complete', async () => {
+      const expectedResult = { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
+      const response = await service.getIncidentStatementStatus(true, false)
+      expect(response).toEqual(expectedResult)
+    })
+  })
+  describe('getOffenceDetailsStatus', () => {
+    it('returns the correct status for the offences - offences not present', async () => {
+      const expectedResult = { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
+      const response = await service.getOffenceDetailsStatus(false)
+      expect(response).toEqual(expectedResult)
+    })
+    it('returns the correct status for the offences - offences present and complete', async () => {
+      const expectedResult = { classes: 'govuk-tag', text: 'COMPLETED' }
+      const response = await service.getOffenceDetailsStatus(true)
+      expect(response).toEqual(expectedResult)
+    })
+  })
+  describe('checkOffenceDetails', () => {
+    const offenceExample = [
+      {
+        offenceCode: 16001,
+        offenceRule: {
+          paragraphNumber: '16',
+          paragraphDescription: 'Intentionally or recklessly sets fire ...',
+        },
+      },
+    ]
+    it('returns true if there are offences on the draft', async () => {
+      const response = await service.checkOffenceDetails(offenceExample)
+      expect(response).toEqual(true)
+    })
+    it('returns false if there are no offences on the draft', async () => {
+      const response = await service.checkOffenceDetails(undefined)
+      expect(response).toEqual(false)
     })
   })
 })

@@ -168,7 +168,7 @@ context('Incident details (edit) - statement incomplete', () => {
         expect($errors.get(0).innerText).to.contain('Select location of incident')
       })
   })
-  it('should submit form successfully if all data entered and redirect to offence details page - change time', () => {
+  it('should submit form successfully if all data entered and redirect to applicable rule page (if no offences on report) - change time', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -177,16 +177,16 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputMinutes().type('00')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
+      expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(34))
     })
   })
-  it('should submit form successfully if all data entered and redirect to offence details page - change location', () => {
+  it('should submit form successfully if all data entered and redirect to applicable rule page (if no offences on report) - change location', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Workshop 2')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
+      expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(34))
     })
   })
   it('should redirect to the task list page if the user exits the page', () => {
@@ -218,6 +218,64 @@ context('Incident details (edit) - statement incomplete', () => {
       })
       incidentDetailsPage.timeInputHours().should('have.value', '13')
       incidentDetailsPage.timeInputMinutes().should('have.value', '10')
+    })
+  })
+  context('Offences already on report', () => {
+    beforeEach(() => {
+      cy.task('stubGetDraftAdjudication', {
+        id: 34,
+        response: {
+          draftAdjudication: {
+            id: 34,
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T13:10:00',
+              handoverDeadline: '2021-11-05T13:10:00',
+              locationId: 27029,
+            },
+            incidentStatement: {
+              completed: false,
+              statement: 'Statement here',
+            },
+            prisonerNumber: 'G6415GD',
+            startedByUserId: 'USER1',
+            incidentRole: {
+              associatedPrisonersNumber: 'T3356FU',
+              roleCode: '25b',
+            },
+            offenceDetails: [
+              {
+                offenceCode: 16001,
+                offenceRule: {
+                  paragraphNumber: '16',
+                  paragraphDescription:
+                    'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
+                },
+              },
+            ],
+          },
+        },
+      })
+    })
+    it('should submit form successfully if all data entered and redirect to offence details page - change time', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.timeInputHours().clear()
+      incidentDetailsPage.timeInputHours().type('13')
+      incidentDetailsPage.timeInputMinutes().clear()
+      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
+      })
+    })
+    it('should submit form successfully if all data entered and redirect to offence details page - change location', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
+      })
     })
   })
 })

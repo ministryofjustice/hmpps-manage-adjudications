@@ -41,9 +41,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T00:00:00',
-        statementPresent: false,
-        statementComplete: false,
-        offenceDetailsComplete: false,
+        showLinkForAcceptDetails: false,
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        offenceDetailsStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -74,9 +75,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T00:00:00',
-        statementPresent: false,
-        statementComplete: false,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        showLinkForAcceptDetails: false,
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -107,9 +109,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T20:45:00',
-        statementPresent: true,
-        statementComplete: false,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        showLinkForAcceptDetails: false,
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' },
       })
     })
     it('should load the continue report page', () => {
@@ -140,9 +143,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T15:11:00',
-        statementPresent: true,
-        statementComplete: true,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        showLinkForAcceptDetails: true,
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
       })
     })
     it('should load the continue report page', () => {
@@ -173,9 +177,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T15:11:00',
-        statementPresent: true,
-        statementComplete: true,
-        offenceDetailsComplete: false,
+        offenceDetailsStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        showLinkForAcceptDetails: false,
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
       })
     })
     it('should not contain a link to confirm the adjudication', () => {
