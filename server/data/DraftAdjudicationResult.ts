@@ -94,12 +94,3 @@ export type IncidentStatementStatus = {
 }
 
 export type OffenceDetailsStatus = IncidentStatementStatus
-
-export type TaskListDisplayItem = {
-  id: string
-  linkUrl: string
-  linkAttributes: string
-  linkText: string
-  statusClass: string
-  statusText: string
-}
