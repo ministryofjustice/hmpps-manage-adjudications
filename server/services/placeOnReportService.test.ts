@@ -571,7 +571,6 @@ describe('placeOnReportService', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6415GD/104/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -580,7 +579,6 @@ describe('placeOnReportService', () => {
             id: 'offence-details-info',
             linkUrl: '/age-of-prisoner/104',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
             linkText: 'Offence details',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -589,7 +587,6 @@ describe('placeOnReportService', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/104',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -598,7 +595,6 @@ describe('placeOnReportService', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/104',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -652,7 +648,6 @@ describe('placeOnReportService', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6415GD/104/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -661,7 +656,6 @@ describe('placeOnReportService', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/104',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
             linkText: 'Offence details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -670,7 +664,6 @@ describe('placeOnReportService', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/104',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -679,7 +672,6 @@ describe('placeOnReportService', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/104',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -737,7 +729,6 @@ describe('placeOnReportService', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6415GD/104/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -746,7 +737,6 @@ describe('placeOnReportService', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/104',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
             linkText: 'Offence details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -755,7 +745,6 @@ describe('placeOnReportService', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/104',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--blue',
             statusText: 'IN PROGRESS',
@@ -764,7 +753,6 @@ describe('placeOnReportService', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/104',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -822,7 +810,6 @@ describe('placeOnReportService', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6123VU/92/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -831,7 +818,6 @@ describe('placeOnReportService', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/92',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
             linkText: 'Offence details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -840,7 +826,6 @@ describe('placeOnReportService', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/92',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
             linkText: 'Incident statement',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -849,7 +834,6 @@ describe('placeOnReportService', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/92',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -1004,6 +988,23 @@ describe('placeOnReportService', () => {
     it('returns the correct url if the offence details are incomplete', async () => {
       const expectedResult = adjudicationUrls.ageOfPrisoner.urls.start(2483)
       const response = await service.getNextOffencesUrl(false, 2483)
+      expect(response).toEqual(expectedResult)
+    })
+  })
+  describe('getIncidentStatementStatus', () => {
+    it('returns the correct status for the statement - statement not present', async () => {
+      const expectedResult = { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
+      const response = await service.getIncidentStatementStatus(false, false)
+      expect(response).toEqual(expectedResult)
+    })
+    it('returns the correct status for the statement - statement present, complete', async () => {
+      const expectedResult = { classes: 'govuk-tag', text: 'COMPLETED' }
+      const response = await service.getIncidentStatementStatus(true, true)
+      expect(response).toEqual(expectedResult)
+    })
+    it('returns the correct status for the statement - statement present, not complete', async () => {
+      const expectedResult = { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
+      const response = await service.getIncidentStatementStatus(true, false)
       expect(response).toEqual(expectedResult)
     })
   })

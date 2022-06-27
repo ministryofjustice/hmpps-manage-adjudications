@@ -15,8 +15,6 @@ export default class DraftTaskListRoutes {
       throw new Error('No adjudication number provided')
     }
 
-    // const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user)
-    // const taskListDetails = await this.placeOnReportService.getInfoForTaskListStatuses(idValue, user)
     const [prisoner, taskListDetails] = await Promise.all([
       this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
       this.placeOnReportService.getInfoForTaskListStatuses(idValue, user),
@@ -29,7 +27,6 @@ export default class DraftTaskListRoutes {
       statementComplete,
       statementPresent,
     } = taskListDetails
-    // const offenceDetailsUrl = await this.placeOnReportService.getNextOffencesUrl(offenceDetailsComplete, idValue)
 
     return res.render(`pages/draftTaskList`, {
       prisoner,

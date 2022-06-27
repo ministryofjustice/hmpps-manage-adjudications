@@ -97,7 +97,6 @@ export type TaskListDisplayItem = {
   id: string
   linkUrl: string
   linkAttributes: string
-  linkClass: string
   linkText: string
   statusClass: string
   statusText: string

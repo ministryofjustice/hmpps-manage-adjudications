@@ -50,7 +50,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6415GD/104/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
+
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -59,7 +59,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'offence-details-info',
             linkUrl: '/age-of-prisoner/104',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
+
             linkText: 'Offence details',
             statusClass: 'govuk-tag',
             statusText: 'NOT STARTED',
@@ -68,7 +68,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/104',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
+
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -77,7 +77,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/104',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
+
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -122,7 +122,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6415GD/104/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
+
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -131,7 +131,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/104',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
+
             linkText: 'Offence details',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'COMPLETED',
@@ -140,7 +140,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/104',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
+
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -149,7 +149,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/104',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
+
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -194,7 +194,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6123VU/92/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
+
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -203,7 +203,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/92',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
+
             linkText: 'Offence details',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'COMPLETED',
@@ -212,7 +212,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/92',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
+
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--blue',
             statusText: 'IN PROGRESS',
@@ -221,7 +221,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/92',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
+
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -266,7 +266,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6415GD/104/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
+
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -275,7 +275,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/104',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
+
             linkText: 'Offence details',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'COMPLETED',
@@ -284,7 +284,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/104',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
+
             linkText: 'Incident statement',
             statusClass: 'govuk-tag govuk-tag--blue',
             statusText: 'IN PROGRESS',
@@ -293,7 +293,6 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/104',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
@@ -338,7 +337,6 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-details-info',
             linkUrl: '/incident-details/G6123VU/92/edit',
             linkAttributes: 'incident-details-link',
-            linkClass: 'task',
             linkText: 'Incident details',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -347,7 +345,6 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'offence-details-info',
             linkUrl: '/details-of-offence/92',
             linkAttributes: 'details-of-offence-link',
-            linkClass: 'task',
             linkText: 'Offence details',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'COMPLETED',
@@ -356,7 +353,7 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'incident-statement-info',
             linkUrl: '/incident-statement/92',
             linkAttributes: 'incident-statement-link',
-            linkClass: 'task',
+
             linkText: 'Incident statement',
             statusClass: 'govuk-tag',
             statusText: 'COMPLETED',
@@ -365,7 +362,6 @@ describe('GET /place-the-prisoner-on-report', () => {
             id: 'accept-details-info',
             linkUrl: '/check-your-answers/92',
             linkAttributes: 'accept-details-link',
-            linkClass: 'task',
             linkText: 'Accept details and place on report',
             statusClass: 'govuk-tag govuk-tag--grey',
             statusText: 'NOT STARTED',
