@@ -41,48 +41,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T00:00:00',
-        statementPresent: false,
-        statementComplete: false,
-        offenceDetailsComplete: false,
         showLinkForAcceptDetails: false,
-        taskListDisplay: [
-          {
-            id: 'incident-details-info',
-            linkUrl: '/incident-details/G6415GD/104/edit',
-            linkAttributes: 'incident-details-link',
-
-            linkText: 'Incident details',
-            statusClass: 'govuk-tag',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'offence-details-info',
-            linkUrl: '/age-of-prisoner/104',
-            linkAttributes: 'details-of-offence-link',
-
-            linkText: 'Offence details',
-            statusClass: 'govuk-tag',
-            statusText: 'NOT STARTED',
-          },
-          {
-            id: 'incident-statement-info',
-            linkUrl: '/incident-statement/104',
-            linkAttributes: 'incident-statement-link',
-
-            linkText: 'Incident statement',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-          {
-            id: 'accept-details-info',
-            linkUrl: '/check-your-answers/104',
-            linkAttributes: 'accept-details-link',
-
-            linkText: 'Accept details and place on report',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-        ],
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        offenceDetailsStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -113,48 +75,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T00:00:00',
-        statementPresent: false,
-        statementComplete: false,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
         showLinkForAcceptDetails: false,
-        taskListDisplay: [
-          {
-            id: 'incident-details-info',
-            linkUrl: '/incident-details/G6415GD/104/edit',
-            linkAttributes: 'incident-details-link',
-
-            linkText: 'Incident details',
-            statusClass: 'govuk-tag',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'offence-details-info',
-            linkUrl: '/details-of-offence/104',
-            linkAttributes: 'details-of-offence-link',
-
-            linkText: 'Offence details',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'incident-statement-info',
-            linkUrl: '/incident-statement/104',
-            linkAttributes: 'incident-statement-link',
-
-            linkText: 'Incident statement',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-          {
-            id: 'accept-details-info',
-            linkUrl: '/check-your-answers/104',
-            linkAttributes: 'accept-details-link',
-
-            linkText: 'Accept details and place on report',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-        ],
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -185,51 +109,13 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T20:45:00',
-        statementPresent: true,
-        statementComplete: false,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
         showLinkForAcceptDetails: false,
-        taskListDisplay: [
-          {
-            id: 'incident-details-info',
-            linkUrl: '/incident-details/G6123VU/92/edit',
-            linkAttributes: 'incident-details-link',
-
-            linkText: 'Incident details',
-            statusClass: 'govuk-tag',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'offence-details-info',
-            linkUrl: '/details-of-offence/92',
-            linkAttributes: 'details-of-offence-link',
-
-            linkText: 'Offence details',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'incident-statement-info',
-            linkUrl: '/incident-statement/92',
-            linkAttributes: 'incident-statement-link',
-
-            linkText: 'Incident statement',
-            statusClass: 'govuk-tag govuk-tag--blue',
-            statusText: 'IN PROGRESS',
-          },
-          {
-            id: 'accept-details-info',
-            linkUrl: '/check-your-answers/92',
-            linkAttributes: 'accept-details-link',
-
-            linkText: 'Accept details and place on report',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-        ],
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' },
       })
     })
-    it.only('should load the continue report page', () => {
+    it('should load the continue report page', () => {
       return request(app)
         .get(adjudicationUrls.taskList.urls.start(3456))
         .expect('Content-Type', /html/)
@@ -257,47 +143,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T15:11:00',
-        statementPresent: true,
-        statementComplete: true,
-        offenceDetailsComplete: true,
+        offenceDetailsStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
         showLinkForAcceptDetails: true,
-        taskListDisplay: [
-          {
-            id: 'incident-details-info',
-            linkUrl: '/incident-details/G6415GD/104/edit',
-            linkAttributes: 'incident-details-link',
-
-            linkText: 'Incident details',
-            statusClass: 'govuk-tag',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'offence-details-info',
-            linkUrl: '/details-of-offence/104',
-            linkAttributes: 'details-of-offence-link',
-
-            linkText: 'Offence details',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'incident-statement-info',
-            linkUrl: '/incident-statement/104',
-            linkAttributes: 'incident-statement-link',
-
-            linkText: 'Incident statement',
-            statusClass: 'govuk-tag govuk-tag--blue',
-            statusText: 'IN PROGRESS',
-          },
-          {
-            id: 'accept-details-info',
-            linkUrl: '/check-your-answers/104',
-            linkAttributes: 'accept-details-link',
-            linkText: 'Accept details and place on report',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-        ],
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
       })
     })
     it('should load the continue report page', () => {
@@ -328,45 +177,10 @@ describe('GET /place-the-prisoner-on-report', () => {
     beforeEach(() => {
       placeOnReportService.getInfoForTaskListStatuses.mockResolvedValue({
         handoverDeadline: '2021-11-23T15:11:00',
-        statementPresent: true,
-        statementComplete: true,
-        offenceDetailsComplete: false,
+        offenceDetailsStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
         showLinkForAcceptDetails: false,
-        taskListDisplay: [
-          {
-            id: 'incident-details-info',
-            linkUrl: '/incident-details/G6123VU/92/edit',
-            linkAttributes: 'incident-details-link',
-            linkText: 'Incident details',
-            statusClass: 'govuk-tag',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'offence-details-info',
-            linkUrl: '/details-of-offence/92',
-            linkAttributes: 'details-of-offence-link',
-            linkText: 'Offence details',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'incident-statement-info',
-            linkUrl: '/incident-statement/92',
-            linkAttributes: 'incident-statement-link',
-
-            linkText: 'Incident statement',
-            statusClass: 'govuk-tag',
-            statusText: 'COMPLETED',
-          },
-          {
-            id: 'accept-details-info',
-            linkUrl: '/check-your-answers/92',
-            linkAttributes: 'accept-details-link',
-            linkText: 'Accept details and place on report',
-            statusClass: 'govuk-tag govuk-tag--grey',
-            statusText: 'NOT STARTED',
-          },
-        ],
+        offenceDetailsUrl: '',
+        incidentStatementStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
       })
     })
     it('should not contain a link to confirm the adjudication', () => {

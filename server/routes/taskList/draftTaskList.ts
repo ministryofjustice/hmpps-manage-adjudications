@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import { formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class DraftTaskListRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -19,21 +20,57 @@ export default class DraftTaskListRoutes {
       this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
       this.placeOnReportService.getInfoForTaskListStatuses(idValue, user),
     ])
+
     const {
-      offenceDetailsComplete,
-      taskListDisplay,
+      // offenceDetailsComplete,
+      offenceDetailsStatus,
       showLinkForAcceptDetails,
       handoverDeadline,
-      statementComplete,
-      statementPresent,
+      offenceDetailsUrl,
+      incidentStatementStatus,
     } = taskListDetails
+
+    const taskListDisplay = [
+      // incident details
+      {
+        id: 'incident-details-info',
+        linkUrl: adjudicationUrls.incidentDetails.urls.edit(prisoner.prisonerNumber, idValue),
+        linkAttributes: 'incident-details-link',
+        linkText: 'Incident details',
+        statusClass: 'govuk-tag',
+        statusText: 'COMPLETED',
+      },
+      // offence details
+      {
+        id: 'offence-details-info',
+        linkUrl: offenceDetailsUrl,
+        linkAttributes: 'details-of-offence-link',
+        linkText: 'Offence details',
+        statusClass: offenceDetailsStatus.classes,
+        statusText: offenceDetailsStatus.text,
+      },
+      // incident statement
+      {
+        id: 'incident-statement-info',
+        linkUrl: adjudicationUrls.incidentStatement.urls.start(idValue),
+        linkAttributes: 'incident-statement-link',
+        linkText: 'Incident statement',
+        statusClass: incidentStatementStatus.classes,
+        statusText: incidentStatementStatus.text,
+      },
+      // accept details (check your answers)
+      {
+        id: 'accept-details-info',
+        linkUrl: adjudicationUrls.checkYourAnswers.urls.start(idValue),
+        linkAttributes: 'accept-details-link',
+        linkText: 'Accept details and place on report',
+        statusClass: 'govuk-tag govuk-tag--grey',
+        statusText: 'NOT STARTED',
+      },
+    ]
 
     return res.render(`pages/draftTaskList`, {
       prisoner,
-      adjudicationId: id,
-      statementPresent,
-      statementComplete,
-      offenceDetailsComplete,
       taskListDisplay,
       prisonerFirstAndLastName: prisoner.friendlyName,
       expirationTime: formatTimestampToTime(handoverDeadline),

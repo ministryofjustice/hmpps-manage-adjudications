@@ -140,9 +140,8 @@ export default class IncidentDetailsPage {
           postValues.draftId,
           user
         )
-        const offenceDetailsComplete = draftAdjudication.offenceDetails?.length > 0 || false
         const nextPageUrl = await this.placeOnReportService.getNextOffencesUrl(
-          offenceDetailsComplete,
+          draftAdjudication.offenceDetails,
           draftAdjudication.id
         )
         return res.redirect(nextPageUrl)

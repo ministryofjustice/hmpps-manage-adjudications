@@ -74,11 +74,11 @@ export type EditIncidentRoleRequest = {
 
 export type TaskListDetails = {
   handoverDeadline: string
-  statementPresent: boolean
-  statementComplete: boolean
-  offenceDetailsComplete: boolean
-  taskListDisplay: TaskListDisplayItem[]
+  // offenceDetailsComplete: boolean
   showLinkForAcceptDetails: boolean
+  offenceDetailsUrl: string
+  incidentStatementStatus: IncidentStatementStatus
+  offenceDetailsStatus: OffenceDetailsStatus
 }
 
 export type PrisonerReport = CheckYourAnswers
@@ -92,6 +92,8 @@ export type IncidentStatementStatus = {
   classes: string
   text: string
 }
+
+export type OffenceDetailsStatus = IncidentStatementStatus
 
 export type TaskListDisplayItem = {
   id: string

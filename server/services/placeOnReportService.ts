@@ -15,6 +15,7 @@ import {
   TaskListDetails,
   OffenceDetails,
   IncidentStatementStatus,
+  OffenceDetailsStatus,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -268,65 +269,31 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
 
-    const offenceDetailsComplete = draftAdjudication.offenceDetails?.length > 0
     const statementComplete = draftAdjudication.incidentStatement?.completed || false
+    const offenceDetailsComplete = this.checkOffenceDetails(draftAdjudication.offenceDetails)
+    const offenceDetailsStatus = this.getOffenceDetailsStatus(offenceDetailsComplete)
 
-    const offenceDetailsUrl = this.getNextOffencesUrl(offenceDetailsComplete, draftAdjudication.id)
+    const offenceDetailsUrl = this.getNextOffencesUrl(draftAdjudication.offenceDetails, draftAdjudication.id)
     const incidentStatementStatus = this.getIncidentStatementStatus(
       !!draftAdjudication.incidentStatement,
       statementComplete
     )
 
-    const taskListDisplay = [
-      // incident details
-      {
-        id: 'incident-details-info',
-        linkUrl: adjudicationUrls.incidentDetails.urls.edit(draftAdjudication.prisonerNumber, draftAdjudication.id),
-        linkAttributes: 'incident-details-link',
-        linkText: 'Incident details',
-        statusClass: 'govuk-tag',
-        statusText: 'COMPLETED',
-      },
-      // offence details
-      {
-        id: 'offence-details-info',
-        linkUrl: offenceDetailsUrl,
-        linkAttributes: 'details-of-offence-link',
-        linkText: 'Offence details',
-        statusClass: offenceDetailsComplete ? 'govuk-tag' : 'govuk-tag govuk-tag--grey',
-        statusText: offenceDetailsComplete ? 'COMPLETED' : 'NOT STARTED',
-      },
-      // incident statement
-      {
-        id: 'incident-statement-info',
-        linkUrl: adjudicationUrls.incidentStatement.urls.start(draftAdjudication.id),
-        linkAttributes: 'incident-statement-link',
-        linkText: 'Incident statement',
-        statusClass: incidentStatementStatus.classes,
-        statusText: incidentStatementStatus.text,
-      },
-      // accept details (check your answers)
-      {
-        id: 'accept-details-info',
-        linkUrl: adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id),
-        linkAttributes: 'accept-details-link',
-        linkText: 'Accept details and place on report',
-        statusClass: 'govuk-tag govuk-tag--grey',
-        statusText: 'NOT STARTED',
-      },
-    ]
-
     return {
+      offenceDetailsUrl,
       handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
-      statementPresent: !!draftAdjudication.incidentStatement,
-      statementComplete,
-      offenceDetailsComplete,
-      taskListDisplay,
+      incidentStatementStatus,
+      offenceDetailsStatus,
       showLinkForAcceptDetails: offenceDetailsComplete && statementComplete,
     }
   }
 
-  getNextOffencesUrl(offenceDetailsComplete: boolean, adjudicationId: number): string {
+  checkOffenceDetails(offenceDetails: OffenceDetails[]): boolean {
+    return offenceDetails?.length > 0 || false
+  }
+
+  getNextOffencesUrl(offenceDetails: OffenceDetails[], adjudicationId: number): string {
+    const offenceDetailsComplete = this.checkOffenceDetails(offenceDetails)
     if (offenceDetailsComplete) return adjudicationUrls.detailsOfOffence.urls.start(adjudicationId)
     return adjudicationUrls.ageOfPrisoner.urls.start(adjudicationId)
   }
@@ -335,6 +302,11 @@ export default class PlaceOnReportService {
     if (!statementPresent) return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
     if (statementComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
     return { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
+  }
+
+  getOffenceDetailsStatus = (offenceDetailsComplete: boolean): OffenceDetailsStatus => {
+    if (offenceDetailsComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
+    return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
   }
 
   async getAssociatedStaffDetails(
