@@ -173,7 +173,7 @@ describe('POST /incident-statement', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('There is a problem')
-          expect(res.text).toContain('Select yes if you have completed your statement')
+          expect(res.text).toContain('Select yes if you’ve completed your statement')
         })
     })
     it('should throw an error on api failure', () => {

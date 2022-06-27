@@ -27,7 +27,7 @@ enum ErrorType {
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {
     href: '#selectedAnswerId',
-    text: 'Please make a choice',
+    text: 'Select yes if you want to delete this offence',
   },
 }
 

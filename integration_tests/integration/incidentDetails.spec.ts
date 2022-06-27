@@ -155,7 +155,7 @@ context('Incident details', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Enter date of incident')
+        expect($errors.get(0).innerText).to.contain('Enter the date of the incident')
       })
   })
   it('should show error if one of the time fields is not filled in correctly', () => {
@@ -170,7 +170,7 @@ context('Incident details', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Enter time of incident')
+        expect($errors.get(0).innerText).to.contain('Enter the time of the incident')
       })
   })
   it('should show error if a location is not selected', () => {
@@ -185,7 +185,7 @@ context('Incident details', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select location of incident')
+        expect($errors.get(0).innerText).to.contain('Select the location of the incident')
       })
   })
   it('should redirect the user to /age-of-prisoner/ if form is complete', () => {

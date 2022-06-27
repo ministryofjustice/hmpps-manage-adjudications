@@ -8,15 +8,15 @@ type incidentRoleForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_ROLE: {
     href: '#currentRadioSelected',
-    text: 'Select the prisoner’s role in this incident.',
+    text: 'Select the prisoner’s role in this incident',
   },
   MISSING_ASSOCIATED_PRISONER_INCITE: {
     href: '#incitedInput',
-    text: 'Enter their name or prison number.',
+    text: 'Enter the prisoner’s name or number',
   },
   MISSING_ASSOCIATED_PRISONER_ASSIST: {
     href: '#assistedInput',
-    text: 'Enter their name or prison number.',
+    text: 'Enter the prisoner’s name or number',
   },
 }
 

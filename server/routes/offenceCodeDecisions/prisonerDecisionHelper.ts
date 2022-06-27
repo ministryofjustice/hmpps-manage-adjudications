@@ -18,7 +18,7 @@ enum ErrorType {
 const error: { [key in ErrorType]: FormError } = {
   PRISONER_MISSING_NAME_INPUT_SEARCH: {
     href: `#prisonerSearchNameInput`,
-    text: 'Enter their name or prison number',
+    text: 'Enter the prisoner’s name or prison number',
   },
   PRISONER_MISSING_NAME_INPUT_SUBMIT: {
     href: `#prisonerSearchNameInput`,

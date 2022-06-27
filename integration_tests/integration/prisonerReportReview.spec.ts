@@ -347,7 +347,7 @@ context('Prisoner report - reviewer view', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewSubmit().click()
-    cy.get('*[class^="govuk-error-message"]').contains('A review outcome is required')
+    cy.get('*[class^="govuk-error-message"]').contains('Enter a review outcome')
   })
 
   it('should display an error if rejected is selected without a reason and save is pressed', () => {
@@ -355,14 +355,14 @@ context('Prisoner report - reviewer view', () => {
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
     PrisonerReportPage.reviewSubmit().click()
-    cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
+    cy.get('*[class^="govuk-error-message"]').contains('Enter a reason')
   })
   it('should display an error if returned is selected without a reason and save is pressed', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     PrisonerReportPage.reviewStatus().find('input[value="returned"]').check()
     PrisonerReportPage.reviewSubmit().click()
-    cy.get('*[class^="govuk-error-message"]').contains('A reason is required')
+    cy.get('*[class^="govuk-error-message"]').contains('Enter a reason')
   })
   it('should not contain the review panel if status is RETURNED', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(56789))

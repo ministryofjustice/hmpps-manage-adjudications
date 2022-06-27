@@ -19,7 +19,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#currentRadioSelected',
-        text: 'Select the prisoner’s role in this incident.',
+        text: 'Select the prisoner’s role in this incident',
       })
     })
     it('shows error if no associated prisoner is selected when there should be', () => {
@@ -30,7 +30,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incitedInput',
-        text: 'Enter their name or prison number.',
+        text: 'Enter the prisoner’s name or number',
       })
       expect(
         validateForm({
@@ -39,7 +39,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#assistedInput',
-        text: 'Enter their name or prison number.',
+        text: 'Enter the prisoner’s name or number',
       })
     })
     it('shows no error there does not need to be an associated prisoner', () => {
