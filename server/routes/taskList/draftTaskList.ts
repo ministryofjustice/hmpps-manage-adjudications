@@ -22,7 +22,6 @@ export default class DraftTaskListRoutes {
     ])
 
     const {
-      // offenceDetailsComplete,
       offenceDetailsStatus,
       showLinkForAcceptDetails,
       handoverDeadline,
