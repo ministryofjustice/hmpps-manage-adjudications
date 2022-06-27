@@ -166,7 +166,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter an hour which is 23 or less')
+        expect(res.text).toContain('Enter an hour between 00 and 23')
       })
   })
   it('should throw an error on PUT endpoint failure', () => {

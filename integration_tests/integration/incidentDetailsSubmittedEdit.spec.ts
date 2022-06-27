@@ -152,7 +152,7 @@ context('Incident details (edit after completion of report)', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Enter time of incident')
+        expect($errors.get(0).innerText).to.contain('Enter the time of the incident')
       })
   })
   it('should show error if a location is not selected', () => {
@@ -164,7 +164,7 @@ context('Incident details (edit after completion of report)', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select location of incident')
+        expect($errors.get(0).innerText).to.contain('Select the location of the incident')
       })
   })
   it('should submit form successfully if all data entered and redirect to offence details page - reporter version', () => {

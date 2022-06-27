@@ -25,7 +25,7 @@ context('Prisoner Search', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Enter a prisoner’s name or number')
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s name or number')
       })
   })
 
