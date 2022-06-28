@@ -373,7 +373,7 @@ context('Prisoner report - reporter view', () => {
         } else {
           PrisonerReportPage.offenceDetailsChangeLink().click()
           cy.location().should(loc => {
-            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(177))
+            expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(177))
           })
         }
       })
