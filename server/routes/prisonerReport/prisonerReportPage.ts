@@ -45,7 +45,7 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
-      editOffencesDetailsURL: adjudicationUrls.detailsOfOffence.urls.start(adjudicationNumber),
+      editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
     }
   }
   return {
@@ -58,7 +58,7 @@ const getVariablesForPageType = (
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
-    editOffencesDetailsURL: adjudicationUrls.detailsOfOffence.urls.start(draftAdjudicationNumber),
+    editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber),
   }
 }
 
