@@ -13,10 +13,12 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
 
 jest.mock('../../services/placeOnReportService.ts')
+jest.mock('../../services/allOffencesSessionService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const allOffencesSessionService = new AllOffencesSessionService() as jest.Mocked<AllOffencesSessionService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
@@ -192,7 +194,6 @@ beforeEach(() => {
     }
   })
 
-  const allOffencesSessionService = new AllOffencesSessionService()
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, decisionTreeService, allOffencesSessionService, userService }
@@ -246,6 +247,33 @@ describe('GET /details-of-offence/100 view', () => {
       .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(1, false, expect.anything()))
       .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(2, false, expect.anything()))
   })
+
+  it('should set and not get the offences on the session', () => {
+    return request(app)
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect(200)
+      .then(() =>
+        expect(allOffencesSessionService.setAllSessionOffences).toHaveBeenCalledWith(
+          expect.anything(),
+          [
+            {
+              offenceCode: '1',
+              victimOtherPersonsName: undefined,
+              victimPrisonersNumber: 'G5512G',
+              victimStaffUsername: undefined,
+            },
+            {
+              offenceCode: '2',
+              victimOtherPersonsName: undefined,
+              victimPrisonersNumber: undefined,
+              victimStaffUsername: undefined,
+            },
+          ],
+          100
+        )
+      )
+      .then(() => expect(allOffencesSessionService.getAllSessionOffences).not.toHaveBeenCalledWith())
+  })
 })
 
 describe('GET /details-of-offence/102 view', () => {
@@ -271,7 +299,33 @@ describe('GET /details-of-offence/102 view', () => {
 })
 
 describe('POST /details-of-offence/100', () => {
-  it('should save the offence', async () => {
+  it('should not save the offence', async () => {
+    const agent = request.agent(app)
+    return agent
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect(200)
+      .then(() =>
+        agent
+          .post(adjudicationUrls.detailsOfOffence.urls.start(100))
+          .then(() => expect(placeOnReportService.saveOffenceDetails).not.toHaveBeenCalled())
+      )
+  })
+
+  it('should redirect to the submitted edited statement page if reported adjudication number set', () => {
+    const agent = request.agent(app)
+    return agent
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect(200)
+      .then(() =>
+        agent
+          .post(adjudicationUrls.detailsOfOffence.urls.start(100))
+          .send({ reportedAdjudicationNumber: 1524493 })
+          .expect(302)
+          .expect('Location', adjudicationUrls.incidentStatement.urls.submittedEdit(100))
+      )
+  })
+
+  it('should redirect to the normal statement page if reported adjudication number not set', () => {
     const agent = request.agent(app)
     return agent
       .get(adjudicationUrls.detailsOfOffence.urls.start(100))
@@ -280,13 +334,7 @@ describe('POST /details-of-offence/100', () => {
         agent
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
           .expect(302)
-          .then(() =>
-            expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
-              100,
-              [{ offenceCode: 1, victimPrisonersNumber: 'G5512G' }, { offenceCode: 2 }],
-              expect.anything()
-            )
-          )
+          .expect('Location', adjudicationUrls.incidentStatement.urls.start(100))
       )
   })
 })

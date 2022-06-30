@@ -33,6 +33,7 @@ export default class DeleteOffenceRoutes {
       user
     )
     const offenceIndex = Number(req.params.offenceIndex)
+    // We assume the offences are already set up on the session
     const offenceData = this.allOffencesSessionService.getSessionOffence(req, offenceIndex, adjudicationNumber)
     const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
@@ -54,6 +55,6 @@ export default class DeleteOffenceRoutes {
     if (confirmDelete === 'yes') {
       this.allOffencesSessionService.deleteSessionOffence(req, offenceIndex, adjudicationNumber)
     }
-    return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(adjudicationNumber))
+    return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
   }
 }

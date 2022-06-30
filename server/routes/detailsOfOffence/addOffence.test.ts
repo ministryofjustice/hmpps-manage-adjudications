@@ -45,6 +45,6 @@ describe('GET /details-of-offence/100/add view', () => {
     return request(app)
       .get(`${adjudicationUrls.detailsOfOffence.urls.add(100)}?offenceCode=1`)
       .expect(302)
-      .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect('Location', adjudicationUrls.detailsOfOffence.urls.modified(100))
   })
 })

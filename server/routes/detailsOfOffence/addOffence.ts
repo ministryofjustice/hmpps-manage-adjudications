@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
-import DetailsOfOffenceHelper from './detailsOfOffenceHelper'
 import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class AddOffenceRoutes {
@@ -11,15 +10,12 @@ export default class AddOffenceRoutes {
     private readonly allOffencesSessionService: AllOffencesSessionService
   ) {}
 
-  private helper = new DetailsOfOffenceHelper(this.placeOnReportService, this.allOffencesSessionService)
-
   add = async (req: Request, res: Response): Promise<void> => {
-    // If the session has not yet been populated from the database we need to do that.
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    await this.helper.populateSessionIfEmpty(adjudicationNumber, req, res)
     // Get the offence to be added from the request and put it on the session
     const offenceToAdd: OffenceData = { ...req.query }
+    // We assume the offences are already set up on the session
     this.allOffencesSessionService.addSessionOffence(req, offenceToAdd, adjudicationNumber)
-    return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(adjudicationNumber))
+    return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
   }
 }
