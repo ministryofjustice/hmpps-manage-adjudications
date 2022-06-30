@@ -3,6 +3,7 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import DeleteOffence from '../pages/deleteOffence'
 
 const adjudicationWithOffences = {
   id: 201,
@@ -292,22 +293,27 @@ context('Details of offence', () => {
   })
 
   it('offence details page when there is no offences, rules or roles', () => {
-    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(404))
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(202))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.continue().click()
-    cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.start(404))
+    detailsOfOffencePage.deleteLink(1).click()
+    const deleteOffencePage = Page.verifyOnPage(DeleteOffence)
+    deleteOffencePage.yesRadio().click()
+    deleteOffencePage.confirm().click()
+    const editedDetailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    editedDetailsOfOffencePage.continue().click()
+    cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.start(202))
   })
 
   it('offence details saves as expected', () => {
-    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
+    // The add page saves the offence data then redirects to the offence page
+    cy.visit(`${adjudicationUrls.detailsOfOffence.urls.add(201)}?offenceCode=4001`)
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {
       adjudicationNumber: 201,
       offenceDetails: [
         {
-          offenceCode: 1001,
-          victimPrisonersNumber: 'G5512G',
+          offenceCode: 4001,
         },
       ],
     }).then((val: request.Response) => {
@@ -315,7 +321,7 @@ context('Details of offence', () => {
     })
   })
 
-  it('goes to the reported adjudication statement edit page', () => {
+  it.only('goes to the reported adjudication statement edit page', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(202))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
