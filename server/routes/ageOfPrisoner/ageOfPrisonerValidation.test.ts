@@ -7,7 +7,7 @@ describe('Age of prisoner validation', () => {
   it('Shows error on an invalid submit where there is a missing radio button selection', () => {
     expect(validateForm({ whichRuleChosen: '' })).toEqual({
       href: '#whichRuleChosen',
-      text: 'Select which rules apply.',
+      text: 'Select which rules apply',
     })
   })
 })

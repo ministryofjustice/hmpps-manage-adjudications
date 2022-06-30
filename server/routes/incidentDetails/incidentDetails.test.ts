@@ -92,7 +92,7 @@ describe('POST /incident-details', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter an hour which is 23 or less')
+        expect(res.text).toContain('Enter an hour between 00 and 23')
       })
   })
   it('should throw an error on api failure', () => {

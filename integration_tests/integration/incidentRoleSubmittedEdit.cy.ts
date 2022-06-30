@@ -220,7 +220,7 @@ context('Incident role (edit after completion of report)', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Enter their name or prison number')
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s name or number')
       })
     incidentRolePage.conditionalInputAssist().type('T3356FU')
     incidentRolePage.searchButtonAssist().click()

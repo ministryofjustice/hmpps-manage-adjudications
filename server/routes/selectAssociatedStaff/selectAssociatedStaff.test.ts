@@ -118,7 +118,7 @@ describe('POST /select-associated-staff', () => {
       .expect(res => {
         expect(res.text).toContain('Error: Select a staff member')
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter their name')
+        expect(res.text).toContain('Enter the prisoner’s name')
       })
   })
 })

@@ -7,7 +7,7 @@ type SearchForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_TEXT: {
     href: '#searchTerm',
-    text: 'Enter a prisoner’s name or number',
+    text: 'Enter the prisoner’s name or number',
   },
 }
 

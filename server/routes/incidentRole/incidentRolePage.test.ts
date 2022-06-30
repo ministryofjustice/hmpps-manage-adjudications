@@ -152,7 +152,7 @@ describe('updateDataOnDeleteReturn', () => {
         })
         .expect(res => {
           expect(res.text).toContain('There is a problem')
-          expect(res.text).toContain('Enter their name or prison number.')
+          expect(res.text).toContain('Enter the prisoner’s name or number')
         })
     })
     it('should throw an error on PUT endpoint failure', () => {

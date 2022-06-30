@@ -9,19 +9,19 @@ describe('validateForm', () => {
     it('invalid - both names', () => {
       expect(validateForm({ staffFirstName: '', staffLastName: '' })).toStrictEqual({
         href: '#staffFullName',
-        text: 'Enter their name',
+        text: 'Enter the prisoner’s name',
       })
     })
     it('invalid - first name', () => {
       expect(validateForm({ staffFirstName: '', staffLastName: 'Smith' })).toStrictEqual({
         href: '#staffFirstName',
-        text: 'Enter their first name',
+        text: 'Enter the prisoner’s first name',
       })
     })
     it('invalid - last names', () => {
       expect(validateForm({ staffFirstName: 'John', staffLastName: '' })).toStrictEqual({
         href: '#staffLastName',
-        text: 'Enter their last name',
+        text: 'Enter the prisoner’s last name',
       })
     })
   })

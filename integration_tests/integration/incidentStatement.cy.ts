@@ -112,7 +112,7 @@ context('Incident Statement', () => {
         .errorSummary()
         .find('li')
         .then($errors => {
-          expect($errors.get(0).innerText).to.contain('Write the full details of the alleged offence')
+          expect($errors.get(0).innerText).to.contain('Enter the details of the incident')
         })
     })
     it('should show validation message if a radio button was not chosen', () => {
@@ -124,7 +124,7 @@ context('Incident Statement', () => {
         .errorSummary()
         .find('li')
         .then($errors => {
-          expect($errors.get(0).innerText).to.contain('Select yes if you have completed your statement')
+          expect($errors.get(0).innerText).to.contain('Select yes if you’ve completed your statement')
         })
     })
     it('should redirect the user to /check-your-answers if statement is complete', () => {
@@ -208,7 +208,7 @@ context('Incident Statement', () => {
         .errorSummary()
         .find('li')
         .then($errors => {
-          expect($errors.get(0).innerText).to.contain('Write the full details of the alleged offence')
+          expect($errors.get(0).innerText).to.contain('Enter the details of the incident')
         })
     })
     it('should show validation message if a radio button was not chosen', () => {
@@ -220,7 +220,7 @@ context('Incident Statement', () => {
         .errorSummary()
         .find('li')
         .then($errors => {
-          expect($errors.get(0).innerText).to.contain('Select yes if you have completed your statement')
+          expect($errors.get(0).innerText).to.contain('Select yes if you’ve completed your statement')
         })
     })
     it('should redirect the user to /place-the-prisoner-on-report if statement is complete', () => {

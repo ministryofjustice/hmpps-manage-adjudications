@@ -14,9 +14,12 @@ import {
   DraftAdjudication,
   TaskListDetails,
   OffenceDetails,
+  IncidentStatementStatus,
+  OffenceDetailsStatus,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
+import adjudicationUrls from '../utils/urlGenerator'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -95,11 +98,13 @@ export default class PlaceOnReportService {
   async addDraftYouthOffenderStatus(
     adjudicationNumber: number,
     whichRuleChosen: string,
+    removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       isYouthOffenderRule: whichRuleChosen === 'yoi',
+      removeExistingOffences,
     }
 
     return client.saveYouthOffenderStatus(adjudicationNumber, requestBody)
@@ -264,12 +269,44 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
 
+    const statementComplete = draftAdjudication.incidentStatement?.completed || false
+    const offenceDetailsComplete = this.checkOffenceDetails(draftAdjudication.offenceDetails)
+    const offenceDetailsStatus = this.getOffenceDetailsStatus(offenceDetailsComplete)
+
+    const offenceDetailsUrl = this.getNextOffencesUrl(draftAdjudication.offenceDetails, draftAdjudication.id)
+    const incidentStatementStatus = this.getIncidentStatementStatus(
+      !!draftAdjudication.incidentStatement,
+      statementComplete
+    )
+
     return {
+      offenceDetailsUrl,
       handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
-      statementPresent: !!draftAdjudication.incidentStatement,
-      statementComplete: draftAdjudication.incidentStatement?.completed || false,
-      offenceDetailsComplete: draftAdjudication.offenceDetails?.length > 0,
+      incidentStatementStatus,
+      offenceDetailsStatus,
+      showLinkForAcceptDetails: offenceDetailsComplete && statementComplete,
     }
+  }
+
+  checkOffenceDetails(offenceDetails: OffenceDetails[]): boolean {
+    return offenceDetails?.length > 0 || false
+  }
+
+  getNextOffencesUrl(offenceDetails: OffenceDetails[], adjudicationId: number): string {
+    const offenceDetailsComplete = this.checkOffenceDetails(offenceDetails)
+    if (offenceDetailsComplete) return adjudicationUrls.detailsOfOffence.urls.start(adjudicationId)
+    return adjudicationUrls.ageOfPrisoner.urls.start(adjudicationId)
+  }
+
+  getIncidentStatementStatus = (statementPresent: boolean, statementComplete: boolean): IncidentStatementStatus => {
+    if (!statementPresent) return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
+    if (statementComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
+    return { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
+  }
+
+  getOffenceDetailsStatus = (offenceDetailsComplete: boolean): OffenceDetailsStatus => {
+    if (offenceDetailsComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
+    return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
   }
 
   async getAssociatedStaffDetails(

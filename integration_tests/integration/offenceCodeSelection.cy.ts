@@ -215,7 +215,7 @@ context('Offence details', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.continue().click()
-    whatTypeOfOffencePage.form().contains('Please make a choice')
+    whatTypeOfOffencePage.form().contains('Select yes if you want to delete this offence')
   })
 
   it('cancel', () => {
@@ -277,7 +277,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.radio(prisonerAnswerId).check()
     // Search without search text for validation
     whoWasAssaultedPage.searchPrisoner().click()
-    whoWasAssaultedPage.form().contains('Enter their name or prison number')
+    whoWasAssaultedPage.form().contains('Enter the prisoner’s name or prison number')
     // Enter search text and submit instead of searching
     whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
     whoWasAssaultedPage.continue().click()
@@ -324,18 +324,18 @@ context('Offence details', () => {
     whoWasAssaultedPage.radio(officerAnswerId).check()
     // Search without search text for validation
     whoWasAssaultedPage.searchOfficer().click()
-    whoWasAssaultedPage.form().contains('Enter their first name')
-    whoWasAssaultedPage.form().contains('Enter their last name')
+    whoWasAssaultedPage.form().contains('Enter the prisoner’s first name')
+    whoWasAssaultedPage.form().contains('Enter the prisoner’s last name')
     whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')
     whoWasAssaultedPage.searchOfficer().click()
-    whoWasAssaultedPage.form().should('not.contain', 'Enter their first name')
-    whoWasAssaultedPage.form().contains('Enter their last name')
+    whoWasAssaultedPage.form().should('not.contain', 'Enter the prisoner’s first name')
+    whoWasAssaultedPage.form().contains('Enter the prisoner’s last name')
     whoWasAssaultedPage.victimOfficerSearchFirstNameInput().should('have.value', 'Adam')
     whoWasAssaultedPage.victimOfficerSearchFirstNameInput().clear()
     whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
     whoWasAssaultedPage.searchOfficer().click()
-    whoWasAssaultedPage.form().contains('Enter their first name')
-    whoWasAssaultedPage.form().should('not.contain', 'Enter their last name')
+    whoWasAssaultedPage.form().contains('Enter the prisoner’s first name')
+    whoWasAssaultedPage.form().should('not.contain', 'Enter the prisoner’s last name')
     whoWasAssaultedPage.victimOfficerSearchLastNameInput().should('have.value', 'Owens')
     // Enter search text and submit instead of searching
     whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')

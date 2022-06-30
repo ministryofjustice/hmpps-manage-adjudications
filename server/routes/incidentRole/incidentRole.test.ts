@@ -90,7 +90,7 @@ describe('POST /incident-role', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter their name or prison number.')
+        expect(res.text).toContain('Enter the prisoner’s name or number')
       })
   })
   it('should render an error summary with correct validation message - missing radio button selection', () => {
@@ -102,7 +102,7 @@ describe('POST /incident-role', () => {
       })
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select the prisoner’s role in this incident.')
+        expect(res.text).toContain('Select the prisoner’s role in this incident')
       })
   })
 })

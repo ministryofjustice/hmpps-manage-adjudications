@@ -74,13 +74,23 @@ export type EditIncidentRoleRequest = {
 
 export type TaskListDetails = {
   handoverDeadline: string
-  statementPresent: boolean
-  statementComplete: boolean
-  offenceDetailsComplete: boolean
+  // offenceDetailsComplete: boolean
+  showLinkForAcceptDetails: boolean
+  offenceDetailsUrl: string
+  incidentStatementStatus: IncidentStatementStatus
+  offenceDetailsStatus: OffenceDetailsStatus
 }
 
 export type PrisonerReport = CheckYourAnswers
 
-export type isYouthOffenderRule = {
+export type ApplicableRules = {
   isYouthOffenderRule: boolean
+  removeExistingOffences: boolean
 }
+
+export type IncidentStatementStatus = {
+  classes: string
+  text: string
+}
+
+export type OffenceDetailsStatus = IncidentStatementStatus

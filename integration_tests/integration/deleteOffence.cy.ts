@@ -103,7 +103,7 @@ context('Incident details', () => {
     detailsOfOffencePage.deleteLink(2).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.confirm().click()
-    deleteOffence.form().contains('Please make a choice')
+    deleteOffence.form().contains('Select yes if you want to delete this offence')
   })
 
   it('Go to the delete offence page and select yes', () => {

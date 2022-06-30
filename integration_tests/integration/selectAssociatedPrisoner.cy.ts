@@ -104,7 +104,7 @@ context('Select an associated prisoner', () => {
       SelectAssociatedPrisonerPage.submitButton().click()
       SelectAssociatedPrisonerPage.resultsTable().should('not.exist')
       SelectAssociatedPrisonerPage.errorSummary().should('exist')
-      SelectAssociatedPrisonerPage.errorSummary().should('contain', 'Enter a prisoner’s name or number')
+      SelectAssociatedPrisonerPage.errorSummary().should('contain', 'Enter the prisoner’s name or number')
     })
   })
 })

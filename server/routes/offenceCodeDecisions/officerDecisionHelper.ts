@@ -28,11 +28,11 @@ const error: { [key in ErrorType]: FormError } = {
   },
   OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH: {
     href: '#officerSearchFirstNameInput',
-    text: 'Enter their first name',
+    text: 'Enter the prisoner’s first name',
   },
   OFFICER_MISSING_LAST_NAME_INPUT_SEARCH: {
     href: '#officerSearchLastNameInput',
-    text: 'Enter their last name',
+    text: 'Enter the prisoner’s last name',
   },
 }
 

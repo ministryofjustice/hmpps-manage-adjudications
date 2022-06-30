@@ -40,6 +40,19 @@ beforeEach(() => {
     startedByUserId: 'TESTER2_GEN',
   })
 
+  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
+    draftAdjudication: {
+      startedByUserId: 'TEST_GEN',
+      id: 34,
+      incidentDetails: {
+        dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+        locationId: 2,
+      },
+      incidentRole: {},
+      prisonerNumber: 'G6415GD',
+    },
+  })
+
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
     draftAdjudication: {
       startedByUserId: 'TEST_GEN',
@@ -54,6 +67,8 @@ beforeEach(() => {
   })
 
   placeOnReportService.getReporterName.mockResolvedValue('Tester2 User')
+
+  placeOnReportService.getNextOffencesUrl.mockResolvedValue(adjudicationUrls.ageOfPrisoner.urls.start(34) as never)
 
   locationService.getIncidentLocations.mockResolvedValue([
     { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
@@ -82,7 +97,41 @@ describe('GET /incident-details/<PRN>/<id>/edit', () => {
 })
 
 describe('POST /incident-details/<PRN>/<id>/edit', () => {
-  it('should redirect to offence details page if details are complete after changing information', () => {
+  it('should redirect to the applicable rule page if details are complete after changing information and there are no offences saved', () => {
+    return request(app)
+      .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.ageOfPrisoner.urls.start(34))
+  })
+  it('should redirect to the applicable rule page if details are complete after changing information and there are already offences on the draft', () => {
+    placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
+      draftAdjudication: {
+        startedByUserId: 'TEST_GEN',
+        id: 34,
+        incidentDetails: {
+          dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+          locationId: 2,
+        },
+        incidentRole: {},
+        prisonerNumber: 'G6415GD',
+        offenceDetails: [
+          {
+            offenceCode: 16001,
+            offenceRule: {
+              paragraphNumber: '16',
+              paragraphDescription:
+                'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
+            },
+          },
+        ],
+      },
+    })
+    placeOnReportService.getNextOffencesUrl.mockResolvedValue(adjudicationUrls.detailsOfOffence.urls.start(34) as never)
+
     return request(app)
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
@@ -102,7 +151,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter an hour which is 23 or less')
+        expect(res.text).toContain('Enter an hour between 00 and 23')
       })
   })
   it('should throw an error on PUT endpoint failure', () => {

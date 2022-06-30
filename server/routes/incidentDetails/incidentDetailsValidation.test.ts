@@ -24,7 +24,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[date]',
-        text: 'Enter date of incident',
+        text: 'Enter the date of the incident',
       })
     })
   })
@@ -46,7 +46,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
-        text: 'Enter time of incident',
+        text: 'Enter the time of the incident',
       })
     })
     it('shows error if an invalid hour is submitted', () => {
@@ -59,7 +59,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
-        text: 'Enter an hour which is 23 or less',
+        text: 'Enter an hour between 00 and 23',
       })
     })
     it('shows error if a minute is not submitted', () => {
@@ -72,7 +72,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
-        text: 'Enter time of incident',
+        text: 'Enter the time of the incident',
       })
     })
     it('shows error if an invalid minute is submitted', () => {
@@ -85,7 +85,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
-        text: 'Enter a minute which is 59 or less',
+        text: 'Enter a minute between 00 and 59',
       })
     })
     it('shows error if neither an hour or a minute is submitted', () => {
@@ -98,7 +98,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time]',
-        text: 'Enter time of incident',
+        text: 'Enter the time of the incident',
       })
     })
     it('shows error if only one digit for hours', () => {
@@ -163,7 +163,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
-        text: 'Enter an hour which is 23 or less',
+        text: 'Enter an hour between 00 and 23',
       })
     })
     it('shows error if letters are entered for the minute field', () => {
@@ -176,7 +176,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
-        text: 'Enter a minute which is 59 or less',
+        text: 'Enter a minute between 00 and 59',
       })
     })
     it('shows error if the time entered is in the future (on the current day)', () => {
@@ -194,7 +194,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#incidentDate[time]',
-        text: 'Enter an incident time that is not in the future.',
+        text: 'The incident time must be in the past',
       })
     })
   })
@@ -208,7 +208,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#locationId',
-        text: 'Select location of incident',
+        text: 'Select the location of the incident',
       })
     })
   })
