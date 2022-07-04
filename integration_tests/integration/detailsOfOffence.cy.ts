@@ -321,7 +321,7 @@ context('Details of offence', () => {
     })
   })
 
-  it.only('goes to the reported adjudication statement edit page', () => {
+  it('goes to the reported adjudication statement edit page', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(202))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
