@@ -165,10 +165,10 @@ describe('POST /details-of-offence/102/delete/1', () => {
             .post(adjudicationUrls.detailsOfOffence.urls.delete(102, 2))
             .send({ confirmDelete: 'yes' })
             .expect(302)
-            .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(102))
+            .expect('Location', adjudicationUrls.detailsOfOffence.urls.modified(102))
             .then(() =>
               agent
-                .get(adjudicationUrls.detailsOfOffence.urls.start(102))
+                .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
                 .expect(200)
                 // The offence with this answer should be removed
                 .expect(res => expect(res.text).not.toContain('A standard answer with child question'))
@@ -188,10 +188,10 @@ describe('POST /details-of-offence/102/delete/1', () => {
             .post(adjudicationUrls.detailsOfOffence.urls.delete(102, 2))
             .send({ confirmDelete: 'no' })
             .expect(302)
-            .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(102))
+            .expect('Location', adjudicationUrls.detailsOfOffence.urls.modified(102))
             .then(() =>
               agent
-                .get(adjudicationUrls.detailsOfOffence.urls.start(102))
+                .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
                 .expect(200)
                 // The offence with this answer should still be present
                 .expect(res => expect(res.text).toContain('A standard answer with child question'))

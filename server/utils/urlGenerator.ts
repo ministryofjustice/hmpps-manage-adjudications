@@ -20,12 +20,16 @@ const adjudicationUrls = {
   detailsOfOffence: {
     root: '/details-of-offence',
     matchers: {
+      // TODO - Rename
       start: '/:adjudicationNumber',
+      modified: '/:adjudicationNumber/modified',
       add: '/:adjudicationNumber/add',
       delete: '/:adjudicationNumber/delete/:offenceIndex',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}`,
+      modified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/modified`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/add`,
       delete: (adjudicationNumber: number, offenceIndex: number) =>
         `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete/${offenceIndex}`,
