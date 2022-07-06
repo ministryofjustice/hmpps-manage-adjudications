@@ -64,16 +64,19 @@ gotenberg:
   replicaCount: 2
 
   image:
-    repository: thecodingmachine/gotenberg
-    tag: 6.3.0
+    repository: gotenberg/gotenberg
+    tag: 7.5.3
     port: 3000
+  
+  containerCommand: ["gotenberg"]  
+  containerArgs: ["--chromium-ignore-certificate-errors","--api-timeout=30s","--pdfengines-engines=pdftk","--uno-listener-restart-threshold=0"]
 
   ingress:
     enabled: false
 
   livenessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 30
     initialDelaySeconds: 60
     timeoutSeconds: 20
@@ -81,7 +84,7 @@ gotenberg:
 
   readinessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 20
     initialDelaySeconds: 60
     timeoutSeconds: 30
@@ -92,4 +95,5 @@ gotenberg:
 
   securityContext:
     runAsUser: 1001
+    privileged: false
     runAsNonRoot: true

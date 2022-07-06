@@ -28,8 +28,3 @@ generic-prometheus-alerts:
 
 gotenberg:
   replicaCount: 1
-
-  env:
-    GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
-    DISABLE_UNOCONV: 1
-    DEFAULT_WAIT_TIMEOUT: 30
