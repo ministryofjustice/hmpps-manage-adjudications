@@ -207,8 +207,8 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         searchUser: 'searchUser',
       })
       .expect(res => {
-        expect(res.text).toContain('Enter the prisoner’s first name')
-        expect(res.text).toContain('Enter the prisoner’s last name')
+        expect(res.text).toContain('Enter the person’s first name')
+        expect(res.text).toContain('Enter the person’s last name')
       })
   })
 
@@ -231,8 +231,8 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         searchUser: 'searchUser',
       })
       .expect(res => {
-        expect(res.text).toContain('Enter the prisoner’s first name')
-        expect(res.text).toContain('Enter the prisoner’s last name')
+        expect(res.text).toContain('Enter the person’s first name')
+        expect(res.text).toContain('Enter the person’s last name')
       })
   })
 })
