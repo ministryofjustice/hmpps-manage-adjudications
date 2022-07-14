@@ -8,15 +8,15 @@ type SearchForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_NAME: {
     href: '#staffFullName',
-    text: 'Enter the prisoner’s name',
+    text: 'Enter the person’s name',
   },
   MISSING_FIRST_NAME: {
     href: '#staffFirstName',
-    text: 'Enter the prisoner’s first name',
+    text: 'Enter the person’s first name',
   },
   MISSING_LAST_NAME: {
     href: '#staffLastName',
-    text: 'Enter the prisoner’s last name',
+    text: 'Enter the person’s last name',
   },
 }
 
