@@ -154,9 +154,9 @@ jobs:
       - store_test_results:
           path: test_results
       - store_artifacts:
-          path: test_results/integration_tests/videos
+          path: integration_tests/videos/
       - store_artifacts:
-          path: test_results/integration_tests/screenshots
+          path: integration_tests/screenshots/
 
 workflows:
   version: 2
