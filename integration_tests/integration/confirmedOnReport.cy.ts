@@ -93,7 +93,7 @@ context('Report has been submitted for review', () => {
     cy.contains('French')
     cy.contains('They have other languages of:')
     cy.contains('Spanish')
-    cy.contains('German make this fail')
+    cy.contains('German')
   })
 
   it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
