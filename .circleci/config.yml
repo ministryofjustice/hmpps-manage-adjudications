@@ -121,7 +121,7 @@ jobs:
       - store_test_results:
           path: test_results
       - store_artifacts:
-          path: test-results/unit-test-reports.html
+          path: test_results/unit-test-reports.html
 
   integration_test:
     executor: integration-tests
