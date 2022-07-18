@@ -62,7 +62,7 @@
             <div class='break-inside-avoid'>
                 {% for questionAndAnswer in offence.questionsAndAnswers %}
                     <p class='govuk-!-margin-bottom-0'>{{ questionAndAnswer.question }}</p>
-                    <p class='govuk-!-margin-bottom-2'>{{ questionAndAnswer.answer }}</p>
+                    <p class='govuk-!-margin-bottom-2'>{{ questionAndAnswer.answer | formatPrisonOfficerName}}</p>
                 {% endfor %}
             </div>
             <div>

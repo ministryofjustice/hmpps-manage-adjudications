@@ -132,6 +132,15 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return 'Prison rule 51'
   })
 
+  njkEnv.addFilter('formatPrisonOfficerName', (answer: string) => {
+    if (answer.includes('A prison officer -')) {
+      const answerArray = answer.split(' - ')
+      const namesArray = answerArray[1].split(' ')
+      return `${answerArray[0]} - ${namesArray[0][0]}. ${namesArray.reverse()[0]}`
+    }
+    return answer
+  })
+
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
