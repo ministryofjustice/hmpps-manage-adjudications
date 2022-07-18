@@ -5,7 +5,7 @@ import * as pathModule from 'path'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive, getFormattedReporterName } from './utils'
+import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
 
 const production = process.env.NODE_ENV === 'production'
@@ -50,7 +50,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
 
   njkEnv.addFilter('initialiseName', (fullName: string) => {
     // this check is for the authError page
-    return getFormattedReporterName(fullName)
+    return getFormattedOfficerName(fullName)
   })
 
   njkEnv.addFilter('findError', (formFieldId: string, array: FormError[] = []) => {
@@ -131,7 +131,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addFilter('formatPrisonOfficerName', (answer: string) => {
     if (answer.includes('A prison officer -')) {
       const answerArray = answer.split(' - ')
-      const initialisedName = getFormattedReporterName(answerArray[1])
+      const initialisedName = getFormattedOfficerName(answerArray[1])
       return `${answerArray[0]} - ${initialisedName}`
     }
     return answer
