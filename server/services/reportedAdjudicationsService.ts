@@ -11,7 +11,7 @@ import {
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
-import { convertToTitleCase, getDate, getFormattedReporterName, getTime, formatTimestampToDate } from '../utils/utils'
+import { convertToTitleCase, getDate, getFormattedOfficerName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
@@ -71,7 +71,7 @@ export default class ReportedAdjudicationsService {
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
       incidentLocationName: location.userDescription,
       incidentAgencyName: agencyDescription.description,
-      reportingOfficer: getFormattedReporterName(reporter.name),
+      reportingOfficer: getFormattedOfficerName(reporter.name),
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
       incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
@@ -230,7 +230,7 @@ export default class ReportedAdjudicationsService {
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: getFormattedReporterName(reporter.name),
+        value: getFormattedOfficerName(reporter.name),
       },
       {
         label: 'Date',

@@ -5,7 +5,7 @@ import * as pathModule from 'path'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive } from './utils'
+import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
 
 const production = process.env.NODE_ENV === 'production'
@@ -50,11 +50,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
 
   njkEnv.addFilter('initialiseName', (fullName: string) => {
     // this check is for the authError page
-    if (!fullName) {
-      return null
-    }
-    const array = fullName.split(' ')
-    return `${array[0][0]}. ${array.reverse()[0]}`
+    return getFormattedOfficerName(fullName)
   })
 
   njkEnv.addFilter('findError', (formFieldId: string, array: FormError[] = []) => {
@@ -130,6 +126,15 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       return 'Prison rule 55'
     }
     return 'Prison rule 51'
+  })
+
+  njkEnv.addFilter('formatPrisonOfficerName', (answer: string) => {
+    if (answer.includes('A prison officer -')) {
+      const answerArray = answer.split(' - ')
+      const initialisedName = getFormattedOfficerName(answerArray[1])
+      return `${answerArray[0]} - ${initialisedName}`
+    }
+    return answer
   })
 
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)

@@ -26,7 +26,7 @@ export const properCaseName = (name: string): string => (isBlank(name) ? '' : na
 export const formatName = (firstName: string, lastName: string): string =>
   [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
 
-export const getFormattedReporterName = (name: string): string => {
+export const getFormattedOfficerName = (name: string): string => {
   if (!name) {
     return null
   }
@@ -130,7 +130,7 @@ export default {
   getTime,
   getDate,
   hasAnyRole,
-  getFormattedReporterName,
+  getFormattedOfficerName,
   possessive,
   calculateAge,
 }

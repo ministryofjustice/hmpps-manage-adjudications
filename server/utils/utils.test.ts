@@ -7,7 +7,7 @@ import {
   getTime,
   getDate,
   hasAnyRole,
-  getFormattedReporterName,
+  getFormattedOfficerName,
   possessive,
   calculateAge,
 } from './utils'
@@ -135,15 +135,15 @@ describe('getDate()', () => {
   })
 })
 
-describe('getFormattedReporterName()', () => {
+describe('getFormattedOfficerName()', () => {
   it('should return a correctly formatted name', () => {
-    expect(getFormattedReporterName('Test User')).toEqual('T. User')
+    expect(getFormattedOfficerName('Test User')).toEqual('T. User')
   })
   it('should return a correctly formatted name when the surname is double barelled', () => {
-    expect(getFormattedReporterName('Test User-Smith')).toEqual('T. User-Smith')
+    expect(getFormattedOfficerName('Test User-Smith')).toEqual('T. User-Smith')
   })
   it('should return a correctly formatted name when the first name is double barelled', () => {
-    expect(getFormattedReporterName('Test-Jo User')).toEqual('T. User')
+    expect(getFormattedOfficerName('Test-Jo User')).toEqual('T. User')
   })
 })
 
