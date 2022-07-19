@@ -45,7 +45,7 @@ export function getPlaceholderValues(
   }
 }
 
-export function getProcessedText(template: string, values: PlaceholderValues, isForPdf: boolean): string {
+export function getProcessedText(template: string, values: PlaceholderValues, prisonerView: boolean): string {
   return (template || '')
     .replace(
       PlaceholderText.PRISONER_FULL_NAME,
@@ -61,7 +61,7 @@ export function getProcessedText(template: string, values: PlaceholderValues, is
     )
     .replace(
       PlaceholderText.VICTIM_STAFF_FULL_NAME,
-      convertNameForPlaceholder(values.victimStaffFullName || '', isForPdf)
+      convertNameForPlaceholder(values.victimStaffFullName || '', prisonerView)
     )
     .replace(
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,

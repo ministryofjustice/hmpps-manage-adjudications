@@ -37,9 +37,9 @@ export const getFormattedOfficerName = (name: string): string => {
 export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
-export const convertNameForPlaceholder = (name: string, isForPdf: boolean): string => {
+export const convertNameForPlaceholder = (name: string, prisonerView: boolean): string => {
   const formattedName = convertToTitleCase(name)
-  if (isForPdf) return getFormattedOfficerName(formattedName)
+  if (prisonerView) return getFormattedOfficerName(formattedName)
   return formattedName
 }
 

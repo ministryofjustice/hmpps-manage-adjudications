@@ -82,7 +82,7 @@ export default class DecisionTreeService {
     associatedPrisoner: PrisonerResult,
     incidentRole: IncidentRole,
     user: User,
-    isForPdf: boolean
+    prisonerView: boolean
   ): Promise<IncidentAndOffences[]> {
     return Promise.all(
       allOffenceData?.map(async offenceData => {
@@ -90,7 +90,12 @@ export default class DecisionTreeService {
         const answerData = await this.answerDataDetails(offenceData, user)
         const offenceCode = Number(offenceData.offenceCode)
         const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum, isForPdf)
+        const questionsAndAnswers = this.questionsAndAnswers(
+          offenceCode,
+          placeHolderValues,
+          incidentRoleEnum,
+          prisonerView
+        )
         return {
           questionsAndAnswers,
           incidentRule: incidentRole.offenceRule,
@@ -121,10 +126,10 @@ export default class DecisionTreeService {
     offenceCode: number,
     placeHolderValues: PlaceholderValues,
     incidentRole: IncidentRoleEnum,
-    isForPdf: boolean
+    prisonerView: boolean
   ) {
     return this.getDecisionTree()
       .findAnswerByCode(offenceCode)
-      .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, isForPdf)
+      .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView)
   }
 }
