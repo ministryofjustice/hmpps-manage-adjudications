@@ -18,7 +18,7 @@ export default class Title {
   }
 
   getProcessedText(placeholderValues: PlaceholderValues, incidentRole: IncidentRole): string {
-    return getProcessedText(this.titles.get(incidentRole), placeholderValues)
+    return getProcessedText(this.titles.get(incidentRole), placeholderValues, false)
   }
 
   toString(indent = 0) {

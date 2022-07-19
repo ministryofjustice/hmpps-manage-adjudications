@@ -67,12 +67,12 @@ export class Answer {
     return this.answerOffenceCode
   }
 
-  getProcessedText(placeholderValues: PlaceholderValues): string {
-    return getProcessedText(this.answerText, placeholderValues)
+  getProcessedText(placeholderValues: PlaceholderValues, prisonerView: boolean): string {
+    return getProcessedText(this.answerText, placeholderValues, prisonerView)
   }
 
-  getProcessedReplayText(placeholderValues: PlaceholderValues): string {
-    return getProcessedText(this.answerReplayText || this.answerText, placeholderValues)
+  getProcessedReplayText(placeholderValues: PlaceholderValues, prisonerView: boolean): string {
+    return getProcessedText(this.answerReplayText || this.answerText, placeholderValues, prisonerView)
   }
 
   getParentQuestion(): Question {
@@ -100,12 +100,13 @@ export class Answer {
 
   getProcessedQuestionsAndAnswersToGetHere(
     placeHolderValues: PlaceholderValues,
-    incidentRole: IncidentRole
+    incidentRole: IncidentRole,
+    prisonerView: boolean
   ): { question: string; answer: string }[] {
     return this.getQuestionsAndAnswersToGetHere().map(questionAndAnswer => {
       return {
         question: questionAndAnswer.question.getTitle().getProcessedText(placeHolderValues, incidentRole),
-        answer: questionAndAnswer.answer.getProcessedReplayText(placeHolderValues),
+        answer: questionAndAnswer.answer.getProcessedReplayText(placeHolderValues, prisonerView),
       }
     })
   }

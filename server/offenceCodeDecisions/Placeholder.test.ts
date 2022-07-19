@@ -24,7 +24,7 @@ describe('process text', () => {
         '{VICTIM_OTHER_PERSON_FULL_NAME}'
     )
     // Now test that processing works as expected.
-    expect(getProcessedText(template, placeholderValues)).toEqual(
+    expect(getProcessedText(template, placeholderValues, false)).toEqual(
       'Prisonerfirstname Prisonerlastname' +
         'Prisonerfirstname Prisonerlastname’s' +
         'Associatedprisonerfirstname Associatedprisonerlastname' +
@@ -33,13 +33,26 @@ describe('process text', () => {
         'Victimotherpersonfirstname Victimotherpersonlastname'
     )
   })
+  it('placeholder text for pdf', () => {
+    const template = Object.values(PlaceholderText).join('') // make a template out of all the PlaceholderText types
+    // Casing representative of what we get back from the API
+    const placeholderValues = {
+      prisonerFirstName: 'PRISONERFIRSTNAME',
+      prisonerLastName: 'PRISONERLASTNAME',
+      victimStaffFullName: 'VICTIMSTAFFFIRSTNAME VICTIMSTAFFLASTNAME', // Single field from the API
+    }
+    // Now test that processing works as expected.
+    expect(getProcessedText(template, placeholderValues, true)).toEqual(
+      'Prisonerfirstname PrisonerlastnamePrisonerfirstname Prisonerlastname’sV. Victimstafflastname'
+    )
+  })
   it('possessive ends in s', () => {
     const template = PlaceholderText.PRISONER_FULL_NAME_POSSESSIVE
     const placeholderValuesEndsInS = {
       prisonerFirstName: 'PRISONERFIRSTNAME',
       prisonerLastName: 'PRISONERLASTNAMES',
     }
-    expect(getProcessedText(template, placeholderValuesEndsInS)).toEqual('Prisonerfirstname Prisonerlastnames’')
+    expect(getProcessedText(template, placeholderValuesEndsInS, false)).toEqual('Prisonerfirstname Prisonerlastnames’')
   })
   it('nulls resolve to empty', () => {
     const template = Object.values(PlaceholderText).join('') // make a template out of all the PlaceholderText types
@@ -47,7 +60,7 @@ describe('process text', () => {
       prisonerFirstName: 'PRISONERFIRSTNAME',
       prisonerLastName: 'PRISONERLASTNAME',
     }
-    expect(getProcessedText(template, placeholderValuesMinimal)).toEqual(
+    expect(getProcessedText(template, placeholderValuesMinimal, false)).toEqual(
       'Prisonerfirstname PrisonerlastnamePrisonerfirstname Prisonerlastname’s'
     )
   })

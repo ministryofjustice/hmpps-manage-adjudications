@@ -24,7 +24,8 @@ export default class AdjudicationPdf {
       prisoner,
       associatedPrisoner,
       reportedAdjudication.incidentRole,
-      user
+      user,
+      true
     )
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(

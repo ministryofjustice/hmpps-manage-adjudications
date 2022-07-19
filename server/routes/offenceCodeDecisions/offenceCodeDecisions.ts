@@ -162,7 +162,7 @@ export default class OffenceCodeRoutes {
     const answers = question.getChildAnswers().map(a => {
       return {
         id: a.id(),
-        label: a.getProcessedText(placeholderValues),
+        label: a.getProcessedText(placeholderValues, false),
         type: a.getType().toString(),
         offenceCode: a.getOffenceCode(),
       }

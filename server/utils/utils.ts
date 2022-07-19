@@ -37,6 +37,12 @@ export const getFormattedOfficerName = (name: string): string => {
 export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
+export const convertNameForPlaceholder = (name: string, prisonerView: boolean): string => {
+  const formattedName = convertToTitleCase(name)
+  if (prisonerView) return getFormattedOfficerName(formattedName)
+  return formattedName
+}
+
 export const formatLocation = (locationName: string): string => {
   if (!locationName) return undefined
   if (locationName.includes('CSWAP')) return 'No cell allocated'
@@ -133,4 +139,5 @@ export default {
   getFormattedOfficerName,
   possessive,
   calculateAge,
+  convertNameForPlaceholder,
 }
