@@ -16,6 +16,7 @@ import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { AnswerType } from '../../offenceCodeDecisions/Answer'
 import adjudicationUrls from '../../utils/urlGenerator'
+import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstablishmentDecisionHelper'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -41,6 +42,10 @@ export default class OffenceCodeRoutes {
 
   private helpers = new Map<AnswerType, DecisionHelper>([
     [AnswerType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
+    [
+      AnswerType.PRISONER_OUTSIDE_ESTABLISHMENT,
+      new PrisonerOutsideEstablishmentDecisionHelper(this.placeOnReportService, this.decisionTreeService),
+    ],
     [AnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
     [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
     [AnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],

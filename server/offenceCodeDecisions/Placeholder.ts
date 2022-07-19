@@ -10,6 +10,7 @@ export type PlaceholderValues = {
   victimStaffFullName?: string
   victimPrisonerFirstName?: string
   victimPrisonerLastName?: string
+  victimPrisonerNumber?: string
   victimOtherPersonFullName?: string
 }
 
@@ -26,6 +27,7 @@ export enum PlaceholderText {
   VICTIM_STAFF_FULL_NAME = '{VICTIM_STAFF_FULL_NAME}',
   VICTIM_PRISONER_FULL_NAME = '{VICTIM_PRISONER_FULL_NAME}',
   VICTIM_OTHER_PERSON_FULL_NAME = '{VICTIM_OTHER_PERSON_FULL_NAME}',
+  VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT = '{VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}',
 }
 
 export function getPlaceholderValues(
@@ -41,6 +43,7 @@ export function getPlaceholderValues(
     victimStaffFullName: answerDataDetails?.victimStaff?.name,
     victimPrisonerFirstName: answerDataDetails?.victimPrisoner?.firstName,
     victimPrisonerLastName: answerDataDetails?.victimPrisoner?.lastName,
+    victimPrisonerNumber: answerDataDetails?.victimPrisoner?.offenderNo,
     victimOtherPersonFullName: answerDataDetails?.victimOtherPerson,
   }
 }
@@ -63,6 +66,10 @@ export function getProcessedText(template: string, values: PlaceholderValues): s
     .replace(
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,
       convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`)
+    )
+    .replace(
+      PlaceholderText.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT,
+      convertToTitleCase(`${values.victimOtherPersonFullName || ''} ${values.victimPrisonerNumber}`)
     )
     .replace(PlaceholderText.VICTIM_OTHER_PERSON_FULL_NAME, convertToTitleCase(values.victimOtherPersonFullName || ''))
 }
