@@ -10,6 +10,7 @@ import {
   getFormattedOfficerName,
   possessive,
   calculateAge,
+  convertNameForPlaceholder,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -135,7 +136,7 @@ describe('getDate()', () => {
   })
 })
 
-describe('getFormattedOfficerName()', () => {
+describe('getFormattedOfficerName', () => {
   it('should return a correctly formatted name', () => {
     expect(getFormattedOfficerName('Test User')).toEqual('T. User')
   })
@@ -144,6 +145,15 @@ describe('getFormattedOfficerName()', () => {
   })
   it('should return a correctly formatted name when the first name is double barelled', () => {
     expect(getFormattedOfficerName('Test-Jo User')).toEqual('T. User')
+  })
+})
+
+describe('convertNameForPlaceholder', () => {
+  it('should return a correctly formatted name for pdf', () => {
+    expect(convertNameForPlaceholder('Test User', true)).toEqual('T. User')
+  })
+  it('should return a correctly formatted name not for pdf', () => {
+    expect(convertNameForPlaceholder('Test User-Smith', false)).toEqual('Test User-Smith')
   })
 })
 

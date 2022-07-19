@@ -103,7 +103,8 @@ export default class prisonerReportRoutes {
       prisoner,
       associatedPrisoner,
       draftAdjudication.incidentRole,
-      user
+      user,
+      false
     )
 
     const prisonerReportVariables = getVariablesForPageType(

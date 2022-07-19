@@ -62,7 +62,8 @@ export default class DetailsOfOffencePage {
         const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
           offenceCode,
           placeHolderValues,
-          incidentRole
+          incidentRole,
+          false
         )
         return {
           questionsAndAnswers,

@@ -1,5 +1,5 @@
 import PrisonerResult from '../data/prisonerResult'
-import { convertToTitleCase, possessive } from '../utils/utils'
+import { convertNameForPlaceholder, convertToTitleCase, possessive } from '../utils/utils'
 import { User } from '../data/hmppsAuthClient'
 
 export type PlaceholderValues = {
@@ -45,7 +45,7 @@ export function getPlaceholderValues(
   }
 }
 
-export function getProcessedText(template: string, values: PlaceholderValues): string {
+export function getProcessedText(template: string, values: PlaceholderValues, isForPdf: boolean): string {
   return (template || '')
     .replace(
       PlaceholderText.PRISONER_FULL_NAME,
@@ -59,7 +59,10 @@ export function getProcessedText(template: string, values: PlaceholderValues): s
       PlaceholderText.ASSOCIATED_PRISONER_FULL_NAME,
       convertToTitleCase(`${values.associatedPrisonerFirstName || ''} ${values.associatedPrisonerLastName || ''}`)
     )
-    .replace(PlaceholderText.VICTIM_STAFF_FULL_NAME, convertToTitleCase(values.victimStaffFullName || ''))
+    .replace(
+      PlaceholderText.VICTIM_STAFF_FULL_NAME,
+      convertNameForPlaceholder(values.victimStaffFullName || '', isForPdf)
+    )
     .replace(
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,
       convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`)

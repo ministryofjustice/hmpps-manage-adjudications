@@ -40,7 +40,8 @@ export default class DeleteOffenceRoutes {
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
       Number(offenceData.offenceCode),
       placeHolderValues,
-      incidentRole
+      incidentRole,
+      false
     )
     return res.render(`pages/deleteOffence`, { offenceIndex, questionsAndAnswers, errors })
   }
