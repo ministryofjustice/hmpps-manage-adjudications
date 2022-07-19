@@ -44,7 +44,7 @@ export default class OffenceCodeRoutes {
     [AnswerType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
     [
       AnswerType.PRISONER_OUTSIDE_ESTABLISHMENT,
-      new PrisonerOutsideEstablishmentDecisionHelper(this.placeOnReportService, this.decisionTreeService),
+      new PrisonerOutsideEstablishmentDecisionHelper(this.decisionTreeService),
     ],
     [AnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
     [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],

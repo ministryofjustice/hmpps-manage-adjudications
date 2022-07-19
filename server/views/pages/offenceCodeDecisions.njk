@@ -32,7 +32,6 @@
             {% endset -%}
         {% elseif answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
             {% set decisionHtml = null %}
-            {% endset -%}
         {% elseif answer.type == 'PRISONER' %}
             {% set decisionHtml %}
                 {{ prisonerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}

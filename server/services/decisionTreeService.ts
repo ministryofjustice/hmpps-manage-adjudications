@@ -105,6 +105,7 @@ export default class DecisionTreeService {
   async answerDataDetails(answerData: AnswerData, user: User): Promise<AnswerDataDetails> {
     const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
       answerData.victimOtherPersonsName,
+      // TODO - This prob won't work for prisoner outside est and we should not make an unecessary call anyway
       answerData.victimPrisonersNumber &&
         this.placeOnReportService.getPrisonerDetails(answerData.victimPrisonersNumber, user),
       answerData.victimStaffUsername && this.userService.getStaffFromUsername(answerData.victimStaffUsername, user),
