@@ -348,7 +348,7 @@ context('Offence details', () => {
   })
 
   it('select another person - validation', () => {
-    const anotherPersonAnswerId = '1-1-1-4'
+    const anotherPersonAnswerId = '1-1-1-5'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
@@ -360,7 +360,7 @@ context('Offence details', () => {
   })
 
   it('select another person question', () => {
-    const anotherPersonAnswerId = '1-1-1-4'
+    const anotherPersonAnswerId = '1-1-1-5'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
