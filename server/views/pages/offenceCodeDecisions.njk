@@ -40,7 +40,7 @@
         {% else %}
             {% set decisionHtml = null %}
         {% endif %}
-        # This is effectively the feature flag to hide the questions related to prisoner outside establishment
+        {# This is effectively the feature flag to hide the questions related to prisoner outside establishment #}
         {% if answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
         {% else %}
           {% set items = (items.push({
