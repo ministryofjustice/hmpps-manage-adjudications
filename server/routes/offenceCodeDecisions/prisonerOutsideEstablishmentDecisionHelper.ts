@@ -11,10 +11,12 @@ export default class PrisonerOutsideEstablishmentDecisionHelper extends Decision
     super(decisionTreeService)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   formFromPost(req: Request): DecisionForm {
     return null
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override validateForm(form: DecisionForm): FormError[] {
     return []
   }
