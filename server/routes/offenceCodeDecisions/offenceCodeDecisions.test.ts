@@ -149,7 +149,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
     return request(app)
       .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .expect(res => {
-        expect(res.text).toContain('Select yes if you want to delete this offence')
+        expect(res.text).toContain('Select an option')
       })
   })
 

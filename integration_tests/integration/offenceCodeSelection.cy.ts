@@ -215,7 +215,7 @@ context('Offence details', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.continue().click()
-    whatTypeOfOffencePage.form().contains('Select yes if you want to delete this offence')
+    whatTypeOfOffencePage.form().contains('Select an option')
   })
 
   it('cancel', () => {
