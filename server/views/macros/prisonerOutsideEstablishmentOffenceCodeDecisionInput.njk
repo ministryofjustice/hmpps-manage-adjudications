@@ -1,0 +1,29 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% macro prisonerOutsideEstablishmentOffenceCodeDecisionInput(answerId, decisionForm, selectedAnswerViewData, errors) %}
+    {% set selectedAnswerId = decisionForm.selectedAnswerId %}
+    {% set anotherNameInput = decisionForm.selectedAnswerData.otherPersonNameInput %}
+    {% set prisonerNumberInput = decisionForm.selectedAnswerData.prisonerNumberInput %}
+        <div id="prisonerOutsideEstablishmentDetails" class="govuk-form-group flex-container flex-column">
+            {{ govukInput({
+                id: "prisonerOutsideEstablishmentNameInput",
+                name: "prisonerOutsideEstablishmentNameInput",
+                classes: "govuk-!-width-one-third",
+                value: selectedAnswerId == answerId and anotherNameInput,
+                errorMessage: errors | findErrors(["prisonerOutsideEstablishmentNameInput"]),
+                label: {
+                    text: "Name"
+                }
+            }) }}
+            {{ govukInput({
+                id: "prisonerOutsideEstablishmentNumberInput",
+                name: "prisonerOutsideEstablishmentNumberInput",
+                classes: "govuk-!-width-one-third",
+                value: selectedAnswerId == answerId and prisonerNumberInput,
+                errorMessage: errors | findErrors(["prisonerOutsideEstablishmentNumberInput"]),
+                label: {
+                    text: "Prison number"
+                }
+            }) }}
+        </div>
+{% endmacro %}

@@ -7,6 +7,7 @@
 {% from "../macros/officerSearchOffenceCodeDecisionInput.njk" import officerSearchOffenceCodeDecisionInput %}
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 {% from "../macros/otherPersonOffenceCodeDecisionInput.njk" import otherPersonOffenceCodeDecisionInput %}
+{% from "../macros/prisonerOutsideEstablishmentOffenceCodeDecisionInput.njk" import prisonerOutsideEstablishmentOffenceCodeDecisionInput %}
 
 {% set title = "Offence details" %}
 
@@ -35,14 +36,15 @@
                 {{ prisonerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
             {% endset -%}
         {% elseif answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
-            {# Need to add HTML relevant to prisoner outside estbalishment here #}
-            {% set decisionHtml = null %}
+            {% set decisionHtml %}
+             {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
+            {% endset -%}
         {% else %}
             {% set decisionHtml = null %}
         {% endif %}
         {# This is effectively the feature flag to hide the questions related to prisoner outside establishment #}
-        {% if answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
-        {% else %}
+        {# {% if answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %} #}
+        {# {% else %} #}
           {% set items = (items.push({
             attributes: { offenceCode: answer.offenceCode },
             value: answer.id,
@@ -52,7 +54,7 @@
             },
             checked: decisionForm.selectedAnswerId == answer.id
           }), items) %}
-        {% endif %}
+        {# {% endif %} #}
     {% endfor %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-decision-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
