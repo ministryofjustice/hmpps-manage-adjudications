@@ -32,6 +32,11 @@ export default question([
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1005))
               .child(answer('No').offenceCode(1006))))
+          // Add placeholder here
+          .child(answer(['A prisoner who is no longer at this establishment', `A prisoner who's left the establishment - NAME HERE`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+            .child(question('Was the incident a racially aggravated assault?')
+              .child(answer('Yes').offenceCode(1021))
+              .child(answer('No').offenceCode(1022))))
           .child(answer(['Another person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON)
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1007))
