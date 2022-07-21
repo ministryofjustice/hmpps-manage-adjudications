@@ -380,7 +380,7 @@ context('Offence details', () => {
     wasTheIncidentRacial.checkOnPage()
   })
 
-  it.skip('select a prisoner outside establishment question', () => {
+  it('select a prisoner outside establishment question', () => {
     const prisonerOutsideEstablishmentAnswerId = '1-1-1-4'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
@@ -396,7 +396,7 @@ context('Offence details', () => {
     wasTheIncidentRacial.checkOnPage()
   })
 
-  it.skip('select a prisoner outside establishment question - validation', () => {
+  it('select a prisoner outside establishment question - validation', () => {
     const prisonerOutsideEstablishmentAnswerId = '1-1-1-4'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
@@ -439,7 +439,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.continue().click()
     Page.verifyOnPage(DetailsOfOffence)
   })
-  it.skip('end to end - prisoner outside establishment', () => {
+  it('end to end - prisoner outside establishment', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
