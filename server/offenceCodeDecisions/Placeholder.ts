@@ -71,10 +71,7 @@ export function getProcessedText(template: string, values: PlaceholderValues, pr
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,
       convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`)
     )
-    .replace(
-      PlaceholderText.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT,
-      formatPrisonerOutsideEstablishmentText(values)
-    )
+    .replace(PlaceholderText.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT, formatPrisonerOutsideEstablishmentText(values))
     .replace(PlaceholderText.VICTIM_OTHER_PERSON_FULL_NAME, convertToTitleCase(values.victimOtherPersonFullName || ''))
 }
 
