@@ -1,9 +1,9 @@
-import { User } from "../data/hmppsAuthClient"
-import Question from "../offenceCodeDecisions/Question"
-import DecisionTreeService, { AnswerData } from "./decisionTreeService"
-import PlaceOnReportService, { PrisonerResultSummary } from "./placeOnReportService"
-import ReportedAdjudicationsService from "./reportedAdjudicationsService"
-import UserService from "./userService"
+import { User } from '../data/hmppsAuthClient'
+import Question from '../offenceCodeDecisions/Question'
+import DecisionTreeService, { AnswerData } from './decisionTreeService'
+import PlaceOnReportService, { PrisonerResultSummary } from './placeOnReportService'
+import ReportedAdjudicationsService from './reportedAdjudicationsService'
+import UserService from './userService'
 
 const getPrisonerDetails = jest.fn()
 const getStaffFromUsername = jest.fn()
@@ -23,7 +23,11 @@ jest.mock('../offenceCodeDecisions/Question')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
-const reportedAdjudicationsService = new ReportedAdjudicationsService(null, null, null) as jest.Mocked<ReportedAdjudicationsService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 const question = new Question(null) as jest.Mocked<Question>
 
 let service: DecisionTreeService
@@ -70,12 +74,10 @@ describe('answerData', () => {
 
   beforeEach(() => {
     getPrisonerDetails.mockResolvedValue(victimPrisonerDetails)
-
     getStaffFromUsername.mockResolvedValue(victimStaffDetails)
   })
 
   describe('offence with no data', () => {
-
     beforeEach(() => {
       answerData = {}
     })
@@ -96,18 +98,17 @@ describe('answerData', () => {
   })
 
   describe('offence with prisoner victim', () => {
-
     beforeEach(() => {
       answerData = {
-        victimPrisonersNumber: 'AA1234A'
+        victimPrisonersNumber: 'AA1234A',
       }
     })
 
     it('returns expected data', async () => {
       const result = await service.answerDataDetails(answerData, callingUser)
-      const expected = { 
+      const expected = {
         victimPrisoner: victimPrisonerDetails,
-        victimPrisonerNumber: 'AA1234A'
+        victimPrisonerNumber: 'AA1234A',
       }
 
       expect(result).toEqual(expected)
@@ -122,17 +123,16 @@ describe('answerData', () => {
   })
 
   describe('offence with staff victim', () => {
-
     beforeEach(() => {
       answerData = {
-        victimStaffUsername: 'John Smith'
+        victimStaffUsername: 'John Smith',
       }
     })
 
     it('returns expected data', async () => {
       const result = await service.answerDataDetails(answerData, callingUser)
-      const expected = { 
-        victimStaff: victimStaffDetails
+      const expected = {
+        victimStaff: victimStaffDetails,
       }
 
       expect(result).toEqual(expected)
@@ -147,10 +147,9 @@ describe('answerData', () => {
   })
 
   describe('offence with other person as victim', () => {
-
     beforeEach(() => {
       answerData = {
-        victimOtherPersonsName: 'Tim Smith'
+        victimOtherPersonsName: 'Tim Smith',
       }
     })
 
@@ -172,7 +171,6 @@ describe('answerData', () => {
   })
 
   describe('offence with prisoner from outside the establishment as victim', () => {
-
     beforeEach(() => {
       answerData = {
         victimOtherPersonsName: 'Jane Smith',
