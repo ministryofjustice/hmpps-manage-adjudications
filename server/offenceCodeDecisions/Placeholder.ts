@@ -10,6 +10,7 @@ export type PlaceholderValues = {
   victimStaffFullName?: string
   victimPrisonerFirstName?: string
   victimPrisonerLastName?: string
+  victimPrisonerNumber?: string
   victimOtherPersonFullName?: string
 }
 
@@ -17,6 +18,7 @@ export type AnswerDataDetails = {
   victimStaff?: User
   victimPrisoner?: PrisonerResult
   victimOtherPerson?: string
+  victimPrisonerNumber?: string
 }
 
 export enum PlaceholderText {
@@ -25,6 +27,7 @@ export enum PlaceholderText {
   ASSOCIATED_PRISONER_FULL_NAME = '{ASSOCIATED_PRISONER_FULL_NAME}',
   VICTIM_STAFF_FULL_NAME = '{VICTIM_STAFF_FULL_NAME}',
   VICTIM_PRISONER_FULL_NAME = '{VICTIM_PRISONER_FULL_NAME}',
+  VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT = '{VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}',
   VICTIM_OTHER_PERSON_FULL_NAME = '{VICTIM_OTHER_PERSON_FULL_NAME}',
 }
 
@@ -41,6 +44,7 @@ export function getPlaceholderValues(
     victimStaffFullName: answerDataDetails?.victimStaff?.name,
     victimPrisonerFirstName: answerDataDetails?.victimPrisoner?.firstName,
     victimPrisonerLastName: answerDataDetails?.victimPrisoner?.lastName,
+    victimPrisonerNumber: answerDataDetails?.victimPrisonerNumber,
     victimOtherPersonFullName: answerDataDetails?.victimOtherPerson,
   }
 }
@@ -67,5 +71,17 @@ export function getProcessedText(template: string, values: PlaceholderValues, pr
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,
       convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`)
     )
+    .replace(
+      PlaceholderText.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT,
+      formatPrisonerOutsideEstablishmentText(values)
+    )
     .replace(PlaceholderText.VICTIM_OTHER_PERSON_FULL_NAME, convertToTitleCase(values.victimOtherPersonFullName || ''))
+}
+
+function formatPrisonerOutsideEstablishmentText(values: PlaceholderValues): string {
+  let text = convertToTitleCase(`${values.victimOtherPersonFullName || ''}`)
+  if (values.victimPrisonerNumber) {
+    text = text.concat(` ${values.victimPrisonerNumber}`)
+  }
+  return text
 }
