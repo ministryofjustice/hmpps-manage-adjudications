@@ -12,6 +12,7 @@ describe('process text', () => {
       victimOtherPersonFullName: 'VICTIMOTHERPERSONFIRSTNAME VICTIMOTHERPERSONLASTNAME', // User input
       victimPrisonerFirstName: 'VICTIMPRISONERFIRSTNAME',
       victimPrisonerLastName: 'VICTIMPRISONERLASTNAME',
+      victimPrisonerNumber: 'VICTIMPRISONERNUMBER',
       victimStaffFullName: 'VICTIMSTAFFFIRSTNAME VICTIMSTAFFLASTNAME', // Single field from the API
     }
     // Check the template is as we expect it.
@@ -21,6 +22,7 @@ describe('process text', () => {
         '{ASSOCIATED_PRISONER_FULL_NAME}' +
         '{VICTIM_STAFF_FULL_NAME}' +
         '{VICTIM_PRISONER_FULL_NAME}' +
+        '{VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}' +
         '{VICTIM_OTHER_PERSON_FULL_NAME}'
     )
     // Now test that processing works as expected.
@@ -30,6 +32,7 @@ describe('process text', () => {
         'Associatedprisonerfirstname Associatedprisonerlastname' +
         'Victimstafffirstname Victimstafflastname' +
         'Victimprisonerfirstname Victimprisonerlastname' +
+        'Victimotherpersonfirstname Victimotherpersonlastname VICTIMPRISONERNUMBER' +
         'Victimotherpersonfirstname Victimotherpersonlastname'
     )
   })

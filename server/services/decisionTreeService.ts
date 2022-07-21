@@ -1,5 +1,5 @@
 import Question from '../offenceCodeDecisions/Question'
-import PlaceOnReportService from './placeOnReportService'
+import PlaceOnReportService, { PrisonerResultSummary } from './placeOnReportService'
 import UserService from './userService'
 import { User } from '../data/hmppsAuthClient'
 import { IncidentRole as IncidentRoleEnum, incidentRoleFromCode } from '../incidentRole/IncidentRole'
@@ -111,15 +111,24 @@ export default class DecisionTreeService {
   async answerDataDetails(answerData: AnswerData, user: User): Promise<AnswerDataDetails> {
     const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
       answerData.victimOtherPersonsName,
-      answerData.victimPrisonersNumber &&
-        this.placeOnReportService.getPrisonerDetails(answerData.victimPrisonersNumber, user),
+      this.getPrisonerDetails(answerData, user),
       answerData.victimStaffUsername && this.userService.getStaffFromUsername(answerData.victimStaffUsername, user),
     ])
     return {
       victimOtherPerson,
       victimPrisoner,
       victimStaff,
+      victimPrisonerNumber: answerData.victimPrisonersNumber,
     }
+  }
+
+  private async getPrisonerDetails(answerData: AnswerData, user: User): Promise<PrisonerResultSummary> {
+    // The victimOtherPersonsName will be set if the prisoner is from outside the establishment,
+    // in which case we do not want to get the extra prisoner information
+    if (!answerData.victimPrisonersNumber || answerData.victimOtherPersonsName) {
+      return undefined
+    }
+    return this.placeOnReportService.getPrisonerDetails(answerData.victimPrisonersNumber, user)
   }
 
   questionsAndAnswers(
