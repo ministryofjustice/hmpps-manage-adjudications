@@ -364,7 +364,7 @@ context('Offence details', () => {
     // Submit without entering any text
     // Enter search text and submit instead of searching
     whoWasAssaultedPage.continue().click()
-    whoWasAssaultedPage.form().contains('You must enter a name')
+    whoWasAssaultedPage.form().contains('Enter the person’s name')
   })
 
   it('select another person question', () => {
@@ -406,8 +406,8 @@ context('Offence details', () => {
       .radioLabelFromValue(prisonerOutsideEstablishmentAnswerId)
       .contains('A prisoner who is no longer at this establishment')
     whoWasAssaultedPage.continue().click()
-    whoWasAssaultedPage.form().contains('You must enter a name')
-    whoWasAssaultedPage.form().contains('You must enter a prison number')
+    whoWasAssaultedPage.form().contains('Enter the person’s name')
+    whoWasAssaultedPage.form().contains('Enter the person’s prison number')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
     whoWasAssaultedPage.continue().click()

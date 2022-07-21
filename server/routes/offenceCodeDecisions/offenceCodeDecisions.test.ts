@@ -160,7 +160,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         selectedAnswerId: anotherPersonAnswer.id(),
       })
       .expect(res => {
-        expect(res.text).toContain('You must enter a name')
+        expect(res.text).toContain('Enter the person’s name')
       })
   })
 

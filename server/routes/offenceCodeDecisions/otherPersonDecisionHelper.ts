@@ -13,7 +13,7 @@ enum ErrorType {
 const error: { [key in ErrorType]: FormError } = {
   OTHER_PERSON_MISSING_NAME_INPUT: {
     href: `#otherPersonNameInput`,
-    text: 'You must enter a name',
+    text: 'Enter the person’s name',
   },
 }
 

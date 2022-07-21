@@ -13,11 +13,11 @@ enum ErrorType {
 const error: { [key in ErrorType]: FormError } = {
   PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NAME_INPUT: {
     href: `#prisonerOutsideEstablishmentNameInput`,
-    text: 'You must enter a name',
+    text: 'Enter the prisoner’s name',
   },
   PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NUMBER_INPUT: {
     href: `#prisonerOutsideEstablishmentNumberInput`,
-    text: 'You must enter a prison number',
+    text: 'Enter the prisoner’s prison number',
   },
 }
 
