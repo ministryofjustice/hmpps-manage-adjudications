@@ -20,7 +20,7 @@ export default question([
           [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,],
           [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
         ])
-          .child(answer(['Another prisoner', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER)
+          .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER)
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1001))
               .child(answer('No').offenceCode(1002))))
@@ -32,11 +32,11 @@ export default question([
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1005))
               .child(answer('No').offenceCode(1006))))
-          .child(answer(['A prisoner who is no longer at this establishment', `A prisoner who's left the establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+          .child(answer(['A person who’s left this establishment', `A person who's left the establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1021))
               .child(answer('No').offenceCode(1022))))
-          .child(answer(['Another person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON)
+          .child(answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON)
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1007))
               .child(answer('No').offenceCode(1008))))))
@@ -108,10 +108,11 @@ export default question([
       [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to detain?`],
       [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to detain?`],
     ])
-      .child(answer(['Another prisoner', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(2001))
+      .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(2001))
       .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(2002))
       .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(2003))
-      .child(answer(['Another person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(2004))))
+      .child(answer(['A person who’s left this establishment', `A person who's left the establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(2021))
+      .child(answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(2004))))
   .child(answer('Stopping someone who is not a prisoner from doing their job')
     .child(question('What did the incident involve?')
       .child(answer('Denying someone access to any part of the prison').offenceCode(3001))
