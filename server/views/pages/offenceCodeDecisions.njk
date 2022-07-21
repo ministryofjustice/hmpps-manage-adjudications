@@ -7,6 +7,7 @@
 {% from "../macros/officerSearchOffenceCodeDecisionInput.njk" import officerSearchOffenceCodeDecisionInput %}
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 {% from "../macros/otherPersonOffenceCodeDecisionInput.njk" import otherPersonOffenceCodeDecisionInput %}
+{% from "../macros/prisonerOutsideEstablishmentOffenceCodeDecisionInput.njk" import prisonerOutsideEstablishmentOffenceCodeDecisionInput %}
 
 {% set title = "Offence details" %}
 
@@ -35,8 +36,9 @@
                 {{ prisonerSearchOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
             {% endset -%}
         {% elseif answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
-            {# Need to add HTML relevant to prisoner outside estbalishment here #}
-            {% set decisionHtml = null %}
+            {% set decisionHtml %}
+             {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
+            {% endset -%}
         {% else %}
             {% set decisionHtml = null %}
         {% endif %}

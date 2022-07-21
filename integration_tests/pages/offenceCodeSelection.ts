@@ -40,6 +40,11 @@ export default class OffenceCodeSelection extends Page {
 
   victimStaffSearchLastNameInput = (): PageElement => cy.get('input[id="staffSearchLastNameInput"]')
 
+  prisonerOutsideEstablishmentNameInput = (): PageElement => cy.get('input[id="prisonerOutsideEstablishmentNameInput"]')
+
+  prisonerOutsideEstablishmentNumberInput = (): PageElement =>
+    cy.get('input[id="prisonerOutsideEstablishmentNumberInput"]')
+
   searchStaff = (): PageElement => cy.get('button[data-qa="staff-search"]')
 
   searchOfficer = (): PageElement => cy.get('button[data-qa="officer-search"]')
