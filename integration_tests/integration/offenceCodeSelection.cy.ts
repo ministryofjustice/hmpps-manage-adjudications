@@ -407,7 +407,7 @@ context('Offence details', () => {
       .contains('A person who’s left this establishment')
     whoWasAssaultedPage.continue().click()
     whoWasAssaultedPage.form().contains('Enter the prisoner’s name')
-    whoWasAssaultedPage.form().contains('Enter the prisoner’s prison number')
+    whoWasAssaultedPage.form().contains('Enter their prison number')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
     whoWasAssaultedPage.continue().click()

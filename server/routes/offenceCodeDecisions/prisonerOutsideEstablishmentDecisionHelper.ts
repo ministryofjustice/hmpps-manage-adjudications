@@ -17,7 +17,7 @@ const error: { [key in ErrorType]: FormError } = {
   },
   PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NUMBER_INPUT: {
     href: `#prisonerOutsideEstablishmentNumberInput`,
-    text: 'Enter the prisoner’s prison number',
+    text: 'Enter their prison number',
   },
 }
 
