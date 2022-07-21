@@ -6,7 +6,6 @@ import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NAME_INPUT = 'PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NAME_INPUT',
   PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NUMBER_INPUT = 'PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NUMBER_INPUT',

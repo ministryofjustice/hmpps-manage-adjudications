@@ -73,7 +73,6 @@ export default class DetailsOfOffencePage {
         }
       })
     )
-
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
       offences,

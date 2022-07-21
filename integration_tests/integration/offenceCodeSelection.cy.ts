@@ -178,6 +178,14 @@ context('Offence details', () => {
         paragraphDescription: 'Commits any assault',
       },
     })
+    // Offence rules
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1021,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
   })
   it('the first page for committing an offence title', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -372,7 +380,42 @@ context('Offence details', () => {
     wasTheIncidentRacial.checkOnPage()
   })
 
-  it('end to end', () => {
+  it('select a prisoner outside establishment question', () => {
+    const prisonerOutsideEstablishmentAnswerId = '1-1-1-4'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(prisonerOutsideEstablishmentAnswerId).check()
+    whoWasAssaultedPage
+      .radioLabelFromValue(prisonerOutsideEstablishmentAnswerId)
+      .contains('A prisoner who is no longer at this establishment')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
+    whoWasAssaultedPage.continue().click()
+    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    wasTheIncidentRacial.checkOnPage()
+  })
+
+  it('select a prisoner outside establishment question - validation', () => {
+    const prisonerOutsideEstablishmentAnswerId = '1-1-1-4'
+    const whoWasAssaultedQuestionId = '1-1-1'
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio(prisonerOutsideEstablishmentAnswerId).check()
+    whoWasAssaultedPage
+      .radioLabelFromValue(prisonerOutsideEstablishmentAnswerId)
+      .contains('A prisoner who is no longer at this establishment')
+    whoWasAssaultedPage.continue().click()
+    whoWasAssaultedPage.form().contains('You must enter a name')
+    whoWasAssaultedPage.form().contains('You must enter a prison number')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
+    whoWasAssaultedPage.continue().click()
+    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    wasTheIncidentRacial.checkOnPage()
+  })
+
+  it('end to end - staff search', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-1').check()
@@ -393,6 +436,24 @@ context('Offence details', () => {
     whoWasAssaultedPage.continue().click()
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     raciallyAggravated.radio('1-1-1-3-1').click()
+    whoWasAssaultedPage.continue().click()
+    Page.verifyOnPage(DetailsOfOffence)
+  })
+  it('end to end - prisoner outside establishment', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+    whoWasAssaultedPage.radio('1-1-1-4').check()
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G5512G')
+    whoWasAssaultedPage.continue().click()
+    const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    raciallyAggravated.radio('1-1-1-4-1').click()
     whoWasAssaultedPage.continue().click()
     Page.verifyOnPage(DetailsOfOffence)
   })
