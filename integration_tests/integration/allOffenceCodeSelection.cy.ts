@@ -87,14 +87,14 @@ context('Incident details', () => {
   })
   it('line 3', () => {
     const page = getToAssaultPage()
-    page.radioLabelFromText('Another prisoner').click()
+    page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-1', '1-1-1-1', 'G5512G')
     page.continue().click()
     page.checkOffenceCode(1001, 'Yes')
   })
   it('line 4', () => {
     const page = getToAssaultPage()
-    page.radioLabelFromText('Another prisoner').click()
+    page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-1', '1-1-1-1', 'G5512G')
     page.continue().click()
     page.checkOffenceCode(1002, 'No')
@@ -127,16 +127,32 @@ context('Incident details', () => {
     page.continue().click()
     page.checkOffenceCode(1006, 'No')
   })
+  it('line 9 - version 2', () => {
+    const page = getToAssaultPage()
+    page.radioLabelFromText('A person who’s left this establishment').click()
+    page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
+    page.victimPersonOutsideEstablishmentSearchNumberInput().type('A1234AA')
+    page.continue().click()
+    page.checkOffenceCode(1021, 'Yes')
+  })
+  it('line 10 - version 2', () => {
+    const page = getToAssaultPage()
+    page.radioLabelFromText('A person who’s left this establishment').click()
+    page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
+    page.victimPersonOutsideEstablishmentSearchNumberInput().type('A1234AA')
+    page.continue().click()
+    page.checkOffenceCode(1022, 'No')
+  })
   it('line 9', () => {
     const page = getToAssaultPage()
-    page.radioLabelFromText('Another person not listed above').click()
+    page.radioLabelFromText('A person not listed above').click()
     page.victimOtherPersonSearchNameInput().type('Another Person')
     page.continue().click()
     page.checkOffenceCode(1007, 'Yes')
   })
   it('line 10', () => {
     const page = getToAssaultPage()
-    page.radioLabelFromText('Another person not listed above').click()
+    page.radioLabelFromText('A person not listed above').click()
     page.victimOtherPersonSearchNameInput().type('Another Person')
     page.continue().click()
     page.checkOffenceCode(1008, 'No')
@@ -422,7 +438,7 @@ context('Incident details', () => {
     )
   })
   it('line 49', () => {
-    checkSimpleDecisionPath(['Detains another person', 'Another prisoner'], 2001)
+    checkSimpleDecisionPath(['Detains another person', 'A prisoner in this establishment'], 2001)
   })
   it('line 50', () => {
     checkSimpleDecisionPath(['Detains another person', 'A prison officer'], 2002)
@@ -430,8 +446,11 @@ context('Incident details', () => {
   it('line 51', () => {
     checkSimpleDecisionPath(['Detains another person', 'A member of staff who is not a prison officer'], 2003)
   })
+  it('line 52 - version 2', () => {
+    checkSimpleDecisionPath(['Detains another person', 'A person who’s left this establishment'], 2021)
+  })
   it('line 52', () => {
-    checkSimpleDecisionPath(['Detains another person', 'Another person not listed above'], 2004)
+    checkSimpleDecisionPath(['Detains another person', 'A person not listed above'], 2004)
   })
   it('line 54', () => {
     checkSimpleDecisionPath(

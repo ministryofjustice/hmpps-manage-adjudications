@@ -43,9 +43,7 @@
             {% set decisionHtml = null %}
         {% endif %}
         {# This is effectively the feature flag to hide the questions related to prisoner outside establishment #}
-        {% if answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
-        {% else %}
-          {% set items = (items.push({
+        {% set items = (items.push({
             attributes: { offenceCode: answer.offenceCode },
             value: answer.id,
             text: answer.label,
@@ -53,8 +51,7 @@
                 html: decisionHtml
             },
             checked: decisionForm.selectedAnswerId == answer.id
-          }), items) %}
-        {% endif %}
+        }), items) %}
     {% endfor %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-decision-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
