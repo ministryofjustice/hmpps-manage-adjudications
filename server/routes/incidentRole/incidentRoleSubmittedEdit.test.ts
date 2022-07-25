@@ -41,16 +41,7 @@ beforeEach(() => {
         handoverDeadline: '2022-03-25T09:10:00',
       },
       incidentRole: {},
-      offenceDetails: [
-        {
-          offenceCode: 1001,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G5512G',
-        },
-      ],
+      offenceDetails: [],
       incidentStatement: {
         statement: 'Lorem Ipsum',
         completed: true,
@@ -119,6 +110,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
         currentRadioSelected: 'committed',
         originalIncidentRoleSelection: 'committed',
       })
@@ -133,6 +126,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
         currentRadioSelected: 'committed',
         originalIncidentRoleSelection: 'committed',
       })
@@ -147,6 +142,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
         currentRadioSelected: 'incited',
       })
       .expect(res => {
@@ -163,6 +160,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
         currentRadioSelected: 'committed',
       })
       .expect('Content-Type', /html/)
@@ -178,6 +177,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        locationId: 2,
         currentRadioSelected: 'committed',
         originalIncidentRoleSelection: 'committed',
       })
@@ -200,6 +201,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        locationId: 2,
         currentRadioSelected: 'committed',
         originalIncidentRoleSelection: 'attempted',
       })

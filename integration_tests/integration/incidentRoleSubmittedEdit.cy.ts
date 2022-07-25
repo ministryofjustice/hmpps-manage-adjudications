@@ -31,16 +31,6 @@ context('Incident role (edit after completion of report)', () => {
             dateTimeOfIncident: '2021-11-03T13:10:00',
             locationId: 27029,
           },
-          offenceDetails: [
-            {
-              offenceCode: 1001,
-              offenceRule: {
-                paragraphNumber: '1',
-                paragraphDescription: 'Commits any assault',
-              },
-              victimPrisonersNumber: 'G5512G',
-            },
-          ],
           incidentStatement: {
             completed: true,
             statement: 'Statement here',
