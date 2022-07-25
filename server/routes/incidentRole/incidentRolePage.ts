@@ -583,20 +583,6 @@ const redirectToOffenceDetails = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
 }
 
-const redirectToTaskList = (res: Response, draftId: number) => {
-  return res.redirect(getTaskListUrl(draftId))
-}
-
-const chooseNextPageAfterEdit = (
-  defaultNextPage: NextPageSelectionAfterEdit,
-  incidentRoleChanged: boolean
-): NextPageSelectionAfterEdit => {
-  if (incidentRoleChanged) {
-    return NextPageSelectionAfterEdit.OFFENCE_SELECTION
-  }
-  return defaultNextPage
-}
-
 // TODO - How best to debug (if at all). We need some unoffical way of logging - do not invoke App Insights
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const debugData = (outputId: string, data: any) => {
