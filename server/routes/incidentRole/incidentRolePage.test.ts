@@ -59,7 +59,6 @@ beforeEach(() => {
         handoverDeadline: '2022-03-25T09:10:00',
       },
       incidentRole: {},
-      offenceDetails: [],
       incidentStatement: {
         statement: 'Lorem Ipsum',
         completed: true,
@@ -130,14 +129,22 @@ describe('updateDataOnDeleteReturn', () => {
     })
   })
 
-  describe('POST /incident-role/<id>', () => {
-    it('should redirect to offence details page if details are complete after changing information', () => {
+  describe('POST /incident-role/<id> without draft offence data', () => {
+    it('should redirect to offence selection page if details are complete after changing information', () => {
       return request(app)
         .post(adjudicationUrls.incidentRole.urls.start(100))
         .send({
-          incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-          locationId: 2,
           currentRadioSelected: 'committed',
+        })
+        .expect(302)
+        .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
+    })
+    it('should redirect to offence selection page even if role not changed', () => {
+      return request(app)
+        .post(adjudicationUrls.incidentRole.urls.start(100))
+        .send({
+          currentRadioSelected: 'committed',
+          originalIncidentRoleSelection: 'committed',
         })
         .expect(302)
         .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
@@ -146,8 +153,6 @@ describe('updateDataOnDeleteReturn', () => {
       return request(app)
         .post(adjudicationUrls.incidentRole.urls.start(100))
         .send({
-          incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-          locationId: 2,
           currentRadioSelected: 'incited',
         })
         .expect(res => {
@@ -160,8 +165,6 @@ describe('updateDataOnDeleteReturn', () => {
       return request(app)
         .post(adjudicationUrls.incidentRole.urls.start(100))
         .send({
-          incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-          locationId: 2,
           currentRadioSelected: 'committed',
         })
         .expect('Content-Type', /html/)
@@ -173,8 +176,6 @@ describe('updateDataOnDeleteReturn', () => {
       return request(app)
         .post(adjudicationUrls.incidentRole.urls.start(100))
         .send({
-          incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-          locationId: 2,
           currentRadioSelected: 'committed',
           originalIncidentRoleSelection: 'committed',
         })
@@ -193,8 +194,6 @@ describe('updateDataOnDeleteReturn', () => {
       return request(app)
         .post(adjudicationUrls.incidentRole.urls.start(100))
         .send({
-          incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-          locationId: 2,
           currentRadioSelected: 'committed',
           originalIncidentRoleSelection: 'attempted',
         })
@@ -208,6 +207,58 @@ describe('updateDataOnDeleteReturn', () => {
             expect.anything()
           )
         )
+    })
+  })
+
+  describe('POST /incident-role/<id> with existing draft offences', () => {
+    beforeEach(() => {
+      placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
+        draftAdjudication: {
+          id: 100,
+          prisonerNumber: 'G6415GD',
+          incidentDetails: {
+            locationId: 2,
+            dateTimeOfIncident: '2022-03-23T09:10:00',
+            handoverDeadline: '2022-03-25T09:10:00',
+          },
+          incidentRole: {},
+          offenceDetails: [
+            {
+              offenceCode: 1001,
+              offenceRule: {
+                paragraphNumber: '1',
+                paragraphDescription: 'Commits any assault',
+              },
+              victimPrisonersNumber: 'G5512G',
+            },
+          ],
+          incidentStatement: {
+            statement: 'Lorem Ipsum',
+            completed: true,
+          },
+          startedByUserId: 'TEST2_GEN',
+        },
+      })
+    })
+
+    it('should redirect to offence selection page if details are complete after changing information', () => {
+      return request(app)
+        .post(adjudicationUrls.incidentRole.urls.start(100))
+        .send({
+          currentRadioSelected: 'committed',
+        })
+        .expect(302)
+        .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
+    })
+    it('should redirect to offence details page if role not changed', () => {
+      return request(app)
+        .post(adjudicationUrls.incidentRole.urls.start(100))
+        .send({
+          currentRadioSelected: 'committed',
+          originalIncidentRoleSelection: 'committed',
+        })
+        .expect(302)
+        .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(100))
     })
   })
 })
