@@ -82,12 +82,6 @@ enum PageRequestAction {
   DELETE_PRISONER,
 }
 
-enum NextPageSelectionAfterEdit {
-  OFFENCE_SELECTION,
-  OFFENCE_DETAILS,
-  TASK_LIST,
-}
-
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
