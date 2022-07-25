@@ -82,12 +82,6 @@ enum PageRequestAction {
   DELETE_PRISONER,
 }
 
-enum NextPageSelectionAfterEdit {
-  OFFENCE_SELECTION,
-  OFFENCE_DETAILS,
-  TASK_LIST,
-}
-
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
@@ -146,7 +140,7 @@ export default class IncidentRolePage {
       user as User
     )
 
-    const { prisonerNumber } = existingAdjudication.draftAdjudication
+    const { offenceDetails, prisonerNumber } = existingAdjudication.draftAdjudication
 
     debugData('POST', postValues)
     debugData('POST action', postData)
@@ -197,24 +191,11 @@ export default class IncidentRolePage {
       const removeExistingOffences = incidentRoleChanged
       await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
 
-      let defaultNextPage = NextPageSelectionAfterEdit.TASK_LIST
-      if (this.pageOptions.isPreviouslySubmitted()) {
-        defaultNextPage = NextPageSelectionAfterEdit.OFFENCE_DETAILS
+      const offencesExist = !removeExistingOffences && offenceDetails?.length > 0
+      if (!offencesExist) {
+        return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
       }
-      const nextPageChoice = chooseNextPageAfterEdit(defaultNextPage, incidentRoleChanged)
-      switch (nextPageChoice) {
-        case NextPageSelectionAfterEdit.OFFENCE_SELECTION:
-          return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
-        case NextPageSelectionAfterEdit.OFFENCE_DETAILS:
-          return redirectToOffenceDetails(res, postValues.draftId)
-        default:
-        // Fall through
-      }
-      if (this.pageOptions.isPreviouslySubmitted()) {
-        return redirectToTaskList(res, postValues.draftId)
-      }
-
-      return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
+      return redirectToOffenceDetails(res, postValues.draftId)
     } catch (postError) {
       this.setUpRedirectForEditError(res, postError, postValues.draftId)
       throw postError
@@ -594,20 +575,6 @@ const redirectToOffenceSelection = (res: Response, draftId: number, incidentRole
 
 const redirectToOffenceDetails = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
-}
-
-const redirectToTaskList = (res: Response, draftId: number) => {
-  return res.redirect(getTaskListUrl(draftId))
-}
-
-const chooseNextPageAfterEdit = (
-  defaultNextPage: NextPageSelectionAfterEdit,
-  incidentRoleChanged: boolean
-): NextPageSelectionAfterEdit => {
-  if (incidentRoleChanged) {
-    return NextPageSelectionAfterEdit.OFFENCE_SELECTION
-  }
-  return defaultNextPage
 }
 
 // TODO - How best to debug (if at all). We need some unoffical way of logging - do not invoke App Insights
