@@ -52,7 +52,7 @@ export default class AgeOfPrisonerPage {
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly allOffencesSessionService: AllOffencesSessionService,
+    private readonly allOffencesSessionService: AllOffencesSessionService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -80,7 +80,7 @@ export default class AgeOfPrisonerPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    if (!!req.query.reselectingFirstOffence) {
+    if (req.query.reselectingFirstOffence) {
       req.session.forceOffenceSelection = true
     } else {
       delete req.session.forceOffenceSelection
@@ -107,7 +107,7 @@ export default class AgeOfPrisonerPage {
     } catch (postError) {
       logger.error(`Failed to post prison rule for draft adjudication: ${postError}`)
       res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(idValue)
-      if (!!req.query.reselectingFirstOffence) {
+      if (req.query.reselectingFirstOffence) {
         res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(idValue)
       }
       throw postError

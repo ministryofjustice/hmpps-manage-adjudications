@@ -12,13 +12,16 @@ export default function CheckAnswersRoutes({
   placeOnReportService,
   allOffencesSessionService,
 }: {
-  placeOnReportService: PlaceOnReportService,
-  allOffencesSessionService: AllOffencesSessionService,
+  placeOnReportService: PlaceOnReportService
+  allOffencesSessionService: AllOffencesSessionService
 }): Router {
   const router = express.Router()
 
   const ageOfPrisonerRoute = new AgeOfPrisonerRoutes(placeOnReportService, allOffencesSessionService)
-  const ageOfPrisonerSubmittedEditRoute = new AgeOfPrisonerSubmittedEditRoutes(placeOnReportService, allOffencesSessionService)
+  const ageOfPrisonerSubmittedEditRoute = new AgeOfPrisonerSubmittedEditRoutes(
+    placeOnReportService, 
+    allOffencesSessionService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

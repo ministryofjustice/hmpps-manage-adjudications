@@ -207,7 +207,8 @@ const adjudicationUrls = {
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}`,
-      startWithResettingOffences: (adjudicationNumber: number) => `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}?reselectingFirstOffence=true`,
+      startWithResettingOffences: (adjudicationNumber: number) =>
+        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}?reselectingFirstOffence=true`,
       submittedEdit: (adjudicationNumber: number) =>
         `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit`,
       submittedEditWithResettingOffences: (adjudicationNumber: number) =>
