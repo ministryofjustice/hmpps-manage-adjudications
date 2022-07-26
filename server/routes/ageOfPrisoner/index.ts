@@ -19,7 +19,7 @@ export default function CheckAnswersRoutes({
 
   const ageOfPrisonerRoute = new AgeOfPrisonerRoutes(placeOnReportService, allOffencesSessionService)
   const ageOfPrisonerSubmittedEditRoute = new AgeOfPrisonerSubmittedEditRoutes(
-    placeOnReportService, 
+    placeOnReportService,
     allOffencesSessionService
   )
 

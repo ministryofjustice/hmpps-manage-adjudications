@@ -96,7 +96,7 @@ export default function routes(
   if (config.yoiNewPagesFeatureFlag) {
     router.use(
       adjudicationUrls.ageOfPrisoner.root,
-      ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService})
+      ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
     )
   }
   return router
