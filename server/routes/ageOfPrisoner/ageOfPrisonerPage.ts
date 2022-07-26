@@ -8,6 +8,7 @@ import { FormError } from '../../@types/template'
 import logger from '../../../logger'
 import { calculateAge } from '../../utils/utils'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 type PageData = {
   error?: FormError
@@ -48,19 +49,17 @@ const getPreviouslyChosenRule = (draftAdjudication: DraftAdjudication): string =
 export default class AgeOfPrisonerPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly placeOnReportService: PlaceOnReportService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly allOffencesSessionService: AllOffencesSessionService,
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
+  private renderView = async (res: Response, idValue: number, pageData: PageData): Promise<void> => {
     const { error } = pageData
-    const { adjudicationNumber } = req.params
     const { user } = res.locals
-
-    const idValue: number = parseInt(adjudicationNumber as string, 10)
-    if (Number.isNaN(idValue)) {
-      throw new Error('No adjudication number provided')
-    }
 
     const [prisoner, adjudicationDetails] = await Promise.all([
       this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
@@ -79,16 +78,25 @@ export default class AgeOfPrisonerPage {
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})
+  view = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    if (!!req.query.reselectingFirstOffence) {
+      req.session.forceOffenceSelection = true
+    } else {
+      delete req.session.forceOffenceSelection
+      // This is the entry point for the journey to change offences - remove existing offences from the session
+      this.allOffencesSessionService.deleteAllSessionOffences(req, adjudicationNumber)
+    }
+    return this.renderView(res, adjudicationNumber, {})
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { whichRuleChosen, originalRuleSelection } = req.body
-    const { adjudicationNumber } = req.params
-    const idValue: number = parseInt(adjudicationNumber as string, 10)
+    const idValue = Number(req.params.adjudicationNumber)
 
     const error = validateForm({ whichRuleChosen })
-    if (error) return this.renderView(req, res, { error, whichRuleChosen })
+    if (error) return this.renderView(res, idValue, { error, whichRuleChosen })
 
     const applicableRuleChanged = originalRuleSelection !== whichRuleChosen
 
@@ -99,6 +107,9 @@ export default class AgeOfPrisonerPage {
     } catch (postError) {
       logger.error(`Failed to post prison rule for draft adjudication: ${postError}`)
       res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(idValue)
+      if (!!req.query.reselectingFirstOffence) {
+        res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(idValue)
+      }
       throw postError
     }
   }

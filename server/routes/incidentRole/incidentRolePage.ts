@@ -192,7 +192,7 @@ export default class IncidentRolePage {
       await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
 
       const offencesExist = !removeExistingOffences && offenceDetails?.length > 0
-      if (!offencesExist) {
+      if (!!req.session.forceOffenceSelection || !offencesExist) {
         return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
       }
       return redirectToOffenceDetails(res, postValues.draftId)
