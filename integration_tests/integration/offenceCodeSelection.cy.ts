@@ -388,7 +388,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.radio(prisonerOutsideEstablishmentAnswerId).check()
     whoWasAssaultedPage
       .radioLabelFromValue(prisonerOutsideEstablishmentAnswerId)
-      .contains('A person who’s left this establishment')
+      .contains('A prisoner who’s left this establishment')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
     whoWasAssaultedPage.continue().click()
@@ -404,7 +404,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.radio(prisonerOutsideEstablishmentAnswerId).check()
     whoWasAssaultedPage
       .radioLabelFromValue(prisonerOutsideEstablishmentAnswerId)
-      .contains('A person who’s left this establishment')
+      .contains('A prisoner who’s left this establishment')
     whoWasAssaultedPage.continue().click()
     whoWasAssaultedPage.form().contains('Enter the prisoner’s name')
     whoWasAssaultedPage.form().contains('Enter their prison number')

@@ -129,7 +129,7 @@ context('Incident details', () => {
   })
   it('line 9 - version 2', () => {
     const page = getToAssaultPage()
-    page.radioLabelFromText('A person who’s left this establishment').click()
+    page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
     page.victimPersonOutsideEstablishmentSearchNumberInput().type('A1234AA')
     page.continue().click()
@@ -137,7 +137,7 @@ context('Incident details', () => {
   })
   it('line 10 - version 2', () => {
     const page = getToAssaultPage()
-    page.radioLabelFromText('A person who’s left this establishment').click()
+    page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
     page.victimPersonOutsideEstablishmentSearchNumberInput().type('A1234AA')
     page.continue().click()
@@ -447,7 +447,7 @@ context('Incident details', () => {
     checkSimpleDecisionPath(['Detains another person', 'A member of staff who is not a prison officer'], 2003)
   })
   it('line 52 - version 2', () => {
-    checkSimpleDecisionPath(['Detains another person', 'A person who’s left this establishment'], 2021)
+    checkSimpleDecisionPath(['Detains another person', 'A prisoner who’s left this establishment'], 2021)
   })
   it('line 52', () => {
     checkSimpleDecisionPath(['Detains another person', 'A person not listed above'], 2004)
