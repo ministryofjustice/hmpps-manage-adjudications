@@ -11,6 +11,10 @@ export default class AllOffencesSessionService {
     req.session.offences?.[draftAdjudicationNumber]?.splice(index - 1, 1)
   }
 
+  deleteAllSessionOffences(req: Request, draftAdjudicationNumber: number) {
+    req.session.offences?.[draftAdjudicationNumber]?.splice(0, req.session.offences?.[draftAdjudicationNumber]?.length)
+  }
+
   setAllSessionOffences(req: Request, offenceData: OffenceData[], draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.offences[draftAdjudicationNumber] = offenceData

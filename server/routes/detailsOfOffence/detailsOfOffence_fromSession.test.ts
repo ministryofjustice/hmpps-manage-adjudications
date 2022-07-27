@@ -309,3 +309,33 @@ describe('POST /details-of-offence/100', () => {
       )
   })
 })
+
+describe('POST /details-of-offence/100 - adding first offence', () => {
+  it('should redirect to the incident rule page with resetting-offences flag set - not submitted', () => {
+    const agent = request.agent(app)
+    return agent
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect(200)
+      .then(() =>
+        agent
+          .post(adjudicationUrls.detailsOfOffence.urls.start(100))
+          .send({ addFirstOffence: true })
+          .expect(302)
+          .expect('Location', adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(100))
+      )
+  })
+
+  it('should redirect to the incident rule page with resetting-offences flag set - submitted', () => {
+    const agent = request.agent(app)
+    return agent
+      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
+      .expect(200)
+      .then(() =>
+        agent
+          .post(adjudicationUrls.detailsOfOffence.urls.start(100))
+          .send({ reportedAdjudicationNumber: 1524493, addFirstOffence: true })
+          .expect(302)
+          .expect('Location', adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(100))
+      )
+  })
+})

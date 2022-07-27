@@ -40,14 +40,13 @@ export default class DetailsOfOffencePage {
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
     const allOffences = this.getOffences(req, adjudicationNumber, draftAdjudication)
-    // TODO - Improve this logic/naming - it doesn't make sense!
+    // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
       // Set up session to allow for adding and deleting
       this.allOffencesSessionService.setAllSessionOffences(req, allOffences, adjudicationNumber)
     }
 
     if (!allOffences || allOffences.length < 1) {
-      // TODO - Redirect to addFirstOffence if draft without any offences (logic from inc dtkls and task list)
       return res.render(`pages/detailsOfOffence`, {
         prisoner,
       })
@@ -87,13 +86,13 @@ export default class DetailsOfOffencePage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
+    if (req.body.addFirstOffence) {
+      return this.redirectToInitialOffenceSelectionPage(res, adjudicationNumber, isReportedAdjudication)
+    }
     // Saving the offences for a draft just means continue
     if (!this.pageOptions.displaySessionData()) {
+      this.allOffencesSessionService.deleteAllSessionOffences(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
-    }
-    const { addFirstOffence } = req.body
-    if (addFirstOffence) {
-      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber))
     }
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)
@@ -123,6 +122,13 @@ export default class DetailsOfOffencePage {
         }
       }) || []
     )
+  }
+
+  redirectToInitialOffenceSelectionPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
+    if (isReportedDraft) {
+      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(adjudicationNumber))
+    }
+    return res.redirect(adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(adjudicationNumber))
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {

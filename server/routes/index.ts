@@ -94,7 +94,10 @@ export default function routes(
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use('/', homepageRoutes({ userService }))
   if (config.yoiNewPagesFeatureFlag) {
-    router.use(adjudicationUrls.ageOfPrisoner.root, ageOfPrisonerRoutes({ placeOnReportService }))
+    router.use(
+      adjudicationUrls.ageOfPrisoner.root,
+      ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
+    )
   }
   return router
 }
