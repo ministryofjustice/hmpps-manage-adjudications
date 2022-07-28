@@ -26,6 +26,8 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 
 const aPrisonerAnswerText = 'Another prisoner answer'
 const aPrisonerAnswer = answer(aPrisonerAnswerText)
+const aPrisonerOutsideEstablishmentAnswerText = 'Another prisoner answer'
+const aPrisonerOutsideEstablishmentAnswer = answer(aPrisonerOutsideEstablishmentAnswerText)
 const aPrisonOfficerAnswerText = 'A prison officer answer'
 const aPrisonOfficerAnswer = answer(aPrisonOfficerAnswerText)
 const aMemberOfStaffAnswerText = 'A member of staff answer'
@@ -53,6 +55,7 @@ const testDecisionsTree = question([
   .child(
     aStandardAnswerWithChildQuestion.child(question('A child question').child(aStandardChildAnswer.offenceCode(6)))
   )
+  .child(aPrisonerOutsideEstablishmentAnswer.type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(11))
 
 const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
@@ -188,6 +191,31 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
       })
   })
 
+  it(`should validate a ${Type.PRISONER_OUTSIDE_ESTABLISHMENT} answer when no name or number is added`, () => {
+    return request(app)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .send({
+        selectedAnswerId: aPrisonerOutsideEstablishmentAnswer.id(),
+      })
+      .expect(res => {
+        expect(res.text).toContain('Enter the prisoner’s name')
+        expect(res.text).toContain('Enter their prison number')
+      })
+  })
+
+  it(`should validate a ${Type.PRISONER_OUTSIDE_ESTABLISHMENT} answer when the size of the number exceeds that supported in the DB`, () => {
+    return request(app)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .send({
+        selectedAnswerId: aPrisonerOutsideEstablishmentAnswer.id(),
+        prisonerOutsideEstablishmentNameInput: 'A Name',
+        prisonerOutsideEstablishmentNumberInput: 'AVERYLONGNUMBER',
+      })
+      .expect(res => {
+        expect(res.text).toContain('The prison number must not exceed 7 characters')
+      })
+  })
+
   it(`should validate a ${Type.OFFICER} question when no staff id is present and not searching`, () => {
     return request(app)
       .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
@@ -280,6 +308,18 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
         'Location',
         `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`
       )
+  })
+
+  it(`A ${Type.PRISONER_OUTSIDE_ESTABLISHMENT} answer should redirect to add offence`, () => {
+    return request(app)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .send({
+        selectedAnswerId: aPrisonerOutsideEstablishmentAnswer.id(),
+        prisonerOutsideEstablishmentNameInput: 'A Name',
+        prisonerOutsideEstablishmentNumberInput: 'A1234AA',
+      })
+      .expect(302)
+      .expect('Location', `${adjudicationUrls.detailsOfOffence.root}/100/add?victimOtherPersonsName=A%20Name&victimPrisonersNumber=A1234AA&victimStaffUsername=&offenceCode=11`)
   })
 })
 
