@@ -321,7 +321,7 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.detailsOfOffence.root}/100/add?victimOtherPersonsName=A%20Name&victimPrisonersNumber=A1234AA&victimStaffUsername=&offenceCode=11`,
+        `${adjudicationUrls.detailsOfOffence.root}/100/add?victimOtherPersonsName=A%20Name&victimPrisonersNumber=A1234AA&victimStaffUsername=&offenceCode=11`
       )
   })
 })
