@@ -52,8 +52,7 @@ export default class PrisonerOutsideEstablishmentDecisionHelper extends Decision
     }
     if (!prisonerOutsideEstablishmentData.victimPrisonersNumber) {
       errors.push(error.PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NUMBER_INPUT)
-    }
-    else if (prisonerOutsideEstablishmentData.victimPrisonersNumber.length > PRISON_NUMBER_MAXIMUM_SIZE_IN_DB) {
+    } else if (prisonerOutsideEstablishmentData.victimPrisonersNumber.length > PRISON_NUMBER_MAXIMUM_SIZE_IN_DB) {
       errors.push(error.PRISONER_OUTSIDE_ESTABLISHMENT_NUMBER_EXCEEDS_MAXIMUM_SIZE)
     }
     return errors
