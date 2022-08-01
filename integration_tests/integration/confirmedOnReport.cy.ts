@@ -86,22 +86,16 @@ context('Report has been submitted for review', () => {
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.confirmedOnReport.urls.start(1524242))
     Page.verifyOnPage(ConfirmedOnReport)
-    cy.contains('The report number is')
-    cy.contains('1524242')
-    cy.contains('John Smith must be given a copy of this report by 10:00 on 8 December 2020')
-    cy.contains('John Smith’s preferred language is:')
-    cy.contains('French')
-    cy.contains('They have other languages of:')
-    cy.contains('Spanish')
-    cy.contains('German')
+    cy.contains('This report will be reviewed. The reviewer can do one of 3 things')
+    cy.contains('Check your prison’s processes.')
   })
 
-  it('should redirect the user to /place-a-prisoner-on-report on finish', () => {
+  it('should redirect the user to your completed reports on finish', () => {
     cy.visit(adjudicationUrls.confirmedOnReport.urls.start(1524242))
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.finishButton().click()
+    confirmedOnReportPage.finishLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.homepage.root)
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
     })
   })
 })

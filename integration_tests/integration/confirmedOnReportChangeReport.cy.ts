@@ -59,21 +59,17 @@ context('Report has been changed', () => {
     cy.visit(adjudicationUrls.confirmedOnReport.urls.reporterView(1524493))
     Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('John Smith’s report has been changed')
-    cy.contains('What you must do next')
-    cy.contains(
-      'You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to John Smith.'
-    )
-    cy.contains(
-      'John Smith needs an updated copy of their report. They need to receive this by 09:40 on 11 December 2021.'
-    )
+    cy.contains('What happens next')
+    cy.contains('You will not get an email notification about this report.')
+    cy.contains('Check your prison’s processes')
   })
 
   it('should redirect the user to prisoner report on finish', () => {
     cy.visit(adjudicationUrls.confirmedOnReport.urls.reporterView(1524493))
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
-    confirmedOnReportPage.finishButton().click()
+    confirmedOnReportPage.finishLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(1524493))
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
     })
   })
 })

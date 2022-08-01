@@ -5,5 +5,5 @@ export default class ConfirmedOnReportChangeReportPage extends Page {
     super('report has been changed')
   }
 
-  finishButton = (): PageElement => cy.get('[data-qa="confirmed-on-report-finish"]')
+  finishLink = (): PageElement => cy.get('[data-qa="confirmed-on-report-finish"]')
 }
