@@ -2,6 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../macros/adjudicationSummary.njk" import adjudicationSummary %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/adjudicationReviewStatusSummary.njk" import adjudicationReviewStatusSummary %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -30,6 +31,10 @@
 
 	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+		{% if not creationJourney %}
+			{{ adjudicationReviewStatusSummary(reviewData.reviewStatus, reviewData.reviewSummary) }}
+		{% endif %}
 
 		{{ adjudicationSummary(editIncidentDetailsURL, editOffenceDetailsURL, editIncidentStatementURL, incidentDetailsData, false, offences) }}
 

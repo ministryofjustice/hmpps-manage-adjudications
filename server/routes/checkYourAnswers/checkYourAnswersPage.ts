@@ -4,6 +4,7 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 
@@ -71,7 +72,8 @@ export default class CheckYourAnswersPage {
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -93,6 +95,9 @@ export default class CheckYourAnswersPage {
       incidentLocations,
       user
     )
+    const reviewData = this.pageOptions.isEditByReporter()
+      ? await this.reportedAdjudicationsService.getReviewDetails(draftAdjudication.adjudicationNumber, user)
+      : null
 
     const [offences, checkAnswersVariations] = await Promise.all([
       this.decisionTreeService.getAdjudicationOffences(
@@ -117,6 +122,7 @@ export default class CheckYourAnswersPage {
       submitButtonText: this.pageOptions.isCreation() ? 'Accept and place on report' : 'Confirm changes',
       secondaryButtonText: this.pageOptions.isCreation() ? 'Exit' : 'Cancel',
       ...checkAnswersVariations,
+      reviewData,
     })
   }
 

@@ -93,7 +93,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
           bookingId: 2,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-01-01T11:45:00',
@@ -108,7 +108,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 1,
           prisonerNumber: 'G6174VU',
           bookingId: 1,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-01-01T11:30:00',
@@ -163,7 +163,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
           bookingId: 2,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           reportingOfficer: '',
           incidentDetails: {
             locationId: 3,
@@ -182,7 +182,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-01-01T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           reportingOfficer: '',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
@@ -217,7 +217,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            createdByUserId: 'NCLAMP_GEN',
+            createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -299,7 +299,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            createdByUserId: 'NCLAMP_GEN',
+            createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -531,6 +531,59 @@ describe('reportedAdjudicationsService', () => {
           },
         ],
         statement: 'Statement for a test',
+      }
+      expect(result).toEqual(expectedResult)
+    })
+  })
+
+  describe('getReviewDetails', () => {
+    beforeEach(() => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          createdByUserId: 'TEST_GEN',
+          incidentDetails: {
+            locationId: 3,
+            dateTimeOfIncident: '2021-10-28T15:40:25.884',
+            handoverDeadline: '2021-10-22T15:40:25.884',
+          },
+          incidentStatement: {
+            statement: 'Example statement',
+          },
+          status: ReportedAdjudicationStatus.RETURNED,
+          reviewedByUserId: 'TEST_GEN',
+          statusReason: 'offence',
+          statusDetails: 'wrong',
+        },
+      })
+
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Test User',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+    })
+    it('returns the correct information for a returned adjudication', async () => {
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Returned',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+          {
+            label: 'Reason for return',
+            value: 'Incorrect offence chosen',
+          },
+          {
+            label: 'Details',
+            value: 'wrong',
+          },
+        ],
       }
       expect(result).toEqual(expectedResult)
     })
