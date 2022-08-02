@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { formatName, formatTimestampToDate, formatTimestampToTime, possessive } from '../../utils/utils'
+import { formatName, possessive } from '../../utils/utils'
 
 export default class ConfirmedOnReportChangeReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -27,16 +27,10 @@ export default class ConfirmedOnReportChangeReportRoutes {
     )
 
     return res.render(`pages/confirmedOnReport`, {
-      adjudicationNumber: adjudicationNumberValue,
-      expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
-      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
-      prisonerFirstAndLastName,
       adjudicationEdited: true,
-      editedByReviewer: false,
-      bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed`,
-      bannerHTML: null,
-      buttonClass: 'govuk-button',
-      buttonHref: adjudicationUrls.prisonerReport.urls.report(adjudicationNumberValue),
+      bannerText: `${possessive(prisonerFirstAndLastName)} report has been changed. It will now be reviewed.`,
+      yourCompletedReportsLink: adjudicationUrls.yourCompletedReports.urls.start(),
+      pageTitle: 'Report change is confirmed',
     })
   }
 

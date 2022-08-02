@@ -38,8 +38,7 @@ describe('GET /prisoner-placed-on-report - edited adjudication', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('John Smith’s report has been changed')
-        expect(res.text).toContain('You must follow local processes.')
-        expect(res.text).toContain('They need to receive this by 07:21 on 23 December 2020.')
+        expect(res.text).toContain('This report will be reviewed. The reviewer can do one of 3 thing')
       })
   })
 

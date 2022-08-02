@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import { formatName } from '../../utils/utils'
 
 export default class ConfirmedOnReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -19,22 +19,10 @@ export default class ConfirmedOnReportRoutes {
     )
 
     return res.render(`pages/confirmedOnReport`, {
-      adjudicationNumber,
-      expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
-      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'D MMMM YYYY'),
-      prisonerFirstAndLastName,
-      showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage != null,
-      prisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
-      showPrisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages?.length > 0,
-      prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
-      showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
-      prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
       adjudicationEdited: false,
-      editedByReviewer: false,
       bannerText: `Your report for ${prisonerFirstAndLastName} has been submitted for review`,
-      bannerHTML: `The report number is: <br><strong>${adjudicationNumber}</strong>`,
-      buttonClass: 'govuk-button--secondary',
-      buttonHref: adjudicationUrls.homepage.root,
+      yourCompletedReportsLink: adjudicationUrls.yourCompletedReports.urls.start(),
+      pageTitle: 'Report submitted for review',
     })
   }
 

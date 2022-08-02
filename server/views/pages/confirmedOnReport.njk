@@ -1,19 +1,14 @@
 {% extends "../partials/layout.njk" %}
 
-{% from "../macros/onReport.njk" import onReportInfo %}
 {% from "../macros/printLink.njk" import printLink %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-{% if adjudicationEdited %}
-  {% set title = "Report change is confirmed" %}
-{% else %}
-  {% set title = "Report submitted for review" %}
-{% endif %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ pageTitle }}
 {% endblock %}
 
 {% block content %}
@@ -21,45 +16,28 @@
     <div class='no-print'>
       {{ govukPanel({
           titleText: bannerText,
-          html: bannerHTML,
           classes: "govuk-!-margin-bottom-6"
         }) }}
 
-      <h2 class="govuk-heading-m">What you must do next</h2>
+      <h2 class="govuk-heading-m">What happens next</h2>
 
       <div class="confirmed-on-report-section">
-        {% if not adjudicationEdited %}
-          <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by {{ expirationTime }} on {{ expirationDay }}.</p>
-        {% endif %}
+          <p class="govuk-body">This report will be reviewed. The reviewer can do one of 3 things:</p>
 
-        {% if not editedByReviewer %}
-          <div class="govuk-inset-text next-steps">You must follow local processes. You might need to give a copy of the printed report to another member of staff to review before it is given to {{ prisonerFirstAndLastName }}.</div>
-        {% else %}
-          <p class="govuk-body">You must confirm with the reporting officer, {{ reporterName }}, that their statement is still accurate.</p>
-          <p class="govuk-body">{{ reporterName }} will need to make any changes to their statement before {{ prisonerFirstAndLastName }} is given an updated copy of their report.</p>
-        {% endif %}
+          <ul class="govuk-list govuk-list--bullet">
+            <li>accept the report</li>
+            <li>reject the report</li>
+            <li>ask you for more information</li>
+          </ul>
 
-        {% if adjudicationEdited %}
-          {% if editedByReviewer %}
-            <p class="govuk-body govuk-inset-text">{{ prisonerFirstAndLastName }} must be given an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
-          {% else %}
-            <p class="govuk-body">{{ prisonerFirstAndLastName }} needs an updated copy of their report. They need to receive this by {{ expirationTime }} on {{ expirationDay }}.</p>
-          {% endif %}
-        {% else %}
-          {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
+          <p class="govuk-body">You will not get an email notification about this report. But you can check its progress in <a class="govuk-link" href={{ yourCompletedReportsLink }}>Your completed reports</a>.</p>
 
-          {{ printLink('Print a copy of this report', adjudicationUrls.printPdf.urls.start(adjudicationNumber), "left", "govuk-!-padding-right-0", "_blank") }}
-          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-        {% endif %}
-        {{ govukButton({
-        text: 'Finish',
-        element: 'a',
-        href: buttonHref,
-        classes: buttonClass,
-        attributes: {
-          'data-qa': 'confirmed-on-report-finish'
-        }
-      }) }}
+          {{ govukInsetText({
+            text: "Check your prison’s processes. For example, you may need to submit this report on paper as well as on this system."
+          }) }}
+
+          <p class="govuk-body"><a class="govuk-link" href={{ yourCompletedReportsLink }} data-qa="confirmed-on-report-finish">Return to your completed reports</a></p>
+
       </div>
     </div>
   </div>

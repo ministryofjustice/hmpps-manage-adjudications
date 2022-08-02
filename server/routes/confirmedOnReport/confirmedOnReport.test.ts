@@ -51,64 +51,7 @@ describe('GET /prisoner-placed-on-report', () => {
       .expect(res => {
         expect(res.text).toContain('Your report for John Smith has been submitted for review')
         expect(res.text).toContain('123')
-        expect(res.text).toContain('John Smith’s preferred language is')
-        expect(res.text).toContain('They have other languages of')
-        expect(res.text).toContain('They have recorded disabilities')
-        expect(res.text).toContain('Moderate learning difficulty')
-        expect(res.text).toContain('Dyslexia')
-      })
-  })
-
-  it('should not show neurodivesity information if none provided', () => {
-    reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue({
-      ...reportedAdjudicationInformation,
-      prisonerNeurodiversities: null,
-    })
-    return request(app)
-      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
-
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).not.toContain('They have recorded disabilities')
-      })
-  })
-
-  it('should not show any language information if no primary language provided', () => {
-    reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue({
-      ...reportedAdjudicationInformation,
-      prisonerPreferredNonEnglishLanguage: null,
-    })
-    return request(app)
-      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
-
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).not.toContain('John Smith’s preferred language is')
-        expect(res.text).not.toContain('They have other languages of')
-      })
-  })
-
-  it('should not show the secondary language text if no secondary languages provided', () => {
-    reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue({
-      ...reportedAdjudicationInformation,
-      prisonerOtherLanguages: null,
-    })
-    return request(app)
-      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
-
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('John Smith’s preferred language is')
-        expect(res.text).not.toContain('They have other languages of')
-      })
-  })
-
-  it('should throw an error if no adjudication number provided', () => {
-    return request(app)
-      .get('/prisoner-placed-on-report')
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('NotFoundError')
+        expect(res.text).toContain('This report will be reviewed. The reviewer can do one of 3 thing')
       })
   })
 
