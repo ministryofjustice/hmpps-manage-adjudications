@@ -140,17 +140,9 @@ describe('prisonerSearchService', () => {
   })
 
   describe('isValidPrisonerNumber', () => {
-    const user = {
-      activeCaseLoadId: 'MDI',
-      name: 'User',
-      username: 'user1',
-      token: 'token-1',
-      authSource: 'auth',
-    }
-
     it('returns true if prisoner returned', async () => {
       searchPrisonerDetails.mockResolvedValue({
-        prisonerNumber: 'A1234AA'
+        prisonerNumber: 'A1234AA',
       })
 
       const result = await service.isPrisonerNumberValid('A1234AA', user)
@@ -177,7 +169,7 @@ describe('prisonerSearchService', () => {
     })
 
     it('throws error if not 404 error', async () => {
-      searchPrisonerDetails.mockRejectedValue(new Error("Found but still error"))
+      searchPrisonerDetails.mockRejectedValue(new Error('Found but still error'))
 
       await expect(service.isPrisonerNumberValid('A1234AA', user)).rejects.toEqual(new Error('Found but still error'))
     })

@@ -63,7 +63,7 @@ export default class PrisonerSearchService {
     )
   }
 
-  async isPrisonerNumberValid(prisonerNumber: string, user: User): Promise<Boolean> {
+  async isPrisonerNumberValid(prisonerNumber: string, user: User): Promise<boolean> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     try {
       const result = await new PrisonerSearchClient(token).getPrisonerDetails(prisonerNumber)

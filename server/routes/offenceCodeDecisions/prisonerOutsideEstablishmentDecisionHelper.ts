@@ -38,7 +38,7 @@ const error: { [key in ErrorType]: FormError } = {
 export default class PrisonerOutsideEstablishmentDecisionHelper extends DecisionHelper {
   constructor(
     readonly decisionTreeService: DecisionTreeService,
-    readonly prisonerSearchService: PrisonerSearchService,
+    readonly prisonerSearchService: PrisonerSearchService
   ) {
     super(decisionTreeService)
   }
@@ -64,13 +64,17 @@ export default class PrisonerOutsideEstablishmentDecisionHelper extends Decision
     if (!prisonerOutsideEstablishmentData.victimPrisonersNumber) {
       errors.push(error.PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NUMBER_INPUT)
     } else {
+      // eslint-disable-next-line no-lonely-if
       if (prisonerOutsideEstablishmentData.victimPrisonersNumber.length > PRISON_NUMBER_MAXIMUM_SIZE_IN_DB) {
         errors.push(error.PRISONER_OUTSIDE_ESTABLISHMENT_NUMBER_EXCEEDS_MAXIMUM_SIZE)
       } else {
-        const foundPrisoner = await this.prisonerSearchService.isPrisonerNumberValid(prisonerOutsideEstablishmentData.victimPrisonersNumber, user)
+        const foundPrisoner = await this.prisonerSearchService.isPrisonerNumberValid(
+          prisonerOutsideEstablishmentData.victimPrisonersNumber,
+          user
+        )
         if (!foundPrisoner) {
           errors.push(error.PRISONER_OUTSIDE_ESTABLISHMENT_INVALID_NUMBER)
-        }    
+        }
       }
     }
     return errors

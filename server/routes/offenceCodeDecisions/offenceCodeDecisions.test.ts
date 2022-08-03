@@ -223,8 +223,8 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
   })
 
   it(`should validate a ${Type.PRISONER_OUTSIDE_ESTABLISHMENT} answer when the number does not correlate with a known prisoner`, () => {
-      prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(false)
-      return request(app)
+    prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(false)
+    return request(app)
       .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
       .send({
         selectedAnswerId: aPrisonerOutsideEstablishmentAnswer.id(),

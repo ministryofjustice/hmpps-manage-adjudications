@@ -98,14 +98,9 @@ describe('prisonerSearchClient', () => {
   describe('get prisoner details', () => {
     it('returns for prisoner', async () => {
       const results = {
-        prisonerNumber: 'A1234AA'
+        prisonerNumber: 'A1234AA',
       }
-      fakePrisonerSearchApi
-        .get(
-          `/prisoner/A1234AA`
-        )
-        .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, results)
+      fakePrisonerSearchApi.get(`/prisoner/A1234AA`).matchHeader('authorization', `Bearer ${token}`).reply(200, results)
 
       const output = await client.getPrisonerDetails('A1234AA')
 

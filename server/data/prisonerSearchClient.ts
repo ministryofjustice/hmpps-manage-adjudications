@@ -38,7 +38,7 @@ export default class PrisonerSearchClient {
   }
 
   async getPrisonerDetails(prisonerNumber: string): Promise<PrisonerSearchResult> {
-    return await this.restClient.get<PrisonerSearchResult>({
+    return this.restClient.get<PrisonerSearchResult>({
       path: `/prisoner/${prisonerNumber}`,
     })
   }

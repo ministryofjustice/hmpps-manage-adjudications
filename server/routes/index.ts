@@ -47,7 +47,7 @@ export default function routes(
       userService,
       offenceSessionService,
       decisionTreeService,
-      prisonerSearchService
+      prisonerSearchService,
     })
   )
   router.use(adjudicationUrls.incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))

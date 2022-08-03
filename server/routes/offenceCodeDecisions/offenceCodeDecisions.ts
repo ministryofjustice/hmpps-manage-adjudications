@@ -39,7 +39,7 @@ export default class OffenceCodeRoutes {
     private readonly userService: UserService,
     private readonly offenceSessionService: OffenceSessionService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly prisonerSearchService: PrisonerSearchService,
+    private readonly prisonerSearchService: PrisonerSearchService
   ) {}
 
   private helpers = new Map<AnswerType, DecisionHelper>([
