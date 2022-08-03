@@ -2,6 +2,139 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
 
+const draftAdjudicationWithStatement = {
+  draftAdjudication: {
+    id: 3456,
+    prisonerNumber: 'G6415GD',
+    incidentDetails: {
+      dateTimeOfIncident: '2021-11-03T11:09:42',
+      locationId: 234,
+    },
+    incidentStatement: {
+      id: 23,
+      statement: 'This is my statement',
+      completed: true,
+    },
+    startedByUserId: 'TEST_GEN',
+    isYouthOffender: true,
+  },
+}
+
+const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
+  return {
+    draftAdjudication: {
+      id: 3456,
+      adjudicationNumber: 234,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        dateTimeOfIncident: '2021-11-03T11:09:42',
+        handoverDeadline: '2021-11-05T11:09:42',
+        locationId: 234,
+      },
+      incidentStatement: {
+        id: 23,
+        statement: 'This is my statement',
+        completed: true,
+      },
+      startedByUserId: 'USER1',
+      isYouthOffender,
+      incidentRole: {
+        associatedPrisonersNumber: 'T3356FU',
+        roleCode: '25c',
+        offenceRule: {
+          paragraphNumber: '25(c)',
+          paragraphDescription:
+            'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+        },
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+    },
+  }
+}
+
+const submitCompleteDraftResponse = {
+  adjudicationNumber: 234,
+  incidentDetails: {
+    dateTimeOfIncident: '2021-11-03T11:09:42',
+    locationId: 234,
+  },
+  incidentStatement: {
+    id: 23,
+    statement: 'This is my statement',
+    completed: true,
+  },
+  prisonerNumber: 'G6415GD',
+  isYouthOffender: true,
+}
+
+const completeReportedAdjudicationResponse = (
+  status = null,
+  reviewedByUserId = null,
+  statusReason = null,
+  statusDetails = null
+) => {
+  return {
+    reportedAdjudication: {
+      id: 3456,
+      adjudicationNumber: 234,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        dateTimeOfIncident: '2021-11-03T11:09:42',
+        handoverDeadline: '2021-11-05T11:09:42',
+        locationId: 234,
+      },
+      incidentStatement: {
+        id: 23,
+        statement: 'This is my statement',
+        completed: true,
+      },
+      startedByUserId: 'USER1',
+      isYouthOffender: true,
+      incidentRole: {
+        associatedPrisonersNumber: 'T3356FU',
+        roleCode: '25c',
+        offenceRule: {
+          paragraphNumber: '25(c)',
+          paragraphDescription:
+            'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+        },
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+      status,
+      reviewedByUserId,
+      statusReason,
+      statusDetails,
+    },
+  }
+}
+
+const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
+  return {
+    offenderNo: prisonerNumber,
+    firstName,
+    lastName,
+    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+  }
+}
+
 context('Check Your Answers', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -10,32 +143,17 @@ context('Check Your Answers', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
-        offenderNo: 'G6415GD',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
-        offenderNo: 'T3356FU',
-        firstName: 'JAMES',
-        lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerDetails('T3356FU', 'JAMES', 'JONES'),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: {
-        offenderNo: 'G5512G',
-        firstName: 'PAUL',
-        lastName: 'WRIGHT',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerDetails('G5512G', 'PAUL', 'WRIGHT'),
     })
     cy.task('stubStartNewDraftAdjudication', {
       draftAdjudication: {
@@ -64,21 +182,6 @@ context('Check Your Answers', () => {
           agencyId: 'MDI',
           userDescription: 'Workshop 19 - Braille',
         },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
       ],
     })
     cy.task('stubGetUserFromUsername', {
@@ -91,99 +194,57 @@ context('Check Your Answers', () => {
         authSource: 'auth',
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 234,
+      response: completeReportedAdjudicationResponse('RETURNED', 'USER1', 'offence', 'wrong'),
+    })
   })
   context('YOI offences', () => {
     beforeEach(() => {
-      cy.task('stubPostDraftIncidentStatement', {
-        id: 3456,
-        response: {
-          draftAdjudication: {
-            id: 3456,
-            prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              locationId: 234,
-            },
-            incidentStatement: {
-              id: 23,
-              statement: 'This is my statement',
-              completed: true,
-            },
-            startedByUserId: 'TEST_GEN',
-            isYouthOffender: true,
-          },
-        },
-      })
+      cy.task('stubPostDraftIncidentStatement', draftAdjudicationWithStatement)
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
-        response: {
-          draftAdjudication: {
-            id: 3456,
-            adjudicationNumber: 234,
-            prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
-            incidentStatement: {
-              id: 23,
-              statement: 'This is my statement',
-              completed: true,
-            },
-            startedByUserId: 'USER1',
-            isYouthOffender: true,
-            incidentRole: {
-              associatedPrisonersNumber: 'T3356FU',
-              roleCode: '25c',
-              offenceRule: {
-                paragraphNumber: '25(c)',
-                paragraphDescription:
-                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-              },
-            },
-            offenceDetails: [
-              {
-                offenceCode: 1001,
-                offenceRule: {
-                  paragraphNumber: '1',
-                  paragraphDescription: 'Commits any assault',
-                },
-                victimPrisonersNumber: 'G5512G',
-              },
-            ],
-          },
-        },
+        response: completeDraftAdjudicationResponse(true),
       })
       cy.task('stubSubmitCompleteDraftAdjudication', {
         id: 3456,
-        response: {
-          adjudicationNumber: 234,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 234,
-          },
-          incidentStatement: {
-            id: 23,
-            statement: 'This is my statement',
-            completed: true,
-          },
-          prisonerNumber: 'G6415GD',
-          isYouthOffender: true,
-        },
+        response: submitCompleteDraftResponse,
       })
+
       cy.signIn()
     })
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
       const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
+      CheckYourAnswersPage.reviewStatus().should('exist')
+      CheckYourAnswersPage.reviewSummary().should('exist')
       CheckYourAnswersPage.incidentDetailsSummary().should('exist')
       CheckYourAnswersPage.incidentStatement().should('exist')
       CheckYourAnswersPage.submitButton().should('exist')
       CheckYourAnswersPage.submitButton().contains('Confirm changes')
       CheckYourAnswersPage.exitButton().should('exist')
       CheckYourAnswersPage.exitButton().contains('Cancel')
+    })
+    it('should contain the correct review summary details', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.reviewStatus().should('contain.text', 'Status: Returned')
+      CheckYourAnswersPage.reviewSummary()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+          expect($summaryLabels.get(1).innerText).to.contain('Reason for return')
+          expect($summaryLabels.get(2).innerText).to.contain('Details')
+        })
+
+      CheckYourAnswersPage.reviewSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('T. User')
+          expect($summaryData.get(1).innerText).to.contain('Incorrect offence chosen')
+          expect($summaryData.get(2).innerText).to.contain('wrong')
+        })
     })
     it('should contain the correct incident details', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
@@ -288,86 +349,28 @@ context('Check Your Answers', () => {
   })
   context('Adult offences', () => {
     beforeEach(() => {
-      cy.task('stubPostDraftIncidentStatement', {
-        id: 3456,
-        response: {
-          draftAdjudication: {
-            id: 3456,
-            prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              locationId: 234,
-            },
-            incidentStatement: {
-              id: 23,
-              statement: 'This is my statement',
-              completed: true,
-            },
-            startedByUserId: 'TEST_GEN',
-            isYouthOffender: false,
-          },
-        },
-      })
+      cy.task('stubPostDraftIncidentStatement', draftAdjudicationWithStatement)
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
-        response: {
-          draftAdjudication: {
-            id: 3456,
-            adjudicationNumber: 234,
-            prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
-            incidentStatement: {
-              id: 23,
-              statement: 'This is my statement',
-              completed: true,
-            },
-            startedByUserId: 'USER1',
-            isYouthOffender: false,
-            incidentRole: {
-              associatedPrisonersNumber: 'T3356FU',
-              roleCode: '25c',
-              offenceRule: {
-                paragraphNumber: '25(c)',
-                paragraphDescription:
-                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-              },
-            },
-            offenceDetails: [
-              {
-                offenceCode: 1001,
-                offenceRule: {
-                  paragraphNumber: '1',
-                  paragraphDescription: 'Commits any assault',
-                },
-                victimPrisonersNumber: 'G5512G',
-              },
-            ],
-          },
-        },
+        response: completeDraftAdjudicationResponse(false),
       })
 
       cy.task('stubSubmitCompleteDraftAdjudication', {
         id: 3456,
-        response: {
-          adjudicationNumber: 234,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 234,
-          },
-          incidentStatement: {
-            id: 23,
-            statement: 'This is my statement',
-            completed: true,
-          },
-          prisonerNumber: 'G6415GD',
-          isYouthOffender: false,
-        },
+        response: submitCompleteDraftResponse,
+      })
+      cy.task('stubGetReportedAdjudication', {
+        id: 234,
+        response: completeReportedAdjudicationResponse('AWAITING_REVIEW'),
       })
       cy.signIn()
+    })
+    it('should show the correct review status', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.reviewStatus().should('exist')
+      CheckYourAnswersPage.reviewStatus().should('contain.text', 'Status: Awaiting Review')
+      CheckYourAnswersPage.reviewSummary().should('not.exist')
     })
     it('should show the correct prison rule', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))

@@ -17,12 +17,12 @@
   	{% endfor %}
 
     <div class="adjudicationReviewStatusSummary-container">
-		<h2 class="govuk-heading-m">Status: {{ reviewStatus }}</h2>
+		<h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>
   		{% if rows.length %}
 			{{ govukSummaryList({
 			rows: rows,
 			classes: classes,
-			attributes: attributes
+			attributes: { "data-qa": "review-summary" }
 			}) }}
 		{% endif %}
   	</div>
