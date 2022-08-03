@@ -42,7 +42,7 @@ const stubSearchPrisonerDetails = ({ prisonerNumber }): SuperAgentRequest =>
         'Content-Type': 'application/json;charset=UTF-8',
       },
       jsonBody: {
-        prisonerNumber
+        prisonerNumber,
       },
     },
   })
