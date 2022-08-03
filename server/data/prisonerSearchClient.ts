@@ -36,4 +36,10 @@ export default class PrisonerSearchClient {
 
     return results.map(result => plainToClass(PrisonerSearchResult, result, { excludeExtraneousValues: true }))
   }
+
+  async getPrisonerDetails(prisonerNumber: string): Promise<PrisonerSearchResult> {
+    return await this.restClient.get<PrisonerSearchResult>({
+      path: `/prisoner/${prisonerNumber}`,
+    })
+  }
 }
