@@ -536,7 +536,7 @@ describe('reportedAdjudicationsService', () => {
     })
   })
 
-  describe.only('getReviewDetails', () => {
+  describe('getReviewDetails', () => {
     beforeEach(() => {
       hmppsAuthClient.getUserFromUsername.mockResolvedValue({
         name: 'Test User',
