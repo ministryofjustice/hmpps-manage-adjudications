@@ -2,24 +2,6 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
 
-const draftAdjudicationWithStatement = {
-  draftAdjudication: {
-    id: 3456,
-    prisonerNumber: 'G6415GD',
-    incidentDetails: {
-      dateTimeOfIncident: '2021-11-03T11:09:42',
-      locationId: 234,
-    },
-    incidentStatement: {
-      id: 23,
-      statement: 'This is my statement',
-      completed: true,
-    },
-    startedByUserId: 'TEST_GEN',
-    isYouthOffender: true,
-  },
-}
-
 const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
   return {
     draftAdjudication: {
@@ -63,17 +45,6 @@ const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
 
 const submitCompleteDraftResponse = {
   adjudicationNumber: 234,
-  incidentDetails: {
-    dateTimeOfIncident: '2021-11-03T11:09:42',
-    locationId: 234,
-  },
-  incidentStatement: {
-    id: 23,
-    statement: 'This is my statement',
-    completed: true,
-  },
-  prisonerNumber: 'G6415GD',
-  isYouthOffender: true,
 }
 
 const completeReportedAdjudicationResponse = (
@@ -84,40 +55,7 @@ const completeReportedAdjudicationResponse = (
 ) => {
   return {
     reportedAdjudication: {
-      id: 3456,
       adjudicationNumber: 234,
-      prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T11:09:42',
-        handoverDeadline: '2021-11-05T11:09:42',
-        locationId: 234,
-      },
-      incidentStatement: {
-        id: 23,
-        statement: 'This is my statement',
-        completed: true,
-      },
-      startedByUserId: 'USER1',
-      isYouthOffender: true,
-      incidentRole: {
-        associatedPrisonersNumber: 'T3356FU',
-        roleCode: '25c',
-        offenceRule: {
-          paragraphNumber: '25(c)',
-          paragraphDescription:
-            'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-        },
-      },
-      offenceDetails: [
-        {
-          offenceCode: 1001,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G5512G',
-        },
-      ],
       status,
       reviewedByUserId,
       statusReason,
@@ -155,25 +93,6 @@ context('Check Your Answers', () => {
       prisonerNumber: 'G5512G',
       response: prisonerDetails('G5512G', 'PAUL', 'WRIGHT'),
     })
-    cy.task('stubStartNewDraftAdjudication', {
-      draftAdjudication: {
-        id: 3456,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-03T11:09:42',
-          locationId: 234,
-        },
-        incidentStatement: {},
-        prisonerNumber: 'G6415GD',
-      },
-    })
-
-    cy.task('stubGetOffenceRule', {
-      offenceCode: 1001,
-      response: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-    })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
       response: [
@@ -201,7 +120,6 @@ context('Check Your Answers', () => {
   })
   context('YOI offences', () => {
     beforeEach(() => {
-      cy.task('stubPostDraftIncidentStatement', draftAdjudicationWithStatement)
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: completeDraftAdjudicationResponse(true),
@@ -210,7 +128,6 @@ context('Check Your Answers', () => {
         id: 3456,
         response: submitCompleteDraftResponse,
       })
-
       cy.signIn()
     })
     it('should contain the required page elements', () => {
@@ -349,15 +266,9 @@ context('Check Your Answers', () => {
   })
   context('Adult offences', () => {
     beforeEach(() => {
-      cy.task('stubPostDraftIncidentStatement', draftAdjudicationWithStatement)
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: completeDraftAdjudicationResponse(false),
-      })
-
-      cy.task('stubSubmitCompleteDraftAdjudication', {
-        id: 3456,
-        response: submitCompleteDraftResponse,
       })
       cy.task('stubGetReportedAdjudication', {
         id: 234,
