@@ -2,7 +2,7 @@ import PrisonerSearchService, { PrisonerSearchSummary } from './prisonerSearchSe
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import { makeNotFoundError } from '../test/helpers'
+import { makeSearchApiNotFoundError } from '../test/helpers'
 
 const search = jest.fn()
 const searchPrisonerDetails = jest.fn()
@@ -161,7 +161,7 @@ describe('prisonerSearchService', () => {
     })
 
     it('returns false if 404', async () => {
-      searchPrisonerDetails.mockRejectedValue(makeNotFoundError())
+      searchPrisonerDetails.mockRejectedValue(makeSearchApiNotFoundError())
 
       const result = await service.isPrisonerNumberValid('A1234AA', user)
 

@@ -69,7 +69,7 @@ export default class PrisonerSearchService {
       const result = await new PrisonerSearchClient(token).getPrisonerDetails(prisonerNumber)
       return result && !!result.prisonerNumber
     } catch (err) {
-      if (err.response?.status === 404) {
+      if (err.status === 404) {
         // Expected
         return false
       }
