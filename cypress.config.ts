@@ -33,6 +33,7 @@ export default defineConfig({
         stubGetUserFromUsername: auth.stubGetUserFromUsername,
 
         stubSearch: prisonerSearch.stubSearch,
+        stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
         stubAuthUser: auth.stubUser,
         stubUserRoles: auth.stubUserRoles,
         stubGetUser: auth.stubGetUser,

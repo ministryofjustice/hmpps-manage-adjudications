@@ -32,7 +32,7 @@ export default class OtherPersonDecisionHelper extends DecisionHelper {
     }
   }
 
-  override validateForm(form: DecisionForm): FormError[] {
+  override async validateForm(form: DecisionForm): Promise<FormError[]> {
     const otherPersonData = form.selectedAnswerData as OtherPersonData
     if (!otherPersonData.otherPersonNameInput) {
       return [error.OTHER_PERSON_MISSING_NAME_INPUT]

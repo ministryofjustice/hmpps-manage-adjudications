@@ -73,7 +73,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     }
   }
 
-  override validateForm(form: DecisionForm, req: Request): FormError[] {
+  override async validateForm(form: DecisionForm, req: Request): Promise<FormError[]> {
     const staffData = form.selectedAnswerData as StaffData
     const searching = !!req.body.searchUser
     if (searching) {

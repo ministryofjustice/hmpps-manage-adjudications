@@ -30,7 +30,25 @@ const stubSearch = ({ query, results }: Record<string, unknown>): SuperAgentRequ
     },
   })
 
+const stubSearchPrisonerDetails = ({ prisonerNumber }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/search/prisoner/${prisonerNumber}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        prisonerNumber,
+      },
+    },
+  })
+
 export default {
   stubPing,
   stubSearch,
+  stubSearchPrisonerDetails,
 }

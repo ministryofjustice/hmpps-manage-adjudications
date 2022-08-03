@@ -4,6 +4,8 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
+const prisonerOutsideEstablishmentNumber = 'G7123CI'
+
 context('Offence details', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -185,6 +187,10 @@ context('Offence details', () => {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
       },
+    })
+    // Prisoner-outside-establishment number validation
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: prisonerOutsideEstablishmentNumber,
     })
   })
   it('the first page for committing an offence title', () => {
@@ -390,7 +396,7 @@ context('Offence details', () => {
       .radioLabelFromValue(prisonerOutsideEstablishmentAnswerId)
       .contains('A prisoner who’s left this establishment')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
-    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
     const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     wasTheIncidentRacial.checkOnPage()
@@ -409,7 +415,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.form().contains('Enter the prisoner’s name')
     whoWasAssaultedPage.form().contains('Enter their prison number')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
-    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
     const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     wasTheIncidentRacial.checkOnPage()
@@ -450,7 +456,7 @@ context('Offence details', () => {
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio('1-1-1-4').check()
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
-    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G5512G')
+    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     raciallyAggravated.radio('1-1-1-4-1').click()

@@ -42,7 +42,13 @@ export default function routes(
 ): Router {
   router.use(
     adjudicationUrls.offenceCodeSelection.root,
-    offenceCodeDecisionsRoutes({ placeOnReportService, userService, offenceSessionService, decisionTreeService })
+    offenceCodeDecisionsRoutes({
+      placeOnReportService,
+      userService,
+      offenceSessionService,
+      decisionTreeService,
+      prisonerSearchService,
+    })
   )
   router.use(adjudicationUrls.incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))
   if (config.yoiNewPagesFeatureFlag) {

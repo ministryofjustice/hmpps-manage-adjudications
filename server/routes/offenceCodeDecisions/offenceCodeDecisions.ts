@@ -17,6 +17,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import { AnswerType } from '../../offenceCodeDecisions/Answer'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstablishmentDecisionHelper'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -37,14 +38,15 @@ export default class OffenceCodeRoutes {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly offenceSessionService: OffenceSessionService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly prisonerSearchService: PrisonerSearchService
   ) {}
 
   private helpers = new Map<AnswerType, DecisionHelper>([
     [AnswerType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
     [
       AnswerType.PRISONER_OUTSIDE_ESTABLISHMENT,
-      new PrisonerOutsideEstablishmentDecisionHelper(this.decisionTreeService),
+      new PrisonerOutsideEstablishmentDecisionHelper(this.decisionTreeService, this.prisonerSearchService),
     ],
     [AnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
     [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
@@ -94,7 +96,7 @@ export default class OffenceCodeRoutes {
     }
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
-    const errors = answerTypeHelper.validateForm(form, req)
+    const errors = await answerTypeHelper.validateForm(form, req, res.locals.user)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
@@ -137,7 +139,7 @@ export default class OffenceCodeRoutes {
     const { selectedAnswerId } = req.body
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
-    const errors = answerTypeHelper.validateForm(form, req)
+    const errors = await answerTypeHelper.validateForm(form, req, res.locals.user)
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
