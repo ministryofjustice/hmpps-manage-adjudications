@@ -150,6 +150,9 @@ describe('GET /check-your-answers', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
+        expect(response.text).toContain('Status: Returned')
+        expect(response.text).toContain('Last reviewed by')
+        expect(response.text).toContain('Reason for return')
         expect(response.text).toContain('Confirm changes')
         expect(response.text).not.toContain(
           'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'

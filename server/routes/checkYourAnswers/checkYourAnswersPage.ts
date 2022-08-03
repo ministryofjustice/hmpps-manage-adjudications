@@ -95,6 +95,8 @@ export default class CheckYourAnswersPage {
       incidentLocations,
       user
     )
+
+    // The reported adjudication number won't exist in the creation journey so we skip this
     const reviewData = this.pageOptions.isEditByReporter()
       ? await this.reportedAdjudicationsService.getReviewDetails(draftAdjudication.adjudicationNumber, user)
       : null

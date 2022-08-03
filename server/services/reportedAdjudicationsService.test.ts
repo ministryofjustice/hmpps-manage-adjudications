@@ -536,28 +536,8 @@ describe('reportedAdjudicationsService', () => {
     })
   })
 
-  describe('getReviewDetails', () => {
+  describe.only('getReviewDetails', () => {
     beforeEach(() => {
-      getReportedAdjudication.mockResolvedValue({
-        reportedAdjudication: {
-          adjudicationNumber: 123,
-          prisonerNumber: 'A1234AA',
-          createdByUserId: 'TEST_GEN',
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-10-28T15:40:25.884',
-            handoverDeadline: '2021-10-22T15:40:25.884',
-          },
-          incidentStatement: {
-            statement: 'Example statement',
-          },
-          status: ReportedAdjudicationStatus.RETURNED,
-          reviewedByUserId: 'TEST_GEN',
-          statusReason: 'offence',
-          statusDetails: 'wrong',
-        },
-      })
-
       hmppsAuthClient.getUserFromUsername.mockResolvedValue({
         name: 'Test User',
         username: 'TEST_GEN',
@@ -567,6 +547,15 @@ describe('reportedAdjudicationsService', () => {
       })
     })
     it('returns the correct information for a returned adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.RETURNED,
+          reviewedByUserId: 'TEST_GEN',
+          statusReason: 'offence',
+          statusDetails: 'wrong',
+        },
+      })
       const result = await service.getReviewDetails(123, user)
       const expectedResult = {
         reviewStatus: 'Returned',
@@ -582,6 +571,70 @@ describe('reportedAdjudicationsService', () => {
           {
             label: 'Details',
             value: 'wrong',
+          },
+        ],
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for an adjudication awaiting review', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          reviewedByUserId: 'TEST_GEN',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Awaiting Review',
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for an accepted adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.ACCEPTED,
+          reviewedByUserId: 'TEST_GEN',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Accepted',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+        ],
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for a rejected adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.REJECTED,
+          reviewedByUserId: 'TEST_GEN',
+          statusReason: 'alternative',
+          statusDetails: 'Not worthy of adjudication, give them a fine instead.',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Rejected',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+          {
+            label: 'Reason for rejection',
+            value: 'Should be dealt with in another way',
+          },
+          {
+            label: 'Details',
+            value: 'Not worthy of adjudication, give them a fine instead.',
           },
         ],
       }
