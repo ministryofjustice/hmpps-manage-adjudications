@@ -105,7 +105,8 @@ export default class CheckYourAnswersPage {
       user
     )
 
-    // The reported adjudication number won't exist in the creation journey so we skip this
+    // The reported adjudication number won't exist in the creation journey
+    // Whilst  we're passing in a draftAdjudication here, it's a duplication of a reported adjudication, so it will have the reported adjudication number, which is what we need
     const reviewData = this.pageOptions.isEditByReporter() ? await this.getReviewData(draftAdjudication, user) : null
 
     const [offences, checkAnswersVariations] = await Promise.all([
