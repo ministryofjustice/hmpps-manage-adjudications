@@ -2,6 +2,107 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
+const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
+  return {
+    offenderNo: prisonerNumber,
+    firstName,
+    lastName,
+    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+  }
+}
+
+const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number, id: number) => {
+  return {
+    draftAdjudication: {
+      id,
+      adjudicationNumber,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        locationId: 234,
+        dateTimeOfIncident: '2021-12-01T09:40:00',
+        handoverDeadline: '2021-12-03T09:40:00',
+      },
+      incidentStatement: {
+        statement: 'TESTING',
+        completed: true,
+      },
+      startedByUserId: 'USER1',
+    },
+  }
+}
+
+const reportedAdjudicationResponse = (
+  adjudicationNumber: number,
+  status: string,
+  reviewedByUserId = null,
+  statusReason = null,
+  statusDetails = null
+) => {
+  return {
+    reportedAdjudication: {
+      adjudicationNumber,
+      prisonerNumber: 'G6415GD',
+      bookingId: 1,
+      createdDateTime: undefined,
+      createdByUserId: undefined,
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        handoverDeadline: '2021-12-11T10:30:00',
+      },
+      incidentStatement: undefined,
+      incidentRole: {
+        roleCode: undefined,
+      },
+      offenceDetails: [],
+      status,
+      reviewedByUserId,
+      statusReason,
+      statusDetails,
+    },
+  }
+}
+
+const draftAdjudicationResponse = (id: number, adjudicationNumber: number, isYouthOffender: boolean) => {
+  return {
+    draftAdjudication: {
+      id,
+      adjudicationNumber,
+      prisonerNumber: 'G6415GD',
+      incidentDetails: {
+        locationId: 234,
+        dateTimeOfIncident: '2021-12-01T09:40:00',
+        handoverDeadline: '2021-12-03T09:40:00',
+      },
+      incidentStatement: {
+        statement: 'TESTING',
+        completed: true,
+      },
+      startedByUserId: 'USER1',
+      isYouthOffender,
+      incidentRole: {
+        associatedPrisonersNumber: 'T3356FU',
+        roleCode: '25c',
+        offenceRule: {
+          paragraphNumber: '25(c)',
+          paragraphDescription:
+            'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+        },
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+    },
+  }
+}
+
 context('Prisoner report - reporter view', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -10,72 +111,33 @@ context('Prisoner report - reporter view', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
-        offenderNo: 'G6415GD',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
-        offenderNo: 'T3356FU',
-        firstName: 'JAMES',
-        lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerDetails('T3356FU', 'JAMES', 'JONES'),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: {
-        offenderNo: 'G5512G',
-        firstName: 'PAUL',
-        lastName: 'WRIGHT',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      response: prisonerDetails('G5512G', 'PAUL', 'WRIGHT'),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 12345,
-      response: {
-        draftAdjudication: {
-          id: 177,
-          adjudicationNumber: 12345,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
-          incidentStatement: {
-            statement: 'TESTING',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-        },
-      },
+      response: createDraftFromReportedAdjudicationResponse(12345, 177),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 56789,
-      response: {
-        draftAdjudication: {
-          id: 188,
-          adjudicationNumber: 12345,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
-          incidentStatement: {
-            statement: 'TESTING',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-        },
-      },
+      response: createDraftFromReportedAdjudicationResponse(56789, 188),
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 23456,
+      response: createDraftFromReportedAdjudicationResponse(23456, 189),
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 34567,
+      response: createDraftFromReportedAdjudicationResponse(34567, 190),
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
@@ -85,148 +147,39 @@ context('Prisoner report - reporter view', () => {
           agencyId: 'MDI',
           userDescription: 'Workshop 19 - Braille',
         },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
       ],
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: {
-        reportedAdjudication: {
-          adjudicationNumber: 1524493,
-          prisonerNumber: 'G6415GD',
-          bookingId: 1,
-          createdDateTime: undefined,
-          createdByUserId: undefined,
-          incidentDetails: {
-            locationId: 197682,
-            dateTimeOfIncident: '2021-12-09T10:30:00',
-            handoverDeadline: '2021-12-11T10:30:00',
-          },
-          incidentStatement: undefined,
-          incidentRole: {
-            roleCode: undefined,
-          },
-          offenceDetails: [],
-          status: 'AWAITING_REVIEW',
-        },
-      },
+      response: reportedAdjudicationResponse(1524493, 'AWAITING_REVIEW'),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
-      response: {
-        reportedAdjudication: {
-          adjudicationNumber: 1524493,
-          prisonerNumber: 'G6415GD',
-          bookingId: 1,
-          createdDateTime: undefined,
-          createdByUserId: undefined,
-          incidentDetails: {
-            locationId: 197682,
-            dateTimeOfIncident: '2021-12-09T10:30:00',
-            handoverDeadline: '2021-12-11T10:30:00',
-          },
-          incidentStatement: undefined,
-          incidentRole: {
-            roleCode: undefined,
-          },
-          offenceDetails: [],
-          status: 'REJECTED',
-        },
-      },
+      response: reportedAdjudicationResponse(1524493, 'REJECTED', 'USER1', 'expired', 'Too long ago to report now.'),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 23456,
+      response: reportedAdjudicationResponse(1524493, 'RETURNED', 'USER1', 'statement', 'More detail please.'),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 34567,
+      response: reportedAdjudicationResponse(1524493, 'ACCEPTED', 'USER1'),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
-      response: {
-        draftAdjudication: {
-          id: 177,
-          adjudicationNumber: 12345,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
-          incidentStatement: {
-            statement: 'TESTING',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-          isYouthOffender: true,
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25c',
-            offenceRule: {
-              paragraphNumber: '25(c)',
-              paragraphDescription:
-                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-            },
-          },
-          offenceDetails: [
-            {
-              offenceCode: 1001,
-              offenceRule: {
-                paragraphNumber: '1',
-                paragraphDescription: 'Commits any assault',
-              },
-              victimPrisonersNumber: 'G5512G',
-            },
-          ],
-        },
-      },
+      response: draftAdjudicationResponse(177, 12345, true),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 188,
-      response: {
-        draftAdjudication: {
-          id: 188,
-          adjudicationNumber: 56789,
-          prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
-          incidentStatement: {
-            statement: 'TESTING',
-            completed: true,
-          },
-          startedByUserId: 'USER1',
-          isYouthOffender: false,
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25c',
-            offenceRule: {
-              paragraphNumber: '25(c)',
-              paragraphDescription:
-                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-            },
-          },
-          offenceDetails: [
-            {
-              offenceCode: 1001,
-              offenceRule: {
-                paragraphNumber: '1',
-                paragraphDescription: 'Commits any assault',
-              },
-              victimPrisonersNumber: 'G5512G',
-            },
-          ],
-        },
-      },
+      response: draftAdjudicationResponse(188, 56789, false),
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 189,
+      response: draftAdjudicationResponse(189, 23456, false),
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 190,
+      response: draftAdjudicationResponse(190, 34567, false),
     })
 
     cy.task('stubGetOffenceRule', {
@@ -257,11 +210,43 @@ context('Prisoner report - reporter view', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
+        PrisonerReportPage.reviewSummaryTitle().should('exist')
         PrisonerReportPage.incidentDetailsSummary().should('exist')
         PrisonerReportPage.offenceDetailsSummary().should('exist')
         PrisonerReportPage.incidentStatement().should('exist')
         PrisonerReportPage.reportNumber().should('exist')
         PrisonerReportPage.returnLink().should('exist')
+        if (prisoner.id === 12345) {
+          PrisonerReportPage.reviewSummary().should('not.exist')
+        } else {
+          PrisonerReportPage.reviewSummary().should('exist')
+        }
+      })
+      it('should contain the correct review summary details', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+
+        if (prisoner.id === 12345) {
+          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting Review')
+          PrisonerReportPage.reviewSummary().should('not.exist')
+        } else {
+          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Rejected')
+          PrisonerReportPage.reviewSummary()
+            .find('dt')
+            .then($summaryLabels => {
+              expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+              expect($summaryLabels.get(1).innerText).to.contain('Reason for rejection')
+              expect($summaryLabels.get(2).innerText).to.contain('Details')
+            })
+
+          PrisonerReportPage.reviewSummary()
+            .find('dd')
+            .then($summaryData => {
+              expect($summaryData.get(0).innerText).to.contain('T. User')
+              expect($summaryData.get(1).innerText).to.contain('More than 48 hours have elapsed since the incident')
+              expect($summaryData.get(2).innerText).to.contain('Too long ago to report now.')
+            })
+        }
       })
       it('should contain the correct incident details', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
@@ -398,6 +383,49 @@ context('Prisoner report - reporter view', () => {
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
         })
+      })
+    })
+  })
+  describe('review statuses', () => {
+    ;[
+      { id: 23456, readOnly: false, isYouthOffender: false },
+      { id: 34567, readOnly: true, isYouthOffender: false },
+    ].forEach(prisoner => {
+      it('should contain the correct review summary details', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+
+        if (prisoner.id === 23456) {
+          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Returned')
+          PrisonerReportPage.reviewSummary()
+            .find('dt')
+            .then($summaryLabels => {
+              expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+              expect($summaryLabels.get(1).innerText).to.contain('Reason for return')
+              expect($summaryLabels.get(2).innerText).to.contain('Details')
+            })
+
+          PrisonerReportPage.reviewSummary()
+            .find('dd')
+            .then($summaryData => {
+              expect($summaryData.get(0).innerText).to.contain('T. User')
+              expect($summaryData.get(1).innerText).to.contain('Incorrect or insufficient information in statement')
+              expect($summaryData.get(2).innerText).to.contain('More detail please.')
+            })
+        } else {
+          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Accepted')
+          PrisonerReportPage.reviewSummary()
+            .find('dt')
+            .then($summaryLabels => {
+              expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+            })
+
+          PrisonerReportPage.reviewSummary()
+            .find('dd')
+            .then($summaryData => {
+              expect($summaryData.get(0).innerText).to.contain('T. User')
+            })
+        }
       })
     })
   })

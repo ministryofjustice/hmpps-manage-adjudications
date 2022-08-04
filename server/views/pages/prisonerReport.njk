@@ -4,6 +4,8 @@
 {% from "../macros/adjudicationReviewPanel.njk" import adjudicationReviewPanel %}
 {% from "../macros/printLink.njk" import printLink %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/adjudicationReviewStatusSummary.njk" import adjudicationReviewStatusSummary %}
+
 {% block pageTitle %}
   Prisoner’s report
 {% endblock %}
@@ -15,6 +17,7 @@
   <div class="prisonerPlaybackSection">
     {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
   </div>
+  {{ adjudicationReviewStatusSummary(reviewData.reviewStatus, reviewData.reviewSummary, 'Not entered', 'govuk-!-margin-top-5') }}
   <div class="prisoner-report-top-bar flex-center govuk-!-margin-top-5">
     <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
       <span class="govuk-!-font-weight-bold">Report number:</span>

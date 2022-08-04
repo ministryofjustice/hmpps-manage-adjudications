@@ -79,9 +79,10 @@ export default class prisonerReportRoutes {
 
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
-    const [newDraftAdjudicationId, reportedAdjudication] = await Promise.all([
+    const [newDraftAdjudicationId, reportedAdjudication, reviewData] = await Promise.all([
       this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, adjudicationNumber),
       this.reportedAdjudicationsService.getReportedAdjudicationDetails(adjudicationNumber, user),
+      this.reportedAdjudicationsService.getReviewDetails(adjudicationNumber, user),
     ])
 
     const { draftAdjudication, prisoner, associatedPrisoner } =
@@ -126,6 +127,7 @@ export default class prisonerReportRoutes {
       pageData,
       prisoner,
       prisonerReportData,
+      reviewData,
       reportNo: draftAdjudication.adjudicationNumber,
       draftAdjudicationNumber: draftAdjudication.id,
       offences,
