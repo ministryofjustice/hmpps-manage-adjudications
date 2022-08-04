@@ -1,5 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% macro adjudicationReviewStatusSummary(reviewStatus, reviewSummary = [], missingValueText = 'Not entered') %}
+{% macro adjudicationReviewStatusSummary(reviewStatus, reviewSummary = [], missingValueText = 'Not entered', classes='')  %}
   {% set rows = [] %}
 
   {% for detail in reviewSummary %}
@@ -15,7 +15,7 @@
 	), rows) %}
   {% endfor %}
 
-  <div class="adjudicationReviewStatusSummary-container">
+  <div class="adjudicationReviewStatusSummary-container {{ classes }}">
     <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>
 	  {% if rows.length %}
 		{{ govukSummaryList({

@@ -61,12 +61,14 @@ export default class ReportedAdjudicationsService {
 
     const getReasonValue = (reason: string) => {
       switch (reason) {
+        // rejected
         case 'unsuitable':
           return 'Not suitable for an adjudication'
         case 'alternative':
           return 'Should be dealt with in another way'
         case 'expired':
           return 'More than 48 hours have elapsed since the incident'
+        // returned
         case 'details':
           return 'Incorrect incident details'
         case 'statement':
@@ -81,7 +83,7 @@ export default class ReportedAdjudicationsService {
     const reviewSummary = [
       {
         label: 'Last reviewed by',
-        value: getFormattedOfficerName(reviewingOfficer.name),
+        value: getFormattedOfficerName(reviewingOfficer?.name),
       },
     ]
     if (reportedAdjudication.status === 'RETURNED' || reportedAdjudication.status === 'REJECTED')

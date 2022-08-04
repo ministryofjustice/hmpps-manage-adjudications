@@ -11,7 +11,7 @@ const prisonerResponse = (offenderNo: string, firstName: string, lastName: strin
   }
 }
 
-const reportedAdjudication = (status: string) => {
+const reportedAdjudication = (status: string, reviewedByUserId = null, statusReason = null, statusDetails = null) => {
   return {
     adjudicationNumber: 1524493,
     prisonerNumber: 'G6415GD',
@@ -29,6 +29,9 @@ const reportedAdjudication = (status: string) => {
     },
     offenceDetails: [],
     status,
+    reviewedByUserId,
+    statusReason,
+    statusDetails,
     isYouthOffender: false,
   }
 }
@@ -82,19 +85,29 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
       response: {
-        reportedAdjudication: reportedAdjudication('RETURNED'),
+        reportedAdjudication: reportedAdjudication(
+          'RETURNED',
+          'USER1',
+          'offence',
+          'I think this is the incorrect offence'
+        ),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 456789,
       response: {
-        reportedAdjudication: reportedAdjudication('ACCEPTED'),
+        reportedAdjudication: reportedAdjudication('ACCEPTED', 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 356789,
       response: {
-        reportedAdjudication: reportedAdjudication('REJECTED'),
+        reportedAdjudication: reportedAdjudication(
+          'REJECTED',
+          'USER1',
+          'unsuitable',
+          'This is not worthy of an adjudication'
+        ),
       },
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
@@ -217,11 +230,78 @@ context('Prisoner report - reviewer view', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
+    PrisonerReportPage.reviewSummaryTitle().should('exist')
+    PrisonerReportPage.reviewSummary().should('not.exist')
     PrisonerReportPage.incidentDetailsSummary().should('exist')
     PrisonerReportPage.offenceDetailsSummary().should('exist')
     PrisonerReportPage.incidentStatement().should('exist')
     PrisonerReportPage.reportNumber().should('exist')
     PrisonerReportPage.reviewerPanel().should('exist')
+  })
+  it('should contain the correct review summary - returned', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(56789))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Returned')
+    PrisonerReportPage.reviewSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+        expect($summaryLabels.get(1).innerText).to.contain('Reason for return')
+        expect($summaryLabels.get(2).innerText).to.contain('Details')
+      })
+
+    PrisonerReportPage.reviewSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('T. User')
+        expect($summaryData.get(1).innerText).to.contain('Incorrect offence chosen')
+        expect($summaryData.get(2).innerText).to.contain('I think this is the incorrect offence')
+      })
+  })
+  it('should contain the correct review summary - rejected', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(356789))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Rejected')
+
+    PrisonerReportPage.reviewSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+        expect($summaryLabels.get(1).innerText).to.contain('Reason for rejection')
+        expect($summaryLabels.get(2).innerText).to.contain('Details')
+      })
+
+    PrisonerReportPage.reviewSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('T. User')
+        expect($summaryData.get(1).innerText).to.contain('Not suitable for an adjudication')
+        expect($summaryData.get(2).innerText).to.contain('This is not worthy of an adjudication')
+      })
+  })
+  it('should contain the correct review summary - accepted', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(456789))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Accepted')
+
+    PrisonerReportPage.reviewSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+      })
+
+    PrisonerReportPage.reviewSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('T. User')
+      })
+  })
+  it('should contain the correct review summary - awaiting review', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting Review')
+
+    PrisonerReportPage.reviewSummary().should('not.exist')
   })
   it('should contain the correct incident details', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
