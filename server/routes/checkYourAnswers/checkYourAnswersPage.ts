@@ -5,8 +5,9 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
+import { CheckYourAnswers, DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { User } from '../../data/hmppsAuthClient'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -78,6 +79,14 @@ export default class CheckYourAnswersPage {
     this.pageOptions = new PageOptions(pageType)
   }
 
+  getReviewData = async (draftAdjudication: DraftAdjudication, user: User) => {
+    const reportedAdjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+      draftAdjudication.adjudicationNumber,
+      user
+    )
+    return this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
+  }
+
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
     const { user } = res.locals
@@ -97,9 +106,7 @@ export default class CheckYourAnswersPage {
     )
 
     // The reported adjudication number won't exist in the creation journey so we skip this
-    const reviewData = this.pageOptions.isEditByReporter()
-      ? await this.reportedAdjudicationsService.getReviewDetails(draftAdjudication.adjudicationNumber, user)
-      : null
+    const reviewData = this.pageOptions.isEditByReporter() ? await this.getReviewData(draftAdjudication, user) : null
 
     const [offences, checkAnswersVariations] = await Promise.all([
       this.decisionTreeService.getAdjudicationOffences(
