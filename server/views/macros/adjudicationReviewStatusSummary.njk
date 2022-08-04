@@ -1,0 +1,27 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% macro adjudicationReviewStatusSummary(reviewStatus, reviewSummary = [], missingValueText = 'Not entered') %}
+  {% set rows = [] %}
+
+  {% for detail in reviewSummary %}
+    {% set rows = (rows.push(
+	  {
+	    key: {
+	      text: detail.label
+        },
+	    value: {
+	      text: detail.value | showDefault(missingValueText)
+		}
+	  }
+	), rows) %}
+  {% endfor %}
+
+  <div class="adjudicationReviewStatusSummary-container">
+    <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>
+	  {% if rows.length %}
+		{{ govukSummaryList({
+		rows: rows,
+		attributes: { "data-qa": "review-summary" }
+		}) }}
+	  {% endif %}
+  	</div>
+{% endmacro %}

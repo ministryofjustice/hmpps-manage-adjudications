@@ -65,6 +65,7 @@ export default function routes(
       placeOnReportService,
       locationService,
       decisionTreeService,
+      reportedAdjudicationsService,
     })
   )
   router.use(adjudicationUrls.confirmedOnReport.root, confirmedOnReportRoutes({ reportedAdjudicationsService }))

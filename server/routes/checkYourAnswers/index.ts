@@ -8,23 +8,32 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default function CheckAnswersRoutes({
   placeOnReportService,
   locationService,
   decisionTreeService,
+  reportedAdjudicationsService,
 }: {
   placeOnReportService: PlaceOnReportService
   locationService: LocationService
   decisionTreeService: DecisionTreeService
+  reportedAdjudicationsService: ReportedAdjudicationsService
 }): Router {
   const router = express.Router()
 
-  const checkYourAnswersRoute = new CheckYourAnswersRoutes(placeOnReportService, locationService, decisionTreeService)
+  const checkYourAnswersRoute = new CheckYourAnswersRoutes(
+    placeOnReportService,
+    locationService,
+    decisionTreeService,
+    reportedAdjudicationsService
+  )
   const checkYourAnswersBeforeChangeReporter = new CheckYourAnswersBeforeChangeReporterRoutes(
     placeOnReportService,
     locationService,
-    decisionTreeService
+    decisionTreeService,
+    reportedAdjudicationsService
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))

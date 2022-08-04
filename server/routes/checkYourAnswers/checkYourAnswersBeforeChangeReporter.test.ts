@@ -4,20 +4,30 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/decisionTreeService.ts')
+jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
+  app = appWithAllRoutes(
+    { production: false },
+    { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService }
+  )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
@@ -108,6 +118,24 @@ beforeEach(() => {
     ],
   })
 
+  reportedAdjudicationsService.getReviewDetails.mockResolvedValue({
+    reviewStatus: 'Returned',
+    reviewSummary: [
+      {
+        label: 'Last reviewed by',
+        value: 'T. User',
+      },
+      {
+        label: 'Reason for return',
+        value: 'offence',
+      },
+      {
+        label: 'Details',
+        value: 'wrong',
+      },
+    ],
+  })
+
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 })
 
@@ -122,6 +150,9 @@ describe('GET /check-your-answers', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Check your answers')
+        expect(response.text).toContain('Status: Returned')
+        expect(response.text).toContain('Last reviewed by')
+        expect(response.text).toContain('Reason for return')
         expect(response.text).toContain('Confirm changes')
         expect(response.text).not.toContain(
           'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'

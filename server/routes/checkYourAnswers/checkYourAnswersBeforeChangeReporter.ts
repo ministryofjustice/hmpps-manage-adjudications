@@ -3,6 +3,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import CheckYourAnswersPage, { PageRequestType } from './checkYourAnswersPage'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default class CheckYourAnswersReporterRoutes {
   page: CheckYourAnswersPage
@@ -10,13 +11,15 @@ export default class CheckYourAnswersReporterRoutes {
   constructor(
     placeOnReportService: PlaceOnReportService,
     locationService: LocationService,
-    decisionTreeService: DecisionTreeService
+    decisionTreeService: DecisionTreeService,
+    reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new CheckYourAnswersPage(
       PageRequestType.EDIT_REPORTER,
       placeOnReportService,
       locationService,
-      decisionTreeService
+      decisionTreeService,
+      reportedAdjudicationsService
     )
   }
 

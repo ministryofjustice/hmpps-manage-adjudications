@@ -93,7 +93,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
           bookingId: 2,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-01-01T11:45:00',
@@ -108,7 +108,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 1,
           prisonerNumber: 'G6174VU',
           bookingId: 1,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-01-01T11:30:00',
@@ -163,7 +163,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
           bookingId: 2,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           reportingOfficer: '',
           incidentDetails: {
             locationId: 3,
@@ -182,7 +182,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-01-01T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
-          createdByUserId: 'NCLAMP_GEN',
+          createdByUserId: 'TEST_GEN',
           reportingOfficer: '',
           prisonerNumber: 'G6174VU',
           bookingId: 1,
@@ -217,7 +217,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            createdByUserId: 'NCLAMP_GEN',
+            createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -299,7 +299,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            createdByUserId: 'NCLAMP_GEN',
+            createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
               dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -531,6 +531,112 @@ describe('reportedAdjudicationsService', () => {
           },
         ],
         statement: 'Statement for a test',
+      }
+      expect(result).toEqual(expectedResult)
+    })
+  })
+
+  describe('getReviewDetails', () => {
+    beforeEach(() => {
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
+        name: 'Test User',
+        username: 'TEST_GEN',
+        activeCaseLoadId: 'MDI',
+        token: '',
+        authSource: '',
+      })
+    })
+    it('returns the correct information for a returned adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.RETURNED,
+          reviewedByUserId: 'TEST_GEN',
+          statusReason: 'offence',
+          statusDetails: 'wrong',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Returned',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+          {
+            label: 'Reason for return',
+            value: 'Incorrect offence chosen',
+          },
+          {
+            label: 'Details',
+            value: 'wrong',
+          },
+        ],
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for an adjudication awaiting review', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          reviewedByUserId: 'TEST_GEN',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Awaiting Review',
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for an accepted adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.ACCEPTED,
+          reviewedByUserId: 'TEST_GEN',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Accepted',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+        ],
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for a rejected adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: {
+          adjudicationNumber: 123,
+          status: ReportedAdjudicationStatus.REJECTED,
+          reviewedByUserId: 'TEST_GEN',
+          statusReason: 'alternative',
+          statusDetails: 'Not worthy of adjudication, give them a fine instead.',
+        },
+      })
+      const result = await service.getReviewDetails(123, user)
+      const expectedResult = {
+        reviewStatus: 'Rejected',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+          {
+            label: 'Reason for rejection',
+            value: 'Should be dealt with in another way',
+          },
+          {
+            label: 'Details',
+            value: 'Not worthy of adjudication, give them a fine instead.',
+          },
+        ],
       }
       expect(result).toEqual(expectedResult)
     })
