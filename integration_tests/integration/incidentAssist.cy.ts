@@ -82,8 +82,8 @@ context('Incident assist', () => {
     incidentAssistPage.radioButtons().find('input[value="internal"]').check()
     incidentAssistPage.conditionalInputInternalAssist().type('T3356FU')
     incidentAssistPage.searchButton().click()
-    // cy.get('[data-qa="select-prisoner-link"]').click()
-    // incidentAssistPage.submitButton().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    incidentAssistPage.submitButton().click()
     // cy.location().should(loc => {
     //  expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
     // })

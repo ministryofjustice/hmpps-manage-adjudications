@@ -1,18 +1,20 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-// import validateForm from './incidentRoleValidation'
-import { FormError } from '../../@types/template'
+import validateForm from './validation'
 import { User } from '../../data/hmppsAuthClient'
-import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
+import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validatePrisonerSearch from '../util/incidentSearchValidation'
-import { popDataFromSession } from './associatedPrisonerCache'
 import {
   AssociatedPrisonerLocation,
   getDraftIdFromString,
   extractAssociatedDetails,
   getPrisonerLocation,
   RoleAssociatedPrisoner,
+  redirectToSearchForPersonPage,
+  redirectToDeletePersonPage,
+  renderData,
+  DisplayData,
 } from './associatedPrisonerUtils'
 
 export enum PageRequestType {
@@ -26,13 +28,6 @@ class PageOptions {
   isPreviouslySubmitted(): boolean {
     return this.pageType === PageRequestType.EDIT_SUBMITTED
   }
-}
-
-type DisplayData = {
-  prisoner: PrisonerResultSummary
-  associatedPrisonersName?: string
-  associatedPrisonerNumber?: string
-  location?: AssociatedPrisonerLocation
 }
 
 export default class IncidentAssistPage {
@@ -61,11 +56,12 @@ export default class IncidentAssistPage {
     }
     const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
 
-    renderData(res, draftId, pageData, null)
+    renderData(res, `pages/incidentAssist`, draftId, pageData, null)
+
+    delete req.session.redirectUrl
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    console.log(req.body)
     if (req.body.deleteUser) {
       return this.delete(req, res)
     }
@@ -76,7 +72,36 @@ export default class IncidentAssistPage {
   }
 
   save = async (req: Request, res: Response) => {
-    console.log('todo')
+    console.log(req.body)
+    const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+
+    const validationError = validateForm({
+      location: AssociatedPrisonerLocation.UNKNOWN,
+      associatedPrisonersName: '',
+      associatedPrisonersNumber: '',
+    })
+    if (validationError) {
+      //   const pageData = await this.getPageDataOnPost(postValues, prisonerNumber, user)
+      //   return renderData(res, `pages/incidentAssist`, draftId, pageData, validationError)
+    }
+    return renderData(res, `pages/incidentAssist`, draftId, null, validationError)
+
+    /*
+    try {
+      const incidentRoleChanged =
+        postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
+      const removeExistingOffences = incidentRoleChanged
+      await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
+
+      const offencesExist = !removeExistingOffences && offenceDetails?.length > 0
+      if (!!req.session.forceOffenceSelection || !offencesExist) {
+        return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
+      }
+      return redirectToOffenceDetails(res, postValues.draftId)
+    } catch (postError) {
+      this.setUpRedirectForEditError(res, postError, postValues.draftId)
+      throw postError
+    } */
   }
 
   delete = async (req: Request, res: Response): Promise<void> => {
@@ -87,7 +112,14 @@ export default class IncidentAssistPage {
     const user = res.locals
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
 
-    req.session.redirectUrl = adjudicationUrls.incidentAssist.urls.start(draftId)
+    if (this.pageOptions.isPreviouslySubmitted()) {
+      const originalPageReferrerUrl = req.query.referrer as string
+      req.session.redirectUrl = `${adjudicationUrls.incidentRole.urls.submittedEdit(draftId)}${
+        originalPageReferrerUrl ? `?referrer=${originalPageReferrerUrl}` : ''
+      }`
+    } else {
+      req.session.redirectUrl = adjudicationUrls.incidentAssist.urls.start(draftId)
+    }
 
     const searchValidationError = validatePrisonerSearch({
       searchTerm: req.body.prisonerSearchNameInput,
@@ -101,7 +133,7 @@ export default class IncidentAssistPage {
         user as User
       )
 
-      return renderData(res, draftId, pageData, searchValidationError)
+      return renderData(res, `pages/incidentAssist`, draftId, pageData, [searchValidationError])
     }
     return redirectToSearchForPersonPage(res, req.body.prisonerSearchNameInput)
   }
@@ -146,39 +178,4 @@ export default class IncidentAssistPage {
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
   }
-}
-
-const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
-  return res.redirect(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
-}
-
-const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {
-  return res.redirect(`${adjudicationUrls.deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
-}
-
-const renderData = (res: Response, draftId: number, pageData: DisplayData, error: FormError) => {
-  return res.render(`pages/incidentAssist`, {
-    errors: error ? [error] : [],
-    exitButtonHref: adjudicationUrls.taskList.urls.start(draftId),
-    decisionData: {
-      selectedAnswerId: pageData.location,
-      selectedAnswerData: {
-        otherPersonNameInput:
-          pageData.location === AssociatedPrisonerLocation.EXTERNAL ? pageData.associatedPrisonersName : null,
-        prisonerNumberInput:
-          pageData.location === AssociatedPrisonerLocation.EXTERNAL ? pageData.associatedPrisonerNumber : null,
-        prisonerId:
-          pageData.location === AssociatedPrisonerLocation.INTERNAL ? pageData.associatedPrisonerNumber : null,
-        // TODO this should be from cache i think.
-        prisonerSearchNameInput:
-          pageData.location === AssociatedPrisonerLocation.INTERNAL ? pageData.associatedPrisonersName : null,
-        prisonerName:
-          pageData.location === AssociatedPrisonerLocation.INTERNAL ? pageData.associatedPrisonersName : null,
-      },
-    },
-    viewData: {
-      prisonerName: pageData.associatedPrisonersName,
-    },
-    prisoner: pageData.prisoner,
-  })
 }
