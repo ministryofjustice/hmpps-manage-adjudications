@@ -1,6 +1,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro prisonerOutsideEstablishmentOffenceCodeDecisionInput(answerId, decisionForm, selectedAnswerViewData, errors) %}
+{% macro prisonerOutsideEstablishmentOffenceCodeDecisionInput(answerId, decisionForm, errors) %}
     {% set selectedAnswerId = decisionForm.selectedAnswerId %}
     {% set anotherNameInput = decisionForm.selectedAnswerData.otherPersonNameInput %}
     {% set prisonerNumberInput = decisionForm.selectedAnswerData.prisonerNumberInput %}

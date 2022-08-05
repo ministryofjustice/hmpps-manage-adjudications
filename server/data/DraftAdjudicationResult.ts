@@ -7,6 +7,7 @@ export type IncidentDetails = {
 export type IncidentRole = {
   roleCode?: string
   associatedPrisonersNumber?: string
+  associatedPrisonersName?: string
   offenceRule?: OffenceRule
 }
 

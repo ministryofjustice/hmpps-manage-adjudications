@@ -18,6 +18,7 @@ declare module 'express-session' {
     originalRadioSelection: string
     currentRadioSelection: string
     currentAssociatedPrisonersNumber: string
+    currentAssociatedPrisonersName: string
     originalReporterUsername: string
     sessionDecisionForm: DecisionForm
     offenceData: { [key: string]; offenceData?: OffenceData }
