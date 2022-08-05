@@ -13,8 +13,6 @@ import {
   extractAssociatedDetails,
   getPrisonerLocation,
   RoleAssociatedPrisoner,
-  updateDataOnSearchReturn,
-  updateDataOnDeleteReturn,
 } from './associatedPrisonerUtils'
 
 export enum PageRequestType {
@@ -51,11 +49,15 @@ export default class IncidentAssistPage {
     const fromSearch = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     let roleAssociatedPrisoner = await this.readFromApi(draftId, user as User)
 
-    const sessionData = popDataFromSession(req, roleAssociatedPrisoner.prisonerNumber) // why do we even have this?
     if (fromSearch) {
-      roleAssociatedPrisoner = updateDataOnSearchReturn(fromSearch)
+      roleAssociatedPrisoner = {
+        prisonerNumber: roleAssociatedPrisoner.prisonerNumber,
+        currentAssociatedPrisonerNumber: fromSearch,
+      }
     } else if (fromDelete) {
-      roleAssociatedPrisoner = updateDataOnDeleteReturn()
+      roleAssociatedPrisoner = {
+        prisonerNumber: roleAssociatedPrisoner.prisonerNumber,
+      }
     }
     const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
 
@@ -84,6 +86,8 @@ export default class IncidentAssistPage {
   search = async (req: Request, res: Response): Promise<void> => {
     const user = res.locals
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+
+    req.session.redirectUrl = adjudicationUrls.incidentAssist.urls.start(draftId)
 
     const searchValidationError = validatePrisonerSearch({
       searchTerm: req.body.prisonerSearchNameInput,

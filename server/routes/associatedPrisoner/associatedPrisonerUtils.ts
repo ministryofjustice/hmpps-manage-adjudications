@@ -39,20 +39,3 @@ export const extractAssociatedDetails = (draftAdjudicationResult: DraftAdjudicat
     currentAssociatedPrisonerName: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersName,
   }
 }
-
-export const updateDataOnSearchReturn = (prisonerNumber: string): RoleAssociatedPrisoner => {
-  return {
-    prisonerNumber,
-    currentAssociatedPrisonerName: '',
-    currentAssociatedPrisonerNumber: prisonerNumber,
-  }
-}
-
-export const updateDataOnDeleteReturn = (): RoleAssociatedPrisoner => {
-  //  if (!requestData.deleteWanted || requestData.deleteWanted !== 'true') {
-  //    return stashedData
-  // }
-  return {
-    prisonerNumber: null,
-  }
-}
