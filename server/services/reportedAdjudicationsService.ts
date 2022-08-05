@@ -37,8 +37,7 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
   }
 
-  async getReviewDetails(adjudicationNumber: number, user: User) {
-    const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+  async getReviewDetails(adjudicationData: ReportedAdjudicationResult, user: User) {
     const { reportedAdjudication } = adjudicationData
 
     if (reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW)

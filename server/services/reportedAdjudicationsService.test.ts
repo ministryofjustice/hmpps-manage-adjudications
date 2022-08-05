@@ -546,17 +546,55 @@ describe('reportedAdjudicationsService', () => {
         authSource: '',
       })
     })
-    it('returns the correct information for a returned adjudication', async () => {
-      getReportedAdjudication.mockResolvedValue({
+    const adjudicationData = (
+      status: ReportedAdjudicationStatus,
+      reviewedByUserId: string = null,
+      statusReason: string = null,
+      statusDetails: string = null
+    ) => {
+      return {
         reportedAdjudication: {
           adjudicationNumber: 123,
-          status: ReportedAdjudicationStatus.RETURNED,
-          reviewedByUserId: 'TEST_GEN',
-          statusReason: 'offence',
-          statusDetails: 'wrong',
+          status,
+          reviewedByUserId,
+          statusReason,
+          statusDetails,
+          prisonerNumber: '',
+          bookingId: 1,
+          createdDateTime: '',
+          createdByUserId: '',
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            handoverDeadline: '2021-11-05T13:10:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          incidentRole: {
+            associatedPrisonersNumber: '',
+            roleCode: '',
+          },
+          offenceDetails: [
+            {
+              offenceCode: 16001,
+              offenceRule: {
+                paragraphNumber: '16',
+                paragraphDescription:
+                  'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
+              },
+            },
+          ],
+          isYouthOffender: false,
         },
-      })
-      const result = await service.getReviewDetails(123, user)
+      }
+    }
+    it('returns the correct information for a returned adjudication', async () => {
+      const result = await service.getReviewDetails(
+        adjudicationData(ReportedAdjudicationStatus.RETURNED, 'TEST_GEN', 'offence', 'wrong'),
+        user
+      )
       const expectedResult = {
         reviewStatus: 'Returned',
         reviewSummary: [
@@ -577,28 +615,17 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the correct information for an adjudication awaiting review', async () => {
-      getReportedAdjudication.mockResolvedValue({
-        reportedAdjudication: {
-          adjudicationNumber: 123,
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          reviewedByUserId: 'TEST_GEN',
-        },
-      })
-      const result = await service.getReviewDetails(123, user)
+      const result = await service.getReviewDetails(adjudicationData(ReportedAdjudicationStatus.AWAITING_REVIEW), user)
       const expectedResult = {
         reviewStatus: 'Awaiting Review',
       }
       expect(result).toEqual(expectedResult)
     })
     it('returns the correct information for an accepted adjudication', async () => {
-      getReportedAdjudication.mockResolvedValue({
-        reportedAdjudication: {
-          adjudicationNumber: 123,
-          status: ReportedAdjudicationStatus.ACCEPTED,
-          reviewedByUserId: 'TEST_GEN',
-        },
-      })
-      const result = await service.getReviewDetails(123, user)
+      const result = await service.getReviewDetails(
+        adjudicationData(ReportedAdjudicationStatus.ACCEPTED, 'TEST_GEN'),
+        user
+      )
       const expectedResult = {
         reviewStatus: 'Accepted',
         reviewSummary: [
@@ -611,16 +638,15 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the correct information for a rejected adjudication', async () => {
-      getReportedAdjudication.mockResolvedValue({
-        reportedAdjudication: {
-          adjudicationNumber: 123,
-          status: ReportedAdjudicationStatus.REJECTED,
-          reviewedByUserId: 'TEST_GEN',
-          statusReason: 'alternative',
-          statusDetails: 'Not worthy of adjudication, give them a fine instead.',
-        },
-      })
-      const result = await service.getReviewDetails(123, user)
+      const result = await service.getReviewDetails(
+        adjudicationData(
+          ReportedAdjudicationStatus.REJECTED,
+          'TEST_GEN',
+          'alternative',
+          'Not worthy of adjudication, give them a fine instead.'
+        ),
+        user
+      )
       const expectedResult = {
         reviewStatus: 'Rejected',
         reviewSummary: [
