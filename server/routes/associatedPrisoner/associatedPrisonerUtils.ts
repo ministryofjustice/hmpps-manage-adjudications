@@ -1,5 +1,6 @@
 import { Response } from 'express'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
+import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
@@ -14,6 +15,7 @@ export type RoleAssociatedPrisoner = {
   prisonerNumber: string
   currentAssociatedPrisonerNumber?: string
   currentAssociatedPrisonerName?: string
+  incidentRole?: string
 }
 
 export type DisplayData = {
@@ -45,6 +47,7 @@ export const getPrisonerLocation = (roleAssociatedPrisoner: RoleAssociatedPrison
 
 export const extractAssociatedDetails = (draftAdjudicationResult: DraftAdjudicationResult): RoleAssociatedPrisoner => {
   return {
+    incidentRole: draftAdjudicationResult.draftAdjudication.incidentRole?.roleCode,
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
     currentAssociatedPrisonerNumber: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersNumber,
     currentAssociatedPrisonerName: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersName,
@@ -57,6 +60,15 @@ export const redirectToSearchForPersonPage = (res: Response, searchTerm: string)
 
 export const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {
   return res.redirect(`${adjudicationUrls.deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
+}
+
+export const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: string) => {
+  return res.redirect(
+    adjudicationUrls.offenceCodeSelection.urls.start(
+      draftId,
+      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode])
+    )
+  )
 }
 
 export const renderData = (res: Response, page: string, draftId: number, pageData: DisplayData, error: FormError[]) => {
@@ -83,4 +95,28 @@ export const renderData = (res: Response, page: string, draftId: number, pageDat
     },
     prisoner: pageData.prisoner,
   })
+}
+
+const radioSelectionCodeFromIncidentRole = (incidentRole: IncidentRole): string => {
+  if (!incidentRole) {
+    return null
+  }
+  let radioSelectionCode = null
+  switch (incidentRole) {
+    case IncidentRole.COMMITTED:
+      radioSelectionCode = 'committed'
+      break
+    case IncidentRole.ATTEMPTED:
+      radioSelectionCode = 'attempted'
+      break
+    case IncidentRole.INCITED:
+      radioSelectionCode = 'incited'
+      break
+    case IncidentRole.ASSISTED:
+    // Fall through
+    default:
+      radioSelectionCode = 'assisted'
+      break
+  }
+  return radioSelectionCode
 }

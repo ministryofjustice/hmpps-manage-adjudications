@@ -5,6 +5,7 @@ import { User } from '../../data/hmppsAuthClient'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validatePrisonerSearch from '../util/incidentSearchValidation'
+import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
 import {
   AssociatedPrisonerLocation,
   getDraftIdFromString,
@@ -15,6 +16,7 @@ import {
   redirectToDeletePersonPage,
   renderData,
   DisplayData,
+  redirectToOffenceSelection,
 } from './associatedPrisonerUtils'
 
 export enum PageRequestType {
@@ -74,34 +76,40 @@ export default class IncidentAssistPage {
   save = async (req: Request, res: Response) => {
     console.log(req.body)
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const { user } = res.locals
+    const roleAssociatedPrisoner = await this.readFromApi(draftId, user as User)
+
+    const associatedPrisonersName = req.body.prisonerOutsideEstablishmentNameInput
+    const associatedPrisonersNumber = req.body.prisonerId
+      ? req.body.prisonerId
+      : req.body.prisonerOutsideEstablishmentNumberInput
 
     const validationError = validateForm({
       location: AssociatedPrisonerLocation.UNKNOWN,
-      associatedPrisonersName: '',
-      associatedPrisonersNumber: '',
+      associatedPrisonersName,
+      associatedPrisonersNumber,
     })
     if (validationError) {
-      //   const pageData = await this.getPageDataOnPost(postValues, prisonerNumber, user)
-      //   return renderData(res, `pages/incidentAssist`, draftId, pageData, validationError)
+      const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
+      return renderData(res, `pages/incidentAssist`, draftId, pageData, validationError)
     }
-    return renderData(res, `pages/incidentAssist`, draftId, null, validationError)
 
-    /*
     try {
-      const incidentRoleChanged =
-        postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
-      const removeExistingOffences = incidentRoleChanged
-      await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
+      await this.saveToApiUpdate(
+        draftId,
+        {
+          prisonerNumber: associatedPrisonersNumber,
+          currentAssociatedPrisonerName: associatedPrisonersName,
+          currentAssociatedPrisonerNumber: associatedPrisonersNumber,
+        },
+        user as User
+      )
 
-      const offencesExist = !removeExistingOffences && offenceDetails?.length > 0
-      if (!!req.session.forceOffenceSelection || !offencesExist) {
-        return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
-      }
-      return redirectToOffenceDetails(res, postValues.draftId)
+      return redirectToOffenceSelection(res, draftId, roleAssociatedPrisoner.incidentRole)
     } catch (postError) {
-      this.setUpRedirectForEditError(res, postError, postValues.draftId)
+      this.setUpRedirectForEditError(res, draftId)
       throw postError
-    } */
+    }
   }
 
   delete = async (req: Request, res: Response): Promise<void> => {
@@ -142,6 +150,21 @@ export default class IncidentAssistPage {
     return extractAssociatedDetails(await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user))
   }
 
+  saveToApiUpdate = async (
+    draftId: number,
+    roleAssociatedPrisoner: RoleAssociatedPrisoner,
+    currentUser: User
+  ): Promise<DraftAdjudicationResult> => {
+    return this.placeOnReportService.saveAssociatedPrisoner(
+      draftId,
+      {
+        associatedPrisonersNumber: roleAssociatedPrisoner.currentAssociatedPrisonerNumber,
+        associatedPrisonersName: roleAssociatedPrisoner.currentAssociatedPrisonerName,
+      },
+      currentUser
+    )
+  }
+
   getDisplayData = async (roleAssociatedPrisoner: RoleAssociatedPrisoner, currentUser: User): Promise<DisplayData> => {
     const prisoner = await this.placeOnReportService.getPrisonerDetails(
       roleAssociatedPrisoner.prisonerNumber,
@@ -177,5 +200,11 @@ export default class IncidentAssistPage {
     if (!associatedPrisonersNumber) return null
     const associatedPrisoner = await this.placeOnReportService.getPrisonerDetails(associatedPrisonersNumber, user)
     return associatedPrisoner.displayName
+  }
+
+  setUpRedirectForEditError = (res: Response, draftId: number) => {
+    res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
+      ? adjudicationUrls.incidentAssist.urls.submittedEdit(draftId)
+      : adjudicationUrls.incidentAssist.urls.start(draftId)
   }
 }

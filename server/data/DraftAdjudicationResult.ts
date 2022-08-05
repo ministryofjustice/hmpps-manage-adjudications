@@ -94,4 +94,9 @@ export type IncidentStatementStatus = {
   text: string
 }
 
+export type AssociatedPrisoner = {
+  associatedPrisonersNumber: string
+  associatedPrisonersName?: string
+}
+
 export type OffenceDetailsStatus = IncidentStatementStatus
