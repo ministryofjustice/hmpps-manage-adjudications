@@ -79,6 +79,8 @@ export default class AssociatePrisonerPage {
     const { roleCode } = req.params
     const { user } = res.locals
 
+    const { prisonerNumber } = await this.readFromApi(draftId, user as User)
+
     const associatedPrisonersName =
       req.body.prisonerOutsideEstablishmentNameInput === '' ? null : req.body.prisonerOutsideEstablishmentNameInput
     const associatedPrisonersNumber =
@@ -90,7 +92,7 @@ export default class AssociatePrisonerPage {
         : req.body.prisonerOutsideEstablishmentNumberInput
 
     const roleAssociatedPrisoner = {
-      prisonerNumber: associatedPrisonersNumber,
+      prisonerNumber,
       currentAssociatedPrisonerName: associatedPrisonersName,
       currentAssociatedPrisonerNumber: associatedPrisonersNumber,
     }
@@ -106,15 +108,7 @@ export default class AssociatePrisonerPage {
     }
 
     try {
-      await this.saveToApiUpdate(
-        draftId,
-        {
-          prisonerNumber: associatedPrisonersNumber,
-          currentAssociatedPrisonerName: associatedPrisonersName,
-          currentAssociatedPrisonerNumber: associatedPrisonersNumber,
-        },
-        user as User
-      )
+      await this.saveToApiUpdate(draftId, roleAssociatedPrisoner, user as User)
 
       return redirectToOffenceSelection(res, draftId, roleCode)
     } catch (postError) {
