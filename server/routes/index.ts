@@ -21,6 +21,7 @@ import selectAssociatedStaffRoutes from './selectAssociatedStaff'
 import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
 import ageOfPrisonerRoutes from './ageOfPrisoner'
+import detailsOfDamagesRoutes from './damages'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -38,6 +39,7 @@ export default function routes(
     offenceSessionService,
     allOffencesSessionService,
     decisionTreeService,
+    damagesSessionService,
   }: Services
 ): Router {
   router.use(
@@ -99,6 +101,13 @@ export default function routes(
     })
   )
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
+  router.use(
+    adjudicationUrls.detailsOfDamages.root,
+    detailsOfDamagesRoutes({
+      placeOnReportService,
+      damagesSessionService,
+    })
+  )
   router.use('/', homepageRoutes({ userService }))
   if (config.yoiNewPagesFeatureFlag) {
     router.use(

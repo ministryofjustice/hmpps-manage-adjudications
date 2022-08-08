@@ -364,4 +364,9 @@ export default class PlaceOnReportService {
     const client = new ManageAdjudicationsClient(user.token)
     return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
   }
+
+  async saveDamageDetails(adjudicationNumber: number, damageDetails: any, user: User) {
+    const client = new ManageAdjudicationsClient(user.token)
+    return client.saveDamageDetails(adjudicationNumber, damageDetails)
+  }
 }
