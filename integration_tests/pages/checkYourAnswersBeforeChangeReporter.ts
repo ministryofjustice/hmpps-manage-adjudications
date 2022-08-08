@@ -5,6 +5,10 @@ export default class CheckYourAnswersPage extends Page {
     super('Check your answers')
   }
 
+  reviewStatus = (): PageElement => cy.get('[data-qa="review-status"]')
+
+  reviewSummary = (): PageElement => cy.get('[data-qa="review-summary"]')
+
   incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
 
   incidentStatement = (): PageElement => cy.get('[data-qa="adjudicationsSummary-incidentStatement"]')

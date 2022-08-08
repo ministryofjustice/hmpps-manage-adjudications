@@ -8,24 +8,28 @@ import UserService from '../../services/userService'
 import OffenceSessionService from '../../services/offenceSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 export default function offenceCodeDecisionsRoutes({
   placeOnReportService,
   userService,
   offenceSessionService,
   decisionTreeService,
+  prisonerSearchService,
 }: {
   placeOnReportService: PlaceOnReportService
   userService: UserService
   offenceSessionService: OffenceSessionService
   decisionTreeService: DecisionTreeService
+  prisonerSearchService: PrisonerSearchService
 }): Router {
   const router = express.Router()
   const offenceCodeDecisions = new OffenceCodeDecisionsRoutes(
     placeOnReportService,
     userService,
     offenceSessionService,
-    decisionTreeService
+    decisionTreeService,
+    prisonerSearchService
   )
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

@@ -5,6 +5,10 @@ export default class PrisonerReportPage extends Page {
     super('report')
   }
 
+  reviewSummaryTitle = (): PageElement => cy.get('[data-qa="review-status"]')
+
+  reviewSummary = (): PageElement => cy.get('[data-qa="review-summary"]')
+
   reportNumber = (): PageElement => cy.get('[data-qa="reportNumber"]')
 
   incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')

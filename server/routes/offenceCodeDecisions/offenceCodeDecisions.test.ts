@@ -11,10 +11,12 @@ import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService')
+jest.mock('../../services/prisonerSearchService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
@@ -23,6 +25,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
+const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
 const aPrisonerAnswerText = 'Another prisoner answer'
 const aPrisonerAnswer = answer(aPrisonerAnswerText)
@@ -117,10 +120,13 @@ beforeEach(() => {
       dateOfBirth: undefined,
     },
   })
+
+  prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(true)
+
   const offenceSessionService = new OffenceSessionService()
   app = appWithAllRoutes(
     { production: false },
-    { placeOnReportService, decisionTreeService, offenceSessionService, userService }
+    { placeOnReportService, decisionTreeService, offenceSessionService, userService, prisonerSearchService }
   )
 })
 
@@ -213,6 +219,20 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
       })
       .expect(res => {
         expect(res.text).toContain('The prison number must not exceed 7 characters')
+      })
+  })
+
+  it(`should validate a ${Type.PRISONER_OUTSIDE_ESTABLISHMENT} answer when the number does not correlate with a known prisoner`, () => {
+    prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(false)
+    return request(app)
+      .post(`${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1')}`)
+      .send({
+        selectedAnswerId: aPrisonerOutsideEstablishmentAnswer.id(),
+        prisonerOutsideEstablishmentNameInput: 'A Name',
+        prisonerOutsideEstablishmentNumberInput: 'A1234AA',
+      })
+      .expect(res => {
+        expect(res.text).toContain('The prison number you have entered does not match a prisoner')
       })
   })
 

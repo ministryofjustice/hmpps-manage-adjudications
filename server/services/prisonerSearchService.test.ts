@@ -2,15 +2,17 @@ import PrisonerSearchService, { PrisonerSearchSummary } from './prisonerSearchSe
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import { makeSearchApiNotFoundError } from '../test/helpers'
 
 const search = jest.fn()
+const searchPrisonerDetails = jest.fn()
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonerSearchClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { search }
+    return { search, getPrisonerDetails: searchPrisonerDetails }
   })
 })
 
@@ -134,6 +136,42 @@ describe('prisonerSearchService', () => {
     it('search by prisoner identifier with extra spaces', async () => {
       await service.search({ searchTerm: '    A1234AA ', prisonIds }, user)
       expect(search).toBeCalledWith({ prisonerIdentifier: 'A1234AA', prisonIds })
+    })
+  })
+
+  describe('isValidPrisonerNumber', () => {
+    it('returns true if prisoner returned', async () => {
+      searchPrisonerDetails.mockResolvedValue({
+        prisonerNumber: 'A1234AA',
+      })
+
+      const result = await service.isPrisonerNumberValid('A1234AA', user)
+
+      expect(result).toEqual(true)
+      expect(PrisonerSearchClient).toBeCalledWith(token)
+      expect(searchPrisonerDetails).toBeCalledWith('A1234AA')
+    })
+
+    it('returns false if nothing returned', async () => {
+      searchPrisonerDetails.mockResolvedValue({})
+
+      const result = await service.isPrisonerNumberValid('A1234AA', user)
+
+      expect(result).toEqual(false)
+    })
+
+    it('returns false if 404', async () => {
+      searchPrisonerDetails.mockRejectedValue(makeSearchApiNotFoundError())
+
+      const result = await service.isPrisonerNumberValid('A1234AA', user)
+
+      expect(result).toEqual(false)
+    })
+
+    it('throws error if not 404 error', async () => {
+      searchPrisonerDetails.mockRejectedValue(new Error('Found but still error'))
+
+      await expect(service.isPrisonerNumberValid('A1234AA', user)).rejects.toEqual(new Error('Found but still error'))
     })
   })
 

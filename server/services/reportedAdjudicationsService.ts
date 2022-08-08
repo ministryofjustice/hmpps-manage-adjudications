@@ -9,6 +9,7 @@ import {
   ReportedAdjudicationFilter,
   ReportedAdjudicationResult,
   reportedAdjudicationStatusDisplayName,
+  ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedOfficerName, getTime, formatTimestampToDate } from '../utils/utils'
@@ -34,6 +35,71 @@ export default class ReportedAdjudicationsService {
 
   async getReportedAdjudicationDetails(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+  }
+
+  async getReviewDetails(adjudicationData: ReportedAdjudicationResult, user: User) {
+    const { reportedAdjudication } = adjudicationData
+
+    if (reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW)
+      return { reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status) }
+
+    const reviewingOfficer =
+      reportedAdjudication.reviewedByUserId &&
+      (await this.hmppsAuthClient.getUserFromUsername(reportedAdjudication.reviewedByUserId, user.token))
+
+    const getReasonTitle = (status: ReportedAdjudicationStatus) => {
+      switch (status) {
+        case ReportedAdjudicationStatus.RETURNED:
+          return 'Reason for return'
+        case ReportedAdjudicationStatus.REJECTED:
+          return 'Reason for rejection'
+        default:
+          return null
+      }
+    }
+
+    const getReasonValue = (reason: string) => {
+      switch (reason) {
+        // rejected
+        case 'unsuitable':
+          return 'Not suitable for an adjudication'
+        case 'alternative':
+          return 'Should be dealt with in another way'
+        case 'expired':
+          return 'More than 48 hours have elapsed since the incident'
+        // returned
+        case 'details':
+          return 'Incorrect incident details'
+        case 'statement':
+          return 'Incorrect or insufficient information in statement'
+        case 'offence':
+          return 'Incorrect offence chosen'
+        default:
+          return null
+      }
+    }
+
+    const reviewSummary = [
+      {
+        label: 'Last reviewed by',
+        value: getFormattedOfficerName(reviewingOfficer?.name),
+      },
+    ]
+    if (reportedAdjudication.status === 'RETURNED' || reportedAdjudication.status === 'REJECTED')
+      reviewSummary.push(
+        {
+          label: getReasonTitle(reportedAdjudication.status),
+          value: getReasonValue(reportedAdjudication.statusReason),
+        },
+        {
+          label: 'Details',
+          value: reportedAdjudication.statusDetails,
+        }
+      )
+    return {
+      reviewSummary,
+      reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
+    }
   }
 
   async getConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {

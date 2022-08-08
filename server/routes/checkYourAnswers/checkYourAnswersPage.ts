@@ -4,8 +4,10 @@ import { FormError } from '../../@types/template'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { CheckYourAnswers } from '../../data/DraftAdjudicationResult'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { CheckYourAnswers, DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { User } from '../../data/hmppsAuthClient'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -71,9 +73,18 @@ export default class CheckYourAnswersPage {
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
+  }
+
+  getReviewData = async (draftAdjudication: DraftAdjudication, user: User) => {
+    const reportedAdjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+      draftAdjudication.adjudicationNumber,
+      user
+    )
+    return this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -93,6 +104,10 @@ export default class CheckYourAnswersPage {
       incidentLocations,
       user
     )
+
+    // The reported adjudication number won't exist in the creation journey
+    // Whilst  we're passing in a draftAdjudication here, it's a duplication of a reported adjudication, so it will have the reported adjudication number, which is what we need
+    const reviewData = this.pageOptions.isEditByReporter() ? await this.getReviewData(draftAdjudication, user) : null
 
     const [offences, checkAnswersVariations] = await Promise.all([
       this.decisionTreeService.getAdjudicationOffences(
@@ -117,6 +132,7 @@ export default class CheckYourAnswersPage {
       submitButtonText: this.pageOptions.isCreation() ? 'Accept and place on report' : 'Confirm changes',
       secondaryButtonText: this.pageOptions.isCreation() ? 'Exit' : 'Cancel',
       ...checkAnswersVariations,
+      reviewData,
     })
   }
 

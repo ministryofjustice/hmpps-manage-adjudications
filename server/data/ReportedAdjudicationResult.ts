@@ -14,6 +14,9 @@ export type ReportedAdjudication = {
   offenceDetails: OffenceDetails[]
   status: ReportedAdjudicationStatus
   isYouthOffender: boolean
+  reviewedByUserId?: string
+  statusReason?: string
+  statusDetails?: string
 }
 
 export type ReportedAdjudicationResult = {

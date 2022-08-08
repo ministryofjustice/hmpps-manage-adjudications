@@ -72,7 +72,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     }
   }
 
-  override validateForm(form: DecisionForm, req: Request): FormError[] {
+  override async validateForm(form: DecisionForm, req: Request): Promise<FormError[]> {
     const officerData = form.selectedAnswerData as OfficerData
     const searching = !!req.body.searchUser
     if (searching) {

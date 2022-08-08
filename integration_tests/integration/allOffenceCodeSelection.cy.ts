@@ -1,6 +1,8 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
+const prisonerOutsideEstablishmentNumber = 'G7123CI'
+
 context('Incident details', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -84,6 +86,10 @@ context('Incident details', () => {
         email: 'cstanley@justice.gov.uk',
       },
     })
+    // Prisoner-outside-establishment number validation
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: prisonerOutsideEstablishmentNumber,
+    })
   })
   it('line 3', () => {
     const page = getToAssaultPage()
@@ -131,7 +137,7 @@ context('Incident details', () => {
     const page = getToAssaultPage()
     page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
-    page.victimPersonOutsideEstablishmentSearchNumberInput().type('A1234AA')
+    page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
     page.continue().click()
     page.checkOffenceCode(1021, 'Yes')
   })
@@ -139,7 +145,7 @@ context('Incident details', () => {
     const page = getToAssaultPage()
     page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
-    page.victimPersonOutsideEstablishmentSearchNumberInput().type('A1234AA')
+    page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
     page.continue().click()
     page.checkOffenceCode(1022, 'No')
   })

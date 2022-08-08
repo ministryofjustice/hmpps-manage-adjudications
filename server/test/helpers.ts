@@ -8,4 +8,6 @@ export const makeError = (key: string, value: unknown): Error =>
 
 export const makeNotFoundError = (): Error => makeError('response', { status: 404 })
 
+export const makeSearchApiNotFoundError = (): Error => makeError('status', 404)
+
 export default { makeError, makeNotFoundError }

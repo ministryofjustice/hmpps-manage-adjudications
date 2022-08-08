@@ -21,8 +21,10 @@ export default class DecisionHelper {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  validateForm(form: DecisionForm, req: Request): FormError[] {
-    return []
+  validateForm(form: DecisionForm, req: Request, user: User): Promise<FormError[]> {
+    return new Promise(resolve => {
+      resolve([])
+    })
   }
 
   formFromPost(req: Request): DecisionForm {

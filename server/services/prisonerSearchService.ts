@@ -63,6 +63,20 @@ export default class PrisonerSearchService {
     )
   }
 
+  async isPrisonerNumberValid(prisonerNumber: string, user: User): Promise<boolean> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    try {
+      const result = await new PrisonerSearchClient(token).getPrisonerDetails(prisonerNumber)
+      return result && !!result.prisonerNumber
+    } catch (err) {
+      if (err.status === 404) {
+        // Expected
+        return false
+      }
+      throw err
+    }
+  }
+
   async getPrisonerImage(prisonerNumber: string, user: User): Promise<Readable> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new PrisonApiClient(token).getPrisonerImage(prisonerNumber)
