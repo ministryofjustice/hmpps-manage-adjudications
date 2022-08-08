@@ -15,7 +15,6 @@ export type RoleAssociatedPrisoner = {
   prisonerNumber: string
   currentAssociatedPrisonerNumber?: string
   currentAssociatedPrisonerName?: string
-  incidentRole?: string
 }
 
 export type DisplayData = {
@@ -47,7 +46,6 @@ export const getPrisonerLocation = (roleAssociatedPrisoner: RoleAssociatedPrison
 
 export const extractAssociatedDetails = (draftAdjudicationResult: DraftAdjudicationResult): RoleAssociatedPrisoner => {
   return {
-    incidentRole: draftAdjudicationResult.draftAdjudication.incidentRole?.roleCode,
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
     currentAssociatedPrisonerNumber: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersNumber,
     currentAssociatedPrisonerName: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersName,
@@ -66,13 +64,20 @@ export const redirectToOffenceSelection = (res: Response, draftId: number, incid
   return res.redirect(
     adjudicationUrls.offenceCodeSelection.urls.start(
       draftId,
-      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode])
+      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase()])
     )
   )
 }
 
-export const renderData = (res: Response, page: string, draftId: number, pageData: DisplayData, error: FormError[]) => {
-  return res.render(page, {
+export const renderData = (
+  res: Response,
+  draftId: number,
+  roleCode: string,
+  pageData: DisplayData,
+  error: FormError[]
+) => {
+  return res.render(`pages/associatePrisoner`, {
+    roleCode: roleCode === 'assisted' ? 'assist' : 'incite',
     errors: error || [],
     exitButtonHref: adjudicationUrls.taskList.urls.start(draftId),
     decisionData: {

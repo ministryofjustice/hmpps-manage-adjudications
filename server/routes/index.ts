@@ -21,7 +21,7 @@ import selectAssociatedStaffRoutes from './selectAssociatedStaff'
 import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
 import ageOfPrisonerRoutes from './ageOfPrisoner'
-import incidentAssistRoutes from './associatedPrisoner'
+import associatedPrisonerRoutes from './associatedPrisoner'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -96,7 +96,7 @@ export default function routes(
     ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
   )
 
-  router.use(adjudicationUrls.incidentAssist.root, incidentAssistRoutes({ placeOnReportService }))
+  router.use(adjudicationUrls.incidentAssociate.root, associatedPrisonerRoutes({ placeOnReportService }))
 
   return router
 }

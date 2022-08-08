@@ -8,7 +8,7 @@
 {% from "../macros/prisonerOutsideEstablishmentOffenceCodeDecisionInput.njk" import prisonerOutsideEstablishmentOffenceCodeDecisionInput %}
 
 
-{% set title = "Who did {{ prisoner.friendlyName | safe }} assist?" %}
+{% set title = "Who did {{ prisoner.friendlyName | safe }} {{ roleCode }}?" %}
 
 {% block pageTitle %}
 	{{ title }}
@@ -56,9 +56,9 @@
     }), items) %}
   
     
-    <h1 class="govuk-heading-l">Who did {{ prisoner.friendlyName | safe }} assist?</h1>
+    <h1 class="govuk-heading-l">Who did {{ prisoner.friendlyName | safe }} {{ roleCode }}?</h1>
 
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="incident-assist-form">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="incident-associate-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
             idPrefix: 'selectedAnswerId',
@@ -72,9 +72,9 @@
         {{ govukButton({
             text: 'Save and continue',
             type: "submit",
-            name: "incidentAssistSubmit",
+            name: "incidentAssociateSubmit",
             classes: "govuk-button--submit govuk-!-margin-right-2",
-            attributes: { "data-qa": "incident-assist-submit" }
+            attributes: { "data-qa": "incident-associate-submit" }
         }) }}
 
 
@@ -82,7 +82,7 @@
             text: 'Exit',
             classes: "govuk-button--secondary",
             href: exitButtonHref,
-            attributes: { "data-qa": "incident-assist-exit" }
+            attributes: { "data-qa": "incident-associate-exit" }
         }) }}
 
     </form>

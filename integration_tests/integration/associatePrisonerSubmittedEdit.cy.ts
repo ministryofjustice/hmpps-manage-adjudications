@@ -1,5 +1,5 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import IncidentAssist from '../pages/incidentAssist'
+import AssociatePrisoner from '../pages/associatePrisoner'
 import Page from '../pages/page'
 
 context('Incident assist submitted edit', () => {
@@ -26,8 +26,8 @@ context('Incident assist submitted edit', () => {
       prisonerNumber: 'T3356FU',
       response: {
         offenderNo: 'T3356FU',
-        firstName: 'Rishi',
-        lastName: 'Rich',
+        firstName: 'JAMES',
+        lastName: 'BROWN',
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
         categoryCode: 'C',
         alerts: [
@@ -70,7 +70,7 @@ context('Incident assist submitted edit', () => {
           startedByUserId: 'USER2',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
-            associatedPrisonersName: 'Boris Wrongun',
+            associatedPrisonersName: 'Someone Else',
             roleCode: '25c',
           },
         },
@@ -99,39 +99,39 @@ context('Incident assist submitted edit', () => {
   })
 
   it('should contain the required page elements for internal prisoner', () => {
-    cy.visit(adjudicationUrls.incidentAssist.urls.submittedEdit(34))
+    cy.visit(adjudicationUrls.incidentAssociate.urls.submittedEdit(34, 'assisted'))
 
-    const incidentAssistPage: IncidentAssist = Page.verifyOnPage(IncidentAssist)
-    incidentAssistPage.radioButtons().should('exist')
-    incidentAssistPage.exitButton().should('exist')
-    incidentAssistPage.submitButton().should('exist')
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().should('exist')
+    associatePrisonerPage.exitButton().should('exist')
+    associatePrisonerPage.submitButton().should('exist')
 
-    incidentAssistPage.radioButtons().find('input[value="internal"]').should('be.checked')
-    incidentAssistPage.radioButtons().find('input[value="external"]').should('not.be.checked')
+    associatePrisonerPage.radioButtons().find('input[value="internal"]').should('be.checked')
+    associatePrisonerPage.radioButtons().find('input[value="external"]').should('not.be.checked')
 
-    incidentAssistPage.internalNameInput().contains('Rich, Rishi')
-    incidentAssistPage.internalNumberInput().contains('T3356FU')
+    associatePrisonerPage.internalNameInput().contains('Brown, James')
+    associatePrisonerPage.internalNumberInput().contains('T3356FU')
   })
 
   it('should contain the required page elements for external prisoner', () => {
-    cy.visit(adjudicationUrls.incidentAssist.urls.submittedEdit(35))
+    cy.visit(adjudicationUrls.incidentAssociate.urls.submittedEdit(35, 'assisted'))
 
-    const incidentAssistPage: IncidentAssist = Page.verifyOnPage(IncidentAssist)
-    incidentAssistPage.radioButtons().should('exist')
-    incidentAssistPage.exitButton().should('exist')
-    incidentAssistPage.submitButton().should('exist')
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().should('exist')
+    associatePrisonerPage.exitButton().should('exist')
+    associatePrisonerPage.submitButton().should('exist')
 
-    incidentAssistPage.radioButtons().find('input[value="internal"]').should('not.be.checked')
-    incidentAssistPage.radioButtons().find('input[value="external"]').should('be.checked')
+    associatePrisonerPage.radioButtons().find('input[value="internal"]').should('not.be.checked')
+    associatePrisonerPage.radioButtons().find('input[value="external"]').should('be.checked')
 
-    incidentAssistPage.externalNameInput().should('have.value', 'Boris Wrongun')
-    incidentAssistPage.externalNumberInput().should('have.value', 'T3356FU')
+    associatePrisonerPage.externalNameInput().should('have.value', 'Someone Else')
+    associatePrisonerPage.externalNumberInput().should('have.value', 'T3356FU')
   })
 
   it('should redirect the user to the task list page if they cancel', () => {
-    cy.visit(adjudicationUrls.incidentAssist.urls.submittedEdit(35))
+    cy.visit(adjudicationUrls.incidentAssociate.urls.submittedEdit(35, 'assisted'))
 
-    const incidentAssistPage: IncidentAssist = Page.verifyOnPage(IncidentAssist)
+    const incidentAssistPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
     incidentAssistPage.exitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/place-the-prisoner-on-report/35')
@@ -139,9 +139,9 @@ context('Incident assist submitted edit', () => {
   })
 
   it('should delete the internal prisoner', () => {
-    cy.visit(adjudicationUrls.incidentAssist.urls.submittedEdit(34))
+    cy.visit(adjudicationUrls.incidentAssociate.urls.submittedEdit(34, 'assisted'))
 
-    const incidentAssistPage: IncidentAssist = Page.verifyOnPage(IncidentAssist)
-    incidentAssistPage.assistAssociatedPrisonerDeleteButton().click()
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.assistAssociatedPrisonerDeleteButton().click()
   })
 })

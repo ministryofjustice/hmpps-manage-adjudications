@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import IncidentAssistPage, { PageRequestType } from './incidentAssistPage'
+import AssociatePrisonerPage, { PageRequestType } from './associatePrisonerPage'
 
-export default class IncidentAssistSubmittedEditRoutes {
-  page: IncidentAssistPage
+export default class AssociatePrisonerSubmittedEditRoutes {
+  page: AssociatePrisonerPage
 
   constructor(placeOnReportService: PlaceOnReportService) {
-    this.page = new IncidentAssistPage(PageRequestType.EDIT_SUBMITTED, placeOnReportService)
+    this.page = new AssociatePrisonerPage(PageRequestType.EDIT_SUBMITTED, placeOnReportService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

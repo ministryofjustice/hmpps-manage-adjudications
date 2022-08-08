@@ -1,5 +1,5 @@
 import { FormError } from '../../@types/template'
-import { AssociatedPrisonerLocation } from './associatedPrisonerUtils'
+import { AssociatedPrisonerLocation } from './associatePrisonerUtils'
 
 type incidentAssistForm = {
   location: AssociatedPrisonerLocation

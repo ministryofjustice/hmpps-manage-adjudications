@@ -55,10 +55,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /incident-assist', () => {
-  it('should load the incident assist page', () => {
+describe('GET /incident-associate', () => {
+  it('should load the incident associate page', () => {
     return request(app)
-      .get(adjudicationUrls.incidentAssist.urls.start(100))
+      .get(adjudicationUrls.incidentAssociate.urls.start(100, 'assisted'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Who did Udfsanaye Aidetria assist?')
@@ -66,29 +66,23 @@ describe('GET /incident-assist', () => {
   })
 })
 
-/* describe('POST /incident-assist', () => {
+describe('POST /incident-associate', () => {
   it('should redirect to type of offence page if associated prisoner completed', () => {
     return request(app)
-      .post(`${adjudicationUrls.incidentAssist.urls.start(100)}?selectedPerson=G2678PF`)
+      .post(`${adjudicationUrls.incidentAssociate.urls.start(100, 'assisted')}?selectedPerson=G2678PF`)
       .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'incited',
-        incitedInput: 'G2678PF',
+        prisonerId: '1234',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(100, 'assisted'))
   })
   it('should render an error summary with correct validation message - missing radio button selection', () => {
     return request(app)
-      .post(`${adjudicationUrls.incidentAssist.urls.start(100)}?selectedPerson=G2678PF`)
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '11', minute: '30' } },
-        locationId: 2,
-      })
+      .post(`${adjudicationUrls.incidentAssociate.urls.start(100, 'assisted')}?selectedPerson=G2678PF`)
+      .send({})
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Select the prisoner’s role in this incident')
+        expect(res.text).toContain('Select an option')
       })
   })
-}) */
+})

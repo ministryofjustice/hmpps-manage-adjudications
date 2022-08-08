@@ -83,16 +83,17 @@ const adjudicationUrls = {
         `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}/submitted/edit`,
     },
   },
-  incidentAssist: {
-    root: '/incident-assist',
+  incidentAssociate: {
+    root: '/incident-associate',
     matchers: {
-      start: '/:adjudicationNumber',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      start: '/:adjudicationNumber/:roleCode',
+      submittedEdit: '/:adjudicationNumber/:roleCode/submitted/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.incidentAssist.root}/${adjudicationNumber}`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.incidentAssist.root}/${adjudicationNumber}/submitted/edit`,
+      start: (adjudicationNumber: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}`,
+      submittedEdit: (adjudicationNumber: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit`,
     },
   },
   incidentStatement: {

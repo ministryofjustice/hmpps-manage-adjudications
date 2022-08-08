@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import validateForm from './validation'
+import validateForm from './associatePrisonerValidation'
 import { User } from '../../data/hmppsAuthClient'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -17,7 +17,7 @@ import {
   renderData,
   DisplayData,
   redirectToOffenceSelection,
-} from './associatedPrisonerUtils'
+} from './associatePrisonerUtils'
 
 export enum PageRequestType {
   EDIT,
@@ -32,7 +32,7 @@ class PageOptions {
   }
 }
 
-export default class IncidentAssistPage {
+export default class AssociatePrisonerPage {
   pageOptions: PageOptions
 
   constructor(pageType: PageRequestType, private readonly placeOnReportService: PlaceOnReportService) {
@@ -42,6 +42,7 @@ export default class IncidentAssistPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const { roleCode } = req.params
     const fromDelete = req.query.personDeleted as string
     const fromSearch = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
     let roleAssociatedPrisoner = await this.readFromApi(draftId, user as User)
@@ -58,7 +59,7 @@ export default class IncidentAssistPage {
     }
     const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
 
-    renderData(res, `pages/incidentAssist`, draftId, pageData, null)
+    renderData(res, draftId, roleCode, pageData, null)
 
     delete req.session.redirectUrl
   }
@@ -74,24 +75,34 @@ export default class IncidentAssistPage {
   }
 
   save = async (req: Request, res: Response) => {
-    console.log(req.body)
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const { roleCode } = req.params
     const { user } = res.locals
-    const roleAssociatedPrisoner = await this.readFromApi(draftId, user as User)
 
-    const associatedPrisonersName = req.body.prisonerOutsideEstablishmentNameInput
-    const associatedPrisonersNumber = req.body.prisonerId
-      ? req.body.prisonerId
-      : req.body.prisonerOutsideEstablishmentNumberInput
+    const associatedPrisonersName =
+      req.body.prisonerOutsideEstablishmentNameInput === '' ? null : req.body.prisonerOutsideEstablishmentNameInput
+    const associatedPrisonersNumber =
+      // eslint-disable-next-line no-nested-ternary
+      req.body.prisonerId !== ''
+        ? req.body.prisonerId
+        : req.body.prisonerOutsideEstablishmentNumberInput === ''
+        ? null
+        : req.body.prisonerOutsideEstablishmentNumberInput
+
+    const roleAssociatedPrisoner = {
+      prisonerNumber: associatedPrisonersNumber,
+      currentAssociatedPrisonerName: associatedPrisonersName,
+      currentAssociatedPrisonerNumber: associatedPrisonersNumber,
+    }
 
     const validationError = validateForm({
-      location: AssociatedPrisonerLocation.UNKNOWN,
+      location: getPrisonerLocation(roleAssociatedPrisoner),
       associatedPrisonersName,
       associatedPrisonersNumber,
     })
     if (validationError) {
       const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
-      return renderData(res, `pages/incidentAssist`, draftId, pageData, validationError)
+      return renderData(res, draftId, roleCode, pageData, validationError)
     }
 
     try {
@@ -105,9 +116,9 @@ export default class IncidentAssistPage {
         user as User
       )
 
-      return redirectToOffenceSelection(res, draftId, roleAssociatedPrisoner.incidentRole)
+      return redirectToOffenceSelection(res, draftId, roleCode)
     } catch (postError) {
-      this.setUpRedirectForEditError(res, draftId)
+      this.setUpRedirectForEditError(res, draftId, roleCode)
       throw postError
     }
   }
@@ -119,6 +130,7 @@ export default class IncidentAssistPage {
   search = async (req: Request, res: Response): Promise<void> => {
     const user = res.locals
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const { roleCode } = req.params
 
     if (this.pageOptions.isPreviouslySubmitted()) {
       const originalPageReferrerUrl = req.query.referrer as string
@@ -126,7 +138,7 @@ export default class IncidentAssistPage {
         originalPageReferrerUrl ? `?referrer=${originalPageReferrerUrl}` : ''
       }`
     } else {
-      req.session.redirectUrl = adjudicationUrls.incidentAssist.urls.start(draftId)
+      req.session.redirectUrl = adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode)
     }
 
     const searchValidationError = validatePrisonerSearch({
@@ -141,7 +153,7 @@ export default class IncidentAssistPage {
         user as User
       )
 
-      return renderData(res, `pages/incidentAssist`, draftId, pageData, [searchValidationError])
+      return renderData(res, draftId, roleCode, pageData, [searchValidationError])
     }
     return redirectToSearchForPersonPage(res, req.body.prisonerSearchNameInput)
   }
@@ -202,9 +214,9 @@ export default class IncidentAssistPage {
     return associatedPrisoner.displayName
   }
 
-  setUpRedirectForEditError = (res: Response, draftId: number) => {
+  setUpRedirectForEditError = (res: Response, draftId: number, roleCode: string) => {
     res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
-      ? adjudicationUrls.incidentAssist.urls.submittedEdit(draftId)
-      : adjudicationUrls.incidentAssist.urls.start(draftId)
+      ? adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode)
+      : adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode)
   }
 }

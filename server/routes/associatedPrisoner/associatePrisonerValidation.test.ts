@@ -1,5 +1,5 @@
-import { AssociatedPrisonerLocation } from './associatedPrisonerUtils'
-import validateForm from './validation'
+import { AssociatedPrisonerLocation } from './associatePrisonerUtils'
+import validateForm from './associatePrisonerValidation'
 
 describe('validateForm', () => {
   describe('Valid submit shows no errors', () => {
