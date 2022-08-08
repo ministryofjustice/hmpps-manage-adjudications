@@ -102,12 +102,39 @@ context('Incident assist', () => {
 
     const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
     associatePrisonerPage.radioButtons().find('input[value="internal"]').check()
-    associatePrisonerPage.conditionalInputInternalAssist().type('T3356FU')
+    associatePrisonerPage.conditionalInputInternal().type('T3356FU')
     associatePrisonerPage.searchButton().click()
     cy.get('[data-qa="select-prisoner-link"]').click()
     associatePrisonerPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
     })
+  })
+
+  it('should show error summary if an internal associated prisoner is not entered', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="internal"]').check()
+    associatePrisonerPage.submitButton().click()
+    associatePrisonerPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s name or number')
+      })
+  })
+
+  it('should show error summary if an extenal associated prisoner is not entered', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatePrisonerPage.submitButton().click()
+    associatePrisonerPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s number')
+        expect($errors.get(1).innerText).to.contain('Enter the prisoner’s name')
+      })
   })
 })

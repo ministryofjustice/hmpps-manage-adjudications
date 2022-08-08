@@ -54,6 +54,7 @@ export default class DeletePersonRoutes {
       return this.renderView(req, res, {
         error,
       })
+    console.log(redirectUrl)
     const queryConnector = redirectUrl.includes('?') ? '&' : '?'
     const redirect =
       deletePerson === 'yes'

@@ -17,7 +17,9 @@ import {
   renderData,
   DisplayData,
   redirectToOffenceSelection,
+  setRedirectUrl,
 } from './associatePrisonerUtils'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 export enum PageRequestType {
   EDIT,
@@ -35,7 +37,11 @@ class PageOptions {
 export default class AssociatePrisonerPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly placeOnReportService: PlaceOnReportService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly prisonerSearchService: PrisonerSearchService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
@@ -59,6 +65,10 @@ export default class AssociatePrisonerPage {
     }
     const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
 
+    if (fromDelete) {
+      pageData.location = AssociatedPrisonerLocation.INTERNAL
+    }
+
     renderData(res, draftId, roleCode, pageData, null)
 
     delete req.session.redirectUrl
@@ -78,6 +88,7 @@ export default class AssociatePrisonerPage {
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
     const { roleCode } = req.params
     const { user } = res.locals
+    const { selectedAnswerId } = req.body
 
     const { prisonerNumber } = await this.readFromApi(draftId, user as User)
 
@@ -97,13 +108,21 @@ export default class AssociatePrisonerPage {
       currentAssociatedPrisonerNumber: associatedPrisonersNumber,
     }
 
+    // TODO external validation
+
     const validationError = validateForm({
-      location: getPrisonerLocation(roleAssociatedPrisoner),
+      // eslint-disable-next-line no-nested-ternary
+      location: selectedAnswerId
+        ? selectedAnswerId === 'internal'
+          ? AssociatedPrisonerLocation.INTERNAL
+          : AssociatedPrisonerLocation.EXTERNAL
+        : AssociatedPrisonerLocation.UNKNOWN,
       associatedPrisonersName,
       associatedPrisonersNumber,
     })
     if (validationError) {
       const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
+      pageData.location = selectedAnswerId
       return renderData(res, draftId, roleCode, pageData, validationError)
     }
 
@@ -118,6 +137,11 @@ export default class AssociatePrisonerPage {
   }
 
   delete = async (req: Request, res: Response): Promise<void> => {
+    const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const { roleCode } = req.params
+
+    setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted())
+
     return redirectToDeletePersonPage(res, req.body.prisonerId)
   }
 
@@ -126,14 +150,7 @@ export default class AssociatePrisonerPage {
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
     const { roleCode } = req.params
 
-    if (this.pageOptions.isPreviouslySubmitted()) {
-      const originalPageReferrerUrl = req.query.referrer as string
-      req.session.redirectUrl = `${adjudicationUrls.incidentRole.urls.submittedEdit(draftId)}${
-        originalPageReferrerUrl ? `?referrer=${originalPageReferrerUrl}` : ''
-      }`
-    } else {
-      req.session.redirectUrl = adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode)
-    }
+    setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted())
 
     const searchValidationError = validatePrisonerSearch({
       searchTerm: req.body.prisonerSearchNameInput,

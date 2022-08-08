@@ -138,10 +138,17 @@ context('Incident assist submitted edit', () => {
     })
   })
 
-  it('should delete the internal prisoner', () => {
-    cy.visit(adjudicationUrls.incidentAssociate.urls.submittedEdit(34, 'assisted'))
-
+  it('should remember once it comes back to this page after deleting an associated prisoner', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
     const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
-    associatePrisonerPage.assistAssociatedPrisonerDeleteButton().click()
+    associatePrisonerPage.associatedPrisonerDeleteButton().click()
+    cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check()
+    cy.get('[data-qa="delete-person-submit"]').click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+      expect(loc.search).to.eq('?personDeleted=true')
+    })
+    associatePrisonerPage.radioButtons().find('input[value="internal"]').should('be.checked')
+    associatePrisonerPage.associatedPrisonerDeleteButton().should('not.exist')
   })
 })

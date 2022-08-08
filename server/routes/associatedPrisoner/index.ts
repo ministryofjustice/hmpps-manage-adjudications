@@ -5,16 +5,22 @@ import AssociatedPrisonerSubmittedEditRoutes from './associatePrisonerSubmittedE
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 export default function prisonerIncidentAssistRoutes({
   placeOnReportService,
+  prisonerSearchService,
 }: {
   placeOnReportService: PlaceOnReportService
+  prisonerSearchService: PrisonerSearchService
 }): Router {
   const router = express.Router()
 
-  const associatedPrisonerRoutes = new AssociatedPrisonerRoutes(placeOnReportService)
-  const associatedPrisonerSubmittedEditRoutes = new AssociatedPrisonerSubmittedEditRoutes(placeOnReportService)
+  const associatedPrisonerRoutes = new AssociatedPrisonerRoutes(placeOnReportService, prisonerSearchService)
+  const associatedPrisonerSubmittedEditRoutes = new AssociatedPrisonerSubmittedEditRoutes(
+    placeOnReportService,
+    prisonerSearchService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

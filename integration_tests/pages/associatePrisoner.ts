@@ -13,9 +13,9 @@ export default class AssociatePrisonerPage extends Page {
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 
-  conditionalInputInternalAssist = (): PageElement => cy.get('#prisonerSearchNameInput')
+  conditionalInputInternal = (): PageElement => cy.get('#prisonerSearchNameInput')
 
-  assistAssociatedPrisonerDeleteButton = (): PageElement => cy.get('button[name="deleteUser"]')
+  associatedPrisonerDeleteButton = (): PageElement => cy.get('button[name="deleteUser"]')
 
   exitButton = (): PageElement => cy.get('[data-qa="incident-associate-exit"]')
 

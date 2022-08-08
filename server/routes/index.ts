@@ -96,7 +96,10 @@ export default function routes(
     ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
   )
 
-  router.use(adjudicationUrls.incidentAssociate.root, associatedPrisonerRoutes({ placeOnReportService }))
+  router.use(
+    adjudicationUrls.incidentAssociate.root,
+    associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
+  )
 
   return router
 }

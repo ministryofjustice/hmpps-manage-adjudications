@@ -121,6 +121,7 @@ describe('POST /incident-associate/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        selectedAnswerId: 'internal',
         prisonerId: '1234',
       })
       .expect(302)
@@ -136,6 +137,7 @@ describe('POST /incident-associate/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        selectedAnswerId: 'external',
         prisonerOutsideEstablishmentNameInput: '1234',
       })
       .expect(res => {
@@ -153,6 +155,7 @@ describe('POST /incident-associate/<id>/submitted/edit', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       .send({
+        selectedAnswerId: 'internal',
         prisonerId: '1234',
       })
       .expect('Content-Type', /html/)

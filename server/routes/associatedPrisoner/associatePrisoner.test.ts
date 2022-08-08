@@ -71,6 +71,7 @@ describe('POST /incident-associate', () => {
     return request(app)
       .post(`${adjudicationUrls.incidentAssociate.urls.start(100, 'assisted')}?selectedPerson=G2678PF`)
       .send({
+        selectedAnswerId: 'internal',
         prisonerId: '1234',
       })
       .expect(302)

@@ -1,4 +1,4 @@
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -67,6 +67,17 @@ export const redirectToOffenceSelection = (res: Response, draftId: number, incid
       radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase()])
     )
   )
+}
+
+export const setRedirectUrl = (req: Request, draftId: number, roleCode: string, isPreviouslySubmitted: boolean) => {
+  if (isPreviouslySubmitted) {
+    const originalPageReferrerUrl = req.query.referrer as string
+    req.session.redirectUrl = `${adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode)}${
+      originalPageReferrerUrl ? `?referrer=${originalPageReferrerUrl}` : ''
+    }`
+  } else {
+    req.session.redirectUrl = adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode)
+  }
 }
 
 export const renderData = (
