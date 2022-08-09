@@ -44,8 +44,14 @@
         {{ govukButton({
             text: "Save and continue",
             type: "submit",
-            classes: "govuk-button--submit",
+            classes: "govuk-button--submit govuk-!-margin-right-3",
             attributes: { "data-qa": "details-of-damages-submit" }
+        }) }}
+        {{ govukButton({
+            text: "Exit",
+            href: exitButtonHref,
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "exit-damages-button" }
         }) }}
             </div>
         </div>

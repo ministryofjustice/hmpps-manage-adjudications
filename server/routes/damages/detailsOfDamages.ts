@@ -34,6 +34,7 @@ export default class DetailsOfDamagesPage {
     // draftId
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const damageToDelete = Number(req.query.delete) || null
+    const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [draftAdjudicationResult, prisoner] = await Promise.all([
@@ -57,15 +58,16 @@ export default class DetailsOfDamagesPage {
     if (!damages || damages.length < 1) {
       return res.render(`pages/detailsOfDamages`, {
         prisoner,
+        exitButtonHref: taskListUrl,
       })
     }
-
     return res.render(`pages/detailsOfDamages`, {
       adjudicationNumber,
       reportedAdjudicationNumber,
       damages,
       prisoner,
       redirectAfterRemoveUrl: `${adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)}?delete=`,
+      exitButtonHref: taskListUrl,
     })
   }
 
