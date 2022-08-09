@@ -151,6 +151,19 @@ context('Incident assist', () => {
       })
   })
 
+  it('should show error summary if an internal associated prisoner is not entered when searching', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="internal"]').check()
+    associatePrisonerPage.searchButton().click()
+    associatePrisonerPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s name or number')
+      })
+  })
+
   it('should show error summary if an internal associated prisoner is not entered', () => {
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
     const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)

@@ -150,23 +150,22 @@ export default class AssociatePrisonerPage {
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
     const { roleCode } = req.params
     const { selectedAnswerId } = req.body
+    const { prisonerNumber } = await this.readFromApi(draftId, user as User)
 
     setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted())
 
-    const searchValidationError = validatePrisonerSearch({
-      searchTerm: req.body.prisonerSearchNameInput,
-    })
-    if (searchValidationError) {
+    if (!req.body.prisonerSearchNameInput || req.body.prisonerSearchNameInput === '') {
       const pageData = await this.getDisplayData(
         {
-          prisonerNumber: req.body.prisonerSearchNameInput,
-          currentAssociatedPrisonerNumber: req.body.prisonerSearchNameInput,
+          prisonerNumber,
+          currentAssociatedPrisonerNumber: null,
+          currentAssociatedPrisonerName: null,
         },
         selectedAnswerId,
         user as User
       )
 
-      return renderData(res, draftId, roleCode, pageData, [searchValidationError])
+      return renderData(res, draftId, roleCode, pageData, [errors.MISSING_INTERNAL_ASSOCIATED_PRISONER_ASSIST])
     }
     return redirectToSearchForPersonPage(res, req.body.prisonerSearchNameInput)
   }
