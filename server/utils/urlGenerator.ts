@@ -39,7 +39,7 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       add: '/:adjudicationNumber/add',
-      modified: ':adjudicationNumber/modified',
+      modified: '/:adjudicationNumber/modified',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}`,
