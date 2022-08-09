@@ -4,7 +4,6 @@ import validateForm, { errors } from './associatePrisonerValidation'
 import { User } from '../../data/hmppsAuthClient'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import validatePrisonerSearch from '../util/incidentSearchValidation'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
 import {
   AssociatedPrisonerLocation,

@@ -1,5 +1,4 @@
 import { FormError } from '../../@types/template'
-import { User } from '../../data/hmppsAuthClient'
 import { AssociatedPrisonerLocation } from './associatePrisonerUtils'
 
 type incidentAssistForm = {
