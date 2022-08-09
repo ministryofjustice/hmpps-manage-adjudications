@@ -52,6 +52,24 @@ export const extractAssociatedDetails = (draftAdjudicationResult: DraftAdjudicat
   }
 }
 
+export const getAssociatedPrisonersName = (req: Request) => {
+  return req.body.prisonerOutsideEstablishmentNameInput === '' ? null : req.body.prisonerOutsideEstablishmentNameInput
+}
+
+export const getAssociatedPrisonersNumber = (req: Request, selectedAnswerId: AssociatedPrisonerLocation) => {
+  // eslint-disable-next-line no-nested-ternary
+  return selectedAnswerId === AssociatedPrisonerLocation.INTERNAL
+    ? req.body.prisonerId !== ''
+      ? req.body.prisonerId
+      : null
+    : // eslint-disable-next-line no-nested-ternary
+    selectedAnswerId === AssociatedPrisonerLocation.EXTERNAL
+    ? req.body.prisonerOutsideEstablishmentNumberInput !== ''
+      ? req.body.prisonerOutsideEstablishmentNumberInput
+      : null
+    : null
+}
+
 export const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
   return res.redirect(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
 }

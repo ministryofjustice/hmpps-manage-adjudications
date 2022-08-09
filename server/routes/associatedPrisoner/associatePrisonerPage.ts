@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import validateForm from './associatePrisonerValidation'
+import validateForm, { errors } from './associatePrisonerValidation'
 import { User } from '../../data/hmppsAuthClient'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -18,6 +18,8 @@ import {
   DisplayData,
   redirectToOffenceSelection,
   setRedirectUrl,
+  getAssociatedPrisonersNumber,
+  getAssociatedPrisonersName,
 } from './associatePrisonerUtils'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 
@@ -63,7 +65,7 @@ export default class AssociatePrisonerPage {
         prisonerNumber: roleAssociatedPrisoner.prisonerNumber,
       }
     }
-    const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
+    const pageData = await this.getDisplayData(roleAssociatedPrisoner, null, user as User)
 
     if (fromDelete) {
       pageData.location = AssociatedPrisonerLocation.INTERNAL
@@ -92,23 +94,14 @@ export default class AssociatePrisonerPage {
 
     const { prisonerNumber } = await this.readFromApi(draftId, user as User)
 
-    const associatedPrisonersName =
-      req.body.prisonerOutsideEstablishmentNameInput === '' ? null : req.body.prisonerOutsideEstablishmentNameInput
-    const associatedPrisonersNumber =
-      // eslint-disable-next-line no-nested-ternary
-      req.body.prisonerId !== ''
-        ? req.body.prisonerId
-        : req.body.prisonerOutsideEstablishmentNumberInput === ''
-        ? null
-        : req.body.prisonerOutsideEstablishmentNumberInput
+    const associatedPrisonersName = getAssociatedPrisonersName(req)
+    const associatedPrisonersNumber = getAssociatedPrisonersNumber(req, selectedAnswerId)
 
     const roleAssociatedPrisoner = {
       prisonerNumber,
       currentAssociatedPrisonerName: associatedPrisonersName,
       currentAssociatedPrisonerNumber: associatedPrisonersNumber,
     }
-
-    // TODO external validation
 
     const validationError = validateForm({
       // eslint-disable-next-line no-nested-ternary
@@ -121,9 +114,16 @@ export default class AssociatePrisonerPage {
       associatedPrisonersNumber,
     })
     if (validationError) {
-      const pageData = await this.getDisplayData(roleAssociatedPrisoner, user as User)
-      pageData.location = selectedAnswerId
+      const pageData = await this.getDisplayData(roleAssociatedPrisoner, selectedAnswerId, user as User)
       return renderData(res, draftId, roleCode, pageData, validationError)
+    }
+    if (selectedAnswerId === AssociatedPrisonerLocation.EXTERNAL) {
+      const foundPrisoner = await this.prisonerSearchService.isPrisonerNumberValid(associatedPrisonersNumber, user)
+
+      if (!foundPrisoner) {
+        const pageData = await this.getDisplayData(roleAssociatedPrisoner, selectedAnswerId, user as User)
+        return renderData(res, draftId, roleCode, pageData, [errors.PRISONER_OUTSIDE_ESTABLISHMENT_INVALID_NUMBER])
+      }
     }
 
     try {
@@ -149,6 +149,7 @@ export default class AssociatePrisonerPage {
     const user = res.locals
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
     const { roleCode } = req.params
+    const { selectedAnswerId } = req.body
 
     setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted())
 
@@ -161,6 +162,7 @@ export default class AssociatePrisonerPage {
           prisonerNumber: req.body.prisonerSearchNameInput,
           currentAssociatedPrisonerNumber: req.body.prisonerSearchNameInput,
         },
+        selectedAnswerId,
         user as User
       )
 
@@ -188,12 +190,16 @@ export default class AssociatePrisonerPage {
     )
   }
 
-  getDisplayData = async (roleAssociatedPrisoner: RoleAssociatedPrisoner, currentUser: User): Promise<DisplayData> => {
+  getDisplayData = async (
+    roleAssociatedPrisoner: RoleAssociatedPrisoner,
+    locationOverride: AssociatedPrisonerLocation,
+    currentUser: User
+  ): Promise<DisplayData> => {
     const prisoner = await this.placeOnReportService.getPrisonerDetails(
       roleAssociatedPrisoner.prisonerNumber,
       currentUser
     )
-    const location = getPrisonerLocation(roleAssociatedPrisoner)
+    const location = locationOverride == null ? getPrisonerLocation(roleAssociatedPrisoner) : locationOverride
     let associatedPrisonersName
 
     switch (location) {

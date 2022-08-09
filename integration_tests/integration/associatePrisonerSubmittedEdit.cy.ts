@@ -151,4 +151,54 @@ context('Incident assist submitted edit', () => {
     associatePrisonerPage.radioButtons().find('input[value="internal"]').should('be.checked')
     associatePrisonerPage.associatedPrisonerDeleteButton().should('not.exist')
   })
+
+  it('should show error summary if associated prisoner location changed to internal', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(35, 'assisted'))
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="internal"]').check()
+    associatePrisonerPage.submitButton().click()
+    associatePrisonerPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s name or number')
+      })
+  })
+
+  it('should show error summary if associated prisoner location changed to external', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatePrisonerPage.submitButton().click()
+    associatePrisonerPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the prisoner’s number')
+        expect($errors.get(1).innerText).to.contain('Enter the prisoner’s name')
+      })
+  })
+
+  context('Redirect on error', () => {
+    beforeEach(() => {
+      cy.task('stubUpdateDraftIncidentRole', { id: 34, response: {}, status: 500 })
+    })
+    it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
+      cy.visit(
+        `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
+          34,
+          'assisted'
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+      )
+      const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+      associatePrisonerPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.not.eq(adjudicationUrls.prisonerReport.urls.report(1524455))
+      })
+      associatePrisonerPage.errorContinueButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.submittedEdit(34, 'assisted'))
+      })
+    })
+  })
 })

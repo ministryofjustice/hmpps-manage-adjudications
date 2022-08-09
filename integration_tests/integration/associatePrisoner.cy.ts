@@ -73,6 +73,13 @@ context('Incident assist', () => {
     cy.task('stubSaveAssociatedPrisoner', {
       adjudicationNumber: 34,
     })
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: 'T3356FU',
+    })
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: 'T3356FT',
+      status: 404,
+    })
   })
 
   it('should contain the required page elements', () => {
@@ -109,6 +116,39 @@ context('Incident assist', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
     })
+  })
+
+  it('should submit form successfully if all data entered - associated prisoner required - external prisoner', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatePrisonerPage.externalNameInput().type('Bla Blah')
+    associatePrisonerPage.externalNumberInput().type('T3356FU')
+
+    associatePrisonerPage.submitButton().click()
+
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
+    })
+  })
+
+  it('shouldthrow an error if prisoner not on file - associated prisoner required - external prisoner', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+
+    const associatePrisonerPage: AssociatePrisoner = Page.verifyOnPage(AssociatePrisoner)
+    associatePrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatePrisonerPage.externalNameInput().type('Bla Blah')
+    associatePrisonerPage.externalNumberInput().type('T3356FT')
+
+    associatePrisonerPage.submitButton().click()
+
+    associatePrisonerPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('The prison number you have entered does not match a prisoner')
+      })
   })
 
   it('should show error summary if an internal associated prisoner is not entered', () => {

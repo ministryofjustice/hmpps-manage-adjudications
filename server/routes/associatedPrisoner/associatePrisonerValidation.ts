@@ -1,4 +1,5 @@
 import { FormError } from '../../@types/template'
+import { User } from '../../data/hmppsAuthClient'
 import { AssociatedPrisonerLocation } from './associatePrisonerUtils'
 
 type incidentAssistForm = {
@@ -7,7 +8,7 @@ type incidentAssistForm = {
   associatedPrisonersName?: string
 }
 
-const errors: { [key: string]: FormError } = {
+export const errors: { [key: string]: FormError } = {
   MISSING_SELECT: {
     href: '#selectedAnswerId',
     text: 'Select an option',
@@ -23,6 +24,10 @@ const errors: { [key: string]: FormError } = {
   MISSING_EXTERNAL_ASSOCIATED_PRISONER_ASSIST_NAME: {
     href: '#prisonerOutsideEstablishmentNameInput',
     text: 'Enter the prisoner’s name',
+  },
+  PRISONER_OUTSIDE_ESTABLISHMENT_INVALID_NUMBER: {
+    href: `#prisonerOutsideEstablishmentNumberInput`,
+    text: 'The prison number you have entered does not match a prisoner',
   },
 }
 
@@ -47,7 +52,7 @@ export default function validateForm({
       local.push(errors.MISSING_EXTERNAL_ASSOCIATED_PRISONER_ASSIST_NAME)
     }
 
-    return local
+    return local.length === 0 ? null : local
   }
 
   return null
