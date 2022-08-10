@@ -22,6 +22,22 @@ context('Incident assist submitted edit', () => {
         ],
       },
     })
+    cy.task('stubSearch', {
+      query: {
+        includeAliases: false,
+        prisonerIdentifier: 'T3356FU',
+        prisonIds: ['MDI'],
+      },
+      results: [
+        {
+          cellLocation: '1-2-015',
+          firstName: 'JAMES',
+          lastName: 'JONES',
+          prisonerNumber: 'T3356FU',
+          prisonName: 'HMP Moorland',
+        },
+      ],
+    })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
       response: {
@@ -95,6 +111,35 @@ context('Incident assist submitted edit', () => {
           },
         },
       },
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 36,
+      response: {
+        draftAdjudication: {
+          id: 36,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 27029,
+          },
+          incidentStatement: {},
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER2',
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            associatedPrisonersName: 'Someone Else',
+            roleCode: '25c',
+          },
+        },
+      },
+    })
+    cy.task('stubSaveAssociatedPrisoner', {
+      adjudicationNumber: 34,
+    })
+    cy.task('stubSaveAssociatedPrisoner', {
+      adjudicationNumber: 35,
+    })
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: 'T3356FU',
     })
   })
 
@@ -179,14 +224,41 @@ context('Incident assist submitted edit', () => {
       })
   })
 
+  it('should save correctly when switching from internal to external ', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
+    associatedPrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatedPrisonerPage.externalNameInput().type('Bla Blah')
+    associatedPrisonerPage.externalNumberInput().type('T3356FU')
+
+    associatedPrisonerPage.submitButton().click()
+
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
+    })
+  })
+
+  it('should save correctly when switching from external to internal ', () => {
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(35, 'assisted'))
+    const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
+    associatedPrisonerPage.radioButtons().find('input[value="internal"]').check()
+    associatedPrisonerPage.conditionalInputInternal().type('T3356FU')
+    associatedPrisonerPage.searchButton().click()
+    cy.get('[data-qa="select-prisoner-link"]').click()
+    associatedPrisonerPage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(35, 'assisted', '1'))
+    })
+  })
+
   context('Redirect on error', () => {
     beforeEach(() => {
-      cy.task('stubUpdateDraftIncidentRole', { id: 34, response: {}, status: 500 })
+      cy.task('stubSaveAssociatedPrisoner', { id: 36, response: {}, status: 500 })
     })
     it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
       cy.visit(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
-          34,
+          36,
           'assisted'
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
@@ -197,7 +269,7 @@ context('Incident assist submitted edit', () => {
       })
       associatedPrisonerPage.errorContinueButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.submittedEdit(34, 'assisted'))
+        expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.submittedEdit(36, 'assisted'))
       })
     })
   })

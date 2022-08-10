@@ -367,14 +367,14 @@ const stubSaveYouthOffenderStatus = ({
     },
   })
 
-const stubSaveAssociatedPrisoner = ({ adjudicationNumber, response = {} }): SuperAgentRequest =>
+const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
       url: `/adjudications/draft-adjudications/${adjudicationNumber}/associated-prisoner`,
     },
     response: {
-      status: 200,
+      status,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },

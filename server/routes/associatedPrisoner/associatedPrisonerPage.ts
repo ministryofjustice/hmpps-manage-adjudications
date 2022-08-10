@@ -118,7 +118,6 @@ export default class AssociatedPrisonerPage {
 
     try {
       await this.saveToApiUpdate(draftId, roleAssociatedPrisoner, user as User)
-
       return redirectToOffenceSelection(res, draftId, roleCode)
     } catch (postError) {
       this.setUpRedirectForEditError(res, draftId, roleCode)
