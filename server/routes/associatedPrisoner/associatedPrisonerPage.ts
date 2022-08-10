@@ -89,7 +89,8 @@ export default class AssociatedPrisonerPage {
 
     const { prisonerNumber } = await this.readFromApi(draftId, user as User)
 
-    const associatedPrisonersName = getAssociatedPrisonersName(req)
+    const associatedPrisonersName =
+      selectedAnswerId === AssociatedPrisonerLocation.EXTERNAL ? getAssociatedPrisonersName(req) : null
     const associatedPrisonersNumber = getAssociatedPrisonersNumber(req, selectedAnswerId)
 
     const roleAssociatedPrisoner = {
