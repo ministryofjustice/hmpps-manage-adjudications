@@ -136,7 +136,7 @@ export default class AssociatedPrisonerPage {
   }
 
   search = async (req: Request, res: Response): Promise<void> => {
-    const user = res.locals
+    const { user } = res.locals
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
     const { roleCode } = req.params
     const { selectedAnswerId } = req.body
