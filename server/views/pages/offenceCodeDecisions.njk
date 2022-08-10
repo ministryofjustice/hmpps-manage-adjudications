@@ -37,7 +37,7 @@
             {% endset -%}
         {% elseif answer.type == 'PRISONER_OUTSIDE_ESTABLISHMENT' %}
             {% set decisionHtml %}
-             {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput(answer.id, decisionForm, selectedAnswerViewData, errors) }}
+             {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput(answer.id, decisionForm, errors) }}
             {% endset -%}
         {% else %}
             {% set decisionHtml = null %}

@@ -10,7 +10,7 @@
         <input type="hidden" name="prisonerId" value="{{ prisonerId }}" id="prisonerId"/>
         <div>
             <p data-qa="victim-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }} </p>
-            <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }} </p>
+            <p data-qa="victim-prisoner-number"><span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }} </p>
             <div>
                 {{ govukButton({
                     text: 'Delete',

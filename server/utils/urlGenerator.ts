@@ -83,6 +83,19 @@ const adjudicationUrls = {
         `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}/submitted/edit`,
     },
   },
+  incidentAssociate: {
+    root: '/associated-prisoner',
+    matchers: {
+      start: '/:adjudicationNumber/:roleCode',
+      submittedEdit: '/:adjudicationNumber/:roleCode/submitted/edit',
+    },
+    urls: {
+      start: (adjudicationNumber: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}`,
+      submittedEdit: (adjudicationNumber: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit`,
+    },
+  },
   incidentStatement: {
     root: '/incident-statement',
     matchers: {

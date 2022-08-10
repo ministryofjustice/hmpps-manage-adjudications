@@ -7,6 +7,7 @@ export type IncidentDetails = {
 export type IncidentRole = {
   roleCode?: string
   associatedPrisonersNumber?: string
+  associatedPrisonersName?: string
   offenceRule?: OffenceRule
 }
 
@@ -91,6 +92,11 @@ export type ApplicableRules = {
 export type IncidentStatementStatus = {
   classes: string
   text: string
+}
+
+export type AssociatedPrisoner = {
+  associatedPrisonersNumber: string
+  associatedPrisonersName?: string
 }
 
 export type OffenceDetailsStatus = IncidentStatementStatus
