@@ -24,7 +24,7 @@ export type DisplayData = {
   location?: AssociatedPrisonerLocation
 }
 
-export const getAssociatedPrisonerLocation = (selectedAnswerId: string) => {
+export const getAssociatedPrisonerLocation = (selectedAnswerId: string): AssociatedPrisonerLocation => {
   if (!selectedAnswerId) {
     return AssociatedPrisonerLocation.UNKNOWN
   }
