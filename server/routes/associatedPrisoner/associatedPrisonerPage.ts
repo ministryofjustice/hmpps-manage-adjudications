@@ -57,8 +57,10 @@ export default class AssociatedPrisonerPage {
 
     if (fromSearch) {
       roleAssociatedPrisoner.currentAssociatedPrisonerNumber = fromSearch
+      roleAssociatedPrisoner.currentAssociatedPrisonerName = null
     } else if (fromDelete) {
       roleAssociatedPrisoner.currentAssociatedPrisonerNumber = null
+      roleAssociatedPrisoner.currentAssociatedPrisonerName = null
     }
     const pageData = await this.getDisplayData(roleAssociatedPrisoner, null, user as User)
 
