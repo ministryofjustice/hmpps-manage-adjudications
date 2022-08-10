@@ -158,7 +158,7 @@ export default class ManageAdjudicationsClient {
   }
 
   // TODO something like this anyway
-  async saveDamageDetails(adjudicationNumber: number, damagesData: any) {
+  async saveDamageDetails(adjudicationNumber: number, damagesData: unknown) {
     return this.restClient.put({
       path: `draft-adjudication/${adjudicationNumber}/damages`,
       data: { damagesData },

@@ -1,7 +1,7 @@
 import { Request } from 'express'
 
 export default class DamagesSessionService {
-  addSessionDamage(req: Request, damageData: any, draftAdjudicationNumber: number) {
+  addSessionDamage(req: Request, damageData: unknown, draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.damages[draftAdjudicationNumber].push(damageData)
   }
@@ -14,7 +14,7 @@ export default class DamagesSessionService {
     req.session.damages?.[draftAdjudicationNumber]?.splice(0, req.session.damages?.[draftAdjudicationNumber]?.length)
   }
 
-  setAllSessionDamages(req: Request, damageData: any, draftAdjudicationNumber: number) {
+  setAllSessionDamages(req: Request, damageData: unknown, draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.damages[draftAdjudicationNumber] = damageData
   }
