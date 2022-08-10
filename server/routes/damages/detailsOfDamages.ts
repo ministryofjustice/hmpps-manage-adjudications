@@ -35,6 +35,7 @@ export default class DetailsOfDamagesPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const damageToDelete = Number(req.query.delete) || null
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
+    const addDamagesUrl = adjudicationUrls.detailsOfDamages.urls.add(adjudicationNumber)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [draftAdjudicationResult, prisoner] = await Promise.all([
@@ -59,6 +60,7 @@ export default class DetailsOfDamagesPage {
       return res.render(`pages/detailsOfDamages`, {
         prisoner,
         exitButtonHref: taskListUrl,
+        addDamagesButtonHref: addDamagesUrl,
       })
     }
     return res.render(`pages/detailsOfDamages`, {
@@ -68,6 +70,7 @@ export default class DetailsOfDamagesPage {
       prisoner,
       redirectAfterRemoveUrl: `${adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)}?delete=`,
       exitButtonHref: taskListUrl,
+      addDamagesButtonHref: addDamagesUrl,
     })
   }
 
@@ -97,11 +100,11 @@ export default class DetailsOfDamagesPage {
     // Temporary return until backend is sorted and we know what things are called
     return [
       {
-        type: 'Re-decoration',
+        type: 'Redecoration',
         description: 'Broken window',
       },
       {
-        type: 'Re-decoration',
+        type: 'Redecoration',
         description: 'Broken pool cue',
       },
     ]

@@ -1,0 +1,55 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set title = "Add damages" %}
+
+{% block pageTitle %}
+    {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+
+                {% include "../partials/addDamagesRadios.njk" %}
+
+                {{ govukTextarea({
+                    name: "damage-detail",
+                    id: "damage-detail",
+                    classes: "govuk-!-width-two-thirds",
+                    label: {
+                        text: "Add details about these damages",
+                        for: "damage-detail"
+                    },
+                    hint: {
+                        text: "This could be what was damaged or what needs to be cleaned, for example."
+                    },
+                    attributes: { "data-qa": "add-damages-description" }
+                }) }}
+            
+                {{ govukButton({
+                    text: "Save and continue",
+                    type: "submit",
+                    classes: "govuk-button--submit govuk-!-margin-right-3",
+                    attributes: { "data-qa": "add-damages-submit" }
+                }) }}
+                {{ govukButton({
+                    text: "Cancel",
+                    href: cancelButtonHref,
+                    classes: "govuk-button--secondary",
+                    attributes: { "data-qa": "cancel-add-damages-button" }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

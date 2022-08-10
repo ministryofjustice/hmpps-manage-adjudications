@@ -5,6 +5,7 @@ import DamagesSessionService from '../../services/damagesSessionService'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import DetailsOfDamagesPage, { PageRequestType } from './detailsOfDamages'
+import AddDamagesRoutes from './addDamages'
 
 export default function detailsOfOffenceRoutes({
   placeOnReportService,
@@ -27,7 +28,7 @@ export default function detailsOfOffenceRoutes({
     damagesSessionService
   )
 
-  //   const addDamage = new AddDamageRoutes(placeOnReportService, damagesSessionService)
+  const addDamage = new AddDamagesRoutes(damagesSessionService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
@@ -36,7 +37,8 @@ export default function detailsOfOffenceRoutes({
   post(adjudicationUrls.detailsOfDamages.matchers.start, detailsOfDamagesUsingDraft.submit)
   get(adjudicationUrls.detailsOfDamages.matchers.modified, detailsOfDamagesUsingSession.view)
   post(adjudicationUrls.detailsOfDamages.matchers.modified, detailsOfDamagesUsingSession.submit)
-  //   get(adjudicationUrls.detailsOfDamages.matchers.add, addDamage.add)
+  get(adjudicationUrls.detailsOfDamages.matchers.add, addDamage.view)
+  post(adjudicationUrls.detailsOfDamages.matchers.add, addDamage.submit)
 
   return router
 }

@@ -1,0 +1,62 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{{ govukRadios({
+  idPrefix: "add-damages",
+  name: "add-damages",
+  fieldset: {
+    legend: {
+      text: "What needs to be done"
+    }
+  },
+  items: [
+    {
+      value: "electrical",
+      text: "Electrical repair",
+      hint: {
+        text: "For damage to lighting, a socket or a cell bell, for example."
+      }
+    },
+    {
+      value: "plumbing",
+      text: "Plumbing repair",
+      hint: {
+        text: "For damage to a toiler or sink, for example."
+      }
+    },
+    {
+      value: "furniture",
+      text: "Furniture or fabric repair",
+      hint: {
+        text: "For damage to a chair, table, cupboard, for example, or any part of the cell or prison."
+      }
+    },
+    {
+      value: "lock",
+      text: "Lock repair",
+      hint: {
+        text: "For damage to a cell door lock or a gate lock, for example."
+      }
+    },
+    {
+      value: "redecoration",
+      text: "Redecoration",
+      hint: {
+        text: "For graffiti or burn damage, for example."
+      }
+    },
+    {
+      value: "cleaning",
+      text: "Cleaning",
+      hint: {
+        text: "For cleaning up bodily fluids like blood, for example."
+      }
+    },
+    {
+      value: "replacement",
+      text: "Replacing an item",
+      hint: {
+        text: "Like replacing a kettle, cleaning equipment or sports equipment, for example."
+      }
+    }
+  ]
+}) }}
