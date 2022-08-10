@@ -8,10 +8,8 @@
 {% from "../macros/prisonerOutsideEstablishmentOffenceCodeDecisionInput.njk" import prisonerOutsideEstablishmentOffenceCodeDecisionInput %}
 
 
-{% set title = "Who did {{ prisoner.friendlyName | safe }} {{ roleCode }}?" %}
-
 {% block pageTitle %}
-	{{ title }}
+    Who did the prisoner {{ roleCode }}?
 {% endblock %}
 
 {% block beforeContent %}
