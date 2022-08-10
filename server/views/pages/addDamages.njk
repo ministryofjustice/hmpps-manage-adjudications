@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Add damages" %}
 
@@ -14,6 +15,14 @@
 {% endblock %}
 
 {% block content %}
+	{% if errors | length %}
+		{{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+	{% endif %}
+
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -24,8 +33,8 @@
                 {% include "../partials/addDamagesRadios.njk" %}
 
                 {{ govukTextarea({
-                    name: "damage-detail",
-                    id: "damage-detail",
+                    name: "damageDescription",
+                    id: "damageDescription",
                     classes: "govuk-!-width-two-thirds",
                     label: {
                         text: "Add details about these damages",
@@ -34,7 +43,9 @@
                     hint: {
                         text: "This could be what was damaged or what needs to be cleaned, for example."
                     },
-                    attributes: { "data-qa": "add-damages-description" }
+                    attributes: { "data-qa": "add-damages-description" },
+                    errorMessage: "damageDescription" | findError(errors),
+                    value: damageDescription
                 }) }}
             
                 {{ govukButton({

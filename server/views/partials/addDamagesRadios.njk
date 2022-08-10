@@ -1,8 +1,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {{ govukRadios({
-  idPrefix: "add-damages",
-  name: "add-damages",
+  idPrefix: "damageType",
+  name: "damageType",
+  errorMessage: "damageType" | findError(errors),
   fieldset: {
     legend: {
       text: "What needs to be done"
@@ -10,53 +11,61 @@
   },
   items: [
     {
-      value: "electrical",
+      value: "Electrical",
       text: "Electrical repair",
       hint: {
         text: "For damage to lighting, a socket or a cell bell, for example."
-      }
+      },
+      checked: damageType === 'Electrical'
     },
     {
-      value: "plumbing",
+      value: "Plumbing",
       text: "Plumbing repair",
       hint: {
         text: "For damage to a toiler or sink, for example."
-      }
+      },
+      checked: damageType === 'Plumbing'
+
     },
     {
-      value: "furniture",
+      value: "Furniture",
       text: "Furniture or fabric repair",
       hint: {
         text: "For damage to a chair, table, cupboard, for example, or any part of the cell or prison."
-      }
+      },
+      checked: damageType === 'Furniture'
     },
     {
-      value: "lock",
+      value: "Lock",
       text: "Lock repair",
       hint: {
         text: "For damage to a cell door lock or a gate lock, for example."
-      }
+      },
+      checked: damageType === 'Lock'
     },
     {
-      value: "redecoration",
+      value: "Redecoration",
       text: "Redecoration",
       hint: {
         text: "For graffiti or burn damage, for example."
-      }
+      },
+      checked: damageType === 'Redecoration'
     },
     {
-      value: "cleaning",
+      value: "Cleaning",
       text: "Cleaning",
       hint: {
         text: "For cleaning up bodily fluids like blood, for example."
-      }
+      },
+      checked: damageType === 'Cleaning'
     },
     {
-      value: "replacement",
+      value: "Replacement",
       text: "Replacing an item",
       hint: {
         text: "Like replacing a kettle, cleaning equipment or sports equipment, for example."
-      }
+      },
+      checked: damageType === 'Replacement'
     }
   ]
 }) }}
