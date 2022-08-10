@@ -78,7 +78,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /incident-associate/<id>/submitted/edit', () => {
+describe('GET /associated-prisoner/<id>/submitted/edit', () => {
   it('should load the incident associate edit page', () => {
     return request(app)
       .get(
@@ -111,7 +111,7 @@ describe('GET /incident-associate/<id>/submitted/edit', () => {
   })
 })
 
-describe('POST /incident-associate/<id>/submitted/edit', () => {
+describe('POST /associated-prisoner/<id>/submitted/edit', () => {
   it('should redirect to offence selection page - reporter', () => {
     return request(app)
       .post(

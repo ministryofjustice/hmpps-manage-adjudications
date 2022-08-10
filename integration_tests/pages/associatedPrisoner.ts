@@ -1,6 +1,6 @@
 import Page, { PageElement } from './page'
 
-export default class AssociatePrisonerPage extends Page {
+export default class AssociatedPrisonerPage extends Page {
   constructor() {
     super('Who did John Smith assist?')
   }
@@ -9,7 +9,7 @@ export default class AssociatePrisonerPage extends Page {
 
   searchButton = (): PageElement => cy.get('[data-qa="prisoner-search"]')
 
-  submitButton = (): PageElement => cy.get('[data-qa="incident-associate-submit"]')
+  submitButton = (): PageElement => cy.get('[data-qa="associated-prisoner-submit"]')
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 
@@ -17,7 +17,7 @@ export default class AssociatePrisonerPage extends Page {
 
   associatedPrisonerDeleteButton = (): PageElement => cy.get('button[name="deleteUser"]')
 
-  exitButton = (): PageElement => cy.get('[data-qa="incident-associate-exit"]')
+  exitButton = (): PageElement => cy.get('[data-qa="associated-prisoner-exit"]')
 
   errorContinueButton = (): PageElement => cy.get('[data-qa="continue-after-error"]')
 

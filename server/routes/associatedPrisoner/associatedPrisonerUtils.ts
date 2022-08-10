@@ -24,6 +24,18 @@ export type DisplayData = {
   location?: AssociatedPrisonerLocation
 }
 
+export const getAssociatedPrisonerLocation = (selectedAnswerId: string) => {
+  if (!selectedAnswerId) {
+    return AssociatedPrisonerLocation.UNKNOWN
+  }
+
+  if (selectedAnswerId === 'internal') {
+    return AssociatedPrisonerLocation.INTERNAL
+  }
+
+  return AssociatedPrisonerLocation.EXTERNAL
+}
+
 export const getDraftIdFromString = (draftId: string): number => {
   let draftIdValue: number = null
   if (draftId) {

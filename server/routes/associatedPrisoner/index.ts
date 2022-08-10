@@ -1,13 +1,13 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
-import AssociatedPrisonerRoutes from './associatePrisoner'
-import AssociatedPrisonerSubmittedEditRoutes from './associatePrisonerSubmittedEdit'
+import AssociatedPrisonerRoutes from './associatedPrisoner'
+import AssociatedPrisonerSubmittedEditRoutes from './associatedPrisonerSubmittedEdit'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 
-export default function prisonerIncidentAssistRoutes({
+export default function prisonerAssociatedPrisonerRoutes({
   placeOnReportService,
   prisonerSearchService,
 }: {

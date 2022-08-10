@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
-import AssociatePrisonerPage, { PageRequestType } from './associatePrisonerPage'
+import AssociatedPrisonerPage, { PageRequestType } from './associatedPrisonerPage'
 
-export default class AssociatePrisonerRoutes {
-  page: AssociatePrisonerPage
+export default class AssociatedPrisonerRoutes {
+  page: AssociatedPrisonerPage
 
   constructor(placeOnReportService: PlaceOnReportService, prisonerSearchService: PrisonerSearchService) {
-    this.page = new AssociatePrisonerPage(PageRequestType.EDIT, placeOnReportService, prisonerSearchService)
+    this.page = new AssociatedPrisonerPage(PageRequestType.EDIT, placeOnReportService, prisonerSearchService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

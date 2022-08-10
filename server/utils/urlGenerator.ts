@@ -84,7 +84,7 @@ const adjudicationUrls = {
     },
   },
   incidentAssociate: {
-    root: '/incident-associate',
+    root: '/associated-prisoner',
     matchers: {
       start: '/:adjudicationNumber/:roleCode',
       submittedEdit: '/:adjudicationNumber/:roleCode/submitted/edit',

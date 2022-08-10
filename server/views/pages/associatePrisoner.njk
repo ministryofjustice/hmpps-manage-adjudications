@@ -58,7 +58,7 @@
     
     <h1 class="govuk-heading-l">Who did {{ prisoner.friendlyName | safe }} {{ roleCode }}?</h1>
 
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="incident-associate-form">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="associated-prisoner-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukRadios({
             idPrefix: 'selectedAnswerId',
@@ -74,7 +74,7 @@
             type: "submit",
             name: "incidentAssociateSubmit",
             classes: "govuk-button--submit govuk-!-margin-right-2",
-            attributes: { "data-qa": "incident-associate-submit" }
+            attributes: { "data-qa": "associated-prisoner-submit" }
         }) }}
 
 
@@ -82,7 +82,7 @@
             text: 'Exit',
             classes: "govuk-button--secondary",
             href: exitButtonHref,
-            attributes: { "data-qa": "incident-associate-exit" }
+            attributes: { "data-qa": "associated-prisoner-exit" }
         }) }}
 
     </form>

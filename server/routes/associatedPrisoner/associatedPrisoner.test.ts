@@ -55,7 +55,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /incident-associate', () => {
+describe('GET /associated-prisoner', () => {
   it('should load the incident associate page', () => {
     return request(app)
       .get(adjudicationUrls.incidentAssociate.urls.start(100, 'assisted'))
@@ -66,7 +66,7 @@ describe('GET /incident-associate', () => {
   })
 })
 
-describe('POST /incident-associate', () => {
+describe('POST /associated-prisoner', () => {
   it('should redirect to type of offence page if associated prisoner completed', () => {
     return request(app)
       .post(`${adjudicationUrls.incidentAssociate.urls.start(100, 'assisted')}?selectedPerson=G2678PF`)

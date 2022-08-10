@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import validateForm, { errors } from './associatePrisonerValidation'
+import validateForm, { errors } from './associatedPrisonerValidation'
 import { User } from '../../data/hmppsAuthClient'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -19,7 +19,8 @@ import {
   setRedirectUrl,
   getAssociatedPrisonersNumber,
   getAssociatedPrisonersName,
-} from './associatePrisonerUtils'
+  getAssociatedPrisonerLocation,
+} from './associatedPrisonerUtils'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 
 export enum PageRequestType {
@@ -35,7 +36,7 @@ class PageOptions {
   }
 }
 
-export default class AssociatePrisonerPage {
+export default class AssociatedPrisonerPage {
   pageOptions: PageOptions
 
   constructor(
@@ -52,17 +53,12 @@ export default class AssociatePrisonerPage {
     const { roleCode } = req.params
     const fromDelete = req.query.personDeleted as string
     const fromSearch = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
-    let roleAssociatedPrisoner = await this.readFromApi(draftId, user as User)
+    const roleAssociatedPrisoner = await this.readFromApi(draftId, user as User)
 
     if (fromSearch) {
-      roleAssociatedPrisoner = {
-        prisonerNumber: roleAssociatedPrisoner.prisonerNumber,
-        currentAssociatedPrisonerNumber: fromSearch,
-      }
+      roleAssociatedPrisoner.currentAssociatedPrisonerNumber = fromSearch
     } else if (fromDelete) {
-      roleAssociatedPrisoner = {
-        prisonerNumber: roleAssociatedPrisoner.prisonerNumber,
-      }
+      roleAssociatedPrisoner.currentAssociatedPrisonerNumber = null
     }
     const pageData = await this.getDisplayData(roleAssociatedPrisoner, null, user as User)
 
@@ -103,12 +99,7 @@ export default class AssociatePrisonerPage {
     }
 
     const validationError = validateForm({
-      // eslint-disable-next-line no-nested-ternary
-      location: selectedAnswerId
-        ? selectedAnswerId === 'internal'
-          ? AssociatedPrisonerLocation.INTERNAL
-          : AssociatedPrisonerLocation.EXTERNAL
-        : AssociatedPrisonerLocation.UNKNOWN,
+      location: getAssociatedPrisonerLocation(selectedAnswerId),
       associatedPrisonersName,
       associatedPrisonersNumber,
     })
@@ -198,28 +189,36 @@ export default class AssociatePrisonerPage {
       currentUser
     )
     const location = locationOverride == null ? getPrisonerLocation(roleAssociatedPrisoner) : locationOverride
-    let associatedPrisonersName
-
-    switch (location) {
-      case AssociatedPrisonerLocation.EXTERNAL:
-        associatedPrisonersName = roleAssociatedPrisoner.currentAssociatedPrisonerName
-        break
-      case AssociatedPrisonerLocation.INTERNAL:
-        associatedPrisonersName = roleAssociatedPrisoner.currentAssociatedPrisonerNumber
-          ? await this.getCurrentAssociatedPrisonersName(
-              roleAssociatedPrisoner.currentAssociatedPrisonerNumber,
-              currentUser
-            )
-          : null
-        break
-      default:
-    }
+    const currentAssociatedPrisonerName = await this.getAssociatedPrisonerNameByLocation(
+      location,
+      roleAssociatedPrisoner,
+      currentUser
+    )
 
     return {
       prisoner,
-      associatedPrisonersName,
+      associatedPrisonersName: currentAssociatedPrisonerName,
       associatedPrisonerNumber: roleAssociatedPrisoner.currentAssociatedPrisonerNumber,
       location: location === AssociatedPrisonerLocation.UNKNOWN ? null : location,
+    }
+  }
+
+  getAssociatedPrisonerNameByLocation = async (
+    location: AssociatedPrisonerLocation,
+    roleAssociatedPrisoner: RoleAssociatedPrisoner,
+    currentUser: User
+  ) => {
+    switch (location) {
+      case AssociatedPrisonerLocation.EXTERNAL:
+        return roleAssociatedPrisoner.currentAssociatedPrisonerName
+
+      case AssociatedPrisonerLocation.INTERNAL:
+        return roleAssociatedPrisoner.currentAssociatedPrisonerNumber
+          ? this.getCurrentAssociatedPrisonersName(roleAssociatedPrisoner.currentAssociatedPrisonerNumber, currentUser)
+          : null
+
+      default:
+        return null
     }
   }
 
