@@ -69,17 +69,22 @@ export const getAssociatedPrisonersName = (req: Request) => {
 }
 
 export const getAssociatedPrisonersNumber = (req: Request, selectedAnswerId: AssociatedPrisonerLocation) => {
-  // eslint-disable-next-line no-nested-ternary
-  return selectedAnswerId === AssociatedPrisonerLocation.INTERNAL
-    ? req.body.prisonerId !== ''
-      ? req.body.prisonerId
-      : null
-    : // eslint-disable-next-line no-nested-ternary
-    selectedAnswerId === AssociatedPrisonerLocation.EXTERNAL
-    ? req.body.prisonerOutsideEstablishmentNumberInput !== ''
-      ? req.body.prisonerOutsideEstablishmentNumberInput
-      : null
-    : null
+  if (selectedAnswerId === AssociatedPrisonerLocation.INTERNAL) {
+    return checkForSpacesAndReturn(req.body.prisonerId)
+  }
+
+  if (selectedAnswerId === AssociatedPrisonerLocation.EXTERNAL) {
+    return checkForSpacesAndReturn(req.body.prisonerOutsideEstablishmentNumberInput)
+  }
+
+  return null
+}
+
+const checkForSpacesAndReturn = (val: string) => {
+  if (val === '') {
+    return null
+  }
+  return val
 }
 
 export const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
