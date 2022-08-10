@@ -187,8 +187,8 @@ context('Delete person - full journey', () => {
   })
   it('should redirect to redirectUrl with correct query attached - yes selected', () => {
     // start on previous page to place redirectUrl on to session
-    cy.visit(adjudicationUrls.incidentRole.urls.start(34))
-    cy.get('[data-qa="incite-prisoner-delete"]').click()
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    cy.get('button[name="deleteUser"]').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.deletePerson.root}`)
       expect(loc.search).to.eq('?associatedPersonId=G6415GD')
@@ -198,14 +198,14 @@ context('Delete person - full journey', () => {
     DeletePersonPage.radioButtons().find('input[value="yes"]').check()
     DeletePersonPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.start(34))
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
       expect(loc.search).to.eq('?personDeleted=true')
     })
   })
   it('should redirect to redirectUrl with correct query attached - no selected', () => {
     // start on previous page to place redirectUrl on to session
-    cy.visit(adjudicationUrls.incidentRole.urls.start(34))
-    cy.get('[data-qa="incite-prisoner-delete"]').click()
+    cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
+    cy.get('button[name="deleteUser"]').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.deletePerson.root}`)
       expect(loc.search).to.eq('?associatedPersonId=G6415GD')
@@ -215,7 +215,7 @@ context('Delete person - full journey', () => {
     DeletePersonPage.radioButtons().find('input[value="no"]').check()
     DeletePersonPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.start(34))
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
       expect(loc.search).to.eq('?selectedPerson=G6415GD')
     })
   })
