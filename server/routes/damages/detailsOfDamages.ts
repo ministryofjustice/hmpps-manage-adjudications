@@ -94,30 +94,32 @@ export default class DetailsOfDamagesPage {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDamages = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
     if (this.pageOptions.displaySessionData()) {
+      console.log('hello!')
       return this.damagesSessionService.getAllSessionDamages(req, adjudicationNumber)
     }
 
     // Temporary return until backend is sorted and we know what things are called
-    return [
-      {
-        type: 'Redecoration',
-        description: 'Broken window',
-      },
-      {
-        type: 'Redecoration',
-        description: 'Broken pool cue',
-      },
-    ]
+    // return [
+    //   {
+    //     type: 'Redecoration',
+    //     description: 'Broken window',
+    //   },
+    //   {
+    //     type: 'Redecoration',
+    //     description: 'Broken pool cue',
+    //   },
+    // ]
 
     // will be more like...
-    // return (
-    //   draftAdjudication.damageDetails?.map(damageDetails => {
-    //     return {
-    //       type: damageDetails.damageType,
-    //       description: damageDetails.damageDescription,
-    //     }
-    //   }) || []
-    // )
+    return (
+      // @ts-expect-error: We can add this to the type when we know more about what it will look like!
+      draftAdjudication.damageDetails?.map(damageDetails => {
+        return {
+          type: damageDetails.damageType,
+          description: damageDetails.damageDescription,
+        }
+      }) || []
+    )
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {

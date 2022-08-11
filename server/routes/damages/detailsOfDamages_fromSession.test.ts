@@ -27,7 +27,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = {
   dateOfBirth: undefined,
 }
 
-const adjudicationWithOffences = {
+const adjudicationWithoutDamages = {
   draftAdjudication: {
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
@@ -49,23 +49,28 @@ const adjudicationWithOffences = {
       },
     ],
     startedByUserId: 'TEST_GEN',
-    damageDetails: [
-      {
-        damageType: 'Redecoration',
-        damageDescription: 'Broken window',
-      },
-      {
-        damageType: 'Redecoration',
-        damageDescription: 'Broken pool cue',
-      },
-    ],
   },
 }
 
+const damagesOnSession = [
+  {
+    type: 'Redecoration',
+    description: 'Broken window',
+  },
+  {
+    type: 'Redecoration',
+    description: 'Broken pool cue',
+  },
+]
+
 beforeEach(() => {
-  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithOffences)
+  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithoutDamages)
 
   placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(adjudicationPrisonerDetails)
+
+  damagesSessionService.getAllSessionDamages.mockReturnValueOnce(damagesOnSession)
+
+  damagesSessionService.getAndDeleteAllSessionDamages.mockReturnValueOnce(damagesOnSession)
 
   app = appWithAllRoutes({ production: false }, { placeOnReportService, damagesSessionService })
 })
@@ -75,9 +80,9 @@ afterEach(() => {
 })
 
 describe('GET /damages/100', () => {
-  it('should load the damages page', () => {
+  it('should load the damages page with details from the session', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfDamages.urls.start(100))
+      .get(adjudicationUrls.detailsOfDamages.urls.modified(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Redecoration')
@@ -85,26 +90,11 @@ describe('GET /damages/100', () => {
         expect(res.text).toContain('Broken pool cue')
       })
   })
-  it('should not have used the session service to get data', () => {
+  it('should use the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfDamages.urls.start(100))
+      .get(adjudicationUrls.detailsOfDamages.urls.modified(100))
       .expect(200)
-      .then(() =>
-        expect(damagesSessionService.setAllSessionDamages).toHaveBeenCalledWith(
-          expect.anything(),
-          [
-            {
-              type: 'Redecoration',
-              description: 'Broken window',
-            },
-            {
-              type: 'Redecoration',
-              description: 'Broken pool cue',
-            },
-          ],
-          100
-        )
-      )
-      .then(() => expect(damagesSessionService.getAllSessionDamages).not.toHaveBeenCalled())
+      .then(() => expect(damagesSessionService.setAllSessionDamages).not.toHaveBeenCalled())
+      .then(() => expect(damagesSessionService.getAllSessionDamages).toHaveBeenCalledWith(expect.anything(), 100))
   })
 })
