@@ -94,7 +94,6 @@ export default class DetailsOfDamagesPage {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDamages = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
     if (this.pageOptions.displaySessionData()) {
-      console.log('hello!')
       return this.damagesSessionService.getAllSessionDamages(req, adjudicationNumber)
     }
 
