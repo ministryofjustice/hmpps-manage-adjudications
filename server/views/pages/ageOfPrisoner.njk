@@ -6,6 +6,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set title = "Age of the prisoner" %}
+{% set errorMessage = errors[0] %}
 
 {% block pageTitle %}
 	{{ title }}
@@ -43,6 +44,7 @@
 			id: 'whichRuleChosen',
 			name: 'whichRuleChosen',
 			attributes: { "data-qa": "age-of-prisoner-radio-buttons" },
+            errorMessage: "whichRuleChosen" | findError(errors),
 			fieldset: {
 				legend: {
 				text: "Which set of rules apply to this prisoner?",
