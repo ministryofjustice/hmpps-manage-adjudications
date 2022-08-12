@@ -12,13 +12,13 @@
 {% set title = "Do you want to delete this offence?" %}
 
 {% block content %}
-	{% if errors | length %}
-		{{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
-    }) }}
-	{% endif %}
+      }) }}
+  {% endif %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
     {{ offenceQuestionsAndAnswers(questionsAndAnswers, adjudicationNumber, offenceIndex) }}
     <div class='govuk-!-margin-top-9'>
