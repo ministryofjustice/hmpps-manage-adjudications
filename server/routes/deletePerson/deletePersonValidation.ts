@@ -2,7 +2,7 @@ import { FormError } from '../../@types/template'
 
 const errors: { [key: string]: FormError } = {
   MISSING_RADIO: {
-    href: '#delete-person',
+    href: '#deletePerson',
     text: 'Select yes if you want to delete this person',
   },
 }
