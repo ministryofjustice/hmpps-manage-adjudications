@@ -72,6 +72,7 @@ export default defineConfig({
         verifySaveOffenceDetails: adjudications.verifySaveOffenceDetails,
         stubUpdateAdjudicationStatus: adjudications.stubUpdateAdjudicationStatus,
         stubSaveYouthOffenderStatus: adjudications.stubSaveYouthOffenderStatus,
+        stubSaveAssociatedPrisoner: adjudications.stubSaveAssociatedPrisoner,
       })
     },
 

@@ -30,14 +30,14 @@ const stubSearch = ({ query, results }: Record<string, unknown>): SuperAgentRequ
     },
   })
 
-const stubSearchPrisonerDetails = ({ prisonerNumber }): SuperAgentRequest =>
+const stubSearchPrisonerDetails = ({ prisonerNumber, status = 200 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
       urlPattern: `/search/prisoner/${prisonerNumber}`,
     },
     response: {
-      status: 200,
+      status,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },

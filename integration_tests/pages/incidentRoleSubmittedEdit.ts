@@ -7,20 +7,6 @@ export default class IncidentRoleEditPage extends Page {
 
   radioButtons = (): PageElement => cy.get('[data-qa="radio-buttons"]')
 
-  conditionalInputIncite = (): PageElement => cy.get('#incitedInput')
-
-  conditionalInputAssist = (): PageElement => cy.get('#assistedInput')
-
-  searchButtonIncite = (): PageElement => cy.get('[data-qa="incite-prisoner-search"]')
-
-  searchButtonAssist = (): PageElement => cy.get('[data-qa="assist-prisoner-search"]')
-
-  prisonerPrnAssist = (): PageElement => cy.get('[data-qa="assist-prisoner-prn"]')
-
-  prisonerNameAssist = (): PageElement => cy.get('[data-qa="assist-prisoner-name"]')
-
-  inciteAssociatedPrisonerDeleteButton = (): PageElement => cy.get('[data-qa="incite-prisoner-delete"]')
-
   submitButton = (): PageElement => cy.get('[data-qa="incident-role-submit"]')
 
   exitButton = (): PageElement => cy.get('[data-qa="incident-role-exit"]')

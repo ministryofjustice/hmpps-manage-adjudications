@@ -77,21 +77,7 @@ describe('POST /incident-role', () => {
         incitedInput: 'G2678PF',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.offenceCodeSelection.urls.start(100, 'incited'))
-  })
-  it('should render an error summary with correct validation message if the selected person has been tampered with in the URL', () => {
-    return request(app)
-      .post(`${adjudicationUrls.incidentRole.urls.start(100)}?selectedPerson=gobbledegook`)
-      .send({
-        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
-        currentRadioSelected: 'incited',
-      })
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter the prisoner’s name or number')
-      })
+      .expect('Location', adjudicationUrls.incidentAssociate.urls.start(100, 'incited'))
   })
   it('should render an error summary with correct validation message - missing radio button selection', () => {
     return request(app)

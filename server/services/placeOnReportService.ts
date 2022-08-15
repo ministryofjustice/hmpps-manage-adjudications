@@ -16,6 +16,7 @@ import {
   OffenceDetails,
   IncidentStatementStatus,
   OffenceDetailsStatus,
+  AssociatedPrisoner,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -205,7 +206,6 @@ export default class PlaceOnReportService {
 
   async updateDraftIncidentRole(
     id: number,
-    associatedPrisonersNumber: string,
     roleCode: string,
     removeExistingOffences: boolean,
     user: User
@@ -213,7 +213,6 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editIncidentRoleRequest = {
       incidentRole: {
-        associatedPrisonersNumber,
         roleCode,
       },
       removeExistingOffences,
@@ -363,6 +362,11 @@ export default class PlaceOnReportService {
   async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[], user: User) {
     const client = new ManageAdjudicationsClient(user.token)
     return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
+  }
+
+  async saveAssociatedPrisoner(adjudicationNumber: number, associatedPrisoner: AssociatedPrisoner, user: User) {
+    const client = new ManageAdjudicationsClient(user.token)
+    return client.saveAssociatedPrisoner(adjudicationNumber, associatedPrisoner)
   }
 
   async saveDamageDetails(adjudicationNumber: number, damageDetails: unknown, user: User) {

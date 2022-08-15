@@ -22,11 +22,11 @@ import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
 import ageOfPrisonerRoutes from './ageOfPrisoner'
 import detailsOfDamagesRoutes from './damages'
+import associatedPrisonerRoutes from './associatedPrisoner'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
-import config from '../config'
 
 export default function routes(
   router: Router,
@@ -53,9 +53,7 @@ export default function routes(
     })
   )
   router.use(adjudicationUrls.incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))
-  if (config.yoiNewPagesFeatureFlag) {
-    router.use(adjudicationUrls.incidentRole.root, incidentRoleRoutes({ placeOnReportService }))
-  }
+  router.use(adjudicationUrls.incidentRole.root, incidentRoleRoutes({ placeOnReportService }))
   router.use(
     adjudicationUrls.detailsOfOffence.root,
     detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
@@ -109,11 +107,15 @@ export default function routes(
     })
   )
   router.use('/', homepageRoutes({ userService }))
-  if (config.yoiNewPagesFeatureFlag) {
-    router.use(
-      adjudicationUrls.ageOfPrisoner.root,
-      ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
-    )
-  }
+  router.use(
+    adjudicationUrls.ageOfPrisoner.root,
+    ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
+  )
+
+  router.use(
+    adjudicationUrls.incidentAssociate.root,
+    associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
+  )
+
   return router
 }

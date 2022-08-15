@@ -367,6 +367,21 @@ const stubSaveYouthOffenderStatus = ({
     },
   })
 
+const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/draft-adjudications/${adjudicationNumber}/associated-prisoner`,
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -386,4 +401,5 @@ export default {
   verifySaveOffenceDetails,
   stubUpdateAdjudicationStatus,
   stubSaveYouthOffenderStatus,
+  stubSaveAssociatedPrisoner,
 }
