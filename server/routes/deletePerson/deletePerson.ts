@@ -25,8 +25,15 @@ export default class DeletePersonRoutes {
     return convertToTitleCase(associatedStaff.name)
   }
 
+  private getFriendlyName = async (associatedPersonId: string, user: User) => {
+    return isPrisonerIdentifier(associatedPersonId)
+      ? this.getAssociatedPrisonersName(associatedPersonId, user)
+      : this.getAssociatedStaffName(associatedPersonId, user)
+  }
+
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, associatedPersonFriendlyName } = pageData
+
     return res.render(`pages/deletePerson.njk`, {
       errors: error ? [error] : [],
       associatedPersonFriendlyName,
@@ -37,23 +44,28 @@ export default class DeletePersonRoutes {
     const { user } = res.locals
     const associatedPersonId = JSON.stringify(req.query.associatedPersonId)?.replace(/"/g, '')
 
-    const associatedPersonFriendlyName = isPrisonerIdentifier(associatedPersonId)
-      ? await this.getAssociatedPrisonersName(associatedPersonId, user)
-      : await this.getAssociatedStaffName(associatedPersonId, user)
+    const associatedPersonFriendlyName = await this.getFriendlyName(associatedPersonId, user)
 
-    this.renderView(req, res, { associatedPersonFriendlyName })
+    return this.renderView(req, res, {
+      associatedPersonFriendlyName,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const { deletePerson } = req.body
     const { redirectUrl } = req.session
     const { associatedPersonId } = req.query
 
     const error = validateForm({ deletePerson })
-    if (error)
+    if (error) {
+      const associatedPersonFriendlyName = await this.getFriendlyName(associatedPersonId as string, user)
       return this.renderView(req, res, {
         error,
+        associatedPersonFriendlyName,
       })
+    }
+
     const queryConnector = redirectUrl.includes('?') ? '&' : '?'
     const redirect =
       deletePerson === 'yes'
