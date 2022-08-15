@@ -3,15 +3,18 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 jest.mock('../../services/placeOnReportService.ts')
+jest.mock('../../services/prisonerSearchService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService })
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, prisonerSearchService })
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
@@ -112,6 +115,61 @@ describe('GET /associated-prisoner/<id>/submitted/edit', () => {
 })
 
 describe('POST /associated-prisoner/<id>/submitted/edit', () => {
+  it('should update correctly when switching from internal to external', () => {
+    prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(true)
+
+    return request(app)
+      .post(
+        `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
+          100,
+          'assisted'
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+      )
+      .send({
+        selectedAnswerId: 'external',
+        prisonerId: '1234',
+        prisonerOutsideEstablishmentNameInput: 'test',
+        prisonerOutsideEstablishmentNumberInput: '12345',
+      })
+      .expect(302)
+      .then(() =>
+        expect(placeOnReportService.saveAssociatedPrisoner).toHaveBeenCalledWith(
+          100,
+          {
+            associatedPrisonersNumber: '12345',
+            associatedPrisonersName: 'test',
+          },
+          expect.anything()
+        )
+      )
+  })
+  it('should update correctly when switching from external to internal', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
+          100,
+          'assisted'
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+      )
+      .send({
+        selectedAnswerId: 'internal',
+        prisonerId: '1234',
+        prisonerOutsideEstablishmentNameInput: '',
+        prisonerOutsideEstablishmentNumberInput: '',
+      })
+      .expect(302)
+      .then(() =>
+        expect(placeOnReportService.saveAssociatedPrisoner).toHaveBeenCalledWith(
+          100,
+          {
+            associatedPrisonersNumber: '1234',
+            associatedPrisonersName: null,
+          },
+          expect.anything()
+        )
+      )
+  })
+
   it('should redirect to offence selection page - reporter', () => {
     return request(app)
       .post(

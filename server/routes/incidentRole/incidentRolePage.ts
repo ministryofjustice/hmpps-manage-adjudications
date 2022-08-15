@@ -1,8 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import { debug } from 'console'
 import validateForm from './incidentRoleValidation'
-import validatePrisonerSearch from '../util/incidentSearchValidation'
 import { FormError } from '../../@types/template'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import logger from '../../../logger'
@@ -20,13 +18,11 @@ type PageData = {
 
 type DisplayData = {
   prisoner: PrisonerResultSummary
-  associatedPrisonersName?: string
 }
 
 type HiddenFormData = {
   originalIncidentRoleSelection: IncidentRole
   lastIncidentRoleSelection?: IncidentRole
-  lastAssociatedPrisonerNumberSelection?: string
 }
 
 type InitialFormData = HiddenFormData & {
@@ -39,8 +35,6 @@ type SubmittedFormData = HiddenFormData & {
   originalPageReferrerUrl?: string
   // Input data
   incidentDetails: IncidentDetails
-  searchForPersonRequest?: string
-  deletePersonRequest?: string
 }
 
 type ExitButtonData = {
@@ -51,15 +45,12 @@ type ExitButtonData = {
 
 type RequestValues = {
   draftId: number
-  selectedPerson?: string
-  deleteWanted?: string
   originalPageReferrerUrl?: string
 }
 
 type IncidentDetails = {
   prisonerNumber: string
   currentIncidentRoleSelection: IncidentRole
-  currentAssociatedPrisonerNumber?: string
 }
 
 type TemporarilySavedData = {
@@ -74,12 +65,6 @@ type StashedIncidentDetails = {
 export enum PageRequestType {
   EDIT,
   EDIT_SUBMITTED,
-}
-
-enum PageRequestAction {
-  STANDARD,
-  SEARCH_FOR_PRISONER,
-  DELETE_PRISONER,
 }
 
 class PageOptions {
@@ -99,41 +84,22 @@ export default class IncidentRolePage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const requestValues = extractValuesFromRequest(req)
-    const requestData = getPageActionFromRequest(requestValues)
     const { user } = res.locals
-    debugData('GET', requestValues)
-    debugData('GET action', requestData)
     const draftIncidentDetails = await this.readFromApi(requestValues.draftId, user as User)
 
-    let data: StashedIncidentDetails = null
-    if (requestData !== PageRequestAction.STANDARD) {
-      const sessionData = popDataFromSession(req, draftIncidentDetails.prisonerNumber)
-      if (requestData === PageRequestAction.SEARCH_FOR_PRISONER) {
-        data = updateDataOnSearchReturn(sessionData, requestValues)
-      } else if (requestData === PageRequestAction.DELETE_PRISONER) {
-        data = updateDataOnDeleteReturn(sessionData, requestValues)
-      }
-    } else {
-      data = {
-        incidentDetails: draftIncidentDetails,
-        temporaryData: {
-          originalIncidentRoleSelection: draftIncidentDetails.currentIncidentRoleSelection,
-        },
-      }
+    const data: StashedIncidentDetails = {
+      incidentDetails: draftIncidentDetails,
+      temporaryData: {
+        originalIncidentRoleSelection: draftIncidentDetails.currentIncidentRoleSelection,
+      },
     }
-    debugData('GET DATA', data)
 
     const pageData = await this.getPageDataOnGet(draftIncidentDetails.prisonerNumber, requestValues, data, user)
     renderData(res, pageData, null)
-
-    // Only delete session data when the page is successfully shown.
-    // This ensures the user can still see the data they entered in case of error.
-    deleteSessionData(req)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const postValues = extractValuesFromPost(req)
-    const postData = getPageActionFromPost(postValues)
     const { user } = res.locals
     const existingAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
       postValues.draftId,
@@ -141,41 +107,8 @@ export default class IncidentRolePage {
     )
 
     const { offenceDetails, prisonerNumber } = existingAdjudication.draftAdjudication
-
-    debugData('POST', postValues)
-    debugData('POST action', postData)
-
-    if (postData !== PageRequestAction.STANDARD) {
-      const dataToSaveAfterRedirect = transformFormDataToStashedData(postValues)
-      let returnUrl = null
-      if (this.pageOptions.isPreviouslySubmitted()) {
-        returnUrl = `${adjudicationUrls.incidentRole.urls.submittedEdit(postValues.draftId)}${
-          postValues.originalPageReferrerUrl ? `?referrer=${postValues.originalPageReferrerUrl}` : ''
-        }`
-      } else {
-        returnUrl = adjudicationUrls.incidentRole.urls.start(postValues.draftId)
-      }
-      stashDataOnSession(returnUrl, dataToSaveAfterRedirect, req)
-      if (postData === PageRequestAction.DELETE_PRISONER) {
-        return redirectToDeletePersonPage(res, postValues.incidentDetails.currentAssociatedPrisonerNumber)
-      }
-      if (postData === PageRequestAction.SEARCH_FOR_PRISONER) {
-        const searchValidationError = validatePrisonerSearch({
-          searchTerm: postValues.incidentDetails.currentAssociatedPrisonerNumber,
-          inputId: postValues.incidentDetails.currentIncidentRoleSelection,
-        })
-        if (searchValidationError) {
-          // Could stash to session and redirect here
-          const pageData = await this.getPageDataOnPost(postValues, prisonerNumber, user)
-          return renderData(res, pageData, searchValidationError)
-        }
-        return redirectToSearchForPersonPage(res, postValues.incidentDetails.currentAssociatedPrisonerNumber)
-      }
-    }
-
     const validationError = validateForm({
       incidentRole: postValues.incidentDetails?.currentIncidentRoleSelection,
-      associatedPrisonersNumber: postValues.incidentDetails?.currentAssociatedPrisonerNumber,
     })
     if (validationError) {
       // Could stash to session and redirect here
@@ -190,7 +123,14 @@ export default class IncidentRolePage {
         postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
       const removeExistingOffences = incidentRoleChanged
       await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
-
+      if ([IncidentRole.ASSISTED, IncidentRole.INCITED].includes(incidentDetailsToSave.currentIncidentRoleSelection)) {
+        return redirectToAssociatedPrisoner(
+          res,
+          postValues.draftId,
+          incidentDetailsToSave.currentIncidentRoleSelection,
+          this.pageOptions.isPreviouslySubmitted()
+        )
+      }
       const offencesExist = !removeExistingOffences && offenceDetails?.length > 0
       if (!!req.session.forceOffenceSelection || !offencesExist) {
         return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
@@ -215,7 +155,6 @@ export default class IncidentRolePage {
     // eslint-disable-next-line no-return-await
     return this.placeOnReportService.updateDraftIncidentRole(
       draftId,
-      data.currentAssociatedPrisonerNumber,
       codeFromIncidentRole(data.currentIncidentRoleSelection),
       removeExistingOffences,
       currentUser
@@ -239,11 +178,7 @@ export default class IncidentRolePage {
       prisonerReportUrl,
     }
     return {
-      displayData: await this.getDisplayData(
-        prisonerNumber,
-        currentUser,
-        data?.incidentDetails?.currentAssociatedPrisonerNumber
-      ),
+      displayData: await this.getDisplayData(prisonerNumber, currentUser),
       exitButtonData,
       formData: transformStashedDataToFormData(data),
     }
@@ -266,30 +201,16 @@ export default class IncidentRolePage {
     }
 
     return {
-      displayData: await this.getDisplayData(
-        prisonerNumber,
-        currentUser,
-        postValues.incidentDetails?.currentAssociatedPrisonerNumber
-      ),
+      displayData: await this.getDisplayData(prisonerNumber, currentUser),
       exitButtonData,
       formData: postValues,
     }
   }
 
-  getDisplayData = async (
-    prisonerNumber: string,
-    currentUser: User,
-    currentAssociatedPrisonerNumber?: string
-  ): Promise<DisplayData> => {
+  getDisplayData = async (prisonerNumber: string, currentUser: User): Promise<DisplayData> => {
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, currentUser)
-
-    const associatedPrisonersName = currentAssociatedPrisonerNumber
-      ? await this.getCurrentAssociatedPrisonersName(currentAssociatedPrisonerNumber, currentUser)
-      : null
-
     return {
       prisoner,
-      associatedPrisonersName,
     }
   }
 
@@ -324,46 +245,6 @@ const extractValuesFromRequest = (req: Request): RequestValues => {
   return values
 }
 
-const getPageActionFromRequest = (reqData: RequestValues): PageRequestAction => {
-  if (reqData.selectedPerson) {
-    return PageRequestAction.SEARCH_FOR_PRISONER
-  }
-  if (reqData.deleteWanted) {
-    return PageRequestAction.DELETE_PRISONER
-  }
-  return PageRequestAction.STANDARD
-}
-
-const popDataFromSession = (req: Request, prisonerNumber: string): StashedIncidentDetails => {
-  const currentIncidentRoleSelection = incidentRoleFromCode(req.session.currentRadioSelection)
-  const currentAssociatedPrisonerNumber = req.session.currentAssociatedPrisonersNumber
-  const originalIncidentRoleSelection = incidentRoleFromCode(req.session.originalRadioSelection)
-  return {
-    incidentDetails: {
-      prisonerNumber,
-      currentIncidentRoleSelection,
-      currentAssociatedPrisonerNumber,
-    },
-    temporaryData: {
-      originalIncidentRoleSelection,
-    },
-  }
-}
-
-const deleteSessionData = (req: Request) => {
-  delete req.session.redirectUrl
-  delete req.session.currentRadioSelection
-  delete req.session.currentAssociatedPrisonersNumber
-  delete req.session.originalRadioSelection
-}
-
-const stashDataOnSession = (returnUrl: string, dataToStore: StashedIncidentDetails, req: Request) => {
-  req.session.redirectUrl = returnUrl
-  req.session.currentRadioSelection = codeFromIncidentRole(dataToStore.incidentDetails.currentIncidentRoleSelection)
-  req.session.currentAssociatedPrisonersNumber = dataToStore.incidentDetails.currentAssociatedPrisonerNumber
-  req.session.originalRadioSelection = codeFromIncidentRole(dataToStore.temporaryData.originalIncidentRoleSelection)
-}
-
 const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult): IncidentDetails => {
   let incidentRoleCode: IncidentRole = null
   if (draftAdjudicationResult.draftAdjudication.incidentRole) {
@@ -372,16 +253,6 @@ const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult
   return {
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
     currentIncidentRoleSelection: incidentRoleCode,
-    currentAssociatedPrisonerNumber: draftAdjudicationResult.draftAdjudication.incidentRole?.associatedPrisonersNumber,
-  }
-}
-
-const transformFormDataToStashedData = (formData: SubmittedFormData): StashedIncidentDetails => {
-  return {
-    incidentDetails: formData.incidentDetails,
-    temporaryData: {
-      originalIncidentRoleSelection: formData.originalIncidentRoleSelection,
-    },
   }
 }
 
@@ -390,7 +261,6 @@ const transformStashedDataToFormData = (data: StashedIncidentDetails): InitialFo
     incidentDetails: data?.incidentDetails,
     originalIncidentRoleSelection: data?.temporaryData?.originalIncidentRoleSelection,
     lastIncidentRoleSelection: data?.incidentDetails?.currentIncidentRoleSelection,
-    lastAssociatedPrisonerNumberSelection: data?.incidentDetails?.currentAssociatedPrisonerNumber,
   }
 }
 
@@ -423,19 +293,6 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
   return values
 }
 
-const getPageActionFromPost = (reqData: SubmittedFormData): PageRequestAction => {
-  if (
-    reqData.searchForPersonRequest === 'incitedSearchSubmit' ||
-    reqData.searchForPersonRequest === 'assistedSearchSubmit'
-  ) {
-    return PageRequestAction.SEARCH_FOR_PRISONER
-  }
-  if (reqData.deletePersonRequest === 'incitedDelete' || reqData.deletePersonRequest === 'assistedDelete') {
-    return PageRequestAction.DELETE_PRISONER
-  }
-  return PageRequestAction.STANDARD
-}
-
 const renderData = (res: Response, pageData: PageData, error: FormError) => {
   let exitButtonHref = null
   if (pageData.exitButtonData) {
@@ -446,20 +303,9 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     }
   }
   const currentIncidentRoleSelection = pageData.formData.incidentDetails?.currentIncidentRoleSelection
-  const currentAssociatedPrisonerNumber = pageData.formData.incidentDetails?.currentAssociatedPrisonerNumber
-  let incitedInput = null
-  let assistedInput = null
-  if (currentIncidentRoleSelection && currentAssociatedPrisonerNumber) {
-    if (currentIncidentRoleSelection === IncidentRole.ASSISTED) {
-      assistedInput = currentAssociatedPrisonerNumber
-    } else if (currentIncidentRoleSelection === IncidentRole.INCITED) {
-      incitedInput = currentAssociatedPrisonerNumber
-    }
-  }
+
   const data = {
     originalRadioSelection: radioSelectionCodeFromIncidentRole(currentIncidentRoleSelection),
-    associatedPrisonersNumber: pageData.formData.incidentDetails?.currentAssociatedPrisonerNumber,
-    associatedPrisonersName: pageData.displayData.associatedPrisonersName,
   }
   return res.render(`pages/incidentRole`, {
     errors: error ? [error] : [],
@@ -467,44 +313,9 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     data,
     submitButtonText: 'Save and continue',
     exitButtonHref,
-    incitedInput,
-    assistedInput,
     originalIncidentRoleSelection: pageData.formData.originalIncidentRoleSelection,
     lastIncidentRoleSelection: pageData.formData.lastIncidentRoleSelection,
-    lastAssociatedPrisonerNumberSelection: pageData.formData.lastAssociatedPrisonerNumberSelection,
   })
-}
-
-export const updateDataOnSearchReturn = (
-  stashedData: StashedIncidentDetails,
-  requestData: RequestValues
-): StashedIncidentDetails => {
-  if (!requestData.selectedPerson) {
-    return stashedData
-  }
-  return {
-    incidentDetails: {
-      ...stashedData.incidentDetails,
-      currentAssociatedPrisonerNumber: requestData.selectedPerson,
-    },
-    temporaryData: stashedData.temporaryData,
-  }
-}
-
-export const updateDataOnDeleteReturn = (
-  stashedData: StashedIncidentDetails,
-  requestData: RequestValues
-): StashedIncidentDetails => {
-  if (!requestData.deleteWanted || requestData.deleteWanted !== 'true') {
-    return stashedData
-  }
-  return {
-    incidentDetails: {
-      ...stashedData.incidentDetails,
-      currentAssociatedPrisonerNumber: null,
-    },
-    temporaryData: stashedData.temporaryData,
-  }
 }
 
 const getDraftIdFromString = (draftId: string): number => {
@@ -559,14 +370,6 @@ const getTaskListUrl = (draftId: number) => {
   return adjudicationUrls.taskList.urls.start(draftId)
 }
 
-const redirectToSearchForPersonPage = (res: Response, searchTerm: string) => {
-  return res.redirect(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=${searchTerm}`)
-}
-
-const redirectToDeletePersonPage = (res: Response, prisonerToDelete: string) => {
-  return res.redirect(`${adjudicationUrls.deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
-}
-
 const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
   return res.redirect(
     adjudicationUrls.offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode))
@@ -577,9 +380,8 @@ const redirectToOffenceDetails = (res: Response, draftId: number) => {
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
 }
 
-// TODO - How best to debug (if at all). We need some unoffical way of logging - do not invoke App Insights
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const debugData = (outputId: string, data: any) => {
-  debug(outputId)
-  debug(data)
+const redirectToAssociatedPrisoner = (res: Response, draftId: number, roleCode: string, isSubmitted: boolean) => {
+  return isSubmitted
+    ? res.redirect(adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode))
+    : res.redirect(adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode))
 }

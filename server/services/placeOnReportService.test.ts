@@ -808,11 +808,10 @@ describe('placeOnReportService', () => {
         prisonerNumber: 'G2996UX',
       }
       updateIncidentRole.mockResolvedValue(expectedResult)
-      const response = await service.updateDraftIncidentRole(4, 'G2996UX', '25b', false, user)
+      const response = await service.updateDraftIncidentRole(4, '25b', false, user)
       expect(response).toEqual(expectedResult)
       expect(updateIncidentRole).toBeCalledWith(4, {
         incidentRole: {
-          associatedPrisonersNumber: 'G2996UX',
           roleCode: '25b',
         },
         removeExistingOffences: false,

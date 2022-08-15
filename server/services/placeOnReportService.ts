@@ -206,7 +206,6 @@ export default class PlaceOnReportService {
 
   async updateDraftIncidentRole(
     id: number,
-    associatedPrisonersNumber: string,
     roleCode: string,
     removeExistingOffences: boolean,
     user: User
@@ -214,7 +213,6 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editIncidentRoleRequest = {
       incidentRole: {
-        associatedPrisonersNumber,
         roleCode,
       },
       removeExistingOffences,

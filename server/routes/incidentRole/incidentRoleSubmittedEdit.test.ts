@@ -125,6 +125,23 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(100))
   })
+  it.each(['incited', 'assisted'])(
+    'should redirect to associated prisoner selection page for %p if details are complete after changing information',
+    (role: string) => {
+      return request(app)
+        .post(
+          `${adjudicationUrls.incidentRole.urls.submittedEdit(
+            100
+          )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+        )
+        .send({
+          currentRadioSelected: role,
+          originalIncidentRoleSelection: 'committed',
+        })
+        .expect(302)
+        .expect('Location', adjudicationUrls.incidentAssociate.urls.submittedEdit(100, role))
+    }
+  )
   it('should redirect to offence details page - reviewer', () => {
     return request(app)
       .post(
@@ -138,21 +155,6 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(100))
-  })
-  it('should render an error summary with correct validation message - user does not search for associated prisoner when required', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.incidentRole.urls.submittedEdit(
-          100
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
-      )
-      .send({
-        currentRadioSelected: 'incited',
-      })
-      .expect(res => {
-        expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter the prisoner’s name or number')
-      })
   })
   it('should throw an error on PUT endpoint failure', () => {
     placeOnReportService.updateDraftIncidentRole.mockRejectedValue(new Error('Internal Error'))
@@ -186,7 +188,6 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         expect(placeOnReportService.updateDraftIncidentRole).toHaveBeenCalledWith(
           100,
           null,
-          null,
           false, // RemoveOffences
           expect.anything()
         )
@@ -207,7 +208,6 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       .then(() =>
         expect(placeOnReportService.updateDraftIncidentRole).toHaveBeenCalledWith(
           100,
-          null,
           null,
           true, // RemoveOffences
           expect.anything()

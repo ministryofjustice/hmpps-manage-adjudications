@@ -2,91 +2,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
- {% set incited %}
-{% if (data.originalRadioSelection === 'incited') and (data.associatedPrisonersName) %}
-  <div>  
-    <p><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonersName }} </p> 
-    <p><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
-    <div>
-      {{ govukButton({
-          text: 'Delete',
-          classes: "govuk-button--secondary",
-            type: "submit",
-            name: "deleteAssociatedPrisoner",
-            value: "incitedDelete",
-          attributes: { "data-qa": "incite-prisoner-delete" }
-      }) }}
-    </div>
-  </div>
-{% else %}
-<div class="flex-container flex-center">
-<div class="govuk-!-margin-right-3">
-{{ govukInput({
-  id: "incitedInput",
-  name: "incitedInput",
-  classes: "govuk-!-width-full-width",
-  value: incitedInput,
-  errorMessage: errors | findErrors(['incitedInput']),
-  label: {
-    text: "Enter their name or prison number",
-    classes: "govuk-!-font-weight-bold"
-  }
-}) }}
-</div>
-    {{ govukButton({
-        text: 'Search',
-        classes: "govuk-button--secondary conditionalRadioSearchButton",
-    type: "submit",
-    name: "search",
-    value: "incitedSearchSubmit",
-        attributes: { "data-qa": "incite-prisoner-search" }
-    }) }}
-</div>
-{% endif %}
-{% endset -%}
-
- {% set assisted %}
-{% if (data.originalRadioSelection === 'assisted') and (data.associatedPrisonersName) %}
-  <div>  
-    <p data-qa="assist-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ data.associatedPrisonersName }} </p> 
-    <p data-qa="assist-prisoner-prn"><span class="govuk-!-font-weight-bold">PRN</span> - {{ data.associatedPrisonersNumber }} </p> 
-    <div>
-    {{ govukButton({
-        text: 'Delete',
-        classes: "govuk-button--secondary",
-          type: "submit",
-          name: "deleteAssociatedPrisoner",
-          value: "assistedDelete",
-        attributes: { "data-qa": "assist-prisoner-delete" }
-    }) }}
-    </div>
-  </div>
-{% else %}
-<div class="flex-container flex-center">
-<div class="govuk-!-margin-right-3">
-{{ govukInput({
-  id: "assistedInput",
-  name: "assistedInput",
-  classes: "govuk-!-width-full-width",
-  value: assistedInput,
-  errorMessage: errors | findErrors(['assistedInput']),
-  label: {
-    text: "Enter their name or prison number",
-    classes: "govuk-!-font-weight-bold"
-  }
-}) }}
-</div>
-    {{ govukButton({
-        text: 'Search',
-        classes: "govuk-button--secondary conditionalRadioSearchButton assistedSearchSubmit",
-    type: "submit",
-    name: "search",
-    value: "assistedSearchSubmit",
-        attributes: { "data-qa": "assist-prisoner-search" }
-    }) }}
-</div>
-{% endif %}
-{% endset -%}
 
     {{ govukRadios({
     idPrefix: 'currentRadioSelected',
@@ -108,17 +23,11 @@
     {
       value: "incited",
       text: "Incited another prisoner to commit this incident",
-      conditional: {
-        html: incited
-      },
       checked: data.originalRadioSelection === "incited"
     },
     {
       value: "assisted",
       text: "Assisted another prisoner to commit, or attempt to commit this incident",
-      conditional: {
-        html: assisted
-      },
       checked: data.originalRadioSelection === "assisted"
     }
   ]
