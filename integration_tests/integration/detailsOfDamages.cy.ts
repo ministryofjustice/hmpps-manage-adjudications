@@ -1,19 +1,22 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfDamages from '../pages/detailsOfDamages'
+import { DamageCode, DamageDetails } from '../../server/data/DraftAdjudicationResult'
 
 const damagesList = [
   {
-    damageType: 'Redecoration',
-    damageDescription: 'Wallpaper ripped',
+    code: DamageCode.REDECORATION,
+    details: 'Wallpaper ripped',
+    reporter: 'TESTER_GEN',
   },
   {
-    damageType: 'Replacement',
-    damageDescription: 'Rug torn',
+    code: DamageCode.REPLACE_AN_ITEM,
+    details: 'Rug torn',
+    reporter: 'TESTER_GEN',
   },
 ]
 
-const draftAdjudication = (id: number, damageDetails: unknown) => {
+const draftAdjudication = (id: number, damages: DamageDetails[]) => {
   return {
     draftAdjudication: {
       id,
@@ -38,7 +41,7 @@ const draftAdjudication = (id: number, damageDetails: unknown) => {
           victimPrisonersNumber: 'G5512G',
         },
       ],
-      damageDetails,
+      damages,
     },
   }
 }
@@ -96,7 +99,7 @@ context('Details of damages', () => {
         expect($data.get(0).innerText).to.contain('Redecoration')
         expect($data.get(1).innerText).to.contain('Wallpaper ripped')
         expect($data.get(2).innerText).to.contain('Remove')
-        expect($data.get(3).innerText).to.contain('Replacement')
+        expect($data.get(3).innerText).to.contain('Replacing an item')
         expect($data.get(4).innerText).to.contain('Rug torn')
         expect($data.get(5).innerText).to.contain('Remove')
       })
@@ -113,7 +116,7 @@ context('Details of damages', () => {
     DetailsOfDamagePage.damagesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Replacement')
+        expect($data.get(0).innerText).to.contain('Replacing an item')
         expect($data.get(1).innerText).to.contain('Rug torn')
       })
   })
@@ -166,7 +169,7 @@ context('Details of damages', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.add(200))
     })
-    DetailsOfDamagePage.addDamageType().find('input[value="Electrical"]').check()
+    DetailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check()
     DetailsOfDamagePage.addDamageDescription().type('Plug socket broken')
     DetailsOfDamagePage.addDamageSubmit().click()
     DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row plus the damage we just added
@@ -174,6 +177,7 @@ context('Details of damages', () => {
       .find('td')
       .then($data => {
         expect($data.get(0).innerText).to.contain('Electrical')
+        expect($data.get(0).innerText).to.not.contain('Electrical repair')
         expect($data.get(1).innerText).to.contain('Plug socket broken')
         expect($data.get(2).innerText).to.contain('Remove')
       })

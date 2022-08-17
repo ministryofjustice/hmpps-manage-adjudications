@@ -23,8 +23,9 @@ describe('Add damages', () => {
     return request(app)
       .post(`${adjudicationUrls.detailsOfDamages.urls.add(100)}`)
       .send({
-        damageType: 'Redecoration',
+        damageType: 'REDECORATION',
         damageDescription: 'Repainting required',
+        reporter: 'user1',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfDamages.urls.modified(100))
@@ -32,8 +33,9 @@ describe('Add damages', () => {
         expect(damagesSessionService.addSessionDamage).toHaveBeenCalledWith(
           expect.anything(),
           {
-            type: 'Redecoration',
+            type: 'REDECORATION',
             description: 'Repainting required',
+            reporter: 'user1',
           },
           100
         )

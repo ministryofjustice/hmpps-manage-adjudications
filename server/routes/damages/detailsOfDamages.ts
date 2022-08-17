@@ -5,6 +5,12 @@ import DamagesSessionService from '../../services/damagesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 
+type DisplayDamage = {
+  type: string
+  description: string
+  reporter: string
+}
+
 export enum PageRequestType {
   DAMAGES_FROM_API,
   DAMAGES_FROM_SESSION,
@@ -83,25 +89,32 @@ export default class DetailsOfDamagesPage {
       this.damagesSessionService.deleteAllSessionDamages(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
     }
-    const damageDetails = this.damagesSessionService.getAndDeleteAllSessionDamages(req, adjudicationNumber)
-    // probably need to map data here to get into correct format for saveDamageDetails api call
+
+    const damageDetails = this.damagesSessionService
+      .getAndDeleteAllSessionDamages(req, adjudicationNumber)
+      .map((damages: DisplayDamage) => {
+        return {
+          code: damages.type,
+          details: damages.description,
+          reporter: damages.reporter,
+        }
+      })
 
     await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damageDetails, user)
     return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDamages = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
     if (this.pageOptions.displaySessionData()) {
       return this.damagesSessionService.getAllSessionDamages(req, adjudicationNumber)
     }
 
     return (
-      // @ts-expect-error: We can add this to the type when we know more about what it will look like!
-      draftAdjudication.damageDetails?.map(damageDetails => {
+      draftAdjudication.damages?.map(damageDetails => {
         return {
-          type: damageDetails.damageType,
-          description: damageDetails.damageDescription,
+          type: damageDetails.code,
+          description: damageDetails.details,
+          reporter: damageDetails.reporter,
         }
       }) || []
     )

@@ -7,6 +7,7 @@ import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
+import { DamageCode } from '../data/DraftAdjudicationResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -126,6 +127,27 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       return 'Prison rule 55'
     }
     return 'Prison rule 51'
+  })
+
+  njkEnv.addFilter('damageCode', (damageCode: DamageCode) => {
+    switch (damageCode) {
+      case DamageCode.ELECTRICAL_REPAIR:
+        return 'Electrical'
+      case DamageCode.PLUMBING_REPAIR:
+        return 'Plumbing'
+      case DamageCode.FURNITURE_OR_FABRIC_REPAIR:
+        return 'Furniture or fabric'
+      case DamageCode.LOCK_REPAIR:
+        return 'Lock'
+      case DamageCode.REDECORATION:
+        return 'Redecoration'
+      case DamageCode.CLEANING:
+        return 'Cleaning'
+      case DamageCode.REPLACE_AN_ITEM:
+        return 'Replacing an item'
+      default:
+        return null
+    }
   })
 
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)

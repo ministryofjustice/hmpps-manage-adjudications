@@ -54,11 +54,11 @@ const adjudicationWithoutDamages = {
 
 const damagesOnSession = [
   {
-    type: 'Redecoration',
+    type: 'REDECORATION',
     description: 'Broken window',
   },
   {
-    type: 'Redecoration',
+    type: 'REDECORATION',
     description: 'Broken pool cue',
   },
 ]

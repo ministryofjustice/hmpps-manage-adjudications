@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import DamagesSessionService from '../../services/damagesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { DamageCode } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/damagesSessionService.ts')
@@ -49,14 +50,16 @@ const adjudicationWithOffences = {
       },
     ],
     startedByUserId: 'TEST_GEN',
-    damageDetails: [
+    damages: [
       {
-        damageType: 'Redecoration',
-        damageDescription: 'Broken window',
+        code: DamageCode.REDECORATION,
+        details: 'Broken window',
+        reporter: 'TESTER_GEN',
       },
       {
-        damageType: 'Redecoration',
-        damageDescription: 'Broken pool cue',
+        code: DamageCode.REDECORATION,
+        details: 'Broken pool cue',
+        reporter: 'TESTER_GEN',
       },
     ],
   },
@@ -94,12 +97,14 @@ describe('GET /damages/100', () => {
           expect.anything(),
           [
             {
-              type: 'Redecoration',
+              type: DamageCode.REDECORATION,
               description: 'Broken window',
+              reporter: 'TESTER_GEN',
             },
             {
-              type: 'Redecoration',
+              type: DamageCode.REDECORATION,
               description: 'Broken pool cue',
+              reporter: 'TESTER_GEN',
             },
           ],
           100

@@ -33,6 +33,7 @@ export default class AddDamagesRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { damageType, damageDescription } = req.body
 
@@ -42,6 +43,7 @@ export default class AddDamagesRoutes {
     const damageToAdd = {
       type: damageType,
       description: damageDescription,
+      reporter: user.username,
     }
 
     this.damagesSessionService.addSessionDamage(req, damageToAdd, adjudicationNumber)

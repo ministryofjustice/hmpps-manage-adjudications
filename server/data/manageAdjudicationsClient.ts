@@ -10,6 +10,7 @@ import {
   OffenceDetails,
   ApplicableRules,
   AssociatedPrisoner,
+  DamageDetails,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -168,11 +169,10 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  // TODO something like this anyway
-  async saveDamageDetails(adjudicationNumber: number, damagesData: unknown) {
+  async saveDamageDetails(adjudicationNumber: number, damages: DamageDetails[]): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `draft-adjudication/${adjudicationNumber}/damages`,
-      data: { damagesData },
+      path: `/draft-adjudications/${adjudicationNumber}/damages`,
+      data: { damages },
     })
   }
 }

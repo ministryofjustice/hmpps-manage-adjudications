@@ -8,7 +8,7 @@
         {% set rows = (rows.push(
             [
                 {
-                    text: damage.type
+                    text: damage.type | damageCode
                 }, 
                 {
                     text: damage.description
