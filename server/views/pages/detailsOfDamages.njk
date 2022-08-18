@@ -1,0 +1,59 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/damagesTable.njk" import damagesTable %}
+
+{% set title = "Damages" %}
+
+{% block pageTitle %}
+    {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}" />
+        <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+            {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+            {% if damages | length > 0 %}
+            <div class="damages-table">
+                {{ damagesTable(damages, redirectAfterRemoveUrl, currentUser) }}
+            </div>
+
+            {% else %}
+            <p class="govuk-body" data-qa="no-damages-p1">You have not added damages to this report.</p>
+            <p class="govuk-body" data-qa="no-damages-p2">You can add damages now or you can continue. You can also return later and add damages.</p>
+            {% endif %}
+
+        {{ govukButton({
+            text: "Add damages",
+            href: addDamagesButtonHref,
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "add-damages-button" }
+        }) }}
+        <br>
+        {{ govukButton({
+            text: "Save and continue",
+            type: "submit",
+            classes: "govuk-button--submit govuk-!-margin-right-3",
+            attributes: { "data-qa": "details-of-damages-submit" }
+        }) }}
+        {{ govukButton({
+            text: "Exit",
+            href: exitButtonHref,
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "exit-damages-button" }
+        }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -39,6 +39,7 @@ export type DraftAdjudication = {
   incidentStatement?: IncidentStatement
   offenceDetails?: OffenceDetails[]
   isYouthOffender?: boolean
+  damages?: DamageDetails[]
 }
 
 export type DraftAdjudicationResult = {
@@ -100,3 +101,19 @@ export type AssociatedPrisoner = {
 }
 
 export type OffenceDetailsStatus = IncidentStatementStatus
+
+export type DamageDetails = {
+  code: DamageCode
+  details: string
+  reporter?: string
+}
+
+export enum DamageCode {
+  ELECTRICAL_REPAIR = 'ELECTRICAL_REPAIR',
+  PLUMBING_REPAIR = 'PLUMBING_REPAIR',
+  FURNITURE_OR_FABRIC_REPAIR = 'FURNITURE_OR_FABRIC_REPAIR',
+  LOCK_REPAIR = 'LOCK_REPAIR',
+  REDECORATION = 'REDECORATION',
+  CLEANING = 'CLEANING',
+  REPLACE_AN_ITEM = 'REPLACE_AN_ITEM',
+}

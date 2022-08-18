@@ -1,0 +1,72 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{{ govukRadios({
+  idPrefix: "damageType",
+  name: "damageType",
+  errorMessage: "damageType" | findError(errors),
+  attributes: { "data-qa": "add-damages-radio-buttons" },
+  fieldset: {
+    legend: {
+      text: "What needs to be done"
+    }
+  },
+  items: [
+    {
+      value: "ELECTRICAL_REPAIR",
+      text: "Electrical repair",
+      hint: {
+        text: "For damage to lighting, a socket or a cell bell, for example."
+      },
+      checked: damageType === 'ELECTRICAL_REPAIR'
+    },
+    {
+      value: "PLUMBING_REPAIR",
+      text: "Plumbing repair",
+      hint: {
+        text: "For damage to a toiler or sink, for example."
+      },
+      checked: damageType === 'PLUMBING_REPAIR'
+
+    },
+    {
+      value: "FURNITURE_OR_FABRIC_REPAIR",
+      text: "Furniture or fabric repair",
+      hint: {
+        text: "For damage to a chair, table, cupboard, for example, or any part of the cell or prison."
+      },
+      checked: damageType === 'FURNITURE_OR_FABRIC_REPAIR'
+    },
+    {
+      value: "LOCK_REPAIR",
+      text: "Lock repair",
+      hint: {
+        text: "For damage to a cell door lock or a gate lock, for example."
+      },
+      checked: damageType === 'LOCK_REPAIR'
+    },
+    {
+      value: "REDECORATION",
+      text: "Redecoration",
+      hint: {
+        text: "For graffiti or burn damage, for example."
+      },
+      checked: damageType === 'REDECORATION'
+    },
+    {
+      value: "CLEANING",
+      text: "Cleaning",
+      hint: {
+        text: "For cleaning up bodily fluids like blood, for example."
+      },
+      checked: damageType === 'CLEANING'
+    },
+    {
+      value: "REPLACE_AN_ITEM",
+      text: "Replacing an item",
+      hint: {
+        text: "Like replacing a kettle, cleaning equipment or sports equipment, for example."
+      },
+      checked: damageType === 'REPLACE_AN_ITEM'
+    }
+  ]
+}) }}

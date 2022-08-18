@@ -3,6 +3,7 @@ import moment from 'moment'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
 import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
+import { DamageCode } from './DraftAdjudicationResult'
 
 jest.mock('../../logger')
 
@@ -150,7 +151,7 @@ describe('manageAdjudicationsClient', () => {
             id: 9,
             statement: 'test',
           },
-          startedByUserId: 'NCLAMP_GEN',
+          startedByUserId: 'TESTER_GEN',
         },
       }
 
@@ -441,7 +442,7 @@ describe('manageAdjudicationsClient', () => {
           handoverDeadline: '2022-06-18T11:11:00',
         },
         incidentRole: {},
-        startedByUserId: 'NCLAMP_GEN',
+        startedByUserId: 'TESTER_GEN',
         isYouthOffender: true,
       },
     }
@@ -471,6 +472,45 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, result)
       const response = await client.getOffenceRule(1234, true)
+      expect(response).toEqual(result)
+    })
+  })
+  describe('saveDamageDetails', () => {
+    const result = {
+      draftAdjudication: {
+        id: 2469,
+        prisonerNumber: 'G6123VU',
+        incidentDetails: {
+          locationId: 26964,
+          dateTimeOfIncident: '2022-06-16T11:11:00',
+          handoverDeadline: '2022-06-18T11:11:00',
+        },
+        incidentRole: {},
+        startedByUserId: 'TESTER_GEN',
+        isYouthOffender: true,
+        damages: [
+          {
+            code: 'REPLACE_AN_ITEM',
+            details: 'Lightbulb was smashed',
+            reporter: 'TESTER_GEN',
+          },
+        ],
+      },
+    }
+
+    const damagesData = [
+      {
+        code: DamageCode.REPLACE_AN_ITEM,
+        details: 'Lightbulb was smashed',
+        reporter: 'TESTER_GEN',
+      },
+    ]
+    it('returns the updated draft adjudication', async () => {
+      fakeManageAdjudicationsApi
+        .put(`/draft-adjudications/2469/damages`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+      const response = await client.saveDamageDetails(2469, damagesData)
       expect(response).toEqual(result)
     })
   })

@@ -10,6 +10,7 @@ import OffenceSessionService from './offenceSessionService'
 import AllOffencesSessionService from './allOffencesSessionService'
 import DecisionTreeService from './decisionTreeService'
 import decisionTree from '../offenceCodeDecisions/DecisionTree'
+import DamagesSessionService from './damagesSessionService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
@@ -24,6 +25,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 const offenceSessionService = new OffenceSessionService()
 const allOffencesSessionService = new AllOffencesSessionService()
+const damagesSessionService = new DamagesSessionService()
 const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,
@@ -40,6 +42,7 @@ export const services = {
   offenceSessionService,
   allOffencesSessionService,
   decisionTreeService,
+  damagesSessionService,
 }
 
 export type Services = typeof services
