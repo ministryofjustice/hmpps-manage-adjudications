@@ -7,12 +7,35 @@ const damagesList = [
   {
     code: DamageCode.REDECORATION,
     details: 'Wallpaper ripped',
-    reporter: 'TESTER_GEN',
+    reporter: 'USER1',
   },
   {
     code: DamageCode.REPLACE_AN_ITEM,
     details: 'Rug torn',
-    reporter: 'TESTER_GEN',
+    reporter: 'USER1',
+  },
+]
+
+const damagesListMultiUser = [
+  {
+    code: DamageCode.REDECORATION,
+    details: 'Wallpaper ripped',
+    reporter: 'USER1',
+  },
+  {
+    code: DamageCode.ELECTRICAL_REPAIR,
+    details: 'Plug socket broken',
+    reporter: 'USER1',
+  },
+  {
+    code: DamageCode.REPLACE_AN_ITEM,
+    details: 'Chair broken',
+    reporter: 'USER2',
+  },
+  {
+    code: DamageCode.CLEANING,
+    details: 'Walls need cleaning',
+    reporter: 'USER1',
   },
 ]
 
@@ -66,6 +89,10 @@ context('Details of damages', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 201,
       response: draftAdjudication(201, damagesList),
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 202,
+      response: draftAdjudication(202, damagesListMultiUser),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
@@ -181,5 +208,71 @@ context('Details of damages', () => {
         expect($data.get(1).innerText).to.contain('Plug socket broken')
         expect($data.get(2).innerText).to.contain('Remove')
       })
+  })
+  it('should not show the remove link for damages that the current user did not add', () => {
+    cy.visit(adjudicationUrls.detailsOfDamages.urls.start(202))
+    const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+    DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 5) // This includes the header row plus four data rows
+    DetailsOfDamagePage.damagesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Redecoration')
+        expect($data.get(1).innerText).to.contain('Wallpaper ripped')
+        expect($data.get(2).innerText).to.contain('Remove')
+        expect($data.get(3).innerText).to.contain('Electrical')
+        expect($data.get(4).innerText).to.contain('Plug socket broken')
+        expect($data.get(5).innerText).to.contain('Remove')
+        expect($data.get(6).innerText).to.contain('Replacing an item')
+        expect($data.get(7).innerText).to.contain('Chair broken')
+        expect($data.get(8).innerText).to.not.contain('Remove')
+        expect($data.get(9).innerText).to.contain('Cleaning')
+        expect($data.get(10).innerText).to.contain('Walls need cleaning')
+        expect($data.get(11).innerText).to.contain('Remove')
+      })
+  })
+  it('should show the remove link on a new damage that you just added', () => {
+    cy.visit(adjudicationUrls.detailsOfDamages.urls.start(202))
+    const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+    DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 5) // This includes the header row plus four data rows
+    DetailsOfDamagePage.addDamagesButton().click()
+    DetailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check()
+    DetailsOfDamagePage.addDamageDescription().type('Light fitting pulled out')
+    DetailsOfDamagePage.addDamageSubmit().click()
+    DetailsOfDamagePage.damagesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(12).innerText).to.contain('Electrical')
+        expect($data.get(13).innerText).to.contain('Light fitting pulled out')
+        expect($data.get(14).innerText).to.contain('Remove')
+      })
+  })
+  it('should still remove the correct damages when there are damages listed not created by the current user', () => {
+    cy.visit(adjudicationUrls.detailsOfDamages.urls.start(202))
+    const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+    DetailsOfDamagePage.removeLink(2).click() // Removes second damage in table
+    DetailsOfDamagePage.damagesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(3).innerText).to.not.contain('Electrical')
+        expect($data.get(4).innerText).to.not.contain('Plug socket broken')
+        expect($data.get(5).innerText).to.not.contain('Remove')
+      })
+    DetailsOfDamagePage.removeLink(1).click() // Removes first damage in table
+    DetailsOfDamagePage.damagesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.not.contain('Redecoration')
+        expect($data.get(1).innerText).to.not.contain('Wallpaper ripped')
+        expect($data.get(2).innerText).to.not.contain('Remove')
+      })
+    DetailsOfDamagePage.removeLink(2).click() // Removes the final damage in table
+    DetailsOfDamagePage.damagesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Replacing an item')
+        expect($data.get(1).innerText).to.contain('Chair broken')
+        expect($data.get(2).innerText).to.not.contain('Remove')
+      })
+    DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row plus a data rows
   })
 })

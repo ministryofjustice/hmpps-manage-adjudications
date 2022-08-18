@@ -26,7 +26,7 @@
             <div class="govuk-grid-column-three-quarters">
             {% if damages | length > 0 %}
             <div class="damages-table">
-                {{ damagesTable(damages, redirectAfterRemoveUrl) }}
+                {{ damagesTable(damages, redirectAfterRemoveUrl, currentUser) }}
             </div>
 
             {% else %}

@@ -68,7 +68,9 @@ export default class DetailsOfDamagesPage {
         addDamagesButtonHref: addDamagesUrl,
       })
     }
+
     return res.render(`pages/detailsOfDamages`, {
+      currentUser: user.username,
       adjudicationNumber,
       reportedAdjudicationNumber,
       damages,
