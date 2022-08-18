@@ -1,0 +1,71 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/evidenceTable.njk" import evidenceTable %}
+
+{% set title = "Evidence" %}
+
+{% block pageTitle %}
+    {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}" />
+        <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+            {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                {% set photoVideoEvidence = evidence | evidenceCategory('photoVideo') %}
+                {% set baggedTaggedEvidence = evidence | evidenceCategory('baggedAndTagged') %}
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Photographic or video evidence</h2>
+                {% if photoVideoEvidence | length > 0 %}
+                <div class="evidence-table">
+                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser) }}
+                </div>
+                {% else %}
+                <p class="govuk-body">None</p>
+                {% endif %}
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Bagged and tagged evidence</h2>
+                {% if baggedTaggedEvidence | length > 0 %}
+                <div class="evidence-table">
+                    {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }}
+                </div>
+                {% else %}
+                <p class="govuk-body">None</p>
+                {% endif %}
+            {% if not evidence | length > 0 %}
+            <p class="govuk-body" data-qa="no-evidence">You can add evidence now or you can continue. You can also return later and add evidence.</p>
+            {% endif %}
+
+        {{ govukButton({
+            text: "Add a piece of evidence",
+            href: addEvidenceButtonHref,
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "add-evidence-button" }
+        }) }}
+        <br>
+        {{ govukButton({
+            text: "Save and continue",
+            type: "submit",
+            classes: "govuk-button--submit govuk-!-margin-right-3",
+            attributes: { "data-qa": "details-of-evidence-submit" }
+        }) }}
+        {{ govukButton({
+            text: "Exit",
+            href: exitButtonHref,
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "exit-evidence-button" }
+        }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

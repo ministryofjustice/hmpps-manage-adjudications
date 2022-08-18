@@ -7,7 +7,7 @@ import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
-import { DamageCode } from '../data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -148,6 +148,31 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       default:
         return null
     }
+  })
+
+  njkEnv.addFilter('evidenceCode', (evidenceCode: EvidenceCode, baggedEvidenceTagNumber) => {
+    switch (evidenceCode) {
+      case EvidenceCode.PHOTO:
+        return 'Photo'
+      case EvidenceCode.BODY_WORN_CAMERA:
+        return 'Body-worn camera'
+      case EvidenceCode.CCTV:
+        return 'CCTV'
+      case EvidenceCode.BAGGED_AND_TAGGED:
+        return baggedEvidenceTagNumber
+      default:
+        return null
+    }
+  })
+
+  njkEnv.addFilter('evidenceCategory', (evidenceArray: EvidenceDetails[], category: string) => {
+    if (category === 'baggedAndTagged') {
+      return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
+    }
+    if (category === 'photoVideo') {
+      return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
+    }
+    return evidenceArray
   })
 
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)

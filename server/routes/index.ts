@@ -22,6 +22,7 @@ import offenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import deletePersonRoutes from './deletePerson'
 import ageOfPrisonerRoutes from './ageOfPrisoner'
 import detailsOfDamagesRoutes from './damages'
+import detailsOfEvidenceRoutes from './evidence'
 import associatedPrisonerRoutes from './associatedPrisoner'
 
 import { Services } from '../services'
@@ -40,6 +41,7 @@ export default function routes(
     allOffencesSessionService,
     decisionTreeService,
     damagesSessionService,
+    evidenceSessionService,
   }: Services
 ): Router {
   router.use(
@@ -104,6 +106,13 @@ export default function routes(
     detailsOfDamagesRoutes({
       placeOnReportService,
       damagesSessionService,
+    })
+  )
+  router.use(
+    adjudicationUrls.detailsOfEvidence.root,
+    detailsOfEvidenceRoutes({
+      placeOnReportService,
+      evidenceSessionService,
     })
   )
   router.use('/', homepageRoutes({ userService }))

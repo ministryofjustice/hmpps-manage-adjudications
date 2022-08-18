@@ -1,0 +1,54 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro evidenceTable(evidenceArray, redirectAfterRemoveUrl, currentUser, tableName = null) %}
+  {% set rows = [] %}
+  <div class="flex-container govuk-!-margin-top-5">
+    {% for evidence in evidenceArray  %}
+    {% set evidenceIndex = loop.index %}
+
+    {% if evidence.reporter == currentUser %}
+      {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+evidenceIndex+'" data-qa="delete-'+evidenceIndex+'" class="govuk-link">Remove</a></p>' %}
+    {% else %}
+      {% set removeColumnValue = '' %}
+    {% endif %}
+
+    {% if evidence.code === 'BODY_WORN_CAMERA' %}
+        {% set description = evidence.identifier + ' - ' + evidence.details %}
+    {% else %}
+        {% set description = evidence.details %}
+    {% endif %}
+
+    {% set rows = (rows.push(
+        [
+            {
+                text: evidence.code | evidenceCode(evidence.identifier)
+            }, 
+            {
+                text: description
+            },
+            {
+                html: removeColumnValue
+            }
+        ]
+    ), rows) %}
+    {% endfor %}
+
+    {% if rows.length %}
+
+{{ govukTable({
+  head: [
+    {
+      text: "Tag Number" if tableName === 'baggedAndTaggedTable' else "Type" 
+    },
+    {
+      text: "Description"
+    },
+    {
+        text: null 
+    }
+  ],
+  rows: rows,
+  attributes: {"data-qa": "evidence-table"}
+}) }}
+    {% endif %}
+{% endmacro %}

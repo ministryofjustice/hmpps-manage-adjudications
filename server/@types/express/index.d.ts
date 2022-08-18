@@ -26,6 +26,8 @@ declare module 'express-session' {
     forceOffenceSelection: boolean
     damageData: { [key: string]; damageData? }
     damages: { [key: string]; damages? }
+    evidenceData: { [key: string]; evidenceData? }
+    evidence: { [key: string]; evidence? }
   }
 }
 
