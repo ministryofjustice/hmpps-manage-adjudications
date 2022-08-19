@@ -1,0 +1,66 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Add a piece of evidence" %}
+
+{% block pageTitle %}
+    {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+	{% if errors | length %}
+		{{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+	{% endif %}
+
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+
+                {% include "../partials/addEvidenceRadios.njk" %}
+
+                {{ govukTextarea({
+                    name: "evidenceDescription",
+                    id: "evidenceDescription",
+                    classes: "govuk-!-width-two-thirds",
+                    label: {
+                        text: "Add details about this evidence",
+                        for: "evidenceDescription"
+                    },
+                    hint: {
+                        text: "This could be what the image or video shows. Or it could be what the bagged and tagged evidence is."
+                    },
+                    attributes: { "data-qa": "add-evidence-description" },
+                    errorMessage: "evidenceDescription" | findError(errors),
+                    value: evidenceDescription
+                }) }}
+            
+                {{ govukButton({
+                    text: "Save and continue",
+                    type: "submit",
+                    classes: "govuk-button--submit govuk-!-margin-right-3",
+                    attributes: { "data-qa": "add-evidence-submit" }
+                }) }}
+                {{ govukButton({
+                    text: "Cancel",
+                    href: cancelButtonHref,
+                    classes: "govuk-button--secondary",
+                    attributes: { "data-qa": "cancel-add-evidence-button" }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

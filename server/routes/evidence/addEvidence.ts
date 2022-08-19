@@ -17,12 +17,15 @@ export default class AddEvidenceRoutes {
   constructor(private readonly evidenceSessionService: EvidenceSessionService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, evidenceType, evidenceDescription } = pageData
+    const { cancelButtonHref, error, evidenceType, evidenceDescription, bwcIdentifier, batIdentifier } = pageData
 
     return res.render(`pages/addEvidence`, {
       errors: error ? [error] : [],
       evidenceDescription,
       evidenceType,
+      bwcIdentifier,
+      batIdentifier,
+      cancelButtonHref,
     })
   }
 
@@ -43,11 +46,11 @@ export default class AddEvidenceRoutes {
     if (error)
       return this.renderView(req, res, { error, evidenceDescription, evidenceType, bwcIdentifier, batIdentifier })
 
-    const evidenceIdentifier = this.getIdentifierToAdd(bwcIdentifier, batIdentifier)
+    const evidenceIdentifier = await this.getIdentifierToAdd(bwcIdentifier, batIdentifier)
 
     const evidenceToAdd = {
-      type: evidenceType,
-      description: evidenceDescription,
+      code: evidenceType,
+      details: evidenceDescription,
       reporter: user.username,
       ...(evidenceIdentifier && { identifier: evidenceIdentifier }),
     }

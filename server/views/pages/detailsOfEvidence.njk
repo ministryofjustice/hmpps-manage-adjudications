@@ -29,7 +29,7 @@
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Photographic or video evidence</h2>
                 {% if photoVideoEvidence | length > 0 %}
                 <div class="evidence-table">
-                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser) }}
+                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable') }}
                 </div>
                 {% else %}
                 <p class="govuk-body">None</p>

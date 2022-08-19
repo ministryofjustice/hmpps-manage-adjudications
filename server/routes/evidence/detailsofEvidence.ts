@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication, EvidenceCode } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 
 export enum PageRequestType {
   EVIDENCE_FROM_API,
@@ -33,7 +33,7 @@ export default class DetailsOfEvidencePage {
     const { user } = res.locals
     // draftId
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const evidenceToDelete = Number(req.query.delete) || null
+    const evidenceToDelete = (req.query.delete as string) || null
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const addEvidenceUrl = adjudicationUrls.detailsOfEvidence.urls.add(adjudicationNumber)
 
@@ -43,11 +43,10 @@ export default class DetailsOfEvidencePage {
     ])
     const { draftAdjudication } = draftAdjudicationResult
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
-    const evidence = this.getEvidence(
-      req,
-      adjudicationNumber
-      // draftAdjudication
-    )
+    const evidence = this.getEvidence(req, adjudicationNumber, draftAdjudication)
+
+    // console.log(evidence)
+
     // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
       // Set up session to allow for adding and deleting
@@ -55,7 +54,7 @@ export default class DetailsOfEvidencePage {
     }
 
     if (evidenceToDelete) {
-      this.evidenceSessionService.deleteSessionEvidence(req, evidenceToDelete, adjudicationNumber)
+      await this.evidenceSessionService.deleteSessionEvidence(req, evidenceToDelete, adjudicationNumber)
     }
 
     if (!evidence || evidence.length < 1) {
@@ -66,7 +65,7 @@ export default class DetailsOfEvidencePage {
         addEvidenceButtonHref: addEvidenceUrl,
       })
     }
-
+    console.log('evidence', evidence)
     return res.render(`pages/detailsOfEvidence`, {
       currentUser: user.username,
       adjudicationNumber,
@@ -96,40 +95,9 @@ export default class DetailsOfEvidencePage {
     return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
   }
 
-  getEvidence = (
-    req: Request,
-    adjudicationNumber: number
-    // draftAdjudication: DraftAdjudication
-  ) => {
+  getEvidence = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
     if (this.pageOptions.displaySessionData()) {
       return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
-    }
-
-    const draftAdjudication = {
-      evidence: [
-        {
-          code: EvidenceCode.BAGGED_AND_TAGGED,
-          details: 'some details here',
-          reporter: 'NCLAMP_GEN',
-          identifier: 'JO345',
-        },
-        {
-          code: EvidenceCode.CCTV,
-          details: 'some details here',
-          reporter: 'NCLAMP_GEN',
-        },
-        {
-          code: EvidenceCode.PHOTO,
-          details: 'some details here',
-          reporter: 'NCLAMP_GEN',
-        },
-        {
-          code: EvidenceCode.BODY_WORN_CAMERA,
-          details: 'some details here',
-          reporter: 'NCLAMP_GEN',
-          identifier: 'BWC: 123456',
-        },
-      ],
     }
 
     return draftAdjudication.evidence || []

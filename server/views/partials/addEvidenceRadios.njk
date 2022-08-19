@@ -1,0 +1,68 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set bodyWornCameraHtml %}
+{{ govukInput({
+  id: "bwcIdentifier",
+  name: "bwcIdentifier",
+  classes: "govuk-!-width-one-third",
+  errorMessage: "bwcIdentifier" | findError(errors),
+  label: {
+    text: "Camera number"
+  },
+  value: bwcIdentifier
+}) }}
+{% endset -%}
+
+{% set baggedAndTaggedHtml %}
+{{ govukInput({
+  id: "batIdentifier",
+  name: "batIdentifier",
+  classes: "govuk-!-width-one-third",
+  errorMessage: "batIdentifier" | findError(errors),
+  label: {
+    text: "Tag number"
+  },
+  value: batIdentifier
+}) }}
+{% endset -%}
+
+{{ govukRadios({
+  idPrefix: "evidenceType",
+  name: "evidenceType",
+  errorMessage: "evidenceType" | findError(errors),
+  attributes: { "data-qa": "add-evidence-radio-buttons" },
+  fieldset: {
+    legend: {
+      text: "Type of evidence"
+    }
+  },
+  items: [
+    {
+      value: "PHOTO",
+      text: "Photo",
+      checked: evidenceType === 'PHOTO'
+    },
+    {
+      value: "BODY_WORN_CAMERA",
+      text: "Body-worn camera",
+      checked: evidenceType === 'BODY_WORN_CAMERA',
+      conditional: {
+        html: bodyWornCameraHtml
+      }
+    },
+    {
+      value: "CCTV",
+      text: "CCTV",
+      checked: evidenceType === 'CCTV'
+    },
+    {
+      value: "BAGGED_AND_TAGGED",
+      text: "Bagged and tagged evidence",
+      checked: evidenceType === 'BAGGED_AND_TAGGED',
+      conditional: {
+        html: baggedAndTaggedHtml
+      }
+    }
+  ]
+}) }}

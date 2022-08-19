@@ -4,7 +4,7 @@
   {% set rows = [] %}
   <div class="flex-container govuk-!-margin-top-5">
     {% for evidence in evidenceArray  %}
-    {% set evidenceIndex = loop.index %}
+    {% set evidenceIndex = 'BT'+loop.index if tableName === 'baggedAndTaggedTable' else 'PV'+loop.index %}
 
     {% if evidence.reporter == currentUser %}
       {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+evidenceIndex+'" data-qa="delete-'+evidenceIndex+'" class="govuk-link">Remove</a></p>' %}
