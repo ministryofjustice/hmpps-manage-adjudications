@@ -21,10 +21,12 @@
     {% set rows = (rows.push(
         [
             {
-                text: evidence.code | evidenceCode(evidence.identifier)
+                text: evidence.code | evidenceCode(evidence.identifier),
+                classes: 'evidenceTable_col1'
             }, 
             {
-                text: description
+                text: description,
+                classes: 'evidenceTable_col2'
             },
             {
                 html: removeColumnValue
@@ -38,7 +40,7 @@
 {{ govukTable({
   head: [
     {
-      text: "Tag Number" if tableName === 'baggedAndTaggedTable' else "Type" 
+      text: "Tag Number" if tableName === 'baggedAndTaggedTable' else "Type"
     },
     {
       text: "Description"

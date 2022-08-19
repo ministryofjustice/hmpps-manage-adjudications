@@ -43,8 +43,11 @@ export default class DetailsOfEvidencePage {
     ])
     const { draftAdjudication } = draftAdjudicationResult
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
-    const evidence = this.getEvidence(req, adjudicationNumber, draftAdjudication)
-
+    const evidence = this.getEvidence(
+      req,
+      adjudicationNumber
+      // draftAdjudication
+    )
     // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
       // Set up session to allow for adding and deleting
@@ -89,49 +92,47 @@ export default class DetailsOfEvidencePage {
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
     // probably need to map data here to get into correct format for saveEvidenceDetails api call
 
-    // @ts-expect-error: haven't created this yet
     await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, evidenceDetails, user)
     return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
   }
 
-  getEvidence = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
+  getEvidence = (
+    req: Request,
+    adjudicationNumber: number
+    // draftAdjudication: DraftAdjudication
+  ) => {
     if (this.pageOptions.displaySessionData()) {
       return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
     }
-    // return [
-    //   {
-    //     code: EvidenceCode.BAGGED_AND_TAGGED,
-    //     details: 'some details here',
-    //     reporter: 'NCLAMP_GEN',
-    //     identifier: 'JO345',
-    //   },
-    //   {
-    //     code: EvidenceCode.CCTV,
-    //     details: 'some details here',
-    //     reporter: 'NCLAMP_GEN',
-    //   },
-    //   {
-    //     code: EvidenceCode.PHOTO,
-    //     details: 'some details here',
-    //     reporter: 'NCLAMP_GEN',
-    //   },
-    //   {
-    //     code: EvidenceCode.BODY_WORN_CAMERA,
-    //     details: 'some details here',
-    //     reporter: 'NCLAMP_GEN',
-    //     identifier: 'BWC: 123456',
-    //   },
-    // ]
-    return (
-      draftAdjudication.evidence?.map(evidenceDetails => {
-        return {
-          code: evidenceDetails.code,
-          details: evidenceDetails.details,
-          reporter: evidenceDetails.reporter,
-          identifier: evidenceDetails.identifier,
-        }
-      }) || []
-    )
+
+    const draftAdjudication = {
+      evidence: [
+        {
+          code: EvidenceCode.BAGGED_AND_TAGGED,
+          details: 'some details here',
+          reporter: 'NCLAMP_GEN',
+          identifier: 'JO345',
+        },
+        {
+          code: EvidenceCode.CCTV,
+          details: 'some details here',
+          reporter: 'NCLAMP_GEN',
+        },
+        {
+          code: EvidenceCode.PHOTO,
+          details: 'some details here',
+          reporter: 'NCLAMP_GEN',
+        },
+        {
+          code: EvidenceCode.BODY_WORN_CAMERA,
+          details: 'some details here',
+          reporter: 'NCLAMP_GEN',
+          identifier: 'BWC: 123456',
+        },
+      ],
+    }
+
+    return draftAdjudication.evidence || []
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {

@@ -3,7 +3,7 @@ import moment from 'moment'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
 import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
-import { DamageCode } from './DraftAdjudicationResult'
+import { DamageCode, EvidenceCode } from './DraftAdjudicationResult'
 
 jest.mock('../../logger')
 
@@ -511,6 +511,57 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, result)
       const response = await client.saveDamageDetails(2469, damagesData)
+      expect(response).toEqual(result)
+    })
+  })
+  describe('saveEvidenceDetails', () => {
+    const result = {
+      draftAdjudication: {
+        id: 2469,
+        prisonerNumber: 'G6123VU',
+        incidentDetails: {
+          locationId: 26964,
+          dateTimeOfIncident: '2022-06-16T11:11:00',
+          handoverDeadline: '2022-06-18T11:11:00',
+        },
+        incidentRole: {},
+        startedByUserId: 'TESTER_GEN',
+        isYouthOffender: true,
+        evidence: [
+          {
+            code: 'PHOTO',
+            details: 'Photograph showing prisoner smashing lightbulb',
+            reporter: 'TESTER_GEN',
+          },
+          {
+            code: 'BODY_WORN_CAMERA',
+            details: 'Video evidence of prisoner smashing lightbulb',
+            reporter: 'TESTER_GEN',
+            identifier: 'BWC: 123456',
+          },
+        ],
+      },
+    }
+
+    const evidenceData = [
+      {
+        code: EvidenceCode.PHOTO,
+        details: 'Photograph showing prisoner smashing lightbulb',
+        reporter: 'TESTER_GEN',
+      },
+      {
+        code: EvidenceCode.BODY_WORN_CAMERA,
+        details: 'Video evidence of prisoner smashing lightbulb',
+        reporter: 'TESTER_GEN',
+        identifier: 'BWC: 123456',
+      },
+    ]
+    it('returns the updated draft adjudication', async () => {
+      fakeManageAdjudicationsApi
+        .put(`/draft-adjudications/2469/evidence`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, result)
+      const response = await client.saveEvidenceDetails(2469, evidenceData)
       expect(response).toEqual(result)
     })
   })
