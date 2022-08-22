@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../../data/DraftAdjudicationResult'
 
 export enum PageRequestType {
   EVIDENCE_FROM_API,
@@ -33,7 +33,7 @@ export default class DetailsOfEvidencePage {
     const { user } = res.locals
     // draftId
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const evidenceToDelete = (req.query.delete as string) || null
+    const evidenceToDelete = Number(req.query.delete) || null
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const addEvidenceUrl = adjudicationUrls.detailsOfEvidence.urls.add(adjudicationNumber)
 
@@ -44,6 +44,7 @@ export default class DetailsOfEvidencePage {
     const { draftAdjudication } = draftAdjudicationResult
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
     const evidence = this.getEvidence(req, adjudicationNumber, draftAdjudication)
+    const allEvidence = [...evidence.photoVideo, ...evidence.baggedAndTagged]
 
     // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
@@ -52,10 +53,15 @@ export default class DetailsOfEvidencePage {
     }
 
     if (evidenceToDelete) {
-      await this.evidenceSessionService.deleteSessionEvidence(req, evidenceToDelete, adjudicationNumber)
+      await this.evidenceSessionService.deleteSessionEvidence(
+        req,
+        evidenceToDelete,
+        evidenceToDelete > 1000,
+        adjudicationNumber
+      )
     }
 
-    if (!evidence || evidence.length < 1) {
+    if (!allEvidence || allEvidence.length < 1) {
       return res.render(`pages/detailsOfEvidence`, {
         evidence,
         prisoner,
@@ -87,18 +93,36 @@ export default class DetailsOfEvidencePage {
       return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
     }
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
-    // probably need to map data here to get into correct format for saveEvidenceDetails api call
+    // we need to merge the different evidence types back together into one array
+    const allEvidence = [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged]
 
-    await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, evidenceDetails, user)
+    await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
     return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
   }
 
   getEvidence = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
     if (this.pageOptions.displaySessionData()) {
-      return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
+      const evidence = this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
+      return evidence
     }
 
-    return draftAdjudication.evidence || []
+    const photoVideo = this.getEvidenceCategory(draftAdjudication.evidence, false) || []
+    const baggedAndTagged = this.getEvidenceCategory(draftAdjudication.evidence, true) || []
+
+    return {
+      photoVideo,
+      baggedAndTagged,
+    }
+  }
+
+  getEvidenceCategory = (evidenceArray: EvidenceDetails[], isBaggedAndTagged: boolean) => {
+    if (isBaggedAndTagged) {
+      return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
+    }
+    if (!isBaggedAndTagged) {
+      return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
+    }
+    return evidenceArray
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {

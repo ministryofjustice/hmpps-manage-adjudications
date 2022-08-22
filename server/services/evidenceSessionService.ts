@@ -7,25 +7,26 @@ export default class EvidenceSessionService {
     req.session.evidence[draftAdjudicationNumber].push(evidenceData)
   }
 
-  async deleteSessionEvidence(req: Request, id: string, draftAdjudicationNumber: number) {
-    const index = Number(id.substring(2))
-    const evidenceType = id.substring(0, 2)
-
-    const BaTArray = req.session.evidence?.[draftAdjudicationNumber]?.filter(
-      (item: EvidenceDetails) => item.code === 'BAGGED_AND_TAGGED'
-    )
-    const PaVArray = req.session.evidence?.[draftAdjudicationNumber]?.filter(
-      (item: EvidenceDetails) => item.code !== 'BAGGED_AND_TAGGED'
-    )
-
-    if (evidenceType === 'PV') PaVArray.splice(index - 1, 1)
-    if (evidenceType === 'BT') BaTArray.splice(index - 1, 1)
-
-    req.session.evidence[draftAdjudicationNumber] = [...BaTArray, ...PaVArray]
+  async deleteSessionEvidence(
+    req: Request,
+    index: number,
+    isBaggedAndTagged: boolean,
+    draftAdjudicationNumber: number
+  ) {
+    if (isBaggedAndTagged)
+      return req.session.evidence?.[draftAdjudicationNumber]?.baggedAndTagged.splice(index - 1001, 1)
+    return req.session.evidence?.[draftAdjudicationNumber]?.photoVideo.splice(index - 1, 1)
   }
 
   deleteAllSessionEvidence(req: Request, draftAdjudicationNumber: number) {
-    req.session.evidence?.[draftAdjudicationNumber]?.splice(0, req.session.evidence?.[draftAdjudicationNumber]?.length)
+    req.session.evidence?.[draftAdjudicationNumber]?.photoVideo.splice(
+      0,
+      req.session.evidence?.[draftAdjudicationNumber]?.length
+    )
+    req.session.evidence?.[draftAdjudicationNumber]?.baggedAndTagged.splice(
+      0,
+      req.session.evidence?.[draftAdjudicationNumber]?.length
+    )
   }
 
   setAllSessionEvidence(req: Request, evidenceData: EvidenceDetails[], draftAdjudicationNumber: number) {

@@ -107,30 +107,34 @@ describe('GET /damages/100', () => {
       .then(() =>
         expect(evidenceSessionService.setAllSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),
-          [
-            {
-              code: EvidenceCode.BAGGED_AND_TAGGED,
-              details: 'some details here',
-              reporter: 'NCLAMP_GEN',
-              identifier: 'JO345',
-            },
-            {
-              code: EvidenceCode.CCTV,
-              details: 'some details here',
-              reporter: 'NCLAMP_GEN',
-            },
-            {
-              code: EvidenceCode.PHOTO,
-              details: 'some details here',
-              reporter: 'NCLAMP_GEN',
-            },
-            {
-              code: EvidenceCode.BODY_WORN_CAMERA,
-              details: 'some details here',
-              reporter: 'NCLAMP_GEN',
-              identifier: 'BWC: 123456',
-            },
-          ],
+          {
+            photoVideo: [
+              {
+                code: EvidenceCode.CCTV,
+                details: 'some details here',
+                reporter: 'NCLAMP_GEN',
+              },
+              {
+                code: EvidenceCode.PHOTO,
+                details: 'some details here',
+                reporter: 'NCLAMP_GEN',
+              },
+              {
+                code: EvidenceCode.BODY_WORN_CAMERA,
+                details: 'some details here',
+                reporter: 'NCLAMP_GEN',
+                identifier: 'BWC: 123456',
+              },
+            ],
+            baggedAndTagged: [
+              {
+                code: EvidenceCode.BAGGED_AND_TAGGED,
+                details: 'some details here',
+                reporter: 'NCLAMP_GEN',
+                identifier: 'JO345',
+              },
+            ],
+          },
           100
         )
       )

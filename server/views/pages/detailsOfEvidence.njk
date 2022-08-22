@@ -24,12 +24,12 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                {% set photoVideoEvidence = evidence | evidenceCategory('photoVideo') %}
-                {% set baggedTaggedEvidence = evidence | evidenceCategory('baggedAndTagged') %}
+                {% set photoVideoEvidence = evidence.photoVideo %}
+                {% set baggedTaggedEvidence = evidence.baggedAndTagged %}
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Photographic or video evidence</h2>
                 {% if photoVideoEvidence | length > 0 %}
                 <div class="evidence-table">
-                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable') }}
+                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable', 0) }}
                 </div>
                 {% else %}
                 <p class="govuk-body">None</p>
@@ -37,7 +37,8 @@
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Bagged and tagged evidence</h2>
                 {% if baggedTaggedEvidence | length > 0 %}
                 <div class="evidence-table">
-                    {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }}
+                    {# We use the length of the data array for the first table in order to know where to start the index on the second table #}
+                    {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable', 1000) }}
                 </div>
                 {% else %}
                 <p class="govuk-body">None</p>
