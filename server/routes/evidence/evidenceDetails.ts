@@ -45,8 +45,6 @@ export default class DetailsOfEvidencePage {
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
     const evidence = this.getEvidence(req, adjudicationNumber, draftAdjudication)
 
-    // console.log(evidence)
-
     // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
       // Set up session to allow for adding and deleting
@@ -65,7 +63,7 @@ export default class DetailsOfEvidencePage {
         addEvidenceButtonHref: addEvidenceUrl,
       })
     }
-    console.log('evidence', evidence)
+
     return res.render(`pages/detailsOfEvidence`, {
       currentUser: user.username,
       adjudicationNumber,
