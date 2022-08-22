@@ -7,7 +7,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import DetailsOfDamagesPage, { PageRequestType } from './detailsOfDamages'
 import AddDamagesRoutes from './addDamages'
 
-export default function detailsOfOffenceRoutes({
+export default function detailsOfDamagesRoutes({
   placeOnReportService,
   damagesSessionService,
 }: {

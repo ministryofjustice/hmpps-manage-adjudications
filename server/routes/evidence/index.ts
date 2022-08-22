@@ -7,7 +7,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import DetailsOfEvidencePage, { PageRequestType } from './detailsOfEvidence'
 import AddEvidenceRoutes from './addEvidence'
 
-export default function detailsOfOffenceRoutes({
+export default function detailsOfEvidenceRoutes({
   placeOnReportService,
   evidenceSessionService,
 }: {
