@@ -15,7 +15,6 @@ export default function detailsOfOffenceRoutes({
   evidenceSessionService: EvidenceSessionService
 }): Router {
   const router = express.Router()
-
   const detailsOfEvidenceUsingDraft = new DetailsOfEvidencePage(
     PageRequestType.EVIDENCE_FROM_API,
     placeOnReportService,
