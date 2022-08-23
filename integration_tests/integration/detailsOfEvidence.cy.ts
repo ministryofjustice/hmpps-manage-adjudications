@@ -113,6 +113,10 @@ context('Details of evidence', () => {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails,
     })
+    cy.task('stubSaveEvidenceDetails', {
+      adjudicationNumber: 201,
+      response: draftAdjudication(201, evidenceList),
+    })
   })
   it('should show the evidence page with no evidence', () => {
     cy.visit(adjudicationUrls.detailsOfEvidence.urls.start(200))
@@ -160,6 +164,24 @@ context('Details of evidence', () => {
         expect($data.get(1).innerText).to.contain('Bagged evidence')
         expect($data.get(2).innerText).to.contain('Remove')
       })
+  })
+  // TODO: this next test will require changing the 'next page' when witnesses pages are developed
+  it('should submit the evidence and move to the next page', () => {
+    cy.visit(adjudicationUrls.detailsOfEvidence.urls.start(201))
+    const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+    DetailsOfEvidencePage.addEvidenceButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(201))
+    })
+    DetailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check()
+    DetailsOfEvidencePage.addEvidenceDescription().type(
+      'A photo of the prisoner stealing the keys from behind a prison officers back'
+    )
+    DetailsOfEvidencePage.addEvidenceSubmit().click()
+    DetailsOfEvidencePage.saveAndContinue().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.start(201))
+    })
   })
   it('should remove the correct piece of evidence', () => {
     cy.visit(adjudicationUrls.detailsOfEvidence.urls.start(201))
