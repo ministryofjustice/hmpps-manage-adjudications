@@ -7,7 +7,7 @@ import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
-import { DamageCode, EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode } from '../data/DraftAdjudicationResult'
 
 const production = process.env.NODE_ENV === 'production'
 
