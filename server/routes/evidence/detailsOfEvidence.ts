@@ -116,13 +116,11 @@ export default class DetailsOfEvidencePage {
   }
 
   getEvidenceCategory = (evidenceArray: EvidenceDetails[], isBaggedAndTagged: boolean) => {
+    if (!evidenceArray) return []
     if (isBaggedAndTagged) {
       return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
     }
-    if (!isBaggedAndTagged) {
-      return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
-    }
-    return evidenceArray
+    return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {

@@ -32,7 +32,7 @@
                     {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable', 0) }}
                 </div>
                 {% else %}
-                <p class="govuk-body">None</p>
+                <p class="govuk-body" data-qa="no-photoVideo-evidence">None</p>
                 {% endif %}
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Bagged and tagged evidence</h2>
                 {% if baggedTaggedEvidence | length > 0 %}
@@ -41,9 +41,9 @@
                     {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable', 1000) }}
                 </div>
                 {% else %}
-                <p class="govuk-body">None</p>
+                <p class="govuk-body" data-qa="no-baggedAndTagged-evidence">None</p>
                 {% endif %}
-            {% if not evidence | length > 0 %}
+            {% if evidence.photoVideo | length < 1 and evidence.baggedAndTagged | length < 1 %}
             <p class="govuk-body" data-qa="no-evidence">You can add evidence now or you can continue. You can also return later and add evidence.</p>
             {% endif %}
 

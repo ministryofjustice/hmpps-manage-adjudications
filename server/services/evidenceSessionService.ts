@@ -4,7 +4,11 @@ import { EvidenceDetails } from '../data/DraftAdjudicationResult'
 export default class EvidenceSessionService {
   addSessionEvidence(req: Request, evidenceData: EvidenceDetails, draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.evidence[draftAdjudicationNumber].push(evidenceData)
+    if (evidenceData.code === 'BAGGED_AND_TAGGED') {
+      return req.session.evidence[draftAdjudicationNumber].baggedAndTagged.push(evidenceData)
+    }
+
+    return req.session.evidence[draftAdjudicationNumber].photoVideo.push(evidenceData)
   }
 
   async deleteSessionEvidence(
