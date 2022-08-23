@@ -165,16 +165,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     }
   })
 
-  njkEnv.addFilter('evidenceCategory', (evidenceArray: EvidenceDetails[], category: string) => {
-    if (category === 'baggedAndTagged') {
-      return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
-    }
-    if (category === 'photoVideo') {
-      return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
-    }
-    return evidenceArray
-  })
-
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)

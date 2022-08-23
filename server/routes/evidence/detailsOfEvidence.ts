@@ -102,12 +102,11 @@ export default class DetailsOfEvidencePage {
 
   getEvidence = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
     if (this.pageOptions.displaySessionData()) {
-      const evidence = this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
-      return evidence
+      return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
     }
 
-    const photoVideo = this.getEvidenceCategory(draftAdjudication.evidence, false) || []
-    const baggedAndTagged = this.getEvidenceCategory(draftAdjudication.evidence, true) || []
+    const photoVideo = this.getEvidenceCategory(draftAdjudication.evidence, false)
+    const baggedAndTagged = this.getEvidenceCategory(draftAdjudication.evidence, true)
 
     return {
       photoVideo,

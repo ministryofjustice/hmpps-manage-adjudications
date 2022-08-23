@@ -48,16 +48,15 @@ export default class EvidenceSessionService {
     return req.session?.evidence?.[draftAdjudicationNumber]
   }
 
-  getSessionEvidence(req: Request, index: number, draftAdjudicationNumber: number) {
-    return req.session.evidence?.[draftAdjudicationNumber][index - 1]
-  }
-
   private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
     if (!req.session.evidence) {
       req.session.evidence = {}
     }
     if (!req.session.evidence[draftAdjudicationNumber]) {
-      req.session.evidence[draftAdjudicationNumber] = []
+      req.session.evidence[draftAdjudicationNumber] = {
+        photoVideo: [],
+        baggedAndTagged: [],
+      }
     }
   }
 }
