@@ -40,6 +40,7 @@ export type DraftAdjudication = {
   offenceDetails?: OffenceDetails[]
   isYouthOffender?: boolean
   damages?: DamageDetails[]
+  evidence?: EvidenceDetails[]
 }
 
 export type DraftAdjudicationResult = {
@@ -108,6 +109,13 @@ export type DamageDetails = {
   reporter?: string
 }
 
+export type EvidenceDetails = {
+  code: EvidenceCode
+  details: string
+  reporter?: string
+  identifier?: string
+}
+
 export enum DamageCode {
   ELECTRICAL_REPAIR = 'ELECTRICAL_REPAIR',
   PLUMBING_REPAIR = 'PLUMBING_REPAIR',
@@ -116,4 +124,11 @@ export enum DamageCode {
   REDECORATION = 'REDECORATION',
   CLEANING = 'CLEANING',
   REPLACE_AN_ITEM = 'REPLACE_AN_ITEM',
+}
+
+export enum EvidenceCode {
+  PHOTO = 'PHOTO',
+  BODY_WORN_CAMERA = 'BODY_WORN_CAMERA',
+  CCTV = 'CCTV',
+  BAGGED_AND_TAGGED = 'BAGGED_AND_TAGGED',
 }

@@ -84,12 +84,11 @@ export default class DetailsOfDamagesPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
 
     // If displaying data on draft, nothing has changed so no save needed
     if (!this.pageOptions.displaySessionData()) {
       this.damagesSessionService.deleteAllSessionDamages(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
+      return this.redirectToNextPage(res, adjudicationNumber)
     }
 
     const damageDetails = this.damagesSessionService
@@ -103,7 +102,7 @@ export default class DetailsOfDamagesPage {
       })
 
     await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damageDetails, user)
-    return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
+    return this.redirectToNextPage(res, adjudicationNumber)
   }
 
   getDamages = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
@@ -122,11 +121,7 @@ export default class DetailsOfDamagesPage {
     )
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
-    // TODO This will be the new evidence section but until it is built this can go to the incident statement page
-    if (isReportedDraft) {
-      return res.redirect(adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber))
-    }
-    return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
+  redirectToNextPage = (res: Response, adjudicationNumber: number) => {
+    return res.redirect(adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber))
   }
 }

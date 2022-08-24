@@ -28,7 +28,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = {
   dateOfBirth: undefined,
 }
 
-const adjudicationWithOffences = {
+const adjudicationWithDamages = {
   draftAdjudication: {
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
@@ -66,7 +66,7 @@ const adjudicationWithOffences = {
 }
 
 beforeEach(() => {
-  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithOffences)
+  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithDamages)
 
   placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(adjudicationPrisonerDetails)
 

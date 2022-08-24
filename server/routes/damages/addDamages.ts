@@ -15,12 +15,13 @@ export default class AddDamagesRoutes {
   constructor(private readonly damagesSessionService: DamagesSessionService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, damageType, damageDescription } = pageData
+    const { error, damageType, damageDescription, cancelButtonHref } = pageData
 
     return res.render(`pages/addDamages`, {
       errors: error ? [error] : [],
       damageDescription,
       damageType,
+      cancelButtonHref,
     })
   }
 

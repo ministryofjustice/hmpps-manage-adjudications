@@ -7,7 +7,7 @@ import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
-import { DamageCode } from '../data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode } from '../data/DraftAdjudicationResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -145,6 +145,21 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
         return 'Cleaning'
       case DamageCode.REPLACE_AN_ITEM:
         return 'Replacing an item'
+      default:
+        return null
+    }
+  })
+
+  njkEnv.addFilter('evidenceCode', (evidenceCode: EvidenceCode, baggedEvidenceTagNumber) => {
+    switch (evidenceCode) {
+      case EvidenceCode.PHOTO:
+        return 'Photo'
+      case EvidenceCode.BODY_WORN_CAMERA:
+        return 'Body-worn camera'
+      case EvidenceCode.CCTV:
+        return 'CCTV'
+      case EvidenceCode.BAGGED_AND_TAGGED:
+        return baggedEvidenceTagNumber
       default:
         return null
     }

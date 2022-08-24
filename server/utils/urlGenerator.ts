@@ -48,6 +48,20 @@ const adjudicationUrls = {
         `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/modified`,
     },
   },
+  detailsOfEvidence: {
+    root: '/evidence',
+    matchers: {
+      start: '/:adjudicationNumber',
+      add: '/:adjudicationNumber/add',
+      modified: '/:adjudicationNumber/modified',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}`,
+      add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/add`,
+      modified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/modified`,
+    },
+  },
   taskList: {
     root: '/place-the-prisoner-on-report',
     matchers: {

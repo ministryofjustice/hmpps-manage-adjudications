@@ -17,6 +17,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import OffenceSessionService from '../../services/offenceSessionService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
+import EvidenceSessionService from '../../services/evidenceSessionService'
 import DamagesSessionService from '../../services/damagesSessionService'
 
 const user = {
@@ -111,6 +112,7 @@ export default function appWithAllRoutes(
       allOffencesSessionService: {} as AllOffencesSessionService,
       decisionTreeService: {} as DecisionTreeService,
       damagesSessionService: {} as DamagesSessionService,
+      evidenceSessionService: {} as EvidenceSessionService,
       ...overrides,
     }),
     production,
