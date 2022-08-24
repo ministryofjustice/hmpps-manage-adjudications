@@ -4,7 +4,7 @@
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% set title = "Evidence" %}
+{% set title = "Witnesses" %}
 
 {% block pageTitle %}
     {{ title }}
@@ -24,46 +24,34 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                {% set photoVideoEvidence = evidence.photoVideo %}
-                {% set baggedTaggedEvidence = evidence.baggedAndTagged %}
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Photographic or video evidence</h2>
-                {% if photoVideoEvidence | length > 0 %}
-                <div class="evidence-table">
-                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable') }}
+                {% if witnesses | length > 0 %}
+                <div class="witnesses-table">
+                    {# {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }} #}
                 </div>
                 {% else %}
-                <p class="govuk-body" data-qa="no-photoVideo-evidence">None</p>
+                <p class="govuk-body" data-qa="no-witnesses-p1">You have not added any witnesses to this report.</p>
+                <p class="govuk-body" data-qa="no-witnesses-p2">You can add witnesses or you can continue. You can also return later and add witnesses.</p>
                 {% endif %}
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Bagged and tagged evidence</h2>
-                {% if baggedTaggedEvidence | length > 0 %}
-                <div class="evidence-table">
-                    {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }}
-                </div>
-                {% else %}
-                <p class="govuk-body" data-qa="no-baggedAndTagged-evidence">None</p>
-                {% endif %}
-            {% if evidence.photoVideo | length < 1 and evidence.baggedAndTagged | length < 1 %}
-            <p class="govuk-body" data-qa="no-evidence">You can add evidence now or you can continue. You can also return later and add evidence.</p>
-            {% endif %}
+
 
         {{ govukButton({
-            text: "Add a piece of evidence",
-            href: addEvidenceButtonHref,
+            text: "Add a witness",
+            href: addWitnessButtonHref,
             classes: "govuk-button--secondary",
-            attributes: { "data-qa": "add-evidence-button" }
+            attributes: { "data-qa": "add-witness-button" }
         }) }}
         <br>
         {{ govukButton({
             text: "Save and continue",
             type: "submit",
             classes: "govuk-button--submit govuk-!-margin-right-3",
-            attributes: { "data-qa": "details-of-evidence-submit" }
+            attributes: { "data-qa": "details-of-witness-submit" }
         }) }}
         {{ govukButton({
             text: "Exit",
             href: exitButtonHref,
             classes: "govuk-button--secondary",
-            attributes: { "data-qa": "exit-evidence-button" }
+            attributes: { "data-qa": "details-of-witness-exit" }
         }) }}
             </div>
         </div>

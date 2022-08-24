@@ -19,6 +19,7 @@ import {
   AssociatedPrisoner,
   DamageDetails,
   EvidenceDetails,
+  WitnessDetails,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -379,5 +380,10 @@ export default class PlaceOnReportService {
   async saveEvidenceDetails(adjudicationNumber: number, evidenceDetails: EvidenceDetails[], user: User) {
     const client = new ManageAdjudicationsClient(user.token)
     return client.saveEvidenceDetails(adjudicationNumber, evidenceDetails)
+  }
+
+  async saveWitnessDetails(adjudicationNumber: number, witnessDetails: WitnessDetails[], user: User) {
+    const client = new ManageAdjudicationsClient(user.token)
+    return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
   }
 }

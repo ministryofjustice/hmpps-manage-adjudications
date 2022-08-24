@@ -62,6 +62,20 @@ const adjudicationUrls = {
         `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/modified`,
     },
   },
+  detailsOfWitnesses: {
+    root: '/witnesses',
+    matchers: {
+      start: '/:adjudicationNumber',
+      add: '/:adjudicationNumber/add',
+      modified: '/:adjudicationNumber/modified',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}`,
+      add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/add`,
+      modified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/modified`,
+    },
+  },
   taskList: {
     root: '/place-the-prisoner-on-report',
     matchers: {
