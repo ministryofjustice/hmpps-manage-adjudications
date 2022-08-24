@@ -17,8 +17,7 @@ export default class EvidenceSessionService {
     isBaggedAndTagged: boolean,
     draftAdjudicationNumber: number
   ) {
-    if (isBaggedAndTagged)
-      return req.session.evidence?.[draftAdjudicationNumber]?.baggedAndTagged.splice(index - 1001, 1)
+    if (isBaggedAndTagged) return req.session.evidence?.[draftAdjudicationNumber]?.baggedAndTagged.splice(index - 1, 1)
     return req.session.evidence?.[draftAdjudicationNumber]?.photoVideo.splice(index - 1, 1)
   }
 

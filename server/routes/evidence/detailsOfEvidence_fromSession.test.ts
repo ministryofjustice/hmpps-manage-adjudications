@@ -85,8 +85,6 @@ const evidenceOnSession = {
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithoutEvidence)
   placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(adjudicationPrisonerDetails)
-  evidenceSessionService.getAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
-  evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
   app = appWithAllRoutes({ production: false }, { placeOnReportService, evidenceSessionService })
 })
 
@@ -95,6 +93,11 @@ afterEach(() => {
 })
 
 describe('GET /evidence/100', () => {
+  beforeEach(() => {
+    evidenceSessionService.getAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
+    evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
+    app = appWithAllRoutes({ production: false }, { placeOnReportService, evidenceSessionService })
+  })
   it('should load the evidence page with details from the session', () => {
     return request(app)
       .get(adjudicationUrls.detailsOfEvidence.urls.modified(100))
@@ -112,5 +115,24 @@ describe('GET /evidence/100', () => {
       .expect(200)
       .then(() => expect(evidenceSessionService.setAllSessionEvidence).not.toHaveBeenCalled())
       .then(() => expect(evidenceSessionService.getAllSessionEvidence).toHaveBeenCalledWith(expect.anything(), 100))
+  })
+})
+
+describe('POST', () => {
+  const emptyEvidence: { photoVideo: []; baggedAndTagged: [] } = {
+    photoVideo: [],
+    baggedAndTagged: [],
+  }
+  beforeEach(() => {
+    evidenceSessionService.getAllSessionEvidence.mockReturnValueOnce(emptyEvidence)
+    evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(emptyEvidence)
+
+    app = appWithAllRoutes({ production: false }, { placeOnReportService, evidenceSessionService })
+  })
+  it.only('should not call the api to save the data if there is no evidence', () => {
+    return request(app)
+      .post(adjudicationUrls.detailsOfEvidence.urls.modified(100))
+      .expect(302)
+      .then(() => expect(placeOnReportService.saveEvidenceDetails).not.toHaveBeenCalled())
   })
 })

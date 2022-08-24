@@ -15,7 +15,8 @@ export default class Evidence extends Page {
 
   noBaggedAndTaggedEvidence = (): PageElement => cy.get('[data-qa="no-baggedAndTagged-evidence"]')
 
-  removeLink = (evidenceIndex: number): PageElement => cy.get(`[data-qa="delete-${evidenceIndex}"]`)
+  removeLink = (isBaggedAndTagged: boolean, evidenceIndex: number): PageElement =>
+    cy.get(`[data-qa="delete-${isBaggedAndTagged ? 'baggedAndTaggedTable' : 'photoVideoTable'}-${evidenceIndex}"]`)
 
   addEvidenceButton = (): PageElement => cy.get('[data-qa="add-evidence-button"]')
 

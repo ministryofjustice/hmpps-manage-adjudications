@@ -33,7 +33,8 @@ export default class DetailsOfEvidencePage {
     const { user } = res.locals
     // draftId
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const evidenceToDelete = Number(req.query.delete) || null
+    const evidenceIndexToDelete = Number(req.query.delete) || null
+    const evidenceTypeToDelete = (req.query.type as string) || null
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const addEvidenceUrl = adjudicationUrls.detailsOfEvidence.urls.add(adjudicationNumber)
 
@@ -52,11 +53,11 @@ export default class DetailsOfEvidencePage {
       this.evidenceSessionService.setAllSessionEvidence(req, evidence, adjudicationNumber)
     }
 
-    if (evidenceToDelete) {
+    if (evidenceIndexToDelete) {
       await this.evidenceSessionService.deleteSessionEvidence(
         req,
-        evidenceToDelete,
-        evidenceToDelete > 1000,
+        evidenceIndexToDelete,
+        evidenceTypeToDelete === EvidenceCode.BAGGED_AND_TAGGED,
         adjudicationNumber
       )
     }
@@ -76,7 +77,7 @@ export default class DetailsOfEvidencePage {
       reportedAdjudicationNumber,
       evidence,
       prisoner,
-      redirectAfterRemoveUrl: `${adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)}?delete=`,
+      redirectAfterRemoveUrl: `${adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)}`,
       exitButtonHref: taskListUrl,
       addEvidenceButtonHref: addEvidenceUrl,
     })
@@ -95,8 +96,10 @@ export default class DetailsOfEvidencePage {
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
     // we need to merge the different evidence types back together into one array
     const allEvidence = [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged]
+    if (allEvidence.length) {
+      await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
+    }
 
-    await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
     return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
   }
 
