@@ -102,7 +102,7 @@ describe('GET /damages/100', () => {
 })
 
 describe('POST', () => {
-  it('should call the save endpoint with', () => {
+  it('should call the save endpoint with evidence present', () => {
     const damagesToSave = [
       {
         code: 'REDECORATION',

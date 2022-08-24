@@ -85,8 +85,6 @@ const evidenceOnSession = {
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithoutEvidence)
   placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(adjudicationPrisonerDetails)
-  evidenceSessionService.getAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
-  evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
   app = appWithAllRoutes({ production: false }, { placeOnReportService, evidenceSessionService })
 })
 
@@ -95,6 +93,11 @@ afterEach(() => {
 })
 
 describe('GET /evidence/100', () => {
+  beforeEach(() => {
+    evidenceSessionService.getAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
+    evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
+    app = appWithAllRoutes({ production: false }, { placeOnReportService, evidenceSessionService })
+  })
   it('should load the evidence page with details from the session', () => {
     return request(app)
       .get(adjudicationUrls.detailsOfEvidence.urls.modified(100))
@@ -116,7 +119,9 @@ describe('GET /evidence/100', () => {
 })
 
 describe('POST', () => {
-  it('should call the save endpoint with', () => {
+  it('should call the save endpoint with evidence present', () => {
+    evidenceSessionService.getAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
+    evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
     const evidenceToSave = [...evidenceOnSession.photoVideo, ...evidenceOnSession.baggedAndTagged]
     return request(app)
       .post(adjudicationUrls.detailsOfEvidence.urls.modified(100))

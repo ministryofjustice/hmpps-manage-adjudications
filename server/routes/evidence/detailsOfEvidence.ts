@@ -94,7 +94,6 @@ export default class DetailsOfEvidencePage {
       return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
     }
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
-
     // we need to merge the different evidence types back together into one array
     const allEvidence = [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged]
     await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
