@@ -56,10 +56,12 @@ const damagesOnSession = [
   {
     type: 'REDECORATION',
     description: 'Broken window',
+    reporter: 'user1',
   },
   {
     type: 'REDECORATION',
     description: 'Broken pool cue',
+    reporter: 'user1',
   },
 ]
 
@@ -96,5 +98,28 @@ describe('GET /damages/100', () => {
       .expect(200)
       .then(() => expect(damagesSessionService.setAllSessionDamages).not.toHaveBeenCalled())
       .then(() => expect(damagesSessionService.getAllSessionDamages).toHaveBeenCalledWith(expect.anything(), 100))
+  })
+})
+
+describe('POST', () => {
+  it('should call the save endpoint with evidence present', () => {
+    const damagesToSave = [
+      {
+        code: 'REDECORATION',
+        details: 'Broken window',
+        reporter: 'user1',
+      },
+      {
+        code: 'REDECORATION',
+        details: 'Broken pool cue',
+        reporter: 'user1',
+      },
+    ]
+    return request(app)
+      .post(adjudicationUrls.detailsOfDamages.urls.modified(100))
+      .expect(302)
+      .then(() =>
+        expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith(100, damagesToSave, expect.anything())
+      )
   })
 })
