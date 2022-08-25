@@ -96,16 +96,7 @@ export default class DetailsOfWitnessesPage {
       return this.witnessesSessionService.getAllSessionWitnesses(req, adjudicationNumber)
     }
 
-    return (
-      draftAdjudication.witnesses?.map(witnessDetails => {
-        return {
-          code: witnessDetails.code,
-          firstName: witnessDetails.firstName,
-          lastName: witnessDetails.lastName,
-          reporter: witnessDetails.reporter,
-        }
-      }) || []
-    )
+    return draftAdjudication.witnesses || []
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number) => {

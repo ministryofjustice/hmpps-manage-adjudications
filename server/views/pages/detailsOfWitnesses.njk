@@ -2,7 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
-{% from "../macros/evidenceTable.njk" import evidenceTable %}
+{% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 
 {% set title = "Witnesses" %}
 
@@ -26,7 +26,7 @@
             <div class="govuk-grid-column-three-quarters">
                 {% if witnesses | length > 0 %}
                 <div class="witnesses-table">
-                    {# {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }} #}
+                    {{ damagesWitnessesTable(witnesses, redirectAfterRemoveUrl, currentUser, 'witnesses') }}
                 </div>
                 {% else %}
                 <p class="govuk-body" data-qa="no-witnesses-p1">You have not added any witnesses to this report.</p>

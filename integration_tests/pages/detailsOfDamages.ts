@@ -5,7 +5,7 @@ export default class Damages extends Page {
     super('Damages')
   }
 
-  damagesTable = (): PageElement => cy.get('[data-qa="damages-table"]')
+  damagesTable = (): PageElement => cy.get('[data-qa="damagesWitnesses-table"]')
 
   noDamagesP1 = (): PageElement => cy.get('[data-qa="no-damages-p1"]')
 

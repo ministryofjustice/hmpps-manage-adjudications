@@ -3,6 +3,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 {% from "../macros/damagesTable.njk" import damagesTable %}
+{% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 
 {% set title = "Damages" %}
 
@@ -26,7 +27,7 @@
             <div class="govuk-grid-column-three-quarters">
             {% if damages | length > 0 %}
             <div class="damages-table">
-                {{ damagesTable(damages, redirectAfterRemoveUrl, currentUser) }}
+                {{ damagesWitnessesTable(damages, redirectAfterRemoveUrl, currentUser, 'damages') }}
             </div>
 
             {% else %}
