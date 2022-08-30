@@ -10,7 +10,8 @@
 {% set staffName =  selectedAnswerViewData.staffName %}
 {% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
 {% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
-{% set anotherNameInput = decisionForm.selectedAnswerData.otherPersonNameInput %}
+{% set otherPersonFirstNameInput = decisionForm.selectedAnswerData.otherPersonFirstNameInput %}
+{% set otherPersonLastNameInput = decisionForm.selectedAnswerData.otherPersonLastNameInput %}
 
 
 {% set prisonOfficerHtml %}
@@ -120,17 +121,30 @@
 {% endset -%}
 
 {% set otherHtml %}
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+    <div class="govuk-form-group flex-container flex-column">
         {{ govukInput({
-          id: "otherPersonNameInput",
-          name: "otherPersonNameInput",
-          classes: "govuk-!-width-one-third",
-          value: otherPersonNameInput,
-          errorMessage: errors | findErrors(["otherPersonNameInput"]),
-          label: {
-            text: "Enter their name",
-            classes: "govuk-!-font-weight-bold"
-          }
+            id: "otherPersonFirstNameInput",
+            name: "otherPersonFirstNameInput",
+            classes: "govuk-!-width-one-third",
+            value: otherPersonFirstNameInput,
+            errorMessage: errors | findErrors(["otherPersonFirstNameInput"]),
+            label: {
+                text: "First name"
+            }
         }) }}
+        {{ govukInput({
+            id: "otherPersonLastNameInput",
+            name: "otherPersonLastNameInput",
+            classes: "govuk-!-width-one-third",
+            value: otherPersonLastNameInput,
+            errorMessage: errors | findErrors(["otherPersonLastNameInput"]),
+            label: {
+                text: "Last name"
+            }
+        }) }}
+    </div>
+    
 {% endset -%}
 
 

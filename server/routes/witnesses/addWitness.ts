@@ -10,7 +10,7 @@ import DecisionHelper from '../offenceCodeDecisions/decisionHelper'
 import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import OfficerDecisionHelper from '../offenceCodeDecisions/officerDecisionHelper'
-import OtherPersonDecisionHelper from '../offenceCodeDecisions/otherPersonDecisionHelper'
+import OtherPersonWitnesDecisionHelper from './otherPersonWitnesDecisionHelper'
 import Question from '../../offenceCodeDecisions/Question'
 import { DecisionForm } from '../offenceCodeDecisions/decisionForm'
 
@@ -52,7 +52,7 @@ export default class AddWitnessRoutes {
   private helpers = new Map<WitnessAnswerType, DecisionHelper>([
     [WitnessAnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
     [WitnessAnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
-    [WitnessAnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
+    [WitnessAnswerType.OTHER_PERSON, new OtherPersonWitnesDecisionHelper(this.decisionTreeService)],
   ])
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
