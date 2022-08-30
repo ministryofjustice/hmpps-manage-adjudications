@@ -42,7 +42,10 @@ export default class StaffDecisionHelper extends DecisionHelper {
     super(decisionTreeService)
   }
 
-  override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+  override getRedirectUrlForUserSearch(form: DecisionForm): {
+    pathname: string
+    query: { [key: string]: string }
+  } {
     return {
       pathname: adjudicationUrls.selectAssociatedStaff.root,
       query: {

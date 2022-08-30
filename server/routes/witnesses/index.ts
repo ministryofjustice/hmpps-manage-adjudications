@@ -5,14 +5,20 @@ import WitnessesSessionService from '../../services/witnessesSessionService'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import DetailsOfWitnessesPage, { PageRequestType } from './detailsOfWitnesses'
-// import AddDamagesRoutes from './addDamages'
+import AddWitnessRoutes from './addWitness'
+import UserService from '../../services/userService'
+import DecisionTreeService from '../../services/decisionTreeService'
 
 export default function detailsOfWitnessesRoutes({
   placeOnReportService,
   witnessesSessionService,
+  userService,
+  decisionTreeService,
 }: {
   placeOnReportService: PlaceOnReportService
   witnessesSessionService: WitnessesSessionService
+  userService: UserService
+  decisionTreeService: DecisionTreeService
 }): Router {
   const router = express.Router()
 
@@ -28,7 +34,12 @@ export default function detailsOfWitnessesRoutes({
     witnessesSessionService
   )
 
-  //   const addWitnesses = new AddWitnessesRoutes(witnessesSessionService)
+  const addWitness = new AddWitnessRoutes(
+    witnessesSessionService,
+    placeOnReportService,
+    userService,
+    decisionTreeService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
@@ -37,8 +48,8 @@ export default function detailsOfWitnessesRoutes({
   post(adjudicationUrls.detailsOfWitnesses.matchers.start, detailsOfWitnessesUsingDraft.submit)
   get(adjudicationUrls.detailsOfWitnesses.matchers.modified, detailsOfWitnessesUsingSession.view)
   post(adjudicationUrls.detailsOfWitnesses.matchers.modified, detailsOfWitnessesUsingSession.submit)
-  //   get(adjudicationUrls.detailsOfWitnesses.matchers.add, addWitneses.view)
-  //   post(adjudicationUrls.detailsOfWitnesses.matchers.add, addWitneses.submit)
+  get(adjudicationUrls.detailsOfWitnesses.matchers.add, addWitness.view)
+  post(adjudicationUrls.detailsOfWitnesses.matchers.add, addWitness.submit)
 
   return router
 }

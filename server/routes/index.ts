@@ -122,6 +122,8 @@ export default function routes(
     detailsOfWitnessesRoutes({
       placeOnReportService,
       witnessesSessionService,
+      userService,
+      decisionTreeService,
     })
   )
   router.use('/', homepageRoutes({ userService }))

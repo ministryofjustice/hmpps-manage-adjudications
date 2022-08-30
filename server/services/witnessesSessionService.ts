@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { WitnessDetails } from '../data/DraftAdjudicationResult'
 
 export default class WitnessesSessionService {
-  addSessionWitness(req: Request, witnessData: WitnessDetails[], draftAdjudicationNumber: number) {
+  addSessionWitness(req: Request, witnessData: WitnessDetails, draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.witnesses[draftAdjudicationNumber].push(witnessData)
   }

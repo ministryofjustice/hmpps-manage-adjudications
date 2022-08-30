@@ -59,7 +59,7 @@ export default class DetailsOfWitnessesPage {
       return res.render(`pages/detailsOfWitnesses`, {
         prisoner,
         exitButtonHref: taskListUrl,
-        addWitnessesButtonHref: addWitnessUrl,
+        addWitnessButtonHref: addWitnessUrl,
       })
     }
 
@@ -71,7 +71,7 @@ export default class DetailsOfWitnessesPage {
       prisoner,
       redirectAfterRemoveUrl: `${adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber)}?delete=`,
       exitButtonHref: taskListUrl,
-      addDamagesButtonHref: addWitnessUrl,
+      addWitnessButtonHref: addWitnessUrl,
     })
   }
 

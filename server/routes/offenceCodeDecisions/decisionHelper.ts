@@ -5,6 +5,7 @@ import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import Question from '../../offenceCodeDecisions/Question'
+import { WitnessData } from '../witnesses/witnessData'
 
 export default class DecisionHelper {
   constructor(readonly decisionTreeService: DecisionTreeService) {}
@@ -53,6 +54,13 @@ export default class DecisionHelper {
       victimPrisonersNumber: currentAnswers?.victimPrisonersNumber,
       victimStaffUsername: currentAnswers?.victimStaffUsername,
       offenceCode: `${this.decision().findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
+    }
+  }
+
+  updatedWitnessData(currentAnswers: WitnessData): WitnessData {
+    return {
+      firstName: currentAnswers.firstName,
+      lastName: currentAnswers.lastName,
     }
   }
 }
