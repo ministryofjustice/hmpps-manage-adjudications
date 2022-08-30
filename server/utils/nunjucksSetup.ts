@@ -179,6 +179,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   })
 
   njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
+    if (!witnessLastName) return witnessFirstName
     return `${witnessLastName}, ${witnessFirstName}`
   })
 

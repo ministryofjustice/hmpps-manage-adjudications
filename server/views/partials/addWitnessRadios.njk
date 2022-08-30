@@ -4,19 +4,18 @@
 {% set selectedAnswerId = decisionForm.selectedAnswerId %}
 {% set officerId =  decisionForm.selectedAnswerData.officerId %}
 {% set officerName =  selectedAnswerViewData.officerName %}
+{% set officerSearchFirstNameInput = decisionForm.selectedAnswerData.officerSearchFirstNameInput %}
+{% set officerSearchLastNameInput = decisionForm.selectedAnswerData.officerSearchLastNameInput %}
 {% set staffId =  decisionForm.selectedAnswerData.staffId %}
 {% set staffName =  selectedAnswerViewData.staffName %}
 {% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
 {% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
 {% set anotherNameInput = decisionForm.selectedAnswerData.otherPersonNameInput %}
-{% set officerSearchFirstNameInput = decisionForm.selectedAnswerData.officerSearchFirstNameInput %}
-{% set officerSearchLastNameInput = decisionForm.selectedAnswerData.officerSearchLastNameInput %}
 
 
 {% set prisonOfficerHtml %}
     {% if selectedAnswerId == "OFFICER" and officerId != null %}
         <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}" />
-        <p>{{ officerSearchFirstNameInput }}</p>
         <div>
             <p data-qa="victim-officer-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
             <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
@@ -121,17 +120,17 @@
 {% endset -%}
 
 {% set otherHtml %}
-            {{ govukInput({
-                id: "otherFullNameInput",
-                name: "otherFullNameInput",
-                classes: "govuk-!-width-one-third",
-                value: otherFullNameInput,
-                errorMessage: errors | findErrors(["otherFullNameInput"]),
-                label: {
-                    text: "Enter their name",
-                    classes: "govuk-!-font-weight-bold"
-                }
-            }) }}
+        {{ govukInput({
+          id: "otherPersonNameInput",
+          name: "otherPersonNameInput",
+          classes: "govuk-!-width-one-third",
+          value: otherPersonNameInput,
+          errorMessage: errors | findErrors(["otherPersonNameInput"]),
+          label: {
+            text: "Enter their name",
+            classes: "govuk-!-font-weight-bold"
+          }
+        }) }}
 {% endset -%}
 
 

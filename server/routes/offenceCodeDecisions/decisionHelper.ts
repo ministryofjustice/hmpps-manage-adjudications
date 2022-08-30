@@ -57,10 +57,10 @@ export default class DecisionHelper {
     }
   }
 
-  updatedWitnessData(currentAnswers: WitnessData): WitnessData {
-    return {
-      firstName: currentAnswers.firstName,
-      lastName: currentAnswers.lastName,
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  witnessNamesForSession(form: DecisionForm, user: User): Promise<WitnessData> {
+    return new Promise(resolve => {
+      resolve({})
+    })
   }
 }

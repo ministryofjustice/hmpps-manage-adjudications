@@ -104,6 +104,19 @@ export default class StaffDecisionHelper extends DecisionHelper {
     return null
   }
 
+  override async witnessNamesForSession(form: DecisionForm, user: User): Promise<unknown> {
+    const staffId = (form.selectedAnswerData as StaffData)?.staffId
+    if (staffId) {
+      const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
+      const staffName = convertToTitleCase(decisionStaff.name).split(' ')
+      return {
+        firstName: staffName[0],
+        lastName: staffName[1],
+      }
+    }
+    return null
+  }
+
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       ...super.updatedOffenceData(currentAnswers, form),

@@ -31,8 +31,7 @@ enum ErrorType {
 export enum WitnessAnswerType {
   OFFICER = 'OFFICER',
   STAFF = 'STAFF',
-  OTHER = 'OTHER',
-  // RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
+  OTHER_PERSON = 'OTHER_PERSON',
 }
 
 const error: { [key in ErrorType]: FormError } = {
@@ -53,37 +52,8 @@ export default class AddWitnessRoutes {
   private helpers = new Map<WitnessAnswerType, DecisionHelper>([
     [WitnessAnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
     [WitnessAnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
-    [WitnessAnswerType.OTHER, new OtherPersonDecisionHelper(this.decisionTreeService)],
-    // [WitnessAnswerType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
+    [WitnessAnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
   ])
-
-  // private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-  //   const { error, selectedAnswerId, selectedPerson, cancelButtonHref, adjudicationNumber } = pageData
-  //   const { user } = res.locals
-  //   const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
-
-  //   return res.render(`pages/addWitness`, {
-  //     errors: error ? [error] : [],
-  //     selectedAnswerId,
-  //     selectedPerson,
-  //     cancelButtonHref,
-  //     prisoner,
-  //   })
-  // }
-
-  // view = async (req: Request, res: Response): Promise<void> => {
-  //   // This is the draftId
-  //   const adjudicationNumber = Number(req.params.adjudicationNumber)
-  //   const selectedAnswerId = req.query.selectedAnswerId as string
-  //   const selectedPerson = req.query.selectedPerson as string
-
-  //   return this.renderView(req, res, {
-  //     cancelButtonHref: adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber),
-  //     adjudicationNumber,
-  //     selectedAnswerId,
-  //     selectedPerson,
-  //   })
-  // }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, errors } = pageData
@@ -141,16 +111,16 @@ export default class AddWitnessRoutes {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber })
     }
 
-    console.log(form)
+    const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
 
     const witnessToAdd = {
       code: this.convertToWitnessCode(selectedAnswerId),
-      // firstName,
-      // lastName,
+      firstName: witnessName.firstName,
+      lastName: witnessName.lastName,
       reporter: user.username,
     }
 
-    // this.witnessesSessionService.addSessionWitness(req, witnessToAdd, adjudicationNumber)
+    this.witnessesSessionService.addSessionWitness(req, witnessToAdd, adjudicationNumber)
     return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber))
   }
 
@@ -182,19 +152,6 @@ export default class AddWitnessRoutes {
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
-  // getWitnessName = (req: Request) => {
-  //   if (req.body.selectedAnswerId === WitnessCode.OTHER) {
-  //     const names = req.body.otherFullNameInput.includes(',')
-  //       ? req.body.otherFullNameInput.split(',').reverse()
-  //       : req.body.otherFullNameInput.split(' ')
-  //     return {
-  //       firstName: names[0].trim(),
-  //       lastName: names[1].trim(),
-  //     }
-  //   }
-  //   return null
-  // }
-
   // The helper that knows how to deal with the specifics of a particular decision type.
   private answerTypeHelper(decisionFormOrSelectedAnswerId: DecisionForm | string): DecisionHelper {
     let selectedAnswerId = ''
@@ -220,8 +177,8 @@ export default class AddWitnessRoutes {
         return WitnessAnswerType.OFFICER
       case 'STAFF':
         return WitnessAnswerType.STAFF
-      case 'OTHER':
-        return WitnessAnswerType.OTHER
+      case 'OTHER_PERSON':
+        return WitnessAnswerType.OTHER_PERSON
       default:
         return null
     }
@@ -233,7 +190,7 @@ export default class AddWitnessRoutes {
         return WitnessCode.PRISON_OFFICER
       case 'STAFF':
         return WitnessCode.STAFF
-      case 'OTHER':
+      case 'OTHER_PERSON':
         return WitnessCode.OTHER
       default:
         return null

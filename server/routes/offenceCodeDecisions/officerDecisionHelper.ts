@@ -103,6 +103,19 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return null
   }
 
+  override async witnessNamesForSession(form: DecisionForm, user: User): Promise<unknown> {
+    const officerId = (form.selectedAnswerData as OfficerData)?.officerId
+    if (officerId) {
+      const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
+      const officerName = convertToTitleCase(decisionOfficer.name).split(' ')
+      return {
+        firstName: officerName[0],
+        lastName: officerName[1],
+      }
+    }
+    return null
+  }
+
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
     return {
       ...super.updatedOffenceData(currentAnswers, form),
