@@ -9,7 +9,7 @@
     {% if data.reporter == currentUser %}
       {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+dataIndex+'" data-qa="delete-'+dataIndex+'" class="govuk-link">Remove</a></p>' %}
     {% else %}
-      {% set removeColumnValue = '' %}
+      {% set removeColumnValue = null %}
     {% endif %}
 
     {% set rows = (rows.push(
@@ -22,7 +22,7 @@
             },
             {
                 html: removeColumnValue,
-                classes: "removeColumn"
+                classes: "removeColumn" if data.reporter == currentUser
             }
         ]
     ), rows) %}
@@ -38,7 +38,7 @@
             text: "Description of damage" if dataType === "damages" else "Role"
           },
           {
-            text: null 
+            text: null
           }
         ],
         rows: rows,

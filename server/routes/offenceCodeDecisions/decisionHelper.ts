@@ -5,7 +5,11 @@ import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import Question from '../../offenceCodeDecisions/Question'
-import { WitnessData } from '../witnesses/witnessData'
+
+export type WitnessData = {
+  firstName?: string
+  lastName?: string
+}
 
 export default class DecisionHelper {
   constructor(readonly decisionTreeService: DecisionTreeService) {}

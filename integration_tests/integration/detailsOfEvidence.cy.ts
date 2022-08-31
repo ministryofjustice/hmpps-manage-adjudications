@@ -165,7 +165,6 @@ context('Details of evidence', () => {
         expect($data.get(2).innerText).to.contain('Remove')
       })
   })
-  // TODO: this next test will require changing the 'next page' when witnesses pages are developed
   it('should submit the evidence and move to the next page', () => {
     cy.visit(adjudicationUrls.detailsOfEvidence.urls.start(201))
     const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
@@ -180,7 +179,7 @@ context('Details of evidence', () => {
     DetailsOfEvidencePage.addEvidenceSubmit().click()
     DetailsOfEvidencePage.saveAndContinue().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.start(201))
+      expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(201))
     })
   })
   it('should remove the correct piece of evidence', () => {

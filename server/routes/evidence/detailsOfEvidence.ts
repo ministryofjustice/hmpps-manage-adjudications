@@ -86,18 +86,17 @@ export default class DetailsOfEvidencePage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
 
     // If displaying data on draft, nothing has changed so no save needed
     if (!this.pageOptions.displaySessionData()) {
       this.evidenceSessionService.deleteAllSessionEvidence(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
+      return this.redirectToNextPage(res, adjudicationNumber)
     }
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
     // we need to merge the different evidence types back together into one array
     const allEvidence = [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged]
     await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
-    return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
+    return this.redirectToNextPage(res, adjudicationNumber)
   }
 
   getEvidence = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
@@ -122,11 +121,7 @@ export default class DetailsOfEvidencePage {
     return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
-    // TODO This will be the new witnesses section but until it is built this can go to the incident statement page
-    if (isReportedDraft) {
-      return res.redirect(adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber))
-    }
-    return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
+  redirectToNextPage = (res: Response, adjudicationNumber: number) => {
+    return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber))
   }
 }

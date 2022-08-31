@@ -18,7 +18,7 @@
     {% if selectedAnswerId == "OFFICER" and officerId != null %}
         <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}" />
         <div>
-            <p data-qa="victim-officer-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
+            <p data-qa="officer-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
             <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
             <div>
                 {{ govukButton({
@@ -69,9 +69,9 @@
 
 {% set staffHtml %}
     {% if selectedAnswerId == "STAFF"and staffId != null %}
-        <input type="hidden" name="staffId" value="{{ staffId }}" />
+        <input type="hidden" id="staffId" name="staffId" value="{{ staffId }}" />
         <div>
-            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }} </p>
+            <p data-qa="staff-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }} </p>
             <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }} </p>
             <div>
                 {{ govukButton({

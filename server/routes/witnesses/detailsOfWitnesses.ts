@@ -78,17 +78,18 @@ export default class DetailsOfWitnessesPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
 
     // If displaying data on draft, nothing has changed so no save needed
     if (!this.pageOptions.displaySessionData()) {
       this.witnessesSessionService.deleteAllSessionWitnesses(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber)
+      return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
     }
 
     const witnessDetails = this.witnessesSessionService.getAndDeleteAllSessionWitnesses(req, adjudicationNumber)
 
     await this.placeOnReportService.saveWitnessDetails(adjudicationNumber, witnessDetails, user)
-    return this.redirectToNextPage(res, adjudicationNumber)
+    return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
   }
 
   getWitnesses = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication) => {
@@ -99,7 +100,10 @@ export default class DetailsOfWitnessesPage {
     return draftAdjudication.witnesses || []
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number) => {
+  redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
+    if (isReportedDraft) {
+      return res.redirect(adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber))
+    }
     return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
   }
 }
