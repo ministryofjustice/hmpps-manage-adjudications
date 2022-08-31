@@ -27,12 +27,12 @@ enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
 }
 
-// eslint-disable-next-line no-shadow
-export enum WitnessAnswerType {
-  OFFICER = 'OFFICER',
-  STAFF = 'STAFF',
-  OTHER_PERSON = 'OTHER_PERSON',
-}
+// // eslint-disable-next-line no-shadow
+// export enum WitnessAnswerType {
+//   OFFICER = 'OFFICER',
+//   STAFF = 'STAFF',
+//   OTHER_PERSON = 'OTHER_PERSON',
+// }
 
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {
@@ -49,10 +49,10 @@ export default class AddWitnessRoutes {
     private readonly decisionTreeService: DecisionTreeService
   ) {}
 
-  private helpers = new Map<WitnessAnswerType, DecisionHelper>([
-    [WitnessAnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
-    [WitnessAnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
-    [WitnessAnswerType.OTHER_PERSON, new OtherPersonWitnesDecisionHelper(this.decisionTreeService)],
+  private helpers = new Map<WitnessCode, DecisionHelper>([
+    [WitnessCode.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
+    [WitnessCode.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
+    [WitnessCode.OTHER_PERSON, new OtherPersonWitnesDecisionHelper(this.decisionTreeService)],
   ])
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -114,7 +114,7 @@ export default class AddWitnessRoutes {
     const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
 
     const witnessToAdd = {
-      code: this.convertToWitnessCode(selectedAnswerId),
+      code: this.getWitnessCode(selectedAnswerId),
       firstName: witnessName.firstName,
       lastName: witnessName.lastName,
       reporter: user.username,
@@ -160,7 +160,7 @@ export default class AddWitnessRoutes {
     } else {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedAnswerId && this.helpers.get(this.getWitnessAnswerType(selectedAnswerId))
+    return selectedAnswerId && this.helpers.get(this.getWitnessCode(selectedAnswerId))
   }
 
   private decisions(): Question {
@@ -171,27 +171,14 @@ export default class AddWitnessRoutes {
     return res.redirect(url.format(urlQuery))
   }
 
-  getWitnessAnswerType = (selectedAnswerId: string): WitnessAnswerType => {
+  getWitnessCode = (selectedAnswerId: string): WitnessCode => {
     switch (selectedAnswerId) {
       case 'OFFICER':
-        return WitnessAnswerType.OFFICER
-      case 'STAFF':
-        return WitnessAnswerType.STAFF
-      case 'OTHER_PERSON':
-        return WitnessAnswerType.OTHER_PERSON
-      default:
-        return null
-    }
-  }
-
-  convertToWitnessCode = (selectedAnswerId: string): WitnessCode => {
-    switch (selectedAnswerId) {
-      case 'OFFICER':
-        return WitnessCode.PRISON_OFFICER
+        return WitnessCode.OFFICER
       case 'STAFF':
         return WitnessCode.STAFF
       case 'OTHER_PERSON':
-        return WitnessCode.OTHER
+        return WitnessCode.OTHER_PERSON
       default:
         return null
     }

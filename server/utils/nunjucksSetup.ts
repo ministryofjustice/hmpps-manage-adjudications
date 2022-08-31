@@ -167,11 +167,11 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
 
   njkEnv.addFilter('witnessCode', (witnessCode: WitnessCode) => {
     switch (witnessCode) {
-      case WitnessCode.PRISON_OFFICER:
+      case WitnessCode.OFFICER:
         return 'Prison officer'
       case WitnessCode.STAFF:
         return "Member of staff who's not a prison officer"
-      case WitnessCode.OTHER:
+      case WitnessCode.OTHER_PERSON:
         return 'None'
       default:
         return null

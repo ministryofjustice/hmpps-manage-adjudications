@@ -52,13 +52,13 @@ const adjudicationWithWitnesses = {
     startedByUserId: 'TEST_GEN',
     witnesses: [
       {
-        code: WitnessCode.OTHER,
+        code: WitnessCode.OTHER_PERSON,
         firstName: 'Philip',
         reporter: 'NCLAMP_GEN',
         lastName: 'Jones',
       },
       {
-        code: WitnessCode.PRISON_OFFICER,
+        code: WitnessCode.OFFICER,
         firstName: 'Jake',
         reporter: 'NCLAMP_GEN',
         lastName: 'January',
@@ -105,13 +105,13 @@ describe('GET', () => {
           expect.anything(),
           [
             {
-              code: WitnessCode.OTHER,
+              code: WitnessCode.OTHER_PERSON,
               firstName: 'Philip',
               reporter: 'NCLAMP_GEN',
               lastName: 'Jones',
             },
             {
-              code: WitnessCode.PRISON_OFFICER,
+              code: WitnessCode.OFFICER,
               firstName: 'Jake',
               reporter: 'NCLAMP_GEN',
               lastName: 'January',

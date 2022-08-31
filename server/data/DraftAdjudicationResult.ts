@@ -142,7 +142,7 @@ export enum EvidenceCode {
 }
 
 export enum WitnessCode {
-  PRISON_OFFICER = 'PRISON_OFFICER',
+  OFFICER = 'OFFICER',
   STAFF = 'STAFF',
-  OTHER = 'OTHER',
+  OTHER_PERSON = 'OTHER_PERSON',
 }
