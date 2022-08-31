@@ -21,7 +21,8 @@
                 text: data.description if dataType == "damages" else data.code | witnessCode
             },
             {
-                html: removeColumnValue
+                html: removeColumnValue,
+                classes: "removeColumn"
             }
         ]
     ), rows) %}
