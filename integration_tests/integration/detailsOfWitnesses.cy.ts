@@ -140,6 +140,10 @@ context('Details of witnesses', () => {
         email: 'jplanet@justice.gov.uk',
       },
     })
+    cy.task('stubSaveWitnessDetails', {
+      adjudicationNumber: 201,
+      response: draftAdjudication(201, witnessesList),
+    })
   })
   it('should show the witnesses page with no witnesses added to begin with', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(200))
@@ -253,7 +257,7 @@ context('Details of witnesses', () => {
   it('should not show the remove link for witnesses that the current user did not add', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(202))
     const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
-    DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 4) // This includes the header row plus three data rows
+    DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
     DetailsOfWitnessesPage.witnessesTable()
       .find('td')
       .then($data => {
@@ -269,7 +273,7 @@ context('Details of witnesses', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(202))
     const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
 
-    DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 4) // This includes the header row plus three data rows
+    DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
     DetailsOfWitnessesPage.addWitnessButton().click()
     DetailsOfWitnessesPage.addWitnessType().find('input[value="OFFICER"]').check()
     DetailsOfWitnessesPage.witnessOfficerSearchFirstNameInput().type('Adam')
@@ -283,16 +287,16 @@ context('Details of witnesses', () => {
     DetailsOfWitnessesPage.witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(9).innerText).to.contain('Owens, Adam')
-        expect($data.get(10).innerText).to.contain('Prison officer')
-        expect($data.get(11).innerText).to.contain('Remove')
+        expect($data.get(12).innerText).to.contain('Owens, Adam')
+        expect($data.get(13).innerText).to.contain('Prison officer')
+        expect($data.get(14).innerText).to.contain('Remove')
       })
   })
   it('should be able to add a member of staff using search', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(202))
     const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
 
-    DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 4) // This includes the header row plus three data rows
+    DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
     DetailsOfWitnessesPage.addWitnessButton().click()
     DetailsOfWitnessesPage.addWitnessType().find('input[value="STAFF"]').check()
     DetailsOfWitnessesPage.witnessStaffSearchFirstNameInput().type('Janet')
@@ -309,12 +313,12 @@ context('Details of witnesses', () => {
     DetailsOfWitnessesPage.witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(9).innerText).to.contain('Planet, Janet')
-        expect($data.get(10).innerText).to.contain("Member of staff who's not a prison officer")
-        expect($data.get(11).innerText).to.contain('Remove')
+        expect($data.get(12).innerText).to.contain('Planet, Janet')
+        expect($data.get(13).innerText).to.contain("Member of staff who's not a prison officer")
+        expect($data.get(14).innerText).to.contain('Remove')
       })
   })
-  it.only('should still remove the correct witness when there are witnesses listed not created by the current user', () => {
+  it('should still remove the correct witness when there are witnesses listed not created by the current user', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(202))
     const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
 
@@ -343,5 +347,18 @@ context('Details of witnesses', () => {
         expect($data.get(2).innerText).to.not.contain('Remove')
       })
     DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 2) // This includes the header row plus a data rows
+  })
+  it('should submit the witnesses and move to the next page', () => {
+    cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(201))
+    const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+    DetailsOfWitnessesPage.addWitnessButton().click()
+    DetailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check()
+    DetailsOfWitnessesPage.witnessOtherFirstNameInput().type('Jake')
+    DetailsOfWitnessesPage.witnessOtherLastNameInput().type('Peters')
+    DetailsOfWitnessesPage.addWitnessSubmit().click()
+    DetailsOfWitnessesPage.saveAndContinue().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.start(201))
+    })
   })
 })
