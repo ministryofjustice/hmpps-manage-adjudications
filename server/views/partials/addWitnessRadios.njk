@@ -1,0 +1,182 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set selectedAnswerId = decisionForm.selectedAnswerId %}
+{% set officerId =  decisionForm.selectedAnswerData.officerId %}
+{% set officerName =  selectedAnswerViewData.officerName %}
+{% set officerSearchFirstNameInput = decisionForm.selectedAnswerData.officerSearchFirstNameInput %}
+{% set officerSearchLastNameInput = decisionForm.selectedAnswerData.officerSearchLastNameInput %}
+{% set staffId =  decisionForm.selectedAnswerData.staffId %}
+{% set staffName =  selectedAnswerViewData.staffName %}
+{% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
+{% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
+{% set otherPersonFirstNameInput = decisionForm.selectedAnswerData.otherPersonFirstNameInput %}
+{% set otherPersonLastNameInput = decisionForm.selectedAnswerData.otherPersonLastNameInput %}
+
+
+{% set prisonOfficerHtml %}
+    {% if selectedAnswerId == "OFFICER" and officerId != null %}
+        <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}" />
+        <div>
+            <p data-qa="officer-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
+            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
+            <div>
+                {{ govukButton({
+                    text: 'Delete',
+                    classes: "govuk-button--secondary",
+                    type: "submit",
+                    name: "deleteUser",
+                    value: "deleteUser"
+                }) }}
+            </div>
+        </div>
+    {% else %}
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+        <div id="officerName" class="govuk-form-group flex-container flex-column">
+            {{ govukInput({
+                id: "officerSearchFirstNameInput",
+                name: "officerSearchFirstNameInput",
+                classes: "govuk-!-width-one-third",
+                value: officerSearchFirstNameInput,
+                errorMessage: errors | findErrors(["officerSearchFirstNameInput"]),
+                label: {
+                    text: "First name"
+                }
+            }) }}
+            {{ govukInput({
+                id: "officerSearchLastNameInput",
+                name: "officerSearchLastNameInput",
+                classes: "govuk-!-width-one-third",
+                value: officerSearchLastNameInput,
+                errorMessage: errors | findErrors(["officerSearchLastNameInput"]),
+                label: {
+                    text: "Last name"
+                }
+            }) }}
+        </div>
+        <div>
+            {{ govukButton({
+                text: "Search",
+                classes: "govuk-button--secondary conditionalRadioSearchButton",
+                type: "submit",
+                name: "searchUser",
+                value: "searchUser",
+                attributes: {"data-qa": "officer-search"}
+            }) }}
+        </div>
+        {% endif %}
+{% endset -%}
+
+{% set staffHtml %}
+    {% if selectedAnswerId == "STAFF"and staffId != null %}
+        <input type="hidden" id="staffId" name="staffId" value="{{ staffId }}" />
+        <div>
+            <p data-qa="staff-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }} </p>
+            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }} </p>
+            <div>
+                {{ govukButton({
+                    text: 'Delete',
+                    classes: "govuk-button--secondary",
+                    type: "submit",
+                    name: "deleteUser",
+                    value: "deleteUser"
+                }) }}
+            </div>
+        </div>
+    {% else %}
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+        <div id="officerName" class="govuk-form-group flex-container flex-column">
+            {{ govukInput({
+                id: "staffSearchFirstNameInput",
+                name: "staffSearchFirstNameInput",
+                classes: "govuk-!-width-one-third",
+                value: selectedAnswerId == "STAFF" and staffSearchFirstNameInput,
+                errorMessage: errors | findErrors(["staffSearchFirstNameInput"]),
+                label: {
+                    text: "First name"
+                }
+            }) }}
+            {{ govukInput({
+                id: "staffSearchLastNameInput",
+                name: "staffSearchLastNameInput",
+                classes: "govuk-!-width-one-third",
+                value: selectedAnswerId == "STAFF" and staffSearchLastNameInput,
+                errorMessage: errors | findErrors(["staffSearchLastNameInput"]),
+                label: {
+                    text: "Last name"
+                }
+            }) }}
+        </div>
+        <div>
+            {{ govukButton({
+                text: "Search",
+                classes: "govuk-button--secondary conditionalRadioSearchButton",
+                type: "submit",
+                name: "searchUser",
+                value: "searchUser",
+                attributes: {'data-qa': 'staff-search'}
+            }) }}
+        </div>
+        {% endif %}
+{% endset -%}
+
+{% set otherHtml %}
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+    <div class="govuk-form-group flex-container flex-column">
+        {{ govukInput({
+            id: "otherPersonFirstNameInput",
+            name: "otherPersonFirstNameInput",
+            classes: "govuk-!-width-one-third",
+            value: otherPersonFirstNameInput,
+            errorMessage: errors | findErrors(["otherPersonFirstNameInput"]),
+            label: {
+                text: "First name"
+            }
+        }) }}
+        {{ govukInput({
+            id: "otherPersonLastNameInput",
+            name: "otherPersonLastNameInput",
+            classes: "govuk-!-width-one-third",
+            value: otherPersonLastNameInput,
+            errorMessage: errors | findErrors(["otherPersonLastNameInput"]),
+            label: {
+                text: "Last name"
+            }
+        }) }}
+    </div>
+    
+{% endset -%}
+
+
+{{ govukRadios({
+  idPrefix: "selectedAnswerId",
+  name: "selectedAnswerId",
+  errorMessage: "selectedAnswerId" | findError(errors),
+  attributes: { "data-qa": "add-witness-radio-buttons" },
+  items: [
+    {
+      value: "OFFICER",
+      text: "A prison officer",
+      checked: decisionForm.selectedAnswerId === 'OFFICER',
+      conditional: {
+        html: prisonOfficerHtml
+      }
+    },
+    {
+      value: "STAFF",
+      text: "A member of staff who's not a prison officer",
+      checked: selectedAnswerId === 'STAFF',
+      conditional: {
+        html: staffHtml
+      }
+    },
+    {
+      value: "OTHER_PERSON",
+      text: "A person not listed above",
+      checked: selectedAnswerId === 'OTHER_PERSON',
+      conditional: {
+        html: otherHtml
+      }
+    }
+  ]
+}) }}

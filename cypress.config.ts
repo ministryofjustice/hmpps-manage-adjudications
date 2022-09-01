@@ -70,6 +70,7 @@ export default defineConfig({
         stubGetOffenceRule: adjudications.stubGetOffenceRule,
         stubSaveOffenceDetails: adjudications.stubSaveOffenceDetails,
         stubSaveEvidenceDetails: adjudications.stubSaveEvidenceDetails,
+        stubSaveWitnessDetails: adjudications.stubSaveWitnessDetails,
         verifySaveOffenceDetails: adjudications.verifySaveOffenceDetails,
         stubUpdateAdjudicationStatus: adjudications.stubUpdateAdjudicationStatus,
         stubSaveYouthOffenderStatus: adjudications.stubSaveYouthOffenderStatus,

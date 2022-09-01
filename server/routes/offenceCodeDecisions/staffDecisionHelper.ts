@@ -42,7 +42,10 @@ export default class StaffDecisionHelper extends DecisionHelper {
     super(decisionTreeService)
   }
 
-  override getRedirectUrlForUserSearch(form: DecisionForm): { pathname: string; query: { [key: string]: string } } {
+  override getRedirectUrlForUserSearch(form: DecisionForm): {
+    pathname: string
+    query: { [key: string]: string }
+  } {
     return {
       pathname: adjudicationUrls.selectAssociatedStaff.root,
       query: {
@@ -97,6 +100,19 @@ export default class StaffDecisionHelper extends DecisionHelper {
     if (staffId) {
       const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
       return { staffName: convertToTitleCase(decisionStaff.name) }
+    }
+    return null
+  }
+
+  override async witnessNamesForSession(form: DecisionForm, user: User): Promise<unknown> {
+    const staffId = (form.selectedAnswerData as StaffData)?.staffId
+    if (staffId) {
+      const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
+      const staffName = convertToTitleCase(decisionStaff.name).split(' ')
+      return {
+        firstName: staffName[0],
+        lastName: staffName[1],
+      }
     }
     return null
   }

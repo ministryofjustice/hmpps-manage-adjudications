@@ -7,7 +7,7 @@ import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
-import { DamageCode, EvidenceCode } from '../data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -163,6 +163,24 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       default:
         return null
     }
+  })
+
+  njkEnv.addFilter('witnessCode', (witnessCode: WitnessCode) => {
+    switch (witnessCode) {
+      case WitnessCode.OFFICER:
+        return 'Prison officer'
+      case WitnessCode.STAFF:
+        return "Member of staff who's not a prison officer"
+      case WitnessCode.OTHER_PERSON:
+        return 'None'
+      default:
+        return null
+    }
+  })
+
+  njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
+    if (!witnessLastName) return witnessFirstName
+    return `${witnessLastName}, ${witnessFirstName}`
   })
 
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)

@@ -28,6 +28,8 @@ declare module 'express-session' {
     damages: { [key: string]; damages? }
     evidenceData: { [key: string]; evidenceData? }
     evidence: { [key: string]; evidence? }
+    witnessData: { [key: string]; witnessData? }
+    witnesses: { [key: string]; witnesses? }
   }
 }
 

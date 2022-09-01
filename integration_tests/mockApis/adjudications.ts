@@ -337,6 +337,27 @@ const stubSaveEvidenceDetails = ({
     },
   })
 
+const stubSaveWitnessDetails = ({
+  adjudicationNumber,
+  response = {},
+}: {
+  adjudicationNumber: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/draft-adjudications/${adjudicationNumber}/witnesses`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const verifySaveOffenceDetails = ({
   adjudicationNumber,
   offenceDetails,
@@ -424,4 +445,5 @@ export default {
   stubSaveYouthOffenderStatus,
   stubSaveAssociatedPrisoner,
   stubSaveEvidenceDetails,
+  stubSaveWitnessDetails,
 }

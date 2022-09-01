@@ -6,6 +6,11 @@ import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import Question from '../../offenceCodeDecisions/Question'
 
+export type WitnessData = {
+  firstName?: string
+  lastName?: string
+}
+
 export default class DecisionHelper {
   constructor(readonly decisionTreeService: DecisionTreeService) {}
 
@@ -54,5 +59,12 @@ export default class DecisionHelper {
       victimStaffUsername: currentAnswers?.victimStaffUsername,
       offenceCode: `${this.decision().findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  witnessNamesForSession(form: DecisionForm, user: User): Promise<WitnessData> {
+    return new Promise(resolve => {
+      resolve({})
+    })
   }
 }

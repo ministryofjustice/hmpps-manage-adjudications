@@ -21,6 +21,8 @@ export type PrisonerData = {
 
 export type OtherPersonData = {
   otherPersonNameInput?: string
+  otherPersonFirstNameInput?: string
+  otherPersonLastNameInput?: string
 }
 
 export type PrisonerOutsideEstablishmentData = {

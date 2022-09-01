@@ -4,7 +4,7 @@
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 
-{% set title = "Damages" %}
+{% set title = "Witnesses" %}
 
 {% block pageTitle %}
     {{ title }}
@@ -24,34 +24,34 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-            {% if damages | length > 0 %}
-            <div class="damages-table">
-                {{ damagesWitnessesTable(damages, redirectAfterRemoveUrl, currentUser, 'damages') }}
-            </div>
+                {% if witnesses | length > 0 %}
+                <div class="witnesses-table">
+                    {{ damagesWitnessesTable(witnesses, redirectAfterRemoveUrl, currentUser, 'witnesses') }}
+                </div>
+                {% else %}
+                <p class="govuk-body" data-qa="no-witnesses-p1">You have not added any witnesses to this report.</p>
+                <p class="govuk-body" data-qa="no-witnesses-p2">You can add witnesses or you can continue. You can also return later and add witnesses.</p>
+                {% endif %}
 
-            {% else %}
-            <p class="govuk-body" data-qa="no-damages-p1">You have not added damages to this report.</p>
-            <p class="govuk-body" data-qa="no-damages-p2">You can add damages now or you can continue. You can also return later and add damages.</p>
-            {% endif %}
 
         {{ govukButton({
-            text: "Add damages",
-            href: addDamagesButtonHref,
+            text: "Add a witness",
+            href: addWitnessButtonHref,
             classes: "govuk-button--secondary",
-            attributes: { "data-qa": "add-damages-button" }
+            attributes: { "data-qa": "add-witness-button" }
         }) }}
         <br>
         {{ govukButton({
             text: "Save and continue",
             type: "submit",
             classes: "govuk-button--submit govuk-!-margin-right-3",
-            attributes: { "data-qa": "details-of-damages-submit" }
+            attributes: { "data-qa": "details-of-witness-submit" }
         }) }}
         {{ govukButton({
             text: "Exit",
             href: exitButtonHref,
             classes: "govuk-button--secondary",
-            attributes: { "data-qa": "exit-damages-button" }
+            attributes: { "data-qa": "details-of-witness-exit" }
         }) }}
             </div>
         </div>

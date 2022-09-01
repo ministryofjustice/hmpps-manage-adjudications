@@ -37,7 +37,6 @@
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Bagged and tagged evidence</h2>
                 {% if baggedTaggedEvidence | length > 0 %}
                 <div class="evidence-table">
-                    {# We use the length of the data array for the first table in order to know where to start the index on the second table #}
                     {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }}
                 </div>
                 {% else %}

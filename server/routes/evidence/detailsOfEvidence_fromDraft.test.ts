@@ -88,7 +88,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /damages/100', () => {
+describe('GET', () => {
   it('should load the evidence page', () => {
     return request(app)
       .get(adjudicationUrls.detailsOfEvidence.urls.start(100))

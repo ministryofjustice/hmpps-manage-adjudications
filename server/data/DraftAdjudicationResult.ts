@@ -41,6 +41,7 @@ export type DraftAdjudication = {
   isYouthOffender?: boolean
   damages?: DamageDetails[]
   evidence?: EvidenceDetails[]
+  witnesses?: WitnessDetails[]
 }
 
 export type DraftAdjudicationResult = {
@@ -116,6 +117,13 @@ export type EvidenceDetails = {
   identifier?: string
 }
 
+export type WitnessDetails = {
+  code: WitnessCode
+  firstName: string
+  lastName: string
+  reporter?: string
+}
+
 export enum DamageCode {
   ELECTRICAL_REPAIR = 'ELECTRICAL_REPAIR',
   PLUMBING_REPAIR = 'PLUMBING_REPAIR',
@@ -131,4 +139,10 @@ export enum EvidenceCode {
   BODY_WORN_CAMERA = 'BODY_WORN_CAMERA',
   CCTV = 'CCTV',
   BAGGED_AND_TAGGED = 'BAGGED_AND_TAGGED',
+}
+
+export enum WitnessCode {
+  OFFICER = 'OFFICER',
+  STAFF = 'STAFF',
+  OTHER_PERSON = 'OTHER_PERSON',
 }
