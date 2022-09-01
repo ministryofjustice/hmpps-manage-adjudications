@@ -114,7 +114,7 @@ export default class AddWitnessRoutes {
     const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
 
     const witnessToAdd = {
-      code: this.getWitnessCode(selectedAnswerId),
+      code: WitnessCode[selectedAnswerId],
       firstName: witnessName.firstName,
       lastName: witnessName.lastName,
       reporter: user.username,
@@ -160,7 +160,7 @@ export default class AddWitnessRoutes {
     } else {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedAnswerId && this.helpers.get(this.getWitnessCode(selectedAnswerId))
+    return selectedAnswerId && this.helpers.get(WitnessCode[selectedAnswerId])
   }
 
   private decisions(): Question {
@@ -169,18 +169,5 @@ export default class AddWitnessRoutes {
 
   private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
     return res.redirect(url.format(urlQuery))
-  }
-
-  getWitnessCode = (selectedAnswerId: string): WitnessCode => {
-    switch (selectedAnswerId) {
-      case 'OFFICER':
-        return WitnessCode.OFFICER
-      case 'STAFF':
-        return WitnessCode.STAFF
-      case 'OTHER_PERSON':
-        return WitnessCode.OTHER_PERSON
-      default:
-        return null
-    }
   }
 }

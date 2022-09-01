@@ -5,13 +5,13 @@ import { WitnessCode, WitnessDetails } from '../../server/data/DraftAdjudication
 
 const witnessesList = [
   {
-    code: WitnessCode.PRISON_OFFICER,
+    code: WitnessCode.OFFICER,
     firstName: 'John',
     lastName: 'Doe',
     reporter: 'USER1',
   },
   {
-    code: WitnessCode.OTHER,
+    code: WitnessCode.OTHER_PERSON,
     firstName: 'Karen',
     lastName: 'Pertiss',
     reporter: 'USER1',
@@ -20,13 +20,13 @@ const witnessesList = [
 
 const witnessesListMultiUser = [
   {
-    code: WitnessCode.PRISON_OFFICER,
+    code: WitnessCode.OFFICER,
     firstName: 'John',
     lastName: 'Doe',
     reporter: 'USER1',
   },
   {
-    code: WitnessCode.OTHER,
+    code: WitnessCode.OTHER_PERSON,
     firstName: 'Karen',
     lastName: 'Pertiss',
     reporter: 'USER1',
