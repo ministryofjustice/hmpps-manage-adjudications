@@ -126,7 +126,7 @@ describe('GET /details-of-offence/102/delete/1 view', () => {
         .expect(200)
         // Title
         .expect(res => {
-          expect(res.text).toContain('Do you want to delete this offence?')
+          expect(res.text).toContain('Do you want to remove this offence?')
           expect(res.text).toContain('A standard answer with child question')
           // Second offence - second question and answer
           expect(res.text).toContain('A child question')
