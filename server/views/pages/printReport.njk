@@ -3,6 +3,7 @@
 {% from "../macros/onReport.njk" import onReportInfo %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set title = "Print a copy of this report" %}
 {% block pageTitle %}
     {{ title }}
@@ -14,12 +15,12 @@
             <div class="confirmed-on-report-section">
                 <p class="govuk-body">{{ prisonerFirstAndLastName }} must be given a copy of this report by
                     {{ expirationTime }} on {{ expirationDay }}.</p>
-                <div class="govuk-inset-text">You must follow local processes. You might need to give a copy of the printed report to
-                    another member of staff to review before it is given to
-                    {{ prisonerFirstAndLastName }}.
-                </div>
+                    {{ govukInsetText({
+                        text: "You must follow your establishment's processes.  For example, you might need to give a copy of the printed report to another member of staff to review before it's given to " + prisonerFirstAndLastName + "."
+                    }) }}
                 {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
-            </div>
+                <p class="govuk-body">Print out 2 copies of this report.  Sign and date both copies to confirm it's been issued.  One copy's for {{ prisonerFirstAndLastName }}.  Keep the second copy to give to the ALO, for reference in the Adjudication hearing.</p>
+            </div> 
             {{ printLink('Print this report', adjudicationUrls.printPdf.urls.start(adjudicationNumber), "left", "govuk-!-padding-right-0", "_blank") }}
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                 <div class="govuk-!-margin-top-7 govuk-!-padding-left-2">
