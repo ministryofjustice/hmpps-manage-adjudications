@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class DeleteOffence extends Page {
   constructor() {
-    super('Do you want to delete this offence?')
+    super('Do you want to remove this offence?')
   }
 
   questionAnswerSection = (offenceIndex: number): PageElement =>

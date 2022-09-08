@@ -126,7 +126,7 @@ describe('GET /details-of-offence/102/delete/1 view', () => {
         .expect(200)
         // Title
         .expect(res => {
-          expect(res.text).toContain('Do you want to delete this offence?')
+          expect(res.text).toContain('Do you want to remove this offence?')
           expect(res.text).toContain('A standard answer with child question')
           // Second offence - second question and answer
           expect(res.text).toContain('A child question')
@@ -146,7 +146,7 @@ describe('POST /details-of-offence/102/delete/1 validation', () => {
         .expect(200)
         .then(() =>
           agent.post(adjudicationUrls.detailsOfOffence.urls.delete(102, 2)).expect(res => {
-            expect(res.text).toContain('Select yes if you want to delete this offence')
+            expect(res.text).toContain('Select yes if you want to remove this offence')
           })
         )
     )
