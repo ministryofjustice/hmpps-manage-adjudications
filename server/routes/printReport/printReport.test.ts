@@ -49,7 +49,7 @@ describe('GET /print-report', () => {
       .get(adjudicationUrls.printReport.urls.start(123))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Print a copy of this report')
+        expect(res.text).toContain('Print this report')
         expect(res.text).toContain('123')
         expect(res.text).toContain('John Smith’s preferred language is')
         expect(res.text).toContain('They have other languages of')
