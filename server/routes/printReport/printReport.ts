@@ -15,7 +15,7 @@ export default class PrintReportRoutes {
     return res.render(`pages/printReport`, {
       adjudicationNumber,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
-      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'dddd, D MMMM'),
+      expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'dddd, D MMMM yyyy'),
       prisonerFirstAndLastName: formatName(adjudicationDetails.prisonerFirstName, adjudicationDetails.prisonerLastName),
       showPrisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage != null,
       prisonerPreferredLanguage: adjudicationDetails.prisonerPreferredNonEnglishLanguage,
