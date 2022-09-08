@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class PrintReportPage extends Page {
   constructor() {
-    super('Print a copy of this report')
+    super('Print this report')
   }
 
   printButton = (): PageElement => cy.get('[data-qa="print-report-button"]')
