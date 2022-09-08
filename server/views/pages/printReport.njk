@@ -19,7 +19,7 @@
                         text: "You must follow your establishment's processes.  For example, you might need to give a copy of the printed report to another member of staff to review before it's given to " + prisonerFirstAndLastName + "."
                     }) }}
                 {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
-                <p class="govuk-body">Print out 2 copies of this report.  Sign and date both copies to confirm it's been issued.  One copy's for {{ prisonerFirstAndLastName }}.  Keep the second copy to give to the ALO, for reference in the Adjudication hearing.</p>
+                <p class="govuk-body">Print out 2 copies of this report.  Sign and date both copies to confirm it's been issued.  One copy is for {{ prisonerFirstAndLastName }}.  Keep the second copy to give to the ALO, for reference in the Adjudication hearing.</p>
             </div> 
             {{ printLink('Print this report', adjudicationUrls.printPdf.urls.start(adjudicationNumber), "left", "govuk-!-padding-right-0", "_blank") }}
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
