@@ -311,7 +311,7 @@ describe('POST /details-of-offence/100', () => {
       )
   })
 
-  it('should redirect to the submitted edited statement page if reported adjudication number set', () => {
+  it('should redirect to the damages page', () => {
     const agent = request.agent(app)
     return agent
       .get(adjudicationUrls.detailsOfOffence.urls.start(100))
@@ -321,20 +321,7 @@ describe('POST /details-of-offence/100', () => {
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
           .send({ reportedAdjudicationNumber: 1524493 })
           .expect(302)
-          .expect('Location', adjudicationUrls.incidentStatement.urls.submittedEdit(100))
-      )
-  })
-
-  it('should redirect to the normal statement page if reported adjudication number not set', () => {
-    const agent = request.agent(app)
-    return agent
-      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
-      .expect(200)
-      .then(() =>
-        agent
-          .post(adjudicationUrls.detailsOfOffence.urls.start(100))
-          .expect(302)
-          .expect('Location', adjudicationUrls.incidentStatement.urls.start(100))
+          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start(100))
       )
   })
 })

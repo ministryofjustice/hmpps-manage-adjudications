@@ -92,7 +92,7 @@ export default class DetailsOfOffencePage {
     // Saving the offences for a draft just means continue
     if (!this.pageOptions.displaySessionData()) {
       this.allOffencesSessionService.deleteAllSessionOffences(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
+      return this.redirectToNextPage(res, adjudicationNumber)
     }
     const offenceDetails = this.allOffencesSessionService
       .getAndDeleteAllSessionOffences(req, adjudicationNumber)
@@ -105,7 +105,7 @@ export default class DetailsOfOffencePage {
         }
       })
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
-    return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
+    return this.redirectToNextPage(res, adjudicationNumber)
   }
 
   getOffences = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication): OffenceData[] => {
@@ -131,10 +131,7 @@ export default class DetailsOfOffencePage {
     return res.redirect(adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(adjudicationNumber))
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
-    if (isReportedDraft) {
-      return res.redirect(adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber))
-    }
-    return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
+  redirectToNextPage = (res: Response, adjudicationNumber: number) => {
+    return res.redirect(adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber))
   }
 }
