@@ -321,17 +321,10 @@ context('Details of offence', () => {
     })
   })
 
-  it('goes to the reported adjudication statement edit page', () => {
+  it('goes to the damages page', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(202))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
-    cy.url().should('include', adjudicationUrls.incidentStatement.urls.submittedEdit(202))
-  })
-
-  it('goes to the draft statement edit page', () => {
-    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
-    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.saveAndContinue().click()
-    cy.url().should('include', adjudicationUrls.incidentStatement.urls.start(201))
+    cy.url().should('include', adjudicationUrls.detailsOfDamages.urls.start(202))
   })
 })
