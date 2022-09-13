@@ -34,6 +34,9 @@ context('Task list', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
+            damages: [],
+            evidence: [],
+            witnesses: [],
           },
         },
       })
@@ -60,10 +63,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('NOT STARTED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(6).innerText).to.contain('Evidence')
           expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('NOT STARTED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('NOT STARTED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -122,6 +131,9 @@ context('Task list', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
+            damages: [],
+            evidence: [],
+            witnesses: [],
           },
         },
       })
@@ -137,10 +149,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('NOT STARTED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(6).innerText).to.contain('Evidence')
           expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('NOT STARTED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('NOT STARTED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should not have an active accept details link', () => {
@@ -240,10 +258,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('COMPLETED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
-          expect($cells.get(5).innerText).to.contain('IN PROGRESS')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
-          expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(4).innerText).to.contain('Damages')
+          expect($cells.get(5).innerText).to.contain('COMPLETED')
+          expect($cells.get(6).innerText).to.contain('Evidence')
+          expect($cells.get(7).innerText).to.contain('COMPLETED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('COMPLETED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('IN PROGRESS')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -346,10 +370,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('COMPLETED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('COMPLETED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
-          expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(6).innerText).to.contain('Evidence')
+          expect($cells.get(7).innerText).to.contain('COMPLETED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('COMPLETED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('COMPLETED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -439,10 +469,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('COMPLETED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
-          expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(6).innerText).to.contain('Evidence')
+          expect($cells.get(7).innerText).to.contain('COMPLETED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('COMPLETED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('COMPLETED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
