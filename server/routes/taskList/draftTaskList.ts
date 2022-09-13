@@ -27,6 +27,9 @@ export default class DraftTaskListRoutes {
       handoverDeadline,
       offenceDetailsUrl,
       incidentStatementStatus,
+      damagesStatus,
+      evidenceStatus,
+      witnessesStatus,
     } = taskListDetails
 
     const taskListDisplay = [
@@ -47,6 +50,33 @@ export default class DraftTaskListRoutes {
         linkText: 'Offence details',
         statusClass: offenceDetailsStatus.classes,
         statusText: offenceDetailsStatus.text,
+      },
+      // damages
+      {
+        id: 'damages-info',
+        linkUrl: adjudicationUrls.detailsOfDamages.urls.start(idValue),
+        linkAttributes: 'damages-link',
+        linkText: 'Damages',
+        statusClass: damagesStatus.classes,
+        statusText: damagesStatus.text,
+      },
+      // evidence
+      {
+        id: 'evidence-info',
+        linkUrl: adjudicationUrls.detailsOfEvidence.urls.start(idValue),
+        linkAttributes: 'evidence-link',
+        linkText: 'Evidence',
+        statusClass: evidenceStatus.classes,
+        statusText: evidenceStatus.text,
+      },
+      // witnesses
+      {
+        id: 'witnesses-info',
+        linkUrl: adjudicationUrls.detailsOfWitnesses.urls.start(idValue),
+        linkAttributes: 'witnesses-link',
+        linkText: 'Witnesses',
+        statusClass: witnessesStatus.classes,
+        statusText: witnessesStatus.text,
       },
       // incident statement
       {

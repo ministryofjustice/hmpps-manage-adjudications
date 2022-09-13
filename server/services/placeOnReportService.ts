@@ -15,11 +15,11 @@ import {
   TaskListDetails,
   OffenceDetails,
   IncidentStatementStatus,
-  OffenceDetailsStatus,
   AssociatedPrisoner,
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
+  AdjudicationSectionStatus,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -273,13 +273,27 @@ export default class PlaceOnReportService {
 
     const statementComplete = draftAdjudication.incidentStatement?.completed || false
     const offenceDetailsComplete = this.checkOffenceDetails(draftAdjudication.offenceDetails)
-    const offenceDetailsStatus = this.getOffenceDetailsStatus(offenceDetailsComplete)
+    const offenceDetailsStatus = this.getStatus(offenceDetailsComplete)
 
     const offenceDetailsUrl = this.getNextOffencesUrl(draftAdjudication.offenceDetails, draftAdjudication.id)
     const incidentStatementStatus = this.getIncidentStatementStatus(
       !!draftAdjudication.incidentStatement,
       statementComplete
     )
+    const damagesPageVisited = this.checkDamagesEvidenceWitnesses('damages', incidentStatementStatus, draftAdjudication)
+    const evidencePageVisited = this.checkDamagesEvidenceWitnesses(
+      'evidence',
+      incidentStatementStatus,
+      draftAdjudication
+    )
+    const witnessesPageVisited = this.checkDamagesEvidenceWitnesses(
+      'witnesses',
+      incidentStatementStatus,
+      draftAdjudication
+    )
+    const damagesStatus = this.getStatus(damagesPageVisited)
+    const evidenceStatus = this.getStatus(evidencePageVisited)
+    const witnessesStatus = this.getStatus(witnessesPageVisited)
 
     return {
       offenceDetailsUrl,
@@ -287,11 +301,29 @@ export default class PlaceOnReportService {
       incidentStatementStatus,
       offenceDetailsStatus,
       showLinkForAcceptDetails: offenceDetailsComplete && statementComplete,
+      damagesStatus,
+      evidenceStatus,
+      witnessesStatus,
     }
   }
 
   checkOffenceDetails(offenceDetails: OffenceDetails[]): boolean {
     return offenceDetails?.length > 0 || false
+  }
+
+  checkDamagesEvidenceWitnesses(
+    page: string,
+    incidentStatementStatus: IncidentStatementStatus,
+    draftAdjudication: DraftAdjudication
+  ): boolean {
+    if (incidentStatementStatus.text !== 'NOT STARTED') return true // If they have gotten to the incident statement we can assume they have gone through these pages
+    if (draftAdjudication.witnesses.length > 0) return true // if they have added witnesses we can assume they have been through the pages inc. damages (???)
+
+    // if damages, check length
+    if (page === 'damages' && draftAdjudication.damages.length > 0) return true
+    // if evidence, check damages
+    if (page === 'evidence' && draftAdjudication.evidence.length > 0) return true
+    return false
   }
 
   getNextOffencesUrl(offenceDetails: OffenceDetails[], adjudicationId: number): string {
@@ -306,8 +338,8 @@ export default class PlaceOnReportService {
     return { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
   }
 
-  getOffenceDetailsStatus = (offenceDetailsComplete: boolean): OffenceDetailsStatus => {
-    if (offenceDetailsComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
+  getStatus = (adjudicationsSectionCompleted: boolean): AdjudicationSectionStatus => {
+    if (adjudicationsSectionCompleted) return { classes: 'govuk-tag', text: 'COMPLETED' }
     return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
   }
 

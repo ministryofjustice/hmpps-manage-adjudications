@@ -78,11 +78,13 @@ export type EditIncidentRoleRequest = {
 
 export type TaskListDetails = {
   handoverDeadline: string
-  // offenceDetailsComplete: boolean
   showLinkForAcceptDetails: boolean
   offenceDetailsUrl: string
   incidentStatementStatus: IncidentStatementStatus
-  offenceDetailsStatus: OffenceDetailsStatus
+  offenceDetailsStatus: AdjudicationSectionStatus
+  damagesStatus: AdjudicationSectionStatus
+  evidenceStatus: AdjudicationSectionStatus
+  witnessesStatus: AdjudicationSectionStatus
 }
 
 export type PrisonerReport = CheckYourAnswers
@@ -102,7 +104,7 @@ export type AssociatedPrisoner = {
   associatedPrisonersName?: string
 }
 
-export type OffenceDetailsStatus = IncidentStatementStatus
+export type AdjudicationSectionStatus = IncidentStatementStatus
 
 export type DamageDetails = {
   code: DamageCode

@@ -36,6 +36,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
+// TODO: I think most of these tests are probably unnecessary - we should rely on the int tests for this stuff.
 describe('GET /place-the-prisoner-on-report', () => {
   describe('Only incident details completed', () => {
     beforeEach(() => {
@@ -45,6 +46,9 @@ describe('GET /place-the-prisoner-on-report', () => {
         offenceDetailsUrl: '',
         incidentStatementStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
         offenceDetailsStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -55,6 +59,12 @@ describe('GET /place-the-prisoner-on-report', () => {
           expect(response.text).toContain('Incident details')
           expect(response.text).toContain('COMPLETED')
           expect(response.text).toContain('Offence details')
+          expect(response.text).toContain('NOT STARTED')
+          expect(response.text).toContain('Damages')
+          expect(response.text).toContain('NOT STARTED')
+          expect(response.text).toContain('Evidence')
+          expect(response.text).toContain('NOT STARTED')
+          expect(response.text).toContain('Witnesses')
           expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain('Incident statement')
           expect(response.text).toContain('NOT STARTED')
@@ -79,6 +89,9 @@ describe('GET /place-the-prisoner-on-report', () => {
         showLinkForAcceptDetails: false,
         offenceDetailsUrl: '',
         incidentStatementStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -90,6 +103,12 @@ describe('GET /place-the-prisoner-on-report', () => {
           expect(response.text).toContain('COMPLETED')
           expect(response.text).toContain('Offence details')
           expect(response.text).toContain('COMPLETED')
+          expect(response.text).toContain('Damages')
+          expect(response.text).toContain('NOT STARTED')
+          expect(response.text).toContain('Evidence')
+          expect(response.text).toContain('NOT STARTED')
+          expect(response.text).toContain('Witnesses')
+          expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain('Incident statement')
           expect(response.text).toContain('NOT STARTED')
           expect(response.text).toContain('Accept details and place on report')
@@ -113,6 +132,9 @@ describe('GET /place-the-prisoner-on-report', () => {
         showLinkForAcceptDetails: false,
         offenceDetailsUrl: '',
         incidentStatementStatus: { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' },
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -147,6 +169,9 @@ describe('GET /place-the-prisoner-on-report', () => {
         showLinkForAcceptDetails: true,
         offenceDetailsUrl: '',
         incidentStatementStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should load the continue report page', () => {
@@ -181,6 +206,9 @@ describe('GET /place-the-prisoner-on-report', () => {
         showLinkForAcceptDetails: false,
         offenceDetailsUrl: '',
         incidentStatementStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('should not contain a link to confirm the adjudication', () => {

@@ -2,6 +2,15 @@ import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
+import {
+  DamageCode,
+  DamageDetails,
+  DraftAdjudication,
+  EvidenceCode,
+  EvidenceDetails,
+  WitnessCode,
+  WitnessDetails,
+} from '../data/DraftAdjudicationResult'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
@@ -557,6 +566,9 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
+          damages: [],
+          evidence: [],
+          witnesses: [],
         },
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
@@ -572,6 +584,9 @@ describe('placeOnReportService', () => {
           text: 'NOT STARTED',
         },
         offenceDetailsUrl: '/age-of-prisoner/104',
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('returns the correct response when there is no incident statement', async () => {
@@ -594,6 +609,9 @@ describe('placeOnReportService', () => {
             roleCode: '25a',
           },
           isYouthOffender: false,
+          damages: [],
+          evidence: [],
+          witnesses: [],
           offenceDetails: [
             {
               offenceCode: 3,
@@ -621,6 +639,9 @@ describe('placeOnReportService', () => {
           text: 'NOT STARTED',
         },
         offenceDetailsUrl: '/details-of-offence/104',
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('returns the correct response when there is an incomplete incident statement', async () => {
@@ -638,6 +659,9 @@ describe('placeOnReportService', () => {
             completed: false,
           },
           startedByUserId: 'TEST_GEN',
+          damages: [],
+          evidence: [],
+          witnesses: [],
           incidentRole: {
             associatedPrisonersNumber: 'G2996UX',
             offenceRule: {
@@ -674,6 +698,9 @@ describe('placeOnReportService', () => {
           text: 'IN PROGRESS',
         },
         offenceDetailsUrl: '/details-of-offence/104',
+        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        evidenceStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        witnessesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
       })
     })
     it('returns the correct response when there is a complete incident statement', async () => {
@@ -700,6 +727,9 @@ describe('placeOnReportService', () => {
             roleCode: '25a',
           },
           isYouthOffender: false,
+          damages: [],
+          evidence: [],
+          witnesses: [],
           offenceDetails: [
             {
               offenceCode: 3,
@@ -727,6 +757,280 @@ describe('placeOnReportService', () => {
           text: 'COMPLETED',
         },
         offenceDetailsUrl: '/details-of-offence/92',
+        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        evidenceStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        witnessesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+      })
+    })
+    it('returns the correct data when there are damages present', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 92,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26999,
+            dateTimeOfIncident: '2021-11-18T14:50:00',
+            handoverDeadline: '2021-11-23T00:00:00',
+          },
+          startedByUserId: 'NCLAMP_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          isYouthOffender: false,
+          damages: [
+            {
+              code: DamageCode.CLEANING,
+              reporter: 'TESTER_GEN',
+              details: 'Some test info',
+            },
+          ],
+          evidence: [],
+          witnesses: [],
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(92, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-11-23T00:00:00',
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        offenceDetailsUrl: '/details-of-offence/92',
+        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+      })
+    })
+
+    it('returns the correct data when there is evidence present', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 92,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26999,
+            dateTimeOfIncident: '2021-11-18T14:50:00',
+            handoverDeadline: '2021-11-23T00:00:00',
+          },
+          startedByUserId: 'NCLAMP_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          isYouthOffender: false,
+          damages: [
+            {
+              code: DamageCode.CLEANING,
+              reporter: 'TESTER_GEN',
+              details: 'Some test info',
+            },
+          ],
+          evidence: [
+            {
+              code: EvidenceCode.PHOTO,
+              reporter: 'TESTER_GEN',
+              details: 'some test info',
+            },
+          ],
+          witnesses: [],
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(92, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-11-23T00:00:00',
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        offenceDetailsUrl: '/details-of-offence/92',
+        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        evidenceStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+      })
+    })
+    it('returns the correct data when there are witnesses present', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 92,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26999,
+            dateTimeOfIncident: '2021-11-18T14:50:00',
+            handoverDeadline: '2021-11-23T00:00:00',
+          },
+          startedByUserId: 'NCLAMP_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          isYouthOffender: false,
+          damages: [
+            {
+              code: DamageCode.CLEANING,
+              reporter: 'TESTER_GEN',
+              details: 'Some test info',
+            },
+          ],
+          evidence: [
+            {
+              code: EvidenceCode.PHOTO,
+              reporter: 'TESTER_GEN',
+              details: 'some test info',
+            },
+          ],
+          witnesses: [
+            {
+              code: WitnessCode.OFFICER,
+              firstName: 'John',
+              lastName: 'Saunders',
+              reporter: 'TESTER_GEN',
+            },
+          ],
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(92, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-11-23T00:00:00',
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        offenceDetailsUrl: '/details-of-offence/92',
+        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        evidenceStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        witnessesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+      })
+    })
+    it('returns the correct data when there are witnesses and evidence present but no damages', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: {
+          id: 92,
+          prisonerNumber: 'G6123VU',
+          incidentDetails: {
+            locationId: 26999,
+            dateTimeOfIncident: '2021-11-18T14:50:00',
+            handoverDeadline: '2021-11-23T00:00:00',
+          },
+          startedByUserId: 'NCLAMP_GEN',
+          incidentRole: {
+            associatedPrisonersNumber: 'G2996UX',
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
+            },
+            roleCode: '25a',
+          },
+          isYouthOffender: false,
+          damages: [],
+          evidence: [
+            {
+              code: EvidenceCode.PHOTO,
+              reporter: 'TESTER_GEN',
+              details: 'some test info',
+            },
+          ],
+          witnesses: [
+            {
+              code: 'OFFICER',
+              firstName: 'John',
+              lastName: 'Saunders',
+              reporter: 'TESTER_GEN',
+            },
+          ],
+          offenceDetails: [
+            {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
+              },
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
+          ],
+        },
+      })
+      const response = await service.getInfoForTaskListStatuses(92, user)
+      expect(response).toEqual({
+        handoverDeadline: '2021-11-23T00:00:00',
+        offenceDetailsStatus: {
+          classes: 'govuk-tag',
+          text: 'COMPLETED',
+        },
+        showLinkForAcceptDetails: false,
+        incidentStatementStatus: {
+          classes: 'govuk-tag govuk-tag--grey',
+          text: 'NOT STARTED',
+        },
+        offenceDetailsUrl: '/details-of-offence/92',
+        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        evidenceStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        witnessesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
       })
     })
   })
@@ -904,15 +1208,15 @@ describe('placeOnReportService', () => {
       expect(response).toEqual(expectedResult)
     })
   })
-  describe('getOffenceDetailsStatus', () => {
+  describe('getStatus', () => {
     it('returns the correct status for the offences - offences not present', async () => {
       const expectedResult = { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
-      const response = await service.getOffenceDetailsStatus(false)
+      const response = await service.getStatus(false)
       expect(response).toEqual(expectedResult)
     })
     it('returns the correct status for the offences - offences present and complete', async () => {
       const expectedResult = { classes: 'govuk-tag', text: 'COMPLETED' }
-      const response = await service.getOffenceDetailsStatus(true)
+      const response = await service.getStatus(true)
       expect(response).toEqual(expectedResult)
     })
   })
@@ -933,6 +1237,60 @@ describe('placeOnReportService', () => {
     it('returns false if there are no offences on the draft', async () => {
       const response = await service.checkOffenceDetails(undefined)
       expect(response).toEqual(false)
+    })
+  })
+  describe('checkDamagesEvidenceWitnesses', () => {
+    const damagesExample = [
+      {
+        reporter: 'TESTER_GEN',
+        code: DamageCode.CLEANING,
+        details: 'Some test text',
+      },
+    ]
+    const incidentStatementIncompleteStatus = {
+      classes: 'govuk-tag govuk-tag--grey',
+      text: 'NOT STARTED',
+    }
+    const incidentStatementInProgressStatus = {
+      classes: 'govuk-tag govuk-tag--blue',
+      text: 'IN PROGRESS',
+    }
+
+    const draftAdjudicationNoData = {
+      damages: [] as DamageDetails[],
+      evidence: [] as EvidenceDetails[],
+      witnesses: [] as WitnessDetails[],
+    }
+
+    const draftAdjudicationData = {
+      damages: damagesExample as DamageDetails[],
+      evidence: [] as EvidenceDetails[],
+      witnesses: [] as WitnessDetails[],
+    }
+
+    it('returns false if there is no data entry and incident statement page not reached', async () => {
+      const response = await service.checkDamagesEvidenceWitnesses(
+        'damages',
+        incidentStatementIncompleteStatus,
+        draftAdjudicationNoData as DraftAdjudication
+      )
+      expect(response).toEqual(false)
+    })
+    it('returns true if there is no data entry but incident statement page has been reached', async () => {
+      const response = await service.checkDamagesEvidenceWitnesses(
+        'evidence',
+        incidentStatementInProgressStatus,
+        draftAdjudicationNoData as DraftAdjudication
+      )
+      expect(response).toEqual(true)
+    })
+    it('returns true if there is an entry present but incident statement page not reached', async () => {
+      const response = await service.checkDamagesEvidenceWitnesses(
+        'damages',
+        incidentStatementIncompleteStatus,
+        draftAdjudicationData as DraftAdjudication
+      )
+      expect(response).toEqual(true)
     })
   })
 })
