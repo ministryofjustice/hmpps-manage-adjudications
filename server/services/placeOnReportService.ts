@@ -321,7 +321,7 @@ export default class PlaceOnReportService {
 
     // if damages, check length
     if (page === 'damages' && draftAdjudication.damages.length > 0) return true
-    // if evidence, check damages
+    // if evidence, check length
     if (page === 'evidence' && draftAdjudication.evidence.length > 0) return true
     return false
   }
