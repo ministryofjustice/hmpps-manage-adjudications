@@ -2,15 +2,7 @@ import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
-import {
-  DamageCode,
-  DamageDetails,
-  DraftAdjudication,
-  EvidenceCode,
-  EvidenceDetails,
-  WitnessCode,
-  WitnessDetails,
-} from '../data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
