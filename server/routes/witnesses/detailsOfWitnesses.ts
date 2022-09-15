@@ -79,14 +79,15 @@ export default class DetailsOfWitnessesPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
 
-    // If displaying data on draft, nothing has changed so no save needed
-    if (!this.pageOptions.displaySessionData()) {
+    // If displaying data on draft, nothing has changed so no save needed  - unless it's the first time viewing the page, when we need to record that the page visit
+    if (!this.pageOptions.displaySessionData() && draftAdjudication.witnessesSaved) {
       this.witnessesSessionService.deleteAllSessionWitnesses(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)
     }
 
-    const witnessDetails = this.witnessesSessionService.getAndDeleteAllSessionWitnesses(req, adjudicationNumber)
+    const witnessDetails = this.witnessesSessionService.getAndDeleteAllSessionWitnesses(req, adjudicationNumber) || []
 
     await this.placeOnReportService.saveWitnessDetails(adjudicationNumber, witnessDetails, user)
     return this.redirectToNextPage(res, adjudicationNumber, isReportedAdjudication)

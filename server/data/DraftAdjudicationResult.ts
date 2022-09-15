@@ -42,6 +42,9 @@ export type DraftAdjudication = {
   damages?: DamageDetails[]
   evidence?: EvidenceDetails[]
   witnesses?: WitnessDetails[]
+  damagesSaved?: boolean
+  evidenceSaved?: boolean
+  witnessesSaved?: boolean
 }
 
 export type DraftAdjudicationResult = {

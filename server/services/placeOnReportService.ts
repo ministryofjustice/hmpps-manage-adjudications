@@ -280,20 +280,9 @@ export default class PlaceOnReportService {
       !!draftAdjudication.incidentStatement,
       statementComplete
     )
-    const damagesPageVisited = this.checkDamagesEvidenceWitnesses('damages', incidentStatementStatus, draftAdjudication)
-    const evidencePageVisited = this.checkDamagesEvidenceWitnesses(
-      'evidence',
-      incidentStatementStatus,
-      draftAdjudication
-    )
-    const witnessesPageVisited = this.checkDamagesEvidenceWitnesses(
-      'witnesses',
-      incidentStatementStatus,
-      draftAdjudication
-    )
-    const damagesStatus = this.getStatus(damagesPageVisited)
-    const evidenceStatus = this.getStatus(evidencePageVisited)
-    const witnessesStatus = this.getStatus(witnessesPageVisited)
+    const damagesStatus = this.getStatus(draftAdjudication.damagesSaved)
+    const evidenceStatus = this.getStatus(draftAdjudication.evidenceSaved)
+    const witnessesStatus = this.getStatus(draftAdjudication.witnessesSaved)
 
     return {
       offenceDetailsUrl,
@@ -309,21 +298,6 @@ export default class PlaceOnReportService {
 
   checkOffenceDetails(offenceDetails: OffenceDetails[]): boolean {
     return offenceDetails?.length > 0 || false
-  }
-
-  checkDamagesEvidenceWitnesses(
-    page: string,
-    incidentStatementStatus: IncidentStatementStatus,
-    draftAdjudication: DraftAdjudication
-  ): boolean {
-    if (incidentStatementStatus.text !== 'NOT STARTED') return true // If they have gotten to the incident statement we can assume they have gone through these pages
-    if (draftAdjudication.witnesses.length > 0) return true // if they have added witnesses we can assume they have been through the pages inc. damages (???)
-
-    // if damages, check length
-    if (page === 'damages' && draftAdjudication.damages.length > 0) return true
-    // if evidence, check length
-    if (page === 'evidence' && draftAdjudication.evidence.length > 0) return true
-    return false
   }
 
   getNextOffencesUrl(offenceDetails: OffenceDetails[], adjudicationId: number): string {

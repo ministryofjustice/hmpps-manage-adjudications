@@ -11,6 +11,12 @@ export default class TaskListPage extends Page {
 
   offenceDetailsLink = (): PageElement => cy.get('[data-qa="details-of-offence-link"]')
 
+  damagesLink = (): PageElement => cy.get('[data-qa="damages-link"]')
+
+  evidenceLink = (): PageElement => cy.get('[data-qa="evidence-link"]')
+
+  witnessesLink = (): PageElement => cy.get('[data-qa="witnesses-link"]')
+
   incidentStatementLink = (): PageElement => cy.get('[data-qa="incident-statement-link"]')
 
   acceptDetailsLink = (): PageElement => cy.get('[data-qa="accept-details-link"]')

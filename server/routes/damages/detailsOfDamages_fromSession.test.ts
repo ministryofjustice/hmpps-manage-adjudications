@@ -54,13 +54,13 @@ const adjudicationWithoutDamages = {
 
 const damagesOnSession = [
   {
-    type: 'REDECORATION',
-    description: 'Broken window',
+    code: 'REDECORATION',
+    details: 'Broken window',
     reporter: 'user1',
   },
   {
-    type: 'REDECORATION',
-    description: 'Broken pool cue',
+    code: 'REDECORATION',
+    details: 'Broken pool cue',
     reporter: 'user1',
   },
 ]

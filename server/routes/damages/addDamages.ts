@@ -42,8 +42,8 @@ export default class AddDamagesRoutes {
     if (error) return this.renderView(req, res, { error, damageType, damageDescription })
 
     const damageToAdd = {
-      type: damageType,
-      description: damageDescription,
+      code: damageType,
+      details: damageDescription,
       reporter: user.username,
     }
 
