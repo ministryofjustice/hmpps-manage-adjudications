@@ -34,6 +34,9 @@ context('Task list', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
+            damages: [],
+            evidence: [],
+            witnesses: [],
           },
         },
       })
@@ -60,10 +63,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('NOT STARTED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(6).innerText).to.contain('Evidence')
           expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('NOT STARTED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('NOT STARTED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -122,6 +131,9 @@ context('Task list', () => {
               locationId: 234,
             },
             startedByUserId: 'TEST_GEN',
+            damages: [],
+            evidence: [],
+            witnesses: [],
           },
         },
       })
@@ -137,10 +149,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('NOT STARTED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(6).innerText).to.contain('Evidence')
           expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('NOT STARTED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('NOT STARTED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should not have an active accept details link', () => {
@@ -214,6 +232,12 @@ context('Task list', () => {
                 victimStaffUsername: 'ABC12D',
               },
             ],
+            damages: [],
+            evidence: [],
+            witnesses: [],
+            damagesSaved: true,
+            evidenceSaved: true,
+            witnessesSaved: true,
           },
         },
       })
@@ -240,10 +264,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('COMPLETED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
-          expect($cells.get(5).innerText).to.contain('IN PROGRESS')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
-          expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(4).innerText).to.contain('Damages')
+          expect($cells.get(5).innerText).to.contain('COMPLETED')
+          expect($cells.get(6).innerText).to.contain('Evidence')
+          expect($cells.get(7).innerText).to.contain('COMPLETED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('COMPLETED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('IN PROGRESS')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -300,6 +330,12 @@ context('Task list', () => {
               completed: true,
             },
             startedByUserId: 'TEST_GEN',
+            damages: [],
+            evidence: [],
+            witnesses: [],
+            damagesSaved: true,
+            evidenceSaved: true,
+            witnessesSaved: true,
             incidentRole: {
               associatedPrisonersNumber: 'G2996UX',
               offenceRule: {
@@ -346,10 +382,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('COMPLETED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('COMPLETED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
-          expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(6).innerText).to.contain('Evidence')
+          expect($cells.get(7).innerText).to.contain('COMPLETED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('COMPLETED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('COMPLETED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -408,6 +450,12 @@ context('Task list', () => {
               associatedPrisonersNumber: 'G6415GD',
             },
             offenceDetails: [],
+            damages: [],
+            evidence: [],
+            witnesses: [],
+            damagesSaved: true,
+            evidenceSaved: true,
+            witnessesSaved: true,
             incidentStatement: {
               statement: 'pangolin',
               completed: true,
@@ -439,10 +487,16 @@ context('Task list', () => {
           expect($cells.get(1).innerText).to.contain('COMPLETED')
           expect($cells.get(2).innerText).to.contain('Offence details')
           expect($cells.get(3).innerText).to.contain('NOT STARTED')
-          expect($cells.get(4).innerText).to.contain('Incident statement')
+          expect($cells.get(4).innerText).to.contain('Damages')
           expect($cells.get(5).innerText).to.contain('COMPLETED')
-          expect($cells.get(6).innerText).to.contain('Accept details and place on report')
-          expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          expect($cells.get(6).innerText).to.contain('Evidence')
+          expect($cells.get(7).innerText).to.contain('COMPLETED')
+          expect($cells.get(8).innerText).to.contain('Witnesses')
+          expect($cells.get(9).innerText).to.contain('COMPLETED')
+          expect($cells.get(10).innerText).to.contain('Incident statement')
+          expect($cells.get(11).innerText).to.contain('COMPLETED')
+          expect($cells.get(12).innerText).to.contain('Accept details and place on report')
+          expect($cells.get(13).innerText).to.contain('NOT STARTED')
         })
     })
     it('should have the correct expiration date and time', () => {
@@ -454,4 +508,122 @@ context('Task list', () => {
       )
     })
   })
+  context(
+    'Witnesses added but no damages and evidence added. Evidence page not visited so should say not started',
+    () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn')
+        cy.task('stubAuthUser')
+        cy.task('stubGetPrisonerDetails', {
+          prisonerNumber: 'G6415GD',
+          response: {
+            offenderNo: 'G6415GD',
+            firstName: 'JOHN',
+            lastName: 'SMITH',
+            assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+            categoryCode: 'C',
+            alerts: [
+              { alertType: 'T', alertCode: 'TCPA' },
+              { alertType: 'X', alertCode: 'XCU' },
+            ],
+          },
+        })
+        cy.task('stubGetDraftAdjudication', {
+          id: 3456,
+          response: {
+            draftAdjudication: {
+              id: 3456,
+              prisonerNumber: 'G6415GD',
+              incidentDetails: {
+                dateTimeOfIncident: '2021-11-03T11:09:00',
+                handoverDeadline: '2021-11-05T11:09:00',
+                locationId: 234,
+              },
+              isYouthOffender: false,
+              incidentStatement: {
+                id: 23,
+                statement: 'This is my statement',
+                completed: true,
+              },
+              startedByUserId: 'TEST_GEN',
+              damages: [],
+              evidence: [],
+              witnesses: [
+                {
+                  code: 'STAFF',
+                  firstName: 'Philip',
+                  lastName: 'Jones',
+                  reporter: 'NCLAMP_GEN',
+                },
+                {
+                  code: 'OFFICER',
+                  firstName: 'Jake',
+                  lastName: 'January',
+                  reporter: 'NCLAMP_GEN',
+                },
+              ],
+              damagesSaved: true,
+              witnessesSaved: true,
+              incidentRole: {
+                associatedPrisonersNumber: 'G2996UX',
+                offenceRule: {
+                  paragraphDescription: 'Committed an assault',
+                  paragraphNumber: '25(a)',
+                },
+                roleCode: '25a',
+              },
+              offenceDetails: [
+                {
+                  offenceCode: 3,
+                  offenceRule: {
+                    paragraphDescription: 'Committed an assault',
+                    paragraphNumber: '25(a)',
+                  },
+                  victimOtherPersonsName: 'Bob Hope',
+                  victimPrisonersNumber: 'G2996UX',
+                  victimStaffUsername: 'ABC12D',
+                },
+              ],
+            },
+          },
+        })
+        cy.signIn()
+      })
+      it('should have the correct statuses', () => {
+        cy.visit(adjudicationUrls.taskList.urls.start(3456))
+        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+        TaskListPage.taskList()
+          .find('td')
+          .then($cells => {
+            expect($cells.get(6).innerText).to.contain('Evidence')
+            expect($cells.get(7).innerText).to.contain('NOT STARTED')
+          })
+      })
+      it('should have an active link to the damages page', () => {
+        cy.visit(adjudicationUrls.taskList.urls.start(3456))
+        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+        TaskListPage.damagesLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(3456))
+        })
+      })
+      it('should have an active link to the evidence page', () => {
+        cy.visit(adjudicationUrls.taskList.urls.start(3456))
+        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+        TaskListPage.evidenceLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.start(3456))
+        })
+      })
+      it('should have an active link to the witnesses page', () => {
+        cy.visit(adjudicationUrls.taskList.urls.start(3456))
+        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+        TaskListPage.witnessesLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(3456))
+        })
+      })
+    }
+  )
 })

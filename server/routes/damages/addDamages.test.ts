@@ -33,8 +33,8 @@ describe('Add damages', () => {
         expect(damagesSessionService.addSessionDamage).toHaveBeenCalledWith(
           expect.anything(),
           {
-            type: 'REDECORATION',
-            description: 'Repainting required',
+            code: 'REDECORATION',
+            details: 'Repainting required',
             reporter: 'user1',
           },
           100

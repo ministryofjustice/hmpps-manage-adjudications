@@ -14,10 +14,10 @@
     {% set rows = (rows.push(
         [
             {
-                text: data.type | damageCode if dataType == "damages" else data.lastName | witnessName(data.firstName)
+                text: data.code | damageCode if dataType == "damages" else data.lastName | witnessName(data.firstName)
             }, 
             {
-                text: data.description if dataType == "damages" else data.code | witnessCode
+                text: data.details if dataType == "damages" else data.code | witnessCode
             },
             {
                 html: removeColumnValue,

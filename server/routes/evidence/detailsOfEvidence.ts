@@ -87,15 +87,17 @@ export default class DetailsOfEvidencePage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
 
-    // If displaying data on draft, nothing has changed so no save needed
-    if (!this.pageOptions.displaySessionData()) {
+    // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
+    if (!this.pageOptions.displaySessionData() && draftAdjudication.evidenceSaved) {
       this.evidenceSessionService.deleteAllSessionEvidence(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber)
     }
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
+
     // we need to merge the different evidence types back together into one array
-    const allEvidence = [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged]
+    const allEvidence = evidenceDetails ? [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged] : []
     await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
     return this.redirectToNextPage(res, adjudicationNumber)
   }
