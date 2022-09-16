@@ -1,6 +1,7 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import { DamageCode } from '../../server/data/DraftAdjudicationResult'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -11,7 +12,13 @@ const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: st
   }
 }
 
-const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number, id: number) => {
+const createDraftFromReportedAdjudicationResponse = (
+  adjudicationNumber: number,
+  id: number,
+  damages = [],
+  evidence = [],
+  witnesses = []
+) => {
   return {
     draftAdjudication: {
       id,
@@ -27,6 +34,9 @@ const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number,
         completed: true,
       },
       startedByUserId: 'USER1',
+      damages,
+      evidence,
+      witnesses,
     },
   }
 }
@@ -36,7 +46,10 @@ const reportedAdjudicationResponse = (
   status: string,
   reviewedByUserId = null,
   statusReason = null,
-  statusDetails = null
+  statusDetails = null,
+  damages = [],
+  evidence = [],
+  witnesses = []
 ) => {
   return {
     reportedAdjudication: {
@@ -59,11 +72,21 @@ const reportedAdjudicationResponse = (
       reviewedByUserId,
       statusReason,
       statusDetails,
+      damages,
+      evidence,
+      witnesses,
     },
   }
 }
 
-const draftAdjudicationResponse = (id: number, adjudicationNumber: number, isYouthOffender: boolean) => {
+const draftAdjudicationResponse = (
+  id: number,
+  adjudicationNumber: number,
+  isYouthOffender: boolean,
+  damages = [],
+  evidence = [],
+  witnesses = []
+) => {
   return {
     draftAdjudication: {
       id,
@@ -99,6 +122,9 @@ const draftAdjudicationResponse = (id: number, adjudicationNumber: number, isYou
           victimPrisonersNumber: 'G5512G',
         },
       ],
+      damages,
+      evidence,
+      witnesses,
     },
   }
 }
@@ -155,7 +181,13 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
-      response: reportedAdjudicationResponse(1524493, 'REJECTED', 'USER1', 'expired', 'Too long ago to report now.'),
+      response: reportedAdjudicationResponse(1524493, 'REJECTED', 'USER1', 'expired', 'Too long ago to report now.', [
+        {
+          code: DamageCode.CLEANING,
+          reporter: 'TESTER_GEN',
+          details: 'Some test info',
+        },
+      ]),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 23456,
@@ -216,6 +248,14 @@ context('Prisoner report - reporter view', () => {
         PrisonerReportPage.incidentStatement().should('exist')
         PrisonerReportPage.reportNumber().should('exist')
         PrisonerReportPage.returnLink().should('exist')
+        if (prisoner.id === 56789) {
+          PrisonerReportPage.damageSummary().should('exist')
+        } else {
+          PrisonerReportPage.damageSummary().should('not.exist')
+        }
+        PrisonerReportPage.photoVideoEvidenceSummary().should('not.exist')
+        PrisonerReportPage.baggedAndTaggedEvidenceSummary().should('not.exist')
+        PrisonerReportPage.witnessesSummary().should('not.exist')
         if (prisoner.id === 12345) {
           PrisonerReportPage.reviewSummary().should('not.exist')
         } else {
@@ -332,6 +372,18 @@ context('Prisoner report - reporter view', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         PrisonerReportPage.reviewerPanel().should('not.exist')
+      })
+      it('should go to the damages page if the change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        PrisonerReportPage.damagesChangeLink().click()
+        cy.location().should(loc => {
+          if (prisoner.id === 12345) {
+            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(177))
+          } else {
+            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(188))
+          }
+        })
       })
 
       it(`should  ${

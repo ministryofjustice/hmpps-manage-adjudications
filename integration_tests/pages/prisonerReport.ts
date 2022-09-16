@@ -15,6 +15,20 @@ export default class PrisonerReportPage extends Page {
 
   offenceDetailsSummary = (): PageElement => cy.get('[data-qa="offence-summary-table"]')
 
+  damageSummary = (): PageElement => cy.get('[data-qa="damages-table"]')
+
+  damagesAbsentText = (): PageElement => cy.get('[data-qa="adjudicationsSummary-damages-none"]')
+
+  photoVideoEvidenceSummary = (): PageElement => cy.get('[data-qa="photoVideoTable-evidence-table"]')
+
+  baggedAndTaggedEvidenceSummary = (): PageElement => cy.get('[data-qa="baggedAndTaggedTable-evidence-table"]')
+
+  evidenceAbsentText = (): PageElement => cy.get('[data-qa="adjudicationsSummary-evidence-none"]')
+
+  witnessesSummary = (): PageElement => cy.get('[data-qa="witnesses-table"]')
+
+  witnessesAbsentText = (): PageElement => cy.get('[data-qa="adjudicationsSummary-witnesses-none"]')
+
   incidentStatement = (): PageElement => cy.get('[data-qa="adjudicationsSummary-incidentStatement"]')
 
   incidentDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-details-changeLink"]')
@@ -22,6 +36,12 @@ export default class PrisonerReportPage extends Page {
   incidentStatementChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-statement-changeLink"]')
 
   offenceDetailsChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-offence-changeLink"]')
+
+  damagesChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-damages-changeLink"]')
+
+  evidenceChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-evidence-changeLink"]')
+
+  witnessesChangeLink = (): PageElement => cy.get('[data-qa="adjudicationsSummary-witnesses-changeLink"]')
 
   reviewerPanel = (): PageElement => cy.get('[data-qa="adjudication-review-panel"]')
 

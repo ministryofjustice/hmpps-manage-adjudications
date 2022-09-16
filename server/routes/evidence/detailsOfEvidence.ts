@@ -4,6 +4,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../../data/DraftAdjudicationResult'
+import { getEvidenceCategory } from '../../utils/utils'
 
 export enum PageRequestType {
   EVIDENCE_FROM_API,
@@ -104,21 +105,13 @@ export default class DetailsOfEvidencePage {
       return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
     }
 
-    const photoVideo = this.getEvidenceCategory(draftAdjudication.evidence, false)
-    const baggedAndTagged = this.getEvidenceCategory(draftAdjudication.evidence, true)
+    const photoVideo = getEvidenceCategory(draftAdjudication.evidence, false)
+    const baggedAndTagged = getEvidenceCategory(draftAdjudication.evidence, true)
 
     return {
       photoVideo,
       baggedAndTagged,
     }
-  }
-
-  getEvidenceCategory = (evidenceArray: EvidenceDetails[], isBaggedAndTagged: boolean) => {
-    if (!evidenceArray) return []
-    if (isBaggedAndTagged) {
-      return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
-    }
-    return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number) => {

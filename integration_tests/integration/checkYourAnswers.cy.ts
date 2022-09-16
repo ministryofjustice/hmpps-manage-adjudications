@@ -1,3 +1,4 @@
+import { DamageCode, EvidenceCode } from '../../server/data/DraftAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
@@ -120,6 +121,21 @@ context('Check Your Answers', () => {
                 victimPrisonersNumber: 'G5512G',
               },
             ],
+            damages: [
+              {
+                code: DamageCode.CLEANING,
+                reporter: 'TESTER_GEN',
+                details: 'Some test info',
+              },
+            ],
+            evidence: [
+              {
+                code: EvidenceCode.PHOTO,
+                reporter: 'TESTER_GEN',
+                details: 'some test info',
+              },
+            ],
+            witnesses: [],
           },
         },
       })
@@ -148,6 +164,16 @@ context('Check Your Answers', () => {
 
       CheckYourAnswersPage.incidentDetailsSummary().should('exist')
       CheckYourAnswersPage.offenceDetailsSummary().should('exist')
+      CheckYourAnswersPage.damageSummary().should('exist')
+      CheckYourAnswersPage.damagesAbsentText().should('not.exist')
+      CheckYourAnswersPage.damagesChangeLink().should('exist')
+      CheckYourAnswersPage.photoVideoEvidenceSummary().should('exist')
+      CheckYourAnswersPage.baggedAndTaggedEvidenceSummary().should('not.exist')
+      CheckYourAnswersPage.evidenceAbsentText().should('not.exist')
+      CheckYourAnswersPage.evidenceChangeLink().should('exist')
+      CheckYourAnswersPage.witnessesSummary().should('not.exist')
+      CheckYourAnswersPage.witnessesAbsentText().should('exist')
+      CheckYourAnswersPage.witnessesChangeLink().should('exist')
       CheckYourAnswersPage.incidentStatement().should('exist')
       CheckYourAnswersPage.submitButton().should('exist')
       CheckYourAnswersPage.submitButton().contains('Accept and place on report')
@@ -208,6 +234,63 @@ context('Check Your Answers', () => {
           )
         })
     })
+    it('should contain the correct damages', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.start(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+
+      CheckYourAnswersPage.damageSummary()
+        .find('th')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Type of repair needed')
+          expect($summaryData.get(1).innerText).to.contain('Description of damage')
+        })
+
+      CheckYourAnswersPage.damageSummary()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Cleaning')
+          expect($summaryData.get(1).innerText).to.contain('Some test info')
+        })
+
+      CheckYourAnswersPage.damagesChangeLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(3456))
+      })
+    })
+    it('should contain the correct evidence', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.start(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+
+      CheckYourAnswersPage.photoVideoEvidenceSummary()
+        .find('th')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Type')
+          expect($summaryData.get(1).innerText).to.contain('Description')
+        })
+
+      CheckYourAnswersPage.photoVideoEvidenceSummary()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Photo')
+          expect($summaryData.get(1).innerText).to.contain('some test info')
+        })
+
+      CheckYourAnswersPage.baggedAndTaggedEvidenceSummary().should('not.exist')
+      CheckYourAnswersPage.evidenceChangeLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.start(3456))
+      })
+    })
+    it('should contain the correct witnesses', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.start(3456))
+      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      CheckYourAnswersPage.witnessesSummary().should('not.exist')
+      CheckYourAnswersPage.witnessesAbsentText().contains('None')
+      CheckYourAnswersPage.witnessesChangeLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(234))
+      })
+    })
     it('should contain the correct incident statement', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.start(3456))
       const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
@@ -219,7 +302,7 @@ context('Check Your Answers', () => {
       const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       CheckYourAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.start(234))
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.start(3456))
       })
     })
     it('should go to the task page if the user exits without submitting', () => {
