@@ -283,15 +283,13 @@ export default class PlaceOnReportService {
     const damagesStatus = this.getStatus(draftAdjudication.damagesSaved)
     const evidenceStatus = this.getStatus(draftAdjudication.evidenceSaved)
     const witnessesStatus = this.getStatus(draftAdjudication.witnessesSaved)
-    const DEWVisited =
-      draftAdjudication.damagesSaved && draftAdjudication.evidenceSaved && draftAdjudication.witnessesSaved
 
     return {
       offenceDetailsUrl,
       handoverDeadline: draftAdjudication.incidentDetails.handoverDeadline,
       incidentStatementStatus,
       offenceDetailsStatus,
-      showLinkForAcceptDetails: offenceDetailsComplete && statementComplete && !!DEWVisited,
+      showLinkForAcceptDetails: offenceDetailsComplete && statementComplete,
       damagesStatus,
       evidenceStatus,
       witnessesStatus,
