@@ -3,13 +3,7 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import DamagesSessionService from '../../services/damagesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
-
-type DisplayDamage = {
-  type: string
-  description: string
-  reporter: string
-}
+import { DamageDetails, DraftAdjudication } from '../../data/DraftAdjudicationResult'
 
 export enum PageRequestType {
   DAMAGES_FROM_API,
@@ -84,24 +78,18 @@ export default class DetailsOfDamagesPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
 
-    // If displaying data on draft, nothing has changed so no save needed
-    if (!this.pageOptions.displaySessionData()) {
+    // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
+    if (!this.pageOptions.displaySessionData() && draftAdjudication.damagesSaved) {
       this.damagesSessionService.deleteAllSessionDamages(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber)
     }
 
-    const damageDetails = this.damagesSessionService
-      .getAndDeleteAllSessionDamages(req, adjudicationNumber)
-      .map((damages: DisplayDamage) => {
-        return {
-          code: damages.type,
-          details: damages.description,
-          reporter: damages.reporter,
-        }
-      })
+    const damagesOnSession = this.damagesSessionService.getAndDeleteAllSessionDamages(req, adjudicationNumber)
+    const damagesToSend = this.formatDamages(damagesOnSession)
 
-    await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damageDetails, user)
+    await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damagesToSend, user)
     return this.redirectToNextPage(res, adjudicationNumber)
   }
 
@@ -110,15 +98,16 @@ export default class DetailsOfDamagesPage {
       return this.damagesSessionService.getAllSessionDamages(req, adjudicationNumber)
     }
 
-    return (
-      draftAdjudication.damages?.map(damageDetails => {
-        return {
-          type: damageDetails.code,
-          description: damageDetails.details,
-          reporter: damageDetails.reporter,
-        }
-      }) || []
-    )
+    return this.formatDamages(draftAdjudication.damages)
+  }
+
+  formatDamages = (damages: DamageDetails[]) => {
+    if (!damages) return []
+    return damages.map(damage => ({
+      code: damage.code,
+      details: damage.details,
+      reporter: damage.reporter,
+    }))
   }
 
   redirectToNextPage = (res: Response, adjudicationNumber: number) => {

@@ -15,11 +15,11 @@ import {
   TaskListDetails,
   OffenceDetails,
   IncidentStatementStatus,
-  OffenceDetailsStatus,
   AssociatedPrisoner,
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
+  AdjudicationSectionStatus,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -273,13 +273,16 @@ export default class PlaceOnReportService {
 
     const statementComplete = draftAdjudication.incidentStatement?.completed || false
     const offenceDetailsComplete = this.checkOffenceDetails(draftAdjudication.offenceDetails)
-    const offenceDetailsStatus = this.getOffenceDetailsStatus(offenceDetailsComplete)
+    const offenceDetailsStatus = this.getStatus(offenceDetailsComplete)
 
     const offenceDetailsUrl = this.getNextOffencesUrl(draftAdjudication.offenceDetails, draftAdjudication.id)
     const incidentStatementStatus = this.getIncidentStatementStatus(
       !!draftAdjudication.incidentStatement,
       statementComplete
     )
+    const damagesStatus = this.getStatus(draftAdjudication.damagesSaved)
+    const evidenceStatus = this.getStatus(draftAdjudication.evidenceSaved)
+    const witnessesStatus = this.getStatus(draftAdjudication.witnessesSaved)
 
     return {
       offenceDetailsUrl,
@@ -287,6 +290,9 @@ export default class PlaceOnReportService {
       incidentStatementStatus,
       offenceDetailsStatus,
       showLinkForAcceptDetails: offenceDetailsComplete && statementComplete,
+      damagesStatus,
+      evidenceStatus,
+      witnessesStatus,
     }
   }
 
@@ -306,8 +312,8 @@ export default class PlaceOnReportService {
     return { classes: 'govuk-tag govuk-tag--blue', text: 'IN PROGRESS' }
   }
 
-  getOffenceDetailsStatus = (offenceDetailsComplete: boolean): OffenceDetailsStatus => {
-    if (offenceDetailsComplete) return { classes: 'govuk-tag', text: 'COMPLETED' }
+  getStatus = (adjudicationsSectionCompleted: boolean): AdjudicationSectionStatus => {
+    if (adjudicationsSectionCompleted) return { classes: 'govuk-tag', text: 'COMPLETED' }
     return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
   }
 
