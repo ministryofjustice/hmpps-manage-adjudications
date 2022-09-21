@@ -17,7 +17,6 @@ import { DecisionForm } from '../offenceCodeDecisions/decisionForm'
 type PageData = {
   errors?: FormError[]
   selectedPerson?: string
-  cancelButtonHref?: string
   prisoner?: PrisonerResultSummary
   adjudicationNumber?: number
 } & DecisionForm
@@ -26,13 +25,6 @@ type PageData = {
 enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
 }
-
-// // eslint-disable-next-line no-shadow
-// export enum WitnessAnswerType {
-//   OFFICER = 'OFFICER',
-//   STAFF = 'STAFF',
-//   OTHER_PERSON = 'OTHER_PERSON',
-// }
 
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {

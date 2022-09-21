@@ -10,14 +10,15 @@ type PageData = {
   evidenceDescription?: string
   bwcIdentifier?: string
   batIdentifier?: string
-  cancelButtonHref?: string
 }
 
 export default class AddEvidenceRoutes {
   constructor(private readonly evidenceSessionService: EvidenceSessionService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { cancelButtonHref, error, evidenceType, evidenceDescription, bwcIdentifier, batIdentifier } = pageData
+    const { error, evidenceType, evidenceDescription, bwcIdentifier, batIdentifier } = pageData
+    // This is the draftId
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     return res.render(`pages/addEvidence`, {
       errors: error ? [error] : [],
@@ -25,16 +26,12 @@ export default class AddEvidenceRoutes {
       evidenceType,
       bwcIdentifier,
       batIdentifier,
-      cancelButtonHref,
+      cancelButtonHref: adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber),
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    // This is the draftId
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return this.renderView(req, res, {
-      cancelButtonHref: adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber),
-    })
+    return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -44,7 +41,13 @@ export default class AddEvidenceRoutes {
 
     const error = validateForm({ evidenceDescription, evidenceType, bwcIdentifier, batIdentifier })
     if (error)
-      return this.renderView(req, res, { error, evidenceDescription, evidenceType, bwcIdentifier, batIdentifier })
+      return this.renderView(req, res, {
+        error,
+        evidenceDescription,
+        evidenceType,
+        bwcIdentifier,
+        batIdentifier,
+      })
 
     const evidenceIdentifier = await this.getIdentifierToAdd(bwcIdentifier, batIdentifier)
 

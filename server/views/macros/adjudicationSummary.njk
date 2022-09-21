@@ -3,7 +3,7 @@
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, offences, damages, evidence, witnesses, isReport) %}
+{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offences, damages, evidence, witnesses, isReport) %}
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
   {% if not readOnly %}
@@ -28,7 +28,9 @@
 
     <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
       <h2 class="govuk-heading-m">Damages</h2>
+      {% if not readOnlyDamagesEvidenceWitnesses %}
       <p class="govuk-body"><a href={{ damagesURL }} class="govuk-link" data-qa="adjudicationsSummary-damages-changeLink" id="adjudication-summary-damages-change-link">Change</a></p>
+      {% endif %}
     </div>
         <div class="adjudicationsSummary">
       {% if damages.length > 0 %}
@@ -40,7 +42,9 @@
 
     <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
       <h2 class="govuk-heading-m">Evidence</h2>
+      {% if not readOnlyDamagesEvidenceWitnesses %}
       <p class="govuk-body"><a href={{ evidenceURL }} class="govuk-link" data-qa="adjudicationsSummary-evidence-changeLink" id="adjudication-summary-evidence-change-link">Change</a></p>
+      {% endif %}
     </div>
     <div class="adjudicationsSummary">
       {% if evidence.photoVideo | length or evidence.baggedAndTagged | length %}
@@ -52,7 +56,9 @@
 
     <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
       <h2 class="govuk-heading-m">Witnesses</h2>
+      {% if not readOnlyDamagesEvidenceWitnesses %}
       <p class="govuk-body"><a href={{ witnessesURL }} class="govuk-link" data-qa="adjudicationsSummary-witnesses-changeLink" id="adjudication-summary-witnesses-change-link">Change</a></p>
+      {% endif %}
     </div>
     <div class="adjudicationsSummary">
       {% if witnesses.length > 0 %}

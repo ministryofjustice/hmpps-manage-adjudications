@@ -8,29 +8,26 @@ type PageData = {
   error?: FormError
   damageType?: string
   damageDescription?: string
-  cancelButtonHref?: string
 }
 
 export default class AddDamagesRoutes {
   constructor(private readonly damagesSessionService: DamagesSessionService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, damageType, damageDescription, cancelButtonHref } = pageData
+    const { error, damageType, damageDescription } = pageData
+    // This is the draftId
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     return res.render(`pages/addDamages`, {
       errors: error ? [error] : [],
       damageDescription,
       damageType,
-      cancelButtonHref,
+      cancelButtonHref: adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber),
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    // This is the draftId
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return this.renderView(req, res, {
-      cancelButtonHref: adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber),
-    })
+    return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -39,7 +36,12 @@ export default class AddDamagesRoutes {
     const { damageType, damageDescription } = req.body
 
     const error = validateForm({ damageType, damageDescription })
-    if (error) return this.renderView(req, res, { error, damageType, damageDescription })
+    if (error)
+      return this.renderView(req, res, {
+        error,
+        damageType,
+        damageDescription,
+      })
 
     const damageToAdd = {
       code: damageType,

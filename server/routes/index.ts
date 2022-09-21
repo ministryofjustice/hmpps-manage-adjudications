@@ -108,6 +108,7 @@ export default function routes(
     detailsOfDamagesRoutes({
       placeOnReportService,
       damagesSessionService,
+      reportedAdjudicationsService,
     })
   )
   router.use(

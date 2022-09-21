@@ -57,9 +57,9 @@ const getVariablesForPageType = (
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
       editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
-      editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(draftAdjudicationNumber),
-      editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(draftAdjudicationNumber),
-      editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(draftAdjudicationNumber),
+      editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber),
+      editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
+      editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
     }
   }
   return {
@@ -136,6 +136,8 @@ export default class prisonerReportRoutes {
       this.pageOptions.isReviewerView() ||
       ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status)
 
+    const readOnlyDamagesEvidenceWitnesses = reportedAdjudication.reportedAdjudication.status === 'REJECTED'
+
     const review =
       this.pageOptions.isReviewerView() &&
       ['AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
@@ -151,6 +153,7 @@ export default class prisonerReportRoutes {
       ...prisonerReportVariables,
       readOnly,
       review,
+      readOnlyDamagesEvidenceWitnesses,
       damages: reportedAdjudication.reportedAdjudication.damages,
       evidence: convertedEvidence,
       witnesses: reportedAdjudication.reportedAdjudication.witnesses,

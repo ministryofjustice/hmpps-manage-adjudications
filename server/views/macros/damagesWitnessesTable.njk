@@ -31,7 +31,8 @@
       {{ govukTable({
         head: [
           {
-            text: "Type of repair needed" if dataType === "damages" else "Name"
+            text: "Type of repair needed" if dataType === "damages" else "Name",
+            classes: "firstColumn"
           },
           {
             text: "Description of damage" if dataType === "damages" else "Role"

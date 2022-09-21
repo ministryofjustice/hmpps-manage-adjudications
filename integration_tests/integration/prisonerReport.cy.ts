@@ -376,14 +376,14 @@ context('Prisoner report - reporter view', () => {
       it('should go to the damages page if the change link is clicked', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-        PrisonerReportPage.damagesChangeLink().click()
-        cy.location().should(loc => {
-          if (prisoner.id === 12345) {
+        if (prisoner.id === 56789) {
+          PrisonerReportPage.damagesChangeLink().should('not.exist')
+        } else {
+          PrisonerReportPage.damagesChangeLink().click()
+          cy.location().should(loc => {
             expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(177))
-          } else {
-            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(188))
-          }
-        })
+          })
+        }
       })
 
       it(`should  ${

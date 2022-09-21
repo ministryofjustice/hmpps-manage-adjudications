@@ -15,7 +15,7 @@ import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import { convertToTitleCase, getDate, getFormattedOfficerName, getTime, formatTimestampToDate } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
+import { PrisonerReport, DraftAdjudication, DamageDetails } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
 
@@ -247,6 +247,14 @@ export default class ReportedAdjudicationsService {
       statusReason: reason,
       statusDetails: details,
     })
+  }
+
+  async updateDamageDetails(
+    adjudicationNumber: number,
+    damages: DamageDetails[],
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateDamageDetails(adjudicationNumber, damages)
   }
 
   enhanceReportedAdjudication(

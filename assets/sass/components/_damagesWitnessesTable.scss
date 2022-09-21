@@ -1,8 +1,10 @@
 .removeColumn {
-    display: flex;
-    justify-content: flex-end;
-
+text-align: right;
     p {
         margin-right: 10px;
     }
+}
+
+.firstColumn {
+    width: 30%;
 }

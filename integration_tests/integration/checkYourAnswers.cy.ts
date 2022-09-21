@@ -288,7 +288,7 @@ context('Check Your Answers', () => {
       CheckYourAnswersPage.witnessesAbsentText().contains('None')
       CheckYourAnswersPage.witnessesChangeLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(234))
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(3456))
       })
     })
     it('should contain the correct incident statement', () => {
@@ -302,7 +302,7 @@ context('Check Your Answers', () => {
       const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       CheckYourAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.start(3456))
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.start(234))
       })
     })
     it('should go to the task page if the user exits without submitting', () => {

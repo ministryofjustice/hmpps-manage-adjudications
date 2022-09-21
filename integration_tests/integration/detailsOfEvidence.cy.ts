@@ -154,7 +154,7 @@ context('Details of evidence', () => {
     DetailsOfEvidencePage.baggedAndTaggedTable()
       .find('th')
       .then($headings => {
-        expect($headings.get(0).innerText).to.contain('Tag Number')
+        expect($headings.get(0).innerText).to.contain('Seal Number')
         expect($headings.get(1).innerText).to.contain('Description')
       })
     DetailsOfEvidencePage.baggedAndTaggedTable()

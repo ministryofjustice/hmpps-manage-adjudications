@@ -4,10 +4,13 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import DamagesSessionService from '../../services/damagesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { DamageDetails, DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export enum PageRequestType {
   DAMAGES_FROM_API,
   DAMAGES_FROM_SESSION,
+  SUBMITTED_EDIT_DAMAGES_FROM_API,
+  SUBMITTED_EDIT_DAMAGES_FROM_SESSION,
 }
 
 class PageOptions {
@@ -15,6 +18,14 @@ class PageOptions {
 
   displaySessionData(): boolean {
     return this.pageType === PageRequestType.DAMAGES_FROM_SESSION
+  }
+
+  displayAPIDataSubmitted(): boolean {
+    return this.pageType === PageRequestType.SUBMITTED_EDIT_DAMAGES_FROM_API
+  }
+
+  displaySessionDataSubmitted(): boolean {
+    return this.pageType === PageRequestType.SUBMITTED_EDIT_DAMAGES_FROM_SESSION
   }
 }
 
@@ -24,18 +35,23 @@ export default class DetailsOfDamagesPage {
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly damagesSessionService: DamagesSessionService
+    private readonly damagesSessionService: DamagesSessionService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    // draftId
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const damageToDelete = Number(req.query.delete) || null
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
+    const prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)
     const addDamagesUrl = adjudicationUrls.detailsOfDamages.urls.add(adjudicationNumber)
+
+    // here we need to get the reported adjudication details rather than the draft for when the reported adjudication is being edited ??
+    // if (displayAPIDataSubmitted || displaySessionDataSubmitted) {
+    // }
 
     const [draftAdjudicationResult, prisoner] = await Promise.all([
       this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user),
@@ -79,6 +95,7 @@ export default class DetailsOfDamagesPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+    const { reportedAdjudicationNumber } = req.body
 
     // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
     if (!this.pageOptions.displaySessionData() && draftAdjudication.damagesSaved) {
@@ -89,7 +106,11 @@ export default class DetailsOfDamagesPage {
     const damagesOnSession = this.damagesSessionService.getAndDeleteAllSessionDamages(req, adjudicationNumber)
     const damagesToSend = this.formatDamages(damagesOnSession)
 
-    await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damagesToSend, user)
+    if (reportedAdjudicationNumber) {
+      await this.reportedAdjudicationsService.updateDamageDetails(reportedAdjudicationNumber, damagesToSend, user)
+    } else {
+      await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damagesToSend, user)
+    }
     return this.redirectToNextPage(res, adjudicationNumber)
   }
 
