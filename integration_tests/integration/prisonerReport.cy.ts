@@ -381,7 +381,7 @@ context('Prisoner report - reporter view', () => {
         } else {
           PrisonerReportPage.damagesChangeLink().click()
           cy.location().should(loc => {
-            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(177))
+            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEdit(12345))
           })
         }
       })

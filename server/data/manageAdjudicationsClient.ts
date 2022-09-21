@@ -180,7 +180,7 @@ export default class ManageAdjudicationsClient {
 
   async updateDamageDetails(adjudicationNumber: number, damages: DamageDetails[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/damages/edit`,
+      path: `/reported-adjudications/${adjudicationNumber}/damages/edit`,
       data: { damages },
     })
   }

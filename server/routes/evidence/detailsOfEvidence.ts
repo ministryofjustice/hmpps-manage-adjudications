@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudication, EvidenceCode } from '../../data/DraftAdjudicationResult'
 import { getEvidenceCategory } from '../../utils/utils'
 
 export enum PageRequestType {

@@ -15,14 +15,19 @@ export default class AddDamagesRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, damageType, damageDescription } = pageData
-    // This is the draftId
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const submitted = req.query.submitted as string
+
+    // eslint-disable-next-line no-extra-boolean-cast
+    const cancelButtonHref = !!submitted
+      ? adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)
+      : adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)
 
     return res.render(`pages/addDamages`, {
       errors: error ? [error] : [],
       damageDescription,
       damageType,
-      cancelButtonHref: adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber),
+      cancelButtonHref,
     })
   }
 
@@ -33,6 +38,7 @@ export default class AddDamagesRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const submitted = req.query.submitted as string
     const { damageType, damageDescription } = req.body
 
     const error = validateForm({ damageType, damageDescription })
@@ -50,6 +56,12 @@ export default class AddDamagesRoutes {
     }
 
     this.damagesSessionService.addSessionDamage(req, damageToAdd, adjudicationNumber)
-    return res.redirect(adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber))
+    const redirectUrl = this.getRedirectUrl(submitted === 'true', adjudicationNumber)
+    return res.redirect(redirectUrl)
+  }
+
+  getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {
+    if (submitted) return adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)
+    return adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)
   }
 }

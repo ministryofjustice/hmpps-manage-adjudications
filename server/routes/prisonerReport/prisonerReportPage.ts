@@ -57,7 +57,9 @@ const getVariablesForPageType = (
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
       editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
-      editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber),
+      editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
       editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
     }
@@ -73,7 +75,9 @@ const getVariablesForPageType = (
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
     editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber),
-    editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(draftAdjudicationNumber),
+    editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
     editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(draftAdjudicationNumber),
     editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(draftAdjudicationNumber),
   }
