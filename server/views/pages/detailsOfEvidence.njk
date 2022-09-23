@@ -18,31 +18,12 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}" />
         <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
             {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
                 {% include "../partials/evidenceTableSection.njk" %}
-                {# {% set photoVideoEvidence = evidence.photoVideo %}
-                {% set baggedTaggedEvidence = evidence.baggedAndTagged %}
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Photographic or video evidence</h2>
-                {% if photoVideoEvidence | length > 0 %}
-                <div class="evidence-table">
-                    {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable') }}
-                </div>
-                {% else %}
-                <p class="govuk-body" data-qa="no-photoVideo-evidence">None</p>
-                {% endif %}
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Bagged and tagged evidence</h2>
-                {% if baggedTaggedEvidence | length > 0 %}
-                <div class="evidence-table">
-                    {{ evidenceTable(baggedTaggedEvidence, redirectAfterRemoveUrl, currentUser, 'baggedAndTaggedTable') }}
-                </div>
-                {% else %}
-                <p class="govuk-body" data-qa="no-baggedAndTagged-evidence">None</p>
-                {% endif %} #}
             {% if evidence.photoVideo | length < 1 and evidence.baggedAndTagged | length < 1 %}
             <p class="govuk-body" data-qa="no-evidence">You can add evidence now or you can continue. You can also return later and add evidence.</p>
             {% endif %}

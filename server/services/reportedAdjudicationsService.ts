@@ -22,7 +22,13 @@ import {
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { PrisonerReport, DraftAdjudication, DamageDetails } from '../data/DraftAdjudicationResult'
+import {
+  PrisonerReport,
+  DraftAdjudication,
+  DamageDetails,
+  EvidenceDetails,
+  WitnessDetails,
+} from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
@@ -263,6 +269,22 @@ export default class ReportedAdjudicationsService {
     user: User
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).updateDamageDetails(adjudicationNumber, damages)
+  }
+
+  async updateEvidenceDetails(
+    adjudicationNumber: number,
+    evidence: EvidenceDetails[],
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateEvidenceDetails(adjudicationNumber, evidence)
+  }
+
+  async updateWitnessDetails(
+    adjudicationNumber: number,
+    witnesses: WitnessDetails[],
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateWitnessDetails(adjudicationNumber, witnesses)
   }
 
   enhanceReportedAdjudication(

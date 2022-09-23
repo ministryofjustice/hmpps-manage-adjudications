@@ -13,6 +13,8 @@ import OfficerDecisionHelper from '../offenceCodeDecisions/officerDecisionHelper
 import OtherPersonWitnesDecisionHelper from './otherPersonWitnesDecisionHelper'
 import Question from '../../offenceCodeDecisions/Question'
 import { DecisionForm } from '../offenceCodeDecisions/decisionForm'
+import { User } from '../../data/hmppsAuthClient'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type PageData = {
   errors?: FormError[]
@@ -38,7 +40,8 @@ export default class AddWitnessRoutes {
     private readonly witnessesSessionService: WitnessesSessionService,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {}
 
   private helpers = new Map<WitnessCode, DecisionHelper>([
@@ -50,8 +53,20 @@ export default class AddWitnessRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { adjudicationNumber, errors } = pageData
     const { user } = res.locals
-    const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
+    const submitted = req.query.submitted as string
+    // we need to save whether this is a submitted edit on the session, so that we don't lose that information as we come back from the search
+    if (submitted === 'true') this.witnessesSessionService.setSubmittedEditFlagOnSession(req)
+
+    const prisoner = await this.getPrisoner(
+      adjudicationNumber,
+      this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
+      user
+    )
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
+    // eslint-disable-next-line no-extra-boolean-cast
+    const cancelButtonHref = this.witnessesSessionService.getSubmittedEditFlagFromSession(req)
+      ? adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(adjudicationNumber)
+      : adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber)
 
     return res.render(`pages/addWitness`, {
       errors: errors || [],
@@ -59,7 +74,7 @@ export default class AddWitnessRoutes {
       selectedAnswerViewData,
       pageData,
       prisoner,
-      cancelButtonHref: adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber),
+      cancelButtonHref,
     })
   }
 
@@ -113,7 +128,11 @@ export default class AddWitnessRoutes {
     }
 
     this.witnessesSessionService.addSessionWitness(req, witnessToAdd, adjudicationNumber)
-    return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber))
+    const redirectUrl = this.getRedirectUrl(
+      this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
+      adjudicationNumber
+    )
+    return res.redirect(redirectUrl)
   }
 
   deleteUser = async (req: Request, res: Response, adjudicationNumber: number): Promise<void> => {
@@ -142,6 +161,18 @@ export default class AddWitnessRoutes {
       adjudicationNumber
     )}?selectedAnswerId=${selectedAnswerId}`
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
+  }
+
+  getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {
+    if (submitted) return adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(adjudicationNumber)
+    return adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber)
+  }
+
+  getPrisoner = async (adjudicationNumber: number, isSubmittedEdit: boolean, user: User) => {
+    if (!isSubmittedEdit) {
+      return this.placeOnReportService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
+    }
+    return this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
   }
 
   // The helper that knows how to deal with the specifics of a particular decision type.

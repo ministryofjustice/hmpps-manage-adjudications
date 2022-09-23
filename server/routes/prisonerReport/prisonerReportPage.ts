@@ -60,8 +60,12 @@ const getVariablesForPageType = (
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
         adjudicationNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
-      editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
-      editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
+      editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
     }
   }
   return {
@@ -78,8 +82,12 @@ const getVariablesForPageType = (
     editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
       adjudicationNumber
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
-    editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(draftAdjudicationNumber),
-    editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(draftAdjudicationNumber),
+    editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+    editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
   }
 }
 

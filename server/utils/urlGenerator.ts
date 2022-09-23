@@ -80,12 +80,18 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       add: '/:adjudicationNumber/add',
       modified: '/:adjudicationNumber/modified',
+      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/add`,
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/modified`,
+      submittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/submitted/edit`,
+      submittedEditModified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/submitted/edit/modified`,
     },
   },
   taskList: {

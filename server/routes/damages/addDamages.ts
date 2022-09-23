@@ -19,9 +19,10 @@ export default class AddDamagesRoutes {
     const submitted = req.query.submitted as string
 
     // eslint-disable-next-line no-extra-boolean-cast
-    const cancelButtonHref = !!submitted
-      ? adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)
-      : adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)
+    const cancelButtonHref =
+      submitted === 'true'
+        ? adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)
+        : adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)
 
     return res.render(`pages/addDamages`, {
       errors: error ? [error] : [],

@@ -59,12 +59,14 @@ export default class DetailsOfDamagesPage {
       ? `${adjudicationUrls.detailsOfDamages.urls.add(adjudicationNumber)}?submitted=true`
       : `${adjudicationUrls.detailsOfDamages.urls.add(adjudicationNumber)}?submitted=false`
 
-    const reportedAdjudicationNumber = adjudication.adjudicationNumber
+    const redirectAfterRemoveUrl = isSubmittedEdit
+      ? `${adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)}?delete=`
+      : `${adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)}?delete=`
 
     const damages = this.getDamages(req, adjudicationNumber, adjudication)
 
     // If we are not displaying session data then fill in the session data
-    if (!this.pageOptions.displaySessionData() || this.pageOptions.displayAPIDataSubmitted()) {
+    if (this.pageOptions.displayAPIData() || this.pageOptions.displayAPIDataSubmitted()) {
       // Set up session to allow for adding and deleting
       this.damagesSessionService.setAllSessionDamages(req, damages, adjudicationNumber)
     }
@@ -84,12 +86,9 @@ export default class DetailsOfDamagesPage {
     return res.render(`pages/detailsOfDamages`, {
       currentUser: user.username,
       adjudicationNumber,
-      reportedAdjudicationNumber,
       damages,
       prisoner,
-      redirectAfterRemoveUrl: isSubmittedEdit
-        ? `${adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)}?delete=`
-        : `${adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)}?delete=`,
+      redirectAfterRemoveUrl,
       exitButtonHref,
       addDamagesButtonHref: addDamagesUrl,
     })
@@ -111,7 +110,7 @@ export default class DetailsOfDamagesPage {
     ) {
       this.damagesSessionService.deleteReferrerOnSession(req)
       this.damagesSessionService.deleteAllSessionDamages(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, !!isSubmittedEdit)
+      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit)
     }
 
     const damagesOnSession = this.damagesSessionService.getAndDeleteAllSessionDamages(req, adjudicationNumber)
@@ -146,7 +145,7 @@ export default class DetailsOfDamagesPage {
   getExitUrl = (req: Request, adjudicationNumber: number, isSubmittedEdit: boolean) => {
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const prisonerReportUrl = req.query.referrer as string
-    if (this.pageOptions.displayAPIDataSubmitted())
+    if (this.pageOptions.displayAPIDataSubmitted() && prisonerReportUrl)
       this.damagesSessionService.setReferrerOnSession(req, prisonerReportUrl)
     return isSubmittedEdit ? this.damagesSessionService.getReferrerFromSession(req) : taskListUrl
   }

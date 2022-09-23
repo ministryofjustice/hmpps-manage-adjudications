@@ -33,6 +33,36 @@ export default class WitnessesSessionService {
     return req.session?.witnesses?.[draftAdjudicationNumber]
   }
 
+  setReferrerOnSession(req: Request, referrer: string) {
+    req.session.witnesses.referrer = referrer
+  }
+
+  getReferrerFromSession(req: Request) {
+    return req.session.witnesses.referrer
+  }
+
+  deleteReferrerOnSession(req: Request) {
+    delete req.session.witnesses.referrer
+  }
+
+  getAndDeleteReferrerOnSession(req: Request) {
+    const referrer = this.getReferrerFromSession(req)
+    delete req.session.witnesses.referrer
+    return referrer
+  }
+
+  setSubmittedEditFlagOnSession(req: Request) {
+    req.session.witnesses.submitted = true
+  }
+
+  getSubmittedEditFlagFromSession(req: Request) {
+    return req.session.witnesses.submitted
+  }
+
+  deleteSubmittedEditFlagOnSession(req: Request) {
+    delete req.session.witnesses.submitted
+  }
+
   private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
     if (!req.session.witnesses) {
       req.session.witnesses = {}
