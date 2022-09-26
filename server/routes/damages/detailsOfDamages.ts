@@ -146,7 +146,7 @@ export default class DetailsOfDamagesPage {
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const prisonerReportUrl = req.query.referrer as string
     if (this.pageOptions.displayAPIDataSubmitted() && prisonerReportUrl)
-      this.damagesSessionService.setReferrerOnSession(req, prisonerReportUrl)
+      this.damagesSessionService.setReferrerOnSession(req, prisonerReportUrl, adjudicationNumber)
     return isSubmittedEdit ? this.damagesSessionService.getReferrerFromSession(req) : taskListUrl
   }
 

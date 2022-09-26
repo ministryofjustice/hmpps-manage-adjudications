@@ -149,7 +149,7 @@ export default class DetailsOfWitnessesPage {
   getExitUrl = (req: Request, adjudicationNumber: number, isSubmittedEdit: boolean) => {
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const prisonerReportUrl = req.query.referrer as string
-    if (prisonerReportUrl) this.witnessesSessionService.setReferrerOnSession(req, prisonerReportUrl)
+    if (prisonerReportUrl) this.witnessesSessionService.setReferrerOnSession(req, prisonerReportUrl, adjudicationNumber)
     return isSubmittedEdit ? this.witnessesSessionService.getReferrerFromSession(req) : taskListUrl
   }
 

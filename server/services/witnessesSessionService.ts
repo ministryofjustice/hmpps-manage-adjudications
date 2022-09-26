@@ -33,7 +33,8 @@ export default class WitnessesSessionService {
     return req.session?.witnesses?.[draftAdjudicationNumber]
   }
 
-  setReferrerOnSession(req: Request, referrer: string) {
+  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
+    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
     req.session.witnesses.referrer = referrer
   }
 

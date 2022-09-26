@@ -173,7 +173,7 @@ export default class DetailsOfEvidencePage {
     const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
     const prisonerReportUrl = req.query.referrer as string
     if (this.pageOptions.displayAPIDataSubmitted() && prisonerReportUrl)
-      this.evidenceSessionService.setReferrerOnSession(req, prisonerReportUrl)
+      this.evidenceSessionService.setReferrerOnSession(req, prisonerReportUrl, adjudicationNumber)
     return isSubmittedEdit ? this.evidenceSessionService.getReferrerFromSession(req) : taskListUrl
   }
 

@@ -69,6 +69,42 @@ const draftAdjudication = (id: number, damages: DamageDetails[]) => {
   }
 }
 
+const reportedAdjudication = (adjudicationNumber: number, damages: DamageDetails[]) => {
+  return {
+    reportedAdjudication: {
+      adjudicationNumber,
+      incidentDetails: {
+        dateTimeOfIncident: '2021-11-03T13:10:00',
+        handoverDeadline: '2021-11-05T13:10:00',
+        locationId: 27029,
+      },
+      prisonerNumber: 'G6415GD',
+      startedByUserId: 'USER1',
+      incidentRole: {
+        associatedPrisonersNumber: undefined,
+        roleCode: undefined,
+      },
+      incidentStatement: {
+        statement: 'This is my statement',
+        completed: true,
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+      damages,
+      evidence: [],
+      witnesses: [],
+    },
+  }
+}
+
 const prisonerDetails = {
   offenderNo: 'G6415GD',
   firstName: 'JOHN',
@@ -97,6 +133,18 @@ context('Details of damages', () => {
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails,
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12345,
+      response: reportedAdjudication(12345, null),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 23456,
+      response: reportedAdjudication(23456, damagesList),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 34567,
+      response: reportedAdjudication(34567, damagesListMultiUser),
     })
   })
   it('should show the damages page with no damages added to begin with', () => {
@@ -274,5 +322,161 @@ context('Details of damages', () => {
         expect($data.get(2).innerText).to.not.contain('Remove')
       })
     DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row plus a data rows
+  })
+  context('submitted edit - reporter or reviewer changes damages', () => {
+    it('page items present - no damages', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+
+      DetailsOfDamagePage.noDamagesP1().should('exist')
+      DetailsOfDamagePage.noDamagesP2().should('exist')
+      DetailsOfDamagePage.addDamagesButton().should('exist')
+      DetailsOfDamagePage.saveAndContinue().should('exist')
+      DetailsOfDamagePage.exitButton().should('exist')
+      DetailsOfDamagePage.damagesTable().should('not.exist')
+    })
+    it('page items present - damages present', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 3) // This includes the header row plus two data rows
+      DetailsOfDamagePage.damagesTable()
+        .find('th')
+        .then($headings => {
+          expect($headings.get(0).innerText).to.contain('Type of repair needed')
+          expect($headings.get(1).innerText).to.contain('Description of damage')
+        })
+      DetailsOfDamagePage.damagesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Redecoration')
+          expect($data.get(1).innerText).to.contain('Wallpaper ripped')
+          expect($data.get(2).innerText).to.contain('Remove')
+          expect($data.get(3).innerText).to.contain('Replacing an item')
+          expect($data.get(4).innerText).to.contain('Rug torn')
+          expect($data.get(5).innerText).to.contain('Remove')
+        })
+    })
+    it('should remove the correct damage if the remove link is used (first damage)', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(23456)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.removeLink(1).click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEditModified(23456))
+        expect(loc.search).to.eq(`?delete=1`)
+      })
+      DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row and one data row
+      DetailsOfDamagePage.damagesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Replacing an item')
+          expect($data.get(1).innerText).to.contain('Rug torn')
+        })
+    })
+    it('should remove the correct damage if the remove link is used (second damage)', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.removeLink(2).click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEditModified(23456))
+        expect(loc.search).to.eq(`?delete=2`)
+      })
+      DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row and one data row
+      DetailsOfDamagePage.damagesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Redecoration')
+          expect($data.get(1).innerText).to.contain('Wallpaper ripped')
+        })
+    })
+    it('should not show the remove link for damages that the current user did not add', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          34567
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 5) // This includes the header row plus four data rows
+      DetailsOfDamagePage.damagesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Redecoration')
+          expect($data.get(1).innerText).to.contain('Wallpaper ripped')
+          expect($data.get(2).innerText).to.contain('Remove')
+          expect($data.get(3).innerText).to.contain('Electrical')
+          expect($data.get(4).innerText).to.contain('Plug socket broken')
+          expect($data.get(5).innerText).to.contain('Remove')
+          expect($data.get(6).innerText).to.contain('Replacing an item')
+          expect($data.get(7).innerText).to.contain('Chair broken')
+          expect($data.get(8).innerText).to.not.contain('Remove')
+          expect($data.get(9).innerText).to.contain('Cleaning')
+          expect($data.get(10).innerText).to.contain('Walls need cleaning')
+          expect($data.get(11).innerText).to.contain('Remove')
+        })
+    })
+    it('should show any damages added to the session in the table', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.damagesTable().should('not.exist')
+      DetailsOfDamagePage.addDamagesButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.add(12345))
+      })
+      DetailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check()
+      DetailsOfDamagePage.addDamageDescription().type('Plug socket broken')
+      DetailsOfDamagePage.addDamageSubmit().click()
+      DetailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row plus the damage we just added
+      DetailsOfDamagePage.damagesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Electrical')
+          expect($data.get(0).innerText).to.not.contain('Electrical repair')
+          expect($data.get(1).innerText).to.contain('Plug socket broken')
+          expect($data.get(2).innerText).to.contain('Remove')
+        })
+    })
+    it('should return to the referrer stored in the session if the exit button is clicked - reporter', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(12345))
+      })
+    })
+    it('should return to the referrer stored in the session if the exit button is clicked - reviewer', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`
+      )
+      const DetailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
+      DetailsOfDamagePage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(12345))
+      })
+    })
   })
 })

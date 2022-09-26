@@ -33,7 +33,8 @@ export default class DamagesSessionService {
     return req.session.damages?.[draftAdjudicationNumber][index - 1]
   }
 
-  setReferrerOnSession(req: Request, referrer: string) {
+  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
+    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
     req.session.damages.referrer = referrer
   }
 

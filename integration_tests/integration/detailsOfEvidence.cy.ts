@@ -84,6 +84,42 @@ const draftAdjudication = (id: number, evidence: EvidenceDetails[]) => {
   }
 }
 
+const reportedAdjudication = (adjudicationNumber: number, evidence: EvidenceDetails[]) => {
+  return {
+    reportedAdjudication: {
+      adjudicationNumber,
+      incidentDetails: {
+        dateTimeOfIncident: '2021-11-03T13:10:00',
+        handoverDeadline: '2021-11-05T13:10:00',
+        locationId: 27029,
+      },
+      prisonerNumber: 'G6415GD',
+      startedByUserId: 'USER1',
+      incidentRole: {
+        associatedPrisonersNumber: undefined,
+        roleCode: undefined,
+      },
+      incidentStatement: {
+        statement: 'This is my statement',
+        completed: true,
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+      damages: [],
+      evidence,
+      witnesses: [],
+    },
+  }
+}
+
 const prisonerDetails = {
   offenderNo: 'G6415GD',
   firstName: 'JOHN',
@@ -116,6 +152,18 @@ context('Details of evidence', () => {
     cy.task('stubSaveEvidenceDetails', {
       adjudicationNumber: 201,
       response: draftAdjudication(201, evidenceList),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12345,
+      response: reportedAdjudication(12345, null),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 23456,
+      response: reportedAdjudication(23456, evidenceList),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 34567,
+      response: reportedAdjudication(34567, evidenceListMultiUser),
     })
   })
   it('should show the evidence page with no evidence', () => {
@@ -289,6 +337,185 @@ context('Details of evidence', () => {
     DetailsOfEvidencePage.exitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(202))
+    })
+  })
+  context('submitted edit - reporter or reviewer changes evidence', () => {
+    it('should show the evidence page with no evidence', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+
+      DetailsOfEvidencePage.noEvidence().should('exist')
+      DetailsOfEvidencePage.addEvidenceButton().should('exist')
+      DetailsOfEvidencePage.saveAndContinue().should('exist')
+      DetailsOfEvidencePage.exitButton().should('exist')
+      DetailsOfEvidencePage.photoVideoTable().should('not.exist')
+      DetailsOfEvidencePage.baggedAndTaggedTable().should('not.exist')
+    })
+    it('should show evidence', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+      DetailsOfEvidencePage.noEvidence().should('not.exist')
+      DetailsOfEvidencePage.photoVideoTable().find('tr').should('have.length', 3) // This includes the header row plus two data rows
+      DetailsOfEvidencePage.photoVideoTable()
+        .find('th')
+        .then($headings => {
+          expect($headings.get(0).innerText).to.contain('Type')
+          expect($headings.get(1).innerText).to.contain('Description')
+        })
+      DetailsOfEvidencePage.photoVideoTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('CCTV')
+          expect($data.get(1).innerText).to.contain('Video of the prisoner doing the thing')
+          expect($data.get(2).innerText).to.contain('Remove')
+          expect($data.get(3).innerText).to.contain('Photo')
+          expect($data.get(4).innerText).to.contain('A photo of the prisoner doing the thing')
+          expect($data.get(5).innerText).to.contain('Remove')
+        })
+      DetailsOfEvidencePage.baggedAndTaggedTable().find('tr').should('have.length', 2) // This includes the header row plus one data row
+      DetailsOfEvidencePage.baggedAndTaggedTable()
+        .find('th')
+        .then($headings => {
+          expect($headings.get(0).innerText).to.contain('Seal Number')
+          expect($headings.get(1).innerText).to.contain('Description')
+        })
+      DetailsOfEvidencePage.baggedAndTaggedTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('JO345')
+          expect($data.get(1).innerText).to.contain('Bagged evidence')
+          expect($data.get(2).innerText).to.contain('Remove')
+        })
+    })
+    it('should remove the correct piece of evidence', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+      DetailsOfEvidencePage.noPhotoVideoEvidence().should('not.exist')
+      DetailsOfEvidencePage.noBaggedAndTaggedEvidence().should('not.exist')
+
+      DetailsOfEvidencePage.removeLink(false, 1).click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(23456))
+        expect(loc.search).to.eq(`?type=CCTV&delete=1`)
+      })
+      DetailsOfEvidencePage.photoVideoTable().find('tr').should('have.length', 2)
+      DetailsOfEvidencePage.photoVideoTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Photo')
+          expect($data.get(1).innerText).to.contain('A photo of the prisoner doing the thing')
+        })
+      DetailsOfEvidencePage.removeLink(false, 1).click()
+      DetailsOfEvidencePage.photoVideoTable().should('not.exist')
+      DetailsOfEvidencePage.noPhotoVideoEvidence().should('contain', 'None')
+      DetailsOfEvidencePage.removeLink(true, 1).click()
+      DetailsOfEvidencePage.baggedAndTaggedTable().should('not.exist')
+      DetailsOfEvidencePage.noBaggedAndTaggedEvidence().should('contain', 'None')
+    })
+    it('should take user to the add evidence page if they click the button, and show the new evidence in the correct tables on the details page on return', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+      DetailsOfEvidencePage.addEvidenceButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(23456))
+      })
+      DetailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check()
+      DetailsOfEvidencePage.addEvidenceDescription().type(
+        'A photo of the prisoner stealing the keys from behind a prison officers back'
+      )
+      DetailsOfEvidencePage.addEvidenceSubmit().click()
+      DetailsOfEvidencePage.photoVideoTable().find('tr').should('have.length', 4)
+      DetailsOfEvidencePage.photoVideoTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('CCTV')
+          expect($data.get(1).innerText).to.contain('Video of the prisoner doing the thing')
+          expect($data.get(2).innerText).to.contain('Remove')
+          expect($data.get(3).innerText).to.contain('Photo')
+          expect($data.get(4).innerText).to.contain('A photo of the prisoner doing the thing')
+          expect($data.get(5).innerText).to.contain('Remove')
+          expect($data.get(6).innerText).to.contain('Photo')
+          expect($data.get(7).innerText).to.contain(
+            'A photo of the prisoner stealing the keys from behind a prison officers back'
+          )
+          expect($data.get(8).innerText).to.contain('Remove')
+        })
+      DetailsOfEvidencePage.addEvidenceButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(23456))
+      })
+      DetailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check()
+      DetailsOfEvidencePage.addTagNumber().type('JO1234')
+      DetailsOfEvidencePage.addEvidenceDescription().type('The hook used to steal the keys')
+      DetailsOfEvidencePage.addEvidenceSubmit().click()
+      DetailsOfEvidencePage.baggedAndTaggedTable().find('tr').should('have.length', 3)
+      DetailsOfEvidencePage.baggedAndTaggedTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(3).innerText).to.contain('JO1234')
+          expect($data.get(4).innerText).to.contain('The hook used to steal the keys')
+          expect($data.get(5).innerText).to.contain('Remove')
+        })
+    })
+    it('should not show the remove link for evidence the current user did not add', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          34567
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+      DetailsOfEvidencePage.photoVideoTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(2).innerText).to.contain('Remove')
+          expect($data.get(5).innerText).to.not.contain('Remove')
+          expect($data.get(8).innerText).to.contain('Remove')
+        })
+      DetailsOfEvidencePage.baggedAndTaggedTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(2).innerText).to.not.contain('Remove')
+        })
+    })
+    it('should return to the referrer stored in the session if the exit button is clicked - reporter', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+      DetailsOfEvidencePage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(12345))
+      })
+    })
+    it('should return to the referrer stored in the session if the exit button is clicked - reviewer', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`
+      )
+      const DetailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
+      DetailsOfEvidencePage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(12345))
+      })
     })
   })
 })

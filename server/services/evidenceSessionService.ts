@@ -47,7 +47,8 @@ export default class EvidenceSessionService {
     return req.session?.evidence?.[draftAdjudicationNumber]
   }
 
-  setReferrerOnSession(req: Request, referrer: string) {
+  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
+    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
     req.session.evidence.referrer = referrer
   }
 

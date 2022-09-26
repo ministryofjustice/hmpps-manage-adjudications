@@ -75,6 +75,42 @@ const draftAdjudication = (id: number, witnesses: WitnessDetails[]) => {
   }
 }
 
+const reportedAdjudication = (adjudicationNumber: number, witnesses: WitnessDetails[]) => {
+  return {
+    reportedAdjudication: {
+      adjudicationNumber,
+      incidentDetails: {
+        dateTimeOfIncident: '2021-11-03T13:10:00',
+        handoverDeadline: '2021-11-05T13:10:00',
+        locationId: 27029,
+      },
+      prisonerNumber: 'G6415GD',
+      startedByUserId: 'USER1',
+      incidentRole: {
+        associatedPrisonersNumber: undefined,
+        roleCode: undefined,
+      },
+      incidentStatement: {
+        statement: 'This is my statement',
+        completed: true,
+      },
+      offenceDetails: [
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        },
+      ],
+      damages: [],
+      evidence: [],
+      witnesses,
+    },
+  }
+}
+
 const prisonerDetails = {
   offenderNo: 'G6415GD',
   firstName: 'JOHN',
@@ -143,6 +179,18 @@ context('Details of witnesses', () => {
     cy.task('stubSaveWitnessDetails', {
       adjudicationNumber: 201,
       response: draftAdjudication(201, witnessesList),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12345,
+      response: reportedAdjudication(12345, null),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 23456,
+      response: reportedAdjudication(23456, witnessesList),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 34567,
+      response: reportedAdjudication(34567, witnessesListMultiUser),
     })
   })
   it('should show the witnesses page with no witnesses added to begin with', () => {
@@ -359,6 +407,135 @@ context('Details of witnesses', () => {
     DetailsOfWitnessesPage.saveAndContinue().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.start(201))
+    })
+  })
+  context('submitted edit - reporter or reviewer changes evidence', () => {
+    it('should show the witnesses page with no witnesses added to begin with', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+
+      DetailsOfWitnessesPage.noWitnessesP1().should('exist')
+      DetailsOfWitnessesPage.noWitnessesP2().should('exist')
+      DetailsOfWitnessesPage.addWitnessButton().should('exist')
+      DetailsOfWitnessesPage.saveAndContinue().should('exist')
+      DetailsOfWitnessesPage.exitButton().should('exist')
+      DetailsOfWitnessesPage.witnessesTable().should('not.exist')
+    })
+    it('should show witnesses when there are some on the draft', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+      DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 3) // This includes the header row plus two data rows
+      DetailsOfWitnessesPage.witnessesTable()
+        .find('th')
+        .then($headings => {
+          expect($headings.get(0).innerText).to.contain('Name')
+          expect($headings.get(1).innerText).to.contain('Role')
+        })
+      DetailsOfWitnessesPage.witnessesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Doe, John')
+          expect($data.get(1).innerText).to.contain('Prison officer')
+          expect($data.get(2).innerText).to.contain('Remove')
+          expect($data.get(3).innerText).to.contain('Pertiss, Karen')
+          expect($data.get(4).innerText).to.contain('None')
+          expect($data.get(5).innerText).to.contain('Remove')
+        })
+    })
+    it('should remove the correct witness if the remove link is used (first)', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          23456
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+      DetailsOfWitnessesPage.removeLink(1).click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(23456))
+        expect(loc.search).to.eq(`?delete=1`)
+      })
+      DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 2) // This includes the header row and one data row
+      DetailsOfWitnessesPage.witnessesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Pertiss, Karen')
+          expect($data.get(1).innerText).to.contain('None')
+        })
+    })
+    it('should show any witnesses added to the session in the table', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          12345
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+      DetailsOfWitnessesPage.witnessesTable().should('not.exist')
+      DetailsOfWitnessesPage.addWitnessButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.add(12345))
+      })
+      DetailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check()
+      DetailsOfWitnessesPage.witnessOtherFirstNameInput().type('Jake')
+      DetailsOfWitnessesPage.witnessOtherLastNameInput().type('Peters')
+      DetailsOfWitnessesPage.addWitnessSubmit().click()
+      DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 2) // This includes the header row plus the Witness we just added
+      DetailsOfWitnessesPage.witnessesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Peters, Jake')
+          expect($data.get(0).innerText).to.not.contain('None')
+        })
+    })
+    it('should not show the remove link for witnesses that the current user did not add', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          34567
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+      DetailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
+      DetailsOfWitnessesPage.witnessesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Doe, John')
+          expect($data.get(1).innerText).to.contain('Prison officer')
+          expect($data.get(3).innerText).to.contain('Pertiss, Karen')
+          expect($data.get(4).innerText).to.contain('None')
+          expect($data.get(6).innerText).to.contain('Northern, Elizabeth')
+          expect($data.get(7).innerText).to.contain("Member of staff who's not a prison officer")
+        })
+    })
+    it('should return to the referrer stored in the session if the exit button is clicked - reporter', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          34567
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+      DetailsOfWitnessesPage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(34567))
+      })
+    })
+    it('should return to the referrer stored in the session if the exit button is clicked - reviewer', () => {
+      cy.visit(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+          34567
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(34567)}`
+      )
+      const DetailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
+      DetailsOfWitnessesPage.exitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(34567))
+      })
     })
   })
 })
