@@ -56,6 +56,12 @@ export default class EvidenceSessionService {
     return req.session.evidence.referrer
   }
 
+  getAndDeleteReferrerOnSession(req: Request) {
+    const referrer = this.getReferrerFromSession(req)
+    delete req.session.evidence.referrer
+    return referrer
+  }
+
   deleteReferrerOnSession(req: Request) {
     delete req.session.evidence.referrer
   }

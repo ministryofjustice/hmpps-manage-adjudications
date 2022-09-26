@@ -113,19 +113,19 @@ export default class DetailsOfEvidencePage {
       ? await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
       : null
 
-    // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
+    const referrer = this.evidenceSessionService.getAndDeleteReferrerOnSession(req)
 
+    // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
     if (
       (this.pageOptions.displayAPIData() && draftAdjudicationResult.draftAdjudication.evidenceSaved) ||
       this.pageOptions.displayAPIDataSubmitted()
     ) {
       this.evidenceSessionService.deleteReferrerOnSession(req)
       this.evidenceSessionService.deleteAllSessionEvidence(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit)
+      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
     }
 
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
-    this.evidenceSessionService.deleteReferrerOnSession(req)
 
     // we need to merge the different evidence types back together into one array
     const allEvidence = evidenceDetails ? [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged] : []
@@ -135,7 +135,7 @@ export default class DetailsOfEvidencePage {
     } else {
       await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
     }
-    return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit)
+    return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
   }
 
   getEvidence = (req: Request, adjudicationNumber: number, adjudication: DraftAdjudication | ReportedAdjudication) => {
@@ -177,8 +177,11 @@ export default class DetailsOfEvidencePage {
     return isSubmittedEdit ? this.evidenceSessionService.getReferrerFromSession(req) : taskListUrl
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number, isSubmittedEdit: boolean) => {
-    if (isSubmittedEdit) return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(adjudicationNumber))
+  redirectToNextPage = (res: Response, adjudicationNumber: number, isSubmittedEdit: boolean, referrer: string) => {
+    if (isSubmittedEdit)
+      return res.redirect(
+        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(adjudicationNumber)}?referrer=${referrer}`
+      )
     return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber))
   }
 }

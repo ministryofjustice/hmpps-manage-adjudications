@@ -103,6 +103,8 @@ export default class DetailsOfDamagesPage {
       ? await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
       : null
 
+    const referrer = this.damagesSessionService.getAndDeleteReferrerOnSession(req)
+
     // If displaying data from API, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
     if (
       (this.pageOptions.displayAPIData() && draftAdjudicationResult.draftAdjudication.damagesSaved) ||
@@ -110,11 +112,10 @@ export default class DetailsOfDamagesPage {
     ) {
       this.damagesSessionService.deleteReferrerOnSession(req)
       this.damagesSessionService.deleteAllSessionDamages(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit)
+      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
     }
 
     const damagesOnSession = this.damagesSessionService.getAndDeleteAllSessionDamages(req, adjudicationNumber)
-    this.damagesSessionService.deleteReferrerOnSession(req)
     const damagesToSend = this.formatDamages(damagesOnSession)
 
     if (isSubmittedEdit) {
@@ -122,7 +123,7 @@ export default class DetailsOfDamagesPage {
     } else {
       await this.placeOnReportService.saveDamageDetails(adjudicationNumber, damagesToSend, user)
     }
-    return this.redirectToNextPage(res, adjudicationNumber, !!isSubmittedEdit)
+    return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
   }
 
   getAdjudicationAndPrisoner = async (adjudicationNumber: number, isSubmittedEdit: boolean, user: User) => {
@@ -171,8 +172,11 @@ export default class DetailsOfDamagesPage {
     }))
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number, isSubmittedEdit: boolean) => {
-    if (isSubmittedEdit) return res.redirect(adjudicationUrls.detailsOfEvidence.urls.submittedEdit(adjudicationNumber))
+  redirectToNextPage = (res: Response, adjudicationNumber: number, isSubmittedEdit: boolean, referrer: string) => {
+    if (isSubmittedEdit)
+      return res.redirect(
+        `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(adjudicationNumber)}?referrer=${referrer}`
+      )
     return res.redirect(adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber))
   }
 }

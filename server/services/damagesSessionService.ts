@@ -42,6 +42,12 @@ export default class DamagesSessionService {
     return req.session.damages.referrer
   }
 
+  getAndDeleteReferrerOnSession(req: Request) {
+    const referrer = this.getReferrerFromSession(req)
+    delete req.session.damages.referrer
+    return referrer
+  }
+
   deleteReferrerOnSession(req: Request) {
     delete req.session.damages.referrer
   }
