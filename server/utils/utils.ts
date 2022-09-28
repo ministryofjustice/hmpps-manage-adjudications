@@ -129,7 +129,10 @@ export const calculateAge = (dateOfBirth: string, dateOfIncident: string) => {
   }
 }
 
-export const getEvidenceCategory = (evidenceArray: EvidenceDetails[], isBaggedAndTagged: boolean) => {
+export const getEvidenceCategory = (
+  evidenceArray: EvidenceDetails[],
+  isBaggedAndTagged: boolean
+): EvidenceDetails[] => {
   if (!evidenceArray) return []
   if (isBaggedAndTagged) {
     return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
