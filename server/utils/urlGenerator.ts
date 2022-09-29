@@ -107,12 +107,15 @@ const adjudicationUrls = {
     root: '/prisoner-placed-on-report',
     matchers: {
       start: '/:adjudicationNumber',
-      reporterView: '/:adjudicationNumber/changes-confirmed/report',
+      confirmationOfChange: '/:adjudicationNumber/changes-confirmed/report',
+      confirmationOfChangePostReview: '/:adjudicationNumber/changes-confirmed/submitted-report',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}`,
-      reporterView: (adjudicationNumber: number) =>
+      confirmationOfChange: (adjudicationNumber: number) =>
         `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/report`,
+      confirmationOfChangePostReview: (adjudicationNumber: number) =>
+        `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/submitted-report`,
     },
   },
   incidentDetails: {

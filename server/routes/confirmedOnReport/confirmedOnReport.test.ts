@@ -23,21 +23,9 @@ const reportedAdjudicationInformation = {
   prisonerFirstName: 'John',
   prisonerLastName: 'Smith',
   prisonerNumber: 'H5123BY',
-  prisonerPreferredNonEnglishLanguage: 'French',
-  prisonerOtherLanguages: ['English', 'Spanish'],
-  prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
-  incidentAgencyName: 'Moorland (HMP & YOI)',
-  incidentLocationName: 'Adj',
-  statement: 'A statement',
-  reportingOfficer: 'An officer',
-  prisonerAgencyName: 'Moorland (HMP & YOI)',
-  prisonerLivingUnitName: '5-2-A-050',
-  incidentDate: '2020-12-21T07:21',
-  createdDateTime: '2020-12-21T10:45',
-  isYouthOffender: false,
 }
 
-reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)
+reportedAdjudicationsService.getSimpleConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -56,7 +44,7 @@ describe('GET /prisoner-placed-on-report', () => {
   })
 
   it('should throw an error on api failure', () => {
-    reportedAdjudicationsService.getConfirmationDetails.mockRejectedValue(new Error('error message content'))
+    reportedAdjudicationsService.getSimpleConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)
       .get(adjudicationUrls.confirmedOnReport.urls.start(123))
 

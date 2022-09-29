@@ -56,7 +56,7 @@ context('Report has been changed', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.confirmedOnReport.urls.reporterView(1524493))
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(1524493))
     Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('John Smith’s report has been changed')
     cy.contains('What happens next')
@@ -64,8 +64,8 @@ context('Report has been changed', () => {
     cy.contains('Check your prison’s processes')
   })
 
-  it('should redirect the user to prisoner report on finish', () => {
-    cy.visit(adjudicationUrls.confirmedOnReport.urls.reporterView(1524493))
+  it('should redirect the user to your completed reports on finish', () => {
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(1524493))
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishLink().click()
     cy.location().should(loc => {

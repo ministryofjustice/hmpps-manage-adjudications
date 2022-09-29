@@ -234,7 +234,7 @@ context('Check Your Answers', () => {
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       checkYourAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.reporterView(234))
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(234))
       })
     })
     it('should go to the prisoner report page if the user cancels', () => {

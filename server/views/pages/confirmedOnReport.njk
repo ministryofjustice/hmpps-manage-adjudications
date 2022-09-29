@@ -19,6 +19,7 @@
           classes: "govuk-!-margin-bottom-6"
         }) }}
 
+      {% if showNextStepsContent %}
       <h2 class="govuk-heading-m">What happens next</h2>
 
       <div class="confirmed-on-report-section">
@@ -37,8 +38,11 @@
           }) }}
 
           <p class="govuk-body"><a class="govuk-link" href={{ yourCompletedReportsLink }} data-qa="confirmed-on-report-finish">Return to your completed reports</a></p>
-
       </div>
+      {% endif %}
+      {% if not showNextStepsContent %}
+        <p class="govuk-body"><a class="govuk-link" href={{ submittedEditConfirmationReturnUrl }} data-qa="confirmed-on-report-finish">{{ submittedEditConfirmationReturnText }}</a></p>
+      {% endif %}
     </div>
   </div>
 

@@ -73,7 +73,7 @@ const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
 
 const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: number) => {
   if (pageOptions.isEditByReporter())
-    return adjudicationUrls.confirmedOnReport.urls.reporterView(completeAdjudicationNumber)
+    return adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(completeAdjudicationNumber)
   return adjudicationUrls.confirmedOnReport.urls.start(completeAdjudicationNumber)
 }
 

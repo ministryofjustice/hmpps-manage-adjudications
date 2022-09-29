@@ -180,7 +180,9 @@ export default class DetailsOfEvidencePage {
   redirectToNextPage = (res: Response, adjudicationNumber: number, isSubmittedEdit: boolean, referrer: string) => {
     if (isSubmittedEdit)
       return res.redirect(
-        `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(adjudicationNumber)}?referrer=${referrer}`
+        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
+          adjudicationNumber
+        )}?referrer=${referrer}`
       )
     return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber))
   }

@@ -160,7 +160,11 @@ export default class DetailsOfWitnessesPage {
     referrer: string = null
   ) => {
     if (isReportedDraft) {
-      return res.redirect(referrer)
+      return res.redirect(
+        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
+          adjudicationNumber
+        )}?referrer=${referrer}`
+      )
     }
     return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
   }

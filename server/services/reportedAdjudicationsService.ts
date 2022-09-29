@@ -160,10 +160,7 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getConfirmationDetailsChangedReport(
-    adjudicationNumber: number,
-    user: User
-  ): Promise<ConfirmedOnReportChangedData> {
+  async getSimpleConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportChangedData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
