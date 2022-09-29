@@ -205,7 +205,7 @@ context('Details of evidence', () => {
       .baggedAndTaggedTable()
       .find('th')
       .then($headings => {
-        expect($headings.get(0).innerText).to.contain('Seal Number')
+        expect($headings.get(0).innerText).to.contain('Seal number')
         expect($headings.get(1).innerText).to.contain('Description')
       })
     detailsOfEvidencePage
@@ -397,7 +397,7 @@ context('Details of evidence', () => {
         .baggedAndTaggedTable()
         .find('th')
         .then($headings => {
-          expect($headings.get(0).innerText).to.contain('Seal Number')
+          expect($headings.get(0).innerText).to.contain('Seal number')
           expect($headings.get(1).innerText).to.contain('Description')
         })
       detailsOfEvidencePage
