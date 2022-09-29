@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { SubmittedDateTime } from '../@types/template'
+import { EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
 
 const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 
@@ -128,6 +129,17 @@ export const calculateAge = (dateOfBirth: string, dateOfIncident: string) => {
   }
 }
 
+export const getEvidenceCategory = (
+  evidenceArray: EvidenceDetails[],
+  isBaggedAndTagged: boolean
+): EvidenceDetails[] => {
+  if (!evidenceArray) return []
+  if (isBaggedAndTagged) {
+    return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
+  }
+  return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
+}
+
 export default {
   numberRange,
   convertToTitleCase,
@@ -140,4 +152,5 @@ export default {
   possessive,
   calculateAge,
   convertNameForPlaceholder,
+  getEvidenceCategory,
 }

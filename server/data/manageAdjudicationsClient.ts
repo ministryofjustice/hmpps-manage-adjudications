@@ -178,6 +178,13 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async updateDamageDetails(adjudicationNumber: number, damages: DamageDetails[]): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/damages/edit`,
+      data: { damages },
+    })
+  }
+
   async saveEvidenceDetails(adjudicationNumber: number, evidence: EvidenceDetails[]): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${adjudicationNumber}/evidence`,
@@ -185,9 +192,29 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async updateEvidenceDetails(
+    adjudicationNumber: number,
+    evidence: EvidenceDetails[]
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/evidence/edit`,
+      data: { evidence },
+    })
+  }
+
   async saveWitnessDetails(adjudicationNumber: number, witnesses: WitnessDetails[]): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${adjudicationNumber}/witnesses`,
+      data: { witnesses },
+    })
+  }
+
+  async updateWitnessDetails(
+    adjudicationNumber: number,
+    witnesses: WitnessDetails[]
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/witnesses/edit`,
       data: { witnesses },
     })
   }

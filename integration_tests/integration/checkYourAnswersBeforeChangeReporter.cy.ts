@@ -132,22 +132,23 @@ context('Check Your Answers', () => {
     })
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-      CheckYourAnswersPage.reviewStatus().should('exist')
-      CheckYourAnswersPage.reviewSummary().should('exist')
-      CheckYourAnswersPage.incidentDetailsSummary().should('exist')
-      CheckYourAnswersPage.incidentStatement().should('exist')
-      CheckYourAnswersPage.submitButton().should('exist')
-      CheckYourAnswersPage.submitButton().contains('Confirm changes')
-      CheckYourAnswersPage.exitButton().should('exist')
-      CheckYourAnswersPage.exitButton().contains('Cancel')
+      checkYourAnswersPage.reviewStatus().should('exist')
+      checkYourAnswersPage.reviewSummary().should('exist')
+      checkYourAnswersPage.incidentDetailsSummary().should('exist')
+      checkYourAnswersPage.incidentStatement().should('exist')
+      checkYourAnswersPage.submitButton().should('exist')
+      checkYourAnswersPage.submitButton().contains('Confirm changes')
+      checkYourAnswersPage.exitButton().should('exist')
+      checkYourAnswersPage.exitButton().contains('Cancel')
     })
     it('should contain the correct review summary details', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.reviewStatus().should('contain.text', 'Status: Returned')
-      CheckYourAnswersPage.reviewSummary()
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.reviewStatus().should('contain.text', 'Status: Returned')
+      checkYourAnswersPage
+        .reviewSummary()
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
@@ -155,7 +156,8 @@ context('Check Your Answers', () => {
           expect($summaryLabels.get(2).innerText).to.contain('Details')
         })
 
-      CheckYourAnswersPage.reviewSummary()
+      checkYourAnswersPage
+        .reviewSummary()
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
@@ -165,9 +167,10 @@ context('Check Your Answers', () => {
     })
     it('should contain the correct incident details', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-      CheckYourAnswersPage.incidentDetailsSummary()
+      checkYourAnswersPage
+        .incidentDetailsSummary()
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
@@ -176,7 +179,8 @@ context('Check Your Answers', () => {
           expect($summaryLabels.get(3).innerText).to.contain('Location')
         })
 
-      CheckYourAnswersPage.incidentDetailsSummary()
+      checkYourAnswersPage
+        .incidentDetailsSummary()
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
@@ -187,15 +191,16 @@ context('Check Your Answers', () => {
     })
     it('should contain the correct incident statement', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-      CheckYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
+      checkYourAnswersPage.incidentStatement().should('contain.text', 'This is my statement')
     })
     it('should contain the correct offence details', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-      CheckYourAnswersPage.offenceDetailsSummary()
+      checkYourAnswersPage
+        .offenceDetailsSummary()
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
@@ -208,7 +213,8 @@ context('Check Your Answers', () => {
           expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
         })
 
-      CheckYourAnswersPage.offenceDetailsSummary()
+      checkYourAnswersPage
+        .offenceDetailsSummary()
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('YOI offences\n\nPrison rule 55')
@@ -225,40 +231,40 @@ context('Check Your Answers', () => {
     })
     it('should go to the completion page (changed) if the user submits changes to the report', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.submitButton().click()
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.reporterView(234))
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(234))
       })
     })
     it('should go to the prisoner report page if the user cancels', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.exitButton().click()
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.exitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.report(234))
       })
     })
     it('should go to the incident details page if the incident details change link is clicked', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.incidentDetailsChangeLink().click()
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.incidentDetailsChangeLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 3456))
       })
     })
     it('should go to the correct page if the offence details change link is clicked - to reenter new offences', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.offenceDetailsChangeLink().click()
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.offenceDetailsChangeLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
       })
     })
     it('should go to the incident statement page if the incident statement change link is clicked', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.incidentStatementChangeLink().click()
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.incidentStatementChangeLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.submittedEdit(3456))
       })
@@ -278,22 +284,24 @@ context('Check Your Answers', () => {
     })
     it('should show the correct review status', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
-      CheckYourAnswersPage.reviewStatus().should('exist')
-      CheckYourAnswersPage.reviewStatus().should('contain.text', 'Status: Awaiting Review')
-      CheckYourAnswersPage.reviewSummary().should('not.exist')
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.reviewStatus().should('exist')
+      checkYourAnswersPage.reviewStatus().should('contain.text', 'Status: Awaiting Review')
+      checkYourAnswersPage.reviewSummary().should('not.exist')
     })
     it('should show the correct prison rule', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
-      const CheckYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
-      CheckYourAnswersPage.offenceDetailsSummary()
+      checkYourAnswersPage
+        .offenceDetailsSummary()
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
         })
 
-      CheckYourAnswersPage.offenceDetailsSummary()
+      checkYourAnswersPage
+        .offenceDetailsSummary()
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')

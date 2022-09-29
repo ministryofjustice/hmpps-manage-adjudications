@@ -19,9 +19,9 @@ afterEach(() => {
 })
 
 describe('Add damages', () => {
-  it('should add the damage and redirect to the damages details page', () => {
+  it('should add the damage and redirect to the damages details page - draft adjudication', () => {
     return request(app)
-      .post(`${adjudicationUrls.detailsOfDamages.urls.add(100)}`)
+      .post(`${adjudicationUrls.detailsOfDamages.urls.add(100)}?submitted=false`)
       .send({
         damageType: 'REDECORATION',
         damageDescription: 'Repainting required',
@@ -29,6 +29,28 @@ describe('Add damages', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfDamages.urls.modified(100))
+      .then(() =>
+        expect(damagesSessionService.addSessionDamage).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            code: 'REDECORATION',
+            details: 'Repainting required',
+            reporter: 'user1',
+          },
+          100
+        )
+      )
+  })
+  it('should add the damage and redirect to the damages details page - submitted edit', () => {
+    return request(app)
+      .post(`${adjudicationUrls.detailsOfDamages.urls.add(100)}?submitted=true`)
+      .send({
+        damageType: 'REDECORATION',
+        damageDescription: 'Repainting required',
+        reporter: 'user1',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.detailsOfDamages.urls.submittedEditModified(100))
       .then(() =>
         expect(damagesSessionService.addSessionDamage).toHaveBeenCalledWith(
           expect.anything(),

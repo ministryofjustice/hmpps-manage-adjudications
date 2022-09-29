@@ -44,19 +44,20 @@ context('Task list', () => {
     })
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
 
-      TaskListPage.taskList().should('exist')
-      TaskListPage.incidentDetailsLink().should('exist')
-      TaskListPage.incidentStatementLink().should('exist')
-      TaskListPage.acceptDetailsText().should('exist')
-      TaskListPage.acceptDetailsLink().should('not.exist')
-      TaskListPage.expirationNotice().should('exist')
+      taskListPage.taskList().should('exist')
+      taskListPage.incidentDetailsLink().should('exist')
+      taskListPage.incidentStatementLink().should('exist')
+      taskListPage.acceptDetailsText().should('exist')
+      taskListPage.acceptDetailsLink().should('not.exist')
+      taskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.taskList()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .taskList()
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
@@ -77,24 +78,26 @@ context('Task list', () => {
     })
     it('should have the correct expiration date and time', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.expirationNotice().should(
-        'contain.text',
-        'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
-      )
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .expirationNotice()
+        .should(
+          'contain.text',
+          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
+        )
     })
     it('should route to the incident page if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.incidentDetailsLink().click()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage.incidentDetailsLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 3456))
       })
     })
     it('should route to the incident statement if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.incidentStatementLink().click()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage.incidentStatementLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.start(3456))
       })
@@ -141,8 +144,9 @@ context('Task list', () => {
     })
     it('should have the correct statuses', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.taskList()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .taskList()
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
@@ -163,13 +167,13 @@ context('Task list', () => {
     })
     it('should not have an active accept details link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.acceptDetailsLink().should('not.exist')
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage.acceptDetailsLink().should('not.exist')
     })
     it('should route to the applicable rules page if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.offenceDetailsLink().click()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage.offenceDetailsLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(3456))
       })
@@ -245,19 +249,20 @@ context('Task list', () => {
     })
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
 
-      TaskListPage.taskList().should('exist')
-      TaskListPage.incidentDetailsLink().should('exist')
-      TaskListPage.incidentStatementLink().should('exist')
-      TaskListPage.acceptDetailsText().should('exist')
-      TaskListPage.acceptDetailsLink().should('not.exist')
-      TaskListPage.expirationNotice().should('exist')
+      taskListPage.taskList().should('exist')
+      taskListPage.incidentDetailsLink().should('exist')
+      taskListPage.incidentStatementLink().should('exist')
+      taskListPage.acceptDetailsText().should('exist')
+      taskListPage.acceptDetailsLink().should('not.exist')
+      taskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.taskList()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .taskList()
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
@@ -278,16 +283,18 @@ context('Task list', () => {
     })
     it('should have the correct expiration date and time', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.expirationNotice().should(
-        'contain.text',
-        'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
-      )
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .expirationNotice()
+        .should(
+          'contain.text',
+          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
+        )
     })
     it('should route to the offenders details page if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.offenceDetailsLink().click()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage.offenceDetailsLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
       })
@@ -363,19 +370,20 @@ context('Task list', () => {
     })
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
 
-      TaskListPage.taskList().should('exist')
-      TaskListPage.incidentDetailsLink().should('exist')
-      TaskListPage.incidentStatementLink().should('exist')
-      TaskListPage.acceptDetailsLink().should('exist')
-      TaskListPage.acceptDetailsText().should('not.exist')
-      TaskListPage.expirationNotice().should('exist')
+      taskListPage.taskList().should('exist')
+      taskListPage.incidentDetailsLink().should('exist')
+      taskListPage.incidentStatementLink().should('exist')
+      taskListPage.acceptDetailsLink().should('exist')
+      taskListPage.acceptDetailsText().should('not.exist')
+      taskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.taskList()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .taskList()
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
@@ -396,16 +404,18 @@ context('Task list', () => {
     })
     it('should have the correct expiration date and time', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.expirationNotice().should(
-        'contain.text',
-        'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
-      )
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .expirationNotice()
+        .should(
+          'contain.text',
+          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
+        )
     })
     it('should route to the check your answers page if you click the link', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.acceptDetailsLink().click()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage.acceptDetailsLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.checkYourAnswers.urls.start(3456))
       })
@@ -468,19 +478,20 @@ context('Task list', () => {
     })
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
 
-      TaskListPage.taskList().should('exist')
-      TaskListPage.incidentDetailsLink().should('exist')
-      TaskListPage.incidentStatementLink().should('exist')
-      TaskListPage.acceptDetailsLink().should('not.exist')
-      TaskListPage.acceptDetailsText().should('exist')
-      TaskListPage.expirationNotice().should('exist')
+      taskListPage.taskList().should('exist')
+      taskListPage.incidentDetailsLink().should('exist')
+      taskListPage.incidentStatementLink().should('exist')
+      taskListPage.acceptDetailsLink().should('not.exist')
+      taskListPage.acceptDetailsText().should('exist')
+      taskListPage.expirationNotice().should('exist')
     })
     it('should have the correct statuses', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.taskList()
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .taskList()
         .find('td')
         .then($cells => {
           expect($cells.get(0).innerText).to.contain('Incident details')
@@ -501,11 +512,13 @@ context('Task list', () => {
     })
     it('should have the correct expiration date and time', () => {
       cy.visit(adjudicationUrls.taskList.urls.start(3456))
-      const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-      TaskListPage.expirationNotice().should(
-        'contain.text',
-        'You need to provide John Smith with a printed copy of this report by 10:11 on 3 February 2022.'
-      )
+      const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+      taskListPage
+        .expirationNotice()
+        .should(
+          'contain.text',
+          'You need to provide John Smith with a printed copy of this report by 10:11 on 3 February 2022.'
+        )
     })
   })
   context(
@@ -592,8 +605,9 @@ context('Task list', () => {
       })
       it('should have the correct statuses', () => {
         cy.visit(adjudicationUrls.taskList.urls.start(3456))
-        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-        TaskListPage.taskList()
+        const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+        taskListPage
+          .taskList()
           .find('td')
           .then($cells => {
             expect($cells.get(6).innerText).to.contain('Evidence')
@@ -602,24 +616,24 @@ context('Task list', () => {
       })
       it('should have an active link to the damages page', () => {
         cy.visit(adjudicationUrls.taskList.urls.start(3456))
-        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-        TaskListPage.damagesLink().click()
+        const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+        taskListPage.damagesLink().click()
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.start(3456))
         })
       })
       it('should have an active link to the evidence page', () => {
         cy.visit(adjudicationUrls.taskList.urls.start(3456))
-        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-        TaskListPage.evidenceLink().click()
+        const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+        taskListPage.evidenceLink().click()
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.start(3456))
         })
       })
       it('should have an active link to the witnesses page', () => {
         cy.visit(adjudicationUrls.taskList.urls.start(3456))
-        const TaskListPage: TaskList = Page.verifyOnPage(TaskList)
-        TaskListPage.witnessesLink().click()
+        const taskListPage: TaskList = Page.verifyOnPage(TaskList)
+        taskListPage.witnessesLink().click()
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(3456))
         })

@@ -2,7 +2,6 @@
 
 {% macro damagesWitnessesTable(dataArray, redirectAfterRemoveUrl, currentUser, dataType) %}
   {% set rows = [] %}
-  <div class="flex-container govuk-!-margin-top-5">
     {% for data in dataArray %}
     {% set dataIndex = loop.index %}
 
@@ -32,7 +31,8 @@
       {{ govukTable({
         head: [
           {
-            text: "Type of repair needed" if dataType === "damages" else "Name"
+            text: "Type of repair needed" if dataType === "damages" else "Name",
+            classes: "firstColumn"
           },
           {
             text: "Description of damage" if dataType === "damages" else "Role"
@@ -42,7 +42,7 @@
           }
         ],
         rows: rows,
-        attributes: {"data-qa": "damagesWitnesses-table"}
+        attributes: {"data-qa": dataType+"-table"}
       }) }}
     {% endif %}
 {% endmacro %}

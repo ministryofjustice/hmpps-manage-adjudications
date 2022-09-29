@@ -1,6 +1,14 @@
 import moment from 'moment'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
-import { IncidentDetails, IncidentRole, IncidentStatement, OffenceDetails } from './DraftAdjudicationResult'
+import {
+  DamageDetails,
+  EvidenceDetails,
+  IncidentDetails,
+  IncidentRole,
+  IncidentStatement,
+  OffenceDetails,
+  WitnessDetails,
+} from './DraftAdjudicationResult'
 
 export type ReportedAdjudication = {
   adjudicationNumber: number
@@ -17,6 +25,9 @@ export type ReportedAdjudication = {
   reviewedByUserId?: string
   statusReason?: string
   statusDetails?: string
+  damages?: DamageDetails[]
+  evidence?: EvidenceDetails[]
+  witnesses?: WitnessDetails[]
 }
 
 export type ReportedAdjudicationResult = {

@@ -6,6 +6,8 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../@types/template'
+import { getEvidenceCategory } from '../../utils/utils'
+import { EvidenceDetails } from '../../data/DraftAdjudicationResult'
 
 type PageData = {
   errors?: FormError[]
@@ -24,6 +26,15 @@ class PageOptions {
 
   isReviewerView(): boolean {
     return this.pageType === PageRequestType.REVIEWER
+  }
+}
+
+const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
+  const photoVideo = getEvidenceCategory(evidence, false)
+  const baggedAndTagged = getEvidenceCategory(evidence, true)
+  return {
+    photoVideo,
+    baggedAndTagged,
   }
 }
 
@@ -46,6 +57,15 @@ const getVariablesForPageType = (
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
       editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
+      editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
     }
   }
   return {
@@ -59,6 +79,15 @@ const getVariablesForPageType = (
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
     editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber),
+    editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+    editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+    editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+      adjudicationNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
   }
 }
 
@@ -113,9 +142,13 @@ export default class prisonerReportRoutes {
       newDraftAdjudicationId
     )
 
+    const convertedEvidence = convertEvidenceToTableFormat(reportedAdjudication.reportedAdjudication.evidence)
+
     const readOnly =
       this.pageOptions.isReviewerView() ||
       ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status)
+
+    const readOnlyDamagesEvidenceWitnesses = reportedAdjudication.reportedAdjudication.status === 'REJECTED'
 
     const review =
       this.pageOptions.isReviewerView() &&
@@ -132,6 +165,10 @@ export default class prisonerReportRoutes {
       ...prisonerReportVariables,
       readOnly,
       review,
+      readOnlyDamagesEvidenceWitnesses,
+      damages: reportedAdjudication.reportedAdjudication.damages,
+      evidence: convertedEvidence,
+      witnesses: reportedAdjudication.reportedAdjudication.witnesses,
     })
   }
 

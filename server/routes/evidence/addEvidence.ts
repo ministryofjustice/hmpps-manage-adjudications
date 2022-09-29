@@ -10,14 +10,21 @@ type PageData = {
   evidenceDescription?: string
   bwcIdentifier?: string
   batIdentifier?: string
-  cancelButtonHref?: string
 }
 
 export default class AddEvidenceRoutes {
   constructor(private readonly evidenceSessionService: EvidenceSessionService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { cancelButtonHref, error, evidenceType, evidenceDescription, bwcIdentifier, batIdentifier } = pageData
+    const { error, evidenceType, evidenceDescription, bwcIdentifier, batIdentifier } = pageData
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const submitted = req.query.submitted as string
+
+    // eslint-disable-next-line no-extra-boolean-cast
+    const cancelButtonHref =
+      submitted === 'true'
+        ? adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(adjudicationNumber)
+        : adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)
 
     return res.render(`pages/addEvidence`, {
       errors: error ? [error] : [],
@@ -30,21 +37,24 @@ export default class AddEvidenceRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    // This is the draftId
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return this.renderView(req, res, {
-      cancelButtonHref: adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber),
-    })
+    return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const submitted = req.query.submitted as string
     const { evidenceDescription, evidenceType, bwcIdentifier, batIdentifier } = req.body
 
     const error = validateForm({ evidenceDescription, evidenceType, bwcIdentifier, batIdentifier })
     if (error)
-      return this.renderView(req, res, { error, evidenceDescription, evidenceType, bwcIdentifier, batIdentifier })
+      return this.renderView(req, res, {
+        error,
+        evidenceDescription,
+        evidenceType,
+        bwcIdentifier,
+        batIdentifier,
+      })
 
     const evidenceIdentifier = await this.getIdentifierToAdd(bwcIdentifier, batIdentifier)
 
@@ -56,10 +66,16 @@ export default class AddEvidenceRoutes {
     }
 
     this.evidenceSessionService.addSessionEvidence(req, evidenceToAdd, adjudicationNumber)
-    return res.redirect(adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber))
+    const redirectUrl = this.getRedirectUrl(submitted === 'true', adjudicationNumber)
+    return res.redirect(redirectUrl)
   }
 
   getIdentifierToAdd = async (bwcIdentifier: string, batIdentifier: string) => {
     return bwcIdentifier || batIdentifier || null
+  }
+
+  getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {
+    if (submitted) return adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(adjudicationNumber)
+    return adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)
   }
 }

@@ -46,7 +46,7 @@ describe('ValidateForm', () => {
       text: 'Enter the camera number',
     })
   })
-  it('returns correct error if bagged and tagged evidence is selected but the tag number is not entered', () => {
+  it('returns correct error if bagged and tagged evidence is selected but the seal number is not entered', () => {
     const result = validateForm({
       evidenceDescription: 'Table leg used to assault victim',
       evidenceType: 'BAGGED_AND_TAGGED',
@@ -55,7 +55,7 @@ describe('ValidateForm', () => {
     })
     expect(result).toStrictEqual({
       href: '#batIdentifier',
-      text: 'Enter the tag number',
+      text: 'Enter the seal number',
     })
   })
 })

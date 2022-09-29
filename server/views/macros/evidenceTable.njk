@@ -2,7 +2,6 @@
 
 {% macro evidenceTable(evidenceArray, redirectAfterRemoveUrl, currentUser, tableName) %}
   {% set rows = [] %}
-  <div class="flex-container govuk-!-margin-top-5">
     {% for evidence in evidenceArray  %}
     {% set evidenceIndex = loop.index %}
 
@@ -40,7 +39,7 @@
 {{ govukTable({
   head: [
     {
-      text: "Tag Number" if tableName === 'baggedAndTaggedTable' else "Type"
+      text: "Seal Number" if tableName === 'baggedAndTaggedTable' else "Type"
     },
     {
       text: "Description"

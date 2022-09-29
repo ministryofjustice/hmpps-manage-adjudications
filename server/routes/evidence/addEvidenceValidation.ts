@@ -22,7 +22,7 @@ const errors: { [key: string]: FormError } = {
   },
   BAT_IDENTIFIER_MISSING: {
     href: '#batIdentifier',
-    text: 'Enter the tag number',
+    text: 'Enter the seal number',
   },
 }
 

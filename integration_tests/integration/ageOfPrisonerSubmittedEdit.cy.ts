@@ -57,26 +57,26 @@ context('Age of the prisoner', () => {
 
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-    const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    AgeOfPrisonerPage.ageOfPrisoner().should('exist')
-    AgeOfPrisonerPage.ageOfPrisonerHint().should('exist')
-    AgeOfPrisonerPage.prisonRuleRadios().should('exist')
-    AgeOfPrisonerPage.submitButton().should('exist')
-    AgeOfPrisonerPage.cancelButton().should('exist')
+    const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    ageOfPrisonerPage.ageOfPrisoner().should('exist')
+    ageOfPrisonerPage.ageOfPrisonerHint().should('exist')
+    ageOfPrisonerPage.prisonRuleRadios().should('exist')
+    ageOfPrisonerPage.submitButton().should('exist')
+    ageOfPrisonerPage.cancelButton().should('exist')
   })
   it('should already have a radio button selected from their previous selection', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-    const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    AgeOfPrisonerPage.prisonRuleRadios().find('input[value="adult"]').should('be.checked')
-    AgeOfPrisonerPage.submitButton().click()
+    const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    ageOfPrisonerPage.prisonRuleRadios().find('input[value="adult"]').should('be.checked')
+    ageOfPrisonerPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
     })
   })
   it('should show the correct age of the prisoner based on the date of the incident report', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-    const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    AgeOfPrisonerPage.ageOfPrisoner().should('have.text', '31 years, 0 months')
+    const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    ageOfPrisonerPage.ageOfPrisoner().should('have.text', '31 years, 0 months')
   })
   it('should not show the age of the prisoner if there are no date of birth details on the prisoner record', () => {
     cy.task('stubGetPrisonerDetails', {
@@ -89,24 +89,24 @@ context('Age of the prisoner', () => {
       },
     })
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-    const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    AgeOfPrisonerPage.ageOfPrisoner().should('not.exist')
-    AgeOfPrisonerPage.ageOfPrisonerHint().should('not.exist')
+    const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    ageOfPrisonerPage.ageOfPrisoner().should('not.exist')
+    ageOfPrisonerPage.ageOfPrisonerHint().should('not.exist')
   })
   it('should redirect the user to the role page if the page receives a valid submission', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-    const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    AgeOfPrisonerPage.radioAdult().click()
-    AgeOfPrisonerPage.submitButton().click()
+    const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    ageOfPrisonerPage.radioAdult().click()
+    ageOfPrisonerPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
     })
   })
   it('should redirect the user to the task list page if they cancel', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
-    const AgeOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    AgeOfPrisonerPage.radioYoi().click()
-    AgeOfPrisonerPage.cancelButton().click()
+    const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
+    ageOfPrisonerPage.radioYoi().click()
+    ageOfPrisonerPage.cancelButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/place-the-prisoner-on-report/3456')
     })

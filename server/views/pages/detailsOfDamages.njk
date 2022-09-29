@@ -18,7 +18,6 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}" />
         <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
             {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
         </div>

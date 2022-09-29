@@ -40,12 +40,18 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       add: '/:adjudicationNumber/add',
       modified: '/:adjudicationNumber/modified',
+      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/add`,
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/modified`,
+      submittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/submitted/edit`,
+      submittedEditModified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/submitted/edit/modified`,
     },
   },
   detailsOfEvidence: {
@@ -54,12 +60,18 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       add: '/:adjudicationNumber/add',
       modified: '/:adjudicationNumber/modified',
+      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/add`,
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/modified`,
+      submittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/submitted/edit`,
+      submittedEditModified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/submitted/edit/modified`,
     },
   },
   detailsOfWitnesses: {
@@ -68,12 +80,18 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       add: '/:adjudicationNumber/add',
       modified: '/:adjudicationNumber/modified',
+      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/add`,
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/modified`,
+      submittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/submitted/edit`,
+      submittedEditModified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/submitted/edit/modified`,
     },
   },
   taskList: {
@@ -89,12 +107,15 @@ const adjudicationUrls = {
     root: '/prisoner-placed-on-report',
     matchers: {
       start: '/:adjudicationNumber',
-      reporterView: '/:adjudicationNumber/changes-confirmed/report',
+      confirmationOfChange: '/:adjudicationNumber/changes-confirmed/report',
+      confirmationOfChangePostReview: '/:adjudicationNumber/changes-confirmed/submitted-report',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}`,
-      reporterView: (adjudicationNumber: number) =>
+      confirmationOfChange: (adjudicationNumber: number) =>
         `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/report`,
+      confirmationOfChangePostReview: (adjudicationNumber: number) =>
+        `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/submitted-report`,
     },
   },
   incidentDetails: {

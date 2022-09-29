@@ -12,12 +12,26 @@ import {
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
-import { convertToTitleCase, getDate, getFormattedOfficerName, getTime, formatTimestampToDate } from '../utils/utils'
+import {
+  convertToTitleCase,
+  getDate,
+  getFormattedOfficerName,
+  getTime,
+  formatTimestampToDate,
+  formatLocation,
+} from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
-import { PrisonerReport, DraftAdjudication } from '../data/DraftAdjudicationResult'
+import {
+  PrisonerReport,
+  DraftAdjudication,
+  DamageDetails,
+  EvidenceDetails,
+  WitnessDetails,
+} from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
+import { PrisonerResultSummary } from './placeOnReportService'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -146,10 +160,7 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getConfirmationDetailsChangedReport(
-    adjudicationNumber: number,
-    user: User
-  ): Promise<ConfirmedOnReportChangedData> {
+  async getSimpleConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportChangedData> {
     const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -249,6 +260,30 @@ export default class ReportedAdjudicationsService {
     })
   }
 
+  async updateDamageDetails(
+    adjudicationNumber: number,
+    damages: DamageDetails[],
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateDamageDetails(adjudicationNumber, damages)
+  }
+
+  async updateEvidenceDetails(
+    adjudicationNumber: number,
+    evidence: EvidenceDetails[],
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateEvidenceDetails(adjudicationNumber, evidence)
+  }
+
+  async updateWitnessDetails(
+    adjudicationNumber: number,
+    witnesses: WitnessDetails[],
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).updateWitnessDetails(adjudicationNumber, witnesses)
+  }
+
   enhanceReportedAdjudication(
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
@@ -317,6 +352,26 @@ export default class ReportedAdjudicationsService {
       statement: draftAdjudication.incidentStatement?.statement,
       isYouthOffender: draftAdjudication.isYouthOffender,
     }
+  }
+
+  async getPrisonerDetails(prisonerNumber: string, user: User): Promise<PrisonerResultSummary> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(prisonerNumber)
+
+    const enhancedResult = {
+      ...prisoner,
+      friendlyName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      displayName: convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`),
+      prisonerNumber: prisoner.offenderNo,
+      currentLocation: formatLocation(prisoner.assignedLivingUnit.description),
+    }
+
+    return enhancedResult
+  }
+
+  async getPrisonerDetailsFromAdjNumber(adjudicationNumber: number, user: User): Promise<PrisonerResultSummary> {
+    const reportedAdjudication = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
+    return this.getPrisonerDetails(reportedAdjudication.reportedAdjudication.prisonerNumber, user)
   }
 
   mapData<TI, TO>(data: ApiPageResponse<TI>, transform: (input: TI) => TO): ApiPageResponse<TO> {

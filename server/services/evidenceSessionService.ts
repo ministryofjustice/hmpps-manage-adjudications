@@ -47,6 +47,25 @@ export default class EvidenceSessionService {
     return req.session?.evidence?.[draftAdjudicationNumber]
   }
 
+  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
+    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+    req.session.evidence.referrer = referrer
+  }
+
+  getReferrerFromSession(req: Request) {
+    return req.session.evidence.referrer
+  }
+
+  getAndDeleteReferrerOnSession(req: Request) {
+    const referrer = this.getReferrerFromSession(req)
+    delete req.session.evidence.referrer
+    return referrer
+  }
+
+  deleteReferrerOnSession(req: Request) {
+    delete req.session.evidence.referrer
+  }
+
   private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
     if (!req.session.evidence) {
       req.session.evidence = {}

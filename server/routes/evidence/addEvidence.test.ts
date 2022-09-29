@@ -19,9 +19,9 @@ afterEach(() => {
 })
 
 describe('Add evidence', () => {
-  it('should add the evidence and redirect to the evidence details page', () => {
+  it('should add the evidence and redirect to the evidence details page - draft adjudication', () => {
     return request(app)
-      .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}`)
+      .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}?submitted=false`)
       .send({
         evidenceType: 'BAGGED_AND_TAGGED',
         evidenceDescription: 'some details here',
@@ -29,6 +29,29 @@ describe('Add evidence', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfEvidence.urls.modified(100))
+      .then(() =>
+        expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            code: 'BAGGED_AND_TAGGED',
+            details: 'some details here',
+            reporter: 'user1',
+            identifier: 'JO12345',
+          },
+          100
+        )
+      )
+  })
+  it('should add the evidence and redirect to the evidence details page - submitted adjudication edit', () => {
+    return request(app)
+      .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}?submitted=true`)
+      .send({
+        evidenceType: 'BAGGED_AND_TAGGED',
+        evidenceDescription: 'some details here',
+        batIdentifier: 'JO12345',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(100))
       .then(() =>
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),

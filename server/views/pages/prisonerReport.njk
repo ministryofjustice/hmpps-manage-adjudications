@@ -24,7 +24,7 @@
       {{ reportNo }}</p>
     {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
   </div>
-  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, offences) }}
+  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, readOnlyDamagesEvidenceWitnesses, offences, damages, evidence, witnesses, true) }}
   {% if review %}
     {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}
   {% endif %}

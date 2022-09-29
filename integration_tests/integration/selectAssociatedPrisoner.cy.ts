@@ -29,17 +29,18 @@ context('Select an associated prisoner', () => {
     })
     it('should contain the required page elements', () => {
       cy.visit(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
-      const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
+      const selectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
 
-      SelectAssociatedPrisonerPage.searchTermInput().should('exist')
-      SelectAssociatedPrisonerPage.resultsTable().should('exist')
-      SelectAssociatedPrisonerPage.noResultsMessage().should('not.exist')
+      selectAssociatedPrisonerPage.searchTermInput().should('exist')
+      selectAssociatedPrisonerPage.resultsTable().should('exist')
+      selectAssociatedPrisonerPage.noResultsMessage().should('not.exist')
     })
     it('should contain the required page elements', () => {
       cy.visit(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
-      const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
+      const selectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
 
-      SelectAssociatedPrisonerPage.resultsTable()
+      selectAssociatedPrisonerPage
+        .resultsTable()
         .find('th')
         .then($headings => {
           expect($headings.get(1).innerText).to.contain('Name')
@@ -47,7 +48,8 @@ context('Select an associated prisoner', () => {
           expect($headings.get(3).innerText).to.contain('Location')
         })
 
-      SelectAssociatedPrisonerPage.resultsTable()
+      selectAssociatedPrisonerPage
+        .resultsTable()
         .find('td')
         .then($data => {
           expect($data.get(1).innerText).to.contain('Smith, James')
@@ -81,10 +83,11 @@ context('Select an associated prisoner', () => {
         ],
       })
       cy.visit(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
-      const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
-      SelectAssociatedPrisonerPage.searchTermInput().clear().type('Jones')
-      SelectAssociatedPrisonerPage.submitButton().click()
-      SelectAssociatedPrisonerPage.resultsTable()
+      const selectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
+      selectAssociatedPrisonerPage.searchTermInput().clear().type('Jones')
+      selectAssociatedPrisonerPage.submitButton().click()
+      selectAssociatedPrisonerPage
+        .resultsTable()
         .find('td')
         .then($data => {
           expect($data.get(1).innerText).to.contain('Jones, Cedric')
@@ -99,12 +102,12 @@ context('Select an associated prisoner', () => {
     })
     it('should show error message if nothing is entered into search box on submit', () => {
       cy.visit(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
-      const SelectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
-      SelectAssociatedPrisonerPage.searchTermInput().clear()
-      SelectAssociatedPrisonerPage.submitButton().click()
-      SelectAssociatedPrisonerPage.resultsTable().should('not.exist')
-      SelectAssociatedPrisonerPage.errorSummary().should('exist')
-      SelectAssociatedPrisonerPage.errorSummary().should('contain', 'Enter the prisoner’s name or number')
+      const selectAssociatedPrisonerPage: SelectAssociatedPrisoner = Page.verifyOnPage(SelectAssociatedPrisoner)
+      selectAssociatedPrisonerPage.searchTermInput().clear()
+      selectAssociatedPrisonerPage.submitButton().click()
+      selectAssociatedPrisonerPage.resultsTable().should('not.exist')
+      selectAssociatedPrisonerPage.errorSummary().should('exist')
+      selectAssociatedPrisonerPage.errorSummary().should('contain', 'Enter the prisoner’s name or number')
     })
   })
 })

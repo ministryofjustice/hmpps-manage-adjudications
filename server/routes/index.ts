@@ -108,6 +108,7 @@ export default function routes(
     detailsOfDamagesRoutes({
       placeOnReportService,
       damagesSessionService,
+      reportedAdjudicationsService,
     })
   )
   router.use(
@@ -115,6 +116,7 @@ export default function routes(
     detailsOfEvidenceRoutes({
       placeOnReportService,
       evidenceSessionService,
+      reportedAdjudicationsService,
     })
   )
   router.use(
@@ -124,6 +126,7 @@ export default function routes(
       witnessesSessionService,
       userService,
       decisionTreeService,
+      reportedAdjudicationsService,
     })
   )
   router.use('/', homepageRoutes({ userService }))

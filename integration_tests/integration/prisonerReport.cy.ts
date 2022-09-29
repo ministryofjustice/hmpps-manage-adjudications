@@ -1,6 +1,7 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import { DamageCode } from '../../server/data/DraftAdjudicationResult'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -11,7 +12,13 @@ const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: st
   }
 }
 
-const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number, id: number) => {
+const createDraftFromReportedAdjudicationResponse = (
+  adjudicationNumber: number,
+  id: number,
+  damages = [],
+  evidence = [],
+  witnesses = []
+) => {
   return {
     draftAdjudication: {
       id,
@@ -27,6 +34,9 @@ const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number,
         completed: true,
       },
       startedByUserId: 'USER1',
+      damages,
+      evidence,
+      witnesses,
     },
   }
 }
@@ -36,7 +46,10 @@ const reportedAdjudicationResponse = (
   status: string,
   reviewedByUserId = null,
   statusReason = null,
-  statusDetails = null
+  statusDetails = null,
+  damages = [],
+  evidence = [],
+  witnesses = []
 ) => {
   return {
     reportedAdjudication: {
@@ -59,11 +72,21 @@ const reportedAdjudicationResponse = (
       reviewedByUserId,
       statusReason,
       statusDetails,
+      damages,
+      evidence,
+      witnesses,
     },
   }
 }
 
-const draftAdjudicationResponse = (id: number, adjudicationNumber: number, isYouthOffender: boolean) => {
+const draftAdjudicationResponse = (
+  id: number,
+  adjudicationNumber: number,
+  isYouthOffender: boolean,
+  damages = [],
+  evidence = [],
+  witnesses = []
+) => {
   return {
     draftAdjudication: {
       id,
@@ -99,6 +122,9 @@ const draftAdjudicationResponse = (id: number, adjudicationNumber: number, isYou
           victimPrisonersNumber: 'G5512G',
         },
       ],
+      damages,
+      evidence,
+      witnesses,
     },
   }
 }
@@ -155,7 +181,13 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
-      response: reportedAdjudicationResponse(1524493, 'REJECTED', 'USER1', 'expired', 'Too long ago to report now.'),
+      response: reportedAdjudicationResponse(1524493, 'REJECTED', 'USER1', 'expired', 'Too long ago to report now.', [
+        {
+          code: DamageCode.CLEANING,
+          reporter: 'TESTER_GEN',
+          details: 'Some test info',
+        },
+      ]),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 23456,
@@ -208,30 +240,39 @@ context('Prisoner report - reporter view', () => {
     ].forEach(prisoner => {
       it('should contain the required page elements', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-        PrisonerReportPage.reviewSummaryTitle().should('exist')
-        PrisonerReportPage.incidentDetailsSummary().should('exist')
-        PrisonerReportPage.offenceDetailsSummary().should('exist')
-        PrisonerReportPage.incidentStatement().should('exist')
-        PrisonerReportPage.reportNumber().should('exist')
-        PrisonerReportPage.returnLink().should('exist')
-        if (prisoner.id === 12345) {
-          PrisonerReportPage.reviewSummary().should('not.exist')
+        prisonerReportPage.reviewSummaryTitle().should('exist')
+        prisonerReportPage.incidentDetailsSummary().should('exist')
+        prisonerReportPage.offenceDetailsSummary().should('exist')
+        prisonerReportPage.incidentStatement().should('exist')
+        prisonerReportPage.reportNumber().should('exist')
+        prisonerReportPage.returnLink().should('exist')
+        if (prisoner.id === 56789) {
+          prisonerReportPage.damageSummary().should('exist')
         } else {
-          PrisonerReportPage.reviewSummary().should('exist')
+          prisonerReportPage.damageSummary().should('not.exist')
+        }
+        prisonerReportPage.photoVideoEvidenceSummary().should('not.exist')
+        prisonerReportPage.baggedAndTaggedEvidenceSummary().should('not.exist')
+        prisonerReportPage.witnessesSummary().should('not.exist')
+        if (prisoner.id === 12345) {
+          prisonerReportPage.reviewSummary().should('not.exist')
+        } else {
+          prisonerReportPage.reviewSummary().should('exist')
         }
       })
       it('should contain the correct review summary details', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
         if (prisoner.id === 12345) {
-          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting Review')
-          PrisonerReportPage.reviewSummary().should('not.exist')
+          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting Review')
+          prisonerReportPage.reviewSummary().should('not.exist')
         } else {
-          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Rejected')
-          PrisonerReportPage.reviewSummary()
+          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Rejected')
+          prisonerReportPage
+            .reviewSummary()
             .find('dt')
             .then($summaryLabels => {
               expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
@@ -239,7 +280,8 @@ context('Prisoner report - reporter view', () => {
               expect($summaryLabels.get(2).innerText).to.contain('Details')
             })
 
-          PrisonerReportPage.reviewSummary()
+          prisonerReportPage
+            .reviewSummary()
             .find('dd')
             .then($summaryData => {
               expect($summaryData.get(0).innerText).to.contain('T. User')
@@ -250,9 +292,10 @@ context('Prisoner report - reporter view', () => {
       })
       it('should contain the correct incident details', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-        PrisonerReportPage.incidentDetailsSummary()
+        prisonerReportPage
+          .incidentDetailsSummary()
           .find('dt')
           .then($summaryLabels => {
             expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
@@ -261,7 +304,8 @@ context('Prisoner report - reporter view', () => {
             expect($summaryLabels.get(3).innerText).to.contain('Location')
           })
 
-        PrisonerReportPage.incidentDetailsSummary()
+        prisonerReportPage
+          .incidentDetailsSummary()
           .find('dd')
           .then($summaryData => {
             expect($summaryData.get(0).innerText).to.contain('T. User')
@@ -272,9 +316,10 @@ context('Prisoner report - reporter view', () => {
       })
       it('should contain the correct offence details', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-        PrisonerReportPage.offenceDetailsSummary()
+        prisonerReportPage
+          .offenceDetailsSummary()
           .find('dt')
           .then($summaryLabels => {
             expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
@@ -287,7 +332,8 @@ context('Prisoner report - reporter view', () => {
             expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
           })
 
-        PrisonerReportPage.offenceDetailsSummary()
+        prisonerReportPage
+          .offenceDetailsSummary()
           .find('dd')
           .then($summaryData => {
             if (prisoner.isYouthOffender) {
@@ -314,35 +360,47 @@ context('Prisoner report - reporter view', () => {
       })
       it('should contain the correct incident statement', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-        PrisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
+        prisonerReportPage.incidentStatement().should('contain.text', 'TESTING')
       })
       it('should contain the correct report number', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
         if (prisoner.id === 12345) {
-          PrisonerReportPage.reportNumber().should('contain.text', '12345')
+          prisonerReportPage.reportNumber().should('contain.text', '12345')
         } else {
-          PrisonerReportPage.reportNumber().should('contain.text', '56789')
+          prisonerReportPage.reportNumber().should('contain.text', '56789')
         }
       })
       it('should not contain the review panel', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-        PrisonerReportPage.reviewerPanel().should('not.exist')
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.reviewerPanel().should('not.exist')
+      })
+      it('should go to the damages page if the change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        if (prisoner.id === 56789) {
+          prisonerReportPage.damagesChangeLink().should('not.exist')
+        } else {
+          prisonerReportPage.damagesChangeLink().click()
+          cy.location().should(loc => {
+            expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEdit(12345))
+          })
+        }
       })
 
       it(`should  ${
         prisoner.readOnly ? 'not' : ''
       } go to the incident details page if the incident details change link is clicked`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
-          PrisonerReportPage.incidentDetailsChangeLink().should('not.exist')
+          prisonerReportPage.incidentDetailsChangeLink().should('not.exist')
         } else {
-          PrisonerReportPage.incidentDetailsChangeLink().click()
+          prisonerReportPage.incidentDetailsChangeLink().click()
           cy.location().should(loc => {
             expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 177))
           })
@@ -352,11 +410,11 @@ context('Prisoner report - reporter view', () => {
         prisoner.readOnly ? 'not' : ''
       } go to the correct page if the offence details change link is clicked`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
-          PrisonerReportPage.offenceDetailsChangeLink().should('not.exist')
+          prisonerReportPage.offenceDetailsChangeLink().should('not.exist')
         } else {
-          PrisonerReportPage.offenceDetailsChangeLink().click()
+          prisonerReportPage.offenceDetailsChangeLink().click()
           cy.location().should(loc => {
             expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(177))
           })
@@ -366,11 +424,11 @@ context('Prisoner report - reporter view', () => {
         prisoner.readOnly ? 'not' : ''
       }  go to the incident statement page if the incident statement change link is clicked`, () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         if (prisoner.readOnly) {
-          PrisonerReportPage.incidentStatementChangeLink().should('not.exist')
+          prisonerReportPage.incidentStatementChangeLink().should('not.exist')
         } else {
-          PrisonerReportPage.incidentStatementChangeLink().click()
+          prisonerReportPage.incidentStatementChangeLink().click()
           cy.location().should(loc => {
             expect(loc.pathname).to.eq(adjudicationUrls.incidentStatement.urls.submittedEdit(177))
           })
@@ -378,8 +436,8 @@ context('Prisoner report - reporter view', () => {
       })
       it('should go to /your-completed-reports if the return link is clicked', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-        PrisonerReportPage.returnLink().click()
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.returnLink().click()
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
         })
@@ -393,11 +451,12 @@ context('Prisoner report - reporter view', () => {
     ].forEach(prisoner => {
       it('should contain the correct review summary details', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
-        const PrisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
         if (prisoner.id === 23456) {
-          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Returned')
-          PrisonerReportPage.reviewSummary()
+          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Returned')
+          prisonerReportPage
+            .reviewSummary()
             .find('dt')
             .then($summaryLabels => {
               expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
@@ -405,7 +464,8 @@ context('Prisoner report - reporter view', () => {
               expect($summaryLabels.get(2).innerText).to.contain('Details')
             })
 
-          PrisonerReportPage.reviewSummary()
+          prisonerReportPage
+            .reviewSummary()
             .find('dd')
             .then($summaryData => {
               expect($summaryData.get(0).innerText).to.contain('T. User')
@@ -413,14 +473,16 @@ context('Prisoner report - reporter view', () => {
               expect($summaryData.get(2).innerText).to.contain('More detail please.')
             })
         } else {
-          PrisonerReportPage.reviewSummaryTitle().should('contain.text', 'Accepted')
-          PrisonerReportPage.reviewSummary()
+          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Accepted')
+          prisonerReportPage
+            .reviewSummary()
             .find('dt')
             .then($summaryLabels => {
               expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
             })
 
-          PrisonerReportPage.reviewSummary()
+          prisonerReportPage
+            .reviewSummary()
             .find('dd')
             .then($summaryData => {
               expect($summaryData.get(0).innerText).to.contain('T. User')

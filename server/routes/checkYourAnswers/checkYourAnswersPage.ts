@@ -5,9 +5,10 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { CheckYourAnswers, DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import { CheckYourAnswers, DraftAdjudication, EvidenceDetails } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { User } from '../../data/hmppsAuthClient'
+import { getEvidenceCategory } from '../../utils/utils'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -45,19 +46,34 @@ const getVariablesForPageType = (
       editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber),
       editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
       exitUrl: adjudicationUrls.prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
+      editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber),
+      editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
+      editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
     }
   }
   return {
     editIncidentDetailsURL: adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
     editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber),
     editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.start(adjudicationNumber),
+    editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber),
+    editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
+    editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
     exitUrl: adjudicationUrls.taskList.urls.start(adjudicationNumber),
+  }
+}
+
+const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
+  const photoVideo = getEvidenceCategory(evidence, false)
+  const baggedAndTagged = getEvidenceCategory(evidence, true)
+  return {
+    photoVideo,
+    baggedAndTagged,
   }
 }
 
 const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: number) => {
   if (pageOptions.isEditByReporter())
-    return adjudicationUrls.confirmedOnReport.urls.reporterView(completeAdjudicationNumber)
+    return adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(completeAdjudicationNumber)
   return adjudicationUrls.confirmedOnReport.urls.start(completeAdjudicationNumber)
 }
 
@@ -121,6 +137,8 @@ export default class CheckYourAnswersPage {
       getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, adjudicationNumber, incidentDetailsData),
     ])
 
+    const convertedEvidence = convertEvidenceToTableFormat(draftAdjudication.evidence)
+
     return res.render(`pages/checkYourAnswers`, {
       errors: error ? [error] : [],
       prisoner,
@@ -133,6 +151,9 @@ export default class CheckYourAnswersPage {
       secondaryButtonText: this.pageOptions.isCreation() ? 'Exit' : 'Cancel',
       ...checkAnswersVariations,
       reviewData,
+      damages: draftAdjudication.damages,
+      evidence: convertedEvidence,
+      witnesses: draftAdjudication.witnesses,
     })
   }
 

@@ -36,7 +36,7 @@
 			{{ adjudicationReviewStatusSummary(reviewData.reviewStatus, reviewData.reviewSummary) }}
 		{% endif %}
 
-		{{ adjudicationSummary(editIncidentDetailsURL, editOffenceDetailsURL, editIncidentStatementURL, incidentDetailsData, false, offences) }}
+		{{ adjudicationSummary(editIncidentDetailsURL, editOffenceDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, editIncidentStatementURL, incidentDetailsData, false, false, offences, damages, evidence, witnesses, true) }}
 
 		{% if creationJourney %}
 		<h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>
