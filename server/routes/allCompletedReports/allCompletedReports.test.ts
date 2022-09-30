@@ -44,7 +44,7 @@ beforeEach(() => {
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      statusDisplayName: 'Awaiting Review',
+      statusDisplayName: 'Awaiting review',
       isYouthOffender: false,
     },
     {
@@ -115,7 +115,7 @@ describe('GET /all-completed-reports', () => {
         expect(response.text).toContain('G6123VU')
         expect(response.text).toContain('15 November 2021 - 11:45')
         expect(response.text).toContain('Seamus Parkinson')
-        expect(response.text).toContain('Awaiting Review')
+        expect(response.text).toContain('Awaiting review')
         expect(response.text).toContain('Moriarty, James')
         expect(response.text).toContain('G6174VU')
         expect(response.text).toContain('15 November 2021 - 11:30')

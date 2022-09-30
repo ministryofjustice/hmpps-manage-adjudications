@@ -80,7 +80,7 @@ context('All Completed Reports', () => {
         expect($data.get(1).innerText).to.contain('A1234AA')
         expect($data.get(2).innerText).to.contain('15 November 2021 - 11:30')
         expect($data.get(3).innerText).to.contain('Test User')
-        expect($data.get(4).innerText).to.contain('Awaiting Review')
+        expect($data.get(4).innerText).to.contain('Awaiting review')
         expect($data.get(5).innerText).to.contain('View report')
       })
   })

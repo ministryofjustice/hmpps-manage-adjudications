@@ -286,7 +286,7 @@ context('Check Your Answers', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       checkYourAnswersPage.reviewStatus().should('exist')
-      checkYourAnswersPage.reviewStatus().should('contain.text', 'Status: Awaiting Review')
+      checkYourAnswersPage.reviewStatus().should('contain.text', 'Status: Awaiting review')
       checkYourAnswersPage.reviewSummary().should('not.exist')
     })
     it('should show the correct prison rule', () => {

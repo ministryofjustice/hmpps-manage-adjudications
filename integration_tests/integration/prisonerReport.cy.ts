@@ -267,7 +267,7 @@ context('Prisoner report - reporter view', () => {
         const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
         if (prisoner.id === 12345) {
-          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting Review')
+          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting review')
           prisonerReportPage.reviewSummary().should('not.exist')
         } else {
           prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Rejected')
