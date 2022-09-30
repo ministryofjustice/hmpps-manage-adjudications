@@ -53,7 +53,7 @@ describe('GET /your-completed-reports', () => {
             incidentRole: {},
             offenceDetails: [{ offenceCode: 1001 }],
             status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-            statusDisplayName: 'Awaiting Review',
+            statusDisplayName: 'Awaiting review',
             isYouthOffender: false,
           },
           {
@@ -94,7 +94,7 @@ describe('GET /your-completed-reports', () => {
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('G6123VU')
           expect(res.text).toContain('15 November 2021 - 11:45')
-          expect(res.text).toContain('Awaiting Review')
+          expect(res.text).toContain('Awaiting review')
           expect(res.text).toContain('Moriarty, James')
           expect(res.text).toContain('G6174VU')
           expect(res.text).toContain('15 November 2021 - 11:30')

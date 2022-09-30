@@ -305,7 +305,7 @@ context('Prisoner report - reviewer view', () => {
   it('should contain the correct review summary - awaiting review', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting Review')
+    prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Awaiting review')
 
     prisonerReportPage.reviewSummary().should('not.exist')
   })

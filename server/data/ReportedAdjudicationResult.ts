@@ -66,7 +66,7 @@ export enum ReportedAdjudicationStatus {
 export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicationStatus) {
   switch (status) {
     case ReportedAdjudicationStatus.AWAITING_REVIEW:
-      return 'Awaiting Review'
+      return 'Awaiting review'
     case ReportedAdjudicationStatus.RETURNED:
       return 'Returned'
     case ReportedAdjudicationStatus.REJECTED:

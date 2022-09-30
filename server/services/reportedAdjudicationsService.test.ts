@@ -174,7 +174,7 @@ describe('reportedAdjudicationsService', () => {
             statement: 'My second incident',
           },
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting Review',
+          statusDisplayName: 'Awaiting review',
         },
         {
           displayName: 'Moriarty, James',
@@ -195,7 +195,7 @@ describe('reportedAdjudicationsService', () => {
             statement: 'My first incident',
           },
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting Review',
+          statusDisplayName: 'Awaiting review',
         },
       ]
 
@@ -426,7 +426,7 @@ describe('reportedAdjudicationsService', () => {
             statement: 'Something happened',
           },
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting Review',
+          statusDisplayName: 'Awaiting review',
         },
 
         {
@@ -448,7 +448,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-30T14:00:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:00',
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting Review',
+          statusDisplayName: 'Awaiting review',
         },
       ]
 
@@ -617,7 +617,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the correct information for an adjudication awaiting review', async () => {
       const result = await service.getReviewDetails(adjudicationData(ReportedAdjudicationStatus.AWAITING_REVIEW), user)
       const expectedResult = {
-        reviewStatus: 'Awaiting Review',
+        reviewStatus: 'Awaiting review',
       }
       expect(result).toEqual(expectedResult)
     })
