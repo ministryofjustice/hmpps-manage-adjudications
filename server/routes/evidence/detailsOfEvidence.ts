@@ -8,6 +8,7 @@ import { getEvidenceCategory } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { User } from '../../data/hmppsAuthClient'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+import DamagesEvidenceWitnessHelper from '../../utils/damagesEvidenceWitnessesHelper'
 
 export enum PageRequestType {
   EVIDENCE_FROM_API,
@@ -16,8 +17,10 @@ export enum PageRequestType {
   SUBMITTED_EDIT_EVIDENCE_FROM_SESSION,
 }
 
-class PageOptions {
-  constructor(private readonly pageType: PageRequestType) {}
+class PageOptions extends DamagesEvidenceWitnessHelper {
+  constructor(private readonly pageType: PageRequestType) {
+    super()
+  }
 
   displayAPIData(): boolean {
     return this.pageType === PageRequestType.EVIDENCE_FROM_API
@@ -53,7 +56,7 @@ export default class DetailsOfEvidencePage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const evidenceIndexToDelete = Number(req.query.delete) || null
     const evidenceTypeToDelete = (req.query.type as string) || null
-    const isSubmittedEdit = this.pageOptions.displayAPIDataSubmitted() || this.pageOptions.displaySessionDataSubmitted()
+    const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
     const exitButtonHref = this.getExitUrl(req, adjudicationNumber, isSubmittedEdit)
 
     const addEvidenceUrl = isSubmittedEdit
@@ -70,7 +73,7 @@ export default class DetailsOfEvidencePage {
     const allEvidence = [...evidence.photoVideo, ...evidence.baggedAndTagged]
 
     // If we are not displaying session data then fill in the session data
-    if (!this.pageOptions.displaySessionData()) {
+    if (this.pageOptions.isShowingAPIData()) {
       // Set up session to allow for adding and deleting
       this.evidenceSessionService.setAllSessionEvidence(req, evidence, adjudicationNumber)
     }
@@ -107,8 +110,7 @@ export default class DetailsOfEvidencePage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const isSubmittedEdit = this.pageOptions.displaySessionDataSubmitted() || this.pageOptions.displayAPIDataSubmitted()
-
+    const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
     const draftAdjudicationResult = !isSubmittedEdit
       ? await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
       : null
@@ -116,10 +118,7 @@ export default class DetailsOfEvidencePage {
     const referrer = this.evidenceSessionService.getAndDeleteReferrerOnSession(req)
 
     // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
-    if (
-      (this.pageOptions.displayAPIData() && draftAdjudicationResult.draftAdjudication.evidenceSaved) ||
-      this.pageOptions.displayAPIDataSubmitted()
-    ) {
+    if (this.pageOptions.isShowingAPIDataAndPageVisited(draftAdjudicationResult?.draftAdjudication.evidenceSaved)) {
       this.evidenceSessionService.deleteReferrerOnSession(req)
       this.evidenceSessionService.deleteAllSessionEvidence(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
@@ -139,7 +138,7 @@ export default class DetailsOfEvidencePage {
   }
 
   getEvidence = (req: Request, adjudicationNumber: number, adjudication: DraftAdjudication | ReportedAdjudication) => {
-    if (this.pageOptions.displaySessionData() || this.pageOptions.displaySessionDataSubmitted()) {
+    if (this.pageOptions.isShowingSessionData()) {
       return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
     }
 
