@@ -17,7 +17,8 @@
                 text: data.code | damageCode if dataType == "damages" else data.lastName | witnessName(data.firstName)
             }, 
             {
-                text: data.details if dataType == "damages" else data.code | witnessCode
+                text: data.details if dataType == "damages" else data.code | witnessCode,
+                classes: "word-break"
             },
             {
                 html: removeColumnValue,
