@@ -7,6 +7,7 @@ import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { User } from '../../data/hmppsAuthClient'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+import DamagesEvidenceWitnessHelper from '../../utils/damagesEvidenceWitnessesHelper'
 
 export enum PageRequestType {
   WITNESSES_FROM_API,
@@ -15,8 +16,10 @@ export enum PageRequestType {
   SUBMITTED_EDIT_WITNESSES_FROM_SESSION,
 }
 
-class PageOptions {
-  constructor(private readonly pageType: PageRequestType) {}
+class PageOptions extends DamagesEvidenceWitnessHelper {
+  constructor(private readonly pageType: PageRequestType) {
+    super()
+  }
 
   displayAPIData(): boolean {
     return this.pageType === PageRequestType.WITNESSES_FROM_API
@@ -51,7 +54,7 @@ export default class DetailsOfWitnessesPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const witnessToDelete = Number(req.query.delete) || null
-    const isSubmittedEdit = this.pageOptions.displayAPIDataSubmitted() || this.pageOptions.displaySessionDataSubmitted()
+    const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
     const exitButtonHref = this.getExitUrl(req, adjudicationNumber, isSubmittedEdit)
     const addWitnessUrl = isSubmittedEdit
       ? `${adjudicationUrls.detailsOfWitnesses.urls.add(adjudicationNumber)}?submitted=true`
@@ -64,7 +67,7 @@ export default class DetailsOfWitnessesPage {
     const witnesses = this.getWitnesses(req, adjudicationNumber, adjudication)
 
     // If we are not displaying session data then fill in the session data
-    if (this.pageOptions.displayAPIData() || this.pageOptions.displayAPIDataSubmitted()) {
+    if (this.pageOptions.isShowingAPIData()) {
       // Set up session to allow for adding and deleting
       this.witnessesSessionService.setAllSessionWitnesses(req, witnesses, adjudicationNumber)
     }
@@ -95,17 +98,14 @@ export default class DetailsOfWitnessesPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const isSubmittedEdit = this.pageOptions.displaySessionDataSubmitted() || this.pageOptions.displayAPIDataSubmitted()
+    const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
     const draftAdjudicationResult = !isSubmittedEdit
       ? await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
       : null
     const referrer = this.witnessesSessionService.getAndDeleteReferrerOnSession(req)
 
     // If displaying data on draft, nothing has changed so no save needed  - unless it's the first time viewing the page, when we need to record that the page visit
-    if (
-      (this.pageOptions.displayAPIData() && draftAdjudicationResult.draftAdjudication.witnessesSaved) ||
-      this.pageOptions.displayAPIDataSubmitted()
-    ) {
+    if (this.pageOptions.isShowingAPIDataAndPageVisited(draftAdjudicationResult?.draftAdjudication.witnessesSaved)) {
       this.witnessesSessionService.deleteSubmittedEditFlagOnSession(req)
       this.witnessesSessionService.deleteAllSessionWitnesses(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
@@ -139,7 +139,7 @@ export default class DetailsOfWitnessesPage {
   }
 
   getWitnesses = (req: Request, adjudicationNumber: number, adjudication: DraftAdjudication | ReportedAdjudication) => {
-    if (this.pageOptions.displaySessionData() || this.pageOptions.displaySessionDataSubmitted()) {
+    if (this.pageOptions.isShowingSessionData()) {
       return this.witnessesSessionService.getAllSessionWitnesses(req, adjudicationNumber)
     }
 
