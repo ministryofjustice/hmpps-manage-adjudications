@@ -74,7 +74,7 @@ export default class confirmedOnReportPage {
     if (this.pageOptions.isReportChangeBeforeReview()) {
       return `${possessive(prisonerFirstAndLastName)} report has been changed. It will now be reviewed.`
     }
-    return `${possessive(prisonerFirstAndLastName)} report has been changed.`
+    return `${possessive(prisonerFirstAndLastName)} report has been changed`
   }
 
   getPageTitle = () => {
