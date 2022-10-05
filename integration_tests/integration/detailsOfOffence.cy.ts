@@ -245,34 +245,35 @@ context('Details of offence', () => {
     detailsOfOffencePage.deleteLink(1).should('exist')
   })
 
-  it('select multiple offences and see them all', () => {
-    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
-    const whatTypeOfOffencePage = new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-    )
-    whatTypeOfOffencePage.radio('1-1').check()
-    whatTypeOfOffencePage.continue().click()
-    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
-    whatDidTheIncidentInvolve.radio('1-1-2').check()
-    whatDidTheIncidentInvolve.continue().click()
-    // We should now be on the offence details page
-    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    // Add another offence
-    detailsOfOffencePage.addAnotherOffence().click()
-    const whatTypeOfOffencePage2 = new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-    )
-    whatTypeOfOffencePage2.radio('1-1').check()
-    whatTypeOfOffencePage2.continue().click()
-    const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What did the incident involve?')
-    whatDidTheIncidentInvolve2.radio('1-1-3').check()
-    whatDidTheIncidentInvolve2.continue().click()
-    // We should be on the offence details page again. There should be two offences.
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
-    detailsOfOffencePage
-      .questionAnswerSectionAnswer(2, 2)
-      .contains('Endangering the health or personal safety of someone')
-  })
+  // We are temporarily removing the ability for a user to add multiple offences
+  // it('select multiple offences and see them all', () => {
+  //   cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
+  //   const whatTypeOfOffencePage = new OffenceCodeSelection(
+  //     'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+  //   )
+  //   whatTypeOfOffencePage.radio('1-1').check()
+  //   whatTypeOfOffencePage.continue().click()
+  //   const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
+  //   whatDidTheIncidentInvolve.radio('1-1-2').check()
+  //   whatDidTheIncidentInvolve.continue().click()
+  //   // We should now be on the offence details page
+  //   const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+  //   // Add another offence
+  //   detailsOfOffencePage.addAnotherOffence().click()
+  //   const whatTypeOfOffencePage2 = new OffenceCodeSelection(
+  //     'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+  //   )
+  //   whatTypeOfOffencePage2.radio('1-1').check()
+  //   whatTypeOfOffencePage2.continue().click()
+  //   const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What did the incident involve?')
+  //   whatDidTheIncidentInvolve2.radio('1-1-3').check()
+  //   whatDidTheIncidentInvolve2.continue().click()
+  //   // We should be on the offence details page again. There should be two offences.
+  //   detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
+  //   detailsOfOffencePage
+  //     .questionAnswerSectionAnswer(2, 2)
+  //     .contains('Endangering the health or personal safety of someone')
+  // })
 
   it('offence details page when there is already an offence saved', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
