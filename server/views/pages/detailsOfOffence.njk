@@ -69,8 +69,8 @@
                     {% endfor %}
                 </div>
             </div>
-            <p class="govuk-body"><a href="{{ adjudicationUrls.offenceCodeSelection.urls.start(adjudicationNumber,incidentRole) }}"
-                                     data-qa="add-another-offence">Add another offence</a></p>
+            {# We are temporarily removing the ability for a user to add multiple offences #}
+            {# <p class="govuk-body"><a href="{{ adjudicationUrls.offenceCodeSelection.urls.start(adjudicationNumber,incidentRole) }}" data-qa="add-another-offence">Add another offence</a></p> #}
             {{ govukButton({
                 text: "Save and continue",
                 type: "submit",
