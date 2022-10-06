@@ -8,6 +8,7 @@ import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../@types/template'
 import { getEvidenceCategory } from '../../utils/utils'
 import { EvidenceDetails } from '../../data/DraftAdjudicationResult'
+import { uiFilterFromRequest } from '../../utils/adjudicationFilterHelper'
 
 type PageData = {
   errors?: FormError[]
@@ -154,6 +155,10 @@ export default class prisonerReportRoutes {
       this.pageOptions.isReviewerView() &&
       ['AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
 
+    // if review is true, then put query on session so it can be used when coming back from the confirmation page after changes have been made to D/E/W. Need to put it in exit buttons too? Delete it from the session when the reviewer submits review?
+    const uiFilter = uiFilterFromRequest(req)
+    const query = new URLSearchParams([...Object.entries(uiFilter)]).toString()
+
     return res.render(`pages/prisonerReport`, {
       pageData,
       prisoner,
@@ -208,6 +213,7 @@ export default class prisonerReportRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
+    const uiFilter = uiFilterFromRequest(req)
 
     const status = this.reviewStatus(req.body.currentStatusSelected)
     const reason = this.reason(status, req)
@@ -217,7 +223,9 @@ export default class prisonerReportRoutes {
     if (errors) return this.renderView(req, res, { errors, status, reason, details })
 
     await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
-    return res.redirect(adjudicationUrls.allCompletedReports.root)
+    // go to filter url instead here - use adjudicationFilterHelper to get filter from URL (pass this over in link from all complete reports?)
+    // return res.redirect(adjudicationUrls.allCompletedReports.root)
+    return res.redirect(adjudicationUrls.allCompletedReports.urls.filter(uiFilter))
   }
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {})

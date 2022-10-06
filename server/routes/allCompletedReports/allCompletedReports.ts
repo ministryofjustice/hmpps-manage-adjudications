@@ -28,10 +28,12 @@ export default class AllCompletedReportsRoutes {
     filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
-  ): Promise<void> =>
+  ): Promise<void> => {
+    const queryString = this.constructQueryForReferrer(filter)
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
       filter,
+      queryString,
       statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
@@ -39,6 +41,7 @@ export default class AllCompletedReportsRoutes {
       ),
       errors,
     })
+  }
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
@@ -70,5 +73,9 @@ export default class AllCompletedReportsRoutes {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
     return thenCall()
+  }
+
+  constructQueryForReferrer = (filter: UiFilter) => {
+    return new URLSearchParams([...Object.entries(filter)]).toString()
   }
 }
