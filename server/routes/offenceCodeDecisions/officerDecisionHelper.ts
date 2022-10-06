@@ -16,14 +16,20 @@ enum ErrorType {
   OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT = 'OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT',
   OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH = 'OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH',
   OFFICER_MISSING_LAST_NAME_INPUT_SEARCH = 'OFFICER_MISSING_LAST_NAME_INPUT_SEARCH',
+  OFFICER_MISSING_ID_SUBMIT = 'OFFICER_MISSING_ID_SUBMIT',
 }
 const error: { [key in ErrorType]: FormError } = {
+  // We have separated out the submit and search validation messages here
   OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT: {
     href: '#officerSearchFirstNameInput',
-    text: 'Search for a prison officer',
+    text: 'Enter the person’s first name',
   },
   OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT: {
     href: '#officerSearchLastNameInput',
+    text: 'Enter the person’s last name',
+  },
+  OFFICER_MISSING_ID_SUBMIT: {
+    href: '#selectedAnswerId',
     text: 'Search for a prison officer',
   },
   OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH: {
@@ -79,17 +85,22 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     const officerData = form.selectedAnswerData as OfficerData
     const searching = !!req.body.searchUser
     if (searching) {
-      const errors = []
+      const searchingErrors = []
       if (!officerData.officerSearchFirstNameInput) {
-        errors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH)
+        searchingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH)
       }
       if (!officerData.officerSearchLastNameInput) {
-        errors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SEARCH)
+        searchingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SEARCH)
       }
-      return errors
+      return searchingErrors
     }
     if (!officerData.officerId && !searching) {
-      return [error.OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT, error.OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT]
+      const submittingErrors = []
+      if (!officerData.officerSearchFirstNameInput) submittingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT)
+      if (!officerData.officerSearchLastNameInput) submittingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT)
+      if (officerData.officerSearchFirstNameInput && officerData.officerSearchLastNameInput)
+        submittingErrors.push(error.OFFICER_MISSING_ID_SUBMIT)
+      return submittingErrors
     }
     return []
   }

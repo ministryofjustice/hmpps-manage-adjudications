@@ -16,16 +16,22 @@ enum ErrorType {
   STAFF_MISSING_LAST_NAME_INPUT_SUBMIT = 'STAFF_MISSING_LAST_NAME_INPUT_SUBMIT',
   STAFF_MISSING_FIRST_NAME_INPUT_SEARCH = 'STAFF_MISSING_FIRST_NAME_INPUT_SEARCH',
   STAFF_MISSING_LAST_NAME_INPUT_SEARCH = 'STAFF_MISSING_LAST_NAME_INPUT_SEARCH',
+  STAFF_MISSING_ID_SUBMIT = 'STAFF_MISSING_ID_SUBMIT',
 }
 
 const error: { [key in ErrorType]: FormError } = {
+  // We have separated out the submit and search validation messages here
+  STAFF_MISSING_ID_SUBMIT: {
+    href: '#selectedAnswerId',
+    text: 'Search for a member of staff',
+  },
   STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT: {
     href: '#staffSearchFirstNameInput',
-    text: 'Search for a member of staff',
+    text: 'Enter the person’s first name',
   },
   STAFF_MISSING_LAST_NAME_INPUT_SUBMIT: {
     href: '#staffSearchLastNameInput',
-    text: 'Search for a member of staff',
+    text: 'Enter the person’s last name',
   },
   STAFF_MISSING_FIRST_NAME_INPUT_SEARCH: {
     href: '#staffSearchFirstNameInput',
@@ -80,17 +86,22 @@ export default class StaffDecisionHelper extends DecisionHelper {
     const staffData = form.selectedAnswerData as StaffData
     const searching = !!req.body.searchUser
     if (searching) {
-      const errors = []
+      const searchingErrors = []
       if (!staffData.staffSearchFirstNameInput) {
-        errors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SEARCH)
+        searchingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SEARCH)
       }
       if (!staffData.staffSearchLastNameInput) {
-        errors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SEARCH)
+        searchingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SEARCH)
       }
-      return errors
+      return searchingErrors
     }
     if (!staffData.staffId && !searching) {
-      return [error.STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT, error.STAFF_MISSING_LAST_NAME_INPUT_SUBMIT]
+      const submittingErrors = []
+      if (!staffData.staffSearchFirstNameInput) submittingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT)
+      if (!staffData.staffSearchLastNameInput) submittingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SUBMIT)
+      if (staffData.staffSearchFirstNameInput && staffData.staffSearchLastNameInput)
+        submittingErrors.push(error.STAFF_MISSING_ID_SUBMIT)
+      return submittingErrors
     }
     return []
   }

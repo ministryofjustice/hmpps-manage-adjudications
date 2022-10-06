@@ -243,7 +243,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         selectedAnswerId: aPrisonOfficerAnswer.id(),
       })
       .expect(res => {
-        expect(res.text).toContain('Search for a prison officer')
+        expect(res.text).toContain('Enter the person’s first name')
       })
   })
 
@@ -267,7 +267,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         selectedAnswerId: aMemberOfStaffAnswer.id(),
       })
       .expect(res => {
-        expect(res.text).toContain('Search for a member of staff')
+        expect(res.text).toContain('Enter the person’s first name')
       })
   })
 

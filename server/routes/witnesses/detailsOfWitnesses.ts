@@ -76,6 +76,9 @@ export default class DetailsOfWitnessesPage {
       this.witnessesSessionService.deleteSessionWitness(req, witnessToDelete, adjudicationNumber)
     }
 
+    // If the user cancelled out of adding a new witness, we need to make sure the session is cleared
+    this.witnessesSessionService.deleteSubmittedEditFlagOnSession(req)
+
     if (!witnesses || witnesses.length < 1) {
       return res.render(`pages/detailsOfWitnesses`, {
         prisoner,
@@ -106,7 +109,6 @@ export default class DetailsOfWitnessesPage {
 
     // If displaying data on draft, nothing has changed so no save needed  - unless it's the first time viewing the page, when we need to record that the page visit
     if (this.pageOptions.isShowingAPIDataAndPageVisited(draftAdjudicationResult?.draftAdjudication.witnessesSaved)) {
-      this.witnessesSessionService.deleteSubmittedEditFlagOnSession(req)
       this.witnessesSessionService.deleteAllSessionWitnesses(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
     }
