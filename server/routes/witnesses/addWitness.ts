@@ -31,7 +31,7 @@ enum ErrorType {
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {
     href: '#selectedAnswerId',
-    text: 'Select an option',
+    text: 'Select the type of witness',
   },
 }
 
@@ -132,6 +132,7 @@ export default class AddWitnessRoutes {
       this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
       adjudicationNumber
     )
+    this.witnessesSessionService.deleteSubmittedEditFlagOnSession(req)
     return res.redirect(redirectUrl)
   }
 
