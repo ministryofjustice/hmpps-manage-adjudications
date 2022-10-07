@@ -1,6 +1,6 @@
 // All functionality that knows about the prison decision.
 import { Request } from 'express'
-import { DecisionForm, StaffData } from './decisionForm'
+import { DecisionForm, OfficerData, StaffData } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
 import DecisionHelper from './decisionHelper'
 import { FormError } from '../../@types/template'
@@ -86,24 +86,37 @@ export default class StaffDecisionHelper extends DecisionHelper {
     const staffData = form.selectedAnswerData as StaffData
     const searching = !!req.body.searchUser
     if (searching) {
-      const searchingErrors = []
-      if (!staffData.staffSearchFirstNameInput) {
-        searchingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SEARCH)
-      }
-      if (!staffData.staffSearchLastNameInput) {
-        searchingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SEARCH)
-      }
-      return searchingErrors
+      return this.validateSearch(staffData)
     }
     if (!staffData.staffId && !searching) {
-      const submittingErrors = []
-      if (!staffData.staffSearchFirstNameInput) submittingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT)
-      if (!staffData.staffSearchLastNameInput) submittingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SUBMIT)
-      if (staffData.staffSearchFirstNameInput && staffData.staffSearchLastNameInput)
-        submittingErrors.push(error.STAFF_MISSING_ID_SUBMIT)
-      return submittingErrors
+      return this.validateSubmission(staffData)
     }
     return []
+  }
+
+  validateSearch = (staffData: StaffData) => {
+    const searchingErrors = []
+    if (!staffData.staffSearchFirstNameInput) {
+      searchingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SEARCH)
+    }
+    if (!staffData.staffSearchLastNameInput) {
+      searchingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SEARCH)
+    }
+    return searchingErrors
+  }
+
+  validateSubmission = (staffData: StaffData) => {
+    const submittingErrors = []
+    if (!staffData.staffSearchFirstNameInput) {
+      submittingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT)
+    }
+    if (!staffData.staffSearchLastNameInput) {
+      submittingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SUBMIT)
+    }
+    if (staffData.staffSearchFirstNameInput && staffData.staffSearchLastNameInput) {
+      submittingErrors.push(error.STAFF_MISSING_ID_SUBMIT)
+    }
+    return submittingErrors
   }
 
   override async viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {

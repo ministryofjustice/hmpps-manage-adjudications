@@ -20,6 +20,10 @@ enum ErrorType {
 }
 const error: { [key in ErrorType]: FormError } = {
   // We have separated out the submit and search validation messages here
+  OFFICER_MISSING_ID_SUBMIT: {
+    href: '#selectedAnswerId',
+    text: 'Search for a prison officer',
+  },
   OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT: {
     href: '#officerSearchFirstNameInput',
     text: 'Enter the person’s first name',
@@ -27,10 +31,6 @@ const error: { [key in ErrorType]: FormError } = {
   OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT: {
     href: '#officerSearchLastNameInput',
     text: 'Enter the person’s last name',
-  },
-  OFFICER_MISSING_ID_SUBMIT: {
-    href: '#selectedAnswerId',
-    text: 'Search for a prison officer',
   },
   OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH: {
     href: '#officerSearchFirstNameInput',
@@ -85,24 +85,37 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     const officerData = form.selectedAnswerData as OfficerData
     const searching = !!req.body.searchUser
     if (searching) {
-      const searchingErrors = []
-      if (!officerData.officerSearchFirstNameInput) {
-        searchingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH)
-      }
-      if (!officerData.officerSearchLastNameInput) {
-        searchingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SEARCH)
-      }
-      return searchingErrors
+      return this.validateSearch(officerData)
     }
     if (!officerData.officerId && !searching) {
-      const submittingErrors = []
-      if (!officerData.officerSearchFirstNameInput) submittingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT)
-      if (!officerData.officerSearchLastNameInput) submittingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT)
-      if (officerData.officerSearchFirstNameInput && officerData.officerSearchLastNameInput)
-        submittingErrors.push(error.OFFICER_MISSING_ID_SUBMIT)
-      return submittingErrors
+      return this.validateSubmission(officerData)
     }
     return []
+  }
+
+  validateSearch = (officerData: OfficerData) => {
+    const searchingErrors = []
+    if (!officerData.officerSearchFirstNameInput) {
+      searchingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH)
+    }
+    if (!officerData.officerSearchLastNameInput) {
+      searchingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SEARCH)
+    }
+    return searchingErrors
+  }
+
+  validateSubmission = (officerData: OfficerData) => {
+    const submittingErrors = []
+    if (!officerData.officerSearchFirstNameInput) {
+      submittingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT)
+    }
+    if (!officerData.officerSearchLastNameInput) {
+      submittingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT)
+    }
+    if (officerData.officerSearchFirstNameInput && officerData.officerSearchLastNameInput) {
+      submittingErrors.push(error.OFFICER_MISSING_ID_SUBMIT)
+    }
+    return submittingErrors
   }
 
   override async viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
