@@ -25,6 +25,7 @@ import detailsOfDamagesRoutes from './damages'
 import detailsOfEvidenceRoutes from './evidence'
 import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
+import hearingDetailsRoutes from './hearingDetails'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -139,6 +140,8 @@ export default function routes(
     adjudicationUrls.incidentAssociate.root,
     associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
   )
+
+  router.use(adjudicationUrls.hearingDetails.root, hearingDetailsRoutes({ reportedAdjudicationsService }))
 
   return router
 }

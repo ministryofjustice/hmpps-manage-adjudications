@@ -1,0 +1,25 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
+{% block pageTitle %}
+  Hearing details
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+  <h1 class="govuk-heading-l">Adjudication for report {{ reportNo }}</h1>
+  <h2 class="govuk-heading-m">Status: {{ reviewStatus }}</h2>
+  <div class="prisonerPlaybackSection">
+    {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+  </div>
+
+  {% if not schedulingAvailable %}
+    <div class="govuk-!-margin-top-5">
+        <p class="govuk-body">There are no hearings to schedule at the moment.</p>
+        <p class="govuk-body">You can only schedule a hearing for reports that have been reviewed and accepted.</p>
+    </div>
+  {% endif %}
+
+{% endblock %}
