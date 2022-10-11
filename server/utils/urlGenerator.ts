@@ -262,16 +262,10 @@ const adjudicationUrls = {
     matchers: {
       report: '/:adjudicationNumber/report',
       review: '/:adjudicationNumber/review',
-      reportNew: '/:adjudicationNumber/report/new',
-      reviewNew: '/:adjudicationNumber/review/new',
     },
     urls: {
       report: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/report`,
       review: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review`,
-      reportNew: (adjudicationNumber: number) =>
-        `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/report/new`,
-      reviewNew: (adjudicationNumber: number) =>
-        `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review/new`,
     },
   },
   deletePerson: {
