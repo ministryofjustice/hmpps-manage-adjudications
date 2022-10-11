@@ -305,6 +305,19 @@ const adjudicationUrls = {
       start: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}`,
     },
   },
+  adjudicationReport: {
+    root: '/adjudication-report',
+    matchers: {
+      report: '/:adjudicationNumber/report',
+      review: '/:adjudicationNumber/review',
+    },
+    urls: {
+      report: (adjudicationNumber: number) =>
+        `${adjudicationUrls.adjudicationReport.root}/${adjudicationNumber}/report`,
+      review: (adjudicationNumber: number) =>
+        `${adjudicationUrls.adjudicationReport.root}/${adjudicationNumber}/review`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

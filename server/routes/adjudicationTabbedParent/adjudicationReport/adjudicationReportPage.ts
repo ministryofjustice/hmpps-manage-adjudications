@@ -4,7 +4,7 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import LocationService from '../../../services/locationService'
 import DecisionTreeService from '../../../services/decisionTreeService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
+import validateForm, { ReviewStatus } from './adjudicationReportReviewValidation'
 import { FormError } from '../../../@types/template'
 import { getEvidenceCategory } from '../../../utils/utils'
 import { EvidenceDetails } from '../../../data/DraftAdjudicationResult'
@@ -66,6 +66,7 @@ const getVariablesForPageType = (
       editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
         adjudicationNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      reportHref: adjudicationUrls.adjudicationReport.urls.review(adjudicationNumber), // TODO probably needs referrer?
     }
   }
   return {
@@ -88,10 +89,11 @@ const getVariablesForPageType = (
     editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
       adjudicationNumber
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+    reportHref: adjudicationUrls.adjudicationReport.urls.report(adjudicationNumber), // TODO probably needs referrer?
   }
 }
 
-export default class prisonerReportRoutes {
+export default class adjudicationReportRoutes {
   pageOptions: PageOptions
 
   constructor(
@@ -154,7 +156,7 @@ export default class prisonerReportRoutes {
       this.pageOptions.isReviewerView() &&
       ['AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
 
-    return res.render(`pages/adjudicationTabbedParent/prisonerReport`, {
+    return res.render(`pages/adjudicationTabbedParent/adjudicationReport`, {
       pageData,
       prisoner,
       prisonerReportData,
@@ -169,9 +171,6 @@ export default class prisonerReportRoutes {
       damages: reportedAdjudication.reportedAdjudication.damages,
       evidence: convertedEvidence,
       witnesses: reportedAdjudication.reportedAdjudication.witnesses,
-      reportHref: adjudicationUrls.prisonerReport.urls.reviewNew(
-        reportedAdjudication.reportedAdjudication.adjudicationNumber
-      ), // or this could be the reported version??
       hearingsHref: adjudicationUrls.hearingDetails.urls.start(
         reportedAdjudication.reportedAdjudication.adjudicationNumber
       ),

@@ -3,13 +3,13 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
 import DecisionTreeService from '../../../services/decisionTreeService'
-import PrisonerReportPage, { PageRequestType } from './prisonerReportPage'
+import AdjudicationReportPage, { PageRequestType } from './adjudicationReportPage'
 
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
-export default class prisonerReportReviewRoutes {
-  page: PrisonerReportPage
+export default class adjudicationReportReviewRoutes {
+  page: AdjudicationReportPage
 
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
@@ -17,7 +17,7 @@ export default class prisonerReportReviewRoutes {
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService
   ) {
-    this.page = new PrisonerReportPage(
+    this.page = new AdjudicationReportPage(
       PageRequestType.REVIEWER,
       reportedAdjudicationsService,
       locationService,

@@ -2,13 +2,13 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/adjudicationTabHeader.njk" import adjudicationTabHeader %}
-{% from "../../macros/adjudicationReviewStatusSummary.njk" import adjudicationReviewStatusSummary %}
 {% from "../../macros/printLink.njk" import printLink %}
 {% from "../../macros/adjudicationReviewPanel.njk" import adjudicationReviewPanel %}
 {% from "../../macros/adjudicationSummary.njk" import adjudicationSummary %}
+{% from "../../macros/adjudicationReviewSummary.njk" import adjudicationReviewSummary %}
 
 {% block pageTitle %}
-  Hearing details
+  Prisoner’s report
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -16,8 +16,8 @@
 {% block content %}
     {{ adjudicationTabHeader(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, reviewData.reviewStatus === 'Rejected') }}
 
-    {{ adjudicationReviewStatusSummary(reviewData.reviewStatus, reviewData.reviewSummary, 'Not entered', 'govuk-!-margin-top-5') }}
-  <div class="prisoner-report-top-bar flex-center govuk-!-margin-top-5">
+    {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
+  <div class="prisoner-report-top-bar flex-center">
     <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
       <span class="govuk-!-font-weight-bold">Report number:</span>
       {{ reportNo }}</p>

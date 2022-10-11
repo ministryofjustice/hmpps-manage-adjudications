@@ -51,10 +51,10 @@ export default class HearingDetailsPage {
       reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
       schedulingAvailable: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       hearings: [],
-      scheduleHearingButtonHref: '', // set up adjudicationUrl for this when building
+      scheduleHearingButtonHref: '', // TODO set up adjudicationUrl for this
       scheduleHearingButtonText: getScheduleHearingButtonText(hearings.length),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
-      reportHref: adjudicationUrls.prisonerReport.urls.reviewNew(reportedAdjudication.adjudicationNumber), // or this could be the reported version??
+      reportHref: adjudicationUrls.adjudicationReport.urls.report(reportedAdjudication.adjudicationNumber), // TODO we need to figure out which version (reporter/reviewer) needs to be used here
       hearingsHref: adjudicationUrls.hearingDetails.urls.start(reportedAdjudication.adjudicationNumber),
     })
   }
