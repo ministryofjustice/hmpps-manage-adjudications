@@ -1,0 +1,38 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../../macros/adjudicationTabHeader.njk" import adjudicationTabHeader %}
+
+{% block pageTitle %}
+  Hearing details
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+
+  {{ adjudicationTabHeader(reportNo, reviewStatus, prisoner, 'hearings', reportHref, hearingsHref) }}
+
+  {% if not schedulingAvailable %}
+    <div class="govuk-!-margin-top-5">
+        <p class="govuk-body">There are no hearings to schedule at the moment.</p>
+        <p class="govuk-body">You can only schedule a hearing for reports that have been reviewed and accepted.</p>
+    </div>
+  {% else %}
+    {% if hearings.length > 0 %}
+{# hearings in summary sections here with change links and a cancel hearing button #}
+    {% else %}
+      <p class="govuk-body govuk-!-margin-bottom-6">Not scheduled.</p>
+    {% endif %}
+  <div class="flex-container flex-center">
+        {{ govukButton({
+      text: scheduleHearingButtonText,
+      href: scheduleHearingButtonHref,
+      classes: "govuk-button--submit govuk-!-margin-right-3",
+      attributes: { "data-qa": scheduleHearingButton }
+    }) }}
+    <p class="govuk-body govuk-!-margin-top-1"><a href="{{ allCompletedReportsHref }}" class="govuk-link" data-qa="all-completed-reports-link">Return to all completed reports</a></p>
+  </div>
+
+  {% endif %}
+{% endblock %}

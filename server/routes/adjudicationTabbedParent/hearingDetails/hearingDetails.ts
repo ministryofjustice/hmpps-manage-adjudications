@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingDetailsPage, { PageRequestType } from './hearingDetailsPage'
 
 export default class HearingDetailsRoute {

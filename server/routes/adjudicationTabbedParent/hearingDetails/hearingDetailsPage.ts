@@ -5,8 +5,9 @@ import { Request, Response } from 'express'
 import {
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
-} from '../../data/ReportedAdjudicationResult'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+} from '../../../data/ReportedAdjudicationResult'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import adjudicationUrls from '../../../utils/urlGenerator'
 
 export enum PageRequestType {
   CREATION,
@@ -40,13 +41,28 @@ export default class HearingDetailsPage {
       reportedAdjudication.prisonerNumber,
       user
     )
-    return res.render(`pages/hearingDetails`, {
+
+    // const hearings = reportedAdjudication.hearings // something like this - will probably need to manipulate
+    const hearings = []
+
+    return res.render(`pages/adjudicationTabbedParent/hearingDetails`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
       schedulingAvailable: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
+      hearings: [],
+      scheduleHearingButtonHref: '', // set up adjudicationUrl for this when building
+      scheduleHearingButtonText: getScheduleHearingButtonText(hearings.length),
+      allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
+      reportHref: adjudicationUrls.prisonerReport.urls.reviewNew(reportedAdjudication.adjudicationNumber), // or this could be the reported version??
+      hearingsHref: adjudicationUrls.hearingDetails.urls.start(reportedAdjudication.adjudicationNumber),
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {}
+}
+
+const getScheduleHearingButtonText = (hearingNumber: number) => {
+  if (hearingNumber) return 'Schedule another hearing for this report'
+  return 'Schedule a hearing'
 }

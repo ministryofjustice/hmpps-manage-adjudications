@@ -14,6 +14,7 @@ import yourCompletedReportsRoutes from './yourCompletedReports'
 import allCompletedReportsRoutes from './allCompletedReports'
 import continueReportSelectRoutes from './continueReport'
 import prisonerReportRoutes from './prisonerReport'
+
 import homepageRoutes from './homepage'
 import printReportRoutes from './printReport'
 import selectAssociatedPrisonerRoutes from './selectAssociatedPrisoner'
@@ -25,7 +26,8 @@ import detailsOfDamagesRoutes from './damages'
 import detailsOfEvidenceRoutes from './evidence'
 import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
-import hearingDetailsRoutes from './hearingDetails'
+import hearingDetailsRoutes from './adjudicationTabbedParent/hearingDetails'
+import prisonerReportNewRoutes from './adjudicationTabbedParent/prisonerReport'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -142,6 +144,15 @@ export default function routes(
   )
 
   router.use(adjudicationUrls.hearingDetails.root, hearingDetailsRoutes({ reportedAdjudicationsService }))
+  router.use(
+    adjudicationUrls.prisonerReport.root,
+    prisonerReportNewRoutes({
+      reportedAdjudicationsService,
+      locationService,
+      userService,
+      decisionTreeService,
+    })
+  )
 
   return router
 }

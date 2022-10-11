@@ -1,10 +1,10 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import HearingDetailsCreationRoute from './hearingDetails'
 
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import adjudicationUrls from '../../utils/urlGenerator'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import adjudicationUrls from '../../../utils/urlGenerator'
 
 export default function HearingDetailsRoutes({
   reportedAdjudicationsService,

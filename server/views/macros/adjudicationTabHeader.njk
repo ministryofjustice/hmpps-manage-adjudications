@@ -1,0 +1,30 @@
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
+{% macro adjudicationTabHeader(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, hideHearings = false) %}
+  {% set items = [{
+      text: 'Report',
+      href: reportHref,
+      active: activeTab === 'report'
+    } , {
+      text: 'Hearings',
+      href: hearingsHref,
+      active: activeTab === 'hearings'
+    }] if not hideHearings else [{
+      text: 'Report',
+      href: reportHref,
+      active: activeTab === 'report'
+    }] %}
+
+  <h1 class="govuk-heading-l">Adjudication for report {{ reportNo }}</h1>
+  <h2 class="govuk-heading-m">Status: {{ reviewStatus }}</h2>
+  <div class="prisonerPlaybackSection">
+    {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+  </div>
+  <div class="govuk-!-margin-top-5">
+    {{ mojSubNavigation({
+      label: 'Sub navigation',
+      items: items
+    }) }}
+  </div>
+{% endmacro %}
