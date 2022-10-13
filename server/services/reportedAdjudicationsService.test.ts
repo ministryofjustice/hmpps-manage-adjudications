@@ -667,4 +667,83 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(expectedResult)
     })
   })
+  describe('getHearingDetails', () => {
+    it('returns the correct information multiple hearings', async () => {
+      const location2 = {
+        locationId: 73612,
+        locationType: 'BIG',
+        description: 'BIG',
+        agencyId: 'MDI',
+        parentLocationId: 27186,
+        currentOccupancy: 0,
+        locationPrefix: 'MDI-RES-MCASU-MCASU',
+        userDescription: 'Big adjudication room',
+        internalLocationCode: 'MCASU',
+      }
+      locationService.getIncidentLocation.mockResolvedValueOnce(location2)
+      const hearings = [
+        {
+          id: 1234,
+          dateTimeOfHearing: '2022-10-20T11:11:00',
+          locationId: 27187,
+        },
+        {
+          id: 23445,
+          dateTimeOfHearing: '2022-10-21T11:11:00',
+          locationId: 73612,
+        },
+      ]
+      const result = await service.getHearingDetails(hearings, user)
+      const expectedResult = [
+        [
+          {
+            label: 'Date and time of hearing',
+            value: '20 October 2022 - 11:10',
+          },
+          {
+            label: 'Location',
+            value: 'Adj',
+          },
+        ],
+        [
+          {
+            label: 'Date and time of hearing',
+            value: '21 October 2022 - 11:10',
+          },
+          {
+            label: 'Location',
+            value: 'Big adjudication room',
+          },
+        ],
+      ]
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for one hearing', async () => {
+      const hearings = [
+        {
+          id: 1234,
+          dateTimeOfHearing: '2022-10-20T11:11:00',
+          locationId: 27187,
+        },
+      ]
+      const result = await service.getHearingDetails(hearings, user)
+      const expectedResult = [
+        [
+          {
+            label: 'Date and time of hearing',
+            value: '20 October 2022 - 11:10',
+          },
+          {
+            label: 'Location',
+            value: 'Adj',
+          },
+        ],
+      ]
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for no hearings', async () => {
+      const result = await service.getHearingDetails([], user)
+      expect(result).toEqual([])
+    })
+  })
 })

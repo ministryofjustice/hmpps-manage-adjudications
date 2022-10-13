@@ -17,7 +17,7 @@
     }] %}
 
   <h1 class="govuk-heading-l">Adjudication for report {{ reportNo }}</h1>
-  <h2 class="govuk-heading-m">Status: {{ reviewStatus }}</h2>
+  <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>
   <div class="prisonerPlaybackSection">
     {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
   </div>

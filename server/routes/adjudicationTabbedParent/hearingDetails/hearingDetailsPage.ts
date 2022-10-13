@@ -61,6 +61,7 @@ export default class HearingDetailsPage {
       user
     )
 
+    // we can get these hearings from the reportedAdjudication when there's some present
     const hearings = [
       {
         id: 1234,
@@ -97,7 +98,8 @@ export default class HearingDetailsPage {
     const { user } = res.locals
     if (req.body.cancelHearingButton) {
       const hearingIndexToCancel = req.body.cancelHearingButton.split('-')[1] - 1
-      // await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIndexToCancel, user)
+      await this.reportedAdjudicationsService.deleteHearing(/* stuff in here */)
     }
+    return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
 }

@@ -384,6 +384,7 @@ export default class ReportedAdjudicationsService {
   }
 
   async getHearingDetails(hearings: HearingDetails[], user: User) {
+    if (!hearings.length) return []
     const locationIds = new Set(hearings.map(hearing => hearing.locationId))
     const locationNamesAndIds =
       (await Promise.all(
@@ -402,5 +403,15 @@ export default class ReportedAdjudicationsService {
         },
       ]
     })
+  }
+
+  async deleteHearing(): // adjudicationNumber: number,
+  // hearingIndexToCancel: number,
+  // user: User
+  Promise<ReportedAdjudicationResult> {
+    // get adjudication and take the hearings, create new altered list and send? Depends on endpoint requirements
+    // return new ManageAdjudicationsClient(user.token).updateHearings(adjudicationNumber, witnesses)
+    // eslint-disable-next-line no-useless-return
+    return
   }
 }

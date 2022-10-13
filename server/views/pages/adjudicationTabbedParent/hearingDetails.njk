@@ -48,7 +48,7 @@
     {% else %}
       <p class="govuk-body govuk-!-margin-bottom-6">Not scheduled.</p>
     {% endif %}
-    {% if readOnly %}
+    {% if not readOnly %}
   <div class="flex-container flex-center">
         {{ govukButton({
       text: scheduleHearingButtonText,
