@@ -20,7 +20,6 @@ import {
   formatTimestampToDate,
   formatLocation,
   formatTimestampTo,
-  formatTimestampToTime,
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
