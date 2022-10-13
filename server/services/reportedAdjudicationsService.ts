@@ -19,6 +19,8 @@ import {
   getTime,
   formatTimestampToDate,
   formatLocation,
+  formatTimestampTo,
+  formatTimestampToTime,
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
@@ -28,6 +30,7 @@ import {
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
+  HearingDetails,
 } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
@@ -379,5 +382,26 @@ export default class ReportedAdjudicationsService {
       ...data,
       content: data.content.map(transform),
     }
+  }
+
+  async getHearingDetails(hearings: HearingDetails[], user: User) {
+    const locationIds = new Set(hearings.map(hearing => hearing.locationId))
+    const locationNamesAndIds =
+      (await Promise.all(
+        [...locationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+      )) || []
+    const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+    return hearings.map(hearing => {
+      return [
+        {
+          label: 'Date and time of hearing',
+          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:MM'),
+        },
+        {
+          label: 'Location',
+          value: locationNamesByIdMap.get(hearing.locationId),
+        },
+      ]
+    })
   }
 }

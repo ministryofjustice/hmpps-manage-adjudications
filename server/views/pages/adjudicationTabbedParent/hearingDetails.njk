@@ -2,6 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/adjudicationTabHeader.njk" import adjudicationTabHeader %}
+{% from "../../macros/summaryList.njk" import summaryList %}
 
 {% block pageTitle %}
   Hearing details
@@ -20,19 +21,46 @@
     </div>
   {% else %}
     {% if hearings.length > 0 %}
-{# hearings in summary sections here with change links and a cancel hearing button #}
+        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+        {% for hearing in hearings %}
+          {% set hearingIndex = loop.index %}
+          <h2 class="govuk-heading-m">Hearing {{ hearingIndex }}</h2>
+          {% if not readOnly %}
+          {{ summaryList(hearing, null, null, null, '#') }}
+          {{ govukButton({
+            text: 'Cancel this hearing',
+            type: "submit",
+            classes: "govuk-button--secondary govuk-!-margin-right-3",
+            name: "cancelHearingButton",
+            value: "cancelHearingButton-"+hearingIndex,
+            attributes: { "data-qa": "cancelHearingButton-"+hearingIndex }
+          }) }}
+          {% else %}
+          {{ summaryList(hearing, null, null, null) }}
+          {% endif %}
+        {% endfor %}
+        </div>
+      </div>
+      </form>
     {% else %}
       <p class="govuk-body govuk-!-margin-bottom-6">Not scheduled.</p>
     {% endif %}
+    {% if readOnly %}
   <div class="flex-container flex-center">
         {{ govukButton({
       text: scheduleHearingButtonText,
       href: scheduleHearingButtonHref,
       classes: "govuk-button--submit govuk-!-margin-right-3",
-      attributes: { "data-qa": scheduleHearingButton }
+      attributes: { "data-qa": "scheduleHearingButton" }
     }) }}
     <p class="govuk-body govuk-!-margin-top-1"><a href="{{ allCompletedReportsHref }}" class="govuk-link" data-qa="all-completed-reports-link">Return to all completed reports</a></p>
   </div>
+    {% else %}
+        <p class="govuk-body govuk-!-margin-top-1"><a href="{{ yourCompletedReportsHref }}" class="govuk-link" data-qa="your-completed-reports-link">Return to your completed reports</a></p>
+    {% endif %}
 
   {% endif %}
 {% endblock %}

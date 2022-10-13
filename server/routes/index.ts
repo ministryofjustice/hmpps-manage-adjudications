@@ -27,11 +27,12 @@ import detailsOfEvidenceRoutes from './evidence'
 import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
 import hearingDetailsRoutes from './adjudicationTabbedParent/hearingDetails'
-import adjudicationReportRoutes from './adjudicationTabbedParent/adjudicationReport'
+import adjudicationReportRoutes from './adjudicationTabbedParent/prisonerReport'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
+import config from '../config'
 
 export default function routes(
   router: Router,
@@ -96,15 +97,27 @@ export default function routes(
     adjudicationUrls.printPdf.root,
     adjudicationPdfRoutes({ reportedAdjudicationsService, decisionTreeService })
   )
-  router.use(
-    adjudicationUrls.prisonerReport.root,
-    prisonerReportRoutes({
-      reportedAdjudicationsService,
-      locationService,
-      userService,
-      decisionTreeService,
-    })
-  )
+  if (config.hearingsFeatureFlag === 'true') {
+    router.use(
+      adjudicationUrls.prisonerReport.root,
+      adjudicationReportRoutes({
+        reportedAdjudicationsService,
+        locationService,
+        userService,
+        decisionTreeService,
+      })
+    )
+  } else {
+    router.use(
+      adjudicationUrls.prisonerReport.root,
+      prisonerReportRoutes({
+        reportedAdjudicationsService,
+        locationService,
+        userService,
+        decisionTreeService,
+      })
+    )
+  }
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use(
     adjudicationUrls.detailsOfDamages.root,
@@ -143,16 +156,6 @@ export default function routes(
     associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
   )
 
-  router.use(adjudicationUrls.hearingDetails.root, hearingDetailsRoutes({ reportedAdjudicationsService }))
-  router.use(
-    adjudicationUrls.adjudicationReport.root,
-    adjudicationReportRoutes({
-      reportedAdjudicationsService,
-      locationService,
-      userService,
-      decisionTreeService,
-    })
-  )
-
+  router.use(adjudicationUrls.hearingDetails.root, hearingDetailsRoutes({ reportedAdjudicationsService, userService }))
   return router
 }

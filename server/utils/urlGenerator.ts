@@ -293,23 +293,12 @@ const adjudicationUrls = {
   hearingDetails: {
     root: '/hearing-details',
     matchers: {
-      start: '/:adjudicationNumber',
-    },
-    urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}`,
-    },
-  },
-  adjudicationReport: {
-    root: '/adjudication-report',
-    matchers: {
-      report: '/:adjudicationNumber/report',
       review: '/:adjudicationNumber/review',
+      report: '/:adjudicationNumber/report',
     },
     urls: {
-      report: (adjudicationNumber: number) =>
-        `${adjudicationUrls.adjudicationReport.root}/${adjudicationNumber}/report`,
-      review: (adjudicationNumber: number) =>
-        `${adjudicationUrls.adjudicationReport.root}/${adjudicationNumber}/review`,
+      review: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/review`,
+      report: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/report`,
     },
   },
   homepage: {

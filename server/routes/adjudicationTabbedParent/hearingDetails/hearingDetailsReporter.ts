@@ -6,14 +6,10 @@ export default class HearingDetailsRoute {
   page: HearingDetailsPage
 
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {
-    this.page = new HearingDetailsPage(PageRequestType.CREATION, reportedAdjudicationsService)
+    this.page = new HearingDetailsPage(PageRequestType.REPORTER, reportedAdjudicationsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     await this.page.view(req, res)
-  }
-
-  submit = async (req: Request, res: Response): Promise<void> => {
-    await this.page.submit(req, res)
   }
 }
