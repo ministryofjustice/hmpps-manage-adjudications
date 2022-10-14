@@ -61,21 +61,10 @@ export default class HearingDetailsPage {
       user
     )
 
-    // we can get these hearings from the reportedAdjudication when there's some present
-    const hearings = [
-      {
-        id: 1234,
-        dateTimeOfHearing: '2022-10-20T11:11:00',
-        locationId: 27187,
-      },
-      {
-        id: 23445,
-        dateTimeOfHearing: '2022-10-21T11:11:00',
-        locationId: 27187,
-      },
-    ]
-
-    const hearingSummary = await this.reportedAdjudicationsService.getHearingDetails(hearings, user)
+    const hearingSummary = await this.reportedAdjudicationsService.getHearingDetails(
+      reportedAdjudication.hearings,
+      user
+    )
     const readOnly = this.pageOptions.isReporter()
 
     return res.render(`pages/adjudicationTabbedParent/hearingDetails`, {
@@ -86,7 +75,7 @@ export default class HearingDetailsPage {
       readOnly,
       hearings: hearingSummary,
       scheduleHearingButtonHref: '#', // TODO set up adjudicationUrl for this
-      scheduleHearingButtonText: getScheduleHearingButtonText(hearings.length),
+      scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings.length),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),

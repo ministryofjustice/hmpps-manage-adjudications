@@ -11,7 +11,7 @@
     {% endif %}
 
     {% if changeLinkHref %}
-      {% set actions = { items: [{href: changeLinkHref, text: "Change", visuallyHiddenText: detail.label}] } %}
+      {% set actions = { items: [{href: changeLinkHref, text: "Change", visuallyHiddenText: detail.label, attributes: {"data-qa": "change-link"} }] } %}
     {% endif %}
 
     {% set rows = (rows.push(
