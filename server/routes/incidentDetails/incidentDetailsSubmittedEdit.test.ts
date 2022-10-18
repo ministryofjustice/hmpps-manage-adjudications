@@ -148,6 +148,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.ageOfPrisoner.urls.start(34))
@@ -160,6 +161,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         incidentDetails: {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
           locationId: 2,
+          discoveryRadioSelected: 'Yes',
         },
         incidentRole: {},
         prisonerNumber: 'G6415GD',
@@ -186,6 +188,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(34))
@@ -201,6 +204,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -220,6 +224,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
       .expect(res => {

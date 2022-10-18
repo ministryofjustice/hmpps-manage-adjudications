@@ -2,6 +2,7 @@ export type IncidentDetails = {
   locationId: number
   dateTimeOfIncident: string
   handoverDeadline?: string
+  discoveryRadioSelected?: string
 }
 
 export type IncidentRole = {

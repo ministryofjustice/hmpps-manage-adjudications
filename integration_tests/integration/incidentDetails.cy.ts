@@ -29,6 +29,7 @@ context('Incident details', () => {
         id: 3456,
         incidentDetails: {
           dateTimeOfIncident: '2021-11-03T11:09:42',
+          dateTimeOfDiscovery: '2021-11-03T11:09:42',
           handoverDeadline: '2021-11-05T11:09:42',
           locationId: 234,
         },
@@ -127,6 +128,7 @@ context('Incident details', () => {
     })
     cy.signIn()
   })
+  // it.only
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
@@ -137,6 +139,13 @@ context('Incident details', () => {
     incidentDetailsPage.timeInputMinutes().should('exist')
     incidentDetailsPage.locationSelector().should('exist')
     incidentDetailsPage.submitButton().should('exist')
+
+    incidentDetailsPage.datePickerDiscovery().should('exist')
+    incidentDetailsPage.timeInputHoursDiscovery().should('exist')
+    incidentDetailsPage.timeInputMinutesDiscovery().should('exist')
+    incidentDetailsPage.radioButtonsDiscovery().should('exist')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').should('not.be.checked')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('not.be.checked')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
@@ -201,6 +210,24 @@ context('Incident details', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(3456))
     })
   })
+
+  it.only('should show error if discovery radio is not selected', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Select an opttion')
+      })
+  })
+
   context('Redirect on error', () => {
     beforeEach(() => {
       cy.task('stubStartNewDraftAdjudication', { response: {}, status: 500 })

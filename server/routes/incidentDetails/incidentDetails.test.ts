@@ -45,6 +45,7 @@ beforeEach(() => {
       startedByUserId: 'TEST_GEN',
       incidentDetails: {
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
         dateTimeOfIncident: '2021-10-27T13:30:00.000',
       },
       incidentRole: {
@@ -81,6 +82,7 @@ describe('POST /incident-details', () => {
         locationId: 2,
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
+        discoveryRadioSelected: 'Yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.ageOfPrisoner.urls.start(1))
@@ -88,7 +90,11 @@ describe('POST /incident-details', () => {
   it('should render an error summary with correct validation message - incorrect time entered', () => {
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
-      .send({ incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } }, locationId: 2 })
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
+        locationId: 2,
+        discoveryRadioSelected: 'Yes',
+      })
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
@@ -104,6 +110,7 @@ describe('POST /incident-details', () => {
         locationId: 2,
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
+        discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
