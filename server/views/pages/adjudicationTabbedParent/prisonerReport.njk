@@ -14,7 +14,7 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
-    {{ adjudicationTabHeader(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, reviewData.reviewStatus === 'Rejected') }}
+    {{ adjudicationTabHeader(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, reviewData.reviewStatus !== 'Rejected') }}
 
     {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
   <div class="prisoner-report-top-bar flex-center">

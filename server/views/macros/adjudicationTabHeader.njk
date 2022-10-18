@@ -1,7 +1,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro adjudicationTabHeader(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, hideHearings = false) %}
+{% macro adjudicationTabHeader(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, showHearings = true) %}
   {% set items = [{
       text: 'Report',
       href: reportHref,
@@ -10,7 +10,7 @@
       text: 'Hearings',
       href: hearingsHref,
       active: activeTab === 'hearings'
-    }] if not hideHearings else [{
+    }] if showHearings else [{
       text: 'Report',
       href: reportHref,
       active: activeTab === 'report'
