@@ -695,26 +695,28 @@ describe('reportedAdjudicationsService', () => {
       ]
       const result = await service.getHearingDetails(hearings, user)
       const expectedResult = [
-        [
-          {
+        {
+          id: 1234,
+          dateTime: {
             label: 'Date and time of hearing',
             value: '20 October 2022 - 11:10',
           },
-          {
+          location: {
             label: 'Location',
             value: 'Adj',
           },
-        ],
-        [
-          {
+        },
+        {
+          id: 23445,
+          dateTime: {
             label: 'Date and time of hearing',
             value: '21 October 2022 - 11:10',
           },
-          {
+          location: {
             label: 'Location',
             value: 'Big adjudication room',
           },
-        ],
+        },
       ]
       expect(result).toEqual(expectedResult)
     })
@@ -728,16 +730,17 @@ describe('reportedAdjudicationsService', () => {
       ]
       const result = await service.getHearingDetails(hearings, user)
       const expectedResult = [
-        [
-          {
+        {
+          id: 1234,
+          dateTime: {
             label: 'Date and time of hearing',
             value: '20 October 2022 - 11:10',
           },
-          {
+          location: {
             label: 'Location',
             value: 'Adj',
           },
-        ],
+        },
       ]
       expect(result).toEqual(expectedResult)
     })

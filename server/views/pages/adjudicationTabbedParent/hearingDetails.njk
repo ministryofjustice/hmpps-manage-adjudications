@@ -2,7 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/adjudicationTabHeader.njk" import adjudicationTabHeader %}
-{% from "../../macros/summaryList.njk" import summaryList %}
+{% from "../../macros/hearingSummary.njk" import hearingSummary %}
 
 {% block pageTitle %}
   Hearing details
@@ -26,20 +26,21 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-three-quarters">
           {% for hearing in hearings %}
-            {% set hearingIndex = loop.index %}
-            <h2 class="govuk-heading-m" data-qa="hearing-index-{{hearingIndex}}">Hearing {{ hearingIndex }}</h2>
+            {% set hearingId = hearing.id %}
+            {% set hearingNumber = loop.index %}
+            <h2 class="govuk-heading-m" data-qa="hearing-index-{{hearingNumber}}">Hearing {{ hearingNumber }}</h2>
             {% if not readOnly %}
-              {{ summaryList(hearing, null, { "data-qa": "details-summary-table" }, null, '#') }}
+              {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, true, '#') }}
               {{ govukButton({
                 text: 'Cancel this hearing',
                 type: "submit",
                 classes: "govuk-button--secondary govuk-!-margin-right-3",
                 name: "cancelHearingButton",
-                value: "cancelHearingButton-"+hearingIndex,
-                attributes: { "data-qa": "cancelHearingButton-"+hearingIndex }
+                value: "cancelHearingButton-"+hearingId,
+                attributes: { "data-qa": "cancelHearingButton-"+hearingId }
               }) }}
             {% else %}
-                {{ summaryList(hearing, null, { "data-qa": "details-summary-table" }, null) }}
+                {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, false) }}
             {% endif %}
           {% endfor %}
         </div>

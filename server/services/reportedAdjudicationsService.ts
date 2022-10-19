@@ -392,26 +392,26 @@ export default class ReportedAdjudicationsService {
       )) || []
     const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
     return hearings.map(hearing => {
-      return [
-        {
+      return {
+        id: hearing.id,
+        dateTime: {
           label: 'Date and time of hearing',
           value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:MM'),
         },
-        {
+        location: {
           label: 'Location',
           value: locationNamesByIdMap.get(hearing.locationId),
         },
-      ]
+      }
     })
   }
 
-  async deleteHearing(): // adjudicationNumber: number,
-  // hearingIndexToCancel: number,
-  // user: User
-  Promise<ReportedAdjudicationResult> {
-    // get adjudication and take the hearings, create new altered list and send? Depends on endpoint requirements
-    // return new ManageAdjudicationsClient(user.token).updateHearings(adjudicationNumber, witnesses)
-    // eslint-disable-next-line no-useless-return
-    return
+  async deleteHearing(
+    adjudicationNumber: number,
+    hearingButtonValue: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingIndexToCancel = Number(hearingButtonValue.split('-')[1])
+    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIndexToCancel)
   }
 }
