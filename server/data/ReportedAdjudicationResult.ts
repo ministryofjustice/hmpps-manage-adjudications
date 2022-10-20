@@ -3,6 +3,7 @@ import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValid
 import {
   DamageDetails,
   EvidenceDetails,
+  HearingDetails,
   IncidentDetails,
   IncidentRole,
   IncidentStatement,
@@ -28,6 +29,7 @@ export type ReportedAdjudication = {
   damages?: DamageDetails[]
   evidence?: EvidenceDetails[]
   witnesses?: WitnessDetails[]
+  hearings?: HearingDetails[]
 }
 
 export type ReportedAdjudicationResult = {

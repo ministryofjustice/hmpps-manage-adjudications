@@ -8,6 +8,7 @@ import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import config from '../../config'
 
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/userService.ts')
@@ -173,7 +174,9 @@ describe('GET prisoner report', () => {
       .get(adjudicationUrls.prisonerReport.urls.review(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('Bobby Da Smith Jones’ report')
+        if (!config.hearingsFeatureFlag) {
+          expect(response.text).toContain('Bobby Da Smith Jones’ report')
+        }
         expect(response.text).toContain('10:45')
         expect(response.text).toContain('Chapel')
         expect(response.text).toContain('What type of offence did Bobby Da Smith Jones commit?')
