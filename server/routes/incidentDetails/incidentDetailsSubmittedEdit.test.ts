@@ -39,6 +39,7 @@ beforeEach(() => {
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
     adjudicationNumber: 1524493,
+    dateTimeOfDiscovery: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
   })
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({

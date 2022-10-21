@@ -45,6 +45,7 @@ export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
 
 export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
+  dateTimeOfDiscovery: SubmittedDateTime
   locationId: number
   startedByUserId: string
   adjudicationNumber?: number
@@ -87,14 +88,17 @@ export default class PlaceOnReportService {
     dateTimeOfIncident: string,
     locationId: number,
     prisonerNumber: string,
-    user: User
+    user: User,
+    dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
+    console.log(dateTimeOfDiscovery)
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       dateTimeOfIncident,
       agencyId: user.activeCaseLoadId,
       locationId,
       prisonerNumber,
+      dateTimeOfDiscovery,
     }
     return client.startNewDraftAdjudication(requestBody)
   }
@@ -178,23 +182,30 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const response = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { incidentDetails } = response.draftAdjudication
-    const date = getDate(incidentDetails.dateTimeOfIncident, 'DD/MM/YYYY')
-    const time = getTime(incidentDetails.dateTimeOfIncident)
-    const hour = time.split(':')[0]
-    const minute = time.split(':')[1]
     return {
-      dateTime: { date, time: { hour, minute } },
+      dateTime: this.convertDate(incidentDetails.dateTimeOfIncident),
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
       adjudicationNumber: response.draftAdjudication.adjudicationNumber,
+      dateTimeOfDiscovery: this.convertDate(incidentDetails.dateTimeOfDiscovery),
     }
+  }
+
+  convertDate = (aDate: string) => {
+    const date = getDate(aDate, 'DD/MM/YYYY')
+    const time = getTime(aDate)
+    const hour = time.split(':')[0]
+    const minute = time.split(':')[1]
+
+    return { date, time: { hour, minute } }
   }
 
   async editDraftIncidentDetails(
     id: number,
     dateTime: string,
     location: number,
-    user: User
+    user: User,
+    dateTimeOfDiscovery: string
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editedIncidentDetails = {
@@ -202,6 +213,7 @@ export default class PlaceOnReportService {
       locationId: location,
       // TODO - Make this optional in API!
       removeExistingOffences: false,
+      dateTimeOfDiscovery,
     }
     const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication

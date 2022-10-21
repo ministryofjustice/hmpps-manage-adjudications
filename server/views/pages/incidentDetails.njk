@@ -4,6 +4,8 @@
 {% from "../macros/datePicker.njk" import datePicker %}
 {% from "../macros/timeInput.njk" import timeInput %}
 
+{% from "./dateTimePicker.njk" import dateTimePicker2 %}
+
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -13,43 +15,11 @@
 {% set isHourError = errors | isErrorPresent(['incidentDate[time][hour]', 'incidentDate[time]']) %}
 {% set isMinuteError = errors | isErrorPresent(['incidentDate[time][minute]', 'incidentDate[time]']) %}
 
+{% set isDiscoveryDateError = errors | isErrorPresent(['discoveryDate[date]']) %}
+{% set isDiscoveryHourError = errors | isErrorPresent(['discoveryDate[time][hour]', 'discoveryDate[time]']) %}
+{% set isDiscoveryMinuteError = errors | isErrorPresent(['discoveryDate[time][minute]', 'discoveryDate[time]']) %}
+
 {% set title = "Incident details" %}
-
-{% macro dateTimePicker(params) %}
-	{{
-		datePicker({
-			id: params.dateId+'[date]',
-			label: params.dateLabel,
-			name: params.dateId+'[date]',
-			date: params.dateTimeObj.date,
-			errorMessage: errors | findErrors([params.dateId+'[date]']),
-			attributes: {'data-disable-future-date':'true', 'data-qa': params.dataQaDate },
-			classes: 'govuk-input--width-10'
-		})
-	}}
-	{{ 
-	timeInput({
-		errorMessage: errors | concatErrors([params.dateId+"[time][hour]", params.dateId+"[time][minute]", params.dateId+"[time]"]),
-		legend: params.timeLabel,
-		hint: 'Use the 24-hour clock. For example, 09 08 or 17 32.',
-		hour:  {
-			dataQaHour: params.dataQaHour,
-			name: params.dateId+'[time][hour]',
-			id: params.dateId+'[time][hour]',
-			value: params.dateTimeObj.hour,
-			classes: ('govuk-input--error' if isHourError)
-		},
-		minutes:  {
-			dataQaMinutes: params.dataQaMinutes,
-			name: params.dateId+'[time][minute]',
-			id: params.dateId+'[time][minute]',
-			value: params.dateTimeObj.minute,
-			classes: ('govuk-input--error' if isMinuteError)
-		}
-	})
-}}
-
-{% endmacro %}
 
 {% block pageTitle %}
 	{{ title }}
@@ -60,6 +30,9 @@
 {% endblock %}
 
 {% block content %}
+
+ERRORS='{{errors}}''
+
 	{% if errors | length %}
 		{{ govukErrorSummary({
       titleText: "There is a problem",
@@ -85,7 +58,11 @@
 
 			<h2 class="govuk-heading-s">When did the incident happen?</h2>
 			{{
-				dateTimePicker({
+				dateTimePicker2({
+					errors: errors,
+					isDateError: isDateError,
+					isHourError: isHourError,
+					isMinuteError: isMinuteError,
 					dateTimeObj: data.incidentDate,
 					dateId: 'incidentDate',
 					dateLabel: 'Date of Incident',
@@ -135,7 +112,11 @@
       text: "No",
       checked: data.discoveryRadioSelected == 'No',
 	  conditional:  {
-        html: dateTimePicker({
+        html: dateTimePicker2({
+					errors: errors,
+					isDateError: isDiscoveryDateError,
+					isHourError: isDiscoveryHourError,
+					isMinuteError: isDiscoveryMinuteError,
 					dateTimeObj: data.discoveryDate,
 					dateId: 'discoveryDate',
 					dateLabel: 'Date of discovery',

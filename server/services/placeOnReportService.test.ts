@@ -84,7 +84,13 @@ describe('placeOnReportService', () => {
         },
       })
 
-      const result = await service.startNewDraftAdjudication('2021-10-28T15:40:25.884', 3, 'G2996UX', user)
+      const result = await service.startNewDraftAdjudication(
+        '2021-10-28T15:40:25.884',
+        3,
+        'G2996UX',
+        user,
+        '2021-11-09T13:55:34.143Z'
+      )
       expect(startNewDraftAdjudication).toBeCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         locationId: 3,
@@ -436,7 +442,13 @@ describe('placeOnReportService', () => {
         prisonerNumber: 'G2996UX',
       }
       editDraftIncidentDetails.mockResolvedValue(expectedResult)
-      const response = await service.editDraftIncidentDetails(4, '2021-11-09T13:55:34.143Z', 12123123, user)
+      const response = await service.editDraftIncidentDetails(
+        4,
+        '2021-11-09T13:55:34.143Z',
+        12123123,
+        user,
+        '2021-11-09T13:55:34.143Z'
+      )
       expect(response).toEqual(expectedResult)
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',

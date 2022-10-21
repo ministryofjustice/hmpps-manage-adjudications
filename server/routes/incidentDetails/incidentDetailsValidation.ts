@@ -87,20 +87,24 @@ export default function validateForm({
     if (!discoveryDate.date) {
       return errors.MISSING_DISCOVERY_DATE
     }
-    if (!discoveryDate.time.hour && !incidentDate.time.minute) {
+    if (!discoveryDate.time.hour && !discoveryDate.time.minute) {
       return errors.MISSING_DISCOVERY_TIME
     }
     if (!discoveryDate.time.hour) {
       return errors.MISSING_DISCOVERY_HOUR
     }
     if (!discoveryDate.time.minute) {
-      return errors.MISSING_DISCOVERY_MINUTE
+      return errors.MISSING_DISCOVERY_MINUTES
     }
 
     if (Number.isNaN(Number(discoveryDate.time.hour)) || Number(discoveryDate.time.hour) > 23) {
       return errors.MISSING_DISCOVERY_HOUR
     }
-    if (Number.isNaN(Number(discoveryDate.time.minute)) || Number(discoveryDate.time.minute) > 59) {
+    if (
+      Number.isNaN(Number(discoveryDate.time.minute)) ||
+      Number(discoveryDate.time.minute) < 0 ||
+      Number(discoveryDate.time.minute) > 59
+    ) {
       return errors.MISSING_DISCOVERY_MINUTES
     }
     if (new Date(formatDate(discoveryDate)) > new Date()) {

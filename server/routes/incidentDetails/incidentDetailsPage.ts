@@ -191,7 +191,8 @@ export default class IncidentDetailsPage {
       draftId,
       formatDate(data.incidentDate),
       data.locationId,
-      currentUser
+      currentUser,
+      formatDate(data.discoveryDate)
     )
   }
 

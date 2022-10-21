@@ -59,6 +59,32 @@ describe('validateForm', () => {
         text: 'Enter the date of the incident discovery',
       })
     })
+    /*
+  MISSING_DISCOVERY_HOUR: {
+    href: '#discoveryDate[time][hour]',
+    text: 'Enter an incident discovery hour between 00 and 23',
+  },
+  MISSING_DISCOVERY_MINUTES: {
+    href: '#discoveryDate[time][minute]',
+    text: 'Enter the discovery minute using 2 numbers - for example, 08 or 18',
+  },
+
+    */
+    it('shows error if discovery radio set to No, date set but no hour', () => {
+      expect(
+        validateForm({
+          incidentDate: { time: { hour: '', minute: '23' } },
+          discoveryDate: { date: '20/12/2022', time: { hour: '', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'No',
+        })
+      ).toEqual({
+        href: '#discoveryDate[date][hour]',
+        text: 'Enter an incident discovery hour between 00 and 23',
+      })
+    })
   })
   describe('incidentTime', () => {
     beforeAll(() => {

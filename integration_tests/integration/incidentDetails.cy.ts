@@ -224,7 +224,7 @@ context('Incident details', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('Select an opttion')
+        expect($errors.get(0).innerText).to.contain('Select an incident discovery time opttion')
       })
   })
 
