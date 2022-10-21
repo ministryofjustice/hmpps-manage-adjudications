@@ -148,6 +148,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         discoveryRadioSelected: 'Yes',
       })
@@ -161,6 +162,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         id: 34,
         incidentDetails: {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+          dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
           locationId: 2,
           discoveryRadioSelected: 'Yes',
         },
@@ -188,6 +190,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         discoveryRadioSelected: 'Yes',
       })
@@ -224,6 +227,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         discoveryRadioSelected: 'Yes',
       })

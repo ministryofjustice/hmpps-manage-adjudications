@@ -104,12 +104,14 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         discoveryRadioSelected: 'Yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.ageOfPrisoner.urls.start(34))
   })
+  // TODO
   it('should redirect to the applicable rule page if details are complete after changing information and there are already offences on the draft', () => {
     placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
       draftAdjudication: {
@@ -117,6 +119,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
         id: 34,
         incidentDetails: {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+          dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
           locationId: 2,
           discoveryRadioSelected: 'Yes',
         },
@@ -140,6 +143,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         discoveryRadioSelected: 'Yes',
       })
@@ -166,6 +170,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
         discoveryRadioSelected: 'Yes',
       })

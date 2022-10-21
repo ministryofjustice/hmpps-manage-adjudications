@@ -81,7 +81,7 @@ describe('validateForm', () => {
           discoveryRadioSelected: 'No',
         })
       ).toEqual({
-        href: '#discoveryDate[date][hour]',
+        href: '#discoveryDate[time][hour]',
         text: 'Enter an incident discovery hour between 00 and 23',
       })
     })

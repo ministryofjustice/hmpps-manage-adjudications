@@ -79,6 +79,7 @@ describe('placeOnReportService', () => {
           incidentDetails: {
             locationId: 3,
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
+            dateTimeOfDiscovery: '2021-10-28T15:40:25.884',
             handoverDeadline: '2021-10-30T15:40:25.884',
           },
         },
@@ -89,10 +90,11 @@ describe('placeOnReportService', () => {
         3,
         'G2996UX',
         user,
-        '2021-11-09T13:55:34.143Z'
+        '2021-10-28T15:40:25.884'
       )
       expect(startNewDraftAdjudication).toBeCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        dateTimeOfDiscovery: '2021-10-28T15:40:25.884',
         locationId: 3,
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
@@ -110,6 +112,7 @@ describe('placeOnReportService', () => {
             locationId: 3,
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
             handoverDeadline: '2021-10-30T15:40:25.884',
+            dateTimeOfDiscovery: '2021-10-28T15:40:25.884',
           },
         },
       })
@@ -402,6 +405,7 @@ describe('placeOnReportService', () => {
     it('should return draft incident details in format ready for editing', async () => {
       const expectedResult = {
         dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
+        dateTimeOfDiscovery: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
         locationId: 1234,
       }
 
@@ -412,6 +416,7 @@ describe('placeOnReportService', () => {
           incidentDetails: {
             locationId: 1234,
             dateTimeOfIncident: '2021-11-08T10:00:00',
+            dateTimeOfDiscovery: '2021-11-08T10:00:00',
           },
           incidentStatement: {
             statement: 'test',
@@ -433,6 +438,7 @@ describe('placeOnReportService', () => {
         adjudicationNumber: 234,
         incidentDetails: {
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+          dateTimeOfDiscovery: '2021-11-09T13:55:34.143Z',
           locationId: 12123123,
         },
         incidentStatement: {
@@ -452,6 +458,7 @@ describe('placeOnReportService', () => {
       expect(response).toEqual(expectedResult)
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+        dateTimeOfDiscovery: '2021-11-09T13:55:34.143Z',
         locationId: 12123123,
         removeExistingOffences: false,
       })
