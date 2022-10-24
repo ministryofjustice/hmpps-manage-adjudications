@@ -424,7 +424,15 @@ const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response
     },
   })
 
-const stubCancelHearing = ({ adjudicationNumber, hearingId, response = {} }): SuperAgentRequest =>
+const stubCancelHearing = ({
+  adjudicationNumber,
+  hearingId,
+  response = {},
+}: {
+  adjudicationNumber: number
+  hearingId: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'DELETE',
