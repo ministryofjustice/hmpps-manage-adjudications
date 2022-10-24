@@ -20,3 +20,14 @@ export const forceDateInputWithDate = (
 
   return forceDateInput(day, month, year, field)
 }
+
+export const forceDiscoveryDateInputWithDate = (
+  date: Date = new Date(),
+  field = '[data-qa="discovery-details-date"]'
+): PageElement => {
+  const day = date.getUTCDate()
+  const month = date.getUTCMonth() + 1
+  const year = date.getUTCFullYear()
+
+  return forceDateInput(day, month, year, field)
+}

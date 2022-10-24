@@ -15,8 +15,8 @@
 {% set isMinuteError = errors | isErrorPresent(['incidentDate[time][minute]', 'incidentDate[time]']) %}
 
 {% set isDiscoveryDateError = errors | isErrorPresent(['discoveryDate[date]']) %}
-{% set isDiscoveryHourError = errors | isErrorPresent(['discoveryDate[time][hour]', 'discoveryDate[time]']) %}
-{% set isDiscoveryMinuteError = errors | isErrorPresent(['discoveryDate[time][minute]', 'discoveryDate[time]']) %}
+{% set isDiscoveryHourError = errors | isErrorPresent(['discoveryDate[time]', 'discoveryDate[time][hour]']) %}
+{% set isDiscoveryMinuteError = errors | isErrorPresent(['discoveryDate[time]', 'discoveryDate[time][minute]']) %}
 
 {% set title = "Incident details" %}
 

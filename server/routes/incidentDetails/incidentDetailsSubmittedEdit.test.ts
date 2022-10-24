@@ -162,7 +162,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
         id: 34,
         incidentDetails: {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-          dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
+          dateTimeOfDiscovery: '2021-10-28T13:30:17.808Z',
           locationId: 2,
           discoveryRadioSelected: 'Yes',
         },

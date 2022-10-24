@@ -1,7 +1,7 @@
 import { FormError } from '../../@types/template'
 
 const errors: { [key: string]: FormError } = {
-  MISSING_RADIO: {
+  DISCOVERY_MISSING_RADIO: {
     href: '#deletePerson',
     text: 'Select yes if you want to delete this person',
   },
@@ -9,7 +9,7 @@ const errors: { [key: string]: FormError } = {
 
 export default function validateForm({ deletePerson }: { deletePerson: string }): FormError | null {
   if (!deletePerson) {
-    return errors.MISSING_RADIO
+    return errors.DISCOVERY_MISSING_RADIO
   }
   return null
 }

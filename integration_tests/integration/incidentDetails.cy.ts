@@ -1,6 +1,6 @@
 import IncidentDetails from '../pages/incidentDetails'
 import Page from '../pages/page'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { forceDateInputWithDate, forceDiscoveryDateInputWithDate } from '../componentDrivers/dateInput'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import adjudicationUrls from '../../server/utils/urlGenerator'
@@ -225,6 +225,128 @@ context('Incident details', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain('Select an incident discovery time opttion')
+      })
+  })
+
+  it.only('should show error if discovery radio is selected but no date input', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the date of the incident discovery')
+      })
+  })
+
+  it.only('should show error if discovery radio is selected but no times input', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    forceDiscoveryDateInputWithDate(today)
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
+      })
+  })
+
+  it.only('should show error if discovery radio is selected but no hour input', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    forceDiscoveryDateInputWithDate(today)
+    incidentDetailsPage.timeInputMinutesDiscovery().type('59')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
+      })
+  })
+
+  it.only('should show error if discovery radio is selected but bad hour input', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    forceDiscoveryDateInputWithDate(today)
+    incidentDetailsPage.timeInputHoursDiscovery().type('24')
+    incidentDetailsPage.timeInputMinutesDiscovery().type('59')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter an incident discovery hour between 00 and 23')
+      })
+  })
+
+  it.only('should show error if discovery radio is selected but bad minute input', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    forceDiscoveryDateInputWithDate(today)
+    incidentDetailsPage.timeInputHoursDiscovery().type('23')
+    incidentDetailsPage.timeInputMinutesDiscovery().type('x59')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the discovery minute between 00 and 59')
+      })
+  })
+
+  it.only('should show error if discovery radio is selected but future date input', () => {
+    const today = new Date()
+    cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    forceDateInputWithDate(today)
+    incidentDetailsPage.timeInputHours().type('11')
+    incidentDetailsPage.timeInputMinutes().type('22')
+    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    const tomorrow = new Date()
+    tomorrow.setDate(new Date().getDate() + 1)
+    forceDiscoveryDateInputWithDate(tomorrow)
+    incidentDetailsPage.timeInputHoursDiscovery().type('23')
+    incidentDetailsPage.timeInputMinutesDiscovery().type('59')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('The incident discovery time must be in the past')
       })
   })
 
