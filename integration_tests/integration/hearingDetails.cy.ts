@@ -277,9 +277,9 @@ context('Hearing deails page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:10')
-          expect($summaryData.get(1).innerText).to.contain('Change\nDate and time of hearing')
+          expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(3).innerText).to.contain('Change\nLocation')
+          expect($summaryData.get(3).innerText).to.contain('Change')
         })
     })
   })
