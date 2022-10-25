@@ -1,0 +1,51 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro hearingSummary(hearingDetails = {}, attributes = {}, changeLinksActive = false, changeLinkHref = null) %}
+  {% set dateTimeValue = { text: hearingDetails.dateTime.value } %}
+  {% set locationValue = { text: hearingDetails.location.value } %}
+  {% set dateTimeLabel = { text: hearingDetails.dateTime.label } %}
+  {% set locationLabel = { text: hearingDetails.location.label } %}
+
+  {% if changeLinksActive %}
+  {% set dateTimeChangeLink = {
+        items: [
+          {
+            href: changeLinkHref + "?hearingId=" + hearingDetails.id,
+            text: "Change",
+            visuallyHiddenText: ' date and time of hearing',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+      } %}
+  {% set locationChangeLink = {
+        items: [
+          {
+            href: changeLinkHref + "?hearingId=" + hearingDetails.id,
+            text: "Change",
+            visuallyHiddenText: ' location',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+      } %}
+    {% endif %}
+
+  {% set rows = [
+    {
+        key: dateTimeLabel,
+        value: dateTimeValue,
+        actions: dateTimeChangeLink
+    },
+    {
+        key: locationLabel,
+        value: locationValue,
+        actions: locationChangeLink
+    }
+  ] %}
+
+  {% if rows.length %}
+    {{ govukSummaryList({
+      rows: rows,
+      attributes: attributes
+    }) }}
+  {% endif %}
+{% endmacro %}

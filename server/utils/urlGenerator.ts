@@ -290,6 +290,17 @@ const adjudicationUrls = {
         `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true`,
     },
   },
+  hearingDetails: {
+    root: '/hearing-details',
+    matchers: {
+      review: '/:adjudicationNumber/review',
+      report: '/:adjudicationNumber/report',
+    },
+    urls: {
+      review: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/review`,
+      report: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/report`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

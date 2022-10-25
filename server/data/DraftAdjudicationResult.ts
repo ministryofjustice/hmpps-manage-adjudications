@@ -153,3 +153,9 @@ export enum WitnessCode {
   STAFF = 'STAFF',
   OTHER_PERSON = 'OTHER_PERSON',
 }
+
+export type HearingDetails = {
+  id: number
+  locationId: number
+  dateTimeOfHearing: string
+}

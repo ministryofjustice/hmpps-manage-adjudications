@@ -117,4 +117,5 @@ export default {
   digitalPrisonServiceUrl: get('DIGITAL_PRISON_SERVICE_URL', 'http://localhost:3002', requiredInProduction),
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   yoiNewPagesFeatureFlag: get('YOI_NEW_PAGES_FEATURE_FLAG', true, requiredInProduction),
+  hearingsFeatureFlag: get('HEARINGS_FEATURE_FLAG', true, requiredInProduction),
 }

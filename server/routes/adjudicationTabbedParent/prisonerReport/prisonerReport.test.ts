@@ -1,17 +1,17 @@
 import { Express } from 'express'
 import request from 'supertest'
-import appWithAllRoutes from '../testutils/appSetup'
-import LocationService from '../../services/locationService'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import DecisionTreeService from '../../services/decisionTreeService'
-import { IncidentRole } from '../../incidentRole/IncidentRole'
-import adjudicationUrls from '../../utils/urlGenerator'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
-import config from '../../config'
+import appWithAllRoutes from '../../testutils/appSetup'
+import LocationService from '../../../services/locationService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import DecisionTreeService from '../../../services/decisionTreeService'
+import { IncidentRole } from '../../../incidentRole/IncidentRole'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import config from '../../../config'
 
-jest.mock('../../services/locationService.ts')
-jest.mock('../../services/reportedAdjudicationsService.ts')
-jest.mock('../../services/decisionTreeService.ts')
+jest.mock('../../../services/locationService.ts')
+jest.mock('../../../services/reportedAdjudicationsService.ts')
+jest.mock('../../../services/decisionTreeService.ts')
 
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(

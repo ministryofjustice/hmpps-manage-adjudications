@@ -1,19 +1,22 @@
 import { Express } from 'express'
 import request from 'supertest'
-import appWithAllRoutes from '../testutils/appSetup'
-import LocationService from '../../services/locationService'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import DecisionTreeService from '../../services/decisionTreeService'
-import { IncidentRole } from '../../incidentRole/IncidentRole'
-import adjudicationUrls from '../../utils/urlGenerator'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
-import config from '../../config'
+import appWithAllRoutes from '../../testutils/appSetup'
+import LocationService from '../../../services/locationService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import DecisionTreeService from '../../../services/decisionTreeService'
+import { IncidentRole } from '../../../incidentRole/IncidentRole'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import UserService from '../../../services/userService'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import config from '../../../config'
 
-jest.mock('../../services/locationService.ts')
-jest.mock('../../services/reportedAdjudicationsService.ts')
-jest.mock('../../services/decisionTreeService.ts')
+jest.mock('../../../services/locationService.ts')
+jest.mock('../../../services/userService.ts')
+jest.mock('../../../services/reportedAdjudicationsService.ts')
+jest.mock('../../../services/decisionTreeService.ts')
 
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -75,6 +78,7 @@ beforeEach(() => {
     incidentRole: IncidentRole.COMMITTED,
     prisoner: {
       offenderNo: 'G5512GK',
+      dateOfBirth: undefined,
       firstName: 'BOBBY',
       lastName: 'DA SMITH JONES',
       assignedLivingUnit: {
@@ -83,7 +87,6 @@ beforeEach(() => {
         description: '1-1-010',
         agencyName: 'Moorland (HMP & YOI)',
       },
-      dateOfBirth: undefined,
       categoryCode: undefined,
       language: undefined,
       friendlyName: 'Bobby Da Smith Jones',
@@ -102,8 +105,6 @@ beforeEach(() => {
   ])
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
-    isYouthOffender: false,
-
     incidentDetails: [
       {
         label: 'Reporting Officer',
@@ -123,6 +124,7 @@ beforeEach(() => {
       },
     ],
     statement: 'text here',
+    isYouthOffender: false,
   })
 
   const qAndAs = [
@@ -155,7 +157,10 @@ beforeEach(() => {
     },
   ])
 
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, decisionTreeService })
+  app = appWithAllRoutes(
+    { production: false },
+    { reportedAdjudicationsService, locationService, userService, decisionTreeService }
+  )
 })
 
 afterEach(() => {
@@ -163,9 +168,10 @@ afterEach(() => {
 })
 
 describe('GET prisoner report', () => {
-  it('should load the prisoner report page', () => {
+  it('should load the prisoner report page if the user has the correct role', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .get(adjudicationUrls.prisonerReport.urls.report(12345))
+      .get(adjudicationUrls.prisonerReport.urls.review(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
         if (!config.hearingsFeatureFlag) {
@@ -184,7 +190,34 @@ describe('GET prisoner report', () => {
         expect(response.text).toContain('This offence broke')
         expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(response.text).toContain('Commits any assault')
+        expect(response.text).toContain('What would you like to do with this report?')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
+      })
+  })
+  it('should not load the prisoner report page if no role present', () => {
+    userService.getUserRoles.mockResolvedValue([])
+    return request(app)
+      .get(adjudicationUrls.prisonerReport.urls.review(12345))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Page not found')
+        expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(0)
+      })
+  })
+})
+
+describe('POST prisoner report', () => {
+  it('should update the review status', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+    return request(app)
+      .post(adjudicationUrls.prisonerReport.urls.review(12345))
+      .send({
+        currentStatusSelected: 'ACCEPTED',
+        rejectedReasonId: 'reason',
+        rejectedDetailsId: 'details',
+      })
+      .expect(response => {
+        expect(reportedAdjudicationsService.updateAdjudicationStatus).toHaveBeenCalledTimes(1)
       })
   })
 })

@@ -19,6 +19,7 @@ import {
   getTime,
   formatTimestampToDate,
   formatLocation,
+  formatTimestampTo,
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
@@ -28,6 +29,7 @@ import {
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
+  HearingDetails,
 } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
@@ -379,5 +381,36 @@ export default class ReportedAdjudicationsService {
       ...data,
       content: data.content.map(transform),
     }
+  }
+
+  async getHearingDetails(hearings: HearingDetails[], user: User) {
+    if (!hearings.length) return []
+    const locationIds = new Set(hearings.map(hearing => hearing.locationId))
+    const locationNamesAndIds =
+      (await Promise.all(
+        [...locationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+      )) || []
+    const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+    return hearings.map(hearing => {
+      return {
+        id: hearing.id,
+        dateTime: {
+          label: 'Date and time of hearing',
+          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:MM'),
+        },
+        location: {
+          label: 'Location',
+          value: locationNamesByIdMap.get(hearing.locationId),
+        },
+      }
+    })
+  }
+
+  async deleteHearing(
+    adjudicationNumber: number,
+    hearingIdToCancel: number,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
   }
 }
