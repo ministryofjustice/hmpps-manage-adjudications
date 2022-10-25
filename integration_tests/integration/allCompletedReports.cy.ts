@@ -312,6 +312,7 @@ context('All Completed Reports', () => {
   it('default date range is as expected', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
+
     cy.visit(adjudicationUrls.allCompletedReports.root)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.toDateInput().should('have.value', moment().format('DD/MM/YYYY'))
