@@ -2,7 +2,7 @@ export type IncidentDetails = {
   locationId: number
   dateTimeOfIncident: string
   handoverDeadline?: string
-  discoveryRadioSelected?: string // TODO
+  discoveryRadioSelected?: string
   dateTimeOfDiscovery?: string
 }
 

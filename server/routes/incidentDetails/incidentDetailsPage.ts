@@ -296,7 +296,7 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
     incidentDate: readDraftIncidentDetails.dateTime,
     discoveryDate: readDraftIncidentDetails.dateTime,
     locationId: readDraftIncidentDetails.locationId,
-    discoveryRadioSelected: 'Yes', // TODO
+    discoveryRadioSelected: 'Yes',
     reporterUsername: readDraftIncidentDetails.startedByUserId,
   }
 }

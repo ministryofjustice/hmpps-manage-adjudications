@@ -111,7 +111,6 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.ageOfPrisoner.urls.start(34))
   })
-  // TODO
   it('should redirect to the applicable rule page if details are complete after changing information and there are already offences on the draft', () => {
     placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
       draftAdjudication: {
