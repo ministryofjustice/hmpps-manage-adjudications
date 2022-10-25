@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@5.1
+  hmpps: ministryofjustice/hmpps@6.0
   slack: circleci/slack@4.4.2
 
 parameters:
@@ -25,11 +25,11 @@ executors:
       - image: 'gotenberg/gotenberg:<<parameters.gotenberg_tag>>'
         command:
           - "gotenberg"
-          - "--api-port=3001"  
+          - "--api-port=3001"
           - "--chromium-ignore-certificate-errors"
           - "--api-timeout=30s"
           - "--pdfengines-engines=pdftk"
-          - "--uno-listener-restart-threshold=0" 
+          - "--uno-listener-restart-threshold=0"
     working_directory: ~/app
     resource_class: <<parameters.resource_class>>
     parameters:
