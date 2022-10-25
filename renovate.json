@@ -1,6 +1,29 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
+  "extends": ["config:base", ":disableDependencyDashboard", ":preserveSemverRanges"],
+  "assigneesFromCodeOwners": true,
+  "timezone": "Europe/London",
+  "schedule": ["after 9am every weekday", "before 5pm every weekday"],
+  "enabledManagers": ["npm", "nvm", "dockerfile", "docker-compose", "helmv3", "helm-values", "circleci"],
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@types/node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "matchDatasources": ["docker"],
+      "allowedVersions": "16.15-bullseye-slim"
+    },
+    {
+      "matchDatasources": ["docker-compose"],
+      "matchPackageNames": ["bitnami/redis"],
+      "allowedVersions": "5.0"
+    },
+    {
+      "matchDatasources": ["orb"],
+      "matchPackageNames": ["cimg/node"],
+      "allowedVersions": "16.15-browsers"
+    }
   ]
 }
