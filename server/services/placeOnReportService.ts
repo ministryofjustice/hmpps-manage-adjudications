@@ -91,7 +91,6 @@ export default class PlaceOnReportService {
     user: User,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
-    console.log(dateTimeOfDiscovery)
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
       dateTimeOfIncident,
