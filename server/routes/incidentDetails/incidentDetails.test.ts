@@ -117,4 +117,11 @@ describe('POST /incident-details', () => {
         expect(res.text).toContain('Error: Internal Error')
       })
   })
+  it('should contain "Date of discovery" ', () => {
+    return request(app)
+      .get(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
+      .expect(res => {
+        expect(res.text).toContain('Date of discovery')
+      })
+  })
 })
