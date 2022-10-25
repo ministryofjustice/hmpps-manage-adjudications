@@ -49,6 +49,14 @@ const singleHearing = [
   },
 ]
 
+const hearingListAfterDeletion = [
+  {
+    id: 988,
+    dateTimeOfHearing: '2022-10-21T11:00:00',
+    locationId: 234,
+  },
+]
+
 const multipleHearings = [
   {
     id: 987,
@@ -138,14 +146,14 @@ context('Hearing deails page', () => {
           hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
         } else {
           hearingDetailsPage.summaryTable().should('exist')
-          hearingDetailsPage.cancelHearingButton(1).should('exist')
+          hearingDetailsPage.cancelHearingButton(987).should('exist')
           hearingDetailsPage.hearingIndex(1).should('exist')
           hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
           hearingDetailsPage.scheduleHearingButton().should('exist')
         }
         if (adj.id === 1524496) {
-          hearingDetailsPage.cancelHearingButton(2).should('exist')
-          hearingDetailsPage.hearingIndex(2).should('exist')
+          hearingDetailsPage.cancelHearingButton(988).should('exist')
+          hearingDetailsPage.hearingIndex(1).should('exist')
         }
       })
     })
@@ -198,7 +206,7 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
       })
     })
-    it('Adjudication accepted muliple hearings to show', () => {
+    it('Adjudication accepted multiple hearings to show', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
       hearingDetailsPage.reviewStatus().contains('Accepted') // this will eventually show Unscheduled
@@ -240,24 +248,39 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524496))
       })
     })
-    it.skip('Successfully cancels a hearing', () => {
-      // TODO the delete hearing functionality hasn't been built yet
-      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
-      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.cancelHearingButton(1).click() // deleting the first hearing
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524496))
+    it('Successfully cancels a hearing', () => {
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524497,
+        response: reportedAdjudicationResponse(1524497, 'ACCEPTED', multipleHearings),
       })
-      hearingDetailsPage.hearingIndex(2).should('not.exist')
-      hearingDetailsPage.cancelHearingButton(2).should('not.exist')
-      hearingDetailsPage
+      cy.task('stubCancelHearing', {
+        adjudicationNumber: 1524497,
+        hearingId: 987,
+        response: reportedAdjudicationResponse(1524497, 'ACCEPTED', hearingListAfterDeletion),
+      })
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
+      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524497,
+        response: reportedAdjudicationResponse(1524497, 'ACCEPTED', hearingListAfterDeletion),
+      })
+      hearingDetailsPage.cancelHearingButton(987).click() // deleting the first hearing in the list with id 987
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
+      })
+      const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
+      hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist') // There were two hearings but now should only be one
+      hearingDetailsPageAfterDeletion.cancelHearingButton(987).should('not.exist')
+      hearingDetailsPageAfterDeletion
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(1).innerText).to.contain('21 October 2022 - 11:10')
-          expect($summaryData.get(2).innerText).to.contain('Change Date and time of hearing')
-          expect($summaryData.get(3).innerText).to.contain('Adj 2')
-          expect($summaryData.get(4).innerText).to.contain('Change Location')
+          expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(3).innerText).to.contain('Change')
         })
     })
   })

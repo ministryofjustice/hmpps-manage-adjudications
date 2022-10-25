@@ -424,6 +424,29 @@ const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response
     },
   })
 
+const stubCancelHearing = ({
+  adjudicationNumber,
+  hearingId,
+  response = {},
+}: {
+  adjudicationNumber: number
+  hearingId: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -446,4 +469,5 @@ export default {
   stubSaveAssociatedPrisoner,
   stubSaveEvidenceDetails,
   stubSaveWitnessDetails,
+  stubCancelHearing,
 }

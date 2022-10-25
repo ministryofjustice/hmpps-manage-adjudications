@@ -218,4 +218,10 @@ export default class ManageAdjudicationsClient {
       data: { witnesses },
     })
   }
+
+  async cancelHearing(adjudicationNumber: number, hearingId: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+    })
+  }
 }

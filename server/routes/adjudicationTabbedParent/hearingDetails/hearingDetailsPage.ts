@@ -86,8 +86,8 @@ export default class HearingDetailsPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
     if (req.body.cancelHearingButton) {
-      const hearingIndexToCancel = req.body.cancelHearingButton.split('-')[1] - 1
-      await this.reportedAdjudicationsService.deleteHearing(/* stuff in here */)
+      const hearingIdToCancel = Number(req.body.cancelHearingButton.split('-')[1])
+      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
     }
     return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
