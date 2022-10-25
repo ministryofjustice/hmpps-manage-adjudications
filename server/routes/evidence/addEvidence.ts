@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
+import { EvidenceCode } from '../../data/DraftAdjudicationResult'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validateForm from './addEvidenceValidation'
@@ -56,7 +57,7 @@ export default class AddEvidenceRoutes {
         batIdentifier,
       })
 
-    const evidenceIdentifier = await this.getIdentifierToAdd(bwcIdentifier, batIdentifier)
+    const evidenceIdentifier = await this.getIdentifierToAdd(evidenceType, bwcIdentifier, batIdentifier)
 
     const evidenceToAdd = {
       code: evidenceType,
@@ -70,8 +71,14 @@ export default class AddEvidenceRoutes {
     return res.redirect(redirectUrl)
   }
 
-  getIdentifierToAdd = async (bwcIdentifier: string, batIdentifier: string) => {
-    return bwcIdentifier || batIdentifier || null
+  getIdentifierToAdd = async (evidenceType: EvidenceCode, bwcIdentifier: string, batIdentifier: string) => {
+    if (evidenceType === EvidenceCode.BAGGED_AND_TAGGED) {
+      return batIdentifier
+    }
+    if (evidenceType === EvidenceCode.BODY_WORN_CAMERA) {
+      return bwcIdentifier
+    }
+    return null
   }
 
   getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {

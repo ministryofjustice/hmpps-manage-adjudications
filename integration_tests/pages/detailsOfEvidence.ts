@@ -28,7 +28,9 @@ export default class Evidence extends Page {
 
   addEvidenceDescription = (): PageElement => cy.get('[data-qa="add-evidence-description"]')
 
-  addTagNumber = (): PageElement => cy.get('[data-qa="add-bat-id"]')
+  addSealNumber = (): PageElement => cy.get('[data-qa="add-bat-id"]')
+
+  addBWCNumber = (): PageElement => cy.get('[data-qa="add-bwc-id"]')
 
   addEvidenceSubmit = (): PageElement => cy.get('[data-qa="add-evidence-submit"]')
 }
