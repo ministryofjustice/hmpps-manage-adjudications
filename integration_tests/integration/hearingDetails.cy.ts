@@ -270,6 +270,7 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
       })
       const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
       hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist') // There were two hearings but now should only be one
       hearingDetailsPageAfterDeletion.cancelHearingButton(987).should('not.exist')
       hearingDetailsPageAfterDeletion

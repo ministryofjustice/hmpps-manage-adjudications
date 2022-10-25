@@ -408,10 +408,9 @@ export default class ReportedAdjudicationsService {
 
   async deleteHearing(
     adjudicationNumber: number,
-    hearingButtonValue: string,
+    hearingIdToCancel: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    const hearingIndexToCancel = Number(hearingButtonValue.split('-')[1])
-    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIndexToCancel)
+    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
   }
 }

@@ -149,11 +149,7 @@ describe('POST cancel hearing', () => {
       .send({ cancelHearingButton: 'cancelHearingButton-101' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(
-          1524494,
-          'cancelHearingButton-101',
-          expect.anything()
-        )
+        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, 101, expect.anything())
       })
   })
 })
