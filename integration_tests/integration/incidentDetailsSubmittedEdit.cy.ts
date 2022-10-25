@@ -141,7 +141,8 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
     incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
-  it('should show error if one of the time fields is not filled in correctly', () => {
+
+  it('should show error if one of the time fields is not filled in correctly - 3', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -273,6 +274,49 @@ context('Incident details (edit after completion of report)', () => {
       incidentDetailsPage.timeInputHours().type('13')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)
+      })
+    })
+
+    it('should show no error if DISCOVERY radio is  selected', () => {
+      cy.visit(
+        `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+          'G6415GD',
+          34
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+      )
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.timeInputHours().clear()
+      incidentDetailsPage.timeInputHours().type('13')
+      incidentDetailsPage.timeInputMinutes().clear()
+      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.timeInputMinutesDiscovery().clear()
+
+      incidentDetailsPage.submitButton().click()
+      incidentDetailsPage
+        .errorSummary()
+        .find('li')
+        .then($errors => {
+          expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
+        })
+    })
+
+    it('should show no error after submit if DISCOVERY radio is  selected', () => {
+      cy.visit(
+        `${adjudicationUrls.incidentDetails.urls.submittedEdit(
+          'G6415GD',
+          34
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+      )
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.timeInputHours().clear()
+      incidentDetailsPage.timeInputHours().type('13')
+      incidentDetailsPage.timeInputMinutes().clear()
+      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)

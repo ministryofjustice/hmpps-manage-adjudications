@@ -277,5 +277,29 @@ context('Incident details (edit) - statement incomplete', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
       })
     })
+    it('should submit form successfully if DISCOVERY selected and all data entered and redirect to offence details page - change location', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.timeInputHoursDiscovery().clear()
+      incidentDetailsPage.submitButton().click()
+      incidentDetailsPage
+        .errorSummary()
+        .find('li')
+        .then($errors => {
+          expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
+        })
+    })
+    it('should submit form successfully if DISCOVERY selected and all data entered and redirect to offence details page - change location', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
+      })
+    })
   })
 })
