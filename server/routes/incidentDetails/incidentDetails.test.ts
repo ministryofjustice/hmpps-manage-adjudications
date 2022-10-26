@@ -47,6 +47,7 @@ beforeEach(() => {
         locationId: 2,
         discoveryRadioSelected: 'Yes',
         dateTimeOfIncident: '2021-10-27T13:30:00.000',
+        dateTimeOfDiscovery: '2021-10-27T13:30:00.000',
       },
       incidentRole: {
         associatedPrisonersNumber: 'G2678PF',
@@ -79,6 +80,7 @@ describe('POST /incident-details', () => {
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -107,6 +109,7 @@ describe('POST /incident-details', () => {
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -117,6 +120,29 @@ describe('POST /incident-details', () => {
         expect(res.text).toContain('Error: Internal Error')
       })
   })
+
+  it('should verify supply optional dateTimeOfDiscovery ', async () => {
+    return request(app)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+      .send({
+        incidentDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'incited',
+        incitedInput: 'G2678PF',
+        discoveryRadioSelected: 'Yes',
+      })
+      .expect(() => {
+        expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
+          '2021-10-26T13:30',
+          2,
+          'G6415GD',
+          expect.anything(),
+          '2021-10-27T13:30'
+        )
+      })
+  })
+
   it('should contain "Date of discovery" ', () => {
     return request(app)
       .get(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
