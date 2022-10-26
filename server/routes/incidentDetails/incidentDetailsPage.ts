@@ -173,8 +173,7 @@ export default class IncidentDetailsPage {
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
-
-    return this.placeOnReportService.startNewDraftAdjudication(
+    return await this.placeOnReportService.startNewDraftAdjudication(
       formatDate(data.incidentDate),
       data.locationId,
       prisonerNumber,
