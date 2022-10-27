@@ -293,11 +293,17 @@ const extractValuesFromRequest = (req: Request): RequestValues => {
 }
 
 const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
+  let radioValue = 'No'
+
+  if (formatDate(readDraftIncidentDetails.dateTime) === formatDate(readDraftIncidentDetails.dateTimeOfDiscovery)) {
+    radioValue = 'Yes'
+  }
+
   return {
     incidentDate: readDraftIncidentDetails.dateTime,
-    discoveryDate: readDraftIncidentDetails.dateTime,
+    discoveryDate: readDraftIncidentDetails.dateTimeOfDiscovery,
     locationId: readDraftIncidentDetails.locationId,
-    discoveryRadioSelected: 'Yes',
+    discoveryRadioSelected: radioValue,
     reporterUsername: readDraftIncidentDetails.startedByUserId,
   }
 }

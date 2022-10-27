@@ -148,6 +148,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputHours().type('13')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -160,6 +161,7 @@ context('Incident details (edit after completion of report)', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Select')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -180,6 +182,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputHours().type('13')
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputMinutes().type('00')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.ageOfPrisoner.urls.start(34)}`)
@@ -214,6 +217,7 @@ context('Incident details (edit after completion of report)', () => {
       incidentDetailsPage.timeInputHours().type('14')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.not.eq(adjudicationUrls.prisonerReport.urls.report(1524455))
@@ -274,6 +278,7 @@ context('Incident details (edit after completion of report)', () => {
       incidentDetailsPage.timeInputHours().type('13')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)
@@ -288,13 +293,11 @@ context('Incident details (edit after completion of report)', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.timeInputHours().clear()
-      incidentDetailsPage.timeInputHours().type('13')
       incidentDetailsPage.timeInputMinutes().clear()
-      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.timeInputMinutes().type('13')
+      incidentDetailsPage.timeInputHours().clear()
+      incidentDetailsPage.timeInputHoursDiscovery().type('00')
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-      incidentDetailsPage.timeInputMinutesDiscovery().clear()
-
       incidentDetailsPage.submitButton().click()
       incidentDetailsPage
         .errorSummary()
@@ -312,10 +315,10 @@ context('Incident details (edit after completion of report)', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.timeInputHours().clear()
-      incidentDetailsPage.timeInputHours().type('13')
-      incidentDetailsPage.timeInputMinutes().clear()
-      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.timeInputMinutesDiscovery().clear()
+      incidentDetailsPage.timeInputMinutesDiscovery().type('13')
+      incidentDetailsPage.timeInputHoursDiscovery().clear()
+      incidentDetailsPage.timeInputHoursDiscovery().type('00')
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {

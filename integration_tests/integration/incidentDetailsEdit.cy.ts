@@ -148,6 +148,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputHours().type('13')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -160,6 +161,7 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Select')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -175,6 +177,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.timeInputHours().type('13')
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputMinutes().type('00')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(34))
@@ -184,6 +187,7 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(34))
@@ -208,6 +212,7 @@ context('Incident details (edit) - statement incomplete', () => {
       incidentDetailsPage.timeInputHours().type('14')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.not.eq(adjudicationUrls.taskList.urls.start(34))
@@ -263,6 +268,7 @@ context('Incident details (edit) - statement incomplete', () => {
       incidentDetailsPage.timeInputHours().type('13')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
@@ -272,12 +278,18 @@ context('Incident details (edit) - statement incomplete', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
       })
     })
-    it('should submit form successfully if DISCOVERY selected and all data entered and redirect to offence details page - change location', () => {
+    it('should set DICOVERY button to Yes is DISCOVERY date same as INCIDENT date ', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('be.checked')
+    })
+    it('should submit form successfully if DISCOVERY selected and all data entered and redirect to offence details page - change location - 2', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.locationSelector().select('Workshop 2')
@@ -291,15 +303,128 @@ context('Incident details (edit) - statement incomplete', () => {
           expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
         })
     })
-    it('should submit form successfully if DISCOVERY selected and all data entered and redirect to offence details page - change location', () => {
+    it('should submit form successfully if DISCOVERY selected and all data entered and redirect to offence details page - change location - 1', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.locationSelector().select('Workshop 2')
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
+        expect(loc.pathname).to.eq('/details-of-offence/34')
       })
     })
+  })
+})
+
+context('Discovery', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: {
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+        categoryCode: 'C',
+        alerts: [
+          { alertType: 'T', alertCode: 'TCPA' },
+          { alertType: 'X', alertCode: 'XCU' },
+        ],
+      },
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 34,
+      response: {
+        draftAdjudication: {
+          id: 34,
+          incidentDetails: {
+            dateTimeOfIncident: '2021-10-05T13:10:00',
+            dateTimeOfDiscovery: '2021-11-05T13:10:00',
+            handoverDeadline: '2021-11-05T13:1:00',
+            locationId: 27029,
+          },
+          incidentStatement: {
+            completed: false,
+            statement: 'Statement here',
+          },
+          prisonerNumber: 'G6415GD',
+          startedByUserId: 'USER1',
+          incidentRole: {
+            associatedPrisonersNumber: 'T3356FU',
+            roleCode: '25b',
+          },
+        },
+      },
+    })
+    cy.task('stubGetLocations', {
+      agencyId: 'MDI',
+      response: [
+        {
+          locationId: 27029,
+          agencyId: 'MDI',
+          userDescription: 'Workshop 19 - Braille',
+        },
+        {
+          locationId: 27008,
+          agencyId: 'MDI',
+          userDescription: 'Workshop 2',
+        },
+        {
+          locationId: 27009,
+          agencyId: 'MDI',
+          userDescription: 'Workshop 3 - Plastics',
+        },
+        {
+          locationId: 27010,
+          agencyId: 'MDI',
+          userDescription: 'Workshop 4 - PICTA',
+        },
+      ],
+    })
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'USER ONE',
+        username: 'USER1',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'T3356FU',
+      response: {
+        offenderNo: 'T3356FU',
+        firstName: 'JAMES',
+        lastName: 'JONES',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+      },
+    })
+    cy.task('stubSearch', {
+      query: {
+        includeAliases: false,
+        prisonerIdentifier: 'T3356FU',
+        prisonIds: ['MDI'],
+      },
+      results: [
+        {
+          cellLocation: '1-2-015',
+          firstName: 'JAMES',
+          lastName: 'JONES',
+          prisonerNumber: 'T3356FU',
+          prisonName: 'HMP Moorland',
+        },
+      ],
+    })
+    cy.signIn()
+  })
+  it('should set DICOVERY button to No is DISCOVERY date same as INCIDENT date ', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('be.checked')
   })
 })
