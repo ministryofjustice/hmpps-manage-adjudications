@@ -157,16 +157,11 @@ export default function routes(
     associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
   )
 
-  if (config.hearingsFeatureFlag === 'true') {
-    router.use(
-      adjudicationUrls.hearingDetails.root,
-      hearingDetailsRoutes({ reportedAdjudicationsService, userService })
-    )
-    router.use(
-      adjudicationUrls.scheduleHearing.root,
-      scheduleHearingRoutes({ reportedAdjudicationsService, locationService, userService })
-    )
-  }
+  router.use(adjudicationUrls.hearingDetails.root, hearingDetailsRoutes({ reportedAdjudicationsService, userService }))
+  router.use(
+    adjudicationUrls.scheduleHearing.root,
+    scheduleHearingRoutes({ reportedAdjudicationsService, locationService, userService })
+  )
 
   return router
 }
