@@ -30,7 +30,7 @@ describe('validateForm', () => {
   })
   describe('incidentTime', () => {
     beforeAll(() => {
-      jest.useFakeTimers('modern')
+      jest.useFakeTimers()
       jest.setSystemTime(new Date(1636017690000))
     })
     afterAll(() => {
