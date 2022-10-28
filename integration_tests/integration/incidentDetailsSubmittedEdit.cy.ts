@@ -29,6 +29,7 @@ context('Incident details (edit after completion of report)', () => {
           adjudicationNumber: 1524455,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T13:10:00',
+            dateTimeOfDiscovery: '2021-11-03T13:10:00',
             locationId: 27029,
           },
           incidentStatement: {
@@ -51,6 +52,7 @@ context('Incident details (edit after completion of report)', () => {
           id: 34,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
+            dateTimeOfDiscovery: '2021-11-03T11:09:42',
             locationId: 27029,
           },
           incidentStatement: {},
@@ -239,6 +241,7 @@ context('Incident details (edit after completion of report)', () => {
             id: 34,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-03T13:10:00',
+              dateTimeOfDiscovery: '2021-11-03T11:09:42',
               handoverDeadline: '2021-11-05T13:10:00',
               locationId: 27029,
             },
@@ -285,7 +288,7 @@ context('Incident details (edit after completion of report)', () => {
       })
     })
 
-    it('should show no error if DISCOVERY radio is  selected', () => {
+    it('should show no appropraite hour error if DISCOVERY radio is  selected and hour is wrong', () => {
       cy.visit(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
@@ -293,17 +296,17 @@ context('Incident details (edit after completion of report)', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('13')
-      incidentDetailsPage.timeInputHours().clear()
-      incidentDetailsPage.timeInputHoursDiscovery().type('00')
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.timeInputHoursDiscovery().clear()
+      incidentDetailsPage.timeInputHoursDiscovery().type('1300')
       incidentDetailsPage.submitButton().click()
       incidentDetailsPage
         .errorSummary()
         .find('li')
         .then($errors => {
-          expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
+          expect($errors.get(0).innerText).to.contain('Enter an incident discovery hour between 00 and 23')
         })
     })
 
@@ -324,6 +327,49 @@ context('Incident details (edit after completion of report)', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)
       })
+    })
+  })
+  context('Tests Discovery date differengt to incident date', () => {
+    beforeEach(() => {
+      cy.task('stubGetDraftAdjudication', {
+        id: 34,
+        response: {
+          draftAdjudication: {
+            id: 34,
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T13:10:00',
+              dateTimeOfDiscovery: '2021-11-04T13:10:00',
+              handoverDeadline: '2021-11-05T13:10:00',
+              locationId: 27029,
+            },
+            incidentStatement: {
+              completed: false,
+              statement: 'Statement here',
+            },
+            prisonerNumber: 'G6415GD',
+            startedByUserId: 'USER1',
+            incidentRole: {
+              associatedPrisonersNumber: 'T3356FU',
+              roleCode: '25b',
+            },
+            offenceDetails: [
+              {
+                offenceCode: 16001,
+                offenceRule: {
+                  paragraphNumber: '16',
+                  paragraphDescription:
+                    'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
+                },
+              },
+            ],
+          },
+        },
+      })
+    })
+    it('should set DICOVERY button to "No" if DISCOVERY date same as INCIDENT date ', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('be.checked')
     })
   })
 })
