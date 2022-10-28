@@ -5,6 +5,7 @@
 {% from "../../macros/datePicker.njk" import datePicker %}
 {% from "../../macros/timeInput.njk" import timeInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../../macros/timeSelect.njk" import timeSelect %}
 
 {% set title = 'Schedule a hearing' %}
 
@@ -49,7 +50,14 @@
         errorMessage: errors | findErrors(['hearingDate[date]'])
       }) }}
 
-      // time selection here
+    {{ timeSelect({         
+        id: 'hearingDate[time]',
+        label: 'Start time',
+        name: 'hearingDate[time]',
+        hour: startTimeHours,
+        minute: startTimeMinutes,
+        errorMessage: errors | findErrors(['hearingDate[time][hours]'])
+    }) }}
 
     <div class="flex-container flex-center">
       {{ govukButton({

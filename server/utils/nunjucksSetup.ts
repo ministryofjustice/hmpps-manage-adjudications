@@ -183,6 +183,27 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return `${witnessLastName}, ${witnessFirstName}`
   })
 
+  njkEnv.addFilter('toTextValue', (array, selected) => {
+    if (!array) return null
+
+    const items = array.map((entry: string) => ({
+      text: entry,
+      value: entry,
+      selected: entry && entry === selected,
+    }))
+
+    return [
+      {
+        text: '--',
+        value: '',
+        hidden: true,
+        selected: true,
+      },
+      ...items,
+    ]
+  })
+
+  njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)

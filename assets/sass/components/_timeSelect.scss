@@ -1,0 +1,18 @@
+.time-select-container {
+    display: flex;
+    flex-direction: row;
+  
+    .time-select-hours, .time-select-minutes {
+        width: 100px;
+        min-width: 100px;
+    }
+  
+    .time-select-hours {
+      margin-right: 16px;
+    }
+  
+    .govuk-form-group {
+      margin-bottom: 0;
+    }
+  }
+  

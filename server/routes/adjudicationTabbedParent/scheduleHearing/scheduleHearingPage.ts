@@ -4,10 +4,17 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { FormError } from '../../../@types/template'
+import { FormError, SubmittedDateTime } from '../../../@types/template'
+import { User } from '../../../data/hmppsAuthClient'
 
 type PageData = {
   errors?: FormError[]
+}
+
+type HearingDetails = {
+  hearingDate: SubmittedDateTime
+  locationId: number
+  id?: number
 }
 
 export enum PageRequestType {
@@ -43,25 +50,48 @@ export default class scheduleHearingRoutes {
     const { agencyId } = prisoner.assignedLivingUnit
     const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
+    // eslint-disable-next-line prefer-const
+    let readApiHearingDetails: HearingDetails = null
+    // if (this.pageOptions.isEdit()) {
+    //   readApiHearingDetails = await this.readFromApi(req.params.hearingId, user as User)
+    // }
+
+    const data = {
+      hearingDate: getHearingDate(readApiHearingDetails.hearingDate),
+      locationId: readApiHearingDetails.locationId,
+    }
     return res.render(`pages/adjudicationTabbedParent/scheduleHearing`, {
       errors: error ? [error] : [],
-      pageData,
       locations,
-      data: {
-        locationId: undefined,
-        hearingDate: {
-          date: undefined,
-          hour: undefined,
-          minute: undefined,
-        },
-      },
+      data,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {}, null)
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+    const { locationId, hearingDate } = req.body
+    console.log(locationId, hearingDate)
+    // const adjudicationNumber = Number(req.params.adjudicationNumber)
+    // return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
+
+  // readFromApi = async (adjudicationNumber: number, hearingId: number, user: User): Promise<HearingDetails> => {
+  //   const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+  //     adjudicationNumber,
+  //     user
+  //   )
+  // filter through hearings to find the correct hearingId and return details
+  // }
+}
+
+const getHearingDate = (userProvidedValue?: SubmittedDateTime) => {
+  if (userProvidedValue) {
+    const {
+      date,
+      time: { hour, minute },
+    } = userProvidedValue
+    return { date, hour, minute }
+  }
+  return null
 }
