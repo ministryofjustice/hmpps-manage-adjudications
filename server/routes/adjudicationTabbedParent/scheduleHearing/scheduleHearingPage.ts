@@ -1,14 +1,30 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
+import validateForm from './scheduleHearingValidation'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { FormError, SubmittedDateTime } from '../../../@types/template'
+import { PrisonLocation } from '../../../data/PrisonLocationResult'
 import { User } from '../../../data/hmppsAuthClient'
+import { PrisonerResultSummary } from '../../../services/placeOnReportService'
+
+type InitialFormData = {
+  hearingDetails?: HearingDetails
+}
+
+type SubmittedFormData = InitialFormData
+
+type DisplayDataFromApis = {
+  possibleLocations: PrisonLocation[]
+  prisoner: PrisonerResultSummary
+}
 
 type PageData = {
-  errors?: FormError[]
+  displayData: DisplayDataFromApis
+  formData?: InitialFormData
+  error?: FormError | FormError[]
 }
 
 type HearingDetails = {
@@ -37,18 +53,14 @@ export default class scheduleHearingRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userServicce: UserService
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  private renderView = async (req: Request, res: Response, pageData: PageData, error: FormError): Promise<void> => {
+  view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-
-    const prisoner = await this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
-    const { agencyId } = prisoner.assignedLivingUnit
-    const locations = await this.locationService.getIncidentLocations(agencyId, user)
 
     // eslint-disable-next-line prefer-const
     let readApiHearingDetails: HearingDetails = null
@@ -56,26 +68,29 @@ export default class scheduleHearingRoutes {
     //   readApiHearingDetails = await this.readFromApi(req.params.hearingId, user as User)
     // }
 
-    const data = {
-      hearingDate: getHearingDate(readApiHearingDetails.hearingDate),
-      locationId: readApiHearingDetails.locationId,
-    }
-    return res.render(`pages/adjudicationTabbedParent/scheduleHearing`, {
-      errors: error ? [error] : [],
-      locations,
-      data,
-    })
-  }
+    const pageData = await this.getPageDataOnGet(adjudicationNumber, readApiHearingDetails, user)
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, {}, null)
+    renderData(res, pageData, null)
+  }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const { locationId, hearingDate } = req.body
-    console.log(locationId, hearingDate)
-    // const adjudicationNumber = Number(req.params.adjudicationNumber)
-    // return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+    const postValues = extractValuesFromPost(req)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const validationError = validateForm({
+      hearingDate,
+      locationId,
+    })
+    if (validationError) {
+      const pageData = await this.getPageDataOnGet(adjudicationNumber, postValues.hearingDetails, user)
+      return renderData(res, pageData, validationError)
+    }
+    // save this data
+    return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
 
+  //  this is for the edit version
   // readFromApi = async (adjudicationNumber: number, hearingId: number, user: User): Promise<HearingDetails> => {
   //   const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
   //     adjudicationNumber,
@@ -83,6 +98,52 @@ export default class scheduleHearingRoutes {
   //   )
   // filter through hearings to find the correct hearingId and return details
   // }
+
+  getPageDataOnGet = async (
+    adjudicationNumber: number,
+    hearingDetails: HearingDetails,
+    user: User
+  ): Promise<PageData> => {
+    return {
+      displayData: await this.getDisplayData(adjudicationNumber, user),
+      formData: {
+        hearingDetails,
+      },
+    }
+  }
+
+  getDisplayData = async (adjudicationNumber: number, user: User): Promise<DisplayDataFromApis> => {
+    const prisoner = await this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
+    const { agencyId } = prisoner.assignedLivingUnit
+    const possibleLocations = await this.locationService.getIncidentLocations(agencyId, user)
+
+    return {
+      prisoner,
+      possibleLocations,
+    }
+  }
+}
+
+const renderData = (res: Response, pageData: PageData, error: FormError) => {
+  const data = {
+    hearingDate: getHearingDate(pageData.formData.hearingDetails?.hearingDate),
+    locationId: pageData.formData.hearingDetails?.locationId,
+  }
+  return res.render(`pages/adjudicationTabbedParent/scheduleHearing`, {
+    errors: error ? [error] : [],
+    locations: pageData.displayData.possibleLocations,
+    data,
+  })
+}
+
+const extractValuesFromPost = (req: Request): SubmittedFormData => {
+  const values = {
+    hearingDetails: {
+      hearingDate: req.body.hearingDate,
+      locationId: req.body.locationId,
+    },
+  }
+  return values
 }
 
 const getHearingDate = (userProvidedValue?: SubmittedDateTime) => {
