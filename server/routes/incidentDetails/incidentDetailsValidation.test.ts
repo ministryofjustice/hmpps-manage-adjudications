@@ -41,7 +41,7 @@ describe('validateForm', () => {
         })
       ).toEqual({
         href: '#discoveryRadioSelected',
-        text: 'Select an incident discovery time opttion',
+        text: 'Select yes if the incident was discovered at the same time',
       })
     })
     it('shows error if discovery radio set to No', () => {

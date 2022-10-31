@@ -335,8 +335,8 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     }
   }
   const data = {
-    incidentDate: getIncidentDate(pageData.formData.incidentDetails?.incidentDate),
-    discoveryDate: getIncidentDate(pageData.formData.incidentDetails?.discoveryDate),
+    incidentDate: extractDate(pageData.formData.incidentDetails?.incidentDate),
+    discoveryDate: extractDate(pageData.formData.incidentDetails?.discoveryDate),
     locationId: pageData.formData.incidentDetails?.locationId,
     discoveryRadioSelected: pageData.formData.incidentDetails?.discoveryRadioSelected,
   }
@@ -360,7 +360,7 @@ const getDraftIdFromString = (draftId: string): number => {
   return draftIdValue
 }
 
-const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
+const extractDate = (userProvidedValue?: SubmittedDateTime) => {
   if (userProvidedValue) {
     const {
       date,

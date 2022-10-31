@@ -307,8 +307,8 @@ context('Incident details (edit) - statement incomplete', () => {
       incidentDetailsPage.timeInputMinutesDiscovery().clear()
       incidentDetailsPage.timeInputMinutesDiscovery().type('00')
       incidentDetailsPage.submitButton().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq('/details-of-offence/34')
+      cy.location().should(() => {
+        adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34)
       })
     })
   })

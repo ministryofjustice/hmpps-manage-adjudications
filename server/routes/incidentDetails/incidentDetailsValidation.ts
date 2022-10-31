@@ -53,7 +53,7 @@ const errors: { [key: string]: FormError } = {
   },
   DISCOVERY_MISSING_RADIO: {
     href: '#discoveryRadioSelected',
-    text: 'Select an incident discovery time opttion',
+    text: 'Select yes if the incident was discovered at the same time',
   },
   DISCOVERY_MISSING_DATE: {
     href: '#discoveryDate[date]',
