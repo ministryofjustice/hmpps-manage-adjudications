@@ -22,4 +22,12 @@ export default class IncidentDetailsPage extends Page {
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 
   errorContinueButton = (): PageElement => cy.get('[data-qa="continue-after-error"]')
+
+  datePickerDiscovery = (): PageElement => cy.get('[data-qa="discovery-details-date"]')
+
+  timeInputHoursDiscovery = (): PageElement => cy.get('[data-qa="discovery-date-hour"]')
+
+  timeInputMinutesDiscovery = (): PageElement => cy.get('[data-qa="discovery-date-minutes"]')
+
+  radioButtonsDiscovery = (): PageElement => cy.get('[data-qa="radio-buttons-discovery"]')
 }

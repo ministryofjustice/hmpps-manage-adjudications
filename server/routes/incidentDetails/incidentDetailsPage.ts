@@ -59,7 +59,9 @@ type RequestValues = {
 
 type IncidentDetails = {
   incidentDate: SubmittedDateTime
+  discoveryDate: SubmittedDateTime
   locationId: number
+  discoveryRadioSelected?: string
 }
 
 type ApiIncidentDetails = IncidentDetails & {
@@ -108,6 +110,7 @@ export default class IncidentDetailsPage {
     if (this.pageOptions.isEdit()) {
       originalReporterUsernameForPage = readApiIncidentDetails.reporterUsername
     }
+
     const pageData = await this.getPageDataOnGet(
       requestValues,
       originalReporterUsernameForPage,
@@ -123,7 +126,9 @@ export default class IncidentDetailsPage {
 
     const validationError = validateForm({
       incidentDate: postValues.incidentDetails?.incidentDate,
+      discoveryDate: postValues.incidentDetails?.discoveryDate,
       locationId: postValues.incidentDetails?.locationId,
+      discoveryRadioSelected: postValues.incidentDetails?.discoveryRadioSelected,
     })
     if (validationError) {
       // Could stash to session and redirect here
@@ -172,7 +177,8 @@ export default class IncidentDetailsPage {
       formatDate(data.incidentDate),
       data.locationId,
       prisonerNumber,
-      currentUser
+      currentUser,
+      formatDate(data.discoveryDate)
     )
   }
 
@@ -186,7 +192,8 @@ export default class IncidentDetailsPage {
       draftId,
       formatDate(data.incidentDate),
       data.locationId,
-      currentUser
+      currentUser,
+      formatDate(data.discoveryDate)
     )
   }
 
@@ -286,9 +293,17 @@ const extractValuesFromRequest = (req: Request): RequestValues => {
 }
 
 const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
+  let radioValue = 'No'
+
+  if (formatDate(readDraftIncidentDetails.dateTime) === formatDate(readDraftIncidentDetails.dateTimeOfDiscovery)) {
+    radioValue = 'Yes'
+  }
+
   return {
     incidentDate: readDraftIncidentDetails.dateTime,
+    discoveryDate: readDraftIncidentDetails.dateTimeOfDiscovery,
     locationId: readDraftIncidentDetails.locationId,
+    discoveryRadioSelected: radioValue,
     reporterUsername: readDraftIncidentDetails.startedByUserId,
   }
 }
@@ -299,8 +314,10 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
     draftId: getDraftIdFromString(req.params.id),
     incidentDetails: {
       incidentDate: req.body.incidentDate,
+      discoveryDate: req.body.discoveryDate,
       locationId: req.body.locationId,
       reporterUsername: req.body.originalReporterUsername,
+      discoveryRadioSelected: req.body.discoveryRadioSelected,
     },
     originalPageReferrerUrl: req.query.referrer as string,
     originalReporterUsername: req.body.originalReporterUsername,
@@ -318,8 +335,10 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     }
   }
   const data = {
-    incidentDate: getIncidentDate(pageData.formData.incidentDetails?.incidentDate),
+    incidentDate: extractDate(pageData.formData.incidentDetails?.incidentDate),
+    discoveryDate: extractDate(pageData.formData.incidentDetails?.discoveryDate),
     locationId: pageData.formData.incidentDetails?.locationId,
+    discoveryRadioSelected: pageData.formData.incidentDetails?.discoveryRadioSelected,
   }
   return res.render(`pages/incidentDetails`, {
     errors: error ? [error] : [],
@@ -341,7 +360,7 @@ const getDraftIdFromString = (draftId: string): number => {
   return draftIdValue
 }
 
-const getIncidentDate = (userProvidedValue?: SubmittedDateTime) => {
+const extractDate = (userProvidedValue?: SubmittedDateTime) => {
   if (userProvidedValue) {
     const {
       date,

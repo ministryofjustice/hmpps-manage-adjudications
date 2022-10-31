@@ -9,6 +9,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toBeNull()
     })
@@ -21,10 +22,56 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[date]',
         text: 'Enter the date of the incident',
+      })
+    })
+    it('shows error if discovery radio not set', () => {
+      expect(
+        validateForm({
+          incidentDate: { time: { hour: '12', minute: '23' } },
+          discoveryDate: { date: '' },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: '',
+        })
+      ).toEqual({
+        href: '#discoveryRadioSelected',
+        text: 'Select yes if the incident was discovered at the same time',
+      })
+    })
+    it('shows error if discovery radio set to No', () => {
+      expect(
+        validateForm({
+          incidentDate: { time: { hour: '12', minute: '23' } },
+          discoveryDate: { date: '', time: { hour: '', minute: '' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'No',
+        })
+      ).toEqual({
+        href: '#discoveryDate[date]',
+        text: 'Enter the date of the incident discovery',
+      })
+    })
+    it('shows error if discovery radio set to No, date set but no hour', () => {
+      expect(
+        validateForm({
+          incidentDate: { time: { hour: '', minute: '23' } },
+          discoveryDate: { date: '20/12/2022', time: { hour: '', minute: '23' } },
+          locationId: 2343,
+          incidentRole: 'attempted',
+          associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'No',
+        })
+      ).toEqual({
+        href: '#discoveryDate[time]',
+        text: 'Enter the time of the discovery',
       })
     })
   })
@@ -43,6 +90,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -56,6 +104,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -69,6 +118,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -82,6 +132,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -95,6 +146,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time]',
@@ -108,6 +160,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -121,6 +174,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -134,6 +188,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -147,6 +202,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -160,6 +216,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][hour]',
@@ -173,6 +230,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time][minute]',
@@ -191,6 +249,7 @@ describe('validateForm', () => {
           locationId: 2343,
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#incidentDate[time]',
@@ -205,6 +264,7 @@ describe('validateForm', () => {
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
+          discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
         href: '#locationId',
