@@ -136,6 +136,7 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputMinutes().should('exist')
     incidentDetailsPage.locationSelector().should('exist')
     incidentDetailsPage.submitButton().should('exist')
+    incidentDetailsPage.radioButtonsDiscovery().should('exist')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 34))
@@ -144,13 +145,12 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
   })
 
-  it('should show error if one of the time fields is not filled in correctly - 3', () => {
+  it('should show error if one of the time fields is not filled in correctly', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputHours().type('13')
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -163,7 +163,6 @@ context('Incident details (edit after completion of report)', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.locationSelector().select('Select')
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -184,7 +183,6 @@ context('Incident details (edit after completion of report)', () => {
     incidentDetailsPage.timeInputHours().type('13')
     incidentDetailsPage.timeInputMinutes().clear()
     incidentDetailsPage.timeInputMinutes().type('00')
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.ageOfPrisoner.urls.start(34)}`)
@@ -219,7 +217,6 @@ context('Incident details (edit after completion of report)', () => {
       incidentDetailsPage.timeInputHours().type('14')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.not.eq(adjudicationUrls.prisonerReport.urls.report(1524455))
@@ -281,7 +278,6 @@ context('Incident details (edit after completion of report)', () => {
       incidentDetailsPage.timeInputHours().type('13')
       incidentDetailsPage.timeInputMinutes().clear()
       incidentDetailsPage.timeInputMinutes().type('00')
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)
@@ -296,9 +292,6 @@ context('Incident details (edit after completion of report)', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-      incidentDetailsPage.timeInputMinutes().clear()
-      incidentDetailsPage.timeInputMinutes().type('13')
       incidentDetailsPage.timeInputHoursDiscovery().clear()
       incidentDetailsPage.timeInputHoursDiscovery().type('1300')
       incidentDetailsPage.submitButton().click()
@@ -366,10 +359,13 @@ context('Incident details (edit after completion of report)', () => {
         },
       })
     })
-    it('should set DICOVERY button to "No" if DISCOVERY date same as INCIDENT date ', () => {
+    it('should set DICOVERY button to "No" if DISCOVERY date is different to INCIDENT date ', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('be.checked')
+      incidentDetailsPage.datePickerDiscovery().should('have.value', '04/11/2021')
+      incidentDetailsPage.timeInputHoursDiscovery().should('have.value', '13')
+      incidentDetailsPage.timeInputMinutesDiscovery().should('have.value', '10')
     })
   })
 })

@@ -136,6 +136,7 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.locationSelector().should('exist')
     incidentDetailsPage.submitButton().should('exist')
     incidentDetailsPage.exitButton().should('exist')
+    incidentDetailsPage.radioButtonsDiscovery().should('exist')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
@@ -287,7 +288,6 @@ context('Incident details (edit) - statement incomplete', () => {
     it('should fail to submit as Hours is cleared with appropriate message', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.locationSelector().select('Workshop 2')
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
       incidentDetailsPage.timeInputHoursDiscovery().clear()
       incidentDetailsPage.submitButton().click()
@@ -306,7 +306,6 @@ context('Incident details (edit) - statement incomplete', () => {
       incidentDetailsPage.timeInputHoursDiscovery().type('13')
       incidentDetailsPage.timeInputMinutesDiscovery().clear()
       incidentDetailsPage.timeInputMinutesDiscovery().type('00')
-      incidentDetailsPage.locationSelector().select('Workshop 2')
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq('/details-of-offence/34')
