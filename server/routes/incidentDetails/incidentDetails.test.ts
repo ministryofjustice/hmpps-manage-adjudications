@@ -121,12 +121,12 @@ describe('POST /incident-details', () => {
       })
   })
 
-  it('should verify supply optional dateTimeOfDiscovery ', async () => {
+  it('should verify supply optional discoveryDate ', async () => {
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
-        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -138,7 +138,7 @@ describe('POST /incident-details', () => {
           2,
           'G6415GD',
           expect.anything(),
-          '2021-10-27T13:30'
+          '2021-10-26T13:30'
         )
       })
   })

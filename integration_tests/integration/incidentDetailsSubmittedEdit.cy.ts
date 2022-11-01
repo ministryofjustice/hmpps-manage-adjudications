@@ -275,9 +275,9 @@ context('Incident details (edit after completion of report)', () => {
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.timeInputHours().clear()
-      incidentDetailsPage.timeInputHours().type('13')
+      incidentDetailsPage.timeInputHours().type('00')
       incidentDetailsPage.timeInputMinutes().clear()
-      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.timeInputMinutes().type('01')
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)

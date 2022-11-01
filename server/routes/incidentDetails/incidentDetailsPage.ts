@@ -297,6 +297,9 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
 
   if (formatDate(readDraftIncidentDetails.dateTime) === formatDate(readDraftIncidentDetails.dateTimeOfDiscovery)) {
     radioValue = 'Yes'
+    /* eslint-disable no-param-reassign */
+    readDraftIncidentDetails.dateTimeOfDiscovery = null
+    /* eslint-enable no-param-reassign */
   }
 
   return {
@@ -309,12 +312,18 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
 }
 
 const extractValuesFromPost = (req: Request): SubmittedFormData => {
+  let { discoveryDate } = req.body
+
+  if (req.body.discoveryRadioSelected === 'Yes') {
+    discoveryDate = req.body.incidentDate
+  }
+
   const values = {
     prisonerNumber: req.params.prisonerNumber,
     draftId: getDraftIdFromString(req.params.id),
     incidentDetails: {
       incidentDate: req.body.incidentDate,
-      discoveryDate: req.body.discoveryDate,
+      discoveryDate,
       locationId: req.body.locationId,
       reporterUsername: req.body.originalReporterUsername,
       discoveryRadioSelected: req.body.discoveryRadioSelected,
