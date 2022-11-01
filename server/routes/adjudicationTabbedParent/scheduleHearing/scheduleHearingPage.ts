@@ -8,7 +8,8 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { FormError, SubmittedDateTime } from '../../../@types/template'
 import { PrisonLocation } from '../../../data/PrisonLocationResult'
 import { User } from '../../../data/hmppsAuthClient'
-import { PrisonerResultSummary } from '../../../services/placeOnReportService'
+import logger from '../../../../logger'
+import { convertDateTimeToObject, formatDate } from '../../../utils/utils'
 
 type InitialFormData = {
   hearingDetails?: HearingDetails
@@ -18,7 +19,7 @@ type SubmittedFormData = InitialFormData
 
 type DisplayDataFromApis = {
   possibleLocations: PrisonLocation[]
-  prisoner: PrisonerResultSummary
+  adjudicationNumber: number
 }
 
 type PageData = {
@@ -61,43 +62,78 @@ export default class scheduleHearingRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const hearingId = Number(req.params.hearingId)
 
-    // eslint-disable-next-line prefer-const
     let readApiHearingDetails: HearingDetails = null
-    // if (this.pageOptions.isEdit()) {
-    //   readApiHearingDetails = await this.readFromApi(req.params.hearingId, user as User)
-    // }
+    if (this.pageOptions.isEdit()) {
+      readApiHearingDetails = await this.readFromApi(adjudicationNumber, hearingId, user as User)
+    }
+    console.log(readApiHearingDetails)
 
     const pageData = await this.getPageDataOnGet(adjudicationNumber, readApiHearingDetails, user)
-
     renderData(res, pageData, null)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { locationId, hearingDate } = req.body
     const postValues = extractValuesFromPost(req)
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const hearingId = Number(req.params.hearingId) // Only present if we're on the edit page
     const validationError = validateForm({
-      hearingDate,
-      locationId,
+      hearingDate: postValues.hearingDetails.hearingDate,
+      locationId: postValues.hearingDetails.locationId,
     })
     if (validationError) {
       const pageData = await this.getPageDataOnGet(adjudicationNumber, postValues.hearingDetails, user)
       return renderData(res, pageData, validationError)
     }
-    // save this data
-    return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+    const hearingDetailsToSave = postValues.hearingDetails
+    try {
+      if (this.pageOptions.isEdit()) {
+        await this.reportedAdjudicationsService.rescheduleHearing(
+          adjudicationNumber,
+          hearingId,
+          hearingDetailsToSave.locationId,
+          formatDate(hearingDetailsToSave.hearingDate),
+          user
+        )
+      } else {
+        await this.reportedAdjudicationsService.scheduleHearing(
+          adjudicationNumber,
+          hearingDetailsToSave.locationId,
+          formatDate(hearingDetailsToSave.hearingDate),
+          user
+        )
+      }
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+    } catch (postError) {
+      if (this.pageOptions.isEdit()) {
+        logger.error(`Failed to amend hearing: ${postError}`)
+        res.locals.redirectUrl = adjudicationUrls.scheduleHearing.urls.edit(adjudicationNumber, hearingId)
+      } else {
+        logger.error(`Failed to schedule hearing: ${postError}`)
+        res.locals.redirectUrl = adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber)
+      }
+      throw postError
+    }
   }
 
-  //  this is for the edit version
-  // readFromApi = async (adjudicationNumber: number, hearingId: number, user: User): Promise<HearingDetails> => {
-  //   const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-  //     adjudicationNumber,
-  //     user
-  //   )
-  // filter through hearings to find the correct hearingId and return details
-  // }
+  readFromApi = async (adjudicationNumber: number, hearingId: number, user: User): Promise<HearingDetails> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+      adjudicationNumber,
+      user
+    )
+    const { reportedAdjudication } = adjudication
+    const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
+    console.log(hearingToRender)
+    console.log(convertDateTimeToObject(hearingToRender.dateTimeOfHearing))
+    // TODO do we need a fallback for if something goes wrong here?
+    return {
+      hearingDate: await convertDateTimeToObject(hearingToRender.dateTimeOfHearing),
+      locationId: hearingToRender.locationId,
+      id: hearingToRender.id,
+    }
+  }
 
   getPageDataOnGet = async (
     adjudicationNumber: number,
@@ -116,10 +152,9 @@ export default class scheduleHearingRoutes {
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
     const { agencyId } = prisoner.assignedLivingUnit
     const possibleLocations = await this.locationService.getIncidentLocations(agencyId, user)
-
     return {
-      prisoner,
       possibleLocations,
+      adjudicationNumber,
     }
   }
 }
@@ -129,8 +164,10 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     hearingDate: getHearingDate(pageData.formData.hearingDetails?.hearingDate),
     locationId: pageData.formData.hearingDetails?.locationId,
   }
+
   return res.render(`pages/adjudicationTabbedParent/scheduleHearing`, {
     errors: error ? [error] : [],
+    cancelHref: adjudicationUrls.hearingDetails.urls.review(pageData.displayData.adjudicationNumber),
     locations: pageData.displayData.possibleLocations,
     data,
   })

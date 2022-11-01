@@ -34,6 +34,7 @@ import {
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
+import { SubmittedDateTime } from '../@types/template'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -396,7 +397,7 @@ export default class ReportedAdjudicationsService {
         id: hearing.id,
         dateTime: {
           label: 'Date and time of hearing',
-          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:MM'),
+          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:mm'),
         },
         location: {
           label: 'Location',
@@ -412,5 +413,27 @@ export default class ReportedAdjudicationsService {
     user: User
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
+  }
+
+  async scheduleHearing(adjudicationNumber: number, locationId: number, dateTimeOfHearing: string, user: User) {
+    const dataToSend = {
+      locationId,
+      dateTimeOfHearing,
+    }
+    return new ManageAdjudicationsClient(user.token).createHearing(adjudicationNumber, dataToSend)
+  }
+
+  async rescheduleHearing(
+    adjudicationNumber: number,
+    hearingId: number,
+    locationId: number,
+    dateTimeOfHearing: string,
+    user: User
+  ) {
+    const dataToSend = {
+      locationId,
+      dateTimeOfHearing,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
   }
 }

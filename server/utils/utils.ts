@@ -140,6 +140,14 @@ export const getEvidenceCategory = (
   return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
 }
 
+export const convertDateTimeToObject = (dateTime: string): { date: string; time: { hour: string; minute: string } } => {
+  const date = getDate(dateTime, 'DD/MM/YYYY')
+  const time = getTime(dateTime)
+  const hour = time.split(':')[0]
+  const minute = time.split(':')[1]
+  return { date, time: { hour, minute } }
+}
+
 export default {
   numberRange,
   convertToTitleCase,

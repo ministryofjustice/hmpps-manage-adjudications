@@ -305,9 +305,12 @@ const adjudicationUrls = {
     root: '/schedule-hearing',
     matchers: {
       start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:hearingId',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.scheduleHearing.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.scheduleHearing.root}/${adjudicationNumber}/edit/${hearingId}`,
     },
   },
   homepage: {

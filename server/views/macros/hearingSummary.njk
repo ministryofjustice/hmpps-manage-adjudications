@@ -10,7 +10,7 @@
   {% set dateTimeChangeLink = {
         items: [
           {
-            href: changeLinkHref + "?hearingId=" + hearingDetails.id,
+            href: changeLinkHref,
             text: "Change",
             visuallyHiddenText: ' date and time of hearing',
             attributes: {"data-qa": "change-link" }
@@ -20,7 +20,7 @@
   {% set locationChangeLink = {
         items: [
           {
-            href: changeLinkHref + "?hearingId=" + hearingDetails.id,
+            href: changeLinkHref,
             text: "Change",
             visuallyHiddenText: ' location',
             attributes: {"data-qa": "change-link" }

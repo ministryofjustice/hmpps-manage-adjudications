@@ -13,6 +13,7 @@ import {
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
+  HearingDetails,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -222,6 +223,24 @@ export default class ManageAdjudicationsClient {
   async cancelHearing(adjudicationNumber: number, hearingId: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+    })
+  }
+
+  async createHearing(adjudicationNumber: number, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing`,
+      data: hearingDetails,
+    })
+  }
+
+  async amendHearing(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingDetails: HearingDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+      data: hearingDetails,
     })
   }
 }
