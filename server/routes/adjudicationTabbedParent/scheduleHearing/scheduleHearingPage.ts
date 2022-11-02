@@ -62,7 +62,7 @@ export default class scheduleHearingRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
+    const hearingId = Number(req.params.hearingId) // Only present if we're on the edit page
 
     let readApiHearingDetails: HearingDetails = null
     if (this.pageOptions.isEdit()) {
@@ -123,7 +123,6 @@ export default class scheduleHearingRoutes {
     )
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
-    // TODO do we need a fallback for if something goes wrong here?
     return {
       hearingDate: await convertDateTimeToObject(hearingToRender.dateTimeOfHearing),
       locationId: hearingToRender.locationId,

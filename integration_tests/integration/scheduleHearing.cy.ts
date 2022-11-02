@@ -2,6 +2,7 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { getTime } from '../../server/utils/utils'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -183,6 +184,23 @@ context('Schedule a hearing page', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain('Select time of hearing')
+      })
+  })
+  it('should show error if the time entered is in the past', () => {
+    const now = new Date()
+    const hour = String(now.getHours() - 1)
+    cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.locationSelector().select('Adj 1')
+    forceDateInputWithDate(now, '[data-qa="hearing-date"]')
+    scheduleHearingsPage.timeInputHours().select(hour)
+    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('The hearing time must be in the future')
       })
   })
   it('should return to the hearing details page if the cancel link is clicked', () => {

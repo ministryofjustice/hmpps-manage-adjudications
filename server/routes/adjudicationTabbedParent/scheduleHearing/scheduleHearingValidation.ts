@@ -17,7 +17,7 @@ const errors: { [key: string]: FormError } = {
   },
   PAST_TIME: {
     href: '#hearingDate[time][hour]',
-    text: 'The incident time must be in the future',
+    text: 'The hearing time must be in the future',
   },
   MISSING_LOCATION: {
     href: '#locationId',
@@ -32,7 +32,7 @@ export default function validateForm({ hearingDate, locationId }: ScheduleHearin
   if (!hearingDate.date) {
     return errors.MISSING_DATE
   }
-  if (!hearingDate.time.hour || !hearingDate.time.minute) {
+  if (!hearingDate.time?.hour || !hearingDate.time?.minute) {
     return errors.MISSING_TIME
   }
   if (new Date(formatDate(hearingDate)) < new Date()) {

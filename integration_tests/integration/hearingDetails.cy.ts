@@ -44,7 +44,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, status: string
 const singleHearing = [
   {
     id: 987,
-    dateTimeOfHearing: '2022-10-20T11:11:00',
+    dateTimeOfHearing: '2022-10-20T10:00:00',
     locationId: 123,
   },
 ]
@@ -196,7 +196,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 11:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 10:00')
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
         })
@@ -224,11 +224,11 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:00')
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
           expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(4).innerText).to.contain('21 October 2022 - 11:00')
           expect($summaryData.get(5).innerText).to.contain('Change')
           expect($summaryData.get(6).innerText).to.contain('Adj 2')
           expect($summaryData.get(7).innerText).to.contain('Change')
@@ -276,7 +276,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:00')
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
           expect($summaryData.get(3).innerText).to.contain('Change')
@@ -347,7 +347,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 11:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 10:00')
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
@@ -374,9 +374,9 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:00')
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(2).innerText).to.contain('21 October 2022 - 11:00')
           expect($summaryData.get(3).innerText).to.contain('Adj 2')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
