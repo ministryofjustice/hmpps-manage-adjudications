@@ -292,19 +292,22 @@ const extractValuesFromRequest = (req: Request): RequestValues => {
   return values
 }
 
-const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
-  let radioValue = 'No'
-
-  if (formatDate(readDraftIncidentDetails.dateTime) === formatDate(readDraftIncidentDetails.dateTimeOfDiscovery)) {
-    radioValue = 'Yes'
-    /* eslint-disable no-param-reassign */
-    readDraftIncidentDetails.dateTimeOfDiscovery = null
-    /* eslint-enable no-param-reassign */
+const calculateRadioValue = (dateTime: SubmittedDateTime, dateOfDiscovery: SubmittedDateTime) => {
+  if (formatDate(dateTime) === formatDate(dateOfDiscovery)) {
+    return 'Yes'
   }
+  return 'No'
+}
+
+const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
+  const radioValue = calculateRadioValue(
+    readDraftIncidentDetails.dateTime,
+    readDraftIncidentDetails.dateTimeOfDiscovery
+  )
 
   return {
     incidentDate: readDraftIncidentDetails.dateTime,
-    discoveryDate: readDraftIncidentDetails.dateTimeOfDiscovery,
+    discoveryDate: radioValue === 'Yes' ? null : readDraftIncidentDetails.dateTimeOfDiscovery,
     locationId: readDraftIncidentDetails.locationId,
     discoveryRadioSelected: radioValue,
     reporterUsername: readDraftIncidentDetails.startedByUserId,
@@ -312,18 +315,16 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
 }
 
 const extractValuesFromPost = (req: Request): SubmittedFormData => {
-  let { discoveryDate } = req.body
+  const { discoveryDate } = req.body
 
-  if (req.body.discoveryRadioSelected === 'Yes') {
-    discoveryDate = req.body.incidentDate
-  }
+  const discoveryDateTime = req.body.discoveryRadioSelected === 'Yes' ? req.body.incidentDate : discoveryDate
 
   const values = {
     prisonerNumber: req.params.prisonerNumber,
     draftId: getDraftIdFromString(req.params.id),
     incidentDetails: {
       incidentDate: req.body.incidentDate,
-      discoveryDate,
+      discoveryDate: discoveryDateTime,
       locationId: req.body.locationId,
       reporterUsername: req.body.originalReporterUsername,
       discoveryRadioSelected: req.body.discoveryRadioSelected,

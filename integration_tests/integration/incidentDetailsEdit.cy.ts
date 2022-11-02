@@ -349,9 +349,27 @@ context('Incident details (edit) - statement incomplete', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain(
-          'The incident discovery date/time must be after the indident date/time'
-        )
+        expect($errors.get(0).innerText).to.contain('The discovery date must be after the indident date')
+      })
+  })
+  it('DISCOVERY : should fail to submit if the "No" radio option selected and discovery time before incident time, but dates are the same', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+
+    forceDateInput(10, 10, 2010, '[data-qa="incident-details-date"]')
+    forceDateInput(10, 10, 2010, '[data-qa="discovery-details-date"]')
+
+    incidentDetailsPage.timeInputHoursDiscovery().clear()
+    incidentDetailsPage.timeInputHoursDiscovery().type('00')
+    incidentDetailsPage.timeInputMinutesDiscovery().clear()
+    incidentDetailsPage.timeInputMinutesDiscovery().type('01')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('The discovery time must be after the indident time')
       })
   })
   it('DISCOVERY : should fail to submit if "No" radio option selected and hour filled incorrectly', () => {
