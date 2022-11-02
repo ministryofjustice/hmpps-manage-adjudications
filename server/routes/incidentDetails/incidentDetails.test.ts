@@ -126,7 +126,7 @@ describe('POST /incident-details', () => {
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
-        discoveryDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '', time: { hour: '', minute: '' } },
         locationId: 2,
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
