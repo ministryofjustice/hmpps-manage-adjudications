@@ -303,7 +303,7 @@ context('Incident details (edit after completion of report)', () => {
         })
     })
 
-    it.only('should show no error after submit if DISCOVERY radio is  selected', () => {
+    it('should show no error after submit if DISCOVERY radio is  selected', () => {
       cy.visit(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
