@@ -85,7 +85,6 @@ context('Hearing deails page', () => {
         authSource: 'auth',
       },
     })
-    // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
@@ -172,11 +171,18 @@ context('Hearing deails page', () => {
       hearingDetailsPage.reviewStatus().contains('Accepted') // TODO this will eventually show Unscheduled
       hearingDetailsPage.noHearingsScheduled().contains('Not scheduled.')
       hearingDetailsPage.scheduleHearingButton().contains('Schedule a hearing')
-      // TODO write a test for clicking add hearing button when that page and URL is set
       hearingDetailsPage.viewAllCompletedReportsLink().contains('Return to all completed reports')
       hearingDetailsPage.viewAllCompletedReportsLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
+      })
+    })
+    it('goes to schedule hearing page when button clicked', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524494))
+      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPage.scheduleHearingButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(1524494))
       })
     })
     it('Adjudication accepted, one hearing', () => {
