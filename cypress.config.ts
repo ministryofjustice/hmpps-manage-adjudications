@@ -76,6 +76,8 @@ export default defineConfig({
         stubSaveYouthOffenderStatus: adjudications.stubSaveYouthOffenderStatus,
         stubSaveAssociatedPrisoner: adjudications.stubSaveAssociatedPrisoner,
         stubCancelHearing: adjudications.stubCancelHearing,
+        stubScheduleHearing: adjudications.stubScheduleHearing,
+        stubAmendHearing: adjudications.stubAmendHearing,
       })
     },
 

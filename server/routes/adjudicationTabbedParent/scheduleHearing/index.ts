@@ -2,7 +2,7 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import ScheduleHearingRoutes from './scheduleHearing'
-import AmendHearingRoutes from './amendHearing'
+import ScheduleHearingEditRoutes from './scheduleHearingEdit'
 
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import LocationService from '../../../services/locationService'
@@ -21,15 +21,19 @@ export default function scheduleHearingRoutes({
   const router = express.Router()
 
   const scheduleHearingRoute = new ScheduleHearingRoutes(reportedAdjudicationsService, locationService, userService)
-  const amendHearingRoute = new AmendHearingRoutes(reportedAdjudicationsService, locationService, userService)
+  const scheduleHearingEditRoute = new ScheduleHearingEditRoutes(
+    reportedAdjudicationsService,
+    locationService,
+    userService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.scheduleHearing.matchers.start, scheduleHearingRoute.view)
   post(adjudicationUrls.scheduleHearing.matchers.start, scheduleHearingRoute.submit)
-  get(adjudicationUrls.scheduleHearing.matchers.edit, amendHearingRoute.view)
-  post(adjudicationUrls.scheduleHearing.matchers.edit, amendHearingRoute.submit)
+  get(adjudicationUrls.scheduleHearing.matchers.edit, scheduleHearingEditRoute.view)
+  post(adjudicationUrls.scheduleHearing.matchers.edit, scheduleHearingEditRoute.submit)
 
   return router
 }

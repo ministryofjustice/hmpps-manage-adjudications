@@ -68,8 +68,6 @@ export default class scheduleHearingRoutes {
     if (this.pageOptions.isEdit()) {
       readApiHearingDetails = await this.readFromApi(adjudicationNumber, hearingId, user as User)
     }
-    console.log(readApiHearingDetails)
-
     const pageData = await this.getPageDataOnGet(adjudicationNumber, readApiHearingDetails, user)
     renderData(res, pageData, null)
   }
@@ -125,8 +123,6 @@ export default class scheduleHearingRoutes {
     )
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
-    console.log(hearingToRender)
-    console.log(convertDateTimeToObject(hearingToRender.dateTimeOfHearing))
     // TODO do we need a fallback for if something goes wrong here?
     return {
       hearingDate: await convertDateTimeToObject(hearingToRender.dateTimeOfHearing),

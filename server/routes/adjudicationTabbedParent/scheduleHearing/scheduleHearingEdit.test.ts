@@ -47,7 +47,7 @@ beforeEach(() => {
     { locationId: 27010, locationPrefix: 'A3', userDescription: 'Adj 3' },
     { locationId: 27011, locationPrefix: 'A4', userDescription: 'Adj 4' },
   ])
-  reportedAdjudicationsService.scheduleHearing.mockResolvedValue({
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: {
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
@@ -75,6 +75,35 @@ beforeEach(() => {
       ],
     },
   })
+  reportedAdjudicationsService.rescheduleHearing.mockResolvedValue({
+    reportedAdjudication: {
+      adjudicationNumber: 1524494,
+      prisonerNumber: 'G6415GD',
+      bookingId: 1,
+      createdDateTime: undefined,
+      createdByUserId: undefined,
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
+        handoverDeadline: '2022-11-02T12:54:09.197Z',
+      },
+      incidentStatement: undefined,
+      incidentRole: {
+        roleCode: undefined,
+      },
+      offenceDetails: [],
+      status: ReportedAdjudicationStatus.ACCEPTED,
+      isYouthOffender: false,
+      hearings: [
+        {
+          id: 101,
+          locationId: 27008,
+          dateTimeOfHearing: '2022-11-04T10:00:00',
+        },
+      ],
+    },
+  })
+
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })
 })
 
@@ -82,10 +111,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET schedule a hearing', () => {
+describe('GET reschedule a hearing', () => {
   it('should load the schedule hearing page', () => {
     return request(app)
-      .get(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .get(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Schedule a hearing')
@@ -99,33 +128,34 @@ describe('GET schedule a hearing', () => {
       })
   })
 })
-describe('POST new schedule hearing', () => {
+describe('POST edit existing hearing', () => {
   it('should successfully submit a hearing when all details provided', () => {
     return request(app)
-      .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .send({
-        hearingDate: { date: '03/11/2022', time: { hour: '11', minute: '00' } },
+        hearingDate: { date: '04/11/2022', time: { hour: '10', minute: '00' } },
         locationId: 27008,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
       .expect(response => {
-        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
+        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           1524494,
+          101,
           27008,
-          '2022-11-03T11:00',
+          '2022-11-04T10:00',
           expect.anything()
         )
-        expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
       })
   })
   it('should throw an error on api failure', () => {
-    reportedAdjudicationsService.scheduleHearing.mockRejectedValue(new Error('Internal Error'))
+    reportedAdjudicationsService.rescheduleHearing.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .send({
-        hearingDate: { date: '03/11/2022', time: { hour: '11', minute: '00' } },
+        hearingDate: { date: '04/11/2022', time: { hour: '10', minute: '00' } },
         locationId: 27008,
       })
       .expect('Content-Type', /html/)

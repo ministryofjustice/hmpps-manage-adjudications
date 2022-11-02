@@ -244,8 +244,7 @@ context('Hearing deails page', () => {
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
       hearingDetailsPage.changeLink().first().click()
       cy.location().should(loc => {
-        // TODO: When we have set up the URL for editing a hearing this will change
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524496))
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524496, 987))
       })
     })
     it('Successfully cancels a hearing', () => {
