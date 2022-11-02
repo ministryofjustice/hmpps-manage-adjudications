@@ -2,7 +2,6 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-import { getTime } from '../../server/utils/utils'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
