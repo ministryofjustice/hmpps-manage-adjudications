@@ -2,7 +2,7 @@
 # Per environment values which override defaults in hmpps-manage-adjudications/values.yaml
 
 generic-service:
-  replicaCount: 4
+  replicaCount: 2
 
   ingress:
     host: manage-adjudications-preprod.hmpps.service.justice.gov.uk
@@ -75,4 +75,4 @@ generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 
 gotenberg:
-  replicaCount: 1 
+  replicaCount: 1
