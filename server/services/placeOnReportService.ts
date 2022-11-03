@@ -52,6 +52,7 @@ export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
 
 export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
+  dateTimeOfDiscovery: SubmittedDateTime
   locationId: number
   startedByUserId: string
   adjudicationNumber?: number
@@ -94,7 +95,8 @@ export default class PlaceOnReportService {
     dateTimeOfIncident: string,
     locationId: number,
     prisonerNumber: string,
-    user: User
+    user: User,
+    dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
     const requestBody = {
@@ -102,6 +104,7 @@ export default class PlaceOnReportService {
       agencyId: user.activeCaseLoadId,
       locationId,
       prisonerNumber,
+      dateTimeOfDiscovery,
     }
     return client.startNewDraftAdjudication(requestBody)
   }
@@ -185,12 +188,14 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const response = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { incidentDetails } = response.draftAdjudication
-    const dateAndTime = await convertDateTimeToObject(incidentDetails.dateTimeOfIncident)
+    const dateAndTimeOfIncident = await convertDateTimeToObject(incidentDetails.dateTimeOfIncident)
+    const dateAndTimeOfDiscovery = await convertDateTimeToObject(incidentDetails.dateTimeOfDiscovery)
     return {
-      dateTime: dateAndTime,
+      dateTime: dateAndTimeOfIncident,
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
       adjudicationNumber: response.draftAdjudication.adjudicationNumber,
+      dateTimeOfDiscovery: dateAndTimeOfDiscovery,
     }
   }
 
@@ -198,7 +203,8 @@ export default class PlaceOnReportService {
     id: number,
     dateTime: string,
     location: number,
-    user: User
+    user: User,
+    dateTimeOfDiscovery: string
   ): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const editedIncidentDetails = {
@@ -206,6 +212,7 @@ export default class PlaceOnReportService {
       locationId: location,
       // TODO - Make this optional in API!
       removeExistingOffences: false,
+      dateTimeOfDiscovery,
     }
     const editedAdjudication = await manageAdjudicationsClient.editDraftIncidentDetails(id, editedIncidentDetails)
     return editedAdjudication

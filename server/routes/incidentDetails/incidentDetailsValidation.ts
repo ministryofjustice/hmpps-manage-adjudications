@@ -3,9 +3,11 @@ import { formatDate } from '../../utils/utils'
 
 type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
+  discoveryDate?: SubmittedDateTime
   locationId?: number
   incidentRole?: string
   associatedPrisonersNumber?: string
+  discoveryRadioSelected?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -49,9 +51,68 @@ const errors: { [key: string]: FormError } = {
     href: '#incidentDate[time]',
     text: 'The incident time must be in the past',
   },
+  DISCOVERY_MISSING_RADIO: {
+    href: '#discoveryRadioSelected',
+    text: 'Select yes if the incident was discovered at the same time',
+  },
+  DISCOVERY_MISSING_DATE: {
+    href: '#discoveryDate[date]',
+    text: 'Enter the date of the incident discovery',
+  },
+  DISCOVERY_MISSING_TIME: {
+    href: '#discoveryDate[time]',
+    text: 'Enter the time of the discovery',
+  },
+  DISCOVERY_MISSING_HOUR: {
+    href: '#discoveryDate[time][hour]',
+    text: 'Enter an incident discovery hour between 00 and 23',
+  },
+  DISCOVERY_MISSING_MINUTE: {
+    href: '#discoveryDate[time][minute]',
+    text: 'Enter the discovery minute between 00 and 59',
+  },
+  DISCOVERY_FUTURE_TIME: {
+    href: '#discoveryDate[time]',
+    text: 'The incident discovery time must be in the past',
+  },
 }
 
-export default function validateForm({ incidentDate, locationId }: incidentDetailsForm): FormError | null {
+export default function validateForm({
+  incidentDate,
+  discoveryDate,
+  locationId,
+  discoveryRadioSelected,
+}: incidentDetailsForm): FormError | null {
+  if (!discoveryRadioSelected) {
+    return errors.DISCOVERY_MISSING_RADIO
+  }
+
+  if (discoveryRadioSelected === 'No') {
+    if (!discoveryDate.date) {
+      return errors.DISCOVERY_MISSING_DATE
+    }
+    if (!discoveryDate.time.hour || !discoveryDate.time.minute) {
+      return errors.DISCOVERY_MISSING_TIME
+    }
+    if (
+      Number.isNaN(Number(discoveryDate.time.hour)) ||
+      Number(discoveryDate.time.hour) < 0 ||
+      Number(discoveryDate.time.hour) > 23
+    ) {
+      return errors.DISCOVERY_MISSING_HOUR
+    }
+    if (
+      Number.isNaN(Number(discoveryDate.time.minute)) ||
+      Number(discoveryDate.time.minute) < 0 ||
+      Number(discoveryDate.time.minute) > 59
+    ) {
+      return errors.DISCOVERY_MISSING_MINUTE
+    }
+    if (new Date(formatDate(discoveryDate)) > new Date()) {
+      return errors.DISCOVERY_FUTURE_TIME
+    }
+  }
+
   if (!incidentDate.date) {
     return errors.MISSING_DATE
   }

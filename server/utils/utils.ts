@@ -60,16 +60,17 @@ const buildDateTime = ({ date, hours, minutes, dateFormat = 'DD/MM/YYYY' }: Date
 }
 
 export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => {
-  try {
-    const dateTime = buildDateTime({
-      date: userSubmittedDateTime.date,
-      hours: userSubmittedDateTime.time.hour,
-      minutes: userSubmittedDateTime.time.minute,
-    })
-    return moment(dateTime).format('YYYY-MM-DDTHH:mm')
-  } catch {
-    return null
-  }
+  const dateTime = buildDateTime({
+    date: userSubmittedDateTime.date,
+    hours: userSubmittedDateTime.time.hour,
+    minutes: userSubmittedDateTime.time.minute,
+  })
+
+  const momentDate = moment(dateTime)
+
+  if (!momentDate.isValid()) return null
+
+  return momentDate.format('YYYY-MM-DDTHH:mm')
 }
 
 export const momentDateToDatePicker = (mom: moment.Moment): string => mom.format('DD/MM/YYYY')

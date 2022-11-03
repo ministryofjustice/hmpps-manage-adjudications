@@ -38,6 +38,7 @@ beforeEach(() => {
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
+    dateTimeOfDiscovery: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
   })
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
@@ -47,6 +48,7 @@ beforeEach(() => {
       incidentDetails: {
         dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       },
       incidentRole: {},
       prisonerNumber: 'G6415GD',
@@ -102,7 +104,9 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.ageOfPrisoner.urls.start(34))
@@ -114,7 +118,9 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
         id: 34,
         incidentDetails: {
           dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+          dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
           locationId: 2,
+          discoveryRadioSelected: 'Yes',
         },
         incidentRole: {},
         prisonerNumber: 'G6415GD',
@@ -136,7 +142,9 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.detailsOfOffence.urls.start(34))
@@ -147,6 +155,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -160,7 +169,9 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
+        discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
       .expect(res => {

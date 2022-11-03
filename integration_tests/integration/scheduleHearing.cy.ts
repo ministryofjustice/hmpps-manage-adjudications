@@ -1,3 +1,4 @@
+import moment from 'moment'
 import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
@@ -186,13 +187,13 @@ context('Schedule a hearing page', () => {
       })
   })
   it('should show error if the time entered is in the past', () => {
-    const now = new Date()
-    const hour = String(now.getHours() - 1)
+    const now = moment().toDate()
+    const oneHourAgo = moment().subtract(1, 'hour').format('HH').toString()
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.locationSelector().select('Adj 1')
     forceDateInputWithDate(now, '[data-qa="hearing-date"]')
-    scheduleHearingsPage.timeInputHours().select(hour)
+    scheduleHearingsPage.timeInputHours().select(oneHourAgo)
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
     scheduleHearingsPage
