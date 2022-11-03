@@ -199,6 +199,15 @@ export default class PlaceOnReportService {
     }
   }
 
+  convertDate = (aDate: string) => {
+    const date = getDate(aDate, 'DD/MM/YYYY')
+    const time = getTime(aDate)
+    const hour = time.split(':')[0]
+    const minute = time.split(':')[1]
+
+    return { date, time: { hour, minute } }
+  }
+
   async editDraftIncidentDetails(
     id: number,
     dateTime: string,

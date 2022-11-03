@@ -2,7 +2,7 @@ import validateForm from './scheduleHearingValidation'
 
 describe('validateForm', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
     jest.setSystemTime(new Date('2022-11-01T11:00:00'))
   })
   afterAll(() => {

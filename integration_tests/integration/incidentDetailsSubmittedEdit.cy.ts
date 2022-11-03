@@ -275,9 +275,9 @@ context('Incident details (edit after completion of report)', () => {
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.timeInputHours().clear()
-      incidentDetailsPage.timeInputHours().type('13')
+      incidentDetailsPage.timeInputHours().type('00')
       incidentDetailsPage.timeInputMinutes().clear()
-      incidentDetailsPage.timeInputMinutes().type('00')
+      incidentDetailsPage.timeInputMinutes().type('01')
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)
@@ -311,11 +311,11 @@ context('Incident details (edit after completion of report)', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.timeInputMinutesDiscovery().clear()
-      incidentDetailsPage.timeInputMinutesDiscovery().type('13')
-      incidentDetailsPage.timeInputHoursDiscovery().clear()
-      incidentDetailsPage.timeInputHoursDiscovery().type('00')
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.timeInputHoursDiscovery().clear()
+      incidentDetailsPage.timeInputMinutesDiscovery().clear()
+      incidentDetailsPage.timeInputHoursDiscovery().type('23')
+      incidentDetailsPage.timeInputMinutesDiscovery().type('59')
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(`${adjudicationUrls.detailsOfOffence.urls.start(34)}`)
