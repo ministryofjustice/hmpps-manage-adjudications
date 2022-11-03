@@ -349,7 +349,7 @@ context('Incident details (edit) - statement incomplete', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('The discovery date must be after the indident date')
+        expect($errors.get(0).innerText).to.contain('The discovery date must be after the incident date')
       })
   })
   it('DISCOVERY : should fail to submit if the "No" radio option selected and discovery time before incident time, but dates are the same', () => {
@@ -369,7 +369,7 @@ context('Incident details (edit) - statement incomplete', () => {
       .errorSummary()
       .find('li')
       .then($errors => {
-        expect($errors.get(0).innerText).to.contain('The discovery time must be after the indident time')
+        expect($errors.get(0).innerText).to.contain('The discovery time must be after the incident time')
       })
   })
   it('DISCOVERY : should fail to submit if "No" radio option selected and hour filled incorrectly', () => {

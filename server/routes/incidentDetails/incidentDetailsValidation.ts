@@ -77,11 +77,11 @@ const errors: { [key: string]: FormError } = {
   },
   DISCOVERY_AFTER_INCIDENT_DATE: {
     href: '#discoveryDate[date]',
-    text: 'The discovery date must be after the indident date',
+    text: 'The discovery date must be after the incident date',
   },
   DISCOVERY_AFTER_INCIDENT_TIME: {
     href: '#discoveryDate[time][minute]',
-    text: 'The discovery time must be after the indident time',
+    text: 'The discovery time must be after the incident time',
   },
 }
 
