@@ -1,6 +1,7 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
+import { forceDateInputWithDate, forceDateInput } from '../componentDrivers/dateInput'
 
 context('Incident details (edit) - statement incomplete', () => {
   beforeEach(() => {
@@ -137,6 +138,14 @@ context('Incident details (edit) - statement incomplete', () => {
     incidentDetailsPage.submitButton().should('exist')
     incidentDetailsPage.exitButton().should('exist')
     incidentDetailsPage.radioButtonsDiscovery().should('exist')
+  })
+  it('should not contain any discovery details if No is selected', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    incidentDetailsPage.timeInputHoursDiscovery().should('have.value', '')
+    incidentDetailsPage.timeInputMinutesDiscovery().should('have.value', '')
+    incidentDetailsPage.datePickerDiscovery().should('have.value', '')
   })
   it('should show the correct reporting officer - the original creator of the report', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
@@ -280,7 +289,7 @@ context('Incident details (edit) - statement incomplete', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
       })
     })
-    it('should check that DICOVERY button to Yes if DISCOVERY date same as INCIDENT date ', () => {
+    it('DISCOVERY : confirm radio button is Yes if DISCOVERY date/time equal as INCIDENT date/time ', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').should('be.checked')
@@ -295,10 +304,10 @@ context('Incident details (edit) - statement incomplete', () => {
         .errorSummary()
         .find('li')
         .then($errors => {
-          expect($errors.get(0).innerText).to.contain('Enter the time of the discovery')
+          expect($errors.get(0).innerText).to.contain('Enter the date of the incident discovery')
         })
     })
-    it('should submit successfully if No DISCOVERY selected and time edited', () => {
+    it('DISCOVERY : should submit successfully if "No" radio option selected and date/time filled correctly', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -311,6 +320,91 @@ context('Incident details (edit) - statement incomplete', () => {
         adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34)
       })
     })
+    it('DISCOVERY : should fail to submit if "No" radio option selected and date/time filled incorrectly', () => {
+      cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+      const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.submitButton().click()
+      incidentDetailsPage
+        .errorSummary()
+        .find('li')
+        .then($errors => {
+          expect($errors.get(0).innerText).to.contain('Enter the date of the incident discovery')
+        })
+    })
+  })
+  it('DISCOVERY : should fail to submit if the "No" radio option selected and discovery date/time before incident date/time', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+
+    forceDateInput(10, 10, 2010, '[data-qa="discovery-details-date"]')
+
+    incidentDetailsPage.timeInputHoursDiscovery().clear()
+    incidentDetailsPage.timeInputHoursDiscovery().type('09')
+    incidentDetailsPage.timeInputMinutesDiscovery().clear()
+    incidentDetailsPage.timeInputMinutesDiscovery().type('00')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('The discovery date must be after the incident date')
+      })
+  })
+  it('DISCOVERY : should fail to submit if the "No" radio option selected and discovery time before incident time, but dates are the same', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+
+    forceDateInput(10, 10, 2010, '[data-qa="incident-details-date"]')
+    forceDateInput(10, 10, 2010, '[data-qa="discovery-details-date"]')
+
+    incidentDetailsPage.timeInputHoursDiscovery().clear()
+    incidentDetailsPage.timeInputHoursDiscovery().type('00')
+    incidentDetailsPage.timeInputMinutesDiscovery().clear()
+    incidentDetailsPage.timeInputMinutesDiscovery().type('01')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('The discovery time must be after the incident time')
+      })
+  })
+  it('DISCOVERY : should fail to submit if "No" radio option selected and hour filled incorrectly', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    forceDateInputWithDate(new Date(), '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.timeInputHoursDiscovery().clear()
+    incidentDetailsPage.timeInputHoursDiscovery().type('23')
+    incidentDetailsPage.timeInputMinutesDiscovery().clear()
+    incidentDetailsPage.timeInputMinutesDiscovery().type('999')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the discovery minute between 00 and 59')
+      })
+  })
+  it('DISCOVERY : should fail to submit if "No" radio option selected and minute filled incorrectly', () => {
+    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
+    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    forceDateInputWithDate(new Date(), '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.timeInputHoursDiscovery().clear()
+    incidentDetailsPage.timeInputHoursDiscovery().type('13')
+    incidentDetailsPage.timeInputMinutesDiscovery().clear()
+    incidentDetailsPage.timeInputMinutesDiscovery().type('00x')
+    incidentDetailsPage.submitButton().click()
+    incidentDetailsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain('Enter the discovery minute between 00 and 59')
+      })
   })
   context('Tests Discovery date differengt to incident date', () => {
     beforeEach(() => {
@@ -349,7 +443,7 @@ context('Incident details (edit) - statement incomplete', () => {
         },
       })
     })
-    it('should set DICOVERY button to No if DISCOVERY date same as INCIDENT date ', () => {
+    it('DISCOVERY : should comfirm DICOVERY button to No if DISCOVERY date/time is different to INCIDENT date/time ', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('be.checked')

@@ -72,8 +72,16 @@ const errors: { [key: string]: FormError } = {
     text: 'Enter the discovery minute between 00 and 59',
   },
   DISCOVERY_FUTURE_TIME: {
-    href: '#discoveryDate[time]',
+    href: '#discoveryDate[date]',
     text: 'The incident discovery time must be in the past',
+  },
+  DISCOVERY_AFTER_INCIDENT_DATE: {
+    href: '#discoveryDate[date]',
+    text: 'The discovery date must be after the incident date',
+  },
+  DISCOVERY_AFTER_INCIDENT_TIME: {
+    href: '#discoveryDate[time][minute]',
+    text: 'The discovery time must be after the incident time',
   },
 }
 
@@ -110,6 +118,14 @@ export default function validateForm({
     }
     if (new Date(formatDate(discoveryDate)) > new Date()) {
       return errors.DISCOVERY_FUTURE_TIME
+    }
+    if (discoveryDate.date === incidentDate.date) {
+      if (new Date(formatDate(discoveryDate)) < new Date(formatDate(incidentDate))) {
+        return errors.DISCOVERY_AFTER_INCIDENT_TIME
+      }
+    }
+    if (new Date(formatDate(discoveryDate)) < new Date(formatDate(incidentDate))) {
+      return errors.DISCOVERY_AFTER_INCIDENT_DATE
     }
   }
 
