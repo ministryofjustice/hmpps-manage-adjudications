@@ -104,7 +104,7 @@ describe('POST new schedule hearing', () => {
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
       .send({
-        hearingDate: { date: '03/11/2022', time: { hour: '11', minute: '00' } },
+        hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
       })
       .expect(302)
@@ -114,7 +114,7 @@ describe('POST new schedule hearing', () => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
           1524494,
           27008,
-          '2022-11-03T11:00',
+          '2045-11-03T11:00',
           expect.anything()
         )
         expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
@@ -125,7 +125,7 @@ describe('POST new schedule hearing', () => {
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
       .send({
-        hearingDate: { date: '03/11/2022', time: { hour: '11', minute: '00' } },
+        hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
       })
       .expect('Content-Type', /html/)

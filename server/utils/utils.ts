@@ -142,6 +142,7 @@ export const getEvidenceCategory = (
 }
 
 export const convertDateTimeToObject = (dateTime: string): { date: string; time: { hour: string; minute: string } } => {
+  if (!dateTime || !isValidDateTimeFormat(dateTime)) return null
   const date = getDate(dateTime, 'DD/MM/YYYY')
   const time = getTime(dateTime)
   const hour = time.split(':')[0]

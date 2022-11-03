@@ -11,6 +11,7 @@ import {
   possessive,
   calculateAge,
   convertNameForPlaceholder,
+  convertDateTimeToObject,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -178,5 +179,23 @@ describe('calculateAge', () => {
   })
   it('17 years old - day before birthday', () => {
     expect(calculateAge('2003-10-11', '2021-10-10')).toEqual({ years: 17, months: 11 })
+  })
+})
+
+describe('convertDateTimeToObject', () => {
+  it('2021-11-09T10:00:00', () => {
+    expect(convertDateTimeToObject('2021-11-09T10:00:00')).toEqual({
+      date: '09/11/2021',
+      time: { hour: '10', minute: '00' },
+    })
+  })
+  it('null', () => {
+    expect(convertDateTimeToObject(null)).toEqual(null)
+  })
+  it('Invalid', () => {
+    expect(convertDateTimeToObject('2021-11T10:00')).toEqual(null)
+  })
+  it('Undefined', () => {
+    expect(convertDateTimeToObject(undefined)).toEqual(null)
   })
 })

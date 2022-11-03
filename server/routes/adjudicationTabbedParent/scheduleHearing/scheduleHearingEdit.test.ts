@@ -133,7 +133,7 @@ describe('POST edit existing hearing', () => {
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .send({
-        hearingDate: { date: '04/11/2022', time: { hour: '10', minute: '00' } },
+        hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
         locationId: 27008,
       })
       .expect(302)
@@ -144,7 +144,7 @@ describe('POST edit existing hearing', () => {
           1524494,
           101,
           27008,
-          '2022-11-04T10:00',
+          '2045-11-04T10:00',
           expect.anything()
         )
         expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
@@ -155,7 +155,7 @@ describe('POST edit existing hearing', () => {
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .send({
-        hearingDate: { date: '04/11/2022', time: { hour: '10', minute: '00' } },
+        hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
         locationId: 27008,
       })
       .expect('Content-Type', /html/)
