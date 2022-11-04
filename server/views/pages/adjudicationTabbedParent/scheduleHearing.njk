@@ -1,0 +1,73 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../../macros/datePicker.njk" import datePicker %}
+{% from "../../macros/timeInput.njk" import timeInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../../macros/timeSelect.njk" import timeSelect %}
+
+{% set title = 'Schedule a hearing' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+    {% if errors | length %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { "data-qa": "error-summary" }
+      }) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {{
+      govukSelect({
+        id: 'locationId',
+        name: 'locationId',
+        label: {
+            text: 'Location of incident',
+            isPageHeading: false,
+            classes: ''
+        },
+        items: locations | toSelect('locationId', 'userDescription', data.locationId ),
+        classes: '',
+        errorMessage: 'locationId' | findError(errors)
+      })
+      }}
+      {{ datePicker({
+        id: 'hearingDate[date]',
+        label: 'Date of hearing',
+        name: 'hearingDate[date]',
+        date: data.hearingDate.date,
+        attributes: {'data-disable-future-date':'false', 'data-disable-past-date':'true', 'data-qa': "hearing-date" },
+        classes: 'govuk-input--width-10',
+        errorMessage: errors | findErrors(['hearingDate[date]'])
+      }) }}
+
+    {{ timeSelect({         
+        id: 'hearingDate[time]',
+        label: 'Start time',
+        name: 'hearingDate[time]',
+        hour: data.hearingDate.hour,
+        minute: data.hearingDate.minute,
+        errorMessage: errors | findErrors(['hearingDate[time][hour]'])
+    }) }}
+
+    <div class="flex-container flex-center">
+      {{ govukButton({
+        text: 'Save and confirm hearing',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "schedule-hearing-submit" }
+      }) }}
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="schedule-hearing-cancel">Cancel</a></p>
+    </div>
+
+    </form>
+{% endblock %}

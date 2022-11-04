@@ -396,7 +396,7 @@ export default class ReportedAdjudicationsService {
         id: hearing.id,
         dateTime: {
           label: 'Date and time of hearing',
-          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:MM'),
+          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:mm'),
         },
         location: {
           label: 'Location',
@@ -412,5 +412,36 @@ export default class ReportedAdjudicationsService {
     user: User
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
+  }
+
+  async scheduleHearing(
+    adjudicationNumber: number,
+    locationId: number,
+    dateTimeOfHearing: string,
+    oicHearingType: string,
+    user: User
+  ) {
+    const dataToSend = {
+      locationId,
+      dateTimeOfHearing,
+      oicHearingType,
+    }
+    return new ManageAdjudicationsClient(user.token).createHearing(adjudicationNumber, dataToSend)
+  }
+
+  async rescheduleHearing(
+    adjudicationNumber: number,
+    hearingId: number,
+    locationId: number,
+    dateTimeOfHearing: string,
+    oicHearingType: string,
+    user: User
+  ) {
+    const dataToSend = {
+      locationId,
+      dateTimeOfHearing,
+      oicHearingType,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
   }
 }

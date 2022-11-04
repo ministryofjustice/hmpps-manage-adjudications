@@ -65,6 +65,7 @@ beforeEach(() => {
           id: 101,
           locationId: 27008,
           dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
+          oicHearingType: 'GOV_ADULT',
         },
       ],
     },
@@ -120,6 +121,7 @@ describe('GET prisoner report', () => {
               id: 101,
               locationId: 27008,
               dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
+              oicHearingType: 'GOV_ADULT',
             },
           ],
           expect.anything()

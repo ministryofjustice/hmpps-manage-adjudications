@@ -447,6 +447,36 @@ const stubCancelHearing = ({
     },
   })
 
+const stubScheduleHearing = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing`,
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubAmendHearing = ({ adjudicationNumber, hearingId, status = 200, response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -470,4 +500,6 @@ export default {
   stubSaveEvidenceDetails,
   stubSaveWitnessDetails,
   stubCancelHearing,
+  stubScheduleHearing,
+  stubAmendHearing,
 }

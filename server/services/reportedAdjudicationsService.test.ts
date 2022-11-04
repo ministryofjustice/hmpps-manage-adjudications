@@ -686,11 +686,13 @@ describe('reportedAdjudicationsService', () => {
           id: 1234,
           dateTimeOfHearing: '2022-10-20T11:11:00',
           locationId: 27187,
+          oicHearingType: 'GOV_ADULT',
         },
         {
           id: 23445,
           dateTimeOfHearing: '2022-10-21T11:11:00',
           locationId: 73612,
+          oicHearingType: 'GOV_ADULT',
         },
       ]
       const result = await service.getHearingDetails(hearings, user)
@@ -699,7 +701,7 @@ describe('reportedAdjudicationsService', () => {
           id: 1234,
           dateTime: {
             label: 'Date and time of hearing',
-            value: '20 October 2022 - 11:10',
+            value: '20 October 2022 - 11:11',
           },
           location: {
             label: 'Location',
@@ -710,7 +712,7 @@ describe('reportedAdjudicationsService', () => {
           id: 23445,
           dateTime: {
             label: 'Date and time of hearing',
-            value: '21 October 2022 - 11:10',
+            value: '21 October 2022 - 11:11',
           },
           location: {
             label: 'Location',
@@ -726,6 +728,7 @@ describe('reportedAdjudicationsService', () => {
           id: 1234,
           dateTimeOfHearing: '2022-10-20T11:11:00',
           locationId: 27187,
+          oicHearingType: 'GOV_ADULT',
         },
       ]
       const result = await service.getHearingDetails(hearings, user)
@@ -734,7 +737,7 @@ describe('reportedAdjudicationsService', () => {
           id: 1234,
           dateTime: {
             label: 'Date and time of hearing',
-            value: '20 October 2022 - 11:10',
+            value: '20 October 2022 - 11:11',
           },
           location: {
             label: 'Location',

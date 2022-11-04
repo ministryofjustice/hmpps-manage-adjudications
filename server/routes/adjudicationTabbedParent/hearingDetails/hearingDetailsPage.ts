@@ -74,7 +74,7 @@ export default class HearingDetailsPage {
       schedulingAvailable: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly,
       hearings: hearingSummary,
-      scheduleHearingButtonHref: '#', // TODO set up adjudicationUrl for this
+      scheduleHearingButtonHref: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
       scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings.length),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),

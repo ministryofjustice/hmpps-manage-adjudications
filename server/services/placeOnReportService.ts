@@ -1,6 +1,13 @@
 import { Readable } from 'stream'
 
-import { convertToTitleCase, formatLocation, getDate, getFormattedOfficerName, getTime } from '../utils/utils'
+import {
+  convertDateTimeStringToSubmittedDateTime,
+  convertToTitleCase,
+  formatLocation,
+  getDate,
+  getFormattedOfficerName,
+  getTime,
+} from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -181,12 +188,14 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const response = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { incidentDetails } = response.draftAdjudication
+    const dateAndTimeOfIncident = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfIncident)
+    const dateAndTimeOfDiscovery = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfDiscovery)
     return {
-      dateTime: this.convertDate(incidentDetails.dateTimeOfIncident),
+      dateTime: dateAndTimeOfIncident,
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
       adjudicationNumber: response.draftAdjudication.adjudicationNumber,
-      dateTimeOfDiscovery: this.convertDate(incidentDetails.dateTimeOfDiscovery),
+      dateTimeOfDiscovery: dateAndTimeOfDiscovery,
     }
   }
 

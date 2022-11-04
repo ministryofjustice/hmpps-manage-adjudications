@@ -141,6 +141,30 @@ export const getEvidenceCategory = (
   return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
 }
 
+export const convertDateTimeStringToSubmittedDateTime = (
+  dateTime: string
+): { date: string; time: { hour: string; minute: string } } => {
+  if (!dateTime || !isValidDateTimeFormat(dateTime)) return null
+  const date = getDate(dateTime, 'DD/MM/YYYY')
+  const time = getTime(dateTime)
+  const hour = time.split(':')[0]
+  const minute = time.split(':')[1]
+  return { date, time: { hour, minute } }
+}
+
+export const convertSubmittedDateTimeToDateObject = (
+  userProvidedValue?: SubmittedDateTime
+): { date: string; hour: string; minute: string } => {
+  if (userProvidedValue) {
+    const {
+      date,
+      time: { hour, minute },
+    } = userProvidedValue
+    return { date, hour, minute }
+  }
+  return null
+}
+
 export default {
   numberRange,
   convertToTitleCase,

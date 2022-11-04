@@ -301,6 +301,18 @@ const adjudicationUrls = {
       report: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/report`,
     },
   },
+  scheduleHearing: {
+    root: '/schedule-hearing',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:hearingId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.scheduleHearing.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.scheduleHearing.root}/${adjudicationNumber}/edit/${hearingId}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

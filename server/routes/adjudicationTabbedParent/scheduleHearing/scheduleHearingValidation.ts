@@ -1,0 +1,43 @@
+import { FormError, SubmittedDateTime } from '../../../@types/template'
+import { formatDate } from '../../../utils/utils'
+
+type ScheduleHearingForm = {
+  hearingDate?: SubmittedDateTime
+  locationId?: number
+}
+
+const errors: { [key: string]: FormError } = {
+  MISSING_DATE: {
+    href: '#hearingDate[date]',
+    text: 'Enter date of hearing',
+  },
+  MISSING_TIME: {
+    href: '#hearingDate[time][hour]',
+    text: 'Select time of hearing',
+  },
+  PAST_TIME: {
+    href: '#hearingDate[time][hour]',
+    text: 'The hearing time must be in the future',
+  },
+  MISSING_LOCATION: {
+    href: '#locationId',
+    text: 'Select location of hearing',
+  },
+}
+
+export default function validateForm({ hearingDate, locationId }: ScheduleHearingForm): FormError | null {
+  if (!locationId) {
+    return errors.MISSING_LOCATION
+  }
+  if (!hearingDate.date) {
+    return errors.MISSING_DATE
+  }
+  if (!hearingDate.time?.hour || !hearingDate.time?.minute) {
+    return errors.MISSING_TIME
+  }
+  if (new Date(formatDate(hearingDate)) < new Date()) {
+    return errors.PAST_TIME
+  }
+
+  return null
+}

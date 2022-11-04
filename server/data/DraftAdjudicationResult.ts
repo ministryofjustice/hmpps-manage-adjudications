@@ -155,7 +155,8 @@ export enum WitnessCode {
 }
 
 export type HearingDetails = {
-  id: number
+  id?: number
   locationId: number
   dateTimeOfHearing: string
+  oicHearingType: string
 }

@@ -44,8 +44,9 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, status: string
 const singleHearing = [
   {
     id: 987,
-    dateTimeOfHearing: '2022-10-20T11:11:00',
+    dateTimeOfHearing: '2022-10-20T10:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
@@ -54,6 +55,7 @@ const hearingListAfterDeletion = [
     id: 988,
     dateTimeOfHearing: '2022-10-21T11:00:00',
     locationId: 234,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
@@ -62,11 +64,13 @@ const multipleHearings = [
     id: 987,
     dateTimeOfHearing: '2022-10-20T09:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
   {
     id: 988,
     dateTimeOfHearing: '2022-10-21T11:00:00',
     locationId: 234,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
@@ -85,7 +89,6 @@ context('Hearing deails page', () => {
         authSource: 'auth',
       },
     })
-    // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
@@ -172,11 +175,18 @@ context('Hearing deails page', () => {
       hearingDetailsPage.reviewStatus().contains('Accepted') // TODO this will eventually show Unscheduled
       hearingDetailsPage.noHearingsScheduled().contains('Not scheduled.')
       hearingDetailsPage.scheduleHearingButton().contains('Schedule a hearing')
-      // TODO write a test for clicking add hearing button when that page and URL is set
       hearingDetailsPage.viewAllCompletedReportsLink().contains('Return to all completed reports')
       hearingDetailsPage.viewAllCompletedReportsLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
+      })
+    })
+    it('goes to schedule hearing page when button clicked', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524494))
+      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPage.scheduleHearingButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(1524494))
       })
     })
     it('Adjudication accepted, one hearing', () => {
@@ -196,7 +206,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 11:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 10:00')
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
         })
@@ -224,11 +234,11 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:00')
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
           expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(4).innerText).to.contain('21 October 2022 - 11:00')
           expect($summaryData.get(5).innerText).to.contain('Change')
           expect($summaryData.get(6).innerText).to.contain('Adj 2')
           expect($summaryData.get(7).innerText).to.contain('Change')
@@ -244,8 +254,7 @@ context('Hearing deails page', () => {
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
       hearingDetailsPage.changeLink().first().click()
       cy.location().should(loc => {
-        // TODO: When we have set up the URL for editing a hearing this will change
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524496))
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524496, 987))
       })
     })
     it('Successfully cancels a hearing', () => {
@@ -277,7 +286,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:00')
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
           expect($summaryData.get(3).innerText).to.contain('Change')
@@ -348,7 +357,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 11:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 10:00')
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
@@ -375,9 +384,9 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:10')
+          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:00')
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain('21 October 2022 - 11:10')
+          expect($summaryData.get(2).innerText).to.contain('21 October 2022 - 11:00')
           expect($summaryData.get(3).innerText).to.contain('Adj 2')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
