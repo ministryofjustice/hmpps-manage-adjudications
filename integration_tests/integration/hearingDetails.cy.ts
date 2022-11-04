@@ -46,6 +46,7 @@ const singleHearing = [
     id: 987,
     dateTimeOfHearing: '2022-10-20T10:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
@@ -54,6 +55,7 @@ const hearingListAfterDeletion = [
     id: 988,
     dateTimeOfHearing: '2022-10-21T11:00:00',
     locationId: 234,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
@@ -62,11 +64,13 @@ const multipleHearings = [
     id: 987,
     dateTimeOfHearing: '2022-10-20T09:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
   {
     id: 988,
     dateTimeOfHearing: '2022-10-21T11:00:00',
     locationId: 234,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 

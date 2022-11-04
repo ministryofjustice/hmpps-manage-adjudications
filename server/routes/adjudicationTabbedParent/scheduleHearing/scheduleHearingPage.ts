@@ -9,7 +9,11 @@ import { FormError, SubmittedDateTime } from '../../../@types/template'
 import { PrisonLocation } from '../../../data/PrisonLocationResult'
 import { User } from '../../../data/hmppsAuthClient'
 import logger from '../../../../logger'
-import { convertDateTimeToObject, formatDate } from '../../../utils/utils'
+import {
+  convertDateTimeStringToSubmittedDateTime,
+  convertSubmittedDateTimeToDateObject,
+  formatDate,
+} from '../../../utils/utils'
 
 type InitialFormData = {
   hearingDetails?: HearingDetails
@@ -93,6 +97,7 @@ export default class scheduleHearingRoutes {
           hearingId,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
+          'GOV_ADULT', // This is just hardcoded to fit the API requirments until the follow-up ticket can be done
           user
         )
       } else {
@@ -100,6 +105,7 @@ export default class scheduleHearingRoutes {
           adjudicationNumber,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
+          'GOV_ADULT', // This is just hardcoded to fit the API requirments until the follow-up ticket can be done
           user
         )
       }
@@ -124,7 +130,7 @@ export default class scheduleHearingRoutes {
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
     return {
-      hearingDate: await convertDateTimeToObject(hearingToRender.dateTimeOfHearing),
+      hearingDate: await convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
       locationId: hearingToRender.locationId,
       id: hearingToRender.id,
     }
@@ -156,7 +162,7 @@ export default class scheduleHearingRoutes {
 
 const renderData = (res: Response, pageData: PageData, error: FormError) => {
   const data = {
-    hearingDate: getHearingDate(pageData.formData.hearingDetails?.hearingDate),
+    hearingDate: convertSubmittedDateTimeToDateObject(pageData.formData.hearingDetails?.hearingDate),
     locationId: pageData.formData.hearingDetails?.locationId,
   }
 
@@ -176,15 +182,4 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
     },
   }
   return values
-}
-
-const getHearingDate = (userProvidedValue?: SubmittedDateTime) => {
-  if (userProvidedValue) {
-    const {
-      date,
-      time: { hour, minute },
-    } = userProvidedValue
-    return { date, hour, minute }
-  }
-  return null
 }

@@ -47,6 +47,7 @@ const originalHearing = [
     id: 333,
     dateTimeOfHearing: '2030-01-01T11:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
@@ -55,6 +56,7 @@ const changedDayHearing = [
     id: 333,
     dateTimeOfHearing: '2030-01-02T11:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 const changedTimeHearing = [
@@ -62,6 +64,7 @@ const changedTimeHearing = [
     id: 333,
     dateTimeOfHearing: '2030-01-01T11:30:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 const changedLocationHearing = [
@@ -69,6 +72,7 @@ const changedLocationHearing = [
     id: 333,
     dateTimeOfHearing: '2030-01-01T11:00:00',
     locationId: 234,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 

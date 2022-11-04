@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 
 import {
-  convertDateTimeToObject,
+  convertDateTimeStringToSubmittedDateTime,
   convertToTitleCase,
   formatLocation,
   getDate,
@@ -188,8 +188,8 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
     const response = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { incidentDetails } = response.draftAdjudication
-    const dateAndTimeOfIncident = await convertDateTimeToObject(incidentDetails.dateTimeOfIncident)
-    const dateAndTimeOfDiscovery = await convertDateTimeToObject(incidentDetails.dateTimeOfDiscovery)
+    const dateAndTimeOfIncident = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfIncident)
+    const dateAndTimeOfDiscovery = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfDiscovery)
     return {
       dateTime: dateAndTimeOfIncident,
       locationId: incidentDetails.locationId,

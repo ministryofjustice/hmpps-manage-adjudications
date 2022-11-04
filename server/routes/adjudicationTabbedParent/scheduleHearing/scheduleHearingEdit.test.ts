@@ -71,6 +71,7 @@ beforeEach(() => {
           id: 101,
           locationId: 27008,
           dateTimeOfHearing: '2022-11-03T11:00:00',
+          oicHearingType: 'GOV_ADULT',
         },
       ],
     },
@@ -99,6 +100,7 @@ beforeEach(() => {
           id: 101,
           locationId: 27008,
           dateTimeOfHearing: '2022-11-04T10:00:00',
+          oicHearingType: 'GOV_ADULT',
         },
       ],
     },
@@ -145,6 +147,7 @@ describe('POST edit existing hearing', () => {
           101,
           27008,
           '2045-11-04T10:00',
+          'GOV_ADULT',
           expect.anything()
         )
         expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()

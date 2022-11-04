@@ -8,7 +8,7 @@ import PlaceOnReportService, {
 } from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
-import { formatDate } from '../../utils/utils'
+import { convertSubmittedDateTimeToDateObject, formatDate } from '../../utils/utils'
 import { User } from '../../data/hmppsAuthClient'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
@@ -345,8 +345,8 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     }
   }
   const data = {
-    incidentDate: extractDate(pageData.formData.incidentDetails?.incidentDate),
-    discoveryDate: extractDate(pageData.formData.incidentDetails?.discoveryDate),
+    incidentDate: convertSubmittedDateTimeToDateObject(pageData.formData.incidentDetails?.incidentDate),
+    discoveryDate: convertSubmittedDateTimeToDateObject(pageData.formData.incidentDetails?.discoveryDate),
     locationId: pageData.formData.incidentDetails?.locationId,
     discoveryRadioSelected: pageData.formData.incidentDetails?.discoveryRadioSelected,
   }
@@ -368,17 +368,6 @@ const getDraftIdFromString = (draftId: string): number => {
     draftIdValue = parseInt(draftId, 10)
   }
   return draftIdValue
-}
-
-const extractDate = (userProvidedValue?: SubmittedDateTime) => {
-  if (userProvidedValue) {
-    const {
-      date,
-      time: { hour, minute },
-    } = userProvidedValue
-    return { date, hour, minute }
-  }
-  return null
 }
 
 const getTaskListUrl = (draftId: number) => {

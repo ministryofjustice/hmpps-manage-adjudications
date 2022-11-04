@@ -414,10 +414,17 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
   }
 
-  async scheduleHearing(adjudicationNumber: number, locationId: number, dateTimeOfHearing: string, user: User) {
+  async scheduleHearing(
+    adjudicationNumber: number,
+    locationId: number,
+    dateTimeOfHearing: string,
+    oicHearingType: string,
+    user: User
+  ) {
     const dataToSend = {
       locationId,
       dateTimeOfHearing,
+      oicHearingType,
     }
     return new ManageAdjudicationsClient(user.token).createHearing(adjudicationNumber, dataToSend)
   }
@@ -427,11 +434,13 @@ export default class ReportedAdjudicationsService {
     hearingId: number,
     locationId: number,
     dateTimeOfHearing: string,
+    oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
       locationId,
       dateTimeOfHearing,
+      oicHearingType,
     }
     return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
   }

@@ -158,4 +158,5 @@ export type HearingDetails = {
   id?: number
   locationId: number
   dateTimeOfHearing: string
+  oicHearingType: string
 }

@@ -11,7 +11,8 @@ import {
   possessive,
   calculateAge,
   convertNameForPlaceholder,
-  convertDateTimeToObject,
+  convertDateTimeStringToSubmittedDateTime,
+  convertSubmittedDateTimeToDateObject,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -182,20 +183,34 @@ describe('calculateAge', () => {
   })
 })
 
-describe('convertDateTimeToObject', () => {
+describe('convertDateTimeStringToSubmittedDateTime', () => {
   it('2021-11-09T10:00:00', () => {
-    expect(convertDateTimeToObject('2021-11-09T10:00:00')).toEqual({
+    expect(convertDateTimeStringToSubmittedDateTime('2021-11-09T10:00:00')).toEqual({
       date: '09/11/2021',
       time: { hour: '10', minute: '00' },
     })
   })
   it('null', () => {
-    expect(convertDateTimeToObject(null)).toEqual(null)
+    expect(convertDateTimeStringToSubmittedDateTime(null)).toEqual(null)
   })
   it('Invalid', () => {
-    expect(convertDateTimeToObject('2021-11T10:00')).toEqual(null)
+    expect(convertDateTimeStringToSubmittedDateTime('2021-11T10:00')).toEqual(null)
   })
   it('Undefined', () => {
-    expect(convertDateTimeToObject(undefined)).toEqual(null)
+    expect(convertDateTimeStringToSubmittedDateTime(undefined)).toEqual(null)
+  })
+})
+
+describe('convertSubmittedDateTimeToDateObject', () => {
+  it('Success', () => {
+    expect(
+      convertSubmittedDateTimeToDateObject({
+        date: '09/11/2021',
+        time: { hour: '10', minute: '00' },
+      })
+    ).toEqual({ date: '09/11/2021', hour: '10', minute: '00' })
+  })
+  it('null', () => {
+    expect(convertSubmittedDateTimeToDateObject(null)).toEqual(null)
   })
 })

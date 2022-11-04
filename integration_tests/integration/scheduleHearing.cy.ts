@@ -48,6 +48,7 @@ const singleHearing = [
     id: 987,
     dateTimeOfHearing: '2030-01-01T11:00:00',
     locationId: 123,
+    oicHearingType: 'GOV_ADULT',
   },
 ]
 
