@@ -218,6 +218,13 @@ describe('POST prisoner report', () => {
       })
       .expect(response => {
         expect(reportedAdjudicationsService.updateAdjudicationStatus).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.updateAdjudicationStatus).toHaveBeenCalledWith(
+          12345,
+          'UNSCHEDULED',
+          '',
+          '',
+          expect.anything()
+        )
       })
   })
 })
