@@ -115,10 +115,10 @@ context('Your Completed Reports', () => {
             roleCode: undefined,
           },
           offenceDetails: undefined,
-          status: ReportedAdjudicationStatus.ACCEPTED,
+          status: ReportedAdjudicationStatus.UNSCHEDULED,
         },
       ],
-      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2022-01-01', toDate: '2022-01-09' },
+      filter: { status: ReportedAdjudicationStatus.UNSCHEDULED, fromDate: '2022-01-01', toDate: '2022-01-09' },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
@@ -129,11 +129,11 @@ context('Your Completed Reports', () => {
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
     filterAdjudication.forceFromDate(1, 1, 2022)
     filterAdjudication.forceToDate(9, 1, 2022)
-    filterAdjudication.selectStatus().select('ACCEPTED')
+    filterAdjudication.selectStatus().select('UNSCHEDULED')
     filterAdjudication.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
-      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=ACCEPTED')
+      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
@@ -158,7 +158,7 @@ context('Your Completed Reports', () => {
           roleCode: undefined,
         },
         offenceDetails: undefined,
-        status: ReportedAdjudicationStatus.ACCEPTED,
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
       }
     })
     // The empty results to return when first landing on your completed reports page.
@@ -167,13 +167,13 @@ context('Your Completed Reports', () => {
     cy.task('stubGetYourReportedAdjudications', {
       number: 0, // Page 1
       allContent: manyReportedAdjudications,
-      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2021-10-10', toDate: '2021-10-19' },
+      filter: { status: ReportedAdjudicationStatus.UNSCHEDULED, fromDate: '2021-10-10', toDate: '2021-10-19' },
     })
     // The results to return after going to another page after having filtered previously
     cy.task('stubGetYourReportedAdjudications', {
       number: 1, // Page 2
       allContent: manyReportedAdjudications,
-      filter: { status: ReportedAdjudicationStatus.ACCEPTED, fromDate: '2021-10-10', toDate: '2021-10-19' },
+      filter: { status: ReportedAdjudicationStatus.UNSCHEDULED, fromDate: '2021-10-10', toDate: '2021-10-19' },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
@@ -181,18 +181,18 @@ context('Your Completed Reports', () => {
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(10, 10, 2021)
     adjudicationsFilter.forceToDate(19, 10, 2021)
-    adjudicationsFilter.selectStatus().select('ACCEPTED')
+    adjudicationsFilter.selectStatus().select('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
-      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=ACCEPTED')
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
     yourCompletedReportsPage.paginationLink(2).click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.
-      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=ACCEPTED&pageNumber=2')
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&pageNumber=2')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
   })

@@ -165,6 +165,10 @@ context('Prisoner report - reporter view', () => {
       adjudicationNumber: 34567,
       response: createDraftFromReportedAdjudicationResponse(34567, 190),
     })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 98765,
+      response: createDraftFromReportedAdjudicationResponse(98765, 191),
+    })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
       response: [
@@ -195,7 +199,11 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 34567,
-      response: reportedAdjudicationResponse(1524493, 'ACCEPTED', 'USER1'),
+      response: reportedAdjudicationResponse(1524493, 'UNSCHEDULED', 'USER1'),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 98765,
+      response: reportedAdjudicationResponse(1524494, 'ACCEPTED', 'USER1'), // here
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
@@ -212,6 +220,10 @@ context('Prisoner report - reporter view', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 190,
       response: draftAdjudicationResponse(190, 34567, false),
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 191,
+      response: draftAdjudicationResponse(191, 98765, false),
     })
 
     cy.task('stubGetOffenceRule', {
@@ -250,8 +262,10 @@ context('Prisoner report - reporter view', () => {
         prisonerReportPage.returnLink().should('exist')
         if (prisoner.id === 56789) {
           prisonerReportPage.damageSummary().should('exist')
+          prisonerReportPage.hearingsTab().should('not.exist')
         } else {
           prisonerReportPage.damageSummary().should('not.exist')
+          prisonerReportPage.hearingsTab().should('exist')
         }
         prisonerReportPage.photoVideoEvidenceSummary().should('not.exist')
         prisonerReportPage.baggedAndTaggedEvidenceSummary().should('not.exist')
@@ -445,10 +459,7 @@ context('Prisoner report - reporter view', () => {
     })
   })
   describe('review statuses', () => {
-    ;[
-      { id: 23456, readOnly: false, isYouthOffender: false },
-      { id: 34567, readOnly: true, isYouthOffender: false },
-    ].forEach(prisoner => {
+    ;[{ id: 23456 }, { id: 34567 }, { id: 98765 }].forEach(prisoner => {
       it('should contain the correct review summary details', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.report(prisoner.id))
         const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
@@ -471,6 +482,21 @@ context('Prisoner report - reporter view', () => {
               expect($summaryData.get(0).innerText).to.contain('T. User')
               expect($summaryData.get(1).innerText).to.contain('Incorrect or insufficient information in statement')
               expect($summaryData.get(2).innerText).to.contain('More detail please.')
+            })
+        } else if (prisoner.id === 34567) {
+          prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Unscheduled')
+          prisonerReportPage
+            .reviewSummary()
+            .find('dt')
+            .then($summaryLabels => {
+              expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+            })
+
+          prisonerReportPage
+            .reviewSummary()
+            .find('dd')
+            .then($summaryData => {
+              expect($summaryData.get(0).innerText).to.contain('T. User')
             })
         } else {
           prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Accepted')

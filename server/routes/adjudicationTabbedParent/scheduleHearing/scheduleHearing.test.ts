@@ -64,7 +64,7 @@ beforeEach(() => {
         roleCode: undefined,
       },
       offenceDetails: [],
-      status: ReportedAdjudicationStatus.ACCEPTED,
+      status: ReportedAdjudicationStatus.UNSCHEDULED,
       isYouthOffender: false,
       hearings: [
         {

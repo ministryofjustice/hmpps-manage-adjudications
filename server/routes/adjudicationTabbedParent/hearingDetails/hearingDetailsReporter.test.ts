@@ -16,57 +16,6 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 let app: Express
 
 beforeEach(() => {
-  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: {
-      adjudicationNumber: 1524493,
-      prisonerNumber: 'G6415GD',
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: [],
-      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      isYouthOffender: false,
-    },
-  })
-  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: {
-      adjudicationNumber: 1524494,
-      prisonerNumber: 'G6415GD',
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: [],
-      status: ReportedAdjudicationStatus.ACCEPTED,
-      isYouthOffender: false,
-      hearings: [
-        {
-          id: 101,
-          locationId: 27008,
-          dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-          oicHearingType: 'GOV_ADULT',
-        },
-      ],
-    },
-  })
-
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
 })
 
@@ -76,17 +25,70 @@ afterEach(() => {
 
 describe('GET hearing details', () => {
   it('should load the hearing details page - reporter version - no hearings', () => {
+    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValueOnce({
+      reportedAdjudication: {
+        adjudicationNumber: 1524493,
+        prisonerNumber: 'G6415GD',
+        bookingId: 1,
+        createdDateTime: undefined,
+        createdByUserId: undefined,
+        incidentDetails: {
+          locationId: 197682,
+          dateTimeOfIncident: '2021-12-09T10:30:00',
+          handoverDeadline: '2021-12-11T10:30:00',
+        },
+        incidentStatement: undefined,
+        incidentRole: {
+          roleCode: undefined,
+        },
+        offenceDetails: [],
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        isYouthOffender: false,
+      },
+    })
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.report(1524493))
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('Not scheduled.')
+        expect(response.text).toContain('There are no hearings to schedule at the moment.')
+        expect(response.text).toContain(
+          'You can only schedule a hearing for reports that have been reviewed and accepted.'
+        )
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledTimes(1)
       })
   })
   it('should load the hearing details page - reporter version - one hearing', () => {
+    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValueOnce({
+      reportedAdjudication: {
+        adjudicationNumber: 1524494,
+        prisonerNumber: 'G6415GD',
+        bookingId: 1,
+        createdDateTime: undefined,
+        createdByUserId: undefined,
+        incidentDetails: {
+          locationId: 197682,
+          dateTimeOfIncident: '2021-12-09T10:30:00',
+          handoverDeadline: '2021-12-11T10:30:00',
+        },
+        incidentStatement: undefined,
+        incidentRole: {
+          roleCode: undefined,
+        },
+        offenceDetails: [],
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        isYouthOffender: false,
+        hearings: [
+          {
+            id: 101,
+            locationId: 27008,
+            dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
+            oicHearingType: 'GOV_ADULT',
+          },
+        ],
+      },
+    })
     reportedAdjudicationsService.getHearingDetails.mockResolvedValue([
       {
         id: 101,

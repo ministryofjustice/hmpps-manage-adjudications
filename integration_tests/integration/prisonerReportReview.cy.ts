@@ -94,9 +94,21 @@ context('Prisoner report - reviewer view', () => {
       },
     })
     cy.task('stubGetReportedAdjudication', {
-      id: 456789,
+      id: 456790,
       response: {
         reportedAdjudication: reportedAdjudication('ACCEPTED', 'USER1'),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 456791,
+      response: {
+        reportedAdjudication: reportedAdjudication('SCHEDULED', 'USER1'),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 456789,
+      response: {
+        reportedAdjudication: reportedAdjudication('UNSCHEDULED', 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
@@ -132,6 +144,18 @@ context('Prisoner report - reviewer view', () => {
       adjudicationNumber: 456789,
       response: {
         draftAdjudication: draftAdjudication(456789),
+      },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 456790,
+      response: {
+        draftAdjudication: draftAdjudication(456790),
+      },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 456791,
+      response: {
+        draftAdjudication: draftAdjudication(456791),
       },
     })
     cy.task('stubGetLocations', {
@@ -283,10 +307,48 @@ context('Prisoner report - reviewer view', () => {
         expect($summaryData.get(2).innerText).to.contain('This is not worthy of an adjudication')
       })
   })
-  it('should contain the correct review summary - accepted', () => {
+  it('should contain the correct review summary - unscheduled', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(456789))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Unscheduled')
+
+    prisonerReportPage
+      .reviewSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+      })
+
+    prisonerReportPage
+      .reviewSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('T. User')
+      })
+  })
+  it('should contain the correct review summary - accepted', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(456790))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Accepted')
+
+    prisonerReportPage
+      .reviewSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Last reviewed by')
+      })
+
+    prisonerReportPage
+      .reviewSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('T. User')
+      })
+  })
+  it('should contain the correct review summary - scheduled', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(456791))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.reviewSummaryTitle().should('contain.text', 'Scheduled')
 
     prisonerReportPage
       .reviewSummary()
@@ -454,6 +516,11 @@ context('Prisoner report - reviewer view', () => {
     prisonerReportPage.reviewSubmit().click()
     cy.get('*[class^="govuk-error-message"]').contains('Enter a reason')
   })
+  it('should not contain the hearings tab if status is REJECTED', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(356789))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.hearingsTab().should('not.exist')
+  })
   it('should not contain the review panel if status is RETURNED', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(56789))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
@@ -465,7 +532,17 @@ context('Prisoner report - reviewer view', () => {
     prisonerReportPage.reviewerPanel().should('not.exist')
   })
   it('should not contain the review panel if status is ACCEPTED', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(456790))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.reviewerPanel().should('not.exist')
+  })
+  it('should not contain the review panel if status is UNSCHEDULED', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(456789))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.reviewerPanel().should('not.exist')
+  })
+  it('should not contain the review panel if status is SCHEDULED', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(456791))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.reviewerPanel().should('not.exist')
   })
