@@ -191,8 +191,8 @@ context('Check Your Answers', () => {
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
-          expect($summaryLabels.get(1).innerText).to.contain('Date of Incident')
-          expect($summaryLabels.get(2).innerText).to.contain('Time of Incident')
+          expect($summaryLabels.get(1).innerText).to.contain('Date of incident')
+          expect($summaryLabels.get(2).innerText).to.contain('Time of incident')
           expect($summaryLabels.get(3).innerText).to.contain('Location')
           expect($summaryLabels.get(4).innerText).to.contain('Date of discovery')
           expect($summaryLabels.get(5).innerText).to.contain('Time of discovery')

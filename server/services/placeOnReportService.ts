@@ -159,11 +159,11 @@ export default class PlaceOnReportService {
         value: getFormattedOfficerName(reporter.name),
       },
       {
-        label: 'Date of Incident',
+        label: 'Date of incident',
         value: date,
       },
       {
-        label: 'Time of Incident',
+        label: 'Time of incident',
         value: time,
       },
       {

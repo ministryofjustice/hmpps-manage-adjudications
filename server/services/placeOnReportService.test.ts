@@ -175,11 +175,11 @@ describe('placeOnReportService', () => {
             value: 'N. Clamp',
           },
           {
-            label: 'Date of Incident',
+            label: 'Date of incident',
             value: '4 November 2021',
           },
           {
-            label: 'Time of Incident',
+            label: 'Time of incident',
             value: '07:20',
           },
           {
@@ -242,11 +242,11 @@ describe('placeOnReportService', () => {
             value: 'N. Clamp',
           },
           {
-            label: 'Date of Incident',
+            label: 'Date of incident',
             value: '4 November 2021',
           },
           {
-            label: 'Time of Incident',
+            label: 'Time of incident',
             value: '07:20',
           },
           {
