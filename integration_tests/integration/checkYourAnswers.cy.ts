@@ -92,6 +92,7 @@ context('Check Your Answers', () => {
             prisonerNumber: 'G6415GD',
             incidentDetails: {
               dateTimeOfIncident: '2021-11-03T11:09:42',
+              dateTimeOfDiscovery: '2021-11-04T12:09:42',
               handoverDeadline: '2021-11-05T11:09:42',
               locationId: 234,
             },
@@ -145,6 +146,7 @@ context('Check Your Answers', () => {
           adjudicationNumber: 234,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
+            dateTimeOfDiscovery: '2021-11-05:09:42',
             locationId: 234,
           },
           incidentStatement: {
@@ -189,9 +191,11 @@ context('Check Your Answers', () => {
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
-          expect($summaryLabels.get(1).innerText).to.contain('Date')
-          expect($summaryLabels.get(2).innerText).to.contain('Time')
+          expect($summaryLabels.get(1).innerText).to.contain('Date of incident')
+          expect($summaryLabels.get(2).innerText).to.contain('Time of incident')
           expect($summaryLabels.get(3).innerText).to.contain('Location')
+          expect($summaryLabels.get(4).innerText).to.contain('Date of discovery')
+          expect($summaryLabels.get(5).innerText).to.contain('Time of discovery')
         })
 
       checkYourAnswersPage
@@ -202,6 +206,8 @@ context('Check Your Answers', () => {
           expect($summaryData.get(1).innerText).to.contain('3 November 2021')
           expect($summaryData.get(2).innerText).to.contain('11:09')
           expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+          expect($summaryData.get(4).innerText).to.contain('4 November 2021')
+          expect($summaryData.get(5).innerText).to.contain('12:09')
         })
     })
     it('should contain the correct offence details', () => {
@@ -356,6 +362,7 @@ context('Check Your Answers', () => {
             prisonerNumber: 'G6415GD',
             incidentDetails: {
               dateTimeOfIncident: '2021-11-03T11:09:42',
+              dateTimeOfDiscovery: '2021-11-06T11:09:42',
               handoverDeadline: '2021-11-05T11:09:42',
               locationId: 234,
             },
@@ -394,6 +401,7 @@ context('Check Your Answers', () => {
           adjudicationNumber: 234,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
+            dateTimeOfDiscovery: '2021-11-07T11:09:42',
             locationId: 234,
           },
           incidentStatement: {

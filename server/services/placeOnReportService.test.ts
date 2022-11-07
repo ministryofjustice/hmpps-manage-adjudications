@@ -142,6 +142,7 @@ describe('placeOnReportService', () => {
           incidentDetails: {
             locationId: 26152,
             dateTimeOfIncident: '2021-11-04T07:20:00',
+            dateTimeOfDiscovery: '2021-11-05T07:21:00',
           },
           incidentStatement: {
             id: 9,
@@ -174,16 +175,24 @@ describe('placeOnReportService', () => {
             value: 'N. Clamp',
           },
           {
-            label: 'Date',
+            label: 'Date of incident',
             value: '4 November 2021',
           },
           {
-            label: 'Time',
+            label: 'Time of incident',
             value: '07:20',
           },
           {
             label: 'Location',
             value: 'place 3',
+          },
+          {
+            label: 'Date of discovery',
+            value: '5 November 2021',
+          },
+          {
+            label: 'Time of discovery',
+            value: '07:21',
           },
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
@@ -199,6 +208,7 @@ describe('placeOnReportService', () => {
           incidentDetails: {
             locationId: 26152,
             dateTimeOfIncident: '2021-11-04T07:20:00',
+            dateTimeOfDiscovery: '2021-11-05T07:21:00',
           },
           incidentStatement: {
             id: 9,
@@ -232,16 +242,24 @@ describe('placeOnReportService', () => {
             value: 'N. Clamp',
           },
           {
-            label: 'Date',
+            label: 'Date of incident',
             value: '4 November 2021',
           },
           {
-            label: 'Time',
+            label: 'Time of incident',
             value: '07:20',
           },
           {
             label: 'Location',
             value: 'place 3',
+          },
+          {
+            label: 'Date of discovery',
+            value: '5 November 2021',
+          },
+          {
+            label: 'Time of discovery',
+            value: '07:21',
           },
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
