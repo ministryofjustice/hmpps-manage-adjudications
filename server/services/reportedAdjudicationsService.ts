@@ -324,9 +324,14 @@ export default class ReportedAdjudicationsService {
     draftAdjudication: DraftAdjudication
   ): Promise<PrisonerReport> {
     const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
+
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')
     const time = getTime(dateTime)
+
+    const dateTimeDiscovery = draftAdjudication.incidentDetails.dateTimeOfDiscovery
+    const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
+    const timeDiscovery = getTime(dateTimeDiscovery)
 
     const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
 
@@ -336,16 +341,24 @@ export default class ReportedAdjudicationsService {
         value: getFormattedOfficerName(reporter.name),
       },
       {
-        label: 'Date',
+        label: 'Date of incident',
         value: date,
       },
       {
-        label: 'Time',
+        label: 'Time of incident',
         value: time,
       },
       {
         label: 'Location',
         value: locationObj?.userDescription || '',
+      },
+      {
+        label: 'Date of discovery',
+        value: dateDiscovery,
+      },
+      {
+        label: 'Time of discovery',
+        value: timeDiscovery,
       },
     ]
 

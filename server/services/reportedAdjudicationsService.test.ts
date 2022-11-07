@@ -499,7 +499,8 @@ describe('reportedAdjudicationsService', () => {
         prisonerNumber: 'G6123VU',
         incidentDetails: {
           locationId: 26152,
-          dateTimeOfIncident: '2021-11-04T07:20:00',
+          dateTimeOfIncident: '2021-11-16T07:21:00',
+          dateTimeOfDiscovery: '2021-11-17T08:22:00',
         },
         incidentStatement: {
           statement: 'Statement for a test',
@@ -518,16 +519,24 @@ describe('reportedAdjudicationsService', () => {
             value: 'T. User',
           },
           {
-            label: 'Date',
-            value: '4 November 2021',
+            label: 'Date of incident',
+            value: '16 November 2021',
           },
           {
-            label: 'Time',
-            value: '07:20',
+            label: 'Time of incident',
+            value: '07:21',
           },
           {
             label: 'Location',
             value: 'place 3',
+          },
+          {
+            label: 'Date of discovery',
+            value: '17 November 2021',
+          },
+          {
+            label: 'Time of discovery',
+            value: '08:22',
           },
         ],
         statement: 'Statement for a test',

@@ -21,6 +21,7 @@ const reportedAdjudication = (status: string, reviewedByUserId = null, statusRea
     incidentDetails: {
       locationId: 197682,
       dateTimeOfIncident: '2021-12-09T10:30:00',
+      dateTimeOfDiscovery: '2021-12-09T10:30:00',
       handoverDeadline: '2021-12-11T10:30:00',
     },
     incidentStatement: undefined,
@@ -44,6 +45,7 @@ const draftAdjudication = (adjudicationNumber: number) => {
     incidentDetails: {
       locationId: 234,
       dateTimeOfIncident: '2021-12-01T09:40:00',
+      dateTimeOfDiscovery: '2021-12-01T09:40:00',
       handoverDeadline: '2021-12-03T09:40:00',
     },
     incidentStatement: {
@@ -169,6 +171,7 @@ context('Prisoner report - reviewer view', () => {
           incidentDetails: {
             locationId: 234,
             dateTimeOfIncident: '2021-12-01T09:40:00',
+            dateTimeOfDiscovery: '2021-12-02T03:04:05',
             handoverDeadline: '2021-12-03T09:40:00',
           },
           incidentStatement: {
@@ -318,9 +321,11 @@ context('Prisoner report - reviewer view', () => {
       .find('dt')
       .then($summaryLabels => {
         expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
-        expect($summaryLabels.get(1).innerText).to.contain('Date')
-        expect($summaryLabels.get(2).innerText).to.contain('Time')
+        expect($summaryLabels.get(1).innerText).to.contain('Date of incident')
+        expect($summaryLabels.get(2).innerText).to.contain('Time of incident')
         expect($summaryLabels.get(3).innerText).to.contain('Location')
+        expect($summaryLabels.get(4).innerText).to.contain('Date of discovery')
+        expect($summaryLabels.get(5).innerText).to.contain('Time of discovery')
       })
 
     prisonerReportPage
@@ -331,6 +336,8 @@ context('Prisoner report - reviewer view', () => {
         expect($summaryData.get(1).innerText).to.contain('1 December 2021')
         expect($summaryData.get(2).innerText).to.contain('09:40')
         expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+        expect($summaryData.get(4).innerText).to.contain('2 December 2021')
+        expect($summaryData.get(5).innerText).to.contain('03:04')
       })
   })
   it('should contain the correct offence details', () => {
