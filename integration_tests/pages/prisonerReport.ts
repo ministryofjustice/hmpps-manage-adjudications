@@ -60,4 +60,6 @@ export default class PrisonerReportPage extends Page {
   reviewSubmit = (): PageElement => cy.get('[data-qa="review-submit"]')
 
   returnLink = (): PageElement => cy.get('[data-qa="prisoner-report-return-link"]')
+
+  hearingsTab = (): PageElement => cy.get('[data-qa="hearingsTab"]')
 }

@@ -4,7 +4,10 @@ import * as toTest from './prisonerReportReviewValidation'
 describe('validateForm - prisoner review', () => {
   describe('success', () => {
     it('success accept', () => {
-      expect(validateForm({ status: ReviewStatus.ACCEPTED, reason: '', details: '' })).toBeNull()
+      expect(validateForm({ status: ReviewStatus.UNSCHEDULED, reason: '', details: '' })).toBeNull()
+    })
+    it('success unscheduled', () => {
+      expect(validateForm({ status: ReviewStatus.UNSCHEDULED, reason: '', details: '' })).toBeNull()
     })
     it('success reject', () => {
       expect(validateForm({ status: ReviewStatus.REJECTED, reason: 'reason', details: 'details' })).toBeNull()

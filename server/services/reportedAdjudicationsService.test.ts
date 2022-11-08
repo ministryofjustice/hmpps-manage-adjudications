@@ -637,6 +637,38 @@ describe('reportedAdjudicationsService', () => {
       }
       expect(result).toEqual(expectedResult)
     })
+    it('returns the correct information for an unscheduled adjudication', async () => {
+      const result = await service.getReviewDetails(
+        adjudicationData(ReportedAdjudicationStatus.UNSCHEDULED, 'TEST_GEN'),
+        user
+      )
+      const expectedResult = {
+        reviewStatus: 'Unscheduled',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+        ],
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct information for an scheduled adjudication', async () => {
+      const result = await service.getReviewDetails(
+        adjudicationData(ReportedAdjudicationStatus.SCHEDULED, 'TEST_GEN'),
+        user
+      )
+      const expectedResult = {
+        reviewStatus: 'Scheduled',
+        reviewSummary: [
+          {
+            label: 'Last reviewed by',
+            value: 'T. User',
+          },
+        ],
+      }
+      expect(result).toEqual(expectedResult)
+    })
     it('returns the correct information for a rejected adjudication', async () => {
       const result = await service.getReviewDetails(
         adjudicationData(

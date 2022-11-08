@@ -212,7 +212,7 @@ describe('POST prisoner report', () => {
     return request(app)
       .post(adjudicationUrls.prisonerReport.urls.review(12345))
       .send({
-        currentStatusSelected: 'ACCEPTED',
+        currentStatusSelected: 'accepted',
         rejectedReasonId: 'reason',
         rejectedDetailsId: 'details',
       })

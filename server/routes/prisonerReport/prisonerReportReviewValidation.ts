@@ -4,6 +4,8 @@ export enum ReviewStatus {
   ACCEPTED = 'ACCEPTED',
   REJECTED = 'REJECTED',
   RETURNED = 'RETURNED',
+  SCHEDULED = 'SCHEDULED',
+  UNSCHEDULED = 'UNSCHEDULED',
 }
 
 type reviewForm = {

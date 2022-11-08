@@ -69,7 +69,7 @@ beforeEach(() => {
       incidentRole: {},
       offenceDetails: [{ offenceCode: 1001 }],
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      statusDisplayName: 'Accepted',
+      statusDisplayName: 'Awaiting review',
       isYouthOffender: false,
     },
   ]
@@ -120,7 +120,7 @@ describe('GET /all-completed-reports', () => {
         expect(response.text).toContain('G6174VU')
         expect(response.text).toContain('15 November 2021 - 11:30')
         expect(response.text).toContain('Penelope Conroy')
-        expect(response.text).toContain('Accepted')
+        expect(response.text).toContain('Awaiting review')
       })
   })
 })

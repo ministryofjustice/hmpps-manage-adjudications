@@ -150,7 +150,7 @@ export default class prisonerReportRoutes {
 
     const readOnly =
       this.pageOptions.isReviewerView() ||
-      ['ACCEPTED', 'REJECTED'].includes(reportedAdjudication.reportedAdjudication.status)
+      ['ACCEPTED', 'REJECTED', 'UNSCHEDULED', 'SCHEDULED'].includes(reportedAdjudication.reportedAdjudication.status)
 
     const readOnlyDamagesEvidenceWitnesses = reportedAdjudication.reportedAdjudication.status === 'REJECTED'
 
@@ -177,16 +177,16 @@ export default class prisonerReportRoutes {
   }
 
   reviewStatus = (selected: string): ReviewStatus => {
-    if (!selected) {
-      return null
+    switch (selected) {
+      case 'rejected':
+        return ReviewStatus.REJECTED
+      case 'returned':
+        return ReviewStatus.RETURNED
+      case 'accepted':
+        return ReviewStatus.UNSCHEDULED
+      default:
+        return null
     }
-    if (selected === 'rejected') {
-      return ReviewStatus.REJECTED
-    }
-    if (selected === 'returned') {
-      return ReviewStatus.RETURNED
-    }
-    return ReviewStatus.ACCEPTED
   }
 
   reason = (status: ReviewStatus, req: Request): string => {

@@ -212,12 +212,19 @@ describe('POST prisoner report', () => {
     return request(app)
       .post(adjudicationUrls.prisonerReport.urls.review(12345))
       .send({
-        currentStatusSelected: 'ACCEPTED',
+        currentStatusSelected: 'accepted',
         rejectedReasonId: 'reason',
         rejectedDetailsId: 'details',
       })
       .expect(response => {
         expect(reportedAdjudicationsService.updateAdjudicationStatus).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.updateAdjudicationStatus).toHaveBeenCalledWith(
+          12345,
+          'UNSCHEDULED',
+          '',
+          '',
+          expect.anything()
+        )
       })
   })
 })

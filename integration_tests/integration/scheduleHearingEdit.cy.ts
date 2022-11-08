@@ -2,6 +2,7 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { ReviewStatus } from '../../server/routes/prisonerReport/prisonerReportReviewValidation'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -30,7 +31,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
         roleCode: undefined,
       },
       offenceDetails: [],
-      status: 'ACCEPTED',
+      status: ReviewStatus.UNSCHEDULED,
       reviewedByUserId: 'USER1',
       statusReason: undefined,
       statusDetails: undefined,

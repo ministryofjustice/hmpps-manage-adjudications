@@ -63,6 +63,8 @@ export enum ReportedAdjudicationStatus {
   RETURNED = 'RETURNED',
   REJECTED = 'REJECTED',
   ACCEPTED = 'ACCEPTED',
+  SCHEDULED = 'SCHEDULED',
+  UNSCHEDULED = 'UNSCHEDULED',
 }
 
 export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicationStatus) {
@@ -75,6 +77,10 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Rejected'
     case ReportedAdjudicationStatus.ACCEPTED:
       return 'Accepted'
+    case ReportedAdjudicationStatus.UNSCHEDULED:
+      return 'Unscheduled'
+    case ReportedAdjudicationStatus.SCHEDULED:
+      return 'Scheduled'
     default:
       return null
   }

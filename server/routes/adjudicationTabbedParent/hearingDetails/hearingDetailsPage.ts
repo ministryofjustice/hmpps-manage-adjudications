@@ -65,17 +65,21 @@ export default class HearingDetailsPage {
       reportedAdjudication.hearings,
       user
     )
-    const readOnly = this.pageOptions.isReporter()
+
+    const schedulingAvailable =
+      reportedAdjudication.status === ReportedAdjudicationStatus.UNSCHEDULED ||
+      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
 
     return res.render(`pages/adjudicationTabbedParent/hearingDetails`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
-      schedulingAvailable: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
-      readOnly,
+      schedulingAvailable,
+      isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
+      readOnly: this.pageOptions.isReporter(),
       hearings: hearingSummary,
       scheduleHearingButtonHref: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
-      scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings.length),
+      scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings?.length),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),

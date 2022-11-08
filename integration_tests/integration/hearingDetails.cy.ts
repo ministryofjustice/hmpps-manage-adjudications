@@ -114,16 +114,24 @@ context('Hearing deails page', () => {
       response: reportedAdjudicationResponse(1524493, 'AWAITING_REVIEW'),
     })
     cy.task('stubGetReportedAdjudication', {
+      id: 1524480,
+      response: reportedAdjudicationResponse(1524480, 'RETURNED'),
+    })
+    cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse(1524494, 'ACCEPTED'),
     })
     cy.task('stubGetReportedAdjudication', {
+      id: 1524497,
+      response: reportedAdjudicationResponse(1524497, 'UNSCHEDULED'),
+    })
+    cy.task('stubGetReportedAdjudication', {
       id: 1524495,
-      response: reportedAdjudicationResponse(1524495, 'ACCEPTED', singleHearing),
+      response: reportedAdjudicationResponse(1524495, 'SCHEDULED', singleHearing),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524496,
-      response: reportedAdjudicationResponse(1524496, 'ACCEPTED', multipleHearings),
+      response: reportedAdjudicationResponse(1524496, 'SCHEDULED', multipleHearings),
     })
     cy.signIn()
   })
@@ -131,35 +139,42 @@ context('Hearing deails page', () => {
     beforeEach(() => {
       cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     })
-    ;[{ id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }].forEach(adj => {
-      it('should contain the required page elements', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.review(adj.id))
-        const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-        hearingDetailsPage.reviewStatus().should('exist')
-        hearingDetailsPage.viewYourCompletedReportsLink().should('not.exist')
-        if (adj.id === 1524493) {
-          hearingDetailsPage.schedulingUnavailableP1().should('exist')
-          hearingDetailsPage.schedulingUnavailableP2().should('exist')
-          hearingDetailsPage.noHearingsScheduled().should('not.exist')
-          hearingDetailsPage.summaryTable().should('not.exist')
-        } else if (adj.id === 1524494) {
-          hearingDetailsPage.summaryTable().should('not.exist')
-          hearingDetailsPage.noHearingsScheduled().should('exist')
-          hearingDetailsPage.scheduleHearingButton().should('exist')
-          hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
-        } else {
-          hearingDetailsPage.summaryTable().should('exist')
-          hearingDetailsPage.cancelHearingButton(987).should('exist')
-          hearingDetailsPage.hearingIndex(1).should('exist')
-          hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
-          hearingDetailsPage.scheduleHearingButton().should('exist')
-        }
-        if (adj.id === 1524496) {
-          hearingDetailsPage.cancelHearingButton(988).should('exist')
-          hearingDetailsPage.hearingIndex(1).should('exist')
-        }
-      })
-    })
+    ;[{ id: 1524480 }, { id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }, { id: 1524497 }].forEach(
+      adj => {
+        it('should contain the required page elements', () => {
+          cy.visit(adjudicationUrls.hearingDetails.urls.review(adj.id))
+          const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+          hearingDetailsPage.reviewStatus().should('exist')
+          hearingDetailsPage.viewYourCompletedReportsLink().should('not.exist')
+          if (adj.id === 1524493 || adj.id === 1524480) {
+            hearingDetailsPage.schedulingUnavailableP1().should('exist')
+            hearingDetailsPage.schedulingUnavailableP2().should('exist')
+            hearingDetailsPage.noHearingsScheduled().should('not.exist')
+            hearingDetailsPage.summaryTable().should('not.exist')
+          } else if (adj.id === 1524494) {
+            hearingDetailsPage.summaryTable().should('not.exist')
+            hearingDetailsPage.noHearingsScheduled().should('exist')
+            hearingDetailsPage.scheduleHearingButton().should('not.exist')
+            hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
+          } else if (adj.id === 1524497) {
+            hearingDetailsPage.summaryTable().should('not.exist')
+            hearingDetailsPage.noHearingsScheduled().should('exist')
+            hearingDetailsPage.scheduleHearingButton().should('exist')
+            hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
+          } else {
+            hearingDetailsPage.summaryTable().should('exist')
+            hearingDetailsPage.cancelHearingButton(987).should('exist')
+            hearingDetailsPage.hearingIndex(1).should('exist')
+            hearingDetailsPage.viewAllCompletedReportsLink().should('exist')
+            hearingDetailsPage.scheduleHearingButton().should('exist')
+          }
+          if (adj.id === 1524496) {
+            hearingDetailsPage.cancelHearingButton(988).should('exist')
+            hearingDetailsPage.hearingIndex(1).should('exist')
+          }
+        })
+      }
+    )
     it('Adjudication awaiting review', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524493))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
@@ -169,10 +184,26 @@ context('Hearing deails page', () => {
         .schedulingUnavailableP2()
         .contains('You can only schedule a hearing for reports that have been reviewed and accepted.')
     })
-    it('Adjudication accepted, no hearings to show', () => {
+    it('Adjudication returned', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524480))
+      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPage.reviewStatus().contains('Returned')
+      hearingDetailsPage.schedulingUnavailableP1().contains('There are no hearings to schedule at the moment.')
+      hearingDetailsPage
+        .schedulingUnavailableP2()
+        .contains('You can only schedule a hearing for reports that have been reviewed and accepted.')
+    })
+    it('Adjudication ACCEPTED, no hearings to show', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524494))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.reviewStatus().contains('Accepted') // TODO this will eventually show Unscheduled
+      hearingDetailsPage.reviewStatus().contains('Accepted')
+      hearingDetailsPage.noHearingsScheduled().contains('Not scheduled.')
+      hearingDetailsPage.scheduleHearingButton().should('not.exist')
+    })
+    it('Adjudication UNSCHEDULED, no hearings to show', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
+      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPage.reviewStatus().contains('Unscheduled')
       hearingDetailsPage.noHearingsScheduled().contains('Not scheduled.')
       hearingDetailsPage.scheduleHearingButton().contains('Schedule a hearing')
       hearingDetailsPage.viewAllCompletedReportsLink().contains('Return to all completed reports')
@@ -182,17 +213,17 @@ context('Hearing deails page', () => {
       })
     })
     it('goes to schedule hearing page when button clicked', () => {
-      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524494))
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
       hearingDetailsPage.scheduleHearingButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(1524494))
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(1524497))
       })
     })
-    it('Adjudication accepted, one hearing', () => {
+    it('Adjudication SCHEDULED, one hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524495))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.reviewStatus().contains('Accepted') // this will eventually show Unscheduled
+      hearingDetailsPage.reviewStatus().contains('Scheduled')
       hearingDetailsPage.hearingIndex(1).contains('Hearing 1')
       hearingDetailsPage
         .summaryTable()
@@ -216,10 +247,10 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
       })
     })
-    it('Adjudication accepted multiple hearings to show', () => {
+    it('Adjudication SCHEDULED multiple hearings to show', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.reviewStatus().contains('Accepted') // this will eventually show Unscheduled
+      hearingDetailsPage.reviewStatus().contains('Scheduled')
       hearingDetailsPage.hearingIndex(1).contains('Hearing 1')
       hearingDetailsPage.hearingIndex(2).contains('Hearing 2')
       hearingDetailsPage
@@ -260,18 +291,18 @@ context('Hearing deails page', () => {
     it('Successfully cancels a hearing', () => {
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
-        response: reportedAdjudicationResponse(1524497, 'ACCEPTED', multipleHearings),
+        response: reportedAdjudicationResponse(1524497, 'SCHEDULED', multipleHearings),
       })
       cy.task('stubCancelHearing', {
         adjudicationNumber: 1524497,
         hearingId: 987,
-        response: reportedAdjudicationResponse(1524497, 'ACCEPTED', hearingListAfterDeletion),
+        response: reportedAdjudicationResponse(1524497, 'SCHEDULED', hearingListAfterDeletion),
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
-        response: reportedAdjudicationResponse(1524497, 'ACCEPTED', hearingListAfterDeletion),
+        response: reportedAdjudicationResponse(1524497, 'SCHEDULED', hearingListAfterDeletion),
       })
       hearingDetailsPage.cancelHearingButton(987).click() // deleting the first hearing in the list with id 987
 
@@ -294,32 +325,40 @@ context('Hearing deails page', () => {
     })
   })
   describe('Test scenarios - reporter view', () => {
-    ;[{ id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }].forEach(adj => {
-      it('should contain the required page elements', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.report(adj.id))
-        const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-        hearingDetailsPage.reviewStatus().should('exist')
-        hearingDetailsPage.scheduleHearingButton().should('not.exist')
-        hearingDetailsPage.cancelHearingButton(1).should('not.exist')
-        hearingDetailsPage.viewAllCompletedReportsLink().should('not.exist')
-        if (adj.id === 1524493) {
-          hearingDetailsPage.schedulingUnavailableP1().should('exist')
-          hearingDetailsPage.schedulingUnavailableP2().should('exist')
-          hearingDetailsPage.summaryTable().should('not.exist')
-          hearingDetailsPage.noHearingsScheduled().should('not.exist')
-        } else if (adj.id === 1524494) {
-          hearingDetailsPage.noHearingsScheduled().should('exist')
-          hearingDetailsPage.schedulingUnavailableP1().should('not.exist')
-          hearingDetailsPage.schedulingUnavailableP2().should('not.exist')
-          hearingDetailsPage.summaryTable().should('not.exist')
-          hearingDetailsPage.viewYourCompletedReportsLink().should('exist')
-        } else {
-          hearingDetailsPage.schedulingUnavailableP1().should('not.exist')
-          hearingDetailsPage.schedulingUnavailableP2().should('not.exist')
-          hearingDetailsPage.noHearingsScheduled().should('not.exist')
-        }
-      })
-    })
+    ;[{ id: 1524480 }, { id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }, { id: 1524497 }].forEach(
+      adj => {
+        it('should contain the required page elements', () => {
+          cy.visit(adjudicationUrls.hearingDetails.urls.report(adj.id))
+          const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+          hearingDetailsPage.reviewStatus().should('exist')
+          hearingDetailsPage.scheduleHearingButton().should('not.exist')
+          hearingDetailsPage.cancelHearingButton(1).should('not.exist')
+          hearingDetailsPage.viewAllCompletedReportsLink().should('not.exist')
+          if (adj.id === 1524493 || adj.id === 1524480) {
+            hearingDetailsPage.schedulingUnavailableP1().should('exist')
+            hearingDetailsPage.schedulingUnavailableP2().should('exist')
+            hearingDetailsPage.summaryTable().should('not.exist')
+            hearingDetailsPage.noHearingsScheduled().should('not.exist')
+          } else if (adj.id === 1524494) {
+            hearingDetailsPage.noHearingsScheduled().should('exist')
+            hearingDetailsPage.schedulingUnavailableP1().should('not.exist')
+            hearingDetailsPage.schedulingUnavailableP2().should('not.exist')
+            hearingDetailsPage.summaryTable().should('not.exist')
+            hearingDetailsPage.viewYourCompletedReportsLink().should('exist')
+          } else if (adj.id === 1524497) {
+            hearingDetailsPage.noHearingsScheduled().should('exist')
+            hearingDetailsPage.schedulingUnavailableP1().should('not.exist')
+            hearingDetailsPage.schedulingUnavailableP2().should('not.exist')
+            hearingDetailsPage.summaryTable().should('not.exist')
+            hearingDetailsPage.viewYourCompletedReportsLink().should('exist')
+          } else {
+            hearingDetailsPage.schedulingUnavailableP1().should('not.exist')
+            hearingDetailsPage.schedulingUnavailableP2().should('not.exist')
+            hearingDetailsPage.noHearingsScheduled().should('not.exist')
+          }
+        })
+      }
+    )
     it('Adjudication awaiting review', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524493))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
@@ -329,10 +368,10 @@ context('Hearing deails page', () => {
         .schedulingUnavailableP2()
         .contains('You can only schedule a hearing for reports that have been reviewed and accepted.')
     })
-    it('Adjudication accepted, no hearings to show', () => {
+    it('Adjudication ACCEPTED, no hearings to show', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524494))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.reviewStatus().contains('Accepted') // this will eventually show Unscheduled
+      hearingDetailsPage.reviewStatus().contains('Accepted')
       hearingDetailsPage.noHearingsScheduled().contains('Not scheduled.')
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
       hearingDetailsPage.viewYourCompletedReportsLink().click()
@@ -340,10 +379,21 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.urls.start())
       })
     })
-    it('Adjudication accepted, one hearing', () => {
+    it('Adjudication UNSCHEDULED, no hearings to show', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.report(1524497))
+      const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
+      hearingDetailsPage.reviewStatus().contains('Unscheduled')
+      hearingDetailsPage.noHearingsScheduled().contains('Not scheduled.')
+      hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
+      hearingDetailsPage.viewYourCompletedReportsLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.urls.start())
+      })
+    })
+    it('Adjudication SCHEDULED, one hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524495))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.reviewStatus().contains('Accepted') // this will eventually show Unscheduled
+      hearingDetailsPage.reviewStatus().contains('Scheduled')
       hearingDetailsPage.hearingIndex(1).contains('Hearing 1')
       hearingDetailsPage
         .summaryTable()
@@ -366,10 +416,10 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.urls.start())
       })
     })
-    it('Adjudication accepted muliple hearings to show', () => {
+    it('Adjudication SCHEDULED muliple hearings to show', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524496))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-      hearingDetailsPage.reviewStatus().contains('Accepted') // this will eventually show Unscheduled
+      hearingDetailsPage.reviewStatus().contains('Scheduled')
       hearingDetailsPage.hearingIndex(1).contains('Hearing 1')
       hearingDetailsPage.hearingIndex(2).contains('Hearing 2')
       hearingDetailsPage
