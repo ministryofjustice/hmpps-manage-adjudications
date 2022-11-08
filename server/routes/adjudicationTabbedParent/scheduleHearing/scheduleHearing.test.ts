@@ -47,6 +47,28 @@ beforeEach(() => {
     { locationId: 27010, locationPrefix: 'A3', userDescription: 'Adj 3' },
     { locationId: 27011, locationPrefix: 'A4', userDescription: 'Adj 4' },
   ])
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+    reportedAdjudication: {
+      adjudicationNumber: 1524494,
+      prisonerNumber: 'G6415GD',
+      bookingId: 1,
+      createdDateTime: undefined,
+      createdByUserId: undefined,
+      incidentDetails: {
+        locationId: 197682,
+        dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
+        handoverDeadline: '2022-11-02T12:54:09.197Z',
+      },
+      incidentStatement: undefined,
+      incidentRole: {
+        roleCode: undefined,
+      },
+      offenceDetails: [],
+      status: ReportedAdjudicationStatus.SCHEDULED,
+      isYouthOffender: false,
+      hearings: [],
+    },
+  })
   reportedAdjudicationsService.scheduleHearing.mockResolvedValue({
     reportedAdjudication: {
       adjudicationNumber: 1524494,
@@ -64,7 +86,7 @@ beforeEach(() => {
         roleCode: undefined,
       },
       offenceDetails: [],
-      status: ReportedAdjudicationStatus.UNSCHEDULED,
+      status: ReportedAdjudicationStatus.SCHEDULED,
       isYouthOffender: false,
       hearings: [
         {
@@ -101,12 +123,13 @@ describe('GET schedule a hearing', () => {
   })
 })
 describe('POST new schedule hearing', () => {
-  it('should successfully submit a hearing when all details provided', () => {
+  it('should successfully submit a hearing when all details provided - GOV', () => {
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
+        hearingType: 'GOV',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
@@ -122,6 +145,28 @@ describe('POST new schedule hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
       })
   })
+  it('should successfully submit a hearing when all details provided - IND', () => {
+    return request(app)
+      .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .send({
+        hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
+        locationId: 27008,
+        hearingType: 'IND_ADJ',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
+      .expect(response => {
+        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
+          1524494,
+          27008,
+          '2045-11-03T11:00',
+          'INAD_ADULT',
+          expect.anything()
+        )
+        expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
+      })
+  })
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.scheduleHearing.mockRejectedValue(new Error('Internal Error'))
     return request(app)
@@ -129,6 +174,7 @@ describe('POST new schedule hearing', () => {
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
+        hearingType: 'GOV',
       })
       .expect('Content-Type', /html/)
       .expect(res => {

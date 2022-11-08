@@ -131,12 +131,13 @@ describe('GET reschedule a hearing', () => {
   })
 })
 describe('POST edit existing hearing', () => {
-  it('should successfully submit a hearing when all details provided', () => {
+  it('should successfully submit a hearing when all details provided - GOV', () => {
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
         locationId: 27008,
+        hearingType: 'GOV',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
@@ -153,6 +154,29 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
       })
   })
+  it('should successfully submit a hearing when all details provided - IND_ADJ', () => {
+    return request(app)
+      .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
+      .send({
+        hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
+        locationId: 27008,
+        hearingType: 'IND_ADJ',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
+      .expect(response => {
+        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
+          1524494,
+          101,
+          27008,
+          '2045-11-04T10:00',
+          'INAD_ADULT',
+          expect.anything()
+        )
+        expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
+      })
+  })
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.rescheduleHearing.mockRejectedValue(new Error('Internal Error'))
     return request(app)
@@ -160,6 +184,7 @@ describe('POST edit existing hearing', () => {
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
         locationId: 27008,
+        hearingType: 'GOV',
       })
       .expect('Content-Type', /html/)
       .expect(res => {

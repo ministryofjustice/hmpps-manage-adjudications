@@ -14,6 +14,7 @@ import {
   convertSubmittedDateTimeToDateObject,
   formatDate,
 } from '../../../utils/utils'
+import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 
 type InitialFormData = {
   hearingDetails?: HearingDetails
@@ -36,6 +37,7 @@ type HearingDetails = {
   hearingDate: SubmittedDateTime
   locationId: number
   id?: number
+  hearingType: string
 }
 
 export enum PageRequestType {
@@ -84,6 +86,7 @@ export default class scheduleHearingRoutes {
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
       locationId: postValues.hearingDetails.locationId,
+      hearingType: postValues.hearingDetails.hearingType,
     })
     if (validationError) {
       const pageData = await this.getPageDataOnGet(adjudicationNumber, postValues.hearingDetails, user)
@@ -91,13 +94,14 @@ export default class scheduleHearingRoutes {
     }
     const hearingDetailsToSave = postValues.hearingDetails
     try {
+      const isYOI = await this.getYoiInfo(adjudicationNumber, user)
       if (this.pageOptions.isEdit()) {
         await this.reportedAdjudicationsService.rescheduleHearing(
           adjudicationNumber,
           hearingId,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
-          'GOV_ADULT', // This is just hardcoded to fit the API requirments until the follow-up ticket can be done
+          getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
           user
         )
       } else {
@@ -105,7 +109,7 @@ export default class scheduleHearingRoutes {
           adjudicationNumber,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
-          'GOV_ADULT', // This is just hardcoded to fit the API requirments until the follow-up ticket can be done
+          getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
           user
         )
       }
@@ -133,6 +137,7 @@ export default class scheduleHearingRoutes {
       hearingDate: await convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
       locationId: hearingToRender.locationId,
       id: hearingToRender.id,
+      hearingType: getRadioHearingType(hearingToRender.oicHearingType),
     }
   }
 
@@ -158,12 +163,22 @@ export default class scheduleHearingRoutes {
       adjudicationNumber,
     }
   }
+
+  getYoiInfo = async (adjudicationNumber: number, user: User): Promise<boolean> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+      adjudicationNumber,
+      user
+    )
+    const { reportedAdjudication } = adjudication
+    return reportedAdjudication.isYouthOffender
+  }
 }
 
 const renderData = (res: Response, pageData: PageData, error: FormError) => {
   const data = {
     hearingDate: convertSubmittedDateTimeToDateObject(pageData.formData.hearingDetails?.hearingDate),
     locationId: pageData.formData.hearingDetails?.locationId,
+    hearingType: pageData.formData.hearingDetails?.hearingType,
   }
 
   return res.render(`pages/adjudicationTabbedParent/scheduleHearing`, {
@@ -179,7 +194,21 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
     hearingDetails: {
       hearingDate: req.body.hearingDate,
       locationId: req.body.locationId,
+      hearingType: req.body.hearingType,
     },
   }
   return values
+}
+
+const getOICHearingType = (hearingType: string, YOI: boolean): OicHearingType => {
+  const govAdj = hearingType === 'GOV'
+  if (YOI) {
+    return govAdj ? OicHearingType.GOV_YOI : OicHearingType.INAD_YOI
+  }
+  return govAdj ? OicHearingType.GOV_ADULT : OicHearingType.INAD_ADULT
+}
+
+const getRadioHearingType = (hearingType: string): string => {
+  if ([OicHearingType.GOV_YOI as string, OicHearingType.GOV_ADULT as string].includes(hearingType)) return 'GOV'
+  return 'IND_ADJ'
 }

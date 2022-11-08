@@ -6,6 +6,7 @@
 {% from "../../macros/timeInput.njk" import timeInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../../macros/timeSelect.njk" import timeSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set title = 'Schedule a hearing' %}
 
@@ -26,6 +27,31 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+        idPrefix: "hearingType",
+        name: "hearingType",
+        errorMessage: "hearingType" | findError(errors),
+        attributes: { "data-qa": "hearing-type-radio-buttons" },
+        fieldset: {
+          legend: {
+            text: "Type of hearing"
+          }
+        },
+        items: [
+          {
+            value: "GOV",
+            text: "Governor",
+            checked: data.hearingType === 'GOV'
+          },
+          {
+            value: "IND_ADJ",
+            text: "Independent adjudicator",
+            checked: data.hearingType === 'IND_ADJ'
+          }
+        ]
+      }) }}
+
       {{
       govukSelect({
         id: 'locationId',

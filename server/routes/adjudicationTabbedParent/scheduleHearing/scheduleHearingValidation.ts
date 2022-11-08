@@ -4,6 +4,7 @@ import { formatDate } from '../../../utils/utils'
 type ScheduleHearingForm = {
   hearingDate?: SubmittedDateTime
   locationId?: number
+  hearingType?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -23,9 +24,16 @@ const errors: { [key: string]: FormError } = {
     href: '#locationId',
     text: 'Select location of hearing',
   },
+  MISSING_HEARING_TYPE: {
+    href: '#hearingType',
+    text: 'Select type of hearing',
+  },
 }
 
-export default function validateForm({ hearingDate, locationId }: ScheduleHearingForm): FormError | null {
+export default function validateForm({ hearingDate, locationId, hearingType }: ScheduleHearingForm): FormError | null {
+  if (!hearingType) {
+    return errors.MISSING_HEARING_TYPE
+  }
   if (!locationId) {
     return errors.MISSING_LOCATION
   }
