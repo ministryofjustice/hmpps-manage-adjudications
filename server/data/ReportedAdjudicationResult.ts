@@ -73,7 +73,6 @@ export enum OicHearingType {
   GOV_YOI = 'GOV_YOI',
   INAD_ADULT = 'INAD_ADULT',
   INAD_YOI = 'INAD_YOI',
-  GOV = 'GOV',
 }
 
 export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicationStatus) {
