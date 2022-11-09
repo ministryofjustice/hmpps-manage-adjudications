@@ -107,7 +107,7 @@ context('Schedule a hearing page', () => {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
     })
-    cy.task('stubGetLocations', {
+    cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',
       response: [
         {

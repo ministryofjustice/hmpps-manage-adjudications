@@ -157,7 +157,7 @@ export default class scheduleHearingRoutes {
   getDisplayData = async (adjudicationNumber: number, user: User): Promise<DisplayDataFromApis> => {
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
     const { agencyId } = prisoner.assignedLivingUnit
-    const possibleLocations = await this.locationService.getIncidentLocations(agencyId, user)
+    const possibleLocations = await this.locationService.getHearingLocations(agencyId, user)
     return {
       possibleLocations,
       adjudicationNumber,

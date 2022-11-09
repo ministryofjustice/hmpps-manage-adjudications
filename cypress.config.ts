@@ -48,6 +48,7 @@ export default defineConfig({
         stubCuriousPing: status => curiousApi.stubPing(status),
         stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
         stubGetLocations: prisonApi.stubGetLocations,
+        stubGetLocationsByType: prisonApi.stubGetLocationsByType,
         stubGetLocation: prisonApi.stubGetLocation,
         stubGetAgency: prisonApi.stubGetAgency,
         stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,

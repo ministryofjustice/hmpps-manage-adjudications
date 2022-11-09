@@ -109,6 +109,19 @@ describe('prisonApiClient', () => {
     })
   })
 
+  describe('getAdjudicationLocations', () => {
+    const locations: nock.Body = []
+    it('should return data from api', async () => {
+      fakePrisonApi
+        .get('/api/agencies/MDI/locations/type/ADJU')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, locations)
+
+      const output = await client.getAdjudicationLocations('MDI')
+      expect(output).toEqual(locations)
+    })
+  })
+
   describe('getSecondaryLanguages', () => {
     it('should return data from api', async () => {
       const result = [
