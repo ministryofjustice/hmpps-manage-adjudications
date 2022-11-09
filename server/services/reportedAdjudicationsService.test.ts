@@ -6,7 +6,7 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
-import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -727,13 +727,13 @@ describe('reportedAdjudicationsService', () => {
           id: 1234,
           dateTimeOfHearing: '2022-10-20T11:11:00',
           locationId: 27187,
-          oicHearingType: 'GOV_ADULT',
+          oicHearingType: OicHearingType.GOV_ADULT as string,
         },
         {
           id: 23445,
           dateTimeOfHearing: '2022-10-21T11:11:00',
           locationId: 73612,
-          oicHearingType: 'GOV_ADULT',
+          oicHearingType: OicHearingType.GOV_ADULT as string,
         },
       ]
       const result = await service.getHearingDetails(hearings, user)
@@ -769,7 +769,7 @@ describe('reportedAdjudicationsService', () => {
           id: 1234,
           dateTimeOfHearing: '2022-10-20T11:11:00',
           locationId: 27187,
-          oicHearingType: 'GOV_ADULT',
+          oicHearingType: OicHearingType.GOV_ADULT as string,
         },
       ]
       const result = await service.getHearingDetails(hearings, user)

@@ -1,3 +1,4 @@
+import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 import validateForm from './scheduleHearingValidation'
 
 describe('validateForm', () => {
@@ -14,7 +15,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { date: '01/01/2030', time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toBeNull()
     })
@@ -25,7 +26,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { time: { hour: '12', minute: '23' } },
           locationId: 2343,
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual({
         href: '#hearingDate[date]',
@@ -38,7 +39,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { time: { hour: '12', minute: '23' } },
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual({
         href: '#locationId',
@@ -52,7 +53,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { date: '01/01/2030', time: { minute: '23' } },
           locationId: 2343,
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual({
         href: '#hearingDate[time][hour]',
@@ -64,7 +65,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { date: '01/01/2030', time: { hour: '12' } },
           locationId: 2343,
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual({
         href: '#hearingDate[time][hour]',
@@ -76,7 +77,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { date: '01/01/2030' },
           locationId: 2343,
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual({
         href: '#hearingDate[time][hour]',
@@ -88,7 +89,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { date: '01/11/2022', time: { hour: '09', minute: '00' } },
           locationId: 2343,
-          hearingType: 'GOV_ADULT',
+          hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual({
         href: '#hearingDate[time][hour]',

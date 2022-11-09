@@ -4,6 +4,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { ReviewStatus } from '../../server/routes/prisonerReport/prisonerReportReviewValidation'
+import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -50,7 +51,7 @@ const singleHearing = [
     id: 987,
     dateTimeOfHearing: '2030-01-01T11:00:00',
     locationId: 123,
-    oicHearingType: 'GOV_ADULT',
+    oicHearingType: OicHearingType.GOV_ADULT as string,
   },
 ]
 

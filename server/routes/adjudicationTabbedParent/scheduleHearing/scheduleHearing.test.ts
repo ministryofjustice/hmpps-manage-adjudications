@@ -3,7 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
 
@@ -93,7 +93,7 @@ beforeEach(() => {
           id: 101,
           locationId: 27008,
           dateTimeOfHearing: '2022-11-03T11:00:00',
-          oicHearingType: 'GOV_ADULT',
+          oicHearingType: OicHearingType.GOV_ADULT as string,
         },
       ],
     },
@@ -139,7 +139,7 @@ describe('POST new schedule hearing', () => {
           1524494,
           27008,
           '2045-11-03T11:00',
-          'GOV_ADULT',
+          OicHearingType.GOV_ADULT as string,
           expect.anything()
         )
         expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
@@ -161,7 +161,7 @@ describe('POST new schedule hearing', () => {
           1524494,
           27008,
           '2045-11-03T11:00',
-          'INAD_ADULT',
+          OicHearingType.INAD_ADULT as string,
           expect.anything()
         )
         expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
