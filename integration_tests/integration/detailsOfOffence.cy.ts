@@ -93,7 +93,7 @@ context('Details of offence', () => {
             offenceRule: {
               paragraphNumber: '25(c)',
               paragraphDescription:
-                'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+                'Assists another prisoner to commit, <br>or to attempt to commit, any of the foregoing offences:',
             },
           },
         },
