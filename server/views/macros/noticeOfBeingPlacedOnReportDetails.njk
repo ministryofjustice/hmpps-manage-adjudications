@@ -69,10 +69,10 @@
                 <p class='govuk-!-margin-bottom-0'>This offence broke:</p>
                 {% if offence.incidentRule %}
                     <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
-                    <p class='govuk-!-margin-bottom-0'>{{ offence.incidentRule.paragraphDescription }}</p>
+                    <p class='govuk-!-margin-bottom-0'>{{ offence.incidentRule.paragraphDescription | safe }}</p>
                 {% endif %}
                 <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
-                <p class='govuk-!-margin-bottom-0'>{{ offence.offenceRule.paragraphDescription }}</p>
+                <p class='govuk-!-margin-bottom-0'>{{ offence.offenceRule.paragraphDescription | safe }}</p>
             </div>
             {% if not loop.last %}
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
