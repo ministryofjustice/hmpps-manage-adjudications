@@ -19,10 +19,7 @@ export default class LocationService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const incidentLocations = await new PrisonApiClient(token).getLocations(agencyId)
 
-    const formattedIncidentLocations = incidentLocations.map(location => ({
-      ...location,
-      userDescription: location.userDescription ? location.userDescription : location.locationPrefix,
-    }))
+    const formattedIncidentLocations = assignIntLocCodeAsUserDesc(incidentLocations)
 
     const prisonersCell = formattedIncidentLocations.find(
       location => location.userDescription.toUpperCase() === "PRISONER'S CELL"
@@ -41,4 +38,21 @@ export default class LocationService {
 
     return [...(prisonersCell ? [prisonersCell] : []), ...(otherCell ? [otherCell] : []), ...remainingLocations]
   }
+
+  async getHearingLocations(agencyId: AgencyId, user: User): Promise<PrisonLocation[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const hearingLocations = await new PrisonApiClient(token).getAdjudicationLocations(agencyId)
+    const formattedHearingLocations = assignIntLocCodeAsUserDesc(hearingLocations)
+
+    return formattedHearingLocations.sort((a, b) =>
+      a.userDescription.localeCompare(b.userDescription, 'en', { ignorePunctuation: true })
+    )
+  }
+}
+
+const assignIntLocCodeAsUserDesc = (locations: PrisonLocation[]) => {
+  return locations.map(location => ({
+    ...location,
+    userDescription: location.userDescription ? location.userDescription : location.locationPrefix,
+  }))
 }

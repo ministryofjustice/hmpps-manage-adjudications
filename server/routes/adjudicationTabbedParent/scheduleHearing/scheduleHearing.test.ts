@@ -41,7 +41,7 @@ beforeEach(() => {
     prisonerNumber: 'G6415GD',
     currentLocation: '1-1-035',
   })
-  locationService.getIncidentLocations.mockResolvedValue([
+  locationService.getHearingLocations.mockResolvedValue([
     { locationId: 27008, locationPrefix: 'A1', userDescription: 'Adj 1' },
     { locationId: 27009, locationPrefix: 'A2', userDescription: 'Adj 2' },
     { locationId: 27010, locationPrefix: 'A3', userDescription: 'Adj 3' },
@@ -112,8 +112,8 @@ describe('GET schedule a hearing', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Schedule a hearing')
-        expect(locationService.getIncidentLocations).toHaveBeenCalledTimes(1)
-        expect(locationService.getIncidentLocations).toHaveBeenCalledWith('MDI', expect.anything())
+        expect(locationService.getHearingLocations).toHaveBeenCalledTimes(1)
+        expect(locationService.getHearingLocations).toHaveBeenCalledWith('MDI', expect.anything())
         expect(reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber).toHaveBeenCalledWith(
           1524494,

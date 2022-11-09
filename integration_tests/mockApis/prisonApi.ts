@@ -75,6 +75,25 @@ const stubGetLocations = ({
     },
   })
 
+const stubGetLocationsByType = ({
+  agencyId,
+  response = [],
+}: {
+  agencyId: string
+  response: Record<string, unknown>[]
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/agencies/${agencyId}/locations/type/ADJU`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 const stubGetLocation = ({ locationId, response }: { locationId: number; response: Location }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -138,6 +157,7 @@ export default {
   stubUserCaseloads,
   stubGetPrisonerDetails,
   stubGetLocations,
+  stubGetLocationsByType,
   stubGetLocation,
   stubGetAgency,
   stubGetSecondaryLanguages,

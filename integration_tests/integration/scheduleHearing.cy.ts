@@ -26,6 +26,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
       incidentDetails: {
         locationId: 197682,
         dateTimeOfIncident: '2021-12-09T10:30:00',
+        dateTimeOfDiscovery: '2021-12-09T10:30:00',
         handoverDeadline: '2021-12-11T10:30:00',
       },
       incidentStatement: undefined,
@@ -75,7 +76,7 @@ context('Schedule a hearing page', () => {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
     })
-    cy.task('stubGetLocations', {
+    cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',
       response: [
         {

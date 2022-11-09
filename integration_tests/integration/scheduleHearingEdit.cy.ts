@@ -25,6 +25,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
       incidentDetails: {
         locationId: 197682,
         dateTimeOfIncident: '2021-12-09T10:30:00',
+        dateTimeOfDiscovery: '2021-12-09T10:30:00',
         handoverDeadline: '2021-12-11T10:30:00',
       },
       incidentStatement: undefined,
@@ -45,10 +46,12 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
   }
 }
 
+const hearingDateTime = '2030-01-01T11:00:00'
+
 const originalHearing = [
   {
     id: 333,
-    dateTimeOfHearing: '2030-01-01T11:00:00',
+    dateTimeOfHearing: hearingDateTime,
     locationId: 123,
     oicHearingType: OicHearingType.GOV_ADULT as string,
   },
@@ -73,7 +76,7 @@ const changedTimeHearing = [
 const changedLocationHearing = [
   {
     id: 333,
-    dateTimeOfHearing: '2030-01-01T11:00:00',
+    dateTimeOfHearing: hearingDateTime,
     locationId: 234,
     oicHearingType: OicHearingType.GOV_ADULT as string,
   },
@@ -81,7 +84,7 @@ const changedLocationHearing = [
 const changedTypeHearing = [
   {
     id: 333,
-    dateTimeOfHearing: '2030-01-01T11:00:00',
+    dateTimeOfHearing: hearingDateTime,
     locationId: 123,
     oicHearingType: OicHearingType.INAD_ADULT as string,
   },
@@ -107,7 +110,7 @@ context('Schedule a hearing page', () => {
       prisonerNumber: 'G6415GD',
       response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
     })
-    cy.task('stubGetLocations', {
+    cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',
       response: [
         {
