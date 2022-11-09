@@ -27,6 +27,7 @@ const createDraftFromReportedAdjudicationResponse = (
       incidentDetails: {
         locationId: 234,
         dateTimeOfIncident: '2021-12-01T09:40:00',
+        dateTimeOfDiscovery: '2021-12-01T09:40:00',
         handoverDeadline: '2021-12-03T09:40:00',
       },
       incidentStatement: {
@@ -61,6 +62,7 @@ const reportedAdjudicationResponse = (
       incidentDetails: {
         locationId: 197682,
         dateTimeOfIncident: '2021-12-09T10:30:00',
+        dateTimeOfDiscovery: '2021-12-10T09:40:00',
         handoverDeadline: '2021-12-11T10:30:00',
       },
       incidentStatement: undefined,
@@ -95,6 +97,7 @@ const draftAdjudicationResponse = (
       incidentDetails: {
         locationId: 234,
         dateTimeOfIncident: '2021-12-01T09:40:00',
+        dateTimeOfDiscovery: '2021-12-02T10:42:00',
         handoverDeadline: '2021-12-03T09:40:00',
       },
       incidentStatement: {
@@ -313,9 +316,11 @@ context('Prisoner report - reporter view', () => {
           .find('dt')
           .then($summaryLabels => {
             expect($summaryLabels.get(0).innerText).to.contain('Reporting Officer')
-            expect($summaryLabels.get(1).innerText).to.contain('Date')
-            expect($summaryLabels.get(2).innerText).to.contain('Time')
+            expect($summaryLabels.get(1).innerText).to.contain('Date of incident')
+            expect($summaryLabels.get(2).innerText).to.contain('Time of incident')
             expect($summaryLabels.get(3).innerText).to.contain('Location')
+            expect($summaryLabels.get(4).innerText).to.contain('Date of discovery')
+            expect($summaryLabels.get(5).innerText).to.contain('Time of discovery')
           })
 
         prisonerReportPage
