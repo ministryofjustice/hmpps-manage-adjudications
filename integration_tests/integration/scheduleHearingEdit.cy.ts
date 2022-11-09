@@ -31,6 +31,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
         roleCode: undefined,
       },
       offenceDetails: [],
+      isYouthOffender: false,
       status: ReviewStatus.UNSCHEDULED,
       reviewedByUserId: 'USER1',
       statusReason: undefined,
@@ -74,6 +75,14 @@ const changedLocationHearing = [
     dateTimeOfHearing: '2030-01-01T11:00:00',
     locationId: 234,
     oicHearingType: 'GOV_ADULT',
+  },
+]
+const changedTypeHearing = [
+  {
+    id: 333,
+    dateTimeOfHearing: '2030-01-01T11:00:00',
+    locationId: 123,
+    oicHearingType: 'INAD_ADULT',
   },
 ]
 
@@ -135,6 +144,7 @@ context('Schedule a hearing page', () => {
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.hearingTypeRadios().should('exist')
     scheduleHearingsPage.datePicker().should('exist')
     scheduleHearingsPage.timeInputHours().should('exist')
     scheduleHearingsPage.timeInputMinutes().should('exist')
@@ -144,6 +154,7 @@ context('Schedule a hearing page', () => {
   it('should have pre-filled fields', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').should('be.checked')
     scheduleHearingsPage.datePicker().should('have.value', '01/01/2030')
     scheduleHearingsPage.timeInputHours().should('have.value', '11')
     scheduleHearingsPage.timeInputMinutes().should('have.value', '00')
@@ -171,6 +182,20 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.locationSelector().select('234')
+    scheduleHearingsPage.submitButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))
+    })
+  })
+  it('should submit the form successfully when the type is changed', () => {
+    cy.task('stubAmendHearing', {
+      adjudicationNumber: 1524494,
+      hearingId: 333,
+      response: reportedAdjudicationResponse(1524494, changedTypeHearing),
+    })
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.hearingTypeRadios().find('input[value="IND_ADJ"]').click()
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))

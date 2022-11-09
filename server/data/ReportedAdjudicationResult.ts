@@ -67,6 +67,14 @@ export enum ReportedAdjudicationStatus {
   UNSCHEDULED = 'UNSCHEDULED',
 }
 
+// This enum needs to be kept in sync with the enum in the API.
+export enum OicHearingType {
+  GOV_ADULT = 'GOV_ADULT',
+  GOV_YOI = 'GOV_YOI',
+  INAD_ADULT = 'INAD_ADULT',
+  INAD_YOI = 'INAD_YOI',
+}
+
 export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicationStatus) {
   switch (status) {
     case ReportedAdjudicationStatus.AWAITING_REVIEW:
