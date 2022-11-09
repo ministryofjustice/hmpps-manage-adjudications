@@ -1,6 +1,7 @@
 import hearingDetails from '../pages/hearingDetails'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -46,7 +47,7 @@ const singleHearing = [
     id: 987,
     dateTimeOfHearing: '2022-10-20T10:00:00',
     locationId: 123,
-    oicHearingType: 'GOV_ADULT',
+    oicHearingType: OicHearingType.GOV_ADULT as string,
   },
 ]
 
@@ -55,7 +56,7 @@ const hearingListAfterDeletion = [
     id: 988,
     dateTimeOfHearing: '2022-10-21T11:00:00',
     locationId: 234,
-    oicHearingType: 'GOV_ADULT',
+    oicHearingType: OicHearingType.GOV_ADULT as string,
   },
 ]
 
@@ -64,13 +65,13 @@ const multipleHearings = [
     id: 987,
     dateTimeOfHearing: '2022-10-20T09:00:00',
     locationId: 123,
-    oicHearingType: 'GOV_ADULT',
+    oicHearingType: OicHearingType.GOV_ADULT as string,
   },
   {
     id: 988,
     dateTimeOfHearing: '2022-10-21T11:00:00',
     locationId: 234,
-    oicHearingType: 'GOV_ADULT',
+    oicHearingType: OicHearingType.GOV_ADULT as string,
   },
 ]
 

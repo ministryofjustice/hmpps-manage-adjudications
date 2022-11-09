@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -65,7 +65,7 @@ beforeEach(() => {
           id: 101,
           locationId: 27008,
           dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-          oicHearingType: 'GOV_ADULT',
+          oicHearingType: OicHearingType.GOV_ADULT as string,
         },
       ],
     },
@@ -121,7 +121,7 @@ describe('GET prisoner report', () => {
               id: 101,
               locationId: 27008,
               dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-              oicHearingType: 'GOV_ADULT',
+              oicHearingType: OicHearingType.GOV_ADULT as string,
             },
           ],
           expect.anything()
