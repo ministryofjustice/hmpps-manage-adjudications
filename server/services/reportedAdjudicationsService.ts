@@ -409,7 +409,7 @@ export default class ReportedAdjudicationsService {
         id: hearing.id,
         dateTime: {
           label: 'Date and time of hearing',
-          value: formatTimestampTo(hearing.dateTimeOfHearing, 'DD MMMM YYYY - HH:mm'),
+          value: formatTimestampTo(hearing.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
         },
         location: {
           label: 'Location',
