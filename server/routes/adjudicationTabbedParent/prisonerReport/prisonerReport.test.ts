@@ -36,6 +36,7 @@ beforeEach(() => {
       incidentDetails: {
         locationId: 197682,
         dateTimeOfIncident: '2021-12-09T10:30:00',
+        dateTimeOfDiscovery: '2021-12-09T10:30:00',
         handoverDeadline: '2021-12-11T10:30:00',
       },
       incidentStatement: undefined,
@@ -56,6 +57,7 @@ beforeEach(() => {
       incidentDetails: {
         locationId: 1,
         dateTimeOfIncident: '2021-03-08T10:45:00',
+        dateTimeOfDiscovery: '2021-03-08T10:45:00',
         handoverDeadline: '2021-03-10T10:45:00',
       },
       incidentRole: {},
@@ -110,16 +112,24 @@ beforeEach(() => {
         value: 'T. User',
       },
       {
-        label: 'Date',
+        label: 'Date of incident',
         value: '8 March 2020',
       },
       {
-        label: 'Time',
+        label: 'Time of incident',
         value: '10:45',
       },
       {
         label: 'Location',
         value: 'Chapel',
+      },
+      {
+        label: 'Date of discovery',
+        value: '8 March 2020',
+      },
+      {
+        label: 'Time of discovery',
+        value: '10:45',
       },
     ],
     statement: 'text here',

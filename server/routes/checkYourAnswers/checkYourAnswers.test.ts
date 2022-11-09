@@ -81,11 +81,11 @@ beforeEach(() => {
         value: 'Test McTest',
       },
       {
-        label: 'Date',
+        label: 'Date of incident',
         value: '8 March 2020',
       },
       {
-        label: 'Time',
+        label: 'Time of incident',
         value: '10:45',
       },
       {
