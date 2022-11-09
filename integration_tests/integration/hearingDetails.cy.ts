@@ -12,6 +12,13 @@ const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: st
   }
 }
 
+const incidentDateTime = '2030-01-01T11:00:00'
+const incidentDateTimeHandover = '2030-01-03T11:00:00'
+const hearingDateTimeOne = '2030-01-04T09:00:00'
+const hearingDateTimeOneFormatted = '4 January 2030 - 09:00'
+const hearingDateTimeTwo = '2030-01-06T10:00:00'
+const hearingDateTimeTwoFormatted = '6 January 2030 - 10:00'
+
 const reportedAdjudicationResponse = (adjudicationNumber: number, status: string, hearings = []) => {
   return {
     reportedAdjudication: {
@@ -22,8 +29,8 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, status: string
       createdByUserId: undefined,
       incidentDetails: {
         locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
+        dateTimeOfIncident: incidentDateTime,
+        handoverDeadline: incidentDateTimeHandover,
       },
       incidentStatement: undefined,
       incidentRole: {
@@ -45,7 +52,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, status: string
 const singleHearing = [
   {
     id: 987,
-    dateTimeOfHearing: '2022-10-20T10:00:00',
+    dateTimeOfHearing: hearingDateTimeOne,
     locationId: 123,
     oicHearingType: OicHearingType.GOV_ADULT as string,
   },
@@ -54,7 +61,7 @@ const singleHearing = [
 const hearingListAfterDeletion = [
   {
     id: 988,
-    dateTimeOfHearing: '2022-10-21T11:00:00',
+    dateTimeOfHearing: hearingDateTimeTwo,
     locationId: 234,
     oicHearingType: OicHearingType.GOV_ADULT as string,
   },
@@ -63,13 +70,13 @@ const hearingListAfterDeletion = [
 const multipleHearings = [
   {
     id: 987,
-    dateTimeOfHearing: '2022-10-20T09:00:00',
+    dateTimeOfHearing: hearingDateTimeOne,
     locationId: 123,
     oicHearingType: OicHearingType.GOV_ADULT as string,
   },
   {
     id: 988,
-    dateTimeOfHearing: '2022-10-21T11:00:00',
+    dateTimeOfHearing: hearingDateTimeTwo,
     locationId: 234,
     oicHearingType: OicHearingType.GOV_ADULT as string,
   },
@@ -238,7 +245,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 10:00')
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
         })
@@ -266,11 +273,11 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:00')
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
           expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('21 October 2022 - 11:00')
+          expect($summaryData.get(4).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(5).innerText).to.contain('Change')
           expect($summaryData.get(6).innerText).to.contain('Adj 2')
           expect($summaryData.get(7).innerText).to.contain('Change')
@@ -318,7 +325,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('21 October 2022 - 11:00')
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
           expect($summaryData.get(3).innerText).to.contain('Change')
@@ -408,7 +415,7 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 10:00')
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
@@ -435,9 +442,9 @@ context('Hearing deails page', () => {
         .summaryTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('20 October 2022 - 09:00')
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain('21 October 2022 - 11:00')
+          expect($summaryData.get(2).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(3).innerText).to.contain('Adj 2')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
