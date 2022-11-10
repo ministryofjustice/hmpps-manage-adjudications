@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import HomepagePage from '../pages/home'
 import Page from '../pages/page'
