@@ -11,5 +11,10 @@
     {%- if params.description %}
       <p class="govuk-body card__description">{{ params.description | safe }}</p>
     {%- endif %}
+    {%- if params.links %}
+      {% for link in params.links %}
+        <p class="govuk-body card__link card__description__link"><a href={{ link.href }} data-qa={{ link.id }}>{{ link.text | safe }}</a></p>
+      {% endfor %}
+    {%- endif %}
   </div>
 {% endmacro %}

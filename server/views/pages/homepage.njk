@@ -2,11 +2,11 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "../partials/card.njk" import card %}
 
-{% set title = "Place a prisoner on report" %}
+{% set title = "Adjudications" %}
 {% set feedbackBannerBackground = '#f0f4f5 '%}
 
 {% block pageTitle %}
-  Place a prisoner on report
+  {{ title }}
 {% endblock %}
 
 {% block main %}
@@ -25,8 +25,28 @@
 
   <div class="homepage-content">
     <div class="govuk-width-container">
-      <ul class="govuk-grid-row card-group">
-          {% for task in tasks %}
+      <div class="govuk-grid-row">
+      <ul class="card-group govuk-!-margin-bottom-0">
+          {% for task in reviewerTasks %}
+            <li class="govuk-grid-column-one-third card-group__item">
+              {{ card({
+                "href": task.href,
+                "clickable": "true",
+                "heading": task.heading,
+                "description": task.description,
+                "links": task.links,
+                "id": task.id
+              }) }}
+            </li>
+          {% endfor %}
+      </ul>
+      {% if reviewerTasks.length %}
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
+      {% endif %}
+      </div>
+      <div class="govuk-grid-row">
+        <ul class="card-group">
+          {% for task in reporterTasks %}
             <li class="govuk-grid-column-one-third card-group__item">
               {{ card({
                 "href": task.href,
@@ -38,6 +58,7 @@
             </li>
           {% endfor %}
         </ul>
+        </div>
       </div>
   </div>
 {% endblock %}

@@ -25,7 +25,7 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Place a prisoner on report')
+        expect(res.text).toContain('Adjudications')
       })
   })
   it('the review tile should not be visible without the correct role', () => {
@@ -34,16 +34,16 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('View all completed reports')
+        expect(res.text).not.toContain('View all reports')
       })
   })
-  it('the review tile should not be visible without the correct role', () => {
+  it('the review tile should be visible with the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('View all completed reports')
+        expect(res.text).toContain('View all reports')
       })
   })
 })

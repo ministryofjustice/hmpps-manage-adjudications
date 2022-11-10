@@ -1,15 +1,24 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
+import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { hasAnyRole } from '../../utils/utils'
+import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 
 type TaskType = {
   id: string
   heading: string
   href: string
-  description: string
-  roles: Array<string> | null
+  description?: string
+  links?: taskLinks[]
+  roles: Array<string>
   enabled: boolean
+}
+
+type taskLinks = {
+  text: string
+  href: string
+  id: string
 }
 
 export const tasks: TaskType[] = [
@@ -18,7 +27,7 @@ export const tasks: TaskType[] = [
     heading: 'Start a new report',
     description: 'Start creating a new report.',
     href: adjudicationUrls.searchForPrisoner.root,
-    roles: null,
+    roles: [],
     enabled: true,
   },
   {
@@ -26,7 +35,7 @@ export const tasks: TaskType[] = [
     heading: 'Continue a report',
     description: 'Continue a report that you have already started.',
     href: adjudicationUrls.selectReport.root,
-    roles: null,
+    roles: [],
     enabled: true,
   },
   {
@@ -35,14 +44,40 @@ export const tasks: TaskType[] = [
     description:
       'View your completed reports. You can also make changes to a report for up to 48 hours, unless the report has been accepted by the reviewer.',
     href: adjudicationUrls.yourCompletedReports.root,
-    roles: null,
+    roles: [],
     enabled: true,
   },
   {
-    id: 'view-all-completed-reports',
-    heading: 'View all completed reports',
-    description: 'View all completed reports in your establishment.',
+    id: 'view-all-reports',
+    heading: 'View all reports',
     href: adjudicationUrls.allCompletedReports.root,
+    links: [
+      {
+        text: 'Review reports',
+        href: adjudicationUrls.allCompletedReports.urls.filter({
+          fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+          toDate: momentDateToDatePicker(moment()),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+        }),
+        id: 'review-reports',
+      },
+      {
+        text: 'Schedule hearings',
+        href: adjudicationUrls.allCompletedReports.urls.filter({
+          fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+          toDate: momentDateToDatePicker(moment()),
+          status: ReportedAdjudicationStatus.UNSCHEDULED,
+        }),
+        id: 'schedule-hearings',
+      },
+    ],
+    roles: ['ADJUDICATIONS_REVIEWER'],
+    enabled: true,
+  },
+  {
+    id: 'view-scheduled-hearings',
+    heading: 'View scheduled hearings',
+    href: adjudicationUrls.viewScheduledHearings.root,
     roles: ['ADJUDICATIONS_REVIEWER'],
     enabled: true,
   },
@@ -53,8 +88,14 @@ export default class HomepageRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+
+    const enabledTasks = tasks.filter(task => task.enabled)
+    const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
+    const reporterTasks = enabledTasks.filter(task => !task.roles.includes('ADJUDICATIONS_REVIEWER'))
+
     return res.render('pages/homepage', {
-      tasks: tasks.filter(task => task.enabled).filter(task => hasAnyRole(task.roles, userRoles)),
+      reviewerTasks: reviewerTasks.filter(task => hasAnyRole(task.roles, userRoles)),
+      reporterTasks,
     })
   }
 }

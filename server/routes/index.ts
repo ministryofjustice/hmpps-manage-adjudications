@@ -34,6 +34,7 @@ import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
 import config from '../config'
 import scheduleHearingRoutes from './adjudicationTabbedParent/scheduleHearing'
+import viewScheduledHearingsRoutes from './viewScheduledHearings'
 
 export default function routes(
   router: Router,
@@ -161,6 +162,11 @@ export default function routes(
   router.use(
     adjudicationUrls.scheduleHearing.root,
     scheduleHearingRoutes({ reportedAdjudicationsService, locationService, userService })
+  )
+
+  router.use(
+    adjudicationUrls.viewScheduledHearings.root,
+    viewScheduledHearingsRoutes({ reportedAdjudicationsService, locationService, userService })
   )
 
   return router

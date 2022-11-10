@@ -1,3 +1,4 @@
+import moment from 'moment'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import HomepagePage from '../pages/home'
 import Page from '../pages/page'
@@ -23,7 +24,9 @@ context('Home page', () => {
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
-    homepage.viewAllCompletedReportsLink().should('not.exist')
+    homepage.viewAllReportsCard().should('not.exist')
+    homepage.viewScheduledHearingsCard().should('not.exist')
+    homepage.sectionBreak().should('not.exist')
   })
 
   it('should see all the tiles with the reviewer role', () => {
@@ -34,6 +37,77 @@ context('Home page', () => {
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
-    homepage.viewAllCompletedReportsLink().should('exist')
+    homepage.viewAllReportsCard().should('exist')
+    homepage.viewScheduledHearingsCard().should('exist')
+    homepage.sectionBreak().should('exist')
+  })
+
+  it('should link to the correct location - view all reports (main link)', () => {
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.viewAllReportsCard().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
+    })
+  })
+  it('should link to the correct location - view all reports (review reports link)', () => {
+    const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
+      'DD/MM/YYYY'
+    )}&status=AWAITING_REVIEW`
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.reviewReportsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
+    })
+  })
+  it('should link to the correct location - view all reports (schedule reports link)', () => {
+    const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
+      'DD/MM/YYYY'
+    )}&status=UNSCHEDULED`
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.scheduleHearingsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
+    })
+  })
+  it('should link to the correct location - view schedule hearings', () => {
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.viewScheduledHearingsCard().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.viewScheduledHearings.urls.start())
+    })
+  })
+  it('should link to the correct location - start new report', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.startANewReportLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.searchForPrisoner.root)
+    })
+  })
+  it('should link to the correct location - continue report', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.continueAReportLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.selectReport.root)
+    })
+  })
+  it('should link to the correct location - view your completed report', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.viewYourCompletedReportsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+    })
   })
 })

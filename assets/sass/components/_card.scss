@@ -24,6 +24,10 @@ $card-border-color: lighten($card-border-hover-color, 15%);
     margin-bottom: 0;
   }
 
+  &__description__link {
+    margin-bottom: govuk-spacing(2);
+  }
+
   /* Clickable card
    ========================================================================== */
   &--clickable {
