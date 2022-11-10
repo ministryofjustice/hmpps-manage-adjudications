@@ -2,6 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/hearingsFilter.njk" import hearingsFilter %}
 
 {% set title = "View scheduled hearings" %}
 
@@ -19,6 +20,32 @@
   {% endif %}
   <h1 class="govuk-heading-l">Adjudications</h1>
 
+  {{ hearingsFilter(uiChosenDate, errors, csrfToken) }}
+
+  {% set rows = [] %}
+  {% for hearing in hearings %}
+
+    {% set viewReportlLinkHtml %}
+    <a href="{{ adjudicationUrls.prisonerReport.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="report-link">View report<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    {% endset -%}
+
+    {% set viewHearinglLinkHtml %}
+    <a href="{{ adjudicationUrls.scheduleHearing.urls.edit(hearing.adjudicationNumber, hearing.id) }}" class="govuk-link" data-qa="report-link">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    {% endset -%}
+
+    {% set rows = (rows.push([
+      { text: hearing.formattedDateTimeOfHearing,
+        attributes: {
+          "data-sort-value": hearing.dateTimeOfHearing
+        }
+       },
+      { text: hearing.nameAndNumber },
+      { text: hearing.formattedDateTimeOfDiscovery},
+      { html: viewHearinglLinkHtml },
+      { html: viewReportlLinkHtml }
+    ]), rows) %}
+  {% endfor %}
+
   {% if rows | length %}
   <div class="results-table">
     {{ govukTable({
@@ -35,8 +62,8 @@
         },
         { text: "Discovery date and time",
           attributes: {
-          "aria-sort": "descending"
-        }
+            "aria-sort": "descending"
+          }
         },
         { text: "" },
         { text: "" }

@@ -20,6 +20,7 @@ import {
   formatTimestampToDate,
   formatLocation,
   formatTimestampTo,
+  momentDateToApi,
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
@@ -456,5 +457,13 @@ export default class ReportedAdjudicationsService {
       oicHearingType,
     }
     return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
+  }
+
+  async getAllHearings(hearingDate: moment.Moment, user: User) {
+    const agencyId = user.activeCaseLoadId
+    const filter = {
+      hearingDate: momentDateToApi(hearingDate),
+    }
+    return new ManageAdjudicationsClient(user.token).getHearingsGivenAgencyAndDate(agencyId, filter)
   }
 }

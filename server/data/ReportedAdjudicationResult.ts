@@ -51,6 +51,23 @@ export type ReportedAdjudicationFilter = {
   status?: ReportedAdjudicationStatus
 }
 
+export type ScheduledHearingFilter = {
+  hearingDate: string
+}
+
+export type ScheduledHearingList = {
+  hearings: ScheduledHearing[]
+}
+
+export type ScheduledHearing = {
+  id: number
+  dateTimeOfHearing: string
+  dateTimeOfDiscovery: string
+  adjudicationNumber: number
+  prisonerNumber: string
+  oicHearingType: OicHearingType
+}
+
 export type ReviewAdjudication = {
   status: ReviewStatus
   statusReason: string

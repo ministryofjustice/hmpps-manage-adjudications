@@ -20,6 +20,8 @@ import {
   ReportedAdjudication,
   ReportedAdjudicationFilter,
   ReviewAdjudication,
+  ScheduledHearingFilter,
+  ScheduledHearingList,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -241,6 +243,12 @@ export default class ManageAdjudicationsClient {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
       data: hearingDetails,
+    })
+  }
+
+  async getHearingsGivenAgencyAndDate(agencyId: string, filter: ScheduledHearingFilter): Promise<ScheduledHearingList> {
+    return this.restClient.get({
+      path: `/reported-adjudications/hearings/agency/${agencyId}?hearingDate=${filter.hearingDate}`,
     })
   }
 }
