@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class Home extends Page {
   constructor() {
-    super('Place a prisoner on report')
+    super('Adjudications')
   }
 
   signInName = (): PageElement => cy.get('[data-qa="sign-in-name"]')

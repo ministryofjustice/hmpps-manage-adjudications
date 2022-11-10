@@ -25,7 +25,7 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Place a prisoner on report')
+        expect(res.text).toContain('Adjudications')
       })
   })
   it('the review tile should not be visible without the correct role', () => {
