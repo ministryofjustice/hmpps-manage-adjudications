@@ -18,6 +18,7 @@ type TaskType = {
 type taskLinks = {
   text: string
   href: string
+  id: string
 }
 
 export const tasks: TaskType[] = [
@@ -47,8 +48,8 @@ export const tasks: TaskType[] = [
     enabled: true,
   },
   {
-    id: 'view-all-completed-reports',
-    heading: 'View all completed reports',
+    id: 'view-all-reports',
+    heading: 'View all reports',
     href: adjudicationUrls.allCompletedReports.root,
     links: [
       {
@@ -58,6 +59,7 @@ export const tasks: TaskType[] = [
           toDate: momentDateToDatePicker(moment()),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         }),
+        id: 'review-reports',
       },
       {
         text: 'Schedule hearings',
@@ -66,6 +68,7 @@ export const tasks: TaskType[] = [
           toDate: momentDateToDatePicker(moment()),
           status: ReportedAdjudicationStatus.UNSCHEDULED,
         }),
+        id: 'schedule-hearings',
       },
     ],
     roles: ['ADJUDICATIONS_REVIEWER'],
@@ -73,8 +76,8 @@ export const tasks: TaskType[] = [
   },
   {
     id: 'view-scheduled-hearings',
-    heading: 'View scheduled hearing',
-    href: '#',
+    heading: 'View scheduled hearings',
+    href: adjudicationUrls.viewScheduledHearings.root,
     roles: ['ADJUDICATIONS_REVIEWER'],
     enabled: true,
   },

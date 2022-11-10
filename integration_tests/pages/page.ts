@@ -16,12 +16,4 @@ export default abstract class Page {
   signOut = (): PageElement => cy.get('[data-qa=sign-out]')
 
   feedbackBanner = (): PageElement => cy.get('[data-qa="feedback-banner"]')
-
-  startANewReportLink = (): PageElement => cy.get('a').contains('Start a new report')
-
-  continueAReportLink = (): PageElement => cy.get('a').contains('Continue a report')
-
-  viewYourCompletedReportsLink = (): PageElement => cy.get('a').contains('View your completed reports')
-
-  viewAllCompletedReportsLink = (): PageElement => cy.get('a').contains('View all completed reports')
 }

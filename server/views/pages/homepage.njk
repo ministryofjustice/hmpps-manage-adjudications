@@ -40,7 +40,9 @@
             </li>
           {% endfor %}
       </ul>
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2">
+      {% if reviewerTasks.length %}
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
+      {% endif %}
       </div>
       <div class="govuk-grid-row">
         <ul class="card-group">

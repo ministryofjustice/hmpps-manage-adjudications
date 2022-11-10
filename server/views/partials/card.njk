@@ -13,7 +13,7 @@
     {%- endif %}
     {%- if params.links %}
       {% for link in params.links %}
-        <p class="govuk-body card__link"><a href={{ link.href }}>{{ link.text | safe }}</a></p>
+        <p class="govuk-body card__link card__description__link"><a href={{ link.href }} data-qa={{ link.id }}>{{ link.text | safe }}</a></p>
       {% endfor %}
     {%- endif %}
   </div>
