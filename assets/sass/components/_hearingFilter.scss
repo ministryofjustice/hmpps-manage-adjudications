@@ -21,4 +21,33 @@
     margin-left: 26px;
     margin-top: 30px;
     margin-bottom: 15px;
+
+    @media print, (max-width: 768px){
+        text-align: center;
+        margin-top: 0;
+        margin-left: 0;
+    }
 }
+
+.hearings-filter-apply {
+    @media print, (max-width: 768px){
+        width: 50% !important;
+    }
+}
+
+#scheduledHearingsFilter {
+    margin-bottom: 15px;
+    @media print, (max-width: 768px){
+        display: flex;
+        margin-bottom: 0;
+
+        > * {
+            margin: 0 10px;
+        }
+
+        .hearings-arrow {
+            margin-top: 40px;
+        }
+    }
+}
+
