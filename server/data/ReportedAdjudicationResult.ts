@@ -59,13 +59,20 @@ export type ScheduledHearingList = {
   hearings: ScheduledHearing[]
 }
 
-export type ScheduledHearing = {
+export interface ScheduledHearing {
   id: number
   dateTimeOfHearing: string
   dateTimeOfDiscovery: string
   adjudicationNumber: number
   prisonerNumber: string
   oicHearingType: OicHearingType
+}
+
+export interface ScheduledHearingEnhanced extends ScheduledHearing {
+  friendlyName: string
+  nameAndNumber: string
+  formattedDateTimeOfHearing: string
+  formattedDateTimeOfDiscovery: string
 }
 
 export type ReviewAdjudication = {

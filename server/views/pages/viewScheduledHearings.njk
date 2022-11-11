@@ -20,7 +20,7 @@
   {% endif %}
   <h1 class="govuk-heading-l">Adjudications</h1>
 
-  {{ hearingsFilter(uiChosenDate, errors, csrfToken) }}
+  {{ hearingsFilter(uiChosenDate, errors, clearUrl, csrfToken) }}
 
   {% set rows = [] %}
   {% for hearing in hearings %}
@@ -38,9 +38,13 @@
         attributes: {
           "data-sort-value": hearing.dateTimeOfHearing
         }
-       },
+      },
       { text: hearing.nameAndNumber },
-      { text: hearing.formattedDateTimeOfDiscovery},
+      { text: hearing.formattedDateTimeOfDiscovery,         
+        attributes: {
+          "data-sort-value": hearing.dateTimeOfDiscovery
+        }
+      },
       { html: viewHearinglLinkHtml },
       { html: viewReportlLinkHtml }
     ]), rows) %}
@@ -57,12 +61,12 @@
         },
         { text: "Name and prison number",
           attributes: {
-           "aria-sort": "descending"
+           "aria-sort": "none"
           }
         },
         { text: "Discovery date and time",
           attributes: {
-            "aria-sort": "descending"
+            "aria-sort": "none"
           }
         },
         { text: "" },

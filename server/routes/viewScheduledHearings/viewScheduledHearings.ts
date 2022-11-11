@@ -6,7 +6,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
 import LocationService from '../../services/locationService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { ScheduledHearing } from '../../data/ReportedAdjudicationResult'
+import { ScheduledHearingEnhanced } from '../../data/ReportedAdjudicationResult'
 
 export default class viewScheduledHearingsRoutes {
   constructor(
@@ -19,12 +19,13 @@ export default class viewScheduledHearingsRoutes {
     req: Request,
     res: Response,
     uiChosenDate: string,
-    results: ScheduledHearing[],
+    results: ScheduledHearingEnhanced[],
     errors: FormError[]
   ): Promise<void> => {
     return res.render(`pages/viewScheduledHearings`, {
       hearings: results,
       uiChosenDate,
+      clearUrl: adjudicationUrls.viewScheduledHearings.urls.start(),
       errors,
     })
   }
@@ -35,11 +36,11 @@ export default class viewScheduledHearingsRoutes {
       const uiChosenDate = getUiDate(req)
       const filter = getApiDate(uiChosenDate)
       const results = await this.reportedAdjudicationsService.getAllHearings(filter, user)
-      // need to add friendlyName to each hearing
-      return this.renderView(req, res, uiChosenDate, results.hearings, [])
+      return this.renderView(req, res, uiChosenDate, results, [])
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   submit = async (req: Request, res: Response): Promise<void> => {
     // return this.validateRoles(req, res, async () => {
     //   const uiFilter = uiFilterFromBody(req)
