@@ -1,0 +1,24 @@
+.hearings-arrow {
+    width: 0;
+    height: 0;
+    margin-bottom: 10px !important;
+    color: #005ea5;
+}
+
+.arrow-right {
+    border-left: 10px solid;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+.arrow-left {
+    border-right: 10px solid;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+.hearings-filter-apply-clear {
+    margin-left: 26px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}

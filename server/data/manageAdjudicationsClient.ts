@@ -20,7 +20,6 @@ import {
   ReportedAdjudication,
   ReportedAdjudicationFilter,
   ReviewAdjudication,
-  ScheduledHearingFilter,
   ScheduledHearingList,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
@@ -246,9 +245,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getHearingsGivenAgencyAndDate(agencyId: string, filter: ScheduledHearingFilter): Promise<ScheduledHearingList> {
+  async getHearingsGivenAgencyAndDate(agencyId: string, chosenHearingDate: string): Promise<ScheduledHearingList> {
     return this.restClient.get({
-      path: `/reported-adjudications/hearings/agency/${agencyId}?hearingDate=${filter.hearingDate}`,
+      path: `/reported-adjudications/hearings/agency/${agencyId}?hearingDate=${chosenHearingDate}`,
     })
   }
 }

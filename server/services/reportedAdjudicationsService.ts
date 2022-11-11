@@ -460,12 +460,12 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
   }
 
-  async getAllHearings(hearingDate: moment.Moment, user: User) {
+  async getAllHearings(chosenHearingDate: string, user: User) {
     const agencyId = user.activeCaseLoadId
-    const filter = {
-      hearingDate: momentDateToApi(hearingDate),
-    }
-    const results = await new ManageAdjudicationsClient(user.token).getHearingsGivenAgencyAndDate(agencyId, filter)
+    const results = await new ManageAdjudicationsClient(user.token).getHearingsGivenAgencyAndDate(
+      agencyId,
+      chosenHearingDate
+    )
 
     const { hearings } = results
 

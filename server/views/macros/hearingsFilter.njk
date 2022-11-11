@@ -1,20 +1,23 @@
 {% from "../macros/datePicker.njk" import datePicker %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro hearingsFilter(uiChosenDate, errors, clearUrl, csrfToken) %}
+{% macro hearingsFilter(hearingDate, errors, clearUrl, csrfToken) %}
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="scheduled-hearings-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <div class="horizontal-form govuk-!-margin-bottom-3" id="scheduledHearingsFilter">
+        <div class="hearings-arrow arrow-left" id="hearing-arrow-left"></div>
         {{ datePicker({
-            id: 'uiChosenDate',
+            id: 'hearingDate',
             label: 'Date of hearing',
-            name: 'uiChosenDate',
-            date: uiChosenDate,
+            labelClasses: 'govuk-!-font-weight-bold',
+            name: 'hearingDate',
+            date: hearingDate,
             attributes: {'data-disable-future-date':'false', 'data-qa': "hearing-date" },
             classes: 'govuk-input--width-10'
         }) }}
+        <div class="hearings-arrow arrow-right" id="hearing-arrow-right"></div>
         </div>
-        <div class="horizontal-form govuk-!-margin-bottom-3">
+        <div class="horizontal-form hearings-filter-apply-clear">
         {{ govukButton({
             text: "Apply",
             type: "submit",

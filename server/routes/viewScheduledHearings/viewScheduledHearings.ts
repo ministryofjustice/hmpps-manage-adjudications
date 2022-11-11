@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import { datePickerDateToMoment, hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
+import { datePickerToApi, hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
@@ -33,23 +33,18 @@ export default class viewScheduledHearingsRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     return this.validateRoles(req, res, async () => {
-      const uiChosenDate = getUiDate(req)
-      const filter = getApiDate(uiChosenDate)
-      const results = await this.reportedAdjudicationsService.getAllHearings(filter, user)
-      return this.renderView(req, res, uiChosenDate, results, [])
+      const uiHearingDate = getUiDateFromRequest(req)
+      const formattedUiHearingDate = datePickerToApi(uiHearingDate)
+      const results = await this.reportedAdjudicationsService.getAllHearings(formattedUiHearingDate, user)
+      return this.renderView(req, res, uiHearingDate, results, [])
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   submit = async (req: Request, res: Response): Promise<void> => {
-    // return this.validateRoles(req, res, async () => {
-    //   const uiFilter = uiFilterFromBody(req)
-    //   const errors = validate(uiFilter)
-    //   if (errors && errors.length !== 0) {
-    //     return this.renderView(req, res, uiFilter, results, errors)
-    //   }
-    //   return res.redirect(adjudicationUrls.allCompletedReports.urls.filter(uiFilter))
-    // })
+    return this.validateRoles(req, res, async () => {
+      const { hearingDate } = req.body
+      return res.redirect(adjudicationUrls.viewScheduledHearings.urls.filter(hearingDate))
+    })
   }
 
   private validateRoles = async (req: Request, res: Response, thenCall: () => Promise<void>) => {
@@ -61,10 +56,7 @@ export default class viewScheduledHearingsRoutes {
   }
 }
 
-const getUiDate = (req: Request): string => {
-  return req.body.hearingDate || momentDateToDatePicker(moment())
-}
-
-const getApiDate = (chosenDate: string) => {
-  return datePickerDateToMoment(chosenDate)
+const getUiDateFromRequest = (req: Request): string => {
+  // Fill in today as a default if no hearing date on query
+  return (req.query.hearingDate as string) || momentDateToDatePicker(moment())
 }

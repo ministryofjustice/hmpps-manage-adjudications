@@ -30,7 +30,7 @@
     {% endset -%}
 
     {% set viewHearinglLinkHtml %}
-    <a href="{{ adjudicationUrls.scheduleHearing.urls.edit(hearing.adjudicationNumber, hearing.id) }}" class="govuk-link" data-qa="report-link">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    <a href="{{ adjudicationUrls.hearingDetails.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="report-link">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([
@@ -80,4 +80,8 @@
     <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings</p>
   {% endif %}
 
+{% endblock %}
+
+{% block pageScripts %}
+<script src="/assets/js/hearingDateShift.js"></script>
 {% endblock %}
