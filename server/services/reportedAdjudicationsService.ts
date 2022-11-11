@@ -21,7 +21,6 @@ import {
   formatTimestampToDate,
   formatLocation,
   formatTimestampTo,
-  momentDateToApi,
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
