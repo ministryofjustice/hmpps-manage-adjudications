@@ -1,7 +1,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro adjudicationTabHeader(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, showHearings = true) %}
+{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, showHearings = true) %}
   {% set items = [{
       text: 'Report',
       href: reportHref,
@@ -26,7 +26,6 @@
   </div>
   <div class="govuk-!-margin-top-5">
     {{ mojSubNavigation({
-      label: 'Sub navigation',
       items: items,
       classes: "govuk-!-margin-bottom-3"
     }) }}

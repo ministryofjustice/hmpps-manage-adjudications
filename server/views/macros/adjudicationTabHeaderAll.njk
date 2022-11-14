@@ -1,0 +1,24 @@
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
+{% macro adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) %}
+  {% set items = [{
+      text: 'View scheduled hearings',
+      href: viewScheduledHearingsHref,
+      attributes: { 'data-qa': 'viewScheduledHearingsTab' },
+      active: activeTab === 'viewScheduledHearings'
+    } , {
+      text: 'View all completed reports',
+      href: viewAllCompletedReportsHref,
+      attributes: { 'data-qa': 'viewAllCompletedReportsTab' },
+      active: activeTab === 'viewCompletedReports'
+    }] 
+  %}
+
+  <div class="govuk-!-margin-top-5">
+    {{ mojSubNavigation({
+      items: items,
+      classes: "govuk-!-margin-bottom-5"
+    }) }}
+  </div>
+{% endmacro %}

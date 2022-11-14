@@ -16,6 +16,7 @@ const getBatchPrisonerDetails = jest.fn()
 const getYourCompletedAdjudications = jest.fn()
 const getAllCompletedAdjudications = jest.fn()
 const createDraftFromCompleteAdjudication = jest.fn()
+const getHearingsGivenAgencyAndDate = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
@@ -31,6 +32,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       getYourCompletedAdjudications,
       getAllCompletedAdjudications,
       createDraftFromCompleteAdjudication,
+      getHearingsGivenAgencyAndDate,
     }
   })
 })
@@ -791,6 +793,56 @@ describe('reportedAdjudicationsService', () => {
     it('returns the correct information for no hearings', async () => {
       const result = await service.getHearingDetails([], user)
       expect(result).toEqual([])
+    })
+  })
+  describe.only('getAllHearings', () => {
+    const batchPrisonerDetails = [
+      {
+        offenderNo: 'G6123VU',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      },
+      {
+        offenderNo: 'G6174VU',
+        firstName: 'James',
+        lastName: 'Moriarty',
+      },
+    ]
+    it('deals with no hearings', async () => {
+      getHearingsGivenAgencyAndDate.mockResolvedValue({ hearings: [] })
+      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
+      const result = await service.getAllHearings('2022-10-19', user)
+      expect(result).toEqual([])
+    })
+    it('mapipulates data correctly', async () => {
+      getHearingsGivenAgencyAndDate.mockResolvedValue({
+        hearings: [
+          {
+            id: 1234,
+            dateTimeOfHearing: '2022-11-14T11:00:00',
+            dateTimeOfDiscovery: '2022-11-11T09:00:00',
+            adjudicationNumber: 123456,
+            prisonerNumber: 'G6123VU',
+            oicHearingType: OicHearingType.GOV_ADULT,
+          },
+        ],
+      })
+      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
+      const result = await service.getAllHearings('2022-11-14', user)
+      expect(result).toEqual([
+        {
+          id: 1234,
+          adjudicationNumber: 123456,
+          dateTimeOfDiscovery: '2022-11-11T09:00:00',
+          dateTimeOfHearing: '2022-11-14T11:00:00',
+          formattedDateTimeOfDiscovery: '11 November 2022 - 09:00',
+          formattedDateTimeOfHearing: '14 November 2022 - 11:00',
+          friendlyName: 'John Smith',
+          nameAndNumber: 'John Smith - G6123VU',
+          oicHearingType: OicHearingType.GOV_ADULT as string,
+          prisonerNumber: 'G6123VU',
+        },
+      ])
     })
   })
 })

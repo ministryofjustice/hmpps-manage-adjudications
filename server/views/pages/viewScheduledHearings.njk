@@ -3,6 +3,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../macros/hearingsFilter.njk" import hearingsFilter %}
+{% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
 
 {% set title = "View scheduled hearings" %}
 
@@ -20,17 +21,20 @@
   {% endif %}
   <h1 class="govuk-heading-l">Adjudications</h1>
 
+  {{ adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) }}
+
   {{ hearingsFilter(uiChosenDate, errors, clearUrl, csrfToken) }}
 
   {% set rows = [] %}
   {% for hearing in hearings %}
+    {% set hearingNumber = loop.index %}
 
     {% set viewReportlLinkHtml %}
-    <a href="{{ adjudicationUrls.prisonerReport.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="report-link">View report<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    <a href="{{ adjudicationUrls.prisonerReport.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link-{{ hearingNumber }}">View report<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
     {% endset -%}
 
     {% set viewHearinglLinkHtml %}
-    <a href="{{ adjudicationUrls.hearingDetails.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="report-link">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    <a href="{{ adjudicationUrls.hearingDetails.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([

@@ -1,7 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../../macros/adjudicationTabHeader.njk" import adjudicationTabHeader %}
+{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/hearingSummary.njk" import hearingSummary %}
 
 {% block pageTitle %}
@@ -12,7 +12,7 @@
 {% endblock %}
 {% block content %}
 
-  {{ adjudicationTabHeader(reportNo, reviewStatus, prisoner, 'hearings', reportHref, hearingsHref) }}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, 'hearings', reportHref, hearingsHref) }}
 
   {% if not schedulingAvailable %}
     {% if isAccepted %}

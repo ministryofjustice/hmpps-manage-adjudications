@@ -477,6 +477,30 @@ const stubAmendHearing = ({ adjudicationNumber, hearingId, status = 200, respons
     },
   })
 
+const stubGetHearingsGivenAgencyAndDate = ({
+  agencyId = 'MDI',
+  hearingDate,
+  status = 200,
+  response = {},
+}): SuperAgentRequest => {
+  const today = moment().format('YYYY-MM-DD')
+  const url = `/adjudications/reported-adjudications/hearings/agency/${agencyId}`
+  const path = `${url}?hearingDate=${hearingDate || today}`
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: path,
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+}
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -502,4 +526,5 @@ export default {
   stubCancelHearing,
   stubScheduleHearing,
   stubAmendHearing,
+  stubGetHearingsGivenAgencyAndDate,
 }

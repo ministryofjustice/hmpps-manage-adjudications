@@ -4,14 +4,12 @@ import { datePickerToApi, hasAnyRole, momentDateToDatePicker } from '../../utils
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
-import LocationService from '../../services/locationService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { ScheduledHearingEnhanced } from '../../data/ReportedAdjudicationResult'
 
 export default class viewScheduledHearingsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly locationService: LocationService,
     private readonly userService: UserService
   ) {}
 
@@ -26,6 +24,9 @@ export default class viewScheduledHearingsRoutes {
       hearings: results,
       uiChosenDate,
       clearUrl: adjudicationUrls.viewScheduledHearings.urls.start(),
+      viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
+      viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
+      activeTab: 'viewScheduledHearings',
       errors,
     })
   }
