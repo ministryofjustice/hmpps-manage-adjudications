@@ -2,6 +2,8 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/hearingsFilter.njk" import hearingsFilter %}
+{% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
 
 {% set title = "View scheduled hearings" %}
 
@@ -19,6 +21,39 @@
   {% endif %}
   <h1 class="govuk-heading-l">Adjudications</h1>
 
+  {{ adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) }}
+
+  {{ hearingsFilter(uiChosenDate, errors, clearUrl, csrfToken) }}
+
+  {% set rows = [] %}
+  {% for hearing in hearings %}
+    {% set hearingNumber = loop.index %}
+
+    {% set viewReportlLinkHtml %}
+    <a href="{{ adjudicationUrls.prisonerReport.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link-{{ hearingNumber }}">View report<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    {% endset -%}
+
+    {% set viewHearinglLinkHtml %}
+    <a href="{{ adjudicationUrls.hearingDetails.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    {% endset -%}
+
+    {% set rows = (rows.push([
+      { text: hearing.formattedDateTimeOfHearing,
+        attributes: {
+          "data-sort-value": hearing.dateTimeOfHearing
+        }
+      },
+      { text: hearing.nameAndNumber },
+      { text: hearing.formattedDateTimeOfDiscovery,         
+        attributes: {
+          "data-sort-value": hearing.dateTimeOfDiscovery
+        }
+      },
+      { html: viewHearinglLinkHtml },
+      { html: viewReportlLinkHtml }
+    ]), rows) %}
+  {% endfor %}
+
   {% if rows | length %}
   <div class="results-table">
     {{ govukTable({
@@ -30,13 +65,13 @@
         },
         { text: "Name and prison number",
           attributes: {
-           "aria-sort": "descending"
+           "aria-sort": "none"
           }
         },
         { text: "Discovery date and time",
           attributes: {
-          "aria-sort": "descending"
-        }
+            "aria-sort": "none"
+          }
         },
         { text: "" },
         { text: "" }
@@ -49,4 +84,8 @@
     <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings</p>
   {% endif %}
 
+{% endblock %}
+
+{% block pageScripts %}
+<script src="/assets/js/hearingDateShift.js"></script>
 {% endblock %}

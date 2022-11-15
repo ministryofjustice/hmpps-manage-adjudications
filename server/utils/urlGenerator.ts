@@ -320,6 +320,11 @@ const adjudicationUrls = {
     },
     urls: {
       start: () => adjudicationUrls.viewScheduledHearings.root,
+      filter: (hearingDate: string) =>
+        url.format({
+          pathname: adjudicationUrls.viewScheduledHearings.root,
+          query: { hearingDate },
+        }),
     },
   },
   homepage: {

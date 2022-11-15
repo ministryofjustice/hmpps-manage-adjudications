@@ -166,7 +166,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.viewScheduledHearings.root,
-    viewScheduledHearingsRoutes({ reportedAdjudicationsService, locationService, userService })
+    viewScheduledHearingsRoutes({ reportedAdjudicationsService, userService })
   )
 
   return router

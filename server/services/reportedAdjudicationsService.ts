@@ -10,6 +10,7 @@ import {
   ReportedAdjudicationResult,
   reportedAdjudicationStatusDisplayName,
   ReportedAdjudicationStatus,
+  ScheduledHearing,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
@@ -456,5 +457,40 @@ export default class ReportedAdjudicationsService {
       oicHearingType,
     }
     return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
+  }
+
+  async getAllHearings(chosenHearingDate: string, user: User) {
+    const agencyId = user.activeCaseLoadId
+    const results = await new ManageAdjudicationsClient(user.token).getHearingsGivenAgencyAndDate(
+      agencyId,
+      chosenHearingDate
+    )
+
+    const { hearings } = results
+
+    const prisonerDetails = new Map(
+      (await new PrisonApiClient(user.token).getBatchPrisonerDetails(hearings.map(_ => _.prisonerNumber))).map(
+        prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail]
+      )
+    )
+    const enhancedHearings = hearings.map(hearing => {
+      return this.enhanceHearing(hearing, prisonerDetails.get(hearing.prisonerNumber))
+    })
+    return enhancedHearings
+  }
+
+  enhanceHearing(hearing: ScheduledHearing, prisonerResult: PrisonerSimpleResult) {
+    const friendlyName =
+      (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
+    const nameAndNumber = `${friendlyName} - ${hearing.prisonerNumber}`
+    const formattedDateTimeOfHearing = formatTimestampToDate(hearing.dateTimeOfHearing, 'D MMMM YYYY - HH:mm')
+    const formattedDateTimeOfDiscovery = formatTimestampToDate(hearing.dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm')
+    return {
+      ...hearing,
+      friendlyName,
+      nameAndNumber,
+      formattedDateTimeOfHearing,
+      formattedDateTimeOfDiscovery,
+    }
   }
 }

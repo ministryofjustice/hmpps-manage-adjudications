@@ -1,7 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../../macros/adjudicationTabHeader.njk" import adjudicationTabHeader %}
+{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/printLink.njk" import printLink %}
 {% from "../../macros/adjudicationReviewPanel.njk" import adjudicationReviewPanel %}
 {% from "../../macros/adjudicationSummary.njk" import adjudicationSummary %}
@@ -14,7 +14,7 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
-    {{ adjudicationTabHeader(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, reviewData.reviewStatus !== 'Rejected') }}
+    {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, reviewData.reviewStatus !== 'Rejected') }}
 
     {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
   <div class="prisoner-report-top-bar flex-center">

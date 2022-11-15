@@ -79,6 +79,7 @@ export default defineConfig({
         stubCancelHearing: adjudications.stubCancelHearing,
         stubScheduleHearing: adjudications.stubScheduleHearing,
         stubAmendHearing: adjudications.stubAmendHearing,
+        stubGetHearingsGivenAgencyAndDate: adjudications.stubGetHearingsGivenAgencyAndDate,
       })
     },
 
