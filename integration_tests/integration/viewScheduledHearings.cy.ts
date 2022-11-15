@@ -208,6 +208,7 @@ context('View scheduled hearings', () => {
 
     cy.visit(adjudicationUrls.viewScheduledHearings.urls.filter('05/11/2025'))
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
+    viewScheduledHearingsPage.rightArrow().should('be.visible')
     viewScheduledHearingsPage.rightArrow().click()
     viewScheduledHearingsPage.datePicker().should('have.value', '06/11/2025')
     viewScheduledHearingsPage.applyButton().click()
@@ -247,6 +248,7 @@ context('View scheduled hearings', () => {
 
     cy.visit(adjudicationUrls.viewScheduledHearings.urls.filter('05/11/2025'))
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
+    viewScheduledHearingsPage.leftArrow().should('be.visible')
     viewScheduledHearingsPage.leftArrow().click()
     viewScheduledHearingsPage.datePicker().should('have.value', '04/11/2025')
     viewScheduledHearingsPage.applyButton().click()
