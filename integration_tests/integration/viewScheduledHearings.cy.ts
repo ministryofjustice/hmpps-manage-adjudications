@@ -49,24 +49,6 @@ const hearingsSetTwo = [
     oicHearingType: OicHearingType.GOV_ADULT,
   },
 ]
-const hearingsSetThree = [
-  {
-    id: 5,
-    dateTimeOfHearing: '2025-11-04T10:00:00',
-    dateTimeOfDiscovery: '2025-11-01T14:00:00',
-    adjudicationNumber: 567894,
-    prisonerNumber: 'D9543CY',
-    oicHearingType: OicHearingType.GOV_ADULT,
-  },
-  {
-    id: 6,
-    dateTimeOfHearing: '2025-11-04T11:00:00',
-    dateTimeOfDiscovery: '2025-11-01T09:00:00',
-    adjudicationNumber: 678912,
-    prisonerNumber: 'M1876DT',
-    oicHearingType: OicHearingType.GOV_ADULT,
-  },
-]
 
 context('View scheduled hearings', () => {
   beforeEach(() => {
