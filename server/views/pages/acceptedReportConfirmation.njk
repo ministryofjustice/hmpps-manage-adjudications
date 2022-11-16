@@ -11,21 +11,24 @@
   <div>
     {{ govukPanel({
         titleText: bannerText,
-        classes: "govuk-!-margin-bottom-6"
+        classes: "govuk-!-margin-bottom-6",
+        attributes: {
+          'data-qa': "accepted-report-confirmation-banner"
+        }
     }) }}
 
     <h2 class="govuk-heading-m">What you need to do next</h2>
 
-    <p class="govuk-body">{{ prisonerName }} must be given a printed copy of this report by {{ expiryTime }} on {{ expiryDate }}.</p>
-    <p class="govuk-body">Once {{ prisonerName }} has received the report, the first hearing should start by the end of the next day. If that day is a Sunday or a public holiday, then the hearing can be on the following working day.</p>
-    <p class="govuk-body">Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.</p>
+    <p class="govuk-body" data-qa="para-1">{{ prisonerName }} must be given a printed copy of this report by {{ expiryTime }} on {{ expiryDate }}.</p>
+    <p class="govuk-body" data-qa="para-2">Once {{ prisonerName }} has received the report, the first hearing should start by the end of the next day. If that day is a Sunday or a public holiday, then the hearing can be on the following working day.</p>
+    <p class="govuk-body" data-qa="para-3">Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.</p>
     {{ govukButton({
         text: "Schedule a hearing",
         classes: "govuk-button--secondary",
         type: "a",
         href: scheduleHearingLink,
         name: "schedule-hearing-link",
-        attributes: {'data-qa': 'schedule-hearing-link'}
+        attributes: {'data-qa': 'schedule-hearing-button'}
     }) }}
     <p class="govuk-body">
         <a class="govuk-link" href={{ viewReportLink }} data-qa="view-report-link">View the report and add damages, evidence or witnesses</a>
