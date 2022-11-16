@@ -8,7 +8,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
-export default function CheckAnswersRoutes({
+export default function ageOfPrisonerRoutes({
   placeOnReportService,
   allOffencesSessionService,
 }: {

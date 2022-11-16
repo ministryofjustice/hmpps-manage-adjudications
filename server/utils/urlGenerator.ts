@@ -327,6 +327,16 @@ const adjudicationUrls = {
         }),
     },
   },
+  acceptedReportConfirmation: {
+    root: '/report-has-been-accepted',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.acceptedReportConfirmation.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
