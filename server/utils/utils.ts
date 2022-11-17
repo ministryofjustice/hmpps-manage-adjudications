@@ -105,15 +105,16 @@ export const isValidDateTimeFormat = (dateTimeString: string): boolean =>
   moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
 
 export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): string => {
-  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
-
-  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(format)
+  return getDateOrTime(dateTimeString, format)
 }
 
-export const getTime = (dateTimeString: string): string => {
-  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+export const getTime = (dateTimeString: string, format = 'HH:mm'): string => {
+  return getDateOrTime(dateTimeString, format)
+}
 
-  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
+const getDateOrTime = (dateTimeString: string, format: string): string => {
+  if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(format)
 }
 
 export const possessive = (string: string): string => {

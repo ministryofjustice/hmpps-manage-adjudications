@@ -15,7 +15,7 @@ export default class AcceptedReportConfirmationRoute {
     )
 
     return res.render(`pages/acceptedReportConfirmation.njk`, {
-      expiryTime: getTime(adjudicationDetails.reportExpirationDateTime),
+      expiryTime: getTime(adjudicationDetails.reportExpirationDateTime, 'H:mm'),
       expiryDate: getDate(adjudicationDetails.reportExpirationDateTime),
       bannerText: `${possessive(adjudicationDetails.prisonerFullName)} report has been accepted`,
       prisonerName: adjudicationDetails.prisonerFullName,
