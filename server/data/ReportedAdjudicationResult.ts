@@ -84,11 +84,11 @@ export type ReviewAdjudication = {
 // This enum needs to be kept in sync with the enum in the API.
 export enum ReportedAdjudicationStatus {
   AWAITING_REVIEW = 'AWAITING_REVIEW',
+  UNSCHEDULED = 'UNSCHEDULED',
   RETURNED = 'RETURNED',
+  SCHEDULED = 'SCHEDULED',
   REJECTED = 'REJECTED',
   ACCEPTED = 'ACCEPTED',
-  SCHEDULED = 'SCHEDULED',
-  UNSCHEDULED = 'UNSCHEDULED',
 }
 
 export enum OicHearingType {
