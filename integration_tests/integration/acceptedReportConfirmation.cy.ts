@@ -1,0 +1,105 @@
+import adjudicationUrls from '../../server/utils/urlGenerator'
+import AcceptedReportConfirmation from '../pages/acceptedReportConfirmation'
+import Page from '../pages/page'
+
+context('Report has been accepted', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: {
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524493,
+      response: {
+        reportedAdjudication: {
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          bookingId: 1201395,
+          createdDateTime: '2021-12-09T09:40:00',
+          incidentDetails: {
+            locationId: 357591,
+            dateTimeOfIncident: '2022-11-15T10:10:00',
+            dateTimeOfDiscovery: '2022-11-15T10:30:00',
+            handoverDeadline: '2022-11-17T10:30:00',
+          },
+          incidentStatement: {
+            statement: 'Statement here.',
+          },
+          createdByUserId: 'TEST_GEN',
+        },
+      },
+    })
+    cy.signIn()
+  })
+
+  it('should contain the required page elements', () => {
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
+    acceptedReportConfirmationPage.banner().should('exist')
+    acceptedReportConfirmationPage.p1().should('exist')
+    acceptedReportConfirmationPage.p2().should('exist')
+    acceptedReportConfirmationPage.p3().should('exist')
+    acceptedReportConfirmationPage.scheduleHearingButton().should('exist')
+    acceptedReportConfirmationPage.viewReportLink().should('exist')
+    acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
+  })
+  it('should contain the correct content', () => {
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
+    acceptedReportConfirmationPage.banner().should('contain', 'John Smith’s report has been accepted')
+    acceptedReportConfirmationPage
+      .p1()
+      .should(
+        'contain',
+        'John Smith must be given a printed copy of this report by 10:30 on Thursday 17 November 2022.'
+      )
+    acceptedReportConfirmationPage
+      .p2()
+      .should(
+        'contain',
+        'Once John Smith has received the report, the first hearing should start by the end of the next day. If that day is a Sunday or a public holiday, then the hearing can be on the following working day.'
+      )
+    acceptedReportConfirmationPage
+      .p3()
+      .should(
+        'contain',
+        'Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.'
+      )
+    acceptedReportConfirmationPage.scheduleHearingButton().should('contain', 'Schedule a hearing')
+    acceptedReportConfirmationPage
+      .viewReportLink()
+      .should('contain', 'View the report and add damages, evidence or witnesses')
+    acceptedReportConfirmationPage.allCompletedReportsLink().should('contain', 'Return to all completed reports')
+  })
+  it('should link to the correct schedule hearing page', () => {
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
+    acceptedReportConfirmationPage.scheduleHearingButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(1524493))
+    })
+  })
+  it('should link to the prisoner report', () => {
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
+    acceptedReportConfirmationPage.viewReportLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1524493))
+    })
+  })
+  it('should link to the completed reports page', () => {
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
+    acceptedReportConfirmationPage.allCompletedReportsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
+    })
+  })
+})

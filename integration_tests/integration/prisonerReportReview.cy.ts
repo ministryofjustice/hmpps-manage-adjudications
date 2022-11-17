@@ -471,13 +471,13 @@ context('Prisoner report - reviewer view', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
     })
   })
-  it('should go to /all-completed-reports if status is accepted and save is pressed and form is valid', () => {
+  it('should go to the confirmation page if status is accepted and save is pressed and form is valid', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.reviewStatus().find('input[value="accepted"]').check()
     prisonerReportPage.reviewSubmit().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.pathname).to.eq(adjudicationUrls.acceptedReportConfirmation.urls.start(12345))
     })
   })
   it('should go to /all-completed-reports if status is rejected and save is pressed and form is valid', () => {

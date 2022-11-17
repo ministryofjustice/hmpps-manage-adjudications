@@ -21,6 +21,7 @@ import {
   formatTimestampToDate,
   formatLocation,
   formatTimestampTo,
+  formatName,
 } from '../utils/utils'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
@@ -491,6 +492,20 @@ export default class ReportedAdjudicationsService {
       nameAndNumber,
       formattedDateTimeOfHearing,
       formattedDateTimeOfDiscovery,
+    }
+  }
+
+  async getAcceptedReportConfirmationDetails(adjudicationNumber: number, user: User) {
+    const adjudicationData = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
+      adjudicationData.reportedAdjudication.prisonerNumber
+    )
+
+    return {
+      reportExpirationDateTime: adjudicationData.reportedAdjudication.incidentDetails.handoverDeadline,
+      prisonerFullName: formatName(prisoner.firstName, prisoner.lastName),
     }
   }
 }

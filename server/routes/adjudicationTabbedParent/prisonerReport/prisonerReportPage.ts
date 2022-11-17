@@ -221,6 +221,9 @@ export default class prisonerReportRoutes {
     if (errors) return this.renderView(req, res, { errors, status, reason, details })
 
     await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
+    if (status === ReviewStatus.UNSCHEDULED) {
+      return res.redirect(adjudicationUrls.acceptedReportConfirmation.urls.start(adjudicationNumber))
+    }
     return res.redirect(adjudicationUrls.allCompletedReports.root)
   }
 

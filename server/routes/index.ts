@@ -35,6 +35,7 @@ import adjudicationUrls from '../utils/urlGenerator'
 import config from '../config'
 import scheduleHearingRoutes from './adjudicationTabbedParent/scheduleHearing'
 import viewScheduledHearingsRoutes from './viewScheduledHearings'
+import acceptedReportConfirmationRoutes from './acceptedReportConfirmation'
 
 export default function routes(
   router: Router,
@@ -167,6 +168,11 @@ export default function routes(
   router.use(
     adjudicationUrls.viewScheduledHearings.root,
     viewScheduledHearingsRoutes({ reportedAdjudicationsService, userService })
+  )
+
+  router.use(
+    adjudicationUrls.acceptedReportConfirmation.root,
+    acceptedReportConfirmationRoutes({ reportedAdjudicationsService })
   )
 
   return router
