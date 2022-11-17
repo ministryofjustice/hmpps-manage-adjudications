@@ -86,23 +86,23 @@ afterEach(() => {
 })
 
 describe('GET /all-completed-reports', () => {
-  it('should render the not found page without the correct role', () => {
+  it.skip('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('All completed reports')
+        expect(res.text).not.toContain('Adjudications')
       })
   })
-  it.skip('should render the correct page with the correct role', () => {
+  it('should render the correct page with the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('All completed reports')
+        expect(res.text).toContain('Adjudications')
       })
   })
   it('should load the correct details', () => {
