@@ -25,9 +25,9 @@ context('Report has been accepted', () => {
           createdDateTime: '2021-12-09T09:40:00',
           incidentDetails: {
             locationId: 357591,
-            dateTimeOfIncident: '2022-11-15T10:10:00',
-            dateTimeOfDiscovery: '2022-11-15T10:30:00',
-            handoverDeadline: '2022-11-17T10:30:00',
+            dateTimeOfIncident: '2022-11-15T09:10:00',
+            dateTimeOfDiscovery: '2022-11-15T09:30:00',
+            handoverDeadline: '2022-11-17T09:30:00',
           },
           incidentStatement: {
             statement: 'Statement here.',
@@ -56,10 +56,7 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.banner().should('contain', 'John Smith’s report has been accepted')
     acceptedReportConfirmationPage
       .p1()
-      .should(
-        'contain',
-        'John Smith must be given a printed copy of this report by 10:30 on Thursday 17 November 2022.'
-      )
+      .should('contain', 'John Smith must be given a printed copy of this report by 9:30 on Thursday 17 November 2022.')
     acceptedReportConfirmationPage
       .p2()
       .should(
