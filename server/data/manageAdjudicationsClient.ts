@@ -21,6 +21,7 @@ import {
   ReportedAdjudicationFilter,
   ReviewAdjudication,
   ScheduledHearingList,
+  allStatuses,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -67,7 +68,7 @@ export default class ManageAdjudicationsClient {
 
   async getAllDraftAdjudicationsForUser(agencyId: string): Promise<DraftAdjudicationResultList> {
     return this.restClient.get({
-      path: `/draft-adjudications/my/agency/${agencyId}`,
+      path: `/draft-adjudications/my/agency/${agencyId}?status=ADD_THEM_ALL_IN`,
     })
   }
 
@@ -124,7 +125,8 @@ export default class ManageAdjudicationsClient {
         `${prefix}agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || ''}`
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses.toString()}`}`
+
       return this.restClient.get({
         path,
       })

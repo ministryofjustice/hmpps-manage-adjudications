@@ -91,6 +91,14 @@ export enum ReportedAdjudicationStatus {
   ACCEPTED = 'ACCEPTED',
 }
 
+export const allStatuses = [
+  ReportedAdjudicationStatus.SCHEDULED,
+  ReportedAdjudicationStatus.UNSCHEDULED,
+  ReportedAdjudicationStatus.AWAITING_REVIEW,
+  ReportedAdjudicationStatus.RETURNED,
+  ReportedAdjudicationStatus.REJECTED,
+]
+
 export enum OicHearingType {
   GOV_ADULT = 'GOV_ADULT',
   GOV_YOI = 'GOV_YOI',

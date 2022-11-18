@@ -47,16 +47,7 @@ export default class AllCompletedReportsRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
       const uiFilter = fillInDefaults(uiFilterFromRequest(req))
-      if (uiFilter.status === undefined) {
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        uiFilter.status = [
-          ReportedAdjudicationStatus.AWAITING_REVIEW,
-          ReportedAdjudicationStatus.UNSCHEDULED,
-          ReportedAdjudicationStatus.RETURNED,
-          ReportedAdjudicationStatus.SCHEDULED,
-          ReportedAdjudicationStatus.REJECTED,
-        ] as any
-      }
+
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
