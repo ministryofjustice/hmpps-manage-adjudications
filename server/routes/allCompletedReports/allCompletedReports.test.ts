@@ -86,13 +86,13 @@ afterEach(() => {
 })
 
 describe('GET /all-completed-reports', () => {
-  it.skip('should render the not found page without the correct role', () => {
+  it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('Adjudications')
+        expect(res.text).toContain('Page not found')
       })
   })
   it('should render the correct page with the correct role', () => {
