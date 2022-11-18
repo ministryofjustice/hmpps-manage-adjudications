@@ -16,10 +16,18 @@ const error: { [key in ErrorType]: FormError } = {
   },
 }
 
+export const allStatuses = [
+  ReportedAdjudicationStatus.SCHEDULED,
+  ReportedAdjudicationStatus.UNSCHEDULED,
+  ReportedAdjudicationStatus.AWAITING_REVIEW,
+  ReportedAdjudicationStatus.RETURNED,
+  ReportedAdjudicationStatus.REJECTED,
+]
+
 export type UiFilter = {
   fromDate: string
   toDate: string
-  status: ReportedAdjudicationStatus
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
@@ -38,7 +46,7 @@ export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
   return {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
-    status: uiFilter.status,
+    status: uiFilter.status || allStatuses,
   }
 }
 
@@ -54,7 +62,7 @@ export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
-    status: filter.status,
+    status: filter.status || allStatuses,
   }
 }
 

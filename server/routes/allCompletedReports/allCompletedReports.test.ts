@@ -92,17 +92,17 @@ describe('GET /all-completed-reports', () => {
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('All completed reports')
+        expect(res.text).toContain('Page not found')
       })
   })
-  it.skip('should render the correct page with the correct role', () => {
+  it('should render the correct page with the correct role', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('All completed reports')
+        expect(res.text).toContain('Date of discovery')
       })
   })
   it('should load the correct details', () => {

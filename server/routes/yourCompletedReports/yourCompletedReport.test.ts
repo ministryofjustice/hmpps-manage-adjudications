@@ -85,7 +85,7 @@ describe('GET /your-completed-reports', () => {
       })
     })
 
-    it.skip('should load the your completed reported page', () => {
+    it('should load the your completed reported page', () => {
       return request(app)
         .get(adjudicationUrls.yourCompletedReports.root)
         .expect('Content-Type', /html/)
@@ -113,7 +113,7 @@ describe('GET /your-completed-reports', () => {
       })
     })
 
-    it.skip('should show the no results message', () => {
+    it('should show the no results message', () => {
       return request(app)
         .get(adjudicationUrls.yourCompletedReports.root)
         .expect('Content-Type', /html/)
