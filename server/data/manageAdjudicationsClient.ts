@@ -68,7 +68,7 @@ export default class ManageAdjudicationsClient {
 
   async getAllDraftAdjudicationsForUser(agencyId: string): Promise<DraftAdjudicationResultList> {
     return this.restClient.get({
-      path: `/draft-adjudications/my/agency/${agencyId}?status=ADD_THEM_ALL_IN`,
+      path: `/draft-adjudications/my/agency/${agencyId}`,
     })
   }
 
@@ -125,7 +125,7 @@ export default class ManageAdjudicationsClient {
         `${prefix}agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses.toString()}`}`
+        `${(filter.status && `&status=${filter.status}`) || ``}`
 
       return this.restClient.get({
         path,
