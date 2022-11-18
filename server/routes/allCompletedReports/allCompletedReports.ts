@@ -47,7 +47,6 @@ export default class AllCompletedReportsRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
       const uiFilter = fillInDefaults(uiFilterFromRequest(req))
-
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
