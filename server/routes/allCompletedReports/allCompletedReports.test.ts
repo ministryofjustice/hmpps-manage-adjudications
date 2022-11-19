@@ -85,7 +85,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe.skip('GET /all-completed-reports', () => {
+describe('GET /all-completed-reports', () => {
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)

@@ -23,7 +23,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe.skip('GET /your-completed-reports', () => {
+describe('GET /your-completed-reports', () => {
   describe('with results', () => {
     beforeEach(() => {
       reportedAdjudicationsService.getYourCompletedAdjudications.mockResolvedValue({
@@ -85,7 +85,7 @@ describe.skip('GET /your-completed-reports', () => {
       })
     })
 
-    it.skip('should load the your completed reported page', () => {
+    it('should load the your completed reported page', () => {
       return request(app)
         .get(adjudicationUrls.yourCompletedReports.root)
         .expect('Content-Type', /html/)

@@ -217,7 +217,7 @@ describe('manageAdjudicationsClient', () => {
     })
   })
 
-  describe.skip('getAllDraftAdjudicationsForUser', () => {
+  describe('getAllDraftAdjudicationsForUser', () => {
     const result = {
       draftAdjudications: [
         {
