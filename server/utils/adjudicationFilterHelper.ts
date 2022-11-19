@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import moment from 'moment'
-import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { allStatuses, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
 
@@ -19,7 +19,7 @@ const error: { [key in ErrorType]: FormError } = {
 export type UiFilter = {
   fromDate: string
   toDate: string
-  status: ReportedAdjudicationStatus
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
@@ -35,10 +35,17 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
 // get results for all of today, thus if set the 'to' date 2 days ago we should also get the proceeding 2 days.
 // The status default to null, which the api interprets as all statuses.
 export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
+  /* const allStatuses = [
+    ReportedAdjudicationStatus.SCHEDULED,
+    ReportedAdjudicationStatus.UNSCHEDULED,
+    ReportedAdjudicationStatus.AWAITING_REVIEW,
+    ReportedAdjudicationStatus.RETURNED,
+    ReportedAdjudicationStatus.REJECTED,
+  ] */
   return {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
-    status: uiFilter.status,
+    status: uiFilter.status || allStatuses,
   }
 }
 

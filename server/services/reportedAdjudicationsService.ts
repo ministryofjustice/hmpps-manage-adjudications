@@ -216,12 +216,14 @@ export default class ReportedAdjudicationsService {
 
   async getAllCompletedAdjudications(
     user: User,
-    filter: ReportedAdjudicationFilter,
+    filter: ReportedAdjudicationFilter | ReportedAdjudicationFilter[], // TODO
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user.token).getAllCompletedAdjudications(
       user.activeCaseLoadId,
-      filter,
+      /* eslint-disable */
+      filter as any, // TODO - NN-4461
+      /* eslint-enable */
       pageRequest
     )
 

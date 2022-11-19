@@ -1,10 +1,6 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
-import {
-  ReportedAdjudication,
-  ReportedAdjudicationStatus,
-  reportedAdjudicationStatuses,
-} from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, reportedAdjudicationStatuses } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -42,20 +38,12 @@ export default class YourCompletedReportsRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const uiFilter = fillInDefaults(uiFilterFromRequest(req))
-    if (uiFilter.status === undefined || !uiFilter.status || uiFilter.status.toString() === '') {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      uiFilter.status = [
-        ReportedAdjudicationStatus.AWAITING_REVIEW,
-        ReportedAdjudicationStatus.UNSCHEDULED,
-        ReportedAdjudicationStatus.RETURNED,
-        ReportedAdjudicationStatus.SCHEDULED,
-        ReportedAdjudicationStatus.REJECTED,
-      ] as any
-    }
     const filter = filterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
-      filter,
+      /* eslint-disable */
+      filter as any, // TODOO - NN-4461
+      /* eslint-enable */
       pageRequestFrom(20, +req.query.pageNumber || 1)
     )
     return this.renderView(req, res, uiFilter, results, [])
