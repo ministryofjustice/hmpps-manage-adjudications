@@ -31,7 +31,7 @@ export default class AllCompletedReportsRoutes {
   ): Promise<void> =>
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
-      filter: filter == null ? [{ status: 'SCHEDULED' }] : filter,
+      filter: filter === null ? [{ status: `allStatuses` }] : filter,
       statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
@@ -46,9 +46,7 @@ export default class AllCompletedReportsRoutes {
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
-        /* eslint-disable */
-        filter as any, // TODO - NN-4461
-        /* eslint-enable */
+        filter,
         pageRequestFrom(20, +req.query.pageNumber || 1)
       )
       return this.renderView(req, res, uiFilter, results, [])

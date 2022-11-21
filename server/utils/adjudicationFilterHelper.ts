@@ -19,14 +19,14 @@ const error: { [key in ErrorType]: FormError } = {
 export type UiFilter = {
   fromDate: string
   toDate: string
-  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  status: ReportedAdjudicationStatus[]
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
-    status: req.query.status as ReportedAdjudicationStatus,
+    status: req.query.status as ReportedAdjudicationStatus[],
   }
 }
 
@@ -53,7 +53,7 @@ export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
     toDate: req.body.toDate.date,
-    status: req.body.status as ReportedAdjudicationStatus,
+    status: req.body.status as ReportedAdjudicationStatus[],
   }
 }
 
@@ -61,7 +61,7 @@ export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
-    status: filter.status,
+    status: filter.status || allStatuses,
   }
 }
 

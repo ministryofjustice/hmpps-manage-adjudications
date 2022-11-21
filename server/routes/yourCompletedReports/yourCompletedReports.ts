@@ -41,9 +41,7 @@ export default class YourCompletedReportsRoutes {
     const filter = filterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
-      /* eslint-disable */
-      filter as any, // TODOO - NN-4461
-      /* eslint-enable */
+      filter,
       pageRequestFrom(20, +req.query.pageNumber || 1)
     )
     return this.renderView(req, res, uiFilter, results, [])
