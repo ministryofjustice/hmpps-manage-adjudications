@@ -48,7 +48,7 @@ export default function createApp(services: Services): express.Application {
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(authorisationMiddleware())
 
-  if (process.env.DISPLAY_MAINTENANCE_PAGE === 'true') {
+  if (config.maintenanceModeFlag) {
     app.use('/', maintenanceRoutes(maintenancePageRouter(services.userService)))
     app.all('*', (req, res) => {
       res.redirect('/')
