@@ -50,13 +50,13 @@ export default function createApp(services: Services): express.Application {
 
   if (process.env.DISPLAY_MAINTENANCE_PAGE === 'true') {
     app.use('/', maintenanceRoutes(maintenancePageRouter(services.userService)))
-    app.all('*', function (req, res) {
+    app.all('*', (req, res) => {
       res.redirect('/')
     })
   } else {
     app.use('/', indexRoutes(standardRouter(services.userService), services))
 
-    app.all('/planned-maintenance', function (req, res) {
+    app.all('/planned-maintenance', (req, res) => {
       res.redirect('/')
     })
   }
