@@ -129,7 +129,8 @@ context('Your Completed Reports', () => {
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
     filterAdjudication.forceFromDate(1, 1, 2022)
     filterAdjudication.forceToDate(9, 1, 2022)
-    filterAdjudication.selectStatus().select('UNSCHEDULED')
+    filterAdjudication.uncheckAllCheckboxes()
+    filterAdjudication.checkCheckboxWithValue('UNSCHEDULED')
     filterAdjudication.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
@@ -181,7 +182,8 @@ context('Your Completed Reports', () => {
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(10, 10, 2021)
     adjudicationsFilter.forceToDate(19, 10, 2021)
-    adjudicationsFilter.selectStatus().select('UNSCHEDULED')
+    adjudicationsFilter.uncheckAllCheckboxes()
+    adjudicationsFilter.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)

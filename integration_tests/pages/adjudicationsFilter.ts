@@ -19,4 +19,8 @@ export default class AdjudicationsFilter {
   applyButton = () => cy.get('[data-qa="filter-apply"]')
 
   filterBar = () => cy.get('[data-qa="filter-bar"]')
+
+  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
+
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 }

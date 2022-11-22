@@ -2,10 +2,19 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% macro adjudicationFilter(filter, statuses, errors, clearUrl, csrfToken) %}
+  {% set items = [] %}
+  {% for status in statuses %}
+    {% set item = {text:status.text, value:status.value, checked: filter.status.includes(status.value) } %}
+      {% if status.value!=='ACCEPTED' %}
+        {% set items = (items.push(item),items) %}
+      {% endif%}
+  {% endfor %}
+
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
-        <h2 class="govuk-heading-m">View by</h2>
+        <h2 class="govuk-heading-m">Date of discovery</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
         <div {% if fromDateError %}class="govuk-form-group--error"{% endif %} data-qa='filter-bar'>
@@ -14,7 +23,7 @@
                 <span class="govuk-visually-hidden">Error:</span>{{ fromDateError.text }}
             </p>
             {% endif %}
-            <div class="horizontal-form govuk-!-margin-bottom-3" id="adjudicationFilter">
+            <div class="displayFlex" id="adjudicationFilter">
                 {{ datePicker({
                     id: 'fromDate[date]',
                     label: 'Date from',
@@ -23,6 +32,9 @@
                     attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
                     classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
                 }) }}
+
+                <div class="spacerCol"></div>
+
                 {{ datePicker({
                     id: 'toDate[date]',
                     label: 'Date to',
@@ -31,14 +43,26 @@
                     attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
                     classes: 'govuk-input--width-10'
                 }) }}
-                {{ govukSelect({
-                    id: 'status',
-                    name: 'status',
-                    label: {
-                        text: 'Status'
-                    },
-                    items: statuses | toSelect('value', 'text', filter.status, 'All' )
+
+                <div class="spacerCol"></div>
+                <div class="spacerCol"></div>
+
+              <div id="statusFilterBox">
+                {{ govukCheckboxes({
+                  name: "status",
+                  classes: "govuk-checkboxes--small stausFilterCheckboxes",
+                  fieldset: {
+                    legend: {
+                      text: "Status",
+                      isPageHeading: false,
+                      classes: "govuk-fieldset__legend--m"
+                    }
+                  },
+                  items: items
                 }) }}
+              </div>
+            </div>
+            <div class="horizontal-form govuk-!-margin-bottom-3">
                 {{ govukButton({
                     text: "Apply",
                     type: "submit",

@@ -21,6 +21,7 @@ import {
   ReportedAdjudicationFilter,
   ReviewAdjudication,
   ScheduledHearingList,
+  allStatuses,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -124,7 +125,8 @@ export default class ManageAdjudicationsClient {
         `${prefix}agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || ''}`
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
+
       return this.restClient.get({
         path,
       })

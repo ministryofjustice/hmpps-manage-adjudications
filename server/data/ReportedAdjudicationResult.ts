@@ -48,7 +48,7 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
 export type ReportedAdjudicationFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
-  status?: ReportedAdjudicationStatus
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
 export type ScheduledHearingFilter = {
@@ -84,12 +84,20 @@ export type ReviewAdjudication = {
 // This enum needs to be kept in sync with the enum in the API.
 export enum ReportedAdjudicationStatus {
   AWAITING_REVIEW = 'AWAITING_REVIEW',
+  UNSCHEDULED = 'UNSCHEDULED',
   RETURNED = 'RETURNED',
+  SCHEDULED = 'SCHEDULED',
   REJECTED = 'REJECTED',
   ACCEPTED = 'ACCEPTED',
-  SCHEDULED = 'SCHEDULED',
-  UNSCHEDULED = 'UNSCHEDULED',
 }
+
+export const allStatuses = [
+  ReportedAdjudicationStatus.SCHEDULED,
+  ReportedAdjudicationStatus.UNSCHEDULED,
+  ReportedAdjudicationStatus.AWAITING_REVIEW,
+  ReportedAdjudicationStatus.RETURNED,
+  ReportedAdjudicationStatus.REJECTED,
+]
 
 export enum OicHearingType {
   GOV_ADULT = 'GOV_ADULT',

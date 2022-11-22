@@ -17,4 +17,8 @@ export default class YourCompletedReportsPage extends Page {
     this.paginationLinks().contains(new RegExp(`^${number.toString()}$`))
 
   paginationResults = (): PageElement => cy.get('.moj-pagination__results').first()
+
+  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
+
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 }

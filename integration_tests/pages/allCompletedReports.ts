@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class YourCompletedReportsPage extends Page {
   constructor() {
-    super('All completed reports')
+    super('Adjudications')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')
@@ -19,4 +19,8 @@ export default class YourCompletedReportsPage extends Page {
   paginationResults = (): PageElement => cy.get('.moj-pagination__results').first()
 
   resultsTable = (): PageElement => cy.get('[data-qa="complete-adjudications-results-table"]')
+
+  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
+
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 }

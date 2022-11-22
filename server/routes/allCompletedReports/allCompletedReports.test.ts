@@ -92,7 +92,7 @@ describe('GET /all-completed-reports', () => {
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('All completed reports')
+        expect(res.text).toContain('Page not found')
       })
   })
   it('should render the correct page with the correct role', () => {
@@ -102,7 +102,7 @@ describe('GET /all-completed-reports', () => {
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('All completed reports')
+        expect(res.text).toContain('Adjudications')
       })
   })
   it('should load the correct details', () => {
@@ -141,7 +141,7 @@ describe('POST /all-completed-reports', () => {
     return request(app)
       .post(adjudicationUrls.allCompletedReports.root)
       .expect(res => {
-        expect(res.text).not.toContain('All completed reports')
+        expect(res.text).toContain('Page not found')
       })
   })
 })

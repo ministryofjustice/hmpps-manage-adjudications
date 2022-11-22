@@ -220,7 +220,8 @@ context('All Completed Reports', () => {
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(1, 1, 2022)
     adjudicationsFilter.forceToDate(9, 1, 2022)
-    adjudicationsFilter.selectStatus().select('UNSCHEDULED')
+    allCompletedReportsPage.uncheckAllCheckboxes()
+    allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
@@ -282,7 +283,8 @@ context('All Completed Reports', () => {
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(10, 10, 2021)
     adjudicationsFilter.forceToDate(19, 10, 2021)
-    adjudicationsFilter.selectStatus().select('UNSCHEDULED')
+    allCompletedReportsPage.uncheckAllCheckboxes()
+    allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)

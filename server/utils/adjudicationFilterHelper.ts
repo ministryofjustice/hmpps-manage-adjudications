@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import moment from 'moment'
-import { ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { allStatuses, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
 
@@ -19,7 +19,7 @@ const error: { [key in ErrorType]: FormError } = {
 export type UiFilter = {
   fromDate: string
   toDate: string
-  status: ReportedAdjudicationStatus
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
@@ -38,7 +38,7 @@ export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
   return {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
-    status: uiFilter.status,
+    status: uiFilter.status || allStatuses,
   }
 }
 
@@ -46,7 +46,7 @@ export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
     toDate: req.body.toDate.date,
-    status: req.body.status as ReportedAdjudicationStatus,
+    status: req.body.status as ReportedAdjudicationStatus[],
   }
 }
 
@@ -54,7 +54,7 @@ export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
-    status: filter.status,
+    status: filter.status || allStatuses,
   }
 }
 
