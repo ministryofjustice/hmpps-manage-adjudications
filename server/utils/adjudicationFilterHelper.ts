@@ -19,14 +19,14 @@ const error: { [key in ErrorType]: FormError } = {
 export type UiFilter = {
   fromDate: string
   toDate: string
-  status: ReportedAdjudicationStatus[]
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
-    status: req.query.status as ReportedAdjudicationStatus[],
+    status: req.query.status as ReportedAdjudicationStatus,
   }
 }
 
@@ -35,13 +35,6 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
 // get results for all of today, thus if set the 'to' date 2 days ago we should also get the proceeding 2 days.
 // The status default to null, which the api interprets as all statuses.
 export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
-  /* const allStatuses = [
-    ReportedAdjudicationStatus.SCHEDULED,
-    ReportedAdjudicationStatus.UNSCHEDULED,
-    ReportedAdjudicationStatus.AWAITING_REVIEW,
-    ReportedAdjudicationStatus.RETURNED,
-    ReportedAdjudicationStatus.REJECTED,
-  ] */
   return {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),

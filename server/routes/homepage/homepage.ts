@@ -57,7 +57,7 @@ export const tasks: TaskType[] = [
         href: adjudicationUrls.allCompletedReports.urls.filter({
           fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
           toDate: momentDateToDatePicker(moment()),
-          status: [ReportedAdjudicationStatus.AWAITING_REVIEW],
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         }),
         id: 'review-reports',
       },
