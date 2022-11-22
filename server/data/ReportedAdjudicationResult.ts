@@ -48,7 +48,7 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
 export type ReportedAdjudicationFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
-  status: ReportedAdjudicationStatus[]
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
 export type ScheduledHearingFilter = {

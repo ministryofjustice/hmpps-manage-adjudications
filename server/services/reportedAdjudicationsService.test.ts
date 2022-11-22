@@ -795,7 +795,7 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual([])
     })
   })
-  describe.only('getAllHearings', () => {
+  describe('getAllHearings', () => {
     const batchPrisonerDetails = [
       {
         offenderNo: 'G6123VU',

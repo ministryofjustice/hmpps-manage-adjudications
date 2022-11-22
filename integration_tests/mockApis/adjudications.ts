@@ -231,7 +231,7 @@ const stubGetReportedAdjudications =
       `${prefix}agency/${agencyId}?page=${number}&size=${size}` +
       `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
       `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
-      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` // TODO
+      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
     return stubFor({
       request: {
         method: 'GET',

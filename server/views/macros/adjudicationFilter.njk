@@ -13,8 +13,6 @@
       {% endif%}
   {% endfor %}
 
-filter={{filter.status}}
-
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
         <h2 class="govuk-heading-m">Date of discovery</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

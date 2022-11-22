@@ -31,7 +31,7 @@ export default class AllCompletedReportsRoutes {
   ): Promise<void> =>
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
-      filter: filter === null ? [{ status: `allStatuses` }] : filter,
+      filter,
       statuses: reportedAdjudicationStatuses,
       pagination: mojPaginationFromPageResponse(
         results,
