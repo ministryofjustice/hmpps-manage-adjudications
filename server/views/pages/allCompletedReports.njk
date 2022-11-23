@@ -4,7 +4,10 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
+{% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
+
 {% set title = "Adjudications" %}
+
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
@@ -23,7 +26,11 @@
     </span>
     <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
   </p>
-  {{ adjudicationFilter(filter, statuses, errors, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
+
+{{ adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) }}
+
+{{ adjudicationFilter(filter, statuses, errors, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
+  
   {% set rows = [] %}
   {% for completedReport in allCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}

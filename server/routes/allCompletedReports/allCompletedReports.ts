@@ -37,6 +37,9 @@ export default class AllCompletedReportsRoutes {
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
+      viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
+      viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
+      activeTab: 'viewCompletedReports',
       errors,
     })
 
