@@ -5,12 +5,19 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% macro adjudicationFilter(filter, statuses, errors, clearUrl, csrfToken) %}
+  {% set allFiltersStr = filter.status.toString() %}
+  {% set filterValuesArray = allFiltersStr.split(',') %}
   {% set items = [] %}
   {% for status in statuses %}
-    {% set item = {text:status.text, value:status.value, checked: filter.status.includes(status.value) } %}
-      {% if status.value!=='ACCEPTED' %}
-        {% set items = (items.push(item),items) %}
+    {% set item = {text:status.text, value:status.value, checked: false } %}
+    {% for filterValue in filterValuesArray %}
+      {% if filterValue === item.value %}
+        {% set item = {text:item.text, value:item.value, checked: true } %}
       {% endif%}
+    {% endfor %}
+    {% if status.value !== 'ACCEPTED' %}
+      {% set items = (items.push(item),items) %}
+    {% endif%}
   {% endfor %}
 
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
