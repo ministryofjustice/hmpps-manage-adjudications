@@ -118,4 +118,5 @@ export default {
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   yoiNewPagesFeatureFlag: get('YOI_NEW_PAGES_FEATURE_FLAG', true, requiredInProduction),
   hearingsFeatureFlag: get('HEARINGS_FEATURE_FLAG', true, requiredInProduction),
+  maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
 }

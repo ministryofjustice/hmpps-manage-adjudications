@@ -1,0 +1,29 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "../partials/card.njk" import card %}
+
+{% set title = "Adjudications" %}
+{% set feedbackBannerBackground = '#f0f4f5 '%}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block main %}
+  <div class="govuk-width-container">
+
+    {% set mainClasses = "govuk-main-wrapper--l" %}
+    <div class="govuk-grid-row govuk-!-margin-top-7 govuk-!-margin-bottom-7">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">This service is currently unavailable</h1>
+        <p class="govuk-body">
+          You'll be able to use the Adjudications service on DPS again from [9am on Monday, 23 May 2022].
+        </p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+

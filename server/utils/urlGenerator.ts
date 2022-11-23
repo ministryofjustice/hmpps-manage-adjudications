@@ -343,6 +343,12 @@ const adjudicationUrls = {
       start: '/',
     },
   },
+  maintenancePage: {
+    root: '/planned-maintenance',
+    matchers: {
+      start: '*',
+    },
+  },
 }
 
 export default adjudicationUrls
