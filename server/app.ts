@@ -20,7 +20,6 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import logger from '../logger'
 import { Services } from './services'
 import { pdfRenderer } from './utils/pdfRenderer'
-import 'dotenv/config'
 import maintenancePageRouter from './routes/maintenancePageRouter'
 
 export default function createApp(services: Services): express.Application {
@@ -48,7 +47,7 @@ export default function createApp(services: Services): express.Application {
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(authorisationMiddleware())
 
-  if (config.maintenanceModeFlag) {
+  if (config.maintenanceModeFlag === 'true') {
     app.use('/', maintenanceRoutes(maintenancePageRouter(services.userService)))
     app.all('*', (req, res) => {
       res.redirect('/')
