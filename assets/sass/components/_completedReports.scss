@@ -1,20 +1,21 @@
 #statusFilterBox {
     margin-top:-47px;
-}
-.govuk-checkboxes__item {
-    width: 144px!important;
-}
-.stausFilterCheckboxes {
-    width: 375px;
-    display: flex;
-    flex-wrap: wrap;
+
+    .horizontal-form, .govuk-form-group {
+        margin-bottom: 0px!important;
+    }
+    .govuk-checkboxes__item {
+        width: 144px!important;
+    }
+    .stausFilterCheckboxes {
+        width: 375px;
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 .spacerCol {
     width: 30px;
 }
 .displayFlex {
     display: flex;
-}
-.horizontal-form, .govuk-form-group {
-    margin-bottom: 0px!important;
 }
