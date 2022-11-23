@@ -21,7 +21,7 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     YOI_NEW_PAGES_FEATURE_FLAG: true
     HEARINGS_FEATURE_FLAG: true
-    MAINTENANCE_MODE: true
+    MAINTENANCE_MODE: false
     
   allowlist: null
 
