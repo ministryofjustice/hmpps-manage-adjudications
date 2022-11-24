@@ -27,6 +27,8 @@ export type UiFilter = {
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
+  console.log(req.query.status)
+  console.log(typeof req.query.status)
   return {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
@@ -50,7 +52,7 @@ export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
     toDate: req.body.toDate.date,
-    status: req.body.status as ReportedAdjudicationStatus[],
+    status: req.body.status as ReportedAdjudicationStatus,
   }
 }
 
