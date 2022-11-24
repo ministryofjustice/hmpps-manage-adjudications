@@ -124,10 +124,3 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return null
   }
 }
-
-export const reportedAdjudicationStatuses = Object.keys(ReportedAdjudicationStatus).map(key => {
-  return {
-    value: key,
-    text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-  }
-})

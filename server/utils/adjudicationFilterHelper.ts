@@ -1,6 +1,10 @@
 import { Request } from 'express'
 import moment from 'moment'
-import { allStatuses, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import {
+  allStatuses,
+  ReportedAdjudicationStatus,
+  reportedAdjudicationStatusDisplayName,
+} from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
 
@@ -46,7 +50,7 @@ export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
     toDate: req.body.toDate.date,
-    status: req.body.status as ReportedAdjudicationStatus[],
+    status: req.body.status as ReportedAdjudicationStatus,
   }
 }
 
@@ -64,3 +68,22 @@ export const validate = (uiFilter: UiFilter): FormError[] => {
   }
   return []
 }
+
+const statusKeyMatch = (
+  adjStatuses: ReportedAdjudicationStatus | ReportedAdjudicationStatus[],
+  adjKey: ReportedAdjudicationStatus
+) => {
+  if (!Array.isArray(adjStatuses)) return adjStatuses === adjKey
+  return adjStatuses.includes(adjKey)
+}
+
+export const reportedAdjudicationStatuses = (filter: UiFilter) =>
+  Object.keys(ReportedAdjudicationStatus)
+    .filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
+    .map(key => {
+      return {
+        value: key,
+        text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
+        checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+      }
+    })

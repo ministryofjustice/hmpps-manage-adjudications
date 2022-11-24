@@ -4,15 +4,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro adjudicationFilter(filter, statuses, errors, clearUrl, csrfToken) %}
-  {% set items = [] %}
-  {% for status in statuses %}
-    {% set item = {text:status.text, value:status.value, checked: filter.status.includes(status.value) } %}
-      {% if status.value!=='ACCEPTED' %}
-        {% set items = (items.push(item),items) %}
-      {% endif%}
-  {% endfor %}
-
+{% macro adjudicationFilter(filter, checkboxes, errors, clearUrl, csrfToken) %}
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
         <h2 class="govuk-heading-m">Date of discovery</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -58,7 +50,7 @@
                       classes: "govuk-fieldset__legend--m"
                     }
                   },
-                  items: items
+                  items: checkboxes
                 }) }}
               </div>
             </div>

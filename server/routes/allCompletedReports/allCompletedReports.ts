@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import { hasAnyRole } from '../../utils/utils'
-import { ReportedAdjudicationEnhanced, reportedAdjudicationStatuses } from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationEnhanced } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
@@ -9,6 +9,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import {
   fillInDefaults,
   filterFromUiFilter,
+  reportedAdjudicationStatuses,
   UiFilter,
   uiFilterFromBody,
   uiFilterFromRequest,
@@ -32,7 +33,7 @@ export default class AllCompletedReportsRoutes {
     res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
       filter,
-      statuses: reportedAdjudicationStatuses,
+      checkboxes: reportedAdjudicationStatuses(filter),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
