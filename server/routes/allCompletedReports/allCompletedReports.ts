@@ -29,8 +29,8 @@ export default class AllCompletedReportsRoutes {
     filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
-  ): Promise<void> => {
-    return res.render(`pages/allCompletedReports`, {
+  ): Promise<void> =>
+    res.render(`pages/allCompletedReports`, {
       allCompletedReports: results,
       filter,
       checkboxes: reportedAdjudicationStatuses(filter),
@@ -43,7 +43,6 @@ export default class AllCompletedReportsRoutes {
       activeTab: 'viewCompletedReports',
       errors,
     })
-  }
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {

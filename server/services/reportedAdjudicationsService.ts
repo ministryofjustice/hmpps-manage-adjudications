@@ -219,7 +219,6 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
-    console.log(filter)
     const pageResponse = await new ManageAdjudicationsClient(user.token).getAllCompletedAdjudications(
       user.activeCaseLoadId,
       filter,
