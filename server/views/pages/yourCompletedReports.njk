@@ -20,10 +20,6 @@
       }) }}
   {% endif %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
-  <p>
-    <span class="govuk-!-margin-bottom-1 govuk-label--s">Location: </span>
-    <span class="govuk-!-margin-bottom-1 govuk-label--xs">{{ user.activeCaseLoad.description }}</span>
-  </p>
   {{ adjudicationFilter(filter, checkboxes, errors, adjudicationUrls.yourCompletedReports.urls.start(), csrfToken) }}
   {% set rows = [] %}
 
