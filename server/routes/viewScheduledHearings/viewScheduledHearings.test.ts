@@ -52,7 +52,7 @@ describe('GET /scheduled-hearings', () => {
 })
 
 describe('POST /scheduled-hearings', () => {
-  it.only('should redirect with the correct filter parameters', () => {
+  it('should redirect with the correct filter parameters', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
       .post(adjudicationUrls.viewScheduledHearings.urls.start())
@@ -64,7 +64,7 @@ describe('POST /scheduled-hearings', () => {
     return request(app)
       .post(adjudicationUrls.viewScheduledHearings.root)
       .expect(res => {
-        expect(res.text).toContain('Not found')
+        expect(res.text).toContain('Page not found')
       })
   })
 })
