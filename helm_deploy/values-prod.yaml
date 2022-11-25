@@ -23,7 +23,6 @@ generic-service:
     HEARINGS_FEATURE_FLAG: false
     MAINTENANCE_MODE: false
 
-
   allowlist:
     global-protect: "35.176.93.186/32"
     office: "217.33.148.210/32"
