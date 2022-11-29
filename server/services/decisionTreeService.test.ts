@@ -47,6 +47,7 @@ const victimPrisonerDetails: PrisonerResultSummary = {
   dateOfBirth: null,
   friendlyName: 'A name',
   displayName: 'A display name',
+  physicalAttributes: undefined,
   prisonerNumber: 'AA1234A',
   currentLocation: 'A-1-2',
 }

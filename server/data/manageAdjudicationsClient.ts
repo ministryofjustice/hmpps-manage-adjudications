@@ -14,6 +14,7 @@ import {
   EvidenceDetails,
   WitnessDetails,
   HearingDetails,
+  PrisonerGender,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -250,6 +251,13 @@ export default class ManageAdjudicationsClient {
   async getHearingsGivenAgencyAndDate(agencyId: string, chosenHearingDate: string): Promise<ScheduledHearingList> {
     return this.restClient.get({
       path: `/reported-adjudications/hearings/agency/${agencyId}?hearingDate=${chosenHearingDate}`,
+    })
+  }
+
+  async amendGender(id: number, chosenGender: { gender: string }): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/draft-adjudications/${id}/gender`,
+      data: { ...chosenGender },
     })
   }
 }

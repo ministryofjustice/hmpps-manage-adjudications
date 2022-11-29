@@ -22,6 +22,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = {
   categoryCode: undefined,
   language: undefined,
   friendlyName: undefined,
+  physicalAttributes: undefined,
   displayName: undefined,
   currentLocation: undefined,
   assignedLivingUnit: undefined,

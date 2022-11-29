@@ -47,6 +47,7 @@ export type DraftAdjudication = {
   damagesSaved?: boolean
   evidenceSaved?: boolean
   witnessesSaved?: boolean
+  gender?: string
 }
 
 export type DraftAdjudicationResult = {
@@ -159,4 +160,9 @@ export type HearingDetails = {
   locationId: number
   dateTimeOfHearing: string
   oicHearingType: string
+}
+
+export enum PrisonerGender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
 }

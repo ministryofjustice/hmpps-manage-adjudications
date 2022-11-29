@@ -85,6 +85,7 @@ beforeEach(() => {
         description: '1-1-010',
         agencyName: 'Moorland (HMP & YOI)',
       },
+      physicalAttributes: undefined,
       dateOfBirth: undefined,
       categoryCode: undefined,
       language: undefined,

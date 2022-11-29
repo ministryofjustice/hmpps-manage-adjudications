@@ -20,6 +20,7 @@ beforeEach(() => {
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
     dateOfBirth: undefined,
+    physicalAttributes: undefined,
     assignedLivingUnit: {
       agencyId: 'MDI',
       locationId: 25928,

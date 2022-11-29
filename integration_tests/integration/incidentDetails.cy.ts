@@ -2,7 +2,6 @@ import IncidentDetails from '../pages/incidentDetails'
 import Page from '../pages/page'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
 context('Incident details', () => {
@@ -17,6 +16,7 @@ context('Incident details', () => {
         firstName: 'JOHN',
         lastName: 'SMITH',
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+        physicalAttributes: { gender: 'Male' },
         categoryCode: 'C',
         alerts: [
           { alertType: 'T', alertCode: 'TCPA' },

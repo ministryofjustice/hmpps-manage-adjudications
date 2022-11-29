@@ -7,6 +7,10 @@ type AssignedLivingUnit = {
   agencyName: string
 }
 
+type PhysicalAttributes = {
+  gender: string
+}
+
 export default class PrisonerResult {
   @Expose()
   offenderNo: string
@@ -28,4 +32,7 @@ export default class PrisonerResult {
 
   @Expose()
   dateOfBirth: string
+
+  @Expose()
+  physicalAttributes: PhysicalAttributes
 }

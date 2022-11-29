@@ -24,6 +24,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = {
   friendlyName: undefined,
   displayName: undefined,
   currentLocation: undefined,
+  physicalAttributes: undefined,
   assignedLivingUnit: undefined,
   dateOfBirth: undefined,
 }

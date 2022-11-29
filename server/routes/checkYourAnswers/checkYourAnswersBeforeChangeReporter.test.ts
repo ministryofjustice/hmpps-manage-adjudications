@@ -32,6 +32,7 @@ beforeEach(() => {
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
+    physicalAttributes: undefined,
     assignedLivingUnit: {
       agencyId: undefined,
       locationId: undefined,
@@ -73,6 +74,7 @@ beforeEach(() => {
     prisoner: {
       offenderNo: 'G6415GD',
       dateOfBirth: undefined,
+      physicalAttributes: undefined,
       firstName: undefined,
       lastName: undefined,
       assignedLivingUnit: {

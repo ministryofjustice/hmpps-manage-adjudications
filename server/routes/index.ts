@@ -28,14 +28,15 @@ import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
 import hearingDetailsRoutes from './adjudicationTabbedParent/hearingDetails'
 import adjudicationReportRoutes from './adjudicationTabbedParent/prisonerReport'
+import scheduleHearingRoutes from './adjudicationTabbedParent/scheduleHearing'
+import viewScheduledHearingsRoutes from './viewScheduledHearings'
+import acceptedReportConfirmationRoutes from './acceptedReportConfirmation'
+import selectGenderRoutes from './selectGender'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
 import config from '../config'
-import scheduleHearingRoutes from './adjudicationTabbedParent/scheduleHearing'
-import viewScheduledHearingsRoutes from './viewScheduledHearings'
-import acceptedReportConfirmationRoutes from './acceptedReportConfirmation'
 
 export default function routes(
   router: Router,
@@ -174,6 +175,8 @@ export default function routes(
     adjudicationUrls.acceptedReportConfirmation.root,
     acceptedReportConfirmationRoutes({ reportedAdjudicationsService })
   )
+
+  router.use(adjudicationUrls.selectGender.root, selectGenderRoutes({ placeOnReportService }))
 
   return router
 }
