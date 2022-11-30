@@ -5,6 +5,7 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
 import { User } from '../../data/hmppsAuthClient'
+import { isPrisonerGenderKnown } from '../../services/prisonerSearchService'
 
 type PageData = {
   error?: FormError
@@ -47,7 +48,12 @@ export default class SelectGenderPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId) || null
+    const { prisonerNumber } = req.params
     const { user } = res.locals
+
+    // if the prisoner already has a gender assigned on their profile, the user should not be able to access this page
+    const prisonerGenderOnProfile = isPrisonerGenderKnown(await this.getPrisonerProfileGender(prisonerNumber, user))
+    if (prisonerGenderOnProfile) return res.redirect(adjudicationUrls.homepage.root)
 
     let readApiGender: string = null
     if (this.pageOptions.isEdit()) {
@@ -79,6 +85,11 @@ export default class SelectGenderPage {
   getPreviouslySelectedGenderFromApi = async (draftId: number, user: User): Promise<string> => {
     const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
     return draftAdjudication.draftAdjudication.gender
+  }
+
+  getPrisonerProfileGender = async (prisonerNumber: string, user: User): Promise<string> => {
+    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    return prisoner.physicalAttributes.gender?.toUpperCase() || null
   }
 }
 
