@@ -1,5 +1,5 @@
 import { Readable } from 'stream'
-
+import { Request } from 'express'
 import {
   convertDateTimeStringToSubmittedDateTime,
   convertToTitleCase,
@@ -432,5 +432,19 @@ export default class PlaceOnReportService {
     }
     const client = new ManageAdjudicationsClient(user.token)
     return client.amendGender(id, genderData)
+  }
+
+  setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {
+    req.session[prisonerNumber] = { gender: genderSelected }
+  }
+
+  getPrisonerGenderFromSession(req: Request) {
+    return req.session[req.params.prisonerNumber].gender
+  }
+
+  getAndDeletePrisonerGenderFromSession(req: Request) {
+    const chosenGender = this.getPrisonerGenderFromSession(req)
+    delete req.session[req.params.prisonerNumber].gender
+    return chosenGender
   }
 }

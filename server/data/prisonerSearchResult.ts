@@ -18,4 +18,7 @@ export default class PrisonerSearchResult {
 
   @Expose()
   cellLocation: string
+
+  @Expose()
+  gender: string
 }

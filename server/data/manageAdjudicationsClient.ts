@@ -14,7 +14,6 @@ import {
   EvidenceDetails,
   WitnessDetails,
   HearingDetails,
-  PrisonerGender,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,

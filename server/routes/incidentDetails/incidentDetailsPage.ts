@@ -168,10 +168,8 @@ export default class IncidentDetailsPage {
   }
 
   getPrisonerGender = async (req: Request, prisonerNumber: string, user: User): Promise<string> => {
-    if (req.session[req.params.prisonerNumber]?.gender) {
-      const chosenGender = req.session[req.params.prisonerNumber].gender
-      delete req.session[req.params.prisonerNumber].gender
-      return chosenGender
+    if (this.placeOnReportService.getPrisonerGenderFromSession(req)) {
+      return this.placeOnReportService.getAndDeletePrisonerGenderFromSession(req)
     }
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
     return prisoner.physicalAttributes.gender.toUpperCase()

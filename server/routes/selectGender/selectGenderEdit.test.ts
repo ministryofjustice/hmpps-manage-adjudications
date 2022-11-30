@@ -31,16 +31,29 @@ beforeEach(() => {
     prisonerNumber: 'A7937DY',
     currentLocation: 'Moorland (HMP & YOI)',
   })
+  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
+    draftAdjudication: {
+      id: 4490,
+      prisonerNumber: 'G6123VU',
+      gender: 'MALE',
+      incidentDetails: undefined,
+      offenceDetails: [],
+      startedByUserId: undefined,
+      damages: [],
+      evidence: [],
+      witnesses: [],
+    },
+  })
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /select-gender', () => {
-  it('should load the select gender page', () => {
+describe('GET /select-gender edit', () => {
+  it('should load the edit select gender page', () => {
     return request(app)
-      .get(adjudicationUrls.selectGender.url.start('A7937DY'))
+      .get(adjudicationUrls.selectGender.url.edit('A7937DY', 4490))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the gender of the prisoner?')
@@ -51,25 +64,21 @@ describe('GET /select-gender', () => {
   })
 })
 
-describe('POST /select-gender', () => {
+describe('POST /select-gender edit', () => {
   it('should redirect to the role page if the form is complete', () => {
     return request(app)
-      .post(adjudicationUrls.selectGender.url.start('A7937DY'))
-      .send({ genderSelected: 'MALE' })
-      .expect('Location', adjudicationUrls.incidentDetails.urls.start('A7937DY'))
+      .post(adjudicationUrls.selectGender.url.edit('A7937DY', 4490))
+      .send({ genderSelected: 'FEMALE' })
+      .expect('Location', adjudicationUrls.checkYourAnswers.urls.start(4490))
       .expect(() => {
-        expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledTimes(0)
-        expect(placeOnReportService.setPrisonerGenderOnSession).toHaveBeenCalledTimes(1)
-        expect(placeOnReportService.setPrisonerGenderOnSession).toHaveBeenCalledWith(
-          expect.anything(),
-          'A7937DY',
-          'MALE'
-        )
+        expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledTimes(1)
+        expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledWith(4490, 'FEMALE', expect.anything())
+        expect(placeOnReportService.setPrisonerGenderOnSession).toHaveBeenCalledTimes(0)
       })
   })
   it('should render error summary with correct validation message', () => {
     return request(app)
-      .post(adjudicationUrls.selectGender.url.start('A7937DY'))
+      .post(adjudicationUrls.selectGender.url.edit('A7937DY', 4490))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')

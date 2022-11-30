@@ -68,11 +68,11 @@ export default class SelectGenderPage {
 
     if (this.pageOptions.isEdit()) {
       await this.placeOnReportService.amendPrisonerGender(draftId, genderSelected, user)
-      return res.redirect(adjudicationUrls.checkYourAnswers.urls.start(draftId)) // TODO: Are there any circumstances where this would have to be the edit version of CYA?
+      return res.redirect(adjudicationUrls.checkYourAnswers.urls.start(draftId))
     }
 
     // Set the chosen gender onto the session so it can be sent with the incident details on the next page
-    req.session[prisonerNumber] = { gender: genderSelected }
+    this.placeOnReportService.setPrisonerGenderOnSession(req, prisonerNumber, genderSelected)
     return res.redirect(adjudicationUrls.incidentDetails.urls.start(prisonerNumber))
   }
 

@@ -29,6 +29,8 @@ describe('GET /select-prisoner', () => {
           friendlyName: 'John Smith',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
+          startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
         } as PrisonerSearchSummary,
       ])
     })

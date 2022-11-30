@@ -5,11 +5,14 @@ import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchResult from '../data/prisonerSearchResult'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import { convertToTitleCase } from '../utils/utils'
+import { PrisonerGender } from '../data/DraftAdjudicationResult'
+import adjudicationUrls from '../utils/urlGenerator'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
   displayName: string
   friendlyName: string
   displayCellLocation: string
+  startHref: string
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
@@ -37,7 +40,16 @@ export default class PrisonerSearchService {
       displayName: convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`),
       friendlyName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       displayCellLocation: prisoner.cellLocation?.replace('CSWAP', 'No cell allocated') || 'None',
+      startHref: this.getPrisonerStartHref(prisoner),
     }
+  }
+
+  private static getPrisonerStartHref(prisoner: PrisonerSearchResult) {
+    const prisonerGender = prisoner.gender.toUpperCase()
+    if (prisonerGender === PrisonerGender.FEMALE || prisonerGender === PrisonerGender.MALE) {
+      return adjudicationUrls.incidentDetails.urls.start(prisoner.prisonerNumber)
+    }
+    return adjudicationUrls.selectGender.url.start(prisoner.prisonerNumber)
   }
 
   async search(search: PrisonerSearch, user: User): Promise<PrisonerSearchSummary[]> {
@@ -50,7 +62,6 @@ export default class PrisonerSearchService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
 
     const results = await new PrisonerSearchClient(token).search(searchRequest)
-
     const enhancedResults = results.map(prisoner => {
       return {
         ...prisoner,

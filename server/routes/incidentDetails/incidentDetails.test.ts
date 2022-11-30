@@ -61,6 +61,8 @@ beforeEach(() => {
   })
   placeOnReportService.getReporterName.mockResolvedValue('Test User')
   locationService.getIncidentLocations.mockResolvedValue([])
+  placeOnReportService.getPrisonerGenderFromSession.mockResolvedValue('MALE')
+  placeOnReportService.getAndDeletePrisonerGenderFromSession.mockResolvedValue('MALE')
 })
 
 afterEach(() => {
@@ -168,6 +170,8 @@ describe('POST /incident-details', () => {
       })
       .expect(() => {
         expect(placeOnReportService.getPrisonerDetails).toBeCalledTimes(0)
+        expect(placeOnReportService.getPrisonerGenderFromSession).toBeCalledTimes(1)
+        expect(placeOnReportService.getAndDeletePrisonerGenderFromSession).toBeCalledTimes(1)
         expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
           '2021-10-27T13:30',
           2,
