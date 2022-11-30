@@ -17,7 +17,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, locationService },
-    { originalRadioSelection: 'incited' }
+    { originalRadioSelection: 'incited', G6415GD: { gender: 'MALE' } }
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue({
     offenderNo: 'G6415GD',
@@ -36,6 +36,9 @@ beforeEach(() => {
     displayName: 'Aidetria, Udfsanaye',
     prisonerNumber: 'G6415GD',
     currentLocation: 'Moorland (HMP & YOI)',
+    physicalAttributes: {
+      gender: 'Male',
+    },
   })
 
   placeOnReportService.startNewDraftAdjudication.mockResolvedValue({
@@ -43,6 +46,7 @@ beforeEach(() => {
       id: 1,
       prisonerNumber: 'G6415GD',
       startedByUserId: 'TEST_GEN',
+      gender: 'MALE',
       incidentDetails: {
         locationId: 2,
         discoveryRadioSelected: 'Yes',
@@ -57,6 +61,8 @@ beforeEach(() => {
   })
   placeOnReportService.getReporterName.mockResolvedValue('Test User')
   locationService.getIncidentLocations.mockResolvedValue([])
+  placeOnReportService.getPrisonerGenderFromSession.mockResolvedValue('MALE')
+  placeOnReportService.getAndDeletePrisonerGenderFromSession.mockResolvedValue('MALE')
 })
 
 afterEach(() => {
@@ -138,6 +144,7 @@ describe('POST /incident-details', () => {
           2,
           'G6415GD',
           expect.anything(),
+          'MALE',
           '2021-10-26T13:30'
         )
       })
@@ -148,6 +155,31 @@ describe('POST /incident-details', () => {
       .get(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
       .expect(res => {
         expect(res.text).toContain('Date of discovery')
+      })
+  })
+  it('should not call getPrisonerDetails to get the prisoner gender if it is stored on the session', () => {
+    return request(app)
+      .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
+      .send({
+        incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
+        locationId: 2,
+        currentRadioSelected: 'incited',
+        incitedInput: 'G2678PF',
+        discoveryRadioSelected: 'Yes',
+      })
+      .expect(() => {
+        expect(placeOnReportService.getPrisonerDetails).toBeCalledTimes(0)
+        expect(placeOnReportService.getPrisonerGenderFromSession).toBeCalledTimes(1)
+        expect(placeOnReportService.getAndDeletePrisonerGenderFromSession).toBeCalledTimes(1)
+        expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
+          '2021-10-27T13:30',
+          2,
+          'G6415GD',
+          expect.anything(),
+          'MALE',
+          '2021-10-27T13:30'
+        )
       })
   })
 })

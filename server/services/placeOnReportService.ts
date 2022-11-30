@@ -1,5 +1,5 @@
 import { Readable } from 'stream'
-
+import { Request } from 'express'
 import {
   convertDateTimeStringToSubmittedDateTime,
   convertToTitleCase,
@@ -96,6 +96,7 @@ export default class PlaceOnReportService {
     locationId: number,
     prisonerNumber: string,
     user: User,
+    gender: string,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
@@ -105,6 +106,7 @@ export default class PlaceOnReportService {
       locationId,
       prisonerNumber,
       dateTimeOfDiscovery,
+      gender,
     }
     return client.startNewDraftAdjudication(requestBody)
   }
@@ -230,7 +232,6 @@ export default class PlaceOnReportService {
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
-      // TODO - Make this optional in API!
       removeExistingOffences: false,
       dateTimeOfDiscovery,
     }
@@ -422,5 +423,27 @@ export default class PlaceOnReportService {
   async saveWitnessDetails(adjudicationNumber: number, witnessDetails: WitnessDetails[], user: User) {
     const client = new ManageAdjudicationsClient(user.token)
     return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
+  }
+
+  async amendPrisonerGender(id: number, chosenGender: string, user: User) {
+    const genderData = {
+      gender: chosenGender,
+    }
+    const client = new ManageAdjudicationsClient(user.token)
+    return client.amendGender(id, genderData)
+  }
+
+  setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {
+    req.session[prisonerNumber] = { gender: genderSelected }
+  }
+
+  getPrisonerGenderFromSession(req: Request) {
+    return req.session[req.params.prisonerNumber]?.gender
+  }
+
+  getAndDeletePrisonerGenderFromSession(req: Request) {
+    const chosenGender = this.getPrisonerGenderFromSession(req)
+    delete req.session[req.params.prisonerNumber]?.gender
+    return chosenGender
   }
 }

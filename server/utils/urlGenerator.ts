@@ -133,6 +133,18 @@ const adjudicationUrls = {
         `${adjudicationUrls.incidentDetails.root}/${prisonerNumber}/${id}/submitted/edit`,
     },
   },
+  selectGender: {
+    root: '/select-gender',
+    matchers: {
+      start: '/:prisonerNumber',
+      edit: '/:prisonerNumber/:draftId/edit',
+    },
+    url: {
+      start: (prisonerNumber: string) => `${adjudicationUrls.selectGender.root}/${prisonerNumber}`,
+      edit: (prisonerNumber: string, draftId: number) =>
+        `${adjudicationUrls.selectGender.root}/${prisonerNumber}/${draftId}/edit`,
+    },
+  },
   incidentRole: {
     root: '/incident-role',
     matchers: {

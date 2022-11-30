@@ -27,6 +27,7 @@ beforeEach(() => {
     offenderNo: 'G6415GD',
     firstName: 'JASON',
     lastName: 'SURCHET',
+    physicalAttributes: undefined,
     assignedLivingUnit: {
       agencyId: 'MDI',
       locationId: 25573,

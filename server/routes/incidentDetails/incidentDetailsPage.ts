@@ -51,7 +51,6 @@ type ExitButtonData = {
 }
 
 type RequestValues = {
-  // This PRN/DraftID stuff is duplicated a lot - extract?
   prisonerNumber: string
   draftId?: number
   originalPageReferrerUrl?: string
@@ -66,6 +65,10 @@ type IncidentDetails = {
 
 type ApiIncidentDetails = IncidentDetails & {
   reporterUsername: string
+}
+
+type IncidentDetailsAndGender = IncidentDetails & {
+  gender: string
 }
 
 export enum PageRequestType {
@@ -131,16 +134,14 @@ export default class IncidentDetailsPage {
       discoveryRadioSelected: postValues.incidentDetails?.discoveryRadioSelected,
     })
     if (validationError) {
-      // Could stash to session and redirect here
       const pageData = await this.getPageDataOnPost(postValues, user)
       return renderData(res, pageData, validationError)
     }
 
-    const incidentDetailsToSave = postValues.incidentDetails
-
     try {
       if (this.pageOptions.isEdit()) {
-        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, user as User)
+        const incidentDetailsToUpdate = postValues.incidentDetails
+        await this.saveToApiUpdate(postValues.draftId, incidentDetailsToUpdate, user as User)
         const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(
           postValues.draftId,
           user
@@ -151,7 +152,10 @@ export default class IncidentDetailsPage {
         )
         return res.redirect(nextPageUrl)
       }
-      const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToSave, user as User)
+
+      const prisonerGender = await this.getPrisonerGender(req, postValues.prisonerNumber, user)
+      const incidentDetailsToCreate = { ...postValues.incidentDetails, gender: prisonerGender }
+      const newDraftData = await this.saveToApiNew(postValues.prisonerNumber, incidentDetailsToCreate, user as User)
       return redirectToApplicableRule(res, newDraftData.draftAdjudication.id)
     } catch (postError) {
       if (this.pageOptions.isEdit()) {
@@ -163,13 +167,21 @@ export default class IncidentDetailsPage {
     }
   }
 
+  getPrisonerGender = async (req: Request, prisonerNumber: string, user: User): Promise<string> => {
+    if (this.placeOnReportService.getPrisonerGenderFromSession(req)) {
+      return this.placeOnReportService.getAndDeletePrisonerGenderFromSession(req)
+    }
+    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    return prisoner.physicalAttributes.gender.toUpperCase()
+  }
+
   readFromApi = async (draftId: number, user: User): Promise<ApiIncidentDetails> => {
     return extractIncidentDetails(await this.placeOnReportService.getDraftIncidentDetailsForEditing(draftId, user))
   }
 
   saveToApiNew = async (
     prisonerNumber: string,
-    data: IncidentDetails,
+    data: IncidentDetailsAndGender,
     currentUser: User
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
@@ -178,6 +190,7 @@ export default class IncidentDetailsPage {
       data.locationId,
       prisonerNumber,
       currentUser,
+      data.gender,
       formatDate(data.discoveryDate)
     )
   }

@@ -1,0 +1,78 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageTitle %}
+  Select gender
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+        idPrefix: 'genderSelected',
+        id: 'genderSelected',
+        name: 'genderSelected',
+        value: genderSelected,
+        hint: {
+          text: hintText,
+          attributes: {
+            "data-qa": "select-gender-hint"
+          }
+        },
+        attributes: { "data-qa": "select-gender-radio-buttons" },
+        errorMessage: "genderSelected" | findError(errors),
+        fieldset: {
+          legend: {
+            text: "What is the gender of the prisoner?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        items: [
+          {
+            value: "FEMALE",
+            text: "Female",
+            checked: genderSelected === "FEMALE"
+          },
+          {
+            value: "MALE",
+            text: "Male",
+            checked: genderSelected === "MALE"
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: 'Save and continue',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "select-gender-submit" }
+      }) }}
+      {{ govukButton({
+        text: 'Cancel',
+        element: "a",
+        href: cancelButtonHref,
+        classes: "govuk-button--secondary",
+        attributes: { "data-qa": "select-gender-cancel" }
+      }) }}
+    </form>
+  </div>
+{% endblock %}

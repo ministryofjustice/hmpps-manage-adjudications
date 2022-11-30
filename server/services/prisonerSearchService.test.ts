@@ -55,6 +55,7 @@ describe('prisonerSearchService', () => {
           prisonName: 'HMP Moorland',
           prisonerNumber: 'A1234AA',
           cellLocation: '1-2-015',
+          gender: 'Male',
         },
         {
           firstName: 'STEVE',
@@ -62,6 +63,7 @@ describe('prisonerSearchService', () => {
           prisonName: 'HMP Moorland',
           prisonerNumber: 'A1234AB',
           cellLocation: '1-2-016',
+          gender: 'Unknown',
         },
       ])
       const results = await service.search({ searchTerm: 'a1234aA', prisonIds }, user)
@@ -75,6 +77,8 @@ describe('prisonerSearchService', () => {
           lastName: 'JONES',
           prisonName: 'HMP Moorland',
           prisonerNumber: 'A1234AB',
+          gender: 'Unknown',
+          startHref: '/select-gender/A1234AB',
         },
         {
           cellLocation: '1-2-015',
@@ -85,6 +89,8 @@ describe('prisonerSearchService', () => {
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
+          startHref: '/incident-details/A1234AA',
         } as PrisonerSearchSummary,
       ])
       expect(PrisonerSearchClient).toBeCalledWith(token)
@@ -99,6 +105,7 @@ describe('prisonerSearchService', () => {
           prisonName: 'HMP Moorland',
           prisonerNumber: 'A1234AA',
           cellLocation: '1-2-015',
+          gender: 'Male',
         },
       ])
       const results = await service.search({ searchTerm: 'Smith, John', prisonIds }, user)
@@ -112,6 +119,8 @@ describe('prisonerSearchService', () => {
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
+          startHref: '/incident-details/A1234AA',
         } as PrisonerSearchSummary,
       ])
       expect(PrisonerSearchClient).toBeCalledWith(token)

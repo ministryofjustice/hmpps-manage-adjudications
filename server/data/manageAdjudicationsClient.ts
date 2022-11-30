@@ -252,4 +252,11 @@ export default class ManageAdjudicationsClient {
       path: `/reported-adjudications/hearings/agency/${agencyId}?hearingDate=${chosenHearingDate}`,
     })
   }
+
+  async amendGender(id: number, chosenGender: { gender: string }): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/draft-adjudications/${id}/gender`,
+      data: { ...chosenGender },
+    })
+  }
 }

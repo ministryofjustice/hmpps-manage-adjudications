@@ -16,6 +16,7 @@ beforeEach(() => {
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
+    physicalAttributes: undefined,
     dateOfBirth: undefined,
     assignedLivingUnit: {
       agencyId: 'MDI',

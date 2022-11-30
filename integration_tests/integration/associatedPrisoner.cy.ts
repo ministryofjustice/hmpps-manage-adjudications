@@ -67,6 +67,7 @@ context('Incident assist', () => {
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
         },
       ],
     })
