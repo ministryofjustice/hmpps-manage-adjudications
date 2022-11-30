@@ -27,6 +27,26 @@ context('Incident details', () => {
     cy.task('stubStartNewDraftAdjudication', {
       draftAdjudication: {
         id: 3456,
+        gender: 'MALE',
+        incidentDetails: {
+          dateTimeOfIncident: '2021-11-03T11:09:42',
+          dateTimeOfDiscovery: '2021-11-03T11:09:42',
+          handoverDeadline: '2021-11-05T11:09:42',
+          locationId: 234,
+        },
+        incidentStatement: {},
+        prisonerNumber: 'G6415GD',
+        incidentRole: {
+          associatedPrisonersNumber: 'T3356FU',
+          roleCode: '25b',
+        },
+      },
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 3456,
+      draftAdjudication: {
+        id: 3456,
+        gender: 'MALE',
         incidentDetails: {
           dateTimeOfIncident: '2021-11-03T11:09:42',
           dateTimeOfDiscovery: '2021-11-03T11:09:42',
@@ -82,6 +102,7 @@ context('Incident details', () => {
         offenderNo: 'T3356FU',
         firstName: 'JAMES',
         lastName: 'JONES',
+        physicalAttributes: { gender: 'Male' },
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
@@ -91,6 +112,7 @@ context('Incident details', () => {
         offenderNo: 'A5155DY',
         firstName: 'TOBY',
         lastName: 'PERCROSS',
+        physicalAttributes: { gender: 'Male' },
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
@@ -107,6 +129,7 @@ context('Incident details', () => {
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
         },
       ],
     })
@@ -123,6 +146,7 @@ context('Incident details', () => {
           lastName: 'PERCROSS',
           prisonerNumber: 'A5155DY',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
         },
       ],
     })

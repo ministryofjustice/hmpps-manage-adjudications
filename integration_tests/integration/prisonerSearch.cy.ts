@@ -43,6 +43,7 @@ context('Prisoner Search', () => {
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
         },
       ],
     })
@@ -69,6 +70,7 @@ context('Prisoner Search', () => {
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
         },
       ],
     })
@@ -79,5 +81,46 @@ context('Prisoner Search', () => {
     prisonerSearchPage.submitButton().click()
     prisonerSearchPage.errorSummary().should('not.exist')
     prisonerSearchPage.resultsRows().should('have.length', 1)
+  })
+
+  it('should have the correct href for the start a report link', () => {
+    cy.task('stubSearch', {
+      query: {
+        includeAliases: false,
+        lastName: 'Smith',
+        prisonIds: ['MDI'],
+      },
+      results: [
+        {
+          cellLocation: '1-2-015',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          prisonerNumber: 'A1234AA',
+          prisonName: 'HMP Moorland',
+          gender: 'Unknown',
+        },
+        {
+          cellLocation: '1-2-015',
+          firstName: 'JAMES',
+          lastName: 'SMITH',
+          prisonerNumber: 'A1234AB',
+          prisonName: 'HMP Moorland',
+          gender: 'Male',
+        },
+      ],
+    })
+
+    cy.visit(adjudicationUrls.searchForPrisoner.root)
+    const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
+    prisonerSearchPage.searchTermInput().type('Smith')
+    prisonerSearchPage.submitButton().click()
+    prisonerSearchPage.errorSummary().should('not.exist')
+    prisonerSearchPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(5).innerHTML).to.contain('/incident-details/A1234AB')
+        expect($data.get(11).innerHTML).to.contain('/select-gender/A1234AA')
+      })
   })
 })

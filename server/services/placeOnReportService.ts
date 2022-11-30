@@ -232,7 +232,6 @@ export default class PlaceOnReportService {
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
-      // TODO - Make this optional in API!
       removeExistingOffences: false,
       dateTimeOfDiscovery,
     }
@@ -439,12 +438,12 @@ export default class PlaceOnReportService {
   }
 
   getPrisonerGenderFromSession(req: Request) {
-    return req.session[req.params.prisonerNumber].gender
+    return req.session[req.params.prisonerNumber]?.gender
   }
 
   getAndDeletePrisonerGenderFromSession(req: Request) {
     const chosenGender = this.getPrisonerGenderFromSession(req)
-    delete req.session[req.params.prisonerNumber].gender
+    delete req.session[req.params.prisonerNumber]?.gender
     return chosenGender
   }
 }

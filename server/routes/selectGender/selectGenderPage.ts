@@ -99,6 +99,6 @@ const validateForm = ({ genderSelected }: SelectGenderFormForm): FormError | nul
 }
 
 const getCancelHref = (pageOptions: PageOptions, draftId: number) => {
-  if (pageOptions.isEdit()) return adjudicationUrls.checkYourAnswers.urls.report(draftId)
+  if (pageOptions.isEdit()) return adjudicationUrls.checkYourAnswers.urls.start(draftId)
   return adjudicationUrls.homepage.root
 }

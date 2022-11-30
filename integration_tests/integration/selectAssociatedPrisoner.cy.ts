@@ -19,9 +19,10 @@ context('Select an associated prisoner', () => {
           {
             cellLocation: '1-2-015',
             firstName: 'JAMES',
-            lastName: 'Smith',
+            lastName: 'SMITH',
             prisonerNumber: 'T3356FU',
             prisonName: 'HMP Moorland',
+            gender: 'Male',
           },
         ],
       })
@@ -72,6 +73,7 @@ context('Select an associated prisoner', () => {
             lastName: 'Jones',
             prisonerNumber: 'G6123UP',
             prisonName: 'HMP Moorland',
+            gender: 'Male',
           },
           {
             cellLocation: '1-2-017',
@@ -79,6 +81,7 @@ context('Select an associated prisoner', () => {
             lastName: 'Jones',
             prisonerNumber: 'F7123VB',
             prisonName: 'HMP Moorland',
+            gender: 'Male',
           },
         ],
       })

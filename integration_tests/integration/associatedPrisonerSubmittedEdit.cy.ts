@@ -35,6 +35,7 @@ context('Incident assist submitted edit', () => {
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
           prisonName: 'HMP Moorland',
+          gender: 'Male',
         },
       ],
     })

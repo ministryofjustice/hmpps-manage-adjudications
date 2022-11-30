@@ -33,7 +33,10 @@
 			name: 'genderSelected',
             value: genderSelected,
             hint: {
-                text: hintText
+                text: hintText,
+                attributes: {
+                    "data-qa": "select-gender-hint"
+                }
             },
 			attributes: { "data-qa": "select-gender-radio-buttons" },
 			errorMessage: "genderSelected" | findError(errors),

@@ -501,6 +501,21 @@ const stubGetHearingsGivenAgencyAndDate = ({
   })
 }
 
+const stubAmendPrisonerGender = ({ draftId, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/draft-adjudications/${draftId}/gender`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -527,4 +542,5 @@ export default {
   stubScheduleHearing,
   stubAmendHearing,
   stubGetHearingsGivenAgencyAndDate,
+  stubAmendPrisonerGender,
 }

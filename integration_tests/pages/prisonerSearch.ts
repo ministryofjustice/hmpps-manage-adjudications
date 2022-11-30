@@ -14,4 +14,6 @@ export default class PrisonerSearch extends Page {
   resultsTable = (): PageElement => cy.get('[data-qa="prisoner-search-results-table"]')
 
   resultsRows = (): PageElement => this.resultsTable().get('tbody tr')
+
+  startReportLinks = (): PageElement => cy.get('[data-qa="start-report-link"]')
 }
