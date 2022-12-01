@@ -7,6 +7,7 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../data/DraftAdjudicationResult'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -219,6 +220,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            gender: PrisonerGender.MALE,
             createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
@@ -301,6 +303,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            gender: PrisonerGender.MALE,
             createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
@@ -571,6 +574,7 @@ describe('reportedAdjudicationsService', () => {
           statusReason,
           statusDetails,
           prisonerNumber: '',
+          gender: PrisonerGender.MALE,
           bookingId: 1,
           createdDateTime: '',
           createdByUserId: '',

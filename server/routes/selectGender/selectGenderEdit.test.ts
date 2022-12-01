@@ -3,6 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -16,7 +17,7 @@ beforeEach(() => {
     draftAdjudication: {
       id: 4490,
       prisonerNumber: 'A7937DY',
-      gender: 'MALE',
+      gender: PrisonerGender.MALE,
       incidentDetails: undefined,
       offenceDetails: [],
       startedByUserId: undefined,

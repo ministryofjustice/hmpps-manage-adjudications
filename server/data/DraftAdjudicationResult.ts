@@ -47,7 +47,7 @@ export type DraftAdjudication = {
   damagesSaved?: boolean
   evidenceSaved?: boolean
   witnessesSaved?: boolean
-  gender?: string
+  gender?: PrisonerGender
 }
 
 export type DraftAdjudicationResult = {

@@ -14,6 +14,7 @@ import {
   EvidenceDetails,
   WitnessDetails,
   HearingDetails,
+  PrisonerGender,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -30,6 +31,7 @@ import { momentDateToApi } from '../utils/utils'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
+  gender: PrisonerGender
 }
 
 export default class ManageAdjudicationsClient {
@@ -142,9 +144,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getOffenceRule(offenceCode: number, isYouthOffender: boolean): Promise<OffenceRule> {
+  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, gender: PrisonerGender): Promise<OffenceRule> {
     return this.restClient.get({
-      path: `/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}`,
+      path: `/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}&gender=${gender}`,
     })
   }
 
@@ -253,7 +255,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async amendGender(id: number, chosenGender: { gender: string }): Promise<DraftAdjudicationResult> {
+  async amendGender(id: number, chosenGender: { gender: PrisonerGender }): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${id}/gender`,
       data: { ...chosenGender },

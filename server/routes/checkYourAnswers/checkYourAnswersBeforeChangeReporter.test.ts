@@ -6,6 +6,7 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -52,7 +53,7 @@ beforeEach(() => {
     draftAdjudication: {
       id: 1,
       adjudicationNumber: 123,
-      gender: 'MALE',
+      gender: PrisonerGender.MALE,
       prisonerNumber: 'G6415GD',
       incidentDetails: {
         locationId: 6,

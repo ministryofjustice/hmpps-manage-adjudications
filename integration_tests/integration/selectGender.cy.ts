@@ -2,6 +2,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import SelectGender from '../pages/selectGender'
 import PrisonerSearch from '../pages/prisonerSearch'
 import Page from '../pages/page'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const prisoner = {
   prisonerNumber: 'G6415GD',
@@ -77,7 +78,7 @@ context('Select gender edit', () => {
         draftAdjudication: {
           id: 3456,
           prisonerNumber: 'G6415GD',
-          gender: 'MALE',
+          gender: PrisonerGender.MALE,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:00',
             handoverDeadline: '2021-11-05T11:09:00',
@@ -93,7 +94,7 @@ context('Select gender edit', () => {
         draftAdjudication: {
           id: 3456,
           prisonerNumber: 'G6415GD',
-          gender: 'FEMALE',
+          gender: PrisonerGender.FEMALE,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:00',
             handoverDeadline: '2021-11-05T11:09:00',

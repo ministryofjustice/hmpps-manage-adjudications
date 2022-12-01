@@ -2,6 +2,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
 import { forceDateInputWithDate, forceDateInput } from '../componentDrivers/dateInput'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 context('Incident details (edit) - statement incomplete', () => {
   beforeEach(() => {
@@ -38,6 +39,7 @@ context('Incident details (edit) - statement incomplete', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -57,6 +59,7 @@ context('Incident details (edit) - statement incomplete', () => {
           },
           incidentStatement: {},
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER2',
           incidentRole: {
             roleCode: '25a',

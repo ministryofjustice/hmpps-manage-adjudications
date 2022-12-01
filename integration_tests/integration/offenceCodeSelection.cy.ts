@@ -3,6 +3,7 @@ import Page from '../pages/page'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const prisonerOutsideEstablishmentNumber = 'G7123CI'
 
@@ -28,6 +29,7 @@ context('Offence details', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: undefined,
@@ -52,6 +54,7 @@ context('Offence details', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: undefined,
@@ -76,6 +79,7 @@ context('Offence details', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -100,6 +104,7 @@ context('Offence details', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',

@@ -4,6 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../../../data/DraftAdjudicationResult'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 
@@ -29,6 +30,7 @@ describe('GET hearing details', () => {
       reportedAdjudication: {
         adjudicationNumber: 1524493,
         prisonerNumber: 'G6415GD',
+        gender: PrisonerGender.MALE,
         bookingId: 1,
         createdDateTime: undefined,
         createdByUserId: undefined,
@@ -64,6 +66,7 @@ describe('GET hearing details', () => {
       reportedAdjudication: {
         adjudicationNumber: 1524494,
         prisonerNumber: 'G6415GD',
+        gender: PrisonerGender.MALE,
         bookingId: 1,
         createdDateTime: undefined,
         createdByUserId: undefined,

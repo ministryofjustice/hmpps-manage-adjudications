@@ -53,6 +53,7 @@ export default class DetailsOfOffencePage {
     }
     const isYouthOffender = draftAdjudication.isYouthOffender || false
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
+    const { gender } = draftAdjudication
     const offences = await Promise.all(
       allOffences.map(async offenceData => {
         const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
@@ -67,7 +68,7 @@ export default class DetailsOfOffencePage {
         return {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole?.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, user),
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, gender, user),
           isYouthOffender,
         }
       })
