@@ -48,12 +48,7 @@ export default class SelectGenderPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId) || null
-    const { prisonerNumber } = req.params
     const { user } = res.locals
-
-    // If the prisoner already has a gender assigned on their profile, the user should not be able to access this page
-    const prisonerGenderOnProfile = isPrisonerGenderKnown(await this.getPrisonerProfileGender(prisonerNumber, user))
-    if (prisonerGenderOnProfile) return res.redirect(adjudicationUrls.homepage.root)
 
     let readApiGender: string = null
     if (this.pageOptions.isEdit()) {

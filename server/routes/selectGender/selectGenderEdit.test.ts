@@ -67,36 +67,6 @@ describe('GET /select-gender edit', () => {
   })
 })
 
-describe('GET /select-gender edit when gender is already set on the prisoner profile', () => {
-  beforeEach(() => {
-    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce({
-      offenderNo: 'F7234VO',
-      firstName: 'UDFSANAYE',
-      lastName: 'AIDETRIA',
-      physicalAttributes: { gender: 'Male' },
-      dateOfBirth: undefined,
-      assignedLivingUnit: {
-        agencyId: 'MDI',
-        locationId: 25928,
-        description: '4-2-001',
-        agencyName: 'Moorland (HMP & YOI)',
-      },
-      categoryCode: undefined,
-      language: 'English',
-      friendlyName: 'Udfsanaye Aidetria',
-      displayName: 'Aidetria, Udfsanaye',
-      prisonerNumber: 'F7234VO',
-      currentLocation: 'Moorland (HMP & YOI)',
-    })
-  })
-  it('should redirect to the homepage if the prisoner already has a gender set on their profile', () => {
-    return request(app)
-      .get(adjudicationUrls.selectGender.url.edit('F7234VO', 4490))
-      .expect(302)
-      .expect('Location', adjudicationUrls.homepage.root)
-  })
-})
-
 describe('POST /select-gender edit', () => {
   it('should redirect to the role page if the form is complete', () => {
     return request(app)

@@ -7,6 +7,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import { properCase } from '../../utils/utils'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -122,7 +123,7 @@ beforeEach(() => {
     data: [
       {
         label: 'What is the gender of the prisoner?',
-        value: PrisonerGender.FEMALE,
+        value: properCase(PrisonerGender.FEMALE),
       },
     ],
     changeLinkHref: adjudicationUrls.selectGender.url.edit('A8383DY', 100),
@@ -181,12 +182,12 @@ describe('GET /check-your-answers for youth offender', () => {
       })
   })
 
-  it('should load the check-your-answers page with PrisonerGender.FEMALE gender', () => {
+  it('should load the check-your-answers page with female gender', () => {
     return request(app)
       .get(adjudicationUrls.checkYourAnswers.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain(PrisonerGender.FEMALE)
+        expect(response.text).toContain('Female')
         expect(response.text).not.toContain('Male')
       })
   })
