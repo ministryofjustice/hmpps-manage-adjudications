@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfDamages from '../pages/detailsOfDamages'
-import { DamageCode, DamageDetails } from '../../server/data/DraftAdjudicationResult'
+import { DamageCode, DamageDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const damagesList = [
   {
@@ -79,6 +79,7 @@ const reportedAdjudication = (adjudicationNumber: number, damages: DamageDetails
         locationId: 27029,
       },
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.MALE,
       startedByUserId: 'USER1',
       incidentRole: {
         associatedPrisonersNumber: undefined,

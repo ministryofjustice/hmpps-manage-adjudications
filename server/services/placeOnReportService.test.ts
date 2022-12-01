@@ -2,7 +2,7 @@ import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
-import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, PrisonerGender, WitnessCode } from '../data/DraftAdjudicationResult'
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
@@ -71,7 +71,7 @@ describe('placeOnReportService', () => {
         draftAdjudication: {
           adjudicationNumber: 4567123,
           id: 1,
-          gender: 'MALE',
+          gender: PrisonerGender.MALE,
           prisonerNumber: 'G2996UX',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -91,7 +91,7 @@ describe('placeOnReportService', () => {
         3,
         'G2996UX',
         user,
-        'MALE',
+        PrisonerGender.MALE,
         '2021-10-29T15:40:25.884'
       )
       expect(startNewDraftAdjudication).toBeCalledWith({
@@ -100,14 +100,14 @@ describe('placeOnReportService', () => {
         locationId: 3,
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
-        gender: 'MALE',
+        gender: PrisonerGender.MALE,
       })
       expect(result).toEqual({
         draftAdjudication: {
           id: 1,
           adjudicationNumber: 4567123,
           prisonerNumber: 'G2996UX',
-          gender: 'MALE',
+          gender: PrisonerGender.MALE,
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25b',

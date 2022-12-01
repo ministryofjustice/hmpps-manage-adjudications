@@ -27,6 +27,7 @@ import {
   EvidenceDetails,
   WitnessDetails,
   AdjudicationSectionStatus,
+  PrisonerGender,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -96,7 +97,7 @@ export default class PlaceOnReportService {
     locationId: number,
     prisonerNumber: string,
     user: User,
-    gender: string,
+    gender: PrisonerGender,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
@@ -395,9 +396,9 @@ export default class PlaceOnReportService {
     return prisonerDetails.prisonerNumber
   }
 
-  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, user: User) {
+  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, gender: PrisonerGender, user: User) {
     const client = new ManageAdjudicationsClient(user.token)
-    return client.getOffenceRule(offenceCode, isYouthOffender)
+    return client.getOffenceRule(offenceCode, isYouthOffender, gender)
   }
 
   async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[], user: User) {
@@ -425,7 +426,7 @@ export default class PlaceOnReportService {
     return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
   }
 
-  async amendPrisonerGender(id: number, chosenGender: string, user: User) {
+  async amendPrisonerGender(id: number, chosenGender: PrisonerGender, user: User) {
     const genderData = {
       gender: chosenGender,
     }

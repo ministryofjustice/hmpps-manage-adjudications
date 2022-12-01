@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -46,7 +47,7 @@ beforeEach(() => {
       id: 1,
       prisonerNumber: 'G6415GD',
       startedByUserId: 'TEST_GEN',
-      gender: 'MALE',
+      gender: PrisonerGender.MALE,
       incidentDetails: {
         locationId: 2,
         discoveryRadioSelected: 'Yes',

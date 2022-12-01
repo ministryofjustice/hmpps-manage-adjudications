@@ -2,7 +2,7 @@ import { SuperAgentRequest } from 'superagent'
 import moment from 'moment'
 import { stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
-import { OffenceDetails } from '../../server/data/DraftAdjudicationResult'
+import { OffenceDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import { allStatuses, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
@@ -275,16 +275,18 @@ const stubCreateDraftFromCompleteAdjudication = ({
 const stubGetOffenceRule = ({
   offenceCode,
   isYouthOffender = false,
+  gender = PrisonerGender.MALE,
   response = {},
 }: {
   offenceCode: number
   isYouthOffender: boolean
+  gender: PrisonerGender
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}`,
+      url: `/adjudications/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}&gender=${gender}`,
     },
     response: {
       status: 200,

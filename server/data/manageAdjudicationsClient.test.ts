@@ -3,7 +3,7 @@ import moment from 'moment'
 import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
 import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
-import { DamageCode, EvidenceCode } from './DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, PrisonerGender } from './DraftAdjudicationResult'
 
 jest.mock('../../logger')
 
@@ -28,6 +28,7 @@ describe('manageAdjudicationsClient', () => {
         draftAdjudication: {
           id: 1,
           prisonerNumber: 'G2996UX',
+          gender: PrisonerGender.MALE,
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -47,6 +48,7 @@ describe('manageAdjudicationsClient', () => {
           associatedPrisonersNumber: 'B2345BB',
         },
         prisonerNumber: 'G2996UX',
+        gender: PrisonerGender.MALE,
       }
 
       fakeManageAdjudicationsApi
@@ -105,6 +107,7 @@ describe('manageAdjudicationsClient', () => {
         reportedAdjudication: {
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
+          gender: PrisonerGender.MALE,
           bookingId: 123,
           incidentDetails: {
             locationId: 2,
@@ -171,6 +174,7 @@ describe('manageAdjudicationsClient', () => {
       reportedAdjudication: {
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
+        gender: PrisonerGender.MALE,
         incidentDetails: {},
         incidentRole: {},
         incidentStatement: {},
@@ -192,6 +196,7 @@ describe('manageAdjudicationsClient', () => {
       reportedAdjudication: {
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
+        gender: PrisonerGender.MALE,
         incidentDetails: {},
         incidentRole: {},
         incidentStatement: {},
@@ -468,10 +473,10 @@ describe('manageAdjudicationsClient', () => {
 
     it('returns the relevant rules', async () => {
       fakeManageAdjudicationsApi
-        .get(`/draft-adjudications/offence-rule/1234?youthOffender=true`)
+        .get(`/draft-adjudications/offence-rule/1234?youthOffender=true&gender=MALE`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, result)
-      const response = await client.getOffenceRule(1234, true)
+      const response = await client.getOffenceRule(1234, true, PrisonerGender.MALE)
       expect(response).toEqual(result)
     })
   })
