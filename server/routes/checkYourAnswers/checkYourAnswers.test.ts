@@ -6,6 +6,7 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -22,6 +23,7 @@ beforeEach(() => {
     draftAdjudication: {
       id: 100,
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.FEMALE,
       incidentDetails: {
         locationId: 197682,
         dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -46,7 +48,7 @@ beforeEach(() => {
       offenderNo: 'A8383DY',
       firstName: 'PHYLLIS',
       lastName: 'SMITH',
-      physicalAttributes: undefined,
+      physicalAttributes: { gender: 'Unknown' },
       assignedLivingUnit: {
         agencyId: 'MDI',
         locationId: 4012,
@@ -116,6 +118,16 @@ beforeEach(() => {
 
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 
+  placeOnReportService.getGenderDataForTable.mockResolvedValue({
+    data: [
+      {
+        label: 'What is the gender of the prisoner?',
+        value: PrisonerGender.FEMALE,
+      },
+    ],
+    changeLinkHref: adjudicationUrls.selectGender.url.edit('A8383DY', 100),
+  })
+
   app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
 })
 
@@ -139,6 +151,7 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain('This offence broke')
         expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(response.text).toContain('Commits any assault')
+        expect(response.text).toContain('What is the gender of the prisoner?')
         expect(placeOnReportService.getCheckYourAnswersInfo).toHaveBeenCalledTimes(1)
       })
   })
@@ -165,6 +178,16 @@ describe('GET /check-your-answers for youth offender', () => {
       .expect(response => {
         expect(response.text).toContain('Prison rule 55')
         expect(response.text).not.toContain('Prison rule 51')
+      })
+  })
+
+  it('should load the check-your-answers page with PrisonerGender.FEMALE gender', () => {
+    return request(app)
+      .get(adjudicationUrls.checkYourAnswers.urls.start(100))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain(PrisonerGender.FEMALE)
+        expect(response.text).not.toContain('Male')
       })
   })
 })

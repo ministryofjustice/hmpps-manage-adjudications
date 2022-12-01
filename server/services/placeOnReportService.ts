@@ -7,6 +7,7 @@ import {
   getDate,
   getFormattedOfficerName,
   getTime,
+  properCase,
 } from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
@@ -31,6 +32,7 @@ import {
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 import adjudicationUrls from '../utils/urlGenerator'
+import { isPrisonerGenderKnown } from './prisonerSearchService'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -445,5 +447,27 @@ export default class PlaceOnReportService {
     const chosenGender = this.getPrisonerGenderFromSession(req)
     delete req.session[req.params.prisonerNumber]?.gender
     return chosenGender
+  }
+
+  async getGenderDataForTable(
+    draftCreationPath: boolean,
+    prisoner: PrisonerResultSummary,
+    draftAdjudication: DraftAdjudication
+  ) {
+    const isPrisonerGenderKnownOnProfile = isPrisonerGenderKnown(prisoner.physicalAttributes.gender)
+    if (!isPrisonerGenderKnownOnProfile && draftCreationPath) {
+      return {
+        data: [
+          {
+            label: 'What is the gender of the prisoner?',
+            value: properCase(draftAdjudication.gender),
+          },
+        ],
+        changeLinkHref: draftCreationPath
+          ? adjudicationUrls.selectGender.url.edit(prisoner.prisonerNumber, draftAdjudication.id)
+          : null,
+      }
+    }
+    return null
   }
 }

@@ -1,4 +1,4 @@
-import { DamageCode, EvidenceCode } from '../../server/data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
@@ -15,6 +15,7 @@ context('Check Your Answers', () => {
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
+        physicalAttributes: { gender: 'Unknown' },
         assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
       },
     })
@@ -90,6 +91,7 @@ context('Check Your Answers', () => {
           draftAdjudication: {
             id: 3456,
             prisonerNumber: 'G6415GD',
+            gender: PrisonerGender.MALE,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-03T11:09:42',
               dateTimeOfDiscovery: '2021-11-04T12:09:42',
@@ -144,6 +146,7 @@ context('Check Your Answers', () => {
         id: 3456,
         response: {
           adjudicationNumber: 234,
+          gender: PrisonerGender.MALE,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             dateTimeOfDiscovery: '2021-11-05:09:42',
@@ -164,6 +167,7 @@ context('Check Your Answers', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.start(3456))
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
+      checkYourAnswersPage.genderDetailsSummary().should('exist')
       checkYourAnswersPage.incidentDetailsSummary().should('exist')
       checkYourAnswersPage.offenceDetailsSummary().should('exist')
       checkYourAnswersPage.damageSummary().should('exist')
@@ -181,6 +185,27 @@ context('Check Your Answers', () => {
       checkYourAnswersPage.submitButton().contains('Accept and place on report')
       checkYourAnswersPage.exitButton().contains('Exit')
       checkYourAnswersPage.exitButton().should('exist')
+    })
+    it('should contain the correct gender, change link and go to the correct destination', () => {
+      cy.visit(`${adjudicationUrls.checkYourAnswers.urls.start(3456)}`)
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage
+        .genderDetailsSummary()
+        .find('dt')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('What is the gender of the prisoner?')
+        })
+      checkYourAnswersPage
+        .genderDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Male')
+          expect($summaryData.get(1).innerText).to.contain('Change')
+        })
+      cy.get('[data-qa="change-link"').click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.selectGender.url.edit('G6415GD', 3456))
+      })
     })
     it('should contain the correct incident details', () => {
       cy.visit(`${adjudicationUrls.checkYourAnswers.urls.start(3456)}`)
@@ -359,6 +384,7 @@ context('Check Your Answers', () => {
         response: {
           draftAdjudication: {
             id: 3456,
+            gender: PrisonerGender.MALE,
             prisonerNumber: 'G6415GD',
             incidentDetails: {
               dateTimeOfIncident: '2021-11-03T11:09:42',
@@ -399,6 +425,7 @@ context('Check Your Answers', () => {
         id: 3456,
         response: {
           adjudicationNumber: 234,
+          gender: PrisonerGender.MALE,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             dateTimeOfDiscovery: '2021-11-07T11:09:42',
@@ -429,6 +456,69 @@ context('Check Your Answers', () => {
             'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
           )
         })
+    })
+  })
+  context('Gender - already known on profile', () => {
+    beforeEach(() => {
+      cy.task('stubGetPrisonerDetails', {
+        prisonerNumber: 'H6415GD',
+        response: {
+          offenderNo: 'H6415GD',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          physicalAttributes: { gender: PrisonerGender.MALE },
+          assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+        },
+      })
+      cy.task('stubGetDraftAdjudication', {
+        id: 5678,
+        response: {
+          draftAdjudication: {
+            id: 5678,
+            gender: PrisonerGender.MALE,
+            prisonerNumber: 'H6415GD',
+            incidentDetails: {
+              dateTimeOfIncident: '2021-11-03T11:09:42',
+              dateTimeOfDiscovery: '2021-11-06T11:09:42',
+              handoverDeadline: '2021-11-05T11:09:42',
+              locationId: 234,
+            },
+            incidentStatement: {
+              id: 23,
+              statement: 'This is my statement',
+              completed: true,
+            },
+            startedByUserId: 'USER1',
+            isYouthOffender: false,
+            incidentRole: {
+              associatedPrisonersNumber: 'T3356FU',
+              roleCode: '25c',
+              offenceRule: {
+                paragraphNumber: '25(c)',
+                paragraphDescription:
+                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+              },
+            },
+            offenceDetails: [
+              {
+                offenceCode: 1001,
+                offenceRule: {
+                  paragraphNumber: '1',
+                  paragraphDescription: 'Commits any assault',
+                },
+                victimPrisonersNumber: 'G5512G',
+              },
+            ],
+          },
+        },
+      })
+      cy.signIn()
+    })
+
+    it('should not show the gender section if a gender is set on the prisoner profile', () => {
+      cy.visit(adjudicationUrls.checkYourAnswers.urls.start(5678))
+      const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
+      checkYourAnswersPage.genderDetailsSummary().should('not.exist')
     })
   })
 })

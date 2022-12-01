@@ -51,7 +51,7 @@ export default class SelectGenderPage {
     const { prisonerNumber } = req.params
     const { user } = res.locals
 
-    // if the prisoner already has a gender assigned on their profile, the user should not be able to access this page
+    // If the prisoner already has a gender assigned on their profile, the user should not be able to access this page
     const prisonerGenderOnProfile = isPrisonerGenderKnown(await this.getPrisonerProfileGender(prisonerNumber, user))
     if (prisonerGenderOnProfile) return res.redirect(adjudicationUrls.homepage.root)
 

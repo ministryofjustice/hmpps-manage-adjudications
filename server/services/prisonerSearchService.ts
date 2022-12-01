@@ -19,6 +19,7 @@ export interface PrisonerSearchSummary extends PrisonerSearchResult {
 export const isPrisonerIdentifier = (searchTerm: string): boolean => /\d/.test(searchTerm)
 
 export const isPrisonerGenderKnown = (prisonerGender: string): boolean => {
+  if (!prisonerGender) return false
   return prisonerGender === PrisonerGender.FEMALE || prisonerGender === PrisonerGender.MALE
 }
 
