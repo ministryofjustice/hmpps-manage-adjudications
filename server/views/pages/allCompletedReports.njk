@@ -29,19 +29,28 @@
   {% set rows = [] %}
   {% for completedReport in allCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-    <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
-    </a>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+      </a>
     {% endset -%}
+
+    {% set viewHearinglLinkHtml = "" %}
+
+    {% if completedReport.status ===  "SCHEDULED" %}
+      {% set viewHearinglLinkHtml %}
+        <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">View or edit hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+      {% endset -%}
+    {% endif %}
+
     {% set rows = (rows.push([
-      { text: completedReport.displayName },
-      { text: completedReport.prisonerNumber },
-      { text: completedReport.formattedDateTimeOfIncident,
+      { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
-        "data-sort-value": completedReport.dateTimeOfIncident
+        "data-sort-value": completedReport.dateTimeOfDiscovery
       }
       },
-      { text: completedReport.reportingOfficer },
+      { text: completedReport.displayName + " - " + completedReport.prisonerNumber },
       { text: completedReport.statusDisplayName },
+      { text: completedReport.formattedDateTimeOfScheduledHearing },
+      { html: viewHearinglLinkHtml },
       { html: viewCompletedReportlLinkHtml }
     ]), rows) %}
   {% endfor %}
@@ -50,15 +59,14 @@
     <div class="results-table">
       {{ govukTable({
       head: [
-        { html: 'Prisoner&#8217;s name' },
-        { text: "Prison number" },
-        { text: "Date and time of incident",
-          attributes: {
+        { text: "Discovery date and time",
+                  attributes: {
           "aria-sort": "descending"
         }
         },
-        { text: "Reporting officer" },
+        { html: "Name and prison number" },
         { text: "Status" },
+        { text: "Latest scheduled hearing" },
         { text: "" }
       ],
       rows: rows,

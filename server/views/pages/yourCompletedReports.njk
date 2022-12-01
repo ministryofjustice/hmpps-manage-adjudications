@@ -30,9 +30,9 @@
     {% set rows = (rows.push([
       { text: completedReport.displayName },
       { text: completedReport.prisonerNumber },
-      { text: completedReport.formattedDateTimeOfIncident,
+      { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
-        "data-sort-value": completedReport.dateTimeOfIncident
+        "data-sort-value": completedReport.dateTimeOfDiscovery
       }
       },
       { text: completedReport.statusDisplayName },

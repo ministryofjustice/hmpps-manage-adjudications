@@ -160,6 +160,7 @@ describe('reportedAdjudicationsService', () => {
         {
           displayName: 'Smith, John',
           formattedDateTimeOfIncident: '1 January 2021 - 11:45',
+          formattedDateTimeOfScheduledHearing: '',
           dateTimeOfIncident: '2021-01-01T11:45:00',
           friendlyName: 'John Smith',
           adjudicationNumber: 2,
@@ -181,6 +182,7 @@ describe('reportedAdjudicationsService', () => {
         {
           displayName: 'Moriarty, James',
           formattedDateTimeOfIncident: '1 January 2021 - 11:30',
+          formattedDateTimeOfScheduledHearing: '',
           dateTimeOfIncident: '2021-01-01T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
@@ -416,6 +418,7 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:10',
+          formattedDateTimeOfScheduledHearing: '',
           adjudicationNumber: 1524427,
           prisonerNumber: 'A5041DY',
           bookingId: 1200675,
@@ -449,6 +452,7 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:00',
+          formattedDateTimeOfScheduledHearing: '',
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
           statusDisplayName: 'Awaiting review',
         },
