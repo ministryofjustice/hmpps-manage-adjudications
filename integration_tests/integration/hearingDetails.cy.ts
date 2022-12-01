@@ -25,7 +25,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, status: string
     reportedAdjudication: {
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE.toString(),
+      gender: PrisonerGender.MALE,
       bookingId: 1,
       createdDateTime: undefined,
       createdByUserId: undefined,

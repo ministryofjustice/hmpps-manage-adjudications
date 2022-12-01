@@ -68,12 +68,7 @@ export default class DetailsOfOffencePage {
         return {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole?.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(
-            offenceCode,
-            isYouthOffender,
-            PrisonerGender[gender],
-            user
-          ),
+          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, gender, user),
           isYouthOffender,
         }
       })

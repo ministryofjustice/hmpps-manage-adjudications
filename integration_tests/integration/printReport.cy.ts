@@ -29,7 +29,7 @@ context('Print a copy of this report', () => {
         reportedAdjudication: {
           adjudicationNumber: 3,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           bookingId: 123,
           createdByUserId: 'AJONES',
           createdDateTime: '2020-12-06T10:00:00',

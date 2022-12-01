@@ -28,7 +28,7 @@ describe('manageAdjudicationsClient', () => {
         draftAdjudication: {
           id: 1,
           prisonerNumber: 'G2996UX',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           incidentDetails: {
             locationId: 2,
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -48,6 +48,7 @@ describe('manageAdjudicationsClient', () => {
           associatedPrisonersNumber: 'B2345BB',
         },
         prisonerNumber: 'G2996UX',
+        gender: PrisonerGender.MALE,
       }
 
       fakeManageAdjudicationsApi
@@ -106,7 +107,7 @@ describe('manageAdjudicationsClient', () => {
         reportedAdjudication: {
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           bookingId: 123,
           incidentDetails: {
             locationId: 2,
@@ -173,7 +174,7 @@ describe('manageAdjudicationsClient', () => {
       reportedAdjudication: {
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
-        gender: PrisonerGender.MALE.toString(),
+        gender: PrisonerGender.MALE,
         incidentDetails: {},
         incidentRole: {},
         incidentStatement: {},
@@ -195,7 +196,7 @@ describe('manageAdjudicationsClient', () => {
       reportedAdjudication: {
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
-        gender: PrisonerGender.MALE.toString(),
+        gender: PrisonerGender.MALE,
         incidentDetails: {},
         incidentRole: {},
         incidentStatement: {},

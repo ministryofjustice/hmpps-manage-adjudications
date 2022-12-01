@@ -31,6 +31,7 @@ import { momentDateToApi } from '../utils/utils'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
+  gender: PrisonerGender
 }
 
 export default class ManageAdjudicationsClient {
@@ -254,7 +255,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async amendGender(id: number, chosenGender: { gender: string }): Promise<DraftAdjudicationResult> {
+  async amendGender(id: number, chosenGender: { gender: PrisonerGender }): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${id}/gender`,
       data: { ...chosenGender },

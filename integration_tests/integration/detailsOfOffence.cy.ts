@@ -18,7 +18,7 @@ const adjudicationWithOffences = {
     statement: 'Statement here',
   },
   prisonerNumber: 'G6415GD',
-  gender: PrisonerGender.MALE.toString(),
+  gender: PrisonerGender.MALE,
   startedByUserId: 'USER1',
   incidentRole: {
     associatedPrisonersNumber: undefined,
@@ -49,7 +49,7 @@ const reportedAdjudicationWithOffences = {
     statement: 'Statement here',
   },
   prisonerNumber: 'G6415GD',
-  gender: PrisonerGender.MALE.toString(),
+  gender: PrisonerGender.MALE,
   startedByUserId: 'USER1',
   incidentRole: {
     associatedPrisonersNumber: undefined,
@@ -89,7 +89,7 @@ context('Details of offence', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -118,7 +118,7 @@ context('Details of offence', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
         },
       },

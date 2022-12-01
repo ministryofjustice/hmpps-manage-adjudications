@@ -3,6 +3,7 @@ import Page from '../pages/page'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -27,7 +28,7 @@ context('Incident details', () => {
     cy.task('stubStartNewDraftAdjudication', {
       draftAdjudication: {
         id: 3456,
-        gender: 'MALE',
+        gender: PrisonerGender.MALE,
         incidentDetails: {
           dateTimeOfIncident: '2021-11-03T11:09:42',
           dateTimeOfDiscovery: '2021-11-03T11:09:42',
@@ -46,7 +47,7 @@ context('Incident details', () => {
       id: 3456,
       draftAdjudication: {
         id: 3456,
-        gender: 'MALE',
+        gender: PrisonerGender.MALE,
         incidentDetails: {
           dateTimeOfIncident: '2021-11-03T11:09:42',
           dateTimeOfDiscovery: '2021-11-03T11:09:42',

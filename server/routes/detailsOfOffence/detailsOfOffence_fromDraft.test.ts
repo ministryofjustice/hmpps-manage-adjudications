@@ -103,7 +103,7 @@ const adjudicationWithOffences = {
     id: 100,
     adjudicationNumber: 1524493,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    gender: PrisonerGender.MALE.toString(),
+    gender: PrisonerGender.MALE,
     incidentDetails: {
       locationId: 197682,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -132,7 +132,7 @@ const adjudicationWithoutOffences = {
     id: 101,
     adjudicationNumber: 1524493,
     prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
-    gender: PrisonerGender.MALE.toString(),
+    gender: PrisonerGender.MALE,
     incidentDetails: {
       locationId: 197682,
       dateTimeOfIncident: '2021-12-09T10:30:00',

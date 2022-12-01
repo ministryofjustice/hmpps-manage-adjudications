@@ -220,7 +220,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            gender: PrisonerGender.MALE.toString(),
+            gender: PrisonerGender.MALE,
             createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
@@ -303,7 +303,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            gender: PrisonerGender.MALE.toString(),
+            gender: PrisonerGender.MALE,
             createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
@@ -574,7 +574,7 @@ describe('reportedAdjudicationsService', () => {
           statusReason,
           statusDetails,
           prisonerNumber: '',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           bookingId: 1,
           createdDateTime: '',
           createdByUserId: '',

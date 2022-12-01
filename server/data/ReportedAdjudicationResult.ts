@@ -8,6 +8,7 @@ import {
   IncidentRole,
   IncidentStatement,
   OffenceDetails,
+  PrisonerGender,
   WitnessDetails,
 } from './DraftAdjudicationResult'
 
@@ -30,7 +31,7 @@ export type ReportedAdjudication = {
   evidence?: EvidenceDetails[]
   witnesses?: WitnessDetails[]
   hearings?: HearingDetails[]
-  gender: string
+  gender: PrisonerGender
 }
 
 export type ReportedAdjudicationResult = {

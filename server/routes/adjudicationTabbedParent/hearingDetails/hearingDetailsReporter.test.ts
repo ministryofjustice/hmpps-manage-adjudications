@@ -30,7 +30,7 @@ describe('GET hearing details', () => {
       reportedAdjudication: {
         adjudicationNumber: 1524493,
         prisonerNumber: 'G6415GD',
-        gender: PrisonerGender.MALE.toString(),
+        gender: PrisonerGender.MALE,
         bookingId: 1,
         createdDateTime: undefined,
         createdByUserId: undefined,
@@ -66,7 +66,7 @@ describe('GET hearing details', () => {
       reportedAdjudication: {
         adjudicationNumber: 1524494,
         prisonerNumber: 'G6415GD',
-        gender: PrisonerGender.MALE.toString(),
+        gender: PrisonerGender.MALE,
         bookingId: 1,
         createdDateTime: undefined,
         createdByUserId: undefined,

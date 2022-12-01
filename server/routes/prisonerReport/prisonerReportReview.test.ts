@@ -34,7 +34,7 @@ beforeEach(() => {
     reportedAdjudication: {
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE.toString(),
+      gender: PrisonerGender.MALE,
       bookingId: 1,
       createdDateTime: undefined,
       createdByUserId: undefined,
@@ -59,7 +59,7 @@ beforeEach(() => {
       id: 12345,
       adjudicationNumber: 1524661,
       prisonerNumber: 'G5512GK',
-      gender: PrisonerGender.MALE.toString(),
+      gender: PrisonerGender.MALE,
       incidentDetails: {
         locationId: 1,
         dateTimeOfIncident: '2021-03-08T10:45:00',

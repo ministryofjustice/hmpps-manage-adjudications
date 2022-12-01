@@ -97,7 +97,7 @@ export default class PlaceOnReportService {
     locationId: number,
     prisonerNumber: string,
     user: User,
-    gender: string,
+    gender: PrisonerGender,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
@@ -426,7 +426,7 @@ export default class PlaceOnReportService {
     return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
   }
 
-  async amendPrisonerGender(id: number, chosenGender: string, user: User) {
+  async amendPrisonerGender(id: number, chosenGender: PrisonerGender, user: User) {
     const genderData = {
       gender: chosenGender,
     }

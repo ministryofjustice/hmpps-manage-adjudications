@@ -29,7 +29,7 @@ context('Report has been changed', () => {
         reportedAdjudication: {
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           bookingId: 1201395,
           createdDateTime: '2021-12-09T09:40:00',
           incidentDetails: {

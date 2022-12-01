@@ -29,7 +29,7 @@ context('Report has been submitted for review', () => {
         reportedAdjudication: {
           adjudicationNumber: 3,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE.toString(),
+          gender: PrisonerGender.MALE,
           bookingId: 123,
           createdDateTime: '2020-12-06T10:00:00',
           createdByUserId: 'AJONES',

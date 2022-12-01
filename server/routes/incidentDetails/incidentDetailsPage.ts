@@ -11,7 +11,7 @@ import logger from '../../../logger'
 import { convertSubmittedDateTimeToDateObject, formatDate } from '../../utils/utils'
 import { User } from '../../data/hmppsAuthClient'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
-import { DraftAdjudicationResult } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudicationResult, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 
 type PageData = {
@@ -68,7 +68,7 @@ type ApiIncidentDetails = IncidentDetails & {
 }
 
 type IncidentDetailsAndGender = IncidentDetails & {
-  gender: string
+  gender: PrisonerGender
 }
 
 export enum PageRequestType {
@@ -167,12 +167,12 @@ export default class IncidentDetailsPage {
     }
   }
 
-  getPrisonerGender = async (req: Request, prisonerNumber: string, user: User): Promise<string> => {
+  getPrisonerGender = async (req: Request, prisonerNumber: string, user: User): Promise<PrisonerGender> => {
     if (this.placeOnReportService.getPrisonerGenderFromSession(req)) {
       return this.placeOnReportService.getAndDeletePrisonerGenderFromSession(req)
     }
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
-    return prisoner.physicalAttributes.gender.toUpperCase()
+    return PrisonerGender[prisoner.physicalAttributes.gender.toUpperCase()]
   }
 
   readFromApi = async (draftId: number, user: User): Promise<ApiIncidentDetails> => {
