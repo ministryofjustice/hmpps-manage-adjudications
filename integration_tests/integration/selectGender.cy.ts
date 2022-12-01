@@ -4,11 +4,26 @@ import PrisonerSearch from '../pages/prisonerSearch'
 import Page from '../pages/page'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
+const prisoner = {
+  prisonerNumber: 'G6415GD',
+  response: {
+    offenderNo: 'G6415GD',
+    firstName: 'JOHN',
+    lastName: 'SMITH',
+    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+    dateOfBirth: '1990-10-11',
+    physicalAttributes: {
+      gender: 'Unknown',
+    },
+  },
+}
+
 context('Select gender', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', prisoner)
     cy.signIn()
   })
 
@@ -56,6 +71,7 @@ context('Select gender edit', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', prisoner)
     cy.task('stubGetDraftAdjudication', {
       id: 3456,
       response: {
@@ -119,6 +135,19 @@ context('Selecting gender pathway - no gender on prisoners profile', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'A1234AA',
+      response: {
+        offenderNo: 'A1234AA',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+        dateOfBirth: '1990-10-11',
+        physicalAttributes: {
+          gender: 'Unknown',
+        },
+      },
+    })
     cy.signIn()
   })
   it('should go through correct pathway if there is no gender specified on the prisoners profile', () => {
@@ -139,6 +168,7 @@ context('Selecting gender pathway - no gender on prisoners profile', () => {
         },
       ],
     })
+
     cy.visit(adjudicationUrls.searchForPrisoner.root)
     const prisonerSearchPage: PrisonerSearch = Page.verifyOnPage(PrisonerSearch)
     prisonerSearchPage.searchTermInput().type('Smith')

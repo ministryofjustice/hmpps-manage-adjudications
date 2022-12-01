@@ -80,6 +80,11 @@ export default class SelectGenderPage {
     const draftAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
     return draftAdjudication.draftAdjudication.gender
   }
+
+  getPrisonerProfileGender = async (prisonerNumber: string, user: User): Promise<string> => {
+    const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+    return prisoner.physicalAttributes.gender?.toUpperCase() || null
+  }
 }
 
 type SelectGenderFormForm = {

@@ -6,6 +6,7 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
@@ -32,7 +33,7 @@ beforeEach(() => {
     offenderNo: 'G6415GD',
     firstName: 'UDFSANAYE',
     lastName: 'AIDETRIA',
-    physicalAttributes: undefined,
+    physicalAttributes: { gender: 'Unknown' },
     assignedLivingUnit: {
       agencyId: undefined,
       locationId: undefined,
@@ -52,6 +53,7 @@ beforeEach(() => {
     draftAdjudication: {
       id: 1,
       adjudicationNumber: 123,
+      gender: PrisonerGender.MALE,
       prisonerNumber: 'G6415GD',
       incidentDetails: {
         locationId: 6,
@@ -74,7 +76,7 @@ beforeEach(() => {
     prisoner: {
       offenderNo: 'G6415GD',
       dateOfBirth: undefined,
-      physicalAttributes: undefined,
+      physicalAttributes: { gender: 'Unknown' },
       firstName: undefined,
       lastName: undefined,
       assignedLivingUnit: {
@@ -139,6 +141,8 @@ beforeEach(() => {
   })
 
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
+
+  placeOnReportService.getGenderDataForTable.mockResolvedValue(null)
 })
 
 afterEach(() => {
@@ -156,6 +160,7 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain('Last reviewed by')
         expect(response.text).toContain('Reason for return')
         expect(response.text).toContain('Confirm changes')
+        expect(response.text).not.toContain('What is the gender of the prisoner?')
         expect(response.text).not.toContain(
           'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'
         )

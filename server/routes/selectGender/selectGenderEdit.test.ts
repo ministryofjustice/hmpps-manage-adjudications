@@ -13,29 +13,10 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
-  placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue({
-    offenderNo: 'A7937DY',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    dateOfBirth: '1990-11-11',
-    physicalAttributes: undefined,
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
-    },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'A7937DY',
-    currentLocation: 'Moorland (HMP & YOI)',
-  })
-  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
+  placeOnReportService.getDraftAdjudicationDetails.mockResolvedValueOnce({
     draftAdjudication: {
       id: 4490,
-      prisonerNumber: 'G6123VU',
+      prisonerNumber: 'A7937DY',
       gender: PrisonerGender.MALE,
       incidentDetails: undefined,
       offenceDetails: [],
@@ -52,6 +33,27 @@ afterEach(() => {
 })
 
 describe('GET /select-gender edit', () => {
+  beforeEach(() => {
+    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce({
+      offenderNo: 'A7937DY',
+      firstName: 'UDFSANAYE',
+      lastName: 'AIDETRIA',
+      physicalAttributes: { gender: 'Unknown' },
+      dateOfBirth: undefined,
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 25928,
+        description: '4-2-001',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+      categoryCode: undefined,
+      language: 'English',
+      friendlyName: 'Udfsanaye Aidetria',
+      displayName: 'Aidetria, Udfsanaye',
+      prisonerNumber: 'A7937DY',
+      currentLocation: 'Moorland (HMP & YOI)',
+    })
+  })
   it('should load the edit select gender page', () => {
     return request(app)
       .get(adjudicationUrls.selectGender.url.edit('A7937DY', 4490))
