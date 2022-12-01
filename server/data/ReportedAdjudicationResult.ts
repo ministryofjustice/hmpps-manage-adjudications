@@ -30,6 +30,7 @@ export type ReportedAdjudication = {
   evidence?: EvidenceDetails[]
   witnesses?: WitnessDetails[]
   hearings?: HearingDetails[]
+  gender: string
 }
 
 export type ReportedAdjudicationResult = {

@@ -12,6 +12,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/allOffencesSessionService.ts')
@@ -104,6 +105,7 @@ const adjudicationWithoutOffences = {
     id: 100,
     adjudicationNumber: 1524493,
     prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
+    gender: PrisonerGender.MALE.toString(),
     incidentDetails: {
       locationId: 197682,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -239,8 +241,22 @@ describe('GET /details-of-offence/100 view', () => {
     return request(app)
       .get(adjudicationUrls.detailsOfOffence.urls.modified(100))
       .expect(200)
-      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(1, false, expect.anything()))
-      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(2, false, expect.anything()))
+      .then(() =>
+        expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
+          1,
+          false,
+          PrisonerGender.MALE,
+          expect.anything()
+        )
+      )
+      .then(() =>
+        expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
+          2,
+          false,
+          PrisonerGender.MALE,
+          expect.anything()
+        )
+      )
   })
 })
 
@@ -261,8 +277,22 @@ describe('GET /details-of-offence/102 view', () => {
     return request(app)
       .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
       .expect(200)
-      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(1, true, expect.anything()))
-      .then(() => expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(2, true, expect.anything()))
+      .then(() =>
+        expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
+          1,
+          true,
+          PrisonerGender.MALE,
+          expect.anything()
+        )
+      )
+      .then(() =>
+        expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
+          2,
+          true,
+          PrisonerGender.MALE,
+          expect.anything()
+        )
+      )
   })
 })
 

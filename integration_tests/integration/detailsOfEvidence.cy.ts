@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfEvidence from '../pages/detailsOfEvidence'
-import { DamageCode, EvidenceCode, EvidenceDetails } from '../../server/data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, EvidenceDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const evidenceList = [
   {
@@ -94,6 +94,7 @@ const reportedAdjudication = (adjudicationNumber: number, evidence: EvidenceDeta
         locationId: 27029,
       },
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.MALE.toString(),
       startedByUserId: 'USER1',
       incidentRole: {
         associatedPrisonersNumber: undefined,

@@ -4,6 +4,7 @@ import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DeleteOffence from '../pages/deleteOffence'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const adjudicationWithOffences = {
   id: 201,
@@ -17,6 +18,7 @@ const adjudicationWithOffences = {
     statement: 'Statement here',
   },
   prisonerNumber: 'G6415GD',
+  gender: PrisonerGender.MALE.toString(),
   startedByUserId: 'USER1',
   incidentRole: {
     associatedPrisonersNumber: undefined,
@@ -47,6 +49,7 @@ const reportedAdjudicationWithOffences = {
     statement: 'Statement here',
   },
   prisonerNumber: 'G6415GD',
+  gender: PrisonerGender.MALE.toString(),
   startedByUserId: 'USER1',
   incidentRole: {
     associatedPrisonersNumber: undefined,
@@ -86,6 +89,7 @@ context('Details of offence', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE.toString(),
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -114,6 +118,7 @@ context('Details of offence', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE.toString(),
           startedByUserId: 'USER1',
         },
       },

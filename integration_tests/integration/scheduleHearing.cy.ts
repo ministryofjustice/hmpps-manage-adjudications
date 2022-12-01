@@ -5,6 +5,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { ReviewStatus } from '../../server/routes/prisonerReport/prisonerReportReviewValidation'
 import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -20,6 +21,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
     reportedAdjudication: {
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.MALE.toString(),
       bookingId: 1,
       createdDateTime: undefined,
       createdByUserId: undefined,

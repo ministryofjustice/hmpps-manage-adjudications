@@ -5,7 +5,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudication, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 
 export enum PageRequestType {
@@ -53,6 +53,7 @@ export default class DetailsOfOffencePage {
     }
     const isYouthOffender = draftAdjudication.isYouthOffender || false
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
+    const { gender } = draftAdjudication
     const offences = await Promise.all(
       allOffences.map(async offenceData => {
         const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
@@ -67,7 +68,12 @@ export default class DetailsOfOffencePage {
         return {
           questionsAndAnswers,
           incidentRule: draftAdjudication.incidentRole?.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, user),
+          offenceRule: await this.placeOnReportService.getOffenceRule(
+            offenceCode,
+            isYouthOffender,
+            PrisonerGender[gender],
+            user
+          ),
           isYouthOffender,
         }
       })

@@ -1,7 +1,7 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { DamageCode } from '../../server/data/DraftAdjudicationResult'
+import { DamageCode, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
   return {
@@ -56,6 +56,7 @@ const reportedAdjudicationResponse = (
     reportedAdjudication: {
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.MALE.toString(),
       bookingId: 1,
       createdDateTime: undefined,
       createdByUserId: undefined,

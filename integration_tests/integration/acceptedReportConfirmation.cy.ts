@@ -1,3 +1,4 @@
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AcceptedReportConfirmation from '../pages/acceptedReportConfirmation'
 import Page from '../pages/page'
@@ -21,6 +22,7 @@ context('Report has been accepted', () => {
         reportedAdjudication: {
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE.toString(),
           bookingId: 1201395,
           createdDateTime: '2021-12-09T09:40:00',
           incidentDetails: {

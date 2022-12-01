@@ -5,6 +5,7 @@ import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -29,6 +30,7 @@ beforeEach(() => {
       friendlyName: 'John Smith',
       adjudicationNumber: 2,
       prisonerNumber: 'G6123VU',
+      gender: PrisonerGender.MALE.toString(),
       bookingId: 2,
       createdDateTime: '2021-11-15T11:45:00',
       createdByUserId: 'TEST_ER',
@@ -56,6 +58,7 @@ beforeEach(() => {
       createdByUserId: 'TEST_ER',
       reportingOfficer: 'Penelope Conroy',
       prisonerNumber: 'G6174VU',
+      gender: PrisonerGender.MALE.toString(),
       bookingId: 1,
       createdDateTime: '2021-11-15T11:30:00',
       incidentDetails: {

@@ -5,7 +5,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
-import { OffenceRule } from '../../data/DraftAdjudicationResult'
+import { OffenceRule, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import AdjudicationPdf from './adjudicationPdf'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
@@ -40,6 +40,7 @@ const offenceRule: OffenceRule = {
 const reportedAdjudication: ReportedAdjudication = {
   adjudicationNumber: 1524493,
   prisonerNumber: 'G6415GD',
+  gender: PrisonerGender.MALE.toString(),
   bookingId: 1,
   createdDateTime: undefined,
   createdByUserId: undefined,
