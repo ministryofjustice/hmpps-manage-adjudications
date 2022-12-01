@@ -5,7 +5,6 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
 import { User } from '../../data/hmppsAuthClient'
-import { isPrisonerGenderKnown } from '../../services/prisonerSearchService'
 
 type PageData = {
   error?: FormError
