@@ -1,3 +1,4 @@
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsSubmittedEdit'
 import Page from '../pages/page'
@@ -37,6 +38,7 @@ context('Incident details (edit after completion of report)', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -57,6 +59,7 @@ context('Incident details (edit after completion of report)', () => {
           },
           incidentStatement: {},
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER2',
           incidentRole: {
             roleCode: '25a',
