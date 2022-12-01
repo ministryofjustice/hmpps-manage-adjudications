@@ -5,7 +5,7 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication, PrisonerGender } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 
 export enum PageRequestType {
