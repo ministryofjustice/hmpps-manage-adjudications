@@ -5,7 +5,6 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
-import YourCompletedReportsPage from '../pages/yourCompletedReports'
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -234,7 +233,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
 
-  it('filtering and pagination should work together', () => {
+  it('UNSCHEDULED staatus - filtering and pagination should work together', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'TEST_GEN',
       response: {
@@ -284,7 +283,7 @@ context('All Completed Reports', () => {
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
-    const allCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(10, 10, 2021)
     adjudicationsFilter.forceToDate(19, 10, 2021)
@@ -303,10 +302,23 @@ context('All Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&pageNumber=2')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
+    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
+        expect($data.get(2).innerText).to.contain('Unscheduled')
+        expect($data.get(3).innerText).to.equal('')
+        expect($data.get(4).innerText).to.contain('Schedule hearing')
+        expect($data.get(4).innerHTML).to.contain('/hearing-details/21/review')
+        expect($data.get(5).innerHTML).to.contain('/prisoner-report/21/review')
+        expect($data.get(5).innerText).to.contain('View report')
+      })
   })
 
-  // TODO
-  it('status=SCHEDULED should show scheduled hearing date link', () => {
+  it('SCHEDULED status should show scheduled hearing date link', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'TEST_GEN',
       response: {
@@ -410,7 +422,7 @@ context('All Completed Reports', () => {
         expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
         expect($data.get(2).innerText).to.contain('Scheduled')
         expect($data.get(3).innerText).to.contain('30 November 2023 - 10:')
-        expect($data.get(4).innerText).to.contain('View or edit hearing')
+        expect($data.get(4).innerText).to.contain('View hearing')
         expect($data.get(4).innerHTML).to.contain('/hearing-details/21/review')
         expect($data.get(5).innerHTML).to.contain('/prisoner-report/21/review')
         expect($data.get(5).innerText).to.contain('View report')
