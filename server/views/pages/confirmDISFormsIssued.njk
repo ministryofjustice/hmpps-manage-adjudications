@@ -29,15 +29,15 @@
       </a>
     {% endset -%}
     {% set rows = (rows.push([
-      { text: report.displayNameAndNumber },
-      { text: completedReport.formattedDateTimeOfDiscovery,
+      { text: report.displayName + ' - ' + report.prisonerNumber },
+      { text: report.formattedDateTimeOfDiscovery,
         attributes: {
-        "data-sort-value": completedReport.dateTimeOfDiscovery
+        "data-sort-value": report.dateTimeOfDiscovery
       }
       },
       { text: report.prisonerLocation },
       { text: report.issueDateAndTime },
-      { text: report.issuingOfficerName },
+      { text: report.issuingOfficer },
       { html: addDateAndTimeLink }
     ]), rows) %}
   {% endfor %}
@@ -46,16 +46,27 @@
     <div class="results-table">
       {{ govukTable({
       head: [
-        { text: 'Name and prison number' },
+        { text: 'Name and prison number',
+          classes: 'confirmDISFormTable-prisonerNameNumber'
+        },
         { text: "Discovery date and time",
+          classes: 'confirmDISFormTable-discDateTime',
           attributes: {
           "aria-sort": "descending"
         }
         },
-        { text: "Prisoner location" },
-        { text: "Issue date and time" },
-        { text: "Issuing officer" },
-        { text: "" }
+        { text: "Prisoner location",
+          classes: 'confirmDISFormTable-prisonerLocation'
+        },
+        { text: "Issue date and time",
+          classes: 'confirmDISFormTable-issueDateTime'
+        },
+        { text: "Issuing officer",
+          classes: 'confirmDISFormTable-officerName'
+        },
+        { text: "",
+          classes: 'confirmDISFormTable-link'
+        }
       ],
       rows: rows,
       attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }

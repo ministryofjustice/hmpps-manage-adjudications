@@ -23,6 +23,7 @@ import {
   ReviewAdjudication,
   ScheduledHearingList,
   allStatuses,
+  ReportedAdjudicationDISFormFilter,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -137,6 +138,22 @@ export default class ManageAdjudicationsClient {
   getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/')
 
   getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my/')
+
+  async getReportedAdjudicationIssueData(
+    agencyId: string,
+    filter: ReportedAdjudicationDISFormFilter,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    const path =
+      `/reported-adjudications/agency/${agencyId}/issue?page=${pageRequest.number}&size=${pageRequest.size}` +
+      `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+      `${(filter.locationId && `&locationId=${filter.locationId}`) || ''}`
+
+    return this.restClient.get({
+      path,
+    })
+  }
 
   async createDraftFromCompleteAdjudication(adjudicationNumber: number): Promise<DraftAdjudicationResult> {
     return this.restClient.post({

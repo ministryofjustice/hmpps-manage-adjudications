@@ -29,7 +29,15 @@ export type UiFilter = {
 export type DISUiFilter = {
   fromDate: string
   toDate: string
-  location: string
+  locationId: string
+}
+
+export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {
+  return {
+    fromDate: req.query.fromDate as string,
+    toDate: req.query.toDate as string,
+    locationId: req.query.locationId as string,
+  }
 }
 
 export const uiFilterFromRequest = (req: Request): UiFilter => {
@@ -52,6 +60,16 @@ export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
   }
 }
 
+// Same as fillInDefaults r.e. dates
+// LocationId defaults to null, api interprets as all locations
+export const fillInDISFormFilterDefaults = (DISUiFilter: DISUiFilter): DISUiFilter => {
+  return {
+    fromDate: DISUiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
+    toDate: DISUiFilter.toDate || momentDateToDatePicker(moment()),
+    locationId: DISUiFilter.locationId || null,
+  }
+}
+
 export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
@@ -65,6 +83,14 @@ export const filterFromUiFilter = (filter: UiFilter) => {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
     status: filter.status || allStatuses,
+  }
+}
+
+export const DISFormfilterFromUiFilter = (filter: DISUiFilter) => {
+  return {
+    fromDate: datePickerDateToMoment(filter.fromDate),
+    toDate: datePickerDateToMoment(filter.toDate),
+    locationId: (filter.locationId && Number(filter.locationId)) || null,
   }
 }
 

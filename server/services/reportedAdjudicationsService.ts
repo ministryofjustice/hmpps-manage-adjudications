@@ -11,6 +11,8 @@ import {
   reportedAdjudicationStatusDisplayName,
   ReportedAdjudicationStatus,
   ScheduledHearing,
+  ReportedAdjudicationDISFormFilter,
+  ReportedAdjudicationEnhancedWithIssuingDetails,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
@@ -23,7 +25,6 @@ import {
   formatTimestampTo,
   formatName,
 } from '../utils/utils'
-import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
 import {
   PrisonerReport,
@@ -36,6 +37,7 @@ import {
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
+import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -250,6 +252,42 @@ export default class ReportedAdjudicationsService {
     })
   }
 
+  async getAdjudicationDISFormData(
+    user: User,
+    filter: ReportedAdjudicationDISFormFilter,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudicationEnhancedWithIssuingDetails>> {
+    const pageResponse = await new ManageAdjudicationsClient(user.token).getReportedAdjudicationIssueData(
+      user.activeCaseLoadId,
+      filter,
+      pageRequest
+    )
+
+    const prisonerDetails = new Map(
+      (
+        await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+    )
+
+    const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
+    const issuingOfficerNamesAndUsernames =
+      (await Promise.all(
+        [...usernamesInPage].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+      )) || []
+    const IssuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+
+    return this.mapData(pageResponse, reportedAdjudication => {
+      const enhancedAdjudication = this.enhanceAdjudicationWithIssuingDetails(
+        reportedAdjudication,
+        prisonerDetails.get(reportedAdjudication.prisonerNumber),
+        IssuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
+      )
+      return {
+        ...enhancedAdjudication,
+      }
+    })
+  }
+
   async updateAdjudicationStatus(
     adjudicationNumber: number,
     status: ReviewStatus,
@@ -288,15 +326,24 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).updateWitnessDetails(adjudicationNumber, witnesses)
   }
 
+  private getPrisonerDisplayNames(prisonerResult: PrisonerSimpleResult) {
+    const displayName =
+      (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
+    const friendlyName =
+      (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
+    return {
+      displayName,
+      friendlyName,
+    }
+  }
+
   enhanceReportedAdjudication(
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
     reporterName: string
   ): ReportedAdjudicationEnhanced {
-    const displayName =
-      (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
-    const friendlyName =
-      (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
+    const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
+    const { displayName, friendlyName } = prisonerNames
     const reportingOfficer = (reporterName && convertToTitleCase(reporterName)) || ''
 
     return {
@@ -310,6 +357,31 @@ export default class ReportedAdjudicationsService {
         'D MMMM YYYY - HH:mm'
       ),
       statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
+    }
+  }
+
+  enhanceAdjudicationWithIssuingDetails(
+    reportedAdjudication: ReportedAdjudication,
+    prisonerResult: PrisonerSimpleResult,
+    issuingOfficerName: string
+  ): ReportedAdjudicationEnhancedWithIssuingDetails {
+    const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
+    const { displayName, friendlyName } = prisonerNames
+    const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
+    const prisonerLocation = formatLocation(prisonerResult.assignedLivingUnitDesc)
+
+    return {
+      ...reportedAdjudication,
+      displayName,
+      friendlyName,
+      issuingOfficer,
+      issueDateAndTime: formatTimestampToDate(reportedAdjudication.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+      prisonerLocation,
+      dateTimeOfDiscovery: reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
+      formattedDateTimeOfDiscovery: formatTimestampToDate(
+        reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
+        'D MMMM YYYY - HH:mm'
+      ),
     }
   }
 
