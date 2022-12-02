@@ -54,7 +54,7 @@
         },
         { text: "Prisoner location" },
         { text: "Issue date and time" },
-        { text: "Issuing officer" }
+        { text: "Issuing officer" },
         { text: "" }
       ],
       rows: rows,
@@ -63,6 +63,6 @@
     </div>
     {{ mojPagination(pagination) }}
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
   {% endif %}
 {% endblock %}
