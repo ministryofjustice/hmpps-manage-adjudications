@@ -26,7 +26,9 @@ context('Home page', () => {
     homepage.viewYourCompletedReportsLink().should('exist')
     homepage.viewAllReportsCard().should('not.exist')
     homepage.viewScheduledHearingsCard().should('not.exist')
-    homepage.sectionBreak().should('not.exist')
+    homepage.sectionBreak().should('exist')
+    homepage.printCompletedDisFormsLink().should('exist')
+    homepage.confirmDisHasBeenIssuedLink().should('exist')
   })
 
   it('should see all the tiles with the reviewer role', () => {
@@ -40,6 +42,8 @@ context('Home page', () => {
     homepage.viewAllReportsCard().should('exist')
     homepage.viewScheduledHearingsCard().should('exist')
     homepage.sectionBreak().should('exist')
+    homepage.printCompletedDisFormsLink().should('exist')
+    homepage.confirmDisHasBeenIssuedLink().should('exist')
   })
 
   it('should link to the correct location - view all reports (main link)', () => {
@@ -108,6 +112,22 @@ context('Home page', () => {
     homepage.viewYourCompletedReportsLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+    })
+  })
+  it('should link to the correct location - print completed dis forms', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.printCompletedDisFormsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.printCompletedDisForms.root)
+    })
+  })
+  it('should link to the correct location - confirm dis has been issued', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.confirmDisHasBeenIssuedLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.confirmDisHasBeenIssued.root)
     })
   })
 })

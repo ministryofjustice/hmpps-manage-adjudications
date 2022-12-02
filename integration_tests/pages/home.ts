@@ -24,4 +24,8 @@ export default class Home extends Page {
   reviewReportsLink = (): PageElement => cy.get('[data-qa="review-reports"]')
 
   scheduleHearingsLink = (): PageElement => cy.get('[data-qa="schedule-hearings"]')
+
+  printCompletedDisFormsLink = (): PageElement => cy.get('[data-qa="print-completed-dis-forms"]')
+
+  confirmDisHasBeenIssuedLink = (): PageElement => cy.get('[data-qa="confirm-dis-has-been-issued"]')
 }

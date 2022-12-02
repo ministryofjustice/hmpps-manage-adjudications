@@ -109,11 +109,15 @@ export default class HomepageRoutes {
 
     const enabledTasks = createTasks().filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
-    const reporterTasks = enabledTasks.filter(task => !task.roles.includes('ADJUDICATIONS_REVIEWER'))
+    const reporterTasks = enabledTasks.filter(
+      task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
+    )
+    const disRelatedTasks = createTasks().filter(task => task.heading.includes('DIS'))
 
     return res.render('pages/homepage', {
       reviewerTasks: reviewerTasks.filter(task => hasAnyRole(task.roles, userRoles)),
       reporterTasks,
+      disRelatedTasks,
     })
   }
 }
