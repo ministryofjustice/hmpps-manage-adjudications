@@ -82,6 +82,22 @@ const createTasks = (): TaskType[] => {
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
     },
+    {
+      id: 'print-completed-dis-forms',
+      heading: 'Print Completed DIS 1/ 2 Forms',
+      description: '',
+      href: adjudicationUrls.printCompletedDisForms.root,
+      roles: [],
+      enabled: true,
+    },
+    {
+      id: 'confirm-dis-has-been-issued',
+      heading: 'Confirm DIS 1/ 2 has been issued to the prisoner',
+      description: '',
+      href: adjudicationUrls.confirmDisHasBeenIssued.root,
+      roles: [],
+      enabled: true,
+    },
   ]
 }
 

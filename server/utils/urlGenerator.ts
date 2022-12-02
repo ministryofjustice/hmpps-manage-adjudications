@@ -361,6 +361,18 @@ const adjudicationUrls = {
       start: '*',
     },
   },
+  printCompletedDisForms: {
+    root: '/print-completed-dis-forms',
+    matchers: {
+      start: '/',
+    },
+  },
+  confirmDisHasBeenIssued: {
+    root: '/confirm-dis-has-been-issued',
+    matchers: {
+      start: '/',
+    },
+  },
 }
 
 export default adjudicationUrls
