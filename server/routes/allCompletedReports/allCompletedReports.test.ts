@@ -5,6 +5,7 @@ import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -23,12 +24,16 @@ beforeEach(() => {
 
   const completedAdjudicationsContent = [
     {
+      dateTimeOfIncident: '2021-11-15T11:45:00',
       displayName: 'Smith, John',
       formattedDateTimeOfIncident: '15 November 2021 - 11:45',
-      dateTimeOfIncident: '2021-11-15T11:45:00',
+      formattedDateTimeOfDiscovery: '15 November 2022 - 11:45',
+      formattedDateTimeOfScheduledHearing: '',
+      dateTimeOfDiscovery: '2022-11-15T11:45:00',
       friendlyName: 'John Smith',
       adjudicationNumber: 2,
       prisonerNumber: 'G6123VU',
+      gender: PrisonerGender.MALE,
       bookingId: 2,
       createdDateTime: '2021-11-15T11:45:00',
       createdByUserId: 'TEST_ER',
@@ -36,6 +41,7 @@ beforeEach(() => {
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:45:00',
+        dateTimeOfDiscovery: '2022-11-15T11:45:00',
         handoverDeadline: '2021-11-17T11:45:00',
       },
       incidentStatement: {
@@ -50,17 +56,22 @@ beforeEach(() => {
     {
       displayName: 'Moriarty, James',
       formattedDateTimeOfIncident: '15 November 2021 - 11:30',
+      formattedDateTimeOfDiscovery: '15 November 2022 - 11:30',
+      formattedDateTimeOfScheduledHearing: '',
       dateTimeOfIncident: '2021-11-15T11:30:00',
+      dateTimeOfDiscovery: '2022-11-15T11:30:00',
       friendlyName: 'James Moriarty',
       adjudicationNumber: 1,
       createdByUserId: 'TEST_ER',
       reportingOfficer: 'Penelope Conroy',
       prisonerNumber: 'G6174VU',
+      gender: PrisonerGender.MALE,
       bookingId: 1,
       createdDateTime: '2021-11-15T11:30:00',
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2022-11-15T11:30:00',
         handoverDeadline: '2021-11-17T11:30:00',
       },
       incidentStatement: {
@@ -111,15 +122,11 @@ describe('GET /all-completed-reports', () => {
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('Smith, John')
-        expect(response.text).toContain('G6123VU')
-        expect(response.text).toContain('15 November 2021 - 11:45')
-        expect(response.text).toContain('Seamus Parkinson')
+        expect(response.text).toContain('Smith, John - G6123VU')
+        expect(response.text).toContain('15 November 2022 - 11:45')
         expect(response.text).toContain('Awaiting review')
-        expect(response.text).toContain('Moriarty, James')
-        expect(response.text).toContain('G6174VU')
-        expect(response.text).toContain('15 November 2021 - 11:30')
-        expect(response.text).toContain('Penelope Conroy')
+        expect(response.text).toContain('Moriarty, James - G6174VU')
+        expect(response.text).toContain('15 November 2022 - 11:30')
         expect(response.text).toContain('Awaiting review')
       })
   })

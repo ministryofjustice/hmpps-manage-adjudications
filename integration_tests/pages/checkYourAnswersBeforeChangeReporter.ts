@@ -2,8 +2,10 @@ import Page, { PageElement } from './page'
 
 export default class CheckYourAnswersPage extends Page {
   constructor() {
-    super('Check your answers')
+    super('Check your answers before changing the report')
   }
+
+  genderDetailsSummary = (): PageElement => cy.get('[data-qa="gender-summary-table"]')
 
   reviewStatus = (): PageElement => cy.get('[data-qa="review-status"]')
 

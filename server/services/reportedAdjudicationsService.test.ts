@@ -7,6 +7,7 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../data/DraftAdjudicationResult'
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -160,6 +161,7 @@ describe('reportedAdjudicationsService', () => {
         {
           displayName: 'Smith, John',
           formattedDateTimeOfIncident: '1 January 2021 - 11:45',
+          formattedDateTimeOfScheduledHearing: ' - ',
           dateTimeOfIncident: '2021-01-01T11:45:00',
           friendlyName: 'John Smith',
           adjudicationNumber: 2,
@@ -181,6 +183,7 @@ describe('reportedAdjudicationsService', () => {
         {
           displayName: 'Moriarty, James',
           formattedDateTimeOfIncident: '1 January 2021 - 11:30',
+          formattedDateTimeOfScheduledHearing: ' - ',
           dateTimeOfIncident: '2021-01-01T11:30:00',
           friendlyName: 'James Moriarty',
           adjudicationNumber: 1,
@@ -219,6 +222,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            gender: PrisonerGender.MALE,
             createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
@@ -301,6 +305,7 @@ describe('reportedAdjudicationsService', () => {
           reportedAdjudication: {
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
+            gender: PrisonerGender.MALE,
             createdByUserId: 'TEST_GEN',
             incidentDetails: {
               locationId: 3,
@@ -416,6 +421,7 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:10',
+          formattedDateTimeOfScheduledHearing: ' - ',
           adjudicationNumber: 1524427,
           prisonerNumber: 'A5041DY',
           bookingId: 1200675,
@@ -449,6 +455,7 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           formattedDateTimeOfIncident: '30 November 2021 - 14:00',
+          formattedDateTimeOfScheduledHearing: ' - ',
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
           statusDisplayName: 'Awaiting review',
         },
@@ -571,6 +578,7 @@ describe('reportedAdjudicationsService', () => {
           statusReason,
           statusDetails,
           prisonerNumber: '',
+          gender: PrisonerGender.MALE,
           bookingId: 1,
           createdDateTime: '',
           createdByUserId: '',

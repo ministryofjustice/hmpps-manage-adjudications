@@ -18,6 +18,11 @@ export interface PrisonerSearchSummary extends PrisonerSearchResult {
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
 export const isPrisonerIdentifier = (searchTerm: string): boolean => /\d/.test(searchTerm)
 
+export const isPrisonerGenderKnown = (prisonerGender: string): boolean => {
+  if (!prisonerGender) return false
+  return prisonerGender === PrisonerGender.FEMALE || prisonerGender === PrisonerGender.MALE
+}
+
 function searchByName(searchTerm: string, prisonIds: string[]): PrisonerSearchByName {
   const [lastName, firstName] = searchTerm.split(' ')
   return { lastName, firstName, prisonIds }
@@ -46,7 +51,7 @@ export default class PrisonerSearchService {
 
   private static getPrisonerStartHref(prisoner: PrisonerSearchResult) {
     const prisonerGender = prisoner.gender.toUpperCase()
-    if (prisonerGender === PrisonerGender.FEMALE || prisonerGender === PrisonerGender.MALE) {
+    if (isPrisonerGenderKnown(prisonerGender)) {
       return adjudicationUrls.incidentDetails.urls.start(prisoner.prisonerNumber)
     }
     return adjudicationUrls.selectGender.url.start(prisoner.prisonerNumber)

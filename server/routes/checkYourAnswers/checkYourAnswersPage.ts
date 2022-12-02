@@ -121,6 +121,12 @@ export default class CheckYourAnswersPage {
       user
     )
 
+    const userSetGenderData = await this.placeOnReportService.getGenderDataForTable(
+      this.pageOptions.isCreation(),
+      prisoner,
+      draftAdjudication
+    )
+
     // The reported adjudication number won't exist in the creation journey
     // Whilst  we're passing in a draftAdjudication here, it's a duplication of a reported adjudication, so it will have the reported adjudication number, which is what we need
     const reviewData = this.pageOptions.isEditByReporter() ? await this.getReviewData(draftAdjudication, user) : null
@@ -151,6 +157,7 @@ export default class CheckYourAnswersPage {
       secondaryButtonText: this.pageOptions.isCreation() ? 'Exit' : 'Cancel',
       ...checkAnswersVariations,
       reviewData,
+      userSetGenderData,
       damages: draftAdjudication.damages,
       evidence: convertedEvidence,
       witnesses: draftAdjudication.witnesses,

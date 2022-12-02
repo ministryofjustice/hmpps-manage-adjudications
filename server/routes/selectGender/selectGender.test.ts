@@ -12,25 +12,6 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
-  placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue({
-    offenderNo: 'A7937DY',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    dateOfBirth: '1990-11-11',
-    physicalAttributes: undefined,
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
-    },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'A7937DY',
-    currentLocation: 'Moorland (HMP & YOI)',
-  })
 })
 
 afterEach(() => {
@@ -38,6 +19,27 @@ afterEach(() => {
 })
 
 describe('GET /select-gender', () => {
+  beforeEach(() => {
+    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce({
+      offenderNo: 'A7937DY',
+      firstName: 'UDFSANAYE',
+      lastName: 'AIDETRIA',
+      physicalAttributes: { gender: 'Unknown' },
+      dateOfBirth: undefined,
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 25928,
+        description: '4-2-001',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+      categoryCode: undefined,
+      language: 'English',
+      friendlyName: 'Udfsanaye Aidetria',
+      displayName: 'Aidetria, Udfsanaye',
+      prisonerNumber: 'A7937DY',
+      currentLocation: 'Moorland (HMP & YOI)',
+    })
+  })
   it('should load the select gender page', () => {
     return request(app)
       .get(adjudicationUrls.selectGender.url.start('A7937DY'))

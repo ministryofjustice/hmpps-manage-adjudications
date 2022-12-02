@@ -2,6 +2,7 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import DeleteOffence from '../pages/deleteOffence'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -25,6 +26,7 @@ context('Incident details', () => {
             statement: 'Statement here',
           },
           prisonerNumber: 'G6415GD',
+          gender: PrisonerGender.MALE,
           startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: undefined,

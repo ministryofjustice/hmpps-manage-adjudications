@@ -7,6 +7,7 @@ import {
   getDate,
   getFormattedOfficerName,
   getTime,
+  properCase,
 } from '../utils/utils'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
@@ -27,10 +28,12 @@ import {
   EvidenceDetails,
   WitnessDetails,
   AdjudicationSectionStatus,
+  PrisonerGender,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 import adjudicationUrls from '../utils/urlGenerator'
+import { isPrisonerGenderKnown } from './prisonerSearchService'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -96,7 +99,7 @@ export default class PlaceOnReportService {
     locationId: number,
     prisonerNumber: string,
     user: User,
-    gender: string,
+    gender: PrisonerGender,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user.token)
@@ -395,9 +398,9 @@ export default class PlaceOnReportService {
     return prisonerDetails.prisonerNumber
   }
 
-  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, user: User) {
+  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, gender: PrisonerGender, user: User) {
     const client = new ManageAdjudicationsClient(user.token)
-    return client.getOffenceRule(offenceCode, isYouthOffender)
+    return client.getOffenceRule(offenceCode, isYouthOffender, gender)
   }
 
   async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[], user: User) {
@@ -425,7 +428,7 @@ export default class PlaceOnReportService {
     return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
   }
 
-  async amendPrisonerGender(id: number, chosenGender: string, user: User) {
+  async amendPrisonerGender(id: number, chosenGender: PrisonerGender, user: User) {
     const genderData = {
       gender: chosenGender,
     }
@@ -445,5 +448,27 @@ export default class PlaceOnReportService {
     const chosenGender = this.getPrisonerGenderFromSession(req)
     delete req.session[req.params.prisonerNumber]?.gender
     return chosenGender
+  }
+
+  async getGenderDataForTable(
+    draftCreationPath: boolean,
+    prisoner: PrisonerResultSummary,
+    draftAdjudication: DraftAdjudication
+  ) {
+    const isPrisonerGenderKnownOnProfile = isPrisonerGenderKnown(prisoner.physicalAttributes.gender)
+    if (!isPrisonerGenderKnownOnProfile && draftCreationPath) {
+      return {
+        data: [
+          {
+            label: 'What is the gender of the prisoner?',
+            value: properCase(draftAdjudication.gender),
+          },
+        ],
+        changeLinkHref: draftCreationPath
+          ? adjudicationUrls.selectGender.url.edit(prisoner.prisonerNumber, draftAdjudication.id)
+          : null,
+      }
+    }
+    return null
   }
 }

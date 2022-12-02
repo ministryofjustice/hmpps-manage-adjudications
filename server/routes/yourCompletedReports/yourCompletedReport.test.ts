@@ -4,6 +4,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/reportedAdjudicationsService')
 
@@ -34,10 +35,14 @@ describe('GET /your-completed-reports', () => {
           {
             displayName: 'Smith, John',
             formattedDateTimeOfIncident: '15 November 2021 - 11:45',
+            formattedDateTimeOfDiscovery: '15 November 2021 - 11:45',
+            formattedDateTimeOfScheduledHearing: '',
             dateTimeOfIncident: '2021-11-15T11:45:00',
+            dateTimeOfDiscovery: '2021-11-15T11:45:00',
             friendlyName: 'John Smith',
             adjudicationNumber: 2,
             prisonerNumber: 'G6123VU',
+            gender: PrisonerGender.MALE,
             bookingId: 2,
             createdDateTime: '2021-11-15T11:45:00',
             createdByUserId: 'TEST_ER',
@@ -59,12 +64,16 @@ describe('GET /your-completed-reports', () => {
           {
             displayName: 'Moriarty, James',
             formattedDateTimeOfIncident: '15 November 2021 - 11:30',
+            formattedDateTimeOfDiscovery: '15 November 2021 - 11:30',
+            formattedDateTimeOfScheduledHearing: '',
             dateTimeOfIncident: '2021-11-15T11:30:00',
+            dateTimeOfDiscovery: '2021-11-15T11:30:00',
             friendlyName: 'James Moriarty',
             adjudicationNumber: 1,
             createdByUserId: 'TEST_ER',
             reportingOfficer: '',
             prisonerNumber: 'G6174VU',
+            gender: PrisonerGender.MALE,
             bookingId: 1,
             createdDateTime: '2021-11-15T11:30:00',
             incidentDetails: {

@@ -6,6 +6,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
+import { PrisonerGender } from '../../../data/DraftAdjudicationResult'
 
 jest.mock('../../../services/locationService.ts')
 jest.mock('../../../services/reportedAdjudicationsService.ts')
@@ -52,6 +53,7 @@ beforeEach(() => {
     reportedAdjudication: {
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.MALE,
       bookingId: 1,
       createdDateTime: undefined,
       createdByUserId: undefined,
@@ -74,6 +76,7 @@ beforeEach(() => {
     reportedAdjudication: {
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
+      gender: PrisonerGender.MALE,
       bookingId: 1,
       createdDateTime: undefined,
       createdByUserId: undefined,

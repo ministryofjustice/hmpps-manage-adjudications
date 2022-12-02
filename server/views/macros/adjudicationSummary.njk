@@ -3,7 +3,12 @@
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offences, damages, evidence, witnesses, isReport) %}
+{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offences, damages, evidence, witnesses, userSetGenderData) %}
+  {% if userSetGenderData %}
+    <div class="adjudicationsSummary">
+      {{ summaryList(userSetGenderData.data, null, { "data-qa": "gender-summary-table" }, null, userSetGenderData.changeLinkHref ) }}
+    </div>
+  {% endif %}
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
    <h2 class="govuk-heading-m">Incident details</h2>
   {% if not readOnly %}

@@ -1,3 +1,4 @@
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
@@ -7,6 +8,7 @@ const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
     draftAdjudication: {
       id: 3456,
       adjudicationNumber: 234,
+      gender: PrisonerGender.MALE,
       prisonerNumber: 'G6415GD',
       incidentDetails: {
         dateTimeOfIncident: '2021-11-03T11:09:42',
@@ -70,6 +72,7 @@ const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: st
     firstName,
     lastName,
     assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
+    physicalAttributes: { gender: 'Unknown' },
   }
 }
 
@@ -81,7 +84,7 @@ context('Check Your Answers', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
+      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH', 'Unknown'),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {
@@ -134,6 +137,7 @@ context('Check Your Answers', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.report(3456))
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
 
+      checkYourAnswersPage.genderDetailsSummary().should('not.exist')
       checkYourAnswersPage.reviewStatus().should('exist')
       checkYourAnswersPage.reviewSummary().should('exist')
       checkYourAnswersPage.incidentDetailsSummary().should('exist')

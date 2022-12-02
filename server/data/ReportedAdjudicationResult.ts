@@ -8,6 +8,7 @@ import {
   IncidentRole,
   IncidentStatement,
   OffenceDetails,
+  PrisonerGender,
   WitnessDetails,
 } from './DraftAdjudicationResult'
 
@@ -30,6 +31,7 @@ export type ReportedAdjudication = {
   evidence?: EvidenceDetails[]
   witnesses?: WitnessDetails[]
   hearings?: HearingDetails[]
+  gender: PrisonerGender
 }
 
 export type ReportedAdjudicationResult = {
@@ -39,10 +41,13 @@ export type ReportedAdjudicationResult = {
 export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   displayName: string
   friendlyName: string
-  formattedDateTimeOfIncident: string
   dateTimeOfIncident: string
+  dateTimeOfDiscovery: string
+  formattedDateTimeOfIncident: string
+  formattedDateTimeOfDiscovery: string
   reportingOfficer?: string
   statusDisplayName: string
+  formattedDateTimeOfScheduledHearing: string
 }
 
 export type ReportedAdjudicationFilter = {
