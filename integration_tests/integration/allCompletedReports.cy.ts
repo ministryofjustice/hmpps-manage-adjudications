@@ -5,7 +5,6 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
-import YourCompletedReportsPage from '../pages/yourCompletedReports'
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -15,6 +14,7 @@ context('All Completed Reports', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
   })
+
   it('should say when there are no results', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
@@ -46,6 +46,7 @@ context('All Completed Reports', () => {
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-11-15T11:30:00',
+          dateTimeOfDiscovery: '2345-11-15T11:30:00',
           handoverDeadline: '2021-11-17T11:30:00',
         },
         isYouthOffender: false,
@@ -66,21 +67,21 @@ context('All Completed Reports', () => {
       .resultsTable()
       .find('th')
       .then($headings => {
-        expect($headings.get(0).innerText).to.contain('Prisoner’s name')
-        expect($headings.get(1).innerText).to.contain('Prison number')
-        expect($headings.get(2).innerText).to.contain('Date and time of incident')
-        expect($headings.get(3).innerText).to.contain('Reporting officer')
-        expect($headings.get(4).innerText).to.contain('Status')
+        expect($headings.get(0).innerText).to.contain('Discovery date and time')
+        expect($headings.get(1).innerText).to.contain('Name and prison number')
+        expect($headings.get(2).innerText).to.contain('Status')
+        expect($headings.get(3).innerText).to.contain('Latest scheduled hearing')
+        expect($headings.get(4) === undefined)
       })
     allCompletedReportsPage
       .resultsTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Potter, Harry')
-        expect($data.get(1).innerText).to.contain('A1234AA')
-        expect($data.get(2).innerText).to.contain('15 November 2021 - 11:30')
-        expect($data.get(3).innerText).to.contain('Test User')
-        expect($data.get(4).innerText).to.contain('Awaiting review')
+        expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
+        expect($data.get(2).innerText).to.contain('Awaiting review')
+        // test hearings link is not populated
+        expect($data.get(4).innerText).to.equal('')
         expect($data.get(5).innerText).to.contain('View report')
       })
   })
@@ -105,6 +106,7 @@ context('All Completed Reports', () => {
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-11-15T11:30:00',
+          dateTimeOfDiscovery: '2345-11-15T11:30:00',
           handoverDeadline: '2021-11-17T11:30:00',
         },
         isYouthOffender: false,
@@ -185,6 +187,7 @@ context('All Completed Reports', () => {
           incidentDetails: {
             locationId: 1,
             dateTimeOfIncident: '2022-01-01T11:30:00',
+            dateTimeOfDiscovery: '2345-11-15T11:30:00',
             handoverDeadline: '2022-01-03T11:30:00',
           },
           incidentStatement: null,
@@ -230,7 +233,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
 
-  it('filtering and pagination should work together', () => {
+  it('UNSCHEDULED staatus - filtering and pagination should work together', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'TEST_GEN',
       response: {
@@ -249,6 +252,7 @@ context('All Completed Reports', () => {
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-10-10T11:30:00',
+          dateTimeOfDiscovery: '2345-11-15T11:30:00',
           handoverDeadline: '2021-10-12T11:30:00',
         },
         isYouthOffender: false,
@@ -279,7 +283,7 @@ context('All Completed Reports', () => {
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
-    const allCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(10, 10, 2021)
     adjudicationsFilter.forceToDate(19, 10, 2021)
@@ -298,6 +302,131 @@ context('All Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&pageNumber=2')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
+    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
+        expect($data.get(2).innerText).to.contain('Unscheduled')
+        expect($data.get(3).innerText).to.equal('-')
+        expect($data.get(4).innerText).to.contain('Schedule hearing')
+        expect($data.get(4).innerHTML).to.contain('/hearing-details/21/review')
+        expect($data.get(5).innerHTML).to.contain('/prisoner-report/21/review')
+        expect($data.get(5).innerText).to.contain('View report')
+      })
+  })
+
+  it('SCHEDULED status should show scheduled hearing date link', () => {
+    cy.task('stubGetUserFromUsername', {
+      username: 'TEST_GEN',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'TEST_GEN',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
+    const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
+      return {
+        adjudicationNumber: _,
+        prisonerNumber: 'A1234AA',
+        bookingId: 1,
+        incidentDetails: {
+          locationId: 1,
+          dateTimeOfIncident: '2222-10-10T11:30:00',
+          dateTimeOfDiscovery: '2345-11-15T11:30:00',
+          handoverDeadline: '2021-10-12T11:30:00',
+        },
+        isYouthOffender: false,
+        incidentStatement: null,
+        createdByUserId: 'TEST_GEN',
+        createdDateTime: undefined,
+        incidentRole: {
+          associatedPrisonersNumber: undefined,
+          roleCode: undefined,
+        },
+        offenceDetails: undefined,
+        status: ReportedAdjudicationStatus.SCHEDULED,
+        hearings: [
+          {
+            id: 68,
+            locationId: 357596,
+            dateTimeOfHearing: '2022-11-23T17:00:00',
+            oicHearingType: 'INAD_ADULT',
+          },
+          {
+            id: 67,
+            locationId: 27187,
+            dateTimeOfHearing: '2022-11-28T09:00:00',
+            oicHearingType: 'INAD_ADULT',
+          },
+          {
+            id: 69,
+            locationId: 775,
+            dateTimeOfHearing: '2022-11-30T09:50:00',
+            oicHearingType: 'GOV_ADULT',
+          },
+          {
+            id: 70,
+            locationId: 775,
+            dateTimeOfHearing: '2023-11-30T10:00:00',
+            oicHearingType: 'GOV_ADULT',
+          },
+        ],
+      }
+    })
+    // The empty results to return when first landing on your completed reports page.
+    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
+    // The results to return when initially filtering
+    cy.task('stubGetAllReportedAdjudications', {
+      number: 0, // Page 1
+      allContent: manyReportedAdjudications,
+      filter: { status: ReportedAdjudicationStatus.SCHEDULED, fromDate: '2021-10-10', toDate: '2021-10-19' },
+    })
+    // The results to return after going to another page after having filtered previously
+    cy.task('stubGetAllReportedAdjudications', {
+      number: 1, // Page 2
+      allContent: manyReportedAdjudications,
+      filter: { status: ReportedAdjudicationStatus.SCHEDULED, fromDate: '2021-10-10', toDate: '2021-10-19' },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
+    cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
+    adjudicationsFilter.forceFromDate(10, 10, 2021)
+    adjudicationsFilter.forceToDate(19, 10, 2021)
+    allCompletedReportsPage.uncheckAllCheckboxes()
+    allCompletedReportsPage.checkCheckboxWithValue('SCHEDULED')
+    adjudicationsFilter.applyButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED')
+    })
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
+    allCompletedReportsPage.paginationLink(2).click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      // We expect the initial filter parameters to have been passed through on the links.
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED&pageNumber=2')
+    })
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
+    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
+        expect($data.get(2).innerText).to.contain('Scheduled')
+        expect($data.get(3).innerText).to.contain('30 November 2023 - 10:00')
+        expect($data.get(4).innerText).to.contain('View hearing')
+        expect($data.get(4).innerHTML).to.contain('/hearing-details/21/review')
+        expect($data.get(5).innerHTML).to.contain('/prisoner-report/21/review')
+        expect($data.get(5).innerText).to.contain('View report')
+      })
   })
 
   it('date range validation works', () => {
