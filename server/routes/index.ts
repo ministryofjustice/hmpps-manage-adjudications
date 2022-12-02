@@ -32,6 +32,7 @@ import scheduleHearingRoutes from './adjudicationTabbedParent/scheduleHearing'
 import viewScheduledHearingsRoutes from './viewScheduledHearings'
 import acceptedReportConfirmationRoutes from './acceptedReportConfirmation'
 import selectGenderRoutes from './selectGender'
+import confirmDISFormsIssuedRoutes from './confirmDISFormsIssued'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -177,6 +178,11 @@ export default function routes(
   )
 
   router.use(adjudicationUrls.selectGender.root, selectGenderRoutes({ placeOnReportService }))
+
+  router.use(
+    adjudicationUrls.confirmDISFormsIssued.root,
+    confirmDISFormsIssuedRoutes({ reportedAdjudicationsService, userService })
+  )
 
   return router
 }

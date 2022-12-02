@@ -26,6 +26,12 @@ export type UiFilter = {
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
 }
 
+export type DISUiFilter = {
+  fromDate: string
+  toDate: string
+  location: string
+}
+
 export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
     fromDate: req.query.fromDate as string,

@@ -1,0 +1,68 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
+{% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
+
+{% set title = "Confirm DIS1/2 has been issued to prisoner" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  
+  {% set rows = [] %}
+  {% for report in reports.content %}
+    {% set addDateAndTimeLink %}
+      <a href="#" class="govuk-link" data-qa="add-issue-date-time-link">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
+      </a>
+    {% endset -%}
+    {% set rows = (rows.push([
+      { text: report.displayNameAndNumber },
+      { text: completedReport.formattedDateTimeOfDiscovery,
+        attributes: {
+        "data-sort-value": completedReport.dateTimeOfDiscovery
+      }
+      },
+      { text: report.prisonerLocation },
+      { text: report.issueDateAndTime },
+      { text: report.issuingOfficerName },
+      { html: addDateAndTimeLink }
+    ]), rows) %}
+  {% endfor %}
+  {% if rows | length %}
+    {{ mojPagination(pagination) }}
+    <div class="results-table">
+      {{ govukTable({
+      head: [
+        { text: 'Name and prison number' },
+        { text: "Discovery date and time",
+          attributes: {
+          "aria-sort": "descending"
+        }
+        },
+        { text: "Prisoner location" },
+        { text: "Issue date and time" },
+        { text: "Issuing officer" }
+        { text: "" }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
+    }) }}
+    </div>
+    {{ mojPagination(pagination) }}
+  {% else %}
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>
+  {% endif %}
+{% endblock %}
