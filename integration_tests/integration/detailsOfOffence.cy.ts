@@ -200,7 +200,7 @@ context('Details of offence', () => {
     })
   })
 
-  it('select and offence for the first time and see it on the offence details page.', () => {
+  it('select an offence for the first time and see it on the offence details page - assault.', () => {
     // Choose a complex offence so that we test all of the functionality.
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
@@ -246,6 +246,57 @@ context('Details of offence', () => {
       .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
     detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
     detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
+    // Delete link
+    detailsOfOffencePage.deleteLink(1).should('exist')
+  })
+
+  it('select an offence for the first time and see it on the offence details page. - endanger', () => {
+    // Choose a complex offence so that we test all of the functionality.
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection(
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+    )
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
+    whatDidTheIncidentInvolve.radio('1-1-3').check()
+    whatDidTheIncidentInvolve.continue().click()
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who did John Smith assist James Jones to endanger?')
+    whoWasAssaultedPage.radio('1-1-3-1').check()
+    whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
+    whoWasAssaultedPage.searchPrisoner().click()
+    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-3', '1-1-3-1', 'G5512G')
+    whoWasAssaultedPage.continue().click()
+    // We should now be on the offence details page.
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    // Prisoner playback
+    detailsOfOffencePage.prisonerNameDiv().contains('Smith, John')
+    // Questions and Answers
+    detailsOfOffencePage
+      .questionAnswerSectionQuestion(1, 1)
+      .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
+    detailsOfOffencePage
+      .questionAnswerSectionAnswer(1, 1)
+      .contains('Assault, fighting, or endangering the health or personal safety of others')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    detailsOfOffencePage
+      .questionAnswerSectionAnswer(1, 2)
+      .contains('Endangering the health or personal safety of someone')
+    detailsOfOffencePage
+      .questionAnswerSectionQuestion(1, 3)
+      .contains('Who did John Smith assist James Jones to endanger?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
+    // Offence details
+    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
+    detailsOfOffencePage
+      .offenceSection(1)
+      .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
+    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 5')
+    detailsOfOffencePage
+      .offenceSection(1)
+      .contains(
+        'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered'
+      )
     // Delete link
     detailsOfOffencePage.deleteLink(1).should('exist')
   })
