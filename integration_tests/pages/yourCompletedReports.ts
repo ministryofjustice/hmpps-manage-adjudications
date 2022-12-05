@@ -21,4 +21,6 @@ export default class YourCompletedReportsPage extends Page {
   uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
 
   checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
+
+  resultsTable = (): PageElement => cy.get('[data-qa="complete-adjudications-results-table"]')
 }
