@@ -20,7 +20,8 @@ export const isPrisonerIdentifier = (searchTerm: string): boolean => /\d/.test(s
 
 export const isPrisonerGenderKnown = (prisonerGender: string): boolean => {
   if (!prisonerGender) return false
-  return prisonerGender === PrisonerGender.FEMALE || prisonerGender === PrisonerGender.MALE
+  const gender = prisonerGender.toUpperCase()
+  return gender === PrisonerGender.FEMALE || gender === PrisonerGender.MALE
 }
 
 function searchByName(searchTerm: string, prisonIds: string[]): PrisonerSearchByName {

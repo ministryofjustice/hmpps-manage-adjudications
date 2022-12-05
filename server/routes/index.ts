@@ -181,7 +181,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.confirmDISFormsIssued.root,
-    confirmDISFormsIssuedRoutes({ reportedAdjudicationsService, userService })
+    confirmDISFormsIssuedRoutes({ reportedAdjudicationsService, userService, locationService })
   )
 
   return router

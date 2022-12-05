@@ -25,7 +25,7 @@ import {
   formatTimestampTo,
   formatName,
 } from '../utils/utils'
-import { PrisonLocation } from '../data/PrisonLocationResult'
+import { LocationId, PrisonLocation } from '../data/PrisonLocationResult'
 import {
   PrisonerReport,
   DraftAdjudication,
@@ -254,37 +254,34 @@ export default class ReportedAdjudicationsService {
 
   async getAdjudicationDISFormData(
     user: User,
-    filter: ReportedAdjudicationDISFormFilter,
-    pageRequest: ApiPageRequest
-  ): Promise<ApiPageResponse<ReportedAdjudicationEnhancedWithIssuingDetails>> {
-    const pageResponse = await new ManageAdjudicationsClient(user.token).getReportedAdjudicationIssueData(
+    filter: ReportedAdjudicationDISFormFilter
+  ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
+    const response = await new ManageAdjudicationsClient(user.token).getReportedAdjudicationIssueData(
       user.activeCaseLoadId,
-      filter,
-      pageRequest
+      filter
     )
-
+    const { reportedAdjudications } = response
     const prisonerDetails = new Map(
       (
-        await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
+        await new PrisonApiClient(user.token).getBatchPrisonerDetails(reportedAdjudications.map(_ => _.prisonerNumber))
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
-    const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
+    const usernamesInPage = new Set(
+      reportedAdjudications.filter(adj => adj.issuingOfficer).map(adj => adj.issuingOfficer)
+    )
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
       )) || []
     const IssuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
 
-    return this.mapData(pageResponse, reportedAdjudication => {
-      const enhancedAdjudication = this.enhanceAdjudicationWithIssuingDetails(
+    return reportedAdjudications.map(reportedAdjudication => {
+      return this.enhanceAdjudicationWithIssuingDetails(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         IssuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
       )
-      return {
-        ...enhancedAdjudication,
-      }
     })
   }
 
@@ -369,7 +366,6 @@ export default class ReportedAdjudicationsService {
     const { displayName, friendlyName } = prisonerNames
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
     const prisonerLocation = formatLocation(prisonerResult.assignedLivingUnitDesc)
-
     return {
       ...reportedAdjudication,
       displayName,
@@ -579,5 +575,26 @@ export default class ReportedAdjudicationsService {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.incidentDetails.handoverDeadline,
       prisonerFullName: formatName(prisoner.firstName, prisoner.lastName),
     }
+  }
+
+  async filterAdjudicationsByLocation(
+    adjudications: ReportedAdjudicationEnhancedWithIssuingDetails[],
+    chosenLocationId: LocationId,
+    user: User
+  ) {
+    const location = await (
+      await this.locationService.getLocationsForUser(user)
+    ).filter(loc => loc.locationId === chosenLocationId)
+    const { locationPrefix } = location[0]
+    return adjudications.filter(adj => this.getLocationPrefix(adj.prisonerLocation) === locationPrefix)
+  }
+
+  getLocationPrefix = (locationCode: string) => {
+    const parts = locationCode && locationCode.split('-')
+    if (parts && parts.length > 0) {
+      return parts.slice(0, 2).join('-')
+    }
+
+    return null
   }
 }

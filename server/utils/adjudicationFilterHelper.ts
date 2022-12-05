@@ -78,6 +78,14 @@ export const uiFilterFromBody = (req: Request) => {
   }
 }
 
+export const DISFormUiFilterFromBody = (req: Request) => {
+  return {
+    fromDate: req.body.fromDate.date,
+    toDate: req.body.toDate.date,
+    locationId: req.body.locationId,
+  }
+}
+
 export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
@@ -94,7 +102,7 @@ export const DISFormfilterFromUiFilter = (filter: DISUiFilter) => {
   }
 }
 
-export const validate = (uiFilter: UiFilter): FormError[] => {
+export const validate = (uiFilter: UiFilter | DISUiFilter): FormError[] => {
   if (datePickerDateToMoment(uiFilter.fromDate).isAfter(datePickerDateToMoment(uiFilter.toDate))) {
     return [error.FROM_DATE_AFTER_TO_DATE]
   }

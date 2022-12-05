@@ -5,18 +5,25 @@ import ConfirmDISFormsIssued from './confirmDISFormsIssued'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
+import LocationService from '../../services/locationService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function confirmDISFormsIssuedRoutes({
   reportedAdjudicationsService,
   userService,
+  locationService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
   userService: UserService
+  locationService: LocationService
 }): Router {
   const router = express.Router()
 
-  const confirmDISFormsIssuedRoute = new ConfirmDISFormsIssued(reportedAdjudicationsService, userService)
+  const confirmDISFormsIssuedRoute = new ConfirmDISFormsIssued(
+    reportedAdjudicationsService,
+    userService,
+    locationService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

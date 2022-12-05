@@ -41,6 +41,10 @@ export type ReportedAdjudicationResult = {
   reportedAdjudication: ReportedAdjudication
 }
 
+export type ReportedAdjudicationsResult = {
+  reportedAdjudications: ReportedAdjudication[]
+}
+
 export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   displayName: string
   friendlyName: string
