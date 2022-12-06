@@ -30,7 +30,6 @@ context('Your Completed Reports', () => {
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
-        dateTimeOfDiscovery: '2021-11-15T11:30:00',
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-11-15T11:30:00',
@@ -106,7 +105,6 @@ context('Your Completed Reports', () => {
           adjudicationNumber: 1,
           prisonerNumber: 'A1234AA',
           bookingId: 1,
-          dateTimeOfDiscovery: '2021-11-15T11:30:00',
           incidentDetails: {
             locationId: 1,
             dateTimeOfIncident: '2022-01-01T11:30:00',
@@ -162,7 +160,6 @@ context('Your Completed Reports', () => {
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
-        dateTimeOfDiscovery: '2021-11-15T11:30:00',
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-10-10T11:30:00',
