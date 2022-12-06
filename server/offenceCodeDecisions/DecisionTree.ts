@@ -41,7 +41,18 @@ export default question([
               .child(answer('Yes').offenceCode(1007))
               .child(answer('No').offenceCode(1008))))))
       .child(answer('Fighting with someone').offenceCode(4001))
-      .child(answer('Endangering the health or personal safety of someone').offenceCode(5001))))
+      .child(answer('Endangering the health or personal safety of someone')
+      .child(question([
+        [Role.COMMITTED, 'Who was endangered?'],
+        [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to endanger?`],
+        [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,],
+        [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to endanger?`],
+      ])
+        .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(5001))
+        .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(5002))
+        .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(5003))
+        .child(answer(['A prisoner who’s left this establishment', `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(5004))
+        .child(answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(5005))))))
   .child(answer('Escape or failure to comply with temporary release conditions')
     .child(question('What did the incident involve?')
       .child(answer('Escaping').offenceCode(7001))
