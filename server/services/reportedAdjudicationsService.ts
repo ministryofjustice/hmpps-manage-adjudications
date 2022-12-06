@@ -382,7 +382,7 @@ export default class ReportedAdjudicationsService {
       displayName,
       friendlyName,
       issuingOfficer,
-      issueDateAndTime: formatTimestampToDate(reportedAdjudication.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+      formattedDateTimeOfIssue: formatTimestampToDate(reportedAdjudication.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
       prisonerLocation,
       dateTimeOfDiscovery: reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
       formattedDateTimeOfDiscovery: formatTimestampToDate(

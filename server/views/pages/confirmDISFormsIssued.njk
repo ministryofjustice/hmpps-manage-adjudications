@@ -26,8 +26,9 @@
   
   {% set rows = [] %}
   {% for report in reports %}
+    {% set index = loop.index %}
     {% set addDateAndTimeLink %}
-      <a href="{{ adjudicationUrls.addIssueDateTime.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="add-issue-date-time-link">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
+      <a href="{{ adjudicationUrls.addIssueDateTime.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="add-issue-date-time-link-{{ index }}">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
       </a>
     {% endset -%}
     {% set rows = (rows.push([
@@ -38,7 +39,7 @@
       }
       },
       { text: report.prisonerLocation },
-      { text: report.issueDateAndTime or ' - ' },
+      { text: report.formattedDateTimeOfIssue or ' - ' },
       { text: report.issuingOfficer or ' - ' },
       { html: addDateAndTimeLink }
     ]), rows) %}
@@ -70,7 +71,7 @@
         }
       ],
       rows: rows,
-      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
+      attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
     }) }}
     </div>
   {% else %}

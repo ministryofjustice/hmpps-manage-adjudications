@@ -1,4 +1,5 @@
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 
@@ -9,11 +10,17 @@ export type OtherData = {
   prisonerLocation: string
   formattedDateTimeOfDiscovery: string
   dateTimeOfDiscovery: string
-  issueDateAndTime: string
+  dateTimeOfIssue: string
+  formattedDateTimeOfIssue: string
 }
 
 export default class TestData {
-  completedAdjudication = (adjudicationNumber: number, prisonerNumber: string, otherData?: OtherData) => {
+  completedAdjudication = (
+    adjudicationNumber: number,
+    prisonerNumber: string,
+    otherData?: OtherData,
+    dateTimeOfDiscovery = '2022-11-15T11:45:00'
+  ) => {
     return {
       adjudicationNumber,
       prisonerNumber,
@@ -24,7 +31,7 @@ export default class TestData {
       incidentDetails: {
         locationId: 3,
         dateTimeOfIncident: '2021-11-15T11:45:00',
-        dateTimeOfDiscovery: '2022-11-15T11:45:00',
+        dateTimeOfDiscovery,
         handoverDeadline: '2021-11-17T11:45:00',
       },
       incidentStatement: {
@@ -35,6 +42,28 @@ export default class TestData {
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       isYouthOffender: false,
       ...otherData,
+    }
+  }
+
+  generateOtherData = (
+    displayName: string,
+    friendlyName: string,
+    issuingOfficer: string,
+    prisonerLocation: string,
+    formattedDateTimeOfDiscovery: string,
+    dateTimeOfDiscovery: string,
+    formattedDateTimeOfIssue: string,
+    dateTimeOfIssue?: string
+  ): OtherData => {
+    return {
+      displayName,
+      friendlyName,
+      issuingOfficer,
+      prisonerLocation,
+      formattedDateTimeOfDiscovery,
+      dateTimeOfDiscovery,
+      formattedDateTimeOfIssue,
+      dateTimeOfIssue,
     }
   }
 
@@ -65,5 +94,19 @@ export default class TestData {
         userDescription: 'Segregation MPU',
       },
     ]
+  }
+
+  simplePrisoner = (
+    offenderNo: string,
+    firstName: string,
+    lastName: string,
+    assignedLivingUnitDesc: string
+  ): PrisonerSimpleResult => {
+    return {
+      offenderNo,
+      firstName,
+      lastName,
+      assignedLivingUnitDesc,
+    }
   }
 }

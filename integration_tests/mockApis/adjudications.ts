@@ -518,6 +518,40 @@ const stubAmendPrisonerGender = ({ draftId, response }): SuperAgentRequest =>
     },
   })
 
+const stubGetReportedAdjudicationIssueData = ({
+  agencyId = 'MDI',
+  filter = {
+    toDate: moment().format('YYYY-MM-DD'),
+    fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+  },
+  response,
+}: {
+  agencyId: string
+  filter: {
+    fromDate: string
+    toDate: string
+  }
+  response
+}): SuperAgentRequest => {
+  const path =
+    `/adjudications/reported-adjudications/agency/${agencyId}/issue?` +
+    `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
+    `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: path,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+}
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -545,4 +579,5 @@ export default {
   stubAmendHearing,
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,
+  stubGetReportedAdjudicationIssueData,
 }

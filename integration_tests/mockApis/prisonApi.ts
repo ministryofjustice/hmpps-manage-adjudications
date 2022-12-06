@@ -152,6 +152,19 @@ const stubGetBatchPrisonerDetails = (response = []): SuperAgentRequest =>
     },
   })
 
+const stubGetUsersLocations = (response = []): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/users/me/locations`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubUserCaseloads,
@@ -162,4 +175,5 @@ export default {
   stubGetAgency,
   stubGetSecondaryLanguages,
   stubGetBatchPrisonerDetails,
+  stubGetUsersLocations,
 }

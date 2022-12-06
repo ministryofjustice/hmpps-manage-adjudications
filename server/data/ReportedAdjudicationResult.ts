@@ -64,7 +64,7 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   prisonerLocation: string
   formattedDateTimeOfDiscovery: string
   dateTimeOfDiscovery: string
-  issueDateAndTime: string
+  formattedDateTimeOfIssue: string
 }
 
 export type ReportedAdjudicationFilter = {

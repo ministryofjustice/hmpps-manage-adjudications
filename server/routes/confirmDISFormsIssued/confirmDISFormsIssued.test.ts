@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import LocationService from '../../services/locationService'
-import TestData, { OtherData } from '../testutils/testData'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/locationService.ts')
@@ -22,34 +22,14 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { locationService, reportedAdjudicationsService })
 
-  const generateOtherData = (
-    displayName: string,
-    friendlyName: string,
-    issuingOfficer: string,
-    prisonerLocation: string,
-    formattedDateTimeOfDiscovery: string,
-    dateTimeOfDiscovery: string,
-    issueDateAndTime: string
-  ): OtherData => {
-    return {
-      displayName,
-      friendlyName,
-      issuingOfficer,
-      prisonerLocation,
-      formattedDateTimeOfDiscovery,
-      dateTimeOfDiscovery,
-      issueDateAndTime,
-    }
-  }
-
   const adjudicationResponse = [
     testData.completedAdjudication(
       12345,
       'G7234VB',
-      generateOtherData(
+      testData.generateOtherData(
         'Smith, James',
         'James Smith',
-        'J. Parolta',
+        'JPERALTER',
         'MDI-2-3-009',
         '5 December 2022 - 11:11',
         '2022-12-05T11:11:00',
@@ -59,10 +39,10 @@ beforeEach(() => {
     testData.completedAdjudication(
       23456,
       'G6123VU',
-      generateOtherData(
+      testData.generateOtherData(
         'Tovey, Peter',
         'Peter Tovey',
-        'J. Parolta',
+        'JPERALTER',
         'MDI-RECP',
         '6 December 2022 - 12:10',
         '2022-12-06T11:11:00',
@@ -74,7 +54,6 @@ beforeEach(() => {
   const locations = testData.residentialLocations()
   reportedAdjudicationsService.getAdjudicationDISFormData.mockResolvedValue(adjudicationResponse)
   locationService.getLocationsForUser.mockResolvedValue(locations)
-  //   reportedAdjudicationsService.filterAdjudicationsByLocation.mockResolvedValue(locations)
 })
 
 afterEach(() => {
