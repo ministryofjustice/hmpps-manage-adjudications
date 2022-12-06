@@ -40,10 +40,21 @@ export default question([
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1007))
               .child(answer('No').offenceCode(1008))))))
-      .child(answer('Fighting with someone').offenceCode(4001))
+      .child(answer('Fighting with someone')
+      .child(question([
+        [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} fight with?`],
+        [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to fight with?`],
+        [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,],
+        [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to fight with?`],
+      ])
+        .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(4001))
+        .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(4002))
+        .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(4003))
+        .child(answer(['A prisoner who’s left this establishment', `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(4004))
+        .child(answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(4005))))
       .child(answer('Endangering the health or personal safety of someone')
       .child(question([
-        [Role.COMMITTED, 'Who was endangered?'],
+        [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} endanger?`],
         [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to endanger?`],
         [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,],
         [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to endanger?`],
