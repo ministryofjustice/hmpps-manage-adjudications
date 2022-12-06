@@ -92,49 +92,49 @@ context('Incident details', () => {
     })
   })
   it('line 3', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-1', '1-1-1-1', 'G5512G')
     page.continue().click()
     page.checkOffenceCode(1001, 'Yes')
   })
   it('line 4', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-1', '1-1-1-1', 'G5512G')
     page.continue().click()
     page.checkOffenceCode(1002, 'No')
   })
   it('line 5', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-2', 'AOWENS')
     page.continue().click()
     page.checkOffenceCode(1003, 'Yes')
   })
   it('line 6', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-2', 'AOWENS')
     page.continue().click()
     page.checkOffenceCode(1004, 'No')
   })
   it('line 7', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A member of staff who is not a prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     page.continue().click()
     page.checkOffenceCode(1005, 'Yes')
   })
   it('line 8', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A member of staff who is not a prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     page.continue().click()
     page.checkOffenceCode(1006, 'No')
   })
   it('line 9 - version 2', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
     page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
@@ -142,7 +142,7 @@ context('Incident details', () => {
     page.checkOffenceCode(1021, 'Yes')
   })
   it('line 10 - version 2', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
     page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
@@ -150,83 +150,83 @@ context('Incident details', () => {
     page.checkOffenceCode(1022, 'No')
   })
   it('line 9', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A person not listed above').click()
     page.victimOtherPersonSearchNameInput().type('Another Person')
     page.continue().click()
     page.checkOffenceCode(1007, 'Yes')
   })
   it('line 10', () => {
-    const page = getToAssaultPage()
+    const page = getPage()
     page.radioLabelFromText('A person not listed above').click()
     page.victimOtherPersonSearchNameInput().type('Another Person')
     page.continue().click()
     page.checkOffenceCode(1008, 'No')
   })
   it('line 11 - 4001', () => {
-    const page = getToFightPage()
+    const page = getPage('Fighting with someone')
     page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-2', '1-1-2-1', 'G5512G')
     page.checkOffenceCode(4001, 'A prisoner in this establishment')
   })
 
   it('line 11 - 4002', () => {
-    const page = getToFightPage()
+    const page = getPage('Fighting with someone')
     page.radioLabelFromText('A prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-2', '1-1-2-2', 'AOWENS')
     page.checkOffenceCode(4002, 'A prison officer')
   })
 
   it('line 11 - 4003', () => {
-    const page = getToFightPage()
+    const page = getPage('Fighting with someone')
     page.radioLabelFromText('A member of staff who is not a prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-2', '1-1-2-3', 'AOWENS')
     page.checkOffenceCode(4003, 'A member of staff who is not a prison officer')
   })
 
   it('line 11 - 4004', () => {
-    const page = getToFightPage()
+    const page = getPage('Fighting with someone')
     page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
     page.checkOffenceCode(4004, 'A prisoner who’s left this establishment')
   })
 
   it('line 11 - 4005', () => {
-    const page = getToFightPage()
+    const page = getPage('Fighting with someone')
     page.radioLabelFromText('A person not listed above').click()
     page.victimOtherPersonSearchNameInput().type(prisonerOutsideEstablishmentNumber)
     page.checkOffenceCode(4005, 'A person not listed above')
   })
   it('line 12 - 5001', () => {
-    const page = getToEndangerPage()
+    const page = getPage('Endangering the health or personal safety of someone')
     page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-3', '1-1-3-1', 'G5512G')
     page.checkOffenceCode(5001, 'A prisoner in this establishment')
   })
 
   it('line 12 - 5002', () => {
-    const page = getToEndangerPage()
+    const page = getPage('Endangering the health or personal safety of someone')
     page.radioLabelFromText('A prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-3', '1-1-3-2', 'AOWENS')
     page.checkOffenceCode(5002, 'A prison officer')
   })
 
   it('line 12 - 5003', () => {
-    const page = getToEndangerPage()
+    const page = getPage('Endangering the health or personal safety of someone')
     page.radioLabelFromText('A member of staff who is not a prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-3', '1-1-3-3', 'AOWENS')
     page.checkOffenceCode(5003, 'A member of staff who is not a prison officer')
   })
 
   it('line 12 - 5004', () => {
-    const page = getToEndangerPage()
+    const page = getPage('Endangering the health or personal safety of someone')
     page.radioLabelFromText('A prisoner who’s left this establishment').click()
     page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
     page.checkOffenceCode(5004, 'A prisoner who’s left this establishment')
   })
 
   it('line 12 - 5005', () => {
-    const page = getToEndangerPage()
+    const page = getPage('Endangering the health or personal safety of someone')
     page.radioLabelFromText('A person not listed above').click()
     page.victimOtherPersonSearchNameInput().type(prisonerOutsideEstablishmentNumber)
     page.checkOffenceCode(5005, 'A person not listed above')
@@ -579,32 +579,12 @@ context('Incident details', () => {
   })
 })
 
-const getToAssaultPage = (): OffenceCodeSelection => {
+const getPage = (option = 'Assaulting someone'): OffenceCodeSelection => {
   cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
   const page = new OffenceCodeSelection('What type of offence did John Smith commit?')
   page.radioLabelFromText('Assault, fighting, or endangering the health or personal safety of others').click()
   page.continue().click()
-  page.radioLabelFromText('Assaulting someone').click()
-  page.continue().click()
-  return page
-}
-
-const getToEndangerPage = (): OffenceCodeSelection => {
-  cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
-  const page = new OffenceCodeSelection('What type of offence did John Smith commit?')
-  page.radioLabelFromText('Assault, fighting, or endangering the health or personal safety of others').click()
-  page.continue().click()
-  page.radioLabelFromText('Endangering the health or personal safety of someone').click()
-  page.continue().click()
-  return page
-}
-
-const getToFightPage = (): OffenceCodeSelection => {
-  cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
-  const page = new OffenceCodeSelection('What type of offence did John Smith commit?')
-  page.radioLabelFromText('Assault, fighting, or endangering the health or personal safety of others').click()
-  page.continue().click()
-  page.radioLabelFromText('Fighting with someone').click()
+  page.radioLabelFromText(option).click()
   page.continue().click()
   return page
 }
