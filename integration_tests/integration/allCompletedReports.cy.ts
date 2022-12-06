@@ -5,6 +5,7 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -39,6 +40,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 20, _ => {
       return {
+        gender: PrisonerGender.MALE,
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
@@ -99,6 +101,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return {
+        gender: PrisonerGender.MALE,
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
@@ -246,6 +249,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return {
+        gender: PrisonerGender.MALE,
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
@@ -331,6 +335,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return {
+        gender: PrisonerGender.MALE,
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,

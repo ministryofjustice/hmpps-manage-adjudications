@@ -5,6 +5,7 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
+import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 
 context('Your Completed Reports', () => {
   beforeEach(() => {
@@ -25,12 +26,14 @@ context('Your Completed Reports', () => {
   it('pagination should work', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return {
+        gender: PrisonerGender.MALE,
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-11-15T11:30:00',
+          dateTimeOfDiscovery: '2022-01-01T11:30:00',
           handoverDeadline: '2021-11-17T11:30:00',
         },
         isYouthOffender: false,
@@ -91,7 +94,7 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage.paginationLink(16).should('not.exist')
   })
 
-  it('filtering should work', () => {
+  it('filtering should work - check table columns accordingly', () => {
     // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: [] })
     // The result to return when filtering for the dates we will enter in the date picker and status selected.
@@ -105,6 +108,7 @@ context('Your Completed Reports', () => {
           incidentDetails: {
             locationId: 1,
             dateTimeOfIncident: '2022-01-01T11:30:00',
+            dateTimeOfDiscovery: '2022-01-01T11:30:00',
             handoverDeadline: '2022-01-03T11:30:00',
           },
           incidentStatement: null,
@@ -137,17 +141,29 @@ context('Your Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+    yourCompletedReportsPage.resultsTable().should('exist')
+    yourCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('1 January 2022 - 11:30')
+        expect($data.get(1).innerText).to.contain('Moriarty, James - A1234AA')
+        expect($data.get(2).innerText).to.contain('Unscheduled')
+        expect($data.get(3).innerText).to.contain('View report')
+      })
   })
 
   it('filtering and pagination should work together', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return {
+        gender: PrisonerGender.MALE,
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
         bookingId: 1,
         incidentDetails: {
           locationId: 1,
           dateTimeOfIncident: '2021-10-10T11:30:00',
+          dateTimeOfDiscovery: '2022-01-01T11:30:00',
           handoverDeadline: '2021-10-12T11:30:00',
         },
         isYouthOffender: false,

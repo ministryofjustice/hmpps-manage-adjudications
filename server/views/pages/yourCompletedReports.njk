@@ -28,13 +28,12 @@
       <a href="{{ adjudicationUrls.prisonerReport.urls.report(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
-      { text: completedReport.displayName },
-      { text: completedReport.prisonerNumber },
       { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
         "data-sort-value": completedReport.dateTimeOfDiscovery
       }
       },
+      { text: completedReport.displayName + " - " + completedReport.prisonerNumber },
       { text: completedReport.statusDisplayName },
       { html: viewCompletedReportlLinkHtml }
     ]), rows) %}
@@ -46,18 +45,17 @@
 
     {{ govukTable({
       head: [
-        { html: 'Prisoner&#8217;s name' },
-        { text: "Prison number" },
-        { text: "Date and time of incident",
+        { text: "Discovery date and time",
           attributes: {
           "aria-sort": "descending"
         }
         },
+        { text: 'Name and prison number' },
         { text: "Status" },
         { text: "" }
       ],
       rows: rows,
-      attributes: { "data-qa": "prisoner-search-results-table", "data-module": "moj-sortable-table" }
+      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
     }) }}
 
   </div>
