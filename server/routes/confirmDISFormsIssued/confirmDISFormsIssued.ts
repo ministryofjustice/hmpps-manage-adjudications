@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import UserService from '../../services/userService'
 import LocationService from '../../services/locationService'
 import { FormError } from '../../@types/template'
 import {
@@ -17,7 +16,6 @@ import adjudicationUrls from '../../utils/urlGenerator'
 export default class AllCompletedReportsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService,
     private readonly locationService: LocationService
   ) {}
 

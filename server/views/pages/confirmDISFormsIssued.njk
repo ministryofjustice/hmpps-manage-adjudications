@@ -1,10 +1,9 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "../macros/DISFormFilter.njk" import DISFormFilter %}
 {% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Confirm DIS1/2 has been issued to prisoner" %}
 
@@ -12,6 +11,7 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
+
   {% if errors | length %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -22,12 +22,12 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken) }}
+  {{ DISFormFilter(filter, errors, possibleLocations, adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken) }}
   
   {% set rows = [] %}
   {% for report in reports %}
     {% set addDateAndTimeLink %}
-      <a href="#" class="govuk-link" data-qa="add-issue-date-time-link">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
+      <a href="{{ adjudicationUrls.addIssueDateTime.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="add-issue-date-time-link">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
       </a>
     {% endset -%}
     {% set rows = (rows.push([
@@ -44,7 +44,6 @@
     ]), rows) %}
   {% endfor %}
   {% if rows | length %}
-    {{ mojPagination(pagination) }}
     <div class="results-table">
       {{ govukTable({
       head: [
@@ -74,7 +73,6 @@
       attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
     }) }}
     </div>
-    {{ mojPagination(pagination) }}
   {% else %}
     <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
   {% endif %}

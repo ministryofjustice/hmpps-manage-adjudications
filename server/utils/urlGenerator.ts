@@ -363,6 +363,15 @@ const adjudicationUrls = {
       start: '/',
     },
   },
+  addIssueDateTime: {
+    root: '/add-issue-date-time',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.addIssueDateTime.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
