@@ -82,6 +82,22 @@ const createTasks = (): TaskType[] => {
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
     },
+    {
+      id: 'print-completed-dis-forms',
+      heading: 'Print Completed DIS 1/ 2 Forms',
+      description: '',
+      href: adjudicationUrls.printCompletedDisForms.root,
+      roles: [],
+      enabled: true,
+    },
+    {
+      id: 'confirm-dis-has-been-issued',
+      heading: 'Confirm DIS 1/ 2 has been issued to the prisoner',
+      description: '',
+      href: adjudicationUrls.confirmDISFormsIssued.root,
+      roles: [],
+      enabled: true,
+    },
   ]
 }
 
@@ -93,11 +109,15 @@ export default class HomepageRoutes {
 
     const enabledTasks = createTasks().filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
-    const reporterTasks = enabledTasks.filter(task => !task.roles.includes('ADJUDICATIONS_REVIEWER'))
+    const reporterTasks = enabledTasks.filter(
+      task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
+    )
+    const disRelatedTasks = createTasks().filter(task => task.heading.includes('DIS'))
 
     return res.render('pages/homepage', {
       reviewerTasks: reviewerTasks.filter(task => hasAnyRole(task.roles, userRoles)),
       reporterTasks,
+      disRelatedTasks,
     })
   }
 }

@@ -342,6 +342,10 @@ export default class ReportedAdjudicationsService {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const reportingOfficer = (reporterName && convertToTitleCase(reporterName)) || ''
+    const latestSheduledHearingDate =
+      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
+        ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
+        : null
 
     return {
       ...reportedAdjudication,
@@ -353,7 +357,14 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
         'D MMMM YYYY - HH:mm'
       ),
+      dateTimeOfDiscovery: reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
+      formattedDateTimeOfDiscovery: formatTimestampToDate(
+        reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
+        'D MMMM YYYY - HH:mm'
+      ),
       statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
+      formattedDateTimeOfScheduledHearing:
+        formatTimestampToDate(latestSheduledHearingDate, 'D MMMM YYYY - HH:mm') || ' - ',
     }
   }
 

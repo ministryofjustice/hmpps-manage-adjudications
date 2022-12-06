@@ -48,10 +48,13 @@ export type ReportedAdjudicationsResult = {
 export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   displayName: string
   friendlyName: string
-  formattedDateTimeOfIncident: string
   dateTimeOfIncident: string
+  dateTimeOfDiscovery: string
+  formattedDateTimeOfIncident: string
+  formattedDateTimeOfDiscovery: string
   reportingOfficer?: string
   statusDisplayName: string
+  formattedDateTimeOfScheduledHearing: string
 }
 
 export interface ReportedAdjudicationEnhancedWithIssuingDetails extends ReportedAdjudication {

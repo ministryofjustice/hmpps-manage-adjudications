@@ -375,6 +375,12 @@ const adjudicationUrls = {
       start: '*',
     },
   },
+  printCompletedDisForms: {
+    root: '/print-completed-dis-forms',
+    matchers: {
+      start: '/',
+    },
+  },
 }
 
 export default adjudicationUrls
