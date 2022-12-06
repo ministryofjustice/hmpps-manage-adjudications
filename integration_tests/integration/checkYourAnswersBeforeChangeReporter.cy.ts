@@ -84,7 +84,7 @@ context('Check Your Answers', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
+      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH', 'Unknown'),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {

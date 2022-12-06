@@ -169,15 +169,41 @@ context('Incident details', () => {
       4001
     )
   })
-  it('line 12', () => {
-    checkSimpleDecisionPath(
-      [
-        'Assault, fighting, or endangering the health or personal safety of others',
-        'Endangering the health or personal safety of someone',
-      ],
-      5001
-    )
+  it('line 12 - 5001', () => {
+    const page = getToEndangerPage()
+    page.radioLabelFromText('A prisoner in this establishment').click()
+    page.simulateReturnFromPrisonerSearch(100, '1-1-3', '1-1-3-1', 'G5512G')
+    page.checkOffenceCode(5001, 'A prisoner in this establishment')
   })
+
+  it('line 12 - 5002', () => {
+    const page = getToEndangerPage()
+    page.radioLabelFromText('A prison officer').click()
+    page.simulateReturnFromStaffSearch(100, '1-1-3', '1-1-3-2', 'AOWENS')
+    page.checkOffenceCode(5002, 'A prison officer')
+  })
+
+  it('line 12 - 5003', () => {
+    const page = getToEndangerPage()
+    page.radioLabelFromText('A member of staff who is not a prison officer').click()
+    page.simulateReturnFromStaffSearch(100, '1-1-3', '1-1-3-3', 'AOWENS')
+    page.checkOffenceCode(5003, 'A member of staff who is not a prison officer')
+  })
+
+  it('line 12 - 5004', () => {
+    const page = getToEndangerPage()
+    page.radioLabelFromText('A prisoner who’s left this establishment').click()
+    page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
+    page.checkOffenceCode(5004, 'A prisoner who’s left this establishment')
+  })
+
+  it('line 12 - 5005', () => {
+    const page = getToEndangerPage()
+    page.radioLabelFromText('A person not listed above').click()
+    page.victimOtherPersonSearchNameInput().type(prisonerOutsideEstablishmentNumber)
+    page.checkOffenceCode(5005, 'A person not listed above')
+  })
+
   it('line 14', () => {
     checkSimpleDecisionPath(['Escape or failure to comply with temporary release conditions', 'Escaping'], 7001)
   })
@@ -531,6 +557,16 @@ const getToAssaultPage = (): OffenceCodeSelection => {
   page.radioLabelFromText('Assault, fighting, or endangering the health or personal safety of others').click()
   page.continue().click()
   page.radioLabelFromText('Assaulting someone').click()
+  page.continue().click()
+  return page
+}
+
+const getToEndangerPage = (): OffenceCodeSelection => {
+  cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(100, 'committed'))
+  const page = new OffenceCodeSelection('What type of offence did John Smith commit?')
+  page.radioLabelFromText('Assault, fighting, or endangering the health or personal safety of others').click()
+  page.continue().click()
+  page.radioLabelFromText('Endangering the health or personal safety of someone').click()
   page.continue().click()
   return page
 }
