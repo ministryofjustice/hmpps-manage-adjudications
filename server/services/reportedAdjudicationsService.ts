@@ -603,10 +603,8 @@ export default class ReportedAdjudicationsService {
   getLocationPrefix = (locationCode: string) => {
     const parts = locationCode && locationCode.split('-')
     if (parts && parts.length > 0) {
-      if (parts[1] === 'RECP') return `${parts[0]}-RECEP`
       return parts.slice(0, 2).join('-')
     }
-
     return null
   }
 }
