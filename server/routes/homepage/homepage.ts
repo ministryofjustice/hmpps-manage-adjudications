@@ -94,7 +94,7 @@ const createTasks = (): TaskType[] => {
       id: 'confirm-dis-has-been-issued',
       heading: 'Confirm DIS 1/ 2 has been issued to the prisoner',
       description: '',
-      href: adjudicationUrls.confirmDisHasBeenIssued.root,
+      href: adjudicationUrls.confirmDISFormsIssued.root,
       roles: [],
       enabled: true,
     },

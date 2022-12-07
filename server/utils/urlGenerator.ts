@@ -1,5 +1,5 @@
 import url from 'url'
-import { UiFilter } from './adjudicationFilterHelper'
+import { DISUiFilter, UiFilter } from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
   offenceCodeSelection: {
@@ -349,6 +349,29 @@ const adjudicationUrls = {
         `${adjudicationUrls.acceptedReportConfirmation.root}/${adjudicationNumber}`,
     },
   },
+  confirmDISFormsIssued: {
+    root: '/issue-DIS1-2',
+    urls: {
+      start: () => adjudicationUrls.confirmDISFormsIssued.root,
+      filter: (filter: DISUiFilter) =>
+        url.format({
+          pathname: adjudicationUrls.confirmDISFormsIssued.root,
+          query: { ...filter },
+        }),
+    },
+    matchers: {
+      start: '/',
+    },
+  },
+  addIssueDateTime: {
+    root: '/add-issue-date-time',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.addIssueDateTime.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
@@ -363,12 +386,6 @@ const adjudicationUrls = {
   },
   printCompletedDisForms: {
     root: '/print-completed-dis-forms',
-    matchers: {
-      start: '/',
-    },
-  },
-  confirmDisHasBeenIssued: {
-    root: '/confirm-dis-has-been-issued',
     matchers: {
       start: '/',
     },

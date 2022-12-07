@@ -15,6 +15,12 @@ export default class LocationService {
     return new PrisonApiClient(token).getAgency(agencyId)
   }
 
+  async getLocationsForUser(user: User): Promise<Location[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const locations = await new PrisonApiClient(token).getUsersLocations()
+    return locations.filter(loc => loc.userDescription)
+  }
+
   async getIncidentLocations(agencyId: AgencyId, user: User): Promise<PrisonLocation[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const incidentLocations = await new PrisonApiClient(token).getLocations(agencyId)

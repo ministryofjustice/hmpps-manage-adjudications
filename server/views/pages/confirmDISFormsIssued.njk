@@ -1,0 +1,80 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/DISFormFilter.njk" import DISFormFilter %}
+{% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Confirm DIS1/2 has been issued to prisoner" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken) }}
+  
+  {% set rows = [] %}
+  {% for report in reports %}
+    {% set index = loop.index %}
+    {% set addDateAndTimeLink %}
+      <a href="{{ adjudicationUrls.addIssueDateTime.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="add-issue-date-time-link-{{ index }}">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
+      </a>
+    {% endset -%}
+    {% set rows = (rows.push([
+      { text: report.displayName + ' - ' + report.prisonerNumber },
+      { text: report.formattedDateTimeOfDiscovery,
+        attributes: {
+        "data-sort-value": report.dateTimeOfDiscovery
+      }
+      },
+      { text: report.prisonerLocation },
+      { text: report.formattedDateTimeOfIssue or ' - ' },
+      { text: report.issuingOfficer or ' - ' },
+      { html: addDateAndTimeLink }
+    ]), rows) %}
+  {% endfor %}
+  {% if rows | length %}
+    <div class="results-table">
+      {{ govukTable({
+      head: [
+        { text: 'Name and prison number',
+          classes: 'confirmDISFormTable-prisonerNameNumber'
+        },
+        { text: "Discovery date and time",
+          classes: 'confirmDISFormTable-discDateTime',
+          attributes: {
+          "aria-sort": "descending"
+        }
+        },
+        { text: "Prisoner location",
+          classes: 'confirmDISFormTable-prisonerLocation'
+        },
+        { text: "Issue date and time",
+          classes: 'confirmDISFormTable-issueDateTime'
+        },
+        { text: "Issuing officer",
+          classes: 'confirmDISFormTable-officerName'
+        },
+        { text: "",
+          classes: 'confirmDISFormTable-link'
+        }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
+    }) }}
+    </div>
+  {% else %}
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
+  {% endif %}
+{% endblock %}

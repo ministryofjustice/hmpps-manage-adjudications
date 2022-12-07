@@ -53,6 +53,7 @@ export default defineConfig({
         stubGetAgency: prisonApi.stubGetAgency,
         stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
         stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,
+        stubGetUsersLocations: prisonApi.stubGetUsersLocations,
 
         stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
         stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
@@ -81,6 +82,7 @@ export default defineConfig({
         stubAmendHearing: adjudications.stubAmendHearing,
         stubGetHearingsGivenAgencyAndDate: adjudications.stubGetHearingsGivenAgencyAndDate,
         stubAmendPrisonerGender: adjudications.stubAmendPrisonerGender,
+        stubGetReportedAdjudicationIssueData: adjudications.stubGetReportedAdjudicationIssueData,
       })
     },
 

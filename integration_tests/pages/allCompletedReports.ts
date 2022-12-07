@@ -1,6 +1,6 @@
 import Page, { PageElement } from './page'
 
-export default class YourCompletedReportsPage extends Page {
+export default class AllCompletedReportsPage extends Page {
   constructor() {
     super('Adjudications')
   }

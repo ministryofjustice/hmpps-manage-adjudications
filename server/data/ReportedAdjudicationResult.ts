@@ -11,6 +11,7 @@ import {
   PrisonerGender,
   WitnessDetails,
 } from './DraftAdjudicationResult'
+import { LocationId } from './PrisonLocationResult'
 
 export type ReportedAdjudication = {
   adjudicationNumber: number
@@ -32,10 +33,16 @@ export type ReportedAdjudication = {
   witnesses?: WitnessDetails[]
   hearings?: HearingDetails[]
   gender: PrisonerGender
+  issuingOfficer?: string
+  dateTimeOfIssue?: string
 }
 
 export type ReportedAdjudicationResult = {
   reportedAdjudication: ReportedAdjudication
+}
+
+export type ReportedAdjudicationsResult = {
+  reportedAdjudications: ReportedAdjudication[]
 }
 
 export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
@@ -50,10 +57,26 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   formattedDateTimeOfScheduledHearing: string
 }
 
+export interface ReportedAdjudicationEnhancedWithIssuingDetails extends ReportedAdjudication {
+  displayName: string
+  friendlyName: string
+  issuingOfficer: string
+  prisonerLocation: string
+  formattedDateTimeOfDiscovery: string
+  dateTimeOfDiscovery: string
+  formattedDateTimeOfIssue: string
+}
+
 export type ReportedAdjudicationFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+}
+
+export type ReportedAdjudicationDISFormFilter = {
+  fromDate: moment.Moment
+  toDate: moment.Moment
+  locationId: LocationId
 }
 
 export type ScheduledHearingFilter = {

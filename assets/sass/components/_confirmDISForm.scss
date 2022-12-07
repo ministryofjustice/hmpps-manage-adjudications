@@ -1,0 +1,11 @@
+.confirmDISFormTable {
+  &-prisonerLocation, &-officerName {
+    width: 15%;
+  }
+  &-issueDateTime  {
+    width: 17%;
+  }
+  &-link {
+    width: 13%;
+  }
+}

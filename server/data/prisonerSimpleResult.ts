@@ -9,4 +9,7 @@ export default class PrisonerSimpleResult {
 
   @Expose()
   lastName: string
+
+  @Expose()
+  assignedLivingUnitDesc?: string
 }

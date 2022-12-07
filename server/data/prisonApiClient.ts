@@ -17,6 +17,20 @@ export interface CaseLoad {
   currentlyActive: boolean
 }
 
+export interface Inmate {
+  bookingId: number
+  bookingNo: string
+  offenderNo: string
+  firstName: string
+  lastName: string
+  dateOfBirth: string
+  age: number
+  agencyId: string
+  assignedLivingUnitId: number
+  alertsCodes: string[]
+  alertsDetails: string[]
+}
+
 export default class PrisonApiClient {
   restClient: RestClient
 
@@ -64,6 +78,12 @@ export default class PrisonApiClient {
   async getLocation(locationId: LocationId): Promise<Location> {
     return this.restClient.get({
       path: `/api/locations/${locationId}`,
+    })
+  }
+
+  async getUsersLocations(): Promise<Location[]> {
+    return this.restClient.get({
+      path: `/api/users/me/locations`,
     })
   }
 

@@ -127,7 +127,7 @@ context('Home page', () => {
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.confirmDisHasBeenIssuedLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.confirmDisHasBeenIssued.root)
+      expect(loc.pathname).to.eq(adjudicationUrls.confirmDISFormsIssued.root)
     })
   })
 })
