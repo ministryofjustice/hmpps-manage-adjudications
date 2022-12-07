@@ -37,7 +37,7 @@
         }
       },
       { html: discoveryDateTimeHtml, attributes: {
-          "data-sort-value": report.incidentDetails.dateTimeOfIncident
+          "data-sort-value": report.incidentDetails.dateTimeOfDiscovery
         } },
       { html: continueReportLinkHtml }
     ]), rows) %}
@@ -56,7 +56,7 @@
           },
           { text: "Discovery date and time", 
             attributes: {
-              "aria-sort": "ascending",
+              "aria-sort": "descending",
               "data-qa": "date-sort"
 
             }
