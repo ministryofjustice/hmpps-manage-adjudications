@@ -47,6 +47,7 @@ export default class AllCompletedReportsRoutes {
     const filteredResults = filter.locationId
       ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationId, user)
       : results
+
     return this.renderView(req, res, uiFilter, filteredResults, [])
   }
 

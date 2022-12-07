@@ -82,9 +82,9 @@ export default class TestData {
         userDescription: 'Houseblock 2',
       },
       {
-        locationId: 722174,
+        locationId: 26956,
         agencyId: 'MDI',
-        locationPrefix: 'MDI-RECV',
+        locationPrefix: 'MDI-RECEP',
         userDescription: 'Reception',
       },
       {
