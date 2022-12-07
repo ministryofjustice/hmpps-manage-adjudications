@@ -39,7 +39,7 @@
                   label: {
                     text: 'Residential location'
                   },
-                  items: locations | toSelect('locationId', 'userDescription', filter.locationId ),
+                  items: locations | toSelect('locationId', 'userDescription', filter.locationId, null, 'description' ),
                   attributes: {
                     "data-qa": "locationId"
                   }

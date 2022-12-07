@@ -18,7 +18,8 @@ export default class LocationService {
   async getLocationsForUser(user: User): Promise<Location[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const locations = await new PrisonApiClient(token).getUsersLocations()
-    return locations.filter(loc => loc.userDescription)
+    // This removes the first entry in the response (which is usually the prison as a whole), we don't need it here
+    return locations.filter(loc => loc.locationId > 0)
   }
 
   async getIncidentLocations(agencyId: AgencyId, user: User): Promise<PrisonLocation[]> {
