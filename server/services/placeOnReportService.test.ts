@@ -512,6 +512,7 @@ describe('placeOnReportService', () => {
             id: 1,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-16T14:15:00',
+              dateTimeOfDiscovery: '2021-11-16T14:15:00',
               locationId: 123,
             },
             incidentStatement: {
@@ -525,6 +526,7 @@ describe('placeOnReportService', () => {
             id: 2,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-20T09:45:00',
+              dateTimeOfDiscovery: '2021-11-20T09:45:00',
               locationId: 456,
             },
             incidentStatement: {
@@ -542,16 +544,16 @@ describe('placeOnReportService', () => {
           displayName: 'Burrows, Jack',
           friendlyName: 'Jack Burrows',
           id: 2,
-          incidentDate: '20 November 2021',
+          formattedDiscoveryDateTime: '20 November 2021 - 09:45',
           incidentDetails: {
             dateTimeOfIncident: '2021-11-20T09:45:00',
+            dateTimeOfDiscovery: '2021-11-20T09:45:00',
             locationId: 456,
           },
           incidentStatement: {
             completed: true,
             statement: 'test',
           },
-          incidentTime: '09:45',
           prisonerNumber: 'G2996UX',
         },
         {
@@ -559,16 +561,16 @@ describe('placeOnReportService', () => {
           displayName: 'Smith, John',
           friendlyName: 'John Smith',
           id: 1,
-          incidentDate: '16 November 2021',
+          formattedDiscoveryDateTime: '16 November 2021 - 14:15',
           incidentDetails: {
             dateTimeOfIncident: '2021-11-16T14:15:00',
+            dateTimeOfDiscovery: '2021-11-16T14:15:00',
             locationId: 123,
           },
           incidentStatement: {
             completed: false,
             statement: 'test',
           },
-          incidentTime: '14:15',
           prisonerNumber: 'A12345',
         },
       ])

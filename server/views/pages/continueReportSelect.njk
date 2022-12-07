@@ -21,13 +21,10 @@
       {% set rows = [] %}
       {% for report in reports %}
         {% set prisonerLinkHtml %}
-        <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ report.prisonerNumber }}" class="govuk-link">{{ report.displayName }}</a>
+        <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ report.prisonerNumber }}" class="govuk-link">{{ report.displayName }} - {{report.prisonerNumber}} </a>
         {% endset -%}
-        {% set incidentDateHtml %}
-        <p class="govuk-body continue-report-text" data-qa="incident-date-text">{{ report.incidentDate }}</p>
-        {% endset -%}
-        {% set incidentTimeHtml %}
-        <p class="govuk-body continue-report-text" data-qa="incident-time-text">{{ report.incidentTime }}</p>
+        {% set discoveryDateTimeHtml %}
+        <p class="govuk-body continue-report-text" data-qa="incident-date-text">{{ report.formattedDiscoveryDateTime }}</p>
         {% endset -%}
         {% set continueReportLinkHtml %}
         <a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a>
@@ -39,10 +36,9 @@
           "data-sort-value": report.displayName
         }
       },
-      { html: incidentDateHtml, attributes: {
+      { html: discoveryDateTimeHtml, attributes: {
           "data-sort-value": report.incidentDetails.dateTimeOfIncident
         } },
-      { html: incidentTimeHtml },
       { html: continueReportLinkHtml }
     ]), rows) %}
       {% endfor %}
@@ -52,20 +48,19 @@
           {{ govukTable({
         head: [
           {
-            text: "Prisoner’s name",
+            text: "Name and prison number",
             attributes: {
               "aria-sort": "ascending",
               "data-qa": "prisoner-name-sort"
             }
           },
-          { text: "Date of incident", 
+          { text: "Discovery date and time", 
             attributes: {
               "aria-sort": "ascending",
               "data-qa": "date-sort"
 
             }
            },
-          { text: "Time of incident"},
           { text: "" }
         ],
         rows: rows,
