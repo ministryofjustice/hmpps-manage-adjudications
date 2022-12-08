@@ -46,7 +46,8 @@ describe('GET /select-report', () => {
           prisonerNumber: 'G6415GD',
           incidentDetails: {
             locationId: 357591,
-            dateTimeOfIncident: '2021-10-12T20:00:00',
+            dateTimeOfIncident: '2020-10-12T20:00:00',
+            dateTimeOfDiscovery: '2022-12-22T20:00:00',
           },
           incidentRole: {},
           incidentStatement: {
@@ -56,15 +57,15 @@ describe('GET /select-report', () => {
           startedByUserId: 'NCLAMP_GEN',
           displayName: 'Aidetria, Udfsanaye',
           friendlyName: 'Udfsanaye Aidetria',
-          incidentDate: '12 October 2021',
-          incidentTime: '20:00',
+          formattedDiscoveryDateTime: '22 December 2022 - 15:00',
         },
         {
           id: 58,
           prisonerNumber: 'G5966UI',
           incidentDetails: {
             locationId: 27187,
-            dateTimeOfIncident: '2021-11-11T15:15:00',
+            dateTimeOfIncident: '2020-11-11T15:15:00',
+            dateTimeOfDiscovery: '2022-12-22T15:15:00',
           },
           incidentRole: {},
           incidentStatement: {
@@ -74,8 +75,7 @@ describe('GET /select-report', () => {
           startedByUserId: 'NCLAMP_GEN',
           displayName: 'Babik, Carroll',
           friendlyName: 'Carroll Babik',
-          incidentDate: '11 November 2021',
-          incidentTime: '15:15',
+          formattedDiscoveryDateTime: '22 December 2022 - 16:00',
         },
       ])
     })
@@ -85,11 +85,11 @@ describe('GET /select-report', () => {
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Select a report')
-          expect(response.text).toContain('Aidetria, Udfsanaye')
-          expect(response.text).toContain('12 October 2021')
+          expect(response.text).toContain('Aidetria, Udfsanaye - G6415GD')
+          expect(response.text).toContain('22 December 2022 - 15:00')
           expect(response.text).toContain('Continue')
-          expect(response.text).toContain('Babik, Carroll')
-          expect(response.text).toContain('11 November 2021')
+          expect(response.text).toContain('Babik, Carroll - G5966UI')
+          expect(response.text).toContain('22 December 2022 - 16:00')
           expect(response.text).toContain('Continue')
         })
     })

@@ -45,8 +45,7 @@ export interface PrisonerResultSummary extends PrisonerResult {
 interface DraftAdjudicationEnhanced extends DraftAdjudication {
   displayName: string
   friendlyName: string
-  incidentDate: string
-  incidentTime: string
+  formattedDiscoveryDateTime: string
 }
 
 export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
@@ -289,9 +288,9 @@ export default class PlaceOnReportService {
         const prisoner = prisonerDetails.get(report.prisonerNumber)
         const displayName = convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`)
         const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
-        const incidentDate = getDate(report.incidentDetails.dateTimeOfIncident, 'D MMMM YYYY')
-        const incidentTime = getTime(report.incidentDetails.dateTimeOfIncident)
-        return { ...report, displayName, friendlyName, incidentDate, incidentTime }
+        const formattedDiscoveryDateTime = getDate(report.incidentDetails.dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm')
+
+        return { ...report, displayName, friendlyName, formattedDiscoveryDateTime }
       })
     }
 

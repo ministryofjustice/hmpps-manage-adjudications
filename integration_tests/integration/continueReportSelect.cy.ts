@@ -15,6 +15,7 @@ context('Continue a report - select report', () => {
             id: 1,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-16T16:45:00',
+              dateTimeOfDiscovery: '2022-11-16T16:45:00',
               locationId: 233,
             },
             incidentStatement: {
@@ -28,6 +29,7 @@ context('Continue a report - select report', () => {
             id: 2,
             incidentDetails: {
               dateTimeOfIncident: '2021-11-14T08:30:00',
+              dateTimeOfDiscovery: '2022-11-14T08:30:00',
               locationId: 644,
             },
             incidentStatement: {
@@ -59,23 +61,20 @@ context('Continue a report - select report', () => {
         .resultsTable()
         .find('th')
         .then($headings => {
-          expect($headings.get(0).innerText).to.contain('Prisoner’s name')
-          expect($headings.get(1).innerText).to.contain('Date of incident')
-          expect($headings.get(2).innerText).to.contain('Time of incident')
+          expect($headings.get(0).innerText).to.contain('Name and prison number')
+          expect($headings.get(1).innerText).to.contain('Discovery date and time')
         })
 
       continueReportSelectPage
         .resultsTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('Broom, Sandy')
-          expect($data.get(1).innerText).to.contain('14 November 2021')
-          expect($data.get(2).innerText).to.contain('08:30')
-          expect($data.get(3).innerText).to.contain('Continue')
-          expect($data.get(4).innerText).to.contain('Smith, Abe')
-          expect($data.get(5).innerText).to.contain('16 November 2021')
-          expect($data.get(6).innerText).to.contain('16:45')
-          expect($data.get(7).innerText).to.contain('Continue')
+          expect($data.get(0).innerText).to.contain('Broom, Sandy - G2996UP')
+          expect($data.get(1).innerText).to.contain('14 November 2022 - 08:30')
+          expect($data.get(2).innerText).to.contain('Continue')
+          expect($data.get(3).innerText).to.contain('Smith, Abe - G2996UX')
+          expect($data.get(4).innerText).to.contain('16 November 2022 - 16:45')
+          expect($data.get(5).innerText).to.contain('Continue')
         })
     })
     it('should reorder the table entries when you manually sort on prisoner name', () => {
@@ -88,14 +87,12 @@ context('Continue a report - select report', () => {
         .resultsTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('Smith, Abe')
-          expect($data.get(1).innerText).to.contain('16 November 2021')
-          expect($data.get(2).innerText).to.contain('16:45')
-          expect($data.get(3).innerText).to.contain('Continue')
-          expect($data.get(4).innerText).to.contain('Broom, Sandy')
-          expect($data.get(5).innerText).to.contain('14 November 2021')
-          expect($data.get(6).innerText).to.contain('08:30')
-          expect($data.get(7).innerText).to.contain('Continue')
+          expect($data.get(0).innerText).to.contain('Smith, Abe - G2996UX')
+          expect($data.get(1).innerText).to.contain('16 November 2022 - 16:45')
+          expect($data.get(2).innerText).to.contain('Continue')
+          expect($data.get(3).innerText).to.contain('Broom, Sandy - G2996UP')
+          expect($data.get(4).innerText).to.contain('14 November 2022 - 08:30')
+          expect($data.get(5).innerText).to.contain('Continue')
         })
     })
     it('should reorder the table entries when you manually sort on date', () => {
@@ -108,14 +105,12 @@ context('Continue a report - select report', () => {
         .resultsTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('Smith, Abe')
-          expect($data.get(1).innerText).to.contain('16 November 2021')
-          expect($data.get(2).innerText).to.contain('16:45')
-          expect($data.get(3).innerText).to.contain('Continue')
-          expect($data.get(4).innerText).to.contain('Broom, Sandy')
-          expect($data.get(5).innerText).to.contain('14 November 2021')
-          expect($data.get(6).innerText).to.contain('08:30')
-          expect($data.get(7).innerText).to.contain('Continue')
+          expect($data.get(3).innerText).to.contain('Smith, Abe - G2996UX')
+          expect($data.get(4).innerText).to.contain('16 November 2022 - 16:45')
+          expect($data.get(5).innerText).to.contain('Continue')
+          expect($data.get(0).innerText).to.contain('Broom, Sandy - G2996UP')
+          expect($data.get(1).innerText).to.contain('14 November 2022 - 08:30')
+          expect($data.get(2).innerText).to.contain('Continue')
         })
     })
     it('should take you to the task list for the report you wish to continue', () => {
