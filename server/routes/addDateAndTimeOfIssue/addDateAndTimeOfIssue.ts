@@ -25,11 +25,11 @@ export default class AddDateAndTimeOfIssueRoutes {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
     const { issuedDate } = req.body
-
     const validationErrors = validateForm(issuedDate)
     if (validationErrors) {
       return this.renderView(res, issuedDate, validationErrors)
     }
+
     try {
       await this.reportedAdjudicationsService.issueDISForm(adjudicationNumber, formatDate(issuedDate), user)
     } catch (postError) {
