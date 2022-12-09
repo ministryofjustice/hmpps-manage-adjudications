@@ -13,7 +13,7 @@ import {
 import { ReportedAdjudicationEnhancedWithIssuingDetails } from '../../data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 
-export default class AllCompletedReportsRoutes {
+export default class confirmDISFormsIssuedRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService
