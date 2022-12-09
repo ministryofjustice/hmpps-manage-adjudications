@@ -60,28 +60,33 @@ context('Confirm DIS forms have been issued', () => {
   })
   it('has working links to add date and time of issue', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(
-        12345,
-        'G7234VB',
-        testData.generateOtherData(
-          'Smith, James',
-          'James Smith',
-          '',
-          'MDI-MCASU',
-          '5 December 2022 - 11:11',
-          '2022-12-05T11:11:00',
-          '5 December 2022 - 15:00'
-        ),
-        '2022-12-06T10:45:00'
-      ),
+      testData.completedAdjudication(12345, 'G7234VB', {
+        displayName: 'Smith, James',
+        friendlyName: 'James Smith',
+        issuingOfficer: 'TEST_GEN',
+        prisonerLocation: 'MDI-MCASU',
+        formattedDateTimeOfIssue: '5 December 2022 - 15:00',
+        dateTimeOfIssue: '2022-12-05T15:00:00',
+        formsAlreadyIssued: true,
+      }),
+      testData.completedAdjudication(23456, 'G7234VB', {
+        displayName: 'Smith, James',
+        friendlyName: 'James Smith',
+        issuingOfficer: null,
+        prisonerLocation: 'MDI-MCASU',
+        formattedDateTimeOfIssue: null,
+        dateTimeOfIssue: null,
+        formsAlreadyIssued: false,
+      }),
     ]
     cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
     cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
-    confirmDISFormsIssued.addDateAndTimeLink(1).click()
+    confirmDISFormsIssued.addDateAndTimeLink(1).should('not.exist')
+    confirmDISFormsIssued.addDateAndTimeLink(2).click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.addIssueDateTime.urls.start(12345))
+      expect(loc.pathname).to.eq(adjudicationUrls.addIssueDateTime.urls.start(23456))
     })
   })
   it('should have the required elements - reports present but not issued', () => {
@@ -89,30 +94,30 @@ context('Confirm DIS forms have been issued', () => {
       testData.completedAdjudication(
         12345,
         'G7234VB',
-        testData.generateOtherData(
-          'Smith, James',
-          'James Smith',
-          '',
-          'MDI-MCASU',
-          '5 December 2022 - 11:11',
-          '2022-12-05T11:11:00',
-          '5 December 2022 - 15:00'
-        ),
-        '2022-12-06T10:45:00'
+        {
+          displayName: 'Smith, James',
+          friendlyName: 'James Smith',
+          issuingOfficer: null,
+          prisonerLocation: 'MDI-MCASU',
+          formattedDateTimeOfIssue: null,
+          dateTimeOfIssue: null,
+          formsAlreadyIssued: false,
+        },
+        '2022-12-05T11:11:00'
       ),
       testData.completedAdjudication(
         23456,
         'P3785CP',
-        testData.generateOtherData(
-          'Tovey, Peter',
-          'Peter Tovey',
-          '',
-          'MDI-RECP',
-          '6 December 2022 - 12:10',
-          '2022-12-06T11:11:00',
-          '6 December 2022 - 16:30'
-        ),
-        '2022-12-06T11:45:00'
+        {
+          displayName: 'Tovey, Peter',
+          friendlyName: 'Peter Tovey',
+          issuingOfficer: null,
+          prisonerLocation: 'MDI-RECP',
+          formattedDateTimeOfIssue: null,
+          dateTimeOfIssue: null,
+          formsAlreadyIssued: false,
+        },
+        '2022-12-06T12:10:00'
       ),
     ]
     cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
@@ -134,37 +139,36 @@ context('Confirm DIS forms have been issued', () => {
     confirmDISFormsIssued
       .resultsTable()
       .find('td')
-      .then($headers => {
-        expect($headers.get(0).innerText).to.contain('Smith, James - G7234VB')
-        expect($headers.get(1).innerText).to.contain('6 December 2022 - 10:45')
-        expect($headers.get(2).innerText).to.contain('MDI-RECP')
-        expect($headers.get(3).innerText).to.contain('-')
-        expect($headers.get(4).innerText).to.contain('-')
-        expect($headers.get(5).innerText).to.contain('Add date and time')
-        expect($headers.get(6).innerText).to.contain('Tovey, Peter - P3785CP')
-        expect($headers.get(7).innerText).to.contain('6 December 2022 - 11:45')
-        expect($headers.get(8).innerText).to.contain('MDI-MCASU')
-        expect($headers.get(9).innerText).to.contain('-')
-        expect($headers.get(10).innerText).to.contain('-')
-        expect($headers.get(11).innerText).to.contain('Add date and time')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Smith, James - G7234VB')
+        expect($data.get(1).innerText).to.contain('5 December 2022 - 11:11')
+        expect($data.get(2).innerText).to.contain('MDI-RECP')
+        expect($data.get(3).innerText).to.contain('-')
+        expect($data.get(4).innerText).to.contain('-')
+        expect($data.get(5).innerText).to.contain('Add date and time')
+        expect($data.get(6).innerText).to.contain('Tovey, Peter - P3785CP')
+        expect($data.get(7).innerText).to.contain('6 December 2022 - 12:10')
+        expect($data.get(8).innerText).to.contain('MDI-MCASU')
+        expect($data.get(9).innerText).to.contain('-')
+        expect($data.get(10).innerText).to.contain('-')
+        expect($data.get(11).innerText).to.contain('Add date and time')
       })
   })
-  it('should show the date and time of issuing, as the issuing officer if data is present', () => {
+  it('should show the date and time of issuing, as the issuing officer if data is present, and not contain a link to issue another date and time', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(
         12345,
         'G7234VB',
-        testData.generateOtherData(
-          'Smith, James',
-          'James Smith',
-          'TEST_GEN',
-          'MDI-MCASU',
-          '5 December 2022 - 11:11',
-          '2022-12-05T11:11:00',
-          '5 December 2022 - 15:00',
-          '2022-12-05T15:00:00'
-        ),
-        '2022-12-06T10:45:00'
+        {
+          displayName: 'Smith, James',
+          friendlyName: 'James Smith',
+          issuingOfficer: 'TEST_GEN',
+          prisonerLocation: 'MDI-MCASU',
+          formattedDateTimeOfIssue: '5 December 2022 - 15:00',
+          dateTimeOfIssue: '2022-12-05T15:00:00',
+          formsAlreadyIssued: true,
+        },
+        '2022-12-05T11:11:00'
       ),
     ]
     cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
@@ -175,13 +179,13 @@ context('Confirm DIS forms have been issued', () => {
     confirmDISFormsIssued
       .resultsTable()
       .find('td')
-      .then($headers => {
-        expect($headers.get(0).innerText).to.contain('Smith, James - G7234VB')
-        expect($headers.get(1).innerText).to.contain('6 December 2022 - 10:45')
-        expect($headers.get(2).innerText).to.contain('MDI-RECP')
-        expect($headers.get(3).innerText).to.contain('5 December 2022 - 15:00')
-        expect($headers.get(4).innerText).to.contain('T. User')
-        expect($headers.get(5).innerText).to.contain('Add date and time')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Smith, James - G7234VB')
+        expect($data.get(1).innerText).to.contain('5 December 2022 - 11:11')
+        expect($data.get(2).innerText).to.contain('MDI-RECP')
+        expect($data.get(3).innerText).to.contain('5 December 2022 - 15:00')
+        expect($data.get(4).innerText).to.contain('T. User')
+        expect($data.get(5).innerText).to.not.contain('Add date and time')
       })
   })
   it('should filter on the parameters given - dates only', () => {
@@ -189,32 +193,30 @@ context('Confirm DIS forms have been issued', () => {
       testData.completedAdjudication(
         12345,
         'G7234VB',
-        testData.generateOtherData(
-          'Smith, James',
-          'James Smith',
-          'TEST_GEN',
-          'MDI-MCASU',
-          '5 December 2022 - 11:11',
-          '2022-12-05T11:11:00',
-          '5 December 2022 - 15:00',
-          '2022-12-05T15:00:00'
-        ),
-        '2022-12-05T10:45:00'
+        {
+          displayName: 'Smith, James',
+          friendlyName: 'James Smith',
+          issuingOfficer: 'TEST_GEN',
+          prisonerLocation: 'MDI-MCASU',
+          formattedDateTimeOfIssue: '5 December 2022 - 15:00',
+          dateTimeOfIssue: '2022-12-05T15:00:00',
+          formsAlreadyIssued: true,
+        },
+        '2022-12-05T11:11:00'
       ),
       testData.completedAdjudication(
         23456,
         'P3785CP',
-        testData.generateOtherData(
-          'Tovey, Peter',
-          'Peter Tovey',
-          'TEST_GEN',
-          'MDI-RECP',
-          '6 December 2022 - 12:10',
-          '2022-12-06T11:11:00',
-          '6 December 2022 - 16:30',
-          '2022-12-05T15:00:00'
-        ),
-        '2022-12-06T11:45:00'
+        {
+          displayName: 'Tovey, Peter',
+          friendlyName: 'Peter Tovey',
+          issuingOfficer: 'TEST_GEN',
+          prisonerLocation: 'MDI-RECP',
+          formattedDateTimeOfIssue: '6 December 2022 - 16:30',
+          dateTimeOfIssue: '2022-12-06T16:30:00',
+          formsAlreadyIssued: true,
+        },
+        '2022-12-05T12:10:00'
       ),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
@@ -240,32 +242,30 @@ context('Confirm DIS forms have been issued', () => {
       testData.completedAdjudication(
         12345,
         'G7234VB',
-        testData.generateOtherData(
-          'Smith, James',
-          'James Smith',
-          'TEST_GEN',
-          'MDI-MCASU',
-          '5 December 2022 - 11:11',
-          '2022-12-05T11:11:00',
-          '5 December 2022 - 15:00',
-          '2022-12-05T15:00:00'
-        ),
-        '2022-12-05T10:45:00'
+        {
+          displayName: 'Smith, James',
+          friendlyName: 'James Smith',
+          issuingOfficer: 'TEST_GEN',
+          prisonerLocation: 'MDI-MCASU',
+          formattedDateTimeOfIssue: '5 December 2022 - 15:00',
+          dateTimeOfIssue: '2022-12-05T15:00:00',
+          formsAlreadyIssued: true,
+        },
+        '2022-12-05T11:11:00'
       ),
       testData.completedAdjudication(
         23456,
         'P3785CP',
-        testData.generateOtherData(
-          'Tovey, Peter',
-          'Peter Tovey',
-          'TEST_GEN',
-          'MDI-RECP',
-          '6 December 2022 - 12:10',
-          '2022-12-06T11:11:00',
-          '6 December 2022 - 16:30',
-          '2022-12-05T15:00:00'
-        ),
-        '2022-12-06T11:45:00'
+        {
+          displayName: 'Tovey, Peter',
+          friendlyName: 'Peter Tovey',
+          issuingOfficer: 'TEST_GEN',
+          prisonerLocation: 'MDI-RECP',
+          formattedDateTimeOfIssue: '6 December 2022 - 16:30',
+          dateTimeOfIssue: '2022-12-06T16:30:00',
+          formsAlreadyIssued: true,
+        },
+        '2022-12-06T11:11:00'
       ),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
@@ -291,13 +291,13 @@ context('Confirm DIS forms have been issued', () => {
     confirmDISFormsIssued
       .resultsTable()
       .find('td')
-      .then($headers => {
-        expect($headers.get(0).innerText).to.contain('Tovey, Peter - P3785CP')
-        expect($headers.get(1).innerText).to.contain('6 December 2022 - 11:45')
-        expect($headers.get(2).innerText).to.contain('MDI-MCASU')
-        expect($headers.get(3).innerText).to.contain('5 December 2022 - 15:00')
-        expect($headers.get(4).innerText).to.contain('T. User')
-        expect($headers.get(5).innerText).to.contain('Add date and time')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Tovey, Peter - P3785CP')
+        expect($data.get(1).innerText).to.contain('6 December 2022 - 11:11')
+        expect($data.get(2).innerText).to.contain('MDI-MCASU')
+        expect($data.get(3).innerText).to.contain('6 December 2022 - 16:30')
+        expect($data.get(4).innerText).to.contain('T. User')
+        expect($data.get(5).innerText).to.not.contain('Add date and time')
       })
   })
 })
