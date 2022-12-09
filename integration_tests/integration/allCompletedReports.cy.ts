@@ -434,6 +434,113 @@ context('All Completed Reports', () => {
       })
   })
 
+  it('SCHEDULED and UNSCHEDULED adjudications should show together', () => {
+    cy.task('stubGetUserFromUsername', {
+      username: 'TEST_GEN',
+      response: {
+        activeCaseLoadId: 'MDI',
+        name: 'Test User',
+        username: 'TEST_GEN',
+        token: 'token-1',
+        authSource: 'auth',
+      },
+    })
+    const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 5, _ => {
+      return {
+        gender: PrisonerGender.MALE,
+        adjudicationNumber: _,
+        prisonerNumber: 'A1234AA',
+        bookingId: 1,
+        incidentDetails: {
+          locationId: 1,
+          dateTimeOfIncident: '2222-10-10T11:30:00',
+          dateTimeOfDiscovery: '2345-11-15T11:30:00',
+          handoverDeadline: '2021-10-12T11:30:00',
+        },
+        isYouthOffender: false,
+        incidentStatement: null,
+        createdByUserId: 'TEST_GEN',
+        createdDateTime: undefined,
+        incidentRole: {
+          associatedPrisonersNumber: undefined,
+          roleCode: undefined,
+        },
+        offenceDetails: undefined,
+        status: _ > 1 ? ReportedAdjudicationStatus.UNSCHEDULED : ReportedAdjudicationStatus.SCHEDULED,
+        hearings: [
+          {
+            id: 68,
+            locationId: 357596,
+            dateTimeOfHearing: '2022-11-23T17:00:00',
+            oicHearingType: 'INAD_ADULT',
+          },
+          {
+            id: 67,
+            locationId: 27187,
+            dateTimeOfHearing: '2022-11-28T09:00:00',
+            oicHearingType: 'INAD_ADULT',
+          },
+          {
+            id: 69,
+            locationId: 775,
+            dateTimeOfHearing: '2022-11-30T09:50:00',
+            oicHearingType: 'GOV_ADULT',
+          },
+          {
+            id: 70,
+            locationId: 775,
+            dateTimeOfHearing: '2023-11-30T10:00:00',
+            oicHearingType: 'GOV_ADULT',
+          },
+        ],
+      }
+    }) // The empty results to return when first landing on your completed reports page.
+    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
+    // The results to return when initially filtering
+    cy.task('stubGetAllReportedAdjudications', {
+      number: 0, // Page 1
+      allContent: manyReportedAdjudications,
+      filter: { status: 'UNSCHEDULED,SCHEDULED', fromDate: '2021-10-10', toDate: '2021-10-19' },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
+    cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
+    adjudicationsFilter.forceFromDate(10, 10, 2021)
+    adjudicationsFilter.forceToDate(19, 10, 2021)
+    allCompletedReportsPage.uncheckAllCheckboxes()
+    allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
+    allCompletedReportsPage.checkCheckboxWithValue('SCHEDULED')
+    adjudicationsFilter.applyButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&status=SCHEDULED')
+    })
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 5 of 5 results')
+    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
+        expect($data.get(2).innerText).to.contain('Scheduled')
+        expect($data.get(3).innerText).to.contain('30 November 2023 - 10:00')
+        expect($data.get(4).innerText).to.contain('View hearings')
+        expect($data.get(4).innerHTML).to.contain('/hearing-details/1/review')
+        expect($data.get(5).innerHTML).to.contain('/prisoner-report/1/review')
+        expect($data.get(5).innerText).to.contain('View report')
+        expect($data.get(6).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(7).innerText).to.contain('Potter, Harry - A1234AA')
+        expect($data.get(8).innerText).to.contain('Unscheduled')
+        expect($data.get(9).innerText).to.equal('-')
+        expect($data.get(10).innerText).to.contain('Schedule hearing')
+        expect($data.get(10).innerHTML).to.contain('/hearing-details/2/review')
+        expect($data.get(11).innerHTML).to.contain('/prisoner-report/2/review')
+        expect($data.get(11).innerText).to.contain('View report')
+      })
+  })
+
   it('date range validation works', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
