@@ -33,6 +33,7 @@ import viewScheduledHearingsRoutes from './viewScheduledHearings'
 import acceptedReportConfirmationRoutes from './acceptedReportConfirmation'
 import selectGenderRoutes from './selectGender'
 import confirmDISFormsIssuedRoutes from './confirmDISFormsIssued'
+import addDateAndTimeOfIssueRoutes from './addDateAndTimeOfIssue'
 
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
@@ -183,6 +184,8 @@ export default function routes(
     adjudicationUrls.confirmDISFormsIssued.root,
     confirmDISFormsIssuedRoutes({ reportedAdjudicationsService, locationService })
   )
+
+  router.use(adjudicationUrls.addIssueDateTime.root, addDateAndTimeOfIssueRoutes({ reportedAdjudicationsService }))
 
   return router
 }

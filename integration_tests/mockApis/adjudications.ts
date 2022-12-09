@@ -552,6 +552,21 @@ const stubGetReportedAdjudicationIssueData = ({
   })
 }
 
+const stubPutDateTimeOfIssue = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/issue`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -580,4 +595,5 @@ export default {
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,
   stubGetReportedAdjudicationIssueData,
+  stubPutDateTimeOfIssue,
 }

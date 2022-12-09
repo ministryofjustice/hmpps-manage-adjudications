@@ -608,4 +608,8 @@ export default class ReportedAdjudicationsService {
     }
     return null
   }
+
+  async issueDISForm(adjudicationNumber: number, dateTimeOfIssue: string, user: User) {
+    return new ManageAdjudicationsClient(user.token).putDateTimeOfIssue(adjudicationNumber, dateTimeOfIssue)
+  }
 }

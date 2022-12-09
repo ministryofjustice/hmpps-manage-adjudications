@@ -418,22 +418,30 @@ context('Incident details', () => {
       16001
     )
   })
-  it('line 36', () => {
+  it('line 36 - 17001', () => {
     checkSimpleDecisionPath(
-      ['Sets fire to, or damages, the prison or any property', 'Racially aggravated damage'],
-      24101
-    )
-  })
-  it('line 37', () => {
-    checkSimpleDecisionPath(
-      ['Sets fire to, or damages, the prison or any property', 'Destroys or damages any part of the prison'],
+      [
+        'Sets fire to, or damages, the prison or any property',
+        'Destroys part of the prison or someone else’s property',
+        'Yes',
+      ],
       17001
     )
   })
-  it('line 38', () => {
+  it('line 36 - 17002', () => {
     checkSimpleDecisionPath(
-      ['Sets fire to, or damages, the prison or any property', 'Destroys or damages someone else’s property'],
+      [
+        'Sets fire to, or damages, the prison or any property',
+        'Destroys part of the prison or someone else’s property',
+        'No',
+      ],
       17002
+    )
+  })
+  it('line 38 - 24101', () => {
+    checkSimpleDecisionPath(
+      ['Sets fire to, or damages, the prison or any property', 'Displays or draws abusive or racist images'],
+      24101
     )
   })
   it('line 40', () => {
