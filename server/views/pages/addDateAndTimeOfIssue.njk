@@ -1,0 +1,59 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/dateTimePicker.njk" import dateTimePicker %}
+
+{% set isDateError = errors | isErrorPresent(['issuedDate[date]']) %}
+{% set isHourError = errors | isErrorPresent(['issuedDate[time][hour]', 'issuedDate[time]']) %}
+{% set isMinuteError = errors | isErrorPresent(['issuedDate[time][minute]', 'issuedDate[time]']) %}
+
+{% set title = 'Add date and time' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+    {% if errors | length %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { "data-qa": "error-summary" }
+      }) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      <p class="govuk-body" data-qa="hint-para">This is the date and time that you gave the DIS 1/2 to the prisoner. <br>If someone else did this, they must log on to DPS and complete this themselves.</p>
+
+      {{ 
+        dateTimePicker({
+          errors: errors,
+          isDateError: isDateError,
+          isHourError: isHourError,
+          isMinuteError: isMinuteError,
+          dateTimeObj: issuedDate,
+          dateId: 'issuedDate',
+          dateLabel: 'Date of issue',
+          timeLabel: 'Time of issue',
+          dataQaDate: 'issued-date',
+          dataQaHour: 'issued-hour',
+          dataQaMinutes: 'issued-minutes'
+        })
+      }}
+
+    <div class="flex-container flex-center">
+      {{ govukButton({
+        text: 'Save',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "issue-date-and-time-submit" }
+      }) }}
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="issue-date-and-time-cancel">Cancel</a></p>
+    </div>
+
+    </form>
+{% endblock %}

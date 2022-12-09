@@ -276,4 +276,11 @@ export default class ManageAdjudicationsClient {
       data: { ...chosenGender },
     })
   }
+
+  async putDateTimeOfIssue(adjudicationNumber: number, dateTimeOfIssue: string): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/issue`,
+      data: { dateTimeOfIssue },
+    })
+  }
 }
