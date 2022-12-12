@@ -3,7 +3,7 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-import { ReviewStatus } from '../../server/routes/prisonerReport/prisonerReportReviewValidation'
+import { ReviewStatus } from '../../server/routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
 import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 

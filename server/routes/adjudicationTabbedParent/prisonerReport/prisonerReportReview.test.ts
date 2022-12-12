@@ -179,9 +179,6 @@ describe('GET prisoner report', () => {
       .get(adjudicationUrls.prisonerReport.urls.review(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
-        if (!config.hearingsFeatureFlag) {
-          expect(response.text).toContain('Bobby Da Smith Jones’ report')
-        }
         expect(response.text).toContain('10:45')
         expect(response.text).toContain('Chapel')
         expect(response.text).toContain('What type of offence did Bobby Da Smith Jones commit?')

@@ -35,7 +35,7 @@ import {
   HearingDetails,
 } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
-import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
+import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 

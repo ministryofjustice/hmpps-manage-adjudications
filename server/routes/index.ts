@@ -13,7 +13,6 @@ import prisonerSelectRoutes from './prisonerSelect'
 import yourCompletedReportsRoutes from './yourCompletedReports'
 import allCompletedReportsRoutes from './allCompletedReports'
 import continueReportSelectRoutes from './continueReport'
-import prisonerReportRoutes from './prisonerReport'
 
 import homepageRoutes from './homepage'
 import printReportRoutes from './printReport'
@@ -103,27 +102,15 @@ export default function routes(
     adjudicationUrls.printPdf.root,
     adjudicationPdfRoutes({ reportedAdjudicationsService, decisionTreeService })
   )
-  if (config.hearingsFeatureFlag === 'true') {
-    router.use(
-      adjudicationUrls.prisonerReport.root,
-      adjudicationReportRoutes({
-        reportedAdjudicationsService,
-        locationService,
-        userService,
-        decisionTreeService,
-      })
-    )
-  } else {
-    router.use(
-      adjudicationUrls.prisonerReport.root,
-      prisonerReportRoutes({
-        reportedAdjudicationsService,
-        locationService,
-        userService,
-        decisionTreeService,
-      })
-    )
-  }
+  router.use(
+    adjudicationUrls.prisonerReport.root,
+    adjudicationReportRoutes({
+      reportedAdjudicationsService,
+      locationService,
+      userService,
+      decisionTreeService,
+    })
+  )
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use(
     adjudicationUrls.detailsOfDamages.root,

@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { ReviewStatus } from '../routes/prisonerReport/prisonerReportReviewValidation'
+import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
 import {
   DamageDetails,
   EvidenceDetails,
