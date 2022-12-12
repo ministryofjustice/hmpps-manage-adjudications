@@ -24,6 +24,14 @@
       "matchDatasources": ["orb"],
       "matchPackageNames": ["cimg/node"],
       "allowedVersions": "16.15-browsers"
+    },
+    {
+      "matchPackageNames": ["typescript"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchPackageNames": ["govuk-frontend"],
+      "rangeStrategy": "bump"
     }
   ]
 }
