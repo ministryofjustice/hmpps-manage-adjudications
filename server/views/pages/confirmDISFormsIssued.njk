@@ -51,7 +51,10 @@
       {{ govukTable({
       head: [
         { text: 'Name and prison number',
-          classes: 'confirmDISFormTable-prisonerNameNumber'
+          classes: 'confirmDISFormTable-prisonerNameNumber',
+          attributes: {
+          "aria-sort": "none"
+        }
         },
         { text: "Discovery date and time",
           classes: 'confirmDISFormTable-discDateTime',
