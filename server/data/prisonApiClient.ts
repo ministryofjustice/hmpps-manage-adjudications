@@ -8,6 +8,7 @@ import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
 import { Agency, AgencyId, Location, LocationId } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
+import { Alert, PrisonerAlerts } from '../utils/alertHelper'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -65,7 +66,18 @@ export default class PrisonApiClient {
       path: `/api/bookings/offenders?activeOnly=false`,
       data: prisonerNumbers,
     })
-    return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: true }))
+
+    return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: false }))
+  }
+
+  async getAlertsForPrisoner(prisonerNumber: string): Promise<PrisonerAlerts> {
+    const alerts = await this.restClient.get<Alert[]>({
+      path: `/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=PRGNT,HA,CSIP,PEEP`,
+    })
+    return {
+      prisonerNumber,
+      alerts,
+    }
   }
 
   async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<Location[]> {

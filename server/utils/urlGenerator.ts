@@ -372,6 +372,20 @@ const adjudicationUrls = {
       start: (adjudicationNumber: number) => `${adjudicationUrls.addIssueDateTime.root}/${adjudicationNumber}`,
     },
   },
+  printCompletedDisForms: {
+    root: '/print-completed-DIS-forms',
+    matchers: {
+      start: '/',
+    },
+    urls: {
+      start: () => adjudicationUrls.printCompletedDisForms.root,
+      filter: (filter: DISUiFilter) =>
+        url.format({
+          pathname: adjudicationUrls.printCompletedDisForms.root,
+          query: { ...filter },
+        }),
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
@@ -382,12 +396,6 @@ const adjudicationUrls = {
     root: '/planned-maintenance',
     matchers: {
       start: '*',
-    },
-  },
-  printCompletedDisForms: {
-    root: '/print-completed-dis-forms',
-    matchers: {
-      start: '/',
     },
   },
 }

@@ -1,0 +1,83 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/DISFormFilter.njk" import DISFormFilter %}
+{% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Print completed DIS1/2 forms" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.printCompletedDisForms.urls.start(), csrfToken) }}
+  
+  {% set rows = [] %}
+  {% for report in reports %}
+    {% set index = loop.index %}
+    {% set printLink %}
+      <a href="{{ adjudicationUrls.printReport.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="print-DIS1/2-{{ report.adjudicationNumber }}">Print DIS1/2 <span class="govuk-visually-hidden">for {{ report.friendlyName | possessive }} adjudication report</span>
+      </a>
+    {% endset -%}
+    {% set rows = (rows.push([
+      { text: report.displayName + ' - ' + report.prisonerNumber },
+      { text: report.formattedDateTimeOfFirstHearing,
+        attributes: {
+        "data-sort-value": report.dateTimeOfFirstHearing
+      }
+      },
+      { text: report.prisonerLocation },
+      { text: report.relevantAlerts or ' - ' },
+      { text: report.issuedStatusDisplay },
+      { html: printLink }
+    ]), rows) %}
+  {% endfor %}
+  {% if rows | length %}
+    <div class="results-table">
+      {{ govukTable({
+      head: [
+        { text: 'Name and prison number',
+          classes: 'printCompletedDISForms-prisonerNameNumber',
+          attributes: {
+          "aria-sort": "none"
+        }
+        },
+        { text: "Hearing date and time",
+          classes: 'printCompletedDISForms-hearingDateTime',
+          attributes: {
+          "aria-sort": "descending"
+        }
+        },
+        { text: "Prisoner location",
+          classes: 'printCompletedDISForms-prisonerLocation'
+        },
+        { text: "Relevant alerts",
+          classes: 'printCompletedDISForms-relevantAlerts'
+        },
+        { text: "Report issued",
+          classes: 'printCompletedDISForms-issuedStatus'
+        },
+        { text: "",
+          classes: 'printCompletedDISForms-link'
+        }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
+    }) }}
+    </div>
+  {% else %}
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
+  {% endif %}
+{% endblock %}

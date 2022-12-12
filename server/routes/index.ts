@@ -37,6 +37,7 @@ import addDateAndTimeOfIssueRoutes from './addDateAndTimeOfIssue'
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
+import printCompletedDISFormsRoutes from './printCompletedDISForms'
 
 export default function routes(
   router: Router,
@@ -173,5 +174,9 @@ export default function routes(
 
   router.use(adjudicationUrls.addIssueDateTime.root, addDateAndTimeOfIssueRoutes({ reportedAdjudicationsService }))
 
+  router.use(
+    adjudicationUrls.printCompletedDisForms.root,
+    printCompletedDISFormsRoutes({ reportedAdjudicationsService, locationService })
+  )
   return router
 }

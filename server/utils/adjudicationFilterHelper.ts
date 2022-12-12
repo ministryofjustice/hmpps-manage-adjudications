@@ -2,6 +2,7 @@ import { Request } from 'express'
 import moment from 'moment'
 import {
   allStatuses,
+  IssuedStatus,
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
@@ -30,6 +31,10 @@ export type DISUiFilter = {
   fromDate: string
   toDate: string
   locationId: string
+}
+
+export interface PrintDISFormsUiFilter extends DISUiFilter {
+  issuedStatus: IssuedStatus
 }
 
 export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {

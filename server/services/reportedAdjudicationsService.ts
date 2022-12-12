@@ -13,6 +13,8 @@ import {
   ScheduledHearing,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationEnhancedWithIssuingDetails,
+  IssuedStatus,
+  getDisplayIssuedStatus,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
@@ -38,6 +40,7 @@ import LocationService from './locationService'
 import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
+import { Alert } from '../utils/alertHelper'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -254,18 +257,24 @@ export default class ReportedAdjudicationsService {
 
   async getAdjudicationDISFormData(
     user: User,
-    filter: ReportedAdjudicationDISFormFilter
+    filter: ReportedAdjudicationDISFormFilter,
+    getAlerts = false
   ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
     const response = await new ManageAdjudicationsClient(user.token).getReportedAdjudicationIssueData(
       user.activeCaseLoadId,
       filter
     )
     const { reportedAdjudications } = response
+    const prisonerNumbers = reportedAdjudications.map(_ => _.prisonerNumber)
+
     const prisonerDetails = new Map(
-      (
-        await new PrisonApiClient(user.token).getBatchPrisonerDetails(reportedAdjudications.map(_ => _.prisonerNumber))
-      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+      (await new PrisonApiClient(user.token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
+        prisonerDetail.offenderNo,
+        prisonerDetail,
+      ])
     )
+
+    const alertMap = getAlerts ? await this.getAlerts(prisonerNumbers, user) : null
 
     const usernamesInPage = new Set(
       reportedAdjudications.filter(adj => adj.issuingOfficer).map(adj => adj.issuingOfficer)
@@ -280,9 +289,18 @@ export default class ReportedAdjudicationsService {
       return this.enhanceAdjudicationWithIssuingDetails(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        IssuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
+        IssuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer),
+        alertMap.get(reportedAdjudication.prisonerNumber)
       )
     })
+  }
+
+  async getAlerts(prisonerNumbers: string[], user: User): Promise<Map<string, Alert[]>> {
+    const alertsForEachPrisoner = await Promise.all(
+      prisonerNumbers.map(prn => new PrisonApiClient(user.token).getAlertsForPrisoner(prn))
+    )
+    const alertMap = new Map(alertsForEachPrisoner.map(a => [a.prisonerNumber, a.alerts]))
+    return alertMap
   }
 
   async updateAdjudicationStatus(
@@ -371,12 +389,16 @@ export default class ReportedAdjudicationsService {
   enhanceAdjudicationWithIssuingDetails(
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
-    issuingOfficerName: string
+    issuingOfficerName: string,
+    alerts: Alert[] = []
   ): ReportedAdjudicationEnhancedWithIssuingDetails {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
     const prisonerLocation = formatLocation(prisonerResult.assignedLivingUnitDesc)
+    const dateTimeOfFirstHearing = reportedAdjudication.hearings[0]?.dateTimeOfHearing
+    const formsAlreadyIssued = !!reportedAdjudication?.dateTimeOfIssue
+    const issuedStatus = formsAlreadyIssued ? IssuedStatus.ISSUED : IssuedStatus.NOT_ISSUED
     return {
       ...reportedAdjudication,
       displayName,
@@ -389,7 +411,11 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
         'D MMMM YYYY - HH:mm'
       ),
-      formsAlreadyIssued: !!reportedAdjudication?.dateTimeOfIssue,
+      formsAlreadyIssued,
+      dateTimeOfFirstHearing,
+      formattedDateTimeOfFirstHearing: formatTimestampToDate(dateTimeOfFirstHearing, 'D MMMM YYYY - HH:mm'),
+      issuedStatusDisplay: getDisplayIssuedStatus(issuedStatus),
+      alerts,
     }
   }
 

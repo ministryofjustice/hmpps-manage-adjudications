@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
+import { Alert } from '../utils/alertHelper'
 import {
   DamageDetails,
   EvidenceDetails,
@@ -66,6 +67,10 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   dateTimeOfDiscovery: string
   formattedDateTimeOfIssue: string
   formsAlreadyIssued: boolean
+  formattedDateTimeOfFirstHearing?: string
+  dateTimeOfFirstHearing?: string
+  issuedStatusDisplay?: string
+  alerts?: Alert[]
 }
 
 export type ReportedAdjudicationFilter = {
@@ -152,4 +157,14 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
     default:
       return null
   }
+}
+
+export enum IssuedStatus {
+  ISSUED = 'ISSUED',
+  NOT_ISSUED = 'NOT_ISSUED',
+}
+
+export function getDisplayIssuedStatus(status: IssuedStatus) {
+  if (status === IssuedStatus.ISSUED) return 'Issued'
+  return 'Not issued'
 }
