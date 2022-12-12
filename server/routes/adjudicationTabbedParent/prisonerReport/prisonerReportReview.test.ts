@@ -8,7 +8,6 @@ import { IncidentRole } from '../../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import config from '../../../config'
 import { PrisonerGender } from '../../../data/DraftAdjudicationResult'
 
 jest.mock('../../../services/locationService.ts')

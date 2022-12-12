@@ -37,7 +37,6 @@ import addDateAndTimeOfIssueRoutes from './addDateAndTimeOfIssue'
 import { Services } from '../services'
 import adjudicationPdfRoutes from './adjudicationPdf'
 import adjudicationUrls from '../utils/urlGenerator'
-import config from '../config'
 
 export default function routes(
   router: Router,
