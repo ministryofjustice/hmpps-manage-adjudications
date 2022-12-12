@@ -84,7 +84,7 @@ const createTasks = (): TaskType[] => {
     },
     {
       id: 'print-completed-dis-forms',
-      heading: 'Print Completed DIS 1/ 2 Forms',
+      heading: 'Print Completed DIS 1/2 Forms',
       description: '',
       href: adjudicationUrls.printCompletedDisForms.root,
       roles: [],
@@ -92,7 +92,7 @@ const createTasks = (): TaskType[] => {
     },
     {
       id: 'confirm-dis-has-been-issued',
-      heading: 'Confirm DIS 1/ 2 has been issued to the prisoner',
+      heading: 'Confirm DIS 1/2 has been issued to the prisoner',
       description: '',
       href: adjudicationUrls.confirmDISFormsIssued.root,
       roles: [],
