@@ -29,11 +29,12 @@ context('Add date and time', () => {
       adjudicationNumber: 12345,
       response: testData.completedAdjudication(12345, 'G6123VU'),
     })
-    const today = new Date()
+    const date = new Date()
+    const yesterday = new Date(date.setDate(date.getDate() - 1))
     cy.visit(adjudicationUrls.addIssueDateTime.urls.start(12345))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
-    forceDateInputWithDate(today, '[data-qa="issued-date"]')
-    addDateTimeOfIssuePage.hourInput().type('09')
+    forceDateInputWithDate(yesterday, '[data-qa="issued-date"]')
+    addDateTimeOfIssuePage.hourInput().type('20')
     addDateTimeOfIssuePage.minutesInput().type('30')
     addDateTimeOfIssuePage.submitButton().click()
     cy.location().should(loc => {
