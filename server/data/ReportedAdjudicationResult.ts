@@ -65,6 +65,7 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   formattedDateTimeOfDiscovery: string
   dateTimeOfDiscovery: string
   formattedDateTimeOfIssue: string
+  formsAlreadyIssued: boolean
 }
 
 export type ReportedAdjudicationFilter = {

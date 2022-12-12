@@ -389,6 +389,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
         'D MMMM YYYY - HH:mm'
       ),
+      formsAlreadyIssued: !!reportedAdjudication?.dateTimeOfIssue,
     }
   }
 

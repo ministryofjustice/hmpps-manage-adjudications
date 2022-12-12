@@ -23,32 +23,28 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { locationService, reportedAdjudicationsService })
 
   const adjudicationResponse = [
-    testData.completedAdjudication(
-      12345,
-      'G7234VB',
-      testData.generateOtherData(
-        'Smith, James',
-        'James Smith',
-        'JPERALTER',
-        'MDI-2-3-009',
-        '5 December 2022 - 11:11',
-        '2022-12-05T11:11:00',
-        '5 December 2022 - 15:00'
-      )
-    ),
-    testData.completedAdjudication(
-      23456,
-      'G6123VU',
-      testData.generateOtherData(
-        'Tovey, Peter',
-        'Peter Tovey',
-        'JPERALTER',
-        'MDI-RECP',
-        '6 December 2022 - 12:10',
-        '2022-12-06T11:11:00',
-        '6 December 2022 - 16:30'
-      )
-    ),
+    testData.completedAdjudication(12345, 'G7234VB', {
+      displayName: 'Smith, James',
+      friendlyName: 'James Smith',
+      issuingOfficer: 'JPERALTER',
+      prisonerLocation: 'MDI-2-3-009',
+      formattedDateTimeOfDiscovery: '5 December 2022 - 11:11',
+      dateTimeOfDiscovery: '2022-12-05T11:11:00',
+      dateTimeOfIssue: '2022-12-05T15:00:00',
+      formattedDateTimeOfIssue: '5 December 2022 - 15:00',
+      formsAlreadyIssued: true,
+    }),
+    testData.completedAdjudication(23456, 'G6123VU', {
+      displayName: 'Tovey, Peter',
+      friendlyName: 'Peter Tovey',
+      issuingOfficer: 'JPERALTER',
+      prisonerLocation: 'MDI-RECP',
+      formattedDateTimeOfDiscovery: '6 December 2022 - 12:10',
+      dateTimeOfDiscovery: '2022-12-06T12:10:00',
+      formattedDateTimeOfIssue: '6 December 2022 - 16:30',
+      formsAlreadyIssued: true,
+      dateTimeOfIssue: '2022-12-06T16:30:00',
+    }),
   ]
 
   const locations = testData.residentialLocations()

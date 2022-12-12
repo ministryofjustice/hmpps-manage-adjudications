@@ -28,8 +28,10 @@
   {% for report in reports %}
     {% set index = loop.index %}
     {% set addDateAndTimeLink %}
+      {% if not report.formsAlreadyIssued %}
       <a href="{{ adjudicationUrls.addIssueDateTime.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="add-issue-date-time-link-{{ index }}">Add date and time<span class="govuk-visually-hidden">of issue for {{ report.friendlyName | possessive }} report</span>
       </a>
+      {% endif %}
     {% endset -%}
     {% set rows = (rows.push([
       { text: report.displayName + ' - ' + report.prisonerNumber },
