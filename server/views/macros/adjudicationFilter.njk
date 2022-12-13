@@ -18,7 +18,7 @@
             <div class="displayFlex" id="adjudicationFilter">
                 {{ datePicker({
                     id: 'fromDate[date]',
-                    label: 'Date from',
+                    label: 'From',
                     name: 'fromDate[date]',
                     date: filter.fromDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
@@ -29,7 +29,7 @@
 
                 {{ datePicker({
                     id: 'toDate[date]',
-                    label: 'Date to',
+                    label: 'To',
                     name: 'toDate[date]',
                     date: filter.toDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },

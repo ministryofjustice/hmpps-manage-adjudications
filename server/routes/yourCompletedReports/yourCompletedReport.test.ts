@@ -125,7 +125,7 @@ describe('GET /your-completed-reports', () => {
         .get(adjudicationUrls.yourCompletedReports.root)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('There are no results for the details you have entered.')
+          expect(res.text).toContain('No completed reports.')
         })
     })
   })
