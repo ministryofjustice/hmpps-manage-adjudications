@@ -127,9 +127,7 @@ context('Your Completed Reports', () => {
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
-    yourCompletedReportsPage
-      .noResultsMessage()
-      .should('contain', 'There are no results for the details you have entered')
+    yourCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
     filterAdjudication.forceFromDate(1, 1, 2022)
     filterAdjudication.forceToDate(9, 1, 2022)

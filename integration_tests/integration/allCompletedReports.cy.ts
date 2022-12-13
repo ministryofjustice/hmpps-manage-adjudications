@@ -220,9 +220,7 @@ context('All Completed Reports', () => {
 
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    allCompletedReportsPage
-      .noResultsMessage()
-      .should('contain', 'There are no results for the details you have entered')
+    allCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     adjudicationsFilter.forceFromDate(1, 1, 2022)
     adjudicationsFilter.forceToDate(9, 1, 2022)
