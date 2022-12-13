@@ -27,7 +27,6 @@ export default class printCompletedDISFormsRoutes {
   ): Promise<void> => {
     const { user } = res.locals
     const possibleLocations = await this.locationService.getLocationsForUser(user)
-    console.log(filter)
     return res.render(`pages/printCompletedDISForms`, {
       reports: results,
       filter,
@@ -42,7 +41,6 @@ export default class printCompletedDISFormsRoutes {
     const uiFilter = fillInPrintDISFormFilterDefaults(uiPrintDISFormFilterFromRequest(req))
     const filter = printDISFormfilterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getAdjudicationDISFormData(res.locals.user, filter, true)
-    console.log(results)
     const filteredResults = filter.locationId
       ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationId, user)
       : results

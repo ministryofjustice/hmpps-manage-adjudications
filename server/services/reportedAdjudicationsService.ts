@@ -395,7 +395,7 @@ export default class ReportedAdjudicationsService {
     const { displayName, friendlyName } = prisonerNames
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
     const prisonerLocation = formatLocation(prisonerResult.assignedLivingUnitDesc)
-    const dateTimeOfFirstHearing = reportedAdjudication.hearings[0]?.dateTimeOfHearing
+    const dateTimeOfFirstHearing = reportedAdjudication.hearings && reportedAdjudication.hearings[0].dateTimeOfHearing
     const formsAlreadyIssued = !!reportedAdjudication?.dateTimeOfIssue
 
     let relevantAlerts: AlertFlags[] = null

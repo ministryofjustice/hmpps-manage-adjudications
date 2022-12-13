@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
-import { Alert, AlertFlags } from '../utils/alertHelper'
+import { AlertFlags } from '../utils/alertHelper'
 import {
   DamageDetails,
   EvidenceDetails,
