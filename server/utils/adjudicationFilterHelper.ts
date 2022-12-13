@@ -1,8 +1,9 @@
 import { Request } from 'express'
 import moment from 'moment'
 import {
+  allIssueStatuses,
   allStatuses,
-  IssuedStatus,
+  IssueStatus,
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
@@ -34,7 +35,7 @@ export type DISUiFilter = {
 }
 
 export interface PrintDISFormsUiFilter extends DISUiFilter {
-  issuedStatus: IssuedStatus
+  issueStatus: IssueStatus | IssueStatus[]
 }
 
 export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {
@@ -42,6 +43,15 @@ export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
     locationId: req.query.locationId as string,
+  }
+}
+
+export const uiPrintDISFormFilterFromRequest = (req: Request): PrintDISFormsUiFilter => {
+  return {
+    fromDate: req.query.fromDate as string,
+    toDate: req.query.toDate as string,
+    locationId: req.query.locationId as string,
+    issueStatus: req.query.issueStatus as IssueStatus,
   }
 }
 
@@ -75,6 +85,18 @@ export const fillInDISFormFilterDefaults = (DISUiFilter: DISUiFilter): DISUiFilt
   }
 }
 
+// Same as fillInDefaults r.e. dates
+export const fillInPrintDISFormFilterDefaults = (
+  printDISFormsUiFilter: PrintDISFormsUiFilter
+): PrintDISFormsUiFilter => {
+  return {
+    fromDate: printDISFormsUiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
+    toDate: printDISFormsUiFilter.toDate || momentDateToDatePicker(moment()),
+    locationId: printDISFormsUiFilter.locationId || null,
+    issueStatus: printDISFormsUiFilter.issueStatus || allIssueStatuses,
+  }
+}
+
 export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
@@ -91,6 +113,15 @@ export const DISFormUiFilterFromBody = (req: Request) => {
   }
 }
 
+export const PrintDISFormUiFilterFromBody = (req: Request) => {
+  return {
+    fromDate: req.body.fromDate.date,
+    toDate: req.body.toDate.date,
+    locationId: req.body.locationId,
+    issueStatus: req.body.issueStatus,
+  }
+}
+
 export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
@@ -104,6 +135,15 @@ export const DISFormfilterFromUiFilter = (filter: DISUiFilter) => {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
     locationId: (filter.locationId && Number(filter.locationId)) || null,
+  }
+}
+
+export const printDISFormfilterFromUiFilter = (filter: PrintDISFormsUiFilter) => {
+  return {
+    fromDate: datePickerDateToMoment(filter.fromDate),
+    toDate: datePickerDateToMoment(filter.toDate),
+    locationId: (filter.locationId && Number(filter.locationId)) || null,
+    issueStatus: filter.issueStatus || allIssueStatuses,
   }
 }
 

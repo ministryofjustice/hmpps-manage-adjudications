@@ -4,6 +4,7 @@
 {% from "../macros/DISFormFilter.njk" import DISFormFilter %}
 {% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% set title = "Print completed DIS1/2 forms" %}
 
@@ -22,7 +23,7 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.printCompletedDisForms.urls.start(), csrfToken) }}
+  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.printCompletedDisForms.urls.start(), csrfToken, "Date of hearing", true) }}
   
   {% set rows = [] %}
   {% for report in reports %}
@@ -33,14 +34,14 @@
     {% endset -%}
     {% set rows = (rows.push([
       { text: report.displayName + ' - ' + report.prisonerNumber },
-      { text: report.formattedDateTimeOfFirstHearing,
+      { text: report.formattedDateTimeOfFirstHearing or ' - ',
         attributes: {
         "data-sort-value": report.dateTimeOfFirstHearing
       }
       },
       { text: report.prisonerLocation },
-      { text: report.relevantAlerts or ' - ' },
-      { text: report.issuedStatusDisplay },
+      { html: alertFlags(report.relevantAlerts, newLine=true) },
+      { text: report.issueStatus | issueStatus },
       { html: printLink }
     ]), rows) %}
   {% endfor %}
@@ -67,7 +68,7 @@
           classes: 'printCompletedDISForms-relevantAlerts'
         },
         { text: "Report issued",
-          classes: 'printCompletedDISForms-issuedStatus'
+          classes: 'printCompletedDISForms-issueStatus'
         },
         { text: "",
           classes: 'printCompletedDISForms-link'
@@ -78,6 +79,6 @@
     }) }}
     </div>
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings.</p>
   {% endif %}
 {% endblock %}

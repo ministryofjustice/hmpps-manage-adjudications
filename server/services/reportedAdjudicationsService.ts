@@ -13,8 +13,7 @@ import {
   ScheduledHearing,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationEnhancedWithIssuingDetails,
-  IssuedStatus,
-  getDisplayIssuedStatus,
+  IssueStatus,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
@@ -40,7 +39,7 @@ import LocationService from './locationService'
 import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
-import { Alert } from '../utils/alertHelper'
+import { Alert, alertFlagLabels, AlertFlags } from '../utils/alertHelper'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -290,7 +289,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         IssuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer),
-        alertMap.get(reportedAdjudication.prisonerNumber)
+        getAlerts ? alertMap.get(reportedAdjudication.prisonerNumber) : null
       )
     })
   }
@@ -390,7 +389,7 @@ export default class ReportedAdjudicationsService {
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
     issuingOfficerName: string,
-    alerts: Alert[] = []
+    prisonersAlerts: Alert[] = []
   ): ReportedAdjudicationEnhancedWithIssuingDetails {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
@@ -398,7 +397,15 @@ export default class ReportedAdjudicationsService {
     const prisonerLocation = formatLocation(prisonerResult.assignedLivingUnitDesc)
     const dateTimeOfFirstHearing = reportedAdjudication.hearings[0]?.dateTimeOfHearing
     const formsAlreadyIssued = !!reportedAdjudication?.dateTimeOfIssue
-    const issuedStatus = formsAlreadyIssued ? IssuedStatus.ISSUED : IssuedStatus.NOT_ISSUED
+
+    let relevantAlerts: AlertFlags[] = null
+    if (prisonersAlerts) {
+      const alertCodesPresent = new Set(prisonersAlerts.map(alert => alert.alertCode))
+      relevantAlerts = alertFlagLabels.filter(alertFlag =>
+        alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
+      )
+    }
+
     return {
       ...reportedAdjudication,
       displayName,
@@ -414,8 +421,8 @@ export default class ReportedAdjudicationsService {
       formsAlreadyIssued,
       dateTimeOfFirstHearing,
       formattedDateTimeOfFirstHearing: formatTimestampToDate(dateTimeOfFirstHearing, 'D MMMM YYYY - HH:mm'),
-      issuedStatusDisplay: getDisplayIssuedStatus(issuedStatus),
-      alerts,
+      issueStatus: formsAlreadyIssued ? IssueStatus.ISSUED : IssueStatus.NOT_ISSUED,
+      relevantAlerts,
     }
   }
 

@@ -8,6 +8,8 @@ import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
+import { IssueStatus } from '../data/ReportedAdjudicationResult'
+import { PrintDISFormsUiFilter } from './adjudicationFilterHelper'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -203,6 +205,17 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     ]
   })
 
+  njkEnv.addFilter('issueStatus', (issueStatus: IssueStatus) => {
+    if (issueStatus === IssueStatus.ISSUED) return 'Issued'
+    return 'Not issued'
+  })
+
+  njkEnv.addFilter('issueStatusChecked', (key: IssueStatus, filter: PrintDISFormsUiFilter) => {
+    if (!Array.isArray(filter.issueStatus)) return key === filter.issueStatus
+    return filter.issueStatus.includes(key)
+  })
+
+  njkEnv.addGlobal('IssueStatus', IssueStatus)
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)

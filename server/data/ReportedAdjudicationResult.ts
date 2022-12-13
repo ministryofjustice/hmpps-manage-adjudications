@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { ReviewStatus } from '../routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
-import { Alert } from '../utils/alertHelper'
+import { Alert, AlertFlags } from '../utils/alertHelper'
 import {
   DamageDetails,
   EvidenceDetails,
@@ -69,8 +69,8 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   formsAlreadyIssued: boolean
   formattedDateTimeOfFirstHearing?: string
   dateTimeOfFirstHearing?: string
-  issuedStatusDisplay?: string
-  alerts?: Alert[]
+  issueStatus?: IssueStatus
+  relevantAlerts?: AlertFlags[]
 }
 
 export type ReportedAdjudicationFilter = {
@@ -83,6 +83,7 @@ export type ReportedAdjudicationDISFormFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
   locationId: LocationId
+  issueStatus?: IssueStatus | IssueStatus[]
 }
 
 export type ScheduledHearingFilter = {
@@ -132,7 +133,6 @@ export const allStatuses = [
   ReportedAdjudicationStatus.RETURNED,
   ReportedAdjudicationStatus.REJECTED,
 ]
-
 export enum OicHearingType {
   GOV_ADULT = 'GOV_ADULT',
   GOV_YOI = 'GOV_YOI',
@@ -159,12 +159,9 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
   }
 }
 
-export enum IssuedStatus {
+export enum IssueStatus {
   ISSUED = 'ISSUED',
   NOT_ISSUED = 'NOT_ISSUED',
 }
 
-export function getDisplayIssuedStatus(status: IssuedStatus) {
-  if (status === IssuedStatus.ISSUED) return 'Issued'
-  return 'Not issued'
-}
+export const allIssueStatuses = [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED]

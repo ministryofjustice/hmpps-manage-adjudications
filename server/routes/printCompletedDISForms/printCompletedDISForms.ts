@@ -3,12 +3,12 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import LocationService from '../../services/locationService'
 import { FormError } from '../../@types/template'
 import {
-  DISFormfilterFromUiFilter,
-  DISUiFilter,
-  fillInDISFormFilterDefaults,
-  uiDISFormFilterFromRequest,
-  DISFormUiFilterFromBody,
   validate,
+  uiPrintDISFormFilterFromRequest,
+  fillInPrintDISFormFilterDefaults,
+  printDISFormfilterFromUiFilter,
+  PrintDISFormsUiFilter,
+  PrintDISFormUiFilterFromBody,
 } from '../../utils/adjudicationFilterHelper'
 import { ReportedAdjudicationEnhancedWithIssuingDetails } from '../../data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -20,15 +20,14 @@ export default class printCompletedDISFormsRoutes {
   ) {}
 
   private renderView = async (
-    req: Request,
     res: Response,
-    filter: DISUiFilter,
+    filter: PrintDISFormsUiFilter,
     results: ReportedAdjudicationEnhancedWithIssuingDetails[],
     errors: FormError[]
   ): Promise<void> => {
     const { user } = res.locals
     const possibleLocations = await this.locationService.getLocationsForUser(user)
-
+    console.log(filter)
     return res.render(`pages/printCompletedDISForms`, {
       reports: results,
       filter,
@@ -40,22 +39,23 @@ export default class printCompletedDISFormsRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const uiFilter = fillInDISFormFilterDefaults(uiDISFormFilterFromRequest(req))
-    const filter = DISFormfilterFromUiFilter(uiFilter)
+    const uiFilter = fillInPrintDISFormFilterDefaults(uiPrintDISFormFilterFromRequest(req))
+    const filter = printDISFormfilterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getAdjudicationDISFormData(res.locals.user, filter, true)
-
+    console.log(results)
     const filteredResults = filter.locationId
       ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationId, user)
       : results
+    // need to sort the filtered results on HEARING dateTime here as it's sorted on discovery datetime on server for the other page
 
-    return this.renderView(req, res, uiFilter, filteredResults, [])
+    return this.renderView(res, uiFilter, filteredResults, [])
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const uiFilter = DISFormUiFilterFromBody(req)
+    const uiFilter = PrintDISFormUiFilterFromBody(req)
     const errors = validate(uiFilter)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, uiFilter, [], errors)
+      return this.renderView(res, uiFilter, [], errors)
     }
     return res.redirect(adjudicationUrls.printCompletedDisForms.urls.filter(uiFilter))
   }

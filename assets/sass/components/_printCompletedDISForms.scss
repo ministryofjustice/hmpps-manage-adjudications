@@ -1,0 +1,22 @@
+.printCompletedDISForms {
+  &-hearingDateTime,
+  &-prisonerLocation {
+    width: 17%;
+  }
+  &-relevantAlerts {
+    min-width: 8%;
+  }
+  &-issueStatus &-link {
+    width: 15%;
+  }
+}
+
+.issueStatusCheckboxes {
+  display:flex;
+  justify-content: space-between;
+  padding-top: 5px;
+}
+
+.printCompletedDISForms-checkboxes {
+  max-height: 70px;
+}
