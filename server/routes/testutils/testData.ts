@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import { HearingDetails, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
 
 export default class TestData {
   completedAdjudication = (
@@ -76,5 +77,18 @@ export default class TestData {
       lastName,
       assignedLivingUnitDesc,
     }
+  }
+
+  singleHearing = (dateTimeOfHearing: string): HearingDetails => {
+    return {
+      id: 86,
+      locationId: 775,
+      dateTimeOfHearing,
+      oicHearingType: 'GOV_ADULT',
+    }
+  }
+
+  alerts = (codes: string[]): AlertFlags[] => {
+    return alertFlagLabels.filter(alert => codes.includes(alert.alertCodes[0]))
   }
 }
