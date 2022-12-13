@@ -44,7 +44,8 @@ export default class printCompletedDISFormsRoutes {
     const filteredResults = filter.locationId
       ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationId, user)
       : results
-    // need to sort the filtered results on HEARING dateTime here as it's sorted on discovery datetime on server for the other page
+    // We need to sort the filtered results on HEARING dateTime as it's sorted on discovery dateTime on server for the 'confirm DIS forms have been issued' page
+    filteredResults.sort((a, b) => a.dateTimeOfFirstHearing.localeCompare(b.dateTimeOfFirstHearing))
 
     return this.renderView(res, uiFilter, filteredResults, [])
   }

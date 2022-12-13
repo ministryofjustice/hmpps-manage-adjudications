@@ -1,5 +1,5 @@
 import url from 'url'
-import { DISUiFilter, UiFilter } from './adjudicationFilterHelper'
+import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
   offenceCodeSelection: {
@@ -379,7 +379,7 @@ const adjudicationUrls = {
     },
     urls: {
       start: () => adjudicationUrls.printCompletedDisForms.root,
-      filter: (filter: DISUiFilter) =>
+      filter: (filter: PrintDISFormsUiFilter) =>
         url.format({
           pathname: adjudicationUrls.printCompletedDisForms.root,
           query: { ...filter },
