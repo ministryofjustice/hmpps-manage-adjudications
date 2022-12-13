@@ -84,7 +84,7 @@ const createTasks = (): TaskType[] => {
     },
     {
       id: 'print-completed-dis-forms',
-      heading: 'Print Completed DIS 1/2 Forms',
+      heading: 'Print completed DIS 1/2 forms',
       description: '',
       href: adjudicationUrls.printCompletedDisForms.root,
       roles: [],
