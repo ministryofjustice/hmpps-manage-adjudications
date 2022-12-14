@@ -14,4 +14,10 @@
     background-color: $govuk-success-colour;
     background-size: 16px 18px;
   }
+  &--no-image {
+    background: none;
+    text-align: right;
+    margin-bottom: 0;
+    padding: 0 0.5em 0 0;
+  }
 }

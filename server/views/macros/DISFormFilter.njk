@@ -16,7 +16,8 @@
         </p>
       {% endif %}
       <div class="horizontal-form govuk-!-margin-bottom-3" id="DISFormFilter">
-        {{ datePicker({
+        <div class="inputBoxes">
+          {{ datePicker({
                     id: 'fromDate[date]',
                     label: 'From',
                     name: 'fromDate[date]',
@@ -25,7 +26,7 @@
                     classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
                 }) }}
 
-        {{ datePicker({
+          {{ datePicker({
                     id: 'toDate[date]',
                     label: 'To',
                     name: 'toDate[date]',
@@ -34,7 +35,7 @@
                     classes: 'govuk-input--width-10'
                 }) }}
 
-        {{ govukSelect({
+          {{ govukSelect({
                   id: 'locationId',
                   name: 'locationId',
                   label: {
@@ -45,11 +46,12 @@
                     "data-qa": "locationId"
                   }
                 }) }}
-
+        </div>
         {% if includeCheckboxes %}
-          {{ govukCheckboxes({
+          <div class="checkboxes-printWidth">
+            {{ govukCheckboxes({
                   formGroup: {
-                    classes: "printCompletedDISForms-checkboxes"
+                    classes: "printCompletedDISForms-checkboxes-formGroup"
                   },
                   name: "issueStatus",
                   classes: "govuk-checkboxes--small issueStatusCheckboxes",
@@ -73,6 +75,7 @@
                     }
                   ]
                 }) }}
+          </div>
         {% endif %}
 
       </div>
@@ -80,10 +83,10 @@
         {{ govukButton({
                     text: "Apply",
                     type: "submit",
-                    classes: "govuk-button--submit",
+                    classes: "govuk-button--submit no-print",
                     attributes: { "data-qa": "filter-apply" }
                 }) }}
-        <p class="govuk-body adj-filter-clear-link">
+        <p class="govuk-body adj-filter-clear-link no-print">
           <a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a>
         </p>
       </div>

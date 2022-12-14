@@ -5,6 +5,7 @@
 {% from '../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
+{% from "../macros/printLink.njk" import printLink %}
 
 {% set title = "Print completed DIS1/2 forms" %}
 
@@ -24,12 +25,14 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
   {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.printCompletedDisForms.urls.start(), csrfToken, "Date of hearing", true) }}
+
+  {{ printLink(align="right", classes="print-link--no-image") }}
   
   {% set rows = [] %}
   {% for report in reports %}
     {% set index = loop.index %}
     {% set printLink %}
-      <a href="{{ adjudicationUrls.printReport.urls.start(report.adjudicationNumber) }}" class="govuk-link" data-qa="print-DIS1/2-{{ report.adjudicationNumber }}">Print DIS1/2 <span class="govuk-visually-hidden">for {{ report.friendlyName | possessive }} adjudication report</span>
+      <a href="{{ adjudicationUrls.printReport.urls.start(report.adjudicationNumber) }}" class="govuk-link no-print" data-qa="print-DIS1/2-{{ report.adjudicationNumber }}">Print DIS1/2 <span class="govuk-visually-hidden">for {{ report.friendlyName | possessive }} adjudication report</span>
       </a>
     {% endset -%}
     {% set rows = (rows.push([
@@ -81,4 +84,8 @@
   {% else %}
     <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings.</p>
   {% endif %}
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/assets/printWithNonce.js" nonce="{{ cspNonce }}"></script>
 {% endblock %}
