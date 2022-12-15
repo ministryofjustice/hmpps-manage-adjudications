@@ -25,6 +25,7 @@ import {
   allStatuses,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationsResult,
+  allIssueStatuses,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -147,7 +148,8 @@ export default class ManageAdjudicationsClient {
     const path =
       `/reported-adjudications/agency/${agencyId}/issue?` +
       `${(filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
-      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+      `${(filter.issueStatus && `&issueStatus=${filter.issueStatus}`) || `&issueStatus=${allIssueStatuses}`}`
     return this.restClient.get({
       path,
     })

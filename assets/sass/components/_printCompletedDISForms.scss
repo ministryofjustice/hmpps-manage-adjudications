@@ -1,0 +1,77 @@
+.printCompletedDISForms {
+  &-hearingDateTime {
+    width: 20%;
+  }
+  &-prisonerLocation {
+    width: 20%;
+  }
+  &-relevantAlerts {
+    width: 14%;
+  }
+  &-issueStatus {
+    width: 12%;
+  }
+  &-link {
+    width: 9%;
+  }
+  @media print {
+    &-prisonerNameNumber {
+      width: 30%;
+    }
+    &-hearingDateTime {
+      width: 25%;
+    }
+    &-prisonerLocation {
+      width:20%;
+    }
+    &-issueStatus, &-relevantAlerts {
+      width: 10%;
+    }
+  }
+}
+
+.issueStatusCheckboxes {
+  display:flex;
+  justify-content: space-around;
+  padding-top: 5px;
+}
+
+.printCompletedDISForms-checkboxes-formGroup {
+  max-height: 70px;
+}
+
+.checkboxes-printWidth{
+  @media print {
+    max-width: 250px;
+  }
+}
+.inputBoxes {
+  @media print {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    input {
+      min-width: 100px;
+    }
+  }
+  display: flex;
+  > div {
+    margin-right: govuk-spacing(3);
+  }
+  > :last-child {
+    margin-right: govuk-spacing(0);
+  }
+}
+
+.printCompletedDISForms-prisonerNameNumber, .printCompletedDISForms-hearingDateTime {
+  > button {
+    @media print {
+      color: black;
+      &::after, &::before {
+        content: none;
+      }
+    }
+  }
+}

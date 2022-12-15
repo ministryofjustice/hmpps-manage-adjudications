@@ -22,7 +22,7 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken) }}
+  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken, "Date of discovery") }}
   
   {% set rows = [] %}
   {% for report in reports %}

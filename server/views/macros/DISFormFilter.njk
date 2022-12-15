@@ -2,38 +2,40 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro DISFormFilter(filter, locations, errors, clearUrl, csrfToken) %}
-    <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="confirm-DIS-issued-form">
-        <h2 class="govuk-heading-m">Date of discovery</h2>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
-        <div {% if fromDateError %}class="govuk-form-group--error"{% endif %} data-qa='filter-bar'>
-            {% if fromDateError %}
-            <p id="fromDate[date]-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span>{{ fromDateError.text }}
-            </p>
-            {% endif %}
-            <div class="horizontal-form govuk-!-margin-bottom-3" id="DISFormFilter">
-                {{ datePicker({
+{% macro DISFormFilter(filter, locations, errors, clearUrl, csrfToken, dateTitle, includeCheckboxes = false) %}
+  <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="confirm-DIS-issued-form">
+    <h2 class="govuk-heading-m">{{ dateTitle }}</h2>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
+    <div {% if fromDateError %}class="govuk-form-group--error"{% endif %} data-qa='filter-bar'>
+      {% if fromDateError %}
+        <p id="fromDate[date]-error" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error:</span>{{ fromDateError.text }}
+        </p>
+      {% endif %}
+      <div class="horizontal-form govuk-!-margin-bottom-3" id="DISFormFilter">
+        <div class="inputBoxes">
+          {{ datePicker({
                     id: 'fromDate[date]',
-                    label: 'Date from',
+                    label: 'From',
                     name: 'fromDate[date]',
                     date: filter.fromDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
                     classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
                 }) }}
 
-                {{ datePicker({
+          {{ datePicker({
                     id: 'toDate[date]',
-                    label: 'Date to',
+                    label: 'To',
                     name: 'toDate[date]',
                     date: filter.toDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
                     classes: 'govuk-input--width-10'
                 }) }}
 
-                {{ govukSelect({
+          {{ govukSelect({
                   id: 'locationId',
                   name: 'locationId',
                   label: {
@@ -44,17 +46,50 @@
                     "data-qa": "locationId"
                   }
                 }) }}
+        </div>
+        {% if includeCheckboxes %}
+          <div class="checkboxes-printWidth">
+            {{ govukCheckboxes({
+                  formGroup: {
+                    classes: "printCompletedDISForms-checkboxes-formGroup"
+                  },
+                  name: "issueStatus",
+                  classes: "govuk-checkboxes--small issueStatusCheckboxes",
+                  fieldset: {
+                    legend: {
+                      text: "Report issued to prisoner",
+                      isPageHeading: false,
+                      classes: "govuk-body"
+                    }
+                  },
+                  items: [
+                    {
+                      value: IssueStatus.ISSUED,
+                      text: 'Issued',
+                      checked: IssueStatus.ISSUED | issueStatusChecked(filter)
+                    }, {
+                      value: IssueStatus.NOT_ISSUED,
+                      text: 'Not issued',
+                      checked: IssueStatus.NOT_ISSUED | issueStatusChecked(filter)
 
-            </div>
-            <div class="horizontal-form govuk-!-margin-bottom-3">
-                {{ govukButton({
+                    }
+                  ]
+                }) }}
+          </div>
+        {% endif %}
+
+      </div>
+      <div class="horizontal-form govuk-!-margin-bottom-3">
+        {{ govukButton({
                     text: "Apply",
                     type: "submit",
-                    classes: "govuk-button--submit",
+                    classes: "govuk-button--submit no-print",
                     attributes: { "data-qa": "filter-apply" }
                 }) }}
-                <p class="govuk-body adj-filter-clear-link"><a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a></p>
-            </div>
-        </div>
-    </form>
+        <p class="govuk-body adj-filter-clear-link no-print">
+          <a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a>
+        </p>
+      </div>
+    </div>
+  </form>
 {% endmacro %}

@@ -3,7 +3,12 @@ import moment from 'moment'
 import { stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
 import { OffenceDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
-import { allStatuses, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import {
+  allIssueStatuses,
+  allStatuses,
+  IssueStatus,
+  ReportedAdjudicationStatus,
+} from '../../server/data/ReportedAdjudicationResult'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -523,6 +528,7 @@ const stubGetReportedAdjudicationIssueData = ({
   filter = {
     toDate: moment().format('YYYY-MM-DD'),
     fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+    issueStatus: allIssueStatuses,
   },
   response,
 }: {
@@ -530,13 +536,15 @@ const stubGetReportedAdjudicationIssueData = ({
   filter: {
     fromDate: string
     toDate: string
+    issueStatus: IssueStatus[]
   }
   response
 }): SuperAgentRequest => {
   const path =
     `/adjudications/reported-adjudications/agency/${agencyId}/issue?` +
     `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
-    `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
+    `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
+    `${(filter.issueStatus && `&issueStatus=${filter.issueStatus}`) || `&issueStatus=${allIssueStatuses}`}`
   return stubFor({
     request: {
       method: 'GET',

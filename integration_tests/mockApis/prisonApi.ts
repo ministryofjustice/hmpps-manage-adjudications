@@ -165,6 +165,19 @@ const stubGetUsersLocations = (response = []): SuperAgentRequest =>
     },
   })
 
+const stubGetPrisonersAlerts = ({ prisonerNumber, response = [] }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/prisonApi/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=PRGNT,HA,CSIP,PEEP`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubUserCaseloads,
@@ -176,4 +189,5 @@ export default {
   stubGetSecondaryLanguages,
   stubGetBatchPrisonerDetails,
   stubGetUsersLocations,
+  stubGetPrisonersAlerts,
 }

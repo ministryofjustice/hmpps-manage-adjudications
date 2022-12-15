@@ -54,6 +54,7 @@ export default defineConfig({
         stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
         stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,
         stubGetUsersLocations: prisonApi.stubGetUsersLocations,
+        stubGetPrisonersAlerts: prisonApi.stubGetPrisonersAlerts,
 
         stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
         stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
