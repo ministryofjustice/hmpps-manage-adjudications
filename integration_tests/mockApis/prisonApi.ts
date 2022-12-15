@@ -2,6 +2,7 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 import { Location, Agency } from '../../server/data/PrisonLocationResult'
+import { alertCodeString } from '../../server/utils/alertHelper'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -169,7 +170,7 @@ const stubGetPrisonersAlerts = ({ prisonerNumber, response = [] }): SuperAgentRe
   stubFor({
     request: {
       method: 'GET',
-      url: `/prisonApi/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=PRGNT,HA,CSIP,PEEP`,
+      url: `/prisonApi/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
     },
     response: {
       status: 200,

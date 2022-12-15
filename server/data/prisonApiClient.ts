@@ -8,7 +8,7 @@ import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
 import { Agency, AgencyId, Location, LocationId } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
-import { Alert, PrisonerAlerts } from '../utils/alertHelper'
+import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -72,7 +72,7 @@ export default class PrisonApiClient {
 
   async getAlertsForPrisoner(prisonerNumber: string): Promise<PrisonerAlerts> {
     const alerts = await this.restClient.get<Alert[]>({
-      path: `/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=PRGNT,HA,CSIP,PEEP`,
+      path: `/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
     })
     return {
       prisonerNumber,
