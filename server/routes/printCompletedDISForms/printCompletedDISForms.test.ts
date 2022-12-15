@@ -70,7 +70,7 @@ describe('GET /print-completed-DIS-forms', () => {
         .get(adjudicationUrls.printCompletedDisForms.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Print completed DIS1/2 forms')
+          expect(response.text).toContain('Print completed DIS 1/2 forms')
           expect(response.text).toContain('Smith, James - G7234VB')
           expect(response.text).toContain('Tovey, Peter - G6123VU')
           expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
@@ -103,7 +103,7 @@ describe('GET /print-completed-DIS-forms', () => {
         .get(adjudicationUrls.printCompletedDisForms.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Print completed DIS1/2 forms')
+          expect(response.text).toContain('Print completed DIS 1/2 forms')
           expect(response.text).toContain('No scheduled hearings.')
           expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
           expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
