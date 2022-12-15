@@ -55,7 +55,7 @@ context('Print completed DIS forms', () => {
     filter.applyButton().click()
     filter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
-  it('has working links to take the user to the print page for the adjudication', () => {
+  it('have working links to take the user to the print page for the adjudication', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(12345, 'G7234VB', {
         dateTimeOfIssue: '2022-12-05T15:00:00',
