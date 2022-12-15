@@ -38,3 +38,8 @@ export const alertFlagLabels = [
   { alertCodes: ['CSIP'], classes: 'alert-status alert-status--csip', label: 'CSIP' },
   { alertCodes: ['PRGNT'], classes: 'alert-status alert-status--prgnt', label: 'PREGNANT' },
 ]
+
+export const alertCodeString = alertFlagLabels
+  .map(alert => alert.alertCodes)
+  .flat()
+  .join(',')
