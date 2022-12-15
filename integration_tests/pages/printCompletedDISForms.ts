@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class PrintCompletedDISFormsPage extends Page {
   constructor() {
-    super('Print completed DIS1/2 forms')
+    super('Print completed DIS 1/2 forms')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')

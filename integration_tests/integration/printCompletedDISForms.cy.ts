@@ -55,7 +55,7 @@ context('Print completed DIS forms', () => {
     filter.applyButton().click()
     filter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
-  it('has working links to take the user to the print page for the adjudication', () => {
+  it('have working links to take the user to the print page for the adjudication', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(12345, 'G7234VB', {
         dateTimeOfIssue: '2022-12-05T15:00:00',
@@ -124,13 +124,13 @@ context('Print completed DIS forms', () => {
         expect($data.get(3).innerText).to.contain('CSIP')
         expect($data.get(3).innerText).to.contain('PREGNANT')
         expect($data.get(4).innerText).to.contain('Issued')
-        expect($data.get(5).innerText).to.contain('Print DIS1/2')
+        expect($data.get(5).innerText).to.contain('Print DIS 1/2')
         expect($data.get(6).innerText).to.contain('Tovey, Peter - P3785CP')
         expect($data.get(7).innerText).to.contain('7 December 2022 - 10:00')
         expect($data.get(8).innerText).to.contain('MDI-MCASU')
         expect($data.get(9).innerText).to.contain('-')
         expect($data.get(10).innerText).to.contain('Not issued')
-        expect($data.get(11).innerText).to.contain('Print DIS1/2')
+        expect($data.get(11).innerText).to.contain('Print DIS 1/2')
       })
   })
   it('should filter on parameters given - no location', () => {
