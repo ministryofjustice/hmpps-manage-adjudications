@@ -1,6 +1,9 @@
 import PrisonerSearch from '../pages/prisonerSearch'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Prisoner Search', () => {
   beforeEach(() => {
@@ -37,14 +40,12 @@ context('Prisoner Search', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+          enhanced: false,
+        }),
       ],
     })
 
@@ -64,14 +65,12 @@ context('Prisoner Search', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+          enhanced: false,
+        }),
       ],
     })
 
@@ -91,22 +90,19 @@ context('Prisoner Search', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
+          enhanced: false,
           gender: 'Unknown',
-        },
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JAMES',
-          lastName: 'SMITH',
+        }),
+        testData.prisonerSearchSummary({
+          firstName: 'James',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AB',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+          enhanced: false,
+        }),
       ],
     })
 

@@ -3,6 +3,7 @@ import { HearingDetails, PrisonerGender } from '../../data/DraftAdjudicationResu
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
 
 export default class TestData {
@@ -90,5 +91,35 @@ export default class TestData {
 
   alerts = (codes: string[]): AlertFlags[] => {
     return alertFlagLabels.filter(alert => codes.includes(alert.alertCodes[0]))
+  }
+
+  prisonerSearchSummary = ({
+    firstName,
+    lastName,
+    prisonerNumber,
+    enhanced = true,
+    gender = 'Male',
+    startHref = null,
+  }: {
+    firstName: string
+    lastName: string
+    prisonerNumber: string
+    enhanced?: boolean
+    gender?: string
+    startHref?: string
+  }): PrisonerSearchSummary => {
+    return {
+      cellLocation: '1-2-015',
+      prisonerNumber,
+      prisonName: 'HMP Moorland',
+      gender,
+      prisonId: 'MDI',
+      firstName,
+      lastName,
+      startHref: enhanced ? startHref : null,
+      displayCellLocation: enhanced ? '1-2-015' : null,
+      displayName: enhanced ? `${lastName}, ${firstName}` : null,
+      friendlyName: enhanced ? `${firstName} ${lastName}` : null,
+    }
   }
 }
