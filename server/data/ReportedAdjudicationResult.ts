@@ -36,6 +36,7 @@ export type ReportedAdjudication = {
   gender: PrisonerGender
   issuingOfficer?: string
   dateTimeOfIssue?: string
+  dateTimeOfFirstHearing?: string
 }
 
 export type ReportedAdjudicationResult = {

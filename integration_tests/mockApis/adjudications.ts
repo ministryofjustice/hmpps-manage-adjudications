@@ -523,11 +523,45 @@ const stubAmendPrisonerGender = ({ draftId, response }): SuperAgentRequest =>
     },
   })
 
-const stubGetReportedAdjudicationIssueData = ({
+const stubGetIssueDataFilteredOnDiscDate = ({
   agencyId = 'MDI',
   filter = {
-    toDate: moment().format('YYYY-MM-DD'),
     fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+    toDate: moment().format('YYYY-MM-DD'),
+  },
+  response,
+}: {
+  agencyId: string
+  filter: {
+    fromDate: string
+    toDate: string
+  }
+  response
+}): SuperAgentRequest => {
+  const path =
+    `/adjudications/reported-adjudications/agency/${agencyId}/issue?` +
+    `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
+    `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: path,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+}
+
+const stubGetIssueDataFilteredOnHearingDate = ({
+  agencyId = 'MDI',
+  filter = {
+    fromDate: moment().format('YYYY-MM-DD'),
+    toDate: moment().add(2, 'days').format('YYYY-MM-DD'),
     issueStatus: allIssueStatuses,
   },
   response,
@@ -541,7 +575,7 @@ const stubGetReportedAdjudicationIssueData = ({
   response
 }): SuperAgentRequest => {
   const path =
-    `/adjudications/reported-adjudications/agency/${agencyId}/issue?` +
+    `/adjudications/reported-adjudications/agency/${agencyId}/print?` +
     `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
     `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
     `${(filter.issueStatus && `&issueStatus=${filter.issueStatus}`) || `&issueStatus=${allIssueStatuses}`}`
@@ -602,6 +636,7 @@ export default {
   stubAmendHearing,
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,
-  stubGetReportedAdjudicationIssueData,
+  stubGetIssueDataFilteredOnDiscDate,
+  stubGetIssueDataFilteredOnHearingDate,
   stubPutDateTimeOfIssue,
 }

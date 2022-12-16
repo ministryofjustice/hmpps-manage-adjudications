@@ -148,6 +148,20 @@ export default class ManageAdjudicationsClient {
     const path =
       `/reported-adjudications/agency/${agencyId}/issue?` +
       `${(filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
+    return this.restClient.get({
+      path,
+    })
+  }
+
+  async getReportedAdjudicationPrintData(
+    agencyId: string,
+    filter: ReportedAdjudicationDISFormFilter
+  ): Promise<ReportedAdjudicationsResult> {
+    const path =
+      `/reported-adjudications/agency/${agencyId}/print?${
+        (filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''
+      }` +
       `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
       `${(filter.issueStatus && `&issueStatus=${filter.issueStatus}`) || `&issueStatus=${allIssueStatuses}`}`
     return this.restClient.get({

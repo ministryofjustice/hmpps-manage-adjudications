@@ -90,8 +90,8 @@ export const fillInPrintDISFormFilterDefaults = (
   printDISFormsUiFilter: PrintDISFormsUiFilter
 ): PrintDISFormsUiFilter => {
   return {
-    fromDate: printDISFormsUiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
-    toDate: printDISFormsUiFilter.toDate || momentDateToDatePicker(moment()),
+    fromDate: printDISFormsUiFilter.fromDate || momentDateToDatePicker(moment()),
+    toDate: printDISFormsUiFilter.toDate || momentDateToDatePicker(moment().add(2, 'days')),
     locationId: printDISFormsUiFilter.locationId || null,
     issueStatus: printDISFormsUiFilter.issueStatus || allIssueStatuses,
   }

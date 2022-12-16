@@ -4,11 +4,11 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro DISFormFilter(filter, locations, errors, clearUrl, csrfToken, dateTitle, includeCheckboxes = false) %}
+{% macro DISFormFilter(params) %}
   <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="confirm-DIS-issued-form">
-    <h2 class="govuk-heading-m">{{ dateTitle }}</h2>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-    {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
+    <h2 class="govuk-heading-m">{{ params.dateTitle }}</h2>
+    <input type="hidden" name="_csrf" value="{{ params.csrfToken }}"/>
+    {% set fromDateError = params.errors | findErrors(['fromDate[date]']) %}
     <div {% if fromDateError %}class="govuk-form-group--error"{% endif %} data-qa='filter-bar'>
       {% if fromDateError %}
         <p id="fromDate[date]-error" class="govuk-error-message">
@@ -21,8 +21,8 @@
                     id: 'fromDate[date]',
                     label: 'From',
                     name: 'fromDate[date]',
-                    date: filter.fromDate,
-                    attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
+                    date: params.filter.fromDate,
+                    attributes: {'data-disable-future-date': params.disableFutureSelection, 'data-disable-past-date': params.disablePastSelection,'data-qa': "from-date" },
                     classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
                 }) }}
 
@@ -30,8 +30,8 @@
                     id: 'toDate[date]',
                     label: 'To',
                     name: 'toDate[date]',
-                    date: filter.toDate,
-                    attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
+                    date: params.filter.toDate,
+                    attributes: {'data-disable-future-date': params.disableFutureSelection, 'data-disable-past-date': params.disablePastSelection, 'data-qa': "to-date" },
                     classes: 'govuk-input--width-10'
                 }) }}
 
@@ -41,13 +41,13 @@
                   label: {
                     text: 'Residential location'
                   },
-                  items: locations | toSelect('locationId', 'userDescription', filter.locationId, null, 'description' ),
+                  items: params.locations | toSelect('locationId', 'userDescription', params.filter.locationId, null, 'description' ),
                   attributes: {
                     "data-qa": "locationId"
                   }
                 }) }}
         </div>
-        {% if includeCheckboxes %}
+        {% if params.includeCheckboxes %}
           <div class="checkboxes-printWidth">
             {{ govukCheckboxes({
                   formGroup: {
@@ -66,11 +66,11 @@
                     {
                       value: IssueStatus.ISSUED,
                       text: 'Issued',
-                      checked: IssueStatus.ISSUED | issueStatusChecked(filter)
+                      checked: IssueStatus.ISSUED | issueStatusChecked(params.filter)
                     }, {
                       value: IssueStatus.NOT_ISSUED,
                       text: 'Not issued',
-                      checked: IssueStatus.NOT_ISSUED | issueStatusChecked(filter)
+                      checked: IssueStatus.NOT_ISSUED | issueStatusChecked(params.filter)
 
                     }
                   ]
@@ -87,7 +87,7 @@
                     attributes: { "data-qa": "filter-apply" }
                 }) }}
         <p class="govuk-body adj-filter-clear-link no-print">
-          <a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a>
+          <a class='govuk-link' href='{{ params.clearUrl }}' data-qa='clear-filter'>Clear</a>
         </p>
       </div>
     </div>

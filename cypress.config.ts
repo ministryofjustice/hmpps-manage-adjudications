@@ -83,7 +83,8 @@ export default defineConfig({
         stubAmendHearing: adjudications.stubAmendHearing,
         stubGetHearingsGivenAgencyAndDate: adjudications.stubGetHearingsGivenAgencyAndDate,
         stubAmendPrisonerGender: adjudications.stubAmendPrisonerGender,
-        stubGetReportedAdjudicationIssueData: adjudications.stubGetReportedAdjudicationIssueData,
+        stubGetIssueDataDiscDate: adjudications.stubGetIssueDataFilteredOnDiscDate,
+        stubGetIssueDataHearingDate: adjudications.stubGetIssueDataFilteredOnHearingDate,
         stubPutDateTimeOfIssue: adjudications.stubPutDateTimeOfIssue,
       })
     },
