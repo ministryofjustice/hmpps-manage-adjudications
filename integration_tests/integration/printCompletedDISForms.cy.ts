@@ -32,21 +32,27 @@ context('Print completed DIS forms', () => {
     cy.signIn()
   })
   it('should have the required elements and expected default filter - no reports', () => {
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: [] } })
+    cy.task('stubGetIssueDataHearingDate', {
+      response: {
+        reportedAdjudications: [],
+      },
+    })
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.printCompletedDisForms.root)
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
     printCompletedDISFormsPage.noResultsMessage().should('exist')
     printCompletedDISFormsPage.resultsTable().should('not.exist')
-    filter.toDateInput().should('have.value', moment().format('DD/MM/YYYY'))
-    filter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
+    filter.fromDateInput().should('have.value', moment().format('DD/MM/YYYY'))
+    filter.toDateInput().should('have.value', moment().add(2, 'days').format('DD/MM/YYYY'))
     filter.selectLocation().should('have.value', '')
     filter.issuedCheckbox().should('be.checked')
     filter.notIssuedCheckbox().should('be.checked')
   })
   it('has working validation for the date filters', () => {
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: [] } })
+    cy.task('stubGetIssueDataHearingDate', {
+      response: { reportedAdjudications: [] },
+    })
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.printCompletedDisForms.root)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
@@ -59,10 +65,12 @@ context('Print completed DIS forms', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(12345, 'G7234VB', {
         dateTimeOfIssue: '2022-12-05T15:00:00',
-        hearings: [testData.singleHearing('2022-12-06T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
     ]
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataHearingDate', {
+      response: { reportedAdjudications: adjudicationResponse },
+    })
     cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
@@ -81,13 +89,15 @@ context('Print completed DIS forms', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(12345, 'G7234VB', {
         dateTimeOfIssue: '2022-12-05T15:00:00',
-        hearings: [testData.singleHearing('2022-12-06T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.completedAdjudication(23456, 'P3785CP', {
-        hearings: [testData.singleHearing('2022-12-07T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
     ]
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataHearingDate', {
+      response: { reportedAdjudications: adjudicationResponse },
+    })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     // First prisoner - G7234VB
     cy.task('stubGetPrisonersAlerts', {
@@ -137,18 +147,18 @@ context('Print completed DIS forms', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(12345, 'G7234VB', {
         dateTimeOfIssue: '2022-12-05T15:00:00',
-        hearings: [testData.singleHearing('2022-12-06T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.completedAdjudication(23456, 'P3785CP', {
-        hearings: [testData.singleHearing('2022-12-07T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
     ]
     // Without filter
-    cy.task('stubGetReportedAdjudicationIssueData', {
+    cy.task('stubGetIssueDataHearingDate', {
       response: { reportedAdjudications: adjudicationResponse },
     })
     // With filter
-    cy.task('stubGetReportedAdjudicationIssueData', {
+    cy.task('stubGetIssueDataHearingDate', {
       filter: { fromDate: '2022-12-05', toDate: '2022-12-07', locationId: null, issueStatus: IssueStatus.ISSUED },
       response: { reportedAdjudications: [adjudicationResponse[0]] },
     })
@@ -181,18 +191,18 @@ context('Print completed DIS forms', () => {
     const adjudicationResponse = [
       testData.completedAdjudication(12345, 'G7234VB', {
         dateTimeOfIssue: '2022-12-05T15:00:00',
-        hearings: [testData.singleHearing('2022-12-06T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.completedAdjudication(23456, 'P3785CP', {
-        hearings: [testData.singleHearing('2022-12-07T10:00:00')],
+        dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
     ]
     // Without filter
-    cy.task('stubGetReportedAdjudicationIssueData', {
+    cy.task('stubGetIssueDataHearingDate', {
       response: { reportedAdjudications: adjudicationResponse },
     })
     // With filter
-    cy.task('stubGetReportedAdjudicationIssueData', {
+    cy.task('stubGetIssueDataHearingDate', {
       filter: { fromDate: '2022-12-05', toDate: '2022-12-07', locationId: 27102, issueStatus: allIssueStatuses },
       response: { reportedAdjudications: adjudicationResponse },
     })

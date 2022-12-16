@@ -42,7 +42,7 @@ export default class confirmDISFormsIssuedRoutes {
     const { user } = res.locals
     const uiFilter = fillInDISFormFilterDefaults(uiDISFormFilterFromRequest(req))
     const filter = DISFormfilterFromUiFilter(uiFilter)
-    const results = await this.reportedAdjudicationsService.getAdjudicationDISFormData(res.locals.user, filter)
+    const results = await this.reportedAdjudicationsService.getAdjudicationDISFormData(res.locals.user, filter, false)
 
     const filteredResults = filter.locationId
       ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationId, user)

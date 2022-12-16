@@ -32,7 +32,7 @@ context('Confirm DIS forms have been issued', () => {
   })
 
   it('should have the required elements - no reports', () => {
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: [] } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: [] } })
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -40,7 +40,7 @@ context('Confirm DIS forms have been issued', () => {
     confirmDISFormsIssued.resultsTable().should('not.exist')
   })
   it('has the expected default date range', () => {
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: [] } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: [] } })
     cy.task('stubGetBatchPrisonerDetails')
 
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
@@ -49,7 +49,7 @@ context('Confirm DIS forms have been issued', () => {
     filter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
   })
   it('has working validation for the date filters', () => {
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: [] } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: [] } })
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const filter: DISFormsFilter = new DISFormsFilter()
@@ -79,7 +79,7 @@ context('Confirm DIS forms have been issued', () => {
         formsAlreadyIssued: false,
       }),
     ]
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
     cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -120,7 +120,7 @@ context('Confirm DIS forms have been issued', () => {
         '2022-12-06T12:10:00'
       ),
     ]
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -171,7 +171,7 @@ context('Confirm DIS forms have been issued', () => {
         '2022-12-05T11:11:00'
       ),
     ]
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -220,8 +220,8 @@ context('Confirm DIS forms have been issued', () => {
       ),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
-    cy.task('stubGetReportedAdjudicationIssueData', {
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', {
       filter: { fromDate: '2022-12-05', toDate: '2022-12-05', locationId: null },
       response: { reportedAdjudications: [adjudicationResponse[0]] },
     })
@@ -270,9 +270,9 @@ context('Confirm DIS forms have been issued', () => {
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     // initially returned data from api with only the default filters
-    cy.task('stubGetReportedAdjudicationIssueData', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
     // the data returned once the filter has been set
-    cy.task('stubGetReportedAdjudicationIssueData', {
+    cy.task('stubGetIssueDataDiscDate', {
       response: { reportedAdjudications: adjudicationResponse },
       filter: { fromDate: '2022-12-04', toDate: '2022-12-06', locationId: 27102 },
     })

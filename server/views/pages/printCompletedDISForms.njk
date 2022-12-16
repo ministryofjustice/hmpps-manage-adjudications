@@ -24,7 +24,7 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ DISFormFilter(filter, possibleLocations, errors, adjudicationUrls.printCompletedDisForms.urls.start(), csrfToken, "Date of hearing", true) }}
+  {{ DISFormFilter({filter: filter, locations: possibleLocations, errors: errors, clearUrl: adjudicationUrls.printCompletedDisForms.urls.start(), csrfToken: csrfToken, dateTitle: "Date of hearing", disableFutureSelection: false, disablePastSelection: true, includeCheckboxes: true}) }}
 
   {{ printLink(align="right", classes="print-link--no-image") }}
   
