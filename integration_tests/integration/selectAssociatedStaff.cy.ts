@@ -2,6 +2,9 @@ import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Select associated staff', () => {
   beforeEach(() => {
@@ -36,12 +39,11 @@ context('Select associated staff', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     // Staff Member
     cy.task('stubGetUserFromNames', {

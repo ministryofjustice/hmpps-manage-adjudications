@@ -1,15 +1,9 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
 
-const prisonerResponse = (offenderNo: string, firstName: string, lastName: string) => {
-  return {
-    offenderNo,
-    firstName,
-    lastName,
-    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-  }
-}
+const testData = new TestData()
 
 const reportedAdjudication = (status: string, reviewedByUserId = null, statusReason = null, statusDetails = null) => {
   return {
@@ -65,18 +59,30 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
-      prisonerNumber: 'T3356FU',
-      response: prisonerResponse('T3356FU', 'JAMES', 'JONES'),
-    })
-    // Associated prisoner
-    cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerResponse('G6415GD', 'JOHN', 'SMITH'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
+    })
+    // Associated Prisoner
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'T3356FU',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'T3356FU',
+        firstName: 'JAMES',
+        lastName: 'JONES',
+      }),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: prisonerResponse('G5512G', 'PAUL', 'WRIGHT'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G5512G',
+        firstName: 'PAUL',
+        lastName: 'WRIGHT',
+      }),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,

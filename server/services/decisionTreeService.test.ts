@@ -1,5 +1,6 @@
 import { User } from '../data/hmppsAuthClient'
 import Question from '../offenceCodeDecisions/Question'
+import TestData from '../routes/testutils/testData'
 import DecisionTreeService, { AnswerData } from './decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from './placeOnReportService'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
@@ -29,28 +30,15 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const question = new Question(null) as jest.Mocked<Question>
+const testData = new TestData()
 
 let service: DecisionTreeService
 
-const victimPrisonerDetails: PrisonerResultSummary = {
+const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'AA1234A',
   firstName: 'Alan',
   lastName: 'Balan',
-  assignedLivingUnit: {
-    agencyId: 'MDI',
-    locationId: 123,
-    description: 'A cell',
-    agencyName: 'Morrlands',
-  },
-  categoryCode: 'A',
-  language: null,
-  dateOfBirth: null,
-  friendlyName: 'A name',
-  displayName: 'A display name',
-  physicalAttributes: undefined,
-  prisonerNumber: 'AA1234A',
-  currentLocation: 'A-1-2',
-}
+})
 
 const victimStaffDetails = {
   username: 'Alan',

@@ -5,29 +5,22 @@ import PlaceOnReportService, { PrisonerResultSummary } from '../../services/plac
 import DamagesSessionService from '../../services/damagesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { DamageCode, DamageDetails } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/damagesSessionService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const damagesSessionService = new DamagesSessionService() as jest.Mocked<DamagesSessionService>
+const testData = new TestData()
 
 let app: Express
 
-const adjudicationPrisonerDetails: PrisonerResultSummary = {
+const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
-  prisonerNumber: 'G6415GD',
   firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
   lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  displayName: undefined,
-  physicalAttributes: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
 const adjudicationWithDamages = {
   draftAdjudication: {

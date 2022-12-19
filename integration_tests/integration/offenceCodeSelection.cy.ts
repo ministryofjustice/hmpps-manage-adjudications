@@ -4,6 +4,9 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 const prisonerOutsideEstablishmentNumber = 'G7123CI'
 
@@ -116,32 +119,29 @@ context('Offence details', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
-    // Associated prisoner
+    // Associated Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
         firstName: 'JAMES',
         lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G5512G',
         firstName: 'PAUL',
         lastName: 'WRIGHT',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     // Prison officer victim
     cy.task('stubGetUserFromUsername', {

@@ -1,7 +1,10 @@
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
 
 const prisonerOutsideEstablishmentNumber = 'G7123CI'
+
+const testData = new TestData()
 
 context('Incident details', () => {
   beforeEach(() => {
@@ -35,22 +38,20 @@ context('Incident details', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G5512G',
         firstName: 'PAUL',
         lastName: 'WRIGHT',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     // Prison officer victim
     cy.task('stubGetUserFromUsername', {

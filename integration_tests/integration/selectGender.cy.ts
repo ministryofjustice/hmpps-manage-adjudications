@@ -3,27 +3,24 @@ import SelectGender from '../pages/selectGender'
 import PrisonerSearch from '../pages/prisonerSearch'
 import Page from '../pages/page'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 
-const prisoner = {
-  prisonerNumber: 'G6415GD',
-  response: {
-    offenderNo: 'G6415GD',
-    firstName: 'JOHN',
-    lastName: 'SMITH',
-    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-    dateOfBirth: '1990-10-11',
-    physicalAttributes: {
-      gender: 'Unknown',
-    },
-  },
-}
+const testData = new TestData()
 
 context('Select gender', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetPrisonerDetails', prisoner)
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+        gender: 'Unknown',
+      }),
+    })
     cy.signIn()
   })
 
@@ -71,7 +68,14 @@ context('Select gender edit', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetPrisonerDetails', prisoner)
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
+    })
     cy.task('stubGetDraftAdjudication', {
       id: 3456,
       response: {

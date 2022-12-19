@@ -5,29 +5,22 @@ import PlaceOnReportService, { PrisonerResultSummary } from '../../services/plac
 import WitnessesSessionService from '../../services/witnessesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { WitnessCode } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/witnessesSessionService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const witnessesSessionService = new WitnessesSessionService() as jest.Mocked<WitnessesSessionService>
+const testData = new TestData()
 
 let app: Express
 
-const adjudicationPrisonerDetails: PrisonerResultSummary = {
+const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
-  prisonerNumber: 'G6415GD',
   firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
   lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  physicalAttributes: undefined,
-  displayName: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
 const adjudicationWithoutWitnesses = {
   draftAdjudication: {

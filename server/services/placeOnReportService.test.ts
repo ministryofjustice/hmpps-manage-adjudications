@@ -3,6 +3,9 @@ import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
 import { DamageCode, EvidenceCode, PrisonerGender, WitnessCode } from '../data/DraftAdjudicationResult'
+import TestData from '../routes/testutils/testData'
+
+const testData = new TestData()
 
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
@@ -287,38 +290,35 @@ describe('placeOnReportService', () => {
 
   describe('getPrisonerDetails', () => {
     it('returns correctly formatted prisoner details', async () => {
-      getPrisonerDetails.mockResolvedValue({
-        offenderNo: 'A1234AA',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015' },
-        categoryCode: 'C',
-      })
+      getPrisonerDetails.mockResolvedValue(
+        testData.prisonerResultSummary({
+          offenderNo: 'A1234AA',
+          firstName: 'John',
+          lastName: 'Smith',
+        })
+      )
 
       const result = await service.getPrisonerDetails('A1234AA', user)
 
-      expect(result).toEqual({
-        assignedLivingUnit: { description: '1-2-015' },
-        categoryCode: 'C',
-        displayName: 'Smith, John',
-        firstName: 'JOHN',
-        friendlyName: 'John Smith',
-        lastName: 'SMITH',
-        offenderNo: 'A1234AA',
-        prisonerNumber: 'A1234AA',
-        currentLocation: '1-2-015',
-      })
+      expect(result).toEqual(
+        testData.prisonerResultSummary({
+          offenderNo: 'A1234AA',
+          firstName: 'John',
+          lastName: 'Smith',
+        })
+      )
       expect(PrisonApiClient).toBeCalledWith(token)
       expect(getPrisonerDetails).toBeCalledWith('A1234AA')
     })
     it('displays correct location when the prisoner is in CSWAP', async () => {
-      getPrisonerDetails.mockResolvedValue({
-        offenderNo: 'A1234AA',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-        assignedLivingUnit: { description: 'CSWAP' },
-        categoryCode: 'C',
-      })
+      getPrisonerDetails.mockResolvedValue(
+        testData.prisonerResultSummary({
+          offenderNo: 'A1234AA',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          assignedLivingUnitDesc: 'CSWAP',
+        })
+      )
       const result = await service.getPrisonerDetails('A1234AA', user)
       expect(result.currentLocation).toEqual('No cell allocated')
     })

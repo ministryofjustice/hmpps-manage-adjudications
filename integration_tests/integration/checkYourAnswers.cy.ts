@@ -1,7 +1,10 @@
 import { DamageCode, EvidenceCode, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswers'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 context('Check Your Answers', () => {
   beforeEach(() => {
@@ -11,33 +14,30 @@ context('Check Your Answers', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        physicalAttributes: { gender: 'Unknown' },
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+        gender: 'Unknown',
+      }),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
-        firstName: 'JAMES',
-        lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+        firstName: 'James',
+        lastName: 'Jones',
+      }),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G5512G',
-        firstName: 'PAUL',
-        lastName: 'WRIGHT',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+        firstName: 'Paul',
+        lastName: 'Wright',
+      }),
     })
 
     cy.task('stubGetOffenceRule', {

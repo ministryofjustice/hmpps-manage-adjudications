@@ -1,8 +1,11 @@
 import { DraftAdjudication } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AgeOfPrisoner from '../pages/ageofPrisoner'
 import IncidentRole from '../pages/incidentRole'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 const draftAdjudicationForCommittedYouthOffences: DraftAdjudication = {
   id: 3456,
@@ -36,13 +39,11 @@ context('Existing draft adjudication', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        dateOfBirth: '1990-10-11',
-      },
+      }),
     })
     cy.task('stubSaveYouthOffenderStatus', {
       adjudicationNumber: '3456',

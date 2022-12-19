@@ -6,15 +6,9 @@ import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { ReviewStatus } from '../../server/routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
 import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 
-const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
-  return {
-    offenderNo: prisonerNumber,
-    firstName,
-    lastName,
-    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-  }
-}
+const testData = new TestData()
 
 const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = []) => {
   return {
@@ -76,7 +70,11 @@ context('Schedule a hearing page', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
     })
     cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',

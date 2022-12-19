@@ -1,6 +1,9 @@
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentRole from '../pages/incidentRoleSubmittedEdit'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 context('Incident role (edit after completion of report)', () => {
   beforeEach(() => {
@@ -9,17 +12,11 @@ context('Incident role (edit after completion of report)', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 34,
@@ -109,12 +106,11 @@ context('Incident role (edit after completion of report)', () => {
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
         firstName: 'JAMES',
         lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     cy.task('stubSearch', {
       query: {

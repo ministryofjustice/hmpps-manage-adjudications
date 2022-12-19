@@ -10,6 +10,7 @@ import AdjudicationPdf from './adjudicationPdf'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -23,6 +24,8 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null) as jest.Mocked<UserService>
+
+const testData = new TestData()
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const decisionTreeService = new DecisionTreeService(
@@ -58,20 +61,12 @@ const reportedAdjudication: ReportedAdjudication = {
   isYouthOffender: false,
 }
 
-const prisonerResultSummary: PrisonerResultSummary = {
+const prisonerResultSummary: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
   firstName: 'John',
   lastName: 'Smith',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  displayName: undefined,
-  prisonerNumber: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-  physicalAttributes: undefined,
-}
+})
+
 const confirmedOnReportData: ConfirmedOnReportData = {
   reportExpirationDateTime: '2020-12-23T07:21',
   prisonerFirstName: 'John',
