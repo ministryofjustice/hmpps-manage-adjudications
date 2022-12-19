@@ -41,14 +41,6 @@ context('Incident details', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-            {
-              offenceCode: 4001,
-              offenceRule: {
-                paragraphNumber: '4',
-                paragraphDescription: 'Fights with any person',
-              },
-              victimPrisonersNumber: 'G5512G',
-            },
           ],
         },
       },
@@ -81,28 +73,25 @@ context('Incident details', () => {
         paragraphDescription: 'Commits any assault',
       },
     })
-    cy.task('stubGetOffenceRule', {
-      offenceCode: 4001,
-      response: {
-        paragraphNumber: '4',
-        paragraphDescription: 'Fights with any person',
-      },
-    })
   })
 
   it('Go to the delete offence page', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSectionAnswer(2, 2).contains('Fighting with someone')
-    detailsOfOffencePage.deleteLink(2).click()
+    detailsOfOffencePage
+      .questionAnswerSectionAnswer(1, 1)
+      .contains('Assault, fighting, or endangering the health or personal safety of others')
+    detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
-    deleteOffence.questionAnswerSectionAnswer(2, 2).contains('Fighting with someone')
+    deleteOffence
+      .questionAnswerSectionAnswer(1, 1)
+      .contains('Assault, fighting, or endangering the health or personal safety of others')
   })
 
   it('Go to the delete offence page and get a validation failure', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.deleteLink(2).click()
+    detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.confirm().click()
     deleteOffence.form().contains('Select yes if you want to remove this offence')
@@ -111,24 +100,24 @@ context('Incident details', () => {
   it('Go to the delete offence page and select yes', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSection(2).should('exist')
-    detailsOfOffencePage.deleteLink(2).click()
+    detailsOfOffencePage.questionAnswerSection(1).should('exist')
+    detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.yesRadio().click()
     deleteOffence.confirm().click()
     detailsOfOffencePage.checkOnPage()
-    detailsOfOffencePage.questionAnswerSection(2).should('not.exist')
+    detailsOfOffencePage.questionAnswerSection(1).should('not.exist')
   })
 
   it('Go to the delete offence page and select no', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSection(2).should('exist')
-    detailsOfOffencePage.deleteLink(2).click()
+    detailsOfOffencePage.questionAnswerSection(1).should('exist')
+    detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.noRadio().click()
     deleteOffence.confirm().click()
     detailsOfOffencePage.checkOnPage()
-    detailsOfOffencePage.questionAnswerSection(2).should('exist')
+    detailsOfOffencePage.questionAnswerSection(1).should('exist')
   })
 })
