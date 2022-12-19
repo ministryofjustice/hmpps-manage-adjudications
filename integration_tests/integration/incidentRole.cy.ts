@@ -1,8 +1,9 @@
 import IncidentRole from '../pages/incidentRole'
 import Page from '../pages/page'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Incident role', () => {
   beforeEach(() => {
@@ -11,17 +12,11 @@ context('Incident role', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
@@ -35,21 +30,19 @@ context('Incident role', () => {
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
         firstName: 'JAMES',
         lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'A5155DY',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'A5155DY',
         firstName: 'TOBY',
         lastName: 'PERCROSS',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 34,

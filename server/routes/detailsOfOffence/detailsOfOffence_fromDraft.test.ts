@@ -12,6 +12,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/allOffencesSessionService.ts')
@@ -51,22 +52,15 @@ const decisionTreeService = new DecisionTreeService(
   testDecisionsTree
 )
 
+const testData = new TestData()
+
 let app: Express
 
-const adjudicationPrisonerDetails: PrisonerResultSummary = {
+const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
-  prisonerNumber: 'G6415GD',
   firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
   lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  displayName: undefined,
-  physicalAttributes: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
 const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = {
   offenderNo: 'G7824GD',

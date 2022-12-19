@@ -1,6 +1,9 @@
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentStatement from '../pages/incidentStatementSubmittedEdit'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 context('Incident Statement', () => {
   beforeEach(() => {
@@ -9,17 +12,11 @@ context('Incident Statement', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 3456,

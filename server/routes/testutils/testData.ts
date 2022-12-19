@@ -3,6 +3,7 @@ import { HearingDetails, PrisonerGender } from '../../data/DraftAdjudicationResu
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
 
@@ -120,6 +121,46 @@ export default class TestData {
       displayCellLocation: enhanced ? '1-2-015' : null,
       displayName: enhanced ? `${lastName}, ${firstName}` : null,
       friendlyName: enhanced ? `${firstName} ${lastName}` : null,
+    }
+  }
+
+  prisonerResultSummary = ({
+    offenderNo,
+    firstName,
+    lastName,
+    gender = 'Male',
+    includeBirthday = true,
+    language = 'English',
+    assignedLivingUnitDesc = '1-2-015',
+  }: {
+    offenderNo: string
+    firstName: string
+    lastName: string
+    gender?: string
+    includeBirthday?: boolean
+    language?: string
+    assignedLivingUnitDesc?: string
+  }): PrisonerResultSummary => {
+    return {
+      offenderNo,
+      firstName,
+      lastName,
+      language,
+      displayName: `${lastName}, ${firstName}`,
+      friendlyName: `${firstName} ${lastName}`,
+      prisonerNumber: offenderNo,
+      categoryCode: 'A',
+      currentLocation: assignedLivingUnitDesc,
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 123,
+        description: assignedLivingUnitDesc,
+        agencyName: 'Moorland (HMPYOI)',
+      },
+      dateOfBirth: includeBirthday ? '1990-10-11' : null,
+      physicalAttributes: {
+        gender,
+      },
     }
   }
 }

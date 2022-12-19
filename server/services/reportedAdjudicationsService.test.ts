@@ -8,6 +8,9 @@ import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
+import TestData from '../routes/testutils/testData'
+
+const testData = new TestData()
 
 const getPrisonerDetails = jest.fn()
 const getSecondaryLanguages = jest.fn()
@@ -236,16 +239,14 @@ describe('reportedAdjudicationsService', () => {
           },
         })
 
-        getPrisonerDetails.mockResolvedValue({
-          offenderNo: 'A1234AA',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          language: 'Spanish',
-          assignedLivingUnit: {
-            description: 'Adj',
-            agencyName: 'Moorland (HMP & YOI)',
-          },
-        })
+        getPrisonerDetails.mockResolvedValue(
+          testData.prisonerResultSummary({
+            offenderNo: 'A1234AA',
+            firstName: 'JOHN',
+            lastName: 'SMITH',
+            language: 'Spanish',
+          })
+        )
 
         getSecondaryLanguages.mockResolvedValue([
           {
@@ -274,9 +275,9 @@ describe('reportedAdjudicationsService', () => {
           incidentAgencyName: 'Moorland (HMP & YOI)',
           incidentLocationName: 'Adj',
           incidentDate: '2021-10-28T15:40:25.884',
-          prisonerAgencyName: 'Moorland (HMP & YOI)',
+          prisonerAgencyName: 'Moorland (HMPYOI)',
           reportExpirationDateTime: '2021-10-22T15:40:25.884',
-          prisonerLivingUnitName: 'Adj',
+          prisonerLivingUnitName: '1-2-015',
           prisonerFirstName: 'JOHN',
           prisonerLastName: 'SMITH',
           prisonerNumber: 'A1234AA',
@@ -319,16 +320,13 @@ describe('reportedAdjudicationsService', () => {
           },
         })
 
-        getPrisonerDetails.mockResolvedValue({
-          offenderNo: 'A1234AA',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          language: 'English',
-          assignedLivingUnit: {
-            description: 'Adj',
-            agencyName: 'Moorland (HMP & YOI)',
-          },
-        })
+        getPrisonerDetails.mockResolvedValue(
+          testData.prisonerResultSummary({
+            offenderNo: 'A1234AA',
+            firstName: 'JOHN',
+            lastName: 'SMITH',
+          })
+        )
 
         getSecondaryLanguages.mockResolvedValue([])
       })

@@ -2,15 +2,9 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { DamageCode, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 
-const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
-  return {
-    offenderNo: prisonerNumber,
-    firstName,
-    lastName,
-    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-  }
-}
+const testData = new TestData()
 
 const createDraftFromReportedAdjudicationResponse = (
   adjudicationNumber: number,
@@ -141,17 +135,29 @@ context('Prisoner report - reporter view', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
     })
-    // Associated prisoner
+    // Associated Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: prisonerDetails('T3356FU', 'JAMES', 'JONES'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'T3356FU',
+        firstName: 'JAMES',
+        lastName: 'JONES',
+      }),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: prisonerDetails('G5512G', 'PAUL', 'WRIGHT'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G5512G',
+        firstName: 'PAUL',
+        lastName: 'WRIGHT',
+      }),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 12345,
@@ -247,7 +253,7 @@ context('Prisoner report - reporter view', () => {
         authSource: 'auth',
       },
     })
-    cy.signIn()
+    return cy.signIn()
   })
   describe('test prisoners', () => {
     ;[

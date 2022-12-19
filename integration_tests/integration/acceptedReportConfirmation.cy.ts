@@ -1,7 +1,10 @@
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AcceptedReportConfirmation from '../pages/acceptedReportConfirmation'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 context('Report has been accepted', () => {
   beforeEach(() => {
@@ -10,11 +13,11 @@ context('Report has been accepted', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-      },
+      }),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,

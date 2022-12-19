@@ -1,6 +1,9 @@
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AssociatedPrisoner from '../pages/associatedPrisoner'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 context('Incident assist', () => {
   beforeEach(() => {
@@ -10,31 +13,19 @@ context('Incident assist', () => {
     cy.signIn()
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
         firstName: 'Rishi',
         lastName: 'Rich',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 34,

@@ -2,6 +2,9 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfWitnesses from '../pages/detailsOfWitnesses'
 import { PrisonerGender, WitnessCode, WitnessDetails } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 const witnessesList = [
   {
@@ -112,12 +115,11 @@ const reportedAdjudication = (adjudicationNumber: number, witnesses: WitnessDeta
   }
 }
 
-const prisonerDetails = {
+const prisonerDetails = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
   firstName: 'JOHN',
   lastName: 'SMITH',
-  assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-}
+})
 
 const officerDetails = {
   activeCaseLoadId: 'MDI',

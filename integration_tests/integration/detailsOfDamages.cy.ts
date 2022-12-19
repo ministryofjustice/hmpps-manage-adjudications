@@ -2,6 +2,9 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfDamages from '../pages/detailsOfDamages'
 import { DamageCode, DamageDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 const damagesList = [
   {
@@ -106,12 +109,11 @@ const reportedAdjudication = (adjudicationNumber: number, damages: DamageDetails
   }
 }
 
-const prisonerDetails = {
+const prisonerDetails = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
   firstName: 'JOHN',
   lastName: 'SMITH',
-  assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-}
+})
 
 context('Details of damages', () => {
   beforeEach(() => {

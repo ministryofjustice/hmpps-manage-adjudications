@@ -1,6 +1,9 @@
 import DeletePerson from '../pages/deletePerson'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Delete person - page contents', () => {
   beforeEach(() => {
@@ -9,17 +12,11 @@ context('Delete person - page contents', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
 
     cy.task('stubGetUserFromUsername', {

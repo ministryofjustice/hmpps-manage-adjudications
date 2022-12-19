@@ -1,6 +1,9 @@
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AgeOfPrisoner from '../pages/ageofPrisoner'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 context('Age of the prisoner', () => {
   beforeEach(() => {
@@ -9,13 +12,11 @@ context('Age of the prisoner', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        dateOfBirth: '1990-10-11',
-      },
+      }),
     })
     cy.task('stubSaveYouthOffenderStatus', {
       adjudicationNumber: '3456',
@@ -81,12 +82,12 @@ context('Age of the prisoner', () => {
   it('should not show the age of the prisoner if there are no date of birth details on the prisoner record', () => {
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+        includeBirthday: false,
+      }),
     })
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)

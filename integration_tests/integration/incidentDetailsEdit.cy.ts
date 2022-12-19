@@ -3,6 +3,9 @@ import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
 import { forceDateInputWithDate, forceDateInput } from '../componentDrivers/dateInput'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Incident details (edit) - statement incomplete', () => {
   beforeEach(() => {
@@ -11,17 +14,11 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'G6415GD',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        categoryCode: 'C',
-        alerts: [
-          { alertType: 'T', alertCode: 'TCPA' },
-          { alertType: 'X', alertCode: 'XCU' },
-        ],
-      },
+      }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 34,
@@ -104,12 +101,11 @@ context('Incident details (edit) - statement incomplete', () => {
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
         firstName: 'JAMES',
         lastName: 'JONES',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-      },
+      }),
     })
     cy.task('stubSearch', {
       query: {

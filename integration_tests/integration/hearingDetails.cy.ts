@@ -3,15 +3,9 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 
-const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
-  return {
-    offenderNo: prisonerNumber,
-    firstName,
-    lastName,
-    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-  }
-}
+const testData = new TestData()
 
 const incidentDateTime = '2030-01-01T11:00:00'
 const incidentDateTimeHandover = '2030-01-03T11:00:00'
@@ -101,7 +95,11 @@ context('Hearing deails page', () => {
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
     })
     cy.task('stubGetLocation', {
       locationId: 123,

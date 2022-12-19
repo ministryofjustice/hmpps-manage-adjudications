@@ -1,7 +1,10 @@
 import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
 import Page from '../pages/page'
+
+const testData = new TestData()
 
 const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
   return {
@@ -66,16 +69,6 @@ const completeReportedAdjudicationResponse = (
   }
 }
 
-const prisonerDetails = (prisonerNumber: string, firstName: string, lastName: string) => {
-  return {
-    offenderNo: prisonerNumber,
-    firstName,
-    lastName,
-    assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-    physicalAttributes: { gender: 'Unknown' },
-  }
-}
-
 context('Check Your Answers', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -84,17 +77,29 @@ context('Check Your Answers', () => {
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
-      response: prisonerDetails('G6415GD', 'JOHN', 'SMITH', 'Unknown'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
     })
     // Associated prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
-      response: prisonerDetails('T3356FU', 'JAMES', 'JONES'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'T3356FU',
+        firstName: 'James',
+        lastName: 'Jones',
+      }),
     })
     // Prisoner victim
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G5512G',
-      response: prisonerDetails('G5512G', 'PAUL', 'WRIGHT'),
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G5512G',
+        firstName: 'Paul',
+        lastName: 'Wright',
+      }),
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
