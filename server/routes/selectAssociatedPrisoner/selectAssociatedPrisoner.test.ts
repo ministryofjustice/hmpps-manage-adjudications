@@ -1,14 +1,16 @@
 import { Express } from 'express'
 import request from 'supertest'
-import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/prisonerSearchService')
 
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
 let app: Express
+const testData = new TestData()
 
 beforeEach(() => {
   app = appWithAllRoutes(
@@ -25,16 +27,13 @@ afterEach(() => {
 describe('GET /select-associated-prisoner', () => {
   describe('with results', () => {
     beforeEach(() => {
-      prisonerSearchService.search.mockResolvedValue([
-        {
-          cellLocation: '1-2-015',
-          displayCellLocation: '1-2-015',
-          displayName: 'Smith, John',
-          friendlyName: 'John Smith',
-          prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
-        } as PrisonerSearchSummary,
-      ])
+      const searchResult = testData.prisonerSearchSummary({
+        firstName: 'John',
+        lastName: 'Smith',
+        prisonerNumber: 'A1234AA',
+        startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
+      })
+      return prisonerSearchService.search.mockResolvedValue([searchResult])
     })
 
     it('should load the search for a prisoner page', () => {

@@ -1,13 +1,17 @@
-import PrisonerSearchService, { PrisonerSearchSummary } from './prisonerSearchService'
+import PrisonerSearchService from './prisonerSearchService'
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import { makeSearchApiNotFoundError } from '../test/helpers'
+import TestData from '../routes/testutils/testData'
+import adjudicationUrls from '../utils/urlGenerator'
 
 const search = jest.fn()
 const searchPrisonerDetails = jest.fn()
 const getPrisonerImage = jest.fn()
 const getPrisonerDetails = jest.fn()
+
+const testData = new TestData()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonerSearchClient', () => {
@@ -49,49 +53,36 @@ describe('prisonerSearchService', () => {
   describe('search', () => {
     it('search by prisoner identifier', async () => {
       search.mockResolvedValue([
-        {
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          prisonName: 'HMP Moorland',
-          prisonerNumber: 'A1234AA',
-          cellLocation: '1-2-015',
-          gender: 'Male',
-        },
-        {
-          firstName: 'STEVE',
-          lastName: 'JONES',
-          prisonName: 'HMP Moorland',
+        testData.prisonerSearchSummary({
+          firstName: 'Steve',
+          lastName: 'Jones',
           prisonerNumber: 'A1234AB',
-          cellLocation: '1-2-016',
           gender: 'Unknown',
-        },
+          enhanced: false,
+        }),
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          enhanced: false,
+        }),
       ])
       const results = await service.search({ searchTerm: 'a1234aA', prisonIds }, user)
       expect(results).toStrictEqual([
-        {
-          cellLocation: '1-2-016',
-          displayCellLocation: '1-2-016',
-          displayName: 'Jones, Steve',
-          friendlyName: 'Steve Jones',
-          firstName: 'STEVE',
-          lastName: 'JONES',
-          prisonName: 'HMP Moorland',
+        testData.prisonerSearchSummary({
+          firstName: 'Steve',
+          lastName: 'Jones',
           prisonerNumber: 'A1234AB',
           gender: 'Unknown',
-          startHref: '/select-gender/A1234AB',
-        },
-        {
-          cellLocation: '1-2-015',
-          displayCellLocation: '1-2-015',
-          displayName: 'Smith, John',
-          friendlyName: 'John Smith',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
+          startHref: adjudicationUrls.selectGender.url.start('A1234AB'),
+        }),
+
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-          startHref: '/incident-details/A1234AA',
-        } as PrisonerSearchSummary,
+          startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
+        }),
       ])
       expect(PrisonerSearchClient).toBeCalledWith(token)
       expect(search).toBeCalledWith({ prisonerIdentifier: 'A1234AA', prisonIds })
@@ -99,29 +90,21 @@ describe('prisonerSearchService', () => {
 
     it('search by prisoner name', async () => {
       search.mockResolvedValue([
-        {
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          prisonName: 'HMP Moorland',
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          cellLocation: '1-2-015',
-          gender: 'Male',
-        },
+          enhanced: false,
+        }),
       ])
       const results = await service.search({ searchTerm: 'Smith, John', prisonIds }, user)
       expect(results).toStrictEqual([
-        {
-          cellLocation: '1-2-015',
-          displayCellLocation: '1-2-015',
-          displayName: 'Smith, John',
-          friendlyName: 'John Smith',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
+        testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-          startHref: '/incident-details/A1234AA',
-        } as PrisonerSearchSummary,
+          startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
+        }),
       ])
       expect(PrisonerSearchClient).toBeCalledWith(token)
       expect(search).toBeCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })

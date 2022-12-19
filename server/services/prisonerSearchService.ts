@@ -51,7 +51,7 @@ export default class PrisonerSearchService {
   }
 
   private static getPrisonerStartHref(prisoner: PrisonerSearchResult) {
-    const prisonerGender = prisoner.gender.toUpperCase()
+    const prisonerGender = prisoner.gender?.toUpperCase()
     if (isPrisonerGenderKnown(prisonerGender)) {
       return adjudicationUrls.incidentDetails.urls.start(prisoner.prisonerNumber)
     }

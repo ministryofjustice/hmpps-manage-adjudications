@@ -1,6 +1,9 @@
 import SelectAssociatedPrisoner from '../pages/selectAssociatedPrisoner'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Select an associated prisoner', () => {
   context('with data', () => {
@@ -16,14 +19,12 @@ context('Select an associated prisoner', () => {
           prisonIds: ['MDI'],
         },
         results: [
-          {
-            cellLocation: '1-2-015',
-            firstName: 'JAMES',
-            lastName: 'SMITH',
+          testData.prisonerSearchSummary({
+            firstName: 'James',
+            lastName: 'Smith',
             prisonerNumber: 'T3356FU',
-            prisonName: 'HMP Moorland',
-            gender: 'Male',
-          },
+            enhanced: false,
+          }),
         ],
       })
       cy.signIn()
@@ -67,22 +68,16 @@ context('Select an associated prisoner', () => {
           prisonIds: ['MDI'],
         },
         results: [
-          {
-            cellLocation: '1-2-016',
+          testData.prisonerSearchSummary({
             firstName: 'Cedric',
             lastName: 'Jones',
             prisonerNumber: 'G6123UP',
-            prisonName: 'HMP Moorland',
-            gender: 'Male',
-          },
-          {
-            cellLocation: '1-2-017',
+          }),
+          testData.prisonerSearchSummary({
             firstName: 'Shaun',
             lastName: 'Jones',
             prisonerNumber: 'F7123VB',
-            prisonName: 'HMP Moorland',
-            gender: 'Male',
-          },
+          }),
         ],
       })
       cy.visit(`${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=T3356FU`)
@@ -95,11 +90,11 @@ context('Select an associated prisoner', () => {
         .then($data => {
           expect($data.get(1).innerText).to.contain('Jones, Cedric')
           expect($data.get(2).innerText).to.contain('G6123UP')
-          expect($data.get(3).innerText).to.contain('1-2-016')
+          expect($data.get(3).innerText).to.contain('1-2-015')
           expect($data.get(4).innerText).to.contain('Select prisoner')
           expect($data.get(6).innerText).to.contain('Jones, Shaun')
           expect($data.get(7).innerText).to.contain('F7123VB')
-          expect($data.get(8).innerText).to.contain('1-2-017')
+          expect($data.get(8).innerText).to.contain('1-2-015')
           expect($data.get(9).innerText).to.contain('Select prisoner')
         })
     })
