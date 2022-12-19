@@ -1,9 +1,6 @@
 import nock from 'nock'
 import config from '../config'
-import TestData from '../routes/testutils/testData'
 import PrisonApiClient from './prisonApiClient'
-
-const testData = new TestData()
 
 jest.mock('../../logger')
 
