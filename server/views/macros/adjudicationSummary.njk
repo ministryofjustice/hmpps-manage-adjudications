@@ -3,7 +3,7 @@
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offences, damages, evidence, witnesses, userSetGenderData) %}
+{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, userSetGenderData) %}
   {% if userSetGenderData %}
     <div class="adjudicationsSummary">
       {{ summaryList(userSetGenderData.data, null, { "data-qa": "gender-summary-table" }, null, userSetGenderData.changeLinkHref ) }}
@@ -25,10 +25,9 @@
       <p class="govuk-body"><a href={{ offenceDetailsURL }} class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink" id="adjudication-summary-offence-change-link">Change</a></p>
      {% endif %}
     </div>
+
     <div class="adjudicationsSummary">
-      {% for offence in offences %}
         {{ offenceQAndASummaryList(offence, incidentData.isYouthOffender, { "data-qa": "offence-summary-table" }) }}
-      {% endfor %}
     </div>
 
     <div class="adjudicationsSummary-heading govuk-!-margin-top-9">

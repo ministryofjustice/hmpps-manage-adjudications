@@ -23,15 +23,14 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       modified: '/:adjudicationNumber/modified',
       add: '/:adjudicationNumber/add',
-      delete: '/:adjudicationNumber/delete/:offenceIndex',
+      delete: '/:adjudicationNumber/delete',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}`,
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/modified`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/add`,
-      delete: (adjudicationNumber: number, offenceIndex: number) =>
-        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete/${offenceIndex}`,
+      delete: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete`,
     },
   },
   detailsOfDamages: {

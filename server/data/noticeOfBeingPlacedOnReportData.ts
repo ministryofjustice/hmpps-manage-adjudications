@@ -25,7 +25,7 @@ export default class noticeOfBeingPlacedOnReportData {
 
   reportedTime: string
 
-  offences: IncidentAndOffences[]
+  offences: IncidentAndOffences
 
   expirationTime: string
 
@@ -35,11 +35,7 @@ export default class noticeOfBeingPlacedOnReportData {
 
   isYouthOffender: boolean
 
-  constructor(
-    adjudicationNumber: number,
-    confirmedOnReportData: ConfirmedOnReportData,
-    offences: IncidentAndOffences[] = []
-  ) {
+  constructor(adjudicationNumber: number, confirmedOnReportData: ConfirmedOnReportData, offences: IncidentAndOffences) {
     this.adjudicationNumber = adjudicationNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(

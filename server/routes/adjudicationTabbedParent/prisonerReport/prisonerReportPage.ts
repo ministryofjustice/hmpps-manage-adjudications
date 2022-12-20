@@ -130,7 +130,7 @@ export default class prisonerReportRoutes {
       this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user),
     ])
 
-    const offences = await this.decisionTreeService.getAdjudicationOffences(
+    const offence = await this.decisionTreeService.getAdjudicationOffences(
       draftAdjudication.offenceDetails,
       prisoner,
       associatedPrisoner,
@@ -165,7 +165,7 @@ export default class prisonerReportRoutes {
       reviewData,
       reportNo: draftAdjudication.adjudicationNumber,
       draftAdjudicationNumber: draftAdjudication.id,
-      offences,
+      offence,
       ...prisonerReportVariables,
       readOnly,
       review,

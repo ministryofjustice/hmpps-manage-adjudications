@@ -54,16 +54,14 @@ const draftAdjudication = (id: number, damages: DamageDetails[]) => {
         associatedPrisonersNumber: undefined,
         roleCode: undefined,
       },
-      offenceDetails: [
-        {
-          offenceCode: 1001,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G5512G',
+      offenceDetails: {
+        offenceCode: 1001,
+        offenceRule: {
+          paragraphNumber: '1',
+          paragraphDescription: 'Commits any assault',
         },
-      ],
+        victimPrisonersNumber: 'G5512G',
+      },
       damages,
     },
   }
@@ -89,16 +87,14 @@ const reportedAdjudication = (adjudicationNumber: number, damages: DamageDetails
         statement: 'This is my statement',
         completed: true,
       },
-      offenceDetails: [
-        {
-          offenceCode: 1001,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G5512G',
+      offenceDetails: {
+        offenceCode: 1001,
+        offenceRule: {
+          paragraphNumber: '1',
+          paragraphDescription: 'Commits any assault',
         },
-      ],
+        victimPrisonersNumber: 'G5512G',
+      },
       damages,
       evidence: [],
       witnesses: [],

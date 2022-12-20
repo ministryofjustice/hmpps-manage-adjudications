@@ -24,16 +24,14 @@ const adjudicationWithOffences = {
     associatedPrisonersNumber: undefined,
     roleCode: undefined,
   },
-  offenceDetails: [
-    {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
+  offenceDetails: {
+    offenceCode: 1001,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ],
+    victimPrisonersNumber: 'G5512G',
+  },
 }
 
 const reportedAdjudicationWithOffences = {
@@ -55,16 +53,14 @@ const reportedAdjudicationWithOffences = {
     associatedPrisonersNumber: undefined,
     roleCode: undefined,
   },
-  offenceDetails: [
-    {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
+  offenceDetails: {
+    offenceCode: 1001,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ],
+    victimPrisonersNumber: 'G5512G',
+  },
 }
 
 context('Details of offence', () => {
@@ -422,11 +418,9 @@ context('Details of offence', () => {
     detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {
       adjudicationNumber: 201,
-      offenceDetails: [
-        {
-          offenceCode: 4001,
-        },
-      ],
+      offenceDetails: {
+        offenceCode: 4001,
+      },
     }).then((val: request.Response) => {
       expect(JSON.parse(val.text).count).to.equal(1)
     })

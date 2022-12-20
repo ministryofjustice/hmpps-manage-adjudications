@@ -255,16 +255,14 @@ context('Incident details (edit after completion of report)', () => {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25b',
             },
-            offenceDetails: [
-              {
-                offenceCode: 16001,
-                offenceRule: {
-                  paragraphNumber: '16',
-                  paragraphDescription:
-                    'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
-                },
+            offenceDetails: {
+              offenceCode: 16001,
+              offenceRule: {
+                paragraphNumber: '16',
+                paragraphDescription:
+                  'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
               },
-            ],
+            },
           },
         },
       })
@@ -348,16 +346,14 @@ context('Incident details (edit after completion of report)', () => {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25b',
             },
-            offenceDetails: [
-              {
-                offenceCode: 16001,
-                offenceRule: {
-                  paragraphNumber: '16',
-                  paragraphDescription:
-                    'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
-                },
+            offenceDetails: {
+              offenceCode: 16001,
+              offenceRule: {
+                paragraphNumber: '16',
+                paragraphDescription:
+                  'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
               },
-            ],
+            },
           },
         },
       })

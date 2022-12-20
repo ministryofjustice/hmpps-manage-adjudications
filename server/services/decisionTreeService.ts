@@ -77,35 +77,27 @@ export default class DecisionTreeService {
   }
 
   async getAdjudicationOffences(
-    allOffenceData: OffenceDetails[],
+    offenceData: OffenceDetails,
     prisoner: PrisonerResult,
     associatedPrisoner: PrisonerResult,
     incidentRole: IncidentRole,
     user: User,
     prisonerView: boolean
-  ): Promise<IncidentAndOffences[]> {
-    return Promise.all(
-      allOffenceData?.map(async offenceData => {
-        const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
-        const answerData = await this.answerDataDetails(offenceData, user)
-        const offenceCode = Number(offenceData.offenceCode)
-        const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = this.questionsAndAnswers(
-          offenceCode,
-          placeHolderValues,
-          incidentRoleEnum,
-          prisonerView
-        )
-        return {
-          questionsAndAnswers,
-          incidentRule: incidentRole.offenceRule,
-          offenceRule: offenceData.offenceRule || {
-            paragraphNumber: '',
-            paragraphDescription: '',
-          },
-        }
-      })
-    )
+  ): Promise<IncidentAndOffences> {
+    const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
+    const answerData = await this.answerDataDetails(offenceData, user)
+    const offenceCode = Number(offenceData.offenceCode)
+    const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
+    const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum, prisonerView)
+
+    return {
+      questionsAndAnswers,
+      incidentRule: incidentRole.offenceRule,
+      offenceRule: offenceData.offenceRule || {
+        paragraphNumber: '',
+        paragraphDescription: '',
+      },
+    }
   }
 
   async answerDataDetails(answerData: AnswerData, user: User): Promise<AnswerDataDetails> {

@@ -15,8 +15,6 @@ export default class AddOffenceRoutes {
     // Get the offence to be added from the request and put it on the session
     const offenceToAdd: OffenceData = { ...req.query }
     // We assume the offences are already set up on the session
-    // We delete any existing offences on the session before saving the new one
-    this.allOffencesSessionService.deleteAllSessionOffences(req, adjudicationNumber)
     this.allOffencesSessionService.addSessionOffence(req, offenceToAdd, adjudicationNumber)
     return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
   }

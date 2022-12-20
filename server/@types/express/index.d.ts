@@ -22,7 +22,7 @@ declare module 'express-session' {
     originalReporterUsername: string
     sessionDecisionForm: DecisionForm
     offenceData: { [key: string]; offenceData?: OffenceData }
-    offences: { [key: string]; offences?: Array<OffenceData> }
+    offences: { [key: string]; offences?: OffenceData }
     forceOffenceSelection: boolean
     damageData: { [key: string]; damageData? }
     damages: { [key: string]; damages? }

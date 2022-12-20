@@ -78,7 +78,7 @@ export default class IncidentStatementRoutes {
   }
 
   getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
-    if (incidentStatementComplete && draftAdjudication.offenceDetails.length)
+    if (incidentStatementComplete && Object.keys(draftAdjudication.offenceDetails).length !== 0)
       return adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id)
     return adjudicationUrls.taskList.urls.start(draftAdjudication.id)
   }

@@ -20,7 +20,7 @@
       }) }}
   {% endif %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
-    {{ offenceQuestionsAndAnswers(questionsAndAnswers, adjudicationNumber, offenceIndex) }}
+    {{ offenceQuestionsAndAnswers(questionsAndAnswers, adjudicationNumber) }}
     <div class='govuk-!-margin-top-9'>
         <form method="POST" novalidate="novalidate" data-qa="delete-offence-form">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

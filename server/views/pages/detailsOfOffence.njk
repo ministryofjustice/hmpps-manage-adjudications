@@ -15,62 +15,59 @@
 {% endblock %}
 
 {% block content %}
-  {% if errors | length %}
-    {{ govukErrorSummary({
+    {% if errors | length %}
+        {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
       }) }}
-  {% endif %}
+    {% endif %}
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}" />
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}"/>
         <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
             {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
         </div>
-        {% if offences | length > 0 %}
+        {% if offence.questionsAndAnswers %}
             <div class="prisoner-rule govuk-!-margin-bottom-5">
-              <p class="govuk-!-margin-bottom-1 govuk-label--s"
+                <p class="govuk-!-margin-bottom-1 govuk-label--s"
                   data-qa="question-applicable-rule">Which set of rules apply to this prisoner?</p>
-              {% if isYouthOffender %}
-                <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">YOI offences</p>
-                <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ true | prisonRule }}</p>
-              {% else %}  
-                <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">Adult offences</p>
-                <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ false | prisonRule }}</p>
-              {% endif %}
-            </div>  
+                {% if isYouthOffender %}
+                    <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">YOI offences</p>
+                    <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ true | prisonRule }}</p>
+                {% else %}
+                    <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">Adult offences</p>
+                    <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ false | prisonRule }}</p>
+                {% endif %}
+            </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-three-quarters">
-                    {% for offence in offences %}
-                        {% set offenceIndex = loop.index %}
-                        <div class="details-of-offence-questions-and-answers">
-                            <div class="q-and-a">
-                                {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber, offenceIndex) }}
-                            </div>
-                            <div>
-                                <p class="govuk-body"><a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceIndex) }}'
-                                   data-qa="delete-{{ offenceIndex }}" class="govuk-link">Remove this offence</a></p>
-                            </div>
+                    <div class="details-of-offence-questions-and-answers">
+                        <div class="q-and-a">
+                            {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber) }}
                         </div>
-                        <div data-qa="offence-broke-section-{{ offenceIndex }}">
-                            <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
-                            {% if offence.incidentRule %}
-                                <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
-                                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
-                                <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription | safe }}</p>
-                            {% endif %}
+                        <div>
+                            <p class="govuk-body">
+                                <a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber) }}'
+                                   data-qa="delete-1" class="govuk-link">Remove this offence</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div data-qa="offence-broke-section-1">
+                        <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
+                        {% if offence.incidentRule %}
                             <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
+                                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+                            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription | safe }}</p>
+                        {% endif %}
+                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
                                 paragraph {{ offence.offenceRule.paragraphNumber }}</p>
-                            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription  | safe }}</p>
-                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                        </div>
-                    {% endfor %}
+                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription  | safe }}</p>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
                 </div>
             </div>
-            {# We are temporarily removing the ability for a user to add multiple offences #}
-            {# <p class="govuk-body"><a href="{{ adjudicationUrls.offenceCodeSelection.urls.start(adjudicationNumber,incidentRole) }}" data-qa="add-another-offence">Add another offence</a></p> #}
             {{ govukButton({
                 text: "Save and continue",
                 type: "submit",

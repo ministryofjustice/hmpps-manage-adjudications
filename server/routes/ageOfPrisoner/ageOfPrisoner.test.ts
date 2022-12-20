@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
+import { OffenceDetails } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -44,7 +45,7 @@ beforeEach(() => {
         handoverDeadline: '2022-03-25T09:10:00',
       },
       incidentRole: {},
-      offenceDetails: [],
+      offenceDetails: {} as OffenceDetails,
       incidentStatement: {
         statement: 'Lorem Ipsum',
         completed: true,

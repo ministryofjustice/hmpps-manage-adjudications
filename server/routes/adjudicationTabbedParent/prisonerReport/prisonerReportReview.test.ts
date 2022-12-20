@@ -8,7 +8,7 @@ import { IncidentRole } from '../../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
 
 jest.mock('../../../services/locationService.ts')
 jest.mock('../../../services/userService.ts')
@@ -47,7 +47,7 @@ beforeEach(() => {
       incidentRole: {
         roleCode: undefined,
       },
-      offenceDetails: [],
+      offenceDetails: {} as OffenceDetails,
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       isYouthOffender: false,
     },
@@ -65,16 +65,15 @@ beforeEach(() => {
         handoverDeadline: '2021-03-10T10:45:00',
       },
       incidentRole: {},
-      offenceDetails: [
-        {
-          offenceCode: 1002,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G6123VU',
+      offenceDetails: {
+        offenceCode: 1002,
+        offenceRule: {
+          paragraphNumber: '1',
+          paragraphDescription: 'Commits any assault',
         },
-      ],
+        victimPrisonersNumber: 'G6123VU',
+      },
+
       incidentStatement: { statement: 'text here ', completed: true },
       startedByUserId: 'TEST_GEN',
     },
@@ -150,16 +149,14 @@ beforeEach(() => {
     },
   ]
 
-  decisionTreeService.getAdjudicationOffences.mockResolvedValue([
-    {
-      questionsAndAnswers: qAndAs,
-      incidentRule: undefined,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
+  decisionTreeService.getAdjudicationOffences.mockResolvedValue({
+    questionsAndAnswers: qAndAs,
+    incidentRule: undefined,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ])
+  })
 
   app = appWithAllRoutes(
     { production: false },

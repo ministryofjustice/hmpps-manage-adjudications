@@ -28,7 +28,7 @@ const reportedAdjudication = (status: string, reviewedByUserId = null, statusRea
     incidentRole: {
       roleCode: undefined,
     },
-    offenceDetails: [],
+    offenceDetails: {},
     status,
     reviewedByUserId,
     statusReason,
@@ -213,16 +213,14 @@ context('Prisoner report - reviewer view', () => {
             },
           },
           isYouthOffender: false,
-          offenceDetails: [
-            {
-              offenceCode: 1001,
-              offenceRule: {
-                paragraphNumber: '1',
-                paragraphDescription: 'Commits any assault',
-              },
-              victimPrisonersNumber: 'G5512G',
+          offenceDetails: {
+            offenceCode: 1001,
+            offenceRule: {
+              paragraphNumber: '1',
+              paragraphDescription: 'Commits any assault',
             },
-          ],
+            victimPrisonersNumber: 'G5512G',
+          },
         },
       },
     })

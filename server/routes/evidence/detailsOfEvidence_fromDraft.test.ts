@@ -112,15 +112,13 @@ const adjudicationWithoutEvidenceSaved = {
     },
     isYouthOffender: false,
     incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
+    offenceDetails: {
+      offenceCode: 2004,
+      offenceRule: {
+        paragraphNumber: '3',
+        paragraphDescription: 'Detains any person against their will',
       },
-    ],
+    },
     startedByUserId: 'TEST_GEN',
     evidence: [] as EvidenceDetails[],
     evidenceSaved: true,

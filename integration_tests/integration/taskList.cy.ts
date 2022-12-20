@@ -224,18 +224,16 @@ context('Task list', () => {
               roleCode: '25a',
             },
             isYouthOffender: false,
-            offenceDetails: [
-              {
-                offenceCode: 3,
-                offenceRule: {
-                  paragraphDescription: 'Committed an assault',
-                  paragraphNumber: '25(a)',
-                },
-                victimOtherPersonsName: 'Bob Hope',
-                victimPrisonersNumber: 'G2996UX',
-                victimStaffUsername: 'ABC12D',
+            offenceDetails: {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
               },
-            ],
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
             damages: [],
             evidence: [],
             witnesses: [],
@@ -351,18 +349,16 @@ context('Task list', () => {
               },
               roleCode: '25a',
             },
-            offenceDetails: [
-              {
-                offenceCode: 3,
-                offenceRule: {
-                  paragraphDescription: 'Committed an assault',
-                  paragraphNumber: '25(a)',
-                },
-                victimOtherPersonsName: 'Bob Hope',
-                victimPrisonersNumber: 'G2996UX',
-                victimStaffUsername: 'ABC12D',
+            offenceDetails: {
+              offenceCode: 3,
+              offenceRule: {
+                paragraphDescription: 'Committed an assault',
+                paragraphNumber: '25(a)',
               },
-            ],
+              victimOtherPersonsName: 'Bob Hope',
+              victimPrisonersNumber: 'G2996UX',
+              victimStaffUsername: 'ABC12D',
+            },
           },
         },
       })
@@ -459,7 +455,7 @@ context('Task list', () => {
               },
               associatedPrisonersNumber: 'G6415GD',
             },
-            offenceDetails: [],
+            offenceDetails: {},
             damages: [],
             evidence: [],
             witnesses: [],
@@ -586,18 +582,16 @@ context('Task list', () => {
                 },
                 roleCode: '25a',
               },
-              offenceDetails: [
-                {
-                  offenceCode: 3,
-                  offenceRule: {
-                    paragraphDescription: 'Committed an assault',
-                    paragraphNumber: '25(a)',
-                  },
-                  victimOtherPersonsName: 'Bob Hope',
-                  victimPrisonersNumber: 'G2996UX',
-                  victimStaffUsername: 'ABC12D',
+              offenceDetails: {
+                offenceCode: 3,
+                offenceRule: {
+                  paragraphDescription: 'Committed an assault',
+                  paragraphNumber: '25(a)',
                 },
-              ],
+                victimOtherPersonsName: 'Bob Hope',
+                victimPrisonersNumber: 'G2996UX',
+                victimStaffUsername: 'ABC12D',
+              },
             },
           },
         })

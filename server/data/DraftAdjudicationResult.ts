@@ -39,7 +39,7 @@ export type DraftAdjudication = {
   incidentDetails: IncidentDetails
   incidentRole?: IncidentRole
   incidentStatement?: IncidentStatement
-  offenceDetails?: OffenceDetails[]
+  offenceDetails?: OffenceDetails
   isYouthOffender?: boolean
   damages?: DamageDetails[]
   evidence?: EvidenceDetails[]

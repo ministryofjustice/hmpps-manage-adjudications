@@ -38,7 +38,7 @@ context('Prisoner has been placed on report', () => {
           incidentStatement: {
             statement: 'test',
           },
-          offenceDetails: [],
+          offenceDetails: { offenceCode: 1001 },
           incidentRole: {},
         },
       },

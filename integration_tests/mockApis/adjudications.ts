@@ -370,7 +370,7 @@ const verifySaveOffenceDetails = ({
   offenceDetails,
 }: {
   adjudicationNumber: number
-  offenceDetails: OffenceDetails[]
+  offenceDetails: OffenceDetails
 }) =>
   verifyRequest({
     requestUrlPattern: `/adjudications/draft-adjudications/${adjudicationNumber}/offence-details`,
