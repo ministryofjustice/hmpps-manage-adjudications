@@ -39,15 +39,15 @@ export default class DetailsOfOffencePage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
-    const allOffences = this.getOffences(req, adjudicationNumber, draftAdjudication)
+    const offence = this.getOffences(req, adjudicationNumber, draftAdjudication)
 
     // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
       // Set up session to allow for adding and deleting
-      this.allOffencesSessionService.setSessionOffences(req, allOffences, adjudicationNumber)
+      this.allOffencesSessionService.setSessionOffences(req, offence, adjudicationNumber)
     }
 
-    if (!allOffences || Object.keys(allOffences).length === 0) {
+    if (!offence || Object.keys(offence).length === 0) {
       return res.render(`pages/detailsOfOffence`, {
         prisoner,
       })
@@ -55,8 +55,8 @@ export default class DetailsOfOffencePage {
     const isYouthOffender = draftAdjudication.isYouthOffender || false
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
     const { gender } = draftAdjudication
-    const answerData = await this.decisionTreeService.answerDataDetails(allOffences, user)
-    const offenceCode = Number(allOffences.offenceCode)
+    const answerData = await this.decisionTreeService.answerDataDetails(offence, user)
+    const offenceCode = Number(offence.offenceCode)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
       offenceCode,
@@ -64,7 +64,7 @@ export default class DetailsOfOffencePage {
       incidentRole,
       false
     )
-    const offence = {
+    const offenceToDisplay = {
       questionsAndAnswers,
       incidentRule: draftAdjudication.incidentRole?.offenceRule,
       offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, gender, user),
@@ -73,7 +73,7 @@ export default class DetailsOfOffencePage {
 
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
-      offence,
+      offence: offenceToDisplay,
       adjudicationNumber,
       reportedAdjudicationNumber,
       incidentRole,
