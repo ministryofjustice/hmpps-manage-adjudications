@@ -131,7 +131,7 @@ export default class IncidentRolePage {
           this.pageOptions.isPreviouslySubmitted()
         )
       }
-      const offencesExist = !removeExistingOffences && offenceDetails?.length > 0
+      const offencesExist = !removeExistingOffences && offenceDetails && Object.keys(offenceDetails).length > 0
       if (!!req.session.forceOffenceSelection || !offencesExist) {
         return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
       }

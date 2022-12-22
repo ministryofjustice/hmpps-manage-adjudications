@@ -1150,15 +1150,13 @@ describe('placeOnReportService', () => {
     })
   })
   describe('getNextOffencesUrl', () => {
-    const offenceExample = [
-      {
-        offenceCode: 16001,
-        offenceRule: {
-          paragraphNumber: '16',
-          paragraphDescription: 'Intentionally or recklessly sets fire ...',
-        },
+    const offenceExample = {
+      offenceCode: 16001,
+      offenceRule: {
+        paragraphNumber: '16',
+        paragraphDescription: 'Intentionally or recklessly sets fire ...',
       },
-    ]
+    }
     it('returns the correct url if the offence details are complete', async () => {
       const expectedResult = adjudicationUrls.detailsOfOffence.urls.start(2483)
       const response = await service.getNextOffencesUrl(offenceExample, 2483)
@@ -1200,15 +1198,13 @@ describe('placeOnReportService', () => {
     })
   })
   describe('checkOffenceDetails', () => {
-    const offenceExample = [
-      {
-        offenceCode: 16001,
-        offenceRule: {
-          paragraphNumber: '16',
-          paragraphDescription: 'Intentionally or recklessly sets fire ...',
-        },
+    const offenceExample = {
+      offenceCode: 16001,
+      offenceRule: {
+        paragraphNumber: '16',
+        paragraphDescription: 'Intentionally or recklessly sets fire ...',
       },
-    ]
+    }
     it('returns true if there are offences on the draft', async () => {
       const response = await service.checkOffenceDetails(offenceExample)
       expect(response).toEqual(true)

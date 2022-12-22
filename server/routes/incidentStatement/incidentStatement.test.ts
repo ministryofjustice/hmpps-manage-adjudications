@@ -3,6 +3,7 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { OffenceDetails } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 
@@ -42,7 +43,7 @@ beforeEach(() => {
         handoverDeadline: '2022-03-25T09:10:00',
       },
       incidentRole: {},
-      offenceDetails: [],
+      offenceDetails: {} as OffenceDetails,
       incidentStatement: {
         statement: 'Lorem Ipsum',
         completed: true,
@@ -80,7 +81,7 @@ describe('POST /incident-statement', () => {
             handoverDeadline: '2022-03-25T09:10:00',
           },
           incidentRole: {},
-          offenceDetails: [],
+          offenceDetails: {} as OffenceDetails,
           incidentStatement: {
             statement: 'Lorem Ipsum',
             completed: true,
@@ -108,7 +109,7 @@ describe('POST /incident-statement', () => {
             handoverDeadline: '2022-03-25T09:10:00',
           },
           incidentRole: {},
-          offenceDetails: [],
+          offenceDetails: {} as OffenceDetails,
           incidentStatement: {
             statement: 'Lorem Ipsum',
             completed: false,
@@ -139,12 +140,11 @@ describe('POST /incident-statement', () => {
           incidentRole: {
             roleCode: '25a',
           },
-          offenceDetails: [
-            {
-              offenceCode: 4,
-              victimPrisonersNumber: '',
-            },
-          ],
+          offenceDetails: {
+            offenceCode: 4,
+            victimPrisonersNumber: '',
+          },
+
           incidentStatement: {
             statement: 'Lorem Ipsum',
             completed: true,

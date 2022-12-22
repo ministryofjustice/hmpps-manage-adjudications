@@ -19,16 +19,15 @@ const draftAdjudicationForCommittedYouthOffences: DraftAdjudication = {
   incidentRole: {
     roleCode: null,
   },
-  offenceDetails: [
-    {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
+  offenceDetails: {
+    offenceCode: 1001,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ],
+    victimPrisonersNumber: 'G5512G',
+  },
+
   startedByUserId: 'TEST_GEN',
 }
 

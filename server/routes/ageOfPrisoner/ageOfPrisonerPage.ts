@@ -85,7 +85,7 @@ export default class AgeOfPrisonerPage {
     } else {
       delete req.session.forceOffenceSelection
       // This is the entry point for the journey to change offences - remove existing offences from the session
-      this.allOffencesSessionService.deleteAllSessionOffences(req, adjudicationNumber)
+      this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
     }
     return this.renderView(res, adjudicationNumber, {})
   }

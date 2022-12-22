@@ -31,16 +31,14 @@ beforeEach(() => {
         handoverDeadline: '2021-12-11T10:30:00',
       },
       incidentRole: {},
-      offenceDetails: [
-        {
-          offenceCode: 1002,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G6123VU',
+      offenceDetails: {
+        offenceCode: 1002,
+        offenceRule: {
+          paragraphNumber: '1',
+          paragraphDescription: 'Commits any assault',
         },
-      ],
+        victimPrisonersNumber: 'G6123VU',
+      },
       incidentStatement: { statement: 'text here', completed: true },
       startedByUserId: 'TEST_GEN',
     },
@@ -106,16 +104,14 @@ beforeEach(() => {
     },
   ]
 
-  decisionTreeService.getAdjudicationOffences.mockResolvedValue([
-    {
-      questionsAndAnswers: qAndAs,
-      incidentRule: undefined,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
+  decisionTreeService.getAdjudicationOffences.mockResolvedValue({
+    questionsAndAnswers: qAndAs,
+    incidentRule: undefined,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ])
+  })
 
   placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
 

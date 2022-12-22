@@ -593,16 +593,15 @@ describe('reportedAdjudicationsService', () => {
             associatedPrisonersNumber: '',
             roleCode: '',
           },
-          offenceDetails: [
-            {
-              offenceCode: 16001,
-              offenceRule: {
-                paragraphNumber: '16',
-                paragraphDescription:
-                  'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
-              },
+          offenceDetails: {
+            offenceCode: 16001,
+            offenceRule: {
+              paragraphNumber: '16',
+              paragraphDescription:
+                'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
             },
-          ],
+          },
+
           isYouthOffender: false,
         },
       }

@@ -33,16 +33,14 @@ const adjudicationWithoutEvidence = {
     },
     isYouthOffender: false,
     incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-        victimOtherPersonsName: 'Jacob Jacobson',
+    offenceDetails: {
+      offenceCode: 2004,
+      offenceRule: {
+        paragraphNumber: '3',
+        paragraphDescription: 'Detains any person against their will',
       },
-    ],
+      victimOtherPersonsName: 'Jacob Jacobson',
+    },
     startedByUserId: 'TEST_GEN',
   },
 }

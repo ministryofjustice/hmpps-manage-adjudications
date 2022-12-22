@@ -56,7 +56,7 @@ const reportedAdjudication: ReportedAdjudication = {
   incidentRole: {
     roleCode: undefined,
   },
-  offenceDetails: [{ offenceCode: 1, offenceRule }],
+  offenceDetails: { offenceCode: 1, offenceRule },
   status: ReportedAdjudicationStatus.AWAITING_REVIEW,
   isYouthOffender: false,
 }
@@ -123,22 +123,19 @@ describe('GET /all-completed-reports', () => {
           incidentLocationDescription: 'Moorland (HMP & YOI) - Adj',
           isYouthOffender: false,
           incidentTime: '07:21',
-          offences: [
-            {
-              incidentRule: undefined,
-              offenceRule: {
-                paragraphDescription: 'Commits any assault',
-                paragraphNumber: '1',
-              },
-              questionsAndAnswers: [
-                {
-                  answer: 'An answer',
-                  question: 'A question',
-                },
-              ],
+          offences: {
+            incidentRule: undefined,
+            offenceRule: {
+              paragraphDescription: 'Commits any assault',
+              paragraphNumber: '1',
             },
-          ],
-
+            questionsAndAnswers: [
+              {
+                answer: 'An answer',
+                question: 'A question',
+              },
+            ],
+          },
           prisonerDisplayName: 'Smith, John',
           prisonerFriendlyName: 'John Smith',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',

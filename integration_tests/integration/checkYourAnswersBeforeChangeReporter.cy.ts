@@ -34,16 +34,14 @@ const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
             'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
         },
       },
-      offenceDetails: [
-        {
-          offenceCode: 1001,
-          offenceRule: {
-            paragraphNumber: '1',
-            paragraphDescription: 'Commits any assault',
-          },
-          victimPrisonersNumber: 'G5512G',
+      offenceDetails: {
+        offenceCode: 1001,
+        offenceRule: {
+          paragraphNumber: '1',
+          paragraphDescription: 'Commits any assault',
         },
-      ],
+        victimPrisonersNumber: 'G5512G',
+      },
     },
   }
 }

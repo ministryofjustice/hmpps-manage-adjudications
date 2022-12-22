@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 
@@ -43,7 +43,7 @@ describe('GET hearing details', () => {
         incidentRole: {
           roleCode: undefined,
         },
-        offenceDetails: [],
+        offenceDetails: {} as OffenceDetails,
         status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         isYouthOffender: false,
       },
@@ -79,7 +79,7 @@ describe('GET hearing details', () => {
         incidentRole: {
           roleCode: undefined,
         },
-        offenceDetails: [],
+        offenceDetails: {} as OffenceDetails,
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         isYouthOffender: false,
         hearings: [

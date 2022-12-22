@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { OffenceDetails } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/prisonerSearchService.ts')
@@ -49,7 +50,7 @@ beforeEach(() => {
         handoverDeadline: '2022-03-25T09:10:00',
       },
       incidentRole: {},
-      offenceDetails: [],
+      offenceDetails: {} as OffenceDetails,
       incidentStatement: {
         statement: 'Lorem Ipsum',
         completed: true,

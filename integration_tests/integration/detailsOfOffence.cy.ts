@@ -27,16 +27,14 @@ const adjudicationWithOffences = {
     associatedPrisonersNumber: undefined,
     roleCode: undefined,
   },
-  offenceDetails: [
-    {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
+  offenceDetails: {
+    offenceCode: 1001,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ],
+    victimPrisonersNumber: 'G5512G',
+  },
 }
 
 const reportedAdjudicationWithOffences = {
@@ -58,16 +56,14 @@ const reportedAdjudicationWithOffences = {
     associatedPrisonersNumber: undefined,
     roleCode: undefined,
   },
-  offenceDetails: [
-    {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
+  offenceDetails: {
+    offenceCode: 1001,
+    offenceRule: {
+      paragraphNumber: '1',
+      paragraphDescription: 'Commits any assault',
     },
-  ],
+    victimPrisonersNumber: 'G5512G',
+  },
 }
 
 context('Details of offence', () => {
@@ -176,11 +172,10 @@ context('Details of offence', () => {
       },
     })
     cy.task('stubGetOffenceRule', {
-      offenceCode: 5001,
+      offenceCode: 1002,
       response: {
-        paragraphNumber: '5',
-        paragraphDescription:
-          'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered',
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
       },
     })
     cy.task('stubGetOffenceRule', {
@@ -188,6 +183,14 @@ context('Details of offence', () => {
       response: {
         paragraphNumber: '4',
         paragraphDescription: 'Fights with any person',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 5001,
+      response: {
+        paragraphNumber: '5',
+        paragraphDescription:
+          'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered',
       },
     })
     cy.task('stubSaveOffenceDetails', {
@@ -346,35 +349,37 @@ context('Details of offence', () => {
     detailsOfOffencePage.deleteLink(1).should('exist')
   })
 
-  // We are temporarily removing the ability for a user to add multiple offences
-  // it('select multiple offences and see them all', () => {
-  //   cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
-  //   const whatTypeOfOffencePage = new OffenceCodeSelection(
-  //     'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-  //   )
-  //   whatTypeOfOffencePage.radio('1-1').check()
-  //   whatTypeOfOffencePage.continue().click()
-  //   const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
-  //   whatDidTheIncidentInvolve.radio('1-1-2').check()
-  //   whatDidTheIncidentInvolve.continue().click()
-  //   // We should now be on the offence details page
-  //   const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-  //   // Add another offence
-  //   detailsOfOffencePage.addAnotherOffence().click()
-  //   const whatTypeOfOffencePage2 = new OffenceCodeSelection(
-  //     'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
-  //   )
-  //   whatTypeOfOffencePage2.radio('1-1').check()
-  //   whatTypeOfOffencePage2.continue().click()
-  //   const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What did the incident involve?')
-  //   whatDidTheIncidentInvolve2.radio('1-1-3').check()
-  //   whatDidTheIncidentInvolve2.continue().click()
-  //   // We should be on the offence details page again. There should be two offences.
-  //   detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
-  //   detailsOfOffencePage
-  //     .questionAnswerSectionAnswer(2, 2)
-  //     .contains('Endangering the health or personal safety of someone')
-  // })
+  it('should replace existing offences if a new offence is added', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection(
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+    )
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve?')
+    whatDidTheIncidentInvolve.radio('1-1-1').check()
+    whatDidTheIncidentInvolve.continue().click()
+    const whoWasAssaultedPage = new OffenceCodeSelection('Who did John Smith assist James Jones to assault?')
+    whoWasAssaultedPage.radio('1-1-1-1').check()
+    whoWasAssaultedPage.victimPrisonerSearchInput().type('Paul Wright')
+    whoWasAssaultedPage.searchPrisoner().click()
+    whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-1', '1-1-1-1', 'G5512G')
+    whoWasAssaultedPage.continue().click()
+    const wasItRaciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    wasItRaciallyAggravated.radio('1-1-1-1-1').check()
+    wasItRaciallyAggravated.continue().click()
+    // We should now be on the offence details page
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    // Try to add another offence
+    cy.go('back')
+    const racialPage = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
+    racialPage.radio('1-1-1-1-2').check()
+    racialPage.continue().click()
+    Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 1).should('exist')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 4).should('contain', 'No')
+    detailsOfOffencePage.questionAnswerSection(2).should('not.exist')
+  })
 
   it('offence details page when there is already an offence saved', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
@@ -413,11 +418,9 @@ context('Details of offence', () => {
     detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {
       adjudicationNumber: 201,
-      offenceDetails: [
-        {
-          offenceCode: 4001,
-        },
-      ],
+      offenceDetails: {
+        offenceCode: 4001,
+      },
     }).then((val: request.Response) => {
       expect(JSON.parse(val.text).count).to.equal(1)
     })

@@ -63,12 +63,11 @@ beforeEach(() => {
       incidentRole: {
         roleCode: '25a',
       },
-      offenceDetails: [
-        {
-          offenceCode: 4,
-          victimPrisonersNumber: '',
-        },
-      ],
+      offenceDetails: {
+        offenceCode: 4,
+        victimPrisonersNumber: '',
+      },
+
       incidentStatement: { statement: '', completed: true },
       startedByUserId: undefined,
     },

@@ -39,14 +39,15 @@ export default class DetailsOfOffencePage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
-    const allOffences = this.getOffences(req, adjudicationNumber, draftAdjudication)
+    const offence = this.getOffences(req, adjudicationNumber, draftAdjudication)
+
     // If we are not displaying session data then fill in the session data
     if (!this.pageOptions.displaySessionData()) {
       // Set up session to allow for adding and deleting
-      this.allOffencesSessionService.setAllSessionOffences(req, allOffences, adjudicationNumber)
+      this.allOffencesSessionService.setSessionOffences(req, offence, adjudicationNumber)
     }
 
-    if (!allOffences || allOffences.length < 1) {
+    if (!offence || Object.keys(offence).length === 0) {
       return res.render(`pages/detailsOfOffence`, {
         prisoner,
       })
@@ -54,28 +55,25 @@ export default class DetailsOfOffencePage {
     const isYouthOffender = draftAdjudication.isYouthOffender || false
     const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
     const { gender } = draftAdjudication
-    const offences = await Promise.all(
-      allOffences.map(async offenceData => {
-        const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
-        const offenceCode = Number(offenceData.offenceCode)
-        const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-        const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
-          offenceCode,
-          placeHolderValues,
-          incidentRole,
-          false
-        )
-        return {
-          questionsAndAnswers,
-          incidentRule: draftAdjudication.incidentRole?.offenceRule,
-          offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, gender, user),
-          isYouthOffender,
-        }
-      })
+    const answerData = await this.decisionTreeService.answerDataDetails(offence, user)
+    const offenceCode = Number(offence.offenceCode)
+    const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
+    const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
+      offenceCode,
+      placeHolderValues,
+      incidentRole,
+      false
     )
+    const offenceToDisplay = {
+      questionsAndAnswers,
+      incidentRule: draftAdjudication.incidentRole?.offenceRule,
+      offenceRule: await this.placeOnReportService.getOffenceRule(offenceCode, isYouthOffender, gender, user),
+      isYouthOffender,
+    }
+
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
-      offences,
+      offence: offenceToDisplay,
       adjudicationNumber,
       reportedAdjudicationNumber,
       incidentRole,
@@ -92,37 +90,33 @@ export default class DetailsOfOffencePage {
     }
     // Saving the offences for a draft just means continue
     if (!this.pageOptions.displaySessionData()) {
-      this.allOffencesSessionService.deleteAllSessionOffences(req, adjudicationNumber)
+      this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber)
     }
-    const offenceDetails = this.allOffencesSessionService
-      .getAndDeleteAllSessionOffences(req, adjudicationNumber)
-      .map(offenceData => {
-        return {
-          victimOtherPersonsName: offenceData.victimOtherPersonsName,
-          victimPrisonersNumber: offenceData.victimPrisonersNumber,
-          victimStaffUsername: offenceData.victimStaffUsername,
-          offenceCode: Number(offenceData.offenceCode),
-        }
-      })
-    await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetails, user)
+    const offenceData = this.allOffencesSessionService.getAndDeleteSessionOffences(req, adjudicationNumber)
+    const offenceDetailsToSave = {
+      victimOtherPersonsName: offenceData?.victimOtherPersonsName,
+      victimPrisonersNumber: offenceData?.victimPrisonersNumber,
+      victimStaffUsername: offenceData?.victimStaffUsername,
+      offenceCode: Number(offenceData?.offenceCode),
+    }
+    await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetailsToSave, user)
     return this.redirectToNextPage(res, adjudicationNumber)
   }
 
-  getOffences = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication): OffenceData[] => {
+  getOffences = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication): OffenceData => {
     if (this.pageOptions.displaySessionData()) {
-      return this.allOffencesSessionService.getAllSessionOffences(req, adjudicationNumber)
+      return this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
     }
-    return (
-      draftAdjudication.offenceDetails?.map(offenceDetails => {
-        return {
+    const { offenceDetails } = draftAdjudication
+    return offenceDetails
+      ? {
           victimOtherPersonsName: offenceDetails.victimOtherPersonsName,
           victimPrisonersNumber: offenceDetails.victimPrisonersNumber,
           victimStaffUsername: offenceDetails.victimStaffUsername,
           offenceCode: `${offenceDetails.offenceCode}`,
         }
-      }) || []
-    )
+      : {}
   }
 
   redirectToInitialOffenceSelectionPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {

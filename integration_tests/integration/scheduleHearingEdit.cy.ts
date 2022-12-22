@@ -28,7 +28,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
       incidentRole: {
         roleCode: undefined,
       },
-      offenceDetails: [],
+      offenceDetails: {},
       isYouthOffender: false,
       status: ReviewStatus.UNSCHEDULED,
       reviewedByUserId: 'USER1',

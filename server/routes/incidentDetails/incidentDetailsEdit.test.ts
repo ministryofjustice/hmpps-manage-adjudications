@@ -125,16 +125,14 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
         },
         incidentRole: {},
         prisonerNumber: 'G6415GD',
-        offenceDetails: [
-          {
-            offenceCode: 16001,
-            offenceRule: {
-              paragraphNumber: '16',
-              paragraphDescription:
-                'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
-            },
+        offenceDetails: {
+          offenceCode: 16001,
+          offenceRule: {
+            paragraphNumber: '16',
+            paragraphDescription:
+              'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
           },
-        ],
+        },
       },
     })
     placeOnReportService.getNextOffencesUrl.mockResolvedValue(adjudicationUrls.detailsOfOffence.urls.start(34) as never)

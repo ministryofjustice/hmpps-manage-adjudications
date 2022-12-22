@@ -6,7 +6,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
-import { PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
 
 jest.mock('../../../services/locationService.ts')
 jest.mock('../../../services/reportedAdjudicationsService.ts')
@@ -66,7 +66,7 @@ beforeEach(() => {
       incidentRole: {
         roleCode: undefined,
       },
-      offenceDetails: [],
+      offenceDetails: {} as OffenceDetails,
       status: ReportedAdjudicationStatus.SCHEDULED,
       isYouthOffender: false,
       hearings: [],
@@ -89,7 +89,7 @@ beforeEach(() => {
       incidentRole: {
         roleCode: undefined,
       },
-      offenceDetails: [],
+      offenceDetails: {} as OffenceDetails,
       status: ReportedAdjudicationStatus.SCHEDULED,
       isYouthOffender: false,
       hearings: [

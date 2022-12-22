@@ -32,7 +32,7 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, status: string
       incidentRole: {
         roleCode: undefined,
       },
-      offenceDetails: [],
+      offenceDetails: {},
       status,
       reviewedByUserId: 'USER1',
       statusReason: undefined,

@@ -330,11 +330,12 @@ export default class PlaceOnReportService {
     }
   }
 
-  checkOffenceDetails(offenceDetails: OffenceDetails[]): boolean {
-    return offenceDetails?.length > 0 || false
+  checkOffenceDetails(offenceDetails: OffenceDetails): boolean {
+    if (!offenceDetails) return false
+    return Object.keys(offenceDetails).length > 0
   }
 
-  getNextOffencesUrl(offenceDetails: OffenceDetails[], adjudicationId: number): string {
+  getNextOffencesUrl(offenceDetails: OffenceDetails, adjudicationId: number): string {
     const offenceDetailsComplete = this.checkOffenceDetails(offenceDetails)
     if (offenceDetailsComplete) return adjudicationUrls.detailsOfOffence.urls.start(adjudicationId)
     return adjudicationUrls.ageOfPrisoner.urls.start(adjudicationId)
@@ -402,7 +403,7 @@ export default class PlaceOnReportService {
     return client.getOffenceRule(offenceCode, isYouthOffender, gender)
   }
 
-  async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails[], user: User) {
+  async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails, user: User) {
     const client = new ManageAdjudicationsClient(user.token)
     return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
   }

@@ -108,15 +108,11 @@ const adjudicationWithOffences = {
       roleCode: '25c',
       associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
     },
-    offenceDetails: [
-      {
-        offenceCode: 1,
-        victimPrisonersNumber: victimPrisonerDetails.offenderNo,
-      },
-      {
-        offenceCode: 2,
-      },
-    ],
+    offenceDetails: {
+      offenceCode: 1,
+      victimPrisonersNumber: victimPrisonerDetails.offenderNo,
+    },
+
     startedByUserId: 'TEST_GEN',
   },
 }
@@ -217,14 +213,6 @@ describe('GET /details-of-offence/100 view', () => {
           'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
         )
         expect(res.text).toContain('Prisoner victim: A_prisoner_first_name A_prisoner_last_name')
-        // Second offence - first question and answer
-        expect(res.text).toContain(
-          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
-        )
-        expect(res.text).toContain('A standard answer with child question')
-        // Second offence - second question and answer
-        expect(res.text).toContain('A child question')
-        expect(res.text).toContain('A standard child answer')
       })
   })
 
@@ -234,9 +222,7 @@ describe('GET /details-of-offence/100 view', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison rule 51')
-        expect(res.text).not.toContain('Prison rule 55')
         expect(res.text).toContain('paragraph 21')
-        expect(res.text).toContain('paragraph 22')
       })
   })
 
@@ -252,14 +238,6 @@ describe('GET /details-of-offence/100 view', () => {
           expect.anything()
         )
       )
-      .then(() =>
-        expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
-          2,
-          false,
-          PrisonerGender.MALE,
-          expect.anything()
-        )
-      )
   })
 
   it('should set and not get the offences on the session', () => {
@@ -267,26 +245,18 @@ describe('GET /details-of-offence/100 view', () => {
       .get(adjudicationUrls.detailsOfOffence.urls.start(100))
       .expect(200)
       .then(() =>
-        expect(allOffencesSessionService.setAllSessionOffences).toHaveBeenCalledWith(
+        expect(allOffencesSessionService.setSessionOffences).toHaveBeenCalledWith(
           expect.anything(),
-          [
-            {
-              offenceCode: '1',
-              victimOtherPersonsName: undefined,
-              victimPrisonersNumber: 'G5512G',
-              victimStaffUsername: undefined,
-            },
-            {
-              offenceCode: '2',
-              victimOtherPersonsName: undefined,
-              victimPrisonersNumber: undefined,
-              victimStaffUsername: undefined,
-            },
-          ],
+          {
+            offenceCode: '1',
+            victimOtherPersonsName: undefined,
+            victimPrisonersNumber: 'G5512G',
+            victimStaffUsername: undefined,
+          },
           100
         )
       )
-      .then(() => expect(allOffencesSessionService.getAllSessionOffences).not.toHaveBeenCalledWith())
+      .then(() => expect(allOffencesSessionService.getSessionOffences).not.toHaveBeenCalledWith())
   })
 })
 
@@ -297,9 +267,7 @@ describe('GET /details-of-offence/102 view', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison rule 55')
-        expect(res.text).not.toContain('Prison rule 51')
         expect(res.text).toContain('paragraph 21')
-        expect(res.text).toContain('paragraph 22')
       })
   })
 
@@ -310,14 +278,6 @@ describe('GET /details-of-offence/102 view', () => {
       .then(() =>
         expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
           1,
-          true,
-          PrisonerGender.MALE,
-          expect.anything()
-        )
-      )
-      .then(() =>
-        expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
-          2,
           true,
           PrisonerGender.MALE,
           expect.anything()

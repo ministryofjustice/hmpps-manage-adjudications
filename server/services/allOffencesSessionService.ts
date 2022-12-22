@@ -4,34 +4,26 @@ import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 export default class AllOffencesSessionService {
   addSessionOffence(req: Request, offenceData: OffenceData, draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.offences[draftAdjudicationNumber].push(offenceData)
+    req.session.offences[draftAdjudicationNumber] = offenceData
   }
 
-  deleteSessionOffence(req: Request, index: number, draftAdjudicationNumber: number) {
-    req.session.offences?.[draftAdjudicationNumber]?.splice(index - 1, 1)
+  deleteSessionOffences(req: Request, draftAdjudicationNumber: number) {
+    delete req.session.offences?.[draftAdjudicationNumber]
   }
 
-  deleteAllSessionOffences(req: Request, draftAdjudicationNumber: number) {
-    req.session.offences?.[draftAdjudicationNumber]?.splice(0, req.session.offences?.[draftAdjudicationNumber]?.length)
-  }
-
-  setAllSessionOffences(req: Request, offenceData: OffenceData[], draftAdjudicationNumber: number) {
+  setSessionOffences(req: Request, offenceData: OffenceData, draftAdjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.offences[draftAdjudicationNumber] = offenceData
   }
 
-  getAndDeleteAllSessionOffences(req: Request, draftAdjudicationNumber: number) {
-    const allSessionOffences = this.getAllSessionOffences(req, draftAdjudicationNumber)
+  getAndDeleteSessionOffences(req: Request, draftAdjudicationNumber: number) {
+    const allSessionOffences = this.getSessionOffences(req, draftAdjudicationNumber)
     delete req.session.offences?.[draftAdjudicationNumber]
     return allSessionOffences
   }
 
-  getAllSessionOffences(req: Request, draftAdjudicationNumber: number): OffenceData[] {
+  getSessionOffences(req: Request, draftAdjudicationNumber: number): OffenceData {
     return req.session?.offences?.[draftAdjudicationNumber]
-  }
-
-  getSessionOffence(req: Request, index: number, draftAdjudicationNumber: number): OffenceData {
-    return req.session.offences?.[draftAdjudicationNumber][index - 1]
   }
 
   private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
@@ -39,7 +31,7 @@ export default class AllOffencesSessionService {
       req.session.offences = {}
     }
     if (!req.session.offences[draftAdjudicationNumber]) {
-      req.session.offences[draftAdjudicationNumber] = []
+      req.session.offences[draftAdjudicationNumber] = {}
     }
   }
 }

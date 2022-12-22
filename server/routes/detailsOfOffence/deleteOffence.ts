@@ -32,9 +32,8 @@ export default class DeleteOffenceRoutes {
       adjudicationNumber,
       user
     )
-    const offenceIndex = Number(req.params.offenceIndex)
     // We assume the offences are already set up on the session
-    const offenceData = this.allOffencesSessionService.getSessionOffence(req, offenceIndex, adjudicationNumber)
+    const offenceData = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
     const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
@@ -43,18 +42,20 @@ export default class DeleteOffenceRoutes {
       incidentRole,
       false
     )
-    return res.render(`pages/deleteOffence`, { offenceIndex, questionsAndAnswers, errors })
+    return res.render(`pages/deleteOffence`, {
+      questionsAndAnswers,
+      errors,
+    })
   }
 
   submit = async (req: Request, res: Response) => {
     const { confirmDelete } = req.body
-    const offenceIndex = Number(req.params.offenceIndex)
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     if (!confirmDelete) {
       return this.renderView(req, res, [error.MISSING_SELECTION])
     }
     if (confirmDelete === 'yes') {
-      this.allOffencesSessionService.deleteSessionOffence(req, offenceIndex, adjudicationNumber)
+      this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
     }
     return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
   }

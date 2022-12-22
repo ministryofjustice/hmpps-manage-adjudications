@@ -23,7 +23,7 @@ export type ReportedAdjudication = {
   incidentDetails: IncidentDetails
   incidentStatement: IncidentStatement
   incidentRole: IncidentRole
-  offenceDetails: OffenceDetails[]
+  offenceDetails: OffenceDetails
   status: ReportedAdjudicationStatus
   isYouthOffender: boolean
   reviewedByUserId?: string

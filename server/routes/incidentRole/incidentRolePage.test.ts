@@ -159,16 +159,15 @@ describe('POST /incident-role/<id> with existing draft offences', () => {
           handoverDeadline: '2022-03-25T09:10:00',
         },
         incidentRole: {},
-        offenceDetails: [
-          {
-            offenceCode: 1001,
-            offenceRule: {
-              paragraphNumber: '1',
-              paragraphDescription: 'Commits any assault',
-            },
-            victimPrisonersNumber: 'G5512G',
+        offenceDetails: {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
           },
-        ],
+          victimPrisonersNumber: 'G5512G',
+        },
+
         incidentStatement: {
           statement: 'Lorem Ipsum',
           completed: true,
