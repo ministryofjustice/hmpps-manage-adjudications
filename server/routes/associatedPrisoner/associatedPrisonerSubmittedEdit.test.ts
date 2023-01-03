@@ -24,15 +24,9 @@ beforeEach(() => {
     })
   )
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 100,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 2,
-        dateTimeOfIncident: '2021-10-27T12:30',
-        handoverDeadline: '2022-03-25T09:10:00',
-      },
-      incidentRole: {},
       offenceDetails: {
         offenceCode: 1001,
         offenceRule: {
@@ -41,27 +35,15 @@ beforeEach(() => {
         },
         victimPrisonersNumber: 'G5512G',
       },
-
-      incidentStatement: {
-        statement: 'Lorem Ipsum',
-        completed: true,
-      },
-      startedByUserId: 'TEST2_GEN',
-    },
+    }),
   })
 
   placeOnReportService.updateDraftIncidentRole.mockResolvedValue({
-    draftAdjudication: {
-      startedByUserId: 'TEST_GEN',
+    draftAdjudication: testData.draftAdjudication({
       id: 100,
-      adjudicationNumber: 1524493,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-        locationId: 2,
-      },
-      incidentRole: {},
       prisonerNumber: 'G6415GD',
-    },
+      adjudicationNumber: 1524493,
+    }),
   })
 })
 

@@ -11,11 +11,13 @@ import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -42,6 +44,12 @@ const decisionTreeService = new DecisionTreeService(
 )
 let app: Express
 
+const prisonerData = testData.prisonerResultSummary({
+  offenderNo: 'G6415GD',
+  firstName: 'A_PRISONER_FIRST_NAME',
+  lastName: 'A_PRISONER_LAST_NAME',
+})
+
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: {
@@ -65,36 +73,10 @@ beforeEach(() => {
     },
   })
 
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: undefined,
-    firstName: 'A_PRISONER_FIRST_NAME',
-    lastName: 'A_PRISONER_LAST_NAME',
-    categoryCode: undefined,
-    language: undefined,
-    friendlyName: undefined,
-    displayName: undefined,
-    physicalAttributes: undefined,
-    prisonerNumber: undefined,
-    currentLocation: undefined,
-    assignedLivingUnit: undefined,
-    dateOfBirth: undefined,
-  })
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerData)
 
   placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
-    prisoner: {
-      offenderNo: undefined,
-      firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
-      lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      physicalAttributes: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-      dateOfBirth: undefined,
-    },
+    prisoner: prisonerData,
     associatedPrisoner: undefined,
   })
   const allOffencesSessionService = new AllOffencesSessionService()

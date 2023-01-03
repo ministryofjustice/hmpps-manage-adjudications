@@ -3,10 +3,12 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { OffenceDetails, PrisonerGender } from '../../data/DraftAdjudicationResult'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 
 let app: Express
@@ -14,17 +16,10 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValueOnce({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 4490,
       prisonerNumber: 'A7937DY',
-      gender: PrisonerGender.MALE,
-      incidentDetails: undefined,
-      offenceDetails: {} as OffenceDetails,
-      startedByUserId: undefined,
-      damages: [],
-      evidence: [],
-      witnesses: [],
-    },
+    }),
   })
 })
 
@@ -34,25 +29,14 @@ afterEach(() => {
 
 describe('GET /select-gender edit', () => {
   beforeEach(() => {
-    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce({
-      offenderNo: 'A7937DY',
-      firstName: 'UDFSANAYE',
-      lastName: 'AIDETRIA',
-      physicalAttributes: { gender: 'Unknown' },
-      dateOfBirth: undefined,
-      assignedLivingUnit: {
-        agencyId: 'MDI',
-        locationId: 25928,
-        description: '4-2-001',
-        agencyName: 'Moorland (HMP & YOI)',
-      },
-      categoryCode: undefined,
-      language: 'English',
-      friendlyName: 'Udfsanaye Aidetria',
-      displayName: 'Aidetria, Udfsanaye',
-      prisonerNumber: 'A7937DY',
-      currentLocation: 'Moorland (HMP & YOI)',
-    })
+    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce(
+      testData.prisonerResultSummary({
+        offenderNo: 'A7937DY',
+        firstName: 'UDFSANAYE',
+        lastName: 'AIDETRIA',
+        gender: 'Unknown',
+      })
+    )
   })
   it('should load the edit select gender page', () => {
     return request(app)
@@ -71,11 +55,15 @@ describe('POST /select-gender edit', () => {
   it('should redirect to the role page if the form is complete', () => {
     return request(app)
       .post(adjudicationUrls.selectGender.url.edit('A7937DY', 4490))
-      .send({ genderSelected: 'FEMALE' })
+      .send({ genderSelected: PrisonerGender.FEMALE })
       .expect('Location', adjudicationUrls.checkYourAnswers.urls.start(4490))
       .expect(() => {
         expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledTimes(1)
-        expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledWith(4490, 'FEMALE', expect.anything())
+        expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledWith(
+          4490,
+          PrisonerGender.FEMALE,
+          expect.anything()
+        )
         expect(placeOnReportService.setPrisonerGenderOnSession).toHaveBeenCalledTimes(0)
       })
   })

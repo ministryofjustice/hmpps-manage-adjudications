@@ -141,16 +141,12 @@ context('Selecting gender pathway - no gender on prisoners profile', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'A1234AA',
-      response: {
+      response: testData.prisonerResultSummary({
         offenderNo: 'A1234AA',
         firstName: 'JOHN',
         lastName: 'SMITH',
-        assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        dateOfBirth: '1990-10-11',
-        physicalAttributes: {
-          gender: 'Unknown',
-        },
-      },
+        gender: 'Unknown',
+      }),
     })
     cy.signIn()
   })
@@ -162,14 +158,13 @@ context('Selecting gender pathway - no gender on prisoners profile', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'JOHN',
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
           gender: 'Unknown',
-        },
+          enhanced: false,
+        }),
       ],
     })
 
@@ -202,14 +197,12 @@ context('Selecting gender pathway - no gender on prisoners profile', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'JOHN',
           lastName: 'SMITH',
           prisonerNumber: 'A1234AA',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+          enhanced: false,
+        }),
       ],
     })
     cy.visit(adjudicationUrls.searchForPrisoner.root)
