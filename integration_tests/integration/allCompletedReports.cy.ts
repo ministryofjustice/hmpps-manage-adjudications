@@ -135,7 +135,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationLink(10).should('exist')
     allCompletedReportsPage.paginationLink(11).should('not.exist')
     // Page 10 - First
-    allCompletedReportsPage.paginationLink(10).click()
+    allCompletedReportsPage.paginationLink(10).first().click()
     allCompletedReportsPage.previousLink().should('exist')
     allCompletedReportsPage.nextLink().should('exist')
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 181 to 200 of 300 results')
@@ -145,7 +145,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationLink(14).should('exist')
     allCompletedReportsPage.paginationLink(15).should('not.exist')
     // Page 14
-    allCompletedReportsPage.paginationLink(14).click()
+    allCompletedReportsPage.paginationLink(14).first().click()
     allCompletedReportsPage.previousLink().should('exist')
     allCompletedReportsPage.nextLink().should('exist')
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 261 to 280 of 300 results')
@@ -155,7 +155,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationLink(15).should('exist')
     allCompletedReportsPage.paginationLink(16).should('not.exist')
     // Page 15 - Last
-    allCompletedReportsPage.paginationLink(15).click()
+    allCompletedReportsPage.paginationLink(15).first().click()
     allCompletedReportsPage.previousLink().should('exist')
     allCompletedReportsPage.nextLink().should('not.exist')
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 281 to 300 of 300 results')
@@ -297,7 +297,7 @@ context('All Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
-    allCompletedReportsPage.paginationLink(2).click()
+    allCompletedReportsPage.paginationLink(2).first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.
@@ -409,7 +409,7 @@ context('All Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
-    allCompletedReportsPage.paginationLink(2).click()
+    allCompletedReportsPage.paginationLink(2).first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.

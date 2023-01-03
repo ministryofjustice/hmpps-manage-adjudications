@@ -63,7 +63,7 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage.paginationLink(10).should('exist')
     yourCompletedReportsPage.paginationLink(11).should('not.exist')
     // Page 10 - First
-    yourCompletedReportsPage.paginationLink(10).click()
+    yourCompletedReportsPage.paginationLink(10).first().click()
     yourCompletedReportsPage.previousLink().should('exist')
     yourCompletedReportsPage.nextLink().should('exist')
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 181 to 200 of 300 results')
@@ -73,7 +73,7 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage.paginationLink(14).should('exist')
     yourCompletedReportsPage.paginationLink(15).should('not.exist')
     // Page 14
-    yourCompletedReportsPage.paginationLink(14).click()
+    yourCompletedReportsPage.paginationLink(14).first().click()
     yourCompletedReportsPage.previousLink().should('exist')
     yourCompletedReportsPage.nextLink().should('exist')
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 261 to 280 of 300 results')
@@ -83,7 +83,7 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage.paginationLink(15).should('exist')
     yourCompletedReportsPage.paginationLink(16).should('not.exist')
     // Page 15 - Last
-    yourCompletedReportsPage.paginationLink(15).click()
+    yourCompletedReportsPage.paginationLink(15).first().click()
     yourCompletedReportsPage.previousLink().should('exist')
     yourCompletedReportsPage.nextLink().should('not.exist')
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 281 to 300 of 300 results')
@@ -204,7 +204,7 @@ context('Your Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
-    yourCompletedReportsPage.paginationLink(2).click()
+    yourCompletedReportsPage.paginationLink(2).first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.
