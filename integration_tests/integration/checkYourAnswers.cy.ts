@@ -49,38 +49,12 @@ context('Check Your Answers', () => {
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 234,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
+
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
   })
   context('YOI offences', () => {
@@ -88,23 +62,18 @@ context('Check Your Answers', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            gender: PrisonerGender.MALE,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              dateTimeOfDiscovery: '2021-11-04T12:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
+            isYouthOffender: true,
+            startedByUserId: 'USER1',
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            dateTimeOfDiscovery: '2021-11-04T12:09:42',
+            locationId: 25538,
             incidentStatement: {
-              id: 23,
               statement: 'This is my statement',
               completed: true,
             },
-            startedByUserId: 'USER1',
-            isYouthOffender: true,
             incidentRole: {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25c',
@@ -136,8 +105,7 @@ context('Check Your Answers', () => {
                 details: 'some test info',
               },
             ],
-            witnesses: [],
-          },
+          }),
         },
       })
       cy.task('stubSubmitCompleteDraftAdjudication', {
@@ -148,7 +116,7 @@ context('Check Your Answers', () => {
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             dateTimeOfDiscovery: '2021-11-05:09:42',
-            locationId: 234,
+            locationId: 25538,
           },
           incidentStatement: {
             id: 23,
@@ -228,7 +196,7 @@ context('Check Your Answers', () => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
           expect($summaryData.get(1).innerText).to.contain('3 November 2021')
           expect($summaryData.get(2).innerText).to.contain('11:09')
-          expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+          expect($summaryData.get(3).innerText).to.contain('Houseblock 1')
           expect($summaryData.get(4).innerText).to.contain('4 November 2021')
           expect($summaryData.get(5).innerText).to.contain('12:09')
         })
@@ -380,23 +348,16 @@ context('Check Your Answers', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
-            gender: PrisonerGender.MALE,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              dateTimeOfDiscovery: '2021-11-06T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            dateTimeOfDiscovery: '2021-11-06T11:09:42',
+            locationId: 25538,
             incidentStatement: {
-              id: 23,
               statement: 'This is my statement',
               completed: true,
             },
-            startedByUserId: 'USER1',
-            isYouthOffender: false,
             incidentRole: {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25c',
@@ -414,27 +375,12 @@ context('Check Your Answers', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-          },
+          }),
         },
       })
       cy.task('stubSubmitCompleteDraftAdjudication', {
         id: 3456,
-        response: {
-          adjudicationNumber: 234,
-          gender: PrisonerGender.MALE,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            dateTimeOfDiscovery: '2021-11-07T11:09:42',
-            locationId: 234,
-          },
-          incidentStatement: {
-            id: 23,
-            statement: 'This is my statement',
-            completed: true,
-          },
-          prisonerNumber: 'G6415GD',
-          isYouthOffender: false,
-        },
+        response: testData.completedAdjudication(234, 'G6415GD', '2021-11-07T11:09:42'),
       })
       cy.signIn()
     })
@@ -458,34 +404,25 @@ context('Check Your Answers', () => {
     beforeEach(() => {
       cy.task('stubGetPrisonerDetails', {
         prisonerNumber: 'H6415GD',
-        response: {
+        response: testData.prisonerResultSummary({
           offenderNo: 'H6415GD',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          physicalAttributes: { gender: PrisonerGender.MALE },
-          assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-        },
+          firstName: 'John',
+          lastName: 'Smith',
+        }),
       })
       cy.task('stubGetDraftAdjudication', {
         id: 5678,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 5678,
-            gender: PrisonerGender.MALE,
             prisonerNumber: 'H6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              dateTimeOfDiscovery: '2021-11-06T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            dateTimeOfDiscovery: '2021-11-06T11:09:42',
+            locationId: 25538,
             incidentStatement: {
-              id: 23,
               statement: 'This is my statement',
               completed: true,
             },
-            startedByUserId: 'USER1',
-            isYouthOffender: false,
             incidentRole: {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25c',
@@ -503,7 +440,7 @@ context('Check Your Answers', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-          },
+          }),
         },
       })
       cy.signIn()

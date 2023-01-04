@@ -4,10 +4,12 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
@@ -15,25 +17,13 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService })
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    physicalAttributes: undefined,
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
-    },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
-    currentLocation: 'Moorland (HMP & YOI)',
-    dateOfBirth: undefined,
-  })
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(
+    testData.prisonerResultSummary({
+      offenderNo: 'G6415GD',
+      firstName: 'Udfsanaye',
+      lastName: 'Aidetria',
+    })
+  )
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
@@ -43,30 +33,20 @@ beforeEach(() => {
   })
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: {
-      startedByUserId: 'TEST_GEN',
+    draftAdjudication: testData.draftAdjudication({
       id: 34,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-        locationId: 2,
-        discoveryRadioSelected: 'Yes',
-      },
-      incidentRole: {},
       prisonerNumber: 'G6415GD',
-    },
+      dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+    }),
   })
 
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
-    draftAdjudication: {
-      startedByUserId: 'TEST_GEN',
+    draftAdjudication: testData.draftAdjudication({
       id: 34,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-        locationId: 2,
-      },
-      incidentRole: {},
       prisonerNumber: 'G6415GD',
-    },
+      dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+      locationId: 2,
+    }),
   })
 
   placeOnReportService.getReporterName.mockResolvedValue('Tester2 User')
@@ -114,17 +94,12 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
   })
   it('should redirect to the applicable rule page if details are complete after changing information and there are already offences on the draft', () => {
     placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-      draftAdjudication: {
-        startedByUserId: 'TEST_GEN',
+      draftAdjudication: testData.draftAdjudication({
         id: 34,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-          dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
-          locationId: 2,
-          discoveryRadioSelected: 'Yes',
-        },
-        incidentRole: {},
         prisonerNumber: 'G6415GD',
+        dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
+        dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
+        locationId: 2,
         offenceDetails: {
           offenceCode: 16001,
           offenceRule: {
@@ -133,7 +108,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
               'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
           },
         },
-      },
+      }),
     })
     placeOnReportService.getNextOffencesUrl.mockResolvedValue(adjudicationUrls.detailsOfOffence.urls.start(34) as never)
 

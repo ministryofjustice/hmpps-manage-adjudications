@@ -1,8 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HearingDetails, PrisonerGender } from '../../data/DraftAdjudicationResult'
+import moment from 'moment'
+import {
+  DamageDetails,
+  DraftAdjudication,
+  EvidenceDetails,
+  HearingDetails,
+  IncidentRole,
+  IncidentStatement,
+  OffenceDetails,
+  PrisonerGender,
+  WitnessDetails,
+} from '../../data/DraftAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
@@ -35,6 +46,61 @@ export default class TestData {
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       isYouthOffender: false,
       ...otherData,
+    }
+  }
+
+  draftAdjudication = ({
+    id,
+    prisonerNumber,
+    gender = PrisonerGender.MALE,
+    locationId = 1,
+    dateTimeOfIncident = '2023-01-01T06:00:00',
+    dateTimeOfDiscovery = '2023-01-01T06:00:00',
+    offenceDetails = {} as OffenceDetails,
+    incidentRole = {} as IncidentRole,
+    damages = [],
+    evidence = [],
+    witnesses = [],
+    adjudicationNumber = null,
+    incidentStatement = {} as IncidentStatement,
+    isYouthOffender = false,
+    startedByUserId = 'USER1',
+  }: {
+    id: number
+    prisonerNumber: string
+    gender?: PrisonerGender
+    locationId?: number
+    dateTimeOfIncident?: string
+    dateTimeOfDiscovery?: string
+    offenceDetails?: OffenceDetails
+    incidentRole?: IncidentRole
+    damages?: DamageDetails[]
+    evidence?: EvidenceDetails[]
+    witnesses?: WitnessDetails[]
+    adjudicationNumber?: number
+    incidentStatement?: IncidentStatement
+    isYouthOffender?: boolean
+    startedByUserId?: string
+  }): DraftAdjudication => {
+    return {
+      id,
+      prisonerNumber,
+      adjudicationNumber,
+      gender,
+      incidentDetails: {
+        locationId,
+        dateTimeOfIncident,
+        dateTimeOfDiscovery,
+        handoverDeadline: moment(dateTimeOfDiscovery).add(2, 'days').format('YYYY-MM-DDTHH:mm'),
+      },
+      incidentStatement,
+      incidentRole,
+      offenceDetails,
+      startedByUserId,
+      damages,
+      evidence,
+      witnesses,
+      isYouthOffender,
     }
   }
 
@@ -86,12 +152,30 @@ export default class TestData {
       id: 86,
       locationId: 775,
       dateTimeOfHearing,
-      oicHearingType: 'GOV_ADULT',
+      oicHearingType: OicHearingType.GOV_ADULT,
     }
   }
 
   alerts = (codes: string[]): AlertFlags[] => {
     return alertFlagLabels.filter(alert => codes.includes(alert.alertCodes[0]))
+  }
+
+  userFromUsername = (username = 'USER1') => {
+    return {
+      activeCaseLoadId: 'MDI',
+      name: 'Test User',
+      username,
+      token: 'token-1',
+      authSource: 'auth',
+    }
+  }
+
+  emailFromUsername = (username = 'USER1') => {
+    return {
+      username,
+      email: 'test@justice.gov.uk',
+      verified: true,
+    }
   }
 
   prisonerSearchSummary = ({

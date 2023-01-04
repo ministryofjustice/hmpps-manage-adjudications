@@ -5,10 +5,12 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
@@ -18,52 +20,32 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, locationService },
-    { originalRadioSelection: 'incited', G6415GD: { gender: 'MALE' } }
+    { originalRadioSelection: 'incited', G6415GD: { gender: PrisonerGender.MALE } }
   )
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    dateOfBirth: undefined,
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
-    },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
-    currentLocation: 'Moorland (HMP & YOI)',
-    physicalAttributes: {
-      gender: 'Male',
-    },
-  })
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(
+    testData.prisonerResultSummary({
+      offenderNo: 'G6415GD',
+      firstName: 'Udfsanaye',
+      lastName: 'Aidetria',
+    })
+  )
 
   placeOnReportService.startNewDraftAdjudication.mockResolvedValue({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 1,
       prisonerNumber: 'G6415GD',
-      startedByUserId: 'TEST_GEN',
-      gender: PrisonerGender.MALE,
-      incidentDetails: {
-        locationId: 2,
-        discoveryRadioSelected: 'Yes',
-        dateTimeOfIncident: '2021-10-27T13:30:00.000',
-        dateTimeOfDiscovery: '2021-10-27T13:30:00.000',
-      },
+      dateTimeOfIncident: '2021-10-27T13:30:00.000',
+      dateTimeOfDiscovery: '2021-10-27T13:30:00.000',
       incidentRole: {
         associatedPrisonersNumber: 'G2678PF',
         roleCode: '25b',
       },
-    },
+    }),
   })
   placeOnReportService.getReporterName.mockResolvedValue('Test User')
   locationService.getIncidentLocations.mockResolvedValue([])
-  placeOnReportService.getPrisonerGenderFromSession.mockResolvedValue('MALE')
-  placeOnReportService.getAndDeletePrisonerGenderFromSession.mockResolvedValue('MALE')
+  placeOnReportService.getPrisonerGenderFromSession.mockResolvedValue(PrisonerGender.MALE)
+  placeOnReportService.getAndDeletePrisonerGenderFromSession.mockResolvedValue(PrisonerGender.MALE)
 })
 
 afterEach(() => {
@@ -145,7 +127,7 @@ describe('POST /incident-details', () => {
           2,
           'G6415GD',
           expect.anything(),
-          'MALE',
+          PrisonerGender.MALE,
           '2021-10-26T13:30'
         )
       })
@@ -178,7 +160,7 @@ describe('POST /incident-details', () => {
           2,
           'G6415GD',
           expect.anything(),
-          'MALE',
+          PrisonerGender.MALE,
           '2021-10-27T13:30'
         )
       })

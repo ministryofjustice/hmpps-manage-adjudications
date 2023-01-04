@@ -3,10 +3,13 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import TestData from '../testutils/testData'
+import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const testData = new TestData()
 
 let app: Express
 
@@ -20,25 +23,14 @@ afterEach(() => {
 
 describe('GET /select-gender', () => {
   beforeEach(() => {
-    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce({
-      offenderNo: 'A7937DY',
-      firstName: 'UDFSANAYE',
-      lastName: 'AIDETRIA',
-      physicalAttributes: { gender: 'Unknown' },
-      dateOfBirth: undefined,
-      assignedLivingUnit: {
-        agencyId: 'MDI',
-        locationId: 25928,
-        description: '4-2-001',
-        agencyName: 'Moorland (HMP & YOI)',
-      },
-      categoryCode: undefined,
-      language: 'English',
-      friendlyName: 'Udfsanaye Aidetria',
-      displayName: 'Aidetria, Udfsanaye',
-      prisonerNumber: 'A7937DY',
-      currentLocation: 'Moorland (HMP & YOI)',
-    })
+    placeOnReportService.getPrisonerDetails.mockResolvedValueOnce(
+      testData.prisonerResultSummary({
+        offenderNo: 'A7937DY',
+        firstName: 'UDFSANAYE',
+        lastName: 'AIDETRIA',
+        gender: 'Unknown',
+      })
+    )
   })
   it('should load the select gender page', () => {
     return request(app)
@@ -57,7 +49,7 @@ describe('POST /select-gender', () => {
   it('should redirect to the role page if the form is complete', () => {
     return request(app)
       .post(adjudicationUrls.selectGender.url.start('A7937DY'))
-      .send({ genderSelected: 'MALE' })
+      .send({ genderSelected: PrisonerGender.MALE })
       .expect('Location', adjudicationUrls.incidentDetails.urls.start('A7937DY'))
       .expect(() => {
         expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledTimes(0)
@@ -65,7 +57,7 @@ describe('POST /select-gender', () => {
         expect(placeOnReportService.setPrisonerGenderOnSession).toHaveBeenCalledWith(
           expect.anything(),
           'A7937DY',
-          'MALE'
+          PrisonerGender.MALE
         )
       })
   })

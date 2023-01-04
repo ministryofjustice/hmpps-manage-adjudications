@@ -12,12 +12,14 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
 import PrisonerSearchService from '../../services/prisonerSearchService'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService')
 jest.mock('../../services/prisonerSearchService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -78,50 +80,25 @@ beforeEach(() => {
     email: undefined,
   })
 
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: undefined,
-    firstName: 'A_PRISONER_FIRST_NAME',
-    lastName: 'A_PRISONER_LAST_NAME',
-    categoryCode: undefined,
-    language: undefined,
-    friendlyName: undefined,
-    physicalAttributes: undefined,
-    displayName: undefined,
-    prisonerNumber: undefined,
-    currentLocation: undefined,
-    assignedLivingUnit: undefined,
-    dateOfBirth: undefined,
-  })
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(
+    testData.prisonerResultSummary({
+      offenderNo: undefined,
+      firstName: 'A_PRISONER_FIRST_NAME',
+      lastName: 'A_PRISONER_LAST_NAME',
+    })
+  )
 
   placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
-    prisoner: {
+    prisoner: testData.prisonerResultSummary({
       offenderNo: undefined,
       firstName: 'ADJUDICATION_PRISONER_FIRST_NAME',
       lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      physicalAttributes: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-      dateOfBirth: undefined,
-    },
-    associatedPrisoner: {
+    }),
+    associatedPrisoner: testData.prisonerResultSummary({
       offenderNo: undefined,
       firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
       lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      physicalAttributes: undefined,
-      currentLocation: undefined,
-      assignedLivingUnit: undefined,
-      dateOfBirth: undefined,
-    },
+    }),
   })
 
   prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(true)

@@ -4,11 +4,12 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { OffenceDetails } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/prisonerSearchService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
@@ -20,43 +21,19 @@ beforeEach(() => {
     { placeOnReportService, prisonerSearchService },
     { originalRadioSelection: 'incited' }
   )
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    dateOfBirth: undefined,
-    physicalAttributes: undefined,
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25928,
-      description: '4-2-001',
-      agencyName: 'Moorland (HMP & YOI)',
-    },
-    categoryCode: undefined,
-    language: 'English',
-    friendlyName: 'Udfsanaye Aidetria',
-    displayName: 'Aidetria, Udfsanaye',
-    prisonerNumber: 'G6415GD',
-    currentLocation: 'Moorland (HMP & YOI)',
-  })
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(
+    testData.prisonerResultSummary({
+      offenderNo: 'G6415GD',
+      firstName: 'Udfsanaye',
+      lastName: 'Aidetria',
+    })
+  )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 100,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 27022,
-        dateTimeOfIncident: '2022-03-23T09:10:00',
-        handoverDeadline: '2022-03-25T09:10:00',
-      },
-      incidentRole: {},
-      offenceDetails: {} as OffenceDetails,
-      incidentStatement: {
-        statement: 'Lorem Ipsum',
-        completed: true,
-      },
-      startedByUserId: 'TEST2_GEN',
-    },
+    }),
   })
 })
 

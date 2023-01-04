@@ -6,13 +6,14 @@ import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
@@ -24,73 +25,32 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 
 let app: Express
 
+const prisonerData = testData.prisonerResultSummary({
+  offenderNo: 'G6415GD',
+  firstName: 'Udfsanaye',
+  lastName: 'Aidetria',
+  gender: 'Unknown',
+})
+
+const draftData = testData.draftAdjudication({
+  id: 1,
+  adjudicationNumber: 123,
+  prisonerNumber: 'G6415GD',
+})
+
 beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService }
   )
-  placeOnReportService.getPrisonerDetails.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'UDFSANAYE',
-    lastName: 'AIDETRIA',
-    physicalAttributes: { gender: 'Unknown' },
-    assignedLivingUnit: {
-      agencyId: undefined,
-      locationId: undefined,
-      description: undefined,
-      agencyName: undefined,
-    },
-    categoryCode: undefined,
-    dateOfBirth: undefined,
-    language: undefined,
-    friendlyName: undefined,
-    displayName: undefined,
-    prisonerNumber: undefined,
-    currentLocation: undefined,
-  })
+  placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerData)
 
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: {
-      id: 1,
-      adjudicationNumber: 123,
-      gender: PrisonerGender.MALE,
-      prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 6,
-        dateTimeOfIncident: undefined,
-        handoverDeadline: undefined,
-      },
-      incidentRole: {
-        roleCode: '25a',
-      },
-      offenceDetails: {
-        offenceCode: 4,
-        victimPrisonersNumber: '',
-      },
-
-      incidentStatement: { statement: '', completed: true },
-      startedByUserId: undefined,
+      ...draftData,
     },
     incidentRole: undefined,
-    prisoner: {
-      offenderNo: 'G6415GD',
-      dateOfBirth: undefined,
-      physicalAttributes: { gender: 'Unknown' },
-      firstName: undefined,
-      lastName: undefined,
-      assignedLivingUnit: {
-        agencyId: undefined,
-        locationId: undefined,
-        description: undefined,
-        agencyName: undefined,
-      },
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: undefined,
-      displayName: undefined,
-      prisonerNumber: undefined,
-      currentLocation: undefined,
-    },
+    prisoner: prisonerData,
     associatedPrisoner: undefined,
   })
 
