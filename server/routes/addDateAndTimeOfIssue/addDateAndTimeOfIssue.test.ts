@@ -19,7 +19,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
   reportedAdjudicationsService.issueDISForm.mockResolvedValue({
-    reportedAdjudication: testData.completedAdjudication(12345, 'G6123VU'),
+    reportedAdjudication: testData.reportedAdjudication({ adjudicationNumber: 12345, prisonerNumber: 'G6123VU' }),
   })
 })
 

@@ -11,40 +11,83 @@ import {
   PrisonerGender,
   WitnessDetails,
 } from '../../data/DraftAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
-import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
 
 export default class TestData {
-  completedAdjudication = (
-    adjudicationNumber: number,
-    prisonerNumber: string,
-    otherData?: any,
-    dateTimeOfDiscovery = '2022-11-15T11:45:00'
-  ) => {
+  reportedAdjudication = ({
+    adjudicationNumber,
+    prisonerNumber,
+    dateTimeOfIncident = '2023-01-01T06:00:00',
+    gender = PrisonerGender.MALE,
+    dateTimeOfDiscovery = dateTimeOfIncident,
+    locationId = 1,
+    incidentStatement = {} as IncidentStatement,
+    offenceDetails = {} as OffenceDetails,
+    incidentRole = {} as IncidentRole,
+    status = ReportedAdjudicationStatus.AWAITING_REVIEW,
+    isYouthOffender = false,
+    damages = [],
+    evidence = [],
+    witnesses = [],
+    hearings = null,
+    dateTimeOfFirstHearing = null,
+    issuingOfficer = null,
+    dateTimeOfIssue = null,
+    otherData,
+  }: {
+    adjudicationNumber: number
+    prisonerNumber: string
+    dateTimeOfIncident?: string
+    gender?: PrisonerGender
+    dateTimeOfDiscovery?: string
+    locationId?: number
+    incidentStatement?: IncidentStatement
+    offenceDetails?: OffenceDetails
+    incidentRole?: IncidentRole
+    status?: ReportedAdjudicationStatus
+    isYouthOffender?: boolean
+    damages?: DamageDetails[]
+    evidence?: EvidenceDetails[]
+    witnesses?: WitnessDetails[]
+    hearings?: HearingDetails[]
+    dateTimeOfFirstHearing?: string
+    issuingOfficer?: string
+    dateTimeOfIssue?: string
+    otherData?: any
+  }) => {
     return {
       adjudicationNumber,
       prisonerNumber,
-      gender: PrisonerGender.MALE,
-      bookingId: 2,
-      createdDateTime: '2021-11-15T11:45:00',
-      createdByUserId: 'TEST_ER',
+      gender,
       incidentDetails: {
-        locationId: 3,
-        dateTimeOfIncident: '2021-11-15T11:45:00',
+        dateTimeOfIncident,
         dateTimeOfDiscovery,
-        handoverDeadline: '2021-11-17T11:45:00',
+        handoverDeadline: moment(dateTimeOfDiscovery).add(2, 'days').format('YYYY-MM-DDTHH:mm'),
+        locationId,
       },
-      incidentStatement: {
-        statement: 'My incident statement is this',
-      },
-      incidentRole: {},
-      offenceDetails: [{ offenceCode: 1001 }],
-      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      isYouthOffender: false,
+      incidentStatement,
+      offenceDetails,
+      incidentRole,
+      status,
+      statusReason: '',
+      statusDetails: '',
+      isYouthOffender,
+      createdDateTime: '2022-12-09T10:30:00',
+      createdByUserId: 'USER1',
+      bookingId: 1,
+      reviewedByUserId: 'USER2',
+      damages,
+      evidence,
+      witnesses,
+      hearings,
+      dateTimeOfFirstHearing,
+      issuingOfficer,
+      dateTimeOfIssue,
       ...otherData,
     }
   }
@@ -55,7 +98,7 @@ export default class TestData {
     gender = PrisonerGender.MALE,
     locationId = 1,
     dateTimeOfIncident = '2023-01-01T06:00:00',
-    dateTimeOfDiscovery = '2023-01-01T06:00:00',
+    dateTimeOfDiscovery = dateTimeOfIncident,
     offenceDetails = {} as OffenceDetails,
     incidentRole = {} as IncidentRole,
     damages = [],

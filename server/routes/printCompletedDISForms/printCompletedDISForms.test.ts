@@ -24,33 +24,19 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { locationService, reportedAdjudicationsService })
 
   const adjudicationResponse = [
-    testData.completedAdjudication(12345, 'G7234VB', {
-      displayName: 'Smith, James',
-      friendlyName: 'James Smith',
-      issuingOfficer: 'JPERALTER',
-      prisonerLocation: 'MDI-2-3-009',
-      dateTimeOfIssue: '2022-12-05T15:00:00',
-      formsAlreadyIssued: true,
-      dateTimeOfFirstHearing: '2022-12-06T09:00:00',
-      issueStatus: IssueStatus.ISSUED,
-      relevantAlerts: [
-        {
-          alertCodes: ['PEEP'],
-          classes: 'alert-status alert-status--disability',
-          label: 'PEEP',
-        },
-      ],
+    testData.reportedAdjudication({
+      adjudicationNumber: 12345,
+      prisonerNumber: 'G7234VB',
+      otherData: {
+        displayName: 'Smith, James',
+      },
     }),
-    testData.completedAdjudication(23456, 'G6123VU', {
-      displayName: 'Tovey, Peter',
-      friendlyName: 'Peter Tovey',
-      issuingOfficer: 'JPERALTER',
-      prisonerLocation: 'MDI-RECP',
-      formsAlreadyIssued: true,
-      dateTimeOfIssue: '2022-12-06T16:30:00',
-      dateTimeOfFirstHearing: '2022-12-07T09:00:00',
-      issueStatus: IssueStatus.ISSUED,
-      relevantAlerts: [{ alertCodes: ['PRGNT'], classes: 'alert-status alert-status--prgnt', label: 'PREGNANT' }],
+    testData.reportedAdjudication({
+      adjudicationNumber: 23456,
+      prisonerNumber: 'G6123VU',
+      otherData: {
+        displayName: 'Tovey, Peter',
+      },
     }),
   ]
 

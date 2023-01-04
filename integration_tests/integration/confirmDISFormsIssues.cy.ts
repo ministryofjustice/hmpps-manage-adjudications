@@ -60,23 +60,15 @@ context('Confirm DIS forms have been issued', () => {
   })
   it('has working links to add date and time of issue', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(12345, 'G7234VB', {
-        displayName: 'Smith, James',
-        friendlyName: 'James Smith',
-        issuingOfficer: 'TEST_GEN',
-        prisonerLocation: 'MDI-MCASU',
-        formattedDateTimeOfIssue: '5 December 2022 - 15:00',
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
-        formsAlreadyIssued: true,
       }),
-      testData.completedAdjudication(23456, 'G7234VB', {
-        displayName: 'Smith, James',
-        friendlyName: 'James Smith',
-        issuingOfficer: null,
-        prisonerLocation: 'MDI-MCASU',
-        formattedDateTimeOfIssue: null,
-        dateTimeOfIssue: null,
-        formsAlreadyIssued: false,
+
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'G7234VB',
       }),
     ]
     cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
@@ -91,35 +83,18 @@ context('Confirm DIS forms have been issued', () => {
   })
   it('should have the required elements - reports present but not issued', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(
-        12345,
-        'G7234VB',
-        {
-          displayName: 'Smith, James',
-          friendlyName: 'James Smith',
-          issuingOfficer: null,
-          prisonerLocation: 'MDI-MCASU',
-          formattedDateTimeOfIssue: null,
-          dateTimeOfIssue: null,
-          formsAlreadyIssued: false,
-        },
-        '2022-12-05T11:11:00'
-      ),
-      testData.completedAdjudication(
-        23456,
-        'P3785CP',
-        {
-          displayName: 'Tovey, Peter',
-          friendlyName: 'Peter Tovey',
-          issuingOfficer: null,
-          prisonerLocation: 'MDI-RECP',
-          formattedDateTimeOfIssue: null,
-          dateTimeOfIssue: null,
-          formsAlreadyIssued: false,
-        },
-        '2022-12-06T12:10:00'
-      ),
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
+        dateTimeOfIncident: '2022-12-05T11:11:00',
+      }),
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
+        dateTimeOfIncident: '2022-12-06T12:10:00',
+      }),
     ]
+
     cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
@@ -156,20 +131,13 @@ context('Confirm DIS forms have been issued', () => {
   })
   it('should show the date and time of issuing, as the issuing officer if data is present, and not contain a link to issue another date and time', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(
-        12345,
-        'G7234VB',
-        {
-          displayName: 'Smith, James',
-          friendlyName: 'James Smith',
-          issuingOfficer: 'TEST_GEN',
-          prisonerLocation: 'MDI-MCASU',
-          formattedDateTimeOfIssue: '5 December 2022 - 15:00',
-          dateTimeOfIssue: '2022-12-05T15:00:00',
-          formsAlreadyIssued: true,
-        },
-        '2022-12-05T11:11:00'
-      ),
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
+        dateTimeOfIncident: '2022-12-05T11:11:00',
+        issuingOfficer: 'TEST_GEN',
+        dateTimeOfIssue: '2022-12-05T15:00:00',
+      }),
     ]
     cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
@@ -190,34 +158,20 @@ context('Confirm DIS forms have been issued', () => {
   })
   it('should filter on the parameters given - dates only', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(
-        12345,
-        'G7234VB',
-        {
-          displayName: 'Smith, James',
-          friendlyName: 'James Smith',
-          issuingOfficer: 'TEST_GEN',
-          prisonerLocation: 'MDI-MCASU',
-          formattedDateTimeOfIssue: '5 December 2022 - 15:00',
-          dateTimeOfIssue: '2022-12-05T15:00:00',
-          formsAlreadyIssued: true,
-        },
-        '2022-12-05T11:11:00'
-      ),
-      testData.completedAdjudication(
-        23456,
-        'P3785CP',
-        {
-          displayName: 'Tovey, Peter',
-          friendlyName: 'Peter Tovey',
-          issuingOfficer: 'TEST_GEN',
-          prisonerLocation: 'MDI-RECP',
-          formattedDateTimeOfIssue: '6 December 2022 - 16:30',
-          dateTimeOfIssue: '2022-12-06T16:30:00',
-          formsAlreadyIssued: true,
-        },
-        '2022-12-05T12:10:00'
-      ),
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
+        dateTimeOfIncident: '2022-12-05T11:11:00',
+        dateTimeOfIssue: '2022-12-05T15:00:00',
+        issuingOfficer: 'TEST_GEN',
+      }),
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
+        dateTimeOfIncident: '2022-12-05T12:10:00',
+        issuingOfficer: 'TEST_GEN',
+        dateTimeOfIssue: '2022-12-06T16:30:00',
+      }),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
@@ -239,34 +193,20 @@ context('Confirm DIS forms have been issued', () => {
   })
   it('should filter on the parameters given - dates and location', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(
-        12345,
-        'G7234VB',
-        {
-          displayName: 'Smith, James',
-          friendlyName: 'James Smith',
-          issuingOfficer: 'TEST_GEN',
-          prisonerLocation: 'MDI-MCASU',
-          formattedDateTimeOfIssue: '5 December 2022 - 15:00',
-          dateTimeOfIssue: '2022-12-05T15:00:00',
-          formsAlreadyIssued: true,
-        },
-        '2022-12-05T11:11:00'
-      ),
-      testData.completedAdjudication(
-        23456,
-        'P3785CP',
-        {
-          displayName: 'Tovey, Peter',
-          friendlyName: 'Peter Tovey',
-          issuingOfficer: 'TEST_GEN',
-          prisonerLocation: 'MDI-RECP',
-          formattedDateTimeOfIssue: '6 December 2022 - 16:30',
-          dateTimeOfIssue: '2022-12-06T16:30:00',
-          formsAlreadyIssued: true,
-        },
-        '2022-12-06T11:11:00'
-      ),
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
+        dateTimeOfIncident: '2022-12-05T11:11:00',
+        issuingOfficer: 'TEST_GEN',
+        dateTimeOfIssue: '2022-12-05T15:00:00',
+      }),
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
+        dateTimeOfIncident: '2022-12-06T11:11:00',
+        issuingOfficer: 'TEST_GEN',
+        dateTimeOfIssue: '2022-12-06T16:30:00',
+      }),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     // initially returned data from api with only the default filters

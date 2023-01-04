@@ -5,11 +5,12 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
 
+const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -22,56 +23,18 @@ let app: Express
 beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {} as OffenceDetails,
-      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      isYouthOffender: false,
-    },
+    }),
   })
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {} as OffenceDetails,
-      status: ReportedAdjudicationStatus.UNSCHEDULED,
-      isYouthOffender: false,
-      hearings: [
-        {
-          id: 101,
-          locationId: 27008,
-          dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-          oicHearingType: OicHearingType.GOV_ADULT as string,
-        },
-      ],
-    },
+      status: ReportedAdjudicationStatus.SCHEDULED,
+      hearings: [testData.singleHearing('2022-10-24T12:54:09.197Z')],
+    }),
   })
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
@@ -119,14 +82,7 @@ describe('GET prisoner report', () => {
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledWith(
-          [
-            {
-              id: 101,
-              locationId: 27008,
-              dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-              oicHearingType: OicHearingType.GOV_ADULT as string,
-            },
-          ],
+          [testData.singleHearing('2022-10-24T12:54:09.197Z')],
           expect.anything()
         )
         expect(response.text).toContain('Hearing 1')

@@ -3,11 +3,12 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 
+const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -27,26 +28,12 @@ afterEach(() => {
 describe('GET hearing details', () => {
   it('should load the hearing details page - reporter version - no hearings', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValueOnce({
-      reportedAdjudication: {
+      reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 1524493,
         prisonerNumber: 'G6415GD',
-        gender: PrisonerGender.MALE,
-        bookingId: 1,
-        createdDateTime: undefined,
-        createdByUserId: undefined,
-        incidentDetails: {
-          locationId: 197682,
-          dateTimeOfIncident: '2021-12-09T10:30:00',
-          handoverDeadline: '2021-12-11T10:30:00',
-        },
-        incidentStatement: undefined,
-        incidentRole: {
-          roleCode: undefined,
-        },
-        offenceDetails: {} as OffenceDetails,
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        isYouthOffender: false,
-      },
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        locationId: 197682,
+      }),
     })
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.report(1524493))
@@ -63,34 +50,14 @@ describe('GET hearing details', () => {
   })
   it('should load the hearing details page - reporter version - one hearing', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValueOnce({
-      reportedAdjudication: {
+      reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 1524494,
         prisonerNumber: 'G6415GD',
-        gender: PrisonerGender.MALE,
-        bookingId: 1,
-        createdDateTime: undefined,
-        createdByUserId: undefined,
-        incidentDetails: {
-          locationId: 197682,
-          dateTimeOfIncident: '2021-12-09T10:30:00',
-          handoverDeadline: '2021-12-11T10:30:00',
-        },
-        incidentStatement: undefined,
-        incidentRole: {
-          roleCode: undefined,
-        },
-        offenceDetails: {} as OffenceDetails,
-        status: ReportedAdjudicationStatus.UNSCHEDULED,
-        isYouthOffender: false,
-        hearings: [
-          {
-            id: 101,
-            locationId: 27008,
-            dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-            oicHearingType: OicHearingType.GOV_ADULT as string,
-          },
-        ],
-      },
+        locationId: 197682,
+        dateTimeOfIncident: '2021-12-09T10:30:00',
+        status: ReportedAdjudicationStatus.SCHEDULED,
+        hearings: [testData.singleHearing('2022-10-24T12:54:09.197Z')],
+      }),
     })
     reportedAdjudicationsService.getHearingDetails.mockResolvedValue([
       {
@@ -117,14 +84,7 @@ describe('GET hearing details', () => {
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledWith(
-          [
-            {
-              id: 101,
-              locationId: 27008,
-              dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
-              oicHearingType: OicHearingType.GOV_ADULT as string,
-            },
-          ],
+          [testData.singleHearing('2022-10-24T12:54:09.197Z')],
           expect.anything()
         )
         expect(response.text).toContain('Hearing 1')

@@ -63,8 +63,9 @@ context('Print completed DIS forms', () => {
   })
   it('have working links to take the user to the print page for the adjudication', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(12345, 'G7234VB', {
-        dateTimeOfIssue: '2022-12-05T15:00:00',
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
     ]
@@ -87,11 +88,15 @@ context('Print completed DIS forms', () => {
   })
   it('has all the correct data in the table', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(12345, 'G7234VB', {
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
-      testData.completedAdjudication(23456, 'P3785CP', {
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
     ]
@@ -145,11 +150,15 @@ context('Print completed DIS forms', () => {
   })
   it('should filter on parameters given - no location', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(12345, 'G7234VB', {
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
-      testData.completedAdjudication(23456, 'P3785CP', {
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
     ]
@@ -189,11 +198,15 @@ context('Print completed DIS forms', () => {
   })
   it('should filter on parameters given - location', () => {
     const adjudicationResponse = [
-      testData.completedAdjudication(12345, 'G7234VB', {
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
-      testData.completedAdjudication(23456, 'P3785CP', {
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
     ]
