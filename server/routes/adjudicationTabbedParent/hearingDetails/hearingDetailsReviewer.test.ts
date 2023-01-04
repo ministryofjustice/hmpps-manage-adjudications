@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
