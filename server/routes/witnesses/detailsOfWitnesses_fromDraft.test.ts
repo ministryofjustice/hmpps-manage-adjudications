@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import WitnessesSessionService from '../../services/witnessesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { WitnessCode, WitnessDetails } from '../../data/DraftAdjudicationResult'
+import { WitnessCode } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')

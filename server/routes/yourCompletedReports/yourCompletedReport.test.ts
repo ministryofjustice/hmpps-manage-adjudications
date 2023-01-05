@@ -3,8 +3,6 @@ import request from 'supertest'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/reportedAdjudicationsService')
