@@ -5,9 +5,9 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
-import { OffenceRule, PrisonerGender } from '../../data/DraftAdjudicationResult'
+import { OffenceRule } from '../../data/DraftAdjudicationResult'
 import AdjudicationPdf from './adjudicationPdf'
-import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
 import TestData from '../testutils/testData'
@@ -40,26 +40,13 @@ const offenceRule: OffenceRule = {
   paragraphNumber: '1',
 }
 
-const reportedAdjudication: ReportedAdjudication = {
+const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication({
   adjudicationNumber: 1524493,
   prisonerNumber: 'G6415GD',
-  gender: PrisonerGender.MALE,
-  bookingId: 1,
-  createdDateTime: undefined,
-  createdByUserId: undefined,
-  incidentDetails: {
-    locationId: 197682,
-    dateTimeOfIncident: '2021-12-09T10:30:00',
-    handoverDeadline: '2021-12-11T10:30:00',
-  },
-  incidentStatement: undefined,
-  incidentRole: {
-    roleCode: undefined,
-  },
+  locationId: 197682,
+  dateTimeOfIncident: '2021-12-09T10:30:00',
   offenceDetails: { offenceCode: 1, offenceRule },
-  status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-  isYouthOffender: false,
-}
+})
 
 const prisonerResultSummary: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',

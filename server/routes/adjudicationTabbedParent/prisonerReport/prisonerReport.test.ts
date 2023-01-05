@@ -6,13 +6,13 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import DecisionTreeService from '../../../services/decisionTreeService'
 import { IncidentRole } from '../../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/locationService.ts')
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/decisionTreeService.ts')
 
+const testData = new TestData()
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
@@ -27,81 +27,43 @@ beforeEach(() => {
   reportedAdjudicationsService.createDraftFromCompleteAdjudication.mockResolvedValue(12345)
 
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        dateTimeOfDiscovery: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+    }),
+  })
+
+  const draftAdjudication = testData.draftAdjudication({
+    id: 12345,
+    adjudicationNumber: 1524661,
+    prisonerNumber: 'G5512GK',
+    dateTimeOfIncident: '2021-03-08T10:45:00',
+    offenceDetails: {
+      offenceCode: 1002,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
       },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {} as OffenceDetails,
-      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      isYouthOffender: false,
+      victimPrisonersNumber: 'G6123VU',
     },
+  })
+
+  const prisoner = testData.prisonerResultSummary({
+    offenderNo: 'G5512GK',
+    firstName: 'BOBBY',
+    lastName: 'DA SMITH JONES',
+    assignedLivingUnitDesc: '1-1-010',
   })
 
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
-    draftAdjudication: {
-      id: 12345,
-      adjudicationNumber: 1524661,
-      prisonerNumber: 'G5512GK',
-      incidentDetails: {
-        locationId: 1,
-        dateTimeOfIncident: '2021-03-08T10:45:00',
-        dateTimeOfDiscovery: '2021-03-08T10:45:00',
-        handoverDeadline: '2021-03-10T10:45:00',
-      },
-      incidentRole: {},
-      offenceDetails: {
-        offenceCode: 1002,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G6123VU',
-      },
-      incidentStatement: { statement: 'text here ', completed: true },
-      startedByUserId: 'TEST_GEN',
-    },
+    draftAdjudication,
     incidentRole: IncidentRole.COMMITTED,
-    prisoner: {
-      offenderNo: 'G5512GK',
-      firstName: 'BOBBY',
-      lastName: 'DA SMITH JONES',
-      assignedLivingUnit: {
-        agencyId: 'MDI',
-        locationId: 25549,
-        description: '1-1-010',
-        agencyName: 'Moorland (HMP & YOI)',
-      },
-      physicalAttributes: undefined,
-      dateOfBirth: undefined,
-      categoryCode: undefined,
-      language: undefined,
-      friendlyName: 'Bobby Da Smith Jones',
-      displayName: 'Da Smith Jones, Bobby',
-      prisonerNumber: 'G5512GK',
-      currentLocation: '1-1-010',
-    },
+    prisoner,
     associatedPrisoner: undefined,
   })
 
-  locationService.getIncidentLocations.mockResolvedValue([
-    { locationId: 6, locationPrefix: 'OC', userDescription: 'Yard' },
-    { locationId: 2, locationPrefix: 'P2', userDescription: 'Gym' },
-    { locationId: 4, locationPrefix: 'P4', userDescription: 'Class' },
-    { locationId: 1, locationPrefix: 'P1', userDescription: 'Chapel' },
-  ])
+  locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
     isYouthOffender: false,

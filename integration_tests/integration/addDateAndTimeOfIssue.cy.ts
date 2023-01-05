@@ -27,7 +27,7 @@ context('Add date and time', () => {
   it('should redirect to the confirm form issue page on successful submit', () => {
     cy.task('stubPutDateTimeOfIssue', {
       adjudicationNumber: 12345,
-      response: testData.completedAdjudication(12345, 'G6123VU'),
+      response: testData.reportedAdjudication({ adjudicationNumber: 12345, prisonerNumber: 'G6123VU' }),
     })
     const date = new Date()
     const yesterday = new Date(date.setDate(date.getDate() - 1))

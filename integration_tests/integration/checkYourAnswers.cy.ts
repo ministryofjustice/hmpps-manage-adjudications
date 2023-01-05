@@ -380,7 +380,11 @@ context('Check Your Answers', () => {
       })
       cy.task('stubSubmitCompleteDraftAdjudication', {
         id: 3456,
-        response: testData.completedAdjudication(234, 'G6415GD', '2021-11-07T11:09:42'),
+        response: testData.reportedAdjudication({
+          adjudicationNumber: 234,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2021-11-07T11:09:42',
+        }),
       })
       cy.signIn()
     })

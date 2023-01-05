@@ -23,27 +23,19 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { locationService, reportedAdjudicationsService })
 
   const adjudicationResponse = [
-    testData.completedAdjudication(12345, 'G7234VB', {
-      displayName: 'Smith, James',
-      friendlyName: 'James Smith',
-      issuingOfficer: 'JPERALTER',
-      prisonerLocation: 'MDI-2-3-009',
-      formattedDateTimeOfDiscovery: '5 December 2022 - 11:11',
-      dateTimeOfDiscovery: '2022-12-05T11:11:00',
-      dateTimeOfIssue: '2022-12-05T15:00:00',
-      formattedDateTimeOfIssue: '5 December 2022 - 15:00',
-      formsAlreadyIssued: true,
+    testData.reportedAdjudication({
+      adjudicationNumber: 12345,
+      prisonerNumber: 'G7234VB',
+      otherData: {
+        displayName: 'Smith, James',
+      },
     }),
-    testData.completedAdjudication(23456, 'G6123VU', {
-      displayName: 'Tovey, Peter',
-      friendlyName: 'Peter Tovey',
-      issuingOfficer: 'JPERALTER',
-      prisonerLocation: 'MDI-RECP',
-      formattedDateTimeOfDiscovery: '6 December 2022 - 12:10',
-      dateTimeOfDiscovery: '2022-12-06T12:10:00',
-      formattedDateTimeOfIssue: '6 December 2022 - 16:30',
-      formsAlreadyIssued: true,
-      dateTimeOfIssue: '2022-12-06T16:30:00',
+    testData.reportedAdjudication({
+      adjudicationNumber: 12345,
+      prisonerNumber: 'G6123VU',
+      otherData: {
+        displayName: 'Tovey, Peter',
+      },
     }),
   ]
 
