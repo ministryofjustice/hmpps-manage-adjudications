@@ -71,14 +71,7 @@ const decisionTreeService = new DecisionTreeService(
 let app: Express
 
 beforeEach(() => {
-  userService.getStaffFromUsername.mockResolvedValue({
-    username: undefined,
-    name: 'A_STAFF_NAME',
-    activeCaseLoadId: undefined,
-    token: undefined,
-    authSource: undefined,
-    email: undefined,
-  })
+  userService.getStaffFromUsername.mockResolvedValue(testData.staffFromUsername())
 
   placeOnReportService.getPrisonerDetails.mockResolvedValue(
     testData.prisonerResultSummary({

@@ -52,25 +52,16 @@ const prisonerData = testData.prisonerResultSummary({
 
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 102,
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentRole: {
-        roleCode: undefined,
-      },
+      dateTimeOfIncident: '2021-12-09T10:30:00',
       offenceDetails: {
         offenceCode: 1,
         victimPrisonersNumber: 'G5512G',
       },
-
-      startedByUserId: 'TEST_GEN',
-    },
+    }),
   })
 
   placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerData)

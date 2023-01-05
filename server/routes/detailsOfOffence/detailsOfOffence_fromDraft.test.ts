@@ -62,48 +62,24 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
   lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
 })
 
-const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = {
+const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G7824GD',
-  prisonerNumber: 'G7824GD',
   firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
   lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  physicalAttributes: undefined,
-  displayName: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
-const victimPrisonerDetails: PrisonerResultSummary = {
+const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G5512G',
-  prisonerNumber: 'G5512G',
   firstName: 'A_PRISONER_FIRST_NAME',
   lastName: 'A_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  physicalAttributes: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  displayName: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
 const adjudicationWithOffences = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     adjudicationNumber: 1524493,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    gender: PrisonerGender.MALE,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
       roleCode: '25c',
       associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
@@ -112,36 +88,33 @@ const adjudicationWithOffences = {
       offenceCode: 1,
       victimPrisonersNumber: victimPrisonerDetails.offenderNo,
     },
-
-    startedByUserId: 'TEST_GEN',
-  },
+  }),
 }
 
 const adjudicationWithoutOffences = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 101,
     adjudicationNumber: 1524493,
     prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
-    gender: PrisonerGender.MALE,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: true,
-    incidentRole: {
-      roleCode: '25c',
-    },
-    startedByUserId: 'TEST_GEN',
-  },
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+  }),
 }
 
 const youthAdjudicationWithOffences = {
-  draftAdjudication: {
-    ...adjudicationWithOffences.draftAdjudication,
+  draftAdjudication: testData.draftAdjudication({
     id: 102,
+    adjudicationNumber: 1524493,
+    prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
     isYouthOffender: true,
-  },
+    incidentRole: {
+      roleCode: '25c',
+      associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
+    },
+    offenceDetails: {
+      offenceCode: 1,
+      victimPrisonersNumber: victimPrisonerDetails.offenderNo,
+    },
+  }),
 }
 
 beforeEach(() => {

@@ -23,54 +23,30 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 })
 
 const adjudicationWithoutEvidence = {
-  draftAdjudication: {
-    id: 100,
+  draftAdjudication: testData.draftAdjudication({
+    id: 10,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: {
-      offenceCode: 2004,
-      offenceRule: {
-        paragraphNumber: '3',
-        paragraphDescription: 'Detains any person against their will',
-      },
-      victimOtherPersonsName: 'Jacob Jacobson',
-    },
-    startedByUserId: 'TEST_GEN',
-  },
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+  }),
 }
 
 const evidenceOnSession = {
   photoVideo: [
-    {
+    testData.singleEvidence({
       code: EvidenceCode.CCTV,
-      details: 'some details here',
-      reporter: 'NCLAMP_GEN',
-    },
-    {
+    }),
+    testData.singleEvidence({
       code: EvidenceCode.PHOTO,
-      details: 'some details here',
-      reporter: 'NCLAMP_GEN',
-    },
-    {
+    }),
+    testData.singleEvidence({
       code: EvidenceCode.BODY_WORN_CAMERA,
-      details: 'some details here',
-      reporter: 'NCLAMP_GEN',
       identifier: 'BWC: 123456',
-    },
+    }),
   ],
   baggedAndTagged: [
-    {
-      code: EvidenceCode.BAGGED_AND_TAGGED,
-      details: 'some details here',
-      reporter: 'NCLAMP_GEN',
+    testData.singleEvidence({
       identifier: 'JO345',
-    },
+    }),
   ],
 }
 

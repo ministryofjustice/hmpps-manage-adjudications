@@ -45,14 +45,7 @@ beforeEach(() => {
 
   placeOnReportService.getNextOffencesUrl.mockResolvedValue(adjudicationUrls.ageOfPrisoner.urls.start(34) as never)
 
-  locationService.getIncidentLocations.mockResolvedValue([
-    { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
-    { locationId: 6, locationPrefix: 'OC', userDescription: 'Rivendell' },
-    { locationId: 2, locationPrefix: 'P2', userDescription: 'Hogwarts' },
-    { locationId: 4, locationPrefix: 'P4', userDescription: 'Arundel' },
-    { locationId: 1, locationPrefix: 'P1', userDescription: 'Timbuktu' },
-    { locationId: 3, locationPrefix: 'P3', userDescription: 'Narnia' },
-  ])
+  locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
 })
 
 afterEach(() => {

@@ -29,14 +29,7 @@ beforeEach(() => {
     })
   )
 
-  userService.getStaffFromUsername.mockResolvedValue({
-    username: 'NTEST_GEN',
-    name: 'NAOMI TEST',
-    authSource: 'nomis',
-    activeCaseLoadId: 'MDI',
-    token: 'token',
-    email: 'naomi.test@digital.justice.gov.uk',
-  })
+  userService.getStaffFromUsername.mockResolvedValue(testData.staffFromUsername())
 })
 
 afterEach(() => {
@@ -57,7 +50,7 @@ describe('GET /delete-person', () => {
       .get(`${adjudicationUrls.deletePerson.root}?associatedPersonId=NTEST_GEN`)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Do you want to delete Naomi Test?')
+        expect(res.text).toContain('Do you want to delete Test User?')
       })
   })
 })

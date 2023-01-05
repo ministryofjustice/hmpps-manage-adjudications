@@ -4,10 +4,12 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/placeOnReportService')
 
+const testData = new TestData()
 const userService = new UserService(null) as jest.Mocked<UserService>
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 
@@ -34,31 +36,10 @@ afterEach(() => {
 describe('GET /select-associated-staff', () => {
   describe('with results', () => {
     beforeEach(() => {
-      userService.getStaffFromNames.mockResolvedValue([
-        {
-          username: 'JSMITH_GEN',
-          staffId: 485592,
-          email: 'john.smith@digital.justice.gov.uk',
-          verified: true,
-          firstName: 'John',
-          lastName: 'Smith',
-          name: 'John Smith',
-          activeCaseLoadId: 'MDI',
-        },
-      ])
+      userService.getStaffFromNames.mockResolvedValue([testData.staffFromName()])
 
       placeOnReportService.getAssociatedStaffDetails.mockResolvedValue([
-        {
-          username: 'JSMITH_GEN',
-          staffId: 485592,
-          email: 'john.smith@digital.justice.gov.uk',
-          verified: true,
-          firstName: 'John',
-          lastName: 'Smith',
-          name: 'John Smith',
-          activeCaseLoadId: 'MDI',
-          currentLocation: 'Moorland',
-        },
+        { ...testData.staffFromName(), currentLocation: 'Moorland' },
       ])
     })
 

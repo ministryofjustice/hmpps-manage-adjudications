@@ -62,63 +62,47 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
   lastName: 'ADJUDICATION_PRISONER_LAST_NAME',
 })
 
-const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = {
+const adjudicationAssociatedPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G7824GD',
-  prisonerNumber: 'G7824GD',
   firstName: 'ADJUDICATION_ASSOCIATED_PRISONER_FIRST_NAME',
   lastName: 'ADJUDICATION_ASSOCIATED_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  displayName: undefined,
-  physicalAttributes: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
-const victimPrisonerDetails: PrisonerResultSummary = {
+const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSummary({
   offenderNo: 'G5512G',
-  prisonerNumber: 'G5512G',
   firstName: 'A_PRISONER_FIRST_NAME',
   lastName: 'A_PRISONER_LAST_NAME',
-  categoryCode: undefined,
-  language: undefined,
-  friendlyName: undefined,
-  physicalAttributes: undefined,
-  displayName: undefined,
-  currentLocation: undefined,
-  assignedLivingUnit: undefined,
-  dateOfBirth: undefined,
-}
+})
 
 // All offence data will come from the session
 const adjudicationWithoutOffences = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     adjudicationNumber: 1524493,
     prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
-    gender: PrisonerGender.MALE,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
       roleCode: '25c',
       associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
     },
-    startedByUserId: 'TEST_GEN',
-  },
+    // startedByUserId: 'TEST_GEN',
+    // isYouthOffender: false,
+    offenceDetails: null,
+  }),
 }
 
 const youthAdjudicationWithOffences = {
-  draftAdjudication: {
-    ...adjudicationWithoutOffences.draftAdjudication,
+  draftAdjudication: testData.draftAdjudication({
     id: 102,
+    adjudicationNumber: 1524493,
+    prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     isYouthOffender: true,
-  },
+    incidentRole: {
+      roleCode: '25c',
+      associatedPrisonersNumber: adjudicationAssociatedPrisonerDetails.offenderNo,
+    },
+  }),
 }
 
 const offencesOnSession: OffenceData = {

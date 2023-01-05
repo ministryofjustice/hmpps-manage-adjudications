@@ -23,102 +23,35 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 })
 
 const adjudicationWithWitnesses = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-        victimOtherPersonsName: 'Jacob Jacobson',
-      },
-    ],
-    startedByUserId: 'TEST_GEN',
     witnesses: [
-      {
-        code: WitnessCode.OTHER_PERSON,
-        firstName: 'Philip',
-        reporter: 'NCLAMP_GEN',
-        lastName: 'Jones',
-      },
-      {
-        code: WitnessCode.OFFICER,
-        firstName: 'Jake',
-        reporter: 'NCLAMP_GEN',
-        lastName: 'January',
-      },
-      {
-        code: WitnessCode.STAFF,
-        firstName: 'Simon',
-        reporter: 'NCLAMP_GEN',
-        lastName: 'Courtee',
-      },
+      testData.singleWitness({ code: WitnessCode.OTHER_PERSON }),
+      testData.singleWitness({}),
+      testData.singleWitness({ code: WitnessCode.STAFF }),
     ],
-  },
+  }),
 }
 
 const adjudicationWithoutWitnessesNewNoSave = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 101,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-        victimOtherPersonsName: 'Jacob Jacobson',
-      },
-    ],
-    startedByUserId: 'TEST_GEN',
-  },
+  }),
 }
 
 const adjudicationWithoutWitnessesSaved = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 102,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
+    otherData: {
+      witnessesSaved: true,
     },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: {
-      offenceCode: 2004,
-      offenceRule: {
-        paragraphNumber: '3',
-        paragraphDescription: 'Detains any person against their will',
-      },
-      victimOtherPersonsName: 'Jacob Jacobson',
-    },
-    startedByUserId: 'TEST_GEN',
-    witnessesSaved: true,
-    witnesses: [] as WitnessDetails[],
-  },
+  }),
 }
 
 beforeEach(() => {
-  // placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithWitnesses)
   placeOnReportService.getDraftAdjudicationDetails.mockImplementation(adjudicationId => {
     switch (adjudicationId) {
       case adjudicationWithWitnesses.draftAdjudication.id:
@@ -149,8 +82,8 @@ describe('GET', () => {
       .get(adjudicationUrls.detailsOfWitnesses.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Courtee, Simon')
-        expect(res.text).toContain('January, Jake')
+        expect(res.text).toContain('Lastname, Firstname')
+        expect(res.text).toContain('Lastname, Firstname')
         expect(res.text).toContain('Prison officer')
       })
   })
@@ -164,21 +97,21 @@ describe('GET', () => {
           [
             {
               code: WitnessCode.OTHER_PERSON,
-              firstName: 'Philip',
-              reporter: 'NCLAMP_GEN',
-              lastName: 'Jones',
+              firstName: 'Firstname',
+              reporter: 'user1',
+              lastName: 'Lastname',
             },
             {
               code: WitnessCode.OFFICER,
-              firstName: 'Jake',
-              reporter: 'NCLAMP_GEN',
-              lastName: 'January',
+              firstName: 'Firstname',
+              reporter: 'user1',
+              lastName: 'Lastname',
             },
             {
               code: WitnessCode.STAFF,
-              firstName: 'Simon',
-              reporter: 'NCLAMP_GEN',
-              lastName: 'Courtee',
+              firstName: 'Firstname',
+              reporter: 'user1',
+              lastName: 'Lastname',
             },
           ],
           100
