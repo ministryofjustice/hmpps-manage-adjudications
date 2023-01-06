@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfWitnesses from '../pages/detailsOfWitnesses'
-import { PrisonerGender, WitnessCode, WitnessDetails } from '../../server/data/DraftAdjudicationResult'
+import { WitnessCode, WitnessDetails } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()

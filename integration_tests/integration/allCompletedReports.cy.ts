@@ -5,7 +5,6 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()

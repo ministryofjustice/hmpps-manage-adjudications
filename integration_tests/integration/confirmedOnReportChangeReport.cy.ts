@@ -1,4 +1,3 @@
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReportChangeReport'

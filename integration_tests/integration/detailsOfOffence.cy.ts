@@ -4,7 +4,6 @@ import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DeleteOffence from '../pages/deleteOffence'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
