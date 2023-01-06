@@ -1,130 +1,51 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfEvidence from '../pages/detailsOfEvidence'
-import { DamageCode, EvidenceCode, EvidenceDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import { DamageCode, EvidenceCode, EvidenceDetails } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 const evidenceList = [
-  {
-    code: EvidenceCode.BAGGED_AND_TAGGED,
-    details: 'Bagged evidence',
-    reporter: 'USER1',
-    identifier: 'JO345',
-  },
-  {
-    code: EvidenceCode.CCTV,
-    details: 'Video of the prisoner doing the thing',
-    reporter: 'USER1',
-  },
-  {
-    code: EvidenceCode.PHOTO,
-    details: 'A photo of the prisoner doing the thing',
-    reporter: 'USER1',
-  },
+  testData.singleEvidence({ details: 'Bagged evidence', identifier: 'JO345' }),
+  testData.singleEvidence({ code: EvidenceCode.CCTV, details: 'Video of the prisoner doing the thing' }),
+  testData.singleEvidence({ code: EvidenceCode.PHOTO, details: 'A photo of the prisoner doing the thing' }),
 ]
 
 const evidenceListMultiUser = [
-  {
-    code: EvidenceCode.BAGGED_AND_TAGGED,
-    details: 'some details here',
-    reporter: 'USER2',
-    identifier: 'JO345',
-  },
-  {
-    code: EvidenceCode.CCTV,
-    details: 'some details here',
-    reporter: 'USER1',
-  },
-  {
-    code: EvidenceCode.PHOTO,
-    details: 'some details here',
-    reporter: 'USER2',
-  },
-  {
-    code: EvidenceCode.BODY_WORN_CAMERA,
-    details: 'some details here',
-    reporter: 'USER1',
-    identifier: 'BWC: 123456',
-  },
+  testData.singleEvidence({ reporter: 'USER2', identifier: 'JO345' }),
+  testData.singleEvidence({ code: EvidenceCode.CCTV }),
+  testData.singleEvidence({ code: EvidenceCode.PHOTO, reporter: 'USER2' }),
+  testData.singleEvidence({ code: EvidenceCode.BODY_WORN_CAMERA, identifier: 'BWC: 123456' }),
 ]
 
 const draftAdjudication = (id: number, evidence: EvidenceDetails[]) => {
   return {
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T13:10:00',
-        handoverDeadline: '2021-11-05T13:10:00',
-        locationId: 27029,
-      },
-      prisonerNumber: 'G6415GD',
-      startedByUserId: 'USER1',
-      incidentRole: {
-        associatedPrisonersNumber: undefined,
-        roleCode: undefined,
-      },
-      offenceDetails: {
-        offenceCode: 1001,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G5512G',
-      },
-
-      damages: [
-        {
-          code: DamageCode.REDECORATION,
-          details: 'Wallpaper ripped',
-          reporter: 'USER1',
-        },
-      ],
       evidence,
-    },
+      prisonerNumber: 'G6415GD',
+      damages: [testData.singleDamage(DamageCode.REDECORATION, 'Wallpaper ripped')],
+    }),
   }
 }
 
 const reportedAdjudication = (adjudicationNumber: number, evidence: EvidenceDetails[]) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T13:10:00',
-        handoverDeadline: '2021-11-05T13:10:00',
-        locationId: 27029,
-      },
-      prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      startedByUserId: 'USER1',
-      incidentRole: {
-        associatedPrisonersNumber: undefined,
-        roleCode: undefined,
-      },
-      incidentStatement: {
-        statement: 'This is my statement',
-        completed: true,
-      },
-      offenceDetails: {
-        offenceCode: 1001,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G5512G',
-      },
-
-      damages: [],
       evidence,
-      witnesses: [],
-    },
+      prisonerNumber: 'G6415GD',
+    }),
   }
 }
 
-const prisonerDetails = {
+const prisonerDetails = testData.prisonerResultSummary({
   offenderNo: 'G6415GD',
-  firstName: 'JOHN',
-  lastName: 'SMITH',
-  assignedLivingUnit: { description: '1-2-015', agencyName: 'Moorland (HMPYOI)', agencyId: 'MDI' },
-}
+  firstName: 'John',
+  lastName: 'Smith',
+  assignedLivingUnitDesc: '1-2-015',
+})
 
 context('Details of evidence', () => {
   beforeEach(() => {

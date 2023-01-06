@@ -22,22 +22,11 @@ context('Report has been submitted for review', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524242,
       response: {
-        reportedAdjudication: {
+        reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 3,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          bookingId: 123,
-          createdDateTime: '2020-12-06T10:00:00',
           createdByUserId: 'AJONES',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-06T10:00:00',
-            handoverDeadline: '2020-12-08T10:00:00',
-          },
-          incidentStatement: {
-            statement: 'test',
-          },
-        },
+        }),
       },
     })
     cy.task('stubGetSecondaryLanguages', {

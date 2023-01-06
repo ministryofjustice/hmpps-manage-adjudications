@@ -91,20 +91,8 @@ context('Check Your Answers', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-            damages: [
-              {
-                code: DamageCode.CLEANING,
-                reporter: 'TESTER_GEN',
-                details: 'Some test info',
-              },
-            ],
-            evidence: [
-              {
-                code: EvidenceCode.PHOTO,
-                reporter: 'TESTER_GEN',
-                details: 'some test info',
-              },
-            ],
+            damages: [testData.singleDamage(DamageCode.CLEANING)],
+            evidence: [testData.singleEvidence({ code: EvidenceCode.PHOTO })],
           }),
         },
       })
@@ -252,7 +240,7 @@ context('Check Your Answers', () => {
         .find('td')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Cleaning')
-          expect($summaryData.get(1).innerText).to.contain('Some test info')
+          expect($summaryData.get(1).innerText).to.contain('Some damage details')
         })
 
       checkYourAnswersPage.damagesChangeLink().click()
@@ -277,7 +265,7 @@ context('Check Your Answers', () => {
         .find('td')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Photo')
-          expect($summaryData.get(1).innerText).to.contain('some test info')
+          expect($summaryData.get(1).innerText).to.contain('Some details here')
         })
 
       checkYourAnswersPage.baggedAndTaggedEvidenceSummary().should('not.exist')

@@ -22,23 +22,12 @@ context('Report has been accepted', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: {
-        reportedAdjudication: {
+        reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          bookingId: 1201395,
-          createdDateTime: '2021-12-09T09:40:00',
-          incidentDetails: {
-            locationId: 357591,
-            dateTimeOfIncident: '2022-11-15T09:10:00',
-            dateTimeOfDiscovery: '2022-11-15T09:30:00',
-            handoverDeadline: '2022-11-17T09:30:00',
-          },
-          incidentStatement: {
-            statement: 'Statement here.',
-          },
-          createdByUserId: 'TEST_GEN',
-        },
+          dateTimeOfIncident: '2022-11-15T09:10:00',
+          handoverDeadline: '2022-11-17T09:30:00',
+        }),
       },
     })
     cy.signIn()

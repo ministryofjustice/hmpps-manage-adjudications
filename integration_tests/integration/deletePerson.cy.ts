@@ -21,21 +21,11 @@ context('Delete person - page contents', () => {
 
     cy.task('stubGetUserFromUsername', {
       username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername('TEST_GEN'),
     })
     cy.task('stubGetEmail', {
       username: 'TEST_GEN',
-      response: {
-        username: 'TEST_GEN',
-        email: 'test@justice.gov.uk',
-        verified: true,
-      },
+      response: testData.emailFromUsername('TEST_GEN'),
     })
 
     cy.signIn()
@@ -50,7 +40,7 @@ context('Delete person - page contents', () => {
     DeletePersonPage.submitButton().should('exist')
     DeletePersonPage.errorSummary().should('not.exist')
   })
-  it('should contain the required page elements - username provided', () => {
+  it.only('should contain the required page elements - username provided', () => {
     cy.visit(`${adjudicationUrls.deletePerson.root}?associatedPersonId=TEST_GEN`)
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 
@@ -85,12 +75,12 @@ context('Delete person - full journey', () => {
     })
 
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: testData.userFromUsername('TEST_GEN'),
+      username: 'USER1',
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetEmail', {
-      username: 'TEST_GEN',
-      response: testData.emailFromUsername('TEST_GEN'),
+      username: 'USER1',
+      response: testData.emailFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6123VU',

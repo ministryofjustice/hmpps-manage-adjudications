@@ -23,26 +23,18 @@ context('Incident assist', () => {
       prisonerNumber: 'T3356FU',
       response: testData.prisonerResultSummary({
         offenderNo: 'T3356FU',
-        firstName: 'Rishi',
+        firstName: 'John',
         lastName: 'Rich',
       }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
-          incidentRole: {
-            role: 'assisted',
-          },
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
-        },
+          dateTimeOfIncident: '2021-11-03T11:09:42',
+        }),
       },
     })
     cy.task('stubSearch', {
@@ -52,14 +44,11 @@ context('Incident assist', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'JAMES',
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+        }),
       ],
     })
     cy.task('stubSaveAssociatedPrisoner', {

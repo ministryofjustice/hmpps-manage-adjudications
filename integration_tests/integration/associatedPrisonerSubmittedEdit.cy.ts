@@ -26,14 +26,11 @@ context('Incident assist submitted edit', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'JAMES',
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+        }),
       ],
     })
     cy.task('stubGetPrisonerDetails', {
@@ -47,81 +44,47 @@ context('Incident assist submitted edit', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            associatedPrisonersName: null,
-            roleCode: '25c',
-          },
-        },
+        }),
       },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 35,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 35,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             associatedPrisonersName: 'Someone Else',
-            roleCode: '25c',
           },
-        },
+        }),
       },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 35,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
-            associatedPrisonersName: null,
-            roleCode: '25c',
           },
-        },
+        }),
       },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 36,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 36,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
-            associatedPrisonersName: 'Someone Else',
-            roleCode: '25c',
           },
-        },
+        }),
       },
     })
     cy.task('stubSaveAssociatedPrisoner', {

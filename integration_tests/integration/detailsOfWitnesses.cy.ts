@@ -6,110 +6,32 @@ import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
-const witnessesList = [
-  {
-    code: WitnessCode.OFFICER,
-    firstName: 'John',
-    lastName: 'Doe',
-    reporter: 'USER1',
-  },
-  {
-    code: WitnessCode.OTHER_PERSON,
-    firstName: 'Karen',
-    lastName: 'Pertiss',
-    reporter: 'USER1',
-  },
-]
+const witnessesList = [testData.singleWitness({}), testData.singleWitness({ code: WitnessCode.OTHER_PERSON })]
 
 const witnessesListMultiUser = [
-  {
-    code: WitnessCode.OFFICER,
-    firstName: 'John',
-    lastName: 'Doe',
-    reporter: 'USER1',
-  },
-  {
-    code: WitnessCode.OTHER_PERSON,
-    firstName: 'Karen',
-    lastName: 'Pertiss',
-    reporter: 'USER1',
-  },
-  {
-    code: WitnessCode.STAFF,
-    firstName: 'Elizabeth',
-    lastName: 'Northern',
-    reporter: 'USER2',
-  },
-  {
-    code: WitnessCode.STAFF,
-    firstName: 'Ian',
-    lastName: 'Norton',
-    reporter: 'USER1',
-  },
+  testData.singleWitness({}),
+  testData.singleWitness({ code: WitnessCode.OTHER_PERSON, firstName: 'Digital', lastName: 'Prison' }),
+  testData.singleWitness({ code: WitnessCode.STAFF, reporter: 'USER2' }),
+  testData.singleWitness({ code: WitnessCode.STAFF }),
 ]
 
 const draftAdjudication = (id: number, witnesses: WitnessDetails[]) => {
   return {
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T13:10:00',
-        handoverDeadline: '2021-11-05T13:10:00',
-        locationId: 27029,
-      },
       prisonerNumber: 'G6415GD',
-      startedByUserId: 'USER1',
-      incidentRole: {
-        associatedPrisonersNumber: undefined,
-        roleCode: undefined,
-      },
-      offenceDetails: {
-        offenceCode: 1001,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G5512G',
-      },
-
       witnesses,
-    },
+    }),
   }
 }
 
 const reportedAdjudication = (adjudicationNumber: number, witnesses: WitnessDetails[]) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T13:10:00',
-        handoverDeadline: '2021-11-05T13:10:00',
-        locationId: 27029,
-      },
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      startedByUserId: 'USER1',
-      incidentRole: {
-        associatedPrisonersNumber: undefined,
-        roleCode: undefined,
-      },
-      incidentStatement: {
-        statement: 'This is my statement',
-        completed: true,
-      },
-      offenceDetails: {
-        offenceCode: 1001,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G5512G',
-      },
-
-      damages: [],
-      evidence: [],
       witnesses,
-    },
+    }),
   }
 }
 
@@ -119,19 +41,8 @@ const prisonerDetails = testData.prisonerResultSummary({
   lastName: 'SMITH',
 })
 
-const officerDetails = {
-  activeCaseLoadId: 'MDI',
-  name: 'Adam Owens',
-  username: 'AOWENS',
-  authSource: 'auth',
-}
-
-const staffDetails = {
-  activeCaseLoadId: 'MDI',
-  name: 'Janet Planet',
-  username: 'JPLANET',
-  authSource: 'auth',
-}
+const officerDetails = testData.staffFromUsername('AOWENS')
+const staffDetails = testData.staffFromUsername('JPLANET')
 
 context('Details of witnesses', () => {
   beforeEach(() => {
@@ -161,10 +72,7 @@ context('Details of witnesses', () => {
     })
     cy.task('stubGetEmail', {
       username: 'AOWENS',
-      response: {
-        username: 'AOWENS',
-        email: 'aowens@justice.gov.uk',
-      },
+      response: testData.emailFromUsername('AOWENS'),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'JPLANET',
@@ -172,10 +80,7 @@ context('Details of witnesses', () => {
     })
     cy.task('stubGetEmail', {
       username: 'JPLANET',
-      response: {
-        username: 'JPLANET',
-        email: 'jplanet@justice.gov.uk',
-      },
+      response: testData.emailFromUsername('JPLANET'),
     })
     cy.task('stubSaveWitnessDetails', {
       adjudicationNumber: 201,
@@ -220,10 +125,10 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Doe, John')
+        expect($data.get(0).innerText).to.contain('Lastname, Firstname')
         expect($data.get(1).innerText).to.contain('Prison officer')
         expect($data.get(2).innerText).to.contain('Remove')
-        expect($data.get(3).innerText).to.contain('Pertiss, Karen')
+        expect($data.get(3).innerText).to.contain('Lastname, Firstname')
         expect($data.get(4).innerText).to.contain('None')
         expect($data.get(5).innerText).to.contain('Remove')
       })
@@ -241,7 +146,7 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Pertiss, Karen')
+        expect($data.get(0).innerText).to.contain('Lastname, Firstname')
         expect($data.get(1).innerText).to.contain('None')
       })
   })
@@ -258,7 +163,7 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Doe, John')
+        expect($data.get(0).innerText).to.contain('Lastname, Firstname')
         expect($data.get(1).innerText).to.contain('Prison officer')
       })
   })
@@ -316,11 +221,11 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Doe, John')
+        expect($data.get(0).innerText).to.contain('Lastname, Firstname')
         expect($data.get(1).innerText).to.contain('Prison officer')
-        expect($data.get(3).innerText).to.contain('Pertiss, Karen')
+        expect($data.get(3).innerText).to.contain('Prison, Digital')
         expect($data.get(4).innerText).to.contain('None')
-        expect($data.get(6).innerText).to.contain('Northern, Elizabeth')
+        expect($data.get(6).innerText).to.contain('Lastname, Firstname')
         expect($data.get(7).innerText).to.contain("Member of staff who's not a prison officer")
       })
   })
@@ -337,13 +242,13 @@ context('Details of witnesses', () => {
     cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=Adam&staffLastName=Owens`)
     detailsOfWitnessesPage.simulateReturnFromOfficerSearch(202, 'OFFICER', 'AOWENS')
     detailsOfWitnessesPage.witnessOfficerHiddenInput().should('have.value', 'AOWENS')
-    detailsOfWitnessesPage.witnessOfficerName().contains('Adam Owens')
+    detailsOfWitnessesPage.witnessOfficerName().contains('Test User')
     detailsOfWitnessesPage.addWitnessSubmit().click()
     detailsOfWitnessesPage
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(12).innerText).to.contain('Owens, Adam')
+        expect($data.get(12).innerText).to.contain('User, Test')
         expect($data.get(13).innerText).to.contain('Prison officer')
         expect($data.get(14).innerText).to.contain('Remove')
       })
@@ -364,13 +269,13 @@ context('Details of witnesses', () => {
     )
     detailsOfWitnessesPage.simulateReturnFromStaffSearch(202, 'STAFF', 'JPLANET')
     detailsOfWitnessesPage.witnessStaffHiddenInput().should('have.value', 'JPLANET')
-    detailsOfWitnessesPage.witnessStaffName().contains('Janet Planet')
+    detailsOfWitnessesPage.witnessStaffName().contains('Test User')
     detailsOfWitnessesPage.addWitnessSubmit().click()
     detailsOfWitnessesPage
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(12).innerText).to.contain('Planet, Janet')
+        expect($data.get(12).innerText).to.contain('User, Test')
         expect($data.get(13).innerText).to.contain("Member of staff who's not a prison officer")
         expect($data.get(14).innerText).to.contain('Remove')
       })
@@ -384,7 +289,7 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(3).innerText).to.not.contain('Pertiss, Karen')
+        expect($data.get(3).innerText).to.not.contain('Prison, Digital')
         expect($data.get(4).innerText).to.not.contain('None')
         expect($data.get(5).innerText).to.not.contain('Remove')
       })
@@ -393,7 +298,7 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.not.contain('Doe, John')
+        expect($data.get(0).innerText).to.not.contain('Prison, Digital')
         expect($data.get(1).innerText).to.not.contain('Prison officer')
         expect($data.get(2).innerText).to.not.contain('Remove')
       })
@@ -402,7 +307,7 @@ context('Details of witnesses', () => {
       .witnessesTable()
       .find('td')
       .then($data => {
-        expect($data.get(0).innerText).to.contain('Northern, Elizabeth')
+        expect($data.get(0).innerText).to.contain('Lastname, Firstname')
         expect($data.get(1).innerText).to.contain("Member of staff who's not a prison officer")
         expect($data.get(2).innerText).to.not.contain('Remove')
       })
@@ -456,10 +361,10 @@ context('Details of witnesses', () => {
         .witnessesTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('Doe, John')
+          expect($data.get(0).innerText).to.contain('Lastname, Firstname')
           expect($data.get(1).innerText).to.contain('Prison officer')
           expect($data.get(2).innerText).to.contain('Remove')
-          expect($data.get(3).innerText).to.contain('Pertiss, Karen')
+          expect($data.get(3).innerText).to.contain('Lastname, Firstname')
           expect($data.get(4).innerText).to.contain('None')
           expect($data.get(5).innerText).to.contain('Remove')
         })
@@ -481,7 +386,7 @@ context('Details of witnesses', () => {
         .witnessesTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('Pertiss, Karen')
+          expect($data.get(0).innerText).to.contain('Lastname, Firstname')
           expect($data.get(1).innerText).to.contain('None')
         })
     })
@@ -522,11 +427,11 @@ context('Details of witnesses', () => {
         .witnessesTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('Doe, John')
+          expect($data.get(0).innerText).to.contain('Lastname, Firstname')
           expect($data.get(1).innerText).to.contain('Prison officer')
-          expect($data.get(3).innerText).to.contain('Pertiss, Karen')
+          expect($data.get(3).innerText).to.contain('Prison, Digital')
           expect($data.get(4).innerText).to.contain('None')
-          expect($data.get(6).innerText).to.contain('Northern, Elizabeth')
+          expect($data.get(6).innerText).to.contain('Lastname, Firstname')
           expect($data.get(7).innerText).to.contain("Member of staff who's not a prison officer")
         })
     })

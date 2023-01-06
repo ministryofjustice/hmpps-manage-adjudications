@@ -1,4 +1,3 @@
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckYourAnswers from '../pages/checkYourAnswersBeforeChangeReporter'
@@ -8,23 +7,16 @@ const testData = new TestData()
 
 const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
   return {
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 3456,
       adjudicationNumber: 234,
-      gender: PrisonerGender.MALE,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T11:09:42',
-        handoverDeadline: '2021-11-05T11:09:42',
-        locationId: 234,
-      },
+      dateTimeOfIncident: '2021-11-03T11:09:42',
+      locationId: 234,
       incidentStatement: {
-        id: 23,
         statement: 'This is my statement',
         completed: true,
       },
-      startedByUserId: 'USER1',
-      isYouthOffender,
       incidentRole: {
         associatedPrisonersNumber: 'T3356FU',
         roleCode: '25c',
@@ -42,7 +34,8 @@ const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
         },
         victimPrisonersNumber: 'G5512G',
       },
-    },
+      isYouthOffender,
+    }),
   }
 }
 
@@ -111,13 +104,7 @@ context('Check Your Answers', () => {
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 234,
