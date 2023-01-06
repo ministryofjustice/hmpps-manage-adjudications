@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import moment from 'moment'
 import {
+  DamageCode,
   DamageDetails,
-  DraftAdjudication,
+  EvidenceCode,
   EvidenceDetails,
   HearingDetails,
   IncidentRole,
   IncidentStatement,
   OffenceDetails,
   PrisonerGender,
+  WitnessCode,
   WitnessDetails,
 } from '../../data/DraftAdjudicationResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
@@ -108,6 +110,7 @@ export default class TestData {
     incidentStatement = {} as IncidentStatement,
     isYouthOffender = false,
     startedByUserId = 'USER1',
+    otherData = {} as any,
   }: {
     id: number
     prisonerNumber: string
@@ -124,7 +127,8 @@ export default class TestData {
     incidentStatement?: IncidentStatement
     isYouthOffender?: boolean
     startedByUserId?: string
-  }): DraftAdjudication => {
+    otherData?: any
+  }) => {
     return {
       id,
       prisonerNumber,
@@ -144,6 +148,7 @@ export default class TestData {
       evidence,
       witnesses,
       isYouthOffender,
+      ...otherData,
     }
   }
 
@@ -190,12 +195,58 @@ export default class TestData {
     }
   }
 
-  singleHearing = (dateTimeOfHearing: string): HearingDetails => {
+  singleHearing = (dateTimeOfHearing: string, id = 101): HearingDetails => {
     return {
-      id: 86,
+      id,
       locationId: 775,
       dateTimeOfHearing,
       oicHearingType: OicHearingType.GOV_ADULT,
+    }
+  }
+
+  singleDamage = (code = DamageCode.REDECORATION, reporter = 'TESTER_GEN'): DamageDetails => {
+    return {
+      code,
+      details: 'Some damage details',
+      reporter,
+    }
+  }
+
+  singleEvidence = ({
+    code = EvidenceCode.BAGGED_AND_TAGGED,
+    details = 'Some details here',
+    reporter = 'user1',
+    identifier,
+  }: {
+    code?: EvidenceCode
+    details?: string
+    reporter?: string
+    identifier?: string
+  }): EvidenceDetails => {
+    return {
+      code,
+      details,
+      reporter,
+      identifier,
+    }
+  }
+
+  singleWitness = ({
+    code = WitnessCode.OFFICER,
+    firstName = 'Firstname',
+    lastName = 'Lastname',
+    reporter = 'user1',
+  }: {
+    code?: WitnessCode
+    firstName?: string
+    lastName?: string
+    reporter?: string
+  }): WitnessDetails => {
+    return {
+      code,
+      firstName,
+      lastName,
+      reporter,
     }
   }
 
@@ -210,6 +261,27 @@ export default class TestData {
       username,
       token: 'token-1',
       authSource: 'auth',
+    }
+  }
+
+  staffFromUsername = (username = 'USER1') => {
+    const data = this.userFromUsername(username)
+    return {
+      ...data,
+      email: 'tester.test@digital.justice.gov.uk',
+    }
+  }
+
+  staffFromName = () => {
+    return {
+      username: 'JSMITH_GEN',
+      staffId: 485592,
+      email: 'john.smith@digital.justice.gov.uk',
+      verified: true,
+      firstName: 'John',
+      lastName: 'Smith',
+      name: 'John Smith',
+      activeCaseLoadId: 'MDI',
     }
   }
 

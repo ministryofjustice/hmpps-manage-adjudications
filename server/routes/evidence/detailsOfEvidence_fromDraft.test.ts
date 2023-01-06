@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { EvidenceCode, EvidenceDetails } from '../../data/DraftAdjudicationResult'
+import { EvidenceCode } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
@@ -23,99 +23,44 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 })
 
 const adjudicationWithEvidence = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-      },
-    ],
-    startedByUserId: 'TEST_GEN',
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     evidence: [
-      {
-        code: EvidenceCode.BAGGED_AND_TAGGED,
-        details: 'some details here',
-        reporter: 'NCLAMP_GEN',
+      testData.singleEvidence({
         identifier: 'JO345',
-      },
-      {
+      }),
+      testData.singleEvidence({
         code: EvidenceCode.CCTV,
-        details: 'some details here',
-        reporter: 'NCLAMP_GEN',
-      },
-      {
+      }),
+      testData.singleEvidence({
         code: EvidenceCode.PHOTO,
-        details: 'some details here',
-        reporter: 'NCLAMP_GEN',
-      },
-      {
+      }),
+      testData.singleEvidence({
         code: EvidenceCode.BODY_WORN_CAMERA,
-        details: 'some details here',
-        reporter: 'NCLAMP_GEN',
         identifier: 'BWC: 123456',
-      },
+      }),
     ],
-  },
+  }),
 }
 
 const adjudicationWithoutEvidenceNewNoSave = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 101,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-      },
-    ],
-    startedByUserId: 'TEST_GEN',
-  },
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+  }),
 }
-
 const adjudicationWithoutEvidenceSaved = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 102,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+    otherData: {
+      evidenceSaved: true,
     },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: {
-      offenceCode: 2004,
-      offenceRule: {
-        paragraphNumber: '3',
-        paragraphDescription: 'Detains any person against their will',
-      },
-    },
-    startedByUserId: 'TEST_GEN',
-    evidence: [] as EvidenceDetails[],
-    evidenceSaved: true,
-  },
+  }),
 }
 
 beforeEach(() => {
@@ -166,26 +111,26 @@ describe('GET', () => {
             photoVideo: [
               {
                 code: EvidenceCode.CCTV,
-                details: 'some details here',
-                reporter: 'NCLAMP_GEN',
+                details: 'Some details here',
+                reporter: 'user1',
               },
               {
                 code: EvidenceCode.PHOTO,
-                details: 'some details here',
-                reporter: 'NCLAMP_GEN',
+                details: 'Some details here',
+                reporter: 'user1',
               },
               {
                 code: EvidenceCode.BODY_WORN_CAMERA,
-                details: 'some details here',
-                reporter: 'NCLAMP_GEN',
+                details: 'Some details here',
+                reporter: 'user1',
                 identifier: 'BWC: 123456',
               },
             ],
             baggedAndTagged: [
               {
                 code: EvidenceCode.BAGGED_AND_TAGGED,
-                details: 'some details here',
-                reporter: 'NCLAMP_GEN',
+                details: 'Some details here',
+                reporter: 'user1',
                 identifier: 'JO345',
               },
             ],

@@ -6,12 +6,13 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
-import { OffenceDetails, PrisonerGender } from '../../../data/DraftAdjudicationResult'
+import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/locationService.ts')
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
 
+const testData = new TestData()
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -24,83 +25,31 @@ let app: Express
 
 beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber.mockResolvedValue({
-    offenderNo: 'G6415GD',
-    firstName: 'JASON',
-    lastName: 'SURCHET',
-    physicalAttributes: undefined,
-    assignedLivingUnit: {
-      agencyId: 'MDI',
-      locationId: 25573,
-      description: '1-1-035',
-      agencyName: 'Moorland (HMP & YOI)',
-    },
-    categoryCode: 'C',
-    language: 'Welsh',
-    dateOfBirth: '1990-10-12',
-    friendlyName: 'Jason Surchet',
-    displayName: 'Surchet, Jason',
-    prisonerNumber: 'G6415GD',
-    currentLocation: '1-1-035',
-  })
-  locationService.getHearingLocations.mockResolvedValue([
-    { locationId: 27008, locationPrefix: 'A1', userDescription: 'Adj 1' },
-    { locationId: 27009, locationPrefix: 'A2', userDescription: 'Adj 2' },
-    { locationId: 27010, locationPrefix: 'A3', userDescription: 'Adj 3' },
-    { locationId: 27011, locationPrefix: 'A4', userDescription: 'Adj 4' },
-  ])
+  reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(
+    testData.prisonerResultSummary({
+      offenderNo: 'G6415GD',
+      firstName: 'JASON',
+      lastName: 'SURCHET',
+    })
+  )
+  locationService.getHearingLocations.mockResolvedValue(testData.residentialLocations())
+
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
-        handoverDeadline: '2022-11-02T12:54:09.197Z',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {} as OffenceDetails,
-      status: ReportedAdjudicationStatus.SCHEDULED,
-      isYouthOffender: false,
-      hearings: [],
-    },
+      dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
+    }),
   })
+
   reportedAdjudicationsService.scheduleHearing.mockResolvedValue({
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
-        handoverDeadline: '2022-11-02T12:54:09.197Z',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {} as OffenceDetails,
+      dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
       status: ReportedAdjudicationStatus.SCHEDULED,
-      isYouthOffender: false,
-      hearings: [
-        {
-          id: 101,
-          locationId: 27008,
-          dateTimeOfHearing: '2022-11-03T11:00:00',
-          oicHearingType: OicHearingType.GOV_ADULT as string,
-        },
-      ],
-    },
+      hearings: [testData.singleHearing('2022-11-03T11:00:00')],
+    }),
   })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })
 })

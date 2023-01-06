@@ -23,48 +23,16 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 })
 
 const adjudicationWithoutWitnesses = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: {
-      offenceCode: 2004,
-      offenceRule: {
-        paragraphNumber: '3',
-        paragraphDescription: 'Detains any person against their will',
-      },
-      victimOtherPersonsName: 'Jacob Jacobson',
-    },
-
-    startedByUserId: 'TEST_GEN',
-  },
+  }),
 }
 
 const witnessesOnSession = [
-  {
-    code: WitnessCode.OTHER_PERSON,
-    firstName: 'Philip',
-    reporter: 'NCLAMP_GEN',
-    lastName: 'Jones',
-  },
-  {
-    code: WitnessCode.OFFICER,
-    firstName: 'Jake',
-    reporter: 'NCLAMP_GEN',
-    lastName: 'January',
-  },
-  {
-    code: WitnessCode.STAFF,
-    firstName: 'Simon',
-    reporter: 'NCLAMP_GEN',
-    lastName: 'Courtee',
-  },
+  testData.singleWitness({ code: WitnessCode.OTHER_PERSON }),
+  testData.singleWitness({}),
+  testData.singleWitness({ code: WitnessCode.STAFF }),
 ]
 
 beforeEach(() => {
@@ -89,7 +57,7 @@ describe('GET', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison officer')
-        expect(res.text).toContain('January, Jake')
+        expect(res.text).toContain('Lastname, Firstname')
       })
   })
   it('should use the session service to get data', () => {

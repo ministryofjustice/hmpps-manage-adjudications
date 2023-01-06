@@ -22,16 +22,10 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 })
 
 const adjudicationWithoutDamages = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     offenceDetails: {
       offenceCode: 2004,
       offenceRule: {
@@ -40,22 +34,10 @@ const adjudicationWithoutDamages = {
       },
       victimOtherPersonsName: 'Jacob Jacobson',
     },
-    startedByUserId: 'TEST_GEN',
-  },
+  }),
 }
 
-const damagesOnSession = [
-  {
-    code: 'REDECORATION',
-    details: 'Broken window',
-    reporter: 'user1',
-  },
-  {
-    code: 'REDECORATION',
-    details: 'Broken pool cue',
-    reporter: 'user1',
-  },
-]
+const damagesOnSession = [testData.singleDamage(), testData.singleDamage()]
 
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithoutDamages)
@@ -80,8 +62,8 @@ describe('GET /damages/100', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Redecoration')
-        expect(res.text).toContain('Broken window')
-        expect(res.text).toContain('Broken pool cue')
+        expect(res.text).toContain('Some damage details')
+        expect(res.text).toContain('Some damage details')
       })
   })
   it('should use the session service to get data', () => {
@@ -95,18 +77,7 @@ describe('GET /damages/100', () => {
 
 describe('POST', () => {
   it('should call the save endpoint with evidence present', () => {
-    const damagesToSave = [
-      {
-        code: 'REDECORATION',
-        details: 'Broken window',
-        reporter: 'user1',
-      },
-      {
-        code: 'REDECORATION',
-        details: 'Broken pool cue',
-        reporter: 'user1',
-      },
-    ]
+    const damagesToSave = [testData.singleDamage(), testData.singleDamage()]
     return request(app)
       .post(adjudicationUrls.detailsOfDamages.urls.modified(100))
       .expect(302)

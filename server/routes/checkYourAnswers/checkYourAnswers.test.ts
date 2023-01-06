@@ -8,11 +8,13 @@ import { IncidentRole } from '../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 import { properCase } from '../../utils/utils'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
@@ -21,16 +23,11 @@ let app: Express
 
 beforeEach(() => {
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 100,
       prisonerNumber: 'G6415GD',
       gender: PrisonerGender.FEMALE,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentRole: {},
+      dateTimeOfIncident: '2021-12-09T10:30:00',
       offenceDetails: {
         offenceCode: 1002,
         offenceRule: {
@@ -39,40 +36,18 @@ beforeEach(() => {
         },
         victimPrisonersNumber: 'G6123VU',
       },
-      incidentStatement: { statement: 'text here', completed: true },
-      startedByUserId: 'TEST_GEN',
-    },
+    }),
     incidentRole: IncidentRole.ASSISTED,
-    prisoner: {
+    associatedPrisoner: undefined,
+    prisoner: testData.prisonerResultSummary({
       offenderNo: 'A8383DY',
       firstName: 'PHYLLIS',
       lastName: 'SMITH',
-      physicalAttributes: { gender: 'Unknown' },
-      assignedLivingUnit: {
-        agencyId: 'MDI',
-        locationId: 4012,
-        description: 'RECP',
-        agencyName: 'Moorland (HMP & YOI)',
-      },
-      categoryCode: undefined,
-      language: undefined,
-      prisonerNumber: 'A8383DY',
-      friendlyName: 'Phyllis Smith',
-      displayName: 'Smith, Phyllis',
-      currentLocation: 'RECP',
-      dateOfBirth: undefined,
-    },
-    associatedPrisoner: undefined,
+      assignedLivingUnitDesc: 'RECP',
+    }),
   })
 
-  locationService.getIncidentLocations.mockResolvedValue([
-    { locationId: 5, locationPrefix: 'PC', userDescription: "Prisoner's cell" },
-    { locationId: 6, locationPrefix: 'OC', userDescription: 'Rivendell' },
-    { locationId: 2, locationPrefix: 'P2', userDescription: 'Hogwarts' },
-    { locationId: 4, locationPrefix: 'P4', userDescription: 'Arundel' },
-    { locationId: 1, locationPrefix: 'P1', userDescription: 'Timbuktu' },
-    { locationId: 3, locationPrefix: 'P3', userDescription: 'Narnia' },
-  ])
+  locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
 
   placeOnReportService.getCheckYourAnswersInfo.mockResolvedValue({
     isYouthOffender: false,

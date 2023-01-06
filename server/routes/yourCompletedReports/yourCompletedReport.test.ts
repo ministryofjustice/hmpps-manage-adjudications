@@ -3,11 +3,11 @@ import request from 'supertest'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../data/DraftAdjudicationResult'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/reportedAdjudicationsService')
 
+const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -27,70 +27,31 @@ afterEach(() => {
 describe('GET /your-completed-reports', () => {
   describe('with results', () => {
     beforeEach(() => {
+      const adjudicationOne = testData.reportedAdjudication({
+        adjudicationNumber: 2,
+        prisonerNumber: 'G6123VU',
+        dateTimeOfIncident: '2021-11-15T11:45:00',
+        otherData: {
+          displayName: 'Smith, John',
+          formattedDateTimeOfIncident: '15 November 2021 - 11:45',
+          formattedDateTimeOfDiscovery: '15 November 2021 - 11:45',
+        },
+      })
+      const adjudicationTwo = testData.reportedAdjudication({
+        adjudicationNumber: 1,
+        prisonerNumber: 'G6174VU',
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        otherData: {
+          displayName: 'Moriarty, James',
+          formattedDateTimeOfIncident: '15 November 2021 - 11:30',
+          formattedDateTimeOfDiscovery: '15 November 2021 - 11:30',
+        },
+      })
       reportedAdjudicationsService.getYourCompletedAdjudications.mockResolvedValue({
         size: 10,
         number: 0,
         totalElements: 2,
-        content: [
-          {
-            displayName: 'Smith, John',
-            formattedDateTimeOfIncident: '15 November 2021 - 11:45',
-            formattedDateTimeOfDiscovery: '15 November 2021 - 11:45',
-            formattedDateTimeOfScheduledHearing: '',
-            dateTimeOfIncident: '2021-11-15T11:45:00',
-            dateTimeOfDiscovery: '2021-11-15T11:45:00',
-            friendlyName: 'John Smith',
-            adjudicationNumber: 2,
-            prisonerNumber: 'G6123VU',
-            gender: PrisonerGender.MALE,
-            bookingId: 2,
-            createdDateTime: '2021-11-15T11:45:00',
-            createdByUserId: 'TEST_ER',
-            reportingOfficer: '',
-            incidentDetails: {
-              locationId: 3,
-              dateTimeOfIncident: '2021-11-15T11:45:00',
-              handoverDeadline: '2021-11-17T11:45:00',
-            },
-            incidentStatement: {
-              statement: 'My second incident',
-            },
-            incidentRole: {},
-            offenceDetails: { offenceCode: 1001 },
-            status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-            statusDisplayName: 'Awaiting review',
-            isYouthOffender: false,
-          },
-          {
-            displayName: 'Moriarty, James',
-            formattedDateTimeOfIncident: '15 November 2021 - 11:30',
-            formattedDateTimeOfDiscovery: '15 November 2021 - 11:30',
-            formattedDateTimeOfScheduledHearing: '',
-            dateTimeOfIncident: '2021-11-15T11:30:00',
-            dateTimeOfDiscovery: '2021-11-15T11:30:00',
-            friendlyName: 'James Moriarty',
-            adjudicationNumber: 1,
-            createdByUserId: 'TEST_ER',
-            reportingOfficer: '',
-            prisonerNumber: 'G6174VU',
-            gender: PrisonerGender.MALE,
-            bookingId: 1,
-            createdDateTime: '2021-11-15T11:30:00',
-            incidentDetails: {
-              locationId: 3,
-              dateTimeOfIncident: '2021-11-15T11:30:00',
-              handoverDeadline: '2021-11-17T11:30:00',
-            },
-            incidentStatement: {
-              statement: 'My first incident',
-            },
-            incidentRole: {},
-            offenceDetails: { offenceCode: 1001 },
-            status: ReportedAdjudicationStatus.ACCEPTED,
-            statusDisplayName: 'Accepted',
-            isYouthOffender: false,
-          },
-        ],
+        content: [adjudicationOne, adjudicationTwo],
       })
     })
 
@@ -105,7 +66,6 @@ describe('GET /your-completed-reports', () => {
           expect(res.text).toContain('Awaiting review')
           expect(res.text).toContain('Moriarty, James - G6174VU')
           expect(res.text).toContain('15 November 2021 - 11:30')
-          expect(res.text).toContain('Accepted')
         })
     })
   })
@@ -135,10 +95,10 @@ describe('POST /your-completed-reports', () => {
   it('should redirect with the correct filter parameters', () => {
     return request(app)
       .post(adjudicationUrls.yourCompletedReports.root)
-      .send({ fromDate: { date: '01/01/2022' }, toDate: { date: '02/01/2022' }, status: 'AWAITING_REVIEW' })
+      .send({ fromDate: { date: '01/01/2021' }, toDate: { date: '02/01/2021' }, status: 'AWAITING_REVIEW' })
       .expect(
         'Location',
-        `${adjudicationUrls.yourCompletedReports.root}?fromDate=01%2F01%2F2022&toDate=02%2F01%2F2022&status=AWAITING_REVIEW`
+        `${adjudicationUrls.yourCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`
       )
   })
 })

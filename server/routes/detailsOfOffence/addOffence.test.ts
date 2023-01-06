@@ -5,10 +5,12 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/userService.ts')
 
+const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 
@@ -16,20 +18,12 @@ let app: Express
 
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id: 101,
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentRole: {
-        roleCode: undefined,
-      },
-      startedByUserId: 'TEST_GEN',
-    },
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+    }),
   })
 
   const allOffencesSessionService = new AllOffencesSessionService()

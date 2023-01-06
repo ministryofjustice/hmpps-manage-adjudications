@@ -3,9 +3,11 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
+import TestData from '../testutils/testData'
 
 jest.mock('../../services/evidenceSessionService.ts')
 
+const testData = new TestData()
 const evidenceSessionService = new EvidenceSessionService() as jest.Mocked<EvidenceSessionService>
 
 let app: Express
@@ -24,7 +26,7 @@ describe('Add evidence', () => {
       .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}?submitted=false`)
       .send({
         evidenceType: 'BAGGED_AND_TAGGED',
-        evidenceDescription: 'some details here',
+        evidenceDescription: 'Some details here',
         batIdentifier: 'JO12345',
       })
       .expect(302)
@@ -32,12 +34,7 @@ describe('Add evidence', () => {
       .then(() =>
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),
-          {
-            code: 'BAGGED_AND_TAGGED',
-            details: 'some details here',
-            reporter: 'user1',
-            identifier: 'JO12345',
-          },
+          testData.singleEvidence({ identifier: 'JO12345' }),
           100
         )
       )
@@ -47,7 +44,7 @@ describe('Add evidence', () => {
       .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}?submitted=true`)
       .send({
         evidenceType: 'BAGGED_AND_TAGGED',
-        evidenceDescription: 'some details here',
+        evidenceDescription: 'Some details here',
         batIdentifier: 'JO12345',
       })
       .expect(302)
@@ -55,12 +52,7 @@ describe('Add evidence', () => {
       .then(() =>
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),
-          {
-            code: 'BAGGED_AND_TAGGED',
-            details: 'some details here',
-            reporter: 'user1',
-            identifier: 'JO12345',
-          },
+          testData.singleEvidence({ identifier: 'JO12345' }),
           100
         )
       )

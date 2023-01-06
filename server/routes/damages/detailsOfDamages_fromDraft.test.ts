@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import DamagesSessionService from '../../services/damagesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DamageCode, DamageDetails } from '../../data/DraftAdjudicationResult'
+import { DamageCode } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
@@ -23,78 +23,10 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 })
 
 const adjudicationWithDamages = {
-  draftAdjudication: {
+  draftAdjudication: testData.draftAdjudication({
     id: 100,
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-        victimOtherPersonsName: 'Jacob Jacobson',
-      },
-    ],
-    startedByUserId: 'TEST_GEN',
-    damages: [
-      {
-        code: DamageCode.REDECORATION,
-        details: 'Broken window',
-        reporter: 'TESTER_GEN',
-      },
-      {
-        code: DamageCode.REDECORATION,
-        details: 'Broken pool cue',
-        reporter: 'TESTER_GEN',
-      },
-    ],
-  },
-}
-
-const adjudicationWithoutDamagesNewNoSave = {
-  draftAdjudication: {
-    id: 101,
-    prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
-    offenceDetails: [
-      {
-        offenceCode: 2004,
-        offenceRule: {
-          paragraphNumber: '3',
-          paragraphDescription: 'Detains any person against their will',
-        },
-        victimOtherPersonsName: 'Jacob Jacobson',
-      },
-    ],
-    startedByUserId: 'TEST_GEN',
-  },
-}
-
-const adjudicationWithoutDamagesSaved = {
-  draftAdjudication: {
-    id: 102,
-    prisonerNumber: adjudicationPrisonerDetails.offenderNo,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    isYouthOffender: false,
-    incidentRole: {},
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     offenceDetails: {
       offenceCode: 2004,
       offenceRule: {
@@ -103,10 +35,43 @@ const adjudicationWithoutDamagesSaved = {
       },
       victimOtherPersonsName: 'Jacob Jacobson',
     },
-    startedByUserId: 'TEST_GEN',
-    damagesSaved: true,
-    damages: [] as DamageDetails[],
-  },
+    damages: [testData.singleDamage(), testData.singleDamage()],
+  }),
+}
+
+const adjudicationWithoutDamagesNewNoSave = {
+  draftAdjudication: testData.draftAdjudication({
+    id: 101,
+    prisonerNumber: adjudicationPrisonerDetails.offenderNo,
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+    offenceDetails: {
+      offenceCode: 2004,
+      offenceRule: {
+        paragraphNumber: '3',
+        paragraphDescription: 'Detains any person against their will',
+      },
+      victimOtherPersonsName: 'Jacob Jacobson',
+    },
+  }),
+}
+
+const adjudicationWithoutDamagesSaved = {
+  draftAdjudication: testData.draftAdjudication({
+    id: 102,
+    prisonerNumber: adjudicationPrisonerDetails.offenderNo,
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+    offenceDetails: {
+      offenceCode: 2004,
+      offenceRule: {
+        paragraphNumber: '3',
+        paragraphDescription: 'Detains any person against their will',
+      },
+      victimOtherPersonsName: 'Jacob Jacobson',
+    },
+    otherData: {
+      damagesSaved: true,
+    },
+  }),
 }
 
 beforeEach(() => {
@@ -141,8 +106,8 @@ describe('GET /damages', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Redecoration')
-        expect(res.text).toContain('Broken window')
-        expect(res.text).toContain('Broken pool cue')
+        expect(res.text).toContain('Some damage details')
+        expect(res.text).toContain('Some damage details')
       })
   })
   it('should not have used the session service to get data', () => {
@@ -155,12 +120,12 @@ describe('GET /damages', () => {
           [
             {
               code: DamageCode.REDECORATION,
-              details: 'Broken window',
+              details: 'Some damage details',
               reporter: 'TESTER_GEN',
             },
             {
               code: DamageCode.REDECORATION,
-              details: 'Broken pool cue',
+              details: 'Some damage details',
               reporter: 'TESTER_GEN',
             },
           ],
