@@ -59,10 +59,10 @@ describe('GET /select-report', () => {
         .get(adjudicationUrls.selectReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Select a report')
+          expect(response.text).toContain('Continue a report')
           expect(response.text).toContain('Aidetria, Udfsanaye - G6415GD')
           expect(response.text).toContain('22 December 2022 - 15:00')
-          expect(response.text).toContain('Continue')
+          expect(response.text).toContain('Continue report')
           expect(response.text).toContain('Babik, Carroll - G5966UI')
           expect(response.text).toContain('22 December 2022 - 16:00')
           expect(response.text).toContain('Continue')
@@ -78,7 +78,7 @@ describe('GET /select-report', () => {
         .get(adjudicationUrls.selectReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Select a report')
+          expect(response.text).toContain('Continue a report')
           expect(response.text).toContain('There are no reports for you to continue.')
         })
     })

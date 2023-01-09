@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class ContineReportSelect extends Page {
   constructor() {
-    super('Select a report')
+    super('Continue a report')
   }
 
   resultsTable = (): PageElement => cy.get('[data-qa="continue-report-results-table"]')
