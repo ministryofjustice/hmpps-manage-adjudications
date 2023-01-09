@@ -21,34 +21,23 @@ context('Age of the prisoner', () => {
     cy.task('stubSaveYouthOffenderStatus', {
       adjudicationNumber: '3456',
       response: {
-        id: 3456,
-        response: {
-          draftAdjudication: {
-            id: 3456,
-            prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:00',
-              handoverDeadline: '2021-11-05T11:09:00',
-              locationId: 234,
-            },
-            startedByUserId: 'TEST_GEN',
-          },
-        },
+        draftAdjudication: testData.draftAdjudication({
+          id: 3456,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2021-11-03T11:09:00',
+          isYouthOffender: null,
+        }),
       },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 3456,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 3456,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:00',
-            handoverDeadline: '2021-11-05T11:09:00',
-            locationId: 234,
-          },
-          startedByUserId: 'TEST_GEN',
-        },
+          dateTimeOfIncident: '2021-11-03T11:09:00',
+          isYouthOffender: null,
+        }),
       },
     })
     cy.signIn()

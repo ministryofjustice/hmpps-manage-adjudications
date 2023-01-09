@@ -2,7 +2,6 @@ import DetailsOfOffence from '../pages/detailsOfOffence'
 import Page from '../pages/page'
 import DeleteOffence from '../pages/deleteOffence'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
@@ -17,24 +16,9 @@ context('Incident details', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 300,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 300,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
-          incidentRole: {
-            associatedPrisonersNumber: undefined,
-            roleCode: undefined,
-          },
           offenceDetails: {
             offenceCode: 1001,
             offenceRule: {
@@ -43,7 +27,7 @@ context('Incident details', () => {
             },
             victimPrisonersNumber: 'G5512G',
           },
-        },
+        }),
       },
     })
 

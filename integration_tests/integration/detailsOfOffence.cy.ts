@@ -4,29 +4,13 @@ import Page from '../pages/page'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DeleteOffence from '../pages/deleteOffence'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
-const adjudicationWithOffences = {
+const adjudicationWithOffences = testData.draftAdjudication({
   id: 201,
-  incidentDetails: {
-    dateTimeOfIncident: '2021-11-03T13:10:00',
-    handoverDeadline: '2021-11-05T13:10:00',
-    locationId: 27029,
-  },
-  incidentStatement: {
-    completed: false,
-    statement: 'Statement here',
-  },
   prisonerNumber: 'G6415GD',
-  gender: PrisonerGender.MALE,
-  startedByUserId: 'USER1',
-  incidentRole: {
-    associatedPrisonersNumber: undefined,
-    roleCode: undefined,
-  },
   offenceDetails: {
     offenceCode: 1001,
     offenceRule: {
@@ -35,27 +19,12 @@ const adjudicationWithOffences = {
     },
     victimPrisonersNumber: 'G5512G',
   },
-}
+})
 
-const reportedAdjudicationWithOffences = {
+const reportedAdjudicationWithOffences = testData.reportedAdjudication({
   id: 202,
   adjudicationNumber: 1234,
-  incidentDetails: {
-    dateTimeOfIncident: '2021-11-03T13:10:00',
-    handoverDeadline: '2021-11-05T13:10:00',
-    locationId: 27029,
-  },
-  incidentStatement: {
-    completed: false,
-    statement: 'Statement here',
-  },
   prisonerNumber: 'G6415GD',
-  gender: PrisonerGender.MALE,
-  startedByUserId: 'USER1',
-  incidentRole: {
-    associatedPrisonersNumber: undefined,
-    roleCode: undefined,
-  },
   offenceDetails: {
     offenceCode: 1001,
     offenceRule: {
@@ -64,7 +33,7 @@ const reportedAdjudicationWithOffences = {
     },
     victimPrisonersNumber: 'G5512G',
   },
-}
+})
 
 context('Details of offence', () => {
   beforeEach(() => {
@@ -76,20 +45,9 @@ context('Details of offence', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 200,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 200,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-06T13:10:00',
-            handoverDeadline: '2021-11-08T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25c',
@@ -99,27 +57,16 @@ context('Details of offence', () => {
                 'Assists another prisoner to commit, <br>or to attempt to commit, any of the foregoing offences:',
             },
           },
-        },
+        }),
       },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 404,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 404,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-06T13:10:00',
-            handoverDeadline: '2021-11-08T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
-        },
+        }),
       },
     })
     // Draft with saved offences

@@ -20,13 +20,7 @@ context('Confirm DIS forms have been issued', () => {
     cy.task('stubGetUsersLocations', testData.residentialLocations())
     cy.task('stubGetUserFromUsername', {
       username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername('TEST_GEN'),
     })
     cy.signIn()
   })

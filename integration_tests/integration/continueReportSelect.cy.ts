@@ -1,7 +1,9 @@
+import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import ContinueReportSelect from '../pages/continueReportSelect'
 import Page from '../pages/page'
 
+const testData = new TestData()
 context('Continue a report - select report', () => {
   context('with data', () => {
     beforeEach(() => {
@@ -10,34 +12,16 @@ context('Continue a report - select report', () => {
       cy.task('stubAuthUser')
       cy.task('stubGetAllDraftAdjudicationsForUser', {
         draftAdjudications: [
-          {
-            startedByUserId: 'USER1',
-            id: 1,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-16T16:45:00',
-              dateTimeOfDiscovery: '2022-11-16T16:45:00',
-              locationId: 233,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'This is a test statement',
-            },
+          testData.draftAdjudication({
             prisonerNumber: 'G2996UX',
-          },
-          {
-            startedByUserId: 'USER1',
-            id: 2,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-14T08:30:00',
-              dateTimeOfDiscovery: '2022-11-14T08:30:00',
-              locationId: 644,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'This is a statement',
-            },
+            dateTimeOfDiscovery: '2022-11-16T16:45:00',
+            id: 1,
+          }),
+          testData.draftAdjudication({
             prisonerNumber: 'G2996UP',
-          },
+            dateTimeOfDiscovery: '2022-11-14T08:30:00',
+            id: 2,
+          }),
         ],
       })
       cy.task('stubGetBatchPrisonerDetails', [

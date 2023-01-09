@@ -15,24 +15,11 @@ context('Incident details', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 100,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 100,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER1',
-          incidentRole: {
-            associatedPrisonersNumber: undefined,
-            roleCode: undefined,
-          },
-        },
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+        }),
       },
     })
     // Prisoner
@@ -56,36 +43,20 @@ context('Incident details', () => {
     // Prison officer victim
     cy.task('stubGetUserFromUsername', {
       username: 'AOWENS',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Adam Owens',
-        username: 'AOWENS',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername('AOWENS'),
     })
     cy.task('stubGetEmail', {
       username: 'AOWENS',
-      response: {
-        username: 'AOWENS',
-        email: 'aowens@justice.gov.uk',
-      },
+      response: testData.emailFromUsername('AOWENS'),
     })
     // Staff victim
     cy.task('stubGetUserFromUsername', {
       username: 'CSTANLEY',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Carl Stanley',
-        username: 'CSTANLEY',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername('CSTANLEY'),
     })
     cy.task('stubGetEmail', {
       username: 'CSTANLEY',
-      response: {
-        username: 'AOWENS',
-        email: 'cstanley@justice.gov.uk',
-      },
+      response: testData.emailFromUsername('CSTANLEY'),
     })
     // Prisoner-outside-establishment number validation
     cy.task('stubSearchPrisonerDetails', {

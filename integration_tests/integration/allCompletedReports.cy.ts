@@ -5,7 +5,9 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('All Completed Reports', () => {
   beforeEach(() => {
@@ -29,35 +31,16 @@ context('All Completed Reports', () => {
   it('should display the correct data on the first page', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername('USER1'),
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 20, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        createdByUserId: 'TEST_GEN',
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2021-11-15T11:30:00',
-          dateTimeOfDiscovery: '2345-11-15T11:30:00',
-          handoverDeadline: '2021-11-17T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        incidentRole: undefined,
-        offenceDetails: undefined,
-        createdDateTime: '2021-11-15T14:30:00',
-      }
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
+      })
     })
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
@@ -90,35 +73,16 @@ context('All Completed Reports', () => {
 
   it('pagination should work', () => {
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername(),
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        createdByUserId: 'TEST_GEN',
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2021-11-15T11:30:00',
-          dateTimeOfDiscovery: '2345-11-15T11:30:00',
-          handoverDeadline: '2021-11-17T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        incidentRole: undefined,
-        offenceDetails: undefined,
-        createdDateTime: '2021-11-15T14:30:00',
-      }
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
+      })
     })
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
     cy.task('stubGetAllReportedAdjudications', { number: 9, allContent: manyReportedAdjudications }) // Page 10
@@ -168,14 +132,8 @@ context('All Completed Reports', () => {
 
   it('filtering should work', () => {
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername('USER1'),
     })
     // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
@@ -183,40 +141,16 @@ context('All Completed Reports', () => {
     cy.task('stubGetAllReportedAdjudications', {
       number: 0,
       allContent: [
-        {
+        testData.reportedAdjudication({
           adjudicationNumber: 1,
           prisonerNumber: 'A1234AA',
-          bookingId: 1,
-          incidentDetails: {
-            locationId: 1,
-            dateTimeOfIncident: '2022-01-01T11:30:00',
-            dateTimeOfDiscovery: '2345-11-15T11:30:00',
-            handoverDeadline: '2022-01-03T11:30:00',
-          },
-          incidentStatement: null,
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: undefined,
-          incidentRole: {
-            associatedPrisonersNumber: undefined,
-            roleCode: undefined,
-          },
-          offenceDetails: undefined,
+          dateTimeOfIncident: '2022-01-01T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
-        },
+        }),
       ],
       filter: { status: ReportedAdjudicationStatus.UNSCHEDULED, fromDate: '2022-01-01', toDate: '2022-01-09' },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
-    cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
-    })
 
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
@@ -236,38 +170,17 @@ context('All Completed Reports', () => {
 
   it('UNSCHEDULED staatus - filtering and pagination should work together', () => {
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername('USER1'),
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2021-10-10T11:30:00',
-          dateTimeOfDiscovery: '2345-11-15T11:30:00',
-          handoverDeadline: '2021-10-12T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        createdByUserId: 'TEST_GEN',
-        createdDateTime: undefined,
-        incidentRole: {
-          associatedPrisonersNumber: undefined,
-          roleCode: undefined,
-        },
-        offenceDetails: undefined,
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
-      }
+      })
     })
     // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
@@ -322,64 +235,23 @@ context('All Completed Reports', () => {
 
   it('SCHEDULED status should show scheduled hearing date link', () => {
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername(),
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2222-10-10T11:30:00',
-          dateTimeOfDiscovery: '2345-11-15T11:30:00',
-          handoverDeadline: '2021-10-12T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        createdByUserId: 'TEST_GEN',
-        createdDateTime: undefined,
-        incidentRole: {
-          associatedPrisonersNumber: undefined,
-          roleCode: undefined,
-        },
-        offenceDetails: undefined,
+        dateTimeOfIncident: '2222-10-10T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
         status: ReportedAdjudicationStatus.SCHEDULED,
         hearings: [
-          {
-            id: 68,
-            locationId: 357596,
-            dateTimeOfHearing: '2022-11-23T17:00:00',
-            oicHearingType: 'INAD_ADULT',
-          },
-          {
-            id: 67,
-            locationId: 27187,
-            dateTimeOfHearing: '2022-11-28T09:00:00',
-            oicHearingType: 'INAD_ADULT',
-          },
-          {
-            id: 69,
-            locationId: 775,
-            dateTimeOfHearing: '2022-11-30T09:50:00',
-            oicHearingType: 'GOV_ADULT',
-          },
-          {
-            id: 70,
-            locationId: 775,
-            dateTimeOfHearing: '2023-11-30T10:00:00',
-            oicHearingType: 'GOV_ADULT',
-          },
+          testData.singleHearing('2022-11-23T17:00:00', 68),
+          testData.singleHearing('2022-11-28T09:00:00', 67),
+          testData.singleHearing('2022-11-30T09:50:00', 69),
+          testData.singleHearing('2023-11-30T10:00:00', 70),
         ],
-      }
+      })
     })
     // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
@@ -434,36 +306,15 @@ context('All Completed Reports', () => {
 
   it('SCHEDULED and UNSCHEDULED adjudications should show together', () => {
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername(),
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 5, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2222-10-10T11:30:00',
-          dateTimeOfDiscovery: '2345-11-15T11:30:00',
-          handoverDeadline: '2021-10-12T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        createdByUserId: 'TEST_GEN',
-        createdDateTime: undefined,
-        incidentRole: {
-          associatedPrisonersNumber: undefined,
-          roleCode: undefined,
-        },
-        offenceDetails: undefined,
+        dateTimeOfIncident: '2222-10-10T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
         status: _ > 1 ? ReportedAdjudicationStatus.UNSCHEDULED : ReportedAdjudicationStatus.SCHEDULED,
         hearings: [
           {
@@ -472,27 +323,10 @@ context('All Completed Reports', () => {
             dateTimeOfHearing: '2022-11-23T17:00:00',
             oicHearingType: 'INAD_ADULT',
           },
-          {
-            id: 67,
-            locationId: 27187,
-            dateTimeOfHearing: '2022-11-28T09:00:00',
-            oicHearingType: 'INAD_ADULT',
-          },
-          {
-            id: 69,
-            locationId: 775,
-            dateTimeOfHearing: '2022-11-30T09:50:00',
-            oicHearingType: 'GOV_ADULT',
-          },
-          {
-            id: 70,
-            locationId: 775,
-            dateTimeOfHearing: '2023-11-30T10:00:00',
-            oicHearingType: 'GOV_ADULT',
-          },
         ],
-      }
-    }) // The empty results to return when first landing on your completed reports page.
+      })
+    })
+    // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
     // The results to return when initially filtering
     cy.task('stubGetAllReportedAdjudications', {
@@ -523,7 +357,7 @@ context('All Completed Reports', () => {
         expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
         expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
         expect($data.get(2).innerText).to.contain('Scheduled')
-        expect($data.get(3).innerText).to.contain('30 November 2023 - 10:00')
+        expect($data.get(3).innerText).to.contain('23 November 2022 - 17:00')
         expect($data.get(4).innerText).to.contain('View hearings')
         expect($data.get(4).innerHTML).to.contain('/hearing-details/1/review')
         expect($data.get(5).innerHTML).to.contain('/prisoner-report/1/review')

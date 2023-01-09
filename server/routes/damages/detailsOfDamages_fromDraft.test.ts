@@ -35,7 +35,7 @@ const adjudicationWithDamages = {
       },
       victimOtherPersonsName: 'Jacob Jacobson',
     },
-    damages: [testData.singleDamage(), testData.singleDamage()],
+    damages: [testData.singleDamage({}), testData.singleDamage({})],
   }),
 }
 

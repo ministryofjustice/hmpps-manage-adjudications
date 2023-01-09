@@ -27,6 +27,7 @@ export default class TestData {
     dateTimeOfIncident = '2023-01-01T06:00:00',
     gender = PrisonerGender.MALE,
     dateTimeOfDiscovery = dateTimeOfIncident,
+    handoverDeadline,
     locationId = 1,
     incidentStatement = {} as IncidentStatement,
     offenceDetails = {} as OffenceDetails,
@@ -40,6 +41,7 @@ export default class TestData {
     dateTimeOfFirstHearing = null,
     issuingOfficer = null,
     dateTimeOfIssue = null,
+    createdByUserId = 'USER1',
     otherData,
   }: {
     adjudicationNumber: number
@@ -47,6 +49,7 @@ export default class TestData {
     dateTimeOfIncident?: string
     gender?: PrisonerGender
     dateTimeOfDiscovery?: string
+    handoverDeadline?: string
     locationId?: number
     incidentStatement?: IncidentStatement
     offenceDetails?: OffenceDetails
@@ -60,6 +63,7 @@ export default class TestData {
     dateTimeOfFirstHearing?: string
     issuingOfficer?: string
     dateTimeOfIssue?: string
+    createdByUserId?: string
     otherData?: any
   }) => {
     return {
@@ -69,7 +73,7 @@ export default class TestData {
       incidentDetails: {
         dateTimeOfIncident,
         dateTimeOfDiscovery,
-        handoverDeadline: moment(dateTimeOfDiscovery).add(2, 'days').format('YYYY-MM-DDTHH:mm'),
+        handoverDeadline,
         locationId,
       },
       incidentStatement,
@@ -80,7 +84,7 @@ export default class TestData {
       statusDetails: '',
       isYouthOffender,
       createdDateTime: '2022-12-09T10:30:00',
-      createdByUserId: 'USER1',
+      createdByUserId,
       bookingId: 1,
       reviewedByUserId: 'USER2',
       damages,
@@ -204,10 +208,18 @@ export default class TestData {
     }
   }
 
-  singleDamage = (code = DamageCode.REDECORATION, reporter = 'TESTER_GEN'): DamageDetails => {
+  singleDamage = ({
+    code = DamageCode.REDECORATION,
+    details = 'Some damage details',
+    reporter = 'TESTER_GEN',
+  }: {
+    code?: DamageCode
+    details?: string
+    reporter?: string
+  }): DamageDetails => {
     return {
       code,
-      details: 'Some damage details',
+      details,
       reporter,
     }
   }

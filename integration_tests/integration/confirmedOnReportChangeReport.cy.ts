@@ -1,4 +1,3 @@
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import ConfirmedOnReport from '../pages/confirmedOnReportChangeReport'
@@ -22,33 +21,15 @@ context('Report has been changed', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: {
-        reportedAdjudication: {
+        reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          bookingId: 1201395,
-          createdDateTime: '2021-12-09T09:40:00',
-          incidentDetails: {
-            locationId: 197682,
-            dateTimeOfIncident: '2021-12-09T09:40:00',
-            handoverDeadline: '2021-12-11T09:40:00',
-          },
-          incidentStatement: {
-            statement: 'Statement here.',
-          },
-          createdByUserId: 'TEST_GEN',
-        },
+        }),
       },
     })
     cy.task('stubGetUserFromUsername', {
-      username: 'TEST_GEN',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'TEST_GEN',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      username: 'USER1',
+      response: testData.userFromUsername(),
     })
     cy.signIn()
   })

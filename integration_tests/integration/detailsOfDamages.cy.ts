@@ -1,107 +1,40 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DetailsOfDamages from '../pages/detailsOfDamages'
-import { DamageCode, DamageDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import { DamageCode, DamageDetails } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
 const damagesList = [
-  {
-    code: DamageCode.REDECORATION,
-    details: 'Wallpaper ripped',
-    reporter: 'USER1',
-  },
-  {
-    code: DamageCode.REPLACE_AN_ITEM,
-    details: 'Rug torn',
-    reporter: 'USER1',
-  },
+  testData.singleDamage({ code: DamageCode.REDECORATION, details: 'Wallpaper ripped', reporter: 'USER1' }),
+  testData.singleDamage({ code: DamageCode.REPLACE_AN_ITEM, details: 'Rug torn', reporter: 'USER1' }),
 ]
 
 const damagesListMultiUser = [
-  {
-    code: DamageCode.REDECORATION,
-    details: 'Wallpaper ripped',
-    reporter: 'USER1',
-  },
-  {
-    code: DamageCode.ELECTRICAL_REPAIR,
-    details: 'Plug socket broken',
-    reporter: 'USER1',
-  },
-  {
-    code: DamageCode.REPLACE_AN_ITEM,
-    details: 'Chair broken',
-    reporter: 'USER2',
-  },
-  {
-    code: DamageCode.CLEANING,
-    details: 'Walls need cleaning',
-    reporter: 'USER1',
-  },
+  testData.singleDamage({ code: DamageCode.REDECORATION, details: 'Wallpaper ripped', reporter: 'USER1' }),
+  testData.singleDamage({ code: DamageCode.ELECTRICAL_REPAIR, details: 'Plug socket broken', reporter: 'USER1' }),
+  testData.singleDamage({ code: DamageCode.REPLACE_AN_ITEM, details: 'Chair broken', reporter: 'USER2' }),
+  testData.singleDamage({ code: DamageCode.CLEANING, details: 'Walls need cleaning', reporter: 'USER1' }),
 ]
 
 const draftAdjudication = (id: number, damages: DamageDetails[]) => {
   return {
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T13:10:00',
-        handoverDeadline: '2021-11-05T13:10:00',
-        locationId: 27029,
-      },
       prisonerNumber: 'G6415GD',
-      startedByUserId: 'USER1',
-      incidentRole: {
-        associatedPrisonersNumber: undefined,
-        roleCode: undefined,
-      },
-      offenceDetails: {
-        offenceCode: 1001,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G5512G',
-      },
       damages,
-    },
+    }),
   }
 }
 
 const reportedAdjudication = (adjudicationNumber: number, damages: DamageDetails[]) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
-      incidentDetails: {
-        dateTimeOfIncident: '2021-11-03T13:10:00',
-        handoverDeadline: '2021-11-05T13:10:00',
-        locationId: 27029,
-      },
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      startedByUserId: 'USER1',
-      incidentRole: {
-        associatedPrisonersNumber: undefined,
-        roleCode: undefined,
-      },
-      incidentStatement: {
-        statement: 'This is my statement',
-        completed: true,
-      },
-      offenceDetails: {
-        offenceCode: 1001,
-        offenceRule: {
-          paragraphNumber: '1',
-          paragraphDescription: 'Commits any assault',
-        },
-        victimPrisonersNumber: 'G5512G',
-      },
       damages,
-      evidence: [],
-      witnesses: [],
-    },
+    }),
   }
 }
 
