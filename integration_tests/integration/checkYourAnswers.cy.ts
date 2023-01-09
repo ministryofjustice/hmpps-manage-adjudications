@@ -91,7 +91,7 @@ context('Check Your Answers', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-            damages: [testData.singleDamage(DamageCode.CLEANING)],
+            damages: [testData.singleDamage({ code: DamageCode.CLEANING })],
             evidence: [testData.singleEvidence({ code: EvidenceCode.PHOTO })],
           }),
         },

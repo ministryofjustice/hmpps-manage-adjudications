@@ -37,7 +37,7 @@ const adjudicationWithoutDamages = {
   }),
 }
 
-const damagesOnSession = [testData.singleDamage(), testData.singleDamage()]
+const damagesOnSession = [testData.singleDamage({}), testData.singleDamage({})]
 
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue(adjudicationWithoutDamages)
@@ -77,7 +77,7 @@ describe('GET /damages/100', () => {
 
 describe('POST', () => {
   it('should call the save endpoint with evidence present', () => {
-    const damagesToSave = [testData.singleDamage(), testData.singleDamage()]
+    const damagesToSave = [testData.singleDamage({}), testData.singleDamage({})]
     return request(app)
       .post(adjudicationUrls.detailsOfDamages.urls.modified(100))
       .expect(302)

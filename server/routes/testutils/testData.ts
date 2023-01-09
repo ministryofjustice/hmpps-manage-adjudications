@@ -208,11 +208,15 @@ export default class TestData {
     }
   }
 
-  singleDamage = (
+  singleDamage = ({
     code = DamageCode.REDECORATION,
     details = 'Some damage details',
-    reporter = 'TESTER_GEN'
-  ): DamageDetails => {
+    reporter = 'TESTER_GEN',
+  }: {
+    code?: DamageCode
+    details?: string
+    reporter?: string
+  }): DamageDetails => {
     return {
       code,
       details,

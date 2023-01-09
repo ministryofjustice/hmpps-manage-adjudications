@@ -7,16 +7,24 @@ import TestData from '../../server/routes/testutils/testData'
 const testData = new TestData()
 
 const evidenceList = [
-  testData.singleEvidence({ details: 'Bagged evidence', identifier: 'JO345' }),
-  testData.singleEvidence({ code: EvidenceCode.CCTV, details: 'Video of the prisoner doing the thing' }),
-  testData.singleEvidence({ code: EvidenceCode.PHOTO, details: 'A photo of the prisoner doing the thing' }),
+  testData.singleEvidence({ details: 'Bagged evidence', identifier: 'JO345', reporter: 'USER1' }),
+  testData.singleEvidence({
+    code: EvidenceCode.CCTV,
+    details: 'Video of the prisoner doing the thing',
+    reporter: 'USER1',
+  }),
+  testData.singleEvidence({
+    code: EvidenceCode.PHOTO,
+    details: 'A photo of the prisoner doing the thing',
+    reporter: 'USER1',
+  }),
 ]
 
 const evidenceListMultiUser = [
   testData.singleEvidence({ reporter: 'USER2', identifier: 'JO345' }),
-  testData.singleEvidence({ code: EvidenceCode.CCTV }),
+  testData.singleEvidence({ code: EvidenceCode.CCTV, reporter: 'USER1' }),
   testData.singleEvidence({ code: EvidenceCode.PHOTO, reporter: 'USER2' }),
-  testData.singleEvidence({ code: EvidenceCode.BODY_WORN_CAMERA, identifier: 'BWC: 123456' }),
+  testData.singleEvidence({ code: EvidenceCode.BODY_WORN_CAMERA, identifier: 'BWC: 123456', reporter: 'USER1' }),
 ]
 
 const draftAdjudication = (id: number, evidence: EvidenceDetails[]) => {
@@ -25,7 +33,7 @@ const draftAdjudication = (id: number, evidence: EvidenceDetails[]) => {
       id,
       evidence,
       prisonerNumber: 'G6415GD',
-      damages: [testData.singleDamage(DamageCode.REDECORATION, 'Wallpaper ripped')],
+      damages: [testData.singleDamage({ code: DamageCode.REDECORATION, details: 'Wallpaper ripped' })],
     }),
   }
 }

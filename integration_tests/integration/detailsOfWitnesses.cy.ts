@@ -6,13 +6,21 @@ import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
-const witnessesList = [testData.singleWitness({}), testData.singleWitness({ code: WitnessCode.OTHER_PERSON })]
+const witnessesList = [
+  testData.singleWitness({ reporter: 'USER1' }),
+  testData.singleWitness({ code: WitnessCode.OTHER_PERSON, reporter: 'USER1' }),
+]
 
 const witnessesListMultiUser = [
-  testData.singleWitness({}),
-  testData.singleWitness({ code: WitnessCode.OTHER_PERSON, firstName: 'Digital', lastName: 'Prison' }),
+  testData.singleWitness({ reporter: 'USER1' }),
+  testData.singleWitness({
+    code: WitnessCode.OTHER_PERSON,
+    firstName: 'Digital',
+    lastName: 'Prison',
+    reporter: 'USER1',
+  }),
   testData.singleWitness({ code: WitnessCode.STAFF, reporter: 'USER2' }),
-  testData.singleWitness({ code: WitnessCode.STAFF }),
+  testData.singleWitness({ code: WitnessCode.STAFF, reporter: 'USER1' }),
 ]
 
 const draftAdjudication = (id: number, witnesses: WitnessDetails[]) => {

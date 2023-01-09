@@ -7,15 +7,15 @@ import TestData from '../../server/routes/testutils/testData'
 const testData = new TestData()
 
 const damagesList = [
-  testData.singleDamage(DamageCode.REDECORATION, 'Wallpaper ripped', 'USER1'),
-  testData.singleDamage(DamageCode.REPLACE_AN_ITEM, 'Rug torn', 'USER1'),
+  testData.singleDamage({ code: DamageCode.REDECORATION, details: 'Wallpaper ripped', reporter: 'USER1' }),
+  testData.singleDamage({ code: DamageCode.REPLACE_AN_ITEM, details: 'Rug torn', reporter: 'USER1' }),
 ]
 
 const damagesListMultiUser = [
-  testData.singleDamage(DamageCode.REDECORATION, 'Wallpaper ripped', 'USER1'),
-  testData.singleDamage(DamageCode.ELECTRICAL_REPAIR, 'Plug socket broken', 'USER1'),
-  testData.singleDamage(DamageCode.REPLACE_AN_ITEM, 'Chair broken', 'USER2'),
-  testData.singleDamage(DamageCode.CLEANING, 'Walls need cleaning', 'USER1'),
+  testData.singleDamage({ code: DamageCode.REDECORATION, details: 'Wallpaper ripped', reporter: 'USER1' }),
+  testData.singleDamage({ code: DamageCode.ELECTRICAL_REPAIR, details: 'Plug socket broken', reporter: 'USER1' }),
+  testData.singleDamage({ code: DamageCode.REPLACE_AN_ITEM, details: 'Chair broken', reporter: 'USER2' }),
+  testData.singleDamage({ code: DamageCode.CLEANING, details: 'Walls need cleaning', reporter: 'USER1' }),
 ]
 
 const draftAdjudication = (id: number, damages: DamageDetails[]) => {
