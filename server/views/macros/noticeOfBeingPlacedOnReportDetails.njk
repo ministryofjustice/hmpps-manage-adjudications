@@ -1,4 +1,5 @@
 {% macro noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) %}
+{% set offences = noticeOfBeingPlacedOnReportData.offences %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
         <div>
             <p>A copy of this report should be given to {{ noticeOfBeingPlacedOnReportData.prisonerFriendlyName }} by
@@ -46,39 +47,32 @@
                 in {{ noticeOfBeingPlacedOnReportData.incidentLocationDescription }}</li>
         </ul>
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-        {% if noticeOfBeingPlacedOnReportData.offences.length > 1 %}
-            <h2>Details of the alleged offences</h2>
-        {% else %}
-            <h2>Details of the alleged offence</h2>
-        {% endif %}
-        
+
+        <h2>Details of the alleged offence</h2>
         <p class='govuk-!-margin-bottom-0'>Which set of rules apply to the prisoner?</p>
         {% if noticeOfBeingPlacedOnReportData.isYouthOffender %}
            <p class='govuk-!-margin-bottom-2'>YOI offences - {{ true | prisonRule }}</p>
         {% else %}
            <p class='govuk-!-margin-bottom-2'>Adult offences - {{ false | prisonRule }}</p>
         {% endif %}
-        
-        {% for offence in noticeOfBeingPlacedOnReportData.offences %}
-            <div class='break-inside-avoid'>
-                {% for questionAndAnswer in offence.questionsAndAnswers %}
-                    <p class='govuk-!-margin-bottom-0'>{{ questionAndAnswer.question }}</p>
-                    <p class='govuk-!-margin-bottom-2'>{{ questionAndAnswer.answer }}</p>
-                {% endfor %}
-            </div>
-            <div>
-                <p class='govuk-!-margin-bottom-0'>This offence broke:</p>
-                {% if offence.incidentRule %}
-                    <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offence.incidentRule.paragraphNumber }}</p>
-                    <p class='govuk-!-margin-bottom-0'>{{ offence.incidentRule.paragraphDescription | safe }}</p>
-                {% endif %}
-                <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offence.offenceRule.paragraphNumber }}</p>
-                <p class='govuk-!-margin-bottom-0'>{{ offence.offenceRule.paragraphDescription | safe }}</p>
-            </div>
-            {% if not loop.last %}
-                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        <div class='break-inside-avoid'>
+            {% for questionAndAnswer in offences.questionsAndAnswers %}
+                <p class='govuk-!-margin-bottom-0'>{{ questionAndAnswer.question }}</p>
+                <p class='govuk-!-margin-bottom-2'>{{ questionAndAnswer.answer }}</p>
+            {% endfor %}
+        </div>
+        <div>
+            <p class='govuk-!-margin-bottom-0'>This offence broke:</p>
+            {% if offences.incidentRule %}
+                <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offences.incidentRule.paragraphNumber }}</p>
+                <p class='govuk-!-margin-bottom-0'>{{ offences.incidentRule.paragraphDescription | safe }}</p>
             {% endif %}
-        {% endfor %}
+            <p class='govuk-!-margin-bottom-0'>Prison rule {{ noticeOfBeingPlacedOnReportData.isYouthOffender | prisonRule }}, paragraph {{ offences.offenceRule.paragraphNumber }}</p>
+            <p class='govuk-!-margin-bottom-0'>{{ offences.offenceRule.paragraphDescription | safe }}</p>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
 
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         <div class='break-inside-avoid'>
