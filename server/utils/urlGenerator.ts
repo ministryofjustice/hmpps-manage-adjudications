@@ -1,4 +1,5 @@
 import url from 'url'
+import { ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
@@ -244,8 +245,16 @@ const adjudicationUrls = {
       start: '/',
     },
   },
-  selectReport: {
+  continueReport: {
     root: '/select-report',
+    urls: {
+      start: () => adjudicationUrls.continueReport.root,
+      filter: (filter: ContinueReportUiFilter) =>
+        url.format({
+          pathname: adjudicationUrls.continueReport.root,
+          query: { ...filter },
+        }),
+    },
     matchers: {
       start: '/',
     },

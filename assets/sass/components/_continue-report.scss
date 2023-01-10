@@ -1,3 +1,22 @@
 .continue-report-text {
  margin: 10px 0
 }
+
+.continueReport-datePicker-container {
+    margin-bottom: 0px;
+    padding-right: 1em;
+  
+    .govuk-form-group {
+      margin-bottom: 20px;
+    }
+  }
+
+.continueReport {
+  &-firstColumn {
+  width: 25%;
+}
+  &-finalColumn {
+    text-align: right !important;
+    margin-bottom: 0;
+}
+}

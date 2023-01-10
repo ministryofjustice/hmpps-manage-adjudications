@@ -103,7 +103,7 @@ context('Home page', () => {
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.continueAReportLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.selectReport.root)
+      expect(loc.pathname).to.eq(adjudicationUrls.continueReport.root)
     })
   })
   it('should link to the correct location - view your completed report', () => {

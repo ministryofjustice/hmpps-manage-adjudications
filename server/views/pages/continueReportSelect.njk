@@ -1,7 +1,9 @@
 {% extends "../partials/layout.njk" %}
-
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{% from "../macros/continueReportFilter.njk" import continueReportFilter %}
 
 {% set title = "Continue a report" %}
 
@@ -14,61 +16,69 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters">
-      <h1 class="govuk-heading-l">{{ title }}</h1>
-
-      {% set rows = [] %}
-      {% for report in reports %}
-        {% set prisonerLinkHtml %}
-        <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ report.prisonerNumber }}" class="govuk-link">{{ report.displayName }} - {{report.prisonerNumber}} </a>
-        {% endset -%}
-        {% set discoveryDateTimeHtml %}
-        <p class="govuk-body continue-report-text" data-qa="incident-date-text">{{ report.formattedDiscoveryDateTime }}</p>
-        {% endset -%}
-        {% set continueReportLinkHtml %}
-        <a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a>
-        {% endset -%}
-        {% set rows = (rows.push([
-      { html: discoveryDateTimeHtml, attributes: {
-          "data-sort-value": report.incidentDetails.dateTimeOfDiscovery
-        } },
-      {
-        html: prisonerLinkHtml,
-        attributes: {
-          "data-sort-value": report.displayName
-        }
-      },
-      { html: continueReportLinkHtml }
-    ]), rows) %}
-      {% endfor %}
-
-      {% if rows | length %}
-        <div class="results-table">
-          {{ govukTable({
-        head: [
-          {
-            text: "Name and prison number",
-            attributes: {
-              "aria-sort": "ascending",
-              "data-qa": "prisoner-name-sort"
-            }
-          },
-          { text: "Discovery date and time", 
-            attributes: {
-              "aria-sort": "descending",
-              "data-qa": "date-sort"
-
-            }
-           },
-          { text: "" }
-        ],
-        rows: rows,
-        attributes: { "data-qa": "continue-report-results-table", "data-module": "moj-sortable-table" }
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
       }) }}
-        </div>
-      </div>
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {{ continueReportFilter(filter, errors, adjudicationUrls.continueReport.urls.start(), csrfToken) }}
+
+  {% set rows = [] %}
+  {% for report in reports.content %}
+    {% set prisonerNameAndNumber %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ report.displayName }} - {{report.prisonerNumber}}
+    </p>
+    {% endset -%}
+    {% set discoveryDateTimeHtml %}
+    <p class="govuk-body continue-report-text" data-qa="incident-date-text">{{ report.formattedDiscoveryDateTime }}</p>
+    {% endset -%}
+    {% set continueReportLinkHtml %}
+    <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
+    {% endset -%}
+    {% set rows = (rows.push([
+    { html: discoveryDateTimeHtml, attributes: {
+        "data-sort-value": report.incidentDetails.dateTimeOfDiscovery
+      } },
+    {
+      html: prisonerNameAndNumber,
+      attributes: {
+        "data-sort-value": report.displayName
+      }
+    },
+    { html: continueReportLinkHtml }
+  ]), rows) %}
+  {% endfor %}
+
+  {% if rows | length %}
+    {{ mojPagination(pagination) }}
+    <div class="results-table">
+
+      {{ govukTable({
+         head: [
+        { text: "Discovery date and time",
+          classes: 'continueReport-firstColumn',
+          attributes: {
+            "aria-sort": "descending"
+          }
+          },
+        {
+          text: "Name and prison number",
+          attributes: {
+            "aria-sort": "none"
+          }
+        },
+        { text: "" }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "continue-report-results-table", "data-module": "moj-sortable-table" }
+      }) }}
     </div>
+    {{ mojPagination(pagination) }}
 
   {% else %}
     {% if not errors | length %}

@@ -4,8 +4,10 @@ import config from '../config'
 import ManageAdjudicationsClient from './manageAdjudicationsClient'
 import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
 import { DamageCode, EvidenceCode, PrisonerGender } from './DraftAdjudicationResult'
+import TestData from '../routes/testutils/testData'
 
 jest.mock('../../logger')
+const testData = new TestData()
 
 describe('manageAdjudicationsClient', () => {
   let fakeManageAdjudicationsApi: nock.Scope
@@ -223,43 +225,43 @@ describe('manageAdjudicationsClient', () => {
   })
 
   describe('getAllDraftAdjudicationsForUser', () => {
-    const result = {
-      draftAdjudications: [
-        {
-          startedByUserId: 'string',
-          id: 1,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-16T14:15:08.021Z',
-            locationId: 23444,
-          },
-          incidentRole: {
-            roleCode: '25a',
-          },
-          incidentStatement: {
-            completed: true,
-            statement: 'string',
-          },
-          prisonerNumber: 'G2996UX',
-        },
-        {
-          startedByUserId: 'string',
-          id: 2,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-16T12:30:00.000Z',
-            locationId: 1335,
-          },
-          incidentRole: {},
-          prisonerNumber: 'G2296UP',
-        },
-      ],
+    const content = [
+      testData.draftAdjudication({
+        dateTimeOfIncident: '2021-11-16T14:15:08.021Z',
+        prisonerNumber: 'G2996UX',
+        id: 1,
+      }),
+      testData.draftAdjudication({
+        dateTimeOfIncident: '2021-11-16T12:30:00.000Z',
+        prisonerNumber: 'G2296UP',
+        id: 2,
+      }),
+    ]
+    const request = {
+      size: 20,
+      number: 0,
     }
+    const response = {
+      size: 20,
+      pageNumber: 0,
+      totalElements: 2,
+      content,
+    }
+
     it('should return a list of all the draft reports provided by the API', async () => {
       fakeManageAdjudicationsApi
-        .get(`/draft-adjudications/my/agency/MDI`)
+        .get(`/draft-adjudications/my/agency/MDI?page=0&size=20&startDate=2021-11-16&endDate=2021-11-21`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, result)
+        .reply(200, response)
 
-      const response = await client.getAllDraftAdjudicationsForUser('MDI')
+      const result = await client.getAllDraftAdjudicationsForUser(
+        'MDI',
+        {
+          fromDate: moment('16/11/2021', 'DD/MM/YYYY'),
+          toDate: moment('21/11/2021', 'DD/MM/YYYY'),
+        },
+        request
+      )
       expect(response).toEqual(result)
     })
   })

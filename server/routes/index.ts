@@ -96,7 +96,7 @@ export default function routes(
     adjudicationUrls.allCompletedReports.root,
     allCompletedReportsRoutes({ reportedAdjudicationsService, userService })
   )
-  router.use(adjudicationUrls.selectReport.root, continueReportSelectRoutes({ placeOnReportService }))
+  router.use(adjudicationUrls.continueReport.root, continueReportSelectRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.printReport.root, printReportRoutes({ reportedAdjudicationsService }))
   router.use(
     adjudicationUrls.printPdf.root,
