@@ -34,7 +34,7 @@ import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 import adjudicationUrls from '../utils/urlGenerator'
 import { isPrisonerGenderKnown } from './prisonerSearchService'
-import { ContinueReportApiFilter, ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
+import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 
 export interface PrisonerResultSummary extends PrisonerResult {

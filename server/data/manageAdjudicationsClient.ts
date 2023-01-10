@@ -1,7 +1,6 @@
 import config from '../config'
 import {
   DraftAdjudicationResult,
-  DraftAdjudicationResultList,
   IncidentStatement,
   IncidentDetails,
   EditedIncidentDetails,

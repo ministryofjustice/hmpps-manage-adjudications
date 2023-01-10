@@ -62,7 +62,7 @@ context('Continue a report - select report', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(1))
       })
     })
-    it.only('pagination should work', () => {
+    it('pagination should work', () => {
       const manyDraftAdjudications: DraftAdjudication[] = generateRange(1, 300, _ => {
         return testData.draftAdjudication({
           id: _,
