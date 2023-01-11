@@ -12,7 +12,6 @@ context('Continue a report - select report', () => {
       cy.task('reset')
       cy.task('stubSignIn')
       cy.task('stubAuthUser')
-      cy.task('stubGetAllDraftAdjudicationsForUser', {})
       const manyDraftAdjudications: DraftAdjudication[] = generateRange(1, 20, _ => {
         return testData.draftAdjudication({
           id: _,
@@ -31,7 +30,7 @@ context('Continue a report - select report', () => {
       continueReportSelectPage.resultsTable().should('exist')
       continueReportSelectPage.noResultsMessage().should('not.exist')
     })
-    it('should contain the correct incident details', () => {
+    it('should contain the correct header and data', () => {
       cy.visit(adjudicationUrls.continueReport.root)
       const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
 
