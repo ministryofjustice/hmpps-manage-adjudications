@@ -3,7 +3,7 @@ import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
-import { DamageCode, EvidenceCode, PrisonerGender, WitnessCode } from '../data/DraftAdjudicationResult'
+import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 
 const testData = new TestData()
@@ -51,13 +51,7 @@ const token = 'some token'
 describe('placeOnReportService', () => {
   let service: PlaceOnReportService
 
-  const user = {
-    activeCaseLoadId: 'MDI',
-    name: 'User Smith',
-    username: 'user1',
-    token: 'token-1',
-    authSource: 'auth',
-  }
+  const user = testData.userFromUsername('user1')
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
@@ -72,22 +66,12 @@ describe('placeOnReportService', () => {
   describe('startNewDraftAdjudication', () => {
     it('returns the adjudication details with new id', async () => {
       startNewDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
-          adjudicationNumber: 4567123,
+        draftAdjudication: testData.draftAdjudication({
           id: 1,
-          gender: PrisonerGender.MALE,
+          adjudicationNumber: 4567123,
           prisonerNumber: 'G2996UX',
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25b',
-          },
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-10-28T15:40:25.884',
-            dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
-            handoverDeadline: '2021-10-30T15:40:25.884',
-          },
-        },
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        }),
       })
 
       const result = await service.startNewDraftAdjudication(
@@ -107,35 +91,19 @@ describe('placeOnReportService', () => {
         gender: PrisonerGender.MALE,
       })
       expect(result).toEqual({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 1,
           adjudicationNumber: 4567123,
           prisonerNumber: 'G2996UX',
-          gender: PrisonerGender.MALE,
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25b',
-          },
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-10-28T15:40:25.884',
-            handoverDeadline: '2021-10-30T15:40:25.884',
-            dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
-          },
-        },
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        }),
       })
     })
   })
 
   describe('getReporter', () => {
     it('returns the users name', async () => {
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
-        name: 'Test User',
-        username: 'TEST_GEN',
-        activeCaseLoadId: 'MDI',
-        token: '',
-        authSource: '',
-      })
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
       const result = await service.getReporterName('TEST_GEN', user)
       expect(result).toEqual('Test User')
     })
@@ -144,43 +112,29 @@ describe('placeOnReportService', () => {
   describe('getCheckYourAnswersInfo', () => {
     it('returns the draft adjudication information - no completed adjudication number', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 10,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26152,
-            dateTimeOfIncident: '2021-11-04T07:20:00',
-            dateTimeOfDiscovery: '2021-11-05T07:21:00',
-          },
+          dateTimeOfIncident: '2021-11-04T07:20:00',
+          dateTimeOfDiscovery: '2021-11-05T07:20:00',
+          locationId: 25538,
           incidentStatement: {
-            id: 9,
             statement:
               "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
           },
-          startedByUserId: 'TEST_GEN',
-        },
+        }),
       })
 
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
-        name: 'Natalie Clamp',
-        username: 'TEST_GEN',
-        activeCaseLoadId: 'MDI',
-        token: '',
-        authSource: '',
-      })
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
 
-      const locations = [
-        { locationId: 26152, locationPrefix: 'P3', userDescription: 'place 3', description: '' },
-        { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
-        { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
-      ]
+      const locations = testData.residentialLocations()
 
       const result = await service.getCheckYourAnswersInfo(10, locations, user)
       const expectedResult = {
         incidentDetails: [
           {
             label: 'Reporting Officer',
-            value: 'N. Clamp',
+            value: 'T. User',
           },
           {
             label: 'Date of incident',
@@ -192,7 +146,7 @@ describe('placeOnReportService', () => {
           },
           {
             label: 'Location',
-            value: 'place 3',
+            value: 'Houseblock 1',
           },
           {
             label: 'Date of discovery',
@@ -200,54 +154,41 @@ describe('placeOnReportService', () => {
           },
           {
             label: 'Time of discovery',
-            value: '07:21',
+            value: '07:20',
           },
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+        isYouthOffender: false,
+        adjudicationNumber: null as never,
       }
       expect(result).toEqual(expectedResult)
     })
     it('returns the draft adjudication information - completed adjudication number included', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 10,
           adjudicationNumber: 123456,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26152,
-            dateTimeOfIncident: '2021-11-04T07:20:00',
-            dateTimeOfDiscovery: '2021-11-05T07:21:00',
-          },
+          dateTimeOfIncident: '2021-11-04T07:20:00',
+          dateTimeOfDiscovery: '2021-11-05T07:21:00',
+          locationId: 25655,
           incidentStatement: {
-            id: 9,
             statement:
               "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
           },
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: '2021-11-04T09:21:21.95935',
-        },
+        }),
       })
 
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
-        name: 'Natalie Clamp',
-        username: 'TEST_GEN',
-        activeCaseLoadId: 'MDI',
-        token: '',
-        authSource: '',
-      })
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
 
-      const locations = [
-        { locationId: 26152, locationPrefix: 'P3', userDescription: 'place 3', description: '' },
-        { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
-        { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
-      ]
+      const locations = testData.residentialLocations()
 
       const result = await service.getCheckYourAnswersInfo(10, locations, user)
       const expectedResult = {
         incidentDetails: [
           {
             label: 'Reporting Officer',
-            value: 'N. Clamp',
+            value: 'T. User',
           },
           {
             label: 'Date of incident',
@@ -259,7 +200,7 @@ describe('placeOnReportService', () => {
           },
           {
             label: 'Location',
-            value: 'place 3',
+            value: 'Houseblock 2',
           },
           {
             label: 'Date of discovery',
@@ -272,6 +213,7 @@ describe('placeOnReportService', () => {
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
         adjudicationNumber: 123456,
+        isYouthOffender: false,
       }
       expect(result).toEqual(expectedResult)
     })
@@ -327,99 +269,85 @@ describe('placeOnReportService', () => {
 
   describe('addOrUpdateDraftIncidentStatement', () => {
     const draftAdjudicationResult = {
-      draftAdjudication: {
+      draftAdjudication: testData.draftAdjudication({
         id: 4,
         prisonerNumber: 'A12345',
-        incidentDetails: {
-          locationId: 2,
-          dateTimeOfIncident: '2020-12-10T10:00:00',
-        },
+        dateTimeOfIncident: '2020-12-10T10:00:00',
+        locationId: 2,
         incidentStatement: {
-          statement: 'test',
+          statement: 'This is a statement',
         },
-      },
+      }),
     }
     postDraftIncidentStatement.mockResolvedValue(draftAdjudicationResult)
     putDraftIncidentStatement.mockResolvedValue(draftAdjudicationResult)
 
     it('makes the api call to create a new statement and returns data', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-          },
-        },
+          dateTimeOfIncident: '2020-12-10T10:00:00',
+          locationId: 2,
+          incidentStatement: null,
+        }),
       })
       const response = await service.addOrUpdateDraftIncidentStatement(4, 'This is a statement', true, user)
 
       expect(postDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
 
-      expect(response).toStrictEqual({
-        draftAdjudication: {
+      expect(response).toEqual({
+        draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-          },
+          dateTimeOfIncident: '2020-12-10T10:00:00',
+          locationId: 2,
           incidentStatement: {
-            statement: 'test',
+            statement: 'This is a statement',
           },
-        },
+        }),
       })
     })
 
     it('makes the api call to edit an existing statement and returns data', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-          },
+          locationId: 2,
+          dateTimeOfIncident: '2020-12-10T10:00:00',
           incidentStatement: {
-            statement: 'test',
+            statement: 'Statement that needs to change',
           },
-        },
+        }),
       })
       const response = await service.addOrUpdateDraftIncidentStatement(4, 'This is a statement', true, user)
 
       expect(putDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
 
-      expect(response).toStrictEqual({
-        draftAdjudication: {
+      expect(response).toEqual({
+        draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-          },
+          locationId: 2,
+          dateTimeOfIncident: '2020-12-10T10:00:00',
           incidentStatement: {
-            statement: 'test',
+            statement: 'This is a statement',
           },
-        },
+        }),
       })
     })
   })
   describe('completeDraftAdjudication', () => {
     it('calls api and returns the reported adjudication number', async () => {
-      submitCompleteDraftAdjudication.mockResolvedValue({
-        adjudicationNumber: 234,
-        dateTimeReportExpired: '2021-11-12T13:55:34.143Z',
-        incidentDetails: {
+      submitCompleteDraftAdjudication.mockResolvedValue(
+        testData.reportedAdjudication({
+          adjudicationNumber: 234,
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
-          locationId: 0,
-        },
-        incidentStatement: {
-          completed: false,
-          statement: 'string',
-        },
-        prisonerNumber: 'G2996UX',
-      })
+          prisonerNumber: 'G2996UX',
+        })
+      )
+
       const response = await service.completeDraftAdjudication(4, user)
       expect(response).toStrictEqual(234)
     })
@@ -430,25 +358,18 @@ describe('placeOnReportService', () => {
         dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
         dateTimeOfDiscovery: { date: '09/11/2021', time: { hour: '10', minute: '00' } },
         locationId: 1234,
+        adjudicationNumber: null as never,
+        startedByUserId: 'USER1',
       }
 
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 1234,
-            dateTimeOfIncident: '2021-11-08T10:00:00',
-            dateTimeOfDiscovery: '2021-11-09T10:00:00',
-          },
-          incidentStatement: {
-            statement: 'test',
-          },
-          incidentRole: {
-            associatedPrisonersNumber: 'G2996UX',
-            roleCode: '25b',
-          },
-        },
+          dateTimeOfIncident: '2021-11-08T10:00:00',
+          dateTimeOfDiscovery: '2021-11-09T10:00:00',
+          locationId: 1234,
+        }),
       })
 
       const response = await service.getDraftIncidentDetailsForEditing(4, user)
@@ -457,19 +378,18 @@ describe('placeOnReportService', () => {
   })
   describe('editDraftIncidentDetails', () => {
     it('creates the edited incident details object and sends', async () => {
-      const expectedResult = {
+      const expectedResult = testData.draftAdjudication({
+        id: 4,
         adjudicationNumber: 234,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
-          dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
-          locationId: 12123123,
-        },
+        prisonerNumber: 'G2996UX',
+        dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
+        dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
         incidentStatement: {
           completed: false,
           statement: 'string',
         },
-        prisonerNumber: 'G2996UX',
-      }
+      })
+
       editDraftIncidentDetails.mockResolvedValue(expectedResult)
       const response = await service.editDraftIncidentDetails(
         4,
@@ -491,20 +411,8 @@ describe('placeOnReportService', () => {
   describe('getAllDraftAdjudicationsForUser', () => {
     it('gets all the users draft reports and enhances them', async () => {
       getBatchPrisonerDetails.mockResolvedValue([
-        {
-          offenderNo: 'A12345',
-          firstName: 'JOHN',
-          lastName: 'SMITH',
-          assignedLivingUnit: { description: '1-2-015' },
-          categoryCode: 'C',
-        },
-        {
-          offenderNo: 'G2996UX',
-          firstName: 'JACK',
-          lastName: 'BURROWS',
-          assignedLivingUnit: { description: '1-2-015' },
-          categoryCode: 'C',
-        },
+        testData.simplePrisoner('A12345', 'JOHN', 'SMITH', '1-2-015'),
+        testData.simplePrisoner('G2996UX', 'JACK', 'BURROWS', '1-2-015'),
       ])
       const draftAdjudicationReports = [
         testData.draftAdjudication({
@@ -589,31 +497,16 @@ describe('placeOnReportService', () => {
   describe('getInfoForTaskListStatuses', () => {
     it('returns the correct response when there are no offence details', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 104,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 357591,
-            dateTimeOfIncident: '2021-10-12T20:00:00',
-            handoverDeadline: '2021-10-14T20:00:00',
-          },
-          startedByUserId: 'TEST_GEN',
-          incidentRole: {
-            associatedPrisonersNumber: 'G2996UX',
-            offenceRule: {
-              paragraphDescription: 'Committed an assault',
-              paragraphNumber: '25(a)',
-            },
-            roleCode: '25a',
-          },
-          damages: [],
-          evidence: [],
-          witnesses: [],
-        },
+          dateTimeOfIncident: '2021-10-12T20:00',
+          incidentStatement: null,
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-10-14T20:00:00',
+        handoverDeadline: '2021-10-14T20:00',
         offenceDetailsStatus: {
           classes: 'govuk-tag govuk-tag--grey',
           text: 'NOT STARTED',
@@ -631,15 +524,10 @@ describe('placeOnReportService', () => {
     })
     it('returns the correct response when there is no incident statement', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 104,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 357591,
-            dateTimeOfIncident: '2021-10-12T20:00:00',
-            handoverDeadline: '2021-10-14T20:00:00',
-          },
-          startedByUserId: 'TEST_GEN',
+          dateTimeOfIncident: '2021-10-12T20:00',
           incidentRole: {
             associatedPrisonersNumber: 'G2996UX',
             offenceRule: {
@@ -648,27 +536,22 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
-          isYouthOffender: false,
-          damages: [],
-          evidence: [],
-          witnesses: [],
-          offenceDetails: [
-            {
-              offenceCode: 3,
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
+          incidentStatement: null,
+          offenceDetails: {
+            offenceCode: 3,
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
             },
-          ],
-        },
+            victimOtherPersonsName: 'Bob Hope',
+            victimPrisonersNumber: 'G2996UX',
+            victimStaffUsername: 'ABC12D',
+          },
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-10-14T20:00:00',
+        handoverDeadline: '2021-10-14T20:00',
         offenceDetailsStatus: {
           classes: 'govuk-tag',
           text: 'COMPLETED',
@@ -686,25 +569,14 @@ describe('placeOnReportService', () => {
     })
     it('returns the correct response when there is an incomplete incident statement', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 104,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 357591,
-            dateTimeOfIncident: '2021-10-12T20:00:00',
-            handoverDeadline: '2021-10-14T20:00:00',
-          },
+          dateTimeOfIncident: '2021-10-12T20:00',
           incidentStatement: {
             statement: 'This is incomplete',
             completed: false,
           },
-          startedByUserId: 'TEST_GEN',
-          damages: [],
-          evidence: [],
-          witnesses: [],
-          damagesSaved: true,
-          evidenceSaved: true,
-          witnessesSaved: true,
           incidentRole: {
             associatedPrisonersNumber: 'G2996UX',
             offenceRule: {
@@ -713,24 +585,26 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
-          isYouthOffender: false,
-          offenceDetails: [
-            {
-              offenceCode: 3,
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
+          offenceDetails: {
+            offenceCode: 3,
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
             },
-          ],
-        },
+            victimOtherPersonsName: 'Bob Hope',
+            victimPrisonersNumber: 'G2996UX',
+            victimStaffUsername: 'ABC12D',
+          },
+          otherData: {
+            damagesSaved: true,
+            evidenceSaved: true,
+            witnessesSaved: true,
+          },
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(104, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-10-14T20:00:00',
+        handoverDeadline: '2021-10-14T20:00',
         offenceDetailsStatus: {
           classes: 'govuk-tag',
           text: 'COMPLETED',
@@ -748,19 +622,14 @@ describe('placeOnReportService', () => {
     })
     it('returns the correct response when there is a complete incident statement', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 92,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26999,
-            dateTimeOfIncident: '2021-11-18T14:50:00',
-            handoverDeadline: '2021-11-23T00:00:00',
-          },
+          dateTimeOfIncident: '2021-11-18T14:50:00',
           incidentStatement: {
             statement: 'ghjghjgh',
             completed: true,
           },
-          startedByUserId: 'NCLAMP_GEN',
           incidentRole: {
             associatedPrisonersNumber: 'G2996UX',
             offenceRule: {
@@ -769,30 +638,21 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
-          isYouthOffender: false,
-          damages: [],
-          evidence: [],
-          witnesses: [],
-          damagesSaved: true,
-          evidenceSaved: true,
-          witnessesSaved: true,
-          offenceDetails: [
-            {
-              offenceCode: 3,
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
+          offenceDetails: {
+            offenceCode: 3,
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
             },
-          ],
-        },
+            victimOtherPersonsName: 'Bob Hope',
+            victimPrisonersNumber: 'G2996UX',
+            victimStaffUsername: 'ABC12D',
+          },
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(92, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-11-23T00:00:00',
+        handoverDeadline: '2021-11-20T14:50',
         offenceDetailsStatus: {
           classes: 'govuk-tag',
           text: 'COMPLETED',
@@ -803,22 +663,17 @@ describe('placeOnReportService', () => {
           text: 'COMPLETED',
         },
         offenceDetailsUrl: '/details-of-offence/92',
-        damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
-        evidenceStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
-        witnessesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
+        damagesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        evidenceStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
+        witnessesStatus: { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' },
       })
     })
     it('returns the correct data when there are damages present', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 92,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26999,
-            dateTimeOfIncident: '2021-11-18T14:50:00',
-            handoverDeadline: '2021-11-23T00:00:00',
-          },
-          startedByUserId: 'NCLAMP_GEN',
+          dateTimeOfIncident: '2021-11-18T14:50:00',
           incidentRole: {
             associatedPrisonersNumber: 'G2996UX',
             offenceRule: {
@@ -827,42 +682,33 @@ describe('placeOnReportService', () => {
             },
             roleCode: '25a',
           },
-          isYouthOffender: false,
-          damages: [
-            {
-              code: DamageCode.CLEANING,
-              reporter: 'TESTER_GEN',
-              details: 'Some test info',
+          damages: [testData.singleDamage({})],
+          offenceDetails: {
+            offenceCode: 3,
+            offenceRule: {
+              paragraphDescription: 'Committed an assault',
+              paragraphNumber: '25(a)',
             },
-          ],
-          evidence: [],
-          witnesses: [],
-          damagesSaved: true,
-          offenceDetails: [
-            {
-              offenceCode: 3,
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
-            },
-          ],
-        },
+            victimOtherPersonsName: 'Bob Hope',
+            victimPrisonersNumber: 'G2996UX',
+            victimStaffUsername: 'ABC12D',
+          },
+          otherData: {
+            damagesSaved: true,
+          },
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(92, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-11-23T00:00:00',
+        handoverDeadline: '2021-11-20T14:50',
         offenceDetailsStatus: {
           classes: 'govuk-tag',
           text: 'COMPLETED',
         },
         showLinkForAcceptDetails: false,
         incidentStatementStatus: {
-          classes: 'govuk-tag govuk-tag--grey',
-          text: 'NOT STARTED',
+          classes: 'govuk-tag govuk-tag--blue',
+          text: 'IN PROGRESS',
         },
         offenceDetailsUrl: '/details-of-offence/92',
         damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
@@ -873,66 +719,43 @@ describe('placeOnReportService', () => {
 
     it('returns the correct data when there is evidence present', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 92,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26999,
-            dateTimeOfIncident: '2021-11-18T14:50:00',
-            handoverDeadline: '2021-11-23T00:00:00',
+          dateTimeOfIncident: '2021-11-18T14:50:00',
+          damages: [testData.singleDamage({})],
+          evidence: [testData.singleEvidence({})],
+          incidentStatement: {
+            statement: '',
+            completed: false,
           },
-          startedByUserId: 'NCLAMP_GEN',
-          incidentRole: {
-            associatedPrisonersNumber: 'G2996UX',
+          offenceDetails: {
+            offenceCode: 3,
             offenceRule: {
               paragraphDescription: 'Committed an assault',
               paragraphNumber: '25(a)',
             },
-            roleCode: '25a',
+            victimOtherPersonsName: 'Bob Hope',
+            victimPrisonersNumber: 'G2996UX',
+            victimStaffUsername: 'ABC12D',
           },
-          isYouthOffender: false,
-          damages: [
-            {
-              code: DamageCode.CLEANING,
-              reporter: 'TESTER_GEN',
-              details: 'Some test info',
-            },
-          ],
-          evidence: [
-            {
-              code: EvidenceCode.PHOTO,
-              reporter: 'TESTER_GEN',
-              details: 'some test info',
-            },
-          ],
-          witnesses: [],
-          damagesSaved: true,
-          evidenceSaved: true,
-          offenceDetails: [
-            {
-              offenceCode: 3,
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
-            },
-          ],
-        },
+          otherData: {
+            damagesSaved: true,
+            evidenceSaved: true,
+          },
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(92, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-11-23T00:00:00',
+        handoverDeadline: '2021-11-20T14:50',
         offenceDetailsStatus: {
           classes: 'govuk-tag',
           text: 'COMPLETED',
         },
         showLinkForAcceptDetails: false,
         incidentStatementStatus: {
-          classes: 'govuk-tag govuk-tag--grey',
-          text: 'NOT STARTED',
+          classes: 'govuk-tag govuk-tag--blue',
+          text: 'IN PROGRESS',
         },
         offenceDetailsUrl: '/details-of-offence/92',
         damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
@@ -942,74 +765,45 @@ describe('placeOnReportService', () => {
     })
     it('returns the correct data when there are witnesses present', async () => {
       getDraftAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 92,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26999,
-            dateTimeOfIncident: '2021-11-18T14:50:00',
-            handoverDeadline: '2021-11-23T00:00:00',
+          dateTimeOfIncident: '2021-11-18T14:50:00',
+          damages: [testData.singleDamage({})],
+          evidence: [testData.singleEvidence({})],
+          witnesses: [testData.singleWitness({})],
+          incidentStatement: {
+            statement: '',
+            completed: false,
           },
-          startedByUserId: 'NCLAMP_GEN',
-          incidentRole: {
-            associatedPrisonersNumber: 'G2996UX',
+          offenceDetails: {
+            offenceCode: 3,
             offenceRule: {
               paragraphDescription: 'Committed an assault',
               paragraphNumber: '25(a)',
             },
-            roleCode: '25a',
+            victimOtherPersonsName: 'Bob Hope',
+            victimPrisonersNumber: 'G2996UX',
+            victimStaffUsername: 'ABC12D',
           },
-          isYouthOffender: false,
-          damages: [
-            {
-              code: DamageCode.CLEANING,
-              reporter: 'TESTER_GEN',
-              details: 'Some test info',
-            },
-          ],
-          evidence: [
-            {
-              code: EvidenceCode.PHOTO,
-              reporter: 'TESTER_GEN',
-              details: 'some test info',
-            },
-          ],
-          witnesses: [
-            {
-              code: WitnessCode.OFFICER,
-              firstName: 'John',
-              lastName: 'Saunders',
-              reporter: 'TESTER_GEN',
-            },
-          ],
-          damagesSaved: true,
-          evidenceSaved: true,
-          witnessesSaved: true,
-          offenceDetails: [
-            {
-              offenceCode: 3,
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
-            },
-          ],
-        },
+          otherData: {
+            damagesSaved: true,
+            evidenceSaved: true,
+            witnessesSaved: true,
+          },
+        }),
       })
       const response = await service.getInfoForTaskListStatuses(92, user)
       expect(response).toEqual({
-        handoverDeadline: '2021-11-23T00:00:00',
+        handoverDeadline: '2021-11-20T14:50',
         offenceDetailsStatus: {
           classes: 'govuk-tag',
           text: 'COMPLETED',
         },
         showLinkForAcceptDetails: false,
         incidentStatementStatus: {
-          classes: 'govuk-tag govuk-tag--grey',
-          text: 'NOT STARTED',
+          classes: 'govuk-tag govuk-tag--blue',
+          text: 'IN PROGRESS',
         },
         offenceDetailsUrl: '/details-of-offence/92',
         damagesStatus: { classes: 'govuk-tag', text: 'COMPLETED' },
@@ -1028,45 +822,14 @@ describe('placeOnReportService', () => {
         agencyType: 'INST',
         active: true,
       })
-      const staffMembers = [
-        {
-          activeCaseLoadId: 'MDI',
-          email: 'testerPerson@justice.gov.uk',
-          firstName: 'Tester',
-          lastName: 'Person',
-          name: 'Tester Person',
-          staffId: 1234564789,
-          username: 'RO_USER_TEST',
-          verified: true,
-        },
-        {
-          activeCaseLoadId: null,
-          email: 'testerPerson@justice.gov.uk',
-          firstName: 'Tester',
-          lastName: 'Person',
-          name: 'Tester Person',
-          staffId: 12345647891,
-          username: 'RO_USER_TEST',
-          verified: true,
-        },
-      ]
+      const staffMembers = [testData.staffFromName(), testData.staffFromName(null)]
 
       const response = await service.getAssociatedStaffDetails(staffMembers, user)
       expect(response).toEqual([{ ...staffMembers[0], currentLocation: 'Moorland (HMP & YOI)' }])
     })
     it('returns the correct response when the caseload is the central agency id', async () => {
-      const staffMembers = [
-        {
-          activeCaseLoadId: 'CADM_I',
-          email: 'testerPerson@justice.gov.uk',
-          firstName: 'Tester',
-          lastName: 'Person',
-          name: 'Tester Person',
-          staffId: 1234564789,
-          username: 'RO_USER_TEST',
-          verified: true,
-        },
-      ]
+      const staffMembers = [testData.staffFromName('CADM_I')]
+
       const response = await service.getAssociatedStaffDetails(staffMembers, user)
       expect(response).toEqual([
         {
@@ -1079,22 +842,14 @@ describe('placeOnReportService', () => {
 
   describe('updateIncidentRole', () => {
     it('creates the incident role object and sends', async () => {
-      const expectedResult = {
+      const expectedResult = testData.reportedAdjudication({
         adjudicationNumber: 234,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
-          locationId: 12123123,
-        },
+        prisonerNumber: 'G2996UX',
         incidentRole: {
           associatedPrisonersNumber: 'G2996UX',
           roleCode: '25b',
         },
-        incidentStatement: {
-          completed: false,
-          statement: 'string',
-        },
-        prisonerNumber: 'G2996UX',
-      }
+      })
       updateIncidentRole.mockResolvedValue(expectedResult)
       const response = await service.updateDraftIncidentRole(4, '25b', false, user)
       expect(response).toEqual(expectedResult)
@@ -1108,20 +863,11 @@ describe('placeOnReportService', () => {
   })
   describe('addDraftYouthOffenderStatus', () => {
     it('creates the correct data payload if the prisoner is YOI and sends to the draft adjudication database', async () => {
-      const expectedResult = {
-        draftAdjudication: {
-          id: 2483,
-          prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 27187,
-            dateTimeOfIncident: '2022-06-16T22:12:00',
-            handoverDeadline: '2022-06-18T22:12:00',
-          },
-          incidentRole: {},
-          startedByUserId: 'BOOPBOOP',
-          isYouthOffender: true,
-        },
-      }
+      const expectedResult = testData.reportedAdjudication({
+        adjudicationNumber: 2483,
+        prisonerNumber: 'G6123VU',
+      })
+
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)
       const response = await service.addDraftYouthOffenderStatus(2483, 'yoi', true, user)
       expect(response).toEqual(expectedResult)
@@ -1131,20 +877,10 @@ describe('placeOnReportService', () => {
       })
     })
     it('creates the correct data payload if the prisoner is an adult and sends to the draft adjudication database', async () => {
-      const expectedResult = {
-        draftAdjudication: {
-          id: 2484,
-          prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 27187,
-            dateTimeOfIncident: '2022-06-16T22:12:00',
-            handoverDeadline: '2022-06-18T22:12:00',
-          },
-          incidentRole: {},
-          startedByUserId: 'BOOPBOOP',
-          isYouthOffender: false,
-        },
-      }
+      const expectedResult = testData.reportedAdjudication({
+        adjudicationNumber: 2483,
+        prisonerNumber: 'G6123VU',
+      })
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)
       const response = await service.addDraftYouthOffenderStatus(2484, 'adult', false, user)
       expect(response).toEqual(expectedResult)

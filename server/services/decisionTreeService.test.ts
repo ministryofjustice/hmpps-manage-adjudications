@@ -40,14 +40,7 @@ const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSumm
   lastName: 'Balan',
 })
 
-const victimStaffDetails = {
-  username: 'Alan',
-  name: 'Malan',
-  activeCaseLoadId: 'MDI',
-  token: 'Toekn123',
-  authSource: 'AUTH_SOURCE_1',
-  email: 'aaa@bb.com',
-}
+const victimStaffDetails = testData.staffFromUsername('Alan')
 
 beforeEach(() => {
   service = new DecisionTreeService(placeOnReportService, userService, reportedAdjudicationsService, question)
