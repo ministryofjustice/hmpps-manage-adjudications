@@ -189,20 +189,48 @@ const stubGetReportedAdjudication = ({
     },
   })
 
-const stubGetAllDraftAdjudicationsForUser = (response = {}): SuperAgentRequest =>
-  stubFor({
+const stubGetAllDraftAdjudicationsForUser = ({
+  agencyId = 'MDI',
+  number = 0,
+  size = 20,
+  allContent = [],
+  filter = {
+    toDate: moment().format('YYYY-MM-DD'),
+    fromDate: moment().subtract(7, 'days').format('YYYY-MM-DD'),
+  },
+}: {
+  agencyId: string
+  number: number
+  size: number
+  allContent: unknown[]
+  filter: {
+    fromDate: string
+    toDate: string
+  }
+}): SuperAgentRequest => {
+  const apiRequest = {
+    size,
+    number,
+  }
+  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
+  const path =
+    `/adjudications/draft-adjudications/my/agency/${agencyId}?page=${number}&size=${size}` +
+    `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
+    `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
+  return stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/draft-adjudications/my/agency/MDI`,
+      url: path,
     },
     response: {
       status: 200,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: response,
+      jsonBody: apiResponse,
     },
   })
+}
 
 const stubGetReportedAdjudications =
   (prefix: string) =>

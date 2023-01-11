@@ -1,11 +1,9 @@
 {% from "../macros/datePicker.njk" import datePicker %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro adjudicationFilter(filter, checkboxes, errors, clearUrl, csrfToken) %}
-    <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
+{% macro continueReportFilter(filter, errors, clearUrl, csrfToken) %}
+    <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="continue-report-form">
         <h2 class="govuk-heading-m">Date of discovery</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% set fromDateError = errors | findErrors(['fromDate[date]']) %}
@@ -15,17 +13,16 @@
                 <span class="govuk-visually-hidden">Error:</span>{{ fromDateError.text }}
             </p>
             {% endif %}
-            <div class="displayFlex" id="adjudicationFilter">
+            <div class="displayFlex" id="continueReportFilter">
                 {{ datePicker({
                     id: 'fromDate[date]',
                     label: 'From',
                     name: 'fromDate[date]',
                     date: filter.fromDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
-                    classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
+                    classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else ''),
+                    containerClasses: 'continueReport-datePicker-container'
                 }) }}
-
-                <div class="spacerCol"></div>
 
                 {{ datePicker({
                     id: 'toDate[date]',
@@ -33,26 +30,9 @@
                     name: 'toDate[date]',
                     date: filter.toDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
-                    classes: 'govuk-input--width-10'
+                    classes: 'govuk-input--width-10',
+                    containerClasses: 'continueReport-datePicker-container'
                 }) }}
-
-                <div class="spacerCol"></div>
-                <div class="spacerCol"></div>
-
-              <div id="statusFilterBox">
-                {{ govukCheckboxes({
-                  name: "status",
-                  classes: "govuk-checkboxes--small stausFilterCheckboxes",
-                  fieldset: {
-                    legend: {
-                      text: "Status",
-                      isPageHeading: false,
-                      classes: "govuk-fieldset__legend--m"
-                    }
-                  },
-                  items: checkboxes
-                }) }}
-              </div>
             </div>
             <div class="horizontal-form govuk-!-margin-bottom-3">
                 {{ govukButton({

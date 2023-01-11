@@ -31,7 +31,7 @@ afterEach(() => {
 describe('GET /select-report', () => {
   describe('with results', () => {
     beforeEach(() => {
-      placeOnReportService.getAllDraftAdjudicationsForUser.mockResolvedValue([
+      const draftAdjudicationReports = [
         testData.draftAdjudication({
           id: 31,
           prisonerNumber: 'G6415GD',
@@ -52,17 +52,23 @@ describe('GET /select-report', () => {
             formattedDiscoveryDateTime: '22 December 2022 - 16:00',
           },
         }),
-      ])
+      ]
+      placeOnReportService.getAllDraftAdjudicationsForUser.mockResolvedValue({
+        size: 10,
+        number: 0,
+        totalElements: 2,
+        content: draftAdjudicationReports,
+      })
     })
     it('should load the continue report page', () => {
       return request(app)
-        .get(adjudicationUrls.selectReport.root)
+        .get(adjudicationUrls.continueReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Select a report')
+          expect(response.text).toContain('Continue a report')
           expect(response.text).toContain('Aidetria, Udfsanaye - G6415GD')
           expect(response.text).toContain('22 December 2022 - 15:00')
-          expect(response.text).toContain('Continue')
+          expect(response.text).toContain('Continue report')
           expect(response.text).toContain('Babik, Carroll - G5966UI')
           expect(response.text).toContain('22 December 2022 - 16:00')
           expect(response.text).toContain('Continue')
@@ -71,14 +77,19 @@ describe('GET /select-report', () => {
   })
   describe('without results', () => {
     beforeEach(() => {
-      placeOnReportService.getAllDraftAdjudicationsForUser.mockResolvedValue([])
+      placeOnReportService.getAllDraftAdjudicationsForUser.mockResolvedValue({
+        size: 10,
+        number: 0,
+        totalElements: 2,
+        content: [],
+      })
     })
     it('shows default message', () => {
       return request(app)
-        .get(adjudicationUrls.selectReport.root)
+        .get(adjudicationUrls.continueReport.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Select a report')
+          expect(response.text).toContain('Continue a report')
           expect(response.text).toContain('There are no reports for you to continue.')
         })
     })

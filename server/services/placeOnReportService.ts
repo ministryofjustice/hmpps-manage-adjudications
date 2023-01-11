@@ -34,6 +34,8 @@ import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 import adjudicationUrls from '../utils/urlGenerator'
 import { isPrisonerGenderKnown } from './prisonerSearchService'
+import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
+import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -269,36 +271,50 @@ export default class PlaceOnReportService {
     return manageAdjudicationsClient.getDraftAdjudication(id)
   }
 
-  async getAllDraftAdjudicationsForUser(user: User): Promise<DraftAdjudicationEnhanced[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const allAdjudications = await new ManageAdjudicationsClient(token).getAllDraftAdjudicationsForUser(
-      user.activeCaseLoadId
+  async getAllDraftAdjudicationsForUser(
+    user: User,
+    filter: ContinueReportApiFilter,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<DraftAdjudicationEnhanced>> {
+    const pageResponse = await new ManageAdjudicationsClient(user.token).getAllDraftAdjudicationsForUser(
+      user.activeCaseLoadId,
+      filter,
+      pageRequest
     )
 
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(
-          allAdjudications.draftAdjudications.map(report => report.prisonerNumber)
+          pageResponse.content.map(report => report.prisonerNumber)
         )
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
-    const getEnhancedReportsByUser = async () => {
-      return allAdjudications.draftAdjudications.map(report => {
-        const prisoner = prisonerDetails.get(report.prisonerNumber)
-        const displayName = convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`)
-        const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
-        const formattedDiscoveryDateTime = getDate(report.incidentDetails.dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm')
+    const getEnhancedReportsByUser = (draftAdjudication: DraftAdjudication) => {
+      const prisoner = prisonerDetails.get(draftAdjudication.prisonerNumber)
+      const displayName = convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName}`)
+      const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
+      const formattedDiscoveryDateTime = getDate(
+        draftAdjudication.incidentDetails.dateTimeOfDiscovery,
+        'D MMMM YYYY - HH:mm'
+      )
 
-        return { ...report, displayName, friendlyName, formattedDiscoveryDateTime }
-      })
+      return { ...draftAdjudication, displayName, friendlyName, formattedDiscoveryDateTime }
     }
 
-    return getEnhancedReportsByUser().then(reportsByUser =>
-      reportsByUser.sort((a: DraftAdjudicationEnhanced, b: DraftAdjudicationEnhanced) =>
-        a.displayName.localeCompare(b.displayName)
-      )
-    )
+    return this.mapData(pageResponse, draftAdjudication => {
+      const enhanced = getEnhancedReportsByUser(draftAdjudication)
+      return {
+        ...enhanced,
+      }
+    })
+  }
+
+  mapData<TI, TO>(data: ApiPageResponse<TI>, transform: (input: TI) => TO): ApiPageResponse<TO> {
+    return {
+      ...data,
+      content: data.content.map(transform),
+    }
   }
 
   async getInfoForTaskListStatuses(draftAdjudicationId: number, user: User): Promise<TaskListDetails> {

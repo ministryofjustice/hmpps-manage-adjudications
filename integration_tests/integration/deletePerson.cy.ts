@@ -40,7 +40,7 @@ context('Delete person - page contents', () => {
     DeletePersonPage.submitButton().should('exist')
     DeletePersonPage.errorSummary().should('not.exist')
   })
-  it.only('should contain the required page elements - username provided', () => {
+  it('should contain the required page elements - username provided', () => {
     cy.visit(`${adjudicationUrls.deletePerson.root}?associatedPersonId=TEST_GEN`)
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 

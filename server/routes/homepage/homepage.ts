@@ -35,7 +35,7 @@ const createTasks = (): TaskType[] => {
       id: 'continue-a-report',
       heading: 'Continue a report',
       description: 'Continue a report that you have already started.',
-      href: adjudicationUrls.selectReport.root,
+      href: adjudicationUrls.continueReport.root,
       roles: [],
       enabled: true,
     },

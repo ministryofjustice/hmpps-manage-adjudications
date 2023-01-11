@@ -1,3 +1,4 @@
+import moment from 'moment'
 import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -488,7 +489,7 @@ describe('placeOnReportService', () => {
   })
 
   describe('getAllDraftAdjudicationsForUser', () => {
-    it('gets all the users draft reports and enhances them, and then sorts by surname', async () => {
+    it('gets all the users draft reports and enhances them', async () => {
       getBatchPrisonerDetails.mockResolvedValue([
         {
           offenderNo: 'A12345',
@@ -505,80 +506,84 @@ describe('placeOnReportService', () => {
           categoryCode: 'C',
         },
       ])
-      getAllDraftAdjudicationsForUser.mockResolvedValue({
-        draftAdjudications: [
-          {
-            startedByUserId: 'user1',
-            id: 1,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-16T14:15:00',
-              dateTimeOfDiscovery: '2021-11-16T14:15:00',
-              locationId: 123,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'test',
-            },
-            prisonerNumber: 'A12345',
-          },
-          {
-            startedByUserId: 'user1',
-            id: 2,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-20T09:45:00',
-              dateTimeOfDiscovery: '2021-11-20T09:45:00',
-              locationId: 456,
-            },
-            incidentStatement: {
-              completed: true,
-              statement: 'test',
-            },
-            prisonerNumber: 'G2996UX',
-          },
-        ],
-      })
-      const response = await service.getAllDraftAdjudicationsForUser(user)
-      expect(response).toEqual([
-        {
-          startedByUserId: 'user1',
-          displayName: 'Burrows, Jack',
-          friendlyName: 'Jack Burrows',
-          id: 2,
-          formattedDiscoveryDateTime: '20 November 2021 - 09:45',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-20T09:45:00',
-            dateTimeOfDiscovery: '2021-11-20T09:45:00',
-            locationId: 456,
-          },
-          incidentStatement: {
-            completed: true,
-            statement: 'test',
-          },
-          prisonerNumber: 'G2996UX',
-        },
-        {
-          startedByUserId: 'user1',
-          displayName: 'Smith, John',
-          friendlyName: 'John Smith',
-          id: 1,
-          formattedDiscoveryDateTime: '16 November 2021 - 14:15',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-16T14:15:00',
-            dateTimeOfDiscovery: '2021-11-16T14:15:00',
-            locationId: 123,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'test',
-          },
+      const draftAdjudicationReports = [
+        testData.draftAdjudication({
+          id: 31,
           prisonerNumber: 'A12345',
+          dateTimeOfIncident: '2021-11-16T14:15:00',
+        }),
+        testData.draftAdjudication({
+          id: 58,
+          prisonerNumber: 'G2996UX',
+          dateTimeOfIncident: '2021-11-20T09:45:00',
+        }),
+      ]
+      getAllDraftAdjudicationsForUser.mockResolvedValue({
+        size: 10,
+        number: 0,
+        totalElements: 2,
+        content: draftAdjudicationReports,
+      })
+      const response = await service.getAllDraftAdjudicationsForUser(
+        user,
+        {
+          fromDate: moment('16/11/2021', 'DD/MM/YYYY'),
+          toDate: moment('21/11/2021', 'DD/MM/YYYY'),
         },
-      ])
+        {
+          size: 20,
+          number: 0,
+        }
+      )
+      const expectedDraftAdjudicationsContent = [
+        testData.draftAdjudication({
+          id: 31,
+          prisonerNumber: 'A12345',
+          dateTimeOfIncident: '2021-11-16T14:15:00',
+          otherData: {
+            displayName: 'Smith, John',
+            formattedDiscoveryDateTime: '16 November 2021 - 14:15',
+            friendlyName: 'John Smith',
+          },
+        }),
+        testData.draftAdjudication({
+          id: 58,
+          prisonerNumber: 'G2996UX',
+          dateTimeOfIncident: '2021-11-20T09:45:00',
+          otherData: {
+            displayName: 'Burrows, Jack',
+            formattedDiscoveryDateTime: '20 November 2021 - 09:45',
+            friendlyName: 'Jack Burrows',
+          },
+        }),
+      ]
+      const expected = {
+        size: 10,
+        number: 0,
+        totalElements: 2,
+        content: expectedDraftAdjudicationsContent,
+      }
+      expect(response).toEqual(expected)
     })
     it('deals with no returned reports elegantly', async () => {
-      getAllDraftAdjudicationsForUser.mockResolvedValue({ draftAdjudications: [] })
-      const response = await service.getAllDraftAdjudicationsForUser(user)
-      expect(response).toEqual([])
+      getAllDraftAdjudicationsForUser.mockResolvedValue({
+        size: 10,
+        number: 0,
+        totalElements: 0,
+        content: [],
+      })
+      const response = await service.getAllDraftAdjudicationsForUser(
+        user,
+        {
+          fromDate: moment('16/11/2021', 'DD/MM/YYYY'),
+          toDate: moment('21/11/2021', 'DD/MM/YYYY'),
+        },
+        {
+          size: 20,
+          number: 0,
+        }
+      )
+      expect(response).toEqual({ content: [], number: 0, size: 10, totalElements: 0 })
     })
   })
   describe('getInfoForTaskListStatuses', () => {
