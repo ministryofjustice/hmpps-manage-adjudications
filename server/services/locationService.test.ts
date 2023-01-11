@@ -1,9 +1,11 @@
 import LocationService from './locationService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
+import TestData from '../routes/testutils/testData'
 
 const getLocations = jest.fn()
 const getAdjudicationLocations = jest.fn()
+const testData = new TestData()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -19,13 +21,7 @@ const token = 'some token'
 describe('locationService', () => {
   let service: LocationService
 
-  const user = {
-    activeCaseLoadId: 'MDI',
-    name: 'User',
-    username: 'user1',
-    token: 'token-1',
-    authSource: 'auth',
-  }
+  const user = testData.userFromUsername('user1')
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)

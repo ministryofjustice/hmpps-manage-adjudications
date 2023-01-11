@@ -284,7 +284,7 @@ export default class TestData {
     }
   }
 
-  staffFromName = () => {
+  staffFromName = (activeCaseLoadId = 'MDI') => {
     return {
       username: 'JSMITH_GEN',
       staffId: 485592,
@@ -293,7 +293,7 @@ export default class TestData {
       firstName: 'John',
       lastName: 'Smith',
       name: 'John Smith',
-      activeCaseLoadId: 'MDI',
+      activeCaseLoadId,
     }
   }
 
