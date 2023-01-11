@@ -3,7 +3,7 @@ import PlaceOnReportService from './placeOnReportService'
 import PrisonApiClient from '../data/prisonApiClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
-import { DamageCode, EvidenceCode, PrisonerGender, WitnessCode } from '../data/DraftAdjudicationResult'
+import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 
 const testData = new TestData()
