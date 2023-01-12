@@ -37,7 +37,7 @@ export default class AdjudicationPdf {
       `pages/noticeOfBeingPlacedOnReport`,
       { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
       `pages/noticeOfBeingPlacedOnReportHeader`,
-      {},
+      { adjudicationNumber },
       `pages/noticeOfBeingPlacedOnReportFooter`,
       { adjudicationNumber },
       {

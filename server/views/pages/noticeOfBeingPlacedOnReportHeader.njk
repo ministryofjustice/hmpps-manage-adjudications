@@ -8,16 +8,28 @@
         h1 {
             font-size: 18px;
         }
+        h2 {
+            font-size: 10px;
+            font-weight: normal;
+        }
         .adjudication-pdf-header {
             background-color: #d8d8d8;
             width: 100%;
-            padding-left:30px
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left:30px;
+            padding-right: 30px;
+        }
+        .adjudication-pdf-header-bold {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class='adjudication-pdf-header'>
         <h1>Notice of being placed on report</h1>
+        <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> {{ adjudicationNumber }}</h2>
     </div>
 </body>
 </html>
