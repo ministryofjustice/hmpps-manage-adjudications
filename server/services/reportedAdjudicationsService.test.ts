@@ -7,7 +7,6 @@ import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 
 const testData = new TestData()
@@ -317,16 +316,12 @@ describe('reportedAdjudicationsService', () => {
         }),
       ]
       const batchPrisonerDetails = [
-        {
+        testData.prisonerResultSummary({
           offenderNo: 'A5041DY',
           firstName: 'Michael',
           lastName: 'Willis',
-        },
-        {
-          offenderNo: 'G6415GD',
-          firstName: 'Peter',
-          lastName: 'Smith',
-        },
+        }),
+        testData.prisonerResultSummary({ offenderNo: 'G6415GD', firstName: 'Peter', lastName: 'Smith' }),
       ]
       hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
@@ -402,51 +397,34 @@ describe('reportedAdjudicationsService', () => {
   describe('getPrisonerReport', () => {
     beforeEach(() => {
       createDraftFromCompleteAdjudication.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 10,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26152,
-            dateTimeOfIncident: '2021-11-04T07:20:00',
-          },
+          dateTimeOfIncident: '2021-11-04T07:20:00',
           incidentStatement: {
             statement: 'Statement for a test',
           },
-          startedByUserId: 'TEST_GEN',
-        },
+        }),
       })
 
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
-        name: 'Test User',
-        username: 'TEST_GEN',
-        activeCaseLoadId: 'MDI',
-        token: '',
-        authSource: '',
-      })
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
     })
     it('returns the correct information', async () => {
-      const locations = [
-        { locationId: 26152, locationPrefix: 'P3', userDescription: 'place 3', description: '' },
-        { locationId: 26155, locationPrefix: 'PC', userDescription: "Prisoner's cell", description: '' },
-        { locationId: 26151, locationPrefix: 'P1', userDescription: 'place 1', description: '' },
-      ]
-      const draftAdjudication = {
+      const locations = testData.residentialLocations()
+      const draftAdjudication = testData.draftAdjudication({
         id: 10,
         prisonerNumber: 'G6123VU',
-        incidentDetails: {
-          locationId: 26152,
-          dateTimeOfIncident: '2021-11-16T07:21:00',
-          dateTimeOfDiscovery: '2021-11-17T08:22:00',
-        },
+        dateTimeOfIncident: '2021-11-16T07:21:00',
+        dateTimeOfDiscovery: '2021-11-17T08:22:00',
+        locationId: 25538,
         incidentStatement: {
           statement: 'Statement for a test',
         },
-        startedByUserId: 'TEST_GEN',
         incidentRole: {
           associatedPrisonersNumber: 'G6415GD',
           roleCode: '25b',
         },
-      }
+      })
       const result = await service.getPrisonerReport(user, locations, draftAdjudication)
       const expectedResult = {
         incidentDetails: [
@@ -464,7 +442,7 @@ describe('reportedAdjudicationsService', () => {
           },
           {
             label: 'Location',
-            value: 'place 3',
+            value: 'Houseblock 1',
           },
           {
             label: 'Date of discovery',
@@ -476,6 +454,7 @@ describe('reportedAdjudicationsService', () => {
           },
         ],
         statement: 'Statement for a test',
+        isYouthOffender: false,
       }
       expect(result).toEqual(expectedResult)
     })
@@ -483,13 +462,7 @@ describe('reportedAdjudicationsService', () => {
 
   describe('getReviewDetails', () => {
     beforeEach(() => {
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
-        name: 'Test User',
-        username: 'TEST_GEN',
-        activeCaseLoadId: 'MDI',
-        token: '',
-        authSource: '',
-      })
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
     })
     const adjudicationData = (
       status: ReportedAdjudicationStatus,
@@ -498,41 +471,16 @@ describe('reportedAdjudicationsService', () => {
       statusDetails: string = null
     ) => {
       return {
-        reportedAdjudication: {
+        reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 123,
+          prisonerNumber: 'G6123VU',
           status,
-          reviewedByUserId,
-          statusReason,
-          statusDetails,
-          prisonerNumber: '',
-          gender: PrisonerGender.MALE,
-          bookingId: 1,
-          createdDateTime: '',
-          createdByUserId: '',
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
+          otherData: {
+            reviewedByUserId,
+            statusReason,
+            statusDetails,
           },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
-          incidentRole: {
-            associatedPrisonersNumber: '',
-            roleCode: '',
-          },
-          offenceDetails: {
-            offenceCode: 16001,
-            offenceRule: {
-              paragraphNumber: '16',
-              paragraphDescription:
-                'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
-            },
-          },
-
-          isYouthOffender: false,
-        },
+        }),
       }
     }
     it('returns the correct information for a returned adjudication', async () => {
@@ -646,31 +594,9 @@ describe('reportedAdjudicationsService', () => {
   })
   describe('getHearingDetails', () => {
     it('returns the correct information multiple hearings', async () => {
-      const location2 = {
-        locationId: 73612,
-        locationType: 'BIG',
-        description: 'BIG',
-        agencyId: 'MDI',
-        parentLocationId: 27186,
-        currentOccupancy: 0,
-        locationPrefix: 'MDI-RES-MCASU-MCASU',
-        userDescription: 'Big adjudication room',
-        internalLocationCode: 'MCASU',
-      }
-      locationService.getIncidentLocation.mockResolvedValueOnce(location2)
       const hearings = [
-        {
-          id: 1234,
-          dateTimeOfHearing: '2022-10-20T11:11:00',
-          locationId: 27187,
-          oicHearingType: OicHearingType.GOV_ADULT as string,
-        },
-        {
-          id: 23445,
-          dateTimeOfHearing: '2022-10-21T11:11:00',
-          locationId: 73612,
-          oicHearingType: OicHearingType.GOV_ADULT as string,
-        },
+        { ...testData.singleHearing('2022-10-20T11:11:00', 1234), locationId: 27187 },
+        { ...testData.singleHearing('2022-10-21T11:11:00', 23445), locationId: 27187 },
       ]
       const result = await service.getHearingDetails(hearings, user)
       const expectedResult = [
@@ -693,21 +619,14 @@ describe('reportedAdjudicationsService', () => {
           },
           location: {
             label: 'Location',
-            value: 'Big adjudication room',
+            value: 'Adj',
           },
         },
       ]
       expect(result).toEqual(expectedResult)
     })
     it('returns the correct information for one hearing', async () => {
-      const hearings = [
-        {
-          id: 1234,
-          dateTimeOfHearing: '2022-10-20T11:11:00',
-          locationId: 27187,
-          oicHearingType: OicHearingType.GOV_ADULT as string,
-        },
-      ]
+      const hearings = [{ ...testData.singleHearing('2022-10-20T11:11:00', 1234), locationId: 27187 }]
       const result = await service.getHearingDetails(hearings, user)
       const expectedResult = [
         {
@@ -731,16 +650,8 @@ describe('reportedAdjudicationsService', () => {
   })
   describe('getAllHearings', () => {
     const batchPrisonerDetails = [
-      {
-        offenderNo: 'G6123VU',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-      },
-      {
-        offenderNo: 'G6174VU',
-        firstName: 'James',
-        lastName: 'Moriarty',
-      },
+      testData.simplePrisoner('G6123VU', 'JOHN', 'SMITH', '1-0-015'),
+      testData.simplePrisoner('G6174VU', 'James', 'Moriarty', '1-0-015'),
     ]
     it('deals with no hearings', async () => {
       getHearingsGivenAgencyAndDate.mockResolvedValue({ hearings: [] })
@@ -752,12 +663,10 @@ describe('reportedAdjudicationsService', () => {
       getHearingsGivenAgencyAndDate.mockResolvedValue({
         hearings: [
           {
-            id: 1234,
-            dateTimeOfHearing: '2022-11-14T11:00:00',
+            ...testData.singleHearing('2022-11-14T11:00:00', 1234),
             dateTimeOfDiscovery: '2022-11-11T09:00:00',
-            adjudicationNumber: 123456,
             prisonerNumber: 'G6123VU',
-            oicHearingType: OicHearingType.GOV_ADULT,
+            adjudicationNumber: 123456,
           },
         ],
       })
@@ -775,6 +684,7 @@ describe('reportedAdjudicationsService', () => {
           nameAndNumber: 'John Smith - G6123VU',
           oicHearingType: OicHearingType.GOV_ADULT as string,
           prisonerNumber: 'G6123VU',
+          locationId: 775,
         },
       ])
     })
