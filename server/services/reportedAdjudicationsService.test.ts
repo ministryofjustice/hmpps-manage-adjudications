@@ -53,12 +53,7 @@ const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiServi
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 const token = 'token-1'
-const user = {
-  username: 'user1',
-  name: 'User',
-  activeCaseLoadId: 'MDI',
-  token,
-} as User
+const user = testData.userFromUsername('user1') as User
 
 const location = {
   locationId: 27187,
@@ -95,48 +90,34 @@ describe('reportedAdjudicationsService', () => {
   describe('getYourCompletedAdjudications', () => {
     beforeEach(() => {
       const completedAdjudicationsContent = [
-        {
+        testData.reportedAdjudication({
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
-          bookingId: 2,
-          createdByUserId: 'TEST_GEN',
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-01-01T11:45:00',
-            handoverDeadline: '2021-01-03T11:45:00',
-          },
+          dateTimeOfIncident: '2021-01-01T11:45:00',
           incidentStatement: {
             statement: 'My second incident',
           },
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        },
-        {
+        }),
+        testData.reportedAdjudication({
           adjudicationNumber: 1,
           prisonerNumber: 'G6174VU',
-          bookingId: 1,
-          createdByUserId: 'TEST_GEN',
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-01-01T11:30:00',
-            handoverDeadline: '2021-01-03T11:30:00',
-          },
+          dateTimeOfIncident: '2021-01-01T11:30:00',
           incidentStatement: {
             statement: 'My first incident',
           },
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        },
+        }),
       ]
       const batchPrisonerDetails = [
-        {
+        testData.prisonerResultSummary({
           offenderNo: 'G6123VU',
           firstName: 'JOHN',
           lastName: 'SMITH',
-        },
-        {
+        }),
+        testData.prisonerResultSummary({
           offenderNo: 'G6174VU',
           firstName: 'James',
           lastName: 'Moriarty',
-        },
+        }),
       ]
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
       getYourCompletedAdjudications.mockResolvedValue({
@@ -161,50 +142,46 @@ describe('reportedAdjudicationsService', () => {
         }
       )
       const expectedAdjudicationContent = [
-        {
-          displayName: 'Smith, John',
-          formattedDateTimeOfIncident: '1 January 2021 - 11:45',
-          formattedDateTimeOfScheduledHearing: ' - ',
-          dateTimeOfIncident: '2021-01-01T11:45:00',
-          friendlyName: 'John Smith',
+        testData.reportedAdjudication({
           adjudicationNumber: 2,
           prisonerNumber: 'G6123VU',
-          bookingId: 2,
-          createdByUserId: 'TEST_GEN',
-          reportingOfficer: '',
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-01-01T11:45:00',
-            handoverDeadline: '2021-01-03T11:45:00',
-          },
+          dateTimeOfIncident: '2021-01-01T11:45:00',
+          dateTimeOfDiscovery: '2021-01-01T11:45:00',
           incidentStatement: {
             statement: 'My second incident',
           },
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting review',
-        },
-        {
-          displayName: 'Moriarty, James',
-          formattedDateTimeOfIncident: '1 January 2021 - 11:30',
-          formattedDateTimeOfScheduledHearing: ' - ',
-          dateTimeOfIncident: '2021-01-01T11:30:00',
-          friendlyName: 'James Moriarty',
-          adjudicationNumber: 1,
-          createdByUserId: 'TEST_GEN',
-          reportingOfficer: '',
-          prisonerNumber: 'G6174VU',
-          bookingId: 1,
-          incidentDetails: {
-            locationId: 3,
-            dateTimeOfIncident: '2021-01-01T11:30:00',
-            handoverDeadline: '2021-01-03T11:30:00',
+          otherData: {
+            displayName: 'Smith, John',
+            formattedDateTimeOfIncident: '1 January 2021 - 11:45',
+            formattedDateTimeOfDiscovery: '1 January 2021 - 11:45',
+            formattedDateTimeOfScheduledHearing: ' - ',
+            friendlyName: 'John Smith',
+            statusDisplayName: 'Awaiting review',
+            reportingOfficer: '',
+            dateTimeOfIncident: '2021-01-01T11:45:00',
+            dateTimeOfDiscovery: '2021-01-01T11:45:00',
           },
+        }),
+        testData.reportedAdjudication({
+          adjudicationNumber: 1,
+          prisonerNumber: 'G6174VU',
+          dateTimeOfIncident: '2021-01-01T11:30:00',
+          dateTimeOfDiscovery: '2021-01-01T11:30:00',
           incidentStatement: {
             statement: 'My first incident',
           },
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting review',
-        },
+          otherData: {
+            displayName: 'Moriarty, James',
+            formattedDateTimeOfIncident: '1 January 2021 - 11:30',
+            formattedDateTimeOfDiscovery: '1 January 2021 - 11:30',
+            formattedDateTimeOfScheduledHearing: ' - ',
+            friendlyName: 'James Moriarty',
+            statusDisplayName: 'Awaiting review',
+            reportingOfficer: '',
+            dateTimeOfIncident: '2021-01-01T11:30:00',
+            dateTimeOfDiscovery: '2021-01-01T11:30:00',
+          },
+        }),
       ]
 
       const expected = {
@@ -222,21 +199,15 @@ describe('reportedAdjudicationsService', () => {
     describe('with valid adjudication number', () => {
       beforeEach(() => {
         getReportedAdjudication.mockResolvedValue({
-          reportedAdjudication: {
+          reportedAdjudication: testData.reportedAdjudication({
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            gender: PrisonerGender.MALE,
-            createdByUserId: 'TEST_GEN',
-            incidentDetails: {
-              locationId: 3,
-              dateTimeOfIncident: '2021-10-28T15:40:25.884',
-              handoverDeadline: '2021-10-22T15:40:25.884',
-            },
+            dateTimeOfIncident: '2021-10-28T15:40:25.884',
             incidentStatement: {
               statement: 'Example statement',
             },
-            status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          },
+            handoverDeadline: '2021-10-22T15:40:25.884',
+          }),
         })
 
         getPrisonerDetails.mockResolvedValue(
@@ -285,7 +256,9 @@ describe('reportedAdjudicationsService', () => {
           prisonerOtherLanguages: ['Spanish', 'German'],
           prisonerNeurodiversities: ['Hearing impairment', 'Visual impairment'],
           statement: 'Example statement',
-          reportingOfficer: 'U. User',
+          reportingOfficer: 'T. User',
+          isYouthOffender: false,
+          createdDateTime: '2022-12-09T10:30:00',
         })
       })
 
@@ -303,23 +276,11 @@ describe('reportedAdjudicationsService', () => {
     describe('with english only language information', () => {
       beforeEach(() => {
         getReportedAdjudication.mockResolvedValue({
-          reportedAdjudication: {
+          reportedAdjudication: testData.reportedAdjudication({
             adjudicationNumber: 123,
             prisonerNumber: 'A1234AA',
-            gender: PrisonerGender.MALE,
-            createdByUserId: 'TEST_GEN',
-            incidentDetails: {
-              locationId: 3,
-              dateTimeOfIncident: '2021-10-28T15:40:25.884',
-              handoverDeadline: '2021-10-22T15:40:25.884',
-            },
-            incidentStatement: {
-              statement: 'Example statement',
-            },
-            status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          },
+          }),
         })
-
         getPrisonerDetails.mockResolvedValue(
           testData.prisonerResultSummary({
             offenderNo: 'A1234AA',
@@ -327,7 +288,6 @@ describe('reportedAdjudicationsService', () => {
             lastName: 'SMITH',
           })
         )
-
         getSecondaryLanguages.mockResolvedValue([])
       })
 
@@ -343,32 +303,18 @@ describe('reportedAdjudicationsService', () => {
   describe('getAllCompletedAdjudications', () => {
     beforeEach(() => {
       const completedAdjudicationsContent = [
-        {
+        testData.reportedAdjudication({
           adjudicationNumber: 1524427,
           prisonerNumber: 'A5041DY',
-          bookingId: 1200675,
-          incidentDetails: {
-            locationId: 27217,
-            dateTimeOfIncident: '2021-11-30T14:10:00',
-            handoverDeadline: '2021-12-02T14:10:00',
-          },
+          dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
-          createdByUserId: 'TEST_GEN',
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        },
-        {
+        }),
+        testData.reportedAdjudication({
           adjudicationNumber: 1524425,
           prisonerNumber: 'G6415GD',
-          bookingId: 1201638,
-          incidentDetails: {
-            locationId: 357592,
-            dateTimeOfIncident: '2021-11-30T14:00:00',
-            handoverDeadline: '2021-12-02T14:00:00',
-          },
-          incidentStatement: { statement: 'efe er3d 32r §' },
-          createdByUserId: 'TEST_GEN',
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        },
+          dateTimeOfIncident: '2021-11-30T14:00:00',
+          incidentStatement: { statement: 'Something happened' },
+        }),
       ]
       const batchPrisonerDetails = [
         {
@@ -382,13 +328,7 @@ describe('reportedAdjudicationsService', () => {
           lastName: 'Smith',
         },
       ]
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue({
-        name: 'Test User',
-        username: 'TEST_GEN',
-        activeCaseLoadId: 'MDI',
-        token: '',
-        authSource: '',
-      })
+      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
       getAllCompletedAdjudications.mockResolvedValue({
         size: 20,
@@ -412,51 +352,40 @@ describe('reportedAdjudicationsService', () => {
       )
 
       const expectedAdjudicationContent = [
-        {
-          createdByUserId: 'TEST_GEN',
-          displayName: 'Willis, Michael',
-          friendlyName: 'Michael Willis',
-          reportingOfficer: 'Test User',
-          dateTimeOfIncident: '2021-11-30T14:10:00',
-          formattedDateTimeOfIncident: '30 November 2021 - 14:10',
-          formattedDateTimeOfScheduledHearing: ' - ',
+        testData.reportedAdjudication({
           adjudicationNumber: 1524427,
           prisonerNumber: 'A5041DY',
-          bookingId: 1200675,
-          incidentDetails: {
-            handoverDeadline: '2021-12-02T14:10:00',
-            locationId: 27217,
+          dateTimeOfIncident: '2021-11-30T14:10:00',
+          incidentStatement: { statement: 'Something happened' },
+          otherData: {
+            displayName: 'Willis, Michael',
+            friendlyName: 'Michael Willis',
+            formattedDateTimeOfIncident: '30 November 2021 - 14:10',
+            formattedDateTimeOfScheduledHearing: ' - ',
+            statusDisplayName: 'Awaiting review',
             dateTimeOfIncident: '2021-11-30T14:10:00',
+            formattedDateTimeOfDiscovery: '30 November 2021 - 14:10',
+            dateTimeOfDiscovery: '2021-11-30T14:10:00',
+            reportingOfficer: '',
           },
-          incidentStatement: {
-            statement: 'Something happened',
-          },
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting review',
-        },
-
-        {
+        }),
+        testData.reportedAdjudication({
           adjudicationNumber: 1524425,
           prisonerNumber: 'G6415GD',
-          bookingId: 1201638,
-          incidentDetails: {
-            handoverDeadline: '2021-12-02T14:00:00',
-            locationId: 357592,
-            dateTimeOfIncident: '2021-11-30T14:00:00',
-          },
-          incidentStatement: {
-            statement: 'efe er3d 32r §',
-          },
-          createdByUserId: 'TEST_GEN',
-          displayName: 'Smith, Peter',
-          friendlyName: 'Peter Smith',
-          reportingOfficer: 'Test User',
           dateTimeOfIncident: '2021-11-30T14:00:00',
-          formattedDateTimeOfIncident: '30 November 2021 - 14:00',
-          formattedDateTimeOfScheduledHearing: ' - ',
-          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          statusDisplayName: 'Awaiting review',
-        },
+          incidentStatement: { statement: 'Something happened' },
+          otherData: {
+            displayName: 'Smith, Peter',
+            friendlyName: 'Peter Smith',
+            formattedDateTimeOfIncident: '30 November 2021 - 14:00',
+            formattedDateTimeOfScheduledHearing: ' - ',
+            statusDisplayName: 'Awaiting review',
+            dateTimeOfIncident: '2021-11-30T14:00:00',
+            formattedDateTimeOfDiscovery: '30 November 2021 - 14:00',
+            dateTimeOfDiscovery: '2021-11-30T14:00:00',
+            reportingOfficer: '',
+          },
+        }),
       ]
 
       const expected = {
