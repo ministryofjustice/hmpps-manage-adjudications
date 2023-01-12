@@ -136,7 +136,7 @@ describe('GET /all-completed-reports', () => {
       'pages/noticeOfBeingPlacedOnReportHeader',
       { adjudicationNumber: 1524493 },
       'pages/noticeOfBeingPlacedOnReportFooter',
-      { adjudicationNumber: 1524493 },
+      {},
       {
         filename: 'adjudication-report-1524493',
         pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '0.9' },
