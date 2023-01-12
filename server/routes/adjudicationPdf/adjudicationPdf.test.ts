@@ -104,9 +104,9 @@ describe('GET /all-completed-reports', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         noticeOfBeingPlacedOnReportData: {
           adjudicationNumber: 1524493,
-          expirationDay: 'Wednesday 23 December',
+          expirationDay: 'Wednesday, 23 December 2020',
           expirationTime: '07:21',
-          incidentDate: '21 December 2020',
+          incidentDate: 'Monday, 21 December 2020',
           incidentLocationDescription: 'Moorland (HMP & YOI) - Adj',
           isYouthOffender: false,
           incidentTime: '07:21',
@@ -134,7 +134,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      {},
+      { adjudicationNumber: 1524493 },
       'pages/noticeOfBeingPlacedOnReportFooter',
       { adjudicationNumber: 1524493 },
       {

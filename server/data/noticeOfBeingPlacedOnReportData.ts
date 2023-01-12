@@ -48,13 +48,13 @@ export default class noticeOfBeingPlacedOnReportData {
     this.reportingOfficer = convertToTitleCase(confirmedOnReportData.reportingOfficer)
     this.incidentLocationDescription = `${confirmedOnReportData.incidentAgencyName} - ${confirmedOnReportData.incidentLocationName}`
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${confirmedOnReportData.prisonerLivingUnitName}`
-    this.incidentDate = formatTimestampTo(confirmedOnReportData.incidentDate, 'D MMMM YYYY')
+    this.incidentDate = formatTimestampTo(confirmedOnReportData.incidentDate, 'dddd, D MMMM YYYY')
     this.incidentTime = formatTimestampTo(confirmedOnReportData.incidentDate, 'HH:mm')
     this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
     this.reportedTime = formatTimestampTo(confirmedOnReportData.createdDateTime, 'HH:mm')
     this.offences = offences
     this.expirationTime = formatTimestampToTime(confirmedOnReportData.reportExpirationDateTime)
-    this.expirationDay = formatTimestampToDate(confirmedOnReportData.reportExpirationDateTime, 'dddd D MMMM')
+    this.expirationDay = formatTimestampToDate(confirmedOnReportData.reportExpirationDateTime, 'dddd, D MMMM YYYY')
     this.isYouthOffender = confirmedOnReportData.isYouthOffender
   }
 }
