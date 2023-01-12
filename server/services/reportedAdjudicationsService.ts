@@ -527,6 +527,7 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...locationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
       )) || []
+
     const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
     return hearings.map(hearing => {
       return {

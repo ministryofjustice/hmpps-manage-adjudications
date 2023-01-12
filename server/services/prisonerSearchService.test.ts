@@ -171,13 +171,7 @@ describe('prisonerSearchService', () => {
     it('uses prison api to request image data', async () => {
       getPrisonerImage.mockResolvedValue('image data')
 
-      const result = await service.getPrisonerImage('A1234AA', {
-        activeCaseLoadId: 'MDI',
-        name: 'User',
-        username: 'user1',
-        token: 'token-1',
-        authSource: 'auth',
-      })
+      const result = await service.getPrisonerImage('A1234AA', testData.userFromUsername('user1'))
 
       expect(result).toEqual('image data')
       expect(PrisonApiClient).toBeCalledWith(token)
