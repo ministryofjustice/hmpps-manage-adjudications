@@ -39,7 +39,7 @@ export default class AdjudicationPdf {
       `pages/noticeOfBeingPlacedOnReportHeader`,
       { adjudicationNumber },
       `pages/noticeOfBeingPlacedOnReportFooter`,
-      { adjudicationNumber },
+      {},
       {
         filename: `adjudication-report-${adjudicationNumber}`,
         pdfMargins,

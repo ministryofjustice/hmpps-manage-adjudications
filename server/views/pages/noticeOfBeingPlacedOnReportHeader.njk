@@ -24,12 +24,15 @@
         .adjudication-pdf-header-bold {
             font-weight: bold;
         }
+        .adjudication-pdf-header-normal {
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
     <div class='adjudication-pdf-header'>
         <h1>Notice of being placed on report</h1>
-        <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> {{ adjudicationNumber }}</h2>
+        <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> <span class="adjudication-pdf-header-normal">{{ adjudicationNumber }}</span></h2>
     </div>
 </body>
 </html>
