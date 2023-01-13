@@ -1,4 +1,3 @@
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 
@@ -21,21 +20,14 @@ context('Prisoner has been placed on report', () => {
       id: 1524242,
       response: {
         reportedAdjudication: {
-          adjudicationNumber: 3,
-          prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
+          ...testData.reportedAdjudication({
+            adjudicationNumber: 3,
+            prisonerNumber: 'G6415GD',
+            // dateTimeOfIncident: '2020-12-06T10:00:00',
+            locationId: 25538,
+            offenceDetails: { offenceCode: 1001 },
+          }),
           bookingId: 123,
-          createdByUserId: 'AJONES',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-06T10:00:00',
-            handoverDeadline: '2020-12-08T10:00:00',
-          },
-          incidentStatement: {
-            statement: 'test',
-          },
-          offenceDetails: { offenceCode: 1001 },
-          incidentRole: {},
         },
       },
     })
@@ -71,11 +63,11 @@ context('Prisoner has been placed on report', () => {
       ],
     })
     cy.task('stubGetLocation', {
-      locationId: 2,
-      response: { locationId: 2, agencyId: 'MDI', userDescription: 'Adj', locationPrefix: 'MDI-RES-MCASU-MCASU' },
+      locationId: 25538,
+      response: testData.residentialLocations()[0],
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-    cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
+    cy.task('stubGetUser', { username: 'USER1', response: testData.userFromUsername() })
 
     cy.signIn()
   })

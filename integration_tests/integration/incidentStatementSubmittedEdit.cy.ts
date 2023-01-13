@@ -21,42 +21,34 @@ context('Incident Statement', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 3456,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 3456,
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 197682,
-            dateTimeOfIncident: '2021-12-09T10:30:00',
-            handoverDeadline: '2021-12-11T10:30:00',
-          },
+          locationId: 197682,
+          dateTimeOfIncident: '2021-12-09T10:30:00',
           incidentStatement: {
             statement: 'This is the statement',
             completed: true,
           },
-          startedByUserId: 'TESTER2_GEN',
-        },
+        }),
       },
     })
 
     cy.task('stubPutDraftIncidentStatement', {
       id: 3456,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 3456,
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 197682,
-            dateTimeOfIncident: '2021-12-09T10:30:00',
-            handoverDeadline: '2021-12-11T10:30:00',
-          },
+          locationId: 197682,
+          dateTimeOfIncident: '2021-12-09T10:30:00',
           incidentStatement: {
             statement: 'The prisoner was badly behaved today.',
             completed: true,
           },
-          startedByUserId: 'TESTER2_GEN',
-        },
+        }),
       },
     })
 

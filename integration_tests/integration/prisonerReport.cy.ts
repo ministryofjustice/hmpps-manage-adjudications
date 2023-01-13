@@ -1,8 +1,8 @@
 import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { DamageCode, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 
@@ -14,31 +14,26 @@ const createDraftFromReportedAdjudicationResponse = (
   witnesses = []
 ) => {
   return {
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id,
       adjudicationNumber,
+      locationId: 25538,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 234,
-        dateTimeOfIncident: '2021-12-01T09:40:00',
-        dateTimeOfDiscovery: '2021-12-01T09:40:00',
-        handoverDeadline: '2021-12-03T09:40:00',
-      },
+      dateTimeOfIncident: '2021-12-01T09:40:00',
       incidentStatement: {
         statement: 'TESTING',
         completed: true,
       },
-      startedByUserId: 'USER1',
       damages,
       evidence,
       witnesses,
-    },
+    }),
   }
 }
 
 const reportedAdjudicationResponse = (
   adjudicationNumber: number,
-  status: string,
+  status: ReportedAdjudicationStatus,
   reviewedByUserId = null,
   statusReason = null,
   statusDetails = null,
@@ -47,32 +42,22 @@ const reportedAdjudicationResponse = (
   witnesses = []
 ) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        dateTimeOfDiscovery: '2021-12-10T09:40:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {},
+      locationId: 25538,
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      dateTimeOfDiscovery: '2021-12-10T09:40:00',
       status,
-      reviewedByUserId,
-      statusReason,
-      statusDetails,
       damages,
       evidence,
       witnesses,
-    },
+      otherData: {
+        reviewedByUserId,
+        statusReason,
+        statusDetails,
+      },
+    }),
   }
 }
 
@@ -85,22 +70,18 @@ const draftAdjudicationResponse = (
   witnesses = []
 ) => {
   return {
-    draftAdjudication: {
+    draftAdjudication: testData.draftAdjudication({
       id,
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      incidentDetails: {
-        locationId: 234,
-        dateTimeOfIncident: '2021-12-01T09:40:00',
-        dateTimeOfDiscovery: '2021-12-02T10:42:00',
-        handoverDeadline: '2021-12-03T09:40:00',
-      },
+      dateTimeOfIncident: '2021-12-01T09:40:00',
+      dateTimeOfDiscovery: '2021-12-02T10:42:00',
+      locationId: 25538,
+      isYouthOffender,
       incidentStatement: {
         statement: 'TESTING',
         completed: true,
       },
-      startedByUserId: 'USER1',
-      isYouthOffender,
       incidentRole: {
         associatedPrisonersNumber: 'T3356FU',
         roleCode: '25c',
@@ -121,7 +102,7 @@ const draftAdjudicationResponse = (
       damages,
       evidence,
       witnesses,
-    },
+    }),
   }
 }
 
@@ -179,39 +160,40 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 234,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: reportedAdjudicationResponse(1524493, 'AWAITING_REVIEW'),
+      response: reportedAdjudicationResponse(1524493, ReportedAdjudicationStatus.AWAITING_REVIEW),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
-      response: reportedAdjudicationResponse(1524493, 'REJECTED', 'USER1', 'expired', 'Too long ago to report now.', [
-        {
-          code: DamageCode.CLEANING,
-          reporter: 'TESTER_GEN',
-          details: 'Some test info',
-        },
-      ]),
+      response: reportedAdjudicationResponse(
+        1524493,
+        ReportedAdjudicationStatus.REJECTED,
+        'USER1',
+        'expired',
+        'Too long ago to report now.',
+        [testData.singleDamage({})]
+      ),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 23456,
-      response: reportedAdjudicationResponse(1524493, 'RETURNED', 'USER1', 'statement', 'More detail please.'),
+      response: reportedAdjudicationResponse(
+        1524493,
+        ReportedAdjudicationStatus.RETURNED,
+        'USER1',
+        'statement',
+        'More detail please.'
+      ),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 34567,
-      response: reportedAdjudicationResponse(1524493, 'UNSCHEDULED', 'USER1'),
+      response: reportedAdjudicationResponse(1524493, ReportedAdjudicationStatus.UNSCHEDULED, 'USER1'),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 98765,
-      response: reportedAdjudicationResponse(1524494, 'ACCEPTED', 'USER1'), // here
+      response: reportedAdjudicationResponse(1524494, ReportedAdjudicationStatus.ACCEPTED, 'USER1'),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
@@ -335,7 +317,7 @@ context('Prisoner report - reporter view', () => {
             expect($summaryData.get(0).innerText).to.contain('T. User')
             expect($summaryData.get(1).innerText).to.contain('1 December 2021')
             expect($summaryData.get(2).innerText).to.contain('09:40')
-            expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+            expect($summaryData.get(3).innerText).to.contain('Houseblock 1')
           })
       })
       it('should contain the correct offence details', () => {

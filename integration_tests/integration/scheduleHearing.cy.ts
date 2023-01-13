@@ -3,54 +3,24 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-import { ReviewStatus } from '../../server/routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
-import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
 const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = []) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        dateTimeOfDiscovery: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {},
-      isYouthOffender: false,
-      status: ReviewStatus.UNSCHEDULED,
-      reviewedByUserId: 'USER1',
-      statusReason: undefined,
-      statusDetails: undefined,
-      damages: [],
-      evidence: [],
-      witnesses: [],
+      dateTimeOfIncident: '2021-12-09T10:30:00',
       hearings,
-    },
+      status: ReportedAdjudicationStatus.UNSCHEDULED,
+    }),
   }
 }
 
-const singleHearing = [
-  {
-    id: 987,
-    dateTimeOfHearing: '2030-01-01T11:00:00',
-    locationId: 123,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
+const singleHearing = [testData.singleHearing('2030-01-01T11:00:00', 987)]
 
 context('Schedule a hearing page', () => {
   beforeEach(() => {
@@ -59,13 +29,7 @@ context('Schedule a hearing page', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetPrisonerDetails', {
@@ -78,31 +42,11 @@ context('Schedule a hearing page', () => {
     })
     cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 234,
-          agencyId: 'MDI',
-          userDescription: 'Adj 2',
-        },
-        {
-          locationId: 123,
-          agencyId: 'MDI',
-          userDescription: 'Adj 1',
-        },
-        {
-          locationId: 345,
-          agencyId: 'MDI',
-          userDescription: 'Adj 3',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetLocation', {
       locationId: 123,
-      response: {
-        locationId: 123,
-        agencyId: 'MDI',
-        userDescription: 'Adj 1',
-      },
+      response: testData.residentialLocations()[0],
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
@@ -128,7 +72,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    scheduleHearingsPage.locationSelector().select('Adj 1')
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
     forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputHours().select('11')
     scheduleHearingsPage.timeInputMinutes().select('00')
@@ -170,7 +114,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    scheduleHearingsPage.locationSelector().select('Adj 1')
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('30')
     scheduleHearingsPage.submitButton().click()
@@ -185,7 +129,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    scheduleHearingsPage.locationSelector().select('Adj 1')
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
     forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputMinutes().select('30')
     scheduleHearingsPage.submitButton().click()
@@ -200,7 +144,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    scheduleHearingsPage.locationSelector().select('Adj 1')
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
     forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.submitButton().click()
@@ -217,7 +161,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    scheduleHearingsPage.locationSelector().select('Adj 1')
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
     forceDateInputWithDate(now, '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputHours().select(oneHourAgo)
     scheduleHearingsPage.timeInputMinutes().select('00')

@@ -2,88 +2,35 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-import { ReviewStatus } from '../../server/routes/adjudicationTabbedParent/prisonerReport/prisonerReportReviewValidation'
-import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
 const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = []) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: '2021-12-09T10:30:00',
-        dateTimeOfDiscovery: '2021-12-09T10:30:00',
-        handoverDeadline: '2021-12-11T10:30:00',
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {},
-      isYouthOffender: false,
-      status: ReviewStatus.UNSCHEDULED,
-      reviewedByUserId: 'USER1',
-      statusReason: undefined,
-      statusDetails: undefined,
-      damages: [],
-      evidence: [],
-      witnesses: [],
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      status: ReportedAdjudicationStatus.UNSCHEDULED,
       hearings,
-    },
+    }),
   }
 }
 
 const hearingDateTime = '2030-01-01T11:00:00'
 
-const originalHearing = [
-  {
-    id: 333,
-    dateTimeOfHearing: hearingDateTime,
-    locationId: 123,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
+const originalHearing = [testData.singleHearing(hearingDateTime, 333, 25538)]
 
-const changedDayHearing = [
-  {
-    id: 333,
-    dateTimeOfHearing: '2030-01-02T11:00:00',
-    locationId: 123,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
-const changedTimeHearing = [
-  {
-    id: 333,
-    dateTimeOfHearing: '2030-01-01T11:30:00',
-    locationId: 123,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
-const changedLocationHearing = [
-  {
-    id: 333,
-    dateTimeOfHearing: hearingDateTime,
-    locationId: 234,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
+const changedDayHearing = [testData.singleHearing('2030-01-02T11:00:00', 333, 25538)]
+
+const changedTimeHearing = [testData.singleHearing('2030-01-01T11:30:00', 333, 25538)]
+
+const changedLocationHearing = [testData.singleHearing(hearingDateTime, 333, 25655)]
+
 const changedTypeHearing = [
-  {
-    id: 333,
-    dateTimeOfHearing: hearingDateTime,
-    locationId: 123,
-    oicHearingType: OicHearingType.INAD_ADULT as string,
-  },
+  { ...testData.singleHearing(hearingDateTime), oicHearingType: OicHearingType.INAD_ADULT as string },
 ]
 
 context('Schedule a hearing page', () => {
@@ -93,13 +40,7 @@ context('Schedule a hearing page', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetPrisonerDetails', {
@@ -112,31 +53,11 @@ context('Schedule a hearing page', () => {
     })
     cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 234,
-          agencyId: 'MDI',
-          userDescription: 'Adj 2',
-        },
-        {
-          locationId: 123,
-          agencyId: 'MDI',
-          userDescription: 'Adj 1',
-        },
-        {
-          locationId: 345,
-          agencyId: 'MDI',
-          userDescription: 'Adj 3',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetLocation', {
-      locationId: 123,
-      response: {
-        locationId: 123,
-        agencyId: 'MDI',
-        userDescription: 'Adj 1',
-      },
+      locationId: 25538,
+      response: testData.residentialLocations()[0],
     })
 
     cy.task('stubGetReportedAdjudication', {
@@ -162,8 +83,8 @@ context('Schedule a hearing page', () => {
     scheduleHearingsPage.datePicker().should('have.value', '01/01/2030')
     scheduleHearingsPage.timeInputHours().should('have.value', '11')
     scheduleHearingsPage.timeInputMinutes().should('have.value', '00')
-    scheduleHearingsPage.locationSelector().should('have.value', '123')
-    scheduleHearingsPage.locationSelectorSelectedOption().should('have.text', 'Adj 1')
+    scheduleHearingsPage.locationSelector().should('have.value', '25538')
+    scheduleHearingsPage.locationSelectorSelectedOption().should('have.text', 'Houseblock 1')
   })
   it('should submit the form successfully when location is changed', () => {
     cy.task('stubAmendHearing', {
@@ -171,13 +92,10 @@ context('Schedule a hearing page', () => {
       hearingId: 333,
       response: reportedAdjudicationResponse(1524494, changedLocationHearing),
     })
+
     cy.task('stubGetLocation', {
-      locationId: 234,
-      response: {
-        locationId: 234,
-        agencyId: 'MDI',
-        userDescription: 'Adj 2',
-      },
+      locationId: 25538,
+      response: testData.residentialLocations()[1],
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
@@ -185,7 +103,7 @@ context('Schedule a hearing page', () => {
     })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    scheduleHearingsPage.locationSelector().select('234')
+    scheduleHearingsPage.locationSelector().select('25655')
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))

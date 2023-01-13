@@ -79,33 +79,20 @@ context('Select gender edit', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 3456,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 3456,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:00',
-            handoverDeadline: '2021-11-05T11:09:00',
-            locationId: 234,
-          },
-          startedByUserId: 'TEST_GEN',
-        },
+        }),
       },
     })
     cy.task('stubAmendPrisonerGender', {
       draftId: 3456,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 3456,
           prisonerNumber: 'G6415GD',
           gender: PrisonerGender.FEMALE,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:00',
-            handoverDeadline: '2021-11-05T11:09:00',
-            locationId: 234,
-          },
-          startedByUserId: 'TEST_GEN',
-        },
+        }),
       },
     })
     cy.signIn()

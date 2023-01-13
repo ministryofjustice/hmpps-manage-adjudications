@@ -22,19 +22,13 @@ context('Task list', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:00',
-              handoverDeadline: '2021-11-05T11:09:00',
-              locationId: 234,
-            },
-            startedByUserId: 'TEST_GEN',
-            damages: [],
-            evidence: [],
-            witnesses: [],
-          },
+            dateTimeOfIncident: '2021-11-03T11:09:00',
+            offenceDetails: null,
+            incidentStatement: null,
+          }),
         },
       })
       cy.signIn()
@@ -116,19 +110,13 @@ context('Task list', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:00',
-              handoverDeadline: '2021-11-05T11:09:00',
-              locationId: 234,
-            },
-            startedByUserId: 'TEST_GEN',
-            damages: [],
-            evidence: [],
-            witnesses: [],
-          },
+            dateTimeOfIncident: '2021-11-03T11:09:00',
+            offenceDetails: null,
+            incidentStatement: null,
+          }),
         },
       })
       cy.signIn()
@@ -186,46 +174,27 @@ context('Task list', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:00',
-              handoverDeadline: '2021-11-05T11:09:00',
-              locationId: 234,
-            },
-            incidentStatement: {
-              id: 23,
-              statement: 'This is my statement',
-              completed: false,
-            },
-            startedByUserId: 'TEST_GEN',
-            incidentRole: {
-              associatedPrisonersNumber: 'G2996UX',
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              roleCode: '25a',
-            },
-            isYouthOffender: false,
+            dateTimeOfIncident: '2021-11-03T11:09:00',
             offenceDetails: {
               offenceCode: 3,
               offenceRule: {
                 paragraphDescription: 'Committed an assault',
                 paragraphNumber: '25(a)',
               },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
             },
-            damages: [],
-            evidence: [],
-            witnesses: [],
-            damagesSaved: true,
-            evidenceSaved: true,
-            witnessesSaved: true,
-          },
+            incidentStatement: {
+              statement: 'This is my statement',
+              completed: false,
+            },
+            otherData: {
+              damagesSaved: true,
+              evidenceSaved: true,
+              witnessesSaved: true,
+            },
+          }),
         },
       })
       cy.signIn()
@@ -299,46 +268,27 @@ context('Task list', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:00',
-              handoverDeadline: '2021-11-05T11:09:00',
-              locationId: 234,
-            },
-            isYouthOffender: false,
-            incidentStatement: {
-              id: 23,
-              statement: 'This is my statement',
-              completed: true,
-            },
-            startedByUserId: 'TEST_GEN',
-            damages: [],
-            evidence: [],
-            witnesses: [],
-            damagesSaved: true,
-            evidenceSaved: true,
-            witnessesSaved: true,
-            incidentRole: {
-              associatedPrisonersNumber: 'G2996UX',
-              offenceRule: {
-                paragraphDescription: 'Committed an assault',
-                paragraphNumber: '25(a)',
-              },
-              roleCode: '25a',
-            },
+            dateTimeOfIncident: '2021-11-03T11:09:00',
             offenceDetails: {
               offenceCode: 3,
               offenceRule: {
                 paragraphDescription: 'Committed an assault',
                 paragraphNumber: '25(a)',
               },
-              victimOtherPersonsName: 'Bob Hope',
-              victimPrisonersNumber: 'G2996UX',
-              victimStaffUsername: 'ABC12D',
             },
-          },
+            incidentStatement: {
+              statement: 'This is my statement',
+              completed: true,
+            },
+            otherData: {
+              damagesSaved: true,
+              evidenceSaved: true,
+              witnessesSaved: true,
+            },
+          }),
         },
       })
       cy.signIn()
@@ -412,35 +362,20 @@ context('Task list', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 792,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              locationId: 26150,
-              dateTimeOfIncident: '2022-02-01T10:11:00',
-              handoverDeadline: '2022-02-03T10:11:00',
-            },
-            incidentRole: {
-              roleCode: '25b',
-              offenceRule: {
-                paragraphNumber: '25(b)',
-                paragraphDescription: 'Incites another prisoner to commit any of the foregoing offences:',
-              },
-              associatedPrisonersNumber: 'G6415GD',
-            },
-            offenceDetails: {},
-            damages: [],
-            evidence: [],
-            witnesses: [],
-            damagesSaved: true,
-            evidenceSaved: true,
-            witnessesSaved: true,
+            dateTimeOfIncident: '2022-02-01T10:11:00',
             incidentStatement: {
-              statement: 'pangolin',
+              statement: 'This is my statement',
               completed: true,
             },
-            startedByUserId: 'TEST_GEN',
-          },
+            otherData: {
+              damagesSaved: true,
+              evidenceSaved: true,
+              witnessesSaved: true,
+            },
+          }),
         },
       })
       cy.signIn()
@@ -508,60 +443,23 @@ context('Task list', () => {
         cy.task('stubGetDraftAdjudication', {
           id: 3456,
           response: {
-            draftAdjudication: {
-              id: 3456,
+            draftAdjudication: testData.draftAdjudication({
+              id: 792,
               prisonerNumber: 'G6415GD',
-              incidentDetails: {
-                dateTimeOfIncident: '2021-11-03T11:09:00',
-                handoverDeadline: '2021-11-05T11:09:00',
-                locationId: 234,
-              },
-              isYouthOffender: false,
+              dateTimeOfIncident: '2021-11-03T11:09:00',
               incidentStatement: {
-                id: 23,
                 statement: 'This is my statement',
                 completed: true,
               },
-              startedByUserId: 'TEST_GEN',
-              damages: [],
-              evidence: [],
-              witnesses: [
-                {
-                  code: 'STAFF',
-                  firstName: 'Philip',
-                  lastName: 'Jones',
-                  reporter: 'NCLAMP_GEN',
-                },
-                {
-                  code: 'OFFICER',
-                  firstName: 'Jake',
-                  lastName: 'January',
-                  reporter: 'NCLAMP_GEN',
-                },
-              ],
-              damagesSaved: true,
-              witnessesSaved: true,
-              incidentRole: {
-                associatedPrisonersNumber: 'G2996UX',
-                offenceRule: {
-                  paragraphDescription: 'Committed an assault',
-                  paragraphNumber: '25(a)',
-                },
-                roleCode: '25a',
+              witnesses: [testData.singleWitness({}), testData.singleWitness({})],
+              otherData: {
+                damagesSaved: true,
+                witnessesSaved: true,
               },
-              offenceDetails: {
-                offenceCode: 3,
-                offenceRule: {
-                  paragraphDescription: 'Committed an assault',
-                  paragraphNumber: '25(a)',
-                },
-                victimOtherPersonsName: 'Bob Hope',
-                victimPrisonersNumber: 'G2996UX',
-                victimStaffUsername: 'ABC12D',
-              },
-            },
+            }),
           },
         })
+
         cy.signIn()
       })
       it('should have the correct statuses', () => {

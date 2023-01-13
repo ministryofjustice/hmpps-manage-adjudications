@@ -5,7 +5,9 @@ import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
+
+const testData = new TestData()
 
 context('Your Completed Reports', () => {
   beforeEach(() => {
@@ -25,28 +27,12 @@ context('Your Completed Reports', () => {
 
   it('pagination should work', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2021-11-15T11:30:00',
-          dateTimeOfDiscovery: '2022-01-01T11:30:00',
-          handoverDeadline: '2021-11-17T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        createdByUserId: 'TEST_GEN',
-        createdDateTime: undefined,
-        incidentRole: {
-          associatedPrisonersNumber: undefined,
-          roleCode: undefined,
-        },
-        offenceDetails: undefined,
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      }
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2022-01-01T11:30:00',
+      })
     })
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
     cy.task('stubGetYourReportedAdjudications', { number: 9, allContent: manyReportedAdjudications }) // Page 10
@@ -101,26 +87,12 @@ context('Your Completed Reports', () => {
     cy.task('stubGetYourReportedAdjudications', {
       number: 0,
       allContent: [
-        {
+        testData.reportedAdjudication({
           adjudicationNumber: 1,
           prisonerNumber: 'A1234AA',
-          bookingId: 1,
-          incidentDetails: {
-            locationId: 1,
-            dateTimeOfIncident: '2022-01-01T11:30:00',
-            dateTimeOfDiscovery: '2022-01-01T11:30:00',
-            handoverDeadline: '2022-01-03T11:30:00',
-          },
-          incidentStatement: null,
-          createdByUserId: 'TEST_GEN',
-          createdDateTime: undefined,
-          incidentRole: {
-            associatedPrisonersNumber: undefined,
-            roleCode: undefined,
-          },
-          offenceDetails: undefined,
+          dateTimeOfIncident: '2022-01-01T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
-        },
+        }),
       ],
       filter: { status: ReportedAdjudicationStatus.UNSCHEDULED, fromDate: '2022-01-01', toDate: '2022-01-09' },
     })
@@ -153,28 +125,13 @@ context('Your Completed Reports', () => {
 
   it('filtering and pagination should work together', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
-      return {
-        gender: PrisonerGender.MALE,
+      return testData.reportedAdjudication({
         adjudicationNumber: _,
         prisonerNumber: 'A1234AA',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 1,
-          dateTimeOfIncident: '2021-10-10T11:30:00',
-          dateTimeOfDiscovery: '2022-01-01T11:30:00',
-          handoverDeadline: '2021-10-12T11:30:00',
-        },
-        isYouthOffender: false,
-        incidentStatement: null,
-        createdByUserId: 'TEST_GEN',
-        createdDateTime: undefined,
-        incidentRole: {
-          associatedPrisonersNumber: undefined,
-          roleCode: undefined,
-        },
-        offenceDetails: undefined,
+        dateTimeOfIncident: '2021-10-10T11:30:00',
+        dateTimeOfDiscovery: '2022-01-01T11:30:00',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
-      }
+      })
     })
     // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: [] })
