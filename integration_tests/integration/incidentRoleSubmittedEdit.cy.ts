@@ -30,33 +30,6 @@ context('Incident role (edit after completion of report)', () => {
             roleCode: '25b',
           },
         }),
-        // {
-        //   id: 34,
-        //   adjudicationNumber: 1524455,
-        //   incidentDetails: {
-        //     dateTimeOfIncident: '2021-11-03T13:10:00',
-        //     locationId: 27029,
-        //   },
-        //   offenceDetails: {
-        //     offenceCode: 1001,
-        //     offenceRule: {
-        //       paragraphNumber: '1',
-        //       paragraphDescription: 'Commits any assault',
-        //     },
-        //     victimPrisonersNumber: 'G5512G',
-        //   },
-
-        //   incidentStatement: {
-        //     completed: true,
-        //     statement: 'Statement here',
-        //   },
-        //   prisonerNumber: 'G6415GD',
-        //   startedByUserId: 'USER1',
-        //   incidentRole: {
-        //     associatedPrisonersNumber: 'T3356FU',
-        //     roleCode: '25b',
-        //   },
-        // },
       },
     })
     cy.task('stubUpdateDraftIncidentRole', {
