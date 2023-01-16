@@ -5,6 +5,12 @@ import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
+const draftAdjNoRole = testData.draftAdjudication({
+  id: 34,
+  prisonerNumber: 'G6415GD',
+})
+delete draftAdjNoRole.incidentRole
+
 context('Incident role', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -20,13 +26,7 @@ context('Incident role', () => {
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'USER ONE',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
@@ -47,75 +47,44 @@ context('Incident role', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
-          id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
-          prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
-        },
+        draftAdjudication: draftAdjNoRole,
       },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 134,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 134,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25b',
           },
-        },
+        }),
       },
     })
     cy.task('stubUpdateDraftIncidentRole', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
           incidentRole: {
             roleCode: '25a',
           },
-        },
+        }),
       },
     })
     cy.task('stubUpdateDraftIncidentRole', {
       id: 134,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 134,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
           incidentRole: {
             roleCode: '25a',
           },
-        },
+        }),
       },
     })
     cy.task('stubSearch', {
@@ -125,13 +94,12 @@ context('Incident role', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'JAMES',
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-        },
+          enhanced: false,
+        }),
       ],
     })
     cy.task('stubSearch', {
@@ -141,13 +109,12 @@ context('Incident role', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'TOBY',
           lastName: 'PERCROSS',
           prisonerNumber: 'A5155DY',
-          prisonName: 'HMP Moorland',
-        },
+          enhanced: false,
+        }),
       ],
     })
     cy.signIn()

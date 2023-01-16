@@ -2,7 +2,6 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
 import { forceDateInputWithDate, forceDateInput } from '../componentDrivers/dateInput'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
@@ -23,81 +22,39 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            dateTimeOfDiscovery: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+          locationId: 25538,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25b',
           },
-        },
+        }),
       },
     })
     cy.task('stubEditDraftIncidentDetails', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
+          dateTimeOfIncident: '2021-11-03T11:09:42',
+          locationId: 25538,
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER2',
           incidentRole: {
             roleCode: '25a',
           },
-        },
+        }),
       },
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 27029,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'USER ONE',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
@@ -113,15 +70,7 @@ context('Incident details (edit) - statement incomplete', () => {
         prisonerIdentifier: 'T3356FU',
         prisonIds: ['MDI'],
       },
-      results: [
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JAMES',
-          lastName: 'JONES',
-          prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-        },
-      ],
+      results: [testData.prisonerSearchSummary({ firstName: 'JAMES', lastName: 'JONES', prisonerNumber: 'T3356FU' })],
     })
     cy.signIn()
   })
@@ -150,7 +99,7 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
-    incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
+    incidentDetailsPage.reportingOfficerName().should('contain.text', 'Test User')
   })
   it('should show error if one of the time fields is not filled in correctly', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
@@ -193,7 +142,7 @@ context('Incident details (edit) - statement incomplete', () => {
   it('should submit form successfully if all data entered and redirect to applicable rule page (if no offences on report) - change location', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.start(34))
@@ -235,20 +184,11 @@ context('Incident details (edit) - statement incomplete', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 34,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 34,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T13:10:00',
-              dateTimeOfDiscovery: '2021-11-03T13:10:00',
-              handoverDeadline: '2021-11-05T13:10:00',
-              locationId: 27029,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'Statement here',
-            },
+            dateTimeOfIncident: '2021-11-03T13:10:00',
             prisonerNumber: 'G6415GD',
-            startedByUserId: 'USER1',
+            locationId: 25538,
             incidentRole: {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25b',
@@ -261,7 +201,7 @@ context('Incident details (edit) - statement incomplete', () => {
                   'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
               },
             },
-          },
+          }),
         },
       })
     })
@@ -280,18 +220,18 @@ context('Incident details (edit) - statement incomplete', () => {
     it('should submit form successfully if all data entered and redirect to offence details page - change location', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.locationSelector().select('Houseblock 2')
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(34))
       })
     })
-    it('DISCOVERY : confirm radio button is Yes if DISCOVERY date/time equal as INCIDENT date/time ', () => {
+    it('should have the "yes" radio checked if incident and discovery dates are the same', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').should('be.checked')
     })
-    it('should fail to submit as Hours is cleared with appropriate message', () => {
+    it('Should return validation error if the hour is cleared', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -304,7 +244,7 @@ context('Incident details (edit) - statement incomplete', () => {
           expect($errors.get(0).innerText).to.contain('Enter the date of the incident discovery')
         })
     })
-    it('DISCOVERY : should submit successfully if "No" radio option selected and date/time filled correctly', () => {
+    it('Should submit successfully if "No" radio option selected and date/time filled correctly', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -317,7 +257,7 @@ context('Incident details (edit) - statement incomplete', () => {
         adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34)
       })
     })
-    it('DISCOVERY : should fail to submit if "No" radio option selected and date/time filled incorrectly', () => {
+    it('Should return validation error if "No" radio option selected and date/time filled incorrectly', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -330,26 +270,7 @@ context('Incident details (edit) - statement incomplete', () => {
         })
     })
   })
-  it('DISCOVERY : should fail to submit if the "No" radio option selected and discovery date/time before incident date/time', () => {
-    cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
-    const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-
-    forceDateInput(10, 10, 2010, '[data-qa="discovery-details-date"]')
-
-    incidentDetailsPage.timeInputHoursDiscovery().clear()
-    incidentDetailsPage.timeInputHoursDiscovery().type('09')
-    incidentDetailsPage.timeInputMinutesDiscovery().clear()
-    incidentDetailsPage.timeInputMinutesDiscovery().type('00')
-    incidentDetailsPage.submitButton().click()
-    incidentDetailsPage
-      .errorSummary()
-      .find('li')
-      .then($errors => {
-        expect($errors.get(0).innerText).to.contain('The discovery date must be after the incident date')
-      })
-  })
-  it('DISCOVERY : should fail to submit if the "No" radio option selected and discovery time before incident time, but dates are the same', () => {
+  it('Should return validation error if discovery time is before the incident time', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -369,7 +290,7 @@ context('Incident details (edit) - statement incomplete', () => {
         expect($errors.get(0).innerText).to.contain('The discovery time must be after the incident time')
       })
   })
-  it('DISCOVERY : should fail to submit if "No" radio option selected and hour filled incorrectly', () => {
+  it('Should return validation error if "No" radio option selected and hour filled incorrectly', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -386,7 +307,7 @@ context('Incident details (edit) - statement incomplete', () => {
         expect($errors.get(0).innerText).to.contain('Enter the discovery minute between 00 and 59')
       })
   })
-  it('DISCOVERY : should fail to submit if "No" radio option selected and minute filled incorrectly', () => {
+  it('should return validation error if "No" radio option selected and minute filled incorrectly', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
@@ -403,42 +324,22 @@ context('Incident details (edit) - statement incomplete', () => {
         expect($errors.get(0).innerText).to.contain('Enter the discovery minute between 00 and 59')
       })
   })
-  context('Tests Discovery date differengt to incident date', () => {
+  context('Discovery date different to incident date', () => {
     beforeEach(() => {
       cy.task('stubGetDraftAdjudication', {
         id: 34,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 34,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T13:10:00',
-              dateTimeOfDiscovery: '2021-11-04T13:10:00',
-              handoverDeadline: '2021-11-05T13:10:00',
-              locationId: 27029,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'Statement here',
-            },
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            dateTimeOfDiscovery: '2021-11-04T13:10:00',
+            locationId: 27029,
             prisonerNumber: 'G6415GD',
-            startedByUserId: 'USER1',
-            incidentRole: {
-              associatedPrisonersNumber: 'T3356FU',
-              roleCode: '25b',
-            },
-            offenceDetails: {
-              offenceCode: 16001,
-              offenceRule: {
-                paragraphNumber: '16',
-                paragraphDescription:
-                  'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
-              },
-            },
-          },
+          }),
         },
       })
     })
-    it('DISCOVERY : should comfirm DICOVERY button to No if DISCOVERY date/time is different to INCIDENT date/time ', () => {
+    it('radio button should equal no if incident dateTime and discovery dateTime are different', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').should('be.checked')

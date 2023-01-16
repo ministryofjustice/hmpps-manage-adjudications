@@ -27,19 +27,16 @@ describe('manageAdjudicationsClient', () => {
   describe('startNewDraftAdjudication', () => {
     it('should return the new draft adjudication', async () => {
       const result = {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 1,
           prisonerNumber: 'G2996UX',
-          gender: PrisonerGender.MALE,
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2021-10-28T15:40:25.884',
-          },
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          locationId: 2,
           incidentRole: {
             roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
           },
-        },
+        }),
       }
       const details = {
         locationId: 2,
@@ -72,21 +69,14 @@ describe('manageAdjudicationsClient', () => {
   describe('postDraftIncidentStatement', () => {
     it('should return only the neccessary prisoner details', async () => {
       const result = {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-          },
-          incidentRole: {
-            roleCode: '25c',
-            associatedPrisonersNumber: 'B2345BB',
-          },
+          locationId: 2,
           incidentStatement: {
             statement: 'test',
           },
-        },
+        }),
       }
 
       const content = { statement: 'test' }
@@ -106,25 +96,11 @@ describe('manageAdjudicationsClient', () => {
   describe('getReportedAdjudication', () => {
     it('should return the reported adjudication data', async () => {
       const result = {
-        reportedAdjudication: {
+        reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 3,
           prisonerNumber: 'A12345',
-          gender: PrisonerGender.MALE,
-          bookingId: 123,
-          incidentDetails: {
-            locationId: 2,
-            dateTimeOfIncident: '2020-12-10T10:00:00',
-            handoverDeadline: '2020-12-12T10:00:00',
-          },
-          incidentRole: {
-            roleCode: '25c',
-            associatedPrisonersNumber: 'B2345BB',
-          },
-          incidentStatement: {
-            statement: 'test',
-          },
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-        },
+        }),
       }
 
       fakeManageAdjudicationsApi
@@ -141,23 +117,10 @@ describe('manageAdjudicationsClient', () => {
   describe('getDraftAdjudication', () => {
     it('should return the draft adjudication data', async () => {
       const result = {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 10,
           prisonerNumber: 'G6123VU',
-          incidentDetails: {
-            locationId: 26152,
-            dateTimeOfIncident: '2021-11-04T07:20:00',
-          },
-          incidentRole: {
-            roleCode: '25b',
-            associatedPrisonersNumber: 'B2345BB',
-          },
-          incidentStatement: {
-            id: 9,
-            statement: 'test',
-          },
-          startedByUserId: 'TESTER_GEN',
-        },
+        }),
       }
 
       fakeManageAdjudicationsApi
@@ -173,14 +136,10 @@ describe('manageAdjudicationsClient', () => {
 
   describe('submitCompleteDraftAdjudication', () => {
     const result = {
-      reportedAdjudication: {
+      reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
-        gender: PrisonerGender.MALE,
-        incidentDetails: {},
-        incidentRole: {},
-        incidentStatement: {},
-      },
+      }),
     }
     it('should return reported adjudication after posting the complete draft adjudication to NOMIS', async () => {
       fakeManageAdjudicationsApi
@@ -195,14 +154,10 @@ describe('manageAdjudicationsClient', () => {
 
   describe('editDraftIncidentDetails', () => {
     const result = {
-      reportedAdjudication: {
+      reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 2345221,
         prisonerNumber: 'G6123VU',
-        gender: PrisonerGender.MALE,
-        incidentDetails: {},
-        incidentRole: {},
-        incidentStatement: {},
-      },
+      }),
     }
 
     const editedDetails = {
@@ -267,39 +222,14 @@ describe('manageAdjudicationsClient', () => {
   })
   describe('getYourCompletedAdjudications', () => {
     const content = [
-      {
+      testData.reportedAdjudication({
         adjudicationNumber: 2,
         prisonerNumber: 'G6123VU',
-        bookingId: 2,
-        incidentDetails: {
-          locationId: 3,
-          dateTimeOfIncident: '2021-01-01T11:45:00',
-          handoverDeadline: '2021-01-03T11:45:00',
-        },
-        incidentRole: {
-          roleCode: '25c',
-          associatedPrisonersNumber: 'B2345BB',
-        },
-        incidentStatement: {
-          statement: 'My second incident',
-        },
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      },
-      {
+      }),
+      testData.reportedAdjudication({
         adjudicationNumber: 1,
         prisonerNumber: 'G6174VU',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 3,
-          dateTimeOfIncident: '2021-01-01T11:30:00',
-          handoverDeadline: '2021-01-01T11:30:00',
-        },
-        incidentRole: {},
-        incidentStatement: {
-          statement: 'My first incident',
-        },
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      },
+      }),
     ]
     const request = {
       size: 20,
@@ -335,39 +265,14 @@ describe('manageAdjudicationsClient', () => {
 
   describe('getAllCompletedAdjudications', () => {
     const content = [
-      {
+      testData.reportedAdjudication({
         adjudicationNumber: 2,
         prisonerNumber: 'G6123VU',
-        bookingId: 2,
-        incidentDetails: {
-          locationId: 3,
-          dateTimeOfIncident: '2021-11-15T11:45:00',
-          handoverDeadline: '2021-11-17T11:45:00',
-        },
-        incidentRole: {
-          roleCode: '25b',
-          associatedPrisonersNumber: 'B2345BB',
-        },
-        incidentStatement: {
-          statement: 'My second incident',
-        },
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      },
-      {
+      }),
+      testData.reportedAdjudication({
         adjudicationNumber: 1,
         prisonerNumber: 'G6174VU',
-        bookingId: 1,
-        incidentDetails: {
-          locationId: 3,
-          dateTimeOfIncident: '2021-11-15T11:30:00',
-          handoverDeadline: '2021-11-17T11:30:00',
-        },
-        incidentRole: {},
-        incidentStatement: {
-          statement: 'My first incident',
-        },
-        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-      },
+      }),
     ]
     const request = {
       size: 20,
@@ -403,14 +308,11 @@ describe('manageAdjudicationsClient', () => {
   describe('createDraftFromCompleteAdjudication', () => {
     it('return a new draft with the details of the completed adjudication', async () => {
       const result = {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 177,
           prisonerNumber: 'A7820DY',
-          incidentDetails: {
-            locationId: 26142,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
+          dateTimeOfIncident: '2021-12-01T09:40:00',
+          locationId: 26142,
           incidentRole: {
             roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
@@ -419,8 +321,7 @@ describe('manageAdjudicationsClient', () => {
             statement: 'TESTING',
             completed: true,
           },
-          startedByUserId: 'TEST_GEN',
-        },
+        }),
       }
 
       fakeManageAdjudicationsApi
@@ -440,18 +341,11 @@ describe('manageAdjudicationsClient', () => {
   })
   describe('saveYouthOffenderStatus', () => {
     const result = {
-      draftAdjudication: {
+      draftAdjudication: testData.draftAdjudication({
         id: 2469,
         prisonerNumber: 'G6123VU',
-        incidentDetails: {
-          locationId: 26964,
-          dateTimeOfIncident: '2022-06-16T11:11:00',
-          handoverDeadline: '2022-06-18T11:11:00',
-        },
-        incidentRole: {},
-        startedByUserId: 'TESTER_GEN',
         isYouthOffender: true,
-      },
+      }),
     }
 
     const youthOffenderData = {
@@ -484,33 +378,25 @@ describe('manageAdjudicationsClient', () => {
   })
   describe('saveDamageDetails', () => {
     const result = {
-      draftAdjudication: {
+      draftAdjudication: testData.draftAdjudication({
         id: 2469,
         prisonerNumber: 'G6123VU',
-        incidentDetails: {
-          locationId: 26964,
-          dateTimeOfIncident: '2022-06-16T11:11:00',
-          handoverDeadline: '2022-06-18T11:11:00',
-        },
-        incidentRole: {},
-        startedByUserId: 'TESTER_GEN',
-        isYouthOffender: true,
         damages: [
-          {
-            code: 'REPLACE_AN_ITEM',
+          testData.singleDamage({
+            code: DamageCode.REPLACE_AN_ITEM,
             details: 'Lightbulb was smashed',
             reporter: 'TESTER_GEN',
-          },
+          }),
         ],
-      },
+      }),
     }
 
     const damagesData = [
-      {
+      testData.singleDamage({
         code: DamageCode.REPLACE_AN_ITEM,
         details: 'Lightbulb was smashed',
         reporter: 'TESTER_GEN',
-      },
+      }),
     ]
     it('returns the updated draft adjudication', async () => {
       fakeManageAdjudicationsApi
@@ -523,43 +409,30 @@ describe('manageAdjudicationsClient', () => {
   })
   describe('saveEvidenceDetails', () => {
     const result = {
-      draftAdjudication: {
+      draftAdjudication: testData.draftAdjudication({
         id: 2469,
         prisonerNumber: 'G6123VU',
-        incidentDetails: {
-          locationId: 26964,
-          dateTimeOfIncident: '2022-06-16T11:11:00',
-          handoverDeadline: '2022-06-18T11:11:00',
-        },
-        incidentRole: {},
-        startedByUserId: 'TESTER_GEN',
-        isYouthOffender: true,
         evidence: [
-          {
-            code: 'PHOTO',
-            details: 'Photograph showing prisoner smashing lightbulb',
-            reporter: 'TESTER_GEN',
-          },
-          {
-            code: 'BODY_WORN_CAMERA',
-            details: 'Video evidence of prisoner smashing lightbulb',
-            reporter: 'TESTER_GEN',
+          testData.singleEvidence({
+            code: EvidenceCode.PHOTO,
+          }),
+          testData.singleEvidence({
             identifier: 'BWC: 123456',
-          },
+          }),
         ],
-      },
+      }),
     }
 
     const evidenceData = [
       {
         code: EvidenceCode.PHOTO,
-        details: 'Photograph showing prisoner smashing lightbulb',
-        reporter: 'TESTER_GEN',
+        details: 'Some details here',
+        reporter: 'user1',
       },
       {
         code: EvidenceCode.BODY_WORN_CAMERA,
-        details: 'Video evidence of prisoner smashing lightbulb',
-        reporter: 'TESTER_GEN',
+        details: 'Some details here',
+        reporter: 'user1',
         identifier: 'BWC: 123456',
       },
     ]

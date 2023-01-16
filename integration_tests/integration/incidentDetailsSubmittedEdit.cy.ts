@@ -1,4 +1,3 @@
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsSubmittedEdit'
@@ -22,82 +21,33 @@ context('Incident details (edit after completion of report)', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
           adjudicationNumber: 1524455,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            dateTimeOfDiscovery: '2021-11-03T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: true,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
-          incidentRole: {
-            associatedPrisonersNumber: 'T3356FU',
-            roleCode: '25b',
-          },
-        },
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+          locationId: 25538,
+        }),
       },
     })
     cy.task('stubEditDraftIncidentDetails', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            dateTimeOfDiscovery: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER2',
-          incidentRole: {
-            roleCode: '25a',
-          },
-        },
+          dateTimeOfIncident: '2021-11-03T11:09:42',
+          locationId: 25538,
+        }),
       },
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 27029,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'USER ONE',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
@@ -113,15 +63,7 @@ context('Incident details (edit after completion of report)', () => {
         prisonerIdentifier: 'T3356FU',
         prisonIds: ['MDI'],
       },
-      results: [
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JAMES',
-          lastName: 'JONES',
-          prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-        },
-      ],
+      results: [testData.prisonerSearchSummary({ firstName: 'JAMES', lastName: 'JONES', prisonerNumber: 'T3356FU' })],
     })
     cy.signIn()
   })
@@ -141,7 +83,7 @@ context('Incident details (edit after completion of report)', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.submittedEdit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
-    incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
+    incidentDetailsPage.reportingOfficerName().should('contain.text', 'Test User')
   })
 
   it('should show error if one of the time fields is not filled in correctly', () => {
@@ -233,20 +175,13 @@ context('Incident details (edit after completion of report)', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 34,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 34,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T13:10:00',
-              dateTimeOfDiscovery: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T13:10:00',
-              locationId: 27029,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'Statement here',
-            },
+            adjudicationNumber: 1524455,
             prisonerNumber: 'G6415GD',
-            startedByUserId: 'USER1',
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            dateTimeOfDiscovery: '2021-11-03T11:09:42',
+            locationId: 25538,
             incidentRole: {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25b',
@@ -259,7 +194,7 @@ context('Incident details (edit after completion of report)', () => {
                   'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
               },
             },
-          },
+          }),
         },
       })
     })
@@ -324,20 +259,13 @@ context('Incident details (edit after completion of report)', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 34,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 34,
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T13:10:00',
-              dateTimeOfDiscovery: '2021-11-04T13:10:00',
-              handoverDeadline: '2021-11-05T13:10:00',
-              locationId: 27029,
-            },
-            incidentStatement: {
-              completed: false,
-              statement: 'Statement here',
-            },
+            adjudicationNumber: 1524455,
             prisonerNumber: 'G6415GD',
-            startedByUserId: 'USER1',
+            dateTimeOfIncident: '2021-11-03T13:10:00',
+            dateTimeOfDiscovery: '2021-11-04T13:10:00',
+            locationId: 27029,
             incidentRole: {
               associatedPrisonersNumber: 'T3356FU',
               roleCode: '25b',
@@ -350,7 +278,7 @@ context('Incident details (edit after completion of report)', () => {
                   'Intentionally or recklessly sets fire to any part of a prison or any other property, whether or not their own',
               },
             },
-          },
+          }),
         },
       })
     })

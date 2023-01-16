@@ -3,7 +3,6 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { OffenceDetails } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
@@ -54,22 +53,14 @@ describe('POST /incident-statement', () => {
   describe('Statement complete, offence details incomplete', () => {
     beforeEach(() => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 1041,
           prisonerNumber: 'A7937DY',
-          incidentDetails: {
-            locationId: 27022,
-            dateTimeOfIncident: '2022-03-23T09:10:00',
-            handoverDeadline: '2022-03-25T09:10:00',
-          },
-          incidentRole: {},
-          offenceDetails: {} as OffenceDetails,
           incidentStatement: {
             statement: 'Lorem Ipsum',
             completed: true,
           },
-          startedByUserId: 'TEST2_GEN',
-        },
+        }),
       })
     })
     it('should redirect to the task page', () => {
@@ -82,22 +73,14 @@ describe('POST /incident-statement', () => {
   describe('Statement incomplete', () => {
     beforeEach(() => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 1041,
           prisonerNumber: 'A7937DY',
-          incidentDetails: {
-            locationId: 27022,
-            dateTimeOfIncident: '2022-03-23T09:10:00',
-            handoverDeadline: '2022-03-25T09:10:00',
-          },
-          incidentRole: {},
-          offenceDetails: {} as OffenceDetails,
           incidentStatement: {
             statement: 'Lorem Ipsum',
             completed: false,
           },
-          startedByUserId: 'TEST2_GEN',
-        },
+        }),
       })
     })
     it('should redirect to the task page', () => {
@@ -111,28 +94,20 @@ describe('POST /incident-statement', () => {
   describe('Incident statement AND offence details are complete', () => {
     beforeEach(() => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 1041,
           prisonerNumber: 'A7937DY',
-          incidentDetails: {
-            locationId: 27022,
-            dateTimeOfIncident: '2022-03-23T09:10:00',
-            handoverDeadline: '2022-03-25T09:10:00',
-          },
-          incidentRole: {
-            roleCode: '25a',
+          locationId: 27022,
+          dateTimeOfIncident: '2022-03-23T09:10:00',
+          incidentStatement: {
+            statement: 'Lorem Ipsum',
+            completed: true,
           },
           offenceDetails: {
             offenceCode: 4,
             victimPrisonersNumber: '',
           },
-
-          incidentStatement: {
-            statement: 'Lorem Ipsum',
-            completed: true,
-          },
-          startedByUserId: 'TEST2_GEN',
-        },
+        }),
       })
     })
     it('should redirect to check your answers page ', () => {
