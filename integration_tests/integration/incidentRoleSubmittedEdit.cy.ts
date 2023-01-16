@@ -21,87 +21,37 @@ context('Incident role (edit after completion of report)', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
           adjudicationNumber: 1524455,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            locationId: 27029,
-          },
-          offenceDetails: {
-            offenceCode: 1001,
-            offenceRule: {
-              paragraphNumber: '1',
-              paragraphDescription: 'Commits any assault',
-            },
-            victimPrisonersNumber: 'G5512G',
-          },
-
-          incidentStatement: {
-            completed: true,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25b',
           },
-        },
+        }),
       },
     })
     cy.task('stubUpdateDraftIncidentRole', {
       id: 34,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 34,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T11:09:42',
-            locationId: 27029,
-          },
-          incidentStatement: {},
+          adjudicationNumber: 1524455,
           prisonerNumber: 'G6415GD',
-          startedByUserId: 'USER2',
           incidentRole: {
             roleCode: '25a',
           },
-        },
+        }),
       },
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 27029,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'USER ONE',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
@@ -118,13 +68,12 @@ context('Incident role (edit after completion of report)', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'JAMES',
           lastName: 'JONES',
           prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-        },
+          enhanced: false,
+        }),
       ],
     })
     cy.signIn()

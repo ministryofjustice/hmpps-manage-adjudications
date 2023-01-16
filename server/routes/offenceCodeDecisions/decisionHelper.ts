@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request } from 'express'
 import { DecisionForm } from './decisionForm'
 import { User } from '../../data/hmppsAuthClient'
@@ -18,14 +19,12 @@ export default class DecisionHelper {
     return this.decisionTreeService.getDecisionTree()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
     return new Promise(resolve => {
       resolve({})
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validateForm(form: DecisionForm, req: Request, user: User): Promise<FormError[]> {
     return new Promise(resolve => {
       resolve([])
@@ -39,7 +38,6 @@ export default class DecisionHelper {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRedirectUrlForUserSearch(form: DecisionForm): {
     pathname: string
     query: { [key: string]: string }
@@ -47,7 +45,6 @@ export default class DecisionHelper {
     return null
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   formAfterSearch(selectedAnswerId: string, selectedUser: string): DecisionForm {
     return null
   }
@@ -61,7 +58,6 @@ export default class DecisionHelper {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   witnessNamesForSession(form: DecisionForm, user: User): Promise<WitnessData> {
     return new Promise(resolve => {
       resolve({})

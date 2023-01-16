@@ -3,7 +3,6 @@ import Page from '../pages/page'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
@@ -22,76 +21,37 @@ context('Incident details', () => {
       }),
     })
     cy.task('stubStartNewDraftAdjudication', {
-      draftAdjudication: {
+      draftAdjudication: testData.draftAdjudication({
         id: 3456,
-        gender: PrisonerGender.MALE,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-03T11:09:42',
-          dateTimeOfDiscovery: '2021-11-03T11:09:42',
-          handoverDeadline: '2021-11-05T11:09:42',
-          locationId: 234,
-        },
-        incidentStatement: {},
+        dateTimeOfIncident: '2021-11-03T11:09:42',
+        locationId: 25538,
         prisonerNumber: 'G6415GD',
         incidentRole: {
           associatedPrisonersNumber: 'T3356FU',
           roleCode: '25b',
         },
-      },
+      }),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 3456,
-      draftAdjudication: {
+      draftAdjudication: testData.draftAdjudication({
         id: 3456,
-        gender: PrisonerGender.MALE,
-        incidentDetails: {
-          dateTimeOfIncident: '2021-11-03T11:09:42',
-          dateTimeOfDiscovery: '2021-11-03T11:09:42',
-          handoverDeadline: '2021-11-05T11:09:42',
-          locationId: 234,
-        },
-        incidentStatement: {},
+        dateTimeOfIncident: '2021-11-03T11:09:42',
+        locationId: 25538,
         prisonerNumber: 'G6415GD',
         incidentRole: {
           associatedPrisonersNumber: 'T3356FU',
           roleCode: '25b',
         },
-      },
+      }),
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 27029,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'USER ONE',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'T3356FU',
@@ -115,16 +75,7 @@ context('Incident details', () => {
         prisonerIdentifier: 'T3356FU',
         prisonIds: ['MDI'],
       },
-      results: [
-        {
-          cellLocation: '1-2-015',
-          firstName: 'JAMES',
-          lastName: 'JONES',
-          prisonerNumber: 'T3356FU',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
-      ],
+      results: [testData.prisonerSearchSummary({ firstName: 'JAMES', lastName: 'JONES', prisonerNumber: 'T3356FU' })],
     })
     cy.task('stubSearch', {
       query: {
@@ -133,14 +84,11 @@ context('Incident details', () => {
         prisonIds: ['MDI'],
       },
       results: [
-        {
-          cellLocation: '1-2-015',
+        testData.prisonerSearchSummary({
           firstName: 'TOBY',
           lastName: 'PERCROSS',
           prisonerNumber: 'A5155DY',
-          prisonName: 'HMP Moorland',
-          gender: 'Male',
-        },
+        }),
       ],
     })
     cy.signIn()
@@ -167,14 +115,14 @@ context('Incident details', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.reportingOfficerLabel().should('contain.text', 'Reporting officer')
-    incidentDetailsPage.reportingOfficerName().should('contain.text', 'USER ONE')
+    incidentDetailsPage.reportingOfficerName().should('contain.text', 'Test User')
   })
   it('should show error if a date is not selected', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
@@ -190,7 +138,7 @@ context('Incident details', () => {
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputMinutes().type('30')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
@@ -200,7 +148,7 @@ context('Incident details', () => {
         expect($errors.get(0).innerText).to.contain('Enter the time of the incident')
       })
   })
-  it('should show error if a location is not selected - 3', () => {
+  it('should show error if a location is not selected', () => {
     const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
@@ -223,7 +171,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('03')
     incidentDetailsPage.timeInputMinutes().type('20')
-    incidentDetailsPage.locationSelector().select('Workshop 19 - Braille')
+    incidentDetailsPage.locationSelector().select('Houseblock 2')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
     incidentDetailsPage.submitButton().click()
     cy.location().should(loc => {
@@ -238,7 +186,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -255,7 +203,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
@@ -273,7 +221,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
     incidentDetailsPage.submitButton().click()
@@ -292,7 +240,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
     incidentDetailsPage.timeInputMinutesDiscovery().type('59')
@@ -312,7 +260,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
     incidentDetailsPage.timeInputHoursDiscovery().type('24')
@@ -333,7 +281,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
     incidentDetailsPage.timeInputHoursDiscovery().type('23')
@@ -354,7 +302,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     const tomorrow = new Date()
     tomorrow.setDate(new Date().getDate() + 1)
@@ -377,7 +325,7 @@ context('Incident details', () => {
     forceDateInputWithDate(today)
     incidentDetailsPage.timeInputHours().type('00')
     incidentDetailsPage.timeInputMinutes().type('01')
-    incidentDetailsPage.locationSelector().select('Workshop 2')
+    incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
     incidentDetailsPage.timeInputHoursDiscovery().type('00')
@@ -399,7 +347,7 @@ context('Incident details', () => {
       forceDateInputWithDate(today)
       incidentDetailsPage.timeInputHours().type('01')
       incidentDetailsPage.timeInputMinutes().type('30')
-      incidentDetailsPage.locationSelector().select('Workshop 2')
+      incidentDetailsPage.locationSelector().select('Houseblock 1')
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
       incidentDetailsPage.submitButton().click()
       cy.location().should(loc => {

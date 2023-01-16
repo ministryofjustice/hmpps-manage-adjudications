@@ -1,82 +1,36 @@
 import hearingDetails from '../pages/hearingDetails'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
-const incidentDateTime = '2030-01-01T11:00:00'
-const incidentDateTimeHandover = '2030-01-03T11:00:00'
 const hearingDateTimeOne = '2030-01-04T09:00:00'
 const hearingDateTimeOneFormatted = '4 January 2030 - 09:00'
 const hearingDateTimeTwo = '2030-01-06T10:00:00'
 const hearingDateTimeTwoFormatted = '6 January 2030 - 10:00'
 
-const reportedAdjudicationResponse = (adjudicationNumber: number, status: string, hearings = []) => {
+const reportedAdjudicationResponse = (
+  adjudicationNumber: number,
+  status: ReportedAdjudicationStatus,
+  hearings = []
+) => {
   return {
-    reportedAdjudication: {
+    reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      gender: PrisonerGender.MALE,
-      bookingId: 1,
-      createdDateTime: undefined,
-      createdByUserId: undefined,
-      incidentDetails: {
-        locationId: 197682,
-        dateTimeOfIncident: incidentDateTime,
-        handoverDeadline: incidentDateTimeHandover,
-      },
-      incidentStatement: undefined,
-      incidentRole: {
-        roleCode: undefined,
-      },
-      offenceDetails: {},
-      status,
-      reviewedByUserId: 'USER1',
-      statusReason: undefined,
-      statusDetails: undefined,
-      damages: [],
-      evidence: [],
-      witnesses: [],
       hearings,
-    },
+      status,
+    }),
   }
 }
 
-const singleHearing = [
-  {
-    id: 987,
-    dateTimeOfHearing: hearingDateTimeOne,
-    locationId: 123,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
+const singleHearing = [testData.singleHearing(hearingDateTimeOne, 987, 123)]
 
-const hearingListAfterDeletion = [
-  {
-    id: 988,
-    dateTimeOfHearing: hearingDateTimeTwo,
-    locationId: 234,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
+const hearingListAfterDeletion = [testData.singleHearing(hearingDateTimeTwo, 988, 234)]
 
-const multipleHearings = [
-  {
-    id: 987,
-    dateTimeOfHearing: hearingDateTimeOne,
-    locationId: 123,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-  {
-    id: 988,
-    dateTimeOfHearing: hearingDateTimeTwo,
-    locationId: 234,
-    oicHearingType: OicHearingType.GOV_ADULT as string,
-  },
-]
+const multipleHearings = [singleHearing[0], hearingListAfterDeletion[0]]
 
 context('Hearing deails page', () => {
   beforeEach(() => {
@@ -85,13 +39,7 @@ context('Hearing deails page', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
@@ -119,27 +67,27 @@ context('Hearing deails page', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,
-      response: reportedAdjudicationResponse(1524493, 'AWAITING_REVIEW'),
+      response: reportedAdjudicationResponse(1524493, ReportedAdjudicationStatus.AWAITING_REVIEW),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524480,
-      response: reportedAdjudicationResponse(1524480, 'RETURNED'),
+      response: reportedAdjudicationResponse(1524480, ReportedAdjudicationStatus.RETURNED),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, 'ACCEPTED'),
+      response: reportedAdjudicationResponse(1524494, ReportedAdjudicationStatus.ACCEPTED),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524497,
-      response: reportedAdjudicationResponse(1524497, 'UNSCHEDULED'),
+      response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.UNSCHEDULED),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524495,
-      response: reportedAdjudicationResponse(1524495, 'SCHEDULED', singleHearing),
+      response: reportedAdjudicationResponse(1524495, ReportedAdjudicationStatus.SCHEDULED, singleHearing),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524496,
-      response: reportedAdjudicationResponse(1524496, 'SCHEDULED', multipleHearings),
+      response: reportedAdjudicationResponse(1524496, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
     })
     cy.signIn()
   })
@@ -299,18 +247,18 @@ context('Hearing deails page', () => {
     it('Successfully cancels a hearing', () => {
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
-        response: reportedAdjudicationResponse(1524497, 'SCHEDULED', multipleHearings),
+        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
       })
       cy.task('stubCancelHearing', {
         adjudicationNumber: 1524497,
         hearingId: 987,
-        response: reportedAdjudicationResponse(1524497, 'SCHEDULED', hearingListAfterDeletion),
+        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
       const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
-        response: reportedAdjudicationResponse(1524497, 'SCHEDULED', hearingListAfterDeletion),
+        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
       })
       hearingDetailsPage.cancelHearingButton(987).click() // deleting the first hearing in the list with id 987
 
