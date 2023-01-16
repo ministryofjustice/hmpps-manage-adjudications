@@ -19,7 +19,8 @@ export default class SelectAssociatedStaff extends Page {
 
   resultsRows = (): PageElement => this.resultsTable().get('tbody tr')
 
-  selectStaffMemberLink = (): PageElement => this.resultsTable().get('[data-qa="select-staffMember-link-BSMITH_GEN"]')
+  selectStaffMemberLink = (username: string): PageElement =>
+    this.resultsTable().get(`[data-qa="select-staffMember-link-${username}"]`)
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')
 }

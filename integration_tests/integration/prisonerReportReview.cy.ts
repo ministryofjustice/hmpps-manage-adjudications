@@ -2,53 +2,36 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 
-const reportedAdjudication = (status: string, reviewedByUserId = null, statusReason = null, statusDetails = null) => {
-  return {
+const reportedAdjudication = (
+  status: ReportedAdjudicationStatus,
+  reviewedByUserId = null,
+  statusReason = null,
+  statusDetails = null
+) => {
+  return testData.reportedAdjudication({
     adjudicationNumber: 1524493,
     prisonerNumber: 'G6415GD',
-    bookingId: 1,
-    createdDateTime: undefined,
-    createdByUserId: undefined,
-    incidentDetails: {
-      locationId: 197682,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      dateTimeOfDiscovery: '2021-12-09T10:30:00',
-      handoverDeadline: '2021-12-11T10:30:00',
-    },
-    incidentStatement: undefined,
-    incidentRole: {
-      roleCode: undefined,
-    },
-    offenceDetails: {},
+    dateTimeOfIncident: '2021-12-09T10:30:00',
     status,
-    reviewedByUserId,
-    statusReason,
-    statusDetails,
-    isYouthOffender: false,
-  }
+    otherData: {
+      reviewedByUserId,
+      statusReason,
+      statusDetails,
+    },
+  })
 }
 
 const draftAdjudication = (adjudicationNumber: number) => {
-  return {
+  return testData.draftAdjudication({
     id: 177,
     adjudicationNumber,
     prisonerNumber: 'G6415GD',
-    incidentDetails: {
-      locationId: 234,
-      dateTimeOfIncident: '2021-12-01T09:40:00',
-      dateTimeOfDiscovery: '2021-12-01T09:40:00',
-      handoverDeadline: '2021-12-03T09:40:00',
-    },
-    incidentStatement: {
-      statement: 'TESTING',
-      completed: true,
-    },
-    startedByUserId: 'USER1',
-    isYouthOffender: false,
-  }
+    dateTimeOfIncident: '2021-12-01T09:40:00',
+  })
 }
 
 context('Prisoner report - reviewer view', () => {
@@ -87,14 +70,14 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
       response: {
-        reportedAdjudication: reportedAdjudication('AWAITING_REVIEW'),
+        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.AWAITING_REVIEW),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
       response: {
         reportedAdjudication: reportedAdjudication(
-          'RETURNED',
+          ReportedAdjudicationStatus.RETURNED,
           'USER1',
           'offence',
           'I think this is the incorrect offence'
@@ -104,26 +87,26 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 456790,
       response: {
-        reportedAdjudication: reportedAdjudication('ACCEPTED', 'USER1'),
+        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.ACCEPTED, 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 456791,
       response: {
-        reportedAdjudication: reportedAdjudication('SCHEDULED', 'USER1'),
+        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.SCHEDULED, 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 456789,
       response: {
-        reportedAdjudication: reportedAdjudication('UNSCHEDULED', 'USER1'),
+        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.UNSCHEDULED, 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 356789,
       response: {
         reportedAdjudication: reportedAdjudication(
-          'REJECTED',
+          ReportedAdjudicationStatus.REJECTED,
           'USER1',
           'unsuitable',
           'This is not worthy of an adjudication'
@@ -168,47 +151,22 @@ context('Prisoner report - reviewer view', () => {
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 234,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 177,
           adjudicationNumber: 12345,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2021-12-01T09:40:00',
-            dateTimeOfDiscovery: '2021-12-02T03:04:05',
-            handoverDeadline: '2021-12-03T09:40:00',
-          },
+          locationId: 25538,
+          dateTimeOfIncident: '2021-12-01T09:40:00',
+          dateTimeOfDiscovery: '2021-12-02T03:04:05',
           incidentStatement: {
             statement: 'TESTING',
             completed: true,
           },
-          startedByUserId: 'USER1',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25c',
@@ -218,7 +176,6 @@ context('Prisoner report - reviewer view', () => {
                 'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
             },
           },
-          isYouthOffender: false,
           offenceDetails: {
             offenceCode: 1001,
             offenceRule: {
@@ -227,7 +184,7 @@ context('Prisoner report - reviewer view', () => {
             },
             victimPrisonersNumber: 'G5512G',
           },
-        },
+        }),
       },
     })
     cy.task('stubGetOffenceRule', {
@@ -239,13 +196,7 @@ context('Prisoner report - reviewer view', () => {
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Test User',
-        username: 'USER1',
-        token: 'token-1',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername(),
     })
     cy.task('stubUpdateAdjudicationStatus', {
       adjudicationNumber: 12345,
@@ -401,7 +352,7 @@ context('Prisoner report - reviewer view', () => {
         expect($summaryData.get(0).innerText).to.contain('T. User')
         expect($summaryData.get(1).innerText).to.contain('1 December 2021')
         expect($summaryData.get(2).innerText).to.contain('09:40')
-        expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+        expect($summaryData.get(3).innerText).to.contain('Houseblock 1')
         expect($summaryData.get(4).innerText).to.contain('2 December 2021')
         expect($summaryData.get(5).innerText).to.contain('03:04')
       })

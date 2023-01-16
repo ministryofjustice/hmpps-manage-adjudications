@@ -3,7 +3,6 @@ import Page from '../pages/page'
 import DetailsOfOffence from '../pages/detailsOfOffence'
 import CheckYourAnswersPage from '../pages/taskList'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
@@ -20,100 +19,56 @@ context('Offence details', () => {
     cy.task('stubGetDraftAdjudication', {
       id: 100,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 100,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-03T13:10:00',
-            handoverDeadline: '2021-11-05T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
-          incidentRole: {
-            associatedPrisonersNumber: undefined,
-            roleCode: undefined,
-          },
-        },
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+        }),
       },
     })
     // Attempted draft
     cy.task('stubGetDraftAdjudication', {
       id: 101,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 101,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-04T13:10:00',
-            handoverDeadline: '2021-11-06T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
+          dateTimeOfIncident: '2021-11-03T13:10:00',
           incidentRole: {
             associatedPrisonersNumber: undefined,
             roleCode: '25a',
           },
-        },
+        }),
       },
     })
     // Incited draft
     cy.task('stubGetDraftAdjudication', {
       id: 102,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 102,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-05T13:10:00',
-            handoverDeadline: '2021-11-07T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
+          dateTimeOfIncident: '2021-11-05T13:10:00',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25b',
           },
-        },
+        }),
       },
     })
     // Assisted draft
     cy.task('stubGetDraftAdjudication', {
       id: 103,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 103,
-          incidentDetails: {
-            dateTimeOfIncident: '2021-11-06T13:10:00',
-            handoverDeadline: '2021-11-08T13:10:00',
-            locationId: 27029,
-          },
-          incidentStatement: {
-            completed: false,
-            statement: 'Statement here',
-          },
           prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          startedByUserId: 'USER1',
+          dateTimeOfIncident: '2021-11-06T13:10:00',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
             roleCode: '25c',
           },
-        },
+        }),
       },
     })
     // Prisoner
@@ -146,36 +101,20 @@ context('Offence details', () => {
     // Prison officer victim
     cy.task('stubGetUserFromUsername', {
       username: 'AOWENS',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Adam Owens',
-        username: 'AOWENS',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername('AOWENS'),
     })
     cy.task('stubGetEmail', {
       username: 'AOWENS',
-      response: {
-        username: 'AOWENS',
-        email: 'aowens@justice.gov.uk',
-      },
+      response: testData.emailFromUsername('AOWENS'),
     })
     // Staff victim
     cy.task('stubGetUserFromUsername', {
       username: 'CSTANLEY',
-      response: {
-        activeCaseLoadId: 'MDI',
-        name: 'Carl Stanley',
-        username: 'CSTANLEY',
-        authSource: 'auth',
-      },
+      response: testData.userFromUsername('CSTANLEY'),
     })
     cy.task('stubGetEmail', {
       username: 'CSTANLEY',
-      response: {
-        username: 'AOWENS',
-        email: 'cstanley@justice.gov.uk',
-      },
+      response: testData.emailFromUsername('CSTANLEY'),
     })
     // Offence rules
     cy.task('stubGetOffenceRule', {
@@ -311,13 +250,13 @@ context('Offence details', () => {
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio(officerAnswerId).check()
     whoWasAssaultedPage.radioLabelFromValue(officerAnswerId).contains('A prison officer')
-    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Adam')
-    whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('Owens')
+    whoWasAssaultedPage.victimOfficerSearchFirstNameInput().type('Test')
+    whoWasAssaultedPage.victimOfficerSearchLastNameInput().type('User')
     whoWasAssaultedPage.searchOfficer().click()
-    cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=Adam&staffLastName=Owens`)
+    cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=Test&staffLastName=User`)
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
-    whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
+    whoWasAssaultedPage.victimOfficerName().contains('Test User')
     whoWasAssaultedPage.continue().click()
     const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     wasTheIncidentRacial.checkOnPage()
@@ -330,7 +269,7 @@ context('Offence details', () => {
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, whoWasAssaultedQuestionId, officerAnswerId, 'AOWENS')
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
-    whoWasAssaultedPage.victimOfficerName().contains('Adam Owens')
+    whoWasAssaultedPage.victimOfficerName().contains('Test User')
     whoWasAssaultedPage.delete().click()
     whoWasAssaultedPage.victimOfficerSearchFirstNameInput().should('exist')
   })

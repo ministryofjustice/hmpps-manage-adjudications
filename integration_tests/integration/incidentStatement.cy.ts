@@ -24,24 +24,10 @@ context('Incident Statement', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
-            startedByUserId: 'USER1',
-            incidentRole: {
-              associatedPrisonersNumber: 'T3356FU',
-              roleCode: '25c',
-              offenceRule: {
-                paragraphNumber: '25(c)',
-                paragraphDescription:
-                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-              },
-            },
+            incidentStatement: null,
             offenceDetails: {
               offenceCode: 1001,
               offenceRule: {
@@ -50,34 +36,16 @@ context('Incident Statement', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-          },
+          }),
         },
       })
 
       cy.task('stubPostDraftIncidentStatement', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
-            startedByUserId: 'USER1',
-            incidentStatement: {
-              statement: 'This is my statement',
-            },
-            incidentRole: {
-              associatedPrisonersNumber: 'T3356FU',
-              roleCode: '25c',
-              offenceRule: {
-                paragraphNumber: '25(c)',
-                paragraphDescription:
-                  'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-              },
-            },
             offenceDetails: {
               offenceCode: 1001,
               offenceRule: {
@@ -86,7 +54,11 @@ context('Incident Statement', () => {
               },
               victimPrisonersNumber: 'G5512G',
             },
-          },
+            incidentStatement: {
+              statement: 'This is my statement',
+              completed: true,
+            },
+          }),
         },
       })
 
@@ -151,39 +123,28 @@ context('Incident Statement', () => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
-            startedByUserId: 'USER1',
-            incidentRole: {},
-            offenceDetails: {},
-          },
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 234,
+            incidentStatement: null,
+          }),
         },
       })
 
       cy.task('stubPostDraftIncidentStatement', {
         id: 3456,
         response: {
-          draftAdjudication: {
+          draftAdjudication: testData.draftAdjudication({
             id: 3456,
             prisonerNumber: 'G6415GD',
-            incidentDetails: {
-              dateTimeOfIncident: '2021-11-03T11:09:42',
-              handoverDeadline: '2021-11-05T11:09:42',
-              locationId: 234,
-            },
-            startedByUserId: 'USER1',
+            dateTimeOfIncident: '2021-11-03T11:09:42',
+            locationId: 234,
             incidentStatement: {
               statement: 'This is my statement',
             },
-            incidentRole: {},
-            offenceDetails: {},
-          },
+          }),
         },
       })
       cy.signIn()

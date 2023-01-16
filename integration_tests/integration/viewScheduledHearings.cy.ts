@@ -2,51 +2,44 @@ import moment from 'moment'
 import ViewScheduledHearingsPage from '../pages/viewScheduledHearings'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
+import TestData from '../../server/routes/testutils/testData'
 
 const formattedDate = moment().format('DD/MM/YYYY')
+const testData = new TestData()
 
 const prisoners = [
-  { offenderNo: 'G6345BY', firstName: 'EMMANUEL', lastName: 'SALGADO' },
-  { offenderNo: 'P3785CP', firstName: 'ROSEMARY', lastName: 'KIRK' },
-  { offenderNo: 'D9543CY', firstName: 'YUNUS', lastName: 'WHITEHEAD' },
-  { offenderNo: 'M1876DT', firstName: 'MALLORY', lastName: 'BARNETT' },
+  testData.prisonerResultSummary({ offenderNo: 'G6345BY', firstName: 'EMMANUEL', lastName: 'SALGADO' }),
+  testData.prisonerResultSummary({ offenderNo: 'P3785CP', firstName: 'ROSEMARY', lastName: 'KIRK' }),
+  testData.prisonerResultSummary({ offenderNo: 'D9543CY', firstName: 'YUNUS', lastName: 'WHITEHEAD' }),
+  testData.prisonerResultSummary({ offenderNo: 'M1876DT', firstName: 'MALLORY', lastName: 'BARNETT' }),
 ]
 
 const hearingsSetOne = [
   {
-    id: 1,
-    dateTimeOfHearing: '2025-11-05T13:00:00',
+    ...testData.singleHearing('2025-11-05T13:00:00', 1),
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
     adjudicationNumber: 123456,
     prisonerNumber: 'G6345BY',
-    oicHearingType: OicHearingType.GOV_ADULT,
   },
   {
-    id: 4,
-    dateTimeOfHearing: '2025-11-05T14:00:00',
+    ...testData.singleHearing('2025-11-05T14:00:00', 4),
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
     adjudicationNumber: 123456,
     prisonerNumber: 'P3785CP',
-    oicHearingType: OicHearingType.GOV_ADULT,
   },
 ]
 const hearingsSetTwo = [
   {
-    id: 2,
-    dateTimeOfHearing: '2025-11-06T10:00:00',
+    ...testData.singleHearing('2025-11-06T10:00:00', 2),
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
     adjudicationNumber: 567894,
     prisonerNumber: 'D9543CY',
-    oicHearingType: OicHearingType.GOV_ADULT,
   },
   {
-    id: 3,
-    dateTimeOfHearing: '2025-11-06T11:00:00',
+    ...testData.singleHearing('2025-11-06T11:00:00', 3),
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
     adjudicationNumber: 678912,
     prisonerNumber: 'M1876DT',
-    oicHearingType: OicHearingType.GOV_ADULT,
   },
 ]
 

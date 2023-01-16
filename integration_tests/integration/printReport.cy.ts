@@ -1,4 +1,3 @@
-import { PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page from '../pages/page'
@@ -24,20 +23,14 @@ context('Print a copy of this report', () => {
       id: 1524242,
       response: {
         reportedAdjudication: {
-          adjudicationNumber: 3,
-          prisonerNumber: 'G6415GD',
-          gender: PrisonerGender.MALE,
-          bookingId: 123,
-          createdByUserId: 'AJONES',
-          createdDateTime: '2020-12-06T10:00:00',
-          incidentDetails: {
-            locationId: 2,
+          ...testData.reportedAdjudication({
+            adjudicationNumber: 3,
+            prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2020-12-06T10:00:00',
             handoverDeadline: '2020-12-08T10:00:00',
-          },
-          incidentStatement: {
-            statement: 'test',
-          },
+            locationId: 25538,
+          }),
+          bookingId: 123,
         },
       },
     })
@@ -73,55 +66,30 @@ context('Print a copy of this report', () => {
       ],
     })
     cy.task('stubGetLocation', {
-      locationId: 2,
-      response: { locationId: 2, agencyId: 'MDI', userDescription: 'Adj', locationPrefix: 'MDI-RES-MCASU-MCASU' },
+      locationId: 25538,
+      response: testData.residentialLocations()[0],
     })
     cy.task('stubGetLocations', {
       agencyId: 'MDI',
-      response: [
-        {
-          locationId: 27029,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
-        },
-        {
-          locationId: 27008,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 2',
-        },
-        {
-          locationId: 27009,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 3 - Plastics',
-        },
-        {
-          locationId: 27010,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 4 - PICTA',
-        },
-      ],
+      response: testData.residentialLocations(),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 1524242,
       response: {
-        draftAdjudication: {
+        draftAdjudication: testData.draftAdjudication({
           id: 177,
           prisonerNumber: 'G6415GD',
-          incidentDetails: {
-            locationId: 234,
-            dateTimeOfIncident: '2020-12-06T10:00:00',
-            handoverDeadline: '2020-12-08T10:00:00',
-          },
+          locationId: 25538,
+          dateTimeOfIncident: '2020-12-06T10:00:00',
           incidentStatement: {
             statement: 'TESTING',
             completed: true,
           },
-          startedByUserId: 'AJONES',
-        },
+        }),
       },
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-    cy.task('stubGetUser', { username: 'AJONES', response: { username: 'AJONES', name: 'Alex Jones' } })
+    cy.task('stubGetUser', { username: 'USER1', response: testData.userFromUsername() })
     cy.signIn()
   })
 

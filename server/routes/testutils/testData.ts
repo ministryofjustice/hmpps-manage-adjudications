@@ -199,10 +199,10 @@ export default class TestData {
     }
   }
 
-  singleHearing = (dateTimeOfHearing: string, id = 101): HearingDetails => {
+  singleHearing = (dateTimeOfHearing: string, id = 101, locationId = 775): HearingDetails => {
     return {
       id,
-      locationId: 775,
+      locationId,
       dateTimeOfHearing,
       oicHearingType: OicHearingType.GOV_ADULT,
     }

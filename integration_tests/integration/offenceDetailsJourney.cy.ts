@@ -7,18 +7,10 @@ import Page from '../pages/page'
 
 const testData = new TestData()
 
-const draftAdjudicationForCommittedYouthOffences: DraftAdjudication = {
+const draftAdjudicationForCommittedYouthOffences: DraftAdjudication = testData.draftAdjudication({
   id: 3456,
   prisonerNumber: 'G6415GD',
-  incidentDetails: {
-    dateTimeOfIncident: '2021-11-03T11:09:00',
-    handoverDeadline: '2021-11-05T11:09:00',
-    locationId: 234,
-  },
-  isYouthOffender: true,
-  incidentRole: {
-    roleCode: null,
-  },
+  dateTimeOfIncident: '2021-11-03T11:09:00',
   offenceDetails: {
     offenceCode: 1001,
     offenceRule: {
@@ -27,9 +19,7 @@ const draftAdjudicationForCommittedYouthOffences: DraftAdjudication = {
     },
     victimPrisonersNumber: 'G5512G',
   },
-
-  startedByUserId: 'TEST_GEN',
-}
+})
 
 context('Existing draft adjudication', () => {
   beforeEach(() => {
