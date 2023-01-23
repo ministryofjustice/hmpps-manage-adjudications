@@ -6,7 +6,6 @@ import CuriousApiService from './curiousApiService'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import PrisonerSearchService from './prisonerSearchService'
 import LocationService from './locationService'
-import OffenceSessionService from './offenceSessionService'
 import AllOffencesSessionService from './allOffencesSessionService'
 import DecisionTreeService from './decisionTreeService'
 import decisionTree from '../offenceCodeDecisions/DecisionTree'
@@ -25,7 +24,6 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   locationService
 )
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
-const offenceSessionService = new OffenceSessionService()
 const allOffencesSessionService = new AllOffencesSessionService()
 const damagesSessionService = new DamagesSessionService()
 const evidenceSessionService = new EvidenceSessionService()
@@ -43,7 +41,6 @@ export const services = {
   reportedAdjudicationsService,
   prisonerSearchService,
   locationService,
-  offenceSessionService,
   allOffencesSessionService,
   decisionTreeService,
   damagesSessionService,

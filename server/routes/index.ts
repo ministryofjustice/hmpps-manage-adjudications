@@ -47,7 +47,6 @@ export default function routes(
     prisonerSearchService,
     reportedAdjudicationsService,
     userService,
-    offenceSessionService,
     allOffencesSessionService,
     decisionTreeService,
     damagesSessionService,
@@ -60,7 +59,6 @@ export default function routes(
     offenceCodeDecisionsRoutes({
       placeOnReportService,
       userService,
-      offenceSessionService,
       decisionTreeService,
       prisonerSearchService,
     })
