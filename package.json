@@ -115,7 +115,7 @@
     "nunjucks": "^3.2.3",
     "passport": "^0.6.0",
     "passport-oauth2": "^1.6.1",
-    "redis": "^3.1.2",
+    "redis": "^4.0.0",
     "superagent": "^8.0.6"
   },
   "devDependencies": {
@@ -136,7 +136,7 @@
     "@types/nunjucks": "^3.2.1",
     "@types/passport": "^1.0.11",
     "@types/passport-oauth2": "^1.4.11",
-    "@types/redis": "^2.8.32",
+    "@types/redis": "^4.0.0",
     "@types/superagent": "^4.1.16",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
