@@ -15,7 +15,7 @@ parameters:
 
   node-version:
     type: string
-    default: 16.15-browsers
+    default: 18.11-browsers
 
 executors:
   integration-tests:
@@ -37,7 +37,7 @@ executors:
         default: medium
         type: string
       node_tag:
-        default: "14.16-browsers"
+        default: << pipeline.parameters.node-version >>
         type: string
       redis_tag:
         default: "6.2"
