@@ -7,7 +7,6 @@ import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
@@ -50,6 +49,13 @@ const prisonerData = testData.prisonerResultSummary({
   lastName: 'A_PRISONER_LAST_NAME',
 })
 
+const offenceData = {
+  victimOtherPersonsName: '',
+  victimPrisonersNumber: 'G5512G',
+  victimStaffUsername: '',
+  offenceCode: `1`,
+}
+
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
@@ -70,11 +76,7 @@ beforeEach(() => {
     prisoner: prisonerData,
     associatedPrisoner: undefined,
   })
-  const allOffencesSessionService = new AllOffencesSessionService()
-  app = appWithAllRoutes(
-    { production: false },
-    { placeOnReportService, decisionTreeService, allOffencesSessionService, userService }
-  )
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, decisionTreeService, userService })
 })
 
 afterEach(() => {
@@ -87,7 +89,7 @@ describe('GET /details-of-offence/102/delete view', () => {
     return agent.get(adjudicationUrls.detailsOfOffence.urls.start(102)).then(() =>
       // This call will populate the session, which we need for the delete page.
       agent
-        .get(adjudicationUrls.detailsOfOffence.urls.delete(102))
+        .get(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData))
         .expect(200)
         // Title
         .expect(res => {
@@ -105,10 +107,10 @@ describe('POST /details-of-offence/102/delete validation', () => {
     return agent.get(adjudicationUrls.detailsOfOffence.urls.start(102)).then(() =>
       // This call will populate the session, which we need for the delete page.
       agent
-        .get(adjudicationUrls.detailsOfOffence.urls.delete(102))
+        .get(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData))
         .expect(200)
         .then(() =>
-          agent.post(adjudicationUrls.detailsOfOffence.urls.delete(102)).expect(res => {
+          agent.post(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData)).expect(res => {
             expect(res.text).toContain('Select yes if you want to remove this offence')
           })
         )
@@ -123,9 +125,9 @@ describe('POST /details-of-offence/102/delete/1', () => {
       .get(adjudicationUrls.detailsOfOffence.urls.start(102)) // This call will populate the session, which we need for the delete page.
       .expect(res => expect(res.text).toContain('Committed: A_prisoner_first_name A_prisoner_last_name'))
       .then(() =>
-        agent.get(adjudicationUrls.detailsOfOffence.urls.delete(102)).then(() =>
+        agent.get(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData)).then(() =>
           agent
-            .post(adjudicationUrls.detailsOfOffence.urls.delete(102))
+            .post(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData))
             .send({ confirmDelete: 'yes' })
             .expect(302)
             .expect('Location', adjudicationUrls.detailsOfOffence.urls.modified(102))
@@ -146,18 +148,16 @@ describe('POST /details-of-offence/102/delete/1', () => {
       .get(adjudicationUrls.detailsOfOffence.urls.start(102)) // This call will populate the session, which we need for the delete page.
       .expect(res => expect(res.text).toContain('Committed: A_prisoner_first_name A_prisoner_last_name')) // We will decide not to delete the offence with this answer
       .then(() =>
-        agent.get(adjudicationUrls.detailsOfOffence.urls.delete(102)).then(() =>
+        agent.get(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData)).then(() =>
           agent
-            .post(adjudicationUrls.detailsOfOffence.urls.delete(102))
+            .post(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData))
             .send({ confirmDelete: 'no' })
             .expect(302)
-            .expect('Location', adjudicationUrls.detailsOfOffence.urls.modified(102))
-            .then(() =>
-              agent
-                .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
-                .expect(200)
-                // The offence with this answer should still be present
-                .expect(res => expect(res.text).toContain('Committed: A_prisoner_first_name A_prisoner_last_name'))
+            .expect(
+              'Location',
+              `${adjudicationUrls.detailsOfOffence.urls.modified(
+                102
+              )}?offenceCode=1&victimOtherPersonsName=&victimPrisonersNumber=G5512G&victimStaffUsername=`
             )
         )
       )

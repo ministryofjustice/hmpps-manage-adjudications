@@ -6,7 +6,6 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
-import OffenceSessionService from '../../services/offenceSessionService'
 import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -96,10 +95,9 @@ beforeEach(() => {
 
   prisonerSearchService.isPrisonerNumberValid.mockResolvedValue(true)
 
-  const offenceSessionService = new OffenceSessionService()
   app = appWithAllRoutes(
     { production: false },
-    { placeOnReportService, decisionTreeService, offenceSessionService, userService, prisonerSearchService }
+    { placeOnReportService, decisionTreeService, userService, prisonerSearchService }
   )
 })
 
@@ -374,7 +372,14 @@ describe('POST /offence-code-selection/100/assisted/1 next page', () => {
         selectedAnswerId: aStandardAnswerWithChildQuestion.id(),
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.offenceCodeSelection.urls.question(100, 'assisted', '1-6')}`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.offenceCodeSelection.urls.question(
+          100,
+          'assisted',
+          '1-6'
+        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=undefined`
+      )
   })
 })
 

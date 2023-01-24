@@ -3,19 +3,17 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
 
 const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
-const allOffencesSessionService = new AllOffencesSessionService() as jest.Mocked<AllOffencesSessionService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, allOffencesSessionService })
+  app = appWithAllRoutes({ production: false }, { placeOnReportService })
   placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(
     testData.prisonerResultSummary({
       offenderNo: 'A7937DY',

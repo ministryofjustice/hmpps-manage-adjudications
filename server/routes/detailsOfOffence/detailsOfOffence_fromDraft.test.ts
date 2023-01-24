@@ -7,7 +7,6 @@ import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
@@ -15,12 +14,10 @@ import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('../../services/allOffencesSessionService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
-const allOffencesSessionService = new AllOffencesSessionService() as jest.Mocked<AllOffencesSessionService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
@@ -163,10 +160,7 @@ beforeEach(() => {
     }
   })
 
-  app = appWithAllRoutes(
-    { production: false },
-    { placeOnReportService, decisionTreeService, allOffencesSessionService, userService }
-  )
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, decisionTreeService, userService })
 })
 
 afterEach(() => {
@@ -211,25 +205,6 @@ describe('GET /details-of-offence/100 view', () => {
           expect.anything()
         )
       )
-  })
-
-  it('should set and not get the offences on the session', () => {
-    return request(app)
-      .get(adjudicationUrls.detailsOfOffence.urls.start(100))
-      .expect(200)
-      .then(() =>
-        expect(allOffencesSessionService.setSessionOffences).toHaveBeenCalledWith(
-          expect.anything(),
-          {
-            offenceCode: '1',
-            victimOtherPersonsName: undefined,
-            victimPrisonersNumber: 'G5512G',
-            victimStaffUsername: undefined,
-          },
-          100
-        )
-      )
-      .then(() => expect(allOffencesSessionService.getSessionOffences).not.toHaveBeenCalledWith())
   })
 })
 

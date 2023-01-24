@@ -8,7 +8,6 @@ import { FormError } from '../../@types/template'
 import logger from '../../../logger'
 import { calculateAge } from '../../utils/utils'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 
 type PageData = {
   error?: FormError
@@ -49,11 +48,7 @@ const getPreviouslyChosenRule = (draftAdjudication: DraftAdjudication): string =
 export default class AgeOfPrisonerPage {
   pageOptions: PageOptions
 
-  constructor(
-    pageType: PageRequestType,
-    private readonly placeOnReportService: PlaceOnReportService,
-    private readonly allOffencesSessionService: AllOffencesSessionService
-  ) {
+  constructor(pageType: PageRequestType, private readonly placeOnReportService: PlaceOnReportService) {
     this.pageOptions = new PageOptions(pageType)
   }
 
@@ -84,8 +79,6 @@ export default class AgeOfPrisonerPage {
       req.session.forceOffenceSelection = true
     } else {
       delete req.session.forceOffenceSelection
-      // This is the entry point for the journey to change offences - remove existing offences from the session
-      this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
     }
     return this.renderView(res, adjudicationNumber, {})
   }

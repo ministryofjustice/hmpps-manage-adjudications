@@ -5,7 +5,6 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
-import OffenceSessionService from '../../services/offenceSessionService'
 import Question from '../../offenceCodeDecisions/Question'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
 import DecisionHelper from './decisionHelper'
@@ -18,6 +17,7 @@ import { AnswerType } from '../../offenceCodeDecisions/Answer'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstablishmentDecisionHelper'
 import PrisonerSearchService from '../../services/prisonerSearchService'
+import { OffenceData } from './offenceData'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -37,7 +37,6 @@ export default class OffenceCodeRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
-    private readonly offenceSessionService: OffenceSessionService,
     private readonly decisionTreeService: DecisionTreeService,
     private readonly prisonerSearchService: PrisonerSearchService
   ) {}
@@ -90,6 +89,7 @@ export default class OffenceCodeRoutes {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { incidentRole } = req.params
     const { selectedAnswerId } = req.body
+    const offenceToAdd: OffenceData = { ...req.query }
     // Validation
     if (!selectedAnswerId) {
       return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber, incidentRole })
@@ -100,11 +100,7 @@ export default class OffenceCodeRoutes {
     if (errors && errors.length !== 0) {
       return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
     }
-    // Save any data associated with the decisions on the session.
-    const currentOffenceData = this.offenceSessionService.getAndDeleteOffenceData(req, adjudicationNumber)
-    const updatedOffenceData = answerTypeHelper.updatedOffenceData(currentOffenceData, form)
-    this.offenceSessionService.setOffenceData(req, updatedOffenceData, adjudicationNumber)
-    // We redirect to the next decision or the details of offence page if this is the last.
+    const updatedOffenceData = answerTypeHelper.updatedOffenceData(offenceToAdd, form)
     const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
       const nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
@@ -112,13 +108,18 @@ export default class OffenceCodeRoutes {
         incidentRole,
         selectedAnswer.getChildQuestion().id()
       )}`
-      return res.redirect(nextQuestionUrl)
+      return this.redirect(
+        {
+          pathname: nextQuestionUrl,
+          query: updatedOffenceData,
+        },
+        res
+      )
     }
     // We have finished - remove the offence data from the session and redirect to the details of offence page with the
     // offence data payload
-    const finalOffenceData = this.offenceSessionService.deleteOffenceData(req, adjudicationNumber)
     return this.redirect(
-      { pathname: adjudicationUrls.detailsOfOffence.urls.add(adjudicationNumber), query: finalOffenceData },
+      { pathname: adjudicationUrls.detailsOfOffence.urls.add(adjudicationNumber), query: updatedOffenceData },
       res
     )
   }

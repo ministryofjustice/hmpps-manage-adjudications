@@ -5,7 +5,6 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import decisionTree from '../../offenceCodeDecisions/DecisionTree'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
 import UserService from '../../services/userService'
-import OffenceSessionService from '../../services/offenceSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerSearchService from '../../services/prisonerSearchService'
@@ -13,13 +12,11 @@ import PrisonerSearchService from '../../services/prisonerSearchService'
 export default function offenceCodeDecisionsRoutes({
   placeOnReportService,
   userService,
-  offenceSessionService,
   decisionTreeService,
   prisonerSearchService,
 }: {
   placeOnReportService: PlaceOnReportService
   userService: UserService
-  offenceSessionService: OffenceSessionService
   decisionTreeService: DecisionTreeService
   prisonerSearchService: PrisonerSearchService
 }): Router {
@@ -27,7 +24,6 @@ export default function offenceCodeDecisionsRoutes({
   const offenceCodeDecisions = new OffenceCodeDecisionsRoutes(
     placeOnReportService,
     userService,
-    offenceSessionService,
     decisionTreeService,
     prisonerSearchService
   )

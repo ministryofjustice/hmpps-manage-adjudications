@@ -3,7 +3,6 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 
@@ -26,8 +25,7 @@ beforeEach(() => {
     }),
   })
 
-  const allOffencesSessionService = new AllOffencesSessionService()
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, allOffencesSessionService, userService })
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, userService })
 })
 
 afterEach(() => {
@@ -39,6 +37,6 @@ describe('GET /details-of-offence/100/add view', () => {
     return request(app)
       .get(`${adjudicationUrls.detailsOfOffence.urls.add(100)}?offenceCode=1`)
       .expect(302)
-      .expect('Location', adjudicationUrls.detailsOfOffence.urls.modified(100))
+      .expect('Location', `${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1`)
   })
 })

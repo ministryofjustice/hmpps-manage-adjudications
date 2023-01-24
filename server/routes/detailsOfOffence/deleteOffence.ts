@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
+import url from 'url'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { OffenceData } from '../offenceCodeDecisions/offenceData'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -18,10 +19,7 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class DeleteOffenceRoutes {
-  constructor(
-    private readonly allOffencesSessionService: AllOffencesSessionService,
-    private readonly decisionTreeService: DecisionTreeService
-  ) {}
+  constructor(private readonly decisionTreeService: DecisionTreeService) {}
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, [])
 
@@ -32,8 +30,8 @@ export default class DeleteOffenceRoutes {
       adjudicationNumber,
       user
     )
-    // We assume the offences are already set up on the session
-    const offenceData = this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
+
+    const offenceData: OffenceData = { ...req.query }
     const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
@@ -42,9 +40,11 @@ export default class DeleteOffenceRoutes {
       incidentRole,
       false
     )
+
     return res.render(`pages/deleteOffence`, {
       questionsAndAnswers,
       errors,
+      offenceData,
     })
   }
 
@@ -55,8 +55,19 @@ export default class DeleteOffenceRoutes {
       return this.renderView(req, res, [error.MISSING_SELECTION])
     }
     if (confirmDelete === 'yes') {
-      this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
+      return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
     }
-    return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
+    const offenceData: OffenceData = { ...req.query }
+    return this.redirect(
+      {
+        pathname: adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber),
+        query: offenceData,
+      },
+      res
+    )
+  }
+
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
+    return res.redirect(url.format(urlQuery))
   }
 }
