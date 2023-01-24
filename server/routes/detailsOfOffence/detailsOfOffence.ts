@@ -81,9 +81,8 @@ export default class DetailsOfOffencePage {
     if (req.body.addFirstOffence) {
       return this.redirectToInitialOffenceSelectionPage(res, adjudicationNumber, isReportedAdjudication)
     }
-    // Saving the offences for a draft just means continue
+
     if (!this.pageOptions.displaySessionData()) {
-      // this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber)
     }
     const offenceData: OffenceData = { ...req.query }
