@@ -47,7 +47,6 @@ export default function routes(
     prisonerSearchService,
     reportedAdjudicationsService,
     userService,
-    allOffencesSessionService,
     decisionTreeService,
     damagesSessionService,
     evidenceSessionService,
@@ -67,7 +66,7 @@ export default function routes(
   router.use(adjudicationUrls.incidentRole.root, incidentRoleRoutes({ placeOnReportService }))
   router.use(
     adjudicationUrls.detailsOfOffence.root,
-    detailsOfOffenceRoutes({ placeOnReportService, allOffencesSessionService, decisionTreeService })
+    detailsOfOffenceRoutes({ placeOnReportService, decisionTreeService })
   )
   router.use(adjudicationUrls.incidentStatement.root, incidentStatementRoutes({ placeOnReportService }))
   router.use(
@@ -137,10 +136,7 @@ export default function routes(
     })
   )
   router.use('/', homepageRoutes({ userService }))
-  router.use(
-    adjudicationUrls.ageOfPrisoner.root,
-    ageOfPrisonerRoutes({ placeOnReportService, allOffencesSessionService })
-  )
+  router.use(adjudicationUrls.ageOfPrisoner.root, ageOfPrisonerRoutes({ placeOnReportService }))
 
   router.use(
     adjudicationUrls.incidentAssociate.root,

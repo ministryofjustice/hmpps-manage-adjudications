@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -27,7 +26,6 @@ export default class DetailsOfOffencePage {
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly allOffencesSessionService: AllOffencesSessionService,
     private readonly decisionTreeService: DecisionTreeService
   ) {
     this.pageOptions = new PageOptions(pageType)
@@ -39,13 +37,7 @@ export default class DetailsOfOffencePage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
-    const offence = this.getOffences(req, adjudicationNumber, draftAdjudication)
-
-    // If we are not displaying session data then fill in the session data
-    if (!this.pageOptions.displaySessionData()) {
-      // Set up session to allow for adding and deleting
-      this.allOffencesSessionService.setSessionOffences(req, offence, adjudicationNumber)
-    }
+    const offence = this.getOffences(req, draftAdjudication)
 
     if (!offence || Object.keys(offence).length === 0) {
       return res.render(`pages/detailsOfOffence`, {
@@ -78,6 +70,7 @@ export default class DetailsOfOffencePage {
       reportedAdjudicationNumber,
       incidentRole,
       isYouthOffender,
+      offenceData: offence,
     })
   }
 
@@ -90,10 +83,11 @@ export default class DetailsOfOffencePage {
     }
     // Saving the offences for a draft just means continue
     if (!this.pageOptions.displaySessionData()) {
-      this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
+      // this.allOffencesSessionService.deleteSessionOffences(req, adjudicationNumber)
       return this.redirectToNextPage(res, adjudicationNumber)
     }
-    const offenceData = this.allOffencesSessionService.getAndDeleteSessionOffences(req, adjudicationNumber)
+    const offenceData: OffenceData = { ...req.query }
+
     const offenceDetailsToSave = {
       victimOtherPersonsName: offenceData?.victimOtherPersonsName,
       victimPrisonersNumber: offenceData?.victimPrisonersNumber,
@@ -104,9 +98,9 @@ export default class DetailsOfOffencePage {
     return this.redirectToNextPage(res, adjudicationNumber)
   }
 
-  getOffences = (req: Request, adjudicationNumber: number, draftAdjudication: DraftAdjudication): OffenceData => {
+  getOffences = (req: Request, draftAdjudication: DraftAdjudication): OffenceData => {
     if (this.pageOptions.displaySessionData()) {
-      return this.allOffencesSessionService.getSessionOffences(req, adjudicationNumber)
+      return { ...req.query }
     }
     const { offenceDetails } = draftAdjudication
     return offenceDetails

@@ -7,21 +7,17 @@ import { IncidentRole as Role } from '../../incidentRole/IncidentRole'
 import { PlaceholderText as Text } from '../../offenceCodeDecisions/Placeholder'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import UserService from '../../services/userService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
-import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('../../services/allOffencesSessionService.ts')
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
-const allOffencesSessionService = new AllOffencesSessionService() as jest.Mocked<AllOffencesSessionService>
 const userService = new UserService(null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
@@ -105,13 +101,6 @@ const youthAdjudicationWithOffences = {
   }),
 }
 
-const offencesOnSession: OffenceData = {
-  offenceCode: '1',
-  victimOtherPersonsName: undefined,
-  victimPrisonersNumber: 'G5512G',
-  victimStaffUsername: undefined,
-}
-
 beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockImplementation(adjudicationId => {
     switch (adjudicationId) {
@@ -156,14 +145,7 @@ beforeEach(() => {
     }
   })
 
-  allOffencesSessionService.getSessionOffences.mockReturnValueOnce(offencesOnSession)
-
-  allOffencesSessionService.getAndDeleteSessionOffences.mockReturnValueOnce(offencesOnSession)
-
-  app = appWithAllRoutes(
-    { production: false },
-    { placeOnReportService, decisionTreeService, allOffencesSessionService, userService }
-  )
+  app = appWithAllRoutes({ production: false }, { placeOnReportService, decisionTreeService, userService })
 })
 
 afterEach(() => {
@@ -173,7 +155,7 @@ afterEach(() => {
 describe('GET /details-of-offence/100 view', () => {
   it('should load the offence details page from the session', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfOffence.urls.modified(100))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G`)
       .expect('Content-Type', /html/)
       .expect(res => {
         // Title
@@ -188,7 +170,7 @@ describe('GET /details-of-offence/100 view', () => {
 
   it('should load the adult offence paragraph information', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfOffence.urls.modified(100))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison rule 51')
@@ -199,7 +181,7 @@ describe('GET /details-of-offence/100 view', () => {
 
   it('should get the offence rule related to adults', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfOffence.urls.modified(100))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G`)
       .expect(200)
       .then(() =>
         expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
@@ -215,7 +197,7 @@ describe('GET /details-of-offence/100 view', () => {
 describe('GET /details-of-offence/102 view', () => {
   it('should load the youth offence paragraph information', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(102)}?offenceCode=1&victimPrisonersNumber=G5512G`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison rule 55')
@@ -225,7 +207,7 @@ describe('GET /details-of-offence/102 view', () => {
 
   it('should get the offence rule related to youth offenders', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(102)}?offenceCode=1&victimPrisonersNumber=G5512G`)
       .expect(200)
       .then(() =>
         expect(placeOnReportService.getOffenceRule).toHaveBeenCalledWith(
@@ -246,7 +228,7 @@ describe('POST /details-of-offence/100', () => {
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfOffence.urls.modified(100))
+          .post(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G`)
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
               100,

@@ -1,4 +1,6 @@
+import { off } from 'process'
 import url from 'url'
+import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
 
@@ -31,7 +33,8 @@ const adjudicationUrls = {
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/modified`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/add`,
-      delete: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete`,
+      delete: (adjudicationNumber: number, offenceData: OffenceData) =>
+        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete?offenceCode=${offenceData?.offenceCode}&victimOtherPersonsName=${offenceData?.victimOtherPersonsName}&victimPrisonersNumber=${offenceData?.victimPrisonersNumber}&victimStaffUsername=${offenceData?.victimStaffUsername}`,
     },
   },
   detailsOfDamages: {

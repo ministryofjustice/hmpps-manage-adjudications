@@ -104,7 +104,9 @@ export default class DecisionTreeService {
     const [victimOtherPerson, victimPrisoner, victimStaff] = await Promise.all([
       answerData.victimOtherPersonsName,
       this.getPrisonerDetails(answerData, user),
-      answerData.victimStaffUsername && this.userService.getStaffFromUsername(answerData.victimStaffUsername, user),
+      answerData.victimStaffUsername &&
+        answerData.victimStaffUsername !== 'undefined' &&
+        this.userService.getStaffFromUsername(answerData.victimStaffUsername, user),
     ])
     return {
       victimOtherPerson,

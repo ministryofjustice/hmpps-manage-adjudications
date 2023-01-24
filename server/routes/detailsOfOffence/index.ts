@@ -2,7 +2,6 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
-import AllOffencesSessionService from '../../services/allOffencesSessionService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import AddOffenceRoutes from './addOffence'
 import DeleteOffenceRoutes from './deleteOffence'
@@ -11,11 +10,9 @@ import DetailsOfOffencePage, { PageRequestType } from './detailsOfOffence'
 
 export default function detailsOfOffenceRoutes({
   placeOnReportService,
-  allOffencesSessionService,
   decisionTreeService,
 }: {
   placeOnReportService: PlaceOnReportService
-  allOffencesSessionService: AllOffencesSessionService
   decisionTreeService: DecisionTreeService
 }): Router {
   const router = express.Router()
@@ -23,20 +20,18 @@ export default function detailsOfOffenceRoutes({
   const detailsOfOffenceUsingDraft = new DetailsOfOffencePage(
     PageRequestType.OFFENCES_FROM_API,
     placeOnReportService,
-    allOffencesSessionService,
     decisionTreeService
   )
 
   const detailsOfOffenceUsingSession = new DetailsOfOffencePage(
     PageRequestType.OFFENCES_FROM_SESSION,
     placeOnReportService,
-    allOffencesSessionService,
     decisionTreeService
   )
 
-  const addOffence = new AddOffenceRoutes(placeOnReportService, allOffencesSessionService)
+  const addOffence = new AddOffenceRoutes()
 
-  const deleteOffence = new DeleteOffenceRoutes(allOffencesSessionService, decisionTreeService)
+  const deleteOffence = new DeleteOffenceRoutes(decisionTreeService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
