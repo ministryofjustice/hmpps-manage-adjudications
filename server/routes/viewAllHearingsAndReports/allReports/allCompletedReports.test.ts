@@ -1,13 +1,13 @@
 import { Express } from 'express'
 import request from 'supertest'
-import appWithAllRoutes from '../testutils/appSetup'
-import UserService from '../../services/userService'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import adjudicationUrls from '../../utils/urlGenerator'
-import TestData from '../testutils/testData'
+import appWithAllRoutes from '../../testutils/appSetup'
+import UserService from '../../../services/userService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import TestData from '../../testutils/testData'
 
-jest.mock('../../services/reportedAdjudicationsService.ts')
-jest.mock('../../services/userService.ts')
+jest.mock('../../../services/reportedAdjudicationsService.ts')
+jest.mock('../../../services/userService.ts')
 
 const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(

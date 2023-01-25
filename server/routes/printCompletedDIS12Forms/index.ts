@@ -1,28 +1,28 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
-import AllCompletedReports from './allCompletedReports'
+import PrintCompletedDISForms from './printCompletedDIS12Forms'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import UserService from '../../services/userService'
+import LocationService from '../../services/locationService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
-export default function allCompletedReportsRoutes({
+export default function printCompletedDISFormsRoutes({
   reportedAdjudicationsService,
-  userService,
+  locationService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
-  userService: UserService
+  locationService: LocationService
 }): Router {
   const router = express.Router()
 
-  const allCompletedReportsRoute = new AllCompletedReports(reportedAdjudicationsService, userService)
+  const printCompletedDISFormsRoute = new PrintCompletedDISForms(reportedAdjudicationsService, locationService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.allCompletedReports.matchers.start, allCompletedReportsRoute.view)
-  post(adjudicationUrls.allCompletedReports.matchers.start, allCompletedReportsRoute.submit)
+  get(adjudicationUrls.printCompletedDisForms.matchers.start, printCompletedDISFormsRoute.view)
+  post(adjudicationUrls.printCompletedDisForms.matchers.start, printCompletedDISFormsRoute.submit)
 
   return router
 }

@@ -2,7 +2,7 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import AdjudicationPdf from './adjudicationPdf'
+import AdjudicationPdf from './dis12Pdf'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
