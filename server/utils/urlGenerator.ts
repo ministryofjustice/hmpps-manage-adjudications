@@ -396,6 +396,42 @@ const adjudicationUrls = {
         }),
     },
   },
+  enterHearingOutcome: {
+    root: '/hearing-outcome',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}`,
+    },
+  },
+  hearingPleaAndFinding: {
+    root: '/hearing-plea-finding',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}`,
+    },
+  },
+  hearingReasonForReferral: {
+    root: '/reason-for-referral',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}`,
+    },
+  },
+  hearingAdjourned: {
+    root: '/hearing-adjourned',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
