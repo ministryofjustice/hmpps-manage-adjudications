@@ -27,7 +27,7 @@ export default class printCompletedDISFormsRoutes {
   ): Promise<void> => {
     const { user } = res.locals
     const possibleLocations = await this.locationService.getLocationsForUser(user)
-    return res.render(`pages/printCompletedDISForms`, {
+    return res.render(`pages/printCompletedDIS12Forms`, {
       reports: results,
       filter,
       possibleLocations,

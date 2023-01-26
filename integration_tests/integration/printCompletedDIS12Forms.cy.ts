@@ -3,7 +3,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import PrintDISFormsFilter from '../pages/printDISFormsFilter'
 import TestData from '../../server/routes/testutils/testData'
-import PrintCompletedDISFormsPage from '../pages/printCompletedDISForms'
+import PrintCompletedDISFormsPage from '../pages/printCompletedDIS12Forms'
 import { allIssueStatuses, IssueStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()

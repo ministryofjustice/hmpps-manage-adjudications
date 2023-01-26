@@ -181,7 +181,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     hearingType: pageData.formData.hearingDetails?.hearingType,
   }
 
-  return res.render(`pages/adjudicationTabbedParent/scheduleHearing`, {
+  return res.render(`pages/adjudicationForReport/scheduleHearing`, {
     errors: error ? [error] : [],
     cancelHref: adjudicationUrls.hearingDetails.urls.review(pageData.displayData.adjudicationNumber),
     locations: pageData.displayData.possibleLocations,

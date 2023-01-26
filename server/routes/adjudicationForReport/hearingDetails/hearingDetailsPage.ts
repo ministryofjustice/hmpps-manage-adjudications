@@ -69,7 +69,7 @@ export default class HearingDetailsPage {
       reportedAdjudication.status === ReportedAdjudicationStatus.UNSCHEDULED ||
       reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
 
-    return res.render(`pages/adjudicationTabbedParent/hearingDetails`, {
+    return res.render(`pages/adjudicationForReport/hearingDetails`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),

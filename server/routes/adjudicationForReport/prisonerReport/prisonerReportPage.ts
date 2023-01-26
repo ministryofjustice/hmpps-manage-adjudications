@@ -158,7 +158,7 @@ export default class prisonerReportRoutes {
       this.pageOptions.isReviewerView() &&
       ['AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
 
-    return res.render(`pages/adjudicationTabbedParent/prisonerReport`, {
+    return res.render(`pages/adjudicationForReport/prisonerReport`, {
       pageData,
       prisoner,
       prisonerReportData,
