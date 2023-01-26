@@ -20,7 +20,7 @@ export default class viewScheduledHearingsRoutes {
     results: ScheduledHearingEnhanced[],
     errors: FormError[]
   ): Promise<void> => {
-    return res.render(`pages/viewScheduledHearings`, {
+    return res.render(`pages/viewAllHearingsAndReports/viewScheduledHearings`, {
       hearings: results,
       uiChosenDate,
       clearUrl: adjudicationUrls.viewScheduledHearings.urls.start(),

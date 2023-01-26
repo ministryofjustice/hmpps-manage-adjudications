@@ -30,7 +30,7 @@ export default class AllCompletedReportsRoutes {
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
   ): Promise<void> =>
-    res.render(`pages/allCompletedReports`, {
+    res.render(`pages/viewAllHearingsAndReports/allReports`, {
       allCompletedReports: results,
       filter,
       checkboxes: reportedAdjudicationStatuses(filter),
