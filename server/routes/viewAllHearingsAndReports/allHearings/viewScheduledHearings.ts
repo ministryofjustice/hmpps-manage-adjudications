@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import { datePickerToApi, hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
-import UserService from '../../services/userService'
-import adjudicationUrls from '../../utils/urlGenerator'
-import { FormError } from '../../@types/template'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { ScheduledHearingEnhanced } from '../../data/ReportedAdjudicationResult'
+import { datePickerToApi, hasAnyRole, momentDateToDatePicker } from '../../../utils/utils'
+import UserService from '../../../services/userService'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import { FormError } from '../../../@types/template'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import { ScheduledHearingEnhanced } from '../../../data/ReportedAdjudicationResult'
 
 export default class viewScheduledHearingsRoutes {
   constructor(

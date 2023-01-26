@@ -1,14 +1,14 @@
 import moment from 'moment'
 import { Express } from 'express'
 import request from 'supertest'
-import appWithAllRoutes from '../testutils/appSetup'
-import UserService from '../../services/userService'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import adjudicationUrls from '../../utils/urlGenerator'
-import { momentDateToApi } from '../../utils/utils'
+import appWithAllRoutes from '../../testutils/appSetup'
+import UserService from '../../../services/userService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import { momentDateToApi } from '../../../utils/utils'
 
-jest.mock('../../services/reportedAdjudicationsService.ts')
-jest.mock('../../services/userService.ts')
+jest.mock('../../../services/reportedAdjudicationsService.ts')
+jest.mock('../../../services/userService.ts')
 
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
