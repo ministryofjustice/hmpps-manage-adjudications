@@ -399,37 +399,51 @@ const adjudicationUrls = {
   enterHearingOutcome: {
     root: '/hearing-outcome',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:adjudicationNumber/hearing/:hearingId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}`,
+      start: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}/hearing/${hearingId}`,
     },
   },
   hearingPleaAndFinding: {
     root: '/hearing-plea-finding',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:adjudicationNumber/hearing/:hearingId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}`,
+      start: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}/hearing/${hearingId}`,
     },
   },
   hearingReasonForReferral: {
     root: '/reason-for-referral',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:adjudicationNumber/hearing/:hearingId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}`,
+      start: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}/hearing/${hearingId}`,
     },
   },
   hearingAdjourned: {
     root: '/hearing-adjourned',
     matchers: {
+      start: '/:adjudicationNumber/hearing/:hearingId',
+    },
+    urls: {
+      start: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}/hearing/${hearingId}`,
+    },
+  },
+  hearingReferralConfirmation: {
+    root: '/report-has-been-referred',
+    matchers: {
       start: '/:adjudicationNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}`,
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.hearingReferralConfirmation.root}/${adjudicationNumber}`,
     },
   },
   homepage: {

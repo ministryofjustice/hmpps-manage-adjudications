@@ -31,6 +31,7 @@ import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
+import { HearingOutcomeDetails } from './HearingResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -307,6 +308,17 @@ export default class ManageAdjudicationsClient {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/issue`,
       data: { dateTimeOfIssue },
+    })
+  }
+
+  async createHearingOutcome(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcomeDetails: HearingOutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      data: { ...hearingOutcomeDetails },
     })
   }
 }

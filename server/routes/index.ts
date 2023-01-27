@@ -39,6 +39,7 @@ import adjudicationPdfRoutes from './dis12Pdf'
 import adjudicationUrls from '../utils/urlGenerator'
 import printCompletedDISFormsRoutes from './printCompletedDIS12Forms'
 import enterHearingOutcomeRoutes from './hearingOutcome/enterHearingOutcome'
+import hearingReasonForReferralRoutes from './hearingOutcome/referCase'
 
 export default function routes(
   router: Router,
@@ -52,6 +53,7 @@ export default function routes(
     damagesSessionService,
     evidenceSessionService,
     witnessesSessionService,
+    hearingsService,
   }: Services
 ): Router {
   router.use(
@@ -175,5 +177,11 @@ export default function routes(
   )
 
   router.use(adjudicationUrls.enterHearingOutcome.root, enterHearingOutcomeRoutes({ userService }))
+
+  router.use(
+    adjudicationUrls.hearingReasonForReferral.root,
+    hearingReasonForReferralRoutes({ hearingsService, userService })
+  )
+
   return router
 }
