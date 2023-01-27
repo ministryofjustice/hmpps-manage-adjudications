@@ -38,6 +38,7 @@ import { Services } from '../services'
 import adjudicationPdfRoutes from './dis12Pdf'
 import adjudicationUrls from '../utils/urlGenerator'
 import printCompletedDISFormsRoutes from './printCompletedDIS12Forms'
+import enterHearingOutcomeRoutes from './hearingOutcome/enterHearingOutcome'
 
 export default function routes(
   router: Router,
@@ -172,5 +173,7 @@ export default function routes(
     adjudicationUrls.printCompletedDisForms.root,
     printCompletedDISFormsRoutes({ reportedAdjudicationsService, locationService })
   )
+
+  router.use(adjudicationUrls.enterHearingOutcome.root, enterHearingOutcomeRoutes({ userService }))
   return router
 }
