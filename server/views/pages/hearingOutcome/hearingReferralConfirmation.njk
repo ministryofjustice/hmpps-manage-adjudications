@@ -1,0 +1,36 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+
+{% set title = 'Report has been referred' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+    {{ govukPanel({
+    titleText: "Referral saved",
+    text: "You must complete the referral using the usual process",
+    attributes: {
+      'data-qa': "hearing-referral-confirmation-panel"
+    }
+    }) }}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6" data-qa="h2-1">What you need to do next</h2>
+    <p class="govuk-body" data-qa="p-1">Complete the referral using your usual process.</p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6" data-qa="h2-2">When the outcome is known</h2>
+    <p class="govuk-body" data-qa="p-2">To record the outcome of the referral:</p>
+    <ol class="govuk-list govuk-list--number" data-qa="list">
+        <li>Go to 'View all reports'.</li>
+        <li>Find the relevant report.</li>
+        <li>Go to the 'Hearings and referrals' tab.</li>
+        <li>Enter the result of the referral.</li>
+    </ol>
+
+    <p class="govuk-body govuk-!-margin-top-1"><a href="{{ returnLinkUrl }}" class="govuk-link" data-qa="hearing-referral-confirmation-return-link">Return to hearings and referrals</a></p>
+
+
+{% endblock %}
