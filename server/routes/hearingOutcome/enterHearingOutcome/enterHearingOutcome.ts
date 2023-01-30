@@ -16,14 +16,14 @@ type PageData = {
 export default class EnterHearingOutcomePage {
   constructor(private readonly userService: UserService) {}
 
-  private getRedirectUrl = (outcome: HearingOutcomeCode, adjudicationNumber: number) => {
+  private getRedirectUrl = (outcome: HearingOutcomeCode, adjudicationNumber: number, hearingId: number) => {
     switch (outcome) {
       case HearingOutcomeCode.ADJOURN:
-        return adjudicationUrls.hearingAdjourned.urls.start(adjudicationNumber)
+        return adjudicationUrls.hearingAdjourned.urls.start(adjudicationNumber, hearingId)
       case HearingOutcomeCode.COMPLETE:
-        return adjudicationUrls.hearingPleaAndFinding.urls.start(adjudicationNumber)
+        return adjudicationUrls.hearingPleaAndFinding.urls.start(adjudicationNumber, hearingId)
       default:
-        return adjudicationUrls.hearingReasonForReferral.urls.start(adjudicationNumber)
+        return adjudicationUrls.hearingReasonForReferral.urls.start(adjudicationNumber, hearingId)
     }
   }
 
@@ -49,6 +49,7 @@ export default class EnterHearingOutcomePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const hearingId = Number(req.params.hearingId)
     const { hearingOutcome, adjudicatorName } = req.body
 
     const error = validateForm({ hearingOutcome, adjudicatorName })
@@ -59,8 +60,8 @@ export default class EnterHearingOutcomePage {
         adjudicatorName,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber)
-    const redirectUrl = `${redirectUrlPrefix}?adjudicator=${adjudicatorName}&hearingOutcomeCode=${hearingOutcome}`
+    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber, hearingId)
+    const redirectUrl = `${redirectUrlPrefix}?adjudicatorName=${adjudicatorName}&hearingOutcome=${hearingOutcome}`
     return res.redirect(redirectUrl)
   }
 }
