@@ -27,6 +27,11 @@ export default class HearingReasonForReferralPage {
     })
   }
 
+  private validDataFromEnterHearingOutcomePage = (hearingOutcome: HearingOutcomeCode, adjudicatorName: string) => {
+    if (!hearingOutcome || !adjudicatorName || !Object.values(HearingOutcomeCode).includes(hearingOutcome)) return false
+    return true
+  }
+
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
@@ -50,7 +55,7 @@ export default class HearingReasonForReferralPage {
       })
 
     // We need to check the data from previous page hasn't been lost/tampered with
-    if (!hearingOutcome || !adjudicatorName)
+    if (!this.validDataFromEnterHearingOutcomePage(hearingOutcome as HearingOutcomeCode, adjudicatorName as string))
       return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber, hearingId))
 
     try {
