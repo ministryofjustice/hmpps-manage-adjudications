@@ -218,16 +218,18 @@ export default class TestData {
   }
 
   hearingOutcome = ({
+    id = 1,
     code = HearingOutcomeCode.REFER_POLICE,
     adjudicator = 'Judge Red',
     optionalItems,
   }: {
+    id?: number
     code?: HearingOutcomeCode
     adjudicator?: string
     optionalItems?: any
   }): HearingOutcomeResult => {
     return {
-      id: 1,
+      id,
       code,
       adjudicator,
       ...optionalItems,
