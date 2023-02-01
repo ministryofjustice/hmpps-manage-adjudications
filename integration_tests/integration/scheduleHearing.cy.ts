@@ -20,7 +20,12 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
   }
 }
 
-const singleHearing = [testData.singleHearing('2030-01-01T11:00:00', 987)]
+const singleHearing = [
+  testData.singleHearing({
+    dateTimeOfHearing: '2030-01-01T11:00:00',
+    id: 987,
+  }),
+]
 
 context('Schedule a hearing page', () => {
   beforeEach(() => {

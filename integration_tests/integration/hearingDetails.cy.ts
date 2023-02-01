@@ -26,9 +26,17 @@ const reportedAdjudicationResponse = (
   }
 }
 
-const singleHearing = [testData.singleHearing(hearingDateTimeOne, 987, 123)]
+const singleHearing = [
+  testData.singleHearing({
+    dateTimeOfHearing: hearingDateTimeOne,
+    id: 987,
+    locationId: 123,
+  }),
+]
 
-const hearingListAfterDeletion = [testData.singleHearing(hearingDateTimeTwo, 988, 234)]
+const hearingListAfterDeletion = [
+  testData.singleHearing({ dateTimeOfHearing: hearingDateTimeTwo, id: 988, locationId: 234 }),
+]
 
 const multipleHearings = [singleHearing[0], hearingListAfterDeletion[0]]
 

@@ -48,7 +48,7 @@ beforeEach(() => {
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
       status: ReportedAdjudicationStatus.SCHEDULED,
-      hearings: [testData.singleHearing('2022-11-03T11:00:00')],
+      hearings: [testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })],
     }),
   })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })

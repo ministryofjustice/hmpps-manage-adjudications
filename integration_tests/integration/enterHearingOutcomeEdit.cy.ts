@@ -21,12 +21,12 @@ context('Enter hearing outcome', () => {
           adjudicationNumber: 100,
           prisonerNumber: 'G6123VU',
           hearings: [
-            testData.singleHearing(
-              '2023-01-23T17:00:00',
-              68,
-              775,
-              testData.hearingOutcome({ optionalItems: { details: 'A reason for referral' } })
-            ),
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-01-23T17:00:00',
+              id: 68,
+              locationId: 775,
+              outcome: testData.hearingOutcome({ optionalItems: { details: 'A reason for referral' } }),
+            }),
           ],
         }),
       },

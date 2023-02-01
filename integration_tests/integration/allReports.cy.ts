@@ -246,10 +246,22 @@ context('All Completed Reports', () => {
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
         status: ReportedAdjudicationStatus.SCHEDULED,
         hearings: [
-          testData.singleHearing('2022-11-23T17:00:00', 68),
-          testData.singleHearing('2022-11-28T09:00:00', 67),
-          testData.singleHearing('2022-11-30T09:50:00', 69),
-          testData.singleHearing('2023-11-30T10:00:00', 70),
+          testData.singleHearing({
+            dateTimeOfHearing: '2022-11-23T17:00:00',
+            id: 68,
+          }),
+          testData.singleHearing({
+            dateTimeOfHearing: '2022-11-28T09:00:00',
+            id: 67,
+          }),
+          testData.singleHearing({
+            dateTimeOfHearing: '2022-11-30T09:50:00',
+            id: 69,
+          }),
+          testData.singleHearing({
+            dateTimeOfHearing: '2023-11-30T10:00:00',
+            id: 70,
+          }),
         ],
       })
     })

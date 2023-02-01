@@ -33,7 +33,11 @@ beforeEach(() => {
       adjudicationNumber: 1524494,
       prisonerNumber: 'G6415GD',
       status: ReportedAdjudicationStatus.SCHEDULED,
-      hearings: [testData.singleHearing('2022-10-24T12:54:09.197Z')],
+      hearings: [
+        testData.singleHearing({
+          dateTimeOfHearing: '2022-10-24T12:54:09.197Z',
+        }),
+      ],
     }),
   })
 
@@ -82,7 +86,7 @@ describe('GET prisoner report', () => {
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledWith(
-          [testData.singleHearing('2022-10-24T12:54:09.197Z')],
+          [testData.singleHearing({ dateTimeOfHearing: '2022-10-24T12:54:09.197Z' })],
           expect.anything()
         )
         expect(response.text).toContain('Hearing 1')

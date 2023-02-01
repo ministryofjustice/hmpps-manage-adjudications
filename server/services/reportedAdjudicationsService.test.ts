@@ -595,8 +595,20 @@ describe('reportedAdjudicationsService', () => {
   describe('getHearingDetails', () => {
     it('returns the correct information multiple hearings', async () => {
       const hearings = [
-        { ...testData.singleHearing('2022-10-20T11:11:00', 1234), locationId: 27187 },
-        { ...testData.singleHearing('2022-10-21T11:11:00', 23445), locationId: 27187 },
+        {
+          ...testData.singleHearing({
+            dateTimeOfHearing: '2022-10-20T11:11:00',
+            id: 1234,
+          }),
+          locationId: 27187,
+        },
+        {
+          ...testData.singleHearing({
+            dateTimeOfHearing: '2022-10-21T11:11:00',
+            id: 23445,
+          }),
+          locationId: 27187,
+        },
       ]
       const result = await service.getHearingDetails(hearings, user)
       const expectedResult = [
@@ -626,7 +638,9 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the correct information for one hearing', async () => {
-      const hearings = [{ ...testData.singleHearing('2022-10-20T11:11:00', 1234), locationId: 27187 }]
+      const hearings = [
+        { ...testData.singleHearing({ dateTimeOfHearing: '2022-10-20T11:11:00', id: 1234 }), locationId: 27187 },
+      ]
       const result = await service.getHearingDetails(hearings, user)
       const expectedResult = [
         {
@@ -663,7 +677,10 @@ describe('reportedAdjudicationsService', () => {
       getHearingsGivenAgencyAndDate.mockResolvedValue({
         hearings: [
           {
-            ...testData.singleHearing('2022-11-14T11:00:00', 1234),
+            ...testData.singleHearing({
+              dateTimeOfHearing: '2022-11-14T11:00:00',
+              id: 1234,
+            }),
             dateTimeOfDiscovery: '2022-11-11T09:00:00',
             prisonerNumber: 'G6123VU',
             adjudicationNumber: 123456,

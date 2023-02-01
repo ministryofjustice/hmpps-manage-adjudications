@@ -21,16 +21,45 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
 
 const hearingDateTime = '2030-01-01T11:00:00'
 
-const originalHearing = [testData.singleHearing(hearingDateTime, 333, 25538)]
+const originalHearing = [
+  testData.singleHearing({
+    dateTimeOfHearing: hearingDateTime,
+    id: 333,
+    locationId: 25538,
+  }),
+]
 
-const changedDayHearing = [testData.singleHearing('2030-01-02T11:00:00', 333, 25538)]
+const changedDayHearing = [
+  testData.singleHearing({
+    dateTimeOfHearing: '2030-01-02T11:00:00',
+    id: 333,
+    locationId: 25538,
+  }),
+]
 
-const changedTimeHearing = [testData.singleHearing('2030-01-01T11:30:00', 333, 25538)]
+const changedTimeHearing = [
+  testData.singleHearing({
+    dateTimeOfHearing: '2030-01-01T11:30:00',
+    id: 333,
+    locationId: 25538,
+  }),
+]
 
-const changedLocationHearing = [testData.singleHearing(hearingDateTime, 333, 25655)]
+const changedLocationHearing = [
+  testData.singleHearing({
+    dateTimeOfHearing: hearingDateTime,
+    id: 333,
+    locationId: 25655,
+  }),
+]
 
 const changedTypeHearing = [
-  { ...testData.singleHearing(hearingDateTime), oicHearingType: OicHearingType.INAD_ADULT as string },
+  {
+    ...testData.singleHearing({
+      dateTimeOfHearing: hearingDateTime,
+    }),
+    oicHearingType: OicHearingType.INAD_ADULT as string,
+  },
 ]
 
 context('Schedule a hearing page', () => {

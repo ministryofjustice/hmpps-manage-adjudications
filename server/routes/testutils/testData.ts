@@ -200,14 +200,17 @@ export default class TestData {
     }
   }
 
-  singleHearing = (
-    dateTimeOfHearing: string,
-    // eslint-disable-next-line default-param-last
+  singleHearing = ({
+    dateTimeOfHearing,
+    outcome,
     id = 101,
-    // eslint-disable-next-line default-param-last
     locationId = 775,
+  }: {
+    dateTimeOfHearing: string
     outcome?: HearingOutcomeResult
-  ): HearingDetails => {
+    id?: number
+    locationId?: number
+  }): HearingDetails => {
     return {
       id,
       locationId,
