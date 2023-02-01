@@ -24,3 +24,7 @@ export type HearingOutcomeDetails = {
   finding?: HearingOutcomeFinding
   plea?: HearingOutcomePlea
 }
+
+export interface HearingOutcomeResult extends HearingOutcomeDetails {
+  id: number
+}
