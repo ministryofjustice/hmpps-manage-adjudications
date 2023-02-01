@@ -27,6 +27,26 @@ export default class HearingsService {
     )
   }
 
+  async updateHearingReferralOutcome(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    referralReason: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      details: referralReason,
+    }
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
   async getHearingOutcome(adjudicationNumber: number, hearingId: number, user: User) {
     const adjudication = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
     const { hearings } = adjudication.reportedAdjudication

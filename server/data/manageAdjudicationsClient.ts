@@ -321,4 +321,15 @@ export default class ManageAdjudicationsClient {
       data: { ...hearingOutcomeDetails },
     })
   }
+
+  async updateHearingOutcome(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcomeDetails: HearingOutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      data: { ...hearingOutcomeDetails },
+    })
+  }
 }
