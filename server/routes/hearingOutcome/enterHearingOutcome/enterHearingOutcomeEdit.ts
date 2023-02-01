@@ -7,7 +7,7 @@ export default class EnterHearingOutcomeRoutes {
   page: EnterHearingOutcomePage
 
   constructor(userService: UserService, hearingsService: HearingsService) {
-    this.page = new EnterHearingOutcomePage(PageRequestType.CREATION, userService, hearingsService)
+    this.page = new EnterHearingOutcomePage(PageRequestType.EDIT, userService, hearingsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

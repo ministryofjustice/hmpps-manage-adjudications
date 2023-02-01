@@ -177,7 +177,7 @@ export default function routes(
     printCompletedDISFormsRoutes({ reportedAdjudicationsService, locationService })
   )
 
-  router.use(adjudicationUrls.enterHearingOutcome.root, enterHearingOutcomeRoutes({ userService }))
+  router.use(adjudicationUrls.enterHearingOutcome.root, enterHearingOutcomeRoutes({ userService, hearingsService }))
 
   router.use(
     adjudicationUrls.hearingReasonForReferral.root,

@@ -1,3 +1,5 @@
+import { HearingOutcomeDetails } from './HearingResult'
+
 export type IncidentDetails = {
   locationId: number
   dateTimeOfIncident: string
@@ -160,6 +162,7 @@ export type HearingDetails = {
   locationId: number
   dateTimeOfHearing: string
   oicHearingType: string
+  outcome?: HearingOutcomeDetails
 }
 
 export enum PrisonerGender {

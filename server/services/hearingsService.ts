@@ -26,4 +26,11 @@ export default class HearingsService {
       hearingOutcomeDetails
     )
   }
+
+  async getHearingOutcome(adjudicationNumber: number, hearingId: number, user: User) {
+    const adjudication = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+    const { hearings } = adjudication.reportedAdjudication
+    const chosenHearing = hearings.filter(hearing => hearing.id === hearingId)
+    return chosenHearing[0].outcome || null
+  }
 }

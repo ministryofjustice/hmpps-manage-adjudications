@@ -19,6 +19,7 @@ import { Location } from '../../data/PrisonLocationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
+import { HearingOutcomeCode, HearingOutcomeResult } from '../../data/HearingResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -199,12 +200,42 @@ export default class TestData {
     }
   }
 
-  singleHearing = (dateTimeOfHearing: string, id = 101, locationId = 775): HearingDetails => {
+  singleHearing = ({
+    dateTimeOfHearing,
+    outcome,
+    id = 101,
+    locationId = 775,
+  }: {
+    dateTimeOfHearing: string
+    outcome?: HearingOutcomeResult
+    id?: number
+    locationId?: number
+  }): HearingDetails => {
     return {
       id,
       locationId,
       dateTimeOfHearing,
       oicHearingType: OicHearingType.GOV_ADULT,
+      outcome,
+    }
+  }
+
+  hearingOutcome = ({
+    id = 1,
+    code = HearingOutcomeCode.REFER_POLICE,
+    adjudicator = 'Judge Red',
+    optionalItems,
+  }: {
+    id?: number
+    code?: HearingOutcomeCode
+    adjudicator?: string
+    optionalItems?: any
+  }): HearingOutcomeResult => {
+    return {
+      id,
+      code,
+      adjudicator,
+      ...optionalItems,
     }
   }
 

@@ -16,13 +16,19 @@ const prisoners = [
 
 const hearingsSetOne = [
   {
-    ...testData.singleHearing('2025-11-05T13:00:00', 1),
+    ...testData.singleHearing({
+      dateTimeOfHearing: '2025-11-05T13:00:00',
+      id: 1,
+    }),
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
     adjudicationNumber: 123456,
     prisonerNumber: 'G6345BY',
   },
   {
-    ...testData.singleHearing('2025-11-05T14:00:00', 4),
+    ...testData.singleHearing({
+      dateTimeOfHearing: '2025-11-05T14:00:00',
+      id: 4,
+    }),
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
     adjudicationNumber: 123456,
     prisonerNumber: 'P3785CP',
@@ -30,13 +36,19 @@ const hearingsSetOne = [
 ]
 const hearingsSetTwo = [
   {
-    ...testData.singleHearing('2025-11-06T10:00:00', 2),
+    ...testData.singleHearing({
+      dateTimeOfHearing: '2025-11-06T10:00:00',
+      id: 2,
+    }),
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
     adjudicationNumber: 567894,
     prisonerNumber: 'D9543CY',
   },
   {
-    ...testData.singleHearing('2025-11-06T11:00:00', 3),
+    ...testData.singleHearing({
+      dateTimeOfHearing: '2025-11-06T11:00:00',
+      id: 3,
+    }),
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
     adjudicationNumber: 678912,
     prisonerNumber: 'M1876DT',
