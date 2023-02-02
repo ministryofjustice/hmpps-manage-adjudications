@@ -13,7 +13,13 @@ export enum HearingOutcomeFinding {
   NOT_PROCEED_WITH = 'NOT_PROCEED_WITH',
 }
 
-export enum HearingOutcomePlea {}
+export enum HearingOutcomePlea {
+  UNFIT = 'UNFIT',
+  ABSTAIN = 'ABSTAIN',
+  GUILTY = 'GUILTY',
+  NOT_GUILTY = 'NOT_GUILTY',
+}
+
 export enum HearingOutcomeReason {}
 
 export type HearingOutcomeDetails = {
