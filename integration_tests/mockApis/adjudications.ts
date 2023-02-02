@@ -652,6 +652,21 @@ const stubCreateHearingOutcome = ({ adjudicationNumber, hearingId, response }): 
     },
   })
 
+const stubUpdateHearingOutcome = ({ adjudicationNumber, hearingId, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -683,4 +698,5 @@ export default {
   stubGetIssueDataFilteredOnHearingDate,
   stubPutDateTimeOfIssue,
   stubCreateHearingOutcome,
+  stubUpdateHearingOutcome,
 }
