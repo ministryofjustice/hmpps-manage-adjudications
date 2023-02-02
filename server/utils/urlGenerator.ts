@@ -458,6 +458,44 @@ const adjudicationUrls = {
         `${adjudicationUrls.hearingReferralConfirmation.root}/${adjudicationNumber}`,
     },
   },
+  moneyRecoveredForDamages: {
+    root: '/money-recovered',
+    matchers: {
+      start: ':/adjudicationNumber',
+      edit: ':/adjudicationNumber/edit',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}/edit`,
+    },
+  },
+  hearingReasonForFinding: {
+    root: '/reason-for-finding',
+    matchers: {
+      start: ':/adjudicationNumber/hearing/:hearingId',
+      edit: ':/adjudicationNumber/hearing/:hearingId/edit',
+    },
+    urls: {
+      start: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}/hearing/${hearingId}`,
+      edit: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+    },
+  },
+  hearingReasonForNotProceeding: {
+    root: '/reason-for-not-proceeding',
+    matchers: {
+      start: ':/adjudicationNumber/hearing/:hearingId',
+      edit: ':/adjudicationNumber/hearing/:hearingId',
+    },
+    urls: {
+      start: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingReasonForNotProceeding.root}/${adjudicationNumber}/hearing/${hearingId}`,
+      edit: (adjudicationNumber: number, hearingId: number) =>
+        `${adjudicationUrls.hearingReasonForNotProceeding.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

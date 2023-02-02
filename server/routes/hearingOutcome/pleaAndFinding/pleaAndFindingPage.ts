@@ -4,10 +4,16 @@ import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/HearingResult'
+import {
+  HearingOutcomeCode,
+  HearingOutcomeDetails,
+  HearingOutcomeFinding,
+  HearingOutcomePlea,
+} from '../../../data/HearingResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
-import validateForm from './hearingReasonForReferralValidation'
+import validateForm from './pleaAndFindingValidation'
+import { User } from '../../../data/hmppsAuthClient'
 
 export enum PageRequestType {
   CREATION,
@@ -16,7 +22,8 @@ export enum PageRequestType {
 
 type PageData = {
   error?: FormError | FormError[]
-  referralReason?: string
+  hearingPlea: HearingOutcomePlea
+  hearingFinding: HearingOutcomeFinding
 }
 
 class PageOptions {
@@ -27,44 +34,47 @@ class PageOptions {
   }
 }
 
-export default class HearingReasonForReferralPage {
+export default class PleaAndFindingPage {
   pageOptions: PageOptions
 
   constructor(
     pageType: PageRequestType,
-    private readonly hearingsService: HearingsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly hearingsService: HearingsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, referralReason } = pageData
+    const { error, hearingPlea, hearingFinding } = pageData
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
-    return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
+    return res.render(`pages/hearingOutcome/pleaAndFinding.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
-      referralReason,
+      hearingPlea,
+      hearingFinding,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
+    const userRoles = await this.userService.getUserRoles(user.token)
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const hearingId = Number(req.params.hearingId)
-    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingOutcome = await this.hearingsService.getHearingOutcome(adjudicationNumber, hearingId, user)
+      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, hearingId, user)
     }
 
     return this.renderView(req, res, {
-      referralReason: readApiHearingOutcome?.details,
+      hearingPlea: readApiHearingOutcome?.plea,
+      hearingFinding: readApiHearingOutcome?.finding,
     })
   }
 
@@ -72,16 +82,16 @@ export default class HearingReasonForReferralPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const hearingId = Number(req.params.hearingId)
+    const { hearingPlea, hearingFinding } = req.body
     const { hearingOutcome, adjudicatorName } = req.query
-    const { referralReason } = req.body
-
     const isEdit = this.pageOptions.isEdit()
 
-    const error = validateForm({ referralReason })
+    const error = validateForm({ hearingPlea, hearingFinding })
     if (error)
       return this.renderView(req, res, {
         error,
-        referralReason,
+        hearingPlea,
+        hearingFinding,
       })
 
     // We need to check the data from previous page hasn't been lost/tampered with
@@ -97,29 +107,64 @@ export default class HearingReasonForReferralPage {
 
     try {
       if (isEdit) {
-        await this.hearingsService.updateHearingReferralOutcome(
+        await this.hearingsService.updateHearingPleaAndFinding(
           adjudicationNumber,
           hearingId,
           hearingOutcome as HearingOutcomeCode,
           adjudicatorName as string,
-          referralReason,
+          hearingPlea as HearingOutcomePlea,
+          hearingFinding as HearingOutcomeFinding,
           user
         )
       } else {
-        await this.hearingsService.postHearingReferralOutcome(
+        await this.hearingsService.postHearingPleaAndFinding(
           adjudicationNumber,
           hearingId,
           hearingOutcome as HearingOutcomeCode,
           adjudicatorName as string,
-          referralReason,
+          hearingPlea as HearingOutcomePlea,
+          hearingFinding as HearingOutcomeFinding,
           user
         )
       }
-
-      return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(adjudicationNumber))
+      const redirectUrl = this.getRedirectUrl(
+        isEdit,
+        HearingOutcomeFinding[hearingFinding],
+        adjudicationNumber,
+        hearingId
+      )
+      return res.redirect(redirectUrl)
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError
     }
+  }
+
+  getPreviouslyEnteredHearingOutcomeFromApi = async (
+    adjudicationId: number,
+    hearingId: number,
+    user: User
+  ): Promise<HearingOutcomeDetails> => {
+    return this.hearingsService.getHearingOutcome(adjudicationId, hearingId, user)
+  }
+
+  getRedirectUrl = (
+    isEdit: boolean,
+    hearingFinding: HearingOutcomeFinding,
+    adjudicationNumber: number,
+    hearingId: number
+  ) => {
+    if (isEdit) {
+      if (hearingFinding === HearingOutcomeFinding.PROVED)
+        return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
+      if (hearingFinding === HearingOutcomeFinding.DISMISSED)
+        return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber, hearingId)
+      return adjudicationUrls.hearingReasonForNotProceeding.urls.edit(adjudicationNumber, hearingId)
+    }
+    if (hearingFinding === HearingOutcomeFinding.PROVED)
+      return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
+    if (hearingFinding === HearingOutcomeFinding.DISMISSED)
+      return adjudicationUrls.hearingReasonForFinding.urls.start(adjudicationNumber, hearingId)
+    return adjudicationUrls.hearingReasonForNotProceeding.urls.start(adjudicationNumber, hearingId)
   }
 }

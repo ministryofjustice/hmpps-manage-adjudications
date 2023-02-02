@@ -44,6 +44,7 @@ describe('GET /reason-for-referral', () => {
 
 describe('POST /reason-for-referral', () => {
   it('should successfully call the endpoint and redirect to the confirmation page', () => {
+    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(true as never)
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
@@ -67,7 +68,9 @@ describe('POST /reason-for-referral', () => {
         )
       )
   })
-  it('should redirect the user back to the enter hearing outcome edit page if the adjudicator name and/or hearing outcome has been tampered lost', () => {
+  it('should redirect the user back to the enter hearing outcome edit page if the adjudicator name and/or hearing outcome has been tampered/lost', () => {
+    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(false as never)
+
     return request(app)
       .post(adjudicationUrls.hearingReasonForReferral.urls.edit(100, 1))
       .send({
@@ -77,6 +80,8 @@ describe('POST /reason-for-referral', () => {
       .expect('Location', adjudicationUrls.enterHearingOutcome.urls.edit(100, 1))
   })
   it('should redirect the user back to the enter hearing outcome edit page if the hearing outcome has been tampered with', () => {
+    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(false as never)
+
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
