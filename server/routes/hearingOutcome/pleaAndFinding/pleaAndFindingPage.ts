@@ -83,7 +83,7 @@ export default class PleaAndFindingPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const hearingId = Number(req.params.hearingId)
     const { hearingPlea, hearingFinding } = req.body
-    const { hearingOutcome, adjudicatorName } = req.query
+    const { adjudicatorName } = req.query
     const isEdit = this.pageOptions.isEdit()
 
     const error = validateForm({ hearingPlea, hearingFinding })
@@ -94,23 +94,12 @@ export default class PleaAndFindingPage {
         hearingFinding,
       })
 
-    // We need to check the data from previous page hasn't been lost/tampered with
-    if (
-      (await this.hearingsService.validDataFromEnterHearingOutcomePage(
-        hearingOutcome as HearingOutcomeCode,
-        adjudicatorName as string
-      )) === false
-    ) {
-      if (isEdit) return res.redirect(adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId))
-      return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber, hearingId))
-    }
-
     try {
       if (isEdit) {
         await this.hearingsService.updateHearingPleaAndFinding(
           adjudicationNumber,
           hearingId,
-          hearingOutcome as HearingOutcomeCode,
+          HearingOutcomeCode.COMPLETE,
           adjudicatorName as string,
           hearingPlea as HearingOutcomePlea,
           hearingFinding as HearingOutcomeFinding,
@@ -120,7 +109,7 @@ export default class PleaAndFindingPage {
         await this.hearingsService.postHearingPleaAndFinding(
           adjudicationNumber,
           hearingId,
-          hearingOutcome as HearingOutcomeCode,
+          HearingOutcomeCode.COMPLETE,
           adjudicatorName as string,
           hearingPlea as HearingOutcomePlea,
           hearingFinding as HearingOutcomeFinding,

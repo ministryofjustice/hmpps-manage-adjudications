@@ -25,7 +25,6 @@ afterEach(() => {
 
 describe('GET /hearing-plea-finding', () => {
   it('should load the `Plea and finding` page', () => {
-    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(true as never)
     return request(app)
       .get(adjudicationUrls.hearingPleaAndFinding.urls.start(100, 1))
       .expect('Content-Type', /html/)
@@ -36,23 +35,7 @@ describe('GET /hearing-plea-finding', () => {
 })
 
 describe('POST /hearing-plea-finding', () => {
-  it('should redirect back to enter hearing outcome if adjudicators name and/or hearing outcome are lost', () => {
-    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(false as never)
-    return request(app)
-      .post(adjudicationUrls.hearingPleaAndFinding.urls.start(100, 1))
-      .send({
-        hearingPlea: HearingOutcomePlea.GUILTY,
-        hearingFinding: HearingOutcomeFinding.PROVED,
-      })
-      .expect(302)
-      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100, 1))
-  })
-})
-
-describe('POST /hearing-plea-finding', () => {
   it('should redirect to the correct URL after correct submission - proved finding', () => {
-    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(true as never)
-
     return request(app)
       .post(
         `${adjudicationUrls.hearingPleaAndFinding.urls.start(
@@ -79,8 +62,6 @@ describe('POST /hearing-plea-finding', () => {
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
-    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(true as never)
-
     return request(app)
       .post(
         `${adjudicationUrls.hearingPleaAndFinding.urls.start(
@@ -107,8 +88,6 @@ describe('POST /hearing-plea-finding', () => {
       )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
-    hearingsService.validDataFromEnterHearingOutcomePage.mockResolvedValue(true as never)
-
     return request(app)
       .post(
         `${adjudicationUrls.hearingPleaAndFinding.urls.start(
