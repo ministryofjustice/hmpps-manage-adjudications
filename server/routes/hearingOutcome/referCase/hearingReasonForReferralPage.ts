@@ -53,7 +53,6 @@ export default class HearingReasonForReferralPage {
     if (
       !hearingOutcome ||
       !adjudicatorName ||
-      !Object.values(HearingOutcomeCode).includes(hearingOutcome) ||
       ![HearingOutcomeCode.REFER_INAD, HearingOutcomeCode.REFER_POLICE].includes(hearingOutcome)
     )
       return false
