@@ -21,7 +21,7 @@ export default class HearingsService {
       adjudicator: adjudicatorName,
       code: hearingOutcome,
       details,
-      adjournReason,
+      reason: adjournReason,
       plea,
     }
     return new ManageAdjudicationsClient(user.token).createHearingOutcome(
@@ -45,7 +45,7 @@ export default class HearingsService {
       adjudicator: adjudicatorName,
       code: hearingOutcome,
       details,
-      adjournReason,
+      reason: adjournReason,
       plea,
     }
     return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
