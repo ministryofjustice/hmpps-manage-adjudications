@@ -41,6 +41,7 @@ import printCompletedDISFormsRoutes from './printCompletedDIS12Forms'
 import enterHearingOutcomeRoutes from './hearingOutcome/enterHearingOutcome'
 import hearingReasonForReferralRoutes from './hearingOutcome/referCase'
 import hearingReferralConfirmationRoutes from './hearingOutcome/referralConfirmation'
+import hearingAdjournedRoutes from './hearingOutcome/adjourn'
 
 export default function routes(
   router: Router,
@@ -185,6 +186,8 @@ export default function routes(
   )
 
   router.use(adjudicationUrls.hearingReferralConfirmation.root, hearingReferralConfirmationRoutes({ userService }))
+
+  router.use(adjudicationUrls.hearingAdjourned.root, hearingAdjournedRoutes({ hearingsService, userService }))
 
   return router
 }

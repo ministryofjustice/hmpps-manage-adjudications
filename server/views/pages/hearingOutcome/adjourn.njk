@@ -1,0 +1,145 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title = 'Adjourn the hearing for another reason' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+   {{ govukSelect({
+        id: 'adjournReason',
+        name: 'adjournReason',
+        label: {
+            text: 'What is the reason?',
+            isPageHeading: false,
+            classes: ''
+        },
+        items: [
+            {  value: "LEGAL_ADVICE",
+               text: "Request for legal advice approved"      
+            },
+            {  value: "LEGAL_REPRESENTATION",
+               text: "Request for legal representation approved"      
+            },
+            {  value: "RO_ATTEND",
+               text: "Adjourned so that reporting officer can attend"      
+            },
+            {  value: "HELP",
+               text: "Prisoner needs help, such as an interpreter or disability aid"      
+            },
+            {  value: "UNFIT",
+               text: "Prisoner unfit to proceed"      
+            },
+            {  value: "WITNESS",
+               text: "Request for witness approved"      
+            },
+            {  value: "WITNESS_SUPPORT",
+               text: "Request for witness to support mitigation"      
+            },
+            {  value: "MCKENZIE",
+               text: "Request for McKenzie friend approved"      
+            },
+            {  value: "EVIDENCE",
+               text: "Further evidence needed"      
+            },
+            {  value: "INVESTIGATION",
+               text: "Further investigation needed"      
+            },
+            {  value: "OTHER",
+               text: "Other reason"      
+            }
+         ] | toSelect('value', 'text', adjournReason),
+        classes: '',
+        errorMessage: 'adjournReason' | findError(errors)
+    }) }}
+
+    {{ govukTextarea({
+      label: {
+        text: "Give more details"
+      },
+      value: adjournDetails,
+      classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
+      rows: "6",
+      id: "adjournDetails",
+      name: "adjournDetails",
+      attributes: {
+        'data-qa': "adjourn-details"
+      },
+      errorMessage: "adjournDetails" | findError(errors)
+    }) }}
+
+    {{ govukRadios({
+    idPrefix: 'adjournPlea',
+    id: 'adjournPlea',
+    name: 'adjournPlea',
+    fieldset: {
+     legend: {
+       text: "Plea for the offence",
+       isPageHeading: false
+     }
+    },
+    attributes: { "data-qa": "adjourn-plea-radio-buttons" },
+    errorMessage: "adjournPlea" | findError(errors),
+    items: [
+     {
+      value: "NOT_ASKED",
+      text: "Prisoner was not asked for a plea",
+      checked: adjournPlea == 'NOT_ASKED'
+     },
+     {
+      value: "UNFIT",
+      text: "No plea - unfit to plea or attend",
+      checked: adjournPlea == 'UNFIT'
+    },
+    {
+      value: "ABSTAIN",
+      text: "No plea - abstained/refused to plea or attend",
+      checked: adjournPlea == 'ABSTAIN'
+    },
+    {
+      value: "NOT_GUILTY",
+      text: "Not guilty",
+      checked: adjournPlea == 'NOT_GUILTY'
+    },
+    {
+      value: "GUILTY",
+      text: "Guilty",
+      checked: adjournPlea == 'GUILTY'
+    }
+    ] }) 
+   }}
+
+    <div class="flex-container flex-center">
+      {{ govukButton({
+        text: 'Save',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "adjourn-submit" }
+      }) }}
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="adjourn-cancel">Cancel</a></p>
+    </div>
+
+  </form>
+{% endblock %}
