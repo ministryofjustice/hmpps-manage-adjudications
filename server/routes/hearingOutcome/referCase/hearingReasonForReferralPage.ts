@@ -50,7 +50,13 @@ export default class HearingReasonForReferralPage {
   }
 
   private validDataFromEnterHearingOutcomePage = (hearingOutcome: HearingOutcomeCode, adjudicatorName: string) => {
-    if (!hearingOutcome || !adjudicatorName || !Object.values(HearingOutcomeCode).includes(hearingOutcome)) return false
+    if (
+      !hearingOutcome ||
+      !adjudicatorName ||
+      !Object.values(HearingOutcomeCode).includes(hearingOutcome) ||
+      ![HearingOutcomeCode.REFER_INAD, HearingOutcomeCode.REFER_POLICE].includes(hearingOutcome)
+    )
+      return false
     return true
   }
 

@@ -90,4 +90,18 @@ describe('POST /reason-for-referral', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.enterHearingOutcome.urls.edit(100, 1))
   })
+  it('should redirect the user back to the enter hearing outcome edit page if the hearing outcome is not a REFER enum', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.hearingReasonForReferral.urls.edit(
+          100,
+          1
+        )}?adjudicatorName=Roxanne%20Red&hearingOutcome=ADJOURN`
+      )
+      .send({
+        referralReason: '123',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.edit(100, 1))
+  })
 })
