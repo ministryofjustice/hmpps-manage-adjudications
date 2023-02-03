@@ -97,9 +97,4 @@ export default class HearingsService {
     const chosenHearing = hearings.filter(hearing => hearing.id === hearingId)
     return chosenHearing[0].outcome || null
   }
-
-  validDataFromEnterHearingOutcomePage(hearingOutcome: HearingOutcomeCode, adjudicatorName: string): boolean {
-    if (!hearingOutcome || !adjudicatorName || !Object.values(HearingOutcomeCode).includes(hearingOutcome)) return false
-    return true
-  }
 }
