@@ -64,7 +64,7 @@ describe('POST /reason-for-referral', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start(100))
       .then(() =>
-        expect(hearingsService.createHearingOutcome).toHaveBeenCalledWith(
+        expect(hearingsService.createReferral).toHaveBeenCalledWith(
           100,
           1,
           HearingOutcomeCode.REFER_POLICE,
@@ -74,7 +74,7 @@ describe('POST /reason-for-referral', () => {
         )
       )
   })
-  it('should redirect the user back to the enter hearing outcome page if the adjudicator name and/or hearing outcome has been tampered lost', () => {
+  it('should redirect the user back to the enter hearing outcome page if the adjudicator name and/or hearing outcome has been tampered/lost', () => {
     return request(app)
       .post(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
       .send({
@@ -90,6 +90,20 @@ describe('POST /reason-for-referral', () => {
           100,
           1
         )}?adjudicatorName=Roxanne%20Red&hearingOutcome=NOT_IN_ENUM`
+      )
+      .send({
+        referralReason: '123',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100, 1))
+  })
+  it('should redirect the user back to the enter hearing outcome page if the hearing outcome is not a REFER enum', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.hearingReasonForReferral.urls.start(
+          100,
+          1
+        )}?adjudicatorName=Roxanne%20Red&hearingOutcome=ADJOURN`
       )
       .send({
         referralReason: '123',

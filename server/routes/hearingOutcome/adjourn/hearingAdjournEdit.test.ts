@@ -56,15 +56,15 @@ describe('POST /hearing-adjourned', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
       .then(() =>
-        expect(hearingsService.updateHearingOutcome).toHaveBeenCalledWith(
+        expect(hearingsService.updateAdjourn).toHaveBeenCalledWith(
           100,
           1,
           HearingOutcomeCode.ADJOURN,
           'Roxanne Red',
           '123',
-          expect.anything(),
           HearingOutcomeAdjournReason.INVESTIGATION,
-          HearingOutcomePlea.UNFIT
+          HearingOutcomePlea.UNFIT,
+          expect.anything()
         )
       )
   })

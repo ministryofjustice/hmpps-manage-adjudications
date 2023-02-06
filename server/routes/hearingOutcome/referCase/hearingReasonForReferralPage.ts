@@ -50,7 +50,12 @@ export default class HearingReasonForReferralPage {
   }
 
   private validDataFromEnterHearingOutcomePage = (hearingOutcome: HearingOutcomeCode, adjudicatorName: string) => {
-    if (!hearingOutcome || !adjudicatorName || !Object.values(HearingOutcomeCode).includes(hearingOutcome)) return false
+    if (
+      !hearingOutcome ||
+      !adjudicatorName ||
+      ![HearingOutcomeCode.REFER_INAD, HearingOutcomeCode.REFER_POLICE].includes(hearingOutcome)
+    )
+      return false
     return true
   }
 
@@ -97,7 +102,7 @@ export default class HearingReasonForReferralPage {
 
     try {
       if (isEdit) {
-        await this.hearingsService.updateHearingOutcome(
+        await this.hearingsService.updateReferral(
           adjudicationNumber,
           hearingId,
           hearingOutcome as HearingOutcomeCode,
@@ -106,7 +111,7 @@ export default class HearingReasonForReferralPage {
           user
         )
       } else {
-        await this.hearingsService.createHearingOutcome(
+        await this.hearingsService.createReferral(
           adjudicationNumber,
           hearingId,
           hearingOutcome as HearingOutcomeCode,

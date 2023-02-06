@@ -1,4 +1,9 @@
-import { HearingOutcomeAdjournReason, HearingOutcomeCode, HearingOutcomePlea } from '../data/HearingResult'
+import {
+  HearingOutcomeAdjournReason,
+  HearingOutcomeCode,
+  HearingOutcomeFinding,
+  HearingOutcomePlea,
+} from '../data/HearingResult'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
@@ -7,15 +12,55 @@ import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 export default class HearingsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  async createHearingOutcome(
+  async createReferral(
     adjudicationNumber: number,
     hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     details: string,
-    user: User,
-    adjournReason?: HearingOutcomeAdjournReason,
-    plea?: HearingOutcomePlea
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      details,
+    }
+    return new ManageAdjudicationsClient(user.token).createHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
+  async updateReferral(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    details: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      details,
+    }
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
+  async createAdjourn(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    details: string,
+    adjournReason: HearingOutcomeAdjournReason,
+    plea: HearingOutcomePlea,
+    user: User
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
@@ -31,15 +76,15 @@ export default class HearingsService {
     )
   }
 
-  async updateHearingOutcome(
+  async updateAdjourn(
     adjudicationNumber: number,
     hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     details: string,
-    user: User,
-    adjournReason?: HearingOutcomeAdjournReason,
-    plea?: HearingOutcomePlea
+    adjournReason: HearingOutcomeAdjournReason,
+    plea: HearingOutcomePlea,
+    user: User
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
@@ -47,6 +92,50 @@ export default class HearingsService {
       details,
       reason: adjournReason,
       plea,
+    }
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
+  async postHearingPleaAndFinding(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    hearingPlea: HearingOutcomePlea,
+    hearingFinding: HearingOutcomeFinding,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      plea: hearingPlea,
+      finding: hearingFinding,
+    }
+    return new ManageAdjudicationsClient(user.token).createHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
+  async updateHearingPleaAndFinding(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    hearingPlea: HearingOutcomePlea,
+    hearingFinding: HearingOutcomeFinding,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      plea: hearingPlea,
+      finding: hearingFinding,
     }
     return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
       adjudicationNumber,

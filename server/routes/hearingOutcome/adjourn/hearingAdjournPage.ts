@@ -99,26 +99,26 @@ export default class HearingReasonForReferralPage {
 
     try {
       if (isEdit) {
-        await this.hearingsService.updateHearingOutcome(
+        await this.hearingsService.updateAdjourn(
           adjudicationNumber,
           hearingId,
           HearingOutcomeCode.ADJOURN,
           adjudicatorName as string,
           adjournDetails,
-          user,
           adjournReason,
-          adjournPlea
+          adjournPlea,
+          user
         )
       } else {
-        await this.hearingsService.createHearingOutcome(
+        await this.hearingsService.createAdjourn(
           adjudicationNumber,
           hearingId,
           HearingOutcomeCode.ADJOURN,
           adjudicatorName as string,
           adjournDetails,
-          user,
           adjournReason,
-          adjournPlea
+          adjournPlea,
+          user
         )
       }
 
