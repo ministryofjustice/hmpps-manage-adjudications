@@ -17,13 +17,13 @@ export default class HearingsService {
     hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
-    details: string,
+    referralReason: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
       code: hearingOutcome,
-      details,
+      details: referralReason,
     }
     return new ManageAdjudicationsClient(user.token).createHearingOutcome(
       adjudicationNumber,
@@ -37,13 +37,13 @@ export default class HearingsService {
     hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
-    details: string,
+    referralReason: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
       code: hearingOutcome,
-      details,
+      details: referralReason,
     }
     return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
       adjudicationNumber,
