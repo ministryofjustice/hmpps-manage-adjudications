@@ -10,7 +10,7 @@ import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import { IssueStatus } from '../data/ReportedAdjudicationResult'
 import { PrintDISFormsUiFilter } from './adjudicationFilterHelper'
-import { HearingOutcomeCode } from '../data/HearingResult'
+import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -218,6 +218,8 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
 
   njkEnv.addGlobal('IssueStatus', IssueStatus)
   njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
+  njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
+  njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)

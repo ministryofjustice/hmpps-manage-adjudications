@@ -67,7 +67,7 @@ describe('POST /reason-for-referral', () => {
         )
       )
   })
-  it('should redirect the user back to the enter hearing outcome edit page if the adjudicator name and/or hearing outcome has been tampered lost', () => {
+  it('should redirect the user back to the enter hearing outcome edit page if the adjudicator name and/or hearing outcome has been tampered/lost', () => {
     return request(app)
       .post(adjudicationUrls.hearingReasonForReferral.urls.edit(100, 1))
       .send({

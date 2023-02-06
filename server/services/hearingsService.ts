@@ -1,4 +1,4 @@
-import { HearingOutcomeCode } from '../data/HearingResult'
+import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingResult'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
@@ -39,6 +39,50 @@ export default class HearingsService {
       adjudicator: adjudicatorName,
       code: hearingOutcome,
       details: referralReason,
+    }
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
+  async postHearingPleaAndFinding(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    hearingPlea: HearingOutcomePlea,
+    hearingFinding: HearingOutcomeFinding,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      plea: hearingPlea,
+      finding: hearingFinding,
+    }
+    return new ManageAdjudicationsClient(user.token).createHearingOutcome(
+      adjudicationNumber,
+      hearingId,
+      hearingOutcomeDetails
+    )
+  }
+
+  async updateHearingPleaAndFinding(
+    adjudicationNumber: number,
+    hearingId: number,
+    hearingOutcome: HearingOutcomeCode,
+    adjudicatorName: string,
+    hearingPlea: HearingOutcomePlea,
+    hearingFinding: HearingOutcomeFinding,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      code: hearingOutcome,
+      plea: hearingPlea,
+      finding: hearingFinding,
     }
     return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
       adjudicationNumber,

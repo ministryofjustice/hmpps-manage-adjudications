@@ -1,0 +1,107 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title = 'Plea and finding' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {{ govukRadios({
+      name: "hearingPlea",
+      id: "hearingPlea",
+      errorMessage: "hearingPlea" | findError(errors),
+      attributes: {
+        'data-qa': 'radio-plea'
+      },
+      fieldset: {
+        legend: {
+          text: "Plea"
+        }
+      },
+      items: [
+        {
+          value: HearingOutcomePlea.UNFIT,
+          text: "No plea - unfit to plea or attend",
+          checked: hearingPlea === "UNFIT"
+        },
+        {
+          value: HearingOutcomePlea.ABSTAIN,
+          text: "No plea - abstained/refused to plea or attend",
+          checked: hearingPlea === "ABSTAIN"
+        },
+        {
+          value: HearingOutcomePlea.NOT_GUILTY,
+          text: "Not guilty",
+          checked: hearingPlea === "NOT_GUILTY"
+        },
+        {
+          value: HearingOutcomePlea.GUILTY,
+          text: "Guilty",
+          checked: hearingPlea === "GUILTY"
+        }
+      ]
+    }) }}
+
+    {{ govukRadios({
+      name: "hearingFinding",
+      id: "hearingFinding",
+      errorMessage: "hearingFinding" | findError(errors),
+      attributes: {
+        'data-qa': 'radio-finding'
+      },
+      fieldset: {
+        legend: {
+          text: "Finding"
+        }
+      },
+      items: [
+        {
+          value: HearingOutcomeFinding.PROVED,
+          text: "Charge proved beyond reasonable doubt",
+          checked: hearingFinding === "PROVED"
+        },
+        {
+          value: HearingOutcomeFinding.DISMISSED,
+          text: "Charge dismissed due to 'not guilty' finding",
+          checked: hearingFinding === "DISMISSED"
+        },
+        {
+          value: HearingOutcomeFinding.NOT_PROCEED_WITH,
+          text: "Charge not proceeded with for any other reason",
+          checked: hearingFinding === "NOT_PROCEED_WITH"
+        }
+      ]
+    }) }}
+
+    <div class="flex-container flex-center">
+      {{ govukButton({
+        text: 'Continue',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "hearing-outcome-submit" }
+      }) }}
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="hearing-outcome-cancel">Cancel</a></p>
+    </div>
+
+  </form>
+{% endblock %}
