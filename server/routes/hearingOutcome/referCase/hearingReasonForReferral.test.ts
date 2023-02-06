@@ -24,6 +24,21 @@ afterEach(() => {
 })
 
 describe('GET /reason-for-referral', () => {
+  beforeEach(() => {
+    app = appWithAllRoutes({ production: false }, { hearingsService, userService }, {})
+    userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
+  })
+  it('should load the `Page not found` page', () => {
+    return request(app)
+      .get(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Page not found')
+      })
+  })
+})
+
+describe('GET /reason-for-referral', () => {
   it('should load the `Reason for referral` page', () => {
     return request(app)
       .get(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
@@ -49,7 +64,7 @@ describe('POST /reason-for-referral', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start(100))
       .then(() =>
-        expect(hearingsService.postHearingReferralOutcome).toHaveBeenCalledWith(
+        expect(hearingsService.createReferral).toHaveBeenCalledWith(
           100,
           1,
           HearingOutcomeCode.REFER_POLICE,
