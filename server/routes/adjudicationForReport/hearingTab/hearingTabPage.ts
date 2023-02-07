@@ -21,11 +21,6 @@ class PageOptions {
   }
 }
 
-const getScheduleHearingButtonText = (hearingNumber: number) => {
-  if (hearingNumber) return 'Schedule another hearing for this report'
-  return 'Schedule a hearing'
-}
-
 const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication: ReportedAdjudication) => {
   if (pageOptions.isReporter()) {
     return {
@@ -39,7 +34,7 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
   }
 }
 
-export default class HearingDetailsPage {
+export default class HearingTabPage {
   pageOptions: PageOptions
 
   constructor(pageType: PageRequestType, private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {
@@ -49,36 +44,35 @@ export default class HearingDetailsPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const reportedAdjudicationResult = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       adjudicationNumber,
       user
     )
-
-    const { reportedAdjudication } = reportedAdjudicationResult
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
       user
     )
-
     const hearingSummary = await this.reportedAdjudicationsService.getHearingDetails(
       reportedAdjudication.hearings,
       user
     )
+    const schedulingNotAvailable =
+      reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW ||
+      reportedAdjudication.status === ReportedAdjudicationStatus.REJECTED ||
+      reportedAdjudication.status === ReportedAdjudicationStatus.RETURNED ||
+      // Including ACCEPTED here so that we can deal with the edgecase early
+      reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED
 
-    const schedulingAvailable =
-      reportedAdjudication.status === ReportedAdjudicationStatus.UNSCHEDULED ||
-      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
-
-    return res.render(`pages/adjudicationForReport/hearingDetails`, {
+    return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
-      schedulingAvailable,
+      schedulingNotAvailable,
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
       hearings: hearingSummary,
-      scheduleHearingButtonHref: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
-      scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings?.length),
+      //   scheduleHearingButtonHref: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
+      //   scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings?.length),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
@@ -88,11 +82,11 @@ export default class HearingDetailsPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { user } = res.locals
-    if (req.body.cancelHearingButton) {
-      const hearingIdToCancel = Number(req.body.cancelHearingButton.split('-')[1])
-      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
-    }
+    // const { user } = res.locals
+    // if (req.body.cancelHearingButton) {
+    //   const hearingIdToCancel = Number(req.body.cancelHearingButton.split('-')[1])
+    //   await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
+    // }
     return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
 }

@@ -1,0 +1,34 @@
+<div class="govuk-!-margin-top-5" data-qa="next-step-choice">
+    <p class="govuk-body" data-qa="no-scheduled-hearings">No scheduled hearings.</p>
+</div>
+
+{{ govukRadios({
+  name: "next-step",
+  fieldset: {
+    legend: {
+      text: "What is the next step for this adjudication?"
+      classes: "govuk-!-font-weight-bold"
+    }
+  },
+  items: [
+    {
+      value: NextStep.SCHEDULE_HEARING,
+      text: "Schedule a hearing"
+    },
+    {
+      value: NextStep.REFER_POLICE,
+      text: "Refer to police"
+    },
+    {
+      value: NextStep.NOT_PROCEED,
+      text: "Not proceed with the charge"
+    }
+  ]
+}) }}
+
+{{ govukButton({
+text: 'Continue',
+type: "submit",
+classes: "govuk-button--submit",
+attributes: { "data-qa": "next-step-continue" }
+}) }}

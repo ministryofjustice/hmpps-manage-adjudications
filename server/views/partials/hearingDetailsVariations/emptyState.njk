@@ -1,0 +1,8 @@
+<div class="govuk-!-margin-top-5" data-qa="scheduling-unavailable">
+    {% if isAccepted %}
+        <p class="govuk-body govuk-!-margin-bottom-6 govuk-!-margin-top-4" data-qa="no-hearings-scheduled">Not scheduled.</p>
+    {% else %}
+    <p class="govuk-body" data-qa="scheduling-unavailable-1">There are no hearings to schedule at the moment.</p>
+    <p class="govuk-body" data-qa="scheduling-unavailable-2">You can only schedule a hearing for reports that have been reviewed and accepted.</p>
+    {% endif %}
+</div>

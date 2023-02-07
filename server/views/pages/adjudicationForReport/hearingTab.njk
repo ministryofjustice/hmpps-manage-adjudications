@@ -1,0 +1,29 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
+{% from "../../macros/hearingSummary.njk" import hearingSummary %}
+
+{% block pageTitle %}
+  Hearing details
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, 'hearings', reportHref, hearingsHref) }}
+
+  {% if schedulingNotAvailable %}
+    {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}
+  {% endif %}
+
+  {% if reviewStatus === ReportedAdjudicationStatus.UNSCHEDULED %}
+    {% include "../../partials/hearingDetailsVariations/unscheduledState.njk" %}
+  {% endif %}
+
+  {% if not readOnly %}
+    {% include "../../partials/hearingDetailsVariations/returnLinks.njk" %}
+  {% endif %}
+
+{% endblock %}
