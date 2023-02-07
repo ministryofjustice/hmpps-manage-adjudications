@@ -61,12 +61,13 @@ export default class HearingTabPage {
       reportedAdjudication.status === ReportedAdjudicationStatus.REJECTED ||
       reportedAdjudication.status === ReportedAdjudicationStatus.RETURNED ||
       // Including ACCEPTED here so that we can deal with the edgecase early
+      // Legacy ACCEPTED reports should not have hearings or outcomes
       reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
-      reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
+      reviewStatus: reportedAdjudication.status,
       schedulingNotAvailable,
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),

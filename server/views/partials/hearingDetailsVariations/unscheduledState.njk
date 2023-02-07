@@ -2,11 +2,12 @@
     <p class="govuk-body" data-qa="no-scheduled-hearings">No scheduled hearings.</p>
 </div>
 
+{% if not readOnly %}
 {{ govukRadios({
   name: "next-step",
   fieldset: {
     legend: {
-      text: "What is the next step for this adjudication?"
+      text: "What is the next step for this adjudication?",
       classes: "govuk-!-font-weight-bold"
     }
   },
@@ -32,3 +33,5 @@ type: "submit",
 classes: "govuk-button--submit",
 attributes: { "data-qa": "next-step-continue" }
 }) }}
+
+{% endif %}

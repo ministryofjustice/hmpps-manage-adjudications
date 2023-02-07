@@ -12,7 +12,7 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
-  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, 'hearings', reportHref, hearingsHref) }}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref) }}
 
   {% if schedulingNotAvailable %}
     {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}

@@ -8,7 +8,11 @@ import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
-import { allStatuses, IssueStatus, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import {
+  IssueStatus,
+  ReportedAdjudicationStatus,
+  reportedAdjudicationStatusDisplayName,
+} from '../data/ReportedAdjudicationResult'
 import { PrintDISFormsUiFilter } from './adjudicationFilterHelper'
 import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingResult'
 import { NextStep } from '../data/OutcomeResult'
@@ -222,6 +226,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
 
   njkEnv.addGlobal('IssueStatus', IssueStatus)
