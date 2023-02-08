@@ -74,6 +74,10 @@ describe.skip('GET hearing details', () => {
           label: 'Location',
           value: 'Adj 2',
         },
+        type: {
+          label: 'Type of hearing',
+          value: 'Governor',
+        },
       },
     ])
     return request(app)

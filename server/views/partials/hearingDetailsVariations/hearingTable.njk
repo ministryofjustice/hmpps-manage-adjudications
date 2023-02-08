@@ -1,0 +1,27 @@
+{# TODO: Technically only the latest hearing should need to be a form as thats the only one with the submit button to add an outcome #}
+
+{% macro hearingTable(hearingNumber, hearing, readOnly, reportNo) %}
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+        {% set hearingId = hearing.id %}
+        <h2 class="govuk-heading-m" data-qa="hearing-index-{{hearingNumber}}">Hearing {{ hearingNumber }}</h2>
+        {% if not readOnly %}
+            {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, true, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId)) }}
+            {{ govukButton({
+            text: 'Cancel this hearing',
+            type: "submit",
+            classes: "govuk-button--secondary govuk-!-margin-right-3",
+            name: "cancelHearingButton",
+            value: "cancelHearingButton-"+hearingId,
+            attributes: { "data-qa": "cancel-hearing-button-"+hearingId }
+            }) }}
+        {% else %}
+            {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, false) }}
+        {% endif %}
+    </div>
+    </div>
+    </form>
+{% endmacro %}
+

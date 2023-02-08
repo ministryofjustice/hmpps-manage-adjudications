@@ -124,7 +124,7 @@ context('Plea and finding', () => {
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED_WITH"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForNotProceeding.urls.edit(100, 1))
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.edit(100))
       })
     })
   })

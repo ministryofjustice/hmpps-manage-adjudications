@@ -1,12 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import {
-  ReportedAdjudication,
-  ReportedAdjudicationStatus,
-  reportedAdjudicationStatusDisplayName,
-} from '../../../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
 
 export enum PageRequestType {
   REPORTER,
@@ -56,13 +53,8 @@ export default class HearingTabPage {
       reportedAdjudication.hearings,
       user
     )
-    const schedulingNotAvailable =
-      reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW ||
-      reportedAdjudication.status === ReportedAdjudicationStatus.REJECTED ||
-      reportedAdjudication.status === ReportedAdjudicationStatus.RETURNED ||
-      // Including ACCEPTED here so that we can deal with the edgecase early
-      // Legacy ACCEPTED reports should not have hearings or outcomes
-      reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED
+
+    const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
@@ -72,8 +64,6 @@ export default class HearingTabPage {
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
       hearings: hearingSummary,
-      //   scheduleHearingButtonHref: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
-      //   scheduleHearingButtonText: getScheduleHearingButtonText(reportedAdjudication.hearings?.length),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
@@ -83,11 +73,17 @@ export default class HearingTabPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    // const { user } = res.locals
-    // if (req.body.cancelHearingButton) {
-    //   const hearingIdToCancel = Number(req.body.cancelHearingButton.split('-')[1])
-    //   await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
-    // }
+    const { user } = res.locals
+    const { cancelHearingButton, nextStep } = req.body
+    if (cancelHearingButton) {
+      const hearingIdToCancel = Number(cancelHearingButton.split('-')[1])
+      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
+    }
+
+    if (nextStep) {
+      const redirectUrl = getNextPageForChosenStep(nextStep, adjudicationNumber)
+      if (redirectUrl) return res.redirect(redirectUrl)
+    }
     return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
 }

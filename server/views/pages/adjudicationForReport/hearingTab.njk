@@ -4,6 +4,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/hearingSummary.njk" import hearingSummary %}
+{% from "../../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
 
 {% block pageTitle %}
   Hearing details
@@ -21,6 +22,19 @@
   {% if reviewStatus === ReportedAdjudicationStatus.UNSCHEDULED %}
     {% include "../../partials/hearingDetailsVariations/unscheduledState.njk" %}
   {% endif %}
+
+  {# TODO: This conditional will need to change when we consider the other statuses #}
+
+  {# Potentially do a FOR loop of the table macro for how many hearings there are #}
+  {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
+  {# i.e. consider hearings table and referrals table as a block and repeat that #}
+  {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+    {% for hearing in hearings %}
+      {% set hearingNumber = loop.index %}
+      {{ hearingTable(hearingNumber, hearing, readOnly, reportNo) }}
+    {% endfor %}
+  {% endif %}
+
 
   {% if not readOnly %}
     {% include "../../partials/hearingDetailsVariations/returnLinks.njk" %}

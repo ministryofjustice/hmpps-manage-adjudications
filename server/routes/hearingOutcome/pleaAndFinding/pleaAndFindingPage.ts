@@ -148,12 +148,12 @@ export default class PleaAndFindingPage {
         return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
         return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber, hearingId)
-      return adjudicationUrls.hearingReasonForNotProceeding.urls.edit(adjudicationNumber, hearingId)
+      return adjudicationUrls.reasonForNotProceeding.urls.edit(adjudicationNumber)
     }
     if (hearingFinding === HearingOutcomeFinding.PROVED)
       return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
     if (hearingFinding === HearingOutcomeFinding.DISMISSED)
       return adjudicationUrls.hearingReasonForFinding.urls.start(adjudicationNumber, hearingId)
-    return adjudicationUrls.hearingReasonForNotProceeding.urls.start(adjudicationNumber, hearingId)
+    return adjudicationUrls.reasonForNotProceeding.urls.start(adjudicationNumber)
   }
 }

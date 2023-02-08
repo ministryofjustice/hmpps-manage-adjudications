@@ -3,35 +3,41 @@
 </div>
 
 {% if not readOnly %}
-{{ govukRadios({
-  name: "next-step",
-  fieldset: {
-    legend: {
-      text: "What is the next step for this adjudication?",
-      classes: "govuk-!-font-weight-bold"
-    }
-  },
-  items: [
-    {
-      value: NextStep.SCHEDULE_HEARING,
-      text: "Schedule a hearing"
+<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  {{ govukRadios({
+    name: "nextStep",
+    fieldset: {
+      legend: {
+        text: "What is the next step for this adjudication?",
+        classes: "govuk-!-font-weight-bold"
+      }
     },
-    {
-      value: NextStep.REFER_POLICE,
-      text: "Refer to police"
+    attributes: {
+      "data-qa": "next-step-radios"
     },
-    {
-      value: NextStep.NOT_PROCEED,
-      text: "Not proceed with the charge"
-    }
-  ]
-}) }}
+    items: [
+      {
+        value: NextStep.SCHEDULE_HEARING,
+        text: "Schedule a hearing"
+      },
+      {
+        value: NextStep.REFER_POLICE,
+        text: "Refer to police"
+      },
+      {
+        value: NextStep.NOT_PROCEED,
+        text: "Not proceed with the charge"
+      }
+    ]
+  }) }}
 
-{{ govukButton({
-text: 'Continue',
-type: "submit",
-classes: "govuk-button--submit",
-attributes: { "data-qa": "next-step-continue" }
-}) }}
+  {{ govukButton({
+  text: 'Continue',
+  type: "submit",
+  classes: "govuk-button--submit",
+  attributes: { "data-qa": "next-step-continue" }
+  }) }}
+</form>
 
 {% endif %}

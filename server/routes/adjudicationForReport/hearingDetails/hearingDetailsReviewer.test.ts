@@ -6,6 +6,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import TestData from '../../testutils/testData'
+import config from '../../../config'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -72,6 +73,10 @@ describe.skip('GET prisoner report', () => {
           label: 'Location',
           value: 'Adj 2',
         },
+        type: {
+          label: 'Type of hearing',
+          value: 'Governor',
+        },
       },
     ])
     return request(app)
@@ -106,6 +111,10 @@ describe.skip('POST cancel hearing', () => {
         location: {
           label: 'Location',
           value: 'Adj 2',
+        },
+        type: {
+          label: 'Type of hearing',
+          value: 'Governor',
         },
       },
     ])

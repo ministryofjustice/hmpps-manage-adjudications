@@ -10,7 +10,6 @@ import {
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
 }
