@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
-{% from "../../macros/hearingSummary.njk" import hearingSummary %}
+
 {% from "../../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
 
 {% block pageTitle %}
@@ -29,10 +29,32 @@
   {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
   {# i.e. consider hearings table and referrals table as a block and repeat that #}
   {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {% for hearing in hearings %}
       {% set hearingNumber = loop.index %}
       {{ hearingTable(hearingNumber, hearing, readOnly, reportNo) }}
     {% endfor %}
+
+    <div class="submitButtons">
+      {{ govukButton({
+        text: 'Enter the hearing outcome',
+        type: "submit",
+        classes: "govuk-button govuk-!-margin-right-3",
+        name: "enterHearingOutcomeSubmit",
+        attributes: { "data-qa": "enter-hearing-outcome-submit" }
+      }) }}
+      {{ govukButton({
+        text: 'Cancel this hearing',
+        type: "submit",
+        classes: "govuk-button--secondary",
+        name: "cancelHearingButton",
+        value: "cancelHearingButton-"+latestHearingId,
+        attributes: { "data-qa": "cancel-hearing-button-"+latestHearingId }
+      }) }}
+    </div>
+
+    </form>
   {% endif %}
 
 

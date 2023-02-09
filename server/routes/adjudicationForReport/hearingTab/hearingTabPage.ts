@@ -49,12 +49,17 @@ export default class HearingTabPage {
       reportedAdjudication.prisonerNumber,
       user
     )
+
     const hearingSummary = await this.reportedAdjudicationsService.getHearingDetails(
       reportedAdjudication.hearings,
       user
     )
 
     const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
+
+    const latestHearingId = reportedAdjudication.hearings
+      ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
+      : null
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
@@ -64,6 +69,7 @@ export default class HearingTabPage {
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
       hearings: hearingSummary,
+      latestHearingId,
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),

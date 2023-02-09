@@ -551,7 +551,7 @@ export default class ReportedAdjudicationsService {
   convertOicHearingType(hearingType: string): string {
     if (!hearingType) return null
     const hearingTypeSplit = hearingType.split('_')
-    if (hearingTypeSplit[0]) return 'Governor'
+    if (hearingTypeSplit[0] === 'GOV') return 'Governor'
     return 'Independent Adjudicator'
   }
 

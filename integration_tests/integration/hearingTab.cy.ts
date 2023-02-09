@@ -1,7 +1,7 @@
 import hearingTab from '../pages/hearingTab'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
@@ -9,7 +9,9 @@ const testData = new TestData()
 const hearingDateTimeOne = '2030-01-04T09:00:00'
 const hearingDateTimeOneFormatted = '4 January 2030 - 09:00'
 const hearingDateTimeTwo = '2030-01-06T10:00:00'
-// const hearingDateTimeTwoFormatted = '6 January 2030 - 10:00'
+const hearingDateTimeTwoFormatted = '6 January 2030 - 10:00'
+const hearingDateTimeThree = '2030-01-07T11:00:00'
+const hearingDateTimeThreeFormatted = '7 January 2030 - 11:00'
 
 const reportedAdjudicationResponse = (
   adjudicationNumber: number,
@@ -34,11 +36,22 @@ const singleHearing = [
   }),
 ]
 
-const hearingListAfterDeletion = [
-  testData.singleHearing({ dateTimeOfHearing: hearingDateTimeTwo, id: 988, locationId: 234 }),
-]
+const secondHearing = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeTwo,
+  id: 988,
+  locationId: 234,
+  oicHearingType: OicHearingType.INAD_ADULT,
+})
 
-const multipleHearings = [singleHearing[0], hearingListAfterDeletion[0]]
+const thirdHearing = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeThree,
+  id: 989,
+  locationId: 234,
+})
+
+const hearingListAfterDeletion = [singleHearing[0], secondHearing]
+
+const multipleHearings = [singleHearing[0], secondHearing, thirdHearing]
 
 context('Hearing deails page', () => {
   beforeEach(() => {
@@ -127,23 +140,33 @@ context('Hearing deails page', () => {
           hearingTabPage.schedulingUnavailableP2().should('exist')
           hearingTabPage.noHearingsScheduled().should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
-          // hearingTabPage.summaryTable().should('not.exist')
+          hearingTabPage.summaryTable().should('not.exist')
         } else if (adj.id === 1524494) {
-          // hearingTabPage.summaryTable().should('not.exist')
+          hearingTabPage.summaryTable().should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
         } else if (adj.id === 1524497) {
-          // hearingTabPage.summaryTable().should('not.exist')
+          hearingTabPage.summaryTable().should('not.exist')
           hearingTabPage.noHearingsScheduled().should('exist')
           hearingTabPage.nextStepRadios().should('exist')
           hearingTabPage.nextStepConfirmationButton().should('exist')
           hearingTabPage.schedulingUnavailableP1().should('not.exist')
           hearingTabPage.schedulingUnavailableP2().should('not.exist')
+        } else if (adj.id === 1524495) {
+          // SCHEDULED - single hearing
+          hearingTabPage.hearingIndex(1).should('exist')
+          hearingTabPage.summaryTable().should('exist')
+          hearingTabPage.enterHearingOutcomeButton().should('exist')
+          hearingTabPage.cancelHearingButton(987).should('exist')
         } else {
-          // SCHEDULED
-          // hearingDetailsPage.hearingIndex(1).should('exist')
-          // hearingDetailsPage.summaryTable().should('exist')
-          // hearingDetailsPage.enterHearingOutcomeButton().should('exist')
-          // hearingDetailsPage.cancelHearingButton(987).should('exist')
+          // SCHEDULED - multiple hearings
+          hearingTabPage.hearingIndex(1).should('exist')
+          hearingTabPage.hearingIndex(2).should('exist')
+          hearingTabPage.hearingIndex(3).should('exist')
+          hearingTabPage.summaryTable().should('exist')
+          hearingTabPage.enterHearingOutcomeButton().should('exist')
+          hearingTabPage.cancelHearingButton(989).should('exist')
+          hearingTabPage.cancelHearingButton(988).should('not.exist')
+          hearingTabPage.cancelHearingButton(987).should('not.exist')
         }
       })
     })
@@ -227,7 +250,7 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start(1524497))
       })
     })
-    it.skip('Adjudication SCHEDULED, one hearing', () => {
+    it('Adjudication SCHEDULED, one hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524495))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Scheduled')
@@ -248,85 +271,96 @@ context('Hearing deails page', () => {
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
           expect($summaryData.get(4).innerText).to.contain('Governor')
         })
+      hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
-    // it('Adjudication SCHEDULED multiple hearings to show', () => {
-    //   cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
-    //   const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-    //   hearingDetailsPage.reviewStatus().contains('Scheduled')
-    //   hearingDetailsPage.hearingIndex(1).contains('Hearing 1')
-    //   hearingDetailsPage.hearingIndex(2).contains('Hearing 2')
-    //   hearingDetailsPage
-    //     .summaryTable()
-    //     .find('dt')
-    //     .then($summaryLabels => {
-    //       expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
-    //       expect($summaryLabels.get(1).innerText).to.contain('Location')
-    //     })
-
-    //   hearingDetailsPage
-    //     .summaryTable()
-    //     .find('dd')
-    //     .then($summaryData => {
-    //       expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-    //       expect($summaryData.get(1).innerText).to.contain('Change')
-    //       expect($summaryData.get(2).innerText).to.contain('Adj 1')
-    //       expect($summaryData.get(3).innerText).to.contain('Change')
-    //       expect($summaryData.get(4).innerText).to.contain(hearingDateTimeTwoFormatted)
-    //       expect($summaryData.get(5).innerText).to.contain('Change')
-    //       expect($summaryData.get(6).innerText).to.contain('Adj 2')
-    //       expect($summaryData.get(7).innerText).to.contain('Change')
-    //     })
-    //   hearingDetailsPage.viewAllCompletedReportsLink().contains('Return to all completed reports')
-    //   hearingDetailsPage.viewAllCompletedReportsLink().click()
-    //   cy.location().should(loc => {
-    //     expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
-    //   })
-    // })
-    // it('Goes to the correct page when you click a change link', () => {
-    //   cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
-    //   const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-    //   hearingDetailsPage.changeLink().first().click()
-    //   cy.location().should(loc => {
-    //     expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524496, 987))
-    //   })
-    // })
-    // it('Successfully cancels a hearing', () => {
-    //   cy.task('stubGetReportedAdjudication', {
-    //     id: 1524497,
-    //     response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
-    //   })
-    //   cy.task('stubCancelHearing', {
-    //     adjudicationNumber: 1524497,
-    //     hearingId: 987,
-    //     response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
-    //   })
-    //   cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
-    //   const hearingDetailsPage = Page.verifyOnPage(hearingDetails)
-    //   cy.task('stubGetReportedAdjudication', {
-    //     id: 1524497,
-    //     response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
-    //   })
-    //   hearingDetailsPage.cancelHearingButton(987).click() // deleting the first hearing in the list with id 987
-
-    //   cy.location().should(loc => {
-    //     expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
-    //   })
-    //   const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingDetails)
-    //   hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
-    //   hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist') // There were two hearings but now should only be one
-    //   hearingDetailsPageAfterDeletion.cancelHearingButton(987).should('not.exist')
-    //   hearingDetailsPageAfterDeletion
-    //     .summaryTable()
-    //     .find('dd')
-    //     .then($summaryData => {
-    //       expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-    //       expect($summaryData.get(1).innerText).to.contain('Change')
-    //       expect($summaryData.get(2).innerText).to.contain('Adj 2')
-    //       expect($summaryData.get(3).innerText).to.contain('Change')
-    //     })
-    // })
+    it('Adjudication SCHEDULED multiple hearings to show', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.reviewStatus().contains('Scheduled')
+      hearingTabPage.hearingIndex(1).contains('Hearing 1')
+      hearingTabPage.hearingIndex(2).contains('Hearing 2')
+      hearingTabPage.enterHearingOutcomeButton().should('have.length', 1)
+      hearingTabPage
+        .summaryTable()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+        })
+      hearingTabPage
+        .summaryTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
+          expect($summaryData.get(5).innerText).to.contain('Change')
+          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(7).innerText).to.contain('Change')
+          expect($summaryData.get(8).innerText).to.contain('Adj 2')
+          expect($summaryData.get(9).innerText).to.contain('Change')
+          expect($summaryData.get(10).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(11).innerText).to.contain('Change')
+        })
+    })
+    it('Adjudications SCHEDULED - goes to the correct page when you click a change link - single hearing', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524495))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.changeLink().first().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524495, 987))
+      })
+    })
+    it.skip('Adjudications SCHEDULED - multiple hearings - change links only available on latest hearing', () => {
+      // TODO: Still need to implement this logic :)
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.changeLink().first().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524495, 989)) // should be the latest hearing
+      })
+    })
+    it('Successfully cancels the latest hearing', () => {
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524497,
+        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
+      })
+      cy.task('stubCancelHearing', {
+        adjudicationNumber: 1524497,
+        hearingId: 989,
+        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
+      })
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524497,
+        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
+      })
+      hearingTabPage.cancelHearingButton(989).click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
+      })
+      const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingTab)
+      hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
+      hearingDetailsPageAfterDeletion.hearingIndex(2).should('exist')
+      hearingDetailsPageAfterDeletion.hearingIndex(3).should('not.exist') // There were three hearings but now should only be two
+      hearingDetailsPageAfterDeletion.cancelHearingButton(989).should('not.exist') // The cancel button linked to the deleted hearing should not exist anymore
+      hearingDetailsPageAfterDeletion.cancelHearingButton(988).should('exist') // The cancel button should now be linked to the latest hearing available
+      hearingDetailsPageAfterDeletion
+        .summaryTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
+          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(8).innerText).to.contain('Adj 2')
+        })
+    })
   })
   // describe('Test scenarios - reporter view', () => {
   //   ;[{ id: 1524480 }, { id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }, { id: 1524497 }].forEach(

@@ -28,8 +28,7 @@ export default class HearingTabPage extends Page {
 
   enterHearingOutcomeButton = (): PageElement => cy.get('[data-qa="enter-hearing-outcome-submit"]')
 
-  cancelHearingButton = (hearingIndex: number): PageElement =>
-    cy.get(`[data-qa="cancel-hearing-button-${hearingIndex}"`)
+  cancelHearingButton = (hearingId: number): PageElement => cy.get(`[data-qa="cancel-hearing-button-${hearingId}"`)
 
   changeLink = (): PageElement => cy.get('[data-qa="change-link"')
 
