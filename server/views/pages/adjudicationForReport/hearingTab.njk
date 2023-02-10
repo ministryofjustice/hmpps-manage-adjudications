@@ -24,8 +24,6 @@
   {% endif %}
 
   {# TODO: This conditional will need to change when we consider the other statuses #}
-
-  {# Potentially do a FOR loop of the table macro for how many hearings there are #}
   {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
   {# i.e. consider hearings table and referrals table as a block and repeat that #}
   {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
@@ -33,19 +31,19 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {% for hearing in hearings %}
       {% set hearingNumber = loop.index %}
-      {{ hearingTable(hearingNumber, hearing, readOnly, reportNo) }}
+      {{ hearingTable(hearingNumber, hearing, readOnly, reportNo, latestHearingId) }}
     {% endfor %}
 
-    <div class="submitButtons">
+    <div class="hearing-buttons">
       {{ govukButton({
         text: 'Enter the hearing outcome',
-        type: "submit",
+        href: adjudicationUrls.enterHearingOutcome.urls.start(reportNo,latestHearingId),
         classes: "govuk-button govuk-!-margin-right-3",
-        name: "enterHearingOutcomeSubmit",
-        attributes: { "data-qa": "enter-hearing-outcome-submit" }
+        name: "enterHearingOutcomeButton",
+        attributes: { "data-qa": "enter-hearing-outcome-button" }
       }) }}
       {{ govukButton({
-        text: 'Cancel this hearing',
+        text: 'Remove this hearing',
         type: "submit",
         classes: "govuk-button--secondary",
         name: "cancelHearingButton",

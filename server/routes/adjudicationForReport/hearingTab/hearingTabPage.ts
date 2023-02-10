@@ -57,7 +57,7 @@ export default class HearingTabPage {
 
     const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
 
-    const latestHearingId = reportedAdjudication.hearings
+    const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null
 
@@ -90,6 +90,7 @@ export default class HearingTabPage {
       const redirectUrl = getNextPageForChosenStep(nextStep, adjudicationNumber)
       if (redirectUrl) return res.redirect(redirectUrl)
     }
+
     return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
   }
 }

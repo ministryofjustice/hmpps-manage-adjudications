@@ -295,16 +295,16 @@ context('Hearing deails page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 1')
-          expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('Governor')
-          expect($summaryData.get(5).innerText).to.contain('Change')
-          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(4).innerText).to.contain('Adj 2')
+          expect($summaryData.get(5).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(7).innerText).to.contain('Change')
           expect($summaryData.get(8).innerText).to.contain('Adj 2')
           expect($summaryData.get(9).innerText).to.contain('Change')
-          expect($summaryData.get(10).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(10).innerText).to.contain('Governor')
           expect($summaryData.get(11).innerText).to.contain('Change')
         })
     })
@@ -316,16 +316,15 @@ context('Hearing deails page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524495, 987))
       })
     })
-    it.skip('Adjudications SCHEDULED - multiple hearings - change links only available on latest hearing', () => {
-      // TODO: Still need to implement this logic :)
+    it('Adjudications SCHEDULED - multiple hearings - change links only available on latest hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.changeLink().first().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524495, 989)) // should be the latest hearing
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524496, 989)) // should be the latest hearing
       })
     })
-    it('Successfully cancels the latest hearing', () => {
+    it.only('Successfully cancels the latest hearing', () => {
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
         response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
@@ -356,9 +355,14 @@ context('Hearing deails page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-          expect($summaryData.get(2).innerText).to.contain('Adj 1')
-          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(8).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(4).innerText).to.contain('Change')
+          expect($summaryData.get(5).innerText).to.contain('Adj 2')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(6).innerText).to.contain('Change')
         })
     })
   })

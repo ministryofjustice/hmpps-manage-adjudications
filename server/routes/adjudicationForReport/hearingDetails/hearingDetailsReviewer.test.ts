@@ -6,7 +6,6 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import TestData from '../../testutils/testData'
-import config from '../../../config'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')

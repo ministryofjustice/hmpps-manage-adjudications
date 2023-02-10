@@ -163,7 +163,16 @@ const statusKeyMatch = (
 
 export const reportedAdjudicationStatuses = (filter: UiFilter) =>
   Object.keys(ReportedAdjudicationStatus)
-    .filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
+    // for now I'm going to ignore the new statuses and ACCEPTED until we come to the ticket for this page
+    // in a very rudimentary way
+    .filter(
+      key =>
+        key === ReportedAdjudicationStatus.AWAITING_REVIEW ||
+        key === ReportedAdjudicationStatus.REJECTED ||
+        key === ReportedAdjudicationStatus.RETURNED ||
+        key === ReportedAdjudicationStatus.SCHEDULED ||
+        key === ReportedAdjudicationStatus.UNSCHEDULED
+    )
     .map(key => {
       return {
         value: key,

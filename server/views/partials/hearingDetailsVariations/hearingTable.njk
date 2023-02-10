@@ -1,13 +1,13 @@
 {% from "../../macros/hearingSummary.njk" import hearingSummary %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro hearingTable(hearingNumber, hearing, readOnly, reportNo) %}
+{% macro hearingTable(hearingNumber, hearing, readOnly, reportNo, latestHearingId) %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
         {% set hearingId = hearing.id %}
         <h2 class="govuk-heading-m" data-qa="hearing-index-{{hearingNumber}}">Hearing {{ hearingNumber }}</h2>
         {% if not readOnly %}
-            {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, true, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId)) }}
+            {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, hearing.id === latestHearingId, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId)) }}
         {% else %}
             {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, false) }}
         {% endif %}
