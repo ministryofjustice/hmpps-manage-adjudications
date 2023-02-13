@@ -82,7 +82,6 @@ export default class HearingReasonForReferralPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
     const { adjudicatorName } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
