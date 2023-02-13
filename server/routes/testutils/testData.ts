@@ -205,17 +205,19 @@ export default class TestData {
     outcome,
     id = 101,
     locationId = 775,
+    oicHearingType = OicHearingType.GOV_ADULT,
   }: {
     dateTimeOfHearing: string
     outcome?: HearingOutcomeResult
     id?: number
     locationId?: number
+    oicHearingType?: OicHearingType
   }): HearingDetails => {
     return {
       id,
       locationId,
       dateTimeOfHearing,
-      oicHearingType: OicHearingType.GOV_ADULT,
+      oicHearingType,
       outcome,
     }
   }

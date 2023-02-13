@@ -622,6 +622,10 @@ describe('reportedAdjudicationsService', () => {
             label: 'Location',
             value: 'Adj',
           },
+          type: {
+            label: 'Type of hearing',
+            value: 'Governor',
+          },
         },
         {
           id: 23445,
@@ -632,6 +636,10 @@ describe('reportedAdjudicationsService', () => {
           location: {
             label: 'Location',
             value: 'Adj',
+          },
+          type: {
+            label: 'Type of hearing',
+            value: 'Governor',
           },
         },
       ]
@@ -652,6 +660,10 @@ describe('reportedAdjudicationsService', () => {
           location: {
             label: 'Location',
             value: 'Adj',
+          },
+          type: {
+            label: 'Type of hearing',
+            value: 'Governor',
           },
         },
       ]

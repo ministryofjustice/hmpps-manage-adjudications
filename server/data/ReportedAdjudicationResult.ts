@@ -125,6 +125,13 @@ export enum ReportedAdjudicationStatus {
   SCHEDULED = 'SCHEDULED',
   REJECTED = 'REJECTED',
   ACCEPTED = 'ACCEPTED',
+  ADJOURNED = 'ADJOURNED',
+  NOT_PROCEED = 'NOT_PROCEED',
+  DISMISSED = 'DISMISSED',
+  REFER_POLICE = 'REFER_POLICE',
+  REFER_INAD = 'REFER_INAD',
+  PROVED = 'PROVED',
+  QUASHED = 'QUASHED',
 }
 
 export const allStatuses = [
@@ -155,6 +162,20 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Unscheduled'
     case ReportedAdjudicationStatus.SCHEDULED:
       return 'Scheduled'
+    case ReportedAdjudicationStatus.ADJOURNED:
+      return 'Adjourned'
+    case ReportedAdjudicationStatus.NOT_PROCEED:
+      return 'Not proceeded with'
+    case ReportedAdjudicationStatus.DISMISSED:
+      return 'Dismissed'
+    case ReportedAdjudicationStatus.REFER_POLICE:
+      return 'Referred to police'
+    case ReportedAdjudicationStatus.REFER_INAD:
+      return 'Referred to IA'
+    case ReportedAdjudicationStatus.PROVED:
+      return 'Charge proved'
+    case ReportedAdjudicationStatus.QUASHED:
+      return 'Quashed'
     default:
       return null
   }

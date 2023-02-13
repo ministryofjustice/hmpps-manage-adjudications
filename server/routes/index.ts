@@ -1,5 +1,6 @@
 import type { Router } from 'express'
 
+import config from '../config'
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
 import incidentRoleRoutes from './incidentRole'
@@ -26,6 +27,8 @@ import detailsOfEvidenceRoutes from './evidence'
 import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
 import hearingDetailsRoutes from './adjudicationForReport/hearingDetails'
+import hearingTabRoutes from './adjudicationForReport/hearingTab'
+
 import adjudicationReportRoutes from './adjudicationForReport/prisonerReport'
 import scheduleHearingRoutes from './adjudicationForReport/scheduleHearing'
 import viewScheduledHearingsRoutes from './viewAllHearingsAndReports/allHearings'
@@ -149,7 +152,15 @@ export default function routes(
     associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
   )
 
-  router.use(adjudicationUrls.hearingDetails.root, hearingDetailsRoutes({ reportedAdjudicationsService, userService }))
+  if (config.outcomeFeatureFlag === 'true') {
+    router.use(adjudicationUrls.hearingDetails.root, hearingTabRoutes({ reportedAdjudicationsService, userService }))
+  } else {
+    router.use(
+      adjudicationUrls.hearingDetails.root,
+      hearingDetailsRoutes({ reportedAdjudicationsService, userService })
+    )
+  }
+
   router.use(
     adjudicationUrls.scheduleHearing.root,
     scheduleHearingRoutes({ reportedAdjudicationsService, locationService, userService })

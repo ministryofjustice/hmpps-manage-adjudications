@@ -3,8 +3,10 @@
 {% macro hearingSummary(hearingDetails = {}, attributes = {}, changeLinksActive = false, changeLinkHref = null) %}
   {% set dateTimeValue = { text: hearingDetails.dateTime.value } %}
   {% set locationValue = { text: hearingDetails.location.value } %}
+  {% set typeValue = { text: hearingDetails.type.value } %}
   {% set dateTimeLabel = { text: hearingDetails.dateTime.label } %}
   {% set locationLabel = { text: hearingDetails.location.label } %}
+  {% set typeLabel = { text: hearingDetails.type.label } %}
 
   {% if changeLinksActive %}
   {% set dateTimeChangeLink = {
@@ -27,6 +29,16 @@
           }
         ]
       } %}
+  {% set typeChangeLink = {
+        items: [
+          {
+            href: changeLinkHref,
+            text: "Change",
+            visuallyHiddenText: ' type of hearing',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+      } %}
     {% endif %}
 
   {% set rows = [
@@ -39,6 +51,11 @@
         key: locationLabel,
         value: locationValue,
         actions: locationChangeLink
+    },
+    {
+        key: typeLabel,
+        value: typeValue,
+        actions: typeChangeLink
     }
   ] %}
 

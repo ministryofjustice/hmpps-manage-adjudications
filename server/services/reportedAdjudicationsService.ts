@@ -540,8 +540,19 @@ export default class ReportedAdjudicationsService {
           label: 'Location',
           value: locationNamesByIdMap.get(hearing.locationId),
         },
+        type: {
+          label: 'Type of hearing',
+          value: this.convertOicHearingType(hearing.oicHearingType),
+        },
       }
     })
+  }
+
+  convertOicHearingType(hearingType: string): string {
+    if (!hearingType) return null
+    const hearingTypeSplit = hearingType.split('_')
+    if (hearingTypeSplit[0] === 'GOV') return 'Governor'
+    return 'Independent Adjudicator'
   }
 
   async deleteHearing(

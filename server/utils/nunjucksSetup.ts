@@ -8,9 +8,14 @@ import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
-import { IssueStatus } from '../data/ReportedAdjudicationResult'
+import {
+  IssueStatus,
+  ReportedAdjudicationStatus,
+  reportedAdjudicationStatusDisplayName,
+} from '../data/ReportedAdjudicationResult'
 import { PrintDISFormsUiFilter } from './adjudicationFilterHelper'
 import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingResult'
+import { NextStep } from '../data/OutcomeResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -216,14 +221,18 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return filter.issueStatus.includes(key)
   })
 
-  njkEnv.addGlobal('IssueStatus', IssueStatus)
-  njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
-  njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
-  njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
+
+  njkEnv.addGlobal('IssueStatus', IssueStatus)
+  njkEnv.addGlobal('ReportedAdjudicationStatus', ReportedAdjudicationStatus)
+  njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
+  njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
+  njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
+  njkEnv.addGlobal('NextStep', NextStep)
 }

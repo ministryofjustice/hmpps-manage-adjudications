@@ -100,7 +100,7 @@ describe('POST /hearing-plea-finding', () => {
         hearingFinding: HearingOutcomeFinding.NOT_PROCEED_WITH,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingReasonForNotProceeding.urls.start(100, 1))
+      .expect('Location', adjudicationUrls.reasonForNotProceeding.urls.start(100))
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,

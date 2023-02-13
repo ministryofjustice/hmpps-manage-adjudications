@@ -91,7 +91,7 @@ context('Plea and finding', () => {
 
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForNotProceeding.urls.start(100, 1))
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start(100))
       })
     })
   })

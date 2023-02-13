@@ -1,0 +1,65 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
+
+{% from "../../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
+
+{% block pageTitle %}
+  Hearing details
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref) }}
+
+  {% if schedulingNotAvailable %}
+    {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}
+  {% endif %}
+
+  {% if reviewStatus === ReportedAdjudicationStatus.UNSCHEDULED %}
+    {% include "../../partials/hearingDetailsVariations/unscheduledState.njk" %}
+  {% endif %}
+
+  {# TODO: This conditional will need to change when we consider the other statuses #}
+  {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
+  {# i.e. consider hearings table and referrals table as a block and repeat that #}
+  {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    {% for hearing in hearings %}
+      {% set hearingNumber = loop.index %}
+      {{ hearingTable(hearingNumber, hearing, readOnly, reportNo, latestHearingId) }}
+    {% endfor %}
+
+    {% if not readOnly %}
+      <div class="hearing-buttons">
+        {{ govukButton({
+          text: 'Enter the hearing outcome',
+          href: adjudicationUrls.enterHearingOutcome.urls.start(reportNo,latestHearingId),
+          classes: "govuk-button govuk-!-margin-right-3",
+          name: "enterHearingOutcomeButton",
+          attributes: { "data-qa": "enter-hearing-outcome-button" }
+        }) }}
+        {{ govukButton({
+          text: 'Remove this hearing',
+          type: "submit",
+          classes: "govuk-button--secondary",
+          name: "cancelHearingButton",
+          value: "cancelHearingButton-"+latestHearingId,
+          attributes: { "data-qa": "cancel-hearing-button-"+latestHearingId }
+        }) }}
+      </div>
+    {% endif %}
+
+    </form>
+  {% endif %}
+
+
+  {% if not readOnly %}
+    {% include "../../partials/hearingDetailsVariations/returnLinks.njk" %}
+  {% endif %}
+
+{% endblock %}
