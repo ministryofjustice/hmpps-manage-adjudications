@@ -7,11 +7,11 @@
         {% set hearingId = hearing.id %}
         <h2 class="govuk-heading-m" data-qa="hearing-index-{{hearingNumber}}">Hearing {{ hearingNumber }}</h2>
         {% if not readOnly %}
-            {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, hearing.id === latestHearingId, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId)) }}
+            {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, hearing.id === latestHearingId, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId), reportNo, latestHearingId) }}
         {% else %}
             {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, false) }}
         {% endif %}
-    </div>
+        </div>
     </div>
 {% endmacro %}
 

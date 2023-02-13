@@ -1,0 +1,35 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% if reviewStatus === ReportedAdjudicationStatus.ADJOURNED %}
+    {{ govukButton({
+        text: 'Schedule another hearing',
+        href: adjudicationUrls.scheduleHearing.urls.start(reportNo),
+        classes: "govuk-button govuk-!-margin-right-3",
+        name: "scheduleAnotherHearingButton",
+        attributes: { "data-qa": "schedule-another-hearing-button" }
+    }) }}
+{% elseif reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+    {{ govukButton({
+        text: 'Enter the hearing outcome',
+        href: adjudicationUrls.enterHearingOutcome.urls.start(reportNo,latestHearingId),
+        classes: "govuk-button govuk-!-margin-right-3",
+        name: "enterHearingOutcomeButton",
+        attributes: { "data-qa": "enter-hearing-outcome-button" }
+    }) }}
+{% elseif reviewStatus === ReportedAdjudicationStatus.REFER_POLICE %}
+    {{ govukButton({
+        text: 'Enter the referral outcome',
+        href: '',
+        classes: "govuk-button govuk-!-margin-right-3",
+        name: "enterReferralOutcomeButton",
+        attributes: { "data-qa": "enter-referral-outcome-button" }
+    }) }}
+{% elseif reviewStatus === ReportedAdjudicationStatus.REFER_IA %}
+    {{ govukButton({
+        text: 'Continue to next step',
+        href: '',
+        classes: "govuk-button govuk-!-margin-right-3",
+        name: "continueToNextStepButton",
+        attributes: { "data-qa": "continue-next-step-button" }
+    }) }}
+{% endif %}

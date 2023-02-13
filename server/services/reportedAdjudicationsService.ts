@@ -41,6 +41,12 @@ import { ReviewStatus } from '../routes/adjudicationForReport/prisonerReport/pri
 import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { Alert, alertFlagLabels, AlertFlags } from '../utils/alertHelper'
+import {
+  convertHearingOutcomeAdjournReason,
+  convertHearingOutcomeCode,
+  convertHearingOutcomeFinding,
+  convertHearingOutcomePlea,
+} from '../data/HearingResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -529,8 +535,9 @@ export default class ReportedAdjudicationsService {
       )) || []
 
     const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+
     return hearings.map(hearing => {
-      return {
+      const hearingDetailsBasics = {
         id: hearing.id,
         dateTime: {
           label: 'Date and time of hearing',
@@ -545,6 +552,31 @@ export default class ReportedAdjudicationsService {
           value: this.convertOicHearingType(hearing.oicHearingType),
         },
       }
+      const hearingOutcomeDetails = {
+        adjudicatorName: {
+          label: 'Name of adjudicator',
+          value: hearing.outcome?.adjudicator || null,
+        },
+        nextStep: {
+          label: 'Next step',
+          value: convertHearingOutcomeCode(hearing.outcome?.code) || null,
+        },
+        plea: {
+          label: 'Plea',
+          value: convertHearingOutcomePlea(hearing.outcome?.plea) || null,
+        },
+        finding: {
+          label: 'Finding',
+          value: convertHearingOutcomeFinding(hearing.outcome?.finding) || null,
+        },
+        adjournReason: {
+          label: 'Reason',
+          value: convertHearingOutcomeAdjournReason(hearing.outcome?.reason) || null,
+        },
+        details: hearing.outcome?.details || null,
+      }
+      if (hearing.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
+      return hearingDetailsBasics
     })
   }
 

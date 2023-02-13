@@ -1,18 +1,28 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingSummary(hearingDetails = {}, attributes = {}, changeLinksActive = false, changeLinkHref = null) %}
+{% macro hearingSummary(hearingDetails = {}, attributes = {}, changeLinksActive = false, basicHearingChangeLinkHref = null, adjudicationNumber = null, hearingId = null) %}
   {% set dateTimeValue = { text: hearingDetails.dateTime.value } %}
   {% set locationValue = { text: hearingDetails.location.value } %}
   {% set typeValue = { text: hearingDetails.type.value } %}
   {% set dateTimeLabel = { text: hearingDetails.dateTime.label } %}
   {% set locationLabel = { text: hearingDetails.location.label } %}
   {% set typeLabel = { text: hearingDetails.type.label } %}
+  {% set adjudicatorNameValue = { text: hearingDetails.adjudicatorName.value } %}
+  {% set adjudicatorNameLabel = { text: hearingDetails.adjudicatorName.label } %}
+  {% set nextStepValue = { text: hearingDetails.nextStep.value } %}
+  {% set nextStepLabel = { text: hearingDetails.nextStep.label } %}
+  {% set pleaValue = { text: hearingDetails.plea.value } %}
+  {% set pleaLabel = { text: hearingDetails.plea.label } %}
+  {% set findingValue = { text: hearingDetails.finding.value } %}
+  {% set findingLabel = { text: hearingDetails.finding.label } %}
+  {% set adjournReasonLabel = { text: hearingDetails.adjournReason.label } %}
+  {% set adjournReasonValue = { html: '<p>'+hearingDetails.adjournReason.value+'</p><p>'+hearingDetails.details+'</p>' } %}
 
   {% if changeLinksActive %}
   {% set dateTimeChangeLink = {
         items: [
           {
-            href: changeLinkHref,
+            href: basicHearingChangeLinkHref,
             text: "Change",
             visuallyHiddenText: ' date and time of hearing',
             attributes: {"data-qa": "change-link" }
@@ -22,7 +32,7 @@
   {% set locationChangeLink = {
         items: [
           {
-            href: changeLinkHref,
+            href: basicHearingChangeLinkHref,
             text: "Change",
             visuallyHiddenText: ' location',
             attributes: {"data-qa": "change-link" }
@@ -30,16 +40,36 @@
         ]
       } %}
   {% set typeChangeLink = {
-        items: [
-          {
-            href: changeLinkHref,
-            text: "Change",
-            visuallyHiddenText: ' type of hearing',
-            attributes: {"data-qa": "change-link" }
-          }
-        ]
-      } %}
-    {% endif %}
+    items: [
+      {
+        href: basicHearingChangeLinkHref,
+        text: "Change",
+        visuallyHiddenText: ' type of hearing',
+        attributes: {"data-qa": "change-link" }
+      }
+    ]
+  } %}
+  {% set adjudicatorChangeLink = {
+    items: [
+      {
+        href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+        text: "Change",
+        visuallyHiddenText: ' name of adjudicator',
+        attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
+      }
+    ]
+  } %}
+  {% set nextStepChangeLink = {
+    items: [
+      {
+        href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+        text: "Change",
+        visuallyHiddenText: ' next step',
+        attributes: {"data-qa": "change-link-hearing-outcome-next-step" }
+      }
+    ]
+  } %}
+{% endif %}
 
   {% set rows = [
     {
@@ -58,6 +88,53 @@
         actions: typeChangeLink
     }
   ] %}
+
+  {% if hearingDetails.adjudicatorName.value !== null %}
+    {% set rows = (rows.push(
+      {
+        key: adjudicatorNameLabel,
+        value: adjudicatorNameValue,
+        actions: adjudicatorChangeLink
+      }
+    ), rows) %}
+  {% endif %}
+
+{% if hearingDetails.nextStep.value !== null %}
+{% set rows = (rows.push(
+  {
+    key: nextStepLabel,
+    value: nextStepValue,
+    actions: nextStepChangeLink
+  }
+), rows) %}
+{% endif %}
+{% if hearingDetails.adjournReason.value !== null %}
+{% set rows = (rows.push(
+      {
+        key: adjournReasonLabel,
+        value: adjournReasonValue
+      }
+), rows) %}
+{% endif %}
+{% if hearingDetails.plea.value !== null %}
+{% set rows = (rows.push(
+      {
+        key: pleaLabel,
+        value: pleaValue,
+        actions: pleaChangeLink
+      }
+), rows) %}
+{% endif %}
+{% if hearingDetails.finding.value !== null %}
+{% set rows = (rows.push(
+      {
+        key: findingLabel,
+        value: findingValue,
+        actions: findingChangeLink
+      }
+), rows) %}
+{% endif %}
+
 
   {% if rows.length %}
     {{ govukSummaryList({

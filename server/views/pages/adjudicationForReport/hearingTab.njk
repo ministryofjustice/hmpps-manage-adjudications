@@ -36,13 +36,7 @@
 
     {% if not readOnly %}
       <div class="hearing-buttons">
-        {{ govukButton({
-          text: 'Enter the hearing outcome',
-          href: adjudicationUrls.enterHearingOutcome.urls.start(reportNo,latestHearingId),
-          classes: "govuk-button govuk-!-margin-right-3",
-          name: "enterHearingOutcomeButton",
-          attributes: { "data-qa": "enter-hearing-outcome-button" }
-        }) }}
+        {% include "../../partials/hearingDetailsVariations/hearingPrimaryButton.njk" %}
         {{ govukButton({
           text: 'Remove this hearing',
           type: "submit",
