@@ -461,17 +461,15 @@ const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response
 
 const stubCancelHearing = ({
   adjudicationNumber,
-  hearingId,
   response = {},
 }: {
   adjudicationNumber: number
-  hearingId: number
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'DELETE',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing`,
     },
     response: {
       status: 200,
@@ -497,11 +495,11 @@ const stubScheduleHearing = ({ adjudicationNumber, status = 200, response = {} }
     },
   })
 
-const stubAmendHearing = ({ adjudicationNumber, hearingId, status = 200, response = {} }): SuperAgentRequest =>
+const stubAmendHearing = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing`,
     },
     response: {
       status,
@@ -637,11 +635,11 @@ const stubPutDateTimeOfIssue = ({ adjudicationNumber, response }): SuperAgentReq
     },
   })
 
-const stubCreateHearingOutcome = ({ adjudicationNumber, hearingId, response }): SuperAgentRequest =>
+const stubCreateHearingOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
     },
     response: {
       status: 200,
@@ -652,11 +650,11 @@ const stubCreateHearingOutcome = ({ adjudicationNumber, hearingId, response }): 
     },
   })
 
-const stubUpdateHearingOutcome = ({ adjudicationNumber, hearingId, response }): SuperAgentRequest =>
+const stubUpdateHearingOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
     },
     response: {
       status: 200,

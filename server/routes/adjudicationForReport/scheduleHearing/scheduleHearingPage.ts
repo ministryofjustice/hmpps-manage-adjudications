@@ -98,7 +98,6 @@ export default class scheduleHearingRoutes {
       if (this.pageOptions.isEdit()) {
         await this.reportedAdjudicationsService.rescheduleHearing(
           adjudicationNumber,
-          hearingId,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),

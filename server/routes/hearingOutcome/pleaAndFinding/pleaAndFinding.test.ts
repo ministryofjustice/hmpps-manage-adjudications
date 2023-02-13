@@ -52,7 +52,6 @@ describe('POST /hearing-plea-finding', () => {
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.COMPLETE,
           'Judge Red',
           HearingOutcomePlea.GUILTY,
@@ -78,7 +77,6 @@ describe('POST /hearing-plea-finding', () => {
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.COMPLETE,
           'Judge Red',
           HearingOutcomePlea.GUILTY,
@@ -104,7 +102,6 @@ describe('POST /hearing-plea-finding', () => {
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.COMPLETE,
           'Judge Red',
           HearingOutcomePlea.GUILTY,

@@ -99,7 +99,6 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           1524494,
-          101,
           27008,
           '2045-11-04T10:00',
           OicHearingType.GOV_ADULT as string,
@@ -122,7 +121,6 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           1524494,
-          101,
           27008,
           '2045-11-04T10:00',
           OicHearingType.INAD_ADULT as string,

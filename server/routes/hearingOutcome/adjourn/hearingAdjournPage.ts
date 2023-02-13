@@ -101,7 +101,6 @@ export default class HearingReasonForReferralPage {
       if (isEdit) {
         await this.hearingsService.updateAdjourn(
           adjudicationNumber,
-          hearingId,
           HearingOutcomeCode.ADJOURN,
           adjudicatorName as string,
           adjournDetails,
@@ -112,7 +111,6 @@ export default class HearingReasonForReferralPage {
       } else {
         await this.hearingsService.createAdjourn(
           adjudicationNumber,
-          hearingId,
           HearingOutcomeCode.ADJOURN,
           adjudicatorName as string,
           adjournDetails,

@@ -58,7 +58,6 @@ describe('POST /hearing-adjourned', () => {
       .then(() =>
         expect(hearingsService.updateAdjourn).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.ADJOURN,
           'Roxanne Red',
           '123',

@@ -82,8 +82,7 @@ export default class HearingTabPage {
     const { user } = res.locals
     const { cancelHearingButton, nextStep } = req.body
     if (cancelHearingButton) {
-      const hearingIdToCancel = Number(cancelHearingButton.split('-')[1])
-      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
+      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
     }
 
     if (nextStep) {

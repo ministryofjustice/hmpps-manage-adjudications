@@ -37,7 +37,6 @@ context('Adjourn the hearing', () => {
     })
     cy.task('stubUpdateHearingOutcome', {
       adjudicationNumber: 100,
-      hearingId: 1,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,

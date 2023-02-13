@@ -267,9 +267,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async cancelHearing(adjudicationNumber: number, hearingId: number): Promise<ReportedAdjudicationResult> {
+  async cancelHearing(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+      path: `/reported-adjudications/${adjudicationNumber}/hearing`,
     })
   }
 
@@ -280,13 +280,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async amendHearing(
-    adjudicationNumber: number,
-    hearingId: number,
-    hearingDetails: HearingDetails
-  ): Promise<ReportedAdjudicationResult> {
+  async amendHearing(adjudicationNumber: number, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+      path: `/reported-adjudications/${adjudicationNumber}/hearing`,
       data: hearingDetails,
     })
   }
@@ -313,22 +309,20 @@ export default class ManageAdjudicationsClient {
 
   async createHearingOutcome(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
       data: { ...hearingOutcomeDetails },
     })
   }
 
   async updateHearingOutcome(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
       data: { ...hearingOutcomeDetails },
     })
   }

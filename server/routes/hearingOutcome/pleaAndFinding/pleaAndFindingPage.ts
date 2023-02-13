@@ -98,7 +98,6 @@ export default class PleaAndFindingPage {
       if (isEdit) {
         await this.hearingsService.updateHearingPleaAndFinding(
           adjudicationNumber,
-          hearingId,
           HearingOutcomeCode.COMPLETE,
           adjudicatorName as string,
           hearingPlea as HearingOutcomePlea,
@@ -108,7 +107,6 @@ export default class PleaAndFindingPage {
       } else {
         await this.hearingsService.postHearingPleaAndFinding(
           adjudicationNumber,
-          hearingId,
           HearingOutcomeCode.COMPLETE,
           adjudicatorName as string,
           hearingPlea as HearingOutcomePlea,

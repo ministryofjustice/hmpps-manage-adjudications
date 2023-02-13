@@ -104,7 +104,6 @@ export default class HearingReasonForReferralPage {
       if (isEdit) {
         await this.hearingsService.updateReferral(
           adjudicationNumber,
-          hearingId,
           hearingOutcome as HearingOutcomeCode,
           adjudicatorName as string,
           referralReason,
@@ -113,7 +112,6 @@ export default class HearingReasonForReferralPage {
       } else {
         await this.hearingsService.createReferral(
           adjudicationNumber,
-          hearingId,
           hearingOutcome as HearingOutcomeCode,
           adjudicatorName as string,
           referralReason,

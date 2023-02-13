@@ -66,7 +66,6 @@ describe('POST /reason-for-referral', () => {
       .then(() =>
         expect(hearingsService.createReferral).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.REFER_POLICE,
           'Roxanne Red',
           '123',

@@ -555,12 +555,8 @@ export default class ReportedAdjudicationsService {
     return 'Independent Adjudicator'
   }
 
-  async deleteHearing(
-    adjudicationNumber: number,
-    hearingIdToCancel: number,
-    user: User
-  ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
+  async deleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber)
   }
 
   async scheduleHearing(
@@ -580,7 +576,6 @@ export default class ReportedAdjudicationsService {
 
   async rescheduleHearing(
     adjudicationNumber: number,
-    hearingId: number,
     locationId: number,
     dateTimeOfHearing: string,
     oicHearingType: string,
@@ -591,7 +586,7 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
+    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, dataToSend)
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {

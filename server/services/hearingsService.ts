@@ -14,7 +14,6 @@ export default class HearingsService {
 
   async createReferral(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     referralReason: string,
@@ -25,16 +24,11 @@ export default class HearingsService {
       code: hearingOutcome,
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user.token).createHearingOutcome(
-      adjudicationNumber,
-      hearingId,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user.token).createHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async updateReferral(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     referralReason: string,
@@ -45,16 +39,11 @@ export default class HearingsService {
       code: hearingOutcome,
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
-      adjudicationNumber,
-      hearingId,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async createAdjourn(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     details: string,
@@ -69,16 +58,11 @@ export default class HearingsService {
       reason: adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user.token).createHearingOutcome(
-      adjudicationNumber,
-      hearingId,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user.token).createHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async updateAdjourn(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     details: string,
@@ -93,16 +77,11 @@ export default class HearingsService {
       reason: adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
-      adjudicationNumber,
-      hearingId,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async postHearingPleaAndFinding(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     hearingPlea: HearingOutcomePlea,
@@ -115,16 +94,11 @@ export default class HearingsService {
       plea: hearingPlea,
       finding: hearingFinding,
     }
-    return new ManageAdjudicationsClient(user.token).createHearingOutcome(
-      adjudicationNumber,
-      hearingId,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user.token).createHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async updateHearingPleaAndFinding(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     hearingPlea: HearingOutcomePlea,
@@ -137,11 +111,7 @@ export default class HearingsService {
       plea: hearingPlea,
       finding: hearingFinding,
     }
-    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(
-      adjudicationNumber,
-      hearingId,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user.token).updateHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async getHearingOutcome(adjudicationNumber: number, hearingId: number, user: User) {
