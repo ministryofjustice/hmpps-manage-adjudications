@@ -1,10 +1,24 @@
 {
-  "extends": ["config:base", ":disableDependencyDashboard", ":preserveSemverRanges"],
-  "assigneesFromCodeOwners": true,
-  "timezone": "Europe/London",
-  "schedule": ["after 9am every weekday", "before 5pm every weekday"],
-  "enabledManagers": ["npm", "nvm", "dockerfile", "docker-compose", "helmv3", "helm-values", "circleci"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>ministryofjustice/hmpps-renovate-config:node"],
+  "reviewers": ["neilmendum", "timoj58", "natclamp-moj"],
   "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non major NPM dependencies",
+      "groupSlug": "all-npm-minor-patch",
+      "stabilityDays": 3
+    },
+    {
+      "matchPackageNames": ["typescript", "govuk-frontend"],
+      "rangeStrategy": "bump",
+      "stabilityDays": 0
+    },
     {
       "matchManagers": ["npm"],
       "matchPackageNames": ["@types/node"],
@@ -12,26 +26,12 @@
       "enabled": false
     },
     {
-      "matchDatasources": ["docker"],
-      "allowedVersions": "16.15-bullseye-slim"
-    },
-    {
       "matchDatasources": ["docker-compose"],
       "matchPackageNames": ["bitnami/redis"],
       "allowedVersions": "5.0"
-    },
-    {
-      "matchDatasources": ["orb"],
-      "matchPackageNames": ["cimg/node"],
-      "allowedVersions": "16.15-browsers"
-    },
-    {
-      "matchPackageNames": ["typescript"],
-      "rangeStrategy": "bump"
-    },
-    {
-      "matchPackageNames": ["govuk-frontend"],
-      "rangeStrategy": "bump"
     }
-  ]
+  ],
+  "vulnerabilityAlerts": {
+    "stabilityDays": 0
+  }
 }
