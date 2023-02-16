@@ -563,15 +563,19 @@ export default class ReportedAdjudicationsService {
     })
   }
 
-  async getHearingHistory(history: OutcomeHistory, user: User) {
-    if (!history.length) return []
-    const hearings = history.filter((step: OutcomeDetailsHistory & HearingDetailsHistory) => !!step.hearing)
-    const hearingLocationIds = (hearings as { hearing: HearingDetails }[]).map(hearing => hearing.hearing.locationId)
+  getHearingLocationMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<number, string>> => {
+    const hearingLocationIds = hearings.map(hearing => hearing.hearing.locationId)
     const locationNamesAndIds =
       (await Promise.all(
         [...hearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
       )) || []
-    const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+    return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+  }
+
+  async getHearingHistory(history: OutcomeHistory, user: User) {
+    if (!history.length) return []
+    const hearings = history.filter((step: OutcomeDetailsHistory & HearingDetailsHistory) => !!step.hearing)
+    const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
 
     return (hearings as { hearing: HearingDetails }[]).map(hearing => {
       const hearingItem = hearing.hearing
