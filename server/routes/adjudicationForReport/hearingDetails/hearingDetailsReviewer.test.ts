@@ -48,7 +48,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe.skip('GET prisoner report', () => {
+describe('GET prisoner report', () => {
   it('should load the hearing details page - reviewer version - no hearings', () => {
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.review(1524493))
@@ -98,7 +98,7 @@ describe.skip('GET prisoner report', () => {
       })
   })
 })
-describe.skip('POST cancel hearing', () => {
+describe('POST cancel hearing', () => {
   it('should call the cancel endpoint if user cancels a hearing', () => {
     reportedAdjudicationsService.getHearingDetails.mockResolvedValue([
       {

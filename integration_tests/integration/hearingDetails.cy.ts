@@ -40,7 +40,7 @@ const hearingListAfterDeletion = [
 
 const multipleHearings = [singleHearing[0], hearingListAfterDeletion[0]]
 
-context.skip('Hearing deails page', () => {
+context('Hearing details page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
