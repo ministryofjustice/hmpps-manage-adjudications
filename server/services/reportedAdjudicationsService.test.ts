@@ -6,7 +6,12 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
-import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import {
+  IssueStatus,
+  OicHearingType,
+  ReportedAdjudicationDISFormFilter,
+  ReportedAdjudicationStatus,
+} from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 
 const testData = new TestData()
@@ -20,12 +25,15 @@ const getYourCompletedAdjudications = jest.fn()
 const getAllCompletedAdjudications = jest.fn()
 const createDraftFromCompleteAdjudication = jest.fn()
 const getHearingsGivenAgencyAndDate = jest.fn()
+const getReportedAdjudicationIssueData = jest.fn()
+const getReportedAdjudicationPrintData = jest.fn()
+const getAlertsForPrisoner = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getPrisonerDetails, getSecondaryLanguages, getBatchPrisonerDetails }
+    return { getPrisonerDetails, getSecondaryLanguages, getBatchPrisonerDetails, getAlertsForPrisoner }
   })
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
@@ -36,6 +44,8 @@ jest.mock('../data/manageAdjudicationsClient', () => {
       getAllCompletedAdjudications,
       createDraftFromCompleteAdjudication,
       getHearingsGivenAgencyAndDate,
+      getReportedAdjudicationIssueData,
+      getReportedAdjudicationPrintData,
     }
   })
 })
@@ -715,6 +725,184 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6123VU',
           locationId: 775,
         },
+      ])
+    })
+  })
+  describe('getAdjudicationDISFormData', () => {
+    it('success - confirm DIS1/2 has been issued page', async () => {
+      getReportedAdjudicationIssueData.mockResolvedValue({
+        reportedAdjudications: [
+          testData.reportedAdjudication({
+            adjudicationNumber: 1524493,
+            prisonerNumber: 'G6123VU',
+            dateTimeOfIncident: '2023-02-05T06:00:00',
+            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          }),
+        ],
+      })
+      getBatchPrisonerDetails.mockResolvedValue([testData.simplePrisoner('G6123VU', 'JOHN', 'SMITH', '1-0-015')])
+      // getAlertsForPrisoner.mockResolvedValue([])
+      const defaultFilter: ReportedAdjudicationDISFormFilter = {
+        fromDate: moment('03/02/2023', 'DD/MM/YYYY'),
+        toDate: moment('05/02/2021', 'DD/MM/YYYY'),
+        locationId: null,
+        issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
+      }
+      const result = await service.getAdjudicationDISFormData(user, defaultFilter, false)
+      expect(result).toEqual([
+        testData.reportedAdjudication({
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6123VU',
+          dateTimeOfIncident: '2023-02-05T06:00:00',
+          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          otherData: {
+            displayName: 'Smith, John',
+            friendlyName: 'John Smith',
+            issueStatus: IssueStatus.NOT_ISSUED,
+            formsAlreadyIssued: false,
+            dateTimeOfIssue: null,
+            formattedDateTimeOfIssue: null,
+            issuingOfficer: '',
+            prisonerLocation: '1-0-015',
+            dateTimeOfDiscovery: '2023-02-05T06:00:00',
+            formattedDateTimeOfDiscovery: '5 February 2023 - 06:00',
+            dateTimeOfFirstHearing: null,
+            formattedDateTimeOfFirstHearing: null,
+            relevantAlerts: null,
+          },
+        }),
+      ])
+    })
+    it('success - print DIS1/2 forms page', async () => {
+      getReportedAdjudicationPrintData.mockResolvedValue({
+        reportedAdjudications: [
+          testData.reportedAdjudication({
+            adjudicationNumber: 1524493,
+            prisonerNumber: 'G6123VU',
+            dateTimeOfIncident: '2023-02-05T06:00:00',
+            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          }),
+        ],
+      })
+      getBatchPrisonerDetails.mockResolvedValue([testData.simplePrisoner('G6123VU', 'JOHN', 'SMITH', '1-0-015')])
+      getAlertsForPrisoner.mockResolvedValue([])
+      const defaultFilter: ReportedAdjudicationDISFormFilter = {
+        fromDate: moment('03/02/2023', 'DD/MM/YYYY'),
+        toDate: moment('05/02/2021', 'DD/MM/YYYY'),
+        locationId: null,
+        issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
+      }
+      const result = await service.getAdjudicationDISFormData(user, defaultFilter, true)
+      expect(result).toEqual([
+        testData.reportedAdjudication({
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6123VU',
+          dateTimeOfIncident: '2023-02-05T06:00:00',
+          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          otherData: {
+            displayName: 'Smith, John',
+            friendlyName: 'John Smith',
+            issueStatus: IssueStatus.NOT_ISSUED,
+            formsAlreadyIssued: false,
+            dateTimeOfIssue: null,
+            formattedDateTimeOfIssue: null,
+            issuingOfficer: '',
+            prisonerLocation: '1-0-015',
+            dateTimeOfDiscovery: '2023-02-05T06:00:00',
+            formattedDateTimeOfDiscovery: '5 February 2023 - 06:00',
+            dateTimeOfFirstHearing: null,
+            formattedDateTimeOfFirstHearing: null,
+            relevantAlerts: [],
+          },
+        }),
+      ])
+    })
+    it('deals with no prisoners - confirm DIS1/2 issued page', async () => {
+      getReportedAdjudicationIssueData.mockResolvedValue({
+        reportedAdjudications: [
+          testData.reportedAdjudication({
+            adjudicationNumber: 1524493,
+            prisonerNumber: 'G6415GD',
+            dateTimeOfIncident: '2023-02-05T06:00:00',
+            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          }),
+        ],
+      })
+      getBatchPrisonerDetails.mockResolvedValue([])
+      // getAlertsForPrisoner.mockResolvedValue([])
+      const defaultFilter: ReportedAdjudicationDISFormFilter = {
+        fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
+        toDate: moment('01/01/2021', 'DD/MM/YYYY'),
+        locationId: null,
+        issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
+      }
+      const result = await service.getAdjudicationDISFormData(user, defaultFilter, false)
+      expect(result).toEqual([
+        testData.reportedAdjudication({
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-02-05T06:00:00',
+          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          otherData: {
+            displayName: 'Unknown',
+            friendlyName: 'Unknown',
+            issueStatus: IssueStatus.NOT_ISSUED,
+            formsAlreadyIssued: false,
+            dateTimeOfIssue: null,
+            formattedDateTimeOfIssue: null,
+            issuingOfficer: '',
+            prisonerLocation: 'Unknown',
+            dateTimeOfDiscovery: '2023-02-05T06:00:00',
+            formattedDateTimeOfDiscovery: '5 February 2023 - 06:00',
+            dateTimeOfFirstHearing: null,
+            formattedDateTimeOfFirstHearing: null,
+            relevantAlerts: null,
+          },
+        }),
+      ])
+    })
+    it('deals with no prisoners - print DIS1/2 page', async () => {
+      getReportedAdjudicationPrintData.mockResolvedValue({
+        reportedAdjudications: [
+          testData.reportedAdjudication({
+            adjudicationNumber: 1524493,
+            prisonerNumber: 'G6415GD',
+            dateTimeOfIncident: '2023-02-05T06:00:00',
+            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          }),
+        ],
+      })
+      getBatchPrisonerDetails.mockResolvedValue([])
+      getAlertsForPrisoner.mockResolvedValue([])
+      const defaultFilter: ReportedAdjudicationDISFormFilter = {
+        fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
+        toDate: moment('01/01/2021', 'DD/MM/YYYY'),
+        locationId: null,
+        issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
+      }
+      const result = await service.getAdjudicationDISFormData(user, defaultFilter, true)
+      expect(result).toEqual([
+        testData.reportedAdjudication({
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-02-05T06:00:00',
+          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          otherData: {
+            displayName: 'Unknown',
+            friendlyName: 'Unknown',
+            issueStatus: IssueStatus.NOT_ISSUED,
+            formsAlreadyIssued: false,
+            dateTimeOfIssue: null,
+            formattedDateTimeOfIssue: null,
+            issuingOfficer: '',
+            prisonerLocation: 'Unknown',
+            dateTimeOfDiscovery: '2023-02-05T06:00:00',
+            formattedDateTimeOfDiscovery: '5 February 2023 - 06:00',
+            dateTimeOfFirstHearing: null,
+            formattedDateTimeOfFirstHearing: null,
+            relevantAlerts: [],
+          },
+        }),
       ])
     })
   })
