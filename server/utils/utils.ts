@@ -45,7 +45,7 @@ export const convertNameForPlaceholder = (name: string, prisonerView: boolean): 
 }
 
 export const formatLocation = (locationName: string): string => {
-  if (!locationName) return undefined
+  if (!locationName) return 'Unknown'
   if (locationName.includes('CSWAP')) return 'No cell allocated'
   return locationName
 }

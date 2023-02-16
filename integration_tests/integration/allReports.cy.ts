@@ -71,6 +71,49 @@ context('All Completed Reports', () => {
       })
   })
 
+  it('should deal with some prisoner information missing', () => {
+    cy.task('stubGetAllReportedAdjudications', {})
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: testData.userFromUsername('USER1'),
+    })
+    const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 20, _ => {
+      return testData.reportedAdjudication({
+        adjudicationNumber: _,
+        prisonerNumber: 'A1234AA',
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
+      })
+    })
+    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
+    cy.task('stubGetBatchPrisonerDetails', [])
+
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage
+      .resultsTable()
+      .find('th')
+      .then($headings => {
+        expect($headings.get(0).innerText).to.contain('Discovery date and time')
+        expect($headings.get(1).innerText).to.contain('Name and prison number')
+        expect($headings.get(2).innerText).to.contain('Status')
+        expect($headings.get(3).innerText).to.contain('Latest scheduled hearing')
+        expect($headings.get(4) === undefined)
+      })
+    allCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
+        expect($data.get(1).innerText).to.contain('Unknown - A1234AA')
+        expect($data.get(2).innerText).to.contain('Awaiting review')
+        // test hearings link is not populated
+        expect($data.get(4).innerText).to.equal('')
+        expect($data.get(5).innerText).to.contain('View report')
+      })
+  })
+
   it('pagination should work', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',

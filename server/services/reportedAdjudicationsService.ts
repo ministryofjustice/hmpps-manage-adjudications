@@ -350,6 +350,11 @@ export default class ReportedAdjudicationsService {
   }
 
   private getPrisonerDisplayNames(prisonerResult: PrisonerSimpleResult) {
+    if (!prisonerResult)
+      return {
+        displayName: 'Unknown',
+        friendlyName: 'Unknown',
+      }
     const displayName =
       (prisonerResult && convertToTitleCase(`${prisonerResult.lastName}, ${prisonerResult.firstName}`)) || ''
     const friendlyName =
@@ -403,7 +408,7 @@ export default class ReportedAdjudicationsService {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
-    const prisonerLocation = formatLocation(prisonerResult.assignedLivingUnitDesc)
+    const prisonerLocation = formatLocation(prisonerResult?.assignedLivingUnitDesc) || 'Unknown'
     const formsAlreadyIssued = !!reportedAdjudication?.dateTimeOfIssue
     const firstHearingDateTime = reportedAdjudication.dateTimeOfFirstHearing
 
@@ -616,7 +621,7 @@ export default class ReportedAdjudicationsService {
 
   enhanceHearing(hearing: ScheduledHearing, prisonerResult: PrisonerSimpleResult) {
     const friendlyName =
-      (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || ''
+      (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || 'Unknown'
     const nameAndNumber = `${friendlyName} - ${hearing.prisonerNumber}`
     const formattedDateTimeOfHearing = formatTimestampToDate(hearing.dateTimeOfHearing, 'D MMMM YYYY - HH:mm')
     const formattedDateTimeOfDiscovery = formatTimestampToDate(hearing.dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm')

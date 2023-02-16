@@ -47,10 +47,10 @@ describe('Convert to title case', () => {
 
 describe('formatLocation()', () => {
   it('should cope with undefined', () => {
-    expect(formatLocation(undefined)).toEqual(undefined)
+    expect(formatLocation(undefined)).toEqual('Unknown')
   })
   it('should cope with null', () => {
-    expect(formatLocation(null)).toEqual(undefined)
+    expect(formatLocation(null)).toEqual('Unknown')
   })
   it('should preserve normal location names', () => {
     expect(formatLocation('A1234BC')).toEqual('A1234BC')
