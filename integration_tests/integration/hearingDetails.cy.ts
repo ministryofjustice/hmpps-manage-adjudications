@@ -223,6 +223,7 @@ context('Hearing details page', () => {
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
           expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
         })
 
       hearingDetailsPage
@@ -233,10 +234,14 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
           expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(5).innerText).to.contain('Change')
-          expect($summaryData.get(6).innerText).to.contain('Adj 2')
+          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(7).innerText).to.contain('Change')
+          expect($summaryData.get(8).innerText).to.contain('Adj 2')
+          expect($summaryData.get(9).innerText).to.contain('Change')
+          expect($summaryData.get(10).innerText).to.contain('Governor')
+          expect($summaryData.get(11).innerText).to.contain('Change')
         })
       hearingDetailsPage.viewAllCompletedReportsLink().contains('Return to all completed reports')
       hearingDetailsPage.viewAllCompletedReportsLink().click()
@@ -392,6 +397,7 @@ context('Hearing details page', () => {
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
           expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
         })
 
       hearingDetailsPage
@@ -400,8 +406,10 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(3).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(4).innerText).to.contain('Adj 2')
+          expect($summaryData.get(5).innerText).to.contain('Governor')
         })
       hearingDetailsPage.viewYourCompletedReportsLink().contains('Return to your completed reports')
       hearingDetailsPage.viewYourCompletedReportsLink().click()

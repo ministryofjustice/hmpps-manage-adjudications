@@ -113,7 +113,7 @@ context('What is the reason for the referral?', () => {
     })
   })
   describe('Validation', () => {
-    it.only('shows correct error message if reason missing', () => {
+    it('shows correct error message if reason missing', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
           100,
