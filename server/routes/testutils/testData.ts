@@ -22,7 +22,6 @@ import {
   HearingDetails,
   HearingOutcomeCode,
   HearingOutcomeResult,
-  OutcomeDetailsHistory,
   OutcomeHistory,
 } from '../../data/HearingAndOutcomeResult'
 

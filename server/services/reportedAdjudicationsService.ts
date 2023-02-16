@@ -575,7 +575,7 @@ export default class ReportedAdjudicationsService {
 
     return (hearings as { hearing: HearingDetails }[]).map(hearing => {
       const hearingItem = hearing.hearing
-      console.log(hearingItem)
+
       const hearingDetailsBasics = {
         id: hearingItem.id,
         dateTime: {
