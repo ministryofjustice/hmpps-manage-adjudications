@@ -26,11 +26,11 @@
   {# TODO: This conditional will need to change when we consider the other statuses #}
   {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
   {# i.e. consider hearings table and referrals table as a block and repeat that #}
-  {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+  {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED or reviewStatus === ReportedAdjudicationStatus.REFER_POLICE or reviewStatus === ReportedAdjudicationStatus.REFER_INAD %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {% for hearing in hearings %}
-      {% set hearingNumber = loop.index %}
+      {% set hearingNumber = loop.index %}`
       {{ hearingTable(hearingNumber, hearing, readOnly, reportNo, latestHearingId) }}
     {% endfor %}
 

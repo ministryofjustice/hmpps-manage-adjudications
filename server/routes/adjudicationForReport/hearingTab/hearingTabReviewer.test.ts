@@ -43,13 +43,13 @@ describe('GET hearing details page - reviewer version', () => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.getHearingHistory).toHaveBeenCalledTimes(1)
       })
   })
 })
 describe('POST cancel hearing', () => {
   it('should call the cancel endpoint if user cancels a hearing', () => {
-    reportedAdjudicationsService.getHearingDetails.mockResolvedValue([
+    reportedAdjudicationsService.getHearingHistory.mockResolvedValue([
       {
         id: 101,
         dateTime: {

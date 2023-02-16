@@ -5,7 +5,6 @@ import {
   DamageDetails,
   EvidenceCode,
   EvidenceDetails,
-  HearingDetails,
   IncidentRole,
   IncidentStatement,
   OffenceDetails,
@@ -19,7 +18,13 @@ import { Location } from '../../data/PrisonLocationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
-import { HearingOutcomeCode, HearingOutcomeResult } from '../../data/HearingResult'
+import {
+  HearingDetails,
+  HearingOutcomeCode,
+  HearingOutcomeResult,
+  OutcomeDetailsHistory,
+  OutcomeHistory,
+} from '../../data/HearingAndOutcomeResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -39,6 +44,7 @@ export default class TestData {
     evidence = [],
     witnesses = [],
     hearings = null,
+    history = null,
     dateTimeOfFirstHearing = null,
     issuingOfficer = null,
     dateTimeOfIssue = null,
@@ -61,6 +67,7 @@ export default class TestData {
     evidence?: EvidenceDetails[]
     witnesses?: WitnessDetails[]
     hearings?: HearingDetails[]
+    history?: OutcomeHistory
     dateTimeOfFirstHearing?: string
     issuingOfficer?: string
     dateTimeOfIssue?: string
@@ -92,6 +99,7 @@ export default class TestData {
       evidence,
       witnesses,
       hearings,
+      history,
       dateTimeOfFirstHearing,
       issuingOfficer,
       dateTimeOfIssue,

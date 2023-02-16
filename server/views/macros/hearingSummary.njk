@@ -89,17 +89,17 @@
     }
   ] %}
 
-  {% if hearingDetails.adjudicatorName.value !== null %}
-    {% set rows = (rows.push(
-      {
-        key: adjudicatorNameLabel,
-        value: adjudicatorNameValue,
-        actions: adjudicatorChangeLink
-      }
-    ), rows) %}
-  {% endif %}
+{% if hearingDetails.adjudicatorName and hearingDetails.adjudicatorName.value %}
+  {% set rows = (rows.push(
+    {
+      key: adjudicatorNameLabel,
+      value: adjudicatorNameValue,
+      actions: adjudicatorChangeLink
+    }
+  ), rows) %}
+{% endif %}
 
-{% if hearingDetails.nextStep.value !== null %}
+{% if hearingDetails.nextStep and hearingDetails.nextStep.value %}
 {% set rows = (rows.push(
   {
     key: nextStepLabel,
@@ -108,7 +108,7 @@
   }
 ), rows) %}
 {% endif %}
-{% if hearingDetails.adjournReason.value !== null %}
+{% if hearingDetails.adjournReason and hearingDetails.adjournReason.value %}
 {% set rows = (rows.push(
       {
         key: adjournReasonLabel,
@@ -116,7 +116,7 @@
       }
 ), rows) %}
 {% endif %}
-{% if hearingDetails.plea.value !== null %}
+{% if hearingDetails.plea and hearingDetails.plea.value %}
 {% set rows = (rows.push(
       {
         key: pleaLabel,
@@ -125,7 +125,7 @@
       }
 ), rows) %}
 {% endif %}
-{% if hearingDetails.finding.value !== null %}
+{% if hearingDetails.finding and hearingDetails.finding.value %}
 {% set rows = (rows.push(
       {
         key: findingLabel,

@@ -4,7 +4,7 @@ import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/HearingResult'
+import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingReasonForReferralValidation'

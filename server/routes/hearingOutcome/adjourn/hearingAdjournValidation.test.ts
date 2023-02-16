@@ -1,4 +1,4 @@
-import { HearingOutcomeAdjournReason, HearingOutcomePlea } from '../../../data/HearingResult'
+import { HearingOutcomeAdjournReason, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import validateForm from './hearingAdjournValidation'
 
 describe('validateForm', () => {

@@ -3,7 +3,7 @@ import {
   HearingOutcomeCode,
   HearingOutcomeFinding,
   HearingOutcomePlea,
-} from '../data/HearingResult'
+} from '../data/HearingAndOutcomeResult'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'

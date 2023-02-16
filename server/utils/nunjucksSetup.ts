@@ -14,7 +14,7 @@ import {
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { PrintDISFormsUiFilter } from './adjudicationFilterHelper'
-import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingResult'
+import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingAndOutcomeResult'
 import { NextStep } from '../data/OutcomeResult'
 
 const production = process.env.NODE_ENV === 'production'

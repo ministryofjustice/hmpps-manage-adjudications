@@ -7,6 +7,20 @@ export enum HearingOutcomeCode {
   ADJOURN = 'ADJOURN',
 }
 
+export enum OutcomeCode {
+  REFER_POLICE = 'REFER_POLICE',
+  REFER_INAD = 'REFER_INAD',
+  NOT_PROCEED = 'NOT_PROCEED',
+  PROSECUTION = 'PROSECUTION',
+  SCHEDULE_HEARING = 'SCHEDULE_HEARING',
+}
+
+export enum ReferralOutcomeCode {
+  NOT_PROCEED = 'NOT_PROCEED',
+  PROSECUTION = 'PROSECUTION',
+  SCHEDULE_HEARING = 'SCHEDULE_HEARING',
+}
+
 export enum HearingOutcomeFinding {
   PROVED = 'PROVED',
   DISMISSED = 'DISMISSED',
@@ -35,6 +49,14 @@ export enum HearingOutcomePlea {
   NOT_ASKED = 'NOT_ASKED',
 }
 
+export type HearingDetails = {
+  id?: number
+  locationId: number
+  dateTimeOfHearing: string
+  oicHearingType: string
+  outcome?: HearingOutcomeDetails
+}
+
 export type HearingOutcomeDetails = {
   adjudicator: string
   code: HearingOutcomeCode
@@ -43,6 +65,32 @@ export type HearingOutcomeDetails = {
   finding?: HearingOutcomeFinding
   plea?: HearingOutcomePlea
 }
+
+export type Outcome = {
+  id: number
+  code: OutcomeCode
+  details: string
+}
+
+export type ReferralOutcome = {
+  id: number
+  code: ReferralOutcomeCode
+}
+
+export type OutcomeDetails = {
+  outcome: Outcome
+  referralOutcome?: ReferralOutcome
+}
+
+export type OutcomeDetailsHistory = {
+  outcome: OutcomeDetails
+}
+
+export type HearingDetailsHistory = {
+  hearing: HearingDetails
+}
+
+export type OutcomeHistory = Array<OutcomeDetailsHistory & HearingDetailsHistory>
 
 export interface HearingOutcomeResult extends HearingOutcomeDetails {
   id: number

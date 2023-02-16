@@ -1,5 +1,5 @@
 import { FormError } from '../../../@types/template'
-import { HearingOutcomeAdjournReason, HearingOutcomePlea } from '../../../data/HearingResult'
+import { HearingOutcomeAdjournReason, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 type adjournForm = {
   adjournReason: HearingOutcomeAdjournReason

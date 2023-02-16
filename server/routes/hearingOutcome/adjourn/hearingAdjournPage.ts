@@ -9,7 +9,7 @@ import {
   HearingOutcomeCode,
   HearingOutcomeDetails,
   HearingOutcomePlea,
-} from '../../../data/HearingResult'
+} from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingAdjournValidation'

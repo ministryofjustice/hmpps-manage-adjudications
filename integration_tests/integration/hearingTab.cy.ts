@@ -53,7 +53,7 @@ const hearingListAfterDeletion = [singleHearing[0], secondHearing]
 
 const multipleHearings = [singleHearing[0], secondHearing, thirdHearing]
 
-context('Hearing deails page', () => {
+context('Hearing details page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

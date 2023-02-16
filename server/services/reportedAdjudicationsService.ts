@@ -34,7 +34,6 @@ import {
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
-  HearingDetails,
 } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/adjudicationForReport/prisonerReport/prisonerReportReviewValidation'
@@ -46,7 +45,11 @@ import {
   convertHearingOutcomeCode,
   convertHearingOutcomeFinding,
   convertHearingOutcomePlea,
-} from '../data/HearingResult'
+  HearingDetails,
+  HearingDetailsHistory,
+  OutcomeDetailsHistory,
+  OutcomeHistory,
+} from '../data/HearingAndOutcomeResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -537,7 +540,7 @@ export default class ReportedAdjudicationsService {
     const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
 
     return hearings.map(hearing => {
-      const hearingDetailsBasics = {
+      return {
         id: hearing.id,
         dateTime: {
           label: 'Date and time of hearing',
@@ -552,30 +555,61 @@ export default class ReportedAdjudicationsService {
           value: this.convertOicHearingType(hearing.oicHearingType),
         },
       }
+    })
+  }
+
+  async getHearingHistory(history: OutcomeHistory, user: User) {
+    if (!history.length) return []
+    const hearings = history.filter((step: OutcomeDetailsHistory & HearingDetailsHistory) => !!step.hearing)
+    const hearingLocationIds = (hearings as { hearing: HearingDetails }[]).map(hearing => hearing.hearing.locationId)
+    const locationNamesAndIds =
+      (await Promise.all(
+        [...hearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+      )) || []
+    const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+
+    return (hearings as { hearing: HearingDetails }[]).map(hearing => {
+      const hearingItem = hearing.hearing
+      console.log(hearingItem)
+      const hearingDetailsBasics = {
+        id: hearingItem.id,
+        dateTime: {
+          label: 'Date and time of hearing',
+          value: formatTimestampTo(hearingItem.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
+        },
+        location: {
+          label: 'Location',
+          value: locationNamesByIdMap.get(hearingItem.locationId),
+        },
+        type: {
+          label: 'Type of hearing',
+          value: this.convertOicHearingType(hearingItem.oicHearingType),
+        },
+      }
       const hearingOutcomeDetails = {
         adjudicatorName: {
           label: 'Name of adjudicator',
-          value: hearing.outcome?.adjudicator || null,
+          value: hearingItem.outcome?.adjudicator || null,
         },
         nextStep: {
           label: 'Next step',
-          value: convertHearingOutcomeCode(hearing.outcome?.code) || null,
+          value: convertHearingOutcomeCode(hearingItem.outcome?.code) || null,
         },
         plea: {
           label: 'Plea',
-          value: convertHearingOutcomePlea(hearing.outcome?.plea) || null,
+          value: convertHearingOutcomePlea(hearingItem.outcome?.plea) || null,
         },
         finding: {
           label: 'Finding',
-          value: convertHearingOutcomeFinding(hearing.outcome?.finding) || null,
+          value: convertHearingOutcomeFinding(hearingItem.outcome?.finding) || null,
         },
         adjournReason: {
           label: 'Reason',
-          value: convertHearingOutcomeAdjournReason(hearing.outcome?.reason) || null,
+          value: convertHearingOutcomeAdjournReason(hearingItem.outcome?.reason) || null,
         },
-        details: hearing.outcome?.details || null,
+        details: hearingItem.outcome?.details || null,
       }
-      if (hearing.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
+      if (hearingItem.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
       return hearingDetailsBasics
     })
   }
