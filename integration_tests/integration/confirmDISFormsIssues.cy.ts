@@ -150,6 +150,33 @@ context('Confirm DIS forms have been issued', () => {
         expect($data.get(5).innerText).to.not.contain('Add date and time')
       })
   })
+  it('should handle if the prisoner details cannot be found', () => {
+    const adjudicationResponse = [
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
+        dateTimeOfIncident: '2022-12-05T11:11:00',
+        issuingOfficer: 'TEST_GEN',
+        dateTimeOfIssue: '2022-12-05T15:00:00',
+      }),
+    ]
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetBatchPrisonerDetails', [])
+    cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
+    const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
+    confirmDISFormsIssued.noResultsMessage().should('not.exist')
+    confirmDISFormsIssued
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Unknown - G7234VB')
+        expect($data.get(1).innerText).to.contain('5 December 2022 - 11:11')
+        expect($data.get(2).innerText).to.contain('Unknown')
+        expect($data.get(3).innerText).to.contain('5 December 2022 - 15:00')
+        expect($data.get(4).innerText).to.contain('T. User')
+        expect($data.get(5).innerText).to.not.contain('Add date and time')
+      })
+  })
   it('should filter on the parameters given - dates only', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({

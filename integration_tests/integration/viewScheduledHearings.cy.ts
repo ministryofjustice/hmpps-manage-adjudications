@@ -214,4 +214,41 @@ context('View scheduled hearings', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
     })
   })
+  it('should handle if some prisoner information is missing', () => {
+    cy.task('stubGetHearingsGivenAgencyAndDate', {
+      hearingDate: moment().format('YYYY-MM-DD'),
+      response: { hearings: hearingsSetOne },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
+
+    cy.visit(adjudicationUrls.viewScheduledHearings.root)
+    const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
+    viewScheduledHearingsPage.forceHearingDate(5, 11, 2025)
+
+    viewScheduledHearingsPage
+      .hearingTable()
+      .find('th')
+      .then($headings => {
+        expect($headings.get(0).innerText).to.contain('Hearing date and time')
+        expect($headings.get(1).innerText).to.contain('Name and prison number')
+        expect($headings.get(2).innerText).to.contain('Discovery date and time')
+        expect($headings.get(3).innerText).to.contain('')
+        expect($headings.get(4).innerText).to.contain('')
+      })
+    viewScheduledHearingsPage
+      .hearingTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('5 November 2025 - 13:00')
+        expect($data.get(1).innerText).to.contain('Emmanuel Salgado - G6345BY')
+        expect($data.get(2).innerText).to.contain('3 November 2025 - 14:00')
+        expect($data.get(3).innerText).to.contain('View or edit hearing')
+        expect($data.get(4).innerText).to.contain('View report')
+        expect($data.get(5).innerText).to.contain('5 November 2025 - 14:00')
+        expect($data.get(6).innerText).to.contain('Unknown - P3785CP')
+        expect($data.get(7).innerText).to.contain('4 November 2025 - 09:00')
+        expect($data.get(8).innerText).to.contain('View or edit hearing')
+        expect($data.get(9).innerText).to.contain('View report')
+      })
+  })
 })

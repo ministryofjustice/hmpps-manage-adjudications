@@ -142,6 +142,68 @@ context('Print completed DIS forms', () => {
         expect($data.get(11).innerText).to.contain('Print DIS 1/2')
       })
   })
+  it('should handle if there is prisoner information missing', () => {
+    const adjudicationResponse = [
+      testData.reportedAdjudication({
+        adjudicationNumber: 12345,
+        prisonerNumber: 'G7234VB',
+        dateTimeOfIssue: '2022-12-05T15:00:00',
+        dateTimeOfFirstHearing: '2022-12-06T10:00:00',
+      }),
+      testData.reportedAdjudication({
+        adjudicationNumber: 23456,
+        prisonerNumber: 'P3785CP',
+        dateTimeOfFirstHearing: '2022-12-07T10:00:00',
+      }),
+    ]
+    cy.task('stubGetIssueDataHearingDate', {
+      response: { reportedAdjudications: adjudicationResponse },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
+    // First prisoner - G7234VB
+    cy.task('stubGetPrisonersAlerts', {
+      prisonerNumber: 'G7234VB',
+      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+    })
+    // Second prisoner - P3785CP
+    cy.task('stubGetPrisonersAlerts', {
+      prisonerNumber: 'P3785CP',
+      response: [],
+    })
+    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
+    printCompletedDISFormsPage
+      .resultsTable()
+      .find('th')
+      .then($headers => {
+        expect($headers.get(0).innerText).to.contain('Name and prison number')
+        expect($headers.get(1).innerText).to.contain('Hearing date and time')
+        expect($headers.get(2).innerText).to.contain('Prisoner location')
+        expect($headers.get(3).innerText).to.contain('Relevant alerts')
+        expect($headers.get(4).innerText).to.contain('Report issued')
+        expect($headers.get(5).innerText).to.contain('')
+      })
+    printCompletedDISFormsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Smith, James - G7234VB')
+        expect($data.get(1).innerText).to.contain('6 December 2022 - 10:00')
+        expect($data.get(2).innerText).to.contain('MDI-RECP')
+        expect($data.get(3).innerText).to.contain('ACCT OPEN')
+        expect($data.get(3).innerText).to.contain('PEEP')
+        expect($data.get(3).innerText).to.contain('CSIP')
+        expect($data.get(3).innerText).to.contain('PREGNANT')
+        expect($data.get(4).innerText).to.contain('Issued')
+        expect($data.get(5).innerText).to.contain('Print DIS 1/2')
+        expect($data.get(6).innerText).to.contain('Unknown - P3785CP')
+        expect($data.get(7).innerText).to.contain('7 December 2022 - 10:00')
+        expect($data.get(8).innerText).to.contain('Unknown')
+        expect($data.get(9).innerText).to.contain('-')
+        expect($data.get(10).innerText).to.contain('Not issued')
+        expect($data.get(11).innerText).to.contain('Print DIS 1/2')
+      })
+  })
   it('should filter on parameters given - no location', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({

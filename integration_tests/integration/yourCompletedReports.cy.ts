@@ -123,6 +123,49 @@ context('Your Completed Reports', () => {
       })
   })
 
+  it('Should deal with some prisoner information missing', () => {
+    // The empty results to return when first landing on your completed reports page.
+    cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: [] })
+    // The result to return when filtering for the dates we will enter in the date picker and status selected.
+    cy.task('stubGetYourReportedAdjudications', {
+      number: 0,
+      allContent: [
+        testData.reportedAdjudication({
+          adjudicationNumber: 1,
+          prisonerNumber: 'A1234AA',
+          dateTimeOfIncident: '2022-01-01T11:30:00',
+          status: ReportedAdjudicationStatus.UNSCHEDULED,
+        }),
+      ],
+      filter: { status: ReportedAdjudicationStatus.UNSCHEDULED, fromDate: '2022-01-01', toDate: '2022-01-09' },
+    })
+    cy.task('stubGetBatchPrisonerDetails', [])
+    cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
+    const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
+    yourCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
+    const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
+    filterAdjudication.forceFromDate(1, 1, 2022)
+    filterAdjudication.forceToDate(9, 1, 2022)
+    filterAdjudication.uncheckAllCheckboxes()
+    filterAdjudication.checkCheckboxWithValue('UNSCHEDULED')
+    filterAdjudication.applyButton().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
+      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
+    })
+    yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+    yourCompletedReportsPage.resultsTable().should('exist')
+    yourCompletedReportsPage
+      .resultsTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('1 January 2022 - 11:30')
+        expect($data.get(1).innerText).to.contain('Unknown - A1234AA')
+        expect($data.get(2).innerText).to.contain('Unscheduled')
+        expect($data.get(3).innerText).to.contain('View report')
+      })
+  })
+
   it('filtering and pagination should work together', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return testData.reportedAdjudication({
