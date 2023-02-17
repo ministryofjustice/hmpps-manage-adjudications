@@ -470,6 +470,15 @@ const adjudicationUrls = {
         `${adjudicationUrls.hearingReferralConfirmation.root}/${adjudicationNumber}`,
     },
   },
+  prosecution: {
+    root: '/prosecution',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.prosecution.root}/${adjudicationNumber}`,
+    },
+  },
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {

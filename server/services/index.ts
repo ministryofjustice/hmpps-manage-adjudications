@@ -12,6 +12,7 @@ import DamagesSessionService from './damagesSessionService'
 import EvidenceSessionService from './evidenceSessionService'
 import WitnessesSessionService from './witnessesSessionService'
 import HearingsService from './hearingsService'
+import OutcomesService from './outcomesService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
@@ -34,6 +35,7 @@ const decisionTreeService = new DecisionTreeService(
 )
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
+const outcomesService = new OutcomesService(hmppsAuthClient)
 
 export const services = {
   userService,
@@ -46,6 +48,7 @@ export const services = {
   evidenceSessionService,
   witnessesSessionService,
   hearingsService,
+  outcomesService,
 }
 
 export type Services = typeof services
