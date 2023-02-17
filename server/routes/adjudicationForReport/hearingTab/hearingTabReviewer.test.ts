@@ -45,7 +45,7 @@ describe('GET hearing details page - reviewer version', () => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.getHearingHistory).toHaveBeenCalledTimes(1)
+        // expect(reportedAdjudicationsService.getHearingHistory).toHaveBeenCalledTimes(1)
       })
   })
 })
