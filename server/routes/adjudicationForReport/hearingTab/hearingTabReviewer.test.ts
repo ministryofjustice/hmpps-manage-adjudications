@@ -21,6 +21,13 @@ let app: Express
 
 beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+    reportedAdjudication: testData.reportedAdjudication({
+      adjudicationNumber: 1524493,
+      prisonerNumber: 'G6415GD',
+      history: [],
+    }),
+  })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
 })
 
@@ -30,13 +37,6 @@ afterEach(() => {
 
 describe('GET hearing details page - reviewer version', () => {
   it('should load the hearing details page with no hearings on adjudication - status AWAITING_REVIEW', () => {
-    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-      reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
-        prisonerNumber: 'G6415GD',
-        history: [],
-      }),
-    })
     reportedAdjudicationsService.getHearingHistory.mockResolvedValue([])
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.review(1524493))

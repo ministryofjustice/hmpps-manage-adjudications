@@ -50,10 +50,7 @@ export default class HearingTabPage {
       user
     )
 
-    // console.log(reportedAdjudication)
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
-
-    // console.log(history)
 
     const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
 

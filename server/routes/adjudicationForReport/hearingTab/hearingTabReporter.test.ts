@@ -20,6 +20,13 @@ const userService = new UserService(null) as jest.Mocked<UserService>
 let app: Express
 
 beforeEach(() => {
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+    reportedAdjudication: testData.reportedAdjudication({
+      adjudicationNumber: 1524493,
+      prisonerNumber: 'G6415GD',
+      history: [],
+    }),
+  })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
 })
 
@@ -29,13 +36,6 @@ afterEach(() => {
 
 describe('GET hearing details page - reporter version', () => {
   it('should load the hearing details page with no history on adjudication - status AWAITING_REVIEW', () => {
-    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-      reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
-        prisonerNumber: 'G6415GD',
-        history: [],
-      }),
-    })
     reportedAdjudicationsService.getHearingHistory.mockResolvedValue([])
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.report(1524493))
