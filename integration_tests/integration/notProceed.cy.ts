@@ -54,7 +54,7 @@ context('Will this charge continue to prosecution?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Missing reason')
+          expect($error.get(0).innerText).to.contain('Select the reason for not proceeding')
         })
     })
     it('should show error if missing details', () => {
@@ -68,7 +68,7 @@ context('Will this charge continue to prosecution?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Missing details')
+          expect($error.get(0).innerText).to.contain('Enter more details')
         })
     })
   })

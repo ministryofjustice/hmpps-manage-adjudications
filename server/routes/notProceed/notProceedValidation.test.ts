@@ -18,7 +18,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#reason',
-      text: 'Missing reason',
+      text: 'Select the reason for not proceeding',
     })
   })
   it('shows error when no prosecution option selected', () => {
@@ -29,7 +29,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#details',
-      text: 'Missing details',
+      text: 'Enter more details',
     })
   })
 })

@@ -9,11 +9,11 @@ type NotProceedForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_REASON: {
     href: '#reason',
-    text: 'Missing reason',
+    text: 'Select the reason for not proceeding',
   },
   MISSING_DETAILS: {
     href: '#details',
-    text: 'Missing details',
+    text: 'Enter more details',
   },
 }
 
