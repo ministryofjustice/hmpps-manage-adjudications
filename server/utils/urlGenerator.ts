@@ -507,8 +507,8 @@ const adjudicationUrls = {
   reasonForNotProceeding: {
     root: '/reason-for-not-proceeding',
     matchers: {
-      start: ':/adjudicationNumber',
-      edit: ':/adjudicationNumber',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}`,
