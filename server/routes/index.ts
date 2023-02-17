@@ -46,6 +46,7 @@ import hearingReasonForReferralRoutes from './hearingOutcome/referCase'
 import hearingReferralConfirmationRoutes from './hearingOutcome/referralConfirmation'
 import hearingAdjournedRoutes from './hearingOutcome/adjourn'
 import hearingPleaAndFindingRoutes from './hearingOutcome/pleaAndFinding'
+import prosecutionRoutes from './prosecution'
 
 export default function routes(
   router: Router,
@@ -201,6 +202,8 @@ export default function routes(
 
   router.use(adjudicationUrls.hearingAdjourned.root, hearingAdjournedRoutes({ hearingsService, userService }))
   router.use(adjudicationUrls.hearingPleaAndFinding.root, hearingPleaAndFindingRoutes({ userService, hearingsService }))
+
+  router.use(adjudicationUrls.prosecution.root, prosecutionRoutes({ userService }))
 
   return router
 }
