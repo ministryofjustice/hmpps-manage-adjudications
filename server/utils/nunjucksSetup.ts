@@ -14,8 +14,13 @@ import {
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { PrintDISFormsUiFilter } from './adjudicationFilterHelper'
-import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../data/HearingResult'
-import { NextStep } from '../data/OutcomeResult'
+import {
+  HearingOutcomeAdjournReason,
+  HearingOutcomeCode,
+  HearingOutcomeFinding,
+  HearingOutcomePlea,
+} from '../data/HearingResult'
+import { NextStep, NotProceedReason } from '../data/OutcomeResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -235,4 +240,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
   njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
   njkEnv.addGlobal('NextStep', NextStep)
+  njkEnv.addGlobal('NotProceedReason', NotProceedReason)
+  njkEnv.addGlobal('HearingOutcomeAdjournReason', HearingOutcomeAdjournReason)
 }

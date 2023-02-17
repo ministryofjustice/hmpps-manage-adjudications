@@ -35,34 +35,34 @@
             classes: ''
         },
         items: [
-            {  value: "RELEASED",
+            {  value: NotProceedReason.RELEASED,
                text: "Prisoner released"      
             },
-            {  value: "WITNESS_RELEASED",
+            {  value: NotProceedReason.WITNESS_RELEASED,
                text: "Prisoner witness released"      
             },
-            {  value: "WITNESS_NOT_ATTEND",
+            {  value: NotProceedReason.WITNESS_NOT_ATTEND,
                text: "Non-prisoner material witness did not attend"      
             },
-            {  value: "UNFIT",
+            {  value: NotProceedReason.UNFIT,
                text: "Prisoner mentality or physically fit to attend"      
             },
-            {  value: "FLAWED",
+            {  value: NotProceedReason.FLAWED,
                text: "Flawed notice of report"      
             },
-            {  value: "EXPIRED_NOTICE",
+            {  value: NotProceedReason.EXPIRED_NOTICE,
                text: "Notice of report issued more than 48 hours after incident"      
             },
-            {  value: "EXPIRED_HEARING",
+            {  value: NotProceedReason.EXPIRED_HEARING,
                text: "Hearing open outside timeframe"      
             },
-            {  value: "NOT_FAIR",
+            {  value: NotProceedReason.NOT_FAIR,
                text: "Not fair to continue"      
             },
-            {  value: "PROSECUTED",
+            {  value: NotProceedReason.PROSECUTED,
                text: "Prisoner is being prosecuted for this offence"      
             },
-            {  value: "OTHER",
+            {  value: NotProceedReason.OTHER,
                text: "Other"      
             }
          ] | toSelect('value', 'text', null),
