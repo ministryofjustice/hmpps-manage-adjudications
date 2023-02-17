@@ -23,15 +23,15 @@
     errorMessage: "nextStepChosen" | findError(errors),
     fieldset: {
     legend: {
-        text: "What is the next step?",
-        isPageHeading: false    
+          text: "What is the next step?",
+          isPageHeading: false    
         }
-        },
+    },
     items: [
     {
         value: "schedule_hearing",
         text: "Schedule a hearing"
-        },
+    },
     {
         value: "not_proceed",
         text: "Not proceed with the charge" 
@@ -57,12 +57,17 @@
             attributes: { "data-qa": "radio-buttons-prosecution" },
             errorMessage: "prosecutionChosen" | findError(errors),
             items: [
-            {
-            value: "yes",	text: "Yes"
-            },
-            { value: "no",text: "No",
-            conditional: { html: nextStep }
-            }]
+                 {
+                 value: "yes",	
+                 text: "Yes"
+                 },
+                 { 
+                 value: "no",
+                 text: "No",
+                   conditional: { 
+                    html: nextStep 
+                    }
+                    }]
             }) }}
             {{ govukButton({
             text: 'Continue',
