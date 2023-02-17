@@ -340,4 +340,10 @@ export default class ManageAdjudicationsClient {
       data: { ...outcomeDetails },
     })
   }
+
+  async removeReferral(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/remove-referral`,
+    })
+  }
 }

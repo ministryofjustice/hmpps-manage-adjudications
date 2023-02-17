@@ -1,0 +1,102 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% set title = "What is the reason for not proceeding?" %}
+{% block pageTitle %}
+    {{ title }}
+{% endblock %}
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+    {% if errors | length %}
+        {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <div>
+        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+            {{ govukSelect({
+        id: 'notProceedReason',
+        name: 'notProceedReason',
+        label: {
+            text: 'Reason',
+            isPageHeading: false,
+            classes: ''
+        },
+        items: [
+            {  value: NotProceedReason.RELEASED,
+               text: "Prisoner released"      
+            },
+            {  value: NotProceedReason.WITNESS_RELEASED,
+               text: "Prisoner witness released"      
+            },
+            {  value: NotProceedReason.WITNESS_NOT_ATTEND,
+               text: "Non-prisoner material witness did not attend"      
+            },
+            {  value: NotProceedReason.UNFIT,
+               text: "Prisoner mentality or physically fit to attend"      
+            },
+            {  value: NotProceedReason.FLAWED,
+               text: "Flawed notice of report"      
+            },
+            {  value: NotProceedReason.EXPIRED_NOTICE,
+               text: "Notice of report issued more than 48 hours after incident"      
+            },
+            {  value: NotProceedReason.EXPIRED_HEARING,
+               text: "Hearing open outside timeframe"      
+            },
+            {  value: NotProceedReason.NOT_FAIR,
+               text: "Not fair to continue"      
+            },
+            {  value: NotProceedReason.PROSECUTED,
+               text: "Prisoner is being prosecuted for this offence"      
+            },
+            {  value: NotProceedReason.OTHER,
+               text: "Other"      
+            }
+         ] | toSelect('value', 'text', null),
+        classes: '',
+        errorMessage: 'notProceedReason' | findError(errors)
+    }) }}
+
+            {{ govukTextarea({
+      label: {
+        text: "Details"
+      },
+      classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
+      rows: "6",
+      id: "notProceedDetails",
+      name: "notProceedDetails",
+      attributes: {
+        'data-qa': "not-proceed-details"
+      },
+      errorMessage: "notProceedDetails" | findError(errors)
+    }) }}
+
+            {{ govukButton({
+		text: 'Save',
+		type: "submit",
+		classes: "govuk-button--submit govuk-!-margin-right-3",
+		attributes: { "data-qa": "not-proceed-submit" }
+	}) }}
+            {{ govukButton({
+		text: 'Cancel',
+		element: "a",
+		href: cancelHref,
+		classes: "govuk-button--secondary",
+		attributes: { "data-qa": "not-proceed-cancel" }
+	}) }}
+        </form>
+    </div>
+{% endblock %}
