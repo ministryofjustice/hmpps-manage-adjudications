@@ -14,6 +14,15 @@ context('Will this charge continue to prosecution?', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubCreateOutcome', {
+      adjudicationNumber: 100,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+        }),
+      },
+    })
     cy.signIn()
   })
   describe('Loads', () => {

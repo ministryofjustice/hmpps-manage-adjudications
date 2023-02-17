@@ -3,16 +3,18 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
+import OutcomesService from '../../services/outcomesService'
 
 jest.mock('../../services/userService')
-jest.mock('../../services/hearingsService')
+jest.mock('../../services/outcomesService')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
+const outcomesService = new OutcomesService(null) as jest.Mocked<OutcomesService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, outcomesService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 })
 
@@ -22,7 +24,7 @@ afterEach(() => {
 
 describe('GET /prosecution', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { userService }, {})
+    app = appWithAllRoutes({ production: false }, { userService, outcomesService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
@@ -56,5 +58,6 @@ describe('POST /prosecution', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .then(() => expect(outcomesService.createProsecution).toHaveBeenCalledWith(100, expect.anything()))
   })
 })

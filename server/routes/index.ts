@@ -61,6 +61,7 @@ export default function routes(
     evidenceSessionService,
     witnessesSessionService,
     hearingsService,
+    outcomesService,
   }: Services
 ): Router {
   router.use(
@@ -203,7 +204,7 @@ export default function routes(
   router.use(adjudicationUrls.hearingAdjourned.root, hearingAdjournedRoutes({ hearingsService, userService }))
   router.use(adjudicationUrls.hearingPleaAndFinding.root, hearingPleaAndFindingRoutes({ userService, hearingsService }))
 
-  router.use(adjudicationUrls.prosecution.root, prosecutionRoutes({ userService }))
+  router.use(adjudicationUrls.prosecution.root, prosecutionRoutes({ userService, outcomesService }))
 
   return router
 }

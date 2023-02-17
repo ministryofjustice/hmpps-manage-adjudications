@@ -4,11 +4,18 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
+import OutcomesService from '../../services/outcomesService'
 
-export default function prosecutionRoutes({ userService }: { userService: UserService }): Router {
+export default function prosecutionRoutes({
+  userService,
+  outcomesService,
+}: {
+  userService: UserService
+  outcomesService: OutcomesService
+}): Router {
   const router = express.Router()
 
-  const prosecutionRoute = new ProsecutionRoutes(userService)
+  const prosecutionRoute = new ProsecutionRoutes(userService, outcomesService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
