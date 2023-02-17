@@ -24,7 +24,7 @@ export default class HearingTabPage extends Page {
 
   hearingIndex = (index: number): PageElement => cy.get(`[data-qa="hearing-index-${index}"]`)
 
-  summaryTable = (): PageElement => cy.get('[data-qa="details-summary-table"]')
+  summaryTable = (index: number): PageElement => cy.get(`[data-qa="details-summary-table-${index}"]`)
 
   enterHearingOutcomeButton = (): PageElement => cy.get('[data-qa="enter-hearing-outcome-button"]')
 

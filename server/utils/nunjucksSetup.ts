@@ -235,4 +235,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
   njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
   njkEnv.addGlobal('NextStep', NextStep)
+
+  njkEnv.addGlobal('outcomesFlag', config.outcomeFeatureFlag)
 }

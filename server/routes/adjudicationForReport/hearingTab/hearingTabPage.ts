@@ -50,7 +50,10 @@ export default class HearingTabPage {
       user
     )
 
+    // console.log(reportedAdjudication)
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
+
+    // console.log(history)
 
     const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
 
@@ -65,7 +68,8 @@ export default class HearingTabPage {
       schedulingNotAvailable,
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
-      hearings: history,
+      history,
+      finalHistoryItem: history.length ? history[history.length - 1] : null,
       latestHearingId,
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),

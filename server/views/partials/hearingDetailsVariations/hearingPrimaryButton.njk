@@ -1,6 +1,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% if reviewStatus === ReportedAdjudicationStatus.ADJOURNED %}
+{% if finalHistoryItem.nextStep and finalHistoryItem.nextStep.value === 'Adjourn the hearing for another reason' %}
     {{ govukButton({
         text: 'Schedule another hearing',
         href: adjudicationUrls.scheduleHearing.urls.start(reportNo),
@@ -8,7 +8,9 @@
         name: "scheduleAnotherHearingButton",
         attributes: { "data-qa": "schedule-another-hearing-button" }
     }) }}
-{% elseif reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+{% endif %}
+
+{% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED and not finalHistoryItem.nextStep %}
     {{ govukButton({
         text: 'Enter the hearing outcome',
         href: adjudicationUrls.enterHearingOutcome.urls.start(reportNo,latestHearingId),
@@ -16,7 +18,18 @@
         name: "enterHearingOutcomeButton",
         attributes: { "data-qa": "enter-hearing-outcome-button" }
     }) }}
-{% elseif reviewStatus === ReportedAdjudicationStatus.REFER_POLICE %}
+{% endif %}
+
+{# 
+    if outcome/refer to po or hearing/outcome/refer to po - enter referral outcome
+    if hearing/outcome/refer to ia - continue to next step
+    if hearing/outcome/refer to ia with next step - no button
+    if complete - no button
+    if outcome - not proceed with - no button 
+#}
+
+{# TODO: Deal with these at later date #}
+{# {% if reviewStatus === ReportedAdjudicationStatus.REFER_POLICE %}
     {{ govukButton({
         text: 'Enter the referral outcome',
         href: '',
@@ -32,4 +45,4 @@
         name: "continueToNextStepButton",
         attributes: { "data-qa": "continue-next-step-button" }
     }) }}
-{% endif %}
+{% endif %} #}

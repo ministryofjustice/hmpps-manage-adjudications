@@ -34,8 +34,10 @@ describe('GET hearing details page - reviewer version', () => {
       reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 1524493,
         prisonerNumber: 'G6415GD',
+        history: [],
       }),
     })
+    reportedAdjudicationsService.getHearingHistory.mockResolvedValue([])
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.review(1524493))
       .expect('Content-Type', /html/)

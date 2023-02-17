@@ -49,7 +49,7 @@
       }
     ]
   } %}
-  {% set adjudicatorChangeLink = {
+  {# {% set adjudicatorChangeLink = {
     items: [
       {
         href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
@@ -58,8 +58,8 @@
         attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
       }
     ]
-  } %}
-  {% set nextStepChangeLink = {
+  } %} #}
+  {# {% set nextStepChangeLink = {
     items: [
       {
         href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
@@ -68,7 +68,7 @@
         attributes: {"data-qa": "change-link-hearing-outcome-next-step" }
       }
     ]
-  } %}
+  } %} #}
 {% endif %}
 
   {% set rows = [

@@ -3,6 +3,11 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
+import {
+  HearingOutcomeAdjournReason,
+  HearingOutcomeCode,
+  HearingOutcomePlea,
+} from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 
@@ -10,48 +15,69 @@ const hearingDateTimeOne = '2030-01-04T09:00:00'
 const hearingDateTimeOneFormatted = '4 January 2030 - 09:00'
 const hearingDateTimeTwo = '2030-01-06T10:00:00'
 const hearingDateTimeTwoFormatted = '6 January 2030 - 10:00'
-const hearingDateTimeThree = '2030-01-07T11:00:00'
-const hearingDateTimeThreeFormatted = '7 January 2030 - 11:00'
 
 const reportedAdjudicationResponse = (
   adjudicationNumber: number,
   status: ReportedAdjudicationStatus,
-  hearings = []
+  hearings = [],
+  history = []
 ) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
       hearings,
+      history,
       status,
     }),
   }
 }
 
-const singleHearing = [
-  testData.singleHearing({
-    dateTimeOfHearing: hearingDateTimeOne,
-    id: 987,
-    locationId: 123,
-  }),
-]
+const singleHearingNoOutcome = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeOne,
+  id: 987,
+  locationId: 123,
+})
 
-const secondHearing = testData.singleHearing({
+const hearingWithAdjournedOutcome = testData.singleHearing({
   dateTimeOfHearing: hearingDateTimeTwo,
   id: 988,
   locationId: 234,
   oicHearingType: OicHearingType.INAD_ADULT,
+  outcome: {
+    id: 123,
+    adjudicator: 'Judge Green',
+    code: HearingOutcomeCode.ADJOURN,
+    details: '123',
+    reason: HearingOutcomeAdjournReason.EVIDENCE,
+    plea: HearingOutcomePlea.NOT_ASKED,
+  },
 })
 
-const thirdHearing = testData.singleHearing({
-  dateTimeOfHearing: hearingDateTimeThree,
-  id: 989,
-  locationId: 234,
-})
+// const thirdHearing = testData.singleHearing({
+//   dateTimeOfHearing: hearingDateTimeThree,
+//   id: 989,
+//   locationId: 234,
+// })
 
-const hearingListAfterDeletion = [singleHearing[0], secondHearing]
+const twoHearings = [hearingWithAdjournedOutcome, singleHearingNoOutcome]
 
-const multipleHearings = [singleHearing[0], secondHearing, thirdHearing]
+// const multipleHearings = [hearingWithAdjournedOutcome, singleHearingNoOutcome, thirdHearing] // needs changing to be more like current data (old hearings need outcome)
+
+const historyWithOneHearing = [
+  {
+    hearing: singleHearingNoOutcome,
+  },
+]
+
+const historyWithTwoHearings = [
+  {
+    hearing: hearingWithAdjournedOutcome,
+  },
+  {
+    hearing: singleHearingNoOutcome,
+  },
+]
 
 context('Hearing details page', () => {
   beforeEach(() => {
@@ -108,11 +134,21 @@ context('Hearing details page', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524495,
-      response: reportedAdjudicationResponse(1524495, ReportedAdjudicationStatus.SCHEDULED, singleHearing),
+      response: reportedAdjudicationResponse(
+        1524495,
+        ReportedAdjudicationStatus.SCHEDULED,
+        [singleHearingNoOutcome],
+        historyWithOneHearing
+      ),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524496,
-      response: reportedAdjudicationResponse(1524496, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
+      response: reportedAdjudicationResponse(
+        1524496,
+        ReportedAdjudicationStatus.SCHEDULED,
+        twoHearings,
+        historyWithTwoHearings
+      ),
     })
     cy.signIn()
   })
@@ -140,12 +176,12 @@ context('Hearing details page', () => {
           hearingTabPage.schedulingUnavailableP2().should('exist')
           hearingTabPage.noHearingsScheduled().should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
-          hearingTabPage.summaryTable().should('not.exist')
+          hearingTabPage.summaryTable(1).should('not.exist')
         } else if (adj.id === 1524494) {
-          hearingTabPage.summaryTable().should('not.exist')
+          hearingTabPage.summaryTable(1).should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
         } else if (adj.id === 1524497) {
-          hearingTabPage.summaryTable().should('not.exist')
+          hearingTabPage.summaryTable(1).should('not.exist')
           hearingTabPage.noHearingsScheduled().should('exist')
           hearingTabPage.nextStepRadios().should('exist')
           hearingTabPage.nextStepConfirmationButton().should('exist')
@@ -154,19 +190,18 @@ context('Hearing details page', () => {
         } else if (adj.id === 1524495) {
           // SCHEDULED - single hearing
           hearingTabPage.hearingIndex(1).should('exist')
-          hearingTabPage.summaryTable().should('exist')
+          hearingTabPage.summaryTable(1).should('exist')
           hearingTabPage.enterHearingOutcomeButton().should('exist')
           hearingTabPage.cancelHearingButton(987).should('exist')
         } else {
           // SCHEDULED - multiple hearings
           hearingTabPage.hearingIndex(1).should('exist')
           hearingTabPage.hearingIndex(2).should('exist')
-          hearingTabPage.hearingIndex(3).should('exist')
-          hearingTabPage.summaryTable().should('exist')
+          hearingTabPage.summaryTable(1).should('exist')
+          hearingTabPage.summaryTable(2).should('exist')
           hearingTabPage.enterHearingOutcomeButton().should('exist')
-          hearingTabPage.cancelHearingButton(989).should('exist')
           hearingTabPage.cancelHearingButton(988).should('not.exist')
-          hearingTabPage.cancelHearingButton(987).should('not.exist')
+          hearingTabPage.cancelHearingButton(987).should('exist')
         }
       })
     })
@@ -256,7 +291,7 @@ context('Hearing details page', () => {
       hearingTabPage.reviewStatus().contains('Scheduled')
       hearingTabPage.hearingIndex(1).contains('Hearing 1')
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
@@ -264,7 +299,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
         })
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
@@ -275,7 +310,7 @@ context('Hearing details page', () => {
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
-    it('Adjudication SCHEDULED multiple hearings to show', () => {
+    it('Adjudication SCHEDULED multiple hearings to show - first adjourned, second has no outcome', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Scheduled')
@@ -283,30 +318,43 @@ context('Hearing details page', () => {
       hearingTabPage.hearingIndex(2).contains('Hearing 2')
       hearingTabPage.enterHearingOutcomeButton().should('have.length', 1)
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+          expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
+          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(5).innerText).to.contain('Reason')
+          expect($summaryLabels.get(6).innerText).to.contain('Plea')
         })
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('Judge Green')
+          expect($summaryData.get(4).innerText).to.contain('Adjourn the hearing for another reason')
+          expect($summaryData.get(5).innerText).to.contain('Further evidence needed\n\n123')
+          expect($summaryData.get(6).innerText).to.contain('Not asked')
+        })
+      hearingTabPage
+        .summaryTable(2)
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(4).innerText).to.contain('Adj 2')
-          expect($summaryData.get(5).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(7).innerText).to.contain('Change')
-          expect($summaryData.get(8).innerText).to.contain('Adj 2')
-          expect($summaryData.get(9).innerText).to.contain('Change')
-          expect($summaryData.get(10).innerText).to.contain('Governor')
-          expect($summaryData.get(11).innerText).to.contain('Change')
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
+          expect($summaryData.get(5).innerText).to.contain('Change')
         })
+      hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
+      hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
+      hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
     it('Adjudications SCHEDULED - goes to the correct page when you click a change link - single hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524495))
@@ -321,48 +369,70 @@ context('Hearing details page', () => {
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.changeLink().first().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524496, 989)) // should be the latest hearing
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.edit(1524496, 987)) // should be the latest hearing
       })
     })
     it('Successfully cancels the latest hearing', () => {
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
-        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
+        response: reportedAdjudicationResponse(
+          1524497,
+          ReportedAdjudicationStatus.SCHEDULED,
+          twoHearings,
+          historyWithTwoHearings
+        ),
       })
       cy.task('stubCancelHearing', {
         adjudicationNumber: 1524497,
-        hearingId: 989,
-        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
+        response: reportedAdjudicationResponse(
+          1524497,
+          ReportedAdjudicationStatus.SCHEDULED,
+          [hearingWithAdjournedOutcome],
+          [
+            {
+              hearing: hearingWithAdjournedOutcome,
+            },
+          ]
+        ),
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524497))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       cy.task('stubGetReportedAdjudication', {
         id: 1524497,
-        response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
+        response: reportedAdjudicationResponse(
+          1524497,
+          ReportedAdjudicationStatus.SCHEDULED,
+          [hearingWithAdjournedOutcome],
+          [
+            {
+              hearing: hearingWithAdjournedOutcome,
+            },
+          ]
+        ),
       })
-      hearingTabPage.cancelHearingButton(989).click()
+      hearingTabPage.cancelHearingButton(987).click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
       })
       const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingTab)
       hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
-      hearingDetailsPageAfterDeletion.hearingIndex(2).should('exist')
-      hearingDetailsPageAfterDeletion.hearingIndex(3).should('not.exist') // There were three hearings but now should only be two
-      hearingDetailsPageAfterDeletion.cancelHearingButton(989).should('not.exist') // The cancel button linked to the deleted hearing should not exist anymore
+      hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist')
+      hearingDetailsPageAfterDeletion.cancelHearingButton(987).should('not.exist') // The cancel button linked to the deleted hearing should not exist anymore
       hearingDetailsPageAfterDeletion.cancelHearingButton(988).should('exist') // The cancel button should now be linked to the latest hearing available
       hearingDetailsPageAfterDeletion
-        .summaryTable()
+        .summaryTable(1)
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(4).innerText).to.contain('Change')
-          expect($summaryData.get(5).innerText).to.contain('Adj 2')
-          expect($summaryData.get(6).innerText).to.contain('Change')
-          expect($summaryData.get(7).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Change')
+          expect($summaryData.get(6).innerText).to.contain('Judge Green')
+          expect($summaryData.get(7).innerText).to.contain('Adjourn the hearing for another reason')
+          expect($summaryData.get(8).innerText).to.contain('Further evidence needed\n\n123')
+          expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
     })
   })
@@ -382,17 +452,17 @@ context('Hearing details page', () => {
             hearingTabPage.schedulingUnavailableP2().should('exist')
             hearingTabPage.noHearingsScheduled().should('not.exist')
             hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
-            hearingTabPage.summaryTable().should('not.exist')
+            hearingTabPage.summaryTable(1).should('not.exist')
           } else if (adj.id === 1524494) {
             // ACCEPTED ADJUDICATION
             hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
             hearingTabPage.schedulingUnavailableP1().should('not.exist')
             hearingTabPage.schedulingUnavailableP2().should('not.exist')
-            hearingTabPage.summaryTable().should('not.exist')
+            hearingTabPage.summaryTable(1).should('not.exist')
           } else if (adj.id === 1524497) {
             // UNSCHEDULED ADJUDICATION
             hearingTabPage.noHearingsScheduled().should('exist')
-            hearingTabPage.summaryTable().should('not.exist')
+            hearingTabPage.summaryTable(1).should('not.exist')
             hearingTabPage.schedulingUnavailableP1().should('not.exist')
             hearingTabPage.schedulingUnavailableP2().should('not.exist')
             hearingTabPage.nextStepRadios().should('not.exist') // not available to reporters
@@ -435,14 +505,14 @@ context('Hearing details page', () => {
       hearingTabPage.reviewStatus().contains('Scheduled')
       hearingTabPage.hearingIndex(1).contains('Hearing 1')
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
           expect($summaryLabels.get(1).innerText).to.contain('Location')
         })
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
@@ -455,28 +525,37 @@ context('Hearing details page', () => {
       hearingTabPage.reviewStatus().contains('Scheduled')
       hearingTabPage.hearingIndex(1).contains('Hearing 1')
       hearingTabPage.hearingIndex(2).contains('Hearing 2')
-      hearingTabPage.hearingIndex(3).contains('Hearing 3')
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
         .find('dt')
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+          expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
+          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(5).innerText).to.contain('Reason')
+          expect($summaryLabels.get(6).innerText).to.contain('Plea')
         })
       hearingTabPage
-        .summaryTable()
+        .summaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('Judge Green')
+          expect($summaryData.get(4).innerText).to.contain('Adjourn the hearing for another reason')
+          expect($summaryData.get(5).innerText).to.contain('Further evidence needed\n\n123')
+          expect($summaryData.get(6).innerText).to.contain('Not asked')
+        })
+      hearingTabPage
+        .summaryTable(2)
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
           expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(4).innerText).to.contain('Adj 2')
-          expect($summaryData.get(5).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(6).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(7).innerText).to.contain('Adj 2')
-          expect($summaryData.get(8).innerText).to.contain('Governor')
         })
       hearingTabPage.changeLink().should('not.exist')
     })

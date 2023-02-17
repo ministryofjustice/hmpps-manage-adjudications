@@ -572,54 +572,61 @@ export default class ReportedAdjudicationsService {
     return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
   }
 
+  createHearingTableDisplay = (hearing: HearingDetailsHistory, locationNamesByIdMap: Map<number, string>) => {
+    const hearingItem = hearing.hearing
+    const hearingDetailsBasics = {
+      id: hearingItem.id,
+      dateTime: {
+        label: 'Date and time of hearing',
+        value: formatTimestampTo(hearingItem.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
+      },
+      location: {
+        label: 'Location',
+        value: locationNamesByIdMap.get(hearingItem.locationId),
+      },
+      type: {
+        label: 'Type of hearing',
+        value: this.convertOicHearingType(hearingItem.oicHearingType),
+      },
+    }
+    const hearingOutcomeDetails = {
+      adjudicatorName: {
+        label: 'Name of adjudicator',
+        value: hearingItem.outcome?.adjudicator || null,
+      },
+      nextStep: {
+        label: 'Next step',
+        value: convertHearingOutcomeCode(hearingItem.outcome?.code) || null,
+      },
+      plea: {
+        label: 'Plea',
+        value: convertHearingOutcomePlea(hearingItem.outcome?.plea) || null,
+      },
+      finding: {
+        label: 'Finding',
+        value: convertHearingOutcomeFinding(hearingItem.outcome?.finding) || null,
+      },
+      adjournReason: {
+        label: 'Reason',
+        value: convertHearingOutcomeAdjournReason(hearingItem.outcome?.reason) || null,
+      },
+      details: hearingItem.outcome?.details || null,
+    }
+    if (hearingItem.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
+    return hearingDetailsBasics
+  }
+
   async getHearingHistory(history: OutcomeHistory, user: User) {
     if (!history.length) return []
-    const hearings = history.filter((step: OutcomeDetailsHistory & HearingDetailsHistory) => !!step.hearing)
+    const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
-
-    return (hearings as { hearing: HearingDetails }[]).map(hearing => {
-      const hearingItem = hearing.hearing
-
-      const hearingDetailsBasics = {
-        id: hearingItem.id,
-        dateTime: {
-          label: 'Date and time of hearing',
-          value: formatTimestampTo(hearingItem.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
-        },
-        location: {
-          label: 'Location',
-          value: locationNamesByIdMap.get(hearingItem.locationId),
-        },
-        type: {
-          label: 'Type of hearing',
-          value: this.convertOicHearingType(hearingItem.oicHearingType),
-        },
-      }
-      const hearingOutcomeDetails = {
-        adjudicatorName: {
-          label: 'Name of adjudicator',
-          value: hearingItem.outcome?.adjudicator || null,
-        },
-        nextStep: {
-          label: 'Next step',
-          value: convertHearingOutcomeCode(hearingItem.outcome?.code) || null,
-        },
-        plea: {
-          label: 'Plea',
-          value: convertHearingOutcomePlea(hearingItem.outcome?.plea) || null,
-        },
-        finding: {
-          label: 'Finding',
-          value: convertHearingOutcomeFinding(hearingItem.outcome?.finding) || null,
-        },
-        adjournReason: {
-          label: 'Reason',
-          value: convertHearingOutcomeAdjournReason(hearingItem.outcome?.reason) || null,
-        },
-        details: hearingItem.outcome?.details || null,
-      }
-      if (hearingItem.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
-      return hearingDetailsBasics
+    return history.map(historyItem => {
+      // if it's a hearing, then create the hearing table display
+      // TODO: if there's a reason then we we'll need to pass over the outcome too potentially
+      // TODO: if theres a referral on the hearing we need to create a separate table which follows the hearing table
+      if (historyItem.hearing) return this.createHearingTableDisplay(historyItem, locationNamesByIdMap)
+      // TODO: Create a display for outcome without hearing - not proceed and refer to police
+      return historyItem
     })
   }
 
