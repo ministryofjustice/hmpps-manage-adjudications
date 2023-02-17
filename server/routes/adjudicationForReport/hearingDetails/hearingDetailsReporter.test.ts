@@ -25,7 +25,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe.skip('GET hearing details', () => {
+describe('GET hearing details', () => {
   it('should load the hearing details page - reporter version - no hearings', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValueOnce({
       reportedAdjudication: testData.reportedAdjudication({

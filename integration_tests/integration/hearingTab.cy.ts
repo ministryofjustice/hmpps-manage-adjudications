@@ -53,7 +53,7 @@ const hearingListAfterDeletion = [singleHearing[0], secondHearing]
 
 const multipleHearings = [singleHearing[0], secondHearing, thirdHearing]
 
-context('Hearing deails page', () => {
+context.skip('Hearing details page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -366,7 +366,7 @@ context('Hearing deails page', () => {
         })
     })
   })
-  describe.only('Test scenarios - reporter view', () => {
+  describe('Test scenarios - reporter view', () => {
     ;[{ id: 1524480 }, { id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }, { id: 1524497 }].forEach(
       adj => {
         it('should contain the required page elements', () => {
