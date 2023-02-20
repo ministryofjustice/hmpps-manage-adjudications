@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import OutcomesService from '../../../services/outcomesService'
 import UserService from '../../../services/userService'
-import ProsecutionPage from './prosecutionPage'
+import NextStepsPolicePage from './nextStepsPolicePage'
 
-export default class ProsecutionRoutes {
-  page: ProsecutionPage
+export default class NextStepsPoliceRoutes {
+  page: NextStepsPolicePage
 
   constructor(userService: UserService, outcomesService: OutcomesService) {
-    this.page = new ProsecutionPage(userService, outcomesService)
+    this.page = new NextStepsPolicePage(userService, outcomesService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

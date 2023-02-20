@@ -1,12 +1,12 @@
 import express, { RequestHandler, Router } from 'express'
-import ProsecutionRoutes from './prosecution'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import OutcomesService from '../../../services/outcomesService'
+import NextStepsPoliceRoutes from './nextStepsPolice'
 
-export default function prosecutionRoutes({
+export default function nextStepsPoliceRoutes({
   userService,
   outcomesService,
 }: {
@@ -15,13 +15,13 @@ export default function prosecutionRoutes({
 }): Router {
   const router = express.Router()
 
-  const prosecutionRoute = new ProsecutionRoutes(userService, outcomesService)
+  const nextStepPoliceRoute = new NextStepsPoliceRoutes(userService, outcomesService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.nextStepsPolice.matchers.start, prosecutionRoute.view)
-  post(adjudicationUrls.nextStepsPolice.matchers.start, prosecutionRoute.submit)
+  get(adjudicationUrls.nextStepsPolice.matchers.start, nextStepPoliceRoute.view)
+  post(adjudicationUrls.nextStepsPolice.matchers.start, nextStepPoliceRoute.submit)
 
   return router
 }

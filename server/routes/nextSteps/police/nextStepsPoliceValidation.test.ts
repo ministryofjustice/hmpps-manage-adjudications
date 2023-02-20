@@ -1,4 +1,4 @@
-import validateForm from './prosecutionValidation'
+import validateForm from './nextStepsPoliceValidation'
 
 describe('validateForm', () => {
   it('Valid submit has no errors if Yes to prosecution', () => {
