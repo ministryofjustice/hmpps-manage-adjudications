@@ -166,14 +166,14 @@ const stubGetUsersLocations = (response = []): SuperAgentRequest =>
     },
   })
 
-const stubGetPrisonersAlerts = ({ prisonerNumber, response = [] }): SuperAgentRequest =>
+const stubGetPrisonersAlerts = ({ prisonerNumber, response = [], status = 200 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
       url: `/prisonApi/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
     },
     response: {
-      status: 200,
+      status,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       jsonBody: response,
     },

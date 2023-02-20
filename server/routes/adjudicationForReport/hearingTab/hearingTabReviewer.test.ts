@@ -69,7 +69,7 @@ describe('POST cancel hearing', () => {
     ])
     return request(app)
       .post(adjudicationUrls.hearingDetails.urls.review(1524494))
-      .send({ removeHearingButton: 'remove-hearing-button' })
+      .send({ removeHearingButton: 'removeHearingButton' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, expect.anything())

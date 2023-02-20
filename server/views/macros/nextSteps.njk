@@ -1,0 +1,23 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% macro nextSteps(legend = {}) %}
+				{{ govukRadios({
+	idPrefix: 'nextStepChosen',
+	id: 'nextStepChosen',
+	name: 'nextStepChosen',
+    attributes: { "data-qa": "radio-buttons-next-step" },
+    errorMessage: "nextStepChosen" | findError(errors),
+    fieldset: {
+		legend: legend 
+	},
+	items: [
+	    {
+	    value: "schedule_hearing",
+	    text: "Schedule a hearing"
+	    },
+	    {
+	    value: "not_proceed",
+	    text: "Not proceed with the charge"
+		}]
+ }) }}
+{% endmacro %}

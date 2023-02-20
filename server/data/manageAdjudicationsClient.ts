@@ -31,6 +31,7 @@ import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { HearingDetails, HearingOutcomeDetails } from './HearingAndOutcomeResult'
+import { OutcomeDetails } from './OutcomeResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -323,6 +324,19 @@ export default class ManageAdjudicationsClient {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
       data: { ...hearingOutcomeDetails },
+    })
+  }
+
+  async createOutcome(adjudicationNumber: number, outcomeDetails: OutcomeDetails): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/outcome`,
+      data: { ...outcomeDetails },
+    })
+  }
+
+  async removeReferral(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/remove-referral`,
     })
   }
 }

@@ -28,7 +28,7 @@
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-   {{ govukSelect({
+    {{ govukSelect({
         id: 'adjournReason',
         name: 'adjournReason',
         label: {
@@ -37,34 +37,34 @@
             classes: ''
         },
         items: [
-            {  value: "LEGAL_ADVICE",
+            {  value: HearingOutcomeAdjournReason.LEGAL_ADVICE,
                text: "Request for legal advice approved"      
             },
-            {  value: "LEGAL_REPRESENTATION",
+            {  value: HearingOutcomeAdjournReason.LEGAL_REPRESENTATION,
                text: "Request for legal representation approved"      
             },
-            {  value: "RO_ATTEND",
+            {  value: HearingOutcomeAdjournReason.RO_ATTEND,
                text: "Adjourned so that reporting officer can attend"      
             },
-            {  value: "HELP",
+            {  value: HearingOutcomeAdjournReason.HELP,
                text: "Prisoner needs help, such as an interpreter or disability aid"      
             },
-            {  value: "UNFIT",
+            {  value: HearingOutcomeAdjournReason.UNFIT,
                text: "Prisoner unfit to proceed"      
             },
-            {  value: "WITNESS",
+            {  value: HearingOutcomeAdjournReason.WITNESS,
                text: "Request for witness approved"      
             },
-            {  value: "WITNESS_SUPPORT",
+            {  value: HearingOutcomeAdjournReason.WITNESS_SUPPORT,
                text: "Request for witness to support mitigation"      
             },
-            {  value: "MCKENZIE",
+            {  value: HearingOutcomeAdjournReason.MCKENZIE,
                text: "Request for McKenzie friend approved"      
             },
-            {  value: "EVIDENCE",
+            {  value: HearingOutcomeAdjournReason.EVIDENCE,
                text: "Further evidence needed"      
             },
-            {  value: "INVESTIGATION",
+            {  value: HearingOutcomeAdjournReason.INVESTIGATION,
                text: "Further investigation needed"      
             },
             {  value: "OTHER",
@@ -138,7 +138,9 @@
         classes: "govuk-button--submit govuk-!-margin-right-3",
         attributes: { "data-qa": "adjourn-submit" }
       }) }}
-      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="adjourn-cancel">Cancel</a></p>
+      <p class="govuk-body govuk-!-margin-top-1">
+        <a href="{{ cancelHref }}" class="govuk-link" data-qa="adjourn-cancel">Cancel</a>
+      </p>
     </div>
 
   </form>

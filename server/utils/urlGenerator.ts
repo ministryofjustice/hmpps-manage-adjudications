@@ -470,6 +470,24 @@ const adjudicationUrls = {
         `${adjudicationUrls.hearingReferralConfirmation.root}/${adjudicationNumber}`,
     },
   },
+  nextStepsPolice: {
+    root: '/next-steps/police',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsPolice.root}/${adjudicationNumber}`,
+    },
+  },
+  nextStepsInad: {
+    root: '/next-steps/inad',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsInad.root}/${adjudicationNumber}`,
+    },
+  },
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {
@@ -498,8 +516,8 @@ const adjudicationUrls = {
   reasonForNotProceeding: {
     root: '/reason-for-not-proceeding',
     matchers: {
-      start: ':/adjudicationNumber',
-      edit: ':/adjudicationNumber',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}`,

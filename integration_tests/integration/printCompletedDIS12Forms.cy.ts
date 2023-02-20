@@ -169,6 +169,7 @@ context('Print completed DIS forms', () => {
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'P3785CP',
       response: [],
+      status: 404,
     })
     cy.visit(adjudicationUrls.printCompletedDisForms.root)
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
