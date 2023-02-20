@@ -50,7 +50,7 @@ context('Will this charge continue to prosecution?', () => {
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
       nextStepsPolicePage.nextStepRadioButtons().should('exist')
       nextStepsPolicePage.nextStepRadioButtons().find('input[value="schedule_hearing"]').should('not.be.checked')
-      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="not_proceed"]').should('not.be.checked')
+      nextStepsPolicePage.nextStepRadioButtons().find('input[value="not_proceed"]').should('not.be.checked')
     })
   })
   describe('Validation', () => {

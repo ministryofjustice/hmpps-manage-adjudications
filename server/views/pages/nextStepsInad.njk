@@ -4,16 +4,14 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../macros/nextSteps.njk" import nextSteps %}
-{% set title = "Will this charge continue to prosecution?" %}
+{% set title = "What is the next step?" %}
 {% block pageTitle %}
 				{{ title }}
 {% endblock %}
 {% block beforeContent %}
 				{{ breadcrumb() }}
 {% endblock %}
-{% set nextStep %}
-{{ nextSteps({ text: "What is the next step?", isPageHeading: false }) }}
-{% endset -%}
+
 {% block content %}
 				{% if errors | length %}
 								{{ govukErrorSummary({
@@ -26,36 +24,22 @@
 				<div>
 								<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
 												<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-												{{ govukRadios({
-			idPrefix: 'prosecutionChosen',
-			id: 'prosecutionChosen',
-			name: 'prosecutionChosen',
-			attributes: { "data-qa": "radio-buttons-prosecution" },
-			errorMessage: "prosecutionChosen" | findError(errors),
-			items: [
-			{
-			    value: "yes",
-		     	text: "Yes"
-			},
-			{
-			    value: "no",
-			    text: "No",
-                conditional: { html: nextStep }        
-			}]
-			}) }}
+
+												{{ nextSteps() }}
+
 												{{ govukButton({
 					text: 'Continue',
 					type: "submit",
 					classes: "govuk-button--submit govuk-!-margin-right-3",
-					attributes: { "data-qa": "prosecution-submit" }
+					attributes: { "data-qa": "nextstep-inad-submit" }
 			}) }}
 												{{ govukButton({
 					text: 'Cancel',
 					element: "a",
 					href: cancelHref,
 					classes: "govuk-button--secondary",
-					attributes: { "data-qa": "prosecution-cancel" }
-				}) }}
+					attributes: { "data-qa": "nextstep-inad-cancel" }
+			}) }}
 								</form>
 				</div>
 {% endblock %}
