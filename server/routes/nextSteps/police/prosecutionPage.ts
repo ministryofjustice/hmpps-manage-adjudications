@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import { FormError } from '../../@types/template'
-import OutcomesService from '../../services/outcomesService'
+import { FormError } from '../../../@types/template'
+import OutcomesService from '../../../services/outcomesService'
 
-import UserService from '../../services/userService'
-import adjudicationUrls from '../../utils/urlGenerator'
-import { hasAnyRole } from '../../utils/utils'
+import UserService from '../../../services/userService'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './prosecutionValidation'
 
 export default class ProsecutionPage {

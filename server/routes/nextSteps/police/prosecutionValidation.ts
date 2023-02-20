@@ -1,4 +1,4 @@
-import { FormError } from '../../@types/template'
+import { FormError } from '../../../@types/template'
 
 type ProsecutionForm = {
   prosecutionChosen: string

@@ -470,13 +470,22 @@ const adjudicationUrls = {
         `${adjudicationUrls.hearingReferralConfirmation.root}/${adjudicationNumber}`,
     },
   },
-  prosecution: {
-    root: '/prosecution',
+  nextStepsPolice: {
+    root: '/next-steps/police',
     matchers: {
       start: '/:adjudicationNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.prosecution.root}/${adjudicationNumber}`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsPolice.root}/${adjudicationNumber}`,
+    },
+  },
+  nextStepsInad: {
+    root: '/next-steps/inad',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsInad.root}/${adjudicationNumber}`,
     },
   },
   moneyRecoveredForDamages: {

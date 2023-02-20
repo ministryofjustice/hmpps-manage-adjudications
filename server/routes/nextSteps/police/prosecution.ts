@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import OutcomesService from '../../services/outcomesService'
-import UserService from '../../services/userService'
+import OutcomesService from '../../../services/outcomesService'
+import UserService from '../../../services/userService'
 import ProsecutionPage from './prosecutionPage'
 
 export default class ProsecutionRoutes {
