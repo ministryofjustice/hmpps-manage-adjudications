@@ -1,19 +1,19 @@
 import { Request, Response } from 'express'
-import { FormError } from '../../@types/template'
-import OutcomesService from '../../services/outcomesService'
+import { FormError } from '../../../@types/template'
+import OutcomesService from '../../../services/outcomesService'
 
-import UserService from '../../services/userService'
-import adjudicationUrls from '../../utils/urlGenerator'
-import { hasAnyRole } from '../../utils/utils'
-import validateForm from './prosecutionValidation'
+import UserService from '../../../services/userService'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import { hasAnyRole } from '../../../utils/utils'
+import validateForm from './nextStepsPoliceValidation'
 
-export default class ProsecutionPage {
+export default class NextStepsPolicePage {
   constructor(private readonly userService: UserService, private readonly outcomesService: OutcomesService) {}
 
   private renderView = async (req: Request, res: Response, error: FormError | null): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
-    return res.render(`pages/prosecution.njk`, {
+    return res.render(`pages/nextStepsPolice.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
     })

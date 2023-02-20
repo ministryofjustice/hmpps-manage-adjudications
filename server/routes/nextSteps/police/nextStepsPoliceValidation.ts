@@ -1,6 +1,6 @@
-import { FormError } from '../../@types/template'
+import { FormError } from '../../../@types/template'
 
-type ProsecutionForm = {
+type NextStepsPoliceForm = {
   prosecutionChosen: string
   nextStepChosen: string
 }
@@ -16,7 +16,7 @@ const errors: { [key: string]: FormError } = {
   },
 }
 
-export default function validateForm({ prosecutionChosen, nextStepChosen }: ProsecutionForm): FormError | null {
+export default function validateForm({ prosecutionChosen, nextStepChosen }: NextStepsPoliceForm): FormError | null {
   if (!prosecutionChosen) {
     return errors.MISSING_PROSECUTION_CHOICE
   }
