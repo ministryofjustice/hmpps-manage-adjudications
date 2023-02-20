@@ -271,12 +271,13 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationDISFormFilter,
     filterUsingHearingDate = false
   ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
     const { reportedAdjudications } = response
     const prisonerNumbers = reportedAdjudications.map(_ => _.prisonerNumber)
 
     const prisonerDetails = new Map(
-      (await new PrisonApiClient(user.token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
+      (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
         prisonerDetail.offenderNo,
         prisonerDetail,
       ])
@@ -304,8 +305,9 @@ export default class ReportedAdjudicationsService {
   }
 
   async getAlerts(prisonerNumbers: string[], user: User): Promise<Map<string, Alert[]>> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const alertsForEachPrisoner = await Promise.all(
-      prisonerNumbers.map(prn => new PrisonApiClient(user.token).getAlertsForPrisoner(prn))
+      prisonerNumbers.map(prn => new PrisonApiClient(token).getAlertsForPrisoner(prn))
     )
     const alertMap = new Map(alertsForEachPrisoner.map(a => [a.prisonerNumber, a.alerts]))
     return alertMap
