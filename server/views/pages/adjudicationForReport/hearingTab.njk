@@ -42,14 +42,16 @@
     {% if not readOnly %}
       <div class="hearing-buttons">
         {% include "../../partials/hearingDetailsVariations/hearingPrimaryButton.njk" %}
-        {{ govukButton({
-          text: 'Remove this hearing',
-          type: "submit",
-          classes: "govuk-button--secondary",
-          name: "cancelHearingButton",
-          value: "cancelHearingButton-"+latestHearingId,
-          attributes: { "data-qa": "cancel-hearing-button-"+latestHearingId }
-        }) }}
+        {% if showRemoveHearingButton %}
+          {{ govukButton({
+            text: 'Remove this hearing',
+            type: "submit",
+            classes: "govuk-button--secondary",
+            name: "removeHearingButton",
+            value: "removeHearingButton",
+            attributes: { "data-qa": "remove-hearing-button" }
+          }) }}
+        {% endif %}
       </div>
     {% endif %}
 

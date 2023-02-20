@@ -45,7 +45,6 @@ describe('GET hearing details page - reviewer version', () => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
-        // expect(reportedAdjudicationsService.getHearingHistory).toHaveBeenCalledTimes(1)
       })
   })
 })
@@ -70,7 +69,7 @@ describe('POST cancel hearing', () => {
     ])
     return request(app)
       .post(adjudicationUrls.hearingDetails.urls.review(1524494))
-      .send({ cancelHearingButton: 'cancelHearingButton-101' })
+      .send({ removeHearingButton: 'remove-hearing-button' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, expect.anything())

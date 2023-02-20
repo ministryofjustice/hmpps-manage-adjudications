@@ -592,7 +592,7 @@ export default class ReportedAdjudicationsService {
     const hearingOutcomeDetails = {
       adjudicatorName: {
         label: 'Name of adjudicator',
-        value: hearingItem.outcome?.adjudicator || null,
+        value: getFormattedOfficerName(hearingItem.outcome?.adjudicator) || null,
       },
       nextStep: {
         label: 'Next step',

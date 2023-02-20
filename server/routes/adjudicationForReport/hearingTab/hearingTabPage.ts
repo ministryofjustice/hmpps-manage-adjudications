@@ -52,6 +52,10 @@ export default class HearingTabPage {
 
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
 
+    const finalHistoryItem = history.length ? history[history.length - 1] : null
+
+    const isFinalHistoryItemAHearing = finalHistoryItem && Object.keys(finalHistoryItem).includes('location')
+
     const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
 
     const latestHearingId = reportedAdjudication.hearings?.length
@@ -66,8 +70,9 @@ export default class HearingTabPage {
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
       history,
-      finalHistoryItem: history.length ? history[history.length - 1] : null,
+      finalHistoryItem,
       latestHearingId,
+      showRemoveHearingButton: isFinalHistoryItemAHearing,
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
@@ -78,8 +83,8 @@ export default class HearingTabPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { cancelHearingButton, nextStep } = req.body
-    if (cancelHearingButton) {
+    const { removeHearingButton, nextStep } = req.body
+    if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
     }
 
