@@ -71,12 +71,19 @@ export default class PrisonApiClient {
   }
 
   async getAlertsForPrisoner(prisonerNumber: string): Promise<PrisonerAlerts> {
-    const alerts = await this.restClient.get<Alert[]>({
-      path: `/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
-    })
+    const alerts = await this.restClient
+      .get<Alert[]>({
+        path: `/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
+      })
+      .catch(error => {
+        if (error.status === 404) {
+          logger.info(`No alerts available for prisonerNumber: ${prisonerNumber}`)
+        }
+      })
+
     return {
       prisonerNumber,
-      alerts,
+      alerts: alerts || [],
     }
   }
 
