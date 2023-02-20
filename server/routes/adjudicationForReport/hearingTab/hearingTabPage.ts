@@ -84,7 +84,7 @@ export default class HearingTabPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
     const { removeHearingButton, nextStep } = req.body
-    if (removeHearingButton) {
+    if (removeHearingButton === 'removeHearing') {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
     }
 
