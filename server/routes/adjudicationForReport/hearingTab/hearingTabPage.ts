@@ -52,14 +52,11 @@ export default class HearingTabPage {
 
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
 
-    const finalFormattedHistoryItem = history.length ? history[history.length - 1] : null
-
-    const isFinalHistoryItemAHearing =
-      finalFormattedHistoryItem && Object.keys(finalFormattedHistoryItem).includes('hearingTable')
-
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null
+
+    const readOnly = this.pageOptions.isReporter()
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
@@ -67,14 +64,16 @@ export default class HearingTabPage {
       reviewStatus: reportedAdjudication.status,
       schedulingNotAvailable: getSchedulingUnavailableStatuses(reportedAdjudication),
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
-      readOnly: this.pageOptions.isReporter(),
+      readOnly,
       history,
-      finalFormattedHistoryItem,
       latestHearingId,
-      showRemoveHearingButton: isFinalHistoryItemAHearing,
+      secondaryButtonInfo: this.reportedAdjudicationsService.getSecondaryButtonInfoForHearingDetails(
+        reportedAdjudication.history,
+        readOnly
+      ),
       primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
         reportedAdjudication.history,
-        this.pageOptions.isReporter(),
+        readOnly,
         adjudicationNumber
       ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),

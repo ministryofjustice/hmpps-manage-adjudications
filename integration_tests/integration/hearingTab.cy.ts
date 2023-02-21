@@ -184,6 +184,9 @@ context('Hearing details page', () => {
           hearingTabPage.noHearingsScheduled().should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
           hearingTabPage.summaryTable(1).should('not.exist')
+          hearingTabPage.removeHearingButton().should('not.exist')
+          hearingTabPage.nextStepConfirmationButton().should('not.exist')
+          hearingTabPage.enterHearingOutcomeButton().should('not.exist')
         } else if (adj.id === 1524494) {
           hearingTabPage.summaryTable(1).should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
@@ -246,6 +249,7 @@ context('Hearing details page', () => {
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Unscheduled')
       hearingTabPage.noHearingsScheduled().contains('No scheduled hearings.')
+      hearingTabPage.nextStepConfirmationButton().contains('Continue')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
       hearingTabPage.viewAllCompletedReportsLink().click()
@@ -313,6 +317,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(4).innerText).to.contain('Governor')
         })
       hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
+      hearingTabPage.removeHearingButton().should('exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
@@ -345,7 +350,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(8).innerText).to.contain('Further evidence needed\n\n123')
           expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
-      hearingTabPage.scheduleAnotherHearingButton().contains('Schedule another hearing')
+      hearingTabPage.scheduleAnotherHearingButton().should('exist')
       hearingTabPage.removeHearingButton().should('exist')
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
@@ -393,7 +398,8 @@ context('Hearing details page', () => {
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(5).innerText).to.contain('Change')
         })
-      hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
+      hearingTabPage.enterHearingOutcomeButton().should('exist')
+      hearingTabPage.removeHearingButton().should('exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
@@ -451,6 +457,8 @@ context('Hearing details page', () => {
           ]
         ),
       })
+      hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
+      hearingTabPage.enterHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
@@ -458,7 +466,7 @@ context('Hearing details page', () => {
       const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingTab)
       hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
       hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist')
-      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist') // The cancel button should now be linked to the latest hearing available
+      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist')
       hearingDetailsPageAfterDeletion
         .summaryTable(1)
         .find('dd')
@@ -474,6 +482,10 @@ context('Hearing details page', () => {
           expect($summaryData.get(8).innerText).to.contain('Further evidence needed\n\n123')
           expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
+      hearingDetailsPageAfterDeletion.summaryTable(2).should('not.exist')
+      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist')
+      hearingDetailsPageAfterDeletion.scheduleAnotherHearingButton().should('exist')
+      hearingDetailsPageAfterDeletion.enterHearingOutcomeButton().should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

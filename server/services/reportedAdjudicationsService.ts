@@ -814,26 +814,67 @@ export default class ReportedAdjudicationsService {
           qa: 'schedule-another-hearing-button',
         }
     }
-    if (
-      finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE &&
-      !finalHistoryItem.outcome.referralOutcome
-    ) {
-      return {
-        href: adjudicationUrls.nextStepsPolice.urls.start(adjudicationNumber),
-        text: 'Enter the referral outcome',
-        name: 'enterReferralOutcomeButton',
-        qa: 'enter-referral-outcome-button',
+    if (finalHistoryItem.outcome) {
+      if (
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE &&
+        !finalHistoryItem.outcome.referralOutcome
+      ) {
+        return {
+          href: adjudicationUrls.nextStepsPolice.urls.start(adjudicationNumber),
+          text: 'Enter the referral outcome',
+          name: 'enterReferralOutcomeButton',
+          qa: 'enter-referral-outcome-button',
+        }
       }
-    }
-    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD && !finalHistoryItem.outcome.referralOutcome) {
-      return {
-        href: adjudicationUrls.nextStepsInad.urls.start(adjudicationNumber),
-        text: 'Continue to next step',
-        name: 'continueToNextStepButton',
-        qa: 'continue-to-next-step-button',
+      if (
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD &&
+        !finalHistoryItem.outcome.referralOutcome
+      ) {
+        return {
+          href: adjudicationUrls.nextStepsInad.urls.start(adjudicationNumber),
+          text: 'Continue to next step',
+          name: 'continueToNextStepButton',
+          qa: 'continue-to-next-step-button',
+        }
       }
     }
     // No primary button
+    return null
+  }
+
+  getSecondaryButtonInfoForHearingDetails(history: OutcomeHistory, readOnly: boolean) {
+    if (!history.length || readOnly) return null
+    const finalHistoryItem = history[history.length - 1]
+    if (finalHistoryItem.outcome) {
+      if (finalHistoryItem.outcome.outcome.code === OutcomeCode.NOT_PROCEED) {
+        return {
+          text: 'Remove this outcome',
+          name: 'removeOutcomeButton',
+          value: 'removeOutcome',
+          qa: 'remove-outcome-button',
+        }
+      }
+      if (
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE ||
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD
+      ) {
+        return {
+          text: 'Remove this referral',
+          name: 'removeReferralButton',
+          value: 'removeReferral',
+          qa: 'remove-referral-button',
+        }
+      }
+    }
+    // Any other items that have hearing info but doesn't have an outcome or the outcome is complete/adjourned
+    if (finalHistoryItem.hearing) {
+      return {
+        text: 'Remove this hearing',
+        name: 'removeHearingButton',
+        value: 'removeHearing',
+        qa: 'remove-hearing-button',
+      }
+    }
     return null
   }
 }

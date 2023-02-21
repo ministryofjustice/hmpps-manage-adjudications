@@ -64,22 +64,20 @@
             attributes: { "data-qa": primaryButtonInfo.qa }
           }) }}
         {% endif %}
-        {% if showRemoveHearingButton %}
+        {% if secondaryButtonInfo %}
           {{ govukButton({
-            text: 'Remove this hearing',
+            text: secondaryButtonInfo.text,
             type: "submit",
             classes: "govuk-button--secondary",
-            name: "removeHearingButton",
-            value: "removeHearing",
-            attributes: { "data-qa": "remove-hearing-button" }
+            name: secondaryButtonInfo.name,
+            value: secondaryButtonInfo.value,
+            attributes: { "data-qa": secondaryButtonInfo.qa }
           }) }}
         {% endif %}
       </div>
     {% endif %}
-
     </form>
   {% endif %}
-
 
   {% if not readOnly %}
     {% include "../../partials/hearingDetailsVariations/returnLinks.njk" %}
