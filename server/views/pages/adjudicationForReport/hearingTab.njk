@@ -35,13 +35,21 @@
         {% set hearingNumber = hearingNumber + 1 %}
         {{ hearingTable(hearingNumber, item, readOnly, reportNo, latestHearingId) }}
       {% else %}
-       {# deal with the outcomes in here in another ticket #}
+       {{ item.outcome.code }}
       {% endif %}
     {% endfor %}
 
     {% if not readOnly %}
       <div class="hearing-buttons">
-        {% include "../../partials/hearingDetailsVariations/hearingPrimaryButton.njk" %}
+        {% if primaryButtonInfo %}
+          {{ govukButton({
+            text: primaryButtonInfo.text,
+            href: primaryButtonInfo.href,
+            classes: "govuk-button govuk-!-margin-right-3",
+            name: primaryButtonInfo.name,
+            attributes: { "data-qa": primaryButtonInfo.qa }
+          }) }}
+        {% endif %}
         {% if showRemoveHearingButton %}
           {{ govukButton({
             text: 'Remove this hearing',

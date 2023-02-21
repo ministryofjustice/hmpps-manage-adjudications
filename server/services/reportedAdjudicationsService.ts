@@ -47,9 +47,12 @@ import {
   convertHearingOutcomePlea,
   HearingDetails,
   HearingDetailsHistory,
+  HearingOutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
 } from '../data/HearingAndOutcomeResult'
+import adjudicationUrls from '../utils/urlGenerator'
+import { OutcomeCode } from '../data/OutcomeResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -628,7 +631,7 @@ export default class ReportedAdjudicationsService {
       // TODO: if theres a referral on the hearing we need to create a separate table which follows the hearing table
       if (historyItem.hearing) return this.createHearingTableDisplay(historyItem, locationNamesByIdMap)
       // TODO: Create a display for outcome without hearing - not proceed and refer to police
-      return historyItem
+      return historyItem.outcome
     })
   }
 
@@ -744,5 +747,48 @@ export default class ReportedAdjudicationsService {
 
   async issueDISForm(adjudicationNumber: number, dateTimeOfIssue: string, user: User) {
     return new ManageAdjudicationsClient(user.token).putDateTimeOfIssue(adjudicationNumber, dateTimeOfIssue)
+  }
+
+  getPrimaryButtonInfoForHearingDetails(
+    history: OutcomeHistory,
+    readOnly: boolean,
+    adjudicationNumber: number
+  ): { href: string; text: string; name: string; qa: string } | null {
+    if (!history.length || readOnly) return null
+    const finalHistoryItem = history[history.length - 1]
+    if (finalHistoryItem.hearing && !finalHistoryItem.outcome) {
+      if (!finalHistoryItem.hearing.outcome)
+        return {
+          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber, finalHistoryItem.hearing.id),
+          text: 'Enter the hearing outcome',
+          name: 'enterHearingOutcomeButton',
+          qa: 'enter-hearing-outcome-button',
+        }
+      if (finalHistoryItem.hearing.outcome.code === HearingOutcomeCode.ADJOURN)
+        return {
+          href: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
+          text: 'Schedule another hearing',
+          name: 'scheduleAnotherHearingButton',
+          qa: 'schedule-another-hearing-button',
+        }
+    }
+    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE) {
+      return {
+        href: adjudicationUrls.nextStepsPolice.urls.start(adjudicationNumber),
+        text: 'Enter the referral outcome',
+        name: 'enterReferralOutcomeButton',
+        qa: 'enter-referral-outcome-button',
+      }
+    }
+    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD) {
+      return {
+        href: adjudicationUrls.nextStepsInad.urls.start(adjudicationNumber),
+        text: 'Continue to next step',
+        name: 'continueToNextStepButton',
+        qa: 'continue-to-next-step-button',
+      }
+    }
+    // No primary button
+    return null
   }
 }

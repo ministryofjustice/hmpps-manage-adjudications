@@ -37,6 +37,8 @@ afterEach(() => {
 describe('GET hearing details page - reporter version', () => {
   it('should load the hearing details page with no history on adjudication - status AWAITING_REVIEW', () => {
     reportedAdjudicationsService.getHearingHistory.mockResolvedValue([])
+    reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails.mockResolvedValue(null as never)
+
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.report(1524493))
       .expect('Content-Type', /html/)

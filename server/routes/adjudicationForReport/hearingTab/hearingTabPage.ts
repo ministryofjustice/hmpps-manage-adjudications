@@ -52,11 +52,10 @@ export default class HearingTabPage {
 
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
 
-    const finalHistoryItem = history.length ? history[history.length - 1] : null
+    const finalFormattedHistoryItem = history.length ? history[history.length - 1] : null
 
-    const isFinalHistoryItemAHearing = finalHistoryItem && Object.keys(finalHistoryItem).includes('location')
-
-    const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
+    const isFinalHistoryItemAHearing =
+      finalFormattedHistoryItem && Object.keys(finalFormattedHistoryItem).includes('location')
 
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
@@ -66,13 +65,18 @@ export default class HearingTabPage {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudication.status,
-      schedulingNotAvailable,
+      schedulingNotAvailable: getSchedulingUnavailableStatuses(reportedAdjudication),
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
       history,
-      finalHistoryItem,
+      finalFormattedHistoryItem,
       latestHearingId,
       showRemoveHearingButton: isFinalHistoryItemAHearing,
+      primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
+        reportedAdjudication.history,
+        this.pageOptions.isReporter(),
+        adjudicationNumber
+      ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
