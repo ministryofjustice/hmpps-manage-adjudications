@@ -626,10 +626,13 @@ export default class ReportedAdjudicationsService {
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
     return history.map(historyItem => {
-      // if it's a hearing, then create the hearing table display
-      // TODO: if there's a reason then we we'll need to pass over the outcome too potentially
-      // TODO: if theres a referral on the hearing we need to create a separate table which follows the hearing table
-      if (historyItem.hearing) return this.createHearingTableDisplay(historyItem, locationNamesByIdMap)
+      if (historyItem.hearing) {
+        // Format the hearing data for the table
+        const hearingTable = this.createHearingTableDisplay(historyItem, locationNamesByIdMap)
+        // If there's a referral on the hearing, we need to create that table too and return them both
+        if (historyItem.outcome) return { hearingTable, referralTable: historyItem.outcome }
+        return { hearingTable }
+      }
       // TODO: Create a display for outcome without hearing - not proceed and refer to police
       return historyItem.outcome
     })

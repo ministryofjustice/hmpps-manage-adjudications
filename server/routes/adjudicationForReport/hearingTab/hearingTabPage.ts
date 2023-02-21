@@ -55,7 +55,7 @@ export default class HearingTabPage {
     const finalFormattedHistoryItem = history.length ? history[history.length - 1] : null
 
     const isFinalHistoryItemAHearing =
-      finalFormattedHistoryItem && Object.keys(finalFormattedHistoryItem).includes('location')
+      finalFormattedHistoryItem && Object.keys(finalFormattedHistoryItem).includes('hearingTable')
 
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
