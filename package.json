@@ -28,7 +28,7 @@
     "clean": "rm -rf dist build node_modules stylesheets"
   },
   "engines": {
-    "node": "^18.0.0",
+    "node": "^v18.14.1",
     "npm": "^9"
   },
   "jest": {
@@ -132,9 +132,9 @@
     "@types/http-errors": "^2.0.1",
     "@types/jest": "^29.4.0",
     "@types/jsonwebtoken": "^9.0.1",
-    "@types/node": "^18.13.0",
-    "@types/nunjucks": "^3.2.1",
-    "@types/passport": "^1.0.11",
+    "@types/node": "^18.14.0",
+    "@types/nunjucks": "^3.2.2",
+    "@types/passport": "^1.0.12",
     "@types/passport-oauth2": "^1.4.12",
     "@types/redis": "^2.8.32",
     "@types/superagent": "^4.1.16",
@@ -142,7 +142,7 @@
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "concurrently": "^7.6.0",
-    "cypress": "^12.5.1",
+    "cypress": "^12.6.0",
     "cypress-multi-reporters": "^1.6.2",
     "eslint": "^8.34.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -152,7 +152,7 @@
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
-    "jest": "^29.4.2",
+    "jest": "^29.4.3",
     "jest-html-reporter": "^3.7.0",
     "jest-junit": "^15.0.0",
     "jsonwebtoken": "^9.0.0",
@@ -161,7 +161,7 @@
     "nock": "^13.3.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.4",
-    "sass": "^1.58.1",
+    "sass": "^1.58.3",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
