@@ -23,17 +23,25 @@
     {% include "../../partials/hearingDetailsVariations/unscheduledState.njk" %}
   {% endif %}
 
-  {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
-  {# i.e. consider hearings table and referrals table as a block and repeat that #}
   {% if not schedulingNotAvailable  %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {% set hearingNumber = 0 %}
     {% for item in history %}
-      {#  If the history item has a location then it's a hearing rather than an outcome #}
-      {% if item.location %}
+      {% if item.hearingTable %}
         {% set hearingNumber = hearingNumber + 1 %}
-        {{ hearingTable(hearingNumber, item, readOnly, reportNo, latestHearingId) }}
+        {{ hearingTable(hearingNumber, item.hearingTable, readOnly, reportNo, latestHearingId) }}
+        {# Put table for police referral and inad referral here #}
+        {% if item.referralTable %}
+          <p class="govuk-body">Outcome code: {{ item.referralTable.outcome.code }}</p>
+          <p class="govuk-body">Outcome details: {{ item.referralTable.outcome.details }}</p>
+          {% if item.referralTable.referralOutcome %}
+            <p class="govuk-body">Referral outcome code: {{ item.referralTable.referralOutcome.code }}</p>
+            <p class="govuk-body">Referral outcome code: {{ item.referralTable.referralOutcome.details }}</p>
+            <p class="govuk-body">Referral outcome reason: {{ item.referralTable.referralOutcome.reason }}</p>
+          {% endif %}
+        {% endif %}
+
       {% else %}
        <p class="govuk-body">Outcome code: {{ item.outcome.code }}</p>
        {% if item.outcome.details %}
