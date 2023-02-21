@@ -772,7 +772,10 @@ export default class ReportedAdjudicationsService {
           qa: 'schedule-another-hearing-button',
         }
     }
-    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE) {
+    if (
+      finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE &&
+      !finalHistoryItem.outcome.referralOutcome
+    ) {
       return {
         href: adjudicationUrls.nextStepsPolice.urls.start(adjudicationNumber),
         text: 'Enter the referral outcome',
@@ -780,7 +783,7 @@ export default class ReportedAdjudicationsService {
         qa: 'enter-referral-outcome-button',
       }
     }
-    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD) {
+    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD && !finalHistoryItem.outcome.referralOutcome) {
       return {
         href: adjudicationUrls.nextStepsInad.urls.start(adjudicationNumber),
         text: 'Continue to next step',
