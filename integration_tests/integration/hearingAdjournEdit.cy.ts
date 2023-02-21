@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import HearingAdjourn from '../pages/hearingAdjourn'
-import { HearingOutcomeCode } from '../../server/data/HearingResult'
+import { HearingOutcomeCode } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 context('Adjourn the hearing', () => {
@@ -37,7 +37,6 @@ context('Adjourn the hearing', () => {
     })
     cy.task('stubUpdateHearingOutcome', {
       adjudicationNumber: 100,
-      hearingId: 1,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,

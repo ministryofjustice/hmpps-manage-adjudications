@@ -12,7 +12,6 @@ import {
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
-  HearingDetails,
   PrisonerGender,
   DraftAdjudication,
 } from './DraftAdjudicationResult'
@@ -31,7 +30,7 @@ import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { HearingOutcomeDetails } from './HearingResult'
+import { HearingDetails, HearingOutcomeDetails } from './HearingAndOutcomeResult'
 import { OutcomeDetails } from './OutcomeResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -337,22 +336,20 @@ export default class ManageAdjudicationsClient {
 
   async createHearingOutcome(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
       data: { ...hearingOutcomeDetails },
     })
   }
 
   async updateHearingOutcome(
     adjudicationNumber: number,
-    hearingId: number,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}/outcome`,
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
       data: { ...hearingOutcomeDetails },
     })
   }

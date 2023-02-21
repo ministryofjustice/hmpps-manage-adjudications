@@ -4,7 +4,6 @@ import { AlertFlags } from '../utils/alertHelper'
 import {
   DamageDetails,
   EvidenceDetails,
-  HearingDetails,
   IncidentDetails,
   IncidentRole,
   IncidentStatement,
@@ -13,6 +12,7 @@ import {
   WitnessDetails,
 } from './DraftAdjudicationResult'
 import { LocationId } from './PrisonLocationResult'
+import { HearingDetails, OutcomeHistory } from './HearingAndOutcomeResult'
 
 export type ReportedAdjudication = {
   adjudicationNumber: number
@@ -37,6 +37,7 @@ export type ReportedAdjudication = {
   issuingOfficer?: string
   dateTimeOfIssue?: string
   dateTimeOfFirstHearing?: string
+  history?: OutcomeHistory
 }
 
 export type ReportedAdjudicationResult = {

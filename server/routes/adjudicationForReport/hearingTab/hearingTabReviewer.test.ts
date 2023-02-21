@@ -21,6 +21,13 @@ let app: Express
 
 beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+    reportedAdjudication: testData.reportedAdjudication({
+      adjudicationNumber: 1524493,
+      prisonerNumber: 'G6415GD',
+      history: [],
+    }),
+  })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService }, {}, 'true')
 })
 
@@ -30,12 +37,8 @@ afterEach(() => {
 
 describe('GET hearing details page - reviewer version', () => {
   it('should load the hearing details page with no hearings on adjudication - status AWAITING_REVIEW', () => {
-    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-      reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
-        prisonerNumber: 'G6415GD',
-      }),
-    })
+    reportedAdjudicationsService.getHearingHistory.mockResolvedValue([])
+    reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails.mockResolvedValue(null as never)
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.review(1524493))
       .expect('Content-Type', /html/)
@@ -43,7 +46,6 @@ describe('GET hearing details page - reviewer version', () => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.getHearingDetails).toHaveBeenCalledTimes(1)
       })
   })
 })
@@ -68,7 +70,7 @@ describe('POST cancel hearing', () => {
     ])
     return request(app)
       .post(adjudicationUrls.hearingDetails.urls.review(1524494))
-      .send({ cancelHearingButton: 'cancelHearingButton-101' })
+      .send({ removeHearingButton: 'cancelHearingButton-101' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, expect.anything())

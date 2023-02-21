@@ -61,6 +61,10 @@ context('Schedule a hearing page', () => {
       adjudicationNumber: 1524494,
       response: reportedAdjudicationResponse(1524494, singleHearing),
     })
+    cy.task('stubScheduleHearing', {
+      adjudicationNumber: 1524494,
+      response: reportedAdjudicationResponse(1524494, singleHearing),
+    })
     cy.signIn()
   })
   it('should contain the required page elements', () => {

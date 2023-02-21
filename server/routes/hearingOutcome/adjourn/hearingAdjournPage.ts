@@ -9,7 +9,7 @@ import {
   HearingOutcomeCode,
   HearingOutcomeDetails,
   HearingOutcomePlea,
-} from '../../../data/HearingResult'
+} from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingAdjournValidation'
@@ -82,7 +82,6 @@ export default class HearingReasonForReferralPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
     const { adjudicatorName } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
@@ -101,7 +100,6 @@ export default class HearingReasonForReferralPage {
       if (isEdit) {
         await this.hearingsService.updateAdjourn(
           adjudicationNumber,
-          hearingId,
           HearingOutcomeCode.ADJOURN,
           adjudicatorName as string,
           adjournDetails,
@@ -112,7 +110,6 @@ export default class HearingReasonForReferralPage {
       } else {
         await this.hearingsService.createAdjourn(
           adjudicationNumber,
-          hearingId,
           HearingOutcomeCode.ADJOURN,
           adjudicatorName as string,
           adjournDetails,

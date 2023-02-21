@@ -1,4 +1,4 @@
-import { HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingResult'
+import { HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import validateForm from './pleaAndFindingValidation'
 
 describe('validateForm', () => {

@@ -30,4 +30,16 @@ export default class OutcomesService {
   async removeReferral(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).removeReferral(adjudicationNumber)
   }
+
+  async createPoliceReferral(
+    adjudicationNumber: number,
+    details: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const outcomeDetails = {
+      code: OutcomeCode.REFER_POLICE,
+      details,
+    }
+    return new ManageAdjudicationsClient(user.token).createOutcome(adjudicationNumber, outcomeDetails)
+  }
 }
