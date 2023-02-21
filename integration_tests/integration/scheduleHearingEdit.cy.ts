@@ -2,7 +2,7 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
