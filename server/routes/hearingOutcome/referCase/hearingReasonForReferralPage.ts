@@ -4,7 +4,7 @@ import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/HearingResult'
+import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingReasonForReferralValidation'
@@ -104,7 +104,6 @@ export default class HearingReasonForReferralPage {
       if (isEdit) {
         await this.hearingsService.updateReferral(
           adjudicationNumber,
-          hearingId,
           hearingOutcome as HearingOutcomeCode,
           adjudicatorName as string,
           referralReason,
@@ -113,7 +112,6 @@ export default class HearingReasonForReferralPage {
       } else {
         await this.hearingsService.createReferral(
           adjudicationNumber,
-          hearingId,
           hearingOutcome as HearingOutcomeCode,
           adjudicatorName as string,
           referralReason,

@@ -2,7 +2,11 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import HearingPleaAndFinding from '../pages/hearingPleaAndFinding'
 import TestData from '../../server/routes/testutils/testData'
-import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../server/data/HearingResult'
+import {
+  HearingOutcomeCode,
+  HearingOutcomeFinding,
+  HearingOutcomePlea,
+} from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 context('Plea and finding', () => {

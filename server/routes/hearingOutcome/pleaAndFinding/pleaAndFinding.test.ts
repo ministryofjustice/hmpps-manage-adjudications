@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingResult'
+import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -52,7 +52,6 @@ describe('POST /hearing-plea-finding', () => {
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.COMPLETE,
           'Judge Red',
           HearingOutcomePlea.GUILTY,
@@ -78,7 +77,6 @@ describe('POST /hearing-plea-finding', () => {
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.COMPLETE,
           'Judge Red',
           HearingOutcomePlea.GUILTY,
@@ -104,7 +102,6 @@ describe('POST /hearing-plea-finding', () => {
       .then(() =>
         expect(hearingsService.postHearingPleaAndFinding).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.COMPLETE,
           'Judge Red',
           HearingOutcomePlea.GUILTY,

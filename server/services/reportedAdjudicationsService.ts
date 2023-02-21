@@ -34,13 +34,25 @@ import {
   DamageDetails,
   EvidenceDetails,
   WitnessDetails,
-  HearingDetails,
 } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
 import { ReviewStatus } from '../routes/adjudicationForReport/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { Alert, alertFlagLabels, AlertFlags } from '../utils/alertHelper'
+import {
+  convertHearingOutcomeAdjournReason,
+  convertHearingOutcomeCode,
+  convertHearingOutcomeFinding,
+  convertHearingOutcomePlea,
+  HearingDetails,
+  HearingDetailsHistory,
+  HearingOutcomeCode,
+  OutcomeDetailsHistory,
+  OutcomeHistory,
+} from '../data/HearingAndOutcomeResult'
+import adjudicationUrls from '../utils/urlGenerator'
+import { OutcomeCode } from '../data/OutcomeResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -536,6 +548,7 @@ export default class ReportedAdjudicationsService {
       )) || []
 
     const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+
     return hearings.map(hearing => {
       return {
         id: hearing.id,
@@ -555,6 +568,73 @@ export default class ReportedAdjudicationsService {
     })
   }
 
+  getHearingLocationMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<number, string>> => {
+    const hearingLocationIds = hearings.map(hearing => hearing.hearing.locationId)
+    const locationNamesAndIds =
+      (await Promise.all(
+        [...hearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+      )) || []
+    return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+  }
+
+  createHearingTableDisplay = (hearing: HearingDetailsHistory, locationNamesByIdMap: Map<number, string>) => {
+    const hearingItem = hearing.hearing
+    const hearingDetailsBasics = {
+      id: hearingItem.id,
+      dateTime: {
+        label: 'Date and time of hearing',
+        value: formatTimestampTo(hearingItem.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
+      },
+      location: {
+        label: 'Location',
+        value: locationNamesByIdMap.get(hearingItem.locationId),
+      },
+      type: {
+        label: 'Type of hearing',
+        value: this.convertOicHearingType(hearingItem.oicHearingType),
+      },
+    }
+    const hearingOutcomeDetails = {
+      adjudicatorName: {
+        label: 'Name of adjudicator',
+        value: getFormattedOfficerName(hearingItem.outcome?.adjudicator) || null,
+      },
+      nextStep: {
+        label: 'Next step',
+        value: convertHearingOutcomeCode(hearingItem.outcome?.code) || null,
+      },
+      plea: {
+        label: 'Plea',
+        value: convertHearingOutcomePlea(hearingItem.outcome?.plea) || null,
+      },
+      finding: {
+        label: 'Finding',
+        value: convertHearingOutcomeFinding(hearingItem.outcome?.finding) || null,
+      },
+      adjournReason: {
+        label: 'Reason',
+        value: convertHearingOutcomeAdjournReason(hearingItem.outcome?.reason) || null,
+      },
+      details: hearingItem.outcome?.details || null,
+    }
+    if (hearingItem.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
+    return hearingDetailsBasics
+  }
+
+  async getHearingHistory(history: OutcomeHistory, user: User) {
+    if (!history.length) return []
+    const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
+    const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
+    return history.map(historyItem => {
+      // if it's a hearing, then create the hearing table display
+      // TODO: if there's a reason then we we'll need to pass over the outcome too potentially
+      // TODO: if theres a referral on the hearing we need to create a separate table which follows the hearing table
+      if (historyItem.hearing) return this.createHearingTableDisplay(historyItem, locationNamesByIdMap)
+      // TODO: Create a display for outcome without hearing - not proceed and refer to police
+      return historyItem.outcome
+    })
+  }
+
   convertOicHearingType(hearingType: string): string {
     if (!hearingType) return null
     const hearingTypeSplit = hearingType.split('_')
@@ -562,12 +642,8 @@ export default class ReportedAdjudicationsService {
     return 'Independent Adjudicator'
   }
 
-  async deleteHearing(
-    adjudicationNumber: number,
-    hearingIdToCancel: number,
-    user: User
-  ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
+  async deleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber)
   }
 
   async scheduleHearing(
@@ -587,7 +663,6 @@ export default class ReportedAdjudicationsService {
 
   async rescheduleHearing(
     adjudicationNumber: number,
-    hearingId: number,
     locationId: number,
     dateTimeOfHearing: string,
     oicHearingType: string,
@@ -598,7 +673,7 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
+    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, dataToSend)
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {
@@ -672,5 +747,51 @@ export default class ReportedAdjudicationsService {
 
   async issueDISForm(adjudicationNumber: number, dateTimeOfIssue: string, user: User) {
     return new ManageAdjudicationsClient(user.token).putDateTimeOfIssue(adjudicationNumber, dateTimeOfIssue)
+  }
+
+  getPrimaryButtonInfoForHearingDetails(
+    history: OutcomeHistory,
+    readOnly: boolean,
+    adjudicationNumber: number
+  ): { href: string; text: string; name: string; qa: string } | null {
+    if (!history.length || readOnly) return null
+    const finalHistoryItem = history[history.length - 1]
+    if (finalHistoryItem.hearing && !finalHistoryItem.outcome) {
+      if (!finalHistoryItem.hearing.outcome)
+        return {
+          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber, finalHistoryItem.hearing.id),
+          text: 'Enter the hearing outcome',
+          name: 'enterHearingOutcomeButton',
+          qa: 'enter-hearing-outcome-button',
+        }
+      if (finalHistoryItem.hearing.outcome.code === HearingOutcomeCode.ADJOURN)
+        return {
+          href: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
+          text: 'Schedule another hearing',
+          name: 'scheduleAnotherHearingButton',
+          qa: 'schedule-another-hearing-button',
+        }
+    }
+    if (
+      finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE &&
+      !finalHistoryItem.outcome.referralOutcome
+    ) {
+      return {
+        href: adjudicationUrls.nextStepsPolice.urls.start(adjudicationNumber),
+        text: 'Enter the referral outcome',
+        name: 'enterReferralOutcomeButton',
+        qa: 'enter-referral-outcome-button',
+      }
+    }
+    if (finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD && !finalHistoryItem.outcome.referralOutcome) {
+      return {
+        href: adjudicationUrls.nextStepsInad.urls.start(adjudicationNumber),
+        text: 'Continue to next step',
+        name: 'continueToNextStepButton',
+        qa: 'continue-to-next-step-button',
+      }
+    }
+    // No primary button
+    return null
   }
 }

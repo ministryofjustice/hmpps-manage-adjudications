@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeCode } from '../../../data/HearingResult'
+import { HearingOutcomeCode } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -66,7 +66,6 @@ describe('POST /reason-for-referral', () => {
       .then(() =>
         expect(hearingsService.createReferral).toHaveBeenCalledWith(
           100,
-          1,
           HearingOutcomeCode.REFER_POLICE,
           'Roxanne Red',
           '123',

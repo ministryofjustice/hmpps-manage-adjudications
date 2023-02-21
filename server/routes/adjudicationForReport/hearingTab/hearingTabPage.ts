@@ -50,12 +50,12 @@ export default class HearingTabPage {
       user
     )
 
-    const hearingSummary = await this.reportedAdjudicationsService.getHearingDetails(
-      reportedAdjudication.hearings,
-      user
-    )
+    const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
 
-    const schedulingNotAvailable = getSchedulingUnavailableStatuses(reportedAdjudication)
+    const finalFormattedHistoryItem = history.length ? history[history.length - 1] : null
+
+    const isFinalHistoryItemAHearing =
+      finalFormattedHistoryItem && Object.keys(finalFormattedHistoryItem).includes('location')
 
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
@@ -65,11 +65,18 @@ export default class HearingTabPage {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudication.status,
-      schedulingNotAvailable,
+      schedulingNotAvailable: getSchedulingUnavailableStatuses(reportedAdjudication),
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
       readOnly: this.pageOptions.isReporter(),
-      hearings: hearingSummary,
+      history,
+      finalFormattedHistoryItem,
       latestHearingId,
+      showRemoveHearingButton: isFinalHistoryItemAHearing,
+      primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
+        reportedAdjudication.history,
+        this.pageOptions.isReporter(),
+        adjudicationNumber
+      ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
@@ -80,10 +87,9 @@ export default class HearingTabPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { cancelHearingButton, nextStep } = req.body
-    if (cancelHearingButton) {
-      const hearingIdToCancel = Number(cancelHearingButton.split('-')[1])
-      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, hearingIdToCancel, user)
+    const { removeHearingButton, nextStep } = req.body
+    if (removeHearingButton) {
+      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
     }
 
     if (nextStep) {

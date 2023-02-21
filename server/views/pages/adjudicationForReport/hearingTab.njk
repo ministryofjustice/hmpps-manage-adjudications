@@ -23,34 +23,49 @@
     {% include "../../partials/hearingDetailsVariations/unscheduledState.njk" %}
   {% endif %}
 
-  {# TODO: This conditional will need to change when we consider the other statuses #}
   {# Insert the referrals table macro at the bottom of the hearings table macro OR before the endfor below? #}
   {# i.e. consider hearings table and referrals table as a block and repeat that #}
-  {% if reviewStatus === ReportedAdjudicationStatus.SCHEDULED %}
+  {% if not schedulingNotAvailable  %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    {% for hearing in hearings %}
-      {% set hearingNumber = loop.index %}
-      {{ hearingTable(hearingNumber, hearing, readOnly, reportNo, latestHearingId) }}
+    {% set hearingNumber = 0 %}
+    {% for item in history %}
+      {#  If the history item has a location then it's a hearing rather than an outcome #}
+      {% if item.location %}
+        {% set hearingNumber = hearingNumber + 1 %}
+        {{ hearingTable(hearingNumber, item, readOnly, reportNo, latestHearingId) }}
+      {% else %}
+       <p class="govuk-body">Outcome code: {{ item.outcome.code }}</p>
+       {% if item.outcome.details %}
+       <p class="govuk-body">details: {{ item.outcome.details }}</p>
+       {% endif %}
+       {% if item.referralOutcome %}
+       <p class="govuk-body">Referral outcome code: {{ item.referralOutcome.code }}</p>
+       {% endif %}
+      {% endif %}
     {% endfor %}
 
     {% if not readOnly %}
       <div class="hearing-buttons">
-        {{ govukButton({
-          text: 'Enter the hearing outcome',
-          href: adjudicationUrls.enterHearingOutcome.urls.start(reportNo,latestHearingId),
-          classes: "govuk-button govuk-!-margin-right-3",
-          name: "enterHearingOutcomeButton",
-          attributes: { "data-qa": "enter-hearing-outcome-button" }
-        }) }}
-        {{ govukButton({
-          text: 'Remove this hearing',
-          type: "submit",
-          classes: "govuk-button--secondary",
-          name: "cancelHearingButton",
-          value: "cancelHearingButton-"+latestHearingId,
-          attributes: { "data-qa": "cancel-hearing-button-"+latestHearingId }
-        }) }}
+        {% if primaryButtonInfo %}
+          {{ govukButton({
+            text: primaryButtonInfo.text,
+            href: primaryButtonInfo.href,
+            classes: "govuk-button govuk-!-margin-right-3",
+            name: primaryButtonInfo.name,
+            attributes: { "data-qa": primaryButtonInfo.qa }
+          }) }}
+        {% endif %}
+        {% if showRemoveHearingButton %}
+          {{ govukButton({
+            text: 'Remove this hearing',
+            type: "submit",
+            classes: "govuk-button--secondary",
+            name: "removeHearingButton",
+            value: "removeHearing",
+            attributes: { "data-qa": "remove-hearing-button" }
+          }) }}
+        {% endif %}
       </div>
     {% endif %}
 

@@ -49,6 +49,7 @@ import hearingPleaAndFindingRoutes from './hearingOutcome/pleaAndFinding'
 import nextStepPoliceRoutes from './nextSteps/police'
 import notProceedRoutes from './notProceed'
 import nextStepInadRoutes from './nextSteps/inad'
+import policeReasonForReferralRoutes from './hearingOutcome/referCase/policeReferral'
 
 export default function routes(
   router: Router,
@@ -200,6 +201,8 @@ export default function routes(
     adjudicationUrls.hearingReasonForReferral.root,
     hearingReasonForReferralRoutes({ hearingsService, userService })
   )
+
+  router.use(adjudicationUrls.reasonForReferral.root, policeReasonForReferralRoutes({ outcomesService, userService }))
 
   router.use(adjudicationUrls.hearingReferralConfirmation.root, hearingReferralConfirmationRoutes({ userService }))
 

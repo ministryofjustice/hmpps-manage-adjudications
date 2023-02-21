@@ -16,6 +16,8 @@ export default class HearingTabPage extends Page {
 
   noHearingsScheduled = (): PageElement => cy.get('[data-qa="no-scheduled-hearings"]')
 
+  nextStepRadioLegend = (): PageElement => cy.get('.govuk-fieldset__legend')
+
   nextStepRadios = (): PageElement => cy.get('[data-qa="next-step-radios"]')
 
   nextStepConfirmationButton = (): PageElement => cy.get('[data-qa="next-step-continue"]')
@@ -24,13 +26,17 @@ export default class HearingTabPage extends Page {
 
   hearingIndex = (index: number): PageElement => cy.get(`[data-qa="hearing-index-${index}"]`)
 
-  summaryTable = (): PageElement => cy.get('[data-qa="details-summary-table"]')
+  summaryTable = (index: number): PageElement => cy.get(`[data-qa="details-summary-table-${index}"]`)
 
   enterHearingOutcomeButton = (): PageElement => cy.get('[data-qa="enter-hearing-outcome-button"]')
 
-  cancelHearingButton = (hearingId: number): PageElement => cy.get(`[data-qa="cancel-hearing-button-${hearingId}"`)
+  removeHearingButton = (): PageElement => cy.get('[data-qa="remove-hearing-button"')
 
   changeLink = (): PageElement => cy.get('[data-qa="change-link"')
+
+  // Adjourned state
+
+  scheduleAnotherHearingButton = (): PageElement => cy.get('[data-qa="schedule-another-hearing-button"]')
 
   // All
 
@@ -39,4 +45,6 @@ export default class HearingTabPage extends Page {
   viewAllCompletedReportsLink = (): PageElement => cy.get('[data-qa="all-completed-reports-link"]')
 
   reviewStatus = (): PageElement => cy.get('[data-qa="review-status"]')
+
+  hearingTabName = (): PageElement => cy.get('[data-qa="hearingsTab"]')
 }

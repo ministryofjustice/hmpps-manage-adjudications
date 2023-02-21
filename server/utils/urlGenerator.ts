@@ -442,9 +442,8 @@ const adjudicationUrls = {
       edit: '/:adjudicationNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}/edit`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForReferral.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.reasonForReferral.root}/${adjudicationNumber}/edit`,
     },
   },
   hearingAdjourned: {
