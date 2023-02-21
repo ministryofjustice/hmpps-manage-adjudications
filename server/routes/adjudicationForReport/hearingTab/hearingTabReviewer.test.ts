@@ -21,7 +21,7 @@ let app: Express
 
 beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService }, {}, 'true')
 })
 
 afterEach(() => {
@@ -71,7 +71,7 @@ describe('POST cancel hearing', () => {
       .send({ cancelHearingButton: 'cancelHearingButton-101' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, 101, expect.anything())
+        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, expect.anything())
       })
   })
 })

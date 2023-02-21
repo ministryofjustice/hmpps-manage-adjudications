@@ -60,7 +60,8 @@ export default class scheduleHearingRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly outcomesActive: boolean
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -95,8 +96,26 @@ export default class scheduleHearingRoutes {
     const hearingDetailsToSave = postValues.hearingDetails
     try {
       const isYOI = await this.getYoiInfo(adjudicationNumber, user)
-      if (this.pageOptions.isEdit()) {
-        await this.reportedAdjudicationsService.rescheduleHearing(
+      if (this.outcomesActive) {
+        if (this.pageOptions.isEdit()) {
+          await this.reportedAdjudicationsService.rescheduleHearing(
+            adjudicationNumber,
+            hearingDetailsToSave.locationId,
+            formatDate(hearingDetailsToSave.hearingDate),
+            getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
+            user
+          )
+        } else {
+          await this.reportedAdjudicationsService.scheduleHearing(
+            adjudicationNumber,
+            hearingDetailsToSave.locationId,
+            formatDate(hearingDetailsToSave.hearingDate),
+            getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
+            user
+          )
+        }
+      } else if (this.pageOptions.isEdit()) {
+        await this.reportedAdjudicationsService.rescheduleHearingV1(
           adjudicationNumber,
           hearingId,
           hearingDetailsToSave.locationId,
@@ -105,7 +124,7 @@ export default class scheduleHearingRoutes {
           user
         )
       } else {
-        await this.reportedAdjudicationsService.scheduleHearing(
+        await this.reportedAdjudicationsService.scheduleHearingV1(
           adjudicationNumber,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),

@@ -459,7 +459,7 @@ const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response
     },
   })
 
-const stubCancelHearing = ({
+const stubCancelHearingV1 = ({
   adjudicationNumber,
   hearingId,
   response = {},
@@ -482,11 +482,33 @@ const stubCancelHearing = ({
     },
   })
 
+const stubCancelHearing = ({
+  adjudicationNumber,
+  response = {},
+}: {
+  adjudicationNumber: number
+  hearingId: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/v2`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubScheduleHearing = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/v2`,
     },
     response: {
       status,
@@ -497,11 +519,26 @@ const stubScheduleHearing = ({ adjudicationNumber, status = 200, response = {} }
     },
   })
 
-const stubAmendHearing = ({ adjudicationNumber, hearingId, status = 200, response = {} }): SuperAgentRequest =>
+const stubAmendHearingV1 = ({ adjudicationNumber, hearingId, status = 200, response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
       url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
+    },
+    response: {
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubAmendHearing = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/v2`,
     },
     response: {
       status,
@@ -704,8 +741,10 @@ export default {
   stubSaveAssociatedPrisoner,
   stubSaveEvidenceDetails,
   stubSaveWitnessDetails,
+  stubCancelHearingV1,
   stubCancelHearing,
   stubScheduleHearing,
+  stubAmendHearingV1,
   stubAmendHearing,
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,

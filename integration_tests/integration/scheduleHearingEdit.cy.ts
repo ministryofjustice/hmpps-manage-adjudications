@@ -116,7 +116,7 @@ context('Schedule a hearing page', () => {
     scheduleHearingsPage.locationSelectorSelectedOption().should('have.text', 'Houseblock 1')
   })
   it('should submit the form successfully when location is changed', () => {
-    cy.task('stubAmendHearing', {
+    cy.task('stubAmendHearingV1', {
       adjudicationNumber: 1524494,
       hearingId: 333,
       response: reportedAdjudicationResponse(1524494, changedLocationHearing),
@@ -139,7 +139,7 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the type is changed', () => {
-    cy.task('stubAmendHearing', {
+    cy.task('stubAmendHearingV1', {
       adjudicationNumber: 1524494,
       hearingId: 333,
       response: reportedAdjudicationResponse(1524494, changedTypeHearing),
@@ -153,7 +153,7 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the date is changed', () => {
-    cy.task('stubAmendHearing', {
+    cy.task('stubAmendHearingV1', {
       adjudicationNumber: 1524494,
       hearingId: 333,
       response: reportedAdjudicationResponse(1524494, changedDayHearing),
@@ -171,7 +171,7 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the time is changed', () => {
-    cy.task('stubAmendHearing', {
+    cy.task('stubAmendHearingV1', {
       adjudicationNumber: 1524494,
       hearingId: 333,
       response: reportedAdjudicationResponse(1524494, changedTimeHearing),

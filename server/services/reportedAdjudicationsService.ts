@@ -562,12 +562,31 @@ export default class ReportedAdjudicationsService {
     return 'Independent Adjudicator'
   }
 
-  async deleteHearing(
+  async deleteHearingV1(
     adjudicationNumber: number,
     hearingIdToCancel: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber, hearingIdToCancel)
+    return new ManageAdjudicationsClient(user.token).cancelHearingV1(adjudicationNumber, hearingIdToCancel)
+  }
+
+  async deleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber)
+  }
+
+  async scheduleHearingV1(
+    adjudicationNumber: number,
+    locationId: number,
+    dateTimeOfHearing: string,
+    oicHearingType: string,
+    user: User
+  ) {
+    const dataToSend = {
+      locationId,
+      dateTimeOfHearing,
+      oicHearingType,
+    }
+    return new ManageAdjudicationsClient(user.token).createHearingV1(adjudicationNumber, dataToSend)
   }
 
   async scheduleHearing(
@@ -585,7 +604,7 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).createHearing(adjudicationNumber, dataToSend)
   }
 
-  async rescheduleHearing(
+  async rescheduleHearingV1(
     adjudicationNumber: number,
     hearingId: number,
     locationId: number,
@@ -598,7 +617,22 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, hearingId, dataToSend)
+    return new ManageAdjudicationsClient(user.token).amendHearingV1(adjudicationNumber, hearingId, dataToSend)
+  }
+
+  async rescheduleHearing(
+    adjudicationNumber: number,
+    locationId: number,
+    dateTimeOfHearing: string,
+    oicHearingType: string,
+    user: User
+  ) {
+    const dataToSend = {
+      locationId,
+      dateTimeOfHearing,
+      oicHearingType,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearing(adjudicationNumber, dataToSend)
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {

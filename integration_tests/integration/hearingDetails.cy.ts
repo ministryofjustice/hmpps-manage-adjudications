@@ -262,7 +262,7 @@ context('Hearing details page', () => {
         id: 1524497,
         response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, multipleHearings),
       })
-      cy.task('stubCancelHearing', {
+      cy.task('stubCancelHearingV1', {
         adjudicationNumber: 1524497,
         hearingId: 987,
         response: reportedAdjudicationResponse(1524497, ReportedAdjudicationStatus.SCHEDULED, hearingListAfterDeletion),
