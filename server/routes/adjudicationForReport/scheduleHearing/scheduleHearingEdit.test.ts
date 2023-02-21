@@ -96,15 +96,16 @@ describe('POST edit existing hearing', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
       .expect(response => {
-        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
+        expect(reportedAdjudicationsService.rescheduleHearingV1).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.rescheduleHearingV1).toHaveBeenCalledWith(
           1524494,
+          101,
           27008,
           '2045-11-04T10:00',
           OicHearingType.GOV_ADULT as string,
           expect.anything()
         )
-        expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.scheduleHearingV1).not.toHaveBeenCalled()
       })
   })
   it('should successfully submit a hearing when all details provided - IND_ADJ', () => {
@@ -118,19 +119,20 @@ describe('POST edit existing hearing', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
       .expect(response => {
-        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
+        expect(reportedAdjudicationsService.rescheduleHearingV1).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.rescheduleHearingV1).toHaveBeenCalledWith(
           1524494,
+          101,
           27008,
           '2045-11-04T10:00',
           OicHearingType.INAD_ADULT as string,
           expect.anything()
         )
-        expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.scheduleHearingV1).not.toHaveBeenCalled()
       })
   })
   it('should throw an error on api failure', () => {
-    reportedAdjudicationsService.rescheduleHearing.mockRejectedValue(new Error('Internal Error'))
+    reportedAdjudicationsService.rescheduleHearingV1.mockRejectedValue(new Error('Internal Error'))
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit(1524494, 101))
       .send({

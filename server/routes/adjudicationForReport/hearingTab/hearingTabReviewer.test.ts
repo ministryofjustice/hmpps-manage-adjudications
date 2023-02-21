@@ -28,7 +28,7 @@ beforeEach(() => {
       history: [],
     }),
   })
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService }, {}, 'true')
 })
 
 afterEach(() => {
@@ -46,6 +46,34 @@ describe('GET hearing details page - reviewer version', () => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
+      })
+  })
+})
+describe('POST cancel hearing', () => {
+  it('should call the cancel endpoint if user cancels a hearing', () => {
+    reportedAdjudicationsService.getHearingDetails.mockResolvedValue([
+      {
+        id: 101,
+        dateTime: {
+          label: 'Date and time of hearing',
+          value: '24 October 2022 - 12:54',
+        },
+        location: {
+          label: 'Location',
+          value: 'Adj 2',
+        },
+        type: {
+          label: 'Type of hearing',
+          value: 'Governor',
+        },
+      },
+    ])
+    return request(app)
+      .post(adjudicationUrls.hearingDetails.urls.review(1524494))
+      .send({ removeHearingButton: 'cancelHearingButton-101' })
+      .expect(() => {
+        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, expect.anything())
       })
   })
 })

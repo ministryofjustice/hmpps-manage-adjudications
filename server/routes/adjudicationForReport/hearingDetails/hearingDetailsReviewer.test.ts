@@ -121,8 +121,8 @@ describe.skip('POST cancel hearing', () => {
       .post(adjudicationUrls.hearingDetails.urls.review(1524494))
       .send({ cancelHearingButton: 'cancelHearingButton-101' })
       .expect(() => {
-        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, 101, expect.anything())
+        expect(reportedAdjudicationsService.deleteHearingV1).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.deleteHearingV1).toHaveBeenCalledWith(1524494, 101, expect.anything())
       })
   })
 })

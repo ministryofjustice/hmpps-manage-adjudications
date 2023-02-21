@@ -87,15 +87,15 @@ describe('POST new schedule hearing', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
       .expect(response => {
-        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
+        expect(reportedAdjudicationsService.scheduleHearingV1).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.scheduleHearingV1).toHaveBeenCalledWith(
           1524494,
           27008,
           '2045-11-03T11:00',
           OicHearingType.GOV_ADULT as string,
           expect.anything()
         )
-        expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.rescheduleHearingV1).not.toHaveBeenCalled()
       })
   })
   it('should successfully submit a hearing when all details provided - IND', () => {
@@ -109,19 +109,19 @@ describe('POST new schedule hearing', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
       .expect(response => {
-        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
+        expect(reportedAdjudicationsService.scheduleHearingV1).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.scheduleHearingV1).toHaveBeenCalledWith(
           1524494,
           27008,
           '2045-11-03T11:00',
           OicHearingType.INAD_ADULT as string,
           expect.anything()
         )
-        expect(reportedAdjudicationsService.rescheduleHearing).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.rescheduleHearingV1).not.toHaveBeenCalled()
       })
   })
   it('should throw an error on api failure', () => {
-    reportedAdjudicationsService.scheduleHearing.mockRejectedValue(new Error('Internal Error'))
+    reportedAdjudicationsService.scheduleHearingV1.mockRejectedValue(new Error('Internal Error'))
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
       .send({

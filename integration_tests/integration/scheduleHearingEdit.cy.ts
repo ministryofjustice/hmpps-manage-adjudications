@@ -2,7 +2,7 @@ import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
@@ -53,15 +53,6 @@ const changedLocationHearing = [
   }),
 ]
 
-const changedTypeHearing = [
-  {
-    ...testData.singleHearing({
-      dateTimeOfHearing: hearingDateTime,
-    }),
-    oicHearingType: OicHearingType.INAD_ADULT as string,
-  },
-]
-
 context('Schedule a hearing page', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -93,6 +84,16 @@ context('Schedule a hearing page', () => {
       id: 1524494,
       response: reportedAdjudicationResponse(1524494, originalHearing),
     })
+    cy.task('stubAmendHearingV1', {
+      adjudicationNumber: 1524494,
+      hearingId: 333,
+      response: reportedAdjudicationResponse(1524494, changedDayHearing),
+    })
+    cy.task('stubAmendHearing', {
+      adjudicationNumber: 1524494,
+      response: reportedAdjudicationResponse(1524494, changedDayHearing),
+    })
+
     cy.signIn()
   })
   it('should contain the required page elements', () => {
@@ -116,12 +117,6 @@ context('Schedule a hearing page', () => {
     scheduleHearingsPage.locationSelectorSelectedOption().should('have.text', 'Houseblock 1')
   })
   it('should submit the form successfully when location is changed', () => {
-    cy.task('stubAmendHearing', {
-      adjudicationNumber: 1524494,
-      hearingId: 333,
-      response: reportedAdjudicationResponse(1524494, changedLocationHearing),
-    })
-
     cy.task('stubGetLocation', {
       locationId: 25538,
       response: testData.residentialLocations()[1],
@@ -139,11 +134,6 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the type is changed', () => {
-    cy.task('stubAmendHearing', {
-      adjudicationNumber: 1524494,
-      hearingId: 333,
-      response: reportedAdjudicationResponse(1524494, changedTypeHearing),
-    })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="IND_ADJ"]').click()
@@ -153,11 +143,6 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the date is changed', () => {
-    cy.task('stubAmendHearing', {
-      adjudicationNumber: 1524494,
-      hearingId: 333,
-      response: reportedAdjudicationResponse(1524494, changedDayHearing),
-    })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse(1524494, changedDayHearing),
@@ -171,11 +156,6 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the time is changed', () => {
-    cy.task('stubAmendHearing', {
-      adjudicationNumber: 1524494,
-      hearingId: 333,
-      response: reportedAdjudicationResponse(1524494, changedTimeHearing),
-    })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse(1524494, changedTimeHearing),

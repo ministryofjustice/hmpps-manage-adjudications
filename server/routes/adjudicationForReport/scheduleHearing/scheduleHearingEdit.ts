@@ -5,6 +5,7 @@ import UserService from '../../../services/userService'
 import ScheduleHearingPage, { PageRequestType } from './scheduleHearingPage'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import config from '../../../config'
 
 export default class scheduleHearingRoutes {
   page: ScheduleHearingPage
@@ -18,7 +19,8 @@ export default class scheduleHearingRoutes {
       PageRequestType.EDIT,
       reportedAdjudicationsService,
       locationService,
-      userService
+      userService,
+      config.outcomeFeatureFlag === 'true'
     )
   }
 
