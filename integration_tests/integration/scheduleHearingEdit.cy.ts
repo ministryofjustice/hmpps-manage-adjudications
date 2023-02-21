@@ -53,15 +53,6 @@ const changedLocationHearing = [
   }),
 ]
 
-const changedTypeHearing = [
-  {
-    ...testData.singleHearing({
-      dateTimeOfHearing: hearingDateTime,
-    }),
-    oicHearingType: OicHearingType.INAD_ADULT as string,
-  },
-]
-
 context('Schedule a hearing page', () => {
   beforeEach(() => {
     cy.task('reset')
