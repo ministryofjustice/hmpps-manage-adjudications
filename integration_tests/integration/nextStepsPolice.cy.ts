@@ -64,7 +64,7 @@ context('Will this charge continue to prosecution?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Missing selection')
+          expect($error.get(0).innerText).to.contain('Select yes if this charge will continue to prosecution')
         })
     })
     it('should show error if no answer to next steps', () => {

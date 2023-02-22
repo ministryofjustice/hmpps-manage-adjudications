@@ -2,6 +2,7 @@
 import { Request, Response } from 'express'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import OutcomesService from '../../../services/outcomesService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
 
@@ -34,7 +35,11 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
 export default class HearingTabPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly outcomesService: OutcomesService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
@@ -86,9 +91,12 @@ export default class HearingTabPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { removeHearingButton, nextStep } = req.body
+    const { removeHearingButton, nextStep, removeReferralButton } = req.body
     if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
+    }
+    if (removeReferralButton) {
+      await this.outcomesService.removeReferral(adjudicationNumber, user)
     }
 
     if (nextStep) {

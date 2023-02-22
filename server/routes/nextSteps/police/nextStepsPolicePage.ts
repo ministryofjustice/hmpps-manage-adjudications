@@ -7,15 +7,24 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './nextStepsPoliceValidation'
 
+type PageData = {
+  error?: FormError
+  prosecutionChosen?: string
+  nextStepChosen?: string
+}
+
 export default class NextStepsPolicePage {
   constructor(private readonly userService: UserService, private readonly outcomesService: OutcomesService) {}
 
-  private renderView = async (req: Request, res: Response, error: FormError | null): Promise<void> => {
+  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { error, prosecutionChosen, nextStepChosen } = pageData
 
     return res.render(`pages/nextStepsPolice.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
+      prosecutionChosen,
+      nextStepChosen,
     })
   }
 
@@ -25,7 +34,7 @@ export default class NextStepsPolicePage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, null)
+    return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -34,7 +43,7 @@ export default class NextStepsPolicePage {
     const { prosecutionChosen, nextStepChosen } = req.body
 
     const error = validateForm({ prosecutionChosen, nextStepChosen })
-    if (error) return this.renderView(req, res, error)
+    if (error) return this.renderView(req, res, { error, prosecutionChosen, nextStepChosen })
 
     try {
       if (prosecutionChosen === 'yes') {

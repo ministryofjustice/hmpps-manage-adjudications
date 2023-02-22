@@ -22,6 +22,8 @@ import {
   HearingDetails,
   HearingOutcomeCode,
   HearingOutcomeResult,
+  Outcome,
+  OutcomeCode,
   OutcomeHistory,
 } from '../../data/HearingAndOutcomeResult'
 
@@ -245,6 +247,22 @@ export default class TestData {
       code,
       adjudicator,
       ...optionalItems,
+    }
+  }
+
+  outcome = ({
+    id = 1,
+    code = OutcomeCode.REFER_POLICE,
+    details = 'Some details',
+  }: {
+    id?: number
+    code?: OutcomeCode
+    details?: string
+  }): Outcome => {
+    return {
+      id,
+      code,
+      details,
     }
   }
 
