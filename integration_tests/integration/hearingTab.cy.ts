@@ -562,6 +562,9 @@ context('Hearing details page', () => {
           expect($summaryData.get(6).innerText).to.contain('J. Red')
           expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
         })
+
+      // TODO: Add table to check referral information is captured
+
       hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().click()
@@ -573,6 +576,7 @@ context('Hearing details page', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524500))
       })
+
       // TODO: Check if referral has been removed here
     })
   })
