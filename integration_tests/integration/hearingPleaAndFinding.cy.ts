@@ -14,16 +14,6 @@ context('Plea and finding', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubCreateHearingOutcome', {
-      adjudicationNumber: 100,
-      hearingId: 1,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
-          prisonerNumber: 'G6415GD',
-        }),
-      },
-    })
     cy.signIn()
   })
   describe('Loads', () => {
