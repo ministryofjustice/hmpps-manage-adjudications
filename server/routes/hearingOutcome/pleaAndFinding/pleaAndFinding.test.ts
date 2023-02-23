@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import { HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')

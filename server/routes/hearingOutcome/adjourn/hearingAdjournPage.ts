@@ -85,8 +85,6 @@ export default class HearingReasonForReferralPage {
     const { adjudicatorName } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
-    const isEdit = this.pageOptions.isEdit()
-
     const error = validateForm({ adjournReason, adjournDetails, adjournPlea })
     if (error)
       return this.renderView(req, res, {

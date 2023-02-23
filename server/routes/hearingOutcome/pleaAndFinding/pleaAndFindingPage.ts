@@ -74,11 +74,9 @@ export default class PleaAndFindingPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const hearingId = Number(req.params.hearingId)
     const { hearingPlea, hearingFinding } = req.body
-    const { adjudicatorName } = req.query
     const isEdit = this.pageOptions.isEdit()
 
     const error = validateForm({ hearingPlea, hearingFinding })
