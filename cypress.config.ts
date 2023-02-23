@@ -89,9 +89,8 @@ export default defineConfig({
         stubGetIssueDataDiscDate: adjudications.stubGetIssueDataFilteredOnDiscDate,
         stubGetIssueDataHearingDate: adjudications.stubGetIssueDataFilteredOnHearingDate,
         stubPutDateTimeOfIssue: adjudications.stubPutDateTimeOfIssue,
-
-        stubCreateHearingOutcome: adjudications.stubCreateHearingOutcome,
-        stubUpdateHearingOutcome: adjudications.stubUpdateHearingOutcome,
+        stubCreateReferral: adjudications.stubCreateReferral,
+        stubCreateAdjourn: adjudications.stubCreateAdjourn,
         stubCreateOutcome: adjudications.stubCreateOutcome,
         stubRemoveReferral: adjudications.stubRemoveReferral,
       })

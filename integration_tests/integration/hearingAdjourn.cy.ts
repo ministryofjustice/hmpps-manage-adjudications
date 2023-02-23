@@ -14,7 +14,7 @@ context('Adjourn the hearing', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubCreateHearingOutcome', {
+    cy.task('stubCreateAdjourn', {
       adjudicationNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

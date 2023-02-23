@@ -687,11 +687,11 @@ const stubPutDateTimeOfIssue = ({ adjudicationNumber, response }): SuperAgentReq
     },
   })
 
-const stubCreateHearingOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubCreateAdjourn = ({ adjudicationNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
     },
     response: {
       status: 200,
@@ -702,11 +702,11 @@ const stubCreateHearingOutcome = ({ adjudicationNumber, response }): SuperAgentR
     },
   })
 
-const stubUpdateHearingOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubCreateReferral = ({ adjudicationNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
-      method: 'PUT',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome/referral`,
     },
     response: {
       status: 200,
@@ -780,8 +780,8 @@ export default {
   stubGetIssueDataFilteredOnDiscDate,
   stubGetIssueDataFilteredOnHearingDate,
   stubPutDateTimeOfIssue,
-  stubCreateHearingOutcome,
-  stubUpdateHearingOutcome,
+  stubCreateReferral,
+  stubCreateAdjourn,
   stubCreateOutcome,
   stubRemoveReferral,
 }
