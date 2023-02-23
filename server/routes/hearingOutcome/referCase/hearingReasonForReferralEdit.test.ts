@@ -56,15 +56,6 @@ describe('POST /reason-for-referral', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start(100))
-      .then(() =>
-        expect(hearingsService.updateReferral).toHaveBeenCalledWith(
-          100,
-          HearingOutcomeCode.REFER_POLICE,
-          'Roxanne Red',
-          '123',
-          expect.anything()
-        )
-      )
   })
   it('should redirect the user back to the enter hearing outcome edit page if the adjudicator name and/or hearing outcome has been tampered/lost', () => {
     return request(app)

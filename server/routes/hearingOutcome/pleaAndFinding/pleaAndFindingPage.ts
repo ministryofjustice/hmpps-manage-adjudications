@@ -4,12 +4,7 @@ import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import {
-  HearingOutcomeCode,
-  HearingOutcomeDetails,
-  HearingOutcomeFinding,
-  HearingOutcomePlea,
-} from '../../../data/HearingAndOutcomeResult'
+import { HearingOutcomeDetails, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './pleaAndFindingValidation'
@@ -95,25 +90,6 @@ export default class PleaAndFindingPage {
       })
 
     try {
-      if (isEdit) {
-        await this.hearingsService.updateHearingPleaAndFinding(
-          adjudicationNumber,
-          HearingOutcomeCode.COMPLETE,
-          adjudicatorName as string,
-          hearingPlea as HearingOutcomePlea,
-          hearingFinding as HearingOutcomeFinding,
-          user
-        )
-      } else {
-        await this.hearingsService.postHearingPleaAndFinding(
-          adjudicationNumber,
-          HearingOutcomeCode.COMPLETE,
-          adjudicatorName as string,
-          hearingPlea as HearingOutcomePlea,
-          hearingFinding as HearingOutcomeFinding,
-          user
-        )
-      }
       const redirectUrl = this.getRedirectUrl(
         isEdit,
         HearingOutcomeFinding[hearingFinding],

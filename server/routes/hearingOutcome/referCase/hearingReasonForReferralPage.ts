@@ -101,23 +101,13 @@ export default class HearingReasonForReferralPage {
     }
 
     try {
-      if (isEdit) {
-        await this.hearingsService.updateReferral(
-          adjudicationNumber,
-          hearingOutcome as HearingOutcomeCode,
-          adjudicatorName as string,
-          referralReason,
-          user
-        )
-      } else {
-        await this.hearingsService.createReferral(
-          adjudicationNumber,
-          hearingOutcome as HearingOutcomeCode,
-          adjudicatorName as string,
-          referralReason,
-          user
-        )
-      }
+      await this.hearingsService.createReferral(
+        adjudicationNumber,
+        hearingOutcome as HearingOutcomeCode,
+        adjudicatorName as string,
+        referralReason,
+        user
+      )
 
       return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(adjudicationNumber))
     } catch (postError) {

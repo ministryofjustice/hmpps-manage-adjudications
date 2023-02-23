@@ -97,27 +97,15 @@ export default class HearingReasonForReferralPage {
       })
 
     try {
-      if (isEdit) {
-        await this.hearingsService.updateAdjourn(
-          adjudicationNumber,
-          HearingOutcomeCode.ADJOURN,
-          adjudicatorName as string,
-          adjournDetails,
-          adjournReason,
-          adjournPlea,
-          user
-        )
-      } else {
-        await this.hearingsService.createAdjourn(
-          adjudicationNumber,
-          HearingOutcomeCode.ADJOURN,
-          adjudicatorName as string,
-          adjournDetails,
-          adjournReason,
-          adjournPlea,
-          user
-        )
-      }
+      await this.hearingsService.createAdjourn(
+        adjudicationNumber,
+        HearingOutcomeCode.ADJOURN,
+        adjudicatorName as string,
+        adjournDetails,
+        adjournReason,
+        adjournPlea,
+        user
+      )
 
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
