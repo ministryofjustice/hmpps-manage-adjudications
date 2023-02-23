@@ -4,58 +4,62 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../macros/nextSteps.njk" import nextSteps %}
+
 {% set title = "Will this charge continue to prosecution?" %}
-{% block pageTitle %}
-				{{ title }}
-{% endblock %}
+  {% block pageTitle %}
+    {{ title }}
+  {% endblock %}
+
 {% block beforeContent %}
-				{{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
+
 {% set nextStep %}
-{{ nextSteps({ text: "What is the next step?", isPageHeading: false }) }}
+  {{ nextSteps({ text: "What is the next step?", isPageHeading: false }) }}
 {% endset -%}
+
 {% block content %}
-				{% if errors | length %}
-								{{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-				{% endif %}
-				<h1 class="govuk-heading-l">{{ title }}</h1>
-				<div>
-								<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-												<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-												{{ govukRadios({
-			idPrefix: 'prosecutionChosen',
-			id: 'prosecutionChosen',
-			name: 'prosecutionChosen',
-			attributes: { "data-qa": "radio-buttons-prosecution" },
-			errorMessage: "prosecutionChosen" | findError(errors),
-			items: [
-			{
-			    value: "yes",
-		     	text: "Yes"
-			},
-			{
-			    value: "no",
-			    text: "No",
-                conditional: { html: nextStep }        
-			}]
-			}) }}
-												{{ govukButton({
-					text: 'Continue',
-					type: "submit",
-					classes: "govuk-button--submit govuk-!-margin-right-3",
-					attributes: { "data-qa": "prosecution-submit" }
-			}) }}
-												{{ govukButton({
-					text: 'Cancel',
-					element: "a",
-					href: cancelHref,
-					classes: "govuk-button--secondary",
-					attributes: { "data-qa": "prosecution-cancel" }
-				}) }}
-								</form>
-				</div>
+    {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+            {{ govukRadios({
+              idPrefix: 'prosecutionChosen',
+              id: 'prosecutionChosen',
+              name: 'prosecutionChosen',
+              attributes: { "data-qa": "radio-buttons-prosecution" },
+              errorMessage: "prosecutionChosen" | findError(errors),
+              items: [
+              {
+                  value: "yes",
+                  text: "Yes",
+                  checked: prosecutionChosen === 'yes'
+              },
+              {
+                  value: "no",
+                  text: "No",
+                  conditional: { html: nextStep },
+                  checked: prosecutionChosen === 'no'
+              }]
+            }) }}
+            {{ govukButton({
+              text: 'Continue',
+              type: "submit",
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "prosecution-submit" }
+            }) }}
+            {{ govukButton({
+              text: 'Cancel',
+              element: "a",
+              href: cancelHref,
+              classes: "govuk-button--secondary",
+              attributes: { "data-qa": "prosecution-cancel" }
+          }) }}
+        </form>
 {% endblock %}

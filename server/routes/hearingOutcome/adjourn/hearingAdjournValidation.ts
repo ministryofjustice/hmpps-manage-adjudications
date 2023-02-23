@@ -18,7 +18,7 @@ const errors: { [key: string]: FormError } = {
   },
   MISSING_PLEA: {
     href: '#adjournPlea',
-    text: 'Enter the plea for the adjournment',
+    text: 'Select the plea for the offence',
   },
 }
 

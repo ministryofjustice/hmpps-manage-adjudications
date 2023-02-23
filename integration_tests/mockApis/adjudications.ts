@@ -732,6 +732,21 @@ const stubCreateOutcome = ({ adjudicationNumber, response }): SuperAgentRequest 
     },
   })
 
+const stubRemoveReferral = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/remove-referral`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -768,4 +783,5 @@ export default {
   stubCreateHearingOutcome,
   stubUpdateHearingOutcome,
   stubCreateOutcome,
+  stubRemoveReferral,
 }

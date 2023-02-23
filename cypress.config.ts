@@ -93,6 +93,7 @@ export default defineConfig({
         stubCreateHearingOutcome: adjudications.stubCreateHearingOutcome,
         stubUpdateHearingOutcome: adjudications.stubUpdateHearingOutcome,
         stubCreateOutcome: adjudications.stubCreateOutcome,
+        stubRemoveReferral: adjudications.stubRemoveReferral,
       })
     },
 

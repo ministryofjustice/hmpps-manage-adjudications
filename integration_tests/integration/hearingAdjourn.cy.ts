@@ -95,7 +95,7 @@ context('Adjourn the hearing', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Enter the plea for the adjournment')
+          expect($error.get(0).innerText).to.contain('Select the plea for the offence')
         })
     })
   })

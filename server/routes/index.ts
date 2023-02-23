@@ -158,7 +158,10 @@ export default function routes(
   )
 
   if (config.outcomeFeatureFlag === 'true') {
-    router.use(adjudicationUrls.hearingDetails.root, hearingTabRoutes({ reportedAdjudicationsService, userService }))
+    router.use(
+      adjudicationUrls.hearingDetails.root,
+      hearingTabRoutes({ reportedAdjudicationsService, userService, outcomesService })
+    )
   } else {
     router.use(
       adjudicationUrls.hearingDetails.root,

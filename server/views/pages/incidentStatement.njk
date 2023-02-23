@@ -10,94 +10,92 @@
 {% set title = "Incident statement" %}
 
 {% block pageTitle %}
-	{{ title }}
+    {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-	{{ breadcrumb() }}
+    {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-	{% if errors | length %}
-		{{ govukErrorSummary({
+    {% if errors | length %}
+        {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-	{% endif %}
+    {% endif %}
 
-	<h1 class="govuk-heading-l">{{ title }}</h1>
+    <h1 class="govuk-heading-l">{{ title }}</h1>
 
-	<div class="prisonerPlaybackSection">
-		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
-	</div>
+    <div class="prisonerPlaybackSection">
+        {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+    </div>
 
-	<div>
-		<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <div>
+      <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-			{{ govukTextarea({
-				name: "incidentStatement",
-				id: "incidentStatement",
-				value: incidentStatement,
-				label: {
-					text: "Write the full details of the alleged offence.",
-					classes: "govuk-!-margin-bottom-2"
-				},
-				rows: '25',
-				classes: "govuk-!-width-three-quarters",
-				attributes: {
-					'data-qa': "incident-statement-input"
-				},
-				errorMessage: "incidentStatement" | findError(errors)
-				}) }}
+        {{ govukTextarea({
+          name: "incidentStatement",
+          id: "incidentStatement",
+          value: incidentStatement,
+          label: {
+            text: "Write the full details of the alleged offence.",
+            classes: "govuk-!-margin-bottom-2"
+          },
+          rows: '25',
+          classes: "govuk-!-width-three-quarters",
+          attributes: {
+            'data-qa': "incident-statement-input"
+          },
+          errorMessage: "incidentStatement" | findError(errors)
+        }) }}
 
-		{% if not adjudicationEdited %}
-			{{ govukRadios({
-				classes: "govuk-radios--inline",
-				idPrefix: "incidentStatementComplete",
-				id: "incidentStatementComplete",
-				name: "incidentStatementComplete",
-				errorMessage: "incidentStatementComplete" | findError(errors),
-				fieldset: {
-					attributes: { "data-qa": "incident-statement-radios" },
-					legend: {
-							text: "Is the statement complete?"
-					}
-				},
-				items: [
-					{
-							value: "yes",
-							text: "Yes",
-							checked: incidentStatementComplete === 'yes'
-					},
-					{
-							value: "no",
-							text: "No",
-							checked: incidentStatementComplete === 'no'
+        {% if not adjudicationEdited %}
+          {{ govukRadios({
+              classes: "govuk-radios--inline",
+              idPrefix: "incidentStatementComplete",
+              id: "incidentStatementComplete",
+              name: "incidentStatementComplete",
+              errorMessage: "incidentStatementComplete" | findError(errors),
+              fieldset: {
+                attributes: { "data-qa": "incident-statement-radios" },
+                legend: {
+                  text: "Is the statement complete?"
+                }
+              },
+              items: [
+                  {
+                    value: "yes",
+                    text: "Yes",
+                    checked: incidentStatementComplete === 'yes'
+                  },
+                  {
+                    value: "no",
+                    text: "No",
+                    checked: incidentStatementComplete === 'no'
+                  }
+              ]
+          }) }}
+        {% endif %}
 
-					}
-				]
-			}) }}
-			{% endif %}
+        {{ govukButton({
+          text: submitButtonText,
+          type: "submit",
+          classes: "govuk-button--submit",
+          attributes: { "data-qa": "incident-statement-submit" }
+        }) }}
 
-			{{ govukButton({
-				text: submitButtonText,
-				type: "submit",
-				classes: "govuk-button--submit",
-				attributes: { "data-qa": "incident-statement-submit" }
-			}) }}
-
-			{% if adjudicationEdited %}
-				{{ govukButton({
-					text: "Cancel",
-						element: "a",
-						href:  adjudicationUrls.prisonerReport.urls.report(adjudicationNumber),
-						classes: "govuk-button--secondary",
-					attributes: { "data-qa": "incident-statement-cancel" }
-				}) }}
-			{% endif %}
-		</form>
-	</div>
-
+        {% if adjudicationEdited %}
+          {{ govukButton({
+            text: "Cancel",
+              element: "a",
+              href:  adjudicationUrls.prisonerReport.urls.report(adjudicationNumber),
+              classes: "govuk-button--secondary",
+            attributes: { "data-qa": "incident-statement-cancel" }
+          }) }}
+        {% endif %}
+        </form>
+    </div>
 {% endblock %}

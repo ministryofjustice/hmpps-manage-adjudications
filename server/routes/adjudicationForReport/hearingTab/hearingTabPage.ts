@@ -2,6 +2,7 @@
 import { Request, Response } from 'express'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import OutcomesService from '../../../services/outcomesService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
 
@@ -34,7 +35,11 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
 export default class HearingTabPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly outcomesService: OutcomesService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
@@ -52,14 +57,11 @@ export default class HearingTabPage {
 
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
 
-    const finalFormattedHistoryItem = history.length ? history[history.length - 1] : null
-
-    const isFinalHistoryItemAHearing =
-      finalFormattedHistoryItem && Object.keys(finalFormattedHistoryItem).includes('hearingTable')
-
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null
+
+    const readOnly = this.pageOptions.isReporter()
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
@@ -67,14 +69,16 @@ export default class HearingTabPage {
       reviewStatus: reportedAdjudication.status,
       schedulingNotAvailable: getSchedulingUnavailableStatuses(reportedAdjudication),
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
-      readOnly: this.pageOptions.isReporter(),
+      readOnly,
       history,
-      finalFormattedHistoryItem,
       latestHearingId,
-      showRemoveHearingButton: isFinalHistoryItemAHearing,
+      secondaryButtonInfo: this.reportedAdjudicationsService.getSecondaryButtonInfoForHearingDetails(
+        reportedAdjudication.history,
+        readOnly
+      ),
       primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
         reportedAdjudication.history,
-        this.pageOptions.isReporter(),
+        readOnly,
         adjudicationNumber
       ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
@@ -87,9 +91,12 @@ export default class HearingTabPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { removeHearingButton, nextStep } = req.body
+    const { removeHearingButton, nextStep, removeReferralButton } = req.body
     if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
+    }
+    if (removeReferralButton) {
+      await this.outcomesService.removeReferral(adjudicationNumber, user)
     }
 
     if (nextStep) {

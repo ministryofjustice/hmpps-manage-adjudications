@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import OutcomesService from '../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -10,9 +11,10 @@ export default class HearingTabRoute {
 
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly outcomesService: OutcomesService
   ) {
-    this.page = new HearingTabPage(PageRequestType.REVIEWER, reportedAdjudicationsService)
+    this.page = new HearingTabPage(PageRequestType.REVIEWER, reportedAdjudicationsService, outcomesService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

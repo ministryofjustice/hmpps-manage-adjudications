@@ -54,6 +54,14 @@ const hearingWithAdjournedOutcome = testData.singleHearing({
   },
 })
 
+const hearingWithReferToPoliceOutcome = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeTwo,
+  id: 988,
+  locationId: 234,
+  oicHearingType: OicHearingType.INAD_ADULT,
+  outcome: testData.hearingOutcome({ optionalItems: { details: 'This is my reason for referring.' } }),
+})
+
 const twoHearings = [hearingWithAdjournedOutcome, singleHearingNoOutcome]
 
 const historyWithOneHearing = [
@@ -74,6 +82,23 @@ const historyWithTwoHearings = [
   },
   {
     hearing: singleHearingNoOutcome,
+  },
+]
+
+const historyWithReferredHearing = [
+  {
+    hearing: hearingWithReferToPoliceOutcome,
+    outcome: { outcome: testData.outcome({ details: 'This is my reason for referring.' }) },
+  },
+]
+
+const historyWithReferredHearingWithOutcome = [
+  {
+    hearing: hearingWithReferToPoliceOutcome,
+    outcome: {
+      outcome: testData.outcome({ details: 'This is my reason for referring.' }),
+      referralOutcome: testData.referralOutcome({}),
+    },
   },
 ]
 
@@ -157,6 +182,26 @@ context('Hearing details page', () => {
         historyWithTwoHearings
       ),
     })
+    // Adjudication with hearing - referred to police
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524500,
+      response: reportedAdjudicationResponse(
+        1524500,
+        ReportedAdjudicationStatus.REFER_POLICE,
+        [hearingWithReferToPoliceOutcome],
+        historyWithReferredHearing
+      ),
+    })
+    // Adjudication with hearing - referred to police - with referral outcome
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524501,
+      response: reportedAdjudicationResponse(
+        1524501,
+        ReportedAdjudicationStatus.REFER_POLICE,
+        [hearingWithReferToPoliceOutcome],
+        historyWithReferredHearingWithOutcome
+      ),
+    })
     cy.signIn()
   })
   describe('Test scenarios - reviewer view', () => {
@@ -171,6 +216,7 @@ context('Hearing details page', () => {
       { id: 1524497 },
       { id: 1524495 },
       { id: 1524496 },
+      { id: 1524500 },
     ].forEach(adj => {
       it('should contain the required page elements', () => {
         cy.visit(adjudicationUrls.hearingDetails.urls.review(adj.id))
@@ -184,6 +230,9 @@ context('Hearing details page', () => {
           hearingTabPage.noHearingsScheduled().should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
           hearingTabPage.summaryTable(1).should('not.exist')
+          hearingTabPage.removeHearingButton().should('not.exist')
+          hearingTabPage.nextStepConfirmationButton().should('not.exist')
+          hearingTabPage.enterHearingOutcomeButton().should('not.exist')
         } else if (adj.id === 1524494) {
           hearingTabPage.summaryTable(1).should('not.exist')
           hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
@@ -201,6 +250,13 @@ context('Hearing details page', () => {
           hearingTabPage.summaryTable(1).should('exist')
           hearingTabPage.enterHearingOutcomeButton().should('exist')
           hearingTabPage.removeHearingButton().should('exist')
+        } else if (adj.id === 1524500) {
+          hearingTabPage.hearingIndex(1).should('exist')
+          hearingTabPage.summaryTable(1).should('exist')
+          hearingTabPage.removeHearingButton().should('not.exist')
+          hearingTabPage.removeReferralButton().should('exist')
+          hearingTabPage.enterReferralOutcomeButton().should('exist')
+          hearingTabPage.enterHearingOutcomeButton().should('not.exist')
         } else {
           // SCHEDULED - multiple hearings
           hearingTabPage.hearingIndex(1).should('exist')
@@ -246,6 +302,7 @@ context('Hearing details page', () => {
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Unscheduled')
       hearingTabPage.noHearingsScheduled().contains('No scheduled hearings.')
+      hearingTabPage.nextStepConfirmationButton().contains('Continue')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
       hearingTabPage.viewAllCompletedReportsLink().click()
@@ -313,6 +370,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(4).innerText).to.contain('Governor')
         })
       hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
+      hearingTabPage.removeHearingButton().should('exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
@@ -345,7 +403,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(8).innerText).to.contain('Further evidence needed\n\n123')
           expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
-      hearingTabPage.scheduleAnotherHearingButton().contains('Schedule another hearing')
+      hearingTabPage.scheduleAnotherHearingButton().should('exist')
       hearingTabPage.removeHearingButton().should('exist')
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
@@ -393,7 +451,8 @@ context('Hearing details page', () => {
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(5).innerText).to.contain('Change')
         })
-      hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
+      hearingTabPage.enterHearingOutcomeButton().should('exist')
+      hearingTabPage.removeHearingButton().should('exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
     })
@@ -451,6 +510,8 @@ context('Hearing details page', () => {
           ]
         ),
       })
+      hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
+      hearingTabPage.enterHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524497))
@@ -458,7 +519,7 @@ context('Hearing details page', () => {
       const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingTab)
       hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
       hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist')
-      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist') // The cancel button should now be linked to the latest hearing available
+      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist')
       hearingDetailsPageAfterDeletion
         .summaryTable(1)
         .find('dd')
@@ -474,6 +535,109 @@ context('Hearing details page', () => {
           expect($summaryData.get(8).innerText).to.contain('Further evidence needed\n\n123')
           expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
+      hearingDetailsPageAfterDeletion.summaryTable(2).should('not.exist')
+      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist')
+      hearingDetailsPageAfterDeletion.scheduleAnotherHearingButton().should('exist')
+      hearingDetailsPageAfterDeletion.enterHearingOutcomeButton().should('not.exist')
+    })
+    it('Adjudication with one hearing with a refer to police outcome', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524500))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .summaryTable(1)
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+          expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
+          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+        })
+
+      hearingTabPage
+        .summaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Change')
+          expect($summaryData.get(6).innerText).to.contain('J. Red')
+          expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
+        })
+
+      cy.get('[data-qa="outcome-code"]').contains('REFER_POLICE')
+      cy.get('[data-qa="outcome-details"]').contains('This is my reason for referring.')
+
+      hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
+      hearingTabPage.removeReferralButton().contains('Remove this referral')
+      hearingTabPage.enterReferralOutcomeButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.nextStepsPolice.urls.start(1524500))
+      })
+    })
+    it('Adjudication with one hearing with a refer to police outcome', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524501))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      hearingTabPage
+        .summaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Change')
+          expect($summaryData.get(6).innerText).to.contain('J. Red')
+          expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
+        })
+
+      cy.get('[data-qa="outcome-code"]').contains('REFER_POLICE')
+      cy.get('[data-qa="outcome-details"]').contains('This is my reason for referring.')
+      cy.get('[data-qa="referral-outcome-code"]').contains('PROSECUTION')
+
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().contains('Remove this referral')
+    })
+    it('Adjudication with one hearing with a refer to police outcome - successfully removes referral', () => {
+      const hearingNoOutcome = testData.singleHearing({
+        dateTimeOfHearing: hearingDateTimeTwo,
+        id: 988,
+        locationId: 234,
+        oicHearingType: OicHearingType.INAD_ADULT,
+      })
+      cy.task('stubRemoveReferral', {
+        adjudicationNumber: 1524500,
+        response: reportedAdjudicationResponse(
+          1524500,
+          ReportedAdjudicationStatus.SCHEDULED,
+          [hearingNoOutcome],
+          [{ hearing: hearingNoOutcome }]
+        ),
+      })
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524500))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524500,
+        response: reportedAdjudicationResponse(
+          1524500,
+          ReportedAdjudicationStatus.SCHEDULED,
+          [hearingNoOutcome],
+          [{ hearing: hearingNoOutcome }]
+        ),
+      })
+      hearingTabPage.removeReferralButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524500))
+      })
+
+      cy.get('[data-qa="outcome-code"]').should('not.exist')
+      cy.get('[data-qa="outcome-details"]').should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

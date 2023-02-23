@@ -7,18 +7,25 @@ import HearingTabReporterRoute from './hearingTabReporter'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
+import OutcomesService from '../../../services/outcomesService'
 
 export default function HearingDetailsRoutes({
   reportedAdjudicationsService,
   userService,
+  outcomesService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
   userService: UserService
+  outcomesService: OutcomesService
 }): Router {
   const router = express.Router()
 
-  const hearingTabReviewerRoute = new HearingTabReviewerRoute(reportedAdjudicationsService, userService)
-  const hearingTabReporterRoute = new HearingTabReporterRoute(reportedAdjudicationsService)
+  const hearingTabReviewerRoute = new HearingTabReviewerRoute(
+    reportedAdjudicationsService,
+    userService,
+    outcomesService
+  )
+  const hearingTabReporterRoute = new HearingTabReporterRoute(reportedAdjudicationsService, outcomesService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

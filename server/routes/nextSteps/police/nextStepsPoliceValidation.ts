@@ -8,7 +8,7 @@ type NextStepsPoliceForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_PROSECUTION_CHOICE: {
     href: '#prosecutionChosen',
-    text: 'Missing selection',
+    text: 'Select yes if this charge will continue to prosecution',
   },
   MISSING_NEXT_STEP_CHOICE: {
     href: '#nextStepChosen',

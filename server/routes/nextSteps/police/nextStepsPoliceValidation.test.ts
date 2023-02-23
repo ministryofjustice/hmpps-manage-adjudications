@@ -25,7 +25,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#prosecutionChosen',
-      text: 'Missing selection',
+      text: 'Select yes if this charge will continue to prosecution',
     })
   })
   it('shows error when no next step selected', () => {
