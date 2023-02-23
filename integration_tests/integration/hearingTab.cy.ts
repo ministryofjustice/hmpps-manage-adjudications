@@ -92,6 +92,16 @@ const historyWithReferredHearing = [
   },
 ]
 
+const historyWithReferredHearingWithOutcome = [
+  {
+    hearing: hearingWithReferToPoliceOutcome,
+    outcome: {
+      outcome: testData.outcome({ details: 'This is my reason for referring.' }),
+      referralOutcome: testData.referralOutcome({}),
+    },
+  },
+]
+
 context('Hearing details page', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -180,6 +190,16 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         [hearingWithReferToPoliceOutcome],
         historyWithReferredHearing
+      ),
+    })
+    // Adjudication with hearing - referred to police - with referral outcome
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524501,
+      response: reportedAdjudicationResponse(
+        1524501,
+        ReportedAdjudicationStatus.REFER_POLICE,
+        [hearingWithReferToPoliceOutcome],
+        historyWithReferredHearingWithOutcome
       ),
     })
     cy.signIn()
@@ -521,21 +541,6 @@ context('Hearing details page', () => {
       hearingDetailsPageAfterDeletion.enterHearingOutcomeButton().should('not.exist')
     })
     it('Adjudication with one hearing with a refer to police outcome', () => {
-      const hearingNoOutcome = testData.singleHearing({
-        dateTimeOfHearing: hearingDateTimeTwo,
-        id: 988,
-        locationId: 234,
-        oicHearingType: OicHearingType.INAD_ADULT,
-      })
-      cy.task('stubRemoveReferral', {
-        adjudicationNumber: 1524500,
-        response: reportedAdjudicationResponse(
-          1524500,
-          ReportedAdjudicationStatus.SCHEDULED,
-          [hearingNoOutcome],
-          [{ hearing: hearingNoOutcome }]
-        ),
-      })
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524500))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage
@@ -563,7 +568,8 @@ context('Hearing details page', () => {
           expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
         })
 
-      // TODO: Add table to check referral information is captured
+      cy.get('[data-qa="outcome-code"]').contains('REFER_POLICE')
+      cy.get('[data-qa="outcome-details"]').contains('This is my reason for referring.')
 
       hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
@@ -571,13 +577,67 @@ context('Hearing details page', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.nextStepsPolice.urls.start(1524500))
       })
+    })
+    it('Adjudication with one hearing with a refer to police outcome', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524501))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      hearingTabPage
+        .summaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Change')
+          expect($summaryData.get(6).innerText).to.contain('J. Red')
+          expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
+        })
+
+      cy.get('[data-qa="outcome-code"]').contains('REFER_POLICE')
+      cy.get('[data-qa="outcome-details"]').contains('This is my reason for referring.')
+      cy.get('[data-qa="referral-outcome-code"]').contains('PROSECUTION')
+
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().contains('Remove this referral')
+    })
+    it('Adjudication with one hearing with a refer to police outcome - successfully removes referral', () => {
+      const hearingNoOutcome = testData.singleHearing({
+        dateTimeOfHearing: hearingDateTimeTwo,
+        id: 988,
+        locationId: 234,
+        oicHearingType: OicHearingType.INAD_ADULT,
+      })
+      cy.task('stubRemoveReferral', {
+        adjudicationNumber: 1524500,
+        response: reportedAdjudicationResponse(
+          1524500,
+          ReportedAdjudicationStatus.SCHEDULED,
+          [hearingNoOutcome],
+          [{ hearing: hearingNoOutcome }]
+        ),
+      })
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524500))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524500,
+        response: reportedAdjudicationResponse(
+          1524500,
+          ReportedAdjudicationStatus.SCHEDULED,
+          [hearingNoOutcome],
+          [{ hearing: hearingNoOutcome }]
+        ),
+      })
       hearingTabPage.removeReferralButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524500))
       })
 
-      // TODO: Check if referral has been removed here
+      cy.get('[data-qa="outcome-code"]').should('not.exist')
+      cy.get('[data-qa="outcome-details"]').should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

@@ -25,6 +25,8 @@ import {
   Outcome,
   OutcomeCode,
   OutcomeHistory,
+  ReferralOutcome,
+  ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
 
 export default class TestData {
@@ -263,6 +265,19 @@ export default class TestData {
       id,
       code,
       details,
+    }
+  }
+
+  referralOutcome = ({
+    id = 1,
+    code = ReferralOutcomeCode.PROSECUTION,
+  }: {
+    id?: number
+    code?: ReferralOutcomeCode
+  }): ReferralOutcome => {
+    return {
+      id,
+      code,
     }
   }
 
