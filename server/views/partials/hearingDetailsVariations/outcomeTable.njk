@@ -1,0 +1,16 @@
+{% from '../../macros/outcomeSummary.njk' import outcomeSummary %}
+
+{% macro outcomeTable(outcomeItem, readOnly, reportNo) %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+        <h2 class="govuk-heading-m" data-qa="outcome-title">{{ outcomeItem.code | outcomeTableTitle }}</h2>
+        {% if not readOnly %}
+            {{ outcomeSummary(outcomeItem) }}
+            {# {{ hearingSummary(hearing, { "data-qa": "details-summary-table-"+hearingNumber }, hearing.id === latestHearingId, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId), reportNo, latestHearingId) }} #}
+        {% else %}
+            {# {{ hearingSummary(hearing, { "data-qa": "details-summary-table-"+hearingNumber }, false) }} #}
+        {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+

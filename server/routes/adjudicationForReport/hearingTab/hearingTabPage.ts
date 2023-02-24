@@ -56,7 +56,6 @@ export default class HearingTabPage {
     )
 
     const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
-
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null

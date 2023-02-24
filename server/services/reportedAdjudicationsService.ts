@@ -50,6 +50,7 @@ import {
   HearingOutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
+  ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import { OutcomeCode } from '../data/OutcomeResult'
@@ -621,6 +622,59 @@ export default class ReportedAdjudicationsService {
     return hearingDetailsBasics
   }
 
+  createOutcomeTableDisplay = (outcomeHistoryItem: OutcomeDetailsHistory) => {
+    const outcomeCode = outcomeHistoryItem.outcome.outcome.code
+
+    if (outcomeCode === OutcomeCode.NOT_PROCEED) {
+      return {
+        code: OutcomeCode.NOT_PROCEED,
+        display: [
+          {
+            label: 'Reason for not proceeding',
+            reason: outcomeHistoryItem.outcome.outcome.reason,
+            details: outcomeHistoryItem.outcome.outcome.details,
+          },
+        ],
+      }
+    }
+    if (outcomeHistoryItem.outcome.referralOutcome) {
+      const prosecute = outcomeHistoryItem.outcome.referralOutcome.code === ReferralOutcomeCode.PROSECUTION
+      const nextStep =
+        outcomeHistoryItem.outcome.referralOutcome.code === ReferralOutcomeCode.NOT_PROCEED
+          ? 'Not proceed with the charge'
+          : 'Schedule a hearing'
+      const outcomeReferralTable = {
+        code: OutcomeCode.REFER_POLICE,
+        display: [
+          { label: 'Reason for referral', value: outcomeHistoryItem.outcome.outcome.details },
+          {
+            label: 'Will this charge continue to prosecution?',
+            value: prosecute ? 'Yes' : 'No',
+          },
+        ],
+      }
+      if (!prosecute) {
+        outcomeReferralTable.display.push({
+          label: 'Next step',
+          value: nextStep,
+        })
+      }
+      if (outcomeHistoryItem.outcome.referralOutcome.code === ReferralOutcomeCode.NOT_PROCEED) {
+        outcomeReferralTable.display.push({
+          label: 'Reason for not proceeding',
+          // @ts-expect-error: this is annoying
+          reason: outcomeHistoryItem.outcome.referralOutcome.reason,
+          details: outcomeHistoryItem.outcome.referralOutcome.details,
+        })
+      }
+      return outcomeReferralTable
+    }
+    return {
+      code: OutcomeCode.REFER_POLICE,
+      display: [{ label: 'Reason for referral', value: outcomeHistoryItem.outcome.outcome.details }],
+    }
+  }
+
   async getHearingHistory(history: OutcomeHistory, user: User) {
     if (!history.length) return []
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
@@ -633,8 +687,9 @@ export default class ReportedAdjudicationsService {
         if (historyItem.outcome) return { hearingTable, referralTable: historyItem.outcome }
         return { hearingTable }
       }
-      // TODO: Create a display for outcome without hearing - not proceed and refer to police
-      return historyItem.outcome
+      const table = this.createOutcomeTableDisplay(historyItem)
+      console.log(table)
+      return table
     })
   }
 

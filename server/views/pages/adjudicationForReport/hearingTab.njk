@@ -4,6 +4,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 
+{% from "../../partials/hearingDetailsVariations/outcomeTable.njk" import outcomeTable %}
 {% from "../../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
 
 {% block pageTitle %}
@@ -41,12 +42,8 @@
             <p class="govuk-body">Referral outcome reason: {{ item.referralTable.referralOutcome.reason }}</p>
           {% endif %}
         {% endif %}
-
       {% else %}
-       <p class="govuk-body">Outcome code: {{ item.outcome.code }}</p>
-       {% if item.outcome.details %}
-       <p class="govuk-body">details: {{ item.outcome.details }}</p>
-       {% endif %}
+      {{ outcomeTable(item, readOnly, reportNo) }}
        {% if item.referralOutcome %}
        <p class="govuk-body">Referral outcome code: {{ item.referralOutcome.code }}</p>
        {% endif %}

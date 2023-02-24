@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
+import { NotProceedReason } from './OutcomeResult'
+
 export enum HearingOutcomeCode {
   COMPLETE = 'COMPLETE',
   REFER_POLICE = 'REFER_POLICE',
@@ -70,11 +72,14 @@ export type Outcome = {
   id: number
   code: OutcomeCode
   details: string
+  reason?: string
 }
 
 export type ReferralOutcome = {
   id: number
   code: ReferralOutcomeCode
+  details?: string
+  reason?: NotProceedReason
 }
 
 export type OutcomeDetails = {
@@ -88,6 +93,7 @@ export type OutcomeDetailsHistory = {
 
 export type HearingDetailsHistory = {
   hearing: HearingDetails
+  outcome?: OutcomeDetails
 }
 
 export type OutcomeHistory = Array<OutcomeDetailsHistory & HearingDetailsHistory>
