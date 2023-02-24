@@ -14,7 +14,7 @@ context('What is the reason for the referral?', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubCreateOutcome', {
+    cy.task('stubCreateProsecution', {
       adjudicationNumber: 100,
       hearingId: 1,
       response: {
