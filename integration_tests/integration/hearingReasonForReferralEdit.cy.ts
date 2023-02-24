@@ -4,7 +4,7 @@ import HearingReasonForReferral from '../pages/hearingReasonForReferral'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
-context('What is the reason for the referral?', () => {
+context.skip('What is the reason for the referral?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

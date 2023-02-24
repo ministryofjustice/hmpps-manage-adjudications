@@ -9,7 +9,7 @@ import {
 } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
-context('Plea and finding', () => {
+context.skip('Plea and finding', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

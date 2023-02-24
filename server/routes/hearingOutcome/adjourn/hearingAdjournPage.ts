@@ -85,8 +85,6 @@ export default class HearingReasonForReferralPage {
     const { adjudicatorName } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
-    const isEdit = this.pageOptions.isEdit()
-
     const error = validateForm({ adjournReason, adjournDetails, adjournPlea })
     if (error)
       return this.renderView(req, res, {
@@ -97,27 +95,15 @@ export default class HearingReasonForReferralPage {
       })
 
     try {
-      if (isEdit) {
-        await this.hearingsService.updateAdjourn(
-          adjudicationNumber,
-          HearingOutcomeCode.ADJOURN,
-          adjudicatorName as string,
-          adjournDetails,
-          adjournReason,
-          adjournPlea,
-          user
-        )
-      } else {
-        await this.hearingsService.createAdjourn(
-          adjudicationNumber,
-          HearingOutcomeCode.ADJOURN,
-          adjudicatorName as string,
-          adjournDetails,
-          adjournReason,
-          adjournPlea,
-          user
-        )
-      }
+      await this.hearingsService.createAdjourn(
+        adjudicationNumber,
+        HearingOutcomeCode.ADJOURN,
+        adjudicatorName as string,
+        adjournDetails,
+        adjournReason,
+        adjournPlea,
+        user
+      )
 
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {

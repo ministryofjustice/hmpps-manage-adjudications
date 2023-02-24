@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import { HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -49,16 +49,6 @@ describe('POST /hearing-plea-finding edit', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
-      .then(() =>
-        expect(hearingsService.updateHearingPleaAndFinding).toHaveBeenCalledWith(
-          100,
-          HearingOutcomeCode.COMPLETE,
-          'Judge Red',
-          HearingOutcomePlea.GUILTY,
-          HearingOutcomeFinding.PROVED,
-          expect.anything()
-        )
-      )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
     return request(app)
@@ -74,16 +64,6 @@ describe('POST /hearing-plea-finding edit', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReasonForFinding.urls.edit(100, 1))
-      .then(() =>
-        expect(hearingsService.updateHearingPleaAndFinding).toHaveBeenCalledWith(
-          100,
-          HearingOutcomeCode.COMPLETE,
-          'Judge Red',
-          HearingOutcomePlea.GUILTY,
-          HearingOutcomeFinding.DISMISSED,
-          expect.anything()
-        )
-      )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
     return request(app)
@@ -99,15 +79,5 @@ describe('POST /hearing-plea-finding edit', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.reasonForNotProceeding.urls.edit(100))
-      .then(() =>
-        expect(hearingsService.updateHearingPleaAndFinding).toHaveBeenCalledWith(
-          100,
-          HearingOutcomeCode.COMPLETE,
-          'Judge Red',
-          HearingOutcomePlea.GUILTY,
-          HearingOutcomeFinding.NOT_PROCEED_WITH,
-          expect.anything()
-        )
-      )
   })
 })

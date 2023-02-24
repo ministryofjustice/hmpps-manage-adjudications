@@ -334,23 +334,32 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createHearingOutcome(
+  async createAdjourn(
     adjudicationNumber: number,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
-      data: { ...hearingOutcomeDetails },
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
+      data: {
+        adjudicator: hearingOutcomeDetails.adjudicator,
+        reason: hearingOutcomeDetails.reason,
+        details: hearingOutcomeDetails.details,
+        plea: hearingOutcomeDetails.plea,
+      },
     })
   }
 
-  async updateHearingOutcome(
+  async createReferral(
     adjudicationNumber: number,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome`,
-      data: { ...hearingOutcomeDetails },
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/referral`,
+      data: {
+        code: hearingOutcomeDetails.code,
+        adjudicator: hearingOutcomeDetails.adjudicator,
+        details: hearingOutcomeDetails.details,
+      },
     })
   }
 
