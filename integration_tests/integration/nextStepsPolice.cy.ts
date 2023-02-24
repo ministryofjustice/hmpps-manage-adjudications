@@ -14,7 +14,7 @@ context('Will this charge continue to prosecution?', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubCreateNotProceed', {
+    cy.task('stubCreateProsecution', {
       adjudicationNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
