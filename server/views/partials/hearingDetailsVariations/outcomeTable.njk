@@ -5,12 +5,12 @@
   {% set outcomeCode = outcomeItem.outcome.code %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-        <h2 class="govuk-heading-m" data-qa="outcome-title">{{ outcomeCode | outcomeTableTitle }}</h2>
+        <h2 class="govuk-heading-m" data-qa="outcome-table-title">{{ outcomeCode | outcomeTableTitle }}</h2>
         {% if not readOnly %}
             {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
-              {{ outcomeNotProceedSummary(outcomeItem.outcome) }}
+              {{ outcomeNotProceedSummary(outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }) }}
             {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
-              {{ outcomePoliceReferralSummary(outcomeItem) }}
+              {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }) }}
             {# do INAD referral in here too? #}
             {% endif %}
         {% else %}
