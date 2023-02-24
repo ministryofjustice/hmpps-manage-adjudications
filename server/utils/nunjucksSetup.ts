@@ -20,6 +20,7 @@ import {
   HearingOutcomePlea,
   HearingOutcomeAdjournReason,
   OutcomeCode,
+  ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import { NextStep, NotProceedReason } from '../data/OutcomeResult'
 
@@ -280,6 +281,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
   njkEnv.addGlobal('HearingOutcomeAdjournReason', HearingOutcomeAdjournReason)
   njkEnv.addGlobal('OutcomeCode', OutcomeCode)
+  njkEnv.addGlobal('ReferralOutcomeCode', ReferralOutcomeCode)
   njkEnv.addGlobal('NextStep', NextStep)
   njkEnv.addGlobal('outcomesFlag', config.outcomeFeatureFlag)
   njkEnv.addGlobal('NotProceedReason', NotProceedReason)

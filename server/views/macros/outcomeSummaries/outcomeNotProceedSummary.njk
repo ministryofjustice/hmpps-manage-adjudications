@@ -1,0 +1,15 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% macro outcomeNotProceedSummary(outcome = {}, attributes = {}, changeLinksActive = false) %}
+    {% set rows = [
+      {
+        key: { text: 'Reason for not proceeding' },
+        value: { html: '<p class="govuk-body">'+ outcome.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ outcome.details +'</p>' }
+      }
+    ] %}
+    {% if rows.length %}
+      {{ govukSummaryList({
+        rows: rows,
+        attributes: attributes
+      }) }}
+    {% endif %}
+{% endmacro %}

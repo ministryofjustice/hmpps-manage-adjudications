@@ -1,14 +1,20 @@
-{% from '../../macros/outcomeSummary.njk' import outcomeSummary %}
+{% from '../../macros/outcomeSummaries/outcomeNotProceedSummary.njk' import outcomeNotProceedSummary %}
+{% from '../../macros/outcomeSummaries/outcomePoliceReferralSummary.njk' import outcomePoliceReferralSummary %}
 
 {% macro outcomeTable(outcomeItem, readOnly, reportNo) %}
+  {% set outcomeCode = outcomeItem.outcome.code %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-        <h2 class="govuk-heading-m" data-qa="outcome-title">{{ outcomeItem.code | outcomeTableTitle }}</h2>
+        <h2 class="govuk-heading-m" data-qa="outcome-title">{{ outcomeCode | outcomeTableTitle }}</h2>
         {% if not readOnly %}
-            {{ outcomeSummary(outcomeItem) }}
-            {# {{ hearingSummary(hearing, { "data-qa": "details-summary-table-"+hearingNumber }, hearing.id === latestHearingId, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId), reportNo, latestHearingId) }} #}
+            {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
+              {{ outcomeNotProceedSummary(outcomeItem.outcome) }}
+            {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
+              {{ outcomePoliceReferralSummary(outcomeItem) }}
+            {# do INAD referral in here too? #}
+            {% endif %}
         {% else %}
-            {# {{ hearingSummary(hearing, { "data-qa": "details-summary-table-"+hearingNumber }, false) }} #}
+          {# Readonly (reporter versions will go in here) #}
         {% endif %}
         </div>
     </div>
