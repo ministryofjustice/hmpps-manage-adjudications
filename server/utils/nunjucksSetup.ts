@@ -196,7 +196,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addFilter('outcomeTableTitle', (outcomeCode: OutcomeCode) => {
     switch (outcomeCode) {
       case OutcomeCode.NOT_PROCEED:
-        return 'Not proceed with'
+        return 'Not proceeded with'
       case OutcomeCode.REFER_POLICE:
         return 'Police referral'
       case OutcomeCode.REFER_INAD:

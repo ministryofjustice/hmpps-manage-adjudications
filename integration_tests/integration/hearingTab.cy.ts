@@ -425,7 +425,7 @@ context('Hearing details page', () => {
     it('Adjudication NOT PROCEEDED WITH', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524502))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
-      hearingTabPage.outcomeTableTitle().contains('Not proceed with')
+      hearingTabPage.outcomeTableTitle().contains('Not proceeded with')
       hearingTabPage
         .notProceedTable()
         .find('dt')
