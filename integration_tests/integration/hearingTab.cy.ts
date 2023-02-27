@@ -19,6 +19,8 @@ const hearingDateTimeOne = '2030-01-04T09:00:00'
 const hearingDateTimeOneFormatted = '4 January 2030 - 09:00'
 const hearingDateTimeTwo = '2030-01-06T10:00:00'
 const hearingDateTimeTwoFormatted = '6 January 2030 - 10:00'
+const hearingDateTimeThree = '2030-01-07T11:00:00'
+const hearingDateTimeThreeFormatted = '7 January 2030 - 11:00'
 
 const reportedAdjudicationResponse = (
   adjudicationNumber: number,
@@ -66,6 +68,17 @@ const hearingWithReferToPoliceOutcome = testData.singleHearing({
   outcome: testData.hearingOutcome({ optionalItems: { details: 'This is my reason for referring.' } }),
 })
 
+const hearingWithReferToInAdOutcome = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeTwo,
+  id: 988,
+  locationId: 234,
+  oicHearingType: OicHearingType.INAD_ADULT,
+  outcome: testData.hearingOutcome({
+    code: HearingOutcomeCode.REFER_INAD,
+    optionalItems: { details: 'This is my reason for referring.' },
+  }),
+})
+
 const twoHearings = [hearingWithAdjournedOutcome, singleHearingNoOutcome]
 
 const historyWithOneHearing = [
@@ -96,13 +109,54 @@ const historyWithReferredHearing = [
   },
 ]
 
-const historyWithReferredHearingWithOutcome = [
+const historyWithReferredHearingWithProsecutionOutcome = [
   {
     hearing: hearingWithReferToPoliceOutcome,
     outcome: {
       outcome: testData.outcome({ details: 'This is my reason for referring.' }),
       referralOutcome: testData.referralOutcome({}),
     },
+  },
+]
+
+const historyWithReferredHearingWithNotProceededOutcome = [
+  {
+    hearing: hearingWithReferToPoliceOutcome,
+    outcome: {
+      outcome: testData.outcome({ details: 'This is my reason for referring.' }),
+      referralOutcome: testData.referralOutcome({
+        code: ReferralOutcomeCode.NOT_PROCEED,
+        reason: NotProceedReason.ANOTHER_WAY,
+        details: 'This is the reason why I am not proceeding',
+      }),
+    },
+  },
+]
+
+const historyWithInAdReferredHearing = [
+  {
+    hearing: hearingWithReferToInAdOutcome,
+    outcome: {
+      outcome: testData.outcome({ details: 'This is my reason for referring.', code: OutcomeCode.REFER_INAD }),
+    },
+  },
+]
+
+const historyWithInAdReferredHearingAndScheduleHearingReferralOutcome = [
+  {
+    hearing: hearingWithReferToInAdOutcome,
+    outcome: {
+      outcome: testData.outcome({ details: 'This is my reason for referring.', code: OutcomeCode.REFER_INAD }),
+      referralOutcome: testData.referralOutcome({ code: ReferralOutcomeCode.SCHEDULE_HEARING }),
+    },
+  },
+  {
+    hearing: testData.singleHearing({
+      dateTimeOfHearing: hearingDateTimeThree,
+      id: 7654,
+      locationId: 123,
+      oicHearingType: OicHearingType.GOV_ADULT,
+    }),
   },
 ]
 
@@ -236,14 +290,44 @@ context('Hearing details page', () => {
         historyWithReferredHearing
       ),
     })
-    // Adjudication with hearing - referred to police - with referral outcome
+    // Adjudication with hearing - referred to ind ad
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524506,
+      response: reportedAdjudicationResponse(
+        1524506,
+        ReportedAdjudicationStatus.REFER_INAD,
+        [],
+        historyWithInAdReferredHearing
+      ),
+    })
+    // Adjudication with hearing - referred to ind ad with schedule hearing referral outcome
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524507,
+      response: reportedAdjudicationResponse(
+        1524507,
+        ReportedAdjudicationStatus.REFER_INAD,
+        [],
+        historyWithInAdReferredHearingAndScheduleHearingReferralOutcome
+      ),
+    })
+    // Adjudication with hearing - referred to police - with referral outcome - prosecution
     cy.task('stubGetReportedAdjudication', {
       id: 1524501,
       response: reportedAdjudicationResponse(
         1524501,
         ReportedAdjudicationStatus.REFER_POLICE,
         [hearingWithReferToPoliceOutcome],
-        historyWithReferredHearingWithOutcome
+        historyWithReferredHearingWithProsecutionOutcome
+      ),
+    })
+    // Adjudication with hearing - referred to police - with referral outcome - not proceed
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524505,
+      response: reportedAdjudicationResponse(
+        1524505,
+        ReportedAdjudicationStatus.NOT_PROCEED,
+        [],
+        historyWithReferredHearingWithNotProceededOutcome
       ),
     })
     // Adjudication not proceeded with
@@ -456,7 +540,7 @@ context('Hearing details page', () => {
       hearingTabPage.nextStepRadios().should('exist')
       hearingTabPage.removeOutcomeButton().should('not.exist')
     })
-    it('Adjudication REFER TO POLICE, no hearing - prosection update', () => {
+    it('Adjudication REFER TO POLICE, no hearing - prosecution update', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524503))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.outcomeTableTitle().contains('Police referral')
@@ -760,8 +844,19 @@ context('Hearing details page', () => {
           expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
         })
 
-      cy.get('[data-qa="outcome-code"]').contains('REFER_POLICE')
-      cy.get('[data-qa="outcome-details"]').contains('This is my reason for referring.')
+      hearingTabPage
+        .policeReferralTable()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Reason for referral')
+        })
+
+      hearingTabPage
+        .policeReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+        })
 
       hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
@@ -788,9 +883,21 @@ context('Hearing details page', () => {
           expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
         })
 
-      cy.get('[data-qa="outcome-code"]').contains('REFER_POLICE')
-      cy.get('[data-qa="outcome-details"]').contains('This is my reason for referring.')
-      cy.get('[data-qa="referral-outcome-code"]').contains('PROSECUTION')
+      hearingTabPage
+        .policeReferralTable()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabels.get(1).innerText).to.contain('Will this charge continue to prosecution?')
+        })
+
+      hearingTabPage
+        .policeReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+          expect($summaryData.get(1).innerText).to.contain('Yes')
+        })
 
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
@@ -828,8 +935,124 @@ context('Hearing details page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524500))
       })
 
-      cy.get('[data-qa="outcome-code"]').should('not.exist')
-      cy.get('[data-qa="outcome-details"]').should('not.exist')
+      hearingTabPage.policeReferralTable().should('not.exist')
+    })
+    it('Adjudication with a hearing with a refer to police outcome and referral outcome - not proceed', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524505))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      hearingTabPage.reviewStatus().contains('Not proceeded with')
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
+        })
+
+      hearingTabPage
+        .policeReferralTable()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabels.get(1).innerText).to.contain('Will this charge continue to prosecution?')
+          expect($summaryLabels.get(2).innerText).to.contain('Next step')
+          expect($summaryLabels.get(3).innerText).to.contain('Reason for not proceeding')
+        })
+
+      hearingTabPage
+        .policeReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+          expect($summaryData.get(1).innerText).to.contain('No')
+          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(3).innerText).to.contain(
+            'Resolved in another way\n\nThis is the reason why I am not proceeding'
+          )
+        })
+
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().contains('Remove this referral')
+    })
+    it('Adjudication with a hearing with a refer to independent adjudicator outcome', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524506))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+        })
+
+      hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
+        })
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+        })
+      hearingTabPage.nextStepReferralOutcomeButton().should('exist')
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().contains('Remove this referral')
+    })
+    it('Adjudication with a hearing with a refer to independent adjudicator outcome and referral outcome of new hearing', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524507))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+        })
+
+      hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabel.get(1).innerText).to.contain('Next step')
+        })
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+        })
+      hearingTabPage.nextStepReferralOutcomeButton().should('not.exist')
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().should('not.exist')
+      hearingTabPage.removeHearingButton().should('exist')
+
+      hearingTabPage
+        .hearingSummaryTable(2)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+        })
     })
   })
   describe('Test scenarios - reporter view', () => {
@@ -843,7 +1066,7 @@ context('Hearing details page', () => {
       { id: 1524502 },
       { id: 1524504 },
     ].forEach(adj => {
-      it.only('should contain the required page elements', () => {
+      it('should contain the required page elements', () => {
         cy.visit(adjudicationUrls.hearingDetails.urls.report(adj.id))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.reviewStatus().should('exist')
@@ -968,6 +1191,50 @@ context('Hearing details page', () => {
           expect($summaryData.get(2).innerText).to.contain('Governor')
         })
       hearingTabPage.changeLink().should('not.exist')
+    })
+    it('Adjudication with a hearing with a refer to independent adjudicator outcome and referral outcome of new hearing', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.report(1524507))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+        })
+
+      hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabel.get(1).innerText).to.contain('Next step')
+        })
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+        })
+      hearingTabPage.nextStepReferralOutcomeButton().should('not.exist')
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().should('not.exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+
+      hearingTabPage
+        .hearingSummaryTable(2)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+        })
     })
   })
 })

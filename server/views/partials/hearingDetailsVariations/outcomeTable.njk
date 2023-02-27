@@ -1,5 +1,6 @@
 {% from '../../macros/outcomeSummaries/outcomeNotProceedSummary.njk' import outcomeNotProceedSummary %}
 {% from '../../macros/outcomeSummaries/outcomePoliceReferralSummary.njk' import outcomePoliceReferralSummary %}
+{% from '../../macros/outcomeSummaries/outcomeInAdReferralSummary.njk' import outcomeInAdReferralSummary %}
 
 {% macro outcomeTable(outcomeItem, readOnly, reportNo) %}
   {% set outcomeCode = outcomeItem.outcome.code %}
@@ -11,14 +12,16 @@
           {{ outcomeNotProceedSummary(outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, true) }}
         {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
           {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }, true) }}
-          {# do INAD referral in here too? #}
+        {% elif outcomeCode === OutcomeCode.REFER_INAD %}
+          {{ outcomeInAdReferralSummary(outcomeItem, { "data-qa": "inad-referral-table" }, true) }}
         {% endif %}
       {% else %}
         {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
           {{ outcomeNotProceedSummary(outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, false) }}
         {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
           {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }, false) }}
-          {# do INAD referral in here too? #}
+        {% elif outcomeCode === OutcomeCode.REFER_INAD %}
+          {{ outcomeInAdReferralSummary(outcomeItem, { "data-qa": "inad-referral-table" }, false) }}
         {% endif %}
       {% endif %}
     </div>

@@ -46,6 +46,10 @@ export default class HearingTabPage extends Page {
 
   policeReferralTable = (): PageElement => cy.get('[data-qa="police-referral-table"]')
 
+  nextStepReferralOutcomeButton = (): PageElement => cy.get('[data-qa="continue-to-next-step-button"]')
+
+  inAdReferralTable = (): PageElement => cy.get('[data-qa="inad-referral-table"]')
+
   // Not proceed state
 
   notProceedTable = (): PageElement => cy.get('[data-qa="not-proceed-summary-table"]')

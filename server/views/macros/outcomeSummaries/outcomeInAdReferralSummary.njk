@@ -1,0 +1,47 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro outcomeInAdReferralSummary(outcome = {}, attributes = {}, changeLinksActive = false) %}
+  {% set outcomeDetails = outcome.outcome %}
+  {% set referralDetails = outcome.referralOutcome %}
+
+  {% set rows = [
+    {
+      key: {
+        text: 'Reason for referral'
+      },
+      value: {
+        text: outcomeDetails.details
+      }
+    }
+  ] %}
+
+  {% if referralDetails %}
+    {% set nextStep = 'Not proceed with the charge' if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED else 
+      'Schedule a hearing' %}
+    {% set notProceeding = referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %} 
+      {% set rows = (rows.push({
+        key: {
+          text: 'Next step'
+        },
+        value: {
+          text: nextStep
+        }
+      }), rows) %}
+
+    {% if notProceeding %}
+      {% set rows = (rows.push({
+        key: {
+          text: 'Reason for not proceeding'
+        },
+        value: { html: '<p class="govuk-body">'+ referralDetails.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ referralDetails.details +'</p>' }
+      }), rows) %}
+    {% endif %} 
+  {% endif %}
+
+  {% if rows.length %}
+    {{ govukSummaryList({
+      rows: rows,
+      attributes: attributes
+    }) }}
+  {% endif %}
+{% endmacro %}
