@@ -777,6 +777,21 @@ const stubRemoveReferral = ({ adjudicationNumber, response }): SuperAgentRequest
     },
   })
 
+const stubRemoveNotProceed = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -816,4 +831,5 @@ export default {
   stubCreateProsecution,
   stubCreateNotProceed,
   stubRemoveReferral,
+  stubRemoveNotProceed,
 }

@@ -439,7 +439,18 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
       hearingTabPage.removeOutcomeButton().should('exist')
+      cy.task('stubRemoveNotProceed', {
+        adjudicationNumber: 1524502,
+        response: reportedAdjudicationResponse(1524502, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
+      })
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524502,
+        response: reportedAdjudicationResponse(1524502, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
+      })
       hearingTabPage.removeOutcomeButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524502))
+      })
       hearingTabPage.reviewStatus().contains('Unscheduled')
       hearingTabPage.nextStepRadioLegend().contains('What is the next step for this adjudication?')
       hearingTabPage.nextStepRadios().should('exist')
@@ -822,46 +833,61 @@ context('Hearing details page', () => {
     })
   })
   describe('Test scenarios - reporter view', () => {
-    ;[{ id: 1524480 }, { id: 1524493 }, { id: 1524494 }, { id: 1524495 }, { id: 1524496 }, { id: 1524497 }].forEach(
-      adj => {
-        it('should contain the required page elements', () => {
-          cy.visit(adjudicationUrls.hearingDetails.urls.report(adj.id))
-          const hearingTabPage = Page.verifyOnPage(hearingTab)
-          hearingTabPage.reviewStatus().should('exist')
-          hearingTabPage.removeHearingButton().should('not.exist')
-          hearingTabPage.viewAllCompletedReportsLink().should('not.exist')
-          hearingTabPage.ReturnToAllHearingsLink().should('not.exist')
-          if (adj.id === 1524493 || adj.id === 1524480) {
-            // AWAITING_REVIEW & RETURNED ADJUDICATIONS
-            hearingTabPage.schedulingUnavailableP1().should('exist')
-            hearingTabPage.schedulingUnavailableP2().should('exist')
-            hearingTabPage.noHearingsScheduled().should('not.exist')
-            hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
-            hearingTabPage.hearingSummaryTable(1).should('not.exist')
-          } else if (adj.id === 1524494) {
-            // ACCEPTED ADJUDICATION
-            hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
-            hearingTabPage.schedulingUnavailableP1().should('not.exist')
-            hearingTabPage.schedulingUnavailableP2().should('not.exist')
-            hearingTabPage.hearingSummaryTable(1).should('not.exist')
-          } else if (adj.id === 1524497) {
-            // UNSCHEDULED ADJUDICATION
-            hearingTabPage.noHearingsScheduled().should('exist')
-            hearingTabPage.hearingSummaryTable(1).should('not.exist')
-            hearingTabPage.schedulingUnavailableP1().should('not.exist')
-            hearingTabPage.schedulingUnavailableP2().should('not.exist')
-            hearingTabPage.nextStepRadios().should('not.exist') // not available to reporters
-            hearingTabPage.nextStepConfirmationButton().should('not.exist') // not available to reporters
-          } else {
-            // SCHEDULED ADJUDICATION
-            hearingTabPage.schedulingUnavailableP1().should('not.exist')
-            hearingTabPage.schedulingUnavailableP2().should('not.exist')
-            hearingTabPage.noHearingsScheduled().should('not.exist')
-            hearingTabPage.enterHearingOutcomeButton().should('not.exist') // not available to reporters
-          }
-        })
-      }
-    )
+    ;[
+      { id: 1524480 },
+      { id: 1524493 },
+      { id: 1524494 },
+      { id: 1524495 },
+      { id: 1524496 },
+      { id: 1524497 },
+      { id: 1524502 },
+      { id: 1524504 },
+    ].forEach(adj => {
+      it.only('should contain the required page elements', () => {
+        cy.visit(adjudicationUrls.hearingDetails.urls.report(adj.id))
+        const hearingTabPage = Page.verifyOnPage(hearingTab)
+        hearingTabPage.reviewStatus().should('exist')
+        hearingTabPage.removeHearingButton().should('not.exist')
+        hearingTabPage.viewAllCompletedReportsLink().should('not.exist')
+        hearingTabPage.ReturnToAllHearingsLink().should('not.exist')
+        if (adj.id === 1524493 || adj.id === 1524480) {
+          // AWAITING_REVIEW & RETURNED ADJUDICATIONS
+          hearingTabPage.schedulingUnavailableP1().should('exist')
+          hearingTabPage.schedulingUnavailableP2().should('exist')
+          hearingTabPage.noHearingsScheduled().should('not.exist')
+          hearingTabPage.reportAcceptedNoHearingsScheduled().should('not.exist')
+          hearingTabPage.hearingSummaryTable(1).should('not.exist')
+        } else if (adj.id === 1524494) {
+          // ACCEPTED ADJUDICATION
+          hearingTabPage.reportAcceptedNoHearingsScheduled().should('exist')
+          hearingTabPage.schedulingUnavailableP1().should('not.exist')
+          hearingTabPage.schedulingUnavailableP2().should('not.exist')
+          hearingTabPage.hearingSummaryTable(1).should('not.exist')
+        } else if (adj.id === 1524497) {
+          // UNSCHEDULED ADJUDICATION
+          hearingTabPage.noHearingsScheduled().should('exist')
+          hearingTabPage.hearingSummaryTable(1).should('not.exist')
+          hearingTabPage.schedulingUnavailableP1().should('not.exist')
+          hearingTabPage.schedulingUnavailableP2().should('not.exist')
+          hearingTabPage.nextStepRadios().should('not.exist') // not available to reporters
+          hearingTabPage.nextStepConfirmationButton().should('not.exist') // not available to reporters
+        } else if (adj.id === 1524502) {
+          hearingTabPage.notProceedTable().should('exist')
+          hearingTabPage.outcomeTableTitle().contains('Not proceeded with')
+          hearingTabPage.removeOutcomeButton().should('not.exist')
+        } else if (adj.id === 1524504) {
+          hearingTabPage.policeReferralTable().should('exist')
+          hearingTabPage.outcomeTableTitle().contains('Police referral')
+          hearingTabPage.removeReferralButton().should('not.exist')
+        } else {
+          // SCHEDULED ADJUDICATION
+          hearingTabPage.schedulingUnavailableP1().should('not.exist')
+          hearingTabPage.schedulingUnavailableP2().should('not.exist')
+          hearingTabPage.noHearingsScheduled().should('not.exist')
+          hearingTabPage.enterHearingOutcomeButton().should('not.exist') // not available to reporters
+        }
+      })
+    })
     it('Adjudication awaiting review', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524493))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
