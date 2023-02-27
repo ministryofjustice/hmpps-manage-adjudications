@@ -7,10 +7,7 @@ export default class OutcomesService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
   async createProsecution(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    const outcomeDetails = {
-      code: OutcomeCode.PROSECUTION,
-    }
-    return new ManageAdjudicationsClient(user.token).createProsecution(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user.token).createProsecution(adjudicationNumber)
   }
 
   async createNotProceed(
@@ -29,6 +26,10 @@ export default class OutcomesService {
 
   async removeReferral(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).removeReferral(adjudicationNumber)
+  }
+
+  async removeNotProceed(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).removeNotProceed(adjudicationNumber)
   }
 
   async createPoliceReferral(

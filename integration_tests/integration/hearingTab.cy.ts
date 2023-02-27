@@ -439,6 +439,11 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
       hearingTabPage.removeOutcomeButton().should('exist')
+      hearingTabPage.removeOutcomeButton().click()
+      hearingTabPage.reviewStatus().contains('Unscheduled')
+      hearingTabPage.nextStepRadioLegend().contains('What is the next step for this adjudication?')
+      hearingTabPage.nextStepRadios().should('exist')
+      hearingTabPage.removeOutcomeButton().should('not.exist')
     })
     it('Adjudication REFER TO POLICE, no hearing - prosection update', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524503))
@@ -459,7 +464,7 @@ context('Hearing details page', () => {
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
       hearingTabPage.enterReferralOutcomeButton().click()
-      cy.task('stubCreateOutcome', {
+      cy.task('stubCreateProsecution', {
         adjudicationNumber: 1524503,
         response: {
           reportedAdjudication: testData.reportedAdjudication({

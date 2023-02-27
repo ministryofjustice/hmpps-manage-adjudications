@@ -90,7 +90,10 @@ export default class HearingTabPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { removeHearingButton, nextStep, removeReferralButton } = req.body
+    const { removeHearingButton, nextStep, removeReferralButton, removeOutcomeButton } = req.body
+    if (removeOutcomeButton) {
+      await this.outcomesService.removeNotProceed(adjudicationNumber, user)
+    }
     if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
     }
