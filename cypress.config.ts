@@ -91,7 +91,9 @@ export default defineConfig({
         stubPutDateTimeOfIssue: adjudications.stubPutDateTimeOfIssue,
         stubCreateReferral: adjudications.stubCreateReferral,
         stubCreateAdjourn: adjudications.stubCreateAdjourn,
-        stubCreateOutcome: adjudications.stubCreateOutcome,
+        stubCreatePoliceReferral: adjudications.stubCreatePoliceReferral,
+        stubCreateProsecution: adjudications.stubCreateProsecution,
+        stubCreateNotProceed: adjudications.stubCreateNotProceed,
         stubRemoveReferral: adjudications.stubRemoveReferral,
       })
     },

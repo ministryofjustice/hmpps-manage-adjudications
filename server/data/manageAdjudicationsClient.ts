@@ -363,10 +363,39 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createOutcome(adjudicationNumber: number, outcomeDetails: OutcomeDetails): Promise<ReportedAdjudicationResult> {
+  async createProsecution(
+    adjudicationNumber: number,
+    outcomeDetails: OutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome`,
-      data: { ...outcomeDetails },
+      path: `/reported-adjudications/${adjudicationNumber}/outcome/prosecution`,
+      data: { details: outcomeDetails.details },
+    })
+  }
+
+  async createNotProceed(
+    adjudicationNumber: number,
+    outcomeDetails: OutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
+      data: { reason: outcomeDetails.reason, details: outcomeDetails.details },
+    })
+  }
+
+  async createPoliceReferral(
+    adjudicationNumber: number,
+    outcomeDetails: OutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/outcome/refer-police`,
+      data: { details: outcomeDetails.details },
+    })
+  }
+
+  async removeNotProceed(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/outcome//not-proceed`,
     })
   }
 
