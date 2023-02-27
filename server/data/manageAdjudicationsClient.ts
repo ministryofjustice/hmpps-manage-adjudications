@@ -363,13 +363,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createProsecution(
-    adjudicationNumber: number,
-    outcomeDetails: OutcomeDetails
-  ): Promise<ReportedAdjudicationResult> {
+  async createProsecution(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/outcome/prosecution`,
-      data: { details: outcomeDetails.details },
     })
   }
 
@@ -395,7 +391,7 @@ export default class ManageAdjudicationsClient {
 
   async removeNotProceed(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome//not-proceed`,
+      path: `/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
     })
   }
 

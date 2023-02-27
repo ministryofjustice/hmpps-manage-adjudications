@@ -633,7 +633,6 @@ export default class ReportedAdjudicationsService {
         if (historyItem.outcome) return { hearingTable, referralTable: historyItem.outcome }
         return { hearingTable }
       }
-      // TODO: Create a display for outcome without hearing - not proceed and refer to police
       return historyItem.outcome
     })
   }

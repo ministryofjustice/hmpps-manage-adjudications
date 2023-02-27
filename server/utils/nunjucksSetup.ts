@@ -19,6 +19,8 @@ import {
   HearingOutcomeFinding,
   HearingOutcomePlea,
   HearingOutcomeAdjournReason,
+  OutcomeCode,
+  ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import { NextStep, NotProceedReason } from '../data/OutcomeResult'
 
@@ -191,6 +193,44 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     }
   })
 
+  njkEnv.addFilter('outcomeTableTitle', (outcomeCode: OutcomeCode) => {
+    switch (outcomeCode) {
+      case OutcomeCode.NOT_PROCEED:
+        return 'Not proceeded with'
+      case OutcomeCode.REFER_POLICE:
+        return 'Police referral'
+      case OutcomeCode.REFER_INAD:
+        return 'Independent adjudicator referral'
+      default:
+        return null
+    }
+  })
+
+  njkEnv.addFilter('convertNotProceedReason', (notProceedReason: NotProceedReason) => {
+    switch (notProceedReason) {
+      case NotProceedReason.ANOTHER_WAY:
+        return 'Resolved in another way'
+      case NotProceedReason.RELEASED:
+        return 'Prisoner released'
+      case NotProceedReason.UNFIT:
+        return 'Prisoner mentally or physically unfit to attend'
+      case NotProceedReason.FLAWED:
+        return 'Flawed notice of report'
+      case NotProceedReason.EXPIRED_NOTICE:
+        return 'Notice of report issued more than 48 hours after incident'
+      case NotProceedReason.EXPIRED_HEARING:
+        return 'Hearing open outside timeframe'
+      case NotProceedReason.NOT_FAIR:
+        return 'Not fair to continue'
+      case NotProceedReason.WITNESS_NOT_ATTEND:
+        return 'Witness unable to attend'
+      case NotProceedReason.OTHER:
+        return 'Other'
+      default:
+        return 'Not known'
+    }
+  })
+
   njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
     if (!witnessLastName) return witnessFirstName
     return `${witnessLastName}, ${witnessFirstName}`
@@ -239,8 +279,10 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
   njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
   njkEnv.addGlobal('HearingOutcomeFinding', HearingOutcomeFinding)
+  njkEnv.addGlobal('HearingOutcomeAdjournReason', HearingOutcomeAdjournReason)
+  njkEnv.addGlobal('OutcomeCode', OutcomeCode)
+  njkEnv.addGlobal('ReferralOutcomeCode', ReferralOutcomeCode)
   njkEnv.addGlobal('NextStep', NextStep)
   njkEnv.addGlobal('outcomesFlag', config.outcomeFeatureFlag)
   njkEnv.addGlobal('NotProceedReason', NotProceedReason)
-  njkEnv.addGlobal('HearingOutcomeAdjournReason', HearingOutcomeAdjournReason)
 }

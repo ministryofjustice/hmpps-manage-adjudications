@@ -26,7 +26,7 @@ export default class HearingTabPage extends Page {
 
   hearingIndex = (index: number): PageElement => cy.get(`[data-qa="hearing-index-${index}"]`)
 
-  summaryTable = (index: number): PageElement => cy.get(`[data-qa="details-summary-table-${index}"]`)
+  hearingSummaryTable = (index: number): PageElement => cy.get(`[data-qa="details-summary-table-${index}"]`)
 
   enterHearingOutcomeButton = (): PageElement => cy.get('[data-qa="enter-hearing-outcome-button"]')
 
@@ -44,7 +44,15 @@ export default class HearingTabPage extends Page {
 
   enterReferralOutcomeButton = (): PageElement => cy.get('[data-qa="enter-referral-outcome-button"]')
 
-  // All
+  policeReferralTable = (): PageElement => cy.get('[data-qa="police-referral-table"]')
+
+  // Not proceed state
+
+  notProceedTable = (): PageElement => cy.get('[data-qa="not-proceed-summary-table"]')
+
+  removeOutcomeButton = (): PageElement => cy.get('[data-qa="remove-outcome-button"]')
+
+  // General
 
   ReturnToAllHearingsLink = (): PageElement => cy.get('[data-qa="all-hearings-link"]')
 
@@ -53,4 +61,6 @@ export default class HearingTabPage extends Page {
   reviewStatus = (): PageElement => cy.get('[data-qa="review-status"]')
 
   hearingTabName = (): PageElement => cy.get('[data-qa="hearingsTab"]')
+
+  outcomeTableTitle = (): PageElement => cy.get('[data-qa="outcome-table-title"]')
 }

@@ -4,6 +4,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 
+{% from "../../partials/hearingDetailsVariations/outcomeTable.njk" import outcomeTable %}
 {% from "../../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
 
 {% block pageTitle %}
@@ -19,53 +20,46 @@
     {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}
   {% endif %}
 
-  {% if reviewStatus === ReportedAdjudicationStatus.UNSCHEDULED %}
+  {% if reviewStatus === ReportedAdjudicationStatus.UNSCHEDULED and not history | length %}
     {% include "../../partials/hearingDetailsVariations/unscheduledState.njk" %}
   {% endif %}
 
-  {% if not schedulingNotAvailable  %}
+  {% if not schedulingNotAvailable %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    {% set hearingNumber = 0 %}
-    {% for item in history %}
-      {% if item.hearingTable %}
-        {% set hearingNumber = hearingNumber + 1 %}
-        {{ hearingTable(hearingNumber, item.hearingTable, readOnly, reportNo, latestHearingId) }}
-        {# Put table for police referral and inad referral here #}
-        {% if item.referralTable %}
-          <p class="govuk-body" data-qa="outcome-code">Outcome code: {{ item.referralTable.outcome.code }}</p>
-          <p class="govuk-body" data-qa="outcome-details">Outcome details: {{ item.referralTable.outcome.details }}</p>
-          {% if item.referralTable.referralOutcome %}
-            <p class="govuk-body" data-qa="referral-outcome-code">Referral outcome code: {{ item.referralTable.referralOutcome.code }}</p>
-            <p class="govuk-body">Referral outcome details: {{ item.referralTable.referralOutcome.details }}</p>
-            <p class="govuk-body">Referral outcome reason: {{ item.referralTable.referralOutcome.reason }}</p>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% set hearingNumber = 0 %}
+      {% for item in history %}
+        {% if item.hearingTable %}
+          {% set hearingNumber = hearingNumber + 1 %}
+          {{ hearingTable(hearingNumber, item.hearingTable, readOnly, reportNo, latestHearingId) }}
+          {# Put table for police referral and inad referral here #}
+          {% if item.referralTable %}
+            <p class="govuk-body" data-qa="outcome-code">Outcome code: {{ item.referralTable.outcome.code }}</p>
+            <p class="govuk-body" data-qa="outcome-details">Outcome details: {{ item.referralTable.outcome.details }}</p>
+            {% if item.referralTable.referralOutcome %}
+              <p class="govuk-body" data-qa="referral-outcome-code">Referral outcome code: {{ item.referralTable.referralOutcome.code }}</p>
+              <p class="govuk-body">Referral outcome details: {{ item.referralTable.referralOutcome.details }}</p>
+              <p class="govuk-body">Referral outcome reason: {{ item.referralTable.referralOutcome.reason }}</p>
+            {% endif %}
           {% endif %}
+        {% else %}
+          {{ outcomeTable(item, readOnly, reportNo) }}
         {% endif %}
+      {% endfor %}
 
-      {% else %}
-       <p class="govuk-body">Outcome code: {{ item.outcome.code }}</p>
-       {% if item.outcome.details %}
-       <p class="govuk-body">details: {{ item.outcome.details }}</p>
-       {% endif %}
-       {% if item.referralOutcome %}
-       <p class="govuk-body">Referral outcome code: {{ item.referralOutcome.code }}</p>
-       {% endif %}
-      {% endif %}
-    {% endfor %}
-
-    {% if not readOnly %}
-      <div class="hearing-buttons">
-        {% if primaryButtonInfo %}
-          {{ govukButton({
+      {% if not readOnly %}
+        <div class="hearing-buttons">
+          {% if primaryButtonInfo %}
+            {{ govukButton({
             text: primaryButtonInfo.text,
             href: primaryButtonInfo.href,
             classes: "govuk-button govuk-!-margin-right-3",
             name: primaryButtonInfo.name,
             attributes: { "data-qa": primaryButtonInfo.qa }
           }) }}
-        {% endif %}
-        {% if secondaryButtonInfo %}
-          {{ govukButton({
+          {% endif %}
+          {% if secondaryButtonInfo %}
+            {{ govukButton({
             text: secondaryButtonInfo.text,
             type: "submit",
             classes: "govuk-button--secondary",
@@ -73,9 +67,9 @@
             value: secondaryButtonInfo.value,
             attributes: { "data-qa": secondaryButtonInfo.qa }
           }) }}
-        {% endif %}
-      </div>
-    {% endif %}
+          {% endif %}
+        </div>
+      {% endif %}
     </form>
   {% endif %}
 

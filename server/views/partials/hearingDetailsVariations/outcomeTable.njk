@@ -1,0 +1,26 @@
+{% from '../../macros/outcomeSummaries/outcomeNotProceedSummary.njk' import outcomeNotProceedSummary %}
+{% from '../../macros/outcomeSummaries/outcomePoliceReferralSummary.njk' import outcomePoliceReferralSummary %}
+
+{% macro outcomeTable(outcomeItem, readOnly, reportNo) %}
+  {% set outcomeCode = outcomeItem.outcome.code %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h2 class="govuk-heading-m" data-qa="outcome-table-title">{{ outcomeCode | outcomeTableTitle }}</h2>
+      {% if not readOnly %}
+        {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
+          {{ outcomeNotProceedSummary(outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, true) }}
+        {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
+          {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }, true) }}
+          {# do INAD referral in here too? #}
+        {% endif %}
+      {% else %}
+        {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
+          {{ outcomeNotProceedSummary(outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, false) }}
+        {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
+          {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }, false) }}
+          {# do INAD referral in here too? #}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}

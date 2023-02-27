@@ -28,6 +28,7 @@ import {
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
+import { NotProceedReason } from '../../data/OutcomeResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -256,28 +257,37 @@ export default class TestData {
     id = 1,
     code = OutcomeCode.REFER_POLICE,
     details = 'Some details',
+    reason = null,
   }: {
     id?: number
     code?: OutcomeCode
     details?: string
+    reason?: NotProceedReason
   }): Outcome => {
     return {
       id,
       code,
       details,
+      reason,
     }
   }
 
   referralOutcome = ({
     id = 1,
     code = ReferralOutcomeCode.PROSECUTION,
+    details = null,
+    reason = null,
   }: {
     id?: number
     code?: ReferralOutcomeCode
+    details?: string
+    reason?: NotProceedReason
   }): ReferralOutcome => {
     return {
       id,
       code,
+      details,
+      reason,
     }
   }
 
