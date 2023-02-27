@@ -50,7 +50,6 @@ import {
   HearingOutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
-  ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import { OutcomeCode } from '../data/OutcomeResult'
