@@ -717,11 +717,41 @@ const stubCreateReferral = ({ adjudicationNumber, response }): SuperAgentRequest
     },
   })
 
-const stubCreateOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubCreatePoliceReferral = ({ adjudicationNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome/refer-police`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubCreateProsecution = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome/prosecution`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubCreateNotProceed = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
     },
     response: {
       status: 200,
@@ -782,6 +812,8 @@ export default {
   stubPutDateTimeOfIssue,
   stubCreateReferral,
   stubCreateAdjourn,
-  stubCreateOutcome,
+  stubCreatePoliceReferral,
+  stubCreateProsecution,
+  stubCreateNotProceed,
   stubRemoveReferral,
 }

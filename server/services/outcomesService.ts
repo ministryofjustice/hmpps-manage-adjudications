@@ -10,7 +10,7 @@ export default class OutcomesService {
     const outcomeDetails = {
       code: OutcomeCode.PROSECUTION,
     }
-    return new ManageAdjudicationsClient(user.token).createOutcome(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user.token).createProsecution(adjudicationNumber, outcomeDetails)
   }
 
   async createNotProceed(
@@ -24,7 +24,7 @@ export default class OutcomesService {
       reason,
       details,
     }
-    return new ManageAdjudicationsClient(user.token).createOutcome(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user.token).createNotProceed(adjudicationNumber, outcomeDetails)
   }
 
   async removeReferral(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
@@ -40,6 +40,6 @@ export default class OutcomesService {
       code: OutcomeCode.REFER_POLICE,
       details,
     }
-    return new ManageAdjudicationsClient(user.token).createOutcome(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user.token).createPoliceReferral(adjudicationNumber, outcomeDetails)
   }
 }
