@@ -1,0 +1,22 @@
+{% set newRows = [
+  {
+    key: {
+      text: 'Name of adjudicator'
+    },
+    value: {
+      text: hearingDetails.outcome.adjudicator | initialiseName
+    }
+  }, {
+    key: {
+      text: 'Next step'
+    },
+    value: {
+      text: 'Refer this case to the police'
+    }
+  }
+]
+ %}
+
+{% for individualRow in newRows %}
+  {% set rows = (rows.push(individualRow), rows) %}
+{% endfor %}

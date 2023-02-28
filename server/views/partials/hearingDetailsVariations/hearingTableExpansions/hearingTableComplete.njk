@@ -1,0 +1,36 @@
+{% set newRows = [
+  {
+    key: {
+      text: 'Name of adjudicator'
+    },
+    value: {
+      text: hearingDetails.outcome.adjudicator | initialiseName
+    }
+  }, {
+    key: {
+      text: 'Next step'
+    },
+    value: {
+      text: 'Hearing complete - add adjudication finding'
+    }
+  }, 
+  {
+    key: { text: 'Plea' },
+    value: {
+      text: hearingDetails.outcome.plea | convertHearingOutcomePlea
+    }
+  },
+    {
+    key: { text: 'Finding' },
+    value: {
+      text: hearingDetails.outcome.finding | convertHearingOutcomeFinding
+    }
+    }
+]
+ %}
+
+{# TODO: if not proceeded with - add reason & details, if dismissed - add details (with reason key) #}
+
+{% for individualRow in newRows %}
+  {% set rows = (rows.push(individualRow), rows) %}
+{% endfor %}
