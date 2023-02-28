@@ -55,7 +55,7 @@ export default class HearingTabPage {
       user
     )
 
-    const history = await this.reportedAdjudicationsService.getHearingHistory(reportedAdjudication.history, user)
+    const history = await this.reportedAdjudicationsService.getOutcomesHistory(reportedAdjudication.outcomes, user)
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null
@@ -72,11 +72,11 @@ export default class HearingTabPage {
       history,
       latestHearingId,
       secondaryButtonInfo: this.reportedAdjudicationsService.getSecondaryButtonInfoForHearingDetails(
-        reportedAdjudication.history,
+        reportedAdjudication.outcomes,
         readOnly
       ),
       primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
-        reportedAdjudication.history,
+        reportedAdjudication.outcomes,
         readOnly,
         adjudicationNumber
       ),

@@ -48,7 +48,7 @@ export default class TestData {
     evidence = [],
     witnesses = [],
     hearings = null,
-    history = null,
+    outcomes = null,
     dateTimeOfFirstHearing = null,
     issuingOfficer = null,
     dateTimeOfIssue = null,
@@ -71,7 +71,7 @@ export default class TestData {
     evidence?: EvidenceDetails[]
     witnesses?: WitnessDetails[]
     hearings?: HearingDetails[]
-    history?: OutcomeHistory
+    outcomes?: OutcomeHistory
     dateTimeOfFirstHearing?: string
     issuingOfficer?: string
     dateTimeOfIssue?: string
@@ -103,7 +103,7 @@ export default class TestData {
       evidence,
       witnesses,
       hearings,
-      history,
+      outcomes,
       dateTimeOfFirstHearing,
       issuingOfficer,
       dateTimeOfIssue,

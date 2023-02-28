@@ -574,7 +574,7 @@ export default class ReportedAdjudicationsService {
     return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
   }
 
-  async getHearingHistory(history: OutcomeHistory, user: User) {
+  async getOutcomesHistory(history: OutcomeHistory, user: User) {
     if (!history.length) return []
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
