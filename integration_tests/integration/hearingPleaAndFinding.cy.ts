@@ -68,7 +68,7 @@ context('Plea and finding', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForFinding.urls.start(100, 1))
       })
     })
-    it('goes to the reason for not proceeding page if data successfully submitted with NOT_PROCEED_WITH finding', () => {
+    it('goes to the reason for not proceeding page if data successfully submitted with NOT_PROCEED finding', () => {
       cy.visit(
         `${adjudicationUrls.hearingPleaAndFinding.urls.start(
           100,
@@ -76,7 +76,7 @@ context('Plea and finding', () => {
         )}?adjudicatorName=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED_WITH"]').click()
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click()
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click()
 
       hearingPleaAndFindingPage.submitButton().click()

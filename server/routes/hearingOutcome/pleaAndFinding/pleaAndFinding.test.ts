@@ -75,7 +75,7 @@ describe('POST /hearing-plea-finding', () => {
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
-        hearingFinding: HearingOutcomeFinding.NOT_PROCEED_WITH,
+        hearingFinding: HearingOutcomeFinding.NOT_PROCEED,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.reasonForNotProceeding.urls.start(100))

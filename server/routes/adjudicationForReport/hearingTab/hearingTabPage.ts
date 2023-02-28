@@ -59,7 +59,6 @@ export default class HearingTabPage {
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null
-
     const readOnly = this.pageOptions.isReporter()
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
@@ -100,7 +99,6 @@ export default class HearingTabPage {
     if (removeReferralButton) {
       await this.outcomesService.removeReferral(adjudicationNumber, user)
     }
-
     if (nextStep) {
       const redirectUrl = getNextPageForChosenStep(nextStep, adjudicationNumber)
       if (redirectUrl) return res.redirect(redirectUrl)

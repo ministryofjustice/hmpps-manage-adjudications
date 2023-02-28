@@ -580,14 +580,14 @@ export default class ReportedAdjudicationsService {
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
     return history.map(historyItem => {
       if (historyItem.hearing) {
-        // Format the hearing data for the table
-        const hearingTable = {
-          ...historyItem.hearing,
-          locationName: locationNamesByIdMap.get(historyItem.hearing.locationId),
+        // Reconstruct the data but add the hearing location name
+        return {
+          hearing: {
+            ...historyItem.hearing,
+            locationName: locationNamesByIdMap.get(historyItem.hearing.locationId),
+          },
+          ...historyItem.outcome,
         }
-        // If there's a referral on the hearing, we need to create that table too and return them both
-        if (historyItem.outcome) return { hearingTable, referralTable: historyItem.outcome }
-        return { hearingTable }
       }
       return historyItem.outcome
     })

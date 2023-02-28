@@ -19,17 +19,20 @@
     value: {
       text: hearingDetails.outcome.plea | convertHearingOutcomePlea
     }
-  },
-    {
+  }, 
+  {
     key: { text: 'Finding' },
     value: {
-      text: hearingDetails.outcome.finding | convertHearingOutcomeFinding
+      text: outcome.code | convertHearingOutcomeFinding
     }
+  },
+  {
+    key: { text: 'Reason' },
+    value: {
+        html: '<p>'+ outcome.reason | convertNotProceedReason + '</p><p>' +  outcome.details +'</p>'
     }
-]
- %}
-
-{# TODO: if not proceeded with - add reason & details, if dismissed - add details (with reason key) #}
+  }
+  ]%}
 
 {% for individualRow in newRows %}
   {% set rows = (rows.push(individualRow), rows) %}

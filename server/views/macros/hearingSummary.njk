@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingSummary(hearingDetails = {}, attributes = {}, changeLinksActive = false, basicHearingChangeLinkHref = null, adjudicationNumber = null, hearingId = null) %}
+{% macro hearingSummary(hearingDetails = {}, outcome = {}, attributes = {}, changeLinksActive = false, basicHearingChangeLinkHref = null, adjudicationNumber = null, hearingId = null) %}
 
   {% if changeLinksActive %}
     {% set dateTimeChangeLink = {
@@ -81,12 +81,17 @@
     {% if hearingDetails.outcome.code === HearingOutcomeCode.REFER_INAD %}
       {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableReferInAdExpansion.njk' %}
     {% endif %}
-    {% if hearingDetails.outcome.code === HearingOutcomeCode.COMPLETE %}
-    {# TODO: This one needs more sorting out when backend changes are made #}
-      {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableComplete.njk' %}
-    {% endif %}
     {% if hearingDetails.outcome.code === HearingOutcomeCode.ADJOURN %}
       {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableAdjourn.njk' %}
+    {% endif %}
+    {% if hearingDetails.outcome.code === HearingOutcomeCode.COMPLETE %}
+      {% if outcome.code === OutcomeCode.PROVED %}
+        {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableCompleteProved.njk' %}
+      {% elif outcome.code === OutcomeCode.NOT_PROCEED %}
+        {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableCompleteNotProceed.njk' %}
+      {% else %}
+        {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableCompleteDismissed.njk' %}
+      {% endif %}
     {% endif %}
   {% endif %}
 
