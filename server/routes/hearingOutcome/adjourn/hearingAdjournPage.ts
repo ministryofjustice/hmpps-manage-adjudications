@@ -34,7 +34,7 @@ class PageOptions {
   }
 }
 
-export default class HearingReasonForReferralPage {
+export default class HearingAdournedPage {
   pageOptions: PageOptions
 
   constructor(
