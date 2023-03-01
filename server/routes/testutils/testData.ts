@@ -21,6 +21,7 @@ import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
 import {
   HearingDetails,
   HearingOutcomeCode,
+  HearingOutcomeFinding,
   HearingOutcomeResult,
   Outcome,
   OutcomeCode,
@@ -258,17 +259,23 @@ export default class TestData {
     code = OutcomeCode.REFER_POLICE,
     details = 'Some details',
     reason = null,
+    amount = null,
+    caution = null,
   }: {
     id?: number
-    code?: OutcomeCode
+    code?: OutcomeCode | HearingOutcomeFinding
     details?: string
     reason?: NotProceedReason
+    amount?: number
+    caution?: boolean
   }): Outcome => {
     return {
       id,
       code,
       details,
       reason,
+      amount,
+      caution,
     }
   }
 
