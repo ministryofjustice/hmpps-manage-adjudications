@@ -116,13 +116,13 @@ export default class PleaAndFindingPage {
     hearingId: number
   ) => {
     if (isEdit) {
-      if (hearingFinding === HearingOutcomeFinding.PROVED)
+      if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
         return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
         return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber, hearingId)
       return adjudicationUrls.reasonForNotProceeding.urls.edit(adjudicationNumber)
     }
-    if (hearingFinding === HearingOutcomeFinding.PROVED)
+    if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
       return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
     if (hearingFinding === HearingOutcomeFinding.DISMISSED)
       return adjudicationUrls.hearingReasonForFinding.urls.start(adjudicationNumber, hearingId)

@@ -45,11 +45,11 @@ import {
   HearingDetails,
   HearingDetailsHistory,
   HearingOutcomeCode,
+  OutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
-import { OutcomeCode } from '../data/OutcomeResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {

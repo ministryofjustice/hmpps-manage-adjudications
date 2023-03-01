@@ -21,15 +21,14 @@ import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
 import {
   HearingDetails,
   HearingOutcomeCode,
-  HearingOutcomeFinding,
   HearingOutcomeResult,
+  NotProceedReason,
   Outcome,
   OutcomeCode,
   OutcomeHistory,
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
-import { NotProceedReason } from '../../data/OutcomeResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -263,7 +262,7 @@ export default class TestData {
     caution = null,
   }: {
     id?: number
-    code?: OutcomeCode | HearingOutcomeFinding
+    code?: OutcomeCode
     details?: string
     reason?: NotProceedReason
     amount?: number

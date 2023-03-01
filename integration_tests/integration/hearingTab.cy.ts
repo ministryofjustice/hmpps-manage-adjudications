@@ -6,13 +6,12 @@ import TestData from '../../server/routes/testutils/testData'
 import {
   HearingOutcomeAdjournReason,
   HearingOutcomeCode,
-  HearingOutcomeFinding,
   HearingOutcomePlea,
+  NotProceedReason,
   OutcomeCode,
   OutcomeHistory,
   ReferralOutcomeCode,
 } from '../../server/data/HearingAndOutcomeResult'
-import { NotProceedReason } from '../../server/data/OutcomeResult'
 
 const testData = new TestData()
 
@@ -214,7 +213,7 @@ const historyWithCompleteAndDismissedFinding = [
       }),
     }),
     outcome: {
-      outcome: testData.outcome({ code: HearingOutcomeFinding.DISMISSED }),
+      outcome: testData.outcome({ code: OutcomeCode.DISMISSED }),
     },
   },
 ]
@@ -232,7 +231,7 @@ const historyWithCompleteAndNotProceedFinding = [
       }),
     }),
     outcome: {
-      outcome: testData.outcome({ code: HearingOutcomeFinding.NOT_PROCEED, reason: NotProceedReason.EXPIRED_HEARING }),
+      outcome: testData.outcome({ code: OutcomeCode.NOT_PROCEED, reason: NotProceedReason.EXPIRED_HEARING }),
     },
   },
 ]
@@ -250,7 +249,7 @@ const historyWithCompleteAndProvedFinding = [
       }),
     }),
     outcome: {
-      outcome: testData.outcome({ code: HearingOutcomeFinding.PROVED, amount: 0, caution: true, details: null }),
+      outcome: testData.outcome({ code: OutcomeCode.CHARGE_PROVED, amount: 0, caution: true, details: null }),
     },
   },
 ]
@@ -440,7 +439,7 @@ context('Hearing details page', () => {
       id: 1524510,
       response: reportedAdjudicationResponse(
         1524510,
-        ReportedAdjudicationStatus.PROVED,
+        ReportedAdjudicationStatus.CHARGE_PROVED,
         [historyWithCompleteAndProvedFinding[0].hearing],
         historyWithCompleteAndProvedFinding
       ),

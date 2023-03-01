@@ -1,4 +1,4 @@
-import { NotProceedReason } from '../../data/OutcomeResult'
+import { NotProceedReason } from '../../data/HearingAndOutcomeResult'
 import validateForm from './notProceedValidation'
 
 describe('validateForm', () => {

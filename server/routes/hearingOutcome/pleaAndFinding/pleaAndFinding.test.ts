@@ -45,7 +45,7 @@ describe('POST /hearing-plea-finding', () => {
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
-        hearingFinding: HearingOutcomeFinding.PROVED,
+        hearingFinding: HearingOutcomeFinding.CHARGE_PROVED,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.moneyRecoveredForDamages.urls.start(100))

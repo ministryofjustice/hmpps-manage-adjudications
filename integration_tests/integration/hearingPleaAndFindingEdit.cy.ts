@@ -32,7 +32,7 @@ context.skip('Plea and finding', () => {
               locationId: 775,
               outcome: testData.hearingOutcome({
                 code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.PROVED },
+                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
               }),
             }),
           ],
@@ -53,7 +53,7 @@ context.skip('Plea and finding', () => {
               locationId: 775,
               outcome: testData.hearingOutcome({
                 code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.PROVED },
+                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
               }),
             }),
           ],
@@ -76,7 +76,7 @@ context.skip('Plea and finding', () => {
       cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').should('be.checked')
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="PROVED"]').should('be.checked')
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
