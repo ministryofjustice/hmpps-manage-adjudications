@@ -794,7 +794,10 @@ export default class ReportedAdjudicationsService {
     if (!history.length || readOnly) return null
     const finalHistoryItem = history[history.length - 1]
     if (finalHistoryItem.outcome) {
-      if (finalHistoryItem.outcome.outcome.code === OutcomeCode.NOT_PROCEED) {
+      if (
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.NOT_PROCEED &&
+        finalHistoryItem.hearing?.outcome.code !== HearingOutcomeCode.COMPLETE
+      ) {
         return {
           text: 'Remove this outcome',
           name: 'removeOutcomeButton',

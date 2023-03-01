@@ -32,7 +32,7 @@
         {% if item.hearing %}
           {% set hearingNumber = hearingNumber + 1 %}
           {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportNo, latestHearingId) }}
-          {% if item.outcome %} 
+          {% if item.outcome and item.hearing.outcome.code != HearingOutcomeCode.COMPLETE %}
             {{ outcomeTable(item, readOnly, reportNo) }}
           {% endif %}
         {% else %}

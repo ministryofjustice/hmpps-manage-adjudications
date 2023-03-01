@@ -35,7 +35,7 @@ export enum HearingOutcomeAdjournReason {
   RO_ATTEND = 'RO_ATTEND',
   HELP = 'HELP',
   UNFIT = 'UNFIT',
-  WITNESS = 'UNFIT',
+  WITNESS = 'WITNESS',
   WITNESS_SUPPORT = 'WITNESS_SUPPORT',
   MCKENZIE = 'MCKENZIE',
   EVIDENCE = 'EVIDENCE',
@@ -70,9 +70,11 @@ export type HearingOutcomeDetails = {
 
 export type Outcome = {
   id: number
-  code: OutcomeCode
+  code: OutcomeCode | HearingOutcomeFinding
   details: string
   reason?: string
+  amount?: number
+  caution?: boolean
 }
 
 export type ReferralOutcome = {
