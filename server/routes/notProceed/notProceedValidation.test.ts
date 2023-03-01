@@ -17,7 +17,7 @@ describe('validateForm', () => {
         notProceedDetails: 'details',
       })
     ).toEqual({
-      href: '#reason',
+      href: '#notProceedReason',
       text: 'Select the reason for not proceeding',
     })
   })
@@ -28,7 +28,7 @@ describe('validateForm', () => {
         notProceedDetails: '',
       })
     ).toEqual({
-      href: '#details',
+      href: '#notProceedDetails',
       text: 'Enter more details',
     })
   })
