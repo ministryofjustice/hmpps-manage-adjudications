@@ -116,7 +116,7 @@ context.skip('Plea and finding', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForFinding.urls.edit(100, 1))
       })
     })
-    it('goes to the reason for not proceeding page if data successfully submitted - change finding radio button to NOT_PROCEED_WITH', () => {
+    it('goes to the reason for not proceeding page if data successfully submitted - change finding radio button to NOT_PROCEED', () => {
       cy.visit(
         `${adjudicationUrls.hearingPleaAndFinding.urls.edit(
           100,
@@ -125,7 +125,7 @@ context.skip('Plea and finding', () => {
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click()
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED_WITH"]').click()
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.edit(100))

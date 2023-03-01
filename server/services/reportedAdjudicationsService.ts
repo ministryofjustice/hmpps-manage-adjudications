@@ -26,6 +26,7 @@ import {
   formatLocation,
   formatTimestampTo,
   formatName,
+  convertOicHearingType,
 } from '../utils/utils'
 import { LocationId, PrisonLocation } from '../data/PrisonLocationResult'
 import {
@@ -41,10 +42,6 @@ import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
 import { Alert, alertFlagLabels, AlertFlags } from '../utils/alertHelper'
 import {
-  convertHearingOutcomeAdjournReason,
-  convertHearingOutcomeCode,
-  convertHearingOutcomeFinding,
-  convertHearingOutcomePlea,
   HearingDetails,
   HearingDetailsHistory,
   HearingOutcomeCode,
@@ -562,7 +559,7 @@ export default class ReportedAdjudicationsService {
         },
         type: {
           label: 'Type of hearing',
-          value: this.convertOicHearingType(hearing.oicHearingType),
+          value: convertOicHearingType(hearing.oicHearingType),
         },
       }
     })
@@ -577,71 +574,23 @@ export default class ReportedAdjudicationsService {
     return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
   }
 
-  createHearingTableDisplay = (hearing: HearingDetailsHistory, locationNamesByIdMap: Map<number, string>) => {
-    const hearingItem = hearing.hearing
-    const hearingDetailsBasics = {
-      id: hearingItem.id,
-      dateTime: {
-        label: 'Date and time of hearing',
-        value: formatTimestampTo(hearingItem.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
-      },
-      location: {
-        label: 'Location',
-        value: locationNamesByIdMap.get(hearingItem.locationId),
-      },
-      type: {
-        label: 'Type of hearing',
-        value: this.convertOicHearingType(hearingItem.oicHearingType),
-      },
-    }
-    const hearingOutcomeDetails = {
-      adjudicatorName: {
-        label: 'Name of adjudicator',
-        value: getFormattedOfficerName(hearingItem.outcome?.adjudicator) || null,
-      },
-      nextStep: {
-        label: 'Next step',
-        value: convertHearingOutcomeCode(hearingItem.outcome?.code) || null,
-      },
-      plea: {
-        label: 'Plea',
-        value: convertHearingOutcomePlea(hearingItem.outcome?.plea) || null,
-      },
-      finding: {
-        label: 'Finding',
-        value: convertHearingOutcomeFinding(hearingItem.outcome?.finding) || null,
-      },
-      adjournReason: {
-        label: 'Reason',
-        value: convertHearingOutcomeAdjournReason(hearingItem.outcome?.reason) || null,
-      },
-      details: hearingItem.outcome?.details || null,
-    }
-    if (hearingItem.outcome) return { ...hearingDetailsBasics, ...hearingOutcomeDetails }
-    return hearingDetailsBasics
-  }
-
-  async getHearingHistory(history: OutcomeHistory, user: User) {
+  async getOutcomesHistory(history: OutcomeHistory, user: User) {
     if (!history.length) return []
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
     return history.map(historyItem => {
       if (historyItem.hearing) {
-        // Format the hearing data for the table
-        const hearingTable = this.createHearingTableDisplay(historyItem, locationNamesByIdMap)
-        // If there's a referral on the hearing, we need to create that table too and return them both
-        if (historyItem.outcome) return { hearingTable, referralTable: historyItem.outcome }
-        return { hearingTable }
+        // Reconstruct the data but add the hearing location name
+        return {
+          hearing: {
+            ...historyItem.hearing,
+            locationName: locationNamesByIdMap.get(historyItem.hearing.locationId),
+          },
+          ...historyItem.outcome,
+        }
       }
       return historyItem.outcome
     })
-  }
-
-  convertOicHearingType(hearingType: string): string {
-    if (!hearingType) return null
-    const hearingTypeSplit = hearingType.split('_')
-    if (hearingTypeSplit[0] === 'GOV') return 'Governor'
-    return 'Independent Adjudicator'
   }
 
   async deleteHearingV1(

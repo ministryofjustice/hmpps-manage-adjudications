@@ -26,14 +26,14 @@ const reportedAdjudicationResponse = (
   adjudicationNumber: number,
   status: ReportedAdjudicationStatus,
   hearings = [],
-  history = []
+  outcomes = []
 ) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
       hearings,
-      history,
+      outcomes,
       status,
     }),
   }
@@ -565,7 +565,7 @@ context('Hearing details page', () => {
           reportedAdjudication: testData.reportedAdjudication({
             adjudicationNumber: 1524503,
             prisonerNumber: 'G6415GD',
-            history: historyWithPoliceReferAndReferralOutcome as OutcomeHistory,
+            outcomes: historyWithPoliceReferAndReferralOutcome as OutcomeHistory,
           }),
         },
       })

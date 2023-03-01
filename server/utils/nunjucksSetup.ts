@@ -5,7 +5,7 @@ import * as pathModule from 'path'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive, getFormattedOfficerName } from './utils'
+import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import {
@@ -21,6 +21,9 @@ import {
   HearingOutcomeAdjournReason,
   OutcomeCode,
   ReferralOutcomeCode,
+  convertHearingOutcomeAdjournReason,
+  convertHearingOutcomePlea,
+  convertHearingOutcomeFinding,
 } from '../data/HearingAndOutcomeResult'
 import { NextStep, NotProceedReason } from '../data/OutcomeResult'
 
@@ -271,6 +274,11 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addFilter('formatTimestampTo', formatTimestampTo)
+  njkEnv.addFilter('convertOicHearingType', convertOicHearingType)
+  njkEnv.addFilter('convertHearingOutcomeAdjournReason', convertHearingOutcomeAdjournReason)
+  njkEnv.addFilter('convertHearingOutcomePlea', convertHearingOutcomePlea)
+  njkEnv.addFilter('convertHearingOutcomeFinding', convertHearingOutcomeFinding)
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
 

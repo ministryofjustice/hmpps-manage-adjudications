@@ -29,13 +29,14 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       {% set hearingNumber = 0 %}
       {% for item in history %}
-        {% if item.hearingTable %}
+        {% if item.hearing %}
           {% set hearingNumber = hearingNumber + 1 %}
-          {{ hearingTable(hearingNumber, item.hearingTable, readOnly, reportNo, latestHearingId) }}
-          {% if item.referralTable %}
-            {{ outcomeTable(item.referralTable, readOnly, reportNo) }}
+          {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportNo, latestHearingId) }}
+          {% if item.outcome %} 
+            {{ outcomeTable(item, readOnly, reportNo) }}
           {% endif %}
         {% else %}
+          {# Tables not attached to a hearing #}
           {{ outcomeTable(item, readOnly, reportNo) }}
         {% endif %}
       {% endfor %}

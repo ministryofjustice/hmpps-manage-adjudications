@@ -37,7 +37,7 @@ export type ReportedAdjudication = {
   issuingOfficer?: string
   dateTimeOfIssue?: string
   dateTimeOfFirstHearing?: string
-  history?: OutcomeHistory
+  outcomes?: OutcomeHistory
 }
 
 export type ReportedAdjudicationResult = {

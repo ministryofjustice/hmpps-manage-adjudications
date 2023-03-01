@@ -168,6 +168,13 @@ export const convertSubmittedDateTimeToDateObject = (
   return null
 }
 
+export const convertOicHearingType = (hearingType: string): string => {
+  if (!hearingType) return null
+  const hearingTypeSplit = hearingType.split('_')
+  if (hearingTypeSplit[0] === 'GOV') return 'Governor'
+  return 'Independent Adjudicator'
+}
+
 export default {
   numberRange,
   convertToTitleCase,

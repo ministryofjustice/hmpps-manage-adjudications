@@ -25,7 +25,7 @@ beforeEach(() => {
     reportedAdjudication: testData.reportedAdjudication({
       adjudicationNumber: 1524493,
       prisonerNumber: 'G6415GD',
-      history: [],
+      outcomes: [],
     }),
   })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService }, {}, 'true')
@@ -37,7 +37,7 @@ afterEach(() => {
 
 describe('GET hearing details page - reviewer version', () => {
   it('should load the hearing details page with no hearings on adjudication - status AWAITING_REVIEW', () => {
-    reportedAdjudicationsService.getHearingHistory.mockResolvedValue([])
+    reportedAdjudicationsService.getOutcomesHistory.mockResolvedValue([])
     reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails.mockResolvedValue(null as never)
     return request(app)
       .get(adjudicationUrls.hearingDetails.urls.review(1524493))

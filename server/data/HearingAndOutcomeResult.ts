@@ -26,7 +26,7 @@ export enum ReferralOutcomeCode {
 export enum HearingOutcomeFinding {
   PROVED = 'PROVED',
   DISMISSED = 'DISMISSED',
-  NOT_PROCEED_WITH = 'NOT_PROCEED_WITH',
+  NOT_PROCEED = 'NOT_PROCEED',
 }
 
 export enum HearingOutcomeAdjournReason {
@@ -140,7 +140,7 @@ export function convertHearingOutcomeFinding(outcomeFinding: HearingOutcomeFindi
       return 'Charge proved beyond reasonable doubt'
     case HearingOutcomeFinding.DISMISSED:
       return "Charge dismissed due to 'not guilty' finding"
-    case HearingOutcomeFinding.NOT_PROCEED_WITH:
+    case HearingOutcomeFinding.NOT_PROCEED:
       return 'Charge not proceeded with for any other reason'
     default:
       return null
