@@ -50,6 +50,7 @@ export default class HearingTabPage {
       adjudicationNumber,
       user
     )
+
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
       user
@@ -89,12 +90,16 @@ export default class HearingTabPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { removeHearingButton, nextStep, removeReferralButton, removeOutcomeButton } = req.body
+    const { removeHearingButton, removeCompleteHearingButton, nextStep, removeReferralButton, removeOutcomeButton } =
+      req.body
     if (removeOutcomeButton) {
       await this.outcomesService.removeNotProceed(adjudicationNumber, user)
     }
     if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
+    }
+    if (removeCompleteHearingButton) {
+      await this.reportedAdjudicationsService.deleteCompleteHearing(adjudicationNumber, user)
     }
     if (removeReferralButton) {
       await this.outcomesService.removeReferral(adjudicationNumber, user)
