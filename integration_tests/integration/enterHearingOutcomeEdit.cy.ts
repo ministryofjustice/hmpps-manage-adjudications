@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import EnterHearingOutcomePage from '../pages/enterHearingOutcome'
 import TestData from '../../server/routes/testutils/testData'
-import { HearingDetailsHistory, OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
+import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 context('Enter hearing outcome', () => {

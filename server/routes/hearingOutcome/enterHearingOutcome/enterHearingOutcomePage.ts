@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 
@@ -107,8 +108,12 @@ export default class EnterHearingOutcomePage {
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber)
-    const redirectUrl = `${redirectUrlPrefix}?adjudicator=${adjudicatorName}&hearingOutcome=${hearingOutcome}`
-    return res.redirect(redirectUrl)
+    return res.redirect(
+      url.format({
+        pathname: redirectUrlPrefix,
+        query: { adjudicator: adjudicatorName, hearingOutcome },
+      })
+    )
   }
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
