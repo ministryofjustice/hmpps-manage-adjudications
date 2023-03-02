@@ -1,6 +1,6 @@
+import { NotProceedReason, OutcomeCode } from '../data/HearingAndOutcomeResult'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
-import { NotProceedReason, OutcomeCode } from '../data/OutcomeResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 
 export default class OutcomesService {

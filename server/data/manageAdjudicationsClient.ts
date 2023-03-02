@@ -30,13 +30,18 @@ import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { HearingDetails, HearingOutcomeDetails } from './HearingAndOutcomeResult'
-import { OutcomeDetails } from './OutcomeResult'
+import { HearingDetails, HearingOutcomeDetails, NotProceedReason, OutcomeCode } from './HearingAndOutcomeResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
   gender: PrisonerGender
+}
+
+export type OutcomeInfo = {
+  code: OutcomeCode
+  details?: string
+  reason?: NotProceedReason
 }
 
 export default class ManageAdjudicationsClient {
@@ -369,10 +374,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createNotProceed(
-    adjudicationNumber: number,
-    outcomeDetails: OutcomeDetails
-  ): Promise<ReportedAdjudicationResult> {
+  async createNotProceed(adjudicationNumber: number, outcomeDetails: OutcomeInfo): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
       data: { reason: outcomeDetails.reason, details: outcomeDetails.details },
@@ -381,7 +383,7 @@ export default class ManageAdjudicationsClient {
 
   async createPoliceReferral(
     adjudicationNumber: number,
-    outcomeDetails: OutcomeDetails
+    outcomeDetails: OutcomeInfo
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/outcome/refer-police`,

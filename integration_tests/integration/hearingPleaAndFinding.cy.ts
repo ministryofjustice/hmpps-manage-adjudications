@@ -44,7 +44,7 @@ context('Plea and finding', () => {
         )}?adjudicatorName=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="PROVED"]').click()
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click()
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click()
 
       hearingPleaAndFindingPage.submitButton().click()
@@ -89,7 +89,7 @@ context('Plea and finding', () => {
     it('shows correct error message if plea missing', () => {
       cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.start(100, 1))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="PROVED"]').click()
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       hearingPleaAndFindingPage
         .errorSummary()

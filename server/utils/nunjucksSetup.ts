@@ -24,8 +24,9 @@ import {
   convertHearingOutcomeAdjournReason,
   convertHearingOutcomePlea,
   convertHearingOutcomeFinding,
+  NotProceedReason,
+  NextStep,
 } from '../data/HearingAndOutcomeResult'
-import { NextStep, NotProceedReason } from '../data/OutcomeResult'
 
 const production = process.env.NODE_ENV === 'production'
 
