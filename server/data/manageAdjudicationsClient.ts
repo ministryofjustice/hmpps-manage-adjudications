@@ -30,7 +30,13 @@ import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { HearingDetails, HearingOutcomeDetails, NotProceedReason, OutcomeCode } from './HearingAndOutcomeResult'
+import {
+  HearingDetails,
+  HearingOutcomeDetails,
+  HearingOutcomePlea,
+  NotProceedReason,
+  OutcomeCode,
+} from './HearingAndOutcomeResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -42,6 +48,12 @@ export type OutcomeInfo = {
   code: OutcomeCode
   details?: string
   reason?: NotProceedReason
+}
+
+export type HearingDismissedOutcomeDetails = {
+  adjudicator: string
+  plea: HearingOutcomePlea
+  details: string
 }
 
 export default class ManageAdjudicationsClient {
@@ -406,6 +418,16 @@ export default class ManageAdjudicationsClient {
   async removeReferral(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${adjudicationNumber}/remove-referral`,
+    })
+  }
+
+  async createDismissedHearingOutcome(
+    adjudicationNumber: number,
+    hearingOutcomeDetails: HearingDismissedOutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `reported-adjudications/${adjudicationNumber}/complete-hearing/dismissed`,
+      data: { ...hearingOutcomeDetails },
     })
   }
 }

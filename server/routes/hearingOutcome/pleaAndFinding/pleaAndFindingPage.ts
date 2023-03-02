@@ -75,7 +75,6 @@ export default class PleaAndFindingPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
     const { hearingPlea, hearingFinding } = req.body
     const isEdit = this.pageOptions.isEdit()
 
@@ -88,12 +87,7 @@ export default class PleaAndFindingPage {
       })
 
     try {
-      const redirectUrl = this.getRedirectUrl(
-        isEdit,
-        HearingOutcomeFinding[hearingFinding],
-        adjudicationNumber,
-        hearingId
-      )
+      const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], adjudicationNumber)
       return res.redirect(redirectUrl)
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
@@ -109,23 +103,18 @@ export default class PleaAndFindingPage {
     return this.hearingsService.getHearingOutcome(adjudicationId, hearingId, user)
   }
 
-  getRedirectUrl = (
-    isEdit: boolean,
-    hearingFinding: HearingOutcomeFinding,
-    adjudicationNumber: number,
-    hearingId: number
-  ) => {
+  getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, adjudicationNumber: number) => {
     if (isEdit) {
       if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
         return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
-        return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber, hearingId)
+        return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber)
       return adjudicationUrls.reasonForNotProceeding.urls.edit(adjudicationNumber)
     }
     if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
       return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
     if (hearingFinding === HearingOutcomeFinding.DISMISSED)
-      return adjudicationUrls.hearingReasonForFinding.urls.start(adjudicationNumber, hearingId)
+      return adjudicationUrls.hearingReasonForFinding.urls.start(adjudicationNumber)
     return adjudicationUrls.reasonForNotProceeding.urls.start(adjudicationNumber)
   }
 }

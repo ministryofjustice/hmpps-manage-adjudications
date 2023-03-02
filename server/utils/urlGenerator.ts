@@ -502,14 +502,13 @@ const adjudicationUrls = {
   hearingReasonForFinding: {
     root: '/reason-for-finding',
     matchers: {
-      start: ':/adjudicationNumber/hearing/:hearingId',
-      edit: ':/adjudicationNumber/hearing/:hearingId/edit',
+      start: ':/adjudicationNumber',
+      edit: ':/adjudicationNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}/hearing/${hearingId}`,
-      edit: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}/edit`,
     },
   },
   reasonForNotProceeding: {
