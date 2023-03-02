@@ -284,6 +284,12 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async cancelCompleteHearing(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/remove-completed-hearing`,
+    })
+  }
+
   async createHearingV1(
     adjudicationNumber: number,
     hearingDetails: HearingDetails
