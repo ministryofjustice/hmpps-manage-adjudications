@@ -41,24 +41,24 @@ export default class EnterHearingOutcomePage {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  private getRedirectUrl = (outcome: HearingOutcomeCode, adjudicationNumber: number, hearingId: number) => {
+  private getRedirectUrl = (outcome: HearingOutcomeCode, adjudicationNumber: number) => {
     if (this.pageOptions.isEdit()) {
       switch (outcome) {
         case HearingOutcomeCode.ADJOURN:
-          return adjudicationUrls.hearingAdjourned.urls.edit(adjudicationNumber, hearingId)
+          return adjudicationUrls.hearingAdjourned.urls.edit(adjudicationNumber)
         case HearingOutcomeCode.COMPLETE:
-          return adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber, hearingId)
+          return adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber)
         default:
-          return adjudicationUrls.hearingReasonForReferral.urls.edit(adjudicationNumber, hearingId)
+          return adjudicationUrls.hearingReasonForReferral.urls.edit(adjudicationNumber)
       }
     }
     switch (outcome) {
       case HearingOutcomeCode.ADJOURN:
-        return adjudicationUrls.hearingAdjourned.urls.start(adjudicationNumber, hearingId)
+        return adjudicationUrls.hearingAdjourned.urls.start(adjudicationNumber)
       case HearingOutcomeCode.COMPLETE:
-        return adjudicationUrls.hearingPleaAndFinding.urls.start(adjudicationNumber, hearingId)
+        return adjudicationUrls.hearingPleaAndFinding.urls.start(adjudicationNumber)
       default:
-        return adjudicationUrls.hearingReasonForReferral.urls.start(adjudicationNumber, hearingId)
+        return adjudicationUrls.hearingReasonForReferral.urls.start(adjudicationNumber)
     }
   }
 
@@ -78,7 +78,6 @@ export default class EnterHearingOutcomePage {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -86,7 +85,7 @@ export default class EnterHearingOutcomePage {
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, hearingId, user)
+      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
     }
 
     return this.renderView(req, res, {
@@ -97,7 +96,6 @@ export default class EnterHearingOutcomePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
     const { hearingOutcome, adjudicatorName } = req.body
 
     const error = validateForm({ hearingOutcome, adjudicatorName })
@@ -108,16 +106,15 @@ export default class EnterHearingOutcomePage {
         adjudicatorName,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber, hearingId)
-    const redirectUrl = `${redirectUrlPrefix}?adjudicatorName=${adjudicatorName}&hearingOutcome=${hearingOutcome}`
+    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber)
+    const redirectUrl = `${redirectUrlPrefix}?adjudicator=${adjudicatorName}&hearingOutcome=${hearingOutcome}`
     return res.redirect(redirectUrl)
   }
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
     adjudicationId: number,
-    hearingId: number,
     user: User
   ): Promise<HearingOutcomeDetails> => {
-    return this.hearingsService.getHearingOutcome(adjudicationId, hearingId, user)
+    return this.hearingsService.getHearingOutcome(adjudicationId, user)
   }
 }
