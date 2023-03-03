@@ -8,15 +8,15 @@ type DamagesOwedForm = {
 const errors: { [key: string]: FormError } = {
   MISSING_DAMAGES_OWED_CHOICE: {
     href: '#damagesOwed',
-    text: 'Select yes, if any money is being recovered for damages.',
+    text: 'Select yes if any money is being recovered for damages',
   },
   MISSING_AMOUNT: {
     href: '#amount',
-    text: 'Enter amount being recovered.',
+    text: 'Enter amount being recovered',
   },
   NAN: {
     href: '#amount',
-    text: 'Numerical values only.',
+    text: 'Numerical values only',
   },
 }
 

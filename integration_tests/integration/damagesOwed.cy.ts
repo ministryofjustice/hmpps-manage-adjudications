@@ -47,7 +47,7 @@ context('Is any money being recovered for damages?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Select yes, if any money is being recovered for damages.')
+          expect($error.get(0).innerText).to.contain('Select yes if any money is being recovered for damages')
         })
     })
     it(`error when no amount entered`, () => {
@@ -60,7 +60,7 @@ context('Is any money being recovered for damages?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Enter amount being recovered.')
+          expect($error.get(0).innerText).to.contain('Enter amount being recovered')
         })
     })
     it(`error when amount is not numeric entered`, () => {
@@ -74,7 +74,7 @@ context('Is any money being recovered for damages?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Numerical values only.')
+          expect($error.get(0).innerText).to.contain('Numerical values only')
         })
     })
   })
@@ -92,7 +92,7 @@ context('Is any money being recovered for damages?', () => {
       })
     })
 
-    it.only('saves successfully when damages not owed', () => {
+    it('saves successfully when damages not owed', () => {
       cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=Tim&plea=GUILTY`)
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').check()

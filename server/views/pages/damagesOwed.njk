@@ -17,8 +17,11 @@
 {{ govukInput({
                 id: "amount",
                 name: "amount",
-                classes: "govuk-!-width-one-third",
+                classes: "govuk-input--width-5",
                 errorMessage: errors | findErrors(["amount"]),
+                prefix: {
+                 text: "£"
+                },
                 label: {
                     text: "Amount"
                 }

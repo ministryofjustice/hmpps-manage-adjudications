@@ -25,7 +25,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#damagesOwed',
-      text: 'Select yes, if any money is being recovered for damages.',
+      text: 'Select yes if any money is being recovered for damages',
     })
   })
   it('shows error when no amount entered', () => {
@@ -36,7 +36,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#amount',
-      text: 'Enter amount being recovered.',
+      text: 'Enter amount being recovered',
     })
   })
   it('shows error when amount is not a number', () => {
@@ -47,7 +47,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#amount',
-      text: 'Numerical values only.',
+      text: 'Numerical values only',
     })
   })
 })
