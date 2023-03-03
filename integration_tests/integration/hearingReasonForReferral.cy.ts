@@ -28,7 +28,7 @@ context('What is the reason for the referral?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().should('exist')
       hearingReasonForReferralPage.submitButton().should('exist')
@@ -36,7 +36,7 @@ context('What is the reason for the referral?', () => {
       hearingReasonForReferralPage.errorSummary().should('not.exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.cancelButton().click()
       cy.location().should(loc => {
@@ -48,9 +48,8 @@ context('What is the reason for the referral?', () => {
     it('goes to the referral confirmation page if data successfully submitted', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=REFER_POLICE`
+          100
+        )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`
       )
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().type("This is the reason I'm referring this case to the police.")
@@ -60,18 +59,18 @@ context('What is the reason for the referral?', () => {
       })
     })
     it('goes back to the enter hearing outcome page if the adjudicator name and hearing outcome code is missing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().type("This is the reason I'm referring this case to the police.")
       hearingReasonForReferralPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.start(100, 1))
+        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.start(100))
       })
     })
   })
   describe('Validation', () => {
     it('shows correct error message if reason missing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100, 1))
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.start(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.submitButton().click()
       hearingReasonForReferralPage

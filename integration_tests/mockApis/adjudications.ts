@@ -485,13 +485,33 @@ const stubCancelHearing = ({
   response = {},
 }: {
   adjudicationNumber: number
-  hearingId: number
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'DELETE',
       url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/v2`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubCancelCompleteHearing = ({
+  adjudicationNumber,
+  response = {},
+}: {
+  adjudicationNumber: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/remove-completed-hearing`,
     },
     response: {
       status: 200,
@@ -832,4 +852,5 @@ export default {
   stubCreateNotProceed,
   stubRemoveReferral,
   stubRemoveNotProceed,
+  stubCancelCompleteHearing,
 }

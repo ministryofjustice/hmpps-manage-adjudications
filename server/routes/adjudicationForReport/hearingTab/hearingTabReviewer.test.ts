@@ -5,6 +5,9 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
+import { HearingOutcomeCode, HearingOutcomePlea, OutcomeCode } from '../../../data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import OutcomesService from '../../../services/outcomesService'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -16,6 +19,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null) as jest.Mocked<UserService>
+const outcomesService = new OutcomesService(null) as jest.Mocked<OutcomesService>
 
 let app: Express
 
@@ -28,7 +32,12 @@ beforeEach(() => {
       outcomes: [],
     }),
   })
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService }, {}, 'true')
+  app = appWithAllRoutes(
+    { production: false },
+    { reportedAdjudicationsService, userService, outcomesService },
+    {},
+    'true'
+  )
 })
 
 afterEach(() => {
@@ -44,6 +53,57 @@ describe('GET hearing details page - reviewer version', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
+        expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
+      })
+  })
+  it('should load the hearing details page with history present', () => {
+    const hearing = {
+      ...testData.singleHearing({
+        dateTimeOfHearing: '2023-03-01T17:00:00',
+        outcome: testData.hearingOutcome({
+          code: HearingOutcomeCode.COMPLETE,
+          optionalItems: {
+            plea: HearingOutcomePlea.GUILTY,
+          },
+        }),
+      }),
+    }
+    const outcome = testData.outcome({
+      code: OutcomeCode.CHARGE_PROVED,
+      amount: 0,
+      caution: true,
+    })
+    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+      reportedAdjudication: testData.reportedAdjudication({
+        adjudicationNumber: 1524495,
+        status: ReportedAdjudicationStatus.CHARGE_PROVED,
+        prisonerNumber: 'G6415GD',
+        outcomes: [
+          {
+            hearing,
+            outcome: {
+              outcome,
+            },
+          },
+        ],
+      }),
+    })
+
+    reportedAdjudicationsService.getOutcomesHistory.mockResolvedValue([
+      {
+        hearing: {
+          ...hearing,
+          locationName: 'Moorland Closed (HMP & YOI)',
+        },
+        outcome,
+      },
+    ])
+    return request(app)
+      .get(adjudicationUrls.hearingDetails.urls.review(1524495))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Charge proved beyond reasonable doubt')
         expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getPrisonerDetails).toHaveBeenCalledTimes(1)
       })

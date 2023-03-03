@@ -22,13 +22,13 @@ import {
   HearingDetails,
   HearingOutcomeCode,
   HearingOutcomeResult,
+  NotProceedReason,
   Outcome,
   OutcomeCode,
   OutcomeHistory,
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
-import { NotProceedReason } from '../../data/OutcomeResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -258,17 +258,23 @@ export default class TestData {
     code = OutcomeCode.REFER_POLICE,
     details = 'Some details',
     reason = null,
+    amount = null,
+    caution = null,
   }: {
     id?: number
     code?: OutcomeCode
     details?: string
     reason?: NotProceedReason
+    amount?: number
+    caution?: boolean
   }): Outcome => {
     return {
       id,
       code,
       details,
       reason,
+      amount,
+      caution,
     }
   }
 

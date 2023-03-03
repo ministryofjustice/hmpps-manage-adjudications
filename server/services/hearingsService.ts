@@ -41,10 +41,10 @@ export default class HearingsService {
     return new ManageAdjudicationsClient(user.token).createAdjourn(adjudicationNumber, hearingOutcomeDetails)
   }
 
-  async getHearingOutcome(adjudicationNumber: number, hearingId: number, user: User) {
+  async getHearingOutcome(adjudicationNumber: number, user: User) {
     const adjudication = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
-    const { hearings } = adjudication.reportedAdjudication
-    const chosenHearing = hearings.filter(hearing => hearing.id === hearingId)
-    return chosenHearing[0].outcome || null
+    const { outcomes } = adjudication.reportedAdjudication
+    const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
+    return latestHearing?.hearing.outcome || null
   }
 }

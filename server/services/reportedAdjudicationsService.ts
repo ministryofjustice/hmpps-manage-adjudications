@@ -45,11 +45,11 @@ import {
   HearingDetails,
   HearingDetailsHistory,
   HearingOutcomeCode,
+  OutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
-import { OutcomeCode } from '../data/OutcomeResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -605,6 +605,10 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber)
   }
 
+  async deleteCompleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).cancelCompleteHearing(adjudicationNumber)
+  }
+
   async scheduleHearingV1(
     adjudicationNumber: number,
     locationId: number,
@@ -749,7 +753,7 @@ export default class ReportedAdjudicationsService {
     if (finalHistoryItem.hearing && !finalHistoryItem.outcome) {
       if (!finalHistoryItem.hearing.outcome)
         return {
-          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber, finalHistoryItem.hearing.id),
+          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber),
           text: 'Enter the hearing outcome',
           name: 'enterHearingOutcomeButton',
           qa: 'enter-hearing-outcome-button',
@@ -794,6 +798,14 @@ export default class ReportedAdjudicationsService {
     if (!history.length || readOnly) return null
     const finalHistoryItem = history[history.length - 1]
     if (finalHistoryItem.outcome) {
+      if (finalHistoryItem.hearing?.outcome.code === HearingOutcomeCode.COMPLETE) {
+        return {
+          text: 'Remove this hearing',
+          name: 'removeCompleteHearingButton',
+          value: 'removeCompleteHearing',
+          qa: 'remove-complete-hearing-button',
+        }
+      }
       if (finalHistoryItem.outcome.outcome.code === OutcomeCode.NOT_PROCEED) {
         return {
           text: 'Remove this outcome',

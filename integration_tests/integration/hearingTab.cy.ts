@@ -7,11 +7,11 @@ import {
   HearingOutcomeAdjournReason,
   HearingOutcomeCode,
   HearingOutcomePlea,
+  NotProceedReason,
   OutcomeCode,
   OutcomeHistory,
   ReferralOutcomeCode,
 } from '../../server/data/HearingAndOutcomeResult'
-import { NotProceedReason } from '../../server/data/OutcomeResult'
 
 const testData = new TestData()
 
@@ -200,6 +200,60 @@ const historyWithPoliceReferAndReferralOutcomeNotProceed = [
   },
 ]
 
+const historyWithCompleteAndDismissedFinding = [
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.COMPLETE,
+        optionalItems: {
+          plea: HearingOutcomePlea.UNFIT,
+        },
+      }),
+    }),
+    outcome: {
+      outcome: testData.outcome({ code: OutcomeCode.DISMISSED }),
+    },
+  },
+]
+
+const historyWithCompleteAndNotProceedFinding = [
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.COMPLETE,
+        optionalItems: {
+          plea: HearingOutcomePlea.UNFIT,
+        },
+      }),
+    }),
+    outcome: {
+      outcome: testData.outcome({ code: OutcomeCode.NOT_PROCEED, reason: NotProceedReason.EXPIRED_HEARING }),
+    },
+  },
+]
+
+const historyWithCompleteAndProvedFinding = [
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.COMPLETE,
+        optionalItems: {
+          plea: HearingOutcomePlea.UNFIT,
+        },
+      }),
+    }),
+    outcome: {
+      outcome: testData.outcome({ code: OutcomeCode.CHARGE_PROVED, amount: 0, caution: true, details: null }),
+    },
+  },
+]
+
 context('Hearing details page', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -358,6 +412,36 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         [],
         historyWithPoliceReferAndReferralOutcomeNotProceed
+      ),
+    })
+    // Adjudication hearing complete and dismissed
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524508,
+      response: reportedAdjudicationResponse(
+        1524508,
+        ReportedAdjudicationStatus.DISMISSED,
+        [historyWithCompleteAndDismissedFinding[0].hearing],
+        historyWithCompleteAndDismissedFinding
+      ),
+    })
+    // Adjudication hearing complete and not proceeded with
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524509,
+      response: reportedAdjudicationResponse(
+        1524509,
+        ReportedAdjudicationStatus.NOT_PROCEED,
+        [historyWithCompleteAndNotProceedFinding[0].hearing],
+        historyWithCompleteAndNotProceedFinding
+      ),
+    })
+    // Adjudication hearing complete and proved
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524510,
+      response: reportedAdjudicationResponse(
+        1524510,
+        ReportedAdjudicationStatus.CHARGE_PROVED,
+        [historyWithCompleteAndProvedFinding[0].hearing],
+        historyWithCompleteAndProvedFinding
       ),
     })
     cy.signIn()
@@ -1053,6 +1137,119 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('Adj 1')
           expect($summaryData.get(2).innerText).to.contain('Governor')
         })
+    })
+    it('Adjudication hearing complete with dismissed finding', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524508))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+          expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
+          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(5).innerText).to.contain('Plea')
+          expect($summaryLabels.get(6).innerText).to.contain('Finding')
+          expect($summaryLabels.get(7).innerText).to.contain('Reason')
+        })
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
+          expect($summaryData.get(6).innerText).to.contain('J. Red')
+          expect($summaryData.get(7).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(8).innerText).to.contain('Unfit')
+          expect($summaryData.get(9).innerText).to.contain("Charge dismissed due to 'not guilty' finding")
+          expect($summaryData.get(10).innerText).to.contain('Some details')
+        })
+      hearingTabPage.removeCompleteHearingButton().should('exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+    })
+    it('Adjudication hearing complete with not proceed finding', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524509))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+          expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
+          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(5).innerText).to.contain('Plea')
+          expect($summaryLabels.get(6).innerText).to.contain('Finding')
+          expect($summaryLabels.get(7).innerText).to.contain('Reason')
+        })
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
+          expect($summaryData.get(6).innerText).to.contain('J. Red')
+          expect($summaryData.get(7).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(8).innerText).to.contain('Unfit')
+          expect($summaryData.get(9).innerText).to.contain('Charge not proceeded with for any other reason')
+          expect($summaryData.get(10).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
+        })
+      hearingTabPage.notProceedTable().should('not.exist')
+      hearingTabPage.removeCompleteHearingButton().should('exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+    })
+    it('Adjudication hearing complete with proved finding', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524510))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+          expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
+          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(5).innerText).to.contain('Plea')
+          expect($summaryLabels.get(6).innerText).to.contain('Finding')
+        })
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(2).innerText).to.contain('Adj 2')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
+          expect($summaryData.get(6).innerText).to.contain('J. Red')
+          expect($summaryData.get(7).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(8).innerText).to.contain('Unfit')
+          expect($summaryData.get(9).innerText).to.contain('Charge proved beyond reasonable doubt')
+        })
+      hearingTabPage.removeCompleteHearingButton().should('exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+    })
+    it('Removes the whole hearing and outcome when the remove completed hearing button is clicked', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524510))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.hearingSummaryTable(1).should('exist')
+      cy.task('stubCancelCompleteHearing', {
+        adjudicationNumber: 1524510,
+        response: reportedAdjudicationResponse(1524510, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
+      })
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524510,
+        response: reportedAdjudicationResponse(1524510, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
+      })
+      hearingTabPage.removeCompleteHearingButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524510))
+      })
+      hearingTabPage.hearingSummaryTable(1).should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

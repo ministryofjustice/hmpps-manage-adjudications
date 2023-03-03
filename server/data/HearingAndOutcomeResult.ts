@@ -1,7 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-import { NotProceedReason } from './OutcomeResult'
-
 export enum HearingOutcomeCode {
   COMPLETE = 'COMPLETE',
   REFER_POLICE = 'REFER_POLICE',
@@ -13,18 +11,24 @@ export enum OutcomeCode {
   REFER_POLICE = 'REFER_POLICE',
   REFER_INAD = 'REFER_INAD',
   NOT_PROCEED = 'NOT_PROCEED',
+  DISMISSED = 'DISMISSED',
   PROSECUTION = 'PROSECUTION',
   SCHEDULE_HEARING = 'SCHEDULE_HEARING',
+  CHARGE_PROVED = 'CHARGE_PROVED',
 }
 
 export enum ReferralOutcomeCode {
   NOT_PROCEED = 'NOT_PROCEED',
   PROSECUTION = 'PROSECUTION',
   SCHEDULE_HEARING = 'SCHEDULE_HEARING',
+  REFER_POLICE = 'REFER_POLICE',
+  REFER_INAD = 'REFER_INAD',
+  DISMISSED = 'DISMISSED',
+  CHARGE_PROVED = 'CHARGE_PROVED',
 }
 
 export enum HearingOutcomeFinding {
-  PROVED = 'PROVED',
+  CHARGE_PROVED = 'CHARGE_PROVED',
   DISMISSED = 'DISMISSED',
   NOT_PROCEED = 'NOT_PROCEED',
 }
@@ -35,7 +39,7 @@ export enum HearingOutcomeAdjournReason {
   RO_ATTEND = 'RO_ATTEND',
   HELP = 'HELP',
   UNFIT = 'UNFIT',
-  WITNESS = 'UNFIT',
+  WITNESS = 'WITNESS',
   WITNESS_SUPPORT = 'WITNESS_SUPPORT',
   MCKENZIE = 'MCKENZIE',
   EVIDENCE = 'EVIDENCE',
@@ -49,6 +53,24 @@ export enum HearingOutcomePlea {
   GUILTY = 'GUILTY',
   NOT_GUILTY = 'NOT_GUILTY',
   NOT_ASKED = 'NOT_ASKED',
+}
+
+export enum NextStep {
+  SCHEDULE_HEARING = 'SCHEDULE_HEARING',
+  REFER_POLICE = 'REFER_POLICE',
+  NOT_PROCEED = 'NOT_PROCEED',
+}
+
+export enum NotProceedReason {
+  ANOTHER_WAY = 'ANOTHER_WAY',
+  RELEASED = 'RELEASED',
+  WITNESS_NOT_ATTEND = 'WITNESS_NOT_ATTEND',
+  UNFIT = 'UNFIT',
+  FLAWED = 'FLAWED',
+  EXPIRED_NOTICE = 'EXPIRED_NOTICE',
+  EXPIRED_HEARING = 'EXPIRED_HEARING',
+  NOT_FAIR = 'NOT_FAIR',
+  OTHER = 'OTHER',
 }
 
 export type HearingDetails = {
@@ -73,6 +95,8 @@ export type Outcome = {
   code: OutcomeCode
   details: string
   reason?: string
+  amount?: number
+  caution?: boolean
 }
 
 export type ReferralOutcome = {
@@ -136,7 +160,7 @@ export function convertHearingOutcomePlea(outcomePlea: HearingOutcomePlea) {
 
 export function convertHearingOutcomeFinding(outcomeFinding: HearingOutcomeFinding) {
   switch (outcomeFinding) {
-    case HearingOutcomeFinding.PROVED:
+    case HearingOutcomeFinding.CHARGE_PROVED:
       return 'Charge proved beyond reasonable doubt'
     case HearingOutcomeFinding.DISMISSED:
       return "Charge dismissed due to 'not guilty' finding"

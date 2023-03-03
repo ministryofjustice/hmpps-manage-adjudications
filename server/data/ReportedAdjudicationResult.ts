@@ -131,7 +131,7 @@ export enum ReportedAdjudicationStatus {
   DISMISSED = 'DISMISSED',
   REFER_POLICE = 'REFER_POLICE',
   REFER_INAD = 'REFER_INAD',
-  PROVED = 'PROVED',
+  CHARGE_PROVED = 'CHARGE_PROVED',
   QUASHED = 'QUASHED',
 }
 
@@ -173,7 +173,7 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Referred to police'
     case ReportedAdjudicationStatus.REFER_INAD:
       return 'Referred to IA'
-    case ReportedAdjudicationStatus.PROVED:
+    case ReportedAdjudicationStatus.CHARGE_PROVED:
       return 'Charge proved'
     case ReportedAdjudicationStatus.QUASHED:
       return 'Quashed'

@@ -2,9 +2,9 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
+import OutcomesService from '../../../services/outcomesService'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -15,7 +15,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
-const userService = new UserService(null) as jest.Mocked<UserService>
+const outcomesService = new OutcomesService(null) as jest.Mocked<OutcomesService>
 
 let app: Express
 
@@ -27,7 +27,7 @@ beforeEach(() => {
       outcomes: [],
     }),
   })
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, outcomesService })
 })
 
 afterEach(() => {

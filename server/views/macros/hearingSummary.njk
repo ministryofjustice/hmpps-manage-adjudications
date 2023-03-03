@@ -85,9 +85,9 @@
       {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableAdjourn.njk' %}
     {% endif %}
     {% if hearingDetails.outcome.code === HearingOutcomeCode.COMPLETE %}
-      {% if outcome.code === OutcomeCode.PROVED %}
+      {% if outcome.code === HearingOutcomeFinding.CHARGE_PROVED %}
         {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableCompleteProved.njk' %}
-      {% elif outcome.code === OutcomeCode.NOT_PROCEED %}
+      {% elif outcome.code === HearingOutcomeFinding.NOT_PROCEED %}
         {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableCompleteNotProceed.njk' %}
       {% else %}
         {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableCompleteDismissed.njk' %}

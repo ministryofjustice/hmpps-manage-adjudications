@@ -1,5 +1,5 @@
 import { FormError } from '../../@types/template'
-import { NotProceedReason } from '../../data/OutcomeResult'
+import { NotProceedReason } from '../../data/HearingAndOutcomeResult'
 
 type NotProceedForm = {
   notProceedReason: NotProceedReason

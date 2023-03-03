@@ -32,7 +32,7 @@ context.skip('Plea and finding', () => {
               locationId: 775,
               outcome: testData.hearingOutcome({
                 code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.PROVED },
+                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
               }),
             }),
           ],
@@ -53,7 +53,7 @@ context.skip('Plea and finding', () => {
               locationId: 775,
               outcome: testData.hearingOutcome({
                 code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.PROVED },
+                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
               }),
             }),
           ],
@@ -76,7 +76,7 @@ context.skip('Plea and finding', () => {
       cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').should('be.checked')
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="PROVED"]').should('be.checked')
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
@@ -90,10 +90,7 @@ context.skip('Plea and finding', () => {
   describe('Submits successfully', () => {
     it('goes to the money recovered for damages page if data successfully submitted - nothing changed', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.submitButton().click()
@@ -103,10 +100,7 @@ context.skip('Plea and finding', () => {
     })
     it('goes to the reason for finding page if data successfully submitted - change finding radio button to DISMISSED', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="NOT_GUILTY"]').click()
@@ -118,10 +112,7 @@ context.skip('Plea and finding', () => {
     })
     it('goes to the reason for not proceeding page if data successfully submitted - change finding radio button to NOT_PROCEED', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click()

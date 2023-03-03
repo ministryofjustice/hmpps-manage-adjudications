@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
 import OutcomesService from '../../services/outcomesService'
-import { NotProceedReason } from '../../data/OutcomeResult'
+import { NotProceedReason } from '../../data/HearingAndOutcomeResult'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/outcomesService')
