@@ -60,6 +60,7 @@ export default class HearingsService {
       plea,
       details,
     }
+
     return new ManageAdjudicationsClient(user.token).createDismissedHearingOutcome(
       adjudicationNumber,
       hearingOutcomeDetails

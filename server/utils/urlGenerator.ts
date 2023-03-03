@@ -483,8 +483,8 @@ const adjudicationUrls = {
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {
-      start: ':/adjudicationNumber',
-      edit: ':/adjudicationNumber/edit',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}`,
@@ -495,8 +495,8 @@ const adjudicationUrls = {
   hearingReasonForFinding: {
     root: '/reason-for-finding',
     matchers: {
-      start: ':/adjudicationNumber',
-      edit: ':/adjudicationNumber/edit',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}`,

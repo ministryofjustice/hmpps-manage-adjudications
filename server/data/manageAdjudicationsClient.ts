@@ -426,7 +426,7 @@ export default class ManageAdjudicationsClient {
     hearingOutcomeDetails: HearingDismissedOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `reported-adjudications/${adjudicationNumber}/complete-hearing/dismissed`,
+      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/dismissed`,
       data: { ...hearingOutcomeDetails },
     })
   }

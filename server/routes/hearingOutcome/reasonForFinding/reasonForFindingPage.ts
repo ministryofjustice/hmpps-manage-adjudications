@@ -7,33 +7,15 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './reasonForFindingValidation'
-import { User } from '../../../data/hmppsAuthClient'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
-
-export enum PageRequestType {
-  CREATION,
-  EDIT,
-}
 
 type PageData = {
   error?: FormError | FormError[]
   reasonForFinding?: string
 }
 
-class PageOptions {
-  constructor(private readonly pageType: PageRequestType) {}
-}
-
 export default class ReasonForFindingPage {
-  pageOptions: PageOptions
-
-  constructor(
-    pageType: PageRequestType,
-    private readonly hearingsService: HearingsService,
-    private readonly userService: UserService
-  ) {
-    this.pageOptions = new PageOptions(pageType)
-  }
+  constructor(private readonly hearingsService: HearingsService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, reasonForFinding } = pageData
@@ -44,6 +26,11 @@ export default class ReasonForFindingPage {
       errors: error ? [error] : [],
       reasonForFinding,
     })
+  }
+
+  private validateQueryData = (adjudicator: string, plea: HearingOutcomePlea) => {
+    if (!adjudicator || !plea || !HearingOutcomePlea[plea]) return false
+    return true
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -61,7 +48,7 @@ export default class ReasonForFindingPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { reasonForFinding } = req.body
-    const { adjudicatorName, plea } = req.query
+    const { adjudicator, plea } = req.query
 
     const error = validateForm({ reasonForFinding })
     if (error)
@@ -70,17 +57,22 @@ export default class ReasonForFindingPage {
         reasonForFinding,
       })
 
+    if (!this.validateQueryData(adjudicator as string, plea as HearingOutcomePlea)) {
+      // TODO: when edit is implemented we will need to send them back to edit version when required
+      return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+    }
+
     try {
       await this.hearingsService.createDismissedHearingOutcome(
         adjudicationNumber,
-        adjudicatorName as string,
+        adjudicator as string,
         plea as HearingOutcomePlea,
         reasonForFinding,
         user
       )
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber)
       throw postError
     }
   }
