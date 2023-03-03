@@ -64,7 +64,7 @@ context.skip('Plea and finding', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
+      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().should('exist')
       hearingPleaAndFindingPage.findingRadioButtons().should('exist')
@@ -73,13 +73,13 @@ context.skip('Plea and finding', () => {
       hearingPleaAndFindingPage.errorSummary().should('not.exist')
     })
     it('should have the previously selected radios selected', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
+      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').should('be.checked')
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100, 1))
+      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.cancelButton().click()
       cy.location().should(loc => {
@@ -95,7 +95,7 @@ context.skip('Plea and finding', () => {
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.start(100))
       })
     })
     it('goes to the reason for finding page if data successfully submitted - change finding radio button to DISMISSED', () => {
@@ -107,7 +107,7 @@ context.skip('Plea and finding', () => {
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="DISMISSED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForFinding.urls.edit(100, 1))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
       })
     })
     it('goes to the reason for not proceeding page if data successfully submitted - change finding radio button to NOT_PROCEED', () => {
