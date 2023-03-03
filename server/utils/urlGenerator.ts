@@ -2,6 +2,7 @@ import url from 'url'
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
+import { HearingOutcomePlea } from '../data/HearingAndOutcomeResult'
 
 const adjudicationUrls = {
   offenceCodeSelection: {
@@ -487,16 +488,23 @@ const adjudicationUrls = {
       start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsInad.root}/${adjudicationNumber}`,
     },
   },
+
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {
-      start: ':/adjudicationNumber',
-      edit: ':/adjudicationNumber/edit',
+      start: '/:adjudicationNumber',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}/edit`,
+    },
+  },
+  isThisACaution: {
+    root: '/is-caution',
+    matchers: {
+      start: ':/adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}`,
     },
   },
   hearingReasonForFinding: {

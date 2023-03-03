@@ -78,6 +78,7 @@ export default class PleaAndFindingPage {
     const hearingId = Number(req.params.hearingId)
     const { hearingPlea, hearingFinding } = req.body
     const isEdit = this.pageOptions.isEdit()
+    const { adjudicator } = req.query
 
     const error = validateForm({ hearingPlea, hearingFinding })
     if (error)
@@ -92,7 +93,9 @@ export default class PleaAndFindingPage {
         isEdit,
         HearingOutcomeFinding[hearingFinding],
         adjudicationNumber,
-        hearingId
+        hearingId,
+        adjudicator as string,
+        hearingPlea
       )
       return res.redirect(redirectUrl)
     } catch (postError) {
@@ -113,11 +116,13 @@ export default class PleaAndFindingPage {
     isEdit: boolean,
     hearingFinding: HearingOutcomeFinding,
     adjudicationNumber: number,
-    hearingId: number
+    hearingId: number,
+    adjudicator: string,
+    hearingPlea: HearingOutcomePlea
   ) => {
     if (isEdit) {
       if (hearingFinding === HearingOutcomeFinding.PROVED)
-        return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
+        return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
         return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber, hearingId)
       return adjudicationUrls.reasonForNotProceeding.urls.edit(adjudicationNumber)

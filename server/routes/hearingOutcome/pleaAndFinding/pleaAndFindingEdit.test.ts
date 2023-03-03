@@ -48,7 +48,7 @@ describe('POST /hearing-plea-finding edit', () => {
         hearingFinding: HearingOutcomeFinding.PROVED,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      .expect('Location', adjudicationUrls.moneyRecoveredForDamages.urls.start(100))
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
     return request(app)
