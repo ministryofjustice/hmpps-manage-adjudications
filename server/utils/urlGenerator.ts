@@ -480,6 +480,7 @@ const adjudicationUrls = {
       start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsInad.root}/${adjudicationNumber}`,
     },
   },
+
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {
@@ -488,8 +489,15 @@ const adjudicationUrls = {
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}/edit`,
+    },
+  },
+  isThisACaution: {
+    root: '/is-caution',
+    matchers: {
+      start: ':/adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}`,
     },
   },
   hearingReasonForFinding: {

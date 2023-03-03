@@ -78,7 +78,7 @@ context('Plea and finding', () => {
   })
   describe('Validation', () => {
     it('shows correct error message if plea missing', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.start(100))
+      cy.visit(`${adjudicationUrls.hearingPleaAndFinding.urls.start(100)}}?adjudicator=Tim`)
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
@@ -90,7 +90,7 @@ context('Plea and finding', () => {
         })
     })
     it('shows correct error message if finding missing', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.start(100))
+      cy.visit(`${adjudicationUrls.hearingPleaAndFinding.urls.start(100)}?adjudicator=Tim`)
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click()
       hearingPleaAndFindingPage.submitButton().click()

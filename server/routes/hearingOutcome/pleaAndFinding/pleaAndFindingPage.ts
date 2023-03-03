@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import url from 'url'
 import { Request, Response } from 'express'
+import url from 'url'
 import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
@@ -111,7 +111,7 @@ export default class PleaAndFindingPage {
   getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, adjudicationNumber: number) => {
     if (isEdit) {
       if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
-        return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
+        return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
         return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber)
       return adjudicationUrls.reasonForNotProceeding.urls.edit(adjudicationNumber)

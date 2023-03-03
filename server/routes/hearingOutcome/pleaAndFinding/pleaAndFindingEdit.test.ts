@@ -45,7 +45,7 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
