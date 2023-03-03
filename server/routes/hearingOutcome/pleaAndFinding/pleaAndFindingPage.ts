@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 
@@ -76,6 +77,7 @@ export default class PleaAndFindingPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { hearingPlea, hearingFinding } = req.body
     const isEdit = this.pageOptions.isEdit()
+    const { adjudicator } = req.query
 
     const error = validateForm({ hearingPlea, hearingFinding })
     if (error)
@@ -87,7 +89,12 @@ export default class PleaAndFindingPage {
 
     try {
       const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], adjudicationNumber)
-      return res.redirect(redirectUrl)
+      return res.redirect(
+        url.format({
+          pathname: redirectUrl,
+          query: { adjudicator: String(adjudicator), plea: hearingPlea },
+        })
+      )
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError
