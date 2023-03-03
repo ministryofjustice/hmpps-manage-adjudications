@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import url from 'url'
 import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
@@ -43,14 +44,27 @@ export default class DamagesOwedPage {
     if (error) return this.renderView(req, res, damagesOwed, error)
 
     try {
-      return res.redirect(adjudicationUrls.isThisACaution.urls.start(adjudicationNumber))
+      if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
+        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+      }
+
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.isThisACaution.urls.start(adjudicationNumber),
+          query: {
+            adjudicator: adjudicator.toString(),
+            plea: HearingOutcomePlea[plea.toString()],
+            amount,
+          },
+        })
+      )
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError
     }
   }
 
-  private validDataFromEnterHearingOutcomePage = (plea: HearingOutcomePlea, adjudicator: string) => {
+  private validateDataFromEnterHearingOutcomePage = (plea: HearingOutcomePlea, adjudicator: string) => {
     if (!plea || !adjudicator) return false
     return true
   }

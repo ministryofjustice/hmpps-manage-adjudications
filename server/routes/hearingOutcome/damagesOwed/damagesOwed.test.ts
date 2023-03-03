@@ -49,12 +49,35 @@ describe('GET /money-recovered', () => {
 describe('POST /money-recovered', () => {
   it('should pass the amount to the next page', () => {
     return request(app)
-      .post(adjudicationUrls.moneyRecoveredForDamages.urls.start(100))
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=test&plea=GUILTY`)
       .send({
         damagesOwed: 'yes',
         amount: '100.10',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.isThisACaution.urls.start(100))
+      .expect(
+        'Location',
+        `${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=test&plea=GUILTY&amount=100.10`
+      )
+  })
+  it('should  not pass the amount to the next page', () => {
+    return request(app)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=test&plea=GUILTY`)
+      .send({
+        damagesOwed: 'no',
+        amount: null,
+      })
+      .expect(302)
+      .expect('Location', `${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=test&plea=GUILTY&amount=`)
+  })
+  it('should return to outcome page if missing adjudicator', () => {
+    return request(app)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?plea=GUILTY`)
+      .send({
+        damagesOwed: 'yes',
+        amount: '100.10',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100))
   })
 })
