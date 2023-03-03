@@ -61,7 +61,6 @@ export default class HearingAdournedPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -69,7 +68,7 @@ export default class HearingAdournedPage {
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingOutcome = await this.hearingsService.getHearingOutcome(adjudicationNumber, hearingId, user)
+      readApiHearingOutcome = await this.hearingsService.getHearingOutcome(adjudicationNumber, user)
     }
 
     return this.renderView(req, res, {
@@ -82,7 +81,7 @@ export default class HearingAdournedPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { adjudicatorName } = req.query
+    const { adjudicator } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
     const error = validateForm({ adjournReason, adjournDetails, adjournPlea })
@@ -98,7 +97,7 @@ export default class HearingAdournedPage {
       await this.hearingsService.createAdjourn(
         adjudicationNumber,
         HearingOutcomeCode.ADJOURN,
-        adjudicatorName as string,
+        adjudicator as string,
         adjournDetails,
         adjournReason,
         adjournPlea,

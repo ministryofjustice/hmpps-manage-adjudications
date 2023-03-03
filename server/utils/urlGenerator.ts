@@ -399,40 +399,35 @@ const adjudicationUrls = {
   enterHearingOutcome: {
     root: '/hearing-outcome',
     matchers: {
-      start: '/:adjudicationNumber/hearing/:hearingId',
-      edit: '/:adjudicationNumber/hearing/:hearingId/edit',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}/hearing/${hearingId}`,
-      edit: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}/edit`,
     },
   },
   hearingPleaAndFinding: {
     root: '/hearing-plea-finding',
     matchers: {
-      start: '/:adjudicationNumber/hearing/:hearingId',
-      edit: '/:adjudicationNumber/hearing/:hearingId/edit',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}/hearing/${hearingId}`,
-      edit: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}/edit`,
     },
   },
   hearingReasonForReferral: {
     root: '/reason-for-referral',
     matchers: {
-      start: '/:adjudicationNumber/hearing/:hearingId',
-      edit: '/:adjudicationNumber/hearing/:hearingId/edit',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}/hearing/${hearingId}`,
-      edit: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}/edit`,
     },
   },
   reasonForReferral: {
@@ -449,14 +444,12 @@ const adjudicationUrls = {
   hearingAdjourned: {
     root: '/hearing-adjourned',
     matchers: {
-      start: '/:adjudicationNumber/hearing/:hearingId',
-      edit: '/:adjudicationNumber/hearing/:hearingId/edit',
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}/hearing/${hearingId}`,
-      edit: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}/hearing/${hearingId}/edit`,
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}/edit`,
     },
   },
   hearingReferralConfirmation: {

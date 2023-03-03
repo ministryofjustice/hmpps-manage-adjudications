@@ -56,7 +56,6 @@ export default class PleaAndFindingPage {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const hearingId = Number(req.params.hearingId)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -64,7 +63,7 @@ export default class PleaAndFindingPage {
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, hearingId, user)
+      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
     }
 
     return this.renderView(req, res, {
@@ -97,10 +96,9 @@ export default class PleaAndFindingPage {
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
     adjudicationId: number,
-    hearingId: number,
     user: User
   ): Promise<HearingOutcomeDetails> => {
-    return this.hearingsService.getHearingOutcome(adjudicationId, hearingId, user)
+    return this.hearingsService.getHearingOutcome(adjudicationId, user)
   }
 
   getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, adjudicationNumber: number) => {

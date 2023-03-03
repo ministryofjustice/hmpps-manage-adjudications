@@ -38,7 +38,7 @@ afterEach(() => {
 describe('GET /hearing-adjourned', () => {
   it('should load the `Reason for referral` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingAdjourned.urls.edit(100, 1))
+      .get(adjudicationUrls.hearingAdjourned.urls.edit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Adjourn the hearing for another reason')
@@ -49,9 +49,7 @@ describe('GET /hearing-adjourned', () => {
 describe('POST /hearing-adjourned', () => {
   it('should successfully call the endpoint and redirect to the confirmation page', () => {
     return request(app)
-      .post(
-        `${adjudicationUrls.hearingAdjourned.urls.edit(100, 1)}?adjudicatorName=Roxanne%20Red&hearingOutcome=ADJOURN`
-      )
+      .post(`${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`)
       .send({
         adjournReason: HearingOutcomeAdjournReason.INVESTIGATION,
         adjournDetails: '123',

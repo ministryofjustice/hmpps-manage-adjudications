@@ -753,7 +753,7 @@ export default class ReportedAdjudicationsService {
     if (finalHistoryItem.hearing && !finalHistoryItem.outcome) {
       if (!finalHistoryItem.hearing.outcome)
         return {
-          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber, finalHistoryItem.hearing.id),
+          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber),
           text: 'Enter the hearing outcome',
           name: 'enterHearingOutcomeButton',
           qa: 'enter-hearing-outcome-button',

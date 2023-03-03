@@ -78,9 +78,8 @@ context.skip('What is the reason for the referral?', () => {
     it('goes to the referral confirmation page if data successfully submitted - nothing changed', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=REFER_POLICE`
+          100
+        )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`
       )
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.submitButton().click()
@@ -91,9 +90,8 @@ context.skip('What is the reason for the referral?', () => {
     it('goes to the referral confirmation page if data successfully submitted - reason changed', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=REFER_POLICE`
+          100
+        )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`
       )
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().clear()
@@ -116,9 +114,8 @@ context.skip('What is the reason for the referral?', () => {
     it('shows correct error message if reason missing', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100,
-          1
-        )}?adjudicatorName=Judge%20Red&hearingOutcome=REFER_POLICE`
+          100
+        )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`
       )
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().clear()
