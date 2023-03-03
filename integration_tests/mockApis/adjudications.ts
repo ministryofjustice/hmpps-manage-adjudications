@@ -812,6 +812,21 @@ const stubRemoveNotProceed = ({ adjudicationNumber, response }): SuperAgentReque
     },
   })
 
+const stubPostCompleteDismissedHearing = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/complete-hearing/dismissed`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -853,4 +868,5 @@ export default {
   stubRemoveReferral,
   stubRemoveNotProceed,
   stubCancelCompleteHearing,
+  stubPostCompleteDismissedHearing,
 }

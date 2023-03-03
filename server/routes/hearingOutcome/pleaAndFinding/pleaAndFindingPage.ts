@@ -79,10 +79,6 @@ export default class PleaAndFindingPage {
     const isEdit = this.pageOptions.isEdit()
     const { adjudicator } = req.query
 
-    if (!adjudicator) {
-      return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
-    }
-
     const error = validateForm({ hearingPlea, hearingFinding })
     if (error)
       return this.renderView(req, res, {
@@ -92,13 +88,12 @@ export default class PleaAndFindingPage {
       })
 
     try {
-      return this.getRedirect(
-        isEdit,
-        HearingOutcomeFinding[hearingFinding],
-        HearingOutcomePlea[hearingPlea],
-        adjudicationNumber,
-        adjudicator as string,
-        res
+      const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], adjudicationNumber)
+      return res.redirect(
+        url.format({
+          pathname: redirectUrl,
+          query: { adjudicator: String(adjudicator), plea: hearingPlea },
+        })
       )
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
@@ -111,25 +106,6 @@ export default class PleaAndFindingPage {
     user: User
   ): Promise<HearingOutcomeDetails> => {
     return this.hearingsService.getHearingOutcome(adjudicationId, user)
-  }
-
-  getRedirect = (
-    isEdit: boolean,
-    hearingFinding: HearingOutcomeFinding,
-    hearingPlea: HearingOutcomePlea,
-    adjudicationNumber: number,
-    adjudicator: string,
-    res: Response
-  ) => {
-    return res.redirect(
-      url.format({
-        pathname: this.getRedirectUrl(isEdit, hearingFinding, adjudicationNumber),
-        query: {
-          adjudicator,
-          plea: hearingPlea,
-        },
-      })
-    )
   }
 
   getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, adjudicationNumber: number) => {

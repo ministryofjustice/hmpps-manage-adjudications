@@ -51,6 +51,7 @@ import notProceedRoutes from './notProceed'
 import nextStepInadRoutes from './nextSteps/inad'
 import policeReasonForReferralRoutes from './hearingOutcome/referCase/policeReferral'
 import damagesOwedRoutes from './hearingOutcome/damagesOwed'
+import reasonForFindingRoutes from './hearingOutcome/reasonForFinding'
 
 export default function routes(
   router: Router,
@@ -217,6 +218,7 @@ export default function routes(
   router.use(adjudicationUrls.reasonForNotProceeding.root, notProceedRoutes({ userService, outcomesService }))
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
   router.use(adjudicationUrls.moneyRecoveredForDamages.root, damagesOwedRoutes({ userService }))
+  router.use(adjudicationUrls.hearingReasonForFinding.root, reasonForFindingRoutes({ hearingsService, userService }))
 
   return router
 }

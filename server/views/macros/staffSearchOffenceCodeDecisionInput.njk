@@ -2,32 +2,40 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% macro staffSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedAnswerViewData, errors) %}
-    {% set selectedAnswerId = decisionForm.selectedAnswerId %}
-    {% set staffId = decisionForm.selectedAnswerData.staffId %}
-    {% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
-    {% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
-    {% set staffName = selectedAnswerViewData.staffName %}
+  {% set selectedAnswerId = decisionForm.selectedAnswerId %}
+  {% set staffId = decisionForm.selectedAnswerData.staffId %}
+  {% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
+  {% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
+  {% set staffName = selectedAnswerViewData.staffName %}
 
-    {% if selectedAnswerId == answerId and staffId != null %}
-        <input type="hidden" name="staffId" value="{{ staffId }}" />
-        <div>
-            <p><span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }} </p>
-            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }} </p>
-            <div>
-                {{ govukButton({
+  {% if selectedAnswerId == answerId and staffId != null %}
+    <input type="hidden" name="staffId" value="{{ staffId }}"/>
+    <div>
+      <p>
+        <span class="govuk-!-font-weight-bold">Name</span>
+        -
+        {{ staffName }}
+      </p>
+      <p>
+        <span class="govuk-!-font-weight-bold">User ID</span>
+        -
+        {{ staffId }}
+      </p>
+      <div>
+        {{ govukButton({
                     text: 'Delete',
                     classes: "govuk-button--secondary",
                     type: "submit",
                     name: "deleteUser",
                     value: "deleteUser"
                 }) }}
-            </div>
-        </div>
-    {% else %}
+      </div>
+    </div>
+  {% else %}
 
-        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
-        <div id="staffName" class="govuk-form-group flex-container flex-column">
-            {{ govukInput({
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
+    <div id="staffName" class="govuk-form-group flex-container flex-column">
+      {{ govukInput({
                 id: "staffSearchFirstNameInput",
                 name: "staffSearchFirstNameInput",
                 classes: "govuk-!-width-one-third",
@@ -37,7 +45,7 @@
                     text: "First name"
                 }
             }) }}
-            {{ govukInput({
+      {{ govukInput({
                 id: "staffSearchLastNameInput",
                 name: "staffSearchLastNameInput",
                 classes: "govuk-!-width-one-third",
@@ -47,9 +55,9 @@
                     text: "Last name"
                 }
             }) }}
-        </div>
-        <div>
-            {{ govukButton({
+    </div>
+    <div>
+      {{ govukButton({
                 text: "Search",
                 classes: "govuk-button--secondary conditionalRadioSearchButton",
                 type: "submit",
@@ -57,7 +65,7 @@
                 value: "searchUser",
                 attributes: {'data-qa': 'staff-search'}
             }) }}
-        </div>
-    {% endif %}
+    </div>
+  {% endif %}
 
 {% endmacro %}
