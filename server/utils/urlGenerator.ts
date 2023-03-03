@@ -2,7 +2,6 @@ import url from 'url'
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
-import { HearingOutcomePlea } from '../data/HearingAndOutcomeResult'
 
 const adjudicationUrls = {
   offenceCodeSelection: {

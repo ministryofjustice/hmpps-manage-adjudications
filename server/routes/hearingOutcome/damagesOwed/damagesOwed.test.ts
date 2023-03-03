@@ -3,7 +3,6 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
-import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 
