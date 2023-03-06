@@ -1,0 +1,65 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "Is the punishment a caution?" %}
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+                idPrefix: 'caution',
+                id: 'caution',
+                name: 'caution',
+                attributes: { "data-qa": "radio-buttons-caution" },
+                errorMessage: "caution" | findError(errors),
+                fieldset: {
+                   legend: legend 
+                },
+             items: [
+           {
+             value: "yes",
+             text: "Yes",
+             checked: caution === 'yes'
+           },
+           {
+            value: "no",
+              text: "No",
+              checked: caution === 'no'
+            }]
+            }) }}
+      {{ govukButton({
+					text: 'Continue',
+					type: "submit",
+					classes: "govuk-button--submit govuk-!-margin-right-3",
+					attributes: { "data-qa": "caution-submit" }
+			}) }}
+      {{ govukButton({
+					text: 'Cancel',
+					element: "a",
+					href: cancelHref,
+					classes: "govuk-button--secondary",
+					attributes: { "data-qa": "caution-cancel" }
+			}) }}
+    </form>
+  </div>
+{% endblock %}

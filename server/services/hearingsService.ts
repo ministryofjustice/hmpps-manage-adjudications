@@ -66,4 +66,25 @@ export default class HearingsService {
       hearingOutcomeDetails
     )
   }
+
+  async createChargedProvedHearingOutcome(
+    adjudicationNumber: number,
+    adjudicatorName: string,
+    plea: HearingOutcomePlea,
+    caution: boolean,
+    user: User,
+    amount?: string
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      plea,
+      caution,
+      amount: !amount ? null : Number(amount),
+    }
+
+    return new ManageAdjudicationsClient(user.token).createChargeProvedHearingOutcome(
+      adjudicationNumber,
+      hearingOutcomeDetails
+    )
+  }
 }

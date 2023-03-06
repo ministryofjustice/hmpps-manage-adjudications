@@ -494,7 +494,7 @@ const adjudicationUrls = {
   isThisACaution: {
     root: '/is-caution',
     matchers: {
-      start: ':/adjudicationNumber',
+      start: '/:adjudicationNumber',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}`,

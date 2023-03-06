@@ -52,6 +52,7 @@ import nextStepInadRoutes from './nextSteps/inad'
 import policeReasonForReferralRoutes from './hearingOutcome/referCase/policeReferral'
 import damagesOwedRoutes from './hearingOutcome/damagesOwed'
 import reasonForFindingRoutes from './hearingOutcome/reasonForFinding'
+import cautionRoutes from './hearingOutcome/caution'
 
 export default function routes(
   router: Router,
@@ -219,6 +220,7 @@ export default function routes(
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
   router.use(adjudicationUrls.moneyRecoveredForDamages.root, damagesOwedRoutes({ userService }))
   router.use(adjudicationUrls.hearingReasonForFinding.root, reasonForFindingRoutes({ hearingsService, userService }))
+  router.use(adjudicationUrls.isThisACaution.root, cautionRoutes({ hearingsService, userService }))
 
   return router
 }
