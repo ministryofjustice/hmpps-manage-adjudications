@@ -54,7 +54,7 @@ describe('POST /is-caution', () => {
     return request(app)
       .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
       .send({
-        caution: true,
+        caution: 'yes',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))

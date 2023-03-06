@@ -68,5 +68,5 @@ export default class HearingTabPage extends Page {
 
   outcomeTableTitle = (): PageElement => cy.get('[data-qa="outcome-table-title"]')
 
-  removeCompleteHearingButton = (): PageElement => cy.get('[data-qa="remove-complete-hearing-button"')
+  removeCompleteHearingOutcomeButton = (): PageElement => cy.get('[data-qa="remove-complete-hearing-outcome-button"')
 }

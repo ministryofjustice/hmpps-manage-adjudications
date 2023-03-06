@@ -216,7 +216,10 @@ export default function routes(
   router.use(adjudicationUrls.hearingPleaAndFinding.root, hearingPleaAndFindingRoutes({ userService, hearingsService }))
 
   router.use(adjudicationUrls.nextStepsPolice.root, nextStepPoliceRoutes({ userService, outcomesService }))
-  router.use(adjudicationUrls.reasonForNotProceeding.root, notProceedRoutes({ userService, outcomesService }))
+  router.use(
+    adjudicationUrls.reasonForNotProceeding.root,
+    notProceedRoutes({ userService, outcomesService, hearingsService })
+  )
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
   router.use(adjudicationUrls.moneyRecoveredForDamages.root, damagesOwedRoutes({ userService }))
   router.use(adjudicationUrls.hearingReasonForFinding.root, reasonForFindingRoutes({ hearingsService, userService }))

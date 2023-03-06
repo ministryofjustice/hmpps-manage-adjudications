@@ -1167,7 +1167,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(9).innerText).to.contain("Charge dismissed due to 'not guilty' finding")
           expect($summaryData.get(10).innerText).to.contain('Some details')
         })
-      hearingTabPage.removeCompleteHearingButton().should('exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().should('not.exist')
     })
     it('Adjudication hearing complete with not proceed finding', () => {
@@ -1200,7 +1200,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(10).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
       hearingTabPage.notProceedTable().should('not.exist')
-      hearingTabPage.removeCompleteHearingButton().should('exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().should('not.exist')
     })
     it('Adjudication hearing complete with proved finding', () => {
@@ -1230,14 +1230,14 @@ context('Hearing details page', () => {
           expect($summaryData.get(8).innerText).to.contain('Unfit')
           expect($summaryData.get(9).innerText).to.contain('Charge proved beyond reasonable doubt')
         })
-      hearingTabPage.removeCompleteHearingButton().should('exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().should('not.exist')
     })
     it('Removes the whole hearing and outcome when the remove completed hearing button is clicked', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524510))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.hearingSummaryTable(1).should('exist')
-      cy.task('stubCancelCompleteHearing', {
+      cy.task('stubCancelCompleteHearingOutcome', {
         adjudicationNumber: 1524510,
         response: reportedAdjudicationResponse(1524510, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
@@ -1245,7 +1245,7 @@ context('Hearing details page', () => {
         id: 1524510,
         response: reportedAdjudicationResponse(1524510, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
-      hearingTabPage.removeCompleteHearingButton().click()
+      hearingTabPage.removeCompleteHearingOutcomeButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524510))
       })

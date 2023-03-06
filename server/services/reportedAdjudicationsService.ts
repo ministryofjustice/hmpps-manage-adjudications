@@ -605,7 +605,7 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user.token).cancelHearing(adjudicationNumber)
   }
 
-  async deleteCompleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+  async deleteCompleteHearingOutcome(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user.token).cancelCompleteHearing(adjudicationNumber)
   }
 
@@ -800,10 +800,10 @@ export default class ReportedAdjudicationsService {
     if (finalHistoryItem.outcome) {
       if (finalHistoryItem.hearing?.outcome.code === HearingOutcomeCode.COMPLETE) {
         return {
-          text: 'Remove this hearing',
-          name: 'removeCompleteHearingButton',
-          value: 'removeCompleteHearing',
-          qa: 'remove-complete-hearing-button',
+          text: 'Remove outcome',
+          name: 'removeCompleteHearingOutcomeButton',
+          value: 'removeCompleteHearingOutcome',
+          qa: 'remove-complete-hearing-outcome-button',
         }
       }
       if (finalHistoryItem.outcome.outcome.code === OutcomeCode.NOT_PROCEED) {

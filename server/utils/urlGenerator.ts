@@ -517,11 +517,14 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       edit: '/:adjudicationNumber/edit',
+      completeHearingStart: '/complete-hearing/:adjudicationNumber',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}`,
       edit: (adjudicationNumber: number) =>
         `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}/edit`,
+      completeHearingStart: (adjudicationNumber: number) =>
+        `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${adjudicationNumber}`,
     },
   },
   homepage: {

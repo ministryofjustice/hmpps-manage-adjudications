@@ -56,6 +56,13 @@ export type HearingDismissedOutcomeDetails = {
   details: string
 }
 
+export type NotProceedHearingOutcomeDetails = {
+  adjudicator: string
+  plea: HearingOutcomePlea
+  reason: NotProceedReason
+  details: string
+}
+
 export type ChargeProvedHearingOutcomeDetails = {
   adjudicator: string
   plea: HearingOutcomePlea
@@ -445,6 +452,16 @@ export default class ManageAdjudicationsClient {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved`,
       data: { ...chargeProvedHearingOutcomeDetails },
+    })
+  }
+
+  async createNotProceedHearingOutcome(
+    adjudicationNumber: number,
+    notProceedHearingOutcomeDetails: NotProceedHearingOutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/not-proceed`,
+      data: { ...notProceedHearingOutcomeDetails },
     })
   }
 }
