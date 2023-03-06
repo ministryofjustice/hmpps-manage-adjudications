@@ -1,9 +1,11 @@
 {% extends "../partials/pdfLayout.njk" %}
 {% from "../macros/noticeOfBeingPlacedOnReportDetails.njk" import noticeOfBeingPlacedOnReportDetails %}
 {% from "../macros/noticeOfBeingPlacedOnReportLegal.njk" import noticeOfBeingPlacedOnReportLegal %}
+{% from "../macros/noticeOfBeingPlacedOnReportAdjournment.njk" import noticeOfBeingPlacedOnReportAdjournment %}
 {% block content %}
     <div class='adjudication-pdf'>
         {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
-        {{ noticeOfBeingPlacedOnReportLegal( noticeOfBeingPlacedOnReportData.adjudicationNumber ) }}
+        {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.adjudicationNumber) }}
+        {{ noticeOfBeingPlacedOnReportLegal(noticeOfBeingPlacedOnReportData.adjudicationNumber) }}
     </div>
 {% endblock %}
