@@ -764,10 +764,51 @@ context('Hearing details page', () => {
           expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
       hearingTabPage.scheduleAnotherHearingButton().should('exist')
-      hearingTabPage.removeHearingButton().should('exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+      hearingTabPage.removeAdjournedHearingButton().should('exist')
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.viewAllCompletedReportsLink().contains('Return to all reports')
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
+      const response = reportedAdjudicationResponse(
+        1524498,
+        ReportedAdjudicationStatus.SCHEDULED,
+        [
+          testData.singleHearing({
+            dateTimeOfHearing: hearingDateTimeTwo,
+            id: 988,
+            locationId: 234,
+            oicHearingType: OicHearingType.INAD_ADULT,
+          }),
+        ],
+        [
+          {
+            hearing: testData.singleHearing({
+              dateTimeOfHearing: hearingDateTimeTwo,
+              id: 988,
+              locationId: 234,
+              oicHearingType: OicHearingType.INAD_ADULT,
+            }),
+          },
+        ]
+      )
+      cy.task('stubRemoveAdjourn', {
+        adjudicationNumber: 1524498,
+        response,
+      })
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524498,
+        response,
+      })
+      hearingTabPage.removeAdjournedHearingButton().click()
+
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dt')
+        .then(row => {
+          expect(row.length).equals(3)
+        })
+      hearingTabPage.removeHearingButton().should('exist')
+      hearingTabPage.removeAdjournedHearingButton().should('not.exist')
     })
     it('Adjudication SCHEDULED multiple hearings to show - first adjourned, second has no outcome', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524496))
@@ -879,7 +920,6 @@ context('Hearing details page', () => {
       const hearingDetailsPageAfterDeletion = Page.verifyOnPage(hearingTab)
       hearingDetailsPageAfterDeletion.hearingIndex(1).should('exist')
       hearingDetailsPageAfterDeletion.hearingIndex(2).should('not.exist')
-      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist')
       hearingDetailsPageAfterDeletion
         .hearingSummaryTable(1)
         .find('dd')
@@ -896,7 +936,8 @@ context('Hearing details page', () => {
           expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
       hearingDetailsPageAfterDeletion.hearingSummaryTable(2).should('not.exist')
-      hearingDetailsPageAfterDeletion.removeHearingButton().should('exist')
+      hearingDetailsPageAfterDeletion.removeHearingButton().should('not.exist')
+      hearingDetailsPageAfterDeletion.removeAdjournedHearingButton().should('exist')
       hearingDetailsPageAfterDeletion.scheduleAnotherHearingButton().should('exist')
       hearingDetailsPageAfterDeletion.enterHearingOutcomeButton().should('not.exist')
     })
@@ -1168,6 +1209,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(10).innerText).to.contain('Some details')
         })
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().contains('Remove outcome')
       hearingTabPage.removeHearingButton().should('not.exist')
     })
     it('Adjudication hearing complete with not proceed finding', () => {
@@ -1201,6 +1243,7 @@ context('Hearing details page', () => {
         })
       hearingTabPage.notProceedTable().should('not.exist')
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().contains('Remove outcome')
       hearingTabPage.removeHearingButton().should('not.exist')
     })
     it('Adjudication hearing complete with proved finding', () => {

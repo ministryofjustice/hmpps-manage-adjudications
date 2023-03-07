@@ -38,6 +38,8 @@ export default class HearingTabPage extends Page {
 
   scheduleAnotherHearingButton = (): PageElement => cy.get('[data-qa="schedule-another-hearing-button"]')
 
+  removeAdjournedHearingButton = (): PageElement => cy.get('[data-qa="remove-adjourn-hearing-button"')
+
   // Referred state
 
   removeReferralButton = (): PageElement => cy.get('[data-qa="remove-referral-button"]')

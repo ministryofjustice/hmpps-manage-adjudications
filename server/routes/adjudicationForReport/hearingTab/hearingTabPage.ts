@@ -96,9 +96,13 @@ export default class HearingTabPage {
       nextStep,
       removeReferralButton,
       removeOutcomeButton,
+      removeAdjournHearingOutcomeButton,
     } = req.body
     if (removeOutcomeButton) {
       await this.outcomesService.removeNotProceedOrQuashed(adjudicationNumber, user)
+    }
+    if (removeAdjournHearingOutcomeButton) {
+      await this.outcomesService.removeAdjournOutcome(adjudicationNumber, user)
     }
     if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)

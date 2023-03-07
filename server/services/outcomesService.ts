@@ -32,6 +32,10 @@ export default class OutcomesService {
     return new ManageAdjudicationsClient(user.token).removeNotProceedOrQuashed(adjudicationNumber)
   }
 
+  async removeAdjournOutcome(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user.token).removeAdjourn(adjudicationNumber)
+  }
+
   async createPoliceReferral(
     adjudicationNumber: number,
     details: string,

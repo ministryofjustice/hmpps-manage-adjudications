@@ -826,8 +826,16 @@ export default class ReportedAdjudicationsService {
         }
       }
     }
-    // Any other items that have hearing info but doesn't have an outcome or the outcome is complete/adjourned
+    // Any other items that have hearing info but doesn't have an outcome
     if (finalHistoryItem.hearing) {
+      if (finalHistoryItem.hearing.outcome && finalHistoryItem.hearing.outcome.code === HearingOutcomeCode.ADJOURN) {
+        return {
+          text: 'Remove outcome',
+          name: 'removeAdjournHearingOutcomeButton',
+          value: 'removeAdjournHearingOutcome',
+          qa: 'remove-adjourn-hearing-button',
+        }
+      }
       return {
         text: 'Remove this hearing',
         name: 'removeHearingButton',

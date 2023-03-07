@@ -429,6 +429,12 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async removeAdjourn(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
+    })
+  }
+
   async removeReferral(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${adjudicationNumber}/remove-referral`,
