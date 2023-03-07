@@ -95,7 +95,7 @@ export default defineConfig({
         stubCreateProsecution: adjudications.stubCreateProsecution,
         stubCreateNotProceed: adjudications.stubCreateNotProceed,
         stubRemoveReferral: adjudications.stubRemoveReferral,
-        stubRemoveNotProceed: adjudications.stubRemoveNotProceed,
+        stubRemoveNotProceedOrQuashed: adjudications.stubRemoveNotProceedOrQuashed,
         stubCancelCompleteHearingOutcome: adjudications.stubCancelCompleteHearingOutcome,
         stubPostCompleteDismissedHearing: adjudications.stubPostCompleteDismissedHearing,
         stubPostCompleteHearingChargeProved: adjudications.stubPostCompleteHearingChargeProved,

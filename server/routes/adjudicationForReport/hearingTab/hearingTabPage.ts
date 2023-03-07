@@ -98,7 +98,7 @@ export default class HearingTabPage {
       removeOutcomeButton,
     } = req.body
     if (removeOutcomeButton) {
-      await this.outcomesService.removeNotProceed(adjudicationNumber, user)
+      await this.outcomesService.removeNotProceedOrQuashed(adjudicationNumber, user)
     }
     if (removeHearingButton) {
       await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)

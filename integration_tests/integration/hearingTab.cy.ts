@@ -607,7 +607,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
       hearingTabPage.removeOutcomeButton().should('exist')
-      cy.task('stubRemoveNotProceed', {
+      cy.task('stubRemoveNotProceedOrQuashed', {
         adjudicationNumber: 1524502,
         response: reportedAdjudicationResponse(1524502, ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
