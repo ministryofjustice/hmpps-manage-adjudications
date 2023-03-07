@@ -71,7 +71,6 @@ export default class NotProceedPage {
 
     const error = validateForm({ notProceedReason, notProceedDetails })
     if (error) return this.renderView(req, res, { error, notProceedReason, notProceedDetails })
-
     try {
       if (this.pageOptions.isCompleteHearing()) {
         if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
