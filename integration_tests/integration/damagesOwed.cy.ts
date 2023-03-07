@@ -74,7 +74,7 @@ context('Is any money being recovered for damages?', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Numerical values only')
+          expect($error.get(0).innerText).to.contain('Enter the amount in numbers')
         })
     })
   })
