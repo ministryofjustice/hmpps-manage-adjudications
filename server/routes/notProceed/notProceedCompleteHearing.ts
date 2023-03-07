@@ -4,11 +4,11 @@ import OutcomesService from '../../services/outcomesService'
 import UserService from '../../services/userService'
 import NotProceedPage, { PageRequestType } from './notProceedPage'
 
-export default class NotProceedRoutes {
+export default class NotProceedCompleteHearingRoutes {
   page: NotProceedPage
 
   constructor(userService: UserService, outcomesService: OutcomesService, hearingsService: HearingsService) {
-    this.page = new NotProceedPage(PageRequestType.REFER_AND_NO_HEARING, userService, outcomesService, hearingsService)
+    this.page = new NotProceedPage(PageRequestType.COMPLETE_HEARING, userService, outcomesService, hearingsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

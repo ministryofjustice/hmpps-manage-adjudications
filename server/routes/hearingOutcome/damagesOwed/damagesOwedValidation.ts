@@ -16,7 +16,7 @@ const errors: { [key: string]: FormError } = {
   },
   NAN: {
     href: '#amount',
-    text: 'Numerical values only',
+    text: 'Enter the amount in numbers',
   },
 }
 

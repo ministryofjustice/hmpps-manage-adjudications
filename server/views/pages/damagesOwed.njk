@@ -7,75 +7,75 @@
 
 {% set title = "Is any money being recovered for damages?" %}
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% set amountOwed %}
 {{ govukInput({
-                id: "amount",
-                name: "amount",
-                classes: "govuk-input--width-5",
-                errorMessage: errors | findErrors(["amount"]),
-                prefix: {
-                 text: "£"
-                },
-                label: {
-                    text: "Amount"
-                }
-            }) }}
+  id: "amount",
+  name: "amount",
+  classes: "govuk-input--width-5",
+  errorMessage: errors | findErrors(["amount"]),
+  prefix: {
+    text: "£"
+  },
+  label: {
+      text: "Amount"
+  }
+}) }}
 {% endset -%}
 
 {% block content %}
-    {% if errors | length %}
-        {{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-    {% endif %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    <div>
-        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-            {{ govukRadios({
-                idPrefix: 'damagesOwed',
-                id: 'damagesOwed',
-                name: 'damagesOwed',
-                attributes: { "data-qa": "radio-buttons-damages-owed" },
-                errorMessage: "damagesOwed" | findError(errors),
-                fieldset: {
-                   legend: legend 
-                },
-             items: [
-           {
-             value: "yes",
-             text: "Yes",
-             checked: damagesOwed === 'yes',
-             conditional: { html: amountOwed }           
-           },
-           {
-            value: "no",
-              text: "No",
-              checked: damagesOwed === 'no'
-            }]
-            }) }}
-            {{ govukButton({
+      {{ govukRadios({
+          idPrefix: 'damagesOwed',
+          id: 'damagesOwed',
+          name: 'damagesOwed',
+          attributes: { "data-qa": "radio-buttons-damages-owed" },
+          errorMessage: "damagesOwed" | findError(errors),
+          fieldset: {
+              legend: legend 
+          },
+        items: [
+      {
+        value: "yes",
+        text: "Yes",
+        checked: damagesOwed === 'yes',
+        conditional: { html: amountOwed }           
+      },
+      {
+      value: "no",
+        text: "No",
+        checked: damagesOwed === 'no'
+      }]
+      }) }}
+      {{ govukButton({
 					text: 'Continue',
 					type: "submit",
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "damages-owed-submit" }
 			}) }}
-            {{ govukButton({
+      {{ govukButton({
 					text: 'Cancel',
 					element: "a",
 					href: cancelHref,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "damages-owed-cancel" }
 			}) }}
-        </form>
-    </div>
+    </form>
+  </div>
 {% endblock %}

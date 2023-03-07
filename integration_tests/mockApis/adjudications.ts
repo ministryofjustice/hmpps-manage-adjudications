@@ -501,7 +501,7 @@ const stubCancelHearing = ({
     },
   })
 
-const stubCancelCompleteHearing = ({
+const stubCancelCompleteHearingOutcome = ({
   adjudicationNumber,
   response = {},
 }: {
@@ -797,11 +797,26 @@ const stubRemoveReferral = ({ adjudicationNumber, response }): SuperAgentRequest
     },
   })
 
-const stubRemoveNotProceed = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubRemoveNotProceedOrQuashed = ({ adjudicationNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'DELETE',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubRemoveAdjourn = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
     },
     response: {
       status: 200,
@@ -832,6 +847,21 @@ const stubPostCompleteHearingChargeProved = ({ adjudicationNumber, response }): 
     request: {
       method: 'POST',
       url: `/adjudications/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubPostCompleteHearingNotProceed = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/complete-hearing/not-proceed`,
     },
     response: {
       status: 200,
@@ -881,8 +911,10 @@ export default {
   stubCreateProsecution,
   stubCreateNotProceed,
   stubRemoveReferral,
-  stubRemoveNotProceed,
-  stubCancelCompleteHearing,
+  stubRemoveNotProceedOrQuashed,
+  stubCancelCompleteHearingOutcome,
   stubPostCompleteDismissedHearing,
   stubPostCompleteHearingChargeProved,
+  stubPostCompleteHearingNotProceed,
+  stubRemoveAdjourn,
 }

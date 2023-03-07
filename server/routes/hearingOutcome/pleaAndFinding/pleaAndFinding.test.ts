@@ -71,7 +71,7 @@ describe('POST /hearing-plea-finding', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.reasonForNotProceeding.urls.start(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100)}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
 })

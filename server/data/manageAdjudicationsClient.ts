@@ -56,6 +56,13 @@ export type HearingDismissedOutcomeDetails = {
   details: string
 }
 
+export type NotProceedHearingOutcomeDetails = {
+  adjudicator: string
+  plea: HearingOutcomePlea
+  reason: NotProceedReason
+  details: string
+}
+
 export type ChargeProvedHearingOutcomeDetails = {
   adjudicator: string
   plea: HearingOutcomePlea
@@ -416,9 +423,15 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async removeNotProceed(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async removeNotProceedOrQuashed(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
+      path: `/reported-adjudications/${adjudicationNumber}/outcome`,
+    })
+  }
+
+  async removeAdjourn(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
     })
   }
 
@@ -445,6 +458,16 @@ export default class ManageAdjudicationsClient {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved`,
       data: { ...chargeProvedHearingOutcomeDetails },
+    })
+  }
+
+  async createNotProceedHearingOutcome(
+    adjudicationNumber: number,
+    notProceedHearingOutcomeDetails: NotProceedHearingOutcomeDetails
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/not-proceed`,
+      data: { ...notProceedHearingOutcomeDetails },
     })
   }
 }

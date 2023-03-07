@@ -1,5 +1,9 @@
+/* eslint-disable max-classes-per-file */
+
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
+import { HearingOutcomePlea } from '../../data/HearingAndOutcomeResult'
+import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
 
 import UserService from '../../services/userService'
@@ -13,8 +17,30 @@ type PageData = {
   notProceedDetails?: string
 }
 
+export enum PageRequestType {
+  REFER_AND_NO_HEARING,
+  COMPLETE_HEARING,
+}
+
+class PageOptions {
+  constructor(private readonly pageType: PageRequestType) {}
+
+  isCompleteHearing(): boolean {
+    return this.pageType === PageRequestType.COMPLETE_HEARING
+  }
+}
+
 export default class NotProceedPage {
-  constructor(private readonly userService: UserService, private readonly outcomesService: OutcomesService) {}
+  pageOptions: PageOptions
+
+  constructor(
+    pageType: PageRequestType,
+    private readonly userService: UserService,
+    private readonly outcomesService: OutcomesService,
+    private readonly hearingsService: HearingsService
+  ) {
+    this.pageOptions = new PageOptions(pageType)
+  }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -41,16 +67,36 @@ export default class NotProceedPage {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { notProceedReason, notProceedDetails } = req.body
+    const { adjudicator, plea } = req.query
 
     const error = validateForm({ notProceedReason, notProceedDetails })
     if (error) return this.renderView(req, res, { error, notProceedReason, notProceedDetails })
-
     try {
-      await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, notProceedDetails, user)
+      if (this.pageOptions.isCompleteHearing()) {
+        if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
+          return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+        }
+
+        await this.hearingsService.createNotProceedHearingOutcome(
+          adjudicationNumber,
+          adjudicator as string,
+          plea as HearingOutcomePlea,
+          notProceedReason,
+          notProceedDetails,
+          user
+        )
+      } else {
+        await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, notProceedDetails, user)
+      }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError
     }
+  }
+
+  private validateDataFromEnterHearingOutcomePage = (plea: HearingOutcomePlea, adjudicator: string) => {
+    if (!plea || !adjudicator) return false
+    return true
   }
 }

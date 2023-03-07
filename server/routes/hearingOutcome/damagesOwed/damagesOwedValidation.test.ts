@@ -47,7 +47,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#amount',
-      text: 'Numerical values only',
+      text: 'Enter the amount in numbers',
     })
   })
 })

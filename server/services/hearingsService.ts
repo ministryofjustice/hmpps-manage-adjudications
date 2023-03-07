@@ -1,4 +1,9 @@
-import { HearingOutcomeAdjournReason, HearingOutcomeCode, HearingOutcomePlea } from '../data/HearingAndOutcomeResult'
+import {
+  HearingOutcomeAdjournReason,
+  HearingOutcomeCode,
+  HearingOutcomePlea,
+  NotProceedReason,
+} from '../data/HearingAndOutcomeResult'
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
@@ -83,6 +88,27 @@ export default class HearingsService {
     }
 
     return new ManageAdjudicationsClient(user.token).createChargeProvedHearingOutcome(
+      adjudicationNumber,
+      hearingOutcomeDetails
+    )
+  }
+
+  async createNotProceedHearingOutcome(
+    adjudicationNumber: number,
+    adjudicator: string,
+    plea: HearingOutcomePlea,
+    reason: NotProceedReason,
+    details: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const hearingOutcomeDetails = {
+      adjudicator,
+      plea,
+      reason,
+      details,
+    }
+
+    return new ManageAdjudicationsClient(user.token).createNotProceedHearingOutcome(
       adjudicationNumber,
       hearingOutcomeDetails
     )

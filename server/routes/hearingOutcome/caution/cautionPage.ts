@@ -50,7 +50,7 @@ export default class CautionPage {
         adjudicationNumber,
         adjudicator as string,
         HearingOutcomePlea[plea.toString()],
-        caution,
+        caution === 'yes',
         user,
         !actualAmount ? null : actualAmount
       )
