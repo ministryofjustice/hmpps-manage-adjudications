@@ -320,7 +320,7 @@ context('Hearing details page', () => {
       id: 1524498,
       response: reportedAdjudicationResponse(
         1524498,
-        ReportedAdjudicationStatus.SCHEDULED,
+        ReportedAdjudicationStatus.ADJOURNED,
         [hearingWithAdjournedOutcome],
         historyWithOneAdjournedHearing
       ),
@@ -737,7 +737,7 @@ context('Hearing details page', () => {
     it('Adjudication SCHEDULED, one adjourned hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524498))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
-      hearingTabPage.reviewStatus().contains('Scheduled')
+      hearingTabPage.reviewStatus().contains('Adjourned')
       hearingTabPage.hearingIndex(1).contains('Hearing 1')
       hearingTabPage
         .hearingSummaryTable(1)
@@ -771,7 +771,7 @@ context('Hearing details page', () => {
       hearingTabPage.ReturnToAllHearingsLink().contains('Return to all hearings')
       const response = reportedAdjudicationResponse(
         1524498,
-        ReportedAdjudicationStatus.SCHEDULED,
+        ReportedAdjudicationStatus.ADJOURNED,
         [
           testData.singleHearing({
             dateTimeOfHearing: hearingDateTimeTwo,

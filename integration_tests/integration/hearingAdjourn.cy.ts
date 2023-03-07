@@ -2,6 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import HearingAdjourn from '../pages/hearingAdjourn'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 context('Adjourn the hearing', () => {
@@ -20,6 +21,7 @@ context('Adjourn the hearing', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.ADJOURNED,
         }),
       },
     })
