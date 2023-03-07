@@ -58,3 +58,16 @@ div.adjudication-pdf {
   }
 }
 
+.adjudication-pdf-section-adjournment-details {
+  display: flex;
+  align-items: space-between;
+
+  &__item {
+    padding-right: govuk-spacing(6);
+
+    &.time {
+      width: 50%;
+    }
+  }
+}
+
