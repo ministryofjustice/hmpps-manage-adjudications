@@ -270,6 +270,19 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return filter.issueStatus.includes(key)
   })
 
+  njkEnv.addFilter('convertToWord', (number: number) => {
+    switch (number) {
+      case 1:
+        return 'first'
+      case 2:
+        return 'second'
+      case 3:
+        return 'third'
+      default:
+        return null
+    }
+  })
+
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)

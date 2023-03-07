@@ -65,8 +65,8 @@ div.adjudication-pdf {
   &__item {
     padding-right: govuk-spacing(6);
 
-    &:last-child {
-      width: 30%;
+    &.time {
+      width: 50%;
     }
   }
 }

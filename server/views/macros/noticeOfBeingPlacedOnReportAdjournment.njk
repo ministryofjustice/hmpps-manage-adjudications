@@ -1,50 +1,61 @@
 {% macro noticeOfBeingPlacedOnReportAdjournment(adjudicationNumber) %}
-    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8 page-break-before-always'>
-        <div class='break-inside-avoid'>
-            <h2>Adjournments</h2>
-            <p>If the hearing is adjourned, the details should be entered below.</p>
-            <p>The prisoner should be given a copy of this re-issued form as soon as possible after the new hearing date is known</p>
-            <p>Prison staff should keep a copy for your records and amend NOMIS/DPS as per the establishment’s practices</p>
-        </div>
-        <div class='adjudication-pdf-section-adjournment-details'>
-            <div class='adjudication-pdf-section-adjournment-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Following <span class="govuk-!-font-weight-bold">first adjournment</span> the hearing <br>of your adjudication will resume on</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                <span>
-                    <strong> / </strong>
-                </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                <span>
-                    <strong> / </strong>
-                </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-            <div class='adjudication-pdf-section-adjournment-details__item'>
-                <p class='govuk-!-margin-bottom-3 govuk-!-margin-top-1'>Not before</p>
-                <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
-                <span>
-                    <strong> : </strong>
-                </span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
-                <span> hours</span>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-adjournment-details govuk-!-margin-top-3'>
-            <div class='adjudication-pdf-section-adjournment-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Time this form was re-issued (24-hour clock)</p>
-                <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
-                <span>
-                    <strong> : </strong>
-                </span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
-                <span> hours</span>
-            </div>
-            <div class='adjudication-pdf-section-adjournment-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Date this form was re-issueed (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                <span>
-                    <strong> / </strong>
-                </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                <span>
-                    <strong> / </strong>
-                </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
+  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8 page-break-before-always'>
+    <div class='break-inside-avoid'>
+      <h2>Adjournments</h2>
+      <p>If the hearing is adjourned, the details should be entered below.</p>
+      <p>The prisoner should be given a copy of this re-issued form as soon as possible after the new hearing date is known.</p>
+      <p>Prison staff should keep a copy for your records and amend NOMIS/DPS as per the establishment’s practices.</p>
+      <div class="govuk-!-margin-top-6"></div>
     </div>
+    {% for adjournment in range(0, 3) %}
+      <div class='adjudication-pdf-section-adjournment-details govuk-!-margin-top-6'>
+        <div class='adjudication-pdf-section-adjournment-details__item'>
+          <p class='govuk-!-margin-bottom-1'>Following <span class="govuk-!-font-weight-bold">{{ loop.index | convertToWord }} adjournment</span> the hearing <br>of your adjudication will resume on</p>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+          <span>
+            <strong> / </strong>
+          </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+          <span>
+            <strong> / </strong>
+          </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+        </div>
+        <div class='adjudication-pdf-section-adjournment-details__item time'>
+          <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Not before</p>
+          <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
+          <span>
+            <strong> : </strong>
+          </span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
+          <span> hours</span>
+        </div>
+      </div>
+      <div class='adjudication-pdf-section-adjournment-details govuk-!-margin-top-3'>
+        <div class='adjudication-pdf-section-adjournment-details__item'>
+          <p class='govuk-!-margin-bottom-1'>Time this form was re-issued (24-hour clock)</p>
+          <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
+          <span>
+            <strong> : </strong>
+          </span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
+          <span> hours</span>
+        </div>
+        <div class='adjudication-pdf-section-adjournment-details__item govuk-!-margin-left-7'>
+          <p class='govuk-!-margin-bottom-1'>Date this form was re-issued (DD/MM/YYYY)</p>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+          <span>
+            <strong> / </strong>
+          </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+          <span>
+            <strong> / </strong>
+          </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+        </div>
+      </div>
+      <div>
+        <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Name of issuing officer</p>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+      </div>
+      {% if loop.index < 3 %}
+        <hr class="govuk-!-margin-top-6">
+      {% endif %}
+    {% endfor %}
+
+  </div>
 {% endmacro %}
