@@ -101,7 +101,7 @@ context('Confirm DIS forms have been issued', () => {
         expect($headers.get(0).innerText).to.contain('Name and prison number')
         expect($headers.get(1).innerText).to.contain('Discovery date and time')
         expect($headers.get(2).innerText).to.contain('Prisoner location')
-        expect($headers.get(3).innerText).to.contain('Issue date and time')
+        expect($headers.get(3).innerText).to.contain('Last issued')
         expect($headers.get(4).innerText).to.contain('Issuing officer')
         expect($headers.get(5).innerText).to.contain('')
       })
