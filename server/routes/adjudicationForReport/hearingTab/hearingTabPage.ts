@@ -80,6 +80,11 @@ export default class HearingTabPage {
         readOnly,
         adjudicationNumber
       ),
+      tertiaryButtonInfo: this.reportedAdjudicationsService.getTertiaryButtonInfoForHearingDetails(
+        reportedAdjudication.outcomes,
+        readOnly,
+        adjudicationNumber
+      ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
@@ -97,8 +102,9 @@ export default class HearingTabPage {
       removeReferralButton,
       removeOutcomeButton,
       removeAdjournHearingOutcomeButton,
+      removeQuashedFindingButton,
     } = req.body
-    if (removeOutcomeButton) {
+    if (removeOutcomeButton || removeQuashedFindingButton) {
       await this.outcomesService.removeNotProceedOrQuashed(adjudicationNumber, user)
     }
     if (removeAdjournHearingOutcomeButton) {

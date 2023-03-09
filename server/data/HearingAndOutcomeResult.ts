@@ -15,6 +15,7 @@ export enum OutcomeCode {
   PROSECUTION = 'PROSECUTION',
   SCHEDULE_HEARING = 'SCHEDULE_HEARING',
   CHARGE_PROVED = 'CHARGE_PROVED',
+  QUASHED = 'QUASHED',
 }
 
 export enum ReferralOutcomeCode {

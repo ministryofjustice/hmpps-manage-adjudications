@@ -4,6 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import OutcomesService from '../../../services/outcomesService'
+import { QuashGuiltyFindingReason } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/outcomesService')
@@ -48,27 +49,23 @@ describe('GET /hearing-adjourned', () => {
   })
 })
 
-// describe('POST /hearing-adjourned', () => {
-//   it('should successfully call the endpoint and redirect', () => {
-//     return request(app)
-//       .post(`${adjudicationUrls.hearingAdjourned.urls.start(100)}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`)
-//       .send({
-//         adjournReason: HearingOutcomeAdjournReason.EVIDENCE,
-//         adjournDetails: '123',
-//         adjournPlea: HearingOutcomePlea.NOT_ASKED,
-//       })
-//       .expect(302)
-//       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
-//       .then(() =>
-//         expect(hearingsService.createAdjourn).toHaveBeenCalledWith(
-//           100,
-//           HearingOutcomeCode.ADJOURN,
-//           'Roxanne Red',
-//           '123',
-//           HearingOutcomeAdjournReason.EVIDENCE,
-//           HearingOutcomePlea.NOT_ASKED,
-//           expect.anything()
-//         )
-//       )
-//   })
-// })
+describe('POST /hearing-adjourned', () => {
+  it('should successfully call the endpoint and redirect', () => {
+    return request(app)
+      .post(adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(100))
+      .send({
+        quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
+        quashDetails: 'Some details about this decision',
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentDetails.urls.review(100))
+      .then(() =>
+        expect(outcomesService.quashAGuiltyFinding).toHaveBeenCalledWith(
+          100,
+          QuashGuiltyFindingReason.APPEAL_UPHELD,
+          'Some details about this decision',
+          expect.anything()
+        )
+      )
+  })
+})

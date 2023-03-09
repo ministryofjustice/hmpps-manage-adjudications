@@ -825,6 +825,14 @@ export default class ReportedAdjudicationsService {
           qa: 'remove-referral-button',
         }
       }
+      if (finalHistoryItem.outcome.outcome.code === OutcomeCode.QUASHED) {
+        return {
+          text: 'Remove quashed finding',
+          name: 'removeQuashedFindingButton',
+          value: 'removeQuashedFinding',
+          qa: 'remove-quashed-finding-button',
+        }
+      }
     }
     // Any other items that have hearing info but doesn't have an outcome
     if (finalHistoryItem.hearing) {
@@ -841,6 +849,21 @@ export default class ReportedAdjudicationsService {
         name: 'removeHearingButton',
         value: 'removeHearing',
         qa: 'remove-hearing-button',
+      }
+    }
+    return null
+  }
+
+  getTertiaryButtonInfoForHearingDetails(history: OutcomeHistory, readOnly: boolean, adjudicationNumber: number) {
+    if (!history.length || readOnly) return null
+    const finalHistoryItem = history[history.length - 1]
+    if (finalHistoryItem.outcome?.outcome.code === OutcomeCode.CHARGE_PROVED) {
+      return {
+        href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(adjudicationNumber),
+        text: 'Report a quashed guilty finding',
+        name: 'reportQuashedFinding',
+        value: 'reportQuashedFinding',
+        qa: 'report-quashed-finding',
       }
     }
     return null

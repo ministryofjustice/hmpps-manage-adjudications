@@ -6,7 +6,6 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './reportAQuashedGuiltyFindingValidation'
-import { User } from '../../../data/hmppsAuthClient'
 import { QuashGuiltyFindingReason } from '../../../data/HearingAndOutcomeResult'
 import OutcomesService from '../../../services/outcomesService'
 
@@ -59,6 +58,7 @@ export default class ReportAQuashedGuiltyFindingPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
     const { quashReason, quashDetails } = req.body
 
     const error = validateForm({ quashReason, quashDetails })
@@ -70,6 +70,7 @@ export default class ReportAQuashedGuiltyFindingPage {
       })
 
     try {
+      await this.outcomesService.quashAGuiltyFinding(adjudicationNumber, quashReason, quashDetails, user)
       return res.redirect(adjudicationUrls.punishmentDetails.urls.review(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
