@@ -62,6 +62,15 @@
             attributes: { "data-qa": secondaryButtonInfo.qa }
           }) }}
           {% endif %}
+          {% if tertiaryButtonInfo %}
+            {{ govukButton({
+            text: tertiaryButtonInfo.text,
+            href: tertiaryButtonInfo.href,
+            classes: "govuk-button--secondary govuk-!-margin-right-3",
+            name: tertiaryButtonInfo.name,
+            attributes: { "data-qa": tertiaryButtonInfo.qa }
+          }) }}
+          {% endif %}
         </div>
       {% endif %}
     </form>

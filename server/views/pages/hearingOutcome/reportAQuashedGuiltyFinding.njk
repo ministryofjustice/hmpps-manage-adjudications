@@ -1,0 +1,82 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set title = 'Report a quashed guilty finding' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {{ govukSelect({
+        id: 'quashReason',
+        name: 'quashReason',
+        label: {
+            text: 'Why was the guilty finding quashed?',
+            isPageHeading: false,
+            classes: ''
+        },
+        items: [
+            {  value: QuashGuiltyFindingReason.FLAWED_CASE,
+               text: "Flawed case"      
+            },
+            {  value: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
+               text: "Quashed on judicial review"      
+            },
+            {  value: QuashGuiltyFindingReason.APPEAL_UPHELD,
+               text: "Prisoner appeal upheld"      
+            },
+            {  value: QuashGuiltyFindingReason.OTHER,
+               text: "Other"      
+            }
+         ] | toSelect('value', 'text', quashReason),
+        classes: '',
+        errorMessage: 'quashReason' | findError(errors)
+    }) }}
+
+    {{ govukTextarea({
+      label: {
+        text: "Give more details"
+      },
+      value: quashDetails,
+      classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
+      rows: "6",
+      id: "quashDetails",
+      name: "quashDetails",
+      attributes: {
+        'data-qa': "quash-details"
+      },
+      errorMessage: "quashDetails" | findError(errors)
+    }) }}
+
+    <div class="flex-container flex-center">
+      {{ govukButton({
+        text: 'Save',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "submit" }
+      }) }}
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="cancel">Cancel</a></p>
+    </div>
+
+  </form>
+{% endblock %}

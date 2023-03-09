@@ -53,6 +53,7 @@ import policeReasonForReferralRoutes from './hearingOutcome/referCase/policeRefe
 import damagesOwedRoutes from './hearingOutcome/damagesOwed'
 import reasonForFindingRoutes from './hearingOutcome/reasonForFinding'
 import cautionRoutes from './hearingOutcome/caution'
+import reportAQuashedGuiltyFindingRoutes from './hearingOutcome/quashedGuiltyFinding'
 
 export default function routes(
   router: Router,
@@ -224,6 +225,10 @@ export default function routes(
   router.use(adjudicationUrls.moneyRecoveredForDamages.root, damagesOwedRoutes({ userService }))
   router.use(adjudicationUrls.hearingReasonForFinding.root, reasonForFindingRoutes({ hearingsService, userService }))
   router.use(adjudicationUrls.isThisACaution.root, cautionRoutes({ hearingsService, userService }))
+  router.use(
+    adjudicationUrls.reportAQuashedGuiltyFinding.root,
+    reportAQuashedGuiltyFindingRoutes({ outcomesService, userService })
+  )
 
   return router
 }

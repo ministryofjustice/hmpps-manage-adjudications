@@ -26,6 +26,7 @@ import {
   convertHearingOutcomeFinding,
   NotProceedReason,
   NextStep,
+  QuashGuiltyFindingReason,
 } from '../data/HearingAndOutcomeResult'
 
 const production = process.env.NODE_ENV === 'production'
@@ -287,6 +288,9 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
+  njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
+  njkEnv.addGlobal('outcomesFlag', config.outcomeFeatureFlag)
+
   njkEnv.addFilter('possessive', possessive)
   njkEnv.addFilter('formatTimestampTo', formatTimestampTo)
   njkEnv.addFilter('convertOicHearingType', convertOicHearingType)
@@ -294,8 +298,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addFilter('convertHearingOutcomePlea', convertHearingOutcomePlea)
   njkEnv.addFilter('convertHearingOutcomeFinding', convertHearingOutcomeFinding)
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
-  njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
-
   njkEnv.addGlobal('IssueStatus', IssueStatus)
   njkEnv.addGlobal('ReportedAdjudicationStatus', ReportedAdjudicationStatus)
   njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
@@ -305,6 +307,6 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addGlobal('OutcomeCode', OutcomeCode)
   njkEnv.addGlobal('ReferralOutcomeCode', ReferralOutcomeCode)
   njkEnv.addGlobal('NextStep', NextStep)
-  njkEnv.addGlobal('outcomesFlag', config.outcomeFeatureFlag)
   njkEnv.addGlobal('NotProceedReason', NotProceedReason)
+  njkEnv.addGlobal('QuashGuiltyFindingReason', QuashGuiltyFindingReason)
 }

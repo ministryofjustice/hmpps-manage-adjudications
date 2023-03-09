@@ -15,6 +15,7 @@ export enum OutcomeCode {
   PROSECUTION = 'PROSECUTION',
   SCHEDULE_HEARING = 'SCHEDULE_HEARING',
   CHARGE_PROVED = 'CHARGE_PROVED',
+  QUASHED = 'QUASHED',
 }
 
 export enum ReferralOutcomeCode {
@@ -70,6 +71,13 @@ export enum NotProceedReason {
   EXPIRED_NOTICE = 'EXPIRED_NOTICE',
   EXPIRED_HEARING = 'EXPIRED_HEARING',
   NOT_FAIR = 'NOT_FAIR',
+  OTHER = 'OTHER',
+}
+
+export enum QuashGuiltyFindingReason {
+  FLAWED_CASE = 'FLAWED_CASE',
+  JUDICIAL_REVIEW = 'JUDICIAL_REVIEW',
+  APPEAL_UPHELD = 'APPEAL_UPHELD',
   OTHER = 'OTHER',
 }
 
