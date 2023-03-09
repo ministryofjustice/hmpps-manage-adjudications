@@ -527,6 +527,27 @@ const adjudicationUrls = {
         `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${adjudicationNumber}`,
     },
   },
+  reportAQuashedGuiltyFinding: {
+    root: '/report-quashed-guilty-finding',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${adjudicationNumber}`,
+    },
+  },
+  punishmentDetails: {
+    root: '/punishment-details',
+    matchers: {
+      review: '/:adjudicationNumber/review',
+      report: '/:adjudicationNumber/report',
+    },
+    urls: {
+      review: (adjudicationNumber: number) => `${adjudicationUrls.punishmentDetails.root}/${adjudicationNumber}/review`,
+      report: (adjudicationNumber: number) => `${adjudicationUrls.punishmentDetails.root}/${adjudicationNumber}/report`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

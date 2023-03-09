@@ -73,6 +73,13 @@ export enum NotProceedReason {
   OTHER = 'OTHER',
 }
 
+export enum QuashGuiltyFindingReason {
+  FLAWED_CASE = 'FLAWED_CASE',
+  JUDICIAL_REVIEW = 'JUDICIAL_REVIEW',
+  APPEAL_UPHELD = 'APPEAL_UPHELD',
+  OTHER = 'OTHER',
+}
+
 export type HearingDetails = {
   id?: number
   locationId: number

@@ -36,6 +36,7 @@ import {
   HearingOutcomePlea,
   NotProceedReason,
   OutcomeCode,
+  QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -68,6 +69,11 @@ export type ChargeProvedHearingOutcomeDetails = {
   plea: HearingOutcomePlea
   caution: boolean
   amount?: number
+}
+
+export type QuashData = {
+  reason: QuashGuiltyFindingReason
+  details: string
 }
 
 export default class ManageAdjudicationsClient {
@@ -468,6 +474,13 @@ export default class ManageAdjudicationsClient {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/not-proceed`,
       data: { ...notProceedHearingOutcomeDetails },
+    })
+  }
+
+  async quashOutcome(adjudicationNumber: number, quashData: QuashData): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/outcome/quashed`,
+      data: { ...quashData },
     })
   }
 }

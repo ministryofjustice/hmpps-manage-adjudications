@@ -1,4 +1,4 @@
-import { NotProceedReason, OutcomeCode } from '../data/HearingAndOutcomeResult'
+import { NotProceedReason, OutcomeCode, QuashGuiltyFindingReason } from '../data/HearingAndOutcomeResult'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
@@ -46,5 +46,18 @@ export default class OutcomesService {
       details,
     }
     return new ManageAdjudicationsClient(user.token).createPoliceReferral(adjudicationNumber, outcomeDetails)
+  }
+
+  async quashAGuiltyFinding(
+    adjudicationNumber: number,
+    quashReason: QuashGuiltyFindingReason,
+    quashDetails: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      details: quashDetails,
+      reason: quashReason,
+    }
+    return new ManageAdjudicationsClient(user.token).quashOutcome(adjudicationNumber, data)
   }
 }
