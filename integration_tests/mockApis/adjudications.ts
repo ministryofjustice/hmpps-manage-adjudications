@@ -872,6 +872,21 @@ const stubPostCompleteHearingNotProceed = ({ adjudicationNumber, response }): Su
     },
   })
 
+const stubPostQuashOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome/quashed`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -917,4 +932,5 @@ export default {
   stubPostCompleteHearingChargeProved,
   stubPostCompleteHearingNotProceed,
   stubRemoveAdjourn,
+  stubPostQuashOutcome,
 }

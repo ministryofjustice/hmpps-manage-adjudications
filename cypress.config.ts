@@ -101,6 +101,7 @@ export default defineConfig({
         stubPostCompleteHearingChargeProved: adjudications.stubPostCompleteHearingChargeProved,
         stubPostCompleteHearingNotProceed: adjudications.stubPostCompleteHearingNotProceed,
         stubRemoveAdjourn: adjudications.stubRemoveAdjourn,
+        stubPostQuashOutcome: adjudications.stubPostQuashOutcome,
       })
     },
 

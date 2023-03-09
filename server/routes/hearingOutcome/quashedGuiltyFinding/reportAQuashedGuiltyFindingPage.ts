@@ -71,7 +71,7 @@ export default class ReportAQuashedGuiltyFindingPage {
 
     try {
       await this.outcomesService.quashAGuiltyFinding(adjudicationNumber, quashReason, quashDetails, user)
-      return res.redirect(adjudicationUrls.punishmentDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError

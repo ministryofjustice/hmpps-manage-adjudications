@@ -58,7 +58,7 @@ describe('POST /hearing-adjourned', () => {
         quashDetails: 'Some details about this decision',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.punishmentDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
       .then(() =>
         expect(outcomesService.quashAGuiltyFinding).toHaveBeenCalledWith(
           100,
