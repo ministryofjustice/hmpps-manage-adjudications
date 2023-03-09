@@ -69,7 +69,7 @@ context('Confirm DIS forms have been issued', () => {
     cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
-    confirmDISFormsIssued.addDateAndTimeLink(1).should('not.exist')
+    confirmDISFormsIssued.addDateAndTimeLink(1).should('exist')
     confirmDISFormsIssued.addDateAndTimeLink(2).click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.addIssueDateTime.urls.start(23456))
@@ -123,7 +123,7 @@ context('Confirm DIS forms have been issued', () => {
         expect($data.get(11).innerText).to.contain('Add date and time')
       })
   })
-  it('should show the date and time of issuing, as the issuing officer if data is present, and not contain a link to issue another date and time', () => {
+  it('should show the date and time of issuing, as the issuing officer if data is present, and contain a link to re-issue another date and time', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
         adjudicationNumber: 12345,
@@ -147,7 +147,7 @@ context('Confirm DIS forms have been issued', () => {
         expect($data.get(2).innerText).to.contain('MDI-RECP')
         expect($data.get(3).innerText).to.contain('5 December 2022 - 15:00')
         expect($data.get(4).innerText).to.contain('T. User')
-        expect($data.get(5).innerText).to.not.contain('Add date and time')
+        expect($data.get(5).innerText).to.contain('Add date and time')
       })
   })
   it('should handle if the prisoner details cannot be found', () => {
@@ -174,7 +174,7 @@ context('Confirm DIS forms have been issued', () => {
         expect($data.get(2).innerText).to.contain('Unknown')
         expect($data.get(3).innerText).to.contain('5 December 2022 - 15:00')
         expect($data.get(4).innerText).to.contain('T. User')
-        expect($data.get(5).innerText).to.not.contain('Add date and time')
+        expect($data.get(5).innerText).to.contain('Add date and time')
       })
   })
   it('should filter on the parameters given - dates only', () => {
@@ -258,7 +258,7 @@ context('Confirm DIS forms have been issued', () => {
         expect($data.get(2).innerText).to.contain('MDI-MCASU')
         expect($data.get(3).innerText).to.contain('6 December 2022 - 16:30')
         expect($data.get(4).innerText).to.contain('T. User')
-        expect($data.get(5).innerText).to.not.contain('Add date and time')
+        expect($data.get(5).innerText).to.contain('Add date and time')
       })
   })
 })
