@@ -58,6 +58,12 @@ export default class HearingTabPage extends Page {
 
   removeOutcomeButton = (): PageElement => cy.get('[data-qa="remove-outcome-button"]')
 
+  // Quashed
+
+  quashedTable = (): PageElement => cy.get('[data-qa="quashed-table"]')
+
+  removeQuashedOutcomeButton = (): PageElement => cy.get('[data-qa="remove-quashed-finding-button"]')
+
   // General
 
   ReturnToAllHearingsLink = (): PageElement => cy.get('[data-qa="all-hearings-link"]')
@@ -71,4 +77,6 @@ export default class HearingTabPage extends Page {
   outcomeTableTitle = (): PageElement => cy.get('[data-qa="outcome-table-title"]')
 
   removeCompleteHearingOutcomeButton = (): PageElement => cy.get('[data-qa="remove-complete-hearing-outcome-button"')
+
+  reportQuashedGuiltyFindingButton = (): PageElement => cy.get('[data-qa="report-quashed-finding"')
 }

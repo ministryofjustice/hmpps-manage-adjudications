@@ -10,6 +10,7 @@ import {
   NotProceedReason,
   OutcomeCode,
   OutcomeHistory,
+  QuashGuiltyFindingReason,
   ReferralOutcomeCode,
 } from '../../server/data/HearingAndOutcomeResult'
 
@@ -1293,6 +1294,73 @@ context('Hearing details page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524510))
       })
       hearingTabPage.hearingSummaryTable(1).should('not.exist')
+    })
+    it.only('Adds a quashed guilty finding outcome and display correctly in the tables', () => {
+      cy.task('stubPostQuashOutcome', {
+        adjudicationNumber: 1524510,
+        response: {
+          reportedAdjudication: testData.reportedAdjudication({
+            adjudicationNumber: 1524510,
+            prisonerNumber: 'G6415GD',
+            status: ReportedAdjudicationStatus.QUASHED,
+          }),
+        },
+      })
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524510))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.reportQuashedGuiltyFindingButton().click()
+      cy.get('#quashReason').select('Flawed case')
+      cy.get('[data-qa="quash-details"]').type('Some details')
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524510,
+        response: reportedAdjudicationResponse(
+          1524510,
+          ReportedAdjudicationStatus.QUASHED,
+          [historyWithCompleteAndProvedFinding[0].hearing],
+          [
+            historyWithCompleteAndProvedFinding[0],
+            {
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.QUASHED,
+                  details: 'Some details',
+                  quashedReason: QuashGuiltyFindingReason.FLAWED_CASE,
+                }),
+              },
+            },
+          ]
+        ),
+      })
+      cy.get('[data-qa="submit"]').click()
+      hearingTabPage.quashedTable().should('exist')
+      hearingTabPage
+        .quashedTable()
+        .find('dd')
+        .then($data => {
+          expect($data.get(0).innerText).to.contain('Flawed case\n\nSome details')
+        })
+      hearingTabPage.removeQuashedOutcomeButton().should('exist')
+      cy.task('stubGetReportedAdjudication', {
+        id: 1524510,
+        response: reportedAdjudicationResponse(
+          1524510,
+          ReportedAdjudicationStatus.CHARGE_PROVED,
+          [historyWithCompleteAndProvedFinding[0].hearing],
+          historyWithCompleteAndProvedFinding
+        ),
+      })
+      cy.task('stubRemoveNotProceedOrQuashed', {
+        adjudicationNumber: 1524510,
+        response: reportedAdjudicationResponse(
+          1524510,
+          ReportedAdjudicationStatus.CHARGE_PROVED,
+          [historyWithCompleteAndProvedFinding[0].hearing],
+          historyWithCompleteAndProvedFinding
+        ),
+      })
+      hearingTabPage.removeQuashedOutcomeButton().click()
+      hearingTabPage.reviewStatus().contains('Charge proved')
+      hearingTabPage.quashedTable().should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

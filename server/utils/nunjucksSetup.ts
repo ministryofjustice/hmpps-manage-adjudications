@@ -206,6 +206,8 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
         return 'Police referral'
       case OutcomeCode.REFER_INAD:
         return 'Independent adjudicator referral'
+      case OutcomeCode.QUASHED:
+        return 'Guilty finding quashed'
       default:
         return null
     }
@@ -230,6 +232,21 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       case NotProceedReason.WITNESS_NOT_ATTEND:
         return 'Witness unable to attend'
       case NotProceedReason.OTHER:
+        return 'Other'
+      default:
+        return 'Not known'
+    }
+  })
+
+  njkEnv.addFilter('convertQuashReason', (quashReason: QuashGuiltyFindingReason) => {
+    switch (quashReason) {
+      case QuashGuiltyFindingReason.APPEAL_UPHELD:
+        return 'Prisoner appeal upheld'
+      case QuashGuiltyFindingReason.FLAWED_CASE:
+        return 'Flawed case'
+      case QuashGuiltyFindingReason.JUDICIAL_REVIEW:
+        return 'Quashed on judicial review'
+      case QuashGuiltyFindingReason.OTHER:
         return 'Other'
       default:
         return 'Not known'

@@ -1,6 +1,7 @@
 {% from '../../macros/outcomeSummaries/outcomeNotProceedSummary.njk' import outcomeNotProceedSummary %}
 {% from '../../macros/outcomeSummaries/outcomePoliceReferralSummary.njk' import outcomePoliceReferralSummary %}
 {% from '../../macros/outcomeSummaries/outcomeInAdReferralSummary.njk' import outcomeInAdReferralSummary %}
+{% from '../../macros/outcomeSummaries/outcomeQuashedSummary.njk' import outcomeQuashedSummary %}
 
 {% macro outcomeTable(outcomeItem, readOnly, reportNo) %}
   {% set outcomeCode = outcomeItem.outcome.code %}
@@ -13,6 +14,8 @@
           {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_INAD %}
           {{ outcomeInAdReferralSummary(outcomeItem, { "data-qa": "inad-referral-table" }, readOnly) }}
+        {% elif outcomeCode === OutcomeCode.QUASHED %}
+          {{ outcomeQuashedSummary(outcomeItem.outcome, { "data-qa": "quashed-table" }, readOnly) }}
         {% endif %}
     </div>
   </div>
