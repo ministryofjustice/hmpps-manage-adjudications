@@ -105,6 +105,7 @@ export type Outcome = {
   reason?: string
   amount?: number
   caution?: boolean
+  quashedReason?: QuashGuiltyFindingReason
 }
 
 export type ReferralOutcome = {

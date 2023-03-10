@@ -26,6 +26,7 @@ import {
   Outcome,
   OutcomeCode,
   OutcomeHistory,
+  QuashGuiltyFindingReason,
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
@@ -257,9 +258,10 @@ export default class TestData {
     id = 1,
     code = OutcomeCode.REFER_POLICE,
     details = 'Some details',
-    reason = null,
-    amount = null,
-    caution = null,
+    reason,
+    amount,
+    caution,
+    quashedReason,
   }: {
     id?: number
     code?: OutcomeCode
@@ -267,6 +269,7 @@ export default class TestData {
     reason?: NotProceedReason
     amount?: number
     caution?: boolean
+    quashedReason?: QuashGuiltyFindingReason
   }): Outcome => {
     return {
       id,
@@ -275,6 +278,7 @@ export default class TestData {
       reason,
       amount,
       caution,
+      quashedReason,
     }
   }
 
