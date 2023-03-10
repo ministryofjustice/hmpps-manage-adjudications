@@ -50,11 +50,11 @@ describe('GET /is-caution', () => {
 })
 
 describe('POST /is-caution', () => {
-  it('should successfully call the endpoint and redirect', () => {
+  it('should successfully call the endpoint and redirect if answer is no', () => {
     return request(app)
       .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
       .send({
-        caution: 'yes',
+        caution: 'no',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
@@ -63,10 +63,23 @@ describe('POST /is-caution', () => {
           100,
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
-          true,
+          false,
           expect.anything(),
           null
         )
       )
+  })
+  it('should not call the endpoint and redirect to the check answers page if answer is yes', () => {
+    return request(app)
+      .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
+      .send({
+        caution: 'yes',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY`
+      )
+      .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

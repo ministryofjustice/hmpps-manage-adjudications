@@ -1,0 +1,39 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
+
+{% set title = 'Check your answers before submitting' %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {{ hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer) }}
+
+    <form method="POST" novalidate="novalidate">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      <div class="flex-container flex-center">
+        {{ govukButton({
+        text: 'Confirm and submit',
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "reason-for-referral-submit" }
+      }) }}
+    </form>
+        <p class="govuk-body govuk-!-margin-top-1">
+          <a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-referral-cancel">Cancel and return to hearings</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

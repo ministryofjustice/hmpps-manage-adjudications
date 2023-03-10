@@ -1,24 +1,23 @@
-import url from 'url'
 import { Request, Response } from 'express'
-import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import HearingsService from '../../../services/hearingsService'
-
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
-import validateForm from './cautionValidation'
 
-export default class CautionPage {
+export default class HearingCheckYourAnswersPage {
   constructor(private readonly hearingsService: HearingsService, private readonly userService: UserService) {}
 
-  private renderView = async (req: Request, res: Response, caution: string, error: FormError | null): Promise<void> => {
+  private renderView = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { amount } = req.query
+    const actualAmount = amount as string
 
-    return res.render(`pages/caution.njk`, {
+    return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
+      moneyRecoveredBoolean: !!amount,
+      moneyRecoveredAmount: actualAmount,
+      cautionAnswer: true,
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
-      errors: error ? [error] : [],
-      caution,
     })
   }
 
@@ -28,51 +27,35 @@ export default class CautionPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, null, null)
+    return this.renderView(req, res)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { caution } = req.body
-    const { plea, adjudicator, amount } = req.query
     const { user } = res.locals
-
-    const error = validateForm({ caution })
-    if (error) return this.renderView(req, res, caution, error)
+    const { plea, adjudicator, amount } = req.query
+    const actualAmount = amount as string
 
     try {
-      if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
+      if (!this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string)) {
         return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
       }
-
-      const actualAmount = amount as string
-
-      if (caution === 'yes') {
-        return res.redirect(
-          url.format({
-            pathname: adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber),
-            query: { adjudicator: adjudicator as string, amount: amount as string, plea: plea as string },
-          })
-        )
-      }
-
       await this.hearingsService.createChargedProvedHearingOutcome(
         adjudicationNumber,
         adjudicator as string,
-        HearingOutcomePlea[plea.toString()],
-        false,
+        HearingOutcomePlea[plea as string],
+        true,
         user,
         !actualAmount ? null : actualAmount
       )
-
-      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber)
       throw postError
     }
   }
 
-  private validateDataFromEnterHearingOutcomePage = (plea: HearingOutcomePlea, adjudicator: string) => {
+  private validateDataFromQueryPage = (plea: HearingOutcomePlea, adjudicator: string) => {
     if (!plea || !adjudicator) return false
     return true
   }

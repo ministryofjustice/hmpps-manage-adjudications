@@ -1,23 +1,50 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, showHearings = true) %}
-  {% set items = [{
+{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, showHearings = true) %}
+{# TODO: We can tidy this up once we've finished outcomes and can remove the flag #}
+  {% if outcomesFlag === 'false' %}
+    {% set items = [{
       text: 'Report',
       href: reportHref,
       attributes: { 'data-qa': 'reportTab' },
       active: activeTab === 'report'
     } , {
-      text: 'Hearings and referrals' if outcomesFlag === 'true' else 'Hearings',
+      text: 'Hearings',
       href: hearingsHref,
       attributes: { 'data-qa': 'hearingsTab' },
       active: activeTab === 'hearings'
-    }] if showHearings else [{
+    }
+    ] if showHearings else [{
       text: 'Report',
       href: reportHref,
       attributes: { 'data-qa': 'reportTab' },
       active: activeTab === 'report'
     }] %}
+  {% else %}
+    {% set items = [{
+      text: 'Report',
+      href: reportHref,
+      attributes: { 'data-qa': 'reportTab' },
+      active: activeTab === 'report'
+    } , {
+      text: 'Hearings and referrals',
+      href: hearingsHref,
+      attributes: { 'data-qa': 'hearingsTab' },
+      active: activeTab === 'hearings'
+    }, {
+      text: 'Punishments and damages',
+      href: punishmentsHref,
+      attributes: { 'data-qa': 'punishmentsTab' },
+      active: activeTab === 'punishments'
+    }
+    ] if showHearings else [{
+      text: 'Report',
+      href: reportHref,
+      attributes: { 'data-qa': 'reportTab' },
+      active: activeTab === 'report'
+    }] %}
+  {% endif %}
 
   <h1 class="govuk-heading-l">Adjudication for report {{ reportNo }}</h1>
   <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>
