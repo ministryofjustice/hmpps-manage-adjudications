@@ -10,11 +10,13 @@ export default class HearingCheckYourAnswersPage {
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { amount } = req.query
+    const { amount, adjudicator, plea } = req.query
     const actualAmount = amount as string
 
+    const queryParamsPresent = this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string)
+
     return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
-      moneyRecoveredBoolean: !!amount,
+      moneyRecoveredBoolean: queryParamsPresent ? !!amount : null,
       moneyRecoveredAmount: actualAmount,
       cautionAnswer: true,
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),

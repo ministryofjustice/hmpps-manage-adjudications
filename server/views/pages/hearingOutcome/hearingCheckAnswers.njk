@@ -17,7 +17,7 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer) }}
+  {{ hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, { "data-qa": "money-caution-summary" }) }}
 
     <form method="POST" novalidate="novalidate">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -26,11 +26,11 @@
         text: 'Confirm and submit',
         type: "submit",
         classes: "govuk-button--submit govuk-!-margin-right-3",
-        attributes: { "data-qa": "reason-for-referral-submit" }
+        attributes: { "data-qa": "submit" }
       }) }}
     </form>
         <p class="govuk-body govuk-!-margin-top-1">
-          <a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-referral-cancel">Cancel and return to hearings</a>
+          <a href="{{ cancelHref }}" class="govuk-link" data-qa="cancel">Cancel and return to hearings</a>
         </p>
       </div>
     </div>

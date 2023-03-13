@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer) %}
+{% macro hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, attributes = {}) %}
   {% set moneyChangeLink = {
             items: [
           {
@@ -23,11 +23,19 @@
   } %}
 
   {% if moneyRecoveredBoolean %}
-    {% set moneyHtml = { html: '<p>Yes' + ': £' + moneyRecoveredAmount + '</p>' } %}
+    {% set moneyHtml = {
+      html: '<p>Yes' + ': £' + moneyRecoveredAmount + '</p>'
+    } %}
+  {% elif moneyRecoveredBoolean == null %}
+    {% set moneyHtml = {
+      text: 'Not known'
+    } %}
   {% else %}
-     {% set moneyHtml = { text: 'No' } %}
+    {% set moneyHtml = {
+      text: 'No'
+    } %}
   {% endif %}
-  
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {{ govukSummaryList({
@@ -44,4 +52,4 @@
         }],
         attributes: attributes
       }) }}
-{% endmacro %}
+    {% endmacro %}
