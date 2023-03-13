@@ -23,14 +23,14 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /is-caution', () => {
+describe('GET', () => {
   beforeEach(() => {
     app = appWithAllRoutes({ production: false }, { hearingsService, userService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isThisACaution.urls.start(100))
+      .get(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -38,48 +38,57 @@ describe('GET /is-caution', () => {
   })
 })
 
-describe('GET /is-caution', () => {
-  it('should load the `is caution` page', () => {
+describe('GET /', () => {
+  it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isThisACaution.urls.start(100))
+      .get(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Is the punishment a caution?')
+        expect(res.text).toContain('Check your answers before submitting')
       })
   })
 })
 
-describe('POST /is-caution', () => {
-  it('should successfully call the endpoint and redirect if answer is no', () => {
+describe('POST', () => {
+  it('should successfully call the endpoint and redirect - no amount given', () => {
     return request(app)
-      .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
-      .send({
-        caution: 'no',
-      })
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
           100,
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
-          false,
+          true,
           expect.anything(),
           null
         )
       )
   })
-  it('should not call the endpoint and redirect to the check answers page if answer is yes', () => {
+  it('should successfully call the endpoint and redirect - no amount given', () => {
     return request(app)
-      .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
-      .send({
-        caution: 'yes',
-      })
-      .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY`
+      .post(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0`
       )
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      .then(() =>
+        expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
+          100,
+          'Roxanne Red',
+          HearingOutcomePlea.GUILTY,
+          true,
+          expect.anything(),
+          '500.0'
+        )
+      )
+  })
+  it('should not call the endpoint if query parameters are missing, instead redirecting them to enter the hearing outcome page', () => {
+    return request(app)
+      .post(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+      .expect(302)
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100))
       .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

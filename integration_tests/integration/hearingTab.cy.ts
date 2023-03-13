@@ -1295,7 +1295,7 @@ context('Hearing details page', () => {
       })
       hearingTabPage.hearingSummaryTable(1).should('not.exist')
     })
-    it.only('Adds a quashed guilty finding outcome and display correctly in the tables', () => {
+    it('Adds a quashed guilty finding outcome and display correctly in the tables', () => {
       cy.task('stubPostQuashOutcome', {
         adjudicationNumber: 1524510,
         response: {

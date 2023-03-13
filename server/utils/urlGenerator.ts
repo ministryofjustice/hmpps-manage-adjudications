@@ -489,15 +489,19 @@ const adjudicationUrls = {
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}/edit`,
     },
   },
   isThisACaution: {
     root: '/is-caution',
     matchers: {
       start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}/edit`,
     },
   },
   hearingReasonForFinding: {
@@ -535,6 +539,28 @@ const adjudicationUrls = {
     urls: {
       start: (adjudicationNumber: number) =>
         `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${adjudicationNumber}`,
+    },
+  },
+  hearingsCheckAnswers: {
+    root: '/check-answers-before-submitting-hearing',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingsCheckAnswers.root}/${adjudicationNumber}`,
+    },
+  },
+  punishmentsAndDamages: {
+    root: '/punishment-details',
+    matchers: {
+      review: '/:adjudicationNumber/review',
+      report: '/:adjudicationNumber/report',
+    },
+    urls: {
+      review: (adjudicationNumber: number) =>
+        `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/review`,
+      report: (adjudicationNumber: number) =>
+        `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/report`,
     },
   },
   homepage: {

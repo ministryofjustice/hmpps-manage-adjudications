@@ -54,6 +54,8 @@ import damagesOwedRoutes from './hearingOutcome/damagesOwed'
 import reasonForFindingRoutes from './hearingOutcome/reasonForFinding'
 import cautionRoutes from './hearingOutcome/caution'
 import reportAQuashedGuiltyFindingRoutes from './hearingOutcome/quashedGuiltyFinding'
+import hearingCheckYourAnswersRoutes from './hearingOutcome/checkYourAnswers'
+import PunishmentsAndDamagesRoutes from './adjudicationForReport/punishmentsTab'
 
 export default function routes(
   router: Router,
@@ -228,6 +230,14 @@ export default function routes(
   router.use(
     adjudicationUrls.reportAQuashedGuiltyFinding.root,
     reportAQuashedGuiltyFindingRoutes({ outcomesService, userService })
+  )
+  router.use(
+    adjudicationUrls.hearingsCheckAnswers.root,
+    hearingCheckYourAnswersRoutes({ hearingsService, userService })
+  )
+  router.use(
+    adjudicationUrls.punishmentsAndDamages.root,
+    PunishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, outcomesService })
   )
 
   return router

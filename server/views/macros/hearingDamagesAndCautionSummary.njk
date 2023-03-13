@@ -1,0 +1,55 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, attributes = {}) %}
+  {% set moneyChangeLink = {
+            items: [
+          {
+            href: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
+            text: "Change",
+            visuallyHiddenText: ' money recovered for damages',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+  } %}
+  {% set cautionChangeLink = {
+            items: [
+          {
+            href: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
+            text: "Change",
+            visuallyHiddenText: ' is this punishment a caution',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+  } %}
+
+  {% if moneyRecoveredBoolean %}
+    {% set moneyHtml = {
+      html: '<p>Yes' + ': £' + moneyRecoveredAmount + '</p>'
+    } %}
+  {% elif moneyRecoveredBoolean === null %}
+    {% set moneyHtml = {
+      text: 'Not known'
+    } %}
+  {% else %}
+    {% set moneyHtml = {
+      text: 'No'
+    } %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukSummaryList({
+        rows: [
+        {
+          key: { text: 'Is any money being recovered for damages?' },
+          value: moneyHtml,
+          actions: moneyChangeLink
+        },
+        {
+          key: { text: 'Is the punishment a caution?' },
+          value: { text: 'Yes' if cautionAnswer == true else 'No'},
+          actions: cautionChangeLink
+        }],
+        attributes: attributes
+      }) }}
+    {% endmacro %}

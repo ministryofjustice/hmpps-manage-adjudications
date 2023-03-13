@@ -1,0 +1,21 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
+{% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
+
+{% block pageTitle %}
+  Punishments and Damages
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref) }}
+
+  {% if chargeProved %}
+    {{ hearingDamagesAndCautionSummary(adjudicationNumber, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }) }}
+  {% endif %}
+
+{% endblock %}

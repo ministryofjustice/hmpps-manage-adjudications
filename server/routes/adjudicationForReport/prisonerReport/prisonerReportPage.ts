@@ -68,6 +68,7 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       reportHref: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
     }
   }
   return {
@@ -92,6 +93,7 @@ const getVariablesForPageType = (
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
     reportHref: adjudicationUrls.prisonerReport.urls.report(adjudicationNumber),
     hearingsHref: adjudicationUrls.hearingDetails.urls.report(adjudicationNumber),
+    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(adjudicationNumber),
   }
 }
 
