@@ -59,7 +59,7 @@ export default class PunishmentsTabPage {
     const readOnly = this.pageOptions.isReporter()
 
     const finalOutcomeItem = reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
-    const amount = finalOutcomeItem.outcome?.outcome?.amount || null
+    const amount = finalOutcomeItem.outcome?.outcome?.amount || false
     const caution = finalOutcomeItem.outcome?.outcome?.caution || false
 
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {

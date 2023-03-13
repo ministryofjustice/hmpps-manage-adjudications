@@ -26,7 +26,7 @@
     {% set moneyHtml = {
       html: '<p>Yes' + ': £' + moneyRecoveredAmount + '</p>'
     } %}
-  {% elif moneyRecoveredBoolean == null %}
+  {% elif moneyRecoveredBoolean === null %}
     {% set moneyHtml = {
       text: 'Not known'
     } %}
