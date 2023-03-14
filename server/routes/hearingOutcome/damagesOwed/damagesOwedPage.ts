@@ -1,20 +1,43 @@
+/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import url from 'url'
 import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 import UserService from '../../../services/userService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './damagesOwedValidation'
 
+export enum PageRequestType {
+  CREATION,
+  EDIT,
+}
+
+class PageOptions {
+  constructor(private readonly pageType: PageRequestType) {}
+
+  isEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT
+  }
+}
 export default class DamagesOwedPage {
-  constructor(private readonly userService: UserService) {}
+  pageOptions: PageOptions
+
+  constructor(
+    pageType: PageRequestType,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly userService: UserService
+  ) {
+    this.pageOptions = new PageOptions(pageType)
+  }
 
   private renderView = async (
     req: Request,
     res: Response,
     damagesOwed: string,
+    amount: string,
     error: FormError | null
   ): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -23,16 +46,39 @@ export default class DamagesOwedPage {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
       damagesOwed,
+      amount,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, null, null)
+    let damagesOwed = null
+    let amount = null
+    if (this.pageOptions.isEdit()) {
+      try {
+        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+          adjudicationNumber,
+          res.locals.user
+        )
+        if (outcome.outcome.amount) {
+          amount = outcome.outcome.amount
+          damagesOwed = 'yes'
+        } else {
+          damagesOwed = 'no'
+        }
+      } catch (postError) {
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        throw postError
+      }
+    }
+
+    return this.renderView(req, res, damagesOwed, amount && amount.toFixed(2), null)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -41,20 +87,29 @@ export default class DamagesOwedPage {
     const { plea, adjudicator } = req.query
 
     const error = validateForm({ damagesOwed, amount })
-    if (error) return this.renderView(req, res, damagesOwed, error)
+    if (error) return this.renderView(req, res, damagesOwed, amount, error)
 
     try {
       if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
-        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+        let path = adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber)
+        if (this.pageOptions.isEdit()) {
+          path = adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber)
+        }
+        return res.redirect(path)
+      }
+
+      let path = adjudicationUrls.isThisACaution.urls.start(adjudicationNumber)
+      if (this.pageOptions.isEdit()) {
+        path = adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber)
       }
 
       return res.redirect(
         url.format({
-          pathname: adjudicationUrls.isThisACaution.urls.start(adjudicationNumber),
+          pathname: path,
           query: {
             adjudicator: adjudicator.toString(),
             plea: HearingOutcomePlea[plea.toString()],
-            amount,
+            amount: damagesOwed === 'yes' ? amount : null,
           },
         })
       )

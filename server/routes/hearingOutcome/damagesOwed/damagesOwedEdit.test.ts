@@ -4,6 +4,9 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import TestData from '../../testutils/testData'
+
+const testData = new TestData()
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/reportedAdjudicationsService')
@@ -17,9 +20,19 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 
 let app: Express
 
+const outcomeHistory = {
+  hearing: testData.singleHearing({
+    dateTimeOfHearing: '2023-03-10T22:00:00',
+  }),
+  outcome: {
+    outcome: testData.outcome({ amount: 100.0 }),
+  },
+}
+
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue(outcomeHistory)
 })
 
 afterEach(() => {
@@ -33,7 +46,7 @@ describe('GET /money-recovered', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.moneyRecoveredForDamages.urls.start(100))
+      .get(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -42,20 +55,20 @@ describe('GET /money-recovered', () => {
 })
 
 describe('GET /money-recovered', () => {
-  it('should load the `Damages owed page` page', () => {
+  it('should load the `Damages owed page` page with correct values', () => {
     return request(app)
-      .get(adjudicationUrls.moneyRecoveredForDamages.urls.start(100))
+      .get(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Is any money being recovered for damages?')
+        expect(res.text).toContain('100.00')
       })
   })
 })
 
 describe('POST /money-recovered', () => {
-  it('should pass the amount to the next page', () => {
+  it('should pass the amount to the next edit page', () => {
     return request(app)
-      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=test&plea=GUILTY`)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=test&plea=GUILTY`)
       .send({
         damagesOwed: 'yes',
         amount: '100.10',
@@ -63,27 +76,27 @@ describe('POST /money-recovered', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=test&plea=GUILTY&amount=100.10`
+        `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=test&plea=GUILTY&amount=100.10`
       )
   })
-  it('should  not pass the amount to the next page', () => {
+  it('should  not pass the amount to the edit next page', () => {
     return request(app)
-      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=test&plea=GUILTY`)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=test&plea=GUILTY`)
       .send({
         damagesOwed: 'no',
         amount: null,
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=test&plea=GUILTY&amount=`)
+      .expect('Location', `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=test&plea=GUILTY&amount=`)
   })
   it('should return to outcome page if missing adjudicator', () => {
     return request(app)
-      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?plea=GUILTY`)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?plea=GUILTY`)
       .send({
         damagesOwed: 'yes',
         amount: '100.10',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100))
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.edit(100))
   })
 })
