@@ -692,7 +692,7 @@ context('Hearing details page', () => {
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Reason for referral')
           expect($summaryLabels.get(1).innerText).to.contain('Will this charge continue to prosecution?')
-          expect($summaryLabels.get(2).innerText).to.contain('Next step')
+          expect($summaryLabels.get(2).innerText).to.contain('Outcome')
           expect($summaryLabels.get(3).innerText).to.contain('Reason for not proceeding')
         })
       hearingTabPage
@@ -748,7 +748,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
           expect($summaryLabels.get(5).innerText).to.contain('Reason')
           expect($summaryLabels.get(6).innerText).to.contain('Plea')
         })
@@ -826,7 +826,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
           expect($summaryLabels.get(5).innerText).to.contain('Reason')
           expect($summaryLabels.get(6).innerText).to.contain('Plea')
         })
@@ -953,7 +953,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
         })
 
       hearingTabPage
@@ -967,7 +967,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(5).innerText).to.contain('Change')
           expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
+          expect($summaryData.get(8).innerText).to.contain('Refer this case to the police')
         })
 
       hearingTabPage
@@ -1006,7 +1006,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(5).innerText).to.contain('Change')
           expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(7).innerText).to.contain('Refer this case to the police')
+          expect($summaryData.get(8).innerText).to.contain('Refer this case to the police')
         })
 
       hearingTabPage
@@ -1076,7 +1076,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
-          expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
+          expect($summaryData.get(5).innerText).to.contain('Refer this case to the police')
         })
 
       hearingTabPage
@@ -1085,7 +1085,7 @@ context('Hearing details page', () => {
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Reason for referral')
           expect($summaryLabels.get(1).innerText).to.contain('Will this charge continue to prosecution?')
-          expect($summaryLabels.get(2).innerText).to.contain('Next step')
+          expect($summaryLabels.get(2).innerText).to.contain('Outcome')
           expect($summaryLabels.get(3).innerText).to.contain('Reason for not proceeding')
         })
 
@@ -1116,7 +1116,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
-          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Refer this case to the independent adjudicator')
         })
 
       hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
@@ -1148,7 +1148,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
-          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Refer this case to the independent adjudicator')
         })
 
       hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
@@ -1157,7 +1157,7 @@ context('Hearing details page', () => {
         .find('dt')
         .then($summaryLabel => {
           expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
-          expect($summaryLabel.get(1).innerText).to.contain('Next step')
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
         })
       hearingTabPage
         .inAdReferralTable()
@@ -1191,7 +1191,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
           expect($summaryLabels.get(5).innerText).to.contain('Plea')
           expect($summaryLabels.get(6).innerText).to.contain('Finding')
           expect($summaryLabels.get(7).innerText).to.contain('Reason')
@@ -1204,10 +1204,10 @@ context('Hearing details page', () => {
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(7).innerText).to.contain('Hearing complete - add adjudication finding')
-          expect($summaryData.get(8).innerText).to.contain('Unfit')
-          expect($summaryData.get(9).innerText).to.contain("Charge dismissed due to 'not guilty' finding")
-          expect($summaryData.get(10).innerText).to.contain('Some details')
+          expect($summaryData.get(8).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(10).innerText).to.contain('Unfit')
+          expect($summaryData.get(11).innerText).to.contain("Charge dismissed due to 'not guilty' finding")
+          expect($summaryData.get(12).innerText).to.contain('Some details')
         })
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeCompleteHearingOutcomeButton().contains('Remove outcome')
@@ -1224,7 +1224,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
           expect($summaryLabels.get(5).innerText).to.contain('Plea')
           expect($summaryLabels.get(6).innerText).to.contain('Finding')
           expect($summaryLabels.get(7).innerText).to.contain('Reason')
@@ -1237,10 +1237,10 @@ context('Hearing details page', () => {
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(7).innerText).to.contain('Hearing complete - add adjudication finding')
-          expect($summaryData.get(8).innerText).to.contain('Unfit')
-          expect($summaryData.get(9).innerText).to.contain('Charge not proceeded with for any other reason')
-          expect($summaryData.get(10).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
+          expect($summaryData.get(8).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(10).innerText).to.contain('Unfit')
+          expect($summaryData.get(11).innerText).to.contain('Charge not proceeded with for any other reason')
+          expect($summaryData.get(12).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
       hearingTabPage.notProceedTable().should('not.exist')
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
@@ -1258,7 +1258,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
           expect($summaryLabels.get(5).innerText).to.contain('Plea')
           expect($summaryLabels.get(6).innerText).to.contain('Finding')
         })
@@ -1270,9 +1270,9 @@ context('Hearing details page', () => {
           expect($summaryData.get(2).innerText).to.contain('Adj 2')
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(7).innerText).to.contain('Hearing complete - add adjudication finding')
-          expect($summaryData.get(8).innerText).to.contain('Unfit')
-          expect($summaryData.get(9).innerText).to.contain('Charge proved beyond reasonable doubt')
+          expect($summaryData.get(8).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(10).innerText).to.contain('Unfit')
+          expect($summaryData.get(11).innerText).to.contain('Charge proved beyond reasonable doubt')
         })
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().should('not.exist')
@@ -1474,7 +1474,7 @@ context('Hearing details page', () => {
           expect($summaryLabels.get(1).innerText).to.contain('Location')
           expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
           expect($summaryLabels.get(3).innerText).to.contain('Name of adjudicator')
-          expect($summaryLabels.get(4).innerText).to.contain('Next step')
+          expect($summaryLabels.get(4).innerText).to.contain('Outcome')
           expect($summaryLabels.get(5).innerText).to.contain('Reason')
           expect($summaryLabels.get(6).innerText).to.contain('Plea')
         })
@@ -1512,7 +1512,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
-          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+          expect($summaryData.get(5).innerText).to.contain('Refer this case to the independent adjudicator')
         })
 
       hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
@@ -1521,7 +1521,7 @@ context('Hearing details page', () => {
         .find('dt')
         .then($summaryLabel => {
           expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
-          expect($summaryLabel.get(1).innerText).to.contain('Next step')
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
         })
       hearingTabPage
         .inAdReferralTable()

@@ -1,3 +1,24 @@
+{% set adjudicatorChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      text: "Change",
+      visuallyHiddenText: ' name of adjudicator',
+      attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
+    }
+  ]
+} %}
+{% set outcomeChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      text: "Change",
+      visuallyHiddenText: ' outcome',
+      attributes: {"data-qa": "change-link-hearing-outcome-outcome" }
+    }
+  ]
+} %}
+
 {% set newRows = [
   {
     key: {
@@ -5,14 +26,16 @@
     },
     value: {
       text: hearingDetails.outcome.adjudicator | initialiseName
-    }
+    },
+        actions: adjudicatorChangeLink
   }, {
     key: {
-      text: 'Next step'
+      text: 'Outcome'
     },
     value: {
       text: 'Refer this case to the independent adjudicator'
-    }
+    },
+        actions: outcomeChangeLink
   }
 ]
  %}
