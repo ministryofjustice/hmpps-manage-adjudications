@@ -7,7 +7,7 @@ import {
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
-import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationResult, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 
 export default class HearingsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -111,6 +111,27 @@ export default class HearingsService {
     return new ManageAdjudicationsClient(user.token).createNotProceedHearingOutcome(
       adjudicationNumber,
       hearingOutcomeDetails
+    )
+  }
+
+  async editAdjournHearingOutcome(
+    adjudicationNumber: number,
+    details: string,
+    adjournReason: HearingOutcomeAdjournReason,
+    plea: HearingOutcomePlea,
+    user: User,
+    adjudicator?: string
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      ...(adjudicator && { adjudicator }),
+      details,
+      adjournReason,
+      plea,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+      adjudicationNumber,
+      ReportedAdjudicationStatus.ADJOURNED,
+      data
     )
   }
 }

@@ -2,10 +2,11 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import HearingAdjourn from '../pages/hearingAdjourn'
-import { HearingOutcomeCode } from '../../server/data/HearingAndOutcomeResult'
+import { HearingOutcomeCode, OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
-context.skip('Adjourn the hearing', () => {
+context('Adjourn the hearing', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -21,22 +22,25 @@ context.skip('Adjourn the hearing', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2023-01-23T17:00:00',
-              id: 1,
-              locationId: 775,
-              outcome: testData.hearingOutcome({
-                code: HearingOutcomeCode.ADJOURN,
-                optionalItems: { details: 'adjourned details', reason: 'LEGAL_ADVICE', plea: 'NOT_ASKED' },
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-01-23T17:00:00',
+                id: 1,
+                locationId: 775,
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.ADJOURN,
+                  optionalItems: { details: 'adjourned details', reason: 'LEGAL_ADVICE', plea: 'NOT_ASKED' },
+                }),
               }),
-            }),
-          ],
+            },
+          ] as OutcomeHistory,
         }),
       },
     })
-    cy.task('stubUpdateHearingOutcome', {
+    cy.task('stubAmendHearingOutcome', {
       adjudicationNumber: 100,
+      status: ReportedAdjudicationStatus.ADJOURNED,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
@@ -68,7 +72,7 @@ context.skip('Adjourn the hearing', () => {
       hearingAdjourned.adjournPlea().should('exist')
       hearingAdjourned.errorSummary().should('not.exist')
     })
-    it('should contain the required page elements', () => {
+    it('should render the data held on api', () => {
       cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.adjournDetails().should('have.value', 'adjourned details')
@@ -76,7 +80,7 @@ context.skip('Adjourn the hearing', () => {
       hearingAdjourned.adjournReason().should('have.value', 'LEGAL_ADVICE')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.start(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.cancelButton().click()
       cy.location().should(loc => {
@@ -87,6 +91,18 @@ context.skip('Adjourn the hearing', () => {
   describe('Submits successfully', () => {
     it('goes to the referral confirmation page if data successfully submitted', () => {
       cy.visit(`${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=ADJOURN`)
+      const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
+
+      hearingAdjourned.adjournReason().select('Further evidence needed')
+      hearingAdjourned.adjournDetails().type('updated details')
+      hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check()
+      hearingAdjourned.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+      })
+    })
+    it('goes to the referral confirmation page if data successfully submitted - no new adjudicator passed in query', () => {
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
 
       hearingAdjourned.adjournReason().select('Further evidence needed')
