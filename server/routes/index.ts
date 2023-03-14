@@ -224,7 +224,10 @@ export default function routes(
     notProceedRoutes({ userService, outcomesService, hearingsService })
   )
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
-  router.use(adjudicationUrls.moneyRecoveredForDamages.root, damagesOwedRoutes({ userService }))
+  router.use(
+    adjudicationUrls.moneyRecoveredForDamages.root,
+    damagesOwedRoutes({ reportedAdjudicationsService, userService })
+  )
   router.use(adjudicationUrls.hearingReasonForFinding.root, reasonForFindingRoutes({ hearingsService, userService }))
   router.use(adjudicationUrls.isThisACaution.root, cautionRoutes({ hearingsService, userService }))
   router.use(

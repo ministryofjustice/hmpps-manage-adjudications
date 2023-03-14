@@ -5,12 +5,19 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import DamagesOwedRoutes from './damagesOwed'
 import DamagesOwedEditRoutes from './damagesOwedEdit'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
-export default function damagesOwedRoutes({ userService }: { userService: UserService }): Router {
+export default function damagesOwedRoutes({
+  reportedAdjudicationsService,
+  userService,
+}: {
+  reportedAdjudicationsService: ReportedAdjudicationsService
+  userService: UserService
+}): Router {
   const router = express.Router()
 
-  const damagesOwedRoute = new DamagesOwedRoutes(userService)
-  const damagesOwedEditRoute = new DamagesOwedEditRoutes(userService)
+  const damagesOwedRoute = new DamagesOwedRoutes(reportedAdjudicationsService, userService)
+  const damagesOwedEditRoute = new DamagesOwedEditRoutes(reportedAdjudicationsService, userService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

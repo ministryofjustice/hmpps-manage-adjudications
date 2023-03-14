@@ -5,6 +5,7 @@ import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 import UserService from '../../../services/userService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './damagesOwedValidation'
@@ -24,7 +25,11 @@ class PageOptions {
 export default class DamagesOwedPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly userService: UserService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly userService: UserService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
@@ -47,6 +52,8 @@ export default class DamagesOwedPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
@@ -54,11 +61,24 @@ export default class DamagesOwedPage {
     let damagesOwed = null
     let amount = null
     if (this.pageOptions.isEdit()) {
-      damagesOwed = 'yes'
-      amount = '100.0'
+      try {
+        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+          adjudicationNumber,
+          res.locals.user
+        )
+        if (outcome.outcome.amount) {
+          amount = outcome.outcome.amount
+          damagesOwed = 'yes'
+        } else {
+          damagesOwed = 'no'
+        }
+      } catch (postError) {
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        throw postError
+      }
     }
 
-    return this.renderView(req, res, damagesOwed, amount, null)
+    return this.renderView(req, res, damagesOwed, amount && amount.toFixed(2), null)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -71,7 +91,11 @@ export default class DamagesOwedPage {
 
     try {
       if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
-        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+        let path = adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber)
+        if (this.pageOptions.isEdit()) {
+          path = adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber)
+        }
+        return res.redirect(path)
       }
 
       let path = adjudicationUrls.isThisACaution.urls.start(adjudicationNumber)
@@ -85,7 +109,7 @@ export default class DamagesOwedPage {
           query: {
             adjudicator: adjudicator.toString(),
             plea: HearingOutcomePlea[plea.toString()],
-            amount,
+            amount: damagesOwed === 'yes' ? amount : null,
           },
         })
       )
