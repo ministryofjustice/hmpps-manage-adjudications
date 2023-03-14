@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import url from 'url'
 import { FormError } from '../../../@types/template'
@@ -8,13 +9,30 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './damagesOwedValidation'
 
+export enum PageRequestType {
+  CREATION,
+  EDIT,
+}
+
+class PageOptions {
+  constructor(private readonly pageType: PageRequestType) {}
+
+  isEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT
+  }
+}
 export default class DamagesOwedPage {
-  constructor(private readonly userService: UserService) {}
+  pageOptions: PageOptions
+
+  constructor(pageType: PageRequestType, private readonly userService: UserService) {
+    this.pageOptions = new PageOptions(pageType)
+  }
 
   private renderView = async (
     req: Request,
     res: Response,
     damagesOwed: string,
+    amount: string,
     error: FormError | null
   ): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
@@ -23,6 +41,7 @@ export default class DamagesOwedPage {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
       damagesOwed,
+      amount,
     })
   }
 
@@ -32,7 +51,14 @@ export default class DamagesOwedPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, null, null)
+    let damagesOwed = null
+    let amount = null
+    if (this.pageOptions.isEdit()) {
+      damagesOwed = 'yes'
+      amount = '100.0'
+    }
+
+    return this.renderView(req, res, damagesOwed, amount, null)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -41,16 +67,21 @@ export default class DamagesOwedPage {
     const { plea, adjudicator } = req.query
 
     const error = validateForm({ damagesOwed, amount })
-    if (error) return this.renderView(req, res, damagesOwed, error)
+    if (error) return this.renderView(req, res, damagesOwed, amount, error)
 
     try {
       if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
         return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
       }
 
+      let path = adjudicationUrls.isThisACaution.urls.start(adjudicationNumber)
+      if (this.pageOptions.isEdit()) {
+        path = adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber)
+      }
+
       return res.redirect(
         url.format({
-          pathname: adjudicationUrls.isThisACaution.urls.start(adjudicationNumber),
+          pathname: path,
           query: {
             adjudicator: adjudicator.toString(),
             plea: HearingOutcomePlea[plea.toString()],
