@@ -13,6 +13,7 @@ import {
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
+import { HearingOutcomeCode, OutcomeCode, ReferralOutcomeCode } from '../data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 
@@ -904,6 +905,117 @@ describe('reportedAdjudicationsService', () => {
           },
         }),
       ])
+    })
+  })
+  describe('getLastOutcomeItem', () => {
+    it('returns null if there are no outcomes on the adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        }),
+      })
+      const result = await service.getLastOutcomeItem(123, user)
+      expect(result).toEqual(null)
+    })
+    it('returns the only item if there is only one outcome on the adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  caution: true,
+                }),
+              },
+            },
+          ],
+        }),
+      })
+      const result = await service.getLastOutcomeItem(123, user)
+      expect(result).toEqual({
+        hearing: testData.singleHearing({
+          dateTimeOfHearing: '2023-03-10T22:00:00',
+          outcome: testData.hearingOutcome({
+            code: HearingOutcomeCode.COMPLETE,
+          }),
+        }),
+        outcome: {
+          outcome: testData.outcome({
+            code: OutcomeCode.CHARGE_PROVED,
+            caution: true,
+          }),
+        },
+      })
+    })
+    it('returns the final item in the outcomes array if there are numerous available', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-14T18:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.REFER_INAD,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.REFER_INAD,
+                }),
+                referralOutcome: testData.referralOutcome({
+                  code: ReferralOutcomeCode.SCHEDULE_HEARING,
+                }),
+              },
+            },
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-15T15:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  amount: 50.0,
+                  caution: false,
+                }),
+              },
+            },
+          ],
+        }),
+      })
+      const result = await service.getLastOutcomeItem(123, user)
+      expect(result).toEqual({
+        hearing: testData.singleHearing({
+          dateTimeOfHearing: '2023-03-15T15:00:00',
+          outcome: testData.hearingOutcome({
+            code: HearingOutcomeCode.COMPLETE,
+          }),
+        }),
+        outcome: {
+          outcome: testData.outcome({
+            code: OutcomeCode.CHARGE_PROVED,
+            amount: 50.0,
+            caution: false,
+          }),
+        },
+      })
     })
   })
 })

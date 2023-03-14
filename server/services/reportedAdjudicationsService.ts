@@ -868,4 +868,11 @@ export default class ReportedAdjudicationsService {
     }
     return null
   }
+
+  async getLastOutcomeItem(adjudicationNumber: number, user: User) {
+    const adjudication = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
+    const { reportedAdjudication } = adjudication
+    if (!reportedAdjudication.outcomes) return null
+    return reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
+  }
 }
