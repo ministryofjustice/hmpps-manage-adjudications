@@ -872,7 +872,7 @@ export default class ReportedAdjudicationsService {
   async getLastOutcomeItem(adjudicationNumber: number, user: User) {
     const adjudication = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
     const { reportedAdjudication } = adjudication
-    if (!reportedAdjudication.outcomes) return null
+    if (!reportedAdjudication.outcomes) throw new Error(`Missing outcomes data`)
     return reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
   }
 }

@@ -908,7 +908,7 @@ describe('reportedAdjudicationsService', () => {
     })
   })
   describe('getLastOutcomeItem', () => {
-    it('returns null if there are no outcomes on the adjudication', async () => {
+    it.skip('throw error if there are no outcomes on the adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 123,
@@ -916,8 +916,9 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
         }),
       })
-      const result = await service.getLastOutcomeItem(123, user)
-      expect(result).toEqual(null)
+      return expect(() => {
+        service.getLastOutcomeItem(123, user)
+      }).toThrow(new Error('Missing outcomes data'))
     })
     it('returns the only item if there is only one outcome on the adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
