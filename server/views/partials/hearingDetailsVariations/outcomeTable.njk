@@ -3,7 +3,7 @@
 {% from '../../macros/outcomeSummaries/outcomeInAdReferralSummary.njk' import outcomeInAdReferralSummary %}
 {% from '../../macros/outcomeSummaries/outcomeQuashedSummary.njk' import outcomeQuashedSummary %}
 
-{% macro outcomeTable(outcomeItem, readOnly, reportNo) %}
+{% macro outcomeTable(outcomeItem, readOnly, reportNo, attachedToHearing) %}
   {% set outcomeCode = outcomeItem.outcome.code %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
@@ -11,7 +11,7 @@
         {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
           {{ outcomeNotProceedSummary(reportNo, outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
-          {{ outcomePoliceReferralSummary(reportNo, outcomeItem, { "data-qa": "police-referral-table" }, readOnly) }}
+          {{ outcomePoliceReferralSummary(reportNo, outcomeItem, { "data-qa": "police-referral-table" }, readOnly, attachedToHearing) }}
         {% elif outcomeCode === OutcomeCode.REFER_INAD %}
           {{ outcomeInAdReferralSummary(reportNo, outcomeItem, { "data-qa": "inad-referral-table" }, readOnly) }}
         {% elif outcomeCode === OutcomeCode.QUASHED %}
