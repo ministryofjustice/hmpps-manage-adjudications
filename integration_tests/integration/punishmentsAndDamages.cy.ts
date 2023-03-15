@@ -106,9 +106,9 @@ context('Damages and punishments summary', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(1524493))
       })
     })
-    it.skip('should got to is caution edit', () => {
+    it('should got to is caution edit', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
-      cy.get('[data-qa="change-link"').click() // unable to click second button speak to Nat
+      cy.get('[data-qa="change-link"').eq(1).click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(1524493))
       })
