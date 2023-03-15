@@ -92,7 +92,7 @@ context('Damages and punishments summary', () => {
         .moneyCautionSummary()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Yes: £100.5')
+          expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
           expect($summaryData.get(2).innerText).to.contain('Yes')
         })
     })

@@ -69,7 +69,7 @@ export default class PunishmentsTabPage {
       readOnly,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
       moneyRecoveredBoolean: !!amount,
-      moneyRecoveredAmount: amount,
+      moneyRecoveredAmount: amount && amount.toFixed(2),
       caution,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
     })
