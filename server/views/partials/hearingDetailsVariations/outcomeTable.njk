@@ -9,13 +9,13 @@
     <div class="govuk-grid-column-three-quarters">
       <h2 class="govuk-heading-m" data-qa="outcome-table-title">{{ outcomeCode | outcomeTableTitle }}</h2>
         {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
-          {{ outcomeNotProceedSummary(outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, readOnly) }}
+          {{ outcomeNotProceedSummary(reportNo, outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
-          {{ outcomePoliceReferralSummary(outcomeItem, { "data-qa": "police-referral-table" }, readOnly) }}
+          {{ outcomePoliceReferralSummary(reportNo, outcomeItem, { "data-qa": "police-referral-table" }, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_INAD %}
-          {{ outcomeInAdReferralSummary(outcomeItem, { "data-qa": "inad-referral-table" }, readOnly) }}
+          {{ outcomeInAdReferralSummary(reportNo, outcomeItem, { "data-qa": "inad-referral-table" }, readOnly) }}
         {% elif outcomeCode === OutcomeCode.QUASHED %}
-          {{ outcomeQuashedSummary(outcomeItem.outcome, { "data-qa": "quashed-table" }, readOnly) }}
+          {{ outcomeQuashedSummary(reportNo, outcomeItem.outcome, { "data-qa": "quashed-table" }, readOnly) }}
         {% endif %}
     </div>
   </div>

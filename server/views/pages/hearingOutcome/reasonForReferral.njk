@@ -25,6 +25,7 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input id="hearingOutcomeCode" type="hidden" name="hearingOutcomeCode" value="{{ hearingOutcomeCode }}" />
 
     {{ govukTextarea({
       label: {

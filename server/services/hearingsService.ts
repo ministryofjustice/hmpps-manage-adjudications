@@ -135,6 +135,24 @@ export default class HearingsService {
     )
   }
 
+  async editReferralHearingOutcome(
+    adjudicationNumber: number,
+    hearingOutcome: HearingOutcomeCode,
+    referralReason: string,
+    user: User,
+    adjudicator?: string
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      ...(adjudicator && { adjudicator }),
+      details: referralReason,
+    }
+    const status =
+      hearingOutcome === HearingOutcomeCode.REFER_INAD
+        ? ReportedAdjudicationStatus.REFER_INAD
+        : ReportedAdjudicationStatus.REFER_POLICE
+    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(adjudicationNumber, status, data)
+  }
+
   async editChargeProvedOutcome(
     adjudicationNumber: number,
     caution: boolean,

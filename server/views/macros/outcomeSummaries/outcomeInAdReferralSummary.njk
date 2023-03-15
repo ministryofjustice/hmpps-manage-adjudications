@@ -1,8 +1,20 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeInAdReferralSummary(outcome = {}, attributes = {}, changeLinksActive = false) %}
+{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, readOnly = true) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
+  {% if not readOnly %}
+    {% set reasonForReferralChangeLink = {
+      items: [
+        {
+          href: adjudicationUrls.hearingReasonForReferral.urls.edit(reportNo), 
+          text: "Change",
+          visuallyHiddenText: ' reason for referral',
+          attributes: {"data-qa": "change-link-hearing-outcome-reason-for-referral" }
+        }
+      ]
+    } %}
+  {% endif %}
 
   {% set rows = [
     {
@@ -11,22 +23,23 @@
       },
       value: {
         text: outcomeDetails.details
-      }
+      },
+      actions: reasonForReferralChangeLink
     }
   ] %}
 
   {% if referralDetails %}
     {% set nextStep = 'Not proceed with the charge' if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED else 
       'Schedule a hearing' %}
-    {% set notProceeding = referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %} 
-      {% set rows = (rows.push({
-        key: {
-          text: 'Outcome'
-        },
-        value: {
-          text: nextStep
-        }
-      }), rows) %}
+    {% set notProceeding = referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %}
+    {% set rows = (rows.push({
+      key: {
+        text: 'Outcome'
+      },
+      value: {
+        text: nextStep
+      }
+    }), rows) %}
 
     {% if notProceeding %}
       {% set rows = (rows.push({
@@ -35,7 +48,7 @@
         },
         value: { html: '<p class="govuk-body">'+ referralDetails.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ referralDetails.details +'</p>' }
       }), rows) %}
-    {% endif %} 
+    {% endif %}
   {% endif %}
 
   {% if rows.length %}
