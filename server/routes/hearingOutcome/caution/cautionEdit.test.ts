@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/userService')

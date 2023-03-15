@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import url from 'url'
-import s from 'connect-redis'
 import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
