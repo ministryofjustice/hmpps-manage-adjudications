@@ -232,7 +232,10 @@ export default function routes(
     damagesOwedRoutes({ reportedAdjudicationsService, userService })
   )
   router.use(adjudicationUrls.hearingReasonForFinding.root, reasonForFindingRoutes({ hearingsService, userService }))
-  router.use(adjudicationUrls.isThisACaution.root, cautionRoutes({ hearingsService, userService }))
+  router.use(
+    adjudicationUrls.isThisACaution.root,
+    cautionRoutes({ reportedAdjudicationsService, hearingsService, userService })
+  )
   router.use(
     adjudicationUrls.reportAQuashedGuiltyFinding.root,
     reportAQuashedGuiltyFindingRoutes({ outcomesService, userService })

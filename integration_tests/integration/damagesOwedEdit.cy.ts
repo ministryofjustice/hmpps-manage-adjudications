@@ -57,26 +57,6 @@ context('Is any money being recovered for damages?', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
-      id: 101,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
-          prisonerNumber: 'G6415GD',
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2023-01-23T17:00:00',
-              id: 1,
-              locationId: 775,
-              outcome: testData.hearingOutcome({
-                code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
-              }),
-            }),
-          ],
-        }),
-      },
-    })
     cy.signIn()
   })
   describe('Loads', () => {
@@ -135,7 +115,7 @@ context('Is any money being recovered for damages?', () => {
 
   describe('submit', () => {
     it('saves successfully when damages owed', () => {
-      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=Tim&plea=GUILTY`)
+      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}`)
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
 
       damagesOwedPage.submitButton().click()
@@ -146,7 +126,7 @@ context('Is any money being recovered for damages?', () => {
     })
 
     it('saves successfully when damages not owed', () => {
-      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=Tim&plea=GUILTY`)
+      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}`)
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').check()
       damagesOwedPage.submitButton().click()

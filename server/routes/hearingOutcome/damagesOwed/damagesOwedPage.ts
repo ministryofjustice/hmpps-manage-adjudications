@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import url from 'url'
+import s from 'connect-redis'
 import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
@@ -90,12 +91,11 @@ export default class DamagesOwedPage {
     if (error) return this.renderView(req, res, damagesOwed, amount, error)
 
     try {
-      if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
-        let path = adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber)
-        if (this.pageOptions.isEdit()) {
-          path = adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber)
-        }
-        return res.redirect(path)
+      if (
+        !this.pageOptions.isEdit() &&
+        !this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)
+      ) {
+        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
       }
 
       let path = adjudicationUrls.isThisACaution.urls.start(adjudicationNumber)
@@ -107,8 +107,8 @@ export default class DamagesOwedPage {
         url.format({
           pathname: path,
           query: {
-            adjudicator: adjudicator.toString(),
-            plea: HearingOutcomePlea[plea.toString()],
+            adjudicator: adjudicator as string,
+            plea: plea && HearingOutcomePlea[plea.toString()],
             amount: damagesOwed === 'yes' ? amount : null,
           },
         })

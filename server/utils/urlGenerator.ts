@@ -545,9 +545,11 @@ const adjudicationUrls = {
     root: '/check-answers-before-submitting-hearing',
     matchers: {
       start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.hearingsCheckAnswers.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.hearingsCheckAnswers.root}/${adjudicationNumber}/edit`,
     },
   },
   punishmentsAndDamages: {
