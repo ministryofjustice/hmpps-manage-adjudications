@@ -25,6 +25,7 @@ import {
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationsResult,
   allIssueStatuses,
+  ReportedAdjudicationStatus,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -32,6 +33,7 @@ import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import {
   HearingDetails,
+  HearingOutcomeAdjournReason,
   HearingOutcomeDetails,
   HearingOutcomePlea,
   NotProceedReason,
@@ -74,6 +76,16 @@ export type ChargeProvedHearingOutcomeDetails = {
 export type QuashData = {
   reason: QuashGuiltyFindingReason
   details: string
+}
+
+export type AmendedHearingOutcomeData = {
+  adjudicator?: string
+  adjournReason?: HearingOutcomeAdjournReason
+  notProceedReason?: NotProceedReason
+  details?: string
+  plea?: HearingOutcomePlea
+  caution?: boolean
+  amount?: string
 }
 
 export default class ManageAdjudicationsClient {
@@ -481,6 +493,17 @@ export default class ManageAdjudicationsClient {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/outcome/quashed`,
       data: { ...quashData },
+    })
+  }
+
+  async amendHearingOutcome(
+    adjudicationNumber: number,
+    status: ReportedAdjudicationStatus,
+    amendedData: AmendedHearingOutcomeData
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/${status}`,
+      data: { ...amendedData },
     })
   }
 }

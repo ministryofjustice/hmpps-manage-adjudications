@@ -6,18 +6,25 @@ import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
 import HearingAdjournRoutes from './hearingAdjourn'
 import HearingAdjournEditRoutes from './hearingAdjournEdit'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
 export default function hearingAdjournedRoutes({
   hearingsService,
   userService,
+  reportedAdjudicationsService,
 }: {
   hearingsService: HearingsService
   userService: UserService
+  reportedAdjudicationsService: ReportedAdjudicationsService
 }): Router {
   const router = express.Router()
 
-  const hearingAdjournRoute = new HearingAdjournRoutes(hearingsService, userService)
-  const hearingAdjournEditRoute = new HearingAdjournEditRoutes(hearingsService, userService)
+  const hearingAdjournRoute = new HearingAdjournRoutes(hearingsService, userService, reportedAdjudicationsService)
+  const hearingAdjournEditRoute = new HearingAdjournEditRoutes(
+    hearingsService,
+    userService,
+    reportedAdjudicationsService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

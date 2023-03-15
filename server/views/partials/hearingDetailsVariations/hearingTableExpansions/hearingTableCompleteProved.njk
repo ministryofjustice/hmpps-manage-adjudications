@@ -1,4 +1,5 @@
-{% set adjudicatorChangeLink = {
+{% if changeLinksActive %}
+  {% set adjudicatorChangeLink = {
   items: [
     {
       href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
@@ -8,7 +9,7 @@
     }
   ]
 } %}
-{% set outcomeChangeLink = {
+  {% set outcomeChangeLink = {
   items: [
     {
       href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
@@ -18,6 +19,7 @@
     }
   ]
 } %}
+{% endif %}
 
 {% set newRows = [
   {

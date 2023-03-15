@@ -10,25 +10,35 @@ import {
   HearingOutcomePlea,
 } from '../../../data/HearingAndOutcomeResult'
 import TestData from '../../testutils/testData'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
+jest.mock('../../../services/reportedAdjudicationsService')
 
 const testData = new TestData()
 const userService = new UserService(null) as jest.Mocked<UserService>
 const hearingsService = new HearingsService(null) as jest.Mocked<HearingsService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { hearingsService, userService }, {})
+  app = appWithAllRoutes({ production: false }, { hearingsService, userService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  hearingsService.getHearingOutcome.mockResolvedValue(
-    testData.hearingOutcome({
-      code: HearingOutcomeCode.ADJOURN,
-      optionalItems: { details: 'adjourn details' },
-    })
-  )
+  reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue({
+    hearing: testData.singleHearing({
+      dateTimeOfHearing: '2023-03-14T18:00:00',
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.ADJOURN,
+        optionalItems: { details: 'adjourn details' },
+      }),
+    }),
+  })
 })
 
 afterEach(() => {
@@ -36,7 +46,7 @@ afterEach(() => {
 })
 
 describe('GET /hearing-adjourned', () => {
-  it('should load the `Reason for referral` page', () => {
+  it('should load the `adjourn edit` page', () => {
     return request(app)
       .get(adjudicationUrls.hearingAdjourned.urls.edit(100))
       .expect('Content-Type', /html/)
@@ -47,9 +57,9 @@ describe('GET /hearing-adjourned', () => {
 })
 
 describe('POST /hearing-adjourned', () => {
-  it('should successfully call the endpoint and redirect to the confirmation page', () => {
+  it('should successfully call the endpoint and redirect to the confirmation page - no adjudicator passed in', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`)
+      .post(adjudicationUrls.hearingAdjourned.urls.edit(100))
       .send({
         adjournReason: HearingOutcomeAdjournReason.INVESTIGATION,
         adjournDetails: '123',
@@ -57,5 +67,38 @@ describe('POST /hearing-adjourned', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .then(() => expect(hearingsService.createAdjourn).not.toHaveBeenCalled())
+      .then(() =>
+        expect(hearingsService.editAdjournHearingOutcome).toHaveBeenCalledWith(
+          100,
+          '123',
+          HearingOutcomeAdjournReason.INVESTIGATION,
+          HearingOutcomePlea.UNFIT,
+          expect.anything(),
+          undefined
+        )
+      )
+  })
+  it('should successfully call the endpoint and redirect to the confirmation page - adjudicator passed in', () => {
+    return request(app)
+      .post(`${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Rebecca%20Red`)
+      .send({
+        adjournReason: HearingOutcomeAdjournReason.INVESTIGATION,
+        adjournDetails: '123',
+        adjournPlea: HearingOutcomePlea.UNFIT,
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .then(() => expect(hearingsService.createAdjourn).not.toHaveBeenCalled())
+      .then(() =>
+        expect(hearingsService.editAdjournHearingOutcome).toHaveBeenCalledWith(
+          100,
+          '123',
+          HearingOutcomeAdjournReason.INVESTIGATION,
+          HearingOutcomePlea.UNFIT,
+          expect.anything(),
+          'Rebecca Red'
+        )
+      )
   })
 })

@@ -1006,15 +1006,5 @@ describe('reportedAdjudicationsService', () => {
         },
       })
     })
-    it.skip('throw error if there are no outcomes on the adjudication', async () => {
-      getReportedAdjudication.mockResolvedValue({
-        reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
-          prisonerNumber: 'A1234AA',
-          dateTimeOfIncident: '2021-10-28T15:40:25.884',
-        }),
-      })
-      expect(() => service.getLastOutcomeItem(123, user)).toThrow()
-    })
   })
 })

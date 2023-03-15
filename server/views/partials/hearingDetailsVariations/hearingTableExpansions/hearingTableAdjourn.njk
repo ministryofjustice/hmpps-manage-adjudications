@@ -1,3 +1,36 @@
+{% if changeLinksActive %}
+  {% set adjudicatorChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      text: "Change",
+      visuallyHiddenText: ' name of adjudicator',
+      attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
+    }
+  ]
+} %}
+  {% set outcomeChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      text: "Change",
+      visuallyHiddenText: ' outcome',
+      attributes: {"data-qa": "change-link-hearing-outcome-outcome" }
+    }
+  ]
+} %}
+  {% set ReasonDetailsPleaChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.hearingAdjourned.urls.edit(adjudicationNumber), 
+      text: "Change",
+      visuallyHiddenText: ' adjourn reason, details and plea',
+      attributes: {"data-qa": "change-link-hearing-outcome-reason-details-plea" }
+    }
+  ]
+} %}
+{% endif %}
+
 {% set newRows = [
   {
     key: {
@@ -5,25 +38,32 @@
     },
     value: {
       text: hearingDetails.outcome.adjudicator | initialiseName
-    }
+    },
+    actions: adjudicatorChangeLink
   }, {
     key: {
       text: 'Outcome'
     },
     value: {
       text: 'Adjourn the hearing for another reason'
-    }
+    },
+    actions: outcomeChangeLink
   }, {
-    key: { text: 'Reason' },
+    key: {
+      text: 'Reason'
+    },
     value: {
-      html: '<p>'+hearingDetails.outcome.reason | convertHearingOutcomeAdjournReason +'</p><p>'+hearingDetails.outcome.details+'</p>'
-    }
-  },
-  {
-    key: { text: 'Plea' },
+      html: '<p>' + hearingDetails.outcome.reason | convertHearingOutcomeAdjournReason + '</p><p>' + hearingDetails.outcome.details + '</p>'
+    },
+    actions: ReasonDetailsPleaChangeLink
+  }, {
+    key: {
+      text: 'Plea'
+    },
     value: {
       text: hearingDetails.outcome.plea | convertHearingOutcomePlea
-    }
+    },
+    actions: ReasonDetailsPleaChangeLink
   }
 ]
  %}
