@@ -134,4 +134,25 @@ export default class HearingsService {
       data
     )
   }
+
+  async editChargeProvedOutcome(
+    adjudicationNumber: number,
+    caution: boolean,
+    user: User,
+    adjudicator?: string,
+    plea?: HearingOutcomePlea,
+    amount?: string
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      ...(adjudicator && { adjudicator }),
+      plea,
+      caution,
+      amount,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+      adjudicationNumber,
+      ReportedAdjudicationStatus.CHARGE_PROVED,
+      data
+    )
+  }
 }
