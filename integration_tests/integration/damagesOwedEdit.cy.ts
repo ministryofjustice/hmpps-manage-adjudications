@@ -57,10 +57,47 @@ context('Is any money being recovered for damages?', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 1524493,
+          prisonerNumber: 'G6415GD',
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-01-23T17:00:00',
+              id: 1,
+              locationId: 775,
+              outcome: testData.hearingOutcome({
+                code: HearingOutcomeCode.COMPLETE,
+                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
+              }),
+            }),
+          ],
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  caution: true,
+                  amount: null,
+                }),
+              },
+            },
+          ],
+        }),
+      },
+    })
     cy.signIn()
   })
   describe('Loads', () => {
-    it('should contain the required page elements with values present', () => {
+    it('should contain the required page elements with amount owed present', () => {
       cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.submitButton().should('exist')
@@ -70,6 +107,15 @@ context('Is any money being recovered for damages?', () => {
       damagesOwedPage.amount().should('have.value', '100.50')
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="yes"]').should('be.checked')
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').should('not.be.checked')
+    })
+    it('should contain the required page elements with no amount owed present', () => {
+      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(101))
+      const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
+      damagesOwedPage.submitButton().should('exist')
+      damagesOwedPage.cancelButton().should('exist')
+      damagesOwedPage.damagesOwedRadioButtons().should('exist')
+      damagesOwedPage.damagesOwedRadioButtons().find('input[value="yes"]').should('not.be.checked')
+      damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))

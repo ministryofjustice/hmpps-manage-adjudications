@@ -63,7 +63,7 @@ export default class CautionPage {
           adjudicationNumber,
           res.locals.user
         )
-        if (outcome.outcome.caution) {
+        if (outcome.outcome.caution != null) {
           caution = outcome.outcome.caution ? 'yes' : 'no'
         }
       } catch (postError) {

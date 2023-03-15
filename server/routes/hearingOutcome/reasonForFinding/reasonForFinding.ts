@@ -1,13 +1,23 @@
 import { Request, Response } from 'express'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import ReasonForFindingPage from './reasonForFindingPage'
+import ReasonForFindingPage, { PageRequestType } from './reasonForFindingPage'
 
 export default class ReasonForFindingRoutes {
   page: ReasonForFindingPage
 
-  constructor(hearingsService: HearingsService, userService: UserService) {
-    this.page = new ReasonForFindingPage(hearingsService, userService)
+  constructor(
+    reportedAdjudicationsService: ReportedAdjudicationsService,
+    hearingsService: HearingsService,
+    userService: UserService
+  ) {
+    this.page = new ReasonForFindingPage(
+      PageRequestType.CREATION,
+      reportedAdjudicationsService,
+      hearingsService,
+      userService
+    )
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

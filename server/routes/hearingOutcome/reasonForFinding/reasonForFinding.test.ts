@@ -3,19 +3,26 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingsService from '../../../services/hearingsService'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
+jest.mock('../../../services/reportedAdjudicationsService')
 
 const hearingsService = new HearingsService(null) as jest.Mocked<HearingsService>
 const userService = new UserService(null) as jest.Mocked<UserService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService, hearingsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, hearingsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 })
 
