@@ -75,7 +75,7 @@ export default class HearingCheckYourAnswersPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { plea, adjudicator, amount } = req.query
+    const { plea, adjudicator, amount, damagesOwed } = req.query
     const actualAmount = amount as string
 
     try {
@@ -92,7 +92,8 @@ export default class HearingCheckYourAnswersPage {
           user,
           (adjudicator && (adjudicator as string)) || null,
           (plea && HearingOutcomePlea[plea.toString()]) || null,
-          !actualAmount ? null : actualAmount
+          !actualAmount ? null : actualAmount,
+          damagesOwed ? Boolean(damagesOwed) : null
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(

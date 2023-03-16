@@ -109,6 +109,7 @@ export default class DamagesOwedPage {
             adjudicator: adjudicator as string,
             plea: plea && HearingOutcomePlea[plea.toString()],
             amount: damagesOwed === 'yes' ? amount : null,
+            damagesOwed: damagesOwed === 'yes',
           },
         })
       )

@@ -78,7 +78,7 @@ export default class CautionPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { caution } = req.body
-    const { plea, adjudicator, amount } = req.query
+    const { plea, adjudicator, amount, damagesOwed } = req.query
     const { user } = res.locals
 
     const error = validateForm({ caution })
@@ -104,7 +104,12 @@ export default class CautionPage {
         return res.redirect(
           url.format({
             pathname: path,
-            query: { adjudicator: adjudicator as string, amount: amount as string, plea: plea as string },
+            query: {
+              adjudicator: adjudicator as string,
+              amount: amount as string,
+              plea: plea as string,
+              damagesOwed: damagesOwed ? Boolean(damagesOwed) : null,
+            },
           })
         )
       }
@@ -116,7 +121,8 @@ export default class CautionPage {
           user,
           (adjudicator && (adjudicator as string)) || null,
           (plea && HearingOutcomePlea[plea.toString()]) || null,
-          !actualAmount ? null : actualAmount
+          !actualAmount ? null : actualAmount,
+          damagesOwed ? Boolean(damagesOwed) : null
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(

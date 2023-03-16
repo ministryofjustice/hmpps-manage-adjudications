@@ -84,6 +84,7 @@ describe('POST /is-caution', () => {
           expect.anything(),
           null,
           null,
+          null,
           null
         )
       )
@@ -95,7 +96,10 @@ describe('POST /is-caution', () => {
         caution: 'yes',
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=&damagesOwed=`
+      )
       .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

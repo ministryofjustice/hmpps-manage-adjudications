@@ -74,7 +74,10 @@ describe('POST /money-recovered', () => {
         amount: '100.10',
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=&plea=&amount=100.10`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=&plea=&amount=100.10&damagesOwed=true`
+      )
   })
   it('should  not pass the amount to the edit next page', () => {
     return request(app)
@@ -84,6 +87,9 @@ describe('POST /money-recovered', () => {
         amount: null,
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=&plea=&amount=`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=&plea=&amount=&damagesOwed=false`
+      )
   })
 })

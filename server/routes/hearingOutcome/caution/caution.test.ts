@@ -78,7 +78,9 @@ describe('POST /is-caution', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY&damagesOwed=`
       )
       .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })

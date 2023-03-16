@@ -86,6 +86,7 @@ export type AmendedHearingOutcomeData = {
   plea?: HearingOutcomePlea
   caution?: boolean
   amount?: string
+  damagesOwed?: boolean
 }
 
 export type AmendedOutcomeData = {
