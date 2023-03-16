@@ -8,11 +8,13 @@
       .hearingReasonForReferral
       .urls
       .edit(reportNo) %}
+    {% set dataQa = 'change-link-hearing-outcome-reason-for-referral' %}
   {% else %}
     {% set changeLinkHref = adjudicationUrls
       .reasonForReferral
       .urls
       .edit(reportNo) %}
+    {% set dataQa = 'change-link-outcome-reason-for-referral' %}
   {% endif %}
 
   {% if not readOnly %}
@@ -22,7 +24,7 @@
           href: changeLinkHref, 
           text: "Change",
           visuallyHiddenText: ' reason for referral',
-          attributes: {"data-qa": "change-link-hearing-outcome-reason-for-referral" }
+          attributes: {"data-qa": dataQa }
         }
       ]
     } %}

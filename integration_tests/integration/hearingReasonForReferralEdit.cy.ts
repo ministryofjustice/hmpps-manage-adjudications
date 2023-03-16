@@ -20,7 +20,7 @@ context('What is the reason for the referral?', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          adjudicationNumber: 100,
           prisonerNumber: 'G6415GD',
           outcomes: [
             {
