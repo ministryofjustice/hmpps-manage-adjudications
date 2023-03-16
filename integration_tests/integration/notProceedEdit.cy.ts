@@ -3,7 +3,6 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import NotProceedPage from '../pages/notProceed'
 import { OutcomeCode, NotProceedReason } from '../../server/data/HearingAndOutcomeResult'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 context('Will this charge continue to prosecution?', () => {
