@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import TestData from '../../testutils/testData'
 
 const testData = new TestData()
