@@ -133,6 +133,8 @@ export default class NotProceedPage {
             user
           )
         }
+      } else if (this.pageOptions.isEdit()) {
+        await this.outcomesService.editNotProceedOutcome(adjudicationNumber, notProceedReason, notProceedDetails, user)
       } else {
         await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, notProceedDetails, user)
       }

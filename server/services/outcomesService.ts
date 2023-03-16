@@ -71,4 +71,17 @@ export default class OutcomesService {
     }
     return new ManageAdjudicationsClient(user.token).quashOutcome(adjudicationNumber, data)
   }
+
+  async editNotProceedOutcome(
+    adjudicationNumber: number,
+    notProceedReason: NotProceedReason,
+    details: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      details,
+      notProceedReason,
+    }
+    return new ManageAdjudicationsClient(user.token).amendOutcome(adjudicationNumber, data)
+  }
 }
