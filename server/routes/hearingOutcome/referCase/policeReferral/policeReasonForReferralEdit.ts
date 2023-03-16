@@ -13,7 +13,7 @@ export default class PoliceReasonForReferralRoutes {
     reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new PoliceReasonForReferralPage(
-      PageRequestType.CREATION,
+      PageRequestType.EDIT,
       outcomesService,
       userService,
       reportedAdjudicationsService

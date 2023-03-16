@@ -902,6 +902,21 @@ const stubAmendHearingOutcome = ({ adjudicationNumber, status, response }): Supe
     },
   })
 
+const stubAmendOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/outcome`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -949,4 +964,5 @@ export default {
   stubRemoveAdjourn,
   stubPostQuashOutcome,
   stubAmendHearingOutcome,
+  stubAmendOutcome,
 }

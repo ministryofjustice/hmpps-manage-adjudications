@@ -211,7 +211,10 @@ export default function routes(
     hearingReasonForReferralRoutes({ hearingsService, userService, reportedAdjudicationsService })
   )
 
-  router.use(adjudicationUrls.reasonForReferral.root, policeReasonForReferralRoutes({ outcomesService, userService }))
+  router.use(
+    adjudicationUrls.reasonForReferral.root,
+    policeReasonForReferralRoutes({ outcomesService, userService, reportedAdjudicationsService })
+  )
 
   router.use(adjudicationUrls.hearingReferralConfirmation.root, hearingReferralConfirmationRoutes({ userService }))
 

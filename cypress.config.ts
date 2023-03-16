@@ -103,6 +103,7 @@ export default defineConfig({
         stubRemoveAdjourn: adjudications.stubRemoveAdjourn,
         stubPostQuashOutcome: adjudications.stubPostQuashOutcome,
         stubAmendHearingOutcome: adjudications.stubAmendHearingOutcome,
+        stubAmendOutcome: adjudications.stubAmendOutcome,
       })
     },
 

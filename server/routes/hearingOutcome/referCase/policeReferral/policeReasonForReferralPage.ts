@@ -7,6 +7,7 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import validateForm from '../hearingReasonForReferralValidation'
 import OutcomesService from '../../../../services/outcomesService'
+import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 
 export enum PageRequestType {
   CREATION,
@@ -20,36 +21,52 @@ type PageData = {
 
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
+
+  isEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT
+  }
 }
 
-export default class HearingReasonForReferralPage {
+export default class ReasonForReferralPage {
   pageOptions: PageOptions
 
   constructor(
     pageType: PageRequestType,
     private readonly outcomesService: OutcomesService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error } = pageData
+    const { error, referralReason } = pageData
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
+      referralReason,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, {})
+    let refOutcome = null
+    if (this.pageOptions.isEdit()) {
+      const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(adjudicationNumber, user)
+      refOutcome = lastOutcomeItem.outcome.outcome
+    }
+
+    return this.renderView(req, res, {
+      referralReason: refOutcome?.details,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -65,7 +82,11 @@ export default class HearingReasonForReferralPage {
       })
 
     try {
-      await this.outcomesService.createPoliceReferral(adjudicationNumber, referralReason, user)
+      if (this.pageOptions.isEdit()) {
+        await this.outcomesService.editPoliceReferralOutcome(adjudicationNumber, referralReason, user)
+      } else {
+        await this.outcomesService.createPoliceReferral(adjudicationNumber, referralReason, user)
+      }
       return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)

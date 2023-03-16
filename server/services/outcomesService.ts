@@ -48,6 +48,17 @@ export default class OutcomesService {
     return new ManageAdjudicationsClient(user.token).createPoliceReferral(adjudicationNumber, outcomeDetails)
   }
 
+  async editPoliceReferralOutcome(
+    adjudicationNumber: number,
+    referralReason: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      details: referralReason,
+    }
+    return new ManageAdjudicationsClient(user.token).amendOutcome(adjudicationNumber, data)
+  }
+
   async quashAGuiltyFinding(
     adjudicationNumber: number,
     quashReason: QuashGuiltyFindingReason,
