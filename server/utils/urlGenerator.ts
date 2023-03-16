@@ -522,6 +522,7 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       edit: '/:adjudicationNumber/edit',
       completeHearingStart: '/complete-hearing/:adjudicationNumber',
+      completeHearingEdit: '/complete-hearing/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}`,
@@ -529,6 +530,8 @@ const adjudicationUrls = {
         `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}/edit`,
       completeHearingStart: (adjudicationNumber: number) =>
         `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${adjudicationNumber}`,
+      completeHearingEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${adjudicationNumber}/edit`,
     },
   },
   reportAQuashedGuiltyFinding: {

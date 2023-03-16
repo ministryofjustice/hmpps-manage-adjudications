@@ -5,7 +5,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import UserService from '../../services/userService'
 import NotProceedPage, { PageRequestType } from './notProceedPage'
 
-export default class NotProceedRoutes {
+export default class NotProceedCompleteHearingEditRoutes {
   page: NotProceedPage
 
   constructor(
@@ -15,7 +15,7 @@ export default class NotProceedRoutes {
     reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new NotProceedPage(
-      PageRequestType.REFER_AND_NO_HEARING,
+      PageRequestType.COMPLETE_HEARING_EDIT,
       userService,
       outcomesService,
       hearingsService,

@@ -5,6 +5,7 @@ import { FormError } from '../../@types/template'
 import { HearingOutcomePlea } from '../../data/HearingAndOutcomeResult'
 import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -19,14 +20,20 @@ type PageData = {
 
 export enum PageRequestType {
   REFER_AND_NO_HEARING,
+  REFER_AND_NO_HEARING_EDIT,
   COMPLETE_HEARING,
+  COMPLETE_HEARING_EDIT,
 }
 
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
   isCompleteHearing(): boolean {
-    return this.pageType === PageRequestType.COMPLETE_HEARING
+    return [PageRequestType.COMPLETE_HEARING_EDIT, PageRequestType.COMPLETE_HEARING].includes(this.pageType)
+  }
+
+  isEdit(): boolean {
+    return [PageRequestType.COMPLETE_HEARING_EDIT, PageRequestType.REFER_AND_NO_HEARING_EDIT].includes(this.pageType)
   }
 }
 
@@ -37,7 +44,8 @@ export default class NotProceedPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly outcomesService: OutcomesService,
-    private readonly hearingsService: HearingsService
+    private readonly hearingsService: HearingsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -56,11 +64,37 @@ export default class NotProceedPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, {})
+    let reason = null
+    let details = null
+
+    if (this.pageOptions.isEdit()) {
+      try {
+        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+          adjudicationNumber,
+          res.locals.user
+        )
+        if (outcome.outcome.reason) {
+          reason = outcome.outcome.reason
+        }
+        if (outcome.outcome.details) {
+          details = outcome.outcome.details
+        }
+      } catch (postError) {
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        throw postError
+      }
+    }
+
+    return this.renderView(req, res, {
+      notProceedReason: reason,
+      notProceedDetails: details,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -73,18 +107,32 @@ export default class NotProceedPage {
     if (error) return this.renderView(req, res, { error, notProceedReason, notProceedDetails })
     try {
       if (this.pageOptions.isCompleteHearing()) {
-        if (!this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)) {
+        if (
+          !this.pageOptions.isEdit() &&
+          !this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)
+        ) {
           return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
         }
 
-        await this.hearingsService.createNotProceedHearingOutcome(
-          adjudicationNumber,
-          adjudicator as string,
-          plea as HearingOutcomePlea,
-          notProceedReason,
-          notProceedDetails,
-          user
-        )
+        if (this.pageOptions.isEdit()) {
+          await this.hearingsService.editNotProceedHearingOutcome(
+            adjudicationNumber,
+            notProceedReason,
+            notProceedDetails,
+            user,
+            (adjudicator && (adjudicator as string)) || null,
+            (plea && HearingOutcomePlea[plea.toString()]) || null
+          )
+        } else {
+          await this.hearingsService.createNotProceedHearingOutcome(
+            adjudicationNumber,
+            adjudicator as string,
+            plea as HearingOutcomePlea,
+            notProceedReason,
+            notProceedDetails,
+            user
+          )
+        }
       } else {
         await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, notProceedDetails, user)
       }

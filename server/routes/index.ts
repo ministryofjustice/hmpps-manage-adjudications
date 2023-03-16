@@ -224,7 +224,7 @@ export default function routes(
   router.use(adjudicationUrls.nextStepsPolice.root, nextStepPoliceRoutes({ userService, outcomesService }))
   router.use(
     adjudicationUrls.reasonForNotProceeding.root,
-    notProceedRoutes({ userService, outcomesService, hearingsService })
+    notProceedRoutes({ userService, outcomesService, hearingsService, reportedAdjudicationsService })
   )
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
   router.use(
