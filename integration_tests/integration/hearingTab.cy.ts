@@ -677,10 +677,14 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Some details')
-          expect($summaryData.get(1).innerText).to.contain('Yes')
+          expect($summaryData.get(2).innerText).to.contain('Yes')
         })
       hearingTabPage.removeReferralButton().should('exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.edit(1524503))
+      })
     })
     it('Adjudication REFER TO POLICE, no hearing - not proceed update', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524504))
@@ -700,14 +704,18 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Some details')
-          expect($summaryData.get(1).innerText).to.contain('No')
-          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
-          expect($summaryData.get(3).innerText).to.contain(
+          expect($summaryData.get(2).innerText).to.contain('No')
+          expect($summaryData.get(3).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(4).innerText).to.contain(
             'Notice of report issued more than 48 hours after incident\n\nThe time on the notice has expired.'
           )
         })
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.edit(1524504))
+      })
     })
     it('Adjudication SCHEDULED, one hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524495))
@@ -1022,7 +1030,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
-          expect($summaryData.get(1).innerText).to.contain('Yes')
+          expect($summaryData.get(2).innerText).to.contain('Yes')
         })
 
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
@@ -1094,9 +1102,9 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
-          expect($summaryData.get(1).innerText).to.contain('No')
-          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
-          expect($summaryData.get(3).innerText).to.contain(
+          expect($summaryData.get(2).innerText).to.contain('No')
+          expect($summaryData.get(3).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(4).innerText).to.contain(
             'Resolved in another way\n\nThis is the reason why I am not proceeding'
           )
         })
@@ -1164,7 +1172,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
-          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+          expect($summaryData.get(2).innerText).to.contain('Schedule a hearing')
         })
       hearingTabPage.nextStepReferralOutcomeButton().should('not.exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')

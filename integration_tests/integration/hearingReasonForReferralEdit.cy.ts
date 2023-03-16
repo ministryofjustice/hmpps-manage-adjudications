@@ -2,9 +2,11 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import HearingReasonForReferral from '../pages/hearingReasonForReferral'
 import TestData from '../../server/routes/testutils/testData'
+import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
-context.skip('What is the reason for the referral?', () => {
+context('What is the reason for the referral?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -20,19 +22,22 @@ context.skip('What is the reason for the referral?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2023-01-23T17:00:00',
-              id: 1,
-              locationId: 775,
-              outcome: testData.hearingOutcome({ optionalItems: { details: 'A reason for referral' } }),
-            }),
-          ],
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-01-23T17:00:00',
+                id: 1,
+                locationId: 775,
+                outcome: testData.hearingOutcome({ optionalItems: { details: 'A reason for referral' } }),
+              }),
+            },
+          ] as OutcomeHistory,
         }),
       },
     })
-    cy.task('stubUpdateHearingOutcome', {
+    cy.task('stubAmendHearingOutcome', {
       adjudicationNumber: 100,
+      status: ReportedAdjudicationStatus.REFER_POLICE,
       hearingId: 1,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -53,20 +58,20 @@ context.skip('What is the reason for the referral?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100, 1))
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().should('exist')
       hearingReasonForReferralPage.submitButton().should('exist')
       hearingReasonForReferralPage.cancelButton().should('exist')
       hearingReasonForReferralPage.errorSummary().should('not.exist')
     })
-    it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100, 1))
+    it('should have preloaded values from api call', () => {
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().should('have.value', 'A reason for referral')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100, 1))
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.cancelButton().click()
       cy.location().should(loc => {
@@ -75,12 +80,20 @@ context.skip('What is the reason for the referral?', () => {
     })
   })
   describe('Submits successfully', () => {
-    it('goes to the referral confirmation page if data successfully submitted - nothing changed', () => {
+    it('goes to the referral confirmation page if data successfully submitted - queries present - nothing changed', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
           100
         )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`
       )
+      const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
+      hearingReasonForReferralPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReferralConfirmation.urls.start(100))
+      })
+    })
+    it('goes to the referral confirmation page if data successfully submitted - queries not present - nothing changed', () => {
+      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100))
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.submitButton().click()
       cy.location().should(loc => {
@@ -99,14 +112,6 @@ context.skip('What is the reason for the referral?', () => {
       hearingReasonForReferralPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingReferralConfirmation.urls.start(100))
-      })
-    })
-    it('goes back to the enter hearing outcome page if the adjudicator name and hearing outcome code is missing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForReferral.urls.edit(100, 1))
-      const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
-      hearingReasonForReferralPage.submitButton().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.edit(100, 1))
       })
     })
   })

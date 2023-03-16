@@ -1,5 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% macro outcomeQuashedSummary(outcome = {}, attributes = {}, changeLinksActive = false) %}
+{% macro outcomeQuashedSummary(reportNo, outcome = {}, attributes = {}, readOnly = true) %}
     {% set rows = [
       {
         key: { text: 'Reason' },

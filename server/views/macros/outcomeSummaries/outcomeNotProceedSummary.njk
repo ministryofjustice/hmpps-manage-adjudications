@@ -1,5 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% macro outcomeNotProceedSummary(outcome = {}, attributes = {}, changeLinksActive = false) %}
+{% macro outcomeNotProceedSummary(reportNo, outcome = {}, attributes = {}, readOnly = true) %}
     {% set rows = [
       {
         key: { text: 'Reason for not proceeding' },
