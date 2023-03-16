@@ -4,7 +4,7 @@ import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingCheckYourAnswersPage, { PageRequestType } from './hearingCheckYourAnswersPage'
 
-export default class HearingCheckYourAnswersRoutes {
+export default class HearingCheckYourAnswersEditRoutes {
   page: HearingCheckYourAnswersPage
 
   constructor(
@@ -13,7 +13,7 @@ export default class HearingCheckYourAnswersRoutes {
     reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new HearingCheckYourAnswersPage(
-      PageRequestType.CREATION,
+      PageRequestType.EDIT,
       hearingsService,
       userService,
       reportedAdjudicationsService

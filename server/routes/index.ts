@@ -248,7 +248,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.hearingsCheckAnswers.root,
-    hearingCheckYourAnswersRoutes({ hearingsService, userService })
+    hearingCheckYourAnswersRoutes({ hearingsService, userService, reportedAdjudicationsService })
   )
   router.use(
     adjudicationUrls.punishmentsAndDamages.root,
