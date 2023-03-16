@@ -244,7 +244,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.reportAQuashedGuiltyFinding.root,
-    reportAQuashedGuiltyFindingRoutes({ outcomesService, userService })
+    reportAQuashedGuiltyFindingRoutes({ outcomesService, userService, reportedAdjudicationsService })
   )
   router.use(
     adjudicationUrls.hearingsCheckAnswers.root,

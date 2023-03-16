@@ -538,10 +538,13 @@ const adjudicationUrls = {
     root: '/report-quashed-guilty-finding',
     matchers: {
       start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) =>
         `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${adjudicationNumber}/edit`,
     },
   },
   hearingsCheckAnswers: {

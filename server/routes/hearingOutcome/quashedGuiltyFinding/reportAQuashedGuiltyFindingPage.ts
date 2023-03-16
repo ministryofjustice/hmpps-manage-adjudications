@@ -6,11 +6,13 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './reportAQuashedGuiltyFindingValidation'
-import { QuashGuiltyFindingReason } from '../../../data/HearingAndOutcomeResult'
+import { OutcomeDetailsHistory, QuashGuiltyFindingReason } from '../../../data/HearingAndOutcomeResult'
 import OutcomesService from '../../../services/outcomesService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
 export enum PageRequestType {
   CREATION,
+  EDIT,
 }
 
 type PageData = {
@@ -21,6 +23,10 @@ type PageData = {
 
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
+
+  isEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT
+  }
 }
 
 export default class ReportAQuashedGuiltyFindingPage {
@@ -29,7 +35,8 @@ export default class ReportAQuashedGuiltyFindingPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly outcomesService: OutcomesService
+    private readonly outcomesService: OutcomesService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -48,12 +55,25 @@ export default class ReportAQuashedGuiltyFindingPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, {})
+    let readApi = null
+    if (this.pageOptions.isEdit()) {
+      const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
+        adjudicationNumber,
+        user
+      )) as OutcomeDetailsHistory
+      readApi = lastOutcomeItem.outcome.outcome
+    }
+
+    return this.renderView(req, res, {
+      quashReason: readApi?.quashedReason,
+      quashDetails: readApi?.details,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -70,7 +90,11 @@ export default class ReportAQuashedGuiltyFindingPage {
       })
 
     try {
-      await this.outcomesService.quashAGuiltyFinding(adjudicationNumber, quashReason, quashDetails, user)
+      if (this.pageOptions.isEdit()) {
+        await this.outcomesService.editQuashedOutcome(adjudicationNumber, quashReason, quashDetails, user)
+      } else {
+        await this.outcomesService.quashAGuiltyFinding(adjudicationNumber, quashReason, quashDetails, user)
+      }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)

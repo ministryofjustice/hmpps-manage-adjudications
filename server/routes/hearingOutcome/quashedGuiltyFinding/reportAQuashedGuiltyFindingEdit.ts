@@ -13,7 +13,7 @@ export default class ReportAQuashedGuiltyFindingRoutes {
     reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new ReportAQuashedGuiltyFindingPage(
-      PageRequestType.CREATION,
+      PageRequestType.EDIT,
       userService,
       outcomesService,
       reportedAdjudicationsService
