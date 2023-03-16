@@ -90,7 +90,7 @@ export type AmendedHearingOutcomeData = {
 
 export type AmendedOutcomeData = {
   details?: string
-  reason?: NotProceedReason
+  reason?: NotProceedReason | QuashGuiltyFindingReason
   quashedReason?: QuashGuiltyFindingReason
 }
 
