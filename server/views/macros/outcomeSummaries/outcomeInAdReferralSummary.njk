@@ -1,9 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, readOnly = true) %}
+{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
-  {% if not readOnly %}
+  {% if changeLinksAvailable %}
     {% set reasonForReferralChangeLink = {
       items: [
         {

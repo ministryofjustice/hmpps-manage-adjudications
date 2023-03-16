@@ -1,4 +1,4 @@
-{% if changeLinksActive %}
+{% if changeLinksAvailable %}
   {% set adjudicatorChangeLink = {
   items: [
     {
@@ -16,6 +16,36 @@
       text: "Change",
       visuallyHiddenText: ' outcome',
       attributes: {"data-qa": "change-link-hearing-outcome-outcome" }
+    }
+  ]
+} %}
+  {% set pleaChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber), 
+      text: "Change",
+      visuallyHiddenText: ' plea',
+      attributes: {"data-qa": "change-link-hearing-outcome-plea" }
+    }
+  ]
+} %}
+  {% set findingChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber), 
+      text: "Change",
+      visuallyHiddenText: ' finding',
+      attributes: {"data-qa": "change-link-hearing-outcome-finding" }
+    }
+  ]
+} %}
+  {% set reasonChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(adjudicationNumber), 
+      text: "Change",
+      visuallyHiddenText: ' reason',
+      attributes: {"data-qa": "change-link-hearing-outcome-reason" }
     }
   ]
 } %}
@@ -43,13 +73,15 @@
     key: { text: 'Plea' },
     value: {
       text: hearingDetails.outcome.plea | convertHearingOutcomePlea
-    }
+    },
+    actions: pleaChangeLink
   }, 
   {
     key: { text: 'Finding' },
     value: {
       text: outcome.code | convertHearingOutcomeFinding
-    }
+    },
+    actions: findingChangeLink
   },
   {
     key: { text: 'Reason' },
