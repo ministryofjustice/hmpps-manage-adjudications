@@ -192,4 +192,25 @@ export default class HearingsService {
       data
     )
   }
+
+  async editNotProceedHearingOutcome(
+    adjudicationNumber: number,
+    reason: NotProceedReason,
+    details: string,
+    user: User,
+    adjudicator?: string,
+    plea?: HearingOutcomePlea
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      ...(adjudicator && { adjudicator }),
+      plea,
+      details,
+      reason,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+      adjudicationNumber,
+      ReportedAdjudicationStatus.NOT_PROCEED,
+      data
+    )
+  }
 }
