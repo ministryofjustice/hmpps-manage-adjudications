@@ -681,7 +681,7 @@ context('Hearing details page', () => {
         })
       hearingTabPage.removeReferralButton().should('exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
-      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').click()
+      cy.get('[data-qa="change-link-outcome-reason-for-referral"]').click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.edit(1524503))
       })
@@ -712,7 +712,7 @@ context('Hearing details page', () => {
         })
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
-      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').click()
+      cy.get('[data-qa="change-link-outcome-reason-for-referral"]').click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.edit(1524504))
       })

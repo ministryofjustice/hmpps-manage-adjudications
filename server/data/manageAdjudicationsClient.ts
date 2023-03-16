@@ -88,6 +88,12 @@ export type AmendedHearingOutcomeData = {
   amount?: string
 }
 
+export type AmendedOutcomeData = {
+  details?: string
+  reason?: NotProceedReason
+  quashedReason?: QuashGuiltyFindingReason
+}
+
 export default class ManageAdjudicationsClient {
   restClient: RestClient
 
@@ -503,6 +509,13 @@ export default class ManageAdjudicationsClient {
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/${status}`,
+      data: { ...amendedData },
+    })
+  }
+
+  async amendOutcome(adjudicationNumber: number, amendedData: AmendedOutcomeData): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/outcome`,
       data: { ...amendedData },
     })
   }
