@@ -173,4 +173,23 @@ export default class HearingsService {
       data
     )
   }
+
+  async editDismissedOutcome(
+    adjudicationNumber: number,
+    details: string,
+    user: User,
+    adjudicator?: string,
+    plea?: HearingOutcomePlea
+  ): Promise<ReportedAdjudicationResult> {
+    const data = {
+      ...(adjudicator && { adjudicator }),
+      plea,
+      details,
+    }
+    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+      adjudicationNumber,
+      ReportedAdjudicationStatus.DISMISSED,
+      data
+    )
+  }
 }

@@ -5,7 +5,9 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import TestData from '../../testutils/testData'
+
+const testData = new TestData()
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -21,9 +23,19 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 
 let app: Express
 
+const outcomeHistory = {
+  hearing: testData.singleHearing({
+    dateTimeOfHearing: '2023-03-10T22:00:00',
+  }),
+  outcome: {
+    outcome: testData.outcome({ details: 'something' }),
+  },
+}
+
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, hearingsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue(outcomeHistory)
 })
 
 afterEach(() => {
@@ -33,7 +45,7 @@ afterEach(() => {
 describe('GET /reason-for-finding', () => {
   it('should load the `Reason for finding` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingReasonForFinding.urls.start(100))
+      .get(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the reason for this finding')
@@ -44,29 +56,20 @@ describe('GET /reason-for-finding', () => {
 describe('POST /reason-for-finding', () => {
   it('should redirect to the correct URL after correct submission', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingReasonForFinding.urls.start(100)}?adjudicator=Joanne%20Rhubarb&plea=UNFIT`)
+      .post(`${adjudicationUrls.hearingReasonForFinding.urls.edit(100)}`)
       .send({
         reasonForFinding: 'This is a reason',
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
       .then(() =>
-        expect(hearingsService.createDismissedHearingOutcome).toHaveBeenCalledWith(
+        expect(hearingsService.editDismissedOutcome).toHaveBeenCalledWith(
           100,
-          'Joanne Rhubarb',
-          HearingOutcomePlea.UNFIT,
           'This is a reason',
-          expect.anything()
+          expect.anything(),
+          null,
+          null
         )
       )
-  })
-  it('should redirect the user back to the enter hearing outcome page if the adjudicator name and/or plea has been tampered/lost', () => {
-    return request(app)
-      .post(adjudicationUrls.hearingReasonForFinding.urls.start(100))
-      .send({
-        reasonForFinding: 'This is a reason',
-      })
-      .expect(302)
-      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100))
   })
 })

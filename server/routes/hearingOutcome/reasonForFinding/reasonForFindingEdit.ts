@@ -4,7 +4,7 @@ import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
 import ReasonForFindingPage, { PageRequestType } from './reasonForFindingPage'
 
-export default class ReasonForFindingRoutes {
+export default class ReasonForFindingEditRoutes {
   page: ReasonForFindingPage
 
   constructor(
@@ -13,7 +13,7 @@ export default class ReasonForFindingRoutes {
     userService: UserService
   ) {
     this.page = new ReasonForFindingPage(
-      PageRequestType.CREATION,
+      PageRequestType.EDIT,
       reportedAdjudicationsService,
       hearingsService,
       userService
