@@ -159,13 +159,15 @@ export default class HearingsService {
     user: User,
     adjudicator?: string,
     plea?: HearingOutcomePlea,
-    amount?: string
+    amount?: string,
+    damagesOwed?: boolean
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       plea,
       caution,
       amount,
+      damagesOwed,
     }
     return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
       adjudicationNumber,

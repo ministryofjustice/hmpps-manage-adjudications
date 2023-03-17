@@ -66,11 +66,13 @@ context('Is this punishment a caution?', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
-        expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY')
+        expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY&damagesOwed=')
       })
     })
     it('should submit successfully, answer no', () => {
-      cy.visit(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Tim&plea=GUILTY&amount=100.5`)
+      cy.visit(
+        `${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Tim&plea=GUILTY&amount=100.5&damagesOwed=`
+      )
       const cautionPage = Page.verifyOnPage(CautionPage)
       cautionPage.cautionRadioButtons().find('input[value="no"]').check()
 

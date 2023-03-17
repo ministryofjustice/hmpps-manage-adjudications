@@ -188,6 +188,7 @@ context('Is this punishment a caution?', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.edit(100))
+        expect(loc.search).to.eq('?adjudicator=&amount=&plea=&damagesOwed=')
       })
     })
     it('should submit successfully, answer no', () => {
