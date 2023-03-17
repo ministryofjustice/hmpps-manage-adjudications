@@ -222,7 +222,10 @@ export default function routes(
     adjudicationUrls.hearingAdjourned.root,
     hearingAdjournedRoutes({ hearingsService, userService, reportedAdjudicationsService })
   )
-  router.use(adjudicationUrls.hearingPleaAndFinding.root, hearingPleaAndFindingRoutes({ userService, hearingsService }))
+  router.use(
+    adjudicationUrls.hearingPleaAndFinding.root,
+    hearingPleaAndFindingRoutes({ userService, hearingsService, reportedAdjudicationsService })
+  )
 
   router.use(adjudicationUrls.nextStepsPolice.root, nextStepPoliceRoutes({ userService, outcomesService }))
   router.use(

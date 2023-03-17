@@ -4,19 +4,39 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
+jest.mock('../../../services/reportedAdjudicationsService')
 
+const testData = new TestData()
 const hearingsService = new HearingsService(null) as jest.Mocked<HearingsService>
 const userService = new UserService(null) as jest.Mocked<UserService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService, hearingsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, hearingsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue({
+    hearing: testData.singleHearing({
+      dateTimeOfHearing: '2023-01-23T17:00:00',
+      id: 1,
+      locationId: 775,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.COMPLETE,
+        optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
+      }),
+    }),
+  })
 })
 
 afterEach(() => {
@@ -45,7 +65,7 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
@@ -61,8 +81,7 @@ describe('POST /hearing-plea-finding edit', () => {
         `${adjudicationUrls.hearingReasonForFinding.urls.edit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
-  it.skip('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
-    // TODO: this test needs amending - do this when we make the edit additions
+  it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
     return request(app)
       .post(`${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
       .send({
@@ -72,7 +91,7 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.reasonForNotProceeding.urls.edit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
 })
