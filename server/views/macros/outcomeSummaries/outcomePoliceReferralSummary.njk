@@ -17,7 +17,9 @@
     {% set dataQa = 'change-link-outcome-reason-for-referral' %}
   {% endif %}
 
-  {% if changeLinksAvailable %}
+  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome else changeLinksAvailable %}
+
+  {% if reasonForReferralChangeLinkAvailable %}
     {% set reasonForReferralChangeLink = {
       items: [
         {

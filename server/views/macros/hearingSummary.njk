@@ -1,7 +1,8 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingSummary(hearingDetails = {}, outcome = {}, attributes = {}, changeLinksAvailable = false, basicHearingChangeLinkHref = null, adjudicationNumber = null, reviewStatus = null) %}
-  {% set changeLinksAvailableForHearingBasicDetails = false if reviewStatus !== ReportedAdjudicationStatus.SCHEDULED else changeLinksAvailable %}
+{% macro hearingSummary(hearingDetails = {}, outcome = {}, attributes = {}, changeLinksAvailable = false, basicHearingChangeLinkHref = null, adjudicationNumber = null) %}
+  {% set changeLinksAvailableForHearingBasicDetails = false if hearingDetails.outcome else changeLinksAvailable %}
+  {% set changeLinksAvailableForAdjudicatorAndOutcome = false if outcome else changeLinksAvailable %}
 
   {% if changeLinksAvailableForHearingBasicDetails %}
     {% set dateTimeChangeLink = {

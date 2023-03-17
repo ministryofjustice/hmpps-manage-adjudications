@@ -607,6 +607,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
+      cy.get('[data-qa="change-link-outcome-reason"]').should('exist')
       hearingTabPage.removeOutcomeButton().should('exist')
       cy.task('stubRemoveNotProceedOrQuashed', {
         adjudicationNumber: 1524502,
@@ -641,6 +642,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Some details')
         })
+      cy.get('[data-qa="change-link-outcome-reason-for-referral"]').should('exist')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
       hearingTabPage.enterReferralOutcomeButton().click()
@@ -677,14 +679,11 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Some details')
-          expect($summaryData.get(2).innerText).to.contain('Yes')
+          expect($summaryData.get(1).innerText).to.contain('Yes')
         })
+      cy.get('[data-qa="change-link-outcome-reason-for-referral"]').should('not.exist')
       hearingTabPage.removeReferralButton().should('exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
-      cy.get('[data-qa="change-link-outcome-reason-for-referral"]').click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.edit(1524503))
-      })
     })
     it('Adjudication REFER TO POLICE, no hearing - not proceed update', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524504))
@@ -704,18 +703,14 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Some details')
-          expect($summaryData.get(2).innerText).to.contain('No')
-          expect($summaryData.get(3).innerText).to.contain('Not proceed with the charge')
-          expect($summaryData.get(4).innerText).to.contain(
+          expect($summaryData.get(1).innerText).to.contain('No')
+          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(3).innerText).to.contain(
             'Notice of report issued more than 48 hours after incident\n\nThe time on the notice has expired.'
           )
         })
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
-      cy.get('[data-qa="change-link-outcome-reason-for-referral"]').click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.edit(1524504))
-      })
     })
     it('Adjudication SCHEDULED, one hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524495))
@@ -735,8 +730,11 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(3).innerText).to.contain('Change')
           expect($summaryData.get(4).innerText).to.contain('Governor')
+          expect($summaryData.get(5).innerText).to.contain('Change')
         })
       hearingTabPage.enterHearingOutcomeButton().contains('Enter the hearing outcome')
       hearingTabPage.removeHearingButton().should('exist')
@@ -765,12 +763,15 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(6).innerText).to.contain('J. Green')
-          expect($summaryData.get(8).innerText).to.contain('Adjourn the hearing for another reason')
-          expect($summaryData.get(10).innerText).to.contain('Further evidence needed\n\n123')
-          expect($summaryData.get(12).innerText).to.contain('Not asked')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Green')
+          expect($summaryData.get(4).innerText).to.contain('Change')
+          expect($summaryData.get(5).innerText).to.contain('Adjourn the hearing for another reason')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Further evidence needed\n\n123')
+          expect($summaryData.get(8).innerText).to.contain('Change')
+          expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
       hearingTabPage.scheduleAnotherHearingButton().should('exist')
       hearingTabPage.removeHearingButton().should('not.exist')
@@ -934,15 +935,15 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(5).innerText).to.contain('Change')
-          expect($summaryData.get(6).innerText).to.contain('J. Green')
-          expect($summaryData.get(8).innerText).to.contain('Adjourn the hearing for another reason')
-          expect($summaryData.get(10).innerText).to.contain('Further evidence needed\n\n123')
-          expect($summaryData.get(12).innerText).to.contain('Not asked')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Green')
+          expect($summaryData.get(4).innerText).to.contain('Change')
+          expect($summaryData.get(5).innerText).to.contain('Adjourn the hearing for another reason')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Further evidence needed\n\n123')
+          expect($summaryData.get(8).innerText).to.contain('Change')
+          expect($summaryData.get(9).innerText).to.contain('Not asked')
         })
       hearingDetailsPageAfterDeletion.hearingSummaryTable(2).should('not.exist')
       hearingDetailsPageAfterDeletion.removeHearingButton().should('not.exist')
@@ -969,13 +970,10 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(5).innerText).to.contain('Change')
-          expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(8).innerText).to.contain('Refer this case to the police')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
         })
 
       hearingTabPage
@@ -992,6 +990,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
         })
 
+      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').should('exist')
       hearingTabPage.enterReferralOutcomeButton().contains('Enter the referral outcome')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.enterReferralOutcomeButton().click()
@@ -1008,13 +1007,10 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(3).innerText).to.contain('Change')
-          expect($summaryData.get(4).innerText).to.contain('Independent Adjudicator')
-          expect($summaryData.get(5).innerText).to.contain('Change')
-          expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(8).innerText).to.contain('Refer this case to the police')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
         })
 
       hearingTabPage
@@ -1030,7 +1026,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
-          expect($summaryData.get(2).innerText).to.contain('Yes')
+          expect($summaryData.get(1).innerText).to.contain('Yes')
         })
 
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
@@ -1064,6 +1060,7 @@ context('Hearing details page', () => {
           [{ hearing: hearingNoOutcome }]
         ),
       })
+      cy.get("[data-qa='change-link-hearing-outcome-reason-for-referral']").should('exist')
       hearingTabPage.removeReferralButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524500))
@@ -1102,9 +1099,9 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
-          expect($summaryData.get(2).innerText).to.contain('No')
-          expect($summaryData.get(3).innerText).to.contain('Not proceed with the charge')
-          expect($summaryData.get(4).innerText).to.contain(
+          expect($summaryData.get(1).innerText).to.contain('No')
+          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(3).innerText).to.contain(
             'Resolved in another way\n\nThis is the reason why I am not proceeding'
           )
         })
@@ -1140,6 +1137,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
         })
+      cy.get("[data-qa='change-link-hearing-outcome-reason-for-referral']").should('exist')
       hearingTabPage.nextStepReferralOutcomeButton().should('exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
@@ -1172,7 +1170,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
-          expect($summaryData.get(2).innerText).to.contain('Schedule a hearing')
+          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
         })
       hearingTabPage.nextStepReferralOutcomeButton().should('not.exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
@@ -1184,8 +1182,10 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 1')
-          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(3).innerText).to.contain('Change')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
         })
     })
     it('Adjudication hearing complete with dismissed finding', () => {
@@ -1209,13 +1209,18 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(4).innerText).to.contain('Governor')
-          expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(8).innerText).to.contain('Hearing complete - add adjudication finding')
-          expect($summaryData.get(10).innerText).to.contain('Unfit')
-          expect($summaryData.get(11).innerText).to.contain("Charge dismissed due to 'not guilty' finding")
-          expect($summaryData.get(12).innerText).to.contain('Some details')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Change')
+          expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Unfit')
+          expect($summaryData.get(8).innerText).to.contain('Change')
+          expect($summaryData.get(9).innerText).to.contain("Charge dismissed due to 'not guilty' finding")
+          expect($summaryData.get(10).innerText).to.contain('Change')
+          expect($summaryData.get(11).innerText).to.contain('Some details')
+          expect($summaryData.get(12).innerText).to.contain('Change')
         })
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeCompleteHearingOutcomeButton().contains('Remove outcome')
@@ -1242,13 +1247,18 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(4).innerText).to.contain('Governor')
-          expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(8).innerText).to.contain('Hearing complete - add adjudication finding')
-          expect($summaryData.get(10).innerText).to.contain('Unfit')
-          expect($summaryData.get(11).innerText).to.contain('Charge not proceeded with for any other reason')
-          expect($summaryData.get(12).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Change')
+          expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Unfit')
+          expect($summaryData.get(8).innerText).to.contain('Change')
+          expect($summaryData.get(9).innerText).to.contain('Charge not proceeded with for any other reason')
+          expect($summaryData.get(10).innerText).to.contain('Change')
+          expect($summaryData.get(11).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
+          expect($summaryData.get(12).innerText).to.contain('Change')
         })
       hearingTabPage.notProceedTable().should('not.exist')
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
@@ -1275,12 +1285,16 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(2).innerText).to.contain('Adj 2')
-          expect($summaryData.get(4).innerText).to.contain('Governor')
-          expect($summaryData.get(6).innerText).to.contain('J. Red')
-          expect($summaryData.get(8).innerText).to.contain('Hearing complete - add adjudication finding')
-          expect($summaryData.get(10).innerText).to.contain('Unfit')
-          expect($summaryData.get(11).innerText).to.contain('Charge proved beyond reasonable doubt')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Change')
+          expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Unfit')
+          expect($summaryData.get(8).innerText).to.contain('Change')
+          expect($summaryData.get(9).innerText).to.contain('Charge proved beyond reasonable doubt')
+          expect($summaryData.get(10).innerText).to.contain('Change')
         })
       hearingTabPage.removeCompleteHearingOutcomeButton().should('exist')
       hearingTabPage.removeHearingButton().should('not.exist')
@@ -1316,6 +1330,10 @@ context('Hearing details page', () => {
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524510))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
+      cy.get("[data-qa='change-link-hearing-outcome-adjudicator-name']").should('exist')
+      cy.get("[data-qa='change-link-hearing-outcome-outcome']").should('exist')
+      cy.get("[data-qa='change-link-hearing-outcome-plea']").should('exist')
+      cy.get("[data-qa='change-link-hearing-outcome-finding']").should('exist')
       hearingTabPage.reportQuashedGuiltyFindingButton().click()
       cy.get('#quashReason').select('Flawed case')
       cy.get('[data-qa="quash-details"]').type('Some details')
@@ -1347,6 +1365,11 @@ context('Hearing details page', () => {
         .then($data => {
           expect($data.get(0).innerText).to.contain('Flawed case\n\nSome details')
         })
+      cy.get("[data-qa='change-link-hearing-outcome-adjudicator-name']").should('not.exist')
+      cy.get("[data-qa='change-link-hearing-outcome-outcome']").should('not.exist')
+      cy.get("[data-qa='change-link-hearing-outcome-plea']").should('not.exist')
+      cy.get("[data-qa='change-link-hearing-outcome-finding']").should('not.exist')
+      cy.get("[data-qa='change-link-quash-guilty-finding']").should('exist')
       hearingTabPage.removeQuashedOutcomeButton().should('exist')
       cy.task('stubGetReportedAdjudication', {
         id: 1524510,
