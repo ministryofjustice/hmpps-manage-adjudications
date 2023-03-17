@@ -89,7 +89,7 @@ context('Check your answers before submitting', () => {
         .answersTable()
         .get('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Not known')
+          expect($summaryData.get(0).innerText).to.contain('No')
         })
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {

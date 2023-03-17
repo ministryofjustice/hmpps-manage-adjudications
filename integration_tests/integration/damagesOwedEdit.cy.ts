@@ -168,6 +168,7 @@ context('Is any money being recovered for damages?', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(100))
+        expect(loc.search).to.eq('?adjudicator=&plea=&amount=100.50&damagesOwed=true')
       })
     })
 
@@ -179,6 +180,7 @@ context('Is any money being recovered for damages?', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(100))
+        expect(loc.search).to.eq('?adjudicator=&plea=&amount=&damagesOwed=false')
       })
     })
   })
