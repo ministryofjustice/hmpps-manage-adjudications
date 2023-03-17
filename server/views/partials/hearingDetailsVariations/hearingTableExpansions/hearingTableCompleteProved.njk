@@ -1,8 +1,8 @@
-{% if changeLinksActive %}
+{% if changeLinksAvailable %}
   {% set adjudicatorChangeLink = {
   items: [
     {
-      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber), 
       text: "Change",
       visuallyHiddenText: ' name of adjudicator',
       attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
@@ -12,10 +12,30 @@
   {% set outcomeChangeLink = {
   items: [
     {
-      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber), 
       text: "Change",
       visuallyHiddenText: ' outcome',
       attributes: {"data-qa": "change-link-hearing-outcome-outcome" }
+    }
+  ]
+} %}
+  {% set pleaChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber), 
+      text: "Change",
+      visuallyHiddenText: ' plea',
+      attributes: {"data-qa": "change-link-hearing-outcome-plea" }
+    }
+  ]
+} %}
+  {% set findingChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber), 
+      text: "Change",
+      visuallyHiddenText: ' finding',
+      attributes: {"data-qa": "change-link-hearing-outcome-finding" }
     }
   ]
 } %}
@@ -43,13 +63,15 @@
     key: { text: 'Plea' },
     value: {
       text: hearingDetails.outcome.plea | convertHearingOutcomePlea
-    }
+    },
+    actions: pleaChangeLink
   },
     {
     key: { text: 'Finding' },
     value: {
       text: outcome.code | convertHearingOutcomeFinding
-    }
+    },
+    actions: findingChangeLink
     }
   ]%}
 

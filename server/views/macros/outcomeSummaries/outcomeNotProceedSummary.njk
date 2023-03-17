@@ -1,15 +1,29 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% macro outcomeNotProceedSummary(reportNo, outcome = {}, attributes = {}, readOnly = true) %}
-    {% set rows = [
+
+{% macro outcomeNotProceedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false) %}
+  {% if changeLinksAvailable %}
+    {% set reasonChangeLink = {
+    items: [
+      {
+        href: adjudicationUrls.reasonForNotProceeding.urls.edit(adjudicationNumber), 
+        text: "Change",
+        visuallyHiddenText: ' reason',
+        attributes: {"data-qa": "change-link-outcome-reason" }
+      }
+    ]
+    } %}
+  {% endif %}
+  {% set rows = [
       {
         key: { text: 'Reason for not proceeding' },
-        value: { html: '<p class="govuk-body">'+ outcome.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ outcome.details +'</p>' }
+        value: { html: '<p class="govuk-body">'+ outcome.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ outcome.details +'</p>' },
+        actions: reasonChangeLink
       }
     ] %}
-    {% if rows.length %}
-      {{ govukSummaryList({
+  {% if rows.length %}
+    {{ govukSummaryList({
         rows: rows,
         attributes: attributes
       }) }}
-    {% endif %}
+  {% endif %}
 {% endmacro %}

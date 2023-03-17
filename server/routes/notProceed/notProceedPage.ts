@@ -113,7 +113,6 @@ export default class NotProceedPage {
         ) {
           return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
         }
-
         if (this.pageOptions.isEdit()) {
           await this.hearingsService.editNotProceedHearingOutcome(
             adjudicationNumber,

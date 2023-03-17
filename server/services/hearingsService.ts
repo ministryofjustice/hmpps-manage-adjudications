@@ -207,7 +207,7 @@ export default class HearingsService {
       ...(adjudicator && { adjudicator }),
       plea,
       details,
-      reason,
+      notProceedReason: reason,
     }
     return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
       adjudicationNumber,
