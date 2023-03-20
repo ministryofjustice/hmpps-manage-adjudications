@@ -86,7 +86,7 @@ export default class PleaAndFindingPage {
       readApiHearingOutcome = {
         plea: lastOutcomeItem.hearing?.outcome.plea,
         finding: lastOutcomeItem.outcome?.outcome.code as unknown as HearingOutcomeFinding,
-        adjudicatorNameFromApi: lastOutcomeItem.hearing.outcome.adjudicator,
+        adjudicatorNameFromApi: lastOutcomeItem.hearing?.outcome.adjudicator,
       }
     }
     const pageData = !readApiHearingOutcome
