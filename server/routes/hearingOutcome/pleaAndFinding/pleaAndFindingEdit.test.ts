@@ -94,4 +94,18 @@ describe('POST /hearing-plea-finding edit', () => {
         `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
+  it('should use the query parameter adjudicator name rather than api adjudicator name if one is present', () => {
+    return request(app)
+      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .send({
+        hearingPlea: HearingOutcomePlea.GUILTY,
+        hearingFinding: HearingOutcomeFinding.NOT_PROCEED,
+        adjudicatorName: 'NameFrom Api',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+      )
+  })
 })
