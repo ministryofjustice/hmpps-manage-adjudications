@@ -27,6 +27,7 @@ type PageData = {
   error?: FormError | FormError[]
   hearingPlea?: HearingOutcomePlea
   hearingFinding?: HearingOutcomeFinding
+  adjudicatorNameFromApi?: string
 }
 
 class PageOptions {
@@ -50,7 +51,7 @@ export default class PleaAndFindingPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, hearingPlea, hearingFinding } = pageData
+    const { error, hearingPlea, hearingFinding, adjudicatorNameFromApi } = pageData
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     return res.render(`pages/hearingOutcome/pleaAndFinding.njk`, {
@@ -58,6 +59,7 @@ export default class PleaAndFindingPage {
       errors: error ? [error] : [],
       hearingPlea,
       hearingFinding,
+      adjudicatorName: adjudicatorNameFromApi,
     })
   }
 
@@ -84,6 +86,7 @@ export default class PleaAndFindingPage {
       readApiHearingOutcome = {
         plea: lastOutcomeItem.hearing?.outcome.plea,
         finding: lastOutcomeItem.outcome?.outcome.code as unknown as HearingOutcomeFinding,
+        adjudicatorNameFromApi: lastOutcomeItem.hearing?.outcome.adjudicator,
       }
     }
     const pageData = !readApiHearingOutcome
@@ -91,6 +94,7 @@ export default class PleaAndFindingPage {
       : {
           hearingPlea: readApiHearingOutcome.plea,
           hearingFinding: readApiHearingOutcome.finding,
+          adjudicatorNameFromApi: readApiHearingOutcome.adjudicatorNameFromApi,
         }
 
     return this.renderView(req, res, pageData)
@@ -98,7 +102,7 @@ export default class PleaAndFindingPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { hearingPlea, hearingFinding } = req.body
+    const { hearingPlea, hearingFinding, adjudicatorName } = req.body
     const isEdit = this.pageOptions.isEdit()
     const { adjudicator } = req.query
 
@@ -110,12 +114,14 @@ export default class PleaAndFindingPage {
         hearingFinding,
       })
 
+    const nameOfAdjudicator = adjudicator || adjudicatorName
+
     try {
       const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], adjudicationNumber)
       return res.redirect(
         url.format({
           pathname: redirectUrl,
-          query: { adjudicator: String(adjudicator), plea: hearingPlea },
+          query: { adjudicator: String(nameOfAdjudicator), plea: hearingPlea },
         })
       )
     } catch (postError) {
