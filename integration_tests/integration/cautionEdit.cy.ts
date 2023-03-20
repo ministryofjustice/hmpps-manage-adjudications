@@ -32,6 +32,7 @@ context('Is this punishment a caution?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-01-23T17:00:00',
@@ -67,6 +68,7 @@ context('Is this punishment a caution?', () => {
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           hearings: [
             testData.singleHearing({
@@ -103,6 +105,7 @@ context('Is this punishment a caution?', () => {
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           hearings: [
             testData.singleHearing({

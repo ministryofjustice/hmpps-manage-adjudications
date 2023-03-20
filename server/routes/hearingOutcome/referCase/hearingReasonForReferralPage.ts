@@ -9,6 +9,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingReasonForReferralValidation'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -75,9 +76,10 @@ export default class HearingReasonForReferralPage {
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         adjudicationNumber,
+        [ReportedAdjudicationStatus.REFER_INAD, ReportedAdjudicationStatus.REFER_POLICE],
         user
       )) as HearingDetailsHistory
-      hearingOutcome = lastOutcomeItem.hearing.outcome
+      hearingOutcome = lastOutcomeItem.hearing?.outcome
     }
     return this.renderView(req, res, {
       referralReason: hearingOutcome?.details,

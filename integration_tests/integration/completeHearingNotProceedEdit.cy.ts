@@ -38,6 +38,7 @@ context('Will this charge continue to prosecution?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.NOT_PROCEED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-01-23T17:00:00',

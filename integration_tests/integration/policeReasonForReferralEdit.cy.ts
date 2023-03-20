@@ -3,6 +3,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import PoliceReasonForReferral from '../pages/policeReasonForReferral'
 import TestData from '../../server/routes/testutils/testData'
 import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 context('What is the reason for the referral?', () => {
@@ -21,6 +22,7 @@ context('What is the reason for the referral?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 100,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.REFER_POLICE,
           outcomes: [
             {
               outcome: {

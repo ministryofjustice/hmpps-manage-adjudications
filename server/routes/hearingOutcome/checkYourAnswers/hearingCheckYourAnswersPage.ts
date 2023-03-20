@@ -7,6 +7,7 @@ import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -42,12 +43,13 @@ export default class HearingCheckYourAnswersPage {
 
     if (this.pageOptions.isEdit() && !actualAmount) {
       try {
-        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+        const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
           adjudicationNumber,
+          [ReportedAdjudicationStatus.CHARGE_PROVED],
           res.locals.user
         )
-        if (outcome.outcome.amount != null) {
-          actualAmount = outcome.outcome.amount.toFixed(2)
+        if (lastOutcomeItem.outcome?.outcome.amount) {
+          actualAmount = lastOutcomeItem.outcome.outcome.amount.toFixed(2)
         }
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)

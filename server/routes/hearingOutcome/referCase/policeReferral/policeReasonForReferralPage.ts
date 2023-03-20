@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../../../utils/utils'
 import validateForm from '../hearingReasonForReferralValidation'
 import OutcomesService from '../../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
+import { ReportedAdjudicationStatus } from '../../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -60,8 +61,12 @@ export default class ReasonForReferralPage {
 
     let refOutcome = null
     if (this.pageOptions.isEdit()) {
-      const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(adjudicationNumber, user)
-      refOutcome = lastOutcomeItem.outcome.outcome
+      const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
+        adjudicationNumber,
+        [ReportedAdjudicationStatus.REFER_POLICE],
+        user
+      )
+      refOutcome = lastOutcomeItem.outcome?.outcome
     }
 
     return this.renderView(req, res, {

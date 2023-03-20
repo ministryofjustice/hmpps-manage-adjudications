@@ -9,6 +9,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './reasonForFindingValidation'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -65,12 +66,14 @@ export default class ReasonForFindingPage {
 
     if (this.pageOptions.isEdit()) {
       try {
-        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+        const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
           adjudicationNumber,
+          [ReportedAdjudicationStatus.DISMISSED],
           res.locals.user
         )
-        if (outcome.outcome.details) {
-          reasonForFinding = outcome.outcome.details
+
+        if (lastOutcomeItem.outcome?.outcome.details) {
+          reasonForFinding = lastOutcomeItem.outcome?.outcome.details
         }
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)

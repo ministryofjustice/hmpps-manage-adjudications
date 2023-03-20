@@ -4,10 +4,11 @@ import HearingPleaAndFinding from '../pages/hearingPleaAndFinding'
 import TestData from '../../server/routes/testutils/testData'
 import {
   HearingOutcomeCode,
-  HearingOutcomeFinding,
   HearingOutcomePlea,
+  OutcomeCode,
   OutcomeHistory,
 } from '../../server/data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 context('Plea and finding', () => {
@@ -26,6 +27,7 @@ context('Plea and finding', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 100,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           outcomes: [
             {
               hearing: testData.singleHearing({
@@ -34,9 +36,14 @@ context('Plea and finding', () => {
                 locationId: 775,
                 outcome: testData.hearingOutcome({
                   code: HearingOutcomeCode.COMPLETE,
-                  optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
+                  optionalItems: { plea: HearingOutcomePlea.GUILTY },
                 }),
               }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
             },
           ] as OutcomeHistory,
         }),

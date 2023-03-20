@@ -22,6 +22,7 @@ context('What is the reason for the referral?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 100,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.REFER_POLICE,
           outcomes: [
             {
               hearing: testData.singleHearing({

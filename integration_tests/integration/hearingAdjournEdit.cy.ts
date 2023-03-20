@@ -22,6 +22,7 @@ context('Adjourn the hearing', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.ADJOURNED,
           outcomes: [
             {
               hearing: testData.singleHearing({

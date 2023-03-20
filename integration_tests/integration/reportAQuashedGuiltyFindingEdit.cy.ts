@@ -22,6 +22,7 @@ context('Report a quashed guilty finding', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 100,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.QUASHED,
           outcomes: [
             {
               outcome: {

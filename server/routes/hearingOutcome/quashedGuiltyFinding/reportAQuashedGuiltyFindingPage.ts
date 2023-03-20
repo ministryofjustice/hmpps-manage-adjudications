@@ -9,6 +9,7 @@ import validateForm from './reportAQuashedGuiltyFindingValidation'
 import { OutcomeDetailsHistory, QuashGuiltyFindingReason } from '../../../data/HearingAndOutcomeResult'
 import OutcomesService from '../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -65,9 +66,10 @@ export default class ReportAQuashedGuiltyFindingPage {
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         adjudicationNumber,
+        [ReportedAdjudicationStatus.QUASHED],
         user
       )) as OutcomeDetailsHistory
-      readApi = lastOutcomeItem.outcome.outcome
+      readApi = lastOutcomeItem.outcome?.outcome
     }
 
     return this.renderView(req, res, {

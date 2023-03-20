@@ -13,7 +13,7 @@ import {
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
-import { HearingOutcomeCode, OutcomeCode, ReferralOutcomeCode } from '../data/HearingAndOutcomeResult'
+import { HearingOutcomeCode, OutcomeCode, OutcomeHistory, ReferralOutcomeCode } from '../data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 
@@ -913,6 +913,7 @@ describe('reportedAdjudicationsService', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 123,
           prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
           outcomes: [
             {
@@ -932,7 +933,7 @@ describe('reportedAdjudicationsService', () => {
           ],
         }),
       })
-      const result = await service.getLastOutcomeItem(123, user)
+      const result = await service.getLastOutcomeItem(123, [ReportedAdjudicationStatus.CHARGE_PROVED], user)
       expect(result).toEqual({
         hearing: testData.singleHearing({
           dateTimeOfHearing: '2023-03-10T22:00:00',
@@ -953,6 +954,7 @@ describe('reportedAdjudicationsService', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 123,
           prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
           outcomes: [
             {
@@ -989,7 +991,7 @@ describe('reportedAdjudicationsService', () => {
           ],
         }),
       })
-      const result = await service.getLastOutcomeItem(123, user)
+      const result = await service.getLastOutcomeItem(123, [ReportedAdjudicationStatus.CHARGE_PROVED], user)
       expect(result).toEqual({
         hearing: testData.singleHearing({
           dateTimeOfHearing: '2023-03-15T15:00:00',
@@ -1005,6 +1007,28 @@ describe('reportedAdjudicationsService', () => {
           }),
         },
       })
+    })
+    it('returns an empty object if the last item in the outcomes array does not match the current status', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.ADJOURNED,
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.ADJOURN,
+                }),
+              }),
+            },
+          ] as OutcomeHistory,
+        }),
+      })
+      const result = await service.getLastOutcomeItem(123, [ReportedAdjudicationStatus.CHARGE_PROVED], user)
+      expect(result).toEqual({})
     })
   })
 })
