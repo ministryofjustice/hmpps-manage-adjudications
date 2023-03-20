@@ -28,6 +28,14 @@ const errors: { [key: string]: FormError } = {
     href: '#hearingType',
     text: 'Select type of hearing',
   },
+  DATE_BEFORE_PREVIOUS_HEARING: {
+    href: '#hearingDate[date]',
+    text: 'The date of this hearing must be after the date of the previous hearing',
+  },
+  TIME_BEFORE_PREVIOUS_HEARING: {
+    href: '#hearingDate[time][hour]',
+    text: 'The date and time of this hearing must be after the date and time of the previous hearing',
+  },
 }
 
 export default function validateForm({ hearingDate, locationId, hearingType }: ScheduleHearingForm): FormError | null {
