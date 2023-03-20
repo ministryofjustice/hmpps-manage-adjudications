@@ -34,7 +34,7 @@ const errors: { [key: string]: FormError } = {
   },
   TIME_BEFORE_PREVIOUS_HEARING: {
     href: '#hearingDate[time][hour]',
-    text: 'The date and time of this hearing must be after the date and time of the previous hearing',
+    text: 'The time of this hearing must be after the time of the previous hearing',
   },
 }
 
