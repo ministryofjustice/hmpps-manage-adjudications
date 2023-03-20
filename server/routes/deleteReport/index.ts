@@ -1,7 +1,7 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
-import ContinueReportSelectRoutes from './continueReportSelect'
+import DeleteReport from './deleteReport'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -13,13 +13,11 @@ export default function CheckAnswersRoutes({
 }): Router {
   const router = express.Router()
 
-  const continueReportRoute = new ContinueReportSelectRoutes(placeOnReportService)
+  const deleteReportRoute = new DeleteReport(placeOnReportService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.continueReport.matchers.start, continueReportRoute.view)
-  post(adjudicationUrls.continueReport.matchers.start, continueReportRoute.submit)
+  get(adjudicationUrls.deleteReport.matchers.delete, deleteReportRoute.delete)
 
   return router
 }

@@ -14,6 +14,7 @@ import prisonerSelectRoutes from './prisonerSelect'
 import yourCompletedReportsRoutes from './yourCompletedReports'
 import allCompletedReportsRoutes from './viewAllHearingsAndReports/allReports'
 import continueReportSelectRoutes from './continueReport'
+import deleteReportRoutes from './deleteReport'
 
 import homepageRoutes from './homepage'
 import printReportRoutes from './printReport'
@@ -114,6 +115,7 @@ export default function routes(
     allCompletedReportsRoutes({ reportedAdjudicationsService, userService })
   )
   router.use(adjudicationUrls.continueReport.root, continueReportSelectRoutes({ placeOnReportService }))
+  router.use(adjudicationUrls.deleteReport.root, deleteReportRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.printReport.root, printReportRoutes({ reportedAdjudicationsService }))
   router.use(
     adjudicationUrls.printPdf.root,
