@@ -17,9 +17,11 @@ export default function CheckAnswersRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const removeReport = (path: string, handler: RequestHandler) => router.delete(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.continueReport.matchers.start, continueReportRoute.view)
   post(adjudicationUrls.continueReport.matchers.start, continueReportRoute.submit)
+  removeReport(adjudicationUrls.deleteReport.matchers.delete, continueReportRoute.delete)
 
   return router
 }
