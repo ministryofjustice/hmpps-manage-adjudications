@@ -7,18 +7,25 @@ import PleaAndFindingEditRoutes from './pleaAndFindingEdit'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
 export default function pleaAndFindingRoutes({
   userService,
   hearingsService,
+  reportedAdjudicationsService,
 }: {
   userService: UserService
   hearingsService: HearingsService
+  reportedAdjudicationsService: ReportedAdjudicationsService
 }): Router {
   const router = express.Router()
 
-  const pleaAndFindingRoute = new PleaAndFindingRoutes(userService, hearingsService)
-  const pleaAndFindingEditRoute = new PleaAndFindingEditRoutes(userService, hearingsService)
+  const pleaAndFindingRoute = new PleaAndFindingRoutes(userService, hearingsService, reportedAdjudicationsService)
+  const pleaAndFindingEditRoute = new PleaAndFindingEditRoutes(
+    userService,
+    hearingsService,
+    reportedAdjudicationsService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

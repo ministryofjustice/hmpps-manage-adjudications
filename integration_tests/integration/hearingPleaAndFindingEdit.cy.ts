@@ -6,10 +6,11 @@ import {
   HearingOutcomeCode,
   HearingOutcomeFinding,
   HearingOutcomePlea,
+  OutcomeHistory,
 } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
-context.skip('Plea and finding', () => {
+context('Plea and finding', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -23,40 +24,21 @@ context.skip('Plea and finding', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          adjudicationNumber: 100,
           prisonerNumber: 'G6415GD',
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2023-01-23T17:00:00',
-              id: 1,
-              locationId: 775,
-              outcome: testData.hearingOutcome({
-                code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-01-23T17:00:00',
+                id: 1,
+                locationId: 775,
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                  optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
+                }),
               }),
-            }),
-          ],
-        }),
-      },
-    })
-    cy.task('stubUpdateHearingOutcome', {
-      adjudicationNumber: 100,
-      hearingId: 1,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
-          prisonerNumber: 'G6415GD',
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2023-01-23T17:00:00',
-              id: 1,
-              locationId: 775,
-              outcome: testData.hearingOutcome({
-                code: HearingOutcomeCode.COMPLETE,
-                optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
-              }),
-            }),
-          ],
+            },
+          ] as OutcomeHistory,
         }),
       },
     })
@@ -95,7 +77,7 @@ context.skip('Plea and finding', () => {
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
       })
     })
     it('goes to the reason for finding page if data successfully submitted - change finding radio button to DISMISSED', () => {
@@ -119,7 +101,7 @@ context.skip('Plea and finding', () => {
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100))
       })
     })
   })

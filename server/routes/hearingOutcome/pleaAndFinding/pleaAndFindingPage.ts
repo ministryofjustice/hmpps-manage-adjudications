@@ -5,7 +5,13 @@ import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import { HearingOutcomeDetails, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import {
+  HearingDetailsHistory,
+  HearingOutcomeDetails,
+  HearingOutcomeFinding,
+  HearingOutcomePlea,
+} from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './pleaAndFindingValidation'
@@ -18,8 +24,8 @@ export enum PageRequestType {
 
 type PageData = {
   error?: FormError | FormError[]
-  hearingPlea: HearingOutcomePlea
-  hearingFinding: HearingOutcomeFinding
+  hearingPlea?: HearingOutcomePlea
+  hearingFinding?: HearingOutcomeFinding
 }
 
 class PageOptions {
@@ -36,7 +42,8 @@ export default class PleaAndFindingPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly hearingsService: HearingsService
+    private readonly hearingsService: HearingsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -62,15 +69,23 @@ export default class PleaAndFindingPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    let readApiHearingOutcome: HearingOutcomeDetails = null
+    let readApiHearingOutcome = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
+      const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
+        adjudicationNumber,
+        user
+      )) as HearingDetailsHistory
+      readApiHearingOutcome = lastOutcomeItem.hearing?.outcome || null
     }
 
-    return this.renderView(req, res, {
-      hearingPlea: readApiHearingOutcome?.plea,
-      hearingFinding: readApiHearingOutcome?.finding,
-    })
+    const pageData = !readApiHearingOutcome
+      ? {}
+      : {
+          hearingPlea: readApiHearingOutcome.plea,
+          hearingFinding: readApiHearingOutcome.finding,
+        }
+
+    return this.renderView(req, res, pageData)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -111,12 +126,10 @@ export default class PleaAndFindingPage {
   getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, adjudicationNumber: number) => {
     if (isEdit) {
       if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
-        // this will need to change to the edit route
-        return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
+        return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
         return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber)
-      // this will need to change to the edit route for complete hearing
-      return adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(adjudicationNumber)
+      return adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(adjudicationNumber)
     }
     if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
       return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
