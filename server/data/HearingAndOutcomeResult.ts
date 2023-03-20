@@ -94,7 +94,7 @@ export type HearingOutcomeDetails = {
   code: HearingOutcomeCode
   details?: string
   reason?: HearingOutcomeAdjournReason
-  finding?: HearingOutcomeFinding
+  // finding?: HearingOutcomeFinding
   plea?: HearingOutcomePlea
 }
 

@@ -871,10 +871,12 @@ export default class ReportedAdjudicationsService {
 
   async getLastOutcomeItem(
     adjudicationNumber: number,
+    acceptableStatuses: ReportedAdjudicationStatus[],
     user: User
-  ): Promise<OutcomeDetailsHistory | HearingDetailsHistory> {
+  ): Promise<OutcomeDetailsHistory | HearingDetailsHistory | Record<string, never>> {
     const adjudication = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
     const { reportedAdjudication } = adjudication
+    if (!acceptableStatuses.includes(reportedAdjudication.status)) return {}
     if (!reportedAdjudication.outcomes) throw new Error(`Missing outcomes data`)
     return reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
   }

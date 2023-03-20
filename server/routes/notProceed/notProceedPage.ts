@@ -3,6 +3,7 @@
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import { HearingOutcomePlea } from '../../data/HearingAndOutcomeResult'
+import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
@@ -75,15 +76,17 @@ export default class NotProceedPage {
 
     if (this.pageOptions.isEdit()) {
       try {
-        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+        const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
           adjudicationNumber,
+          [ReportedAdjudicationStatus.NOT_PROCEED],
           res.locals.user
         )
-        if (outcome.outcome.reason) {
-          reason = outcome.outcome.reason
+
+        if (lastOutcomeItem.outcome?.outcome.reason) {
+          reason = lastOutcomeItem.outcome.outcome.reason
         }
-        if (outcome.outcome.details) {
-          details = outcome.outcome.details
+        if (lastOutcomeItem.outcome?.outcome.details) {
+          details = lastOutcomeItem.outcome.outcome.details
         }
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)

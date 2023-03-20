@@ -9,6 +9,7 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './damagesOwedValidation'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -62,12 +63,13 @@ export default class DamagesOwedPage {
     let amount = null
     if (this.pageOptions.isEdit()) {
       try {
-        const { outcome } = await this.reportedAdjudicationsService.getLastOutcomeItem(
+        const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
           adjudicationNumber,
+          [ReportedAdjudicationStatus.CHARGE_PROVED],
           res.locals.user
         )
-        if (outcome.outcome.amount) {
-          amount = outcome.outcome.amount
+        if (lastOutcomeItem.outcome?.outcome.amount) {
+          amount = lastOutcomeItem.outcome.outcome.amount
           damagesOwed = 'yes'
         } else {
           damagesOwed = 'no'

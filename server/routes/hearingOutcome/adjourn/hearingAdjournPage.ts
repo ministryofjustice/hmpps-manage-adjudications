@@ -14,6 +14,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingAdjournValidation'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -72,9 +73,10 @@ export default class HearingAdournedPage {
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         adjudicationNumber,
+        [ReportedAdjudicationStatus.ADJOURNED],
         user
       )) as HearingDetailsHistory
-      readApi = lastOutcomeItem.hearing.outcome
+      readApi = lastOutcomeItem.hearing?.outcome
     }
 
     return this.renderView(req, res, {

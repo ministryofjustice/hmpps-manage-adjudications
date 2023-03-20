@@ -16,6 +16,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './pleaAndFindingValidation'
 import { User } from '../../../data/hmppsAuthClient'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -73,11 +74,18 @@ export default class PleaAndFindingPage {
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         adjudicationNumber,
+        [
+          ReportedAdjudicationStatus.DISMISSED,
+          ReportedAdjudicationStatus.CHARGE_PROVED,
+          ReportedAdjudicationStatus.NOT_PROCEED,
+        ],
         user
       )) as HearingDetailsHistory
-      readApiHearingOutcome = lastOutcomeItem.hearing?.outcome || null
+      readApiHearingOutcome = {
+        plea: lastOutcomeItem.hearing?.outcome.plea,
+        finding: lastOutcomeItem.outcome?.outcome.code as unknown as HearingOutcomeFinding,
+      }
     }
-
     const pageData = !readApiHearingOutcome
       ? {}
       : {

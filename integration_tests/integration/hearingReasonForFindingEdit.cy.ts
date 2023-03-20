@@ -72,6 +72,7 @@ context('What is the reason for this finding?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.DISMISSED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-01-23T17:00:00',

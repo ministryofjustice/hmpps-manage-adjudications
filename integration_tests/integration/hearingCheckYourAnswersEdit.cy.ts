@@ -33,6 +33,7 @@ context('Check your answers before submitting', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-01-23T17:00:00',
