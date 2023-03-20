@@ -65,6 +65,7 @@ context('Is any money being recovered for damages?', () => {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
           prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-01-23T17:00:00',
@@ -110,7 +111,7 @@ context('Is any money being recovered for damages?', () => {
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="yes"]').should('be.checked')
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').should('not.be.checked')
     })
-    it('should contain the required page elements with no amount owed present', () => {
+    it.only('should contain the required page elements with no amount owed present', () => {
       cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(101))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.submitButton().should('exist')

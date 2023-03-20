@@ -68,11 +68,14 @@ export default class DamagesOwedPage {
           [ReportedAdjudicationStatus.CHARGE_PROVED],
           res.locals.user
         )
-        if (lastOutcomeItem.outcome?.outcome.amount) {
-          amount = lastOutcomeItem.outcome.outcome.amount
-          damagesOwed = 'yes'
-        } else {
-          damagesOwed = 'no'
+
+        if (lastOutcomeItem.outcome) {
+          if (lastOutcomeItem.outcome.outcome.amount) {
+            amount = lastOutcomeItem.outcome.outcome.amount
+            damagesOwed = 'yes'
+          } else {
+            damagesOwed = 'no'
+          }
         }
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
