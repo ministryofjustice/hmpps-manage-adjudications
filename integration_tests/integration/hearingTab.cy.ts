@@ -1028,7 +1028,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
           expect($summaryData.get(1).innerText).to.contain('Yes')
         })
-
+      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').should('not.exist')
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
     })
@@ -1108,6 +1108,7 @@ context('Hearing details page', () => {
 
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
+      cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]').should('not.exist')
     })
     it('Adjudication with a hearing with a refer to independent adjudicator outcome', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524506))
