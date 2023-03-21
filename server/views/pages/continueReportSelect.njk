@@ -40,8 +40,8 @@
     {% set continueReportLinkHtml %}
     <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
     {% endset -%}
-    {% set deleteReportLinkHtml %}
-      <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.deleteReport.urls.delete(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Delete report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
+    {% set requestDeletionConfirmationLinkHtml %}
+      <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.deleteReport.urls.requestConfirmation(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Delete report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
     {% endset -%}
     {% set rows = (rows.push([
     { html: discoveryDateTimeHtml, attributes: {
@@ -54,7 +54,7 @@
       }
     },
     { html: continueReportLinkHtml },
-    { html: deleteReportLinkHtml }
+    { html: requestDeletionConfirmationLinkHtml }
   ]), rows) %}
   {% endfor %}
 
