@@ -38,10 +38,10 @@
     <p class="govuk-body continue-report-text" data-qa="incident-date-text">{{ report.formattedDiscoveryDateTime }}</p>
     {% endset -%}
     {% set continueReportLinkHtml %}
-    <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
+      <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.taskList.urls.start(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Continue report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
     {% endset -%}
     {% set requestDeletionConfirmationLinkHtml %}
-      <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.deleteReport.urls.requestConfirmation(report.id) }}" class="govuk-link" data-qa="continue-report-link-{{report.id}}">Delete report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
+      <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.deleteReport.urls.requestConfirmation(report.id) }}" class="govuk-link" data-qa="delete-report-link-{{report.id}}">Delete report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
     {% endset -%}
     {% set rows = (rows.push([
     { html: discoveryDateTimeHtml, attributes: {
@@ -76,6 +76,7 @@
             "aria-sort": "none"
           }
         },
+        { text: "" },
         { text: "" }
       ],
       rows: rows,
