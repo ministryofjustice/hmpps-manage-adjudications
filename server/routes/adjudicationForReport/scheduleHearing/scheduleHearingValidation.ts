@@ -1,10 +1,11 @@
 import { FormError, SubmittedDateTime } from '../../../@types/template'
-import { formatDate } from '../../../utils/utils'
+import { formatDate, formatTimestampToDate, formatTimestampToTime } from '../../../utils/utils'
 
 type ScheduleHearingForm = {
   hearingDate?: SubmittedDateTime
   locationId?: number
   hearingType?: string
+  latestExistingHearing?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -28,9 +29,22 @@ const errors: { [key: string]: FormError } = {
     href: '#hearingType',
     text: 'Select type of hearing',
   },
+  DATE_BEFORE_PREVIOUS_HEARING: {
+    href: '#hearingDate[date]',
+    text: 'The date of this hearing must be after the date of the previous hearing',
+  },
+  TIME_BEFORE_PREVIOUS_HEARING: {
+    href: '#hearingDate[time][hour]',
+    text: 'The time of this hearing must be after the time of the previous hearing',
+  },
 }
 
-export default function validateForm({ hearingDate, locationId, hearingType }: ScheduleHearingForm): FormError | null {
+export default function validateForm({
+  hearingDate,
+  locationId,
+  hearingType,
+  latestExistingHearing,
+}: ScheduleHearingForm): FormError | null {
   if (!hearingType) {
     return errors.MISSING_HEARING_TYPE
   }
@@ -45,6 +59,15 @@ export default function validateForm({ hearingDate, locationId, hearingType }: S
   }
   if (new Date(formatDate(hearingDate)) < new Date()) {
     return errors.PAST_TIME
+  }
+  if (
+    formatTimestampToDate(formatDate(hearingDate)) === formatTimestampToDate(latestExistingHearing) &&
+    formatTimestampToTime(formatDate(hearingDate)) < formatTimestampToTime(latestExistingHearing)
+  ) {
+    return errors.TIME_BEFORE_PREVIOUS_HEARING
+  }
+  if (new Date(formatDate(hearingDate)) < new Date(latestExistingHearing)) {
+    return errors.DATE_BEFORE_PREVIOUS_HEARING
   }
 
   return null

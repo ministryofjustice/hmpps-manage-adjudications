@@ -60,6 +60,10 @@ beforeEach(() => {
     }),
   })
 
+  reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
+    testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })
+  )
+
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })
 })
 

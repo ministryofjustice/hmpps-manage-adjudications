@@ -1031,4 +1031,42 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual({})
     })
   })
+  describe('getLatestHearing', () => {
+    it('it returns an empty object if there are no hearings already', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.UNSCHEDULED,
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        }),
+      })
+      const result = await service.getLatestHearing(123, user)
+      expect(result).toEqual({})
+    })
+    it('returns the latest hearing if there are some present', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 123,
+          prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.SCHEDULED,
+          dateTimeOfIncident: '2023-03-20T10:00:00',
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-03-21T10:05:00',
+            }),
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-03-21T19:00:00',
+            }),
+          ],
+        }),
+      })
+      const result = await service.getLatestHearing(123, user)
+      expect(result).toEqual(
+        testData.singleHearing({
+          dateTimeOfHearing: '2023-03-21T19:00:00',
+        })
+      )
+    })
+  })
 })
