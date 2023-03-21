@@ -85,6 +85,7 @@ export default class scheduleHearingRoutes {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const hearingId = Number(req.params.hearingId) // Only present if we're on the edit page
     const { dateTimeOfHearing } = await this.reportedAdjudicationsService.getLatestHearing(adjudicationNumber, user)
+
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
       locationId: postValues.hearingDetails.locationId,

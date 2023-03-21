@@ -182,6 +182,42 @@ context('Schedule a hearing page', () => {
         expect($errors.get(0).innerText).to.contain('The hearing time must be in the future')
       })
   })
+  it('should show error if the date entered is before the date of any existing hearings', () => {
+    cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
+    forceDateInputWithDate(new Date('2029-12-31T11:00:00'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.timeInputHours().select('11')
+    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain(
+          'The date of this hearing must be after the date of the previous hearing'
+        )
+      })
+  })
+  it('should show error if the time entered is before the datetime of any existing hearings', () => {
+    cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
+    forceDateInputWithDate(new Date('2030-01-01T11:00:00'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.timeInputHours().select('10')
+    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain(
+          'The time of this hearing must be after the time of the previous hearing'
+        )
+      })
+  })
   it('should return to the hearing details page if the cancel link is clicked', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)

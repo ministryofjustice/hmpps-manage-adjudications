@@ -21,37 +21,37 @@ const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = [])
 
 const hearingDateTime = '2030-01-01T11:00:00'
 
-const originalHearing = [
+const previouslyExistingHearing = [
   testData.singleHearing({
-    dateTimeOfHearing: hearingDateTime,
+    dateTimeOfHearing: '2029-12-T11:00:00',
     id: 333,
     locationId: 25538,
   }),
 ]
 
-const changedDayHearing = [
-  testData.singleHearing({
-    dateTimeOfHearing: '2030-01-02T11:00:00',
-    id: 333,
-    locationId: 25538,
-  }),
-]
+const originalHearing = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTime,
+  id: 333,
+  locationId: 25538,
+})
 
-const changedTimeHearing = [
-  testData.singleHearing({
-    dateTimeOfHearing: '2030-01-01T11:30:00',
-    id: 333,
-    locationId: 25538,
-  }),
-]
+const changedDayHearing = testData.singleHearing({
+  dateTimeOfHearing: '2030-01-02T11:00:00',
+  id: 333,
+  locationId: 25538,
+})
 
-const changedLocationHearing = [
-  testData.singleHearing({
-    dateTimeOfHearing: hearingDateTime,
-    id: 333,
-    locationId: 25655,
-  }),
-]
+const changedTimeHearing = testData.singleHearing({
+  dateTimeOfHearing: '2030-01-01T11:30:00',
+  id: 333,
+  locationId: 25538,
+})
+
+const changedLocationHearing = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTime,
+  id: 333,
+  locationId: 25655,
+})
 
 context('Schedule a hearing page', () => {
   beforeEach(() => {
@@ -82,16 +82,16 @@ context('Schedule a hearing page', () => {
 
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, originalHearing),
+      response: reportedAdjudicationResponse(1524494, [previouslyExistingHearing, originalHearing]),
     })
     cy.task('stubAmendHearingV1', {
       adjudicationNumber: 1524494,
       hearingId: 333,
-      response: reportedAdjudicationResponse(1524494, changedDayHearing),
+      response: reportedAdjudicationResponse(1524494, [previouslyExistingHearing, changedDayHearing]),
     })
     cy.task('stubAmendHearing', {
       adjudicationNumber: 1524494,
-      response: reportedAdjudicationResponse(1524494, changedDayHearing),
+      response: reportedAdjudicationResponse(1524494, [previouslyExistingHearing, changedDayHearing]),
     })
 
     cy.signIn()
@@ -123,7 +123,7 @@ context('Schedule a hearing page', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, changedLocationHearing),
+      response: reportedAdjudicationResponse(1524494, [changedLocationHearing]),
     })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
@@ -145,7 +145,7 @@ context('Schedule a hearing page', () => {
   it('should submit the form successfully when the date is changed', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, changedDayHearing),
+      response: reportedAdjudicationResponse(1524494, [changedDayHearing]),
     })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
@@ -158,7 +158,7 @@ context('Schedule a hearing page', () => {
   it('should submit the form successfully when the time is changed', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, changedTimeHearing),
+      response: reportedAdjudicationResponse(1524494, [changedTimeHearing]),
     })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
@@ -191,6 +191,35 @@ context('Schedule a hearing page', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain('Select time of hearing')
+      })
+  })
+  it('should show error if the date entered is before the date of any existing hearings', () => {
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    forceDateInputWithDate(new Date('2029-12-28'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain(
+          'The date of this hearing must be after the date of the previous hearing'
+        )
+      })
+  })
+  it('should show error if the time entered is before the datetime of any existing hearings', () => {
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.timeInputHours().select('09')
+    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain(
+          'The time of this hearing must be after the time of the previous hearing'
+        )
       })
   })
   it('should show error if location is removed', () => {
