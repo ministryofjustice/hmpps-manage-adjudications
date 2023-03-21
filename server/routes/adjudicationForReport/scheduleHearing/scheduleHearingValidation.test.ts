@@ -108,4 +108,32 @@ describe('validateForm', () => {
       })
     })
   })
+  describe('Date before latest existing hearing', () => {
+    it('shows error if the date entered is before the date of the latest existing hearing', () => {
+      expect(
+        validateForm({
+          hearingDate: { date: '01/02/2030', time: { hour: '10', minute: '00' } },
+          locationId: 2343,
+          hearingType: OicHearingType.GOV_ADULT as string,
+          latestExistingHearing: '2030-02-02T10:00:00',
+        })
+      ).toEqual({
+        href: '#hearingDate[date]',
+        text: 'The date of this hearing must be after the date of the previous hearing',
+      })
+    })
+    it('shows error if the time entered is before the time of the latest existing hearing', () => {
+      expect(
+        validateForm({
+          hearingDate: { date: '02/02/2030', time: { hour: '08', minute: '00' } },
+          locationId: 2343,
+          hearingType: OicHearingType.GOV_ADULT as string,
+          latestExistingHearing: '2030-02-02T10:00:00',
+        })
+      ).toEqual({
+        href: '#hearingDate[time][hour]',
+        text: 'The time of this hearing must be after the time of the previous hearing',
+      })
+    })
+  })
 })

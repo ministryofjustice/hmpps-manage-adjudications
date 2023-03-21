@@ -880,4 +880,10 @@ export default class ReportedAdjudicationsService {
     if (!reportedAdjudication.outcomes) throw new Error(`Missing outcomes data`)
     return reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
   }
+
+  async getLatestHearing(adjudicationNumber: number, user: User): Promise<HearingDetails | Record<string, never>> {
+    const { reportedAdjudication } = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
+    if (!reportedAdjudication.hearings?.length) return {}
+    return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
+  }
 }
