@@ -264,11 +264,9 @@ const adjudicationUrls = {
   deleteReport: {
     root: '/delete-report',
     urls: {
-      requestConfirmation: (id: number) => `${adjudicationUrls.deleteReport.root}/${id}/request-confirmation`,
       delete: (id: number) => `${adjudicationUrls.deleteReport.root}/${id}`,
     },
     matchers: {
-      requestConfirmation: '/:id/request-confirmation',
       delete: '/:id',
     },
   },

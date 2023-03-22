@@ -15,9 +15,10 @@ export default function CheckAnswersRoutes({
   const deleteReportRoute = new DeleteReport(placeOnReportService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.deleteReport.matchers.requestConfirmation, deleteReportRoute.view)
-  get(adjudicationUrls.deleteReport.matchers.delete, deleteReportRoute.delete)
+  get(adjudicationUrls.deleteReport.matchers.delete, deleteReportRoute.view)
+  post(adjudicationUrls.deleteReport.matchers.delete, deleteReportRoute.submit)
 
   return router
 }

@@ -8,32 +8,35 @@
 {% set title = "Delete report" %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
 
-    <h1 class="govuk-heading-l">{{ title }}</h1>
+  <h1 class="govuk-heading-l">{{ title }}</h1>
 
-    <p class="govuk-body" data-qa="delete-draft-report-p1">Draft adjudication report will be deleted, please confirm.</p>
+  <p class="govuk-body" data-qa="delete-draft-report-p1">Draft adjudication report will be deleted, please confirm.</p>
+
+  <form method="POST" novalidate="novalidate" data-qa="prisoner-search-form">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
     <div class="horizontal-form govuk-!-margin-bottom-3">
 
-        {{ govukButton({
-            text: "Delete",
-            type: "submit",
-            href: reportDeleteLinkURL,
-            classes: "govuk-button--submit govuk-!-margin-right-3",
-            attributes: { "data-qa": "delete-report-submit" }
-        }) }}
+      {{ govukButton({
+        text: "Delete",
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "delete-report-submit" }
+      }) }}
 
-        {{ govukButton({
-            text: "Cancel",
-            href: cancelLinkURL,
-            classes: "govuk-button--secondary",
-            attributes: { "data-qa": "delete-report-cancel" }
-        }) }}
+      {{ govukButton({
+        text: "Cancel",
+        href: cancelLinkURL,
+        classes: "govuk-button--secondary",
+        attributes: { "data-qa": "delete-report-cancel" }
+      }) }}
 
     </div>
+  </form>
 
 {% endblock %}

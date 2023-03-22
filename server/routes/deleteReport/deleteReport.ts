@@ -8,14 +8,10 @@ export default class DeleteReportRoutes {
   private renderView = async (
     req: Request,
     res: Response,
-    reportId: string,
     cancelLinkURL: string,
-    reportDeleteLinkURL: string
   ): Promise<void> => {
     return res.render(`pages/deleteReport`, {
-      reportId,
       cancelLinkURL,
-      reportDeleteLinkURL,
     })
   }
 
@@ -26,12 +22,11 @@ export default class DeleteReportRoutes {
       throw new Error('No draft adjudication id provided')
     }
     const cancelLinkURL = adjudicationUrls.continueReport.urls.start()
-    const reportDeleteLinkURL = adjudicationUrls.deleteReport.urls.delete(idValue)
 
-    return this.renderView(req, res, id, cancelLinkURL, reportDeleteLinkURL)
+    return this.renderView(req, res, cancelLinkURL)
   }
 
-  delete = async (req: Request, res: Response): Promise<void> => {
+  submit = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params
     const { user } = res.locals
     const idValue: number = parseInt(id as string, 10)
