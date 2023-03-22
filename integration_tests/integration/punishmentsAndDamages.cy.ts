@@ -38,7 +38,7 @@ context('Damages and punishments summary', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          adjudicationNumber: 100,
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           hearings: [
@@ -103,14 +103,14 @@ context('Damages and punishments summary', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
       cy.get('[data-qa="change-link"').first().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(1524493))
+        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
       })
     })
     it('should got to is caution edit', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
       cy.get('[data-qa="change-link"').eq(1).click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(1524493))
+        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(100))
       })
     })
   })

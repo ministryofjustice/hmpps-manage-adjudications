@@ -62,6 +62,12 @@ export default class HearingCheckYourAnswersPage {
       moneyRecoveredAmount: actualAmount,
       cautionAnswer: true,
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      moneyChangeLinkHref: `${adjudicationUrls.moneyRecoveredForDamages.urls.start(
+        adjudicationNumber
+      )}?adjudicator=${adjudicator}&plea=${plea}`,
+      cautionChangeLinkHref: `${adjudicationUrls.isThisACaution.urls.start(
+        adjudicationNumber
+      )}?adjudicator=${adjudicator}&plea=${plea}&amount=${amount}`,
     })
   }
 
