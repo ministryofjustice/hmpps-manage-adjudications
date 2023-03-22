@@ -1,10 +1,10 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, attributes = {}) %}
+{% macro hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, attributes = {}, moneyChangeLinkHref = null, cautionChangeLinkHref = null) %}
   {% set moneyChangeLink = {
             items: [
           {
-            href: adjudicationUrls.moneyRecoveredForDamages.urls.edit(reportNo),
+            href: moneyChangeLinkHref,
             text: "Change",
             visuallyHiddenText: ' money recovered for damages',
             attributes: {"data-qa": "change-link" }
@@ -14,7 +14,7 @@
   {% set cautionChangeLink = {
             items: [
           {
-            href: adjudicationUrls.isThisACaution.urls.edit(reportNo),
+            href: cautionChangeLinkHref,
             text: "Change",
             visuallyHiddenText: ' is this punishment a caution',
             attributes: {"data-qa": "change-link" }

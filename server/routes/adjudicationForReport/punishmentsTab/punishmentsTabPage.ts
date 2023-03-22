@@ -75,6 +75,8 @@ export default class PunishmentsTabPage {
       moneyRecoveredBoolean: !!amount,
       moneyRecoveredAmount: amount && amount.toFixed(2),
       caution,
+      moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
+      cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
     })
   }
