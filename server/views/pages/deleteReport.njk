@@ -15,9 +15,9 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  <p class="govuk-body" data-qa="delete-draft-report-p1">Draft adjudication report will be deleted, please confirm.</p>
+  <p class="govuk-body" data-qa="delete-report-p1">Draft adjudication report will be deleted, please confirm.</p>
 
-  <form method="POST" novalidate="novalidate" data-qa="prisoner-search-form">
+  <form method="POST" novalidate="novalidate" data-qa="delete-report-form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
     <div class="horizontal-form govuk-!-margin-bottom-3">
