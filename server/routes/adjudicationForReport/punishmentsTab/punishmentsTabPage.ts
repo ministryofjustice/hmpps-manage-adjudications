@@ -58,7 +58,11 @@ export default class PunishmentsTabPage {
     )
     const readOnly = this.pageOptions.isReporter()
 
-    const finalOutcomeItem = reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
+    const finalOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
+      adjudicationNumber,
+      [ReportedAdjudicationStatus.CHARGE_PROVED],
+      user
+    )
     const amount = finalOutcomeItem.outcome?.outcome?.amount || false
     const caution = finalOutcomeItem.outcome?.outcome?.caution || false
 
