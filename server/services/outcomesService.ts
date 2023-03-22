@@ -80,7 +80,7 @@ export default class OutcomesService {
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details,
-      notProceedReason,
+      reason: notProceedReason,
     }
     return new ManageAdjudicationsClient(user.token).amendOutcome(adjudicationNumber, data)
   }
