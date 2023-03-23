@@ -104,6 +104,7 @@ export default defineConfig({
         stubPostQuashOutcome: adjudications.stubPostQuashOutcome,
         stubAmendHearingOutcome: adjudications.stubAmendHearingOutcome,
         stubAmendOutcome: adjudications.stubAmendOutcome,
+        stubDeleteReport: adjudications.stubDeleteReport,
       })
     },
 
