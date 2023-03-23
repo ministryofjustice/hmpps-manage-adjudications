@@ -59,7 +59,7 @@ export default class HearingCheckYourAnswersPage {
 
     return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
       moneyRecoveredBoolean: queryParamsPresent ? !!amount : !!actualAmount,
-      moneyRecoveredAmount: actualAmount,
+      moneyRecoveredAmount: (+actualAmount).toFixed(2),
       cautionAnswer: true,
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       moneyChangeLinkHref: `${adjudicationUrls.moneyRecoveredForDamages.urls.start(
