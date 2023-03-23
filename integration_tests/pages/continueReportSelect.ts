@@ -9,6 +9,8 @@ export default class ContineReportSelect extends Page {
 
   continueLink = (): PageElement => cy.get('[data-qa="continue-report-link-1"]')
 
+  deleteLink = (): PageElement => cy.get('[data-qa="delete-report-link-1"]')
+
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')
 
   paginationLinks = (): PageElement => cy.get('.moj-pagination').first().get('.moj-pagination__link')

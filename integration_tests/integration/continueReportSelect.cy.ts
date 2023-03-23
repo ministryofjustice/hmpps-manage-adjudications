@@ -49,6 +49,7 @@ context('Continue a report - select report', () => {
           expect($data.get(0).innerText).to.contain('14 November 2021 - 08:30')
           expect($data.get(1).innerText).to.contain('Smith, Abe - A1234AA')
           expect($data.get(2).innerText).to.contain('Continue report')
+          expect($data.get(3).innerText).to.contain('Delete report')
         })
     })
     it('should take you to the task list for the report you wish to continue', () => {
@@ -59,6 +60,16 @@ context('Continue a report - select report', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(1))
+      })
+    })
+    it('should take you to deletion confirmation page', () => {
+      cy.visit(adjudicationUrls.continueReport.root)
+      const continueReportSelectPage: ContinueReportSelect = Page.verifyOnPage(ContinueReportSelect)
+
+      continueReportSelectPage.deleteLink().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.deleteReport.urls.delete(1))
       })
     })
     it('pagination should work', () => {
