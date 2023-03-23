@@ -1,8 +1,8 @@
 import Page, { PageElement } from './page'
 
-export default class ContineReportSelect extends Page {
+export default class DeleteReport extends Page {
   constructor() {
-    super('Continue a report')
+    super('Delete report')
   }
 
   submitButton = (): PageElement => cy.get('[data-qa="delete-report-submit"]')

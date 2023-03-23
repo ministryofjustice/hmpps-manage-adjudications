@@ -917,7 +917,7 @@ const stubAmendOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =
     },
   })
 
-const stubDeleteReport = ({ id }: { id: number }): SuperAgentRequest =>
+const stubDeleteReport = ({ id }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'DELETE',
