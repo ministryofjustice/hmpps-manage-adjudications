@@ -84,7 +84,7 @@ context('Schedule a hearing page', () => {
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
     forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputHours().select('11')
-    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.timeInputMinutes().select('05')
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))
@@ -187,7 +187,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2029-12-31T11:00:00'), '[data-qa="hearing-date"]')
+    forceDateInputWithDate(new Date('2029-12-31'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputHours().select('11')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
@@ -205,7 +205,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2030-01-01T11:00:00'), '[data-qa="hearing-date"]')
+    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
@@ -214,6 +214,27 @@ context('Schedule a hearing page', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain(
+          'The time of this hearing must be after the time of the previous hearing'
+        )
+      })
+  })
+  it('should show error if the date and time entered are before the date and time of any existing hearings', () => {
+    cy.visit(adjudicationUrls.scheduleHearing.urls.start(1524494))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
+    forceDateInputWithDate(new Date('2029-12-31'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.timeInputHours().select('10')
+    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain(
+          'The date of this hearing must be after the date of the previous hearing'
+        )
+        expect($errors.get(1).innerText).to.contain(
           'The time of this hearing must be after the time of the previous hearing'
         )
       })

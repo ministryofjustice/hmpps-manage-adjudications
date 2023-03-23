@@ -44,30 +44,41 @@ export default function validateForm({
   locationId,
   hearingType,
   latestExistingHearing,
-}: ScheduleHearingForm): FormError | null {
+}: ScheduleHearingForm): FormError[] | null {
   if (!hearingType) {
-    return errors.MISSING_HEARING_TYPE
+    return [errors.MISSING_HEARING_TYPE]
   }
   if (!locationId) {
-    return errors.MISSING_LOCATION
+    return [errors.MISSING_LOCATION]
   }
   if (!hearingDate.date) {
-    return errors.MISSING_DATE
+    return [errors.MISSING_DATE]
   }
   if (!hearingDate.time?.hour || !hearingDate.time?.minute) {
-    return errors.MISSING_TIME
+    return [errors.MISSING_TIME]
   }
   if (new Date(formatDate(hearingDate)) < new Date()) {
-    return errors.PAST_TIME
+    return [errors.PAST_TIME]
   }
   if (
-    formatTimestampToDate(formatDate(hearingDate)) === formatTimestampToDate(latestExistingHearing) &&
+    formatTimestampToDate(formatDate(hearingDate), 'YYYY-MM-DD') <
+      formatTimestampToDate(latestExistingHearing, 'YYYY-MM-DD') &&
     formatTimestampToTime(formatDate(hearingDate)) < formatTimestampToTime(latestExistingHearing)
   ) {
-    return errors.TIME_BEFORE_PREVIOUS_HEARING
+    return [errors.DATE_BEFORE_PREVIOUS_HEARING, errors.TIME_BEFORE_PREVIOUS_HEARING]
   }
-  if (new Date(formatDate(hearingDate)) < new Date(latestExistingHearing)) {
-    return errors.DATE_BEFORE_PREVIOUS_HEARING
+  if (
+    formatTimestampToDate(formatDate(hearingDate), 'YYYY-MM-DD') <
+    formatTimestampToDate(latestExistingHearing, 'YYYY-MM-DD')
+  ) {
+    return [errors.DATE_BEFORE_PREVIOUS_HEARING]
+  }
+  if (
+    formatTimestampToDate(formatDate(hearingDate), 'YYYY-MM-DD') ===
+      formatTimestampToDate(latestExistingHearing, 'YYYY-MM-DD') &&
+    formatTimestampToTime(formatDate(hearingDate)) < formatTimestampToTime(latestExistingHearing)
+  ) {
+    return [errors.TIME_BEFORE_PREVIOUS_HEARING]
   }
 
   return null
