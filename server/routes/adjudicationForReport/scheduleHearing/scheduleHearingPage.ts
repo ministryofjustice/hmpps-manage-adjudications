@@ -196,7 +196,7 @@ export default class scheduleHearingRoutes {
   }
 }
 
-const renderData = (res: Response, pageData: PageData, error: FormError) => {
+const renderData = (res: Response, pageData: PageData, error: FormError[]) => {
   const data = {
     hearingDate: convertSubmittedDateTimeToDateObject(pageData.formData.hearingDetails?.hearingDate),
     locationId: pageData.formData.hearingDetails?.locationId,
@@ -204,7 +204,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
   }
 
   return res.render(`pages/adjudicationForReport/scheduleHearing`, {
-    errors: error ? [error] : [],
+    errors: error || [],
     cancelHref: adjudicationUrls.hearingDetails.urls.review(pageData.displayData.adjudicationNumber),
     locations: pageData.displayData.possibleLocations,
     data,
