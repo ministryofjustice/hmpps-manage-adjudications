@@ -148,6 +148,9 @@ describe('getFormattedOfficerName', () => {
   it('should return a correctly formatted name when the first name is double barelled', () => {
     expect(getFormattedOfficerName('Test-Jo User')).toEqual('T. User')
   })
+  it('should return a correctly formatted name if only one name is added', () => {
+    expect(getFormattedOfficerName('smithy')).toEqual('Smithy')
+  })
 })
 
 describe('convertNameForPlaceholder', () => {

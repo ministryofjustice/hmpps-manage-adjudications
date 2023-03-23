@@ -32,7 +32,8 @@ export const getFormattedOfficerName = (name: string): string => {
     return null
   }
   const names = name.split(' ')
-  return `${names[0][0]}. ${names.reverse()[0]}`
+  if (names.length < 2) return properCaseName(name)
+  return `${names[0][0].toUpperCase()}. ${properCaseName(names.reverse()[0])}`
 }
 
 export const convertToTitleCase = (sentence: string): string =>
