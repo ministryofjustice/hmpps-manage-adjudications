@@ -5,11 +5,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 export default class DeleteReportRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
-  private renderView = async (
-    req: Request,
-    res: Response,
-    cancelLinkURL: string,
-  ): Promise<void> => {
+  private renderView = async (req: Request, res: Response, cancelLinkURL: string): Promise<void> => {
     return res.render(`pages/deleteReport`, {
       cancelLinkURL,
     })
