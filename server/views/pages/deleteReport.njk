@@ -17,21 +17,21 @@
     {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
   </div>
 
+  <p></p>
+
   <form method="POST" novalidate="novalidate" data-qa="delete-report-form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-    <div class="horizontal-form govuk-!-margin-bottom-3">
-
+    <div class="horizontal-form govuk-!-margin-bottom-3  govuk-!-margin-top-6">
       {{ govukButton({
-        text: "Delete",
+        text: "Delete report",
         type: "submit",
-        classes: "govuk-button--submit govuk-!-margin-right-3",
+        classes: "govuk-button--submit",
         attributes: { "data-qa": "delete-report-submit" }
       }) }}
-
-      <p class="govuk-body"><a href="{{ cancelLinkURL }}" class="govuk-link" data-qa="delete-report-cancel">Cancel</a></p>
-
+      <p class="govuk-body filter-clear-link"><a class='govuk-link' href='{{ cancelLinkURL }}' data-qa='delete-report-cancel'>Cancel</a></p>
     </div>
+
   </form>
 
 {% endblock %}
