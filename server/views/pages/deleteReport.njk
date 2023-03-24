@@ -1,8 +1,9 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set title = "Delete report" %}
+{% set title = "Are you sure you want to delete this report?" %}
 
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -12,7 +13,9 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  <p class="govuk-body" data-qa="delete-report-p1">Draft adjudication report will be deleted, please confirm.</p>
+  <div class="prisonerPlaybackSection">
+    {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+  </div>
 
   <form method="POST" novalidate="novalidate" data-qa="delete-report-form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -26,12 +29,7 @@
         attributes: { "data-qa": "delete-report-submit" }
       }) }}
 
-      {{ govukButton({
-        text: "Cancel",
-        href: cancelLinkURL,
-        classes: "govuk-button--secondary",
-        attributes: { "data-qa": "delete-report-cancel" }
-      }) }}
+      <p class="govuk-body"><a href="{{ cancelLinkURL }}" class="govuk-link" data-qa="delete-report-cancel">Cancel</a></p>
 
     </div>
   </form>
