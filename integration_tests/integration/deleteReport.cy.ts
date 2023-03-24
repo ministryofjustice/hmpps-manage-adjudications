@@ -1,9 +1,7 @@
-import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import DeleteReport from '../pages/deleteReport'
 import Page from '../pages/page'
 
-const testData = new TestData()
 context('Delete a report', () => {
   context('with data', () => {
     beforeEach(() => {
