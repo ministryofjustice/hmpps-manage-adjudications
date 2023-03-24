@@ -917,17 +917,18 @@ const stubAmendOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =
     },
   })
 
-const stubDeleteReport = ({ id }): SuperAgentRequest =>
+const stubDeleteReport = ({ id, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'DELETE',
-      url: `/adjudications/reported-draft-adjudications/${id}`,
+      url: `/adjudications/draft-adjudications/${id}`,
     },
     response: {
       status: 200,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
+      jsonBody: response,
     },
   })
 

@@ -21,7 +21,6 @@ context('Delete a report', () => {
       })
       cy.task('stubGetAllDraftAdjudicationsForUser', { number: 0, allContent: manyDraftAdjudications }) // Page 1
       cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'ABE', lastName: 'SMITH' }])
-      cy.task('stubDeleteReport', { id: 0 })
       cy.signIn()
     })
     it('should contain the required page elements', () => {
@@ -45,10 +44,11 @@ context('Delete a report', () => {
       cy.visit(adjudicationUrls.deleteReport.urls.delete(0))
       const deleteReportPage: DeleteReport = Page.verifyOnPage(DeleteReport)
 
+      cy.task('stubDeleteReport', { id: 0, response: null })
       deleteReportPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.deleteReport.urls.delete(0))
+        expect(loc.pathname).to.eq(adjudicationUrls.continueReport.root)
       })
     })
   })
