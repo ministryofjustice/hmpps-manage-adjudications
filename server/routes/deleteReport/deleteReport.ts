@@ -20,9 +20,7 @@ export default class DeleteReportRoutes {
       throw new Error('No draft adjudication id provided')
     }
 
-    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(idValue, user)
-    const { draftAdjudication } = draftAdjudicationResult
-    const prisoner = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
+    const prisoner = await this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user)
     const cancelLinkURL = adjudicationUrls.continueReport.urls.start()
 
     return this.renderView(req, res, prisoner, cancelLinkURL)

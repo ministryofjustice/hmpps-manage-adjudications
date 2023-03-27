@@ -22,12 +22,6 @@ afterEach(() => {
 
 describe('GET /delete-report/:id', () => {
   beforeEach(() => {
-    placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-      draftAdjudication: testData.draftAdjudication({
-        id: 1041,
-        prisonerNumber: 'A1234AA',
-      }),
-    })
     placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(
       testData.prisonerResultSummary({
         firstName: 'John',
@@ -40,23 +34,16 @@ describe('GET /delete-report/:id', () => {
     return request(app)
       .get(adjudicationUrls.deleteReport.urls.delete(1041))
       .expect(() => {
-        expect(placeOnReportService.getDraftAdjudicationDetails).toBeCalledTimes(1)
-        expect(placeOnReportService.getDraftAdjudicationDetails).toBeCalledWith(1041, expect.anything())
-        expect(placeOnReportService.getPrisonerDetails).toBeCalledTimes(1)
-        expect(placeOnReportService.getPrisonerDetails).toBeCalledWith('A1234AA', expect.anything())
+        expect(placeOnReportService.getPrisonerDetailsFromAdjNumber).toBeCalledWith(1041, expect.anything())
       })
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Are you sure you want to delete this report?')
-        /*
-        expect(response.text).toContain(
-          '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />'
-        )
+        expect(response.text).toContain('src="/prisoner/A1234AA/image"')
         expect(response.text).toContain('Smith, John')
         expect(response.text).toContain('1-2-015')
         expect(response.text).toContain('Delete report')
         expect(response.text).toContain('Cancel')
-        */
       })
   })
 })
