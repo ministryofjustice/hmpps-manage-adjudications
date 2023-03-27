@@ -487,4 +487,8 @@ export default class PlaceOnReportService {
     }
     return null
   }
+
+  async removeDraftAdjudication(draftAdjudicationId: number, user: User): Promise<void> {
+    return new ManageAdjudicationsClient(user.token).removeDraftAdjudication(draftAdjudicationId)
+  }
 }

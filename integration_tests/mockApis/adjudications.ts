@@ -917,6 +917,21 @@ const stubAmendOutcome = ({ adjudicationNumber, response }): SuperAgentRequest =
     },
   })
 
+const stubDeleteReport = ({ id, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/draft-adjudications/${id}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -965,4 +980,5 @@ export default {
   stubPostQuashOutcome,
   stubAmendHearingOutcome,
   stubAmendOutcome,
+  stubDeleteReport,
 }

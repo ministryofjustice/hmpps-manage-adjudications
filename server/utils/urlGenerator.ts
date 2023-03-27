@@ -261,6 +261,15 @@ const adjudicationUrls = {
       start: '/',
     },
   },
+  deleteReport: {
+    root: '/delete-report',
+    urls: {
+      delete: (id: number) => `${adjudicationUrls.deleteReport.root}/${id}`,
+    },
+    matchers: {
+      delete: '/:id',
+    },
+  },
   printReport: {
     root: '/print-report',
     matchers: {

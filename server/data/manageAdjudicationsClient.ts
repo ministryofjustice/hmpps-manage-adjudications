@@ -448,6 +448,12 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async removeDraftAdjudication(draftAdjudicationId: number): Promise<void> {
+    return this.restClient.delete({
+      path: `/draft-adjudications/${draftAdjudicationId}`,
+    })
+  }
+
   async removeNotProceedOrQuashed(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${adjudicationNumber}/outcome`,
