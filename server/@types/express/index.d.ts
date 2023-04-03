@@ -30,6 +30,7 @@ declare module 'express-session' {
     evidence: { [key: string]; evidence? }
     witnessData: { [key: string]; witnessData? }
     witnesses: { [key: string]; witnesses? }
+    punishments: { [key: string]; punishments? }
   }
 }
 

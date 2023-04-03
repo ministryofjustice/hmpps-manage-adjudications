@@ -1,0 +1,64 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { v4 as uuidv4 } from 'uuid'
+import { Request } from 'express'
+import { User } from '../data/hmppsAuthClient'
+import { PunishmentData } from '../data/PunishmentResult'
+import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
+import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+
+export default class PunishmentsService {
+  private createSessionForAdjudicationIfNotExists(req: Request, adjudicationNumber: number) {
+    if (!req.session.punishments) {
+      req.session.punishments = {}
+    }
+    if (!req.session.punishments[adjudicationNumber]) {
+      req.session.punishments[adjudicationNumber] = []
+    }
+  }
+
+  addSessionPunishment(req: Request, punishmentData: PunishmentData, adjudicationNumber: number) {
+    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+    const newPunishment = { ...punishmentData, redisId: uuidv4() }
+    return req.session.punishments[adjudicationNumber].push(newPunishment)
+  }
+
+  async deleteSessionPunishments(req: Request, redisId: string, adjudicationNumber: number) {
+    // get an array of the redisIds
+    const redisIdArray = req.session.punishments?.[adjudicationNumber].map(
+      (punishment: PunishmentData) => punishment.redisId
+    )
+    // get the index of the redisId we want to delete
+    const indexOfPunishment = redisIdArray.indexOf(redisId)
+    // delete the correct punishment using the index
+    return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment - 1, 1)
+  }
+
+  getAllSessionPunishments(req: Request, adjudicationNumber: number) {
+    return req.session?.punishments?.[adjudicationNumber]
+  }
+
+  setAllSessionPunishments(req: Request, punishmentData: PunishmentData[], adjudicationNumber: number) {
+    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+    req.session.punishments[adjudicationNumber] = punishmentData
+  }
+
+  deleteAllSessionPunishments(req: Request, adjudicationNumber: number) {
+    return delete req.session?.punishments?.[adjudicationNumber]
+  }
+
+  async createPunishmentSet(
+    punishmentSet: PunishmentData,
+    adjudicationNumber: number,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    // TODO: Probably some manipulation of the punishment data into the correct format for the endpoint
+    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishmentSet)
+  }
+
+  async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentData[]> {
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(
+      adjudicationNumber
+    )
+    return reportedAdjudication.punishments
+  }
+}

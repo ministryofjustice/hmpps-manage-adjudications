@@ -20,3 +20,16 @@ export enum PrivilegeType {
   ASSOCIATION = 'ASSOCIATION',
   OTHER = 'OTHER',
 }
+
+export type PunishmentData = {
+  id?: number
+  redisId?: string
+  type: PunishmentType
+  privilegeType: PrivilegeType
+  otherPrivilege: string
+  stoppagePercentage: number
+  days: number
+  startDate: string
+  endDate: string
+  suspendedUntil: string
+}
