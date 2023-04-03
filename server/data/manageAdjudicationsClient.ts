@@ -530,11 +530,11 @@ export default class ManageAdjudicationsClient {
 
   async createPunishments(
     adjudicationNumber: number,
-    punishments: PunishmentData
+    punishments: PunishmentData[]
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/punishments`,
-      data: { ...punishments },
+      data: { punishments },
     })
   }
 }

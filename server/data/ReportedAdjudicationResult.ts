@@ -13,7 +13,7 @@ import {
 } from './DraftAdjudicationResult'
 import { LocationId } from './PrisonLocationResult'
 import { HearingDetails, OutcomeHistory } from './HearingAndOutcomeResult'
-import { PunishmentData } from './PunishmentResult'
+import { PunishmentDataWithSchedule } from './PunishmentResult'
 
 export type ReportedAdjudication = {
   adjudicationNumber: number
@@ -39,7 +39,7 @@ export type ReportedAdjudication = {
   dateTimeOfIssue?: string
   dateTimeOfFirstHearing?: string
   outcomes?: OutcomeHistory
-  punishments?: PunishmentData[]
+  punishments?: PunishmentDataWithSchedule[]
 }
 
 export type ReportedAdjudicationResult = {

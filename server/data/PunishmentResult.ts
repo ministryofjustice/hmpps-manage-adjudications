@@ -33,3 +33,19 @@ export type PunishmentData = {
   endDate: string
   suspendedUntil: string
 }
+
+export type PunishmentSchedule = {
+  days: number
+  startDate: string
+  endDate: string
+  suspendedUntil: string
+}
+
+export type PunishmentDataWithSchedule = {
+  id?: number
+  type: PunishmentType
+  privilegeType: PrivilegeType
+  otherPrivilege: string
+  stoppagePercentage: number
+  schedule: PunishmentSchedule
+}

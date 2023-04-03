@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
 import { User } from '../data/hmppsAuthClient'
-import { PunishmentData } from '../data/PunishmentResult'
+import { PunishmentData, PunishmentDataWithSchedule } from '../data/PunishmentResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
@@ -28,16 +28,17 @@ export default class PunishmentsService {
       (punishment: PunishmentData) => punishment.redisId
     )
     // get the index of the redisId we want to delete
-    const indexOfPunishment = redisIdArray.indexOf(redisId)
+    const indexOfPunishment = redisIdArray.indexOf(redisId) || null
     // delete the correct punishment using the index
-    return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment - 1, 1)
+    if (indexOfPunishment) return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment - 1, 1)
+    return null
   }
 
   getAllSessionPunishments(req: Request, adjudicationNumber: number) {
     return req.session?.punishments?.[adjudicationNumber]
   }
 
-  setAllSessionPunishments(req: Request, punishmentData: PunishmentData[], adjudicationNumber: number) {
+  setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], adjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
     req.session.punishments[adjudicationNumber] = punishmentData
   }
@@ -47,7 +48,7 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishmentSet: PunishmentData,
+    punishmentSet: PunishmentData[],
     adjudicationNumber: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
@@ -55,7 +56,7 @@ export default class PunishmentsService {
     return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishmentSet)
   }
 
-  async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentData[]> {
+  async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentDataWithSchedule[]> {
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(
       adjudicationNumber
     )
