@@ -1,18 +1,18 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import validateForm from './punishmentValidation'
+import validateForm from './punishmentScheduleValidation'
 import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
-  punishmentType?: PunishmentType
-  privilegeType?: PrivilegeType
-  otherPrivilege?: string
-  stoppagePercentage?: number
+  days?: number
+  suspended?: string
+  suspendedUntil?: string
+  startDate?: string
+  endDate?: string
 }
 
 export enum PageRequestType {
@@ -28,7 +28,7 @@ class PageOptions {
   }
 }
 
-export default class PunishmentPage {
+export default class PunishmentSchedulePage {
   pageOptions: PageOptions
 
   constructor(pageType: PageRequestType, private readonly userService: UserService) {
@@ -37,15 +37,16 @@ export default class PunishmentPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = pageData
+    const { error, days, suspended, suspendedUntil, startDate, endDate } = pageData
 
-    return res.render(`pages/punishment.njk`, {
+    return res.render(`pages/punishmentSchedule.njk`, {
       cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
-      punishmentType,
-      privilegeType,
-      otherPrivilege,
-      stoppagePercentage,
+      days,
+      suspended,
+      suspendedUntil,
+      startDate,
+      endDate,
     })
   }
 
@@ -60,12 +61,11 @@ export default class PunishmentPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.body
+    const { days, suspended, suspendedUntil, startDate, endDate } = req.body
 
-    const error = validateForm({ punishmentType, privilegeType, otherPrivilege, stoppagePercentage })
+    const error = validateForm({ days, suspended, suspendedUntil, startDate, endDate })
 
-    if (error)
-      return this.renderView(req, res, { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage })
+    if (error) return this.renderView(req, res, { error, days, suspended, suspendedUntil, startDate, endDate })
 
     return null
   }
