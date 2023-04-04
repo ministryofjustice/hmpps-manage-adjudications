@@ -591,6 +591,18 @@ const adjudicationUrls = {
       edit: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}/edit`,
     },
   },
+  awardPunishments: {
+    root: '/award-punishments',
+    matchers: {
+      start: '/:adjudicationNumber',
+      modified: '/:adjudicationNumber/modified',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}`,
+      modified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}/modified`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

@@ -25,27 +25,75 @@ export type PunishmentData = {
   id?: number
   redisId?: string
   type: PunishmentType
-  privilegeType: PrivilegeType
-  otherPrivilege: string
-  stoppagePercentage: number
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
   days: number
-  startDate: string
-  endDate: string
-  suspendedUntil: string
+  startDate?: string
+  endDate?: string
+  suspendedUntil?: string
 }
 
 export type PunishmentSchedule = {
   days: number
-  startDate: string
-  endDate: string
-  suspendedUntil: string
+  startDate?: string
+  endDate?: string
+  suspendedUntil?: string
 }
 
 export type PunishmentDataWithSchedule = {
   id?: number
   type: PunishmentType
-  privilegeType: PrivilegeType
-  otherPrivilege: string
-  stoppagePercentage: number
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
   schedule: PunishmentSchedule
+}
+
+export function convertPrivilegeType(privilege: PrivilegeType) {
+  switch (privilege) {
+    case PrivilegeType.ASSOCIATION:
+      return 'association'
+    case PrivilegeType.CANTEEN:
+      return 'canteen'
+    case PrivilegeType.FACILITIES:
+      return 'facilities'
+    case PrivilegeType.MONEY:
+      return 'money'
+    case PrivilegeType.TV:
+      return 'TV'
+    default:
+      return null
+  }
+}
+
+export function convertPunishmentType(
+  type: PunishmentType,
+  stoppage: number,
+  privilege: PrivilegeType,
+  otherPrivilege: string
+) {
+  switch (type) {
+    case PunishmentType.ADDITIONAL_DAYS:
+      return 'Additional days'
+    case PunishmentType.CONFINEMENT:
+      return 'Cellular confinement'
+    case PunishmentType.EARNINGS:
+      return `Stoppage of earnings: ${stoppage}%`
+    case PunishmentType.EXCLUSION_WORK:
+      return 'Exclusion from associated work'
+    case PunishmentType.EXTRA_WORK:
+      return 'Extra work'
+    case PunishmentType.PRIVILEGE:
+      if (privilege === PrivilegeType.OTHER) return `Loss of ${otherPrivilege.toLowerCase()}`
+      return `Loss of ${convertPrivilegeType(privilege)}`
+    case PunishmentType.PROSPECTIVE_DAYS:
+      return 'Prospective additional days'
+    case PunishmentType.REMOVAL_ACTIVITY:
+      return 'Removal from activity'
+    case PunishmentType.REMOVAL_WING:
+      return 'Removal from wing/unit'
+    default:
+      return null
+  }
 }

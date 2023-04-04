@@ -28,6 +28,7 @@ import {
   NextStep,
   QuashGuiltyFindingReason,
 } from '../data/HearingAndOutcomeResult'
+import { convertPunishmentType } from '../data/PunishmentResult'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -315,6 +316,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addFilter('convertHearingOutcomePlea', convertHearingOutcomePlea)
   njkEnv.addFilter('convertHearingOutcomeFinding', convertHearingOutcomeFinding)
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
+  njkEnv.addFilter('convertPunishmentType', convertPunishmentType)
   njkEnv.addGlobal('IssueStatus', IssueStatus)
   njkEnv.addGlobal('ReportedAdjudicationStatus', ReportedAdjudicationStatus)
   njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
