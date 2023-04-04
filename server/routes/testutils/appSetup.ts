@@ -21,6 +21,7 @@ import WitnessesSessionService from '../../services/witnessesSessionService'
 import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
 import config from '../../config'
+import PunishmentsService from '../../services/punishmentsService'
 
 const user = {
   name: 'john smith',
@@ -118,6 +119,7 @@ export default function appWithAllRoutes(
       witnessesSessionService: {} as WitnessesSessionService,
       hearingsService: {} as HearingsService,
       outcomesService: {} as OutcomesService,
+      punishmentsService: {} as PunishmentsService,
       ...overrides,
     }),
     production,
