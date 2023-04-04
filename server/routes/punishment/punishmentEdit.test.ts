@@ -3,15 +3,18 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
+import PunishmentsService from '../../services/punishmentsService'
 
 jest.mock('../../services/userService')
+jest.mock('../../services/punishmentsService')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
+const punishmentsService = new PunishmentsService() as jest.Mocked<PunishmentsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 })
 
@@ -21,7 +24,7 @@ afterEach(() => {
 
 describe('GET /punishment', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { userService }, {})
+    app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {

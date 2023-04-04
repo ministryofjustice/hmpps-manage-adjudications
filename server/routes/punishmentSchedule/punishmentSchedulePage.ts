@@ -5,6 +5,7 @@ import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
+import PunishmentsService from '../../services/punishmentsService'
 
 type PageData = {
   error?: FormError
@@ -31,7 +32,11 @@ class PageOptions {
 export default class PunishmentSchedulePage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly userService: UserService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
