@@ -2,6 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
+import { PrivilegeType } from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
 context('Add a new punishment', () => {
@@ -89,6 +90,62 @@ context('Add a new punishment', () => {
         .then($error => {
           expect($error.get(0).innerText).to.contain('Enter the loss of privileges')
         })
+    })
+  })
+
+  describe('Submit', () => {
+    it('should submit successfully and redirect for type CONFINEMENT', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+
+    it('should submit successfully and redirect for type EARNINGS', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
+      punishmentPage.stoppagePercentage().type('10')
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+
+    it('should submit successfully and redirect for type PRIVILEGE - CANTEEN', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.privilege().find('input[value="CANTEEN"]').check()
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+
+    it('should submit successfully and redirect for type PRIVILEGE - OTHER', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.otherPrivilege().type('ninentdo switch')
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
     })
   })
 })

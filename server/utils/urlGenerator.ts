@@ -584,22 +584,24 @@ const adjudicationUrls = {
     root: '/punishment',
     matchers: {
       start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      edit: '/:adjudicationNumber/edit/:redisId',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}/edit`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.punishment.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
   punishmentSchedule: {
     root: '/punishment-schedule',
     matchers: {
       start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      edit: '/:adjudicationNumber/edit/:redisId',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}/edit`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
   homepage: {

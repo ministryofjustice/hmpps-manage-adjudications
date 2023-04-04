@@ -108,4 +108,36 @@ context('Punishment schedule', () => {
         })
     })
   })
+
+  describe('saves successfully and redirects', () => {
+    it('should save when days and suspended until', () => {
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
+
+      punishmentSchedulePage.days().type('10')
+      punishmentSchedulePage.suspended().find('input[value="yes"]').check()
+      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+
+      punishmentSchedulePage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      })
+    })
+    it('should save when days and start date and end date', () => {
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
+
+      punishmentSchedulePage.days().type('10')
+      punishmentSchedulePage.suspended().find('input[value="no"]').check()
+      forceDateInput(10, 10, 2030, '[data-qa="start-date-picker"]')
+      forceDateInput(10, 10, 2030, '[data-qa="end-date-picker"]')
+
+      punishmentSchedulePage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      })
+    })
+  })
 })

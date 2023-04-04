@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
 import PunishmentsService from '../../services/punishmentsService'
+import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')
@@ -45,5 +46,24 @@ describe('GET /punishment', () => {
       .expect(res => {
         expect(res.text).toContain('Add a new punishment')
       })
+  })
+})
+
+describe('POST /punishment', () => {
+  it('should successfully call the endpoint and redirect', () => {
+    return request(app)
+      .post(`${adjudicationUrls.punishment.urls.start(100)}`)
+      .send({
+        punishmentType: PunishmentType.PRIVILEGE,
+        privilegeType: PrivilegeType.OTHER,
+        otherPrivilege: 'nintendo switch',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.punishmentSchedule.urls.start(
+          100
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+      )
   })
 })

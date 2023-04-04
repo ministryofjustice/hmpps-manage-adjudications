@@ -6,6 +6,7 @@ import UserService from '../../services/userService'
 import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PunishmentsService from '../../services/punishmentsService'
+import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -56,22 +57,66 @@ export default class PunishmentSchedulePage {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
+    if (this.pageOptions.isEdit()) {
+      const sessionData = await this.punishmentsService.getSessionPunishment(
+        req,
+        adjudicationNumber,
+        req.params.redisId
+      )
+      return this.renderView(req, res, {
+        days: sessionData.days,
+        suspended: sessionData.suspendedUntil ? 'yes' : 'no',
+        startDate: sessionData.startDate,
+        endDate: sessionData.endDate,
+      })
+    }
+
     return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { days, suspended, suspendedUntil, startDate, endDate } = req.body
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
 
     const error = validateForm({ days, suspended, suspendedUntil, startDate, endDate })
 
     if (error) return this.renderView(req, res, { error, days, suspended, suspendedUntil, startDate, endDate })
 
-    return null
+    try {
+      const punishmentData = {
+        type: PunishmentType[punishmentType as string],
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
+        stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+        days,
+        suspendedUntil: suspendedUntil || null,
+        startDate: startDate || null,
+        endDate: endDate || null,
+      }
+
+      if (this.pageOptions.isEdit()) {
+        await this.punishmentsService.updateSessionPunishment(
+          req,
+          punishmentData,
+          adjudicationNumber,
+          req.params.redisId
+        )
+      } else {
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, adjudicationNumber)
+      }
+    } catch (postError) {
+      res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
+      throw postError
+    }
+
+    return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber))
   }
 }
