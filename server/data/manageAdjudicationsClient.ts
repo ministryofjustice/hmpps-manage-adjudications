@@ -40,6 +40,7 @@ import {
   OutcomeCode,
   QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
+import { PunishmentData } from './PunishmentResult'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -524,6 +525,16 @@ export default class ManageAdjudicationsClient {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/outcome`,
       data: { ...amendedData },
+    })
+  }
+
+  async createPunishments(
+    adjudicationNumber: number,
+    punishments: PunishmentData[]
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments`,
+      data: { punishments },
     })
   }
 }
