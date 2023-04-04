@@ -2,7 +2,6 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
-import { PrivilegeType } from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
 context('Add a new punishment', () => {
