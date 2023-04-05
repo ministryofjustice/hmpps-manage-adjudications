@@ -31,7 +31,7 @@ context('Punishment schedule', () => {
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
       })
     })
   })
@@ -121,7 +121,7 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
       })
     })
     it('should save when days and start date and end date', () => {
@@ -136,7 +136,7 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
       })
     })
   })
