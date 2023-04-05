@@ -55,7 +55,11 @@ export default class PunishmentsService {
 
   setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], adjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
-    req.session.punishments[adjudicationNumber] = punishmentData
+    // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
+    const punishments = punishmentData.map(punishment => {
+      return { ...punishment, redisId: uuidv4() }
+    })
+    req.session.punishments[adjudicationNumber] = punishments
   }
 
   deleteAllSessionPunishments(req: Request, adjudicationNumber: number) {

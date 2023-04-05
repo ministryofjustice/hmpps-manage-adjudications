@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber) %}
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber, readOnly) %}
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
@@ -36,11 +36,11 @@
             classes: "columnWidth20"
           },
           {
-          html: changeColumnValue,
+          html: changeColumnValue if not readOnly else '',
           classes: "changeColumn"
           },
           {
-            html: removeColumnValue,
+            html: removeColumnValue if not readOnly else '',
             classes: "removeColumn"
           }
       ]

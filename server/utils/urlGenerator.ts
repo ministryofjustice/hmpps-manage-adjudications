@@ -616,6 +616,15 @@ const adjudicationUrls = {
         `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}/modified`,
     },
   },
+  checkPunishments: {
+    root: '/check-punishments',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

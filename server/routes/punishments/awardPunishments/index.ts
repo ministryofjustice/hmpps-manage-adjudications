@@ -16,12 +16,9 @@ export default function awardPunishmentsRoutes({
   const punishmentsUsingSession = new AwardPunishmentsPage(PageRequestType.PUNISHMENTS_FROM_SESSION, punishmentsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.awardPunishments.matchers.start, punishmentsUsingApi.view)
-  post(adjudicationUrls.awardPunishments.matchers.start, punishmentsUsingApi.submit)
   get(adjudicationUrls.awardPunishments.matchers.modified, punishmentsUsingSession.view)
-  post(adjudicationUrls.awardPunishments.matchers.modified, punishmentsUsingSession.submit)
 
   return router
 }

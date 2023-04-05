@@ -532,9 +532,9 @@ export default class ManageAdjudicationsClient {
     adjudicationNumber: number,
     punishments: PunishmentData[]
   ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
+    return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/punishments`,
-      data: { punishments },
+      data: { punishments: [...punishments] },
     })
   }
 }
