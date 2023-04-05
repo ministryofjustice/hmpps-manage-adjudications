@@ -57,7 +57,7 @@ describe('POST /is-caution', () => {
         caution: 'no',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.start(100))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
           100,

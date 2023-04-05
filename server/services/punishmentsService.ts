@@ -36,9 +36,10 @@ export default class PunishmentsService {
       (punishment: PunishmentData) => punishment.redisId
     )
     // get the index of the redisId we want to delete
-    const indexOfPunishment = redisIdArray.indexOf(redisId) || null
+    const indexOfPunishment = redisIdArray.indexOf(redisId)
+
     // delete the correct punishment using the index
-    if (indexOfPunishment) return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment - 1, 1)
+    if (indexOfPunishment > -1) return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment, 1)
     return null
   }
 

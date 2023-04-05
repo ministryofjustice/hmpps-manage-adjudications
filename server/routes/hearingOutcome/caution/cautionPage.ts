@@ -137,7 +137,7 @@ export default class CautionPage {
         )
       }
 
-      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.awardPunishments.urls.start(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError
