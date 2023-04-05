@@ -1,11 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
+import url from 'url'
 import validateForm from './punishmentValidation'
 import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
+import PunishmentsService from '../../services/punishmentsService'
 
 type PageData = {
   error?: FormError
@@ -28,10 +30,14 @@ class PageOptions {
   }
 }
 
-export default class PunishmentsTabPage {
+export default class PunishmentPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly userService: UserService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
@@ -51,15 +57,31 @@ export default class PunishmentsTabPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
+    }
+
+    if (this.pageOptions.isEdit()) {
+      const sessionData = await this.punishmentsService.getSessionPunishment(
+        req,
+        adjudicationNumber,
+        req.params.redisId
+      )
+      return this.renderView(req, res, {
+        punishmentType: sessionData.type,
+        privilegeType: sessionData.privilegeType,
+        otherPrivilege: sessionData.otherPrivilege,
+        stoppagePercentage: sessionData.stoppagePercentage,
+      })
     }
 
     return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.body
 
     const error = validateForm({ punishmentType, privilegeType, otherPrivilege, stoppagePercentage })
@@ -67,6 +89,19 @@ export default class PunishmentsTabPage {
     if (error)
       return this.renderView(req, res, { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage })
 
-    return null
+    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req)
+    return res.redirect(
+      url.format({
+        pathname: redirectUrlPrefix,
+        query: { punishmentType, privilegeType, otherPrivilege, stoppagePercentage },
+      })
+    )
+  }
+
+  private getRedirectUrl = (adjudicationNumber: number, req: Request) => {
+    if (this.pageOptions.isEdit()) {
+      return adjudicationUrls.punishmentSchedule.urls.edit(adjudicationNumber, req.params.redisId)
+    }
+    return adjudicationUrls.punishmentSchedule.urls.start(adjudicationNumber)
   }
 }

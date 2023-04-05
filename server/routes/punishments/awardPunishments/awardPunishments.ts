@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { User } from '../../../data/hmppsAuthClient'
+import { convertPunishmentSessionToApi, PunishmentData } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
@@ -36,6 +37,7 @@ export default class AwardPunishmentsPage {
     const redirectAfterRemoveUrl = `${adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber)}?delete=`
 
     const punishments = await this.getPunishments(req, adjudicationNumber, user)
+    // console.log(punishments)
 
     // // If we are not displaying session data then fill in the session data
     if (this.pageOptions.displayAPIData()) {
@@ -45,12 +47,12 @@ export default class AwardPunishmentsPage {
 
     if (punishmentToDelete) {
       await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, adjudicationNumber)
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
     }
 
     return res.render(`pages/awardPunishments.njk`, {
       cancelHref: adjudicationUrls.homepage.root,
       redirectAfterRemoveUrl,
-      changeUrl: adjudicationUrls.punishment.urls.edit(adjudicationNumber),
       adjudicationNumber,
       punishments,
     })
@@ -63,7 +65,9 @@ export default class AwardPunishmentsPage {
 
   getPunishments = async (req: Request, adjudicationNumber: number, user: User) => {
     if (this.pageOptions.displaySessionData()) {
-      return this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+      const punishments = this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+      console.log(punishments)
+      return convertPunishmentSessionToApi(punishments)
     }
 
     return this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)

@@ -1,0 +1,122 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "Punishment schedule" %}
+{% block pageTitle %}
+    {{ title }}
+{% endblock %}
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% set suspendedUntilHtml %}
+<h2 class="govuk-heading-s">When will it be suspended until?</h2>
+{{
+            datePicker({
+            id: 'suspendedUntil',
+            label: 'Suspended until',
+            name: 'suspendedUntil',
+            date: suspendedUntil,
+            attributes: {'data-disable-future-date':'false', 'data-qa': "suspended-until-date-picker" },
+            classes: 'govuk-input--width-10'
+        })
+        }}
+{% endset -%}
+
+{% set notSuspendedHtml %}
+<h2 class="govuk-heading-s">When will this punishment start?</h2>
+
+{{
+            datePicker({
+            id: 'startDate',
+            label: 'Start date',
+            name: 'startDate',
+            date: startDate,
+            attributes: {'data-disable-future-date':'false', 'data-qa': "start-date-picker" },
+            classes: 'govuk-input--width-10'
+        })   
+        }}
+<h2 class="govuk-heading-s">What is the last day of this punishment?</h2>
+{{
+            datePicker({
+            id: 'endDate',
+            label: 'Last day',
+            name: 'endDate',
+            date: endDate,
+            attributes: {'data-disable-future-date':'false', 'data-qa': "end-date-picker" },
+            classes: 'govuk-input--width-10'
+        })
+        }}
+
+{% endset -%}
+
+{% block content %}
+    {% if errors | length %}
+        {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <div>
+        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+            {{ govukInput({
+             id: "days",
+             name: "days",
+             value: days,
+             classes: "govuk-input--width-5",
+             errorMessage: errors | findErrors(["days"]),
+             label: {
+             text: "How many days will this punishment last?"
+             }
+             }) }}
+
+            {{      govukRadios({
+             idPrefix: 'suspended',
+             id: 'suspended',
+             name: 'suspended',
+             fieldset: {
+             legend: {
+             text: "Will this punishment be suspended?",
+             isPageHeading: false 
+              }
+             },
+             attributes: { "data-qa": "suspended-radio-buttons" },
+             errorMessage: "suspended" | findError(errors),
+             items: [
+             {
+             value: "yes",
+             text: "Yes",
+             checked: suspended == 'yes',
+             conditional: { html: suspendedUntilHtml }       
+             },
+             {
+             value: "no",
+             text: "No",
+             checked: suspended == 'no',
+             conditional: { html: notSuspendedHtml }       
+             }
+             ] }) 
+             }}
+
+            <div class="govuk-button-group">
+                {{ govukButton({
+              text: 'Continue',
+              type: "submit",
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "punishment-schedule-submit" }
+              }) }}
+                <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-schedule-cancel'>Return to 'Award Punishments'</a>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

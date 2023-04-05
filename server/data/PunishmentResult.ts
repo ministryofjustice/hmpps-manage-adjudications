@@ -97,3 +97,21 @@ export function convertPunishmentType(
       return null
   }
 }
+
+export function convertPunishmentSessionToApi(punishments: PunishmentData[]): PunishmentDataWithSchedule[] {
+  return punishments.map((punishment: PunishmentData) => {
+    return {
+      redisId: punishment.redisId,
+      type: punishment.type,
+      privilegeType: punishment.privilegeType,
+      otherPrivilege: punishment.otherPrivilege,
+      stoppagePercentage: punishment.stoppagePercentage,
+      schedule: {
+        days: punishment.days,
+        startDate: punishment.startDate || null,
+        endDate: punishment.endDate || null,
+        suspendedUntil: punishment.suspendedUntil,
+      },
+    }
+  })
+}

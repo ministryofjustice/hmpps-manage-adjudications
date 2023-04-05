@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
-import PunishmentPage, { PageRequestType } from './punishmentPage'
+import PunishmentSchedulePage, { PageRequestType } from './punishmentSchedulePage'
 import UserService from '../../services/userService'
 import PunishmentsService from '../../services/punishmentsService'
 
-export default class PunishmentRoute {
-  page: PunishmentPage
+export default class PunishmentScheduleEditRoute {
+  page: PunishmentSchedulePage
 
   constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
-    this.page = new PunishmentPage(PageRequestType.CREATION, userService, punishmentsService)
+    this.page = new PunishmentSchedulePage(PageRequestType.EDIT, userService, punishmentsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
