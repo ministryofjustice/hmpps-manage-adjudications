@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { User } from '../../../data/hmppsAuthClient'
-import { convertPunishmentSessionToApi, PunishmentData } from '../../../data/PunishmentResult'
+import { convertPunishmentSessionToApi } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
@@ -66,7 +66,7 @@ export default class AwardPunishmentsPage {
   getPunishments = async (req: Request, adjudicationNumber: number, user: User) => {
     if (this.pageOptions.displaySessionData()) {
       const punishments = this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
-      console.log(punishments)
+
       return convertPunishmentSessionToApi(punishments)
     }
 

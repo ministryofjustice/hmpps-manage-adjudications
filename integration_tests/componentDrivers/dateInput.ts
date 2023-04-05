@@ -3,6 +3,7 @@ import { PageElement } from '../pages/page'
 // In order to bypass the date picker we force the input to accept text and then press escape so the date picker
 // disappears allowing us to interact with other fields.
 export const forceDateInput = (day: number, month: number, year: number, field: string): PageElement =>
+  // eslint-disable-next-line cypress/unsafe-to-chain-command
   cy
     .get(field)
     .clear({ force: true })
