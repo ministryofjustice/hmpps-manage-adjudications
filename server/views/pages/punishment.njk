@@ -19,6 +19,7 @@
   name: "otherPrivilege",
   value: otherPrivilege,
   classes: "govuk-!-width-one-third",
+  attributes: { "data-qa": "other-privilege" },
   errorMessage: errors | findErrors(["otherPrivilege"]),
   label: {
       text: "Privilege to be withdrawn"
@@ -80,6 +81,7 @@
   name: "stoppagePercentage",
   value: percentage,
   classes: "govuk-input--width-5",
+  attributes: { "data-qa": "stoppage-percentage" },
   errorMessage: errors | findErrors(["stoppagePercentage"]),
   suffix: {
     text: "%"

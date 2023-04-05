@@ -22,6 +22,14 @@ export default class PunishmentsService {
     return req.session.punishments[adjudicationNumber].push(newPunishment)
   }
 
+  updateSessionPunishment(req: Request, punishmentData: PunishmentData, adjudicationNumber: number, redisId: string) {
+    const punishment = this.getSessionPunishment(req, adjudicationNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, adjudicationNumber)
+    const updatedPunishment = { ...punishmentData, redisId, id: punishment.id }
+
+    return req.session.punishments[adjudicationNumber].push(updatedPunishment)
+  }
+
   async deleteSessionPunishments(req: Request, redisId: string, adjudicationNumber: number) {
     // get an array of the redisIds
     const redisIdArray = req.session.punishments?.[adjudicationNumber].map(
@@ -32,6 +40,12 @@ export default class PunishmentsService {
     // delete the correct punishment using the index
     if (indexOfPunishment) return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment - 1, 1)
     return null
+  }
+
+  getSessionPunishment(req: Request, adjudicationNumber: number, redisId: string) {
+    const sessionData = this.getAllSessionPunishments(req, adjudicationNumber)
+
+    return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)
   }
 
   getAllSessionPunishments(req: Request, adjudicationNumber: number) {

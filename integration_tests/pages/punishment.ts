@@ -9,6 +9,10 @@ export default class PunishmentPage extends Page {
 
   privilege = (): PageElement => cy.get('[data-qa="privilege-radio-buttons"]')
 
+  stoppagePercentage = (): PageElement => cy.get('[data-qa="stoppage-percentage"]')
+
+  otherPrivilege = (): PageElement => cy.get('[data-qa="other-privilege"]')
+
   submitButton = (): PageElement => cy.get('[data-qa="punishment-submit"]')
 
   cancelButton = (): PageElement => cy.get('[data-qa="punishment-cancel"]')

@@ -91,4 +91,60 @@ context('Add a new punishment', () => {
         })
     })
   })
+
+  describe('Submit', () => {
+    it('should submit successfully and redirect for type CONFINEMENT', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+
+    it('should submit successfully and redirect for type EARNINGS', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
+      punishmentPage.stoppagePercentage().type('10')
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+
+    it('should submit successfully and redirect for type PRIVILEGE - CANTEEN', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.privilege().find('input[value="CANTEEN"]').check()
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+
+    it('should submit successfully and redirect for type PRIVILEGE - OTHER', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.otherPrivilege().type('ninentdo switch')
+
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+      })
+    })
+  })
 })

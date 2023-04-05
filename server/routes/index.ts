@@ -58,6 +58,7 @@ import reportAQuashedGuiltyFindingRoutes from './hearingOutcome/quashedGuiltyFin
 import hearingCheckYourAnswersRoutes from './hearingOutcome/checkYourAnswers'
 import PunishmentsAndDamagesRoutes from './adjudicationForReport/punishmentsTab'
 import PunishmentRoutes from './punishment'
+import PunishmentScheduleRoutes from './punishmentSchedule'
 
 export default function routes(
   router: Router,
@@ -73,6 +74,7 @@ export default function routes(
     witnessesSessionService,
     hearingsService,
     outcomesService,
+    punishmentsService,
   }: Services
 ): Router {
   router.use(
@@ -261,7 +263,8 @@ export default function routes(
     PunishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, outcomesService })
   )
 
-  router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService }))
+  router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
+  router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
 
   return router
 }
