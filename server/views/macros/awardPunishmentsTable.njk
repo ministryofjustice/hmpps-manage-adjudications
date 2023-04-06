@@ -16,19 +16,19 @@
             classes: "columnWidth30"
           },
           {
-            text: data.schedule.startDate | formatTimestampTo('DD MMM YYYY') if data.schedule.startDate else '-',
+            text: data.startDate | formatTimestampTo('DD MMM YYYY') if data.startDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.schedule.endDate | formatTimestampTo('DD MMM YYYY') if data.schedule.endDate else '-',
+            text: data.endDate | formatTimestampTo('DD MMM YYYY') if data.endDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.schedule.days,
+            text: data.days,
             classes: "columnWidth12"
           },
           {
-            text: data.schedule.suspendedUntil | formatTimestampTo('DD MMM YYYY') if data.schedule.suspendedUntil  else '-',
+            text: data.suspendedUntil | formatTimestampTo('DD MMM YYYY') if data.suspendedUntil  else '-',
             classes: "columnWidth12"
           },
           {

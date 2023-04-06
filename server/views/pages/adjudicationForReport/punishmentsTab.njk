@@ -4,6 +4,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
+{% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 
 {% block pageTitle %}
   Punishments and Damages
@@ -16,6 +17,26 @@
 
   {% if chargeProved %}
     {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, moneyChangeLinkHref, cautionChangeLinkHref) }}
+
+    {% if punishments | length %}
+      {{ awardPunishmentsTable(punishments, null, reportNo, true) }}
+      <div>
+      {{ govukButton({
+        text: 'Change punishments',
+        element: "a",
+        href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+        classes: "govuk-button--secondary govuk-!-margin-right-3",
+        attributes: { "data-qa": "change-punishments" }
+      }) }}
+      {{ govukButton({
+        text: 'Report a quashed guilty finding',
+        element: "a",
+        href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(reportNo),
+        classes: "govuk-button--secondary govuk-!-margin-right-3",
+        attributes: { "data-qa": "report-quashed-guilty-finding" }
+      }) }}
+      </div>
+    {% endif %}
   {% endif %}
 
 {% endblock %}

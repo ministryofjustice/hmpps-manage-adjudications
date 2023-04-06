@@ -262,7 +262,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.punishmentsAndDamages.root,
-    punishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, outcomesService })
+    punishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, punishmentsService })
   )
 
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))

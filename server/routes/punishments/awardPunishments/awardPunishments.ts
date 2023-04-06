@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { User } from '../../../data/hmppsAuthClient'
-import { convertPunishmentSessionToApi } from '../../../data/PunishmentResult'
+import { flattenPunishments } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
@@ -50,7 +50,6 @@ export default class AwardPunishmentsPage {
       await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, adjudicationNumber)
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
     }
-
     return res.render(`pages/awardPunishments.njk`, {
       // TODO: Need to calculate the correct cancel href here
       cancelHref: adjudicationUrls.homepage.root,
@@ -62,9 +61,9 @@ export default class AwardPunishmentsPage {
 
   getPunishments = async (req: Request, adjudicationNumber: number, user: User) => {
     if (this.pageOptions.displaySessionData()) {
-      const punishments = this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
-      return convertPunishmentSessionToApi(punishments)
+      return this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
     }
-    return this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
+    const punishments = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
+    return flattenPunishments(punishments)
   }
 }

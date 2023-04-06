@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import { convertPunishmentSessionToApi } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
@@ -10,9 +9,7 @@ export default class CheckPunishmentsPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
-    const punishments = convertPunishmentSessionToApi(
-      await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
-    )
+    const punishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
 
     return res.render(`pages/checkPunishments.njk`, {
       adjudicationNumber,

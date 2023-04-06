@@ -67,12 +67,11 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishments: PunishmentData | PunishmentData[],
+    punishments: PunishmentData[],
     adjudicationNumber: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    const punishmentSet = !Array.isArray(punishments) ? [punishments] : punishments
-    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishmentSet)
+    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishments)
   }
 
   async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentDataWithSchedule[]> {
