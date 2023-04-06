@@ -3,13 +3,11 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import TestData from '../../testutils/testData'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/punishmentsService')
 
 const punishmentsService = new PunishmentsService() as jest.Mocked<PunishmentsService>
-const testData = new TestData()
 
 let app: Express
 
