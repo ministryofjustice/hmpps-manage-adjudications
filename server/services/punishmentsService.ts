@@ -55,7 +55,11 @@ export default class PunishmentsService {
 
   setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], adjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
-    req.session.punishments[adjudicationNumber] = punishmentData
+    // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
+    const punishments = punishmentData.map(punishment => {
+      return { ...punishment, redisId: uuidv4() }
+    })
+    req.session.punishments[adjudicationNumber] = punishments
   }
 
   deleteAllSessionPunishments(req: Request, adjudicationNumber: number) {
@@ -63,12 +67,11 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishments: PunishmentData | PunishmentData[],
+    punishments: PunishmentData[],
     adjudicationNumber: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    const punishmentSet = !Array.isArray(punishments) ? [punishments] : punishments
-    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishmentSet)
+    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishments)
   }
 
   async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentDataWithSchedule[]> {

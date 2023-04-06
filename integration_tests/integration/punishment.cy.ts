@@ -29,7 +29,7 @@ context('Add a new punishment', () => {
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
       })
     })
   })

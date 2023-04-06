@@ -105,6 +105,7 @@ export default defineConfig({
         stubAmendHearingOutcome: adjudications.stubAmendHearingOutcome,
         stubAmendOutcome: adjudications.stubAmendOutcome,
         stubDeleteReport: adjudications.stubDeleteReport,
+        stubCreatePunishments: adjudications.stubCreatePunishments,
       })
     },
 

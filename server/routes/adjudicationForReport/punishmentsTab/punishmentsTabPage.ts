@@ -2,8 +2,9 @@
 import { Request, Response } from 'express'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import OutcomesService from '../../../services/outcomesService'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import PunishmentsService from '../../../services/punishmentsService'
+import { flattenPunishments } from '../../../data/PunishmentResult'
 
 export enum PageRequestType {
   REPORTER,
@@ -39,7 +40,7 @@ export default class PunishmentsTabPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly outcomesService: OutcomesService
+    private readonly punishmentsService: PunishmentsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -66,6 +67,10 @@ export default class PunishmentsTabPage {
     const amount = finalOutcomeItem.outcome?.outcome?.amount || false
     const caution = finalOutcomeItem.outcome?.outcome?.caution || false
 
+    const punishments = flattenPunishments(
+      await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
+    )
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
@@ -77,6 +82,7 @@ export default class PunishmentsTabPage {
       caution,
       moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
       cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
+      punishments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
     })
   }

@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber) %}
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber, readOnly) %}
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
@@ -16,19 +16,19 @@
             classes: "columnWidth30"
           },
           {
-            text: data.schedule.startDate | formatTimestampTo('DD MMM YYYY') if data.schedule.startDate else '-',
+            text: data.startDate | formatTimestampTo('DD MMM YYYY') if data.startDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.schedule.endDate | formatTimestampTo('DD MMM YYYY') if data.schedule.endDate else '-',
+            text: data.endDate | formatTimestampTo('DD MMM YYYY') if data.endDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.schedule.days,
+            text: data.days,
             classes: "columnWidth12"
           },
           {
-            text: data.schedule.suspendedUntil | formatTimestampTo('DD MMM YYYY') if data.schedule.suspendedUntil  else '-',
+            text: data.suspendedUntil | formatTimestampTo('DD MMM YYYY') if data.suspendedUntil  else '-',
             classes: "columnWidth12"
           },
           {
@@ -36,11 +36,11 @@
             classes: "columnWidth20"
           },
           {
-          html: changeColumnValue,
+          html: changeColumnValue if not readOnly else '',
           classes: "changeColumn"
           },
           {
-            html: removeColumnValue,
+            html: removeColumnValue if not readOnly else '',
             classes: "removeColumn"
           }
       ]
