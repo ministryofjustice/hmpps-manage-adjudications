@@ -721,7 +721,7 @@ describe('reportedAdjudicationsService', () => {
           formattedDateTimeOfDiscovery: '11 November 2022 - 09:00',
           formattedDateTimeOfHearing: '14 November 2022 - 11:00',
           friendlyName: 'John Smith',
-          nameAndNumber: 'John Smith - G6123VU',
+          nameAndNumber: 'Smith, John - G6123VU',
           oicHearingType: OicHearingType.GOV_ADULT as string,
           prisonerNumber: 'G6123VU',
           locationId: 775,

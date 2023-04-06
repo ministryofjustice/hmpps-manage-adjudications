@@ -691,9 +691,9 @@ export default class ReportedAdjudicationsService {
   }
 
   enhanceHearing(hearing: ScheduledHearing, prisonerResult: PrisonerSimpleResult) {
-    const friendlyName =
-      (prisonerResult && convertToTitleCase(`${prisonerResult.firstName} ${prisonerResult.lastName}`)) || 'Unknown'
-    const nameAndNumber = `${friendlyName} - ${hearing.prisonerNumber}`
+    const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
+    const { displayName, friendlyName } = prisonerNames
+    const nameAndNumber = `${displayName} - ${hearing.prisonerNumber}`
     const formattedDateTimeOfHearing = formatTimestampToDate(hearing.dateTimeOfHearing, 'D MMMM YYYY - HH:mm')
     const formattedDateTimeOfDiscovery = formatTimestampToDate(hearing.dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm')
     return {
