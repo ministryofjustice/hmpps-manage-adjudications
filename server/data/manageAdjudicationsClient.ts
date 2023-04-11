@@ -537,4 +537,14 @@ export default class ManageAdjudicationsClient {
       data: { punishments: [...punishments] },
     })
   }
+
+  async amendPunishments(
+    adjudicationNumber: number,
+    punishments: PunishmentData[]
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments`,
+      data: { punishments: [...punishments] },
+    })
+  }
 }

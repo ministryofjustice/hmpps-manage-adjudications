@@ -1,6 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, attributes = {}, moneyChangeLinkHref = null, cautionChangeLinkHref = null) %}
+{% macro hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, attributes = {}, readOnly = true, moneyChangeLinkHref = null, cautionChangeLinkHref = null) %}
+  {% if not readOnly %}
   {% set moneyChangeLink = {
             items: [
           {
@@ -21,6 +22,7 @@
           }
         ]
   } %}
+  {% endif %}
 
   {% if moneyRecoveredBoolean %}
     {% set moneyHtml = {
@@ -43,12 +45,12 @@
         {
           key: { text: 'Is any money being recovered for damages?' },
           value: moneyHtml,
-          actions: moneyChangeLink
+          actions: moneyChangeLink or null
         },
         {
           key: { text: 'Is the punishment a caution?' },
           value: { text: 'Yes' if cautionAnswer == true else 'No'},
-          actions: cautionChangeLink
+          actions: cautionChangeLink or null
         }],
         attributes: attributes
       }) }}

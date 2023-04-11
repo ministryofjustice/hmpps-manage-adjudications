@@ -1,19 +1,30 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 import PunishmentsService from '../../../services/punishmentsService'
+import UserService from '../../../services/userService'
 
 import adjudicationUrls from '../../../utils/urlGenerator'
 import AwardPunishmentsPage, { PageRequestType } from './awardPunishments'
 
 export default function awardPunishmentsRoutes({
   punishmentsService,
+  userService,
 }: {
   punishmentsService: PunishmentsService
+  userService: UserService
 }): Router {
   const router = express.Router()
-  const punishmentsUsingApi = new AwardPunishmentsPage(PageRequestType.PUNISHMENTS_FROM_API, punishmentsService)
+  const punishmentsUsingApi = new AwardPunishmentsPage(
+    PageRequestType.PUNISHMENTS_FROM_API,
+    punishmentsService,
+    userService
+  )
 
-  const punishmentsUsingSession = new AwardPunishmentsPage(PageRequestType.PUNISHMENTS_FROM_SESSION, punishmentsService)
+  const punishmentsUsingSession = new AwardPunishmentsPage(
+    PageRequestType.PUNISHMENTS_FROM_SESSION,
+    punishmentsService,
+    userService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 

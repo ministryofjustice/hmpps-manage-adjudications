@@ -4,6 +4,8 @@ import { User } from '../../../data/hmppsAuthClient'
 import { flattenPunishments } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import { hasAnyRole } from '../../../utils/utils'
+import UserService from '../../../services/userService'
 
 export enum PageRequestType {
   PUNISHMENTS_FROM_API,
@@ -25,12 +27,21 @@ class PageOptions {
 export default class AwardPunishmentsPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
+    const userRoles = await this.userService.getUserRoles(user.token)
+    if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
+      return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
+    }
+
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const punishmentToDelete = req.query.delete || null
 
@@ -50,12 +61,14 @@ export default class AwardPunishmentsPage {
       await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, adjudicationNumber)
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
     }
+    const continueHref = await this.getContinueHref(adjudicationNumber, user)
+
     return res.render(`pages/awardPunishments.njk`, {
-      // TODO: Need to calculate the correct cancel href here
-      cancelHref: adjudicationUrls.homepage.root,
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       redirectAfterRemoveUrl,
       adjudicationNumber,
       punishments,
+      continueHref,
     })
   }
 
@@ -65,5 +78,12 @@ export default class AwardPunishmentsPage {
     }
     const punishments = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     return flattenPunishments(punishments)
+  }
+
+  getContinueHref = async (adjudicationNumber: number, user: User) => {
+    const punishments = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
+    if (punishments && punishments.length)
+      return adjudicationUrls.checkPunishments.urls.submittedEdit(adjudicationNumber)
+    return adjudicationUrls.checkPunishments.urls.start(adjudicationNumber)
   }
 }

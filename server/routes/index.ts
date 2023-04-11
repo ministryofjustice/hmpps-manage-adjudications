@@ -268,8 +268,8 @@ export default function routes(
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
 
-  router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService }))
-  router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService }))
+  router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
+  router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
 
   return router
 }

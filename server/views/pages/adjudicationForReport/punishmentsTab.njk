@@ -16,10 +16,11 @@
   {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref) }}
 
   {% if chargeProved %}
-    {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, moneyChangeLinkHref, cautionChangeLinkHref) }}
+    {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, readOnly, moneyChangeLinkHref, cautionChangeLinkHref) }}
 
     {% if punishments | length %}
       {{ awardPunishmentsTable(punishments, null, reportNo, true) }}
+      {% if not readOnly %}
       <div>
       {{ govukButton({
         text: 'Change punishments',
@@ -36,6 +37,7 @@
         attributes: { "data-qa": "report-quashed-guilty-finding" }
       }) }}
       </div>
+      {% endif %}
     {% endif %}
   {% endif %}
 
