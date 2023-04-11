@@ -36,9 +36,10 @@ export default class PunishmentsService {
       (punishment: PunishmentData) => punishment.redisId
     )
     // get the index of the redisId we want to delete
-    const indexOfPunishment = redisIdArray.indexOf(redisId) || null
+    const indexOfPunishment = redisIdArray.indexOf(redisId)
+
     // delete the correct punishment using the index
-    if (indexOfPunishment) return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment - 1, 1)
+    if (indexOfPunishment > -1) return req.session.punishments?.[adjudicationNumber]?.splice(indexOfPunishment, 1)
     return null
   }
 
@@ -54,7 +55,11 @@ export default class PunishmentsService {
 
   setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], adjudicationNumber: number) {
     this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
-    req.session.punishments[adjudicationNumber] = punishmentData
+    // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
+    const punishments = punishmentData.map(punishment => {
+      return { ...punishment, redisId: uuidv4() }
+    })
+    req.session.punishments[adjudicationNumber] = punishments
   }
 
   deleteAllSessionPunishments(req: Request, adjudicationNumber: number) {
@@ -62,12 +67,11 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishments: PunishmentData | PunishmentData[],
+    punishments: PunishmentData[],
     adjudicationNumber: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    const punishmentSet = !Array.isArray(punishments) ? [punishments] : punishments
-    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishmentSet)
+    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishments)
   }
 
   async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentDataWithSchedule[]> {

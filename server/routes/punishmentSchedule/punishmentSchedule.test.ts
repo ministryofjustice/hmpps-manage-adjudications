@@ -64,7 +64,7 @@ describe('POST /punishment-schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -73,8 +73,8 @@ describe('POST /punishment-schedule', () => {
             privilegeType: PrivilegeType.OTHER,
             otherPrivilege: 'nintendo switch',
             days: 10,
-            startDate: '3/4/2023',
-            endDate: '13/4/2023',
+            startDate: '2023-04-03',
+            endDate: '2023-04-13',
             stoppagePercentage: null,
             suspendedUntil: null,
           },

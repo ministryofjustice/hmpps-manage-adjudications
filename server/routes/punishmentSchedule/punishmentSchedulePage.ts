@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import validateForm from './punishmentScheduleValidation'
 import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
-import { hasAnyRole } from '../../utils/utils'
+import { datePickerToApi, hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PunishmentsService from '../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
@@ -46,7 +46,7 @@ export default class PunishmentSchedulePage {
     const { error, days, suspended, suspendedUntil, startDate, endDate } = pageData
 
     return res.render(`pages/punishmentSchedule.njk`, {
-      cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       errors: error ? [error] : [],
       days,
       suspended,
@@ -89,7 +89,6 @@ export default class PunishmentSchedulePage {
     const error = validateForm({ days, suspended, suspendedUntil, startDate, endDate })
 
     if (error) return this.renderView(req, res, { error, days, suspended, suspendedUntil, startDate, endDate })
-
     try {
       const punishmentData = {
         type: PunishmentType[punishmentType as string],
@@ -97,9 +96,9 @@ export default class PunishmentSchedulePage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days,
-        suspendedUntil: suspendedUntil || null,
-        startDate: startDate || null,
-        endDate: endDate || null,
+        suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
+        startDate: startDate ? datePickerToApi(startDate) : null,
+        endDate: endDate ? datePickerToApi(endDate) : null,
       }
 
       if (this.pageOptions.isEdit()) {
@@ -117,6 +116,6 @@ export default class PunishmentSchedulePage {
       throw postError
     }
 
-    return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber))
+    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
   }
 }

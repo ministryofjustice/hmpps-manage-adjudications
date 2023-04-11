@@ -1,0 +1,49 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+
+{% set title = "Check your answers before submitting" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      <div class="punishmentsTitleRow">
+        <h2 class="govuk-heading-m">Punishments</h2>
+        <p class="govuk-body">
+          <a class="govuk-link" href="{{ changePunishmentLink }}">Change punishments</a>
+        </p>
+      </div>
+
+      {% if punishments | length %}
+        {{ awardPunishmentsTable(punishments, null, adjudicationNumber, true) }}
+      {% else %}
+        <p class="govuk-body">No punishments have been awarded for this adjudication.</p>
+      {% endif %}
+
+      <div class="flex-container flex-center">
+        {% if punishments | length %}
+          {{ govukButton({
+        text: 'Confirm and submit',
+        type: 'submit',
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "punishments-confirm" }
+      }) }}
+        {% endif %}
+        <p class="govuk-body govuk-!-margin-top-1">
+          <a href="{{ cancelHref }}" class="govuk-link" data-qa="cancel">Cancel and return to hearings</a>
+        </p>
+      </div>
+    </form>
+  </div>
+{% endblock %}

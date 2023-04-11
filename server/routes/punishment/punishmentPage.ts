@@ -46,7 +46,7 @@ export default class PunishmentPage {
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = pageData
 
     return res.render(`pages/punishment.njk`, {
-      cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       errors: error ? [error] : [],
       punishmentType,
       privilegeType,

@@ -1,0 +1,83 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber, readOnly) %}
+  {% set rows = [] %}
+  {% for data in dataArray %}
+    {% set redisId = data.redisId %}
+
+    {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-'+redisId+'" class="govuk-link">Remove</a></p>' %}
+    {% set changeUrl = adjudicationUrls.punishment.urls.edit(adjudicationNumber, redisId) %}
+    {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-'+redisId+'" class="govuk-link">Change</a></p>' %}
+
+    {% set rows = (rows.push(
+      [
+          {
+            text: data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege),
+            classes: "columnWidth30"
+          },
+          {
+            text: data.startDate | formatTimestampTo('DD MMM YYYY') if data.startDate else '-',
+            classes: "columnWidth15"
+          },
+          {
+            text: data.endDate | formatTimestampTo('DD MMM YYYY') if data.endDate else '-',
+            classes: "columnWidth15"
+          },
+          {
+            text: data.days,
+            classes: "columnWidth12"
+          },
+          {
+            text: data.suspendedUntil | formatTimestampTo('DD MMM YYYY') if data.suspendedUntil  else '-',
+            classes: "columnWidth12"
+          },
+          {
+            text: '-',
+            classes: "columnWidth20"
+          },
+          {
+          html: changeColumnValue if not readOnly else '',
+          classes: "changeColumn"
+          },
+          {
+            html: removeColumnValue if not readOnly else '',
+            classes: "removeColumn"
+          }
+      ]
+    ), rows) %}
+  {% endfor %}
+
+      {% if rows.length %}
+      {{ govukTable({
+        head: [
+          {
+            text: "Type"
+          },
+          {
+            text: "Start date"
+          },
+          {
+            text: "Last day"
+          },
+          {
+            text: "Number of days"
+          },
+          {
+            text: "Suspended until"
+          },
+          {
+            text: "Activated from report"
+          },
+          {
+            text: null
+          },
+          {
+            text: null
+          }
+        ],
+        rows: rows,
+        attributes: {"data-qa": "punishments-table"}
+      }) }}
+    {% endif %}
+
+{% endmacro %}

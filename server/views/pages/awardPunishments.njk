@@ -1,0 +1,62 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+
+{% set title = "Award punishments" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {% if punishments | length %}
+        {{ awardPunishmentsTable(punishments, redirectAfterRemoveUrl, adjudicationNumber, false) }}
+      {% else %}
+        <p class="govuk-body">No punishments have been awarded for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments below</p>
+      {% endif %}
+
+      <div>
+        {{ govukButton({
+        text: 'Add a new punishment',
+        element: "a",
+        href: adjudicationUrls.punishment.urls.start(adjudicationNumber),
+        classes: "govuk-button--secondary govuk-!-margin-bottom-3",
+        attributes: { "data-qa": "add-new-punishment-button" }
+      }) }}
+      </div>
+      <div>
+        {{ govukButton({
+        text: 'Activate an existing suspended punishment',
+        element: "a",
+        href: "",
+        classes: "govuk-button--secondary govuk-!-margin-bottom-5",
+        attributes: { "data-qa": "activate-suspended-punishment-button" }
+      }) }}
+      </div>
+
+      <div class="flex-container flex-center">
+        {% if punishments | length %}
+          {{ govukButton({
+        text: 'Finish adding and continue',
+        element: "a",
+        href: adjudicationUrls.checkPunishments.urls.start(adjudicationNumber),
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "punishments-continue" }
+      }) }}
+        {% endif %}
+        <p class="govuk-body govuk-!-margin-top-1">
+          <a href="{{ cancelHref }}" class="govuk-link" data-qa="cancel">Cancel</a>
+        </p>
+      </div>
+    </form>
+  </div>
+{% endblock %}

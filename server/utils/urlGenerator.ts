@@ -604,6 +604,27 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
+  awardPunishments: {
+    root: '/award-punishments',
+    matchers: {
+      start: '/:adjudicationNumber',
+      modified: '/:adjudicationNumber/modified',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}`,
+      modified: (adjudicationNumber: number) =>
+        `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}/modified`,
+    },
+  },
+  checkPunishments: {
+    root: '/check-punishments',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

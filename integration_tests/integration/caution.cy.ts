@@ -79,7 +79,7 @@ context('Is this punishment a caution?', () => {
       cautionPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(100))
       })
     })
   })

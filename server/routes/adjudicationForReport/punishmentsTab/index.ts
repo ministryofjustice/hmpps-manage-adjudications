@@ -7,25 +7,25 @@ import PunishmentsTabReporterRoute from './punishmentsTabReporter'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
-import OutcomesService from '../../../services/outcomesService'
+import PunishmentsService from '../../../services/punishmentsService'
 
 export default function PunishmentsAndDamagesRoutes({
   reportedAdjudicationsService,
   userService,
-  outcomesService,
+  punishmentsService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
   userService: UserService
-  outcomesService: OutcomesService
+  punishmentsService: PunishmentsService
 }): Router {
   const router = express.Router()
 
   const hearingTabReviewerRoute = new PunishmentsTabReviewerRoute(
     reportedAdjudicationsService,
     userService,
-    outcomesService
+    punishmentsService
   )
-  const hearingTabReporterRoute = new PunishmentsTabReporterRoute(reportedAdjudicationsService, outcomesService)
+  const hearingTabReporterRoute = new PunishmentsTabReporterRoute(reportedAdjudicationsService, punishmentsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
