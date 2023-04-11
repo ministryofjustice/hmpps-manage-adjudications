@@ -74,6 +74,14 @@ export default class PunishmentsService {
     return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishments)
   }
 
+  async editPunishmentSet(
+    punishments: PunishmentData[],
+    adjudicationNumber: number,
+    user: User // : Promise<ReportedAdjudicationResult>
+  ) {
+    return new ManageAdjudicationsClient(user.token).amendPunishments(adjudicationNumber, punishments)
+  }
+
   async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentDataWithSchedule[]> {
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(
       adjudicationNumber
