@@ -947,6 +947,21 @@ const stubCreatePunishments = ({ adjudicationNumber, response }): SuperAgentRequ
     },
   })
 
+const stubAmendPunishments = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications//reported-adjudications/${adjudicationNumber}/punishments`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -997,4 +1012,5 @@ export default {
   stubAmendOutcome,
   stubDeleteReport,
   stubCreatePunishments,
+  stubAmendPunishments,
 }

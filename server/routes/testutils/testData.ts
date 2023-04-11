@@ -30,6 +30,7 @@ import {
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
+import { PunishmentDataWithSchedule } from '../../data/PunishmentResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -50,6 +51,7 @@ export default class TestData {
     witnesses = [],
     hearings = null,
     outcomes = null,
+    punishments = null,
     dateTimeOfFirstHearing = null,
     issuingOfficer = null,
     dateTimeOfIssue = null,
@@ -73,6 +75,7 @@ export default class TestData {
     witnesses?: WitnessDetails[]
     hearings?: HearingDetails[]
     outcomes?: OutcomeHistory
+    punishments?: PunishmentDataWithSchedule[]
     dateTimeOfFirstHearing?: string
     issuingOfficer?: string
     dateTimeOfIssue?: string
@@ -105,6 +108,7 @@ export default class TestData {
       witnesses,
       hearings,
       outcomes,
+      punishments,
       dateTimeOfFirstHearing,
       issuingOfficer,
       dateTimeOfIssue,
