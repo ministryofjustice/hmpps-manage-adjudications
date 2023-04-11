@@ -620,9 +620,12 @@ const adjudicationUrls = {
     root: '/check-punishments',
     matchers: {
       start: '/:adjudicationNumber',
+      submittedEdit: '/:adjudicationNumber/edit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}`,
+      submittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}/edit`,
     },
   },
   homepage: {

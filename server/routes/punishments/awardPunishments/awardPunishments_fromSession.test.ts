@@ -2,12 +2,15 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import PunishmentsService from '../../../services/punishmentsService'
+import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/punishmentsService')
+jest.mock('../../../services/userService')
 
 const punishmentsService = new PunishmentsService() as jest.Mocked<PunishmentsService>
+const userService = new UserService(null) as jest.Mocked<UserService>
 
 let app: Express
 
@@ -45,11 +48,13 @@ const punishmentsOnSession = [
 ]
 
 beforeEach(() => {
+  userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+
   punishmentsService.getPunishmentsFromServer.mockResolvedValue([])
 
   punishmentsService.getAllSessionPunishments.mockReturnValueOnce(punishmentsOnSession)
 
-  app = appWithAllRoutes({ production: false }, { punishmentsService })
+  app = appWithAllRoutes({ production: false }, { punishmentsService, userService })
 })
 
 afterEach(() => {
@@ -72,6 +77,7 @@ describe('GET', () => {
       .get(adjudicationUrls.awardPunishments.urls.modified(100))
       .expect(200)
       .then(() => expect(punishmentsService.setAllSessionPunishments).not.toHaveBeenCalled())
+      .then(() => expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(1))
       .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), 100))
   })
 })
