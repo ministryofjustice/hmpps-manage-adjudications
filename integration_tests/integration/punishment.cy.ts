@@ -65,6 +65,7 @@ context('Add a new punishment', () => {
       cy.visit(adjudicationUrls.punishment.urls.start(100))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.privilege().find('input[value="OTHER"]').check()
 
       punishmentPage.submitButton().click()
 
