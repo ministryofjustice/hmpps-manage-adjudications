@@ -22,8 +22,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       id: 100,
       response: {
         reportedAdjudication: {
-          punishments: [],
           ...testData.reportedAdjudication({
+            punishments: [],
             adjudicationNumber: 3,
             prisonerNumber: 'G6415GD',
             locationId: 25538,
@@ -165,7 +165,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit punishments - PROSPECTIVE DAYS', () => {
+    it.only('create and edit punishments - PROSPECTIVE DAYS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -177,8 +177,9 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.submitButton().click()
 
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
-      punishmentSchedulePage.suspended().should('not.exist')
+      punishmentSchedulePage.suspended().should('exist')
       punishmentSchedulePage.days().type('10')
+      punishmentSchedulePage.suspended().find('input[value="no"]').click()
 
       punishmentSchedulePage.submitButton().click()
 

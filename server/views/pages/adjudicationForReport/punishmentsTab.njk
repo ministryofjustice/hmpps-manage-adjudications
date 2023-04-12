@@ -38,7 +38,20 @@
       }) }}
       </div>
       {% endif %}
+      {% else %}
+      <div>
+        {{ govukButton({
+        text: 'Award punishments',
+        element: "a",
+        href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "award-punishments" }
+      }) }}
+      </div>
     {% endif %}
+    {% else %}
+    <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
+    <p class="govuk-body govuk-!-margin-top-3">You can only add punishments if the charge is proved.</p>
   {% endif %}
 
 {% endblock %}
