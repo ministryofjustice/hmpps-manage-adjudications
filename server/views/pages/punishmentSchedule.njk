@@ -79,7 +79,9 @@
              }
              }) }}
 
-            {{      govukRadios({
+            {% if displaySuspended %}
+
+                {{      govukRadios({
              idPrefix: 'suspended',
              id: 'suspended',
              name: 'suspended',
@@ -107,6 +109,7 @@
              ] }) 
              }}
 
+            {% endif %}
             <div class="govuk-button-group">
                 {{ govukButton({
               text: 'Continue',

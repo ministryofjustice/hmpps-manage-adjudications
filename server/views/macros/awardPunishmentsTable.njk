@@ -5,9 +5,12 @@
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
 
-    {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-'+redisId+'" class="govuk-link">Remove</a></p>' %}
-    {% set changeUrl = adjudicationUrls.punishment.urls.edit(adjudicationNumber, redisId) %}
-    {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-'+redisId+'" class="govuk-link">Change</a></p>' %}
+    {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove</a></p>' %}
+    {% set changeUrl = adjudicationUrls
+      .punishment
+      .urls
+      .edit(adjudicationNumber, redisId) %}
+    {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change</a></p>' %}
 
     {% set rows = (rows.push(
       [
@@ -47,8 +50,8 @@
     ), rows) %}
   {% endfor %}
 
-      {% if rows.length %}
-      {{ govukTable({
+  {% if rows.length %}
+    {{ govukTable({
         head: [
           {
             text: "Type"
@@ -78,6 +81,6 @@
         rows: rows,
         attributes: {"data-qa": "punishments-table"}
       }) }}
-    {% endif %}
+  {% endif %}
 
 {% endmacro %}

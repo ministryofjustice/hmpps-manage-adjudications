@@ -1,9 +1,11 @@
+import { PunishmentType } from '../../data/PunishmentResult'
 import validateForm from './punishmentScheduleValidation'
 
 describe('validateForm', () => {
   it('Valid submit has no errors when suspended', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'yes',
         suspendedUntil: '3/4/2023',
@@ -13,6 +15,7 @@ describe('validateForm', () => {
   it('Valid submit when not suspended', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'no',
         startDate: '3/4/2023',
@@ -21,9 +24,28 @@ describe('validateForm', () => {
     ).toBeNull()
   })
 
+  it('Valid submit when prospective days', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.PROSPECTIVE_DAYS,
+        days: 10,
+      })
+    ).toBeNull()
+  })
+
+  it('Valid submit when additional days', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.ADDITIONAL_DAYS,
+        days: 10,
+      })
+    ).toBeNull()
+  })
+
   it('shows error when no  days select', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: null,
         suspended: null,
       })
@@ -35,6 +57,7 @@ describe('validateForm', () => {
   it('shows error when suspended decision not select', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: null,
       })
@@ -46,6 +69,7 @@ describe('validateForm', () => {
   it('shows error when suspended date not set', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'yes',
       })
@@ -57,6 +81,7 @@ describe('validateForm', () => {
   it('shows error when start date not set', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'no',
       })
@@ -68,6 +93,7 @@ describe('validateForm', () => {
   it('shows error when end date not set', () => {
     expect(
       validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'no',
         startDate: '3/4/2023',

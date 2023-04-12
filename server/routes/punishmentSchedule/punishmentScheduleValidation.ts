@@ -1,8 +1,10 @@
 import { FormError } from '../../@types/template'
+import { PunishmentType } from '../../data/PunishmentResult'
 
 type PunishmentScheduleForm = {
+  punishmentType: PunishmentType
   days: number
-  suspended: string
+  suspended?: string
   suspendedUntil?: string
   startDate?: string
   endDate?: string
@@ -32,6 +34,7 @@ const errors: { [key: string]: FormError } = {
 }
 
 export default function validateForm({
+  punishmentType,
   days,
   suspended,
   suspendedUntil,
@@ -39,6 +42,7 @@ export default function validateForm({
   endDate,
 }: PunishmentScheduleForm): FormError | null {
   if (!days) return errors.MISSING_DAYS
+  if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) return null
   if (!suspended) return errors.MISSING_SUSPENDED_DECISION
   if (suspended === 'yes' && !suspendedUntil) return errors.MISSING_SUSPENDED_UNTIL
   if (suspended === 'no' && !startDate) return errors.MISSING_START_DATE

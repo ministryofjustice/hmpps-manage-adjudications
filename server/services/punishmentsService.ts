@@ -46,7 +46,7 @@ export default class PunishmentsService {
   getSessionPunishment(req: Request, adjudicationNumber: number, redisId: string) {
     const sessionData = this.getAllSessionPunishments(req, adjudicationNumber)
 
-    return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)
+    return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)[0]
   }
 
   getAllSessionPunishments(req: Request, adjudicationNumber: number) {
