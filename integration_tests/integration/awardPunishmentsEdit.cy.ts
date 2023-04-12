@@ -165,7 +165,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit punishments - PROSPECTIVE DAYS - force update to file', () => {
+    it('create and edit punishments - PROSPECTIVE DAYS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
