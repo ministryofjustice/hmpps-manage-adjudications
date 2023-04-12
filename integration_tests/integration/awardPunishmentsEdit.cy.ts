@@ -22,7 +22,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       id: 100,
       response: {
         reportedAdjudication: {
-          punishments: [],
           ...testData.reportedAdjudication({
             adjudicationNumber: 3,
             prisonerNumber: 'G6415GD',
@@ -30,6 +29,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
             offenceDetails: { offenceCode: 1001 },
           }),
           bookingId: 123,
+          punishments: [],
         },
       },
     })
