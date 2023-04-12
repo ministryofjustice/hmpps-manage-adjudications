@@ -177,6 +177,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.submitButton().click()
 
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
+      punishmentSchedulePage.suspended().should('not.exist')
       punishmentSchedulePage.days().type('10')
 
       punishmentSchedulePage.submitButton().click()
