@@ -78,6 +78,8 @@ export const momentDateToDatePicker = (mom: moment.Moment): string => mom.format
 
 export const datePickerDateToMoment = (dataPicker: string): moment.Moment => moment(dataPicker, 'DD/MM/YYYY')
 
+export const apiDateToDatePicker = (apiDate: string): string => momentDateToDatePicker(moment(apiDate, 'YYYY-MM-DD'))
+
 export const momentDateToApi = (mom: moment.Moment): string => mom.format('YYYY-MM-DD')
 
 export const datePickerToApi = (dataPicker: string): string => momentDateToApi(datePickerDateToMoment(dataPicker))

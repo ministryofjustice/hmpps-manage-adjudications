@@ -69,6 +69,7 @@ export default class PunishmentPage {
         adjudicationNumber,
         req.params.redisId
       )
+
       return this.renderView(req, res, {
         punishmentType: sessionData.type,
         privilegeType: sessionData.privilegeType,
