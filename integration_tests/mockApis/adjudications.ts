@@ -936,7 +936,7 @@ const stubCreatePunishments = ({ adjudicationNumber, response }): SuperAgentRequ
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications//reported-adjudications/${adjudicationNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments`,
     },
     response: {
       status: 200,
@@ -951,7 +951,7 @@ const stubAmendPunishments = ({ adjudicationNumber, response }): SuperAgentReque
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications//reported-adjudications/${adjudicationNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments`,
     },
     response: {
       status: 200,
