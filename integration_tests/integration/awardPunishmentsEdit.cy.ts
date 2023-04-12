@@ -36,7 +36,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
   })
 
   describe('e2e', () => {
-    it('create and edit a punishments - CONFINEMENT', () => {
+    it('create and edit punishments - CONFINEMENT', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -65,7 +65,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit a punishments - EARNINGS', () => {
+    it('create and edit punishments - EARNINGS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -98,7 +98,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit a punishments - PRIVILEGE - CANTEEN', () => {
+    it('create and edit punishments - PRIVILEGE - CANTEEN', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -130,7 +130,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit a punishments - PRIVILEGE - OTHER', () => {
+    it('create and edit punishments - PRIVILEGE - OTHER', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -165,7 +165,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit a punishments - PROSPECTIVE DAYS', () => {
+    it('create and edit punishments - PROSPECTIVE DAYS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
