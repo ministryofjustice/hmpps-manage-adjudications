@@ -77,6 +77,7 @@ export default class PunishmentsTabPage {
       reviewStatus: reportedAdjudication.status,
       readOnly,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
+      quashed: reportedAdjudication.status === ReportedAdjudicationStatus.QUASHED,
       moneyRecoveredBoolean: !!amount,
       moneyRecoveredAmount: amount && amount.toFixed(2),
       caution,
