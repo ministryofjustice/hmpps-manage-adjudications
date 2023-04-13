@@ -62,6 +62,17 @@ const createTasks = (): TaskType[] => {
           }),
           id: 'review-reports',
         },
+      ],
+      roles: ['ADJUDICATIONS_REVIEWER'],
+      enabled: true,
+    },
+    {
+      id: 'view-scheduled-hearings',
+      heading: 'View all hearings',
+      href: adjudicationUrls.viewScheduledHearings.root,
+      roles: ['ADJUDICATIONS_REVIEWER'],
+      enabled: true,
+      links: [
         {
           text: 'Schedule hearings',
           href: adjudicationUrls.allCompletedReports.urls.filter({
@@ -72,12 +83,10 @@ const createTasks = (): TaskType[] => {
           id: 'schedule-hearings',
         },
       ],
-      roles: ['ADJUDICATIONS_REVIEWER'],
-      enabled: true,
     },
     {
-      id: 'view-scheduled-hearings',
-      heading: 'View scheduled hearings',
+      id: 'enter-outcomes',
+      heading: 'Enter outcomes',
       href: adjudicationUrls.viewScheduledHearings.root,
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,

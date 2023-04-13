@@ -29,6 +29,7 @@ context('Home page', () => {
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
+    homepage.enterOutcomesCard().should('not.exist')
   })
 
   it('should see all the tiles with the reviewer role', () => {
@@ -41,6 +42,7 @@ context('Home page', () => {
     homepage.viewYourCompletedReportsLink().should('exist')
     homepage.viewAllReportsCard().should('exist')
     homepage.viewScheduledHearingsCard().should('exist')
+    homepage.enterOutcomesCard().should('exist')
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
