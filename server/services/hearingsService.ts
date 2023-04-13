@@ -24,7 +24,7 @@ export default class HearingsService {
       code: hearingOutcome,
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user.token).createReferral(adjudicationNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsClient(user).createReferral(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async createAdjourn(
@@ -43,11 +43,11 @@ export default class HearingsService {
       reason: adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user.token).createAdjourn(adjudicationNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsClient(user).createAdjourn(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async getHearingOutcome(adjudicationNumber: number, user: User) {
-    const adjudication = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(adjudicationNumber)
+    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
     return latestHearing?.hearing.outcome || null
@@ -66,10 +66,7 @@ export default class HearingsService {
       details,
     }
 
-    return new ManageAdjudicationsClient(user.token).createDismissedHearingOutcome(
-      adjudicationNumber,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user).createDismissedHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async createChargedProvedHearingOutcome(
@@ -87,7 +84,7 @@ export default class HearingsService {
       amount: !amount ? null : Number(amount),
     }
 
-    return new ManageAdjudicationsClient(user.token).createChargeProvedHearingOutcome(
+    return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcome(
       adjudicationNumber,
       hearingOutcomeDetails
     )
@@ -108,10 +105,7 @@ export default class HearingsService {
       details,
     }
 
-    return new ManageAdjudicationsClient(user.token).createNotProceedHearingOutcome(
-      adjudicationNumber,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user).createNotProceedHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
   }
 
   async editAdjournHearingOutcome(
@@ -128,7 +122,7 @@ export default class HearingsService {
       adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+    return new ManageAdjudicationsClient(user).amendHearingOutcome(
       adjudicationNumber,
       ReportedAdjudicationStatus.ADJOURNED,
       data
@@ -150,7 +144,7 @@ export default class HearingsService {
       hearingOutcome === HearingOutcomeCode.REFER_INAD
         ? ReportedAdjudicationStatus.REFER_INAD
         : ReportedAdjudicationStatus.REFER_POLICE
-    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(adjudicationNumber, status, data)
+    return new ManageAdjudicationsClient(user).amendHearingOutcome(adjudicationNumber, status, data)
   }
 
   async editChargeProvedOutcome(
@@ -169,7 +163,7 @@ export default class HearingsService {
       amount,
       damagesOwed,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+    return new ManageAdjudicationsClient(user).amendHearingOutcome(
       adjudicationNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
       data
@@ -188,7 +182,7 @@ export default class HearingsService {
       plea,
       details,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+    return new ManageAdjudicationsClient(user).amendHearingOutcome(
       adjudicationNumber,
       ReportedAdjudicationStatus.DISMISSED,
       data
@@ -209,7 +203,7 @@ export default class HearingsService {
       details,
       notProceedReason: reason,
     }
-    return new ManageAdjudicationsClient(user.token).amendHearingOutcome(
+    return new ManageAdjudicationsClient(user).amendHearingOutcome(
       adjudicationNumber,
       ReportedAdjudicationStatus.NOT_PROCEED,
       data

@@ -41,6 +41,7 @@ import {
   QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
 import { PunishmentData } from './PunishmentResult'
+import { User } from './hmppsAuthClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -99,8 +100,13 @@ export type AmendedOutcomeData = {
 export default class ManageAdjudicationsClient {
   restClient: RestClient
 
-  constructor(token: string) {
-    this.restClient = new RestClient('Manage Adjudications API', config.apis.adjudications, token)
+  constructor(user: User) {
+    this.restClient = new RestClient(
+      'Manage Adjudications API',
+      config.apis.adjudications,
+      user.token,
+      user.activeCaseLoadId
+    )
   }
 
   async startNewDraftAdjudication(incidentDetails: IncidentDetailsEnhanced): Promise<DraftAdjudicationResult> {

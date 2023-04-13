@@ -7,7 +7,7 @@ export default class OutcomesService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
   async createProsecution(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).createProsecution(adjudicationNumber)
+    return new ManageAdjudicationsClient(user).createProsecution(adjudicationNumber)
   }
 
   async createNotProceed(
@@ -21,19 +21,19 @@ export default class OutcomesService {
       reason,
       details,
     }
-    return new ManageAdjudicationsClient(user.token).createNotProceed(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user).createNotProceed(adjudicationNumber, outcomeDetails)
   }
 
   async removeReferral(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).removeReferral(adjudicationNumber)
+    return new ManageAdjudicationsClient(user).removeReferral(adjudicationNumber)
   }
 
   async removeNotProceedOrQuashed(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).removeNotProceedOrQuashed(adjudicationNumber)
+    return new ManageAdjudicationsClient(user).removeNotProceedOrQuashed(adjudicationNumber)
   }
 
   async removeAdjournOutcome(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).removeAdjourn(adjudicationNumber)
+    return new ManageAdjudicationsClient(user).removeAdjourn(adjudicationNumber)
   }
 
   async createPoliceReferral(
@@ -45,7 +45,7 @@ export default class OutcomesService {
       code: OutcomeCode.REFER_POLICE,
       details,
     }
-    return new ManageAdjudicationsClient(user.token).createPoliceReferral(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user).createPoliceReferral(adjudicationNumber, outcomeDetails)
   }
 
   async editPoliceReferralOutcome(
@@ -56,7 +56,7 @@ export default class OutcomesService {
     const data = {
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user.token).amendOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).amendOutcome(adjudicationNumber, data)
   }
 
   async quashAGuiltyFinding(
@@ -69,7 +69,7 @@ export default class OutcomesService {
       details: quashDetails,
       reason: quashReason,
     }
-    return new ManageAdjudicationsClient(user.token).quashOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).quashOutcome(adjudicationNumber, data)
   }
 
   async editNotProceedOutcome(
@@ -82,7 +82,7 @@ export default class OutcomesService {
       details,
       reason: notProceedReason,
     }
-    return new ManageAdjudicationsClient(user.token).amendOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).amendOutcome(adjudicationNumber, data)
   }
 
   async editQuashedOutcome(
@@ -95,6 +95,6 @@ export default class OutcomesService {
       details: quashDetails,
       quashedReason: quashReason,
     }
-    return new ManageAdjudicationsClient(user.token).amendOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).amendOutcome(adjudicationNumber, data)
   }
 }

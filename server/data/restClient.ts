@@ -40,7 +40,12 @@ interface DeleteRequest {
 export default class RestClient {
   agent: Agent
 
-  constructor(private readonly name: string, private readonly config: ApiConfig, private readonly token: string) {
+  constructor(
+    private readonly name: string,
+    private readonly config: ApiConfig,
+    private readonly token: string,
+    private readonly activeCaseload?: string
+  ) {
     this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
   }
 
@@ -50,6 +55,12 @@ export default class RestClient {
 
   private timeoutConfig() {
     return this.config.timeout
+  }
+
+  private getHeaders(headers = {}) {
+    if (this.activeCaseload) return { ...headers, 'Active-Caseload': this.activeCaseload }
+
+    return headers
   }
 
   defaultErrorLogger(error: UnsanitisedError): void {
@@ -68,7 +79,7 @@ export default class RestClient {
         })
         .query(query)
         .auth(this.token, { type: 'bearer' })
-        .set(headers)
+        .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
@@ -98,7 +109,7 @@ export default class RestClient {
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(this.token, { type: 'bearer' })
-        .set(headers)
+        .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
@@ -122,7 +133,7 @@ export default class RestClient {
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .timeout(this.timeoutConfig())
-        .set(headers)
+        .set(this.getHeaders(headers))
         .end((error, response) => {
           if (error) {
             logger.warn(sanitiseError(error), `Error calling ${this.name}`)
@@ -151,7 +162,7 @@ export default class RestClient {
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(this.token, { type: 'bearer' })
-        .set(headers)
+        .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
@@ -181,7 +192,7 @@ export default class RestClient {
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(this.token, { type: 'bearer' })
-        .set(headers)
+        .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
