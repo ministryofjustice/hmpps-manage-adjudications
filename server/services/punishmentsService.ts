@@ -71,7 +71,7 @@ export default class PunishmentsService {
     adjudicationNumber: number,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user.token).createPunishments(adjudicationNumber, punishments)
+    return new ManageAdjudicationsClient(user).createPunishments(adjudicationNumber, punishments)
   }
 
   async editPunishmentSet(
@@ -79,11 +79,11 @@ export default class PunishmentsService {
     adjudicationNumber: number,
     user: User // : Promise<ReportedAdjudicationResult>
   ) {
-    return new ManageAdjudicationsClient(user.token).amendPunishments(adjudicationNumber, punishments)
+    return new ManageAdjudicationsClient(user).amendPunishments(adjudicationNumber, punishments)
   }
 
   async getPunishmentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentDataWithSchedule[]> {
-    const { reportedAdjudication } = await new ManageAdjudicationsClient(user.token).getReportedAdjudication(
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
       adjudicationNumber
     )
     return reportedAdjudication.punishments

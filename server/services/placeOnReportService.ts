@@ -103,7 +103,7 @@ export default class PlaceOnReportService {
     gender: PrisonerGender,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     const requestBody = {
       dateTimeOfIncident,
       agencyId: user.activeCaseLoadId,
@@ -121,7 +121,7 @@ export default class PlaceOnReportService {
     removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     const requestBody = {
       isYouthOffenderRule: whichRuleChosen === 'yoi',
       removeExistingOffences,
@@ -136,7 +136,7 @@ export default class PlaceOnReportService {
     completed: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
 
     const { draftAdjudication } = await client.getDraftAdjudication(id)
     const editRequired = Boolean(draftAdjudication?.incidentStatement != null)
@@ -151,7 +151,7 @@ export default class PlaceOnReportService {
   }
 
   async getCheckYourAnswersInfo(id: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
 
     const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { draftAdjudication } = draftAdjudicationInfo
@@ -202,7 +202,7 @@ export default class PlaceOnReportService {
   }
 
   async getDraftIncidentDetailsForEditing(id: number, user: User): Promise<ExistingDraftIncidentDetails> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     const response = await manageAdjudicationsClient.getDraftAdjudication(id)
     const { incidentDetails } = response.draftAdjudication
     const dateAndTimeOfIncident = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfIncident)
@@ -232,7 +232,7 @@ export default class PlaceOnReportService {
     user: User,
     dateTimeOfDiscovery: string
   ): Promise<DraftAdjudicationResult> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
@@ -249,7 +249,7 @@ export default class PlaceOnReportService {
     removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     const editIncidentRoleRequest = {
       incidentRole: {
         roleCode,
@@ -261,13 +261,13 @@ export default class PlaceOnReportService {
   }
 
   async completeDraftAdjudication(id: number, user: User): Promise<number> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     const completedAdjudication = await manageAdjudicationsClient.submitCompleteDraftAdjudication(id)
     return completedAdjudication.adjudicationNumber
   }
 
   async getDraftAdjudicationDetails(id: number, user: User): Promise<DraftAdjudicationResult> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     return manageAdjudicationsClient.getDraftAdjudication(id)
   }
 
@@ -276,7 +276,7 @@ export default class PlaceOnReportService {
     filter: ContinueReportApiFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<DraftAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user.token).getAllDraftAdjudicationsForUser(
+    const pageResponse = await new ManageAdjudicationsClient(user).getAllDraftAdjudicationsForUser(
       user.activeCaseLoadId,
       filter,
       pageRequest
@@ -318,7 +318,7 @@ export default class PlaceOnReportService {
   }
 
   async getInfoForTaskListStatuses(draftAdjudicationId: number, user: User): Promise<TaskListDetails> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user.token)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
 
     const statementComplete = draftAdjudication.incidentStatement?.completed || false
@@ -415,32 +415,32 @@ export default class PlaceOnReportService {
   }
 
   async getOffenceRule(offenceCode: number, isYouthOffender: boolean, gender: PrisonerGender, user: User) {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.getOffenceRule(offenceCode, isYouthOffender, gender)
   }
 
   async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails, user: User) {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
   }
 
   async saveAssociatedPrisoner(adjudicationNumber: number, associatedPrisoner: AssociatedPrisoner, user: User) {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.saveAssociatedPrisoner(adjudicationNumber, associatedPrisoner)
   }
 
   async saveDamageDetails(adjudicationNumber: number, damageDetails: DamageDetails[], user: User) {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.saveDamageDetails(adjudicationNumber, damageDetails)
   }
 
   async saveEvidenceDetails(adjudicationNumber: number, evidenceDetails: EvidenceDetails[], user: User) {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.saveEvidenceDetails(adjudicationNumber, evidenceDetails)
   }
 
   async saveWitnessDetails(adjudicationNumber: number, witnessDetails: WitnessDetails[], user: User) {
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
   }
 
@@ -448,7 +448,7 @@ export default class PlaceOnReportService {
     const genderData = {
       gender: chosenGender,
     }
-    const client = new ManageAdjudicationsClient(user.token)
+    const client = new ManageAdjudicationsClient(user)
     return client.amendGender(id, genderData)
   }
 
@@ -489,6 +489,6 @@ export default class PlaceOnReportService {
   }
 
   async removeDraftAdjudication(draftAdjudicationId: number, user: User): Promise<void> {
-    return new ManageAdjudicationsClient(user.token).removeDraftAdjudication(draftAdjudicationId)
+    return new ManageAdjudicationsClient(user).removeDraftAdjudication(draftAdjudicationId)
   }
 }

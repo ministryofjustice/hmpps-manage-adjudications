@@ -275,7 +275,7 @@ describe('reportedAdjudicationsService', () => {
       it('makes the correct calls', async () => {
         await service.getConfirmationDetails(123, user)
 
-        expect(ManageAdjudicationsClient).toBeCalledWith(token)
+        expect(ManageAdjudicationsClient).toBeCalledWith(user)
         expect(getReportedAdjudication).toBeCalledWith(123)
         expect(PrisonApiClient).toBeCalledWith(token)
         expect(getPrisonerDetails).toBeCalledWith('A1234AA')

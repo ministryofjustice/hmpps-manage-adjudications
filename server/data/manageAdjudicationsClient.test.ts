@@ -14,10 +14,17 @@ describe('manageAdjudicationsClient', () => {
   let client: ManageAdjudicationsClient
 
   const token = 'token-1'
+  const user = {
+    token,
+    username: '',
+    name: '',
+    activeCaseLoadId: '',
+    authSource: '',
+  }
 
   beforeEach(() => {
     fakeManageAdjudicationsApi = nock(config.apis.adjudications.url)
-    client = new ManageAdjudicationsClient(token)
+    client = new ManageAdjudicationsClient(user)
   })
 
   afterEach(() => {
@@ -53,6 +60,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .post('/draft-adjudications', details)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
       const response = await client.startNewDraftAdjudication(details)
@@ -84,6 +92,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .post('/draft-adjudications/4/incident-statement', content)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
       const response = await client.postDraftIncidentStatement(4, content)
@@ -106,6 +115,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .get('/reported-adjudications/3')
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
       const response = await client.getReportedAdjudication(3)
@@ -126,6 +136,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .get('/draft-adjudications/10')
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
       const response = await client.getDraftAdjudication(10)
@@ -145,6 +156,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .post('/draft-adjudications/16/complete-draft-adjudication')
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(201, result)
 
       const response = await client.submitCompleteDraftAdjudication(16)
@@ -172,6 +184,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .put(`/draft-adjudications/16/incident-details`)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
       const response = await client.editDraftIncidentDetails(16, editedDetails)
@@ -207,6 +220,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .get(`/draft-adjudications/my/agency/MDI?page=0&size=20&startDate=2021-11-16&endDate=2021-11-21`)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, response)
 
       const result = await client.getAllDraftAdjudicationsForUser(
@@ -248,6 +262,7 @@ describe('manageAdjudicationsClient', () => {
           `/reported-adjudications/my/agency/MDI?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01&status=AWAITING_REVIEW`
         )
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, response)
 
       const result = await client.getYourCompletedAdjudications(
@@ -291,6 +306,7 @@ describe('manageAdjudicationsClient', () => {
           `/reported-adjudications/agency/MDI?page=0&size=20&startDate=2021-01-01&endDate=2021-01-01&status=AWAITING_REVIEW`
         )
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, response)
 
       const result = await client.getAllCompletedAdjudications(
@@ -327,6 +343,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .post('/reported-adjudications/12347/create-draft-adjudication')
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
       const response = await client.createDraftFromCompleteAdjudication(12347)
@@ -356,6 +373,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .put(`/draft-adjudications/2469/applicable-rules`)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
       const response = await client.saveYouthOffenderStatus(2469, youthOffenderData)
       expect(response).toEqual(result)
@@ -371,6 +389,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .get(`/draft-adjudications/offence-rule/1234?youthOffender=true&gender=MALE`)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
       const response = await client.getOffenceRule(1234, true, PrisonerGender.MALE)
       expect(response).toEqual(result)
@@ -402,6 +421,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .put(`/draft-adjudications/2469/damages`)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
       const response = await client.saveDamageDetails(2469, damagesData)
       expect(response).toEqual(result)
@@ -440,6 +460,7 @@ describe('manageAdjudicationsClient', () => {
       fakeManageAdjudicationsApi
         .put(`/draft-adjudications/2469/evidence`)
         .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
       const response = await client.saveEvidenceDetails(2469, evidenceData)
       expect(response).toEqual(result)
