@@ -25,6 +25,10 @@ const errors: { [key: string]: FormError } = {
     href: '#stoppagePercentage',
     text: 'Enter the loss of privileges',
   },
+  STOPPAGE_PERCENTAGE: {
+    href: '#stoppagePercentage',
+    text: 'Enter a number between 0 and 100',
+  },
 }
 
 export default function validateForm({
@@ -41,5 +45,8 @@ export default function validateForm({
     return errors.MISSING_OTHER_PRIVILEGE
 
   if (punishmentType === PunishmentType.EARNINGS && !stoppagePercentage) return errors.MISSING_STOPPAGE_PERCENTAGE
+
+  if (punishmentType === PunishmentType.EARNINGS && (stoppagePercentage < 1 || stoppagePercentage > 100))
+    return errors.STOPPAGE_PERCENTAGE
   return null
 }

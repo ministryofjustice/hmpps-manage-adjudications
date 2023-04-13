@@ -75,4 +75,26 @@ describe('validateForm', () => {
       text: 'Enter the loss of privileges',
     })
   })
+  it('shows error when stoppage percentage is more than 100', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.EARNINGS,
+        stoppagePercentage: 101,
+      })
+    ).toEqual({
+      href: '#stoppagePercentage',
+      text: 'Enter a number between 0 and 100',
+    })
+  })
+  it('shows error when stoppage percentage is less than 1', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.EARNINGS,
+        stoppagePercentage: -3,
+      })
+    ).toEqual({
+      href: '#stoppagePercentage',
+      text: 'Enter a number between 0 and 100',
+    })
+  })
 })

@@ -76,7 +76,7 @@ context('Add a new punishment', () => {
           expect($error.get(0).innerText).to.contain('Enter a privilege to be withdrawn')
         })
     })
-    it('should error when no  stoppage percentate selected', () => {
+    it('should error when no  stoppage percentage selected', () => {
       cy.visit(adjudicationUrls.punishment.urls.start(100))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="EARNINGS"]').check()
@@ -138,7 +138,7 @@ context('Add a new punishment', () => {
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="OTHER"]').check()
-      punishmentPage.otherPrivilege().type('ninentdo switch')
+      punishmentPage.otherPrivilege().type('nintendo switch')
 
       punishmentPage.submitButton().click()
 

@@ -19,11 +19,11 @@
             classes: "columnWidth30"
           },
           {
-            text: data.startDate | formatTimestampTo('DD MMM YYYY') if data.startDate else '-',
+            text: data.startDate | formatTimestampTo('D MMM YYYY') if data.startDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.endDate | formatTimestampTo('DD MMM YYYY') if data.endDate else '-',
+            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else '-',
             classes: "columnWidth15"
           },
           {
@@ -31,7 +31,7 @@
             classes: "columnWidth12"
           },
           {
-            text: data.suspendedUntil | formatTimestampTo('DD MMM YYYY') if data.suspendedUntil  else '-',
+            text: data.suspendedUntil | formatTimestampTo('D MMM YYYY') if data.suspendedUntil  else '-',
             classes: "columnWidth12"
           },
           {

@@ -1,5 +1,6 @@
 import { FormError } from '../../@types/template'
 import { PunishmentType } from '../../data/PunishmentResult'
+import { datePickerToApi } from '../../utils/utils'
 
 type PunishmentScheduleForm = {
   punishmentType: PunishmentType
@@ -15,9 +16,13 @@ const errors: { [key: string]: FormError } = {
     href: '#days',
     text: 'Enter how many days the punishment will last',
   },
+  DAYS_TOO_FEW: {
+    href: '#days',
+    text: 'Enter 1 or more days',
+  },
   MISSING_SUSPENDED_DECISION: {
     href: '#suspended',
-    text: 'Select yes, if this punishment is to be suspended',
+    text: 'Select yes if this punishment is to be suspended',
   },
   MISSING_SUSPENDED_UNTIL: {
     href: '#suspendedUntil',
@@ -31,6 +36,10 @@ const errors: { [key: string]: FormError } = {
     href: '#endDate',
     text: 'Enter the last day of this punishment',
   },
+  END_DATE_BEFORE_START_DATE: {
+    href: '#endDate',
+    text: 'Enter an end date that is after the start date',
+  },
 }
 
 export default function validateForm({
@@ -41,12 +50,19 @@ export default function validateForm({
   startDate,
   endDate,
 }: PunishmentScheduleForm): FormError | null {
-  if (!days) return errors.MISSING_DAYS
-  if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) return null
+  if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
+  if (days === undefined || days === null || !days) return errors.MISSING_DAYS
   if (!suspended) return errors.MISSING_SUSPENDED_DECISION
   if (suspended === 'yes' && !suspendedUntil) return errors.MISSING_SUSPENDED_UNTIL
-  if (suspended === 'no' && !startDate) return errors.MISSING_START_DATE
-  if (suspended === 'no' && !endDate) return errors.MISSING_END_DATE
+  if (suspended === 'no' && !startDate) {
+    if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) return null
+    return errors.MISSING_START_DATE
+  }
+  if (suspended === 'no' && !endDate) {
+    if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) return null
+    return errors.MISSING_END_DATE
+  }
+  if (datePickerToApi(endDate) < datePickerToApi(startDate)) return errors.END_DATE_BEFORE_START_DATE
 
   return null
 }
