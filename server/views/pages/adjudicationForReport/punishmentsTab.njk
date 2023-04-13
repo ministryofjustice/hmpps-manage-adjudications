@@ -2,12 +2,13 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 
 {% block pageTitle %}
-  Punishments and Damages
+  Punishments and damages
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -20,25 +21,27 @@
 
     {% if punishments | length %}
       {{ awardPunishmentsTable(punishments, null, reportNo, true) }}
+
       {% if not readOnly %}
-      <div>
-      {{ govukButton({
-        text: 'Change punishments',
-        element: "a",
-        href: adjudicationUrls.awardPunishments.urls.start(reportNo),
-        classes: "govuk-button--secondary govuk-!-margin-right-3",
-        attributes: { "data-qa": "change-punishments" }
-      }) }}
-      {{ govukButton({
-        text: 'Report a quashed guilty finding',
-        element: "a",
-        href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(reportNo),
-        classes: "govuk-button--secondary govuk-!-margin-right-3",
-        attributes: { "data-qa": "report-quashed-guilty-finding" }
-      }) }}
-      </div>
+        <div>
+          {{ govukButton({
+          text: 'Change punishments',
+          element: "a",
+          href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+          classes: "govuk-button--secondary govuk-!-margin-right-3",
+          attributes: { "data-qa": "change-punishments" }
+        }) }}
+          {{ govukButton({
+          text: 'Report a quashed guilty finding',
+          element: "a",
+          href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(reportNo),
+          classes: "govuk-button--secondary govuk-!-margin-right-3",
+          attributes: { "data-qa": "report-quashed-guilty-finding" }
+        }) }}
+        </div>
       {% endif %}
-      {% else %}
+
+    {% else %}
       <div>
         {{ govukButton({
         text: 'Award punishments',
@@ -49,9 +52,24 @@
       }) }}
       </div>
     {% endif %}
-    {% else %}
-    <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
-    <p class="govuk-body govuk-!-margin-top-3">You can only add punishments if the charge is proved.</p>
+
+  {% elif quashed %}
+    {{ govukWarningText({
+        html: "<p class='govuk-!-font-weight-bold'>The guilty finding has been quashed. Punishments and recovery of <br>damages should not be enforced.</p>",
+        iconFallbackText: "Warning",
+        classes: "govuk-!-margin-bottom-0",
+        attributes: {
+          "data-qa": "quashed-warning"
+        }
+      }) }}
+    {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, true) }}
+    {{ awardPunishmentsTable(punishments, null, reportNo, true) }}
+
+  {% else %}
+    <div data-qa="no-punishments">
+      <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
+      <p class="govuk-body govuk-!-margin-top-3">You can only add punishments if the charge is proved.</p>
+    </div>
   {% endif %}
 
 {% endblock %}
