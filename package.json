@@ -143,7 +143,7 @@
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "concurrently": "^7.6.0",
+    "concurrently": "^8.0.1",
     "cypress": "^12.9.0",
     "cypress-multi-reporters": "^1.6.3",
     "eslint": "^8.38.0",
