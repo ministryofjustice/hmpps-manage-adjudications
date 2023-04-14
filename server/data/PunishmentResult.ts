@@ -102,9 +102,10 @@ export function convertPunishmentType(
 export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {
   if (!punishments) return null
   return punishments.map(punishment => {
-    const { redisId, type, privilegeType, otherPrivilege, stoppagePercentage, schedule } = punishment
+    const { id, redisId, type, privilegeType, otherPrivilege, stoppagePercentage, schedule } = punishment
     const { days, startDate, endDate, suspendedUntil } = schedule
     return {
+      id,
       redisId,
       type,
       days,
