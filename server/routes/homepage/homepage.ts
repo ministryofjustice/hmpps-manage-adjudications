@@ -4,6 +4,7 @@ import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResul
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
+import config from '../../config'
 
 type TaskType = {
   id: string
@@ -85,13 +86,6 @@ const createTasks = (): TaskType[] => {
       ],
     },
     {
-      id: 'enter-outcomes',
-      heading: 'Enter outcomes',
-      href: adjudicationUrls.viewScheduledHearings.root,
-      roles: ['ADJUDICATIONS_REVIEWER'],
-      enabled: true,
-    },
-    {
       id: 'print-completed-dis-forms',
       heading: 'Print completed DIS 1/2 forms',
       description: '',
@@ -122,6 +116,16 @@ export default class HomepageRoutes {
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
     const disRelatedTasks = createTasks().filter(task => task.heading.includes('DIS'))
+
+    if (config.outcomeFeatureFlag === 'true') {
+      reviewerTasks.push({
+        id: 'enter-outcomes',
+        heading: 'Enter outcomes',
+        href: adjudicationUrls.viewScheduledHearings.root,
+        roles: ['ADJUDICATIONS_REVIEWER'],
+        enabled: true,
+      })
+    }
 
     return res.render('pages/homepage', {
       reviewerTasks: reviewerTasks.filter(task => hasAnyRole(task.roles, userRoles)),
