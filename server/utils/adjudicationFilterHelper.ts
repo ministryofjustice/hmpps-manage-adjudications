@@ -9,6 +9,7 @@ import {
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
+import config from '../config'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -161,11 +162,11 @@ const statusKeyMatch = (
   return adjStatuses.includes(adjKey)
 }
 
-export const reportedAdjudicationStatuses = (filter: UiFilter) =>
-  Object.keys(ReportedAdjudicationStatus)
-    // for now I'm going to ignore the new statuses and ACCEPTED until we come to the ticket for this page
-    // in a very rudimentary way
-    .filter(
+export const reportedAdjudicationStatuses = (filter: UiFilter) => {
+  const statuses = Object.keys(ReportedAdjudicationStatus)
+  let filteredStatuses
+  if (config.outcomeFeatureFlag === 'false') {
+    filteredStatuses = statuses.filter(
       key =>
         key === ReportedAdjudicationStatus.AWAITING_REVIEW ||
         key === ReportedAdjudicationStatus.REJECTED ||
@@ -173,10 +174,15 @@ export const reportedAdjudicationStatuses = (filter: UiFilter) =>
         key === ReportedAdjudicationStatus.SCHEDULED ||
         key === ReportedAdjudicationStatus.UNSCHEDULED
     )
-    .map(key => {
-      return {
-        value: key,
-        text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-        checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
-      }
-    })
+  } else {
+    filteredStatuses = statuses.filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
+  }
+
+  return filteredStatuses.map(key => {
+    return {
+      value: key,
+      text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
+      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+    }
+  })
+}
