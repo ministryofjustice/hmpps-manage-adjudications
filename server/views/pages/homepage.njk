@@ -24,9 +24,29 @@
   </div>
 
   <div class="homepage-content">
-    <div class="govuk-width-container">
+        <div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <ul class="card-group">
+        {% for task in reporterTasks %}
+          <li class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+                "href": task.href,
+                "clickable": "true",
+                "heading": task.heading,
+                "description": task.description,
+                "id": task.id
+              }) }}
+          </li>
+        {% endfor %}
+      </ul>
+      {% if reporterTasks.length %}
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
+      {% endif %}
+    </div>
+
+
       <div class="govuk-grid-row">
-      <ul class="card-group govuk-!-margin-bottom-0">
+        <ul class="card-group govuk-!-margin-bottom-0">
           {% for task in reviewerTasks %}
             <li class="govuk-grid-column-one-third card-group__item">
               {{ card({
@@ -39,46 +59,28 @@
               }) }}
             </li>
           {% endfor %}
-      </ul>
-      {% if reviewerTasks.length %}
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
-      {% endif %}
+        </ul>
+        {% if reviewerTasks.length %}
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
+        {% endif %}
       </div>
+
       <div class="govuk-grid-row">
         <ul class="card-group">
-          {% for task in reporterTasks %}
+          {% for task in disRelatedTasks %}
             <li class="govuk-grid-column-one-third card-group__item">
               {{ card({
-                "href": task.href,
-                "clickable": "true",
-                "heading": task.heading,
-                "description": task.description,
-                "id": task.id
-              }) }}
-            </li>
-          {% endfor %}
-        </ul>
-        {% if reporterTasks.length %}
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
-        {% endif %}
-        </div>
-
-        <div class="govuk-grid-row">
-          <ul class="card-group">
-            {% for task in disRelatedTasks %}
-              <li class="govuk-grid-column-one-third card-group__item">
-                {{ card({
                   "href": task.href,
                   "clickable": "true",
                   "heading": task.heading,
                   "description": task.description,
                   "id": task.id
                 }) }}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
+            </li>
+          {% endfor %}
+        </ul>
       </div>
+    </div>
   </div>
 {% endblock %}
 

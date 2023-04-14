@@ -3,12 +3,12 @@
 
 {% macro adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) %}
   {% set items = [{
-      text: 'View scheduled hearings',
+      text: 'View all hearings',
       href: viewScheduledHearingsHref,
       attributes: { 'data-qa': 'viewScheduledHearingsTab' },
       active: activeTab === 'viewScheduledHearings'
     } , {
-      text: 'View all completed reports',
+      text: 'View all reports',
       href: viewAllCompletedReportsHref,
       attributes: { 'data-qa': 'viewAllCompletedReportsTab' },
       active: activeTab === 'viewCompletedReports'
