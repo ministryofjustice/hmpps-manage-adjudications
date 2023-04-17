@@ -1,5 +1,6 @@
 import UserService from './userService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
+import ManageUsersClient from '../data/manageUsersClient'
 import TokenStore from '../data/tokenStore'
 import PlaceOnReportService from './placeOnReportService'
 import CuriousApiService from './curiousApiService'
@@ -16,7 +17,8 @@ import OutcomesService from './outcomesService'
 import PunishmentsService from './punishmentsService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
-const userService = new UserService(hmppsAuthClient)
+const manageUsersClient = new ManageUsersClient()
+const userService = new UserService(hmppsAuthClient, manageUsersClient)
 const placeOnReportService = new PlaceOnReportService(hmppsAuthClient)
 const curiousApiService = new CuriousApiService()
 const locationService = new LocationService(hmppsAuthClient)

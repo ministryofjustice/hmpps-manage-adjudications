@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { convertToTitleCase } from '../utils/utils'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import ManageUsersClient, { ManageUserResult } from '../data/manageUsersClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
 
 interface UserDetails {
@@ -37,7 +38,10 @@ export const isCentralAdminCaseload = (caseloadId: string): boolean => {
 }
 
 export default class UserService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly manageUsersClient: ManageUsersClient
+  ) {}
 
   async getUserRoles(token: string): Promise<string[]> {
     return this.hmppsAuthClient.getUserRoles(token)
@@ -66,5 +70,9 @@ export default class UserService {
   async getStaffFromNames(firstName: string, lastName: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return this.hmppsAuthClient.getUsersFromName(firstName, lastName, token)
+  }
+
+  async getStaffFromName(name: string): Promise<ManageUserResult[]> {
+    return this.manageUsersClient.getUsersFromName(name)
   }
 }

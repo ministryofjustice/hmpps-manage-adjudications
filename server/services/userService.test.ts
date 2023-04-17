@@ -1,9 +1,12 @@
 import UserService from './userService'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import ManageUsersClient from '../data/manageUsersClient'
 import { CaseLoad } from '../data/prisonApiClient'
 
 const getUserCaseLoads = jest.fn()
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../data/manageUsersClient')
+
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
     return { getUserCaseLoads }
@@ -14,12 +17,13 @@ const token = 'some token'
 
 describe('User service', () => {
   let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
+  let manageUsersClient: jest.Mocked<ManageUsersClient>
   let userService: UserService
 
   describe('getUser', () => {
     beforeEach(() => {
       hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-      userService = new UserService(hmppsAuthClient)
+      userService = new UserService(hmppsAuthClient, manageUsersClient)
     })
     it('Retrieves and formats user name', async () => {
       hmppsAuthClient.getUser.mockResolvedValue({ name: 'john smith' } as User)

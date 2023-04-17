@@ -9,7 +9,7 @@ import { NotProceedReason } from '../../data/HearingAndOutcomeResult'
 jest.mock('../../services/userService')
 jest.mock('../../services/outcomesService')
 
-const userService = new UserService(null) as jest.Mocked<UserService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 const outcomesService = new OutcomesService(null) as jest.Mocked<OutcomesService>
 
 let app: Express

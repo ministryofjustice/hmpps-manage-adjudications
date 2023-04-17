@@ -109,6 +109,14 @@ export default {
       agent: new AgentConfig(),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    manageUsers: {
+      url: get('MANAGE_USERS_API_URL', 'http://localhost:3004', requiredInProduction),
+      timeout: {
+        response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(),
+    },
   },
   analytics: {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
