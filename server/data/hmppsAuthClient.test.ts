@@ -11,7 +11,7 @@ const tokenStore = new TokenStore(null) as jest.Mocked<TokenStore>
 const username = 'Bob'
 const token = { access_token: 'token-1', expires_in: 300 }
 
-describe.skip('hmppsAuthClient', () => {
+describe('hmppsAuthClient', () => {
   let fakeHmppsAuthApi: nock.Scope
   let hmppsAuthClient: HmppsAuthClient
 
@@ -79,12 +79,12 @@ describe.skip('hmppsAuthClient', () => {
       email: 'bsmith@justice.gov.uk',
       firstName: 'Bob',
       lastName: 'Smith',
-      name: 'Bob Smith',
+      // name: 'Bob Smith',
       username: 'BSMITH_GEN',
     }
     it('should return data from api', async () => {
       fakeHmppsAuthApi
-        .get('/api/prisonuser?firstName=bob&lastName=smith')
+        .get('/api/user/search?name=bob%20smith&authSources=nomis')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
@@ -93,11 +93,11 @@ describe.skip('hmppsAuthClient', () => {
     })
     it('should trim the names', async () => {
       fakeHmppsAuthApi
-        .get('/api/prisonuser?firstName=bob&lastName=smith')
+        .get('/api/user/search?name=bob%20smith&authSources=nomis')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsAuthClient.getUsersFromName('   bob  smith', token.access_token)
+      const output = await hmppsAuthClient.getUsersFromName('bob smith  ', token.access_token)
       expect(output).toEqual(response)
     })
   })

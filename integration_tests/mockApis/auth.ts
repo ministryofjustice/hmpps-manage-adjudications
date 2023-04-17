@@ -183,7 +183,7 @@ const stubGetUserFromNames = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/auth/api/prisonuser?firstName=${staffFirstName}&lastName=${staffLastName}`,
+      url: `/auth/api/user/search?name=${staffFirstName}%20${staffLastName}`,
     },
     response: {
       status: 200,
