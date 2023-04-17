@@ -38,6 +38,7 @@ export interface User {
   activeCaseLoadId: string
   token: string
   authSource: string
+  userId?: string
 }
 
 export interface UserRole {
@@ -54,7 +55,7 @@ export type MatchedUserResult = {
   staffId: number
 }
 
-export type StaffUserResult = {
+export type NomisUserResult = {
   username: string
   email: string
   firstName: string
@@ -83,17 +84,10 @@ export default class HmppsAuthClient {
     return this.restClient(token).get({ path: `/api/user/${username}` })
   }
 
-  getUsersFromName(firstName: string, lastName: string, token: string): Promise<MatchedUserResult[]> {
-    return this.restClient(token).get({
-      path: `/api/prisonuser`,
-      query: querystring.stringify({ firstName: firstName?.trim(), lastName: lastName?.trim() }),
-    })
-  }
-
-  getUsersFromName2(firstName: string, lastName: string, token: string): Promise<StaffUserResult[]> {
+  getUsersFromName(name: string, token: string): Promise<NomisUserResult[]> {
     return this.restClient(token).get({
       path: `/api/user/search`,
-      query: querystring.stringify({ name: firstName?.trim() }),
+      query: querystring.stringify({ name: name?.trim(), authSources: ['nomis'] }),
     })
   }
 

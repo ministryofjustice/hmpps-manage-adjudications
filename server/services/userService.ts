@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { convertToTitleCase } from '../utils/utils'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient, { User, MatchedUserResult, NomisUserResult } from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
 
 interface UserDetails {
@@ -63,10 +63,34 @@ export default class UserService {
     return { ...result, email: userEmail.email }
   }
 
+  getUserDetailsMap = async (nomisUsers: NomisUserResult[], token: string): Promise<Map<string, User>> => {
+    const nomisUsernames = nomisUsers.map(nomisUser => nomisUser.username)
+    const userDetails =
+      (await Promise.all(
+        [...nomisUsernames].map(username => this.hmppsAuthClient.getUserFromUsername(username, token))
+      )) || []
+    return new Map(userDetails.map(details => [details.username, details]))
+  }
+
   async getStaffFromNames(firstName: string, lastName: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const users = await this.hmppsAuthClient.getUsersFromName2(firstName, lastName, token)
-    console.log(users)
-    return this.hmppsAuthClient.getUsersFromName(firstName, lastName, token)
+    const users = await this.hmppsAuthClient.getUsersFromName(`${firstName} ${lastName}`, token)
+
+    const userDetailsMapById = await this.getUserDetailsMap(users, token)
+
+    return users.map(nomisUser => {
+      const userDetails = userDetailsMapById.get(nomisUser.username)
+
+      return {
+        username: nomisUser.username,
+        firstName: nomisUser.firstName,
+        lastName: nomisUser.lastName,
+        name: `${nomisUser.firstName} ${nomisUser.lastName}`,
+        email: nomisUser.email,
+        activeCaseLoadId: userDetails.activeCaseLoadId,
+        staffId: Number(userDetails.userId),
+        verified: true,
+      }
+    })
   }
 }
