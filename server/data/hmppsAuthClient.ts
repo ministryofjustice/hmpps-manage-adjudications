@@ -55,6 +55,10 @@ export type MatchedUserResult = {
   staffId: number
 }
 
+export type NomisUserResponse = {
+  content: NomisUserResult[]
+}
+
 export type NomisUserResult = {
   username: string
   email: string
@@ -84,7 +88,7 @@ export default class HmppsAuthClient {
     return this.restClient(token).get({ path: `/api/user/${username}` })
   }
 
-  getUsersFromName(name: string, token: string): Promise<NomisUserResult[]> {
+  getUsersFromName(name: string, token: string): Promise<NomisUserResponse> {
     return this.restClient(token).get({
       path: `/api/user/search`,
       query: querystring.stringify({ name: name?.trim(), authSources: ['nomis'] }),

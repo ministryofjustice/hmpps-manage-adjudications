@@ -76,9 +76,9 @@ export default class UserService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const users = await this.hmppsAuthClient.getUsersFromName(`${firstName} ${lastName}`, token)
 
-    const userDetailsMapById = await this.getUserDetailsMap(users, token)
+    const userDetailsMapById = await this.getUserDetailsMap(users.content, token)
 
-    return users.map(nomisUser => {
+    return users.content.map(nomisUser => {
       const userDetails = userDetailsMapById.get(nomisUser.username)
 
       return {
