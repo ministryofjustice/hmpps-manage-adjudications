@@ -289,6 +289,17 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return filter.issueStatus.includes(key)
   })
 
+  njkEnv.addFilter('statusNotAwaitingRejectedReturned', (reportStatus: ReportedAdjudicationStatus) => {
+    if (
+      reportStatus === ReportedAdjudicationStatus.AWAITING_REVIEW ||
+      reportStatus === ReportedAdjudicationStatus.REJECTED ||
+      reportStatus === ReportedAdjudicationStatus.RETURNED
+    ) {
+      return false
+    }
+    return true
+  })
+
   njkEnv.addFilter('convertToWord', (number: number) => {
     switch (number) {
       case 1:

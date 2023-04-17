@@ -123,18 +123,19 @@ export type ReviewAdjudication = {
 // This enum needs to be kept in sync with the enum in the API.
 export enum ReportedAdjudicationStatus {
   AWAITING_REVIEW = 'AWAITING_REVIEW',
-  UNSCHEDULED = 'UNSCHEDULED',
   RETURNED = 'RETURNED',
-  SCHEDULED = 'SCHEDULED',
   REJECTED = 'REJECTED',
-  ACCEPTED = 'ACCEPTED',
+  UNSCHEDULED = 'UNSCHEDULED',
+  SCHEDULED = 'SCHEDULED',
   ADJOURNED = 'ADJOURNED',
   NOT_PROCEED = 'NOT_PROCEED',
   DISMISSED = 'DISMISSED',
   REFER_POLICE = 'REFER_POLICE',
+  PROSECUTION = 'PROSECUTION',
   REFER_INAD = 'REFER_INAD',
   CHARGE_PROVED = 'CHARGE_PROVED',
   QUASHED = 'QUASHED',
+  ACCEPTED = 'ACCEPTED',
 }
 
 export const allStatuses = [
@@ -143,7 +144,16 @@ export const allStatuses = [
   ReportedAdjudicationStatus.AWAITING_REVIEW,
   ReportedAdjudicationStatus.RETURNED,
   ReportedAdjudicationStatus.REJECTED,
+  ReportedAdjudicationStatus.ADJOURNED,
+  ReportedAdjudicationStatus.NOT_PROCEED,
+  ReportedAdjudicationStatus.DISMISSED,
+  ReportedAdjudicationStatus.REFER_POLICE,
+  ReportedAdjudicationStatus.REFER_INAD,
+  ReportedAdjudicationStatus.CHARGE_PROVED,
+  ReportedAdjudicationStatus.QUASHED,
+  ReportedAdjudicationStatus.PROSECUTION,
 ]
+
 export enum OicHearingType {
   GOV_ADULT = 'GOV_ADULT',
   GOV_YOI = 'GOV_YOI',
@@ -179,6 +189,8 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Charge proved'
     case ReportedAdjudicationStatus.QUASHED:
       return 'Quashed'
+    case ReportedAdjudicationStatus.PROSECUTION:
+      return 'Police prosecution'
     default:
       return null
   }
