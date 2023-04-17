@@ -102,6 +102,7 @@ export interface ScheduledHearing {
   id: number
   dateTimeOfHearing: string
   dateTimeOfDiscovery: string
+  status: ReportedAdjudicationStatus
   adjudicationNumber: number
   prisonerNumber: string
   oicHearingType: OicHearingType
@@ -111,7 +112,6 @@ export interface ScheduledHearingEnhanced extends ScheduledHearing {
   friendlyName: string
   nameAndNumber: string
   formattedDateTimeOfHearing: string
-  formattedDateTimeOfDiscovery: string
 }
 
 export type ReviewAdjudication = {

@@ -692,13 +692,11 @@ export default class ReportedAdjudicationsService {
     const { displayName, friendlyName } = prisonerNames
     const nameAndNumber = `${displayName} - ${hearing.prisonerNumber}`
     const formattedDateTimeOfHearing = formatTimestampToDate(hearing.dateTimeOfHearing, 'D MMMM YYYY - HH:mm')
-    const formattedDateTimeOfDiscovery = formatTimestampToDate(hearing.dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm')
     return {
       ...hearing,
       friendlyName,
       nameAndNumber,
       formattedDateTimeOfHearing,
-      formattedDateTimeOfDiscovery,
     }
   }
 
