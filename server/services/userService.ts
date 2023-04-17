@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { convertToTitleCase } from '../utils/utils'
-import HmppsAuthClient, { User, MatchedUserResult, NomisUserResult } from '../data/hmppsAuthClient'
+import HmppsAuthClient, { User, NomisUserResult } from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
 
 interface UserDetails {
