@@ -14,8 +14,8 @@ export default class ManageUsersClient {
     return new RestClient('Manage Users Client', config.apis.manageUsers, token)
   }
 
-  getUsersFromName(name: string): Promise<ManageUserResult[]> {
-    return this.restClient('TODO').get({
+  getUsersFromName(name: string, token: string): Promise<ManageUserResult[]> {
+    return this.restClient(token).get({
       path: `/externalusers/search`,
       query: querystring.stringify({ name: name?.trim() }),
     })
