@@ -65,6 +65,8 @@ export default class UserService {
 
   async getStaffFromNames(firstName: string, lastName: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const users = await this.hmppsAuthClient.getUsersFromName2(firstName, lastName, token)
+    console.log(users)
     return this.hmppsAuthClient.getUsersFromName(firstName, lastName, token)
   }
 }

@@ -54,6 +54,13 @@ export type MatchedUserResult = {
   staffId: number
 }
 
+export type StaffUserResult = {
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+}
+
 export type UserEmail = {
   username: string
   email: string
@@ -80,6 +87,13 @@ export default class HmppsAuthClient {
     return this.restClient(token).get({
       path: `/api/prisonuser`,
       query: querystring.stringify({ firstName: firstName?.trim(), lastName: lastName?.trim() }),
+    })
+  }
+
+  getUsersFromName2(firstName: string, lastName: string, token: string): Promise<StaffUserResult[]> {
+    return this.restClient(token).get({
+      path: `/api/user/search`,
+      query: querystring.stringify({ name: firstName?.trim() }),
     })
   }
 
