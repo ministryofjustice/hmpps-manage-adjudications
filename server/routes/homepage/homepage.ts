@@ -73,17 +73,7 @@ const createTasks = (): TaskType[] => {
       href: adjudicationUrls.viewScheduledHearings.root,
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
-      links: [
-        {
-          text: 'Schedule hearings',
-          href: adjudicationUrls.allCompletedReports.urls.filter({
-            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
-            toDate: momentDateToDatePicker(moment()),
-            status: ReportedAdjudicationStatus.UNSCHEDULED,
-          }),
-          id: 'schedule-hearings',
-        },
-      ],
+      links: [],
     },
     {
       id: 'print-completed-dis-forms',
@@ -124,6 +114,39 @@ export default class HomepageRoutes {
         href: adjudicationUrls.viewScheduledHearings.root,
         roles: ['ADJUDICATIONS_REVIEWER'],
         enabled: true,
+      })
+      reviewerTasks.map(task => {
+        if (task.id === 'view-scheduled-hearings') {
+          return task.links.push({
+            text: 'Schedule hearings',
+            href: adjudicationUrls.allCompletedReports.urls.filter({
+              fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+              toDate: momentDateToDatePicker(moment()),
+              status: [
+                ReportedAdjudicationStatus.UNSCHEDULED,
+                ReportedAdjudicationStatus.ADJOURNED,
+                ReportedAdjudicationStatus.REFER_INAD,
+              ],
+            }),
+            id: 'schedule-hearings',
+          })
+        }
+        return task
+      })
+    } else {
+      reviewerTasks.map(task => {
+        if (task.id === 'view-all-reports') {
+          return task.links.push({
+            text: 'Schedule hearings',
+            href: adjudicationUrls.allCompletedReports.urls.filter({
+              fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+              toDate: momentDateToDatePicker(moment()),
+              status: ReportedAdjudicationStatus.UNSCHEDULED,
+            }),
+            id: 'schedule-hearings',
+          })
+        }
+        return task
       })
     }
 
