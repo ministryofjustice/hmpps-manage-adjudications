@@ -3,6 +3,7 @@ import ViewScheduledHearingsPage from '../pages/viewScheduledHearings'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const formattedDate = moment().format('DD/MM/YYYY')
 const testData = new TestData()
@@ -23,6 +24,7 @@ const hearingsSetOne = [
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
     adjudicationNumber: 123456,
     prisonerNumber: 'G6345BY',
+    status: ReportedAdjudicationStatus.CHARGE_PROVED,
   },
   {
     ...testData.singleHearing({
@@ -32,6 +34,7 @@ const hearingsSetOne = [
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
     adjudicationNumber: 123456,
     prisonerNumber: 'P3785CP',
+    status: ReportedAdjudicationStatus.ADJOURNED,
   },
 ]
 const hearingsSetTwo = [
@@ -43,6 +46,7 @@ const hearingsSetTwo = [
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
     adjudicationNumber: 567894,
     prisonerNumber: 'D9543CY',
+    status: ReportedAdjudicationStatus.DISMISSED,
   },
   {
     ...testData.singleHearing({
@@ -52,6 +56,7 @@ const hearingsSetTwo = [
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
     adjudicationNumber: 678912,
     prisonerNumber: 'M1876DT',
+    status: ReportedAdjudicationStatus.ADJOURNED,
   },
 ]
 
@@ -115,7 +120,7 @@ context('View scheduled hearings', () => {
       .then($headings => {
         expect($headings.get(0).innerText).to.contain('Hearing date and time')
         expect($headings.get(1).innerText).to.contain('Name and prison number')
-        expect($headings.get(2).innerText).to.contain('Discovery date and time')
+        expect($headings.get(2).innerText).to.contain('Adjudication status')
         expect($headings.get(3).innerText).to.contain('')
         expect($headings.get(4).innerText).to.contain('')
       })
@@ -125,13 +130,13 @@ context('View scheduled hearings', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('5 November 2025 - 13:00')
         expect($data.get(1).innerText).to.contain('Salgado, Emmanuel - G6345BY')
-        expect($data.get(2).innerText).to.contain('3 November 2025 - 14:00')
-        expect($data.get(3).innerText).to.contain('View or edit hearing')
+        expect($data.get(2).innerText).to.contain('Charge proved')
+        expect($data.get(3).innerText).to.contain('View hearing')
         expect($data.get(4).innerText).to.contain('View report')
         expect($data.get(5).innerText).to.contain('5 November 2025 - 14:00')
         expect($data.get(6).innerText).to.contain('Kirk, Rosemary - P3785CP')
-        expect($data.get(7).innerText).to.contain('4 November 2025 - 09:00')
-        expect($data.get(8).innerText).to.contain('View or edit hearing')
+        expect($data.get(7).innerText).to.contain('Adjourned')
+        expect($data.get(8).innerText).to.contain('View hearing')
         expect($data.get(9).innerText).to.contain('View report')
       })
     viewScheduledHearingsPage.viewReportLink(1).click()
@@ -171,13 +176,13 @@ context('View scheduled hearings', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('6 November 2025 - 10:00')
         expect($data.get(1).innerText).to.contain('Whitehead, Yunus - D9543CY')
-        expect($data.get(2).innerText).to.contain('3 November 2025 - 14:00')
-        expect($data.get(3).innerText).to.contain('View or edit hearing')
+        expect($data.get(2).innerText).to.contain('Dismissed')
+        expect($data.get(3).innerText).to.contain('View hearing')
         expect($data.get(4).innerText).to.contain('View report')
         expect($data.get(5).innerText).to.contain('6 November 2025 - 11:00')
         expect($data.get(6).innerText).to.contain('Barnett, Mallory - M1876DT')
-        expect($data.get(7).innerText).to.contain('4 November 2025 - 09:00')
-        expect($data.get(8).innerText).to.contain('View or edit hearing')
+        expect($data.get(7).innerText).to.contain('Adjourned')
+        expect($data.get(8).innerText).to.contain('View hearing')
         expect($data.get(9).innerText).to.contain('View report')
       })
   })
@@ -231,7 +236,7 @@ context('View scheduled hearings', () => {
       .then($headings => {
         expect($headings.get(0).innerText).to.contain('Hearing date and time')
         expect($headings.get(1).innerText).to.contain('Name and prison number')
-        expect($headings.get(2).innerText).to.contain('Discovery date and time')
+        expect($headings.get(2).innerText).to.contain('Adjudication status')
         expect($headings.get(3).innerText).to.contain('')
         expect($headings.get(4).innerText).to.contain('')
       })
@@ -241,13 +246,13 @@ context('View scheduled hearings', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('5 November 2025 - 13:00')
         expect($data.get(1).innerText).to.contain('Salgado, Emmanuel - G6345BY')
-        expect($data.get(2).innerText).to.contain('3 November 2025 - 14:00')
-        expect($data.get(3).innerText).to.contain('View or edit hearing')
+        expect($data.get(2).innerText).to.contain('Charge proved')
+        expect($data.get(3).innerText).to.contain('View hearing')
         expect($data.get(4).innerText).to.contain('View report')
         expect($data.get(5).innerText).to.contain('5 November 2025 - 14:00')
         expect($data.get(6).innerText).to.contain('Unknown - P3785CP')
-        expect($data.get(7).innerText).to.contain('4 November 2025 - 09:00')
-        expect($data.get(8).innerText).to.contain('View or edit hearing')
+        expect($data.get(7).innerText).to.contain('Adjourned')
+        expect($data.get(8).innerText).to.contain('View hearing')
         expect($data.get(9).innerText).to.contain('View report')
       })
   })

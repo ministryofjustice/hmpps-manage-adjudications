@@ -718,7 +718,7 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 123456,
           dateTimeOfDiscovery: '2022-11-11T09:00:00',
           dateTimeOfHearing: '2022-11-14T11:00:00',
-          formattedDateTimeOfDiscovery: '11 November 2022 - 09:00',
+
           formattedDateTimeOfHearing: '14 November 2022 - 11:00',
           friendlyName: 'John Smith',
           nameAndNumber: 'Smith, John - G6123VU',
