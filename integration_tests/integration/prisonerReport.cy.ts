@@ -158,9 +158,14 @@ context('Prisoner report - reporter view', () => {
       adjudicationNumber: 98765,
       response: createDraftFromReportedAdjudicationResponse(98765, 191),
     })
-    cy.task('stubGetLocations', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+    cy.task('stubGetLocation', {
+      locationId: 25538,
+      response: {
+        locationId: 25538,
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-1',
+        userDescription: 'Houseblock 1',
+      },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,

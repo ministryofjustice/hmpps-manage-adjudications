@@ -149,9 +149,14 @@ context('Prisoner report - reviewer view', () => {
         draftAdjudication: draftAdjudication(456791),
       },
     })
-    cy.task('stubGetLocations', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+    cy.task('stubGetLocation', {
+      locationId: 25538,
+      response: {
+        locationId: 25538,
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-1',
+        userDescription: 'Houseblock 1',
+      },
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
