@@ -28,7 +28,7 @@ import {
   formatName,
   convertOicHearingType,
 } from '../utils/utils'
-import { LocationId, PrisonLocation } from '../data/PrisonLocationResult'
+import { LocationId } from '../data/PrisonLocationResult'
 import {
   PrisonerReport,
   DraftAdjudication,
@@ -458,11 +458,7 @@ export default class ReportedAdjudicationsService {
     return newDraftAdjudicationData.draftAdjudication.id
   }
 
-  async getPrisonerReport(
-    user: User,
-    locations: PrisonLocation[],
-    draftAdjudication: DraftAdjudication
-  ): Promise<PrisonerReport> {
+  async getPrisonerReport(user: User, draftAdjudication: DraftAdjudication): Promise<PrisonerReport> {
     const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
 
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
@@ -473,7 +469,7 @@ export default class ReportedAdjudicationsService {
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
 
-    const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
+    const location = await this.locationService.getIncidentLocation(draftAdjudication.incidentDetails.locationId, user)
 
     const incidentDetails = [
       {
@@ -490,7 +486,7 @@ export default class ReportedAdjudicationsService {
       },
       {
         label: 'Location',
-        value: locationObj?.userDescription || '',
+        value: `${location?.userDescription || ''}`,
       },
       {
         label: 'Date of discovery',

@@ -417,11 +417,15 @@ describe('reportedAdjudicationsService', () => {
           },
         }),
       })
-
+      locationService.getIncidentLocation.mockResolvedValue({
+        locationId: 26996,
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-VISITS-CLO_VIS',
+        userDescription: 'Closed Visits',
+      })
       hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
     })
     it('returns the correct information', async () => {
-      const locations = testData.residentialLocations()
       const draftAdjudication = testData.draftAdjudication({
         id: 10,
         prisonerNumber: 'G6123VU',
@@ -436,7 +440,7 @@ describe('reportedAdjudicationsService', () => {
           roleCode: '25b',
         },
       })
-      const result = await service.getPrisonerReport(user, locations, draftAdjudication)
+      const result = await service.getPrisonerReport(user, draftAdjudication)
       const expectedResult = {
         incidentDetails: [
           {
@@ -453,7 +457,7 @@ describe('reportedAdjudicationsService', () => {
           },
           {
             label: 'Location',
-            value: 'Houseblock 1',
+            value: 'Closed Visits',
           },
           {
             label: 'Date of discovery',
