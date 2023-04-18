@@ -183,14 +183,16 @@ const stubGetUserFromNames = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/auth/api/prisonuser?firstName=${staffFirstName}&lastName=${staffLastName}`,
+      url: `/auth/api/user/search?name=${staffFirstName}%20${staffLastName}&authSources=nomis`,
     },
     response: {
       status: 200,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: response,
+      jsonBody: {
+        content: response,
+      },
     },
   })
 

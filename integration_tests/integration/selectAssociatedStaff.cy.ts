@@ -40,7 +40,7 @@ context('Select associated staff', () => {
     // Staff Member
     cy.task('stubGetUserFromUsername', {
       username: 'JSMITH_GEN',
-      response: testData.userFromUsername(),
+      response: testData.userFromUsername('JSMITH_GEN'),
     })
     cy.task('stubGetEmail', {
       username: 'JSMITH_GEN',

@@ -79,25 +79,25 @@ describe('hmppsAuthClient', () => {
       email: 'bsmith@justice.gov.uk',
       firstName: 'Bob',
       lastName: 'Smith',
-      name: 'Bob Smith',
+      // name: 'Bob Smith',
       username: 'BSMITH_GEN',
     }
     it('should return data from api', async () => {
       fakeHmppsAuthApi
-        .get('/api/prisonuser?firstName=bob&lastName=smith')
+        .get('/api/user/search?name=bob%20smith&authSources=nomis')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsAuthClient.getUsersFromName('bob', 'smith', token.access_token)
+      const output = await hmppsAuthClient.getUsersFromName('bob smith', token.access_token)
       expect(output).toEqual(response)
     })
     it('should trim the names', async () => {
       fakeHmppsAuthApi
-        .get('/api/prisonuser?firstName=bob&lastName=smith')
+        .get('/api/user/search?name=bob%20smith&authSources=nomis')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsAuthClient.getUsersFromName('   bob  ', '  smith', token.access_token)
+      const output = await hmppsAuthClient.getUsersFromName('bob smith  ', token.access_token)
       expect(output).toEqual(response)
     })
   })
