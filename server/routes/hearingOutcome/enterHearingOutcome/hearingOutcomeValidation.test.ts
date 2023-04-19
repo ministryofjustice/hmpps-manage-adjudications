@@ -1,12 +1,25 @@
 import { HearingOutcomeCode } from '../../../data/HearingAndOutcomeResult'
+import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 import validateForm from './hearingOutcomeValidation'
 
 describe('validateForm', () => {
-  it('Valid submit has no errors', () => {
+  it('Valid submit (governor) has no errors', () => {
+    expect(
+      validateForm({
+        inAdName: null,
+        hearingOutcome: HearingOutcomeCode.COMPLETE,
+        governorId: 'RSWANSON_GEN',
+        adjudicatorType: OicHearingType.GOV_ADULT,
+      })
+    ).toBeNull()
+  })
+  it('Valid submit (inad) has no errors', () => {
     expect(
       validateForm({
         hearingOutcome: HearingOutcomeCode.COMPLETE,
-        adjudicatorName: 'Roxanne Red',
+        inAdName: 'Roxanne Red',
+        governorId: null,
+        adjudicatorType: OicHearingType.INAD_ADULT,
       })
     ).toBeNull()
   })
@@ -14,22 +27,39 @@ describe('validateForm', () => {
     expect(
       validateForm({
         hearingOutcome: '',
-        adjudicatorName: 'Roxanne Red',
+        inAdName: null,
+        governorId: 'RSWANSON_GEN',
+        adjudicatorType: OicHearingType.GOV_ADULT,
       })
     ).toEqual({
       href: '#hearingOutcome',
       text: 'Select the next step after this hearing',
     })
   })
-  it('shows error when adjudicator name is missing', () => {
+  it('shows error when adjudicator name is missing - inAd', () => {
     expect(
       validateForm({
         hearingOutcome: HearingOutcomeCode.COMPLETE,
-        adjudicatorName: '',
+        adjudicatorType: OicHearingType.INAD_ADULT,
+        inAdName: null,
+        governorId: null,
       })
     ).toEqual({
-      href: '#adjudicatorName',
+      href: '#inAdName',
       text: 'Enter the name of the adjudicator',
+    })
+  })
+  it('shows error when governor id is missing - gov', () => {
+    expect(
+      validateForm({
+        hearingOutcome: HearingOutcomeCode.COMPLETE,
+        adjudicatorType: OicHearingType.GOV_ADULT,
+        inAdName: null,
+        governorId: null,
+      })
+    ).toEqual({
+      href: '#governorName',
+      text: 'Search for a governor',
     })
   })
 })

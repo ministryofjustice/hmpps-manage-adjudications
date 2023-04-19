@@ -10,6 +10,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingOutcomeValidation'
 import { User } from '../../../data/hmppsAuthClient'
+import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -19,8 +20,11 @@ export enum PageRequestType {
 type PageData = {
   error?: FormError | FormError[]
   hearingOutcome?: HearingOutcomeCode
-  adjudicatorName?: string
+  inAdName?: string
   readApiHearingOutcome?: HearingOutcomeDetails
+  adjudicatorType: OicHearingType
+  governorId?: string
+  governorName?: string
 }
 
 class PageOptions {
@@ -64,14 +68,17 @@ export default class EnterHearingOutcomePage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, hearingOutcome, adjudicatorName } = pageData
+    const { error, hearingOutcome, inAdName, governorId, governorName, adjudicatorType } = pageData
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     return res.render(`pages/hearingOutcome/enterHearingOutcome.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
       hearingOutcome,
-      adjudicatorName,
+      inAdName,
+      governorId,
+      governorName,
+      adjudicatorType,
     })
   }
 
@@ -79,6 +86,7 @@ export default class EnterHearingOutcomePage {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const selectedPerson = req.query.selectedPerson as string
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -89,29 +97,52 @@ export default class EnterHearingOutcomePage {
       readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
     }
 
+    const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(adjudicationNumber, user)
+    const isGovernor = adjudicatorType.includes('GOV')
+
+    if (selectedPerson) {
+      // We are coming back from search
+      const governor = await this.userService.getStaffFromUsername(selectedPerson, user)
+      return this.renderView(req, res, { governorId: selectedPerson, adjudicatorType, governorName: governor.name })
+    }
     return this.renderView(req, res, {
+      adjudicatorType,
       hearingOutcome: readApiHearingOutcome?.code,
-      adjudicatorName: readApiHearingOutcome?.adjudicator,
+      inAdName: (!isGovernor && readApiHearingOutcome?.adjudicator) || null,
+      // governorName: get this on edit?
+      governorId: (isGovernor && readApiHearingOutcome?.adjudicator) || null,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { hearingOutcome, adjudicatorName } = req.body
+    const { hearingOutcome, inAdName, adjudicatorType, governorId, governorName } = req.body
 
-    const error = validateForm({ hearingOutcome, adjudicatorName })
+    if (req.body.searchGov) {
+      return this.search(req, res)
+    }
+
+    if (req.body.deleteUser) {
+      return res.redirect(`${adjudicationUrls.enterHearingOutcome.root}${req.path}`)
+    }
+
+    const error = validateForm({ hearingOutcome, inAdName, governorId, adjudicatorType })
     if (error)
       return this.renderView(req, res, {
         error,
         hearingOutcome,
-        adjudicatorName,
+        inAdName,
+        adjudicatorType,
+        governorId,
+        governorName,
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber)
+    const adjudicator = governorId || inAdName
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { adjudicator: adjudicatorName, hearingOutcome },
+        query: { adjudicator, hearingOutcome },
       })
     )
   }
@@ -121,5 +152,25 @@ export default class EnterHearingOutcomePage {
     user: User
   ): Promise<HearingOutcomeDetails> => {
     return this.hearingsService.getHearingOutcome(adjudicationId, user)
+  }
+
+  search = async (req: Request, res: Response): Promise<void> => {
+    const { governorName } = req.body
+
+    // const errors = do some validation here
+    // if (errors && errors.length !== 0) {
+    //   return this.renderView(req, res, { errors, ...form?, adjudicationNumber })
+    // }
+    const governorNames = governorName.split(' ')
+    req.session.redirectUrl = `${adjudicationUrls.enterHearingOutcome.root}${req.path}`
+    return res.redirect(
+      url.format({
+        pathname: adjudicationUrls.selectAssociatedStaff.root,
+        query: {
+          staffFirstName: governorNames[0],
+          staffLastName: governorNames[governorNames.length - 1],
+        },
+      })
+    )
   }
 }

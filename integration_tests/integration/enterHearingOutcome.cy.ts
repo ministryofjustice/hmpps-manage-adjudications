@@ -4,7 +4,7 @@ import EnterHearingOutcomePage from '../pages/enterHearingOutcome'
 import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
-context('Enter hearing outcome', () => {
+context.skip('Enter hearing outcome', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

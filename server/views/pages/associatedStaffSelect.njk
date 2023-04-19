@@ -24,10 +24,10 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
   <form method="POST" novalidate="novalidate" data-qa="search-form">
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-  <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
-    {{ govukInput({
+    <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
+      {{ govukInput({
       id: "staffFirstName",
       name: "staffFirstName",
       value: staffFirstName,
@@ -41,7 +41,7 @@
       errorMessage: errors | findErrors(['staffFirstName', 'staffFullName' ])
     }) }}
 
-    {{ govukInput({
+      {{ govukInput({
       id: "staffLastName",
       name: "staffLastName",
       value: staffLastName,
@@ -55,19 +55,26 @@
       errorMessage: errors | findErrors(['staffLastName', 'staffFullName' ])
     }) }}
 
-    {{ govukButton({
+      {{ govukButton({
       text: "Search",
       type: "submit",
       classes: "govuk-button--secondary",
       attributes: { "data-qa": "search-submit" }
     }) }}
-  </div>
-</form>
+    </div>
+  </form>
 
   {% set rows = [] %}
   {% for staffMember in searchResults %}
+    {% set linkHref %}
+      {% if redirectUrl.includes('?') %}
+        {{ redirectUrl }}&selectedPerson={{ staffMember.username }}
+      {% else %}
+        {{ redirectUrl }}?selectedPerson={{ staffMember.username }}
+      {% endif %}
+    {% endset %}
     {% set startReportlLinkHtml %}
-      <a href="{{ redirectUrl }}&selectedPerson={{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
+    <a href={{ linkHref }} class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
@@ -110,7 +117,7 @@
         attributes: { "data-qa": "staffMember-search-results-table", "data-module": "moj-sortable-table" }
       }) }}
     </div>
-    
+
   {% else %}
     {% if not errors | length %}
       <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no results for the details you have entered.</p>

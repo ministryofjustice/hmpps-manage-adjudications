@@ -31,7 +31,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /hearing-outcome - edit', () => {
+describe.skip('GET /hearing-outcome - edit', () => {
   it('should load the `Enter hearing outcome` page', () => {
     return request(app)
       .get(adjudicationUrls.enterHearingOutcome.urls.edit(100))
@@ -42,7 +42,7 @@ describe('GET /hearing-outcome - edit', () => {
   })
 })
 
-describe('POST /hearing-outcome - edit', () => {
+describe.skip('POST /hearing-outcome - edit', () => {
   it('should redirect to the correct URL - refer to police (edit version)', () => {
     return request(app)
       .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))

@@ -7,7 +7,11 @@ import {
 
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
-import { ReportedAdjudicationResult, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
+import {
+  OicHearingType,
+  ReportedAdjudicationResult,
+  ReportedAdjudicationStatus,
+} from '../data/ReportedAdjudicationResult'
 
 export default class HearingsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -51,6 +55,13 @@ export default class HearingsService {
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
     return latestHearing?.hearing.outcome || null
+  }
+
+  async getHearingAdjudicatorType(adjudicationNumber: number, user: User) {
+    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+    const { outcomes } = adjudication.reportedAdjudication
+    const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
+    return latestHearing.hearing.oicHearingType as OicHearingType
   }
 
   async createDismissedHearingOutcome(

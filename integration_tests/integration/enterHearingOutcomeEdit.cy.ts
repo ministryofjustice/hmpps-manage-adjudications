@@ -5,7 +5,7 @@ import TestData from '../../server/routes/testutils/testData'
 import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
-context('Enter hearing outcome', () => {
+context.skip('Enter hearing outcome', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

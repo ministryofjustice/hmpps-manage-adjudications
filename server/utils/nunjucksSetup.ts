@@ -10,6 +10,7 @@ import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import {
   IssueStatus,
+  OicHearingType,
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
@@ -329,6 +330,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addFilter('convertPunishmentType', convertPunishmentType)
   njkEnv.addGlobal('IssueStatus', IssueStatus)
+  njkEnv.addGlobal('OicHearingType', OicHearingType)
   njkEnv.addGlobal('ReportedAdjudicationStatus', ReportedAdjudicationStatus)
   njkEnv.addGlobal('HearingOutcomeCode', HearingOutcomeCode)
   njkEnv.addGlobal('HearingOutcomePlea', HearingOutcomePlea)
