@@ -2,12 +2,12 @@
     {% if governorId != null %}
     <input type="hidden" name="governorId" value="{{ governorId }}"/>
     <div>
-      <p>
+      <p data-qa="chosen-governor-name">
         <span class="govuk-!-font-weight-bold">Name</span>
         -
         {{ governorName }}
       </p>
-      <p>
+      <p data-qa="chosen-governor-id">
         <span class="govuk-!-font-weight-bold">User ID</span>
         -
         {{ governorId }}
