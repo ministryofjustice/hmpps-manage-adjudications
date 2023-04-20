@@ -1,6 +1,5 @@
 import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
-import EnterHearingOutcomePage from '../pages/enterHearingOutcome'
 
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'

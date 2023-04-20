@@ -66,15 +66,8 @@
 
   {% set rows = [] %}
   {% for staffMember in searchResults %}
-    {% set linkHref %}
-      {% if redirectUrl.includes('?') %}
-        {{ redirectUrl }}&selectedPerson={{ staffMember.username }}
-      {% else %}
-        {{ redirectUrl }}?selectedPerson={{ staffMember.username }}
-      {% endif %}
-    {% endset %}
     {% set startReportlLinkHtml %}
-    <a href="{{ linkHref }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
+    <a href="{{ redirectUrl }}{{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
