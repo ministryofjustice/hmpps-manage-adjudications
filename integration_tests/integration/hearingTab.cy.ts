@@ -206,6 +206,7 @@ const historyWithCompleteAndDismissedFinding = [
     hearing: testData.singleHearing({
       locationId: 234,
       dateTimeOfHearing: hearingDateTimeThree,
+      oicHearingType: OicHearingType.INAD_ADULT,
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.COMPLETE,
         optionalItems: {
@@ -226,6 +227,7 @@ const historyWithCompleteAndNotProceedFinding = [
       dateTimeOfHearing: hearingDateTimeThree,
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.COMPLETE,
+        adjudicator: 'JRED_GEN',
         optionalItems: {
           plea: HearingOutcomePlea.UNFIT,
         },
@@ -244,6 +246,7 @@ const historyWithCompleteAndProvedFinding = [
       dateTimeOfHearing: hearingDateTimeThree,
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.COMPLETE,
+        adjudicator: 'JRED_GEN',
         optionalItems: {
           plea: HearingOutcomePlea.UNFIT,
         },
@@ -1211,7 +1214,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
-          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Change')
           expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
@@ -1250,7 +1253,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(3).innerText).to.contain('JRED_GEN')
           expect($summaryData.get(4).innerText).to.contain('Change')
           expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
           expect($summaryData.get(6).innerText).to.contain('Change')
@@ -1288,7 +1291,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(3).innerText).to.contain('JRED_GEN')
           expect($summaryData.get(4).innerText).to.contain('Change')
           expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
           expect($summaryData.get(6).innerText).to.contain('Change')

@@ -102,8 +102,8 @@ export default class EnterHearingOutcomePage {
     }
 
     const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(adjudicationNumber, user)
-    const isGovernor = adjudicatorType.includes('GOV')
 
+    const isGovernor = adjudicatorType.includes('GOV')
     if (selectedPerson) {
       // We are coming back from search
       const governor = await this.userService.getStaffFromUsername(selectedPerson, user)
