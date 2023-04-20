@@ -47,7 +47,7 @@
       text: 'Name of adjudicator'
     },
     value: {
-      text: hearingDetails.outcome.adjudicator | initialiseName
+      text: hearingDetails.outcome.adjudicator | formatAdjudicatorName(hearingDetails.oicHearingType)
     },
     actions: adjudicatorChangeLink
   }, {

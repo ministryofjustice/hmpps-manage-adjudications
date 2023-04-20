@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
-import UserService from '../../../services/userService'
+import UserService, { UserWithEmail } from '../../../services/userService'
 import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
@@ -93,8 +93,12 @@ export default class EnterHearingOutcomePage {
     }
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
+    let readApiHearingGovernor: UserWithEmail = null
     if (this.pageOptions.isEdit()) {
       readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
+      if (!selectedPerson) {
+        readApiHearingGovernor = await this.userService.getStaffFromUsername(readApiHearingOutcome?.adjudicator, user)
+      }
     }
 
     const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(adjudicationNumber, user)
@@ -103,13 +107,19 @@ export default class EnterHearingOutcomePage {
     if (selectedPerson) {
       // We are coming back from search
       const governor = await this.userService.getStaffFromUsername(selectedPerson, user)
-      return this.renderView(req, res, { governorId: selectedPerson, adjudicatorType, governorName: governor.name })
+      return this.renderView(req, res, {
+        governorId: selectedPerson,
+        adjudicatorType,
+        governorName: governor?.name,
+        hearingOutcome: readApiHearingOutcome?.code,
+      })
     }
+
     return this.renderView(req, res, {
       adjudicatorType,
       hearingOutcome: readApiHearingOutcome?.code,
       inAdName: (!isGovernor && readApiHearingOutcome?.adjudicator) || null,
-      // governorName: get this on edit?
+      governorName: readApiHearingGovernor?.name || null,
       governorId: (isGovernor && readApiHearingOutcome?.adjudicator) || null,
     })
   }
@@ -123,7 +133,11 @@ export default class EnterHearingOutcomePage {
     }
 
     if (req.body.deleteUser) {
-      return res.redirect(`${adjudicationUrls.enterHearingOutcome.root}${req.path}`)
+      if (req.query.selectedPerson) return res.redirect(`${adjudicationUrls.enterHearingOutcome.root}${req.path}`)
+      return this.renderView(req, res, {
+        adjudicatorType,
+        hearingOutcome,
+      })
     }
 
     const error = validateForm({ hearingOutcome, inAdName, governorId, adjudicatorType })

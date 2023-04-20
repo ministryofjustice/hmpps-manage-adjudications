@@ -76,6 +76,13 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     return getFormattedOfficerName(fullName)
   })
 
+  njkEnv.addFilter('formatAdjudicatorName', (adjudicator: string, typeOfHearing: OicHearingType) => {
+    if (typeOfHearing === OicHearingType.GOV_ADULT || typeOfHearing === OicHearingType.GOV_YOI) {
+      return adjudicator.toUpperCase()
+    }
+    return getFormattedOfficerName(adjudicator)
+  })
+
   njkEnv.addFilter('findError', (formFieldId: string, array: FormError[] = []) => {
     const item = array.find(error => error.href === `#${formFieldId}`)
     if (item) {
