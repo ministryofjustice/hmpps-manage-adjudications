@@ -43,7 +43,7 @@ describe('GET /select-associated-staff', () => {
       ])
     })
 
-    it.skip('should load the search for a prisoner page', () => {
+    it('should load the search for a prisoner page', () => {
       return request(app)
         .get(`${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=john&staffLastName=smith`)
         .expect('Content-Type', /html/)
@@ -53,11 +53,7 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            `<a href="${adjudicationUrls.offenceCodeSelection.urls.question(
-              893,
-              'committed',
-              '1-1-1'
-            )}?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN" class="govuk-link" data-qa="select-staffMember-link-JSMITH_GEN">Select staff member</a>`
+            '/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3&amp;selectedPerson=JSMITH_GEN'
           )
         })
     })
