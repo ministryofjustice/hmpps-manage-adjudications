@@ -11,6 +11,8 @@ export default class EnterHearingOutcomePage extends Page {
 
   searchButton = (): PageElement => cy.get('[data-qa="gov-search"]')
 
+  deleteButton = (): PageElement => cy.get('[data-qa="deleteUser"]')
+
   chosenGovernorName = (): PageElement => cy.get('[data-qa="chosen-governor-name"]')
 
   chosenGovernorId = (): PageElement => cy.get('[data-qa="chosen-governor-id"]')

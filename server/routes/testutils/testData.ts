@@ -381,15 +381,21 @@ export default class TestData {
     }
   }
 
-  staffFromName = (activeCaseLoadId = 'MDI') => {
+  staffFromName = (
+    activeCaseLoadId = 'MDI',
+    username = 'JSMITH_GEN',
+    name = 'John Smith',
+    firstName = 'John',
+    lastName = 'Smith'
+  ) => {
     return {
-      username: 'JSMITH_GEN',
+      username,
       staffId: 485592,
       email: 'john.smith@digital.justice.gov.uk',
       verified: true,
-      firstName: 'John',
-      lastName: 'Smith',
-      name: 'John Smith',
+      firstName,
+      lastName,
+      name,
       activeCaseLoadId,
     }
   }

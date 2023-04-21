@@ -91,19 +91,18 @@ export default class EnterHearingOutcomePage {
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
+    const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(adjudicationNumber, user)
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
     let readApiHearingGovernor: UserWithEmail = null
     if (this.pageOptions.isEdit()) {
       readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
-      if (!selectedPerson) {
+      if (adjudicatorType.includes('GOV') && !selectedPerson) {
         readApiHearingGovernor = await this.userService.getStaffFromUsername(readApiHearingOutcome?.adjudicator, user)
       }
     }
-
-    const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(adjudicationNumber, user)
-
     const isGovernor = adjudicatorType.includes('GOV')
+
     if (selectedPerson) {
       // We are coming back from search
       const governor = await this.userService.getStaffFromUsername(selectedPerson, user)
