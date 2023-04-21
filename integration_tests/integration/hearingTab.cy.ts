@@ -267,6 +267,10 @@ context('Hearing details page', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
+    cy.task('stubGetUserFromUsername', {
+      username: 'JRED_GEN',
+      response: testData.userFromUsername('JRED_GEN', 'Jennifer Red'),
+    })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: testData.prisonerResultSummary({
@@ -1253,7 +1257,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain('JRED_GEN')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Change')
           expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
           expect($summaryData.get(6).innerText).to.contain('Change')
@@ -1291,7 +1295,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2')
           expect($summaryData.get(2).innerText).to.contain('Governor')
-          expect($summaryData.get(3).innerText).to.contain('JRED_GEN')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Change')
           expect($summaryData.get(5).innerText).to.contain('Hearing complete - add adjudication finding')
           expect($summaryData.get(6).innerText).to.contain('Change')

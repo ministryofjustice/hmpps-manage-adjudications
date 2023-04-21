@@ -95,6 +95,7 @@ describe('GET hearing details page - reviewer version', () => {
         hearing: {
           ...hearing,
           locationName: 'Moorland Closed (HMP & YOI)',
+          convertedAdjudicator: 'J. Red',
         },
         outcome,
       },

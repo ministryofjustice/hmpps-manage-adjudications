@@ -40,6 +40,7 @@
   ]
 } %}
 {% endif %}
+{% set adjudicatorName = hearingDetails.convertedAdjudicator if hearingDetails.oicHearingType.includes('GOV') else  hearingDetails.outcome.adjudicator %}
 
 {% set newRows = [
   {
@@ -47,7 +48,7 @@
       text: 'Name of adjudicator'
     },
     value: {
-      text: hearingDetails.outcome.adjudicator | formatAdjudicatorName(hearingDetails.oicHearingType)
+      text: adjudicatorName | initialiseName
     },
     actions: adjudicatorChangeLink
   }, {

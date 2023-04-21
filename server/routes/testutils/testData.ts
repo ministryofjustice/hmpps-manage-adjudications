@@ -363,10 +363,10 @@ export default class TestData {
     return alertFlagLabels.filter(alert => codes.includes(alert.alertCodes[0]))
   }
 
-  userFromUsername = (username = 'USER1') => {
+  userFromUsername = (username = 'USER1', name = 'Test User') => {
     return {
       activeCaseLoadId: 'MDI',
-      name: 'Test User',
+      name,
       username,
       token: 'token-1',
       authSource: 'auth',

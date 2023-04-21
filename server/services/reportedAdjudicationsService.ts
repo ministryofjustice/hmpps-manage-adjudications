@@ -570,10 +570,24 @@ export default class ReportedAdjudicationsService {
     return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
   }
 
+  getAdjudicatorNameMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
+    const governorHearings = hearings.filter(
+      hearing => hearing.hearing.oicHearingType.includes('GOV') && hearing.hearing.outcome
+    )
+    const governorUsernames = governorHearings.map(hearing => hearing.hearing.outcome?.adjudicator || null)
+
+    const usernamesAndNames =
+      (await Promise.all(
+        [...governorUsernames].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+      )) || []
+    return new Map(usernamesAndNames.map(name => [name.username, name.name]))
+  }
+
   async getOutcomesHistory(history: OutcomeHistory, user: User) {
     if (!history.length) return []
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
+    const governorMap = await this.getAdjudicatorNameMap(hearings, user)
     return history.map(historyItem => {
       if (historyItem.hearing) {
         // Reconstruct the data but add the hearing location name
@@ -581,6 +595,7 @@ export default class ReportedAdjudicationsService {
           hearing: {
             ...historyItem.hearing,
             locationName: locationNamesByIdMap.get(historyItem.hearing.locationId),
+            convertedAdjudicator: governorMap.get(historyItem.hearing.outcome?.adjudicator) || null,
           },
           ...historyItem.outcome,
         }
