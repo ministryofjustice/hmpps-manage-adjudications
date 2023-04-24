@@ -174,14 +174,12 @@ export default class EnterHearingOutcomePage {
     // if (errors && errors.length !== 0) {
     //   return this.renderView(req, res, { errors, ...form?, adjudicationNumber })
     // }
-    const governorNames = governorName.split(' ')
     req.session.redirectUrl = `${adjudicationUrls.enterHearingOutcome.root}${req.path}`
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectAssociatedStaff.root,
         query: {
-          staffFirstName: governorNames[0],
-          staffLastName: governorNames[governorNames.length - 1],
+          staffName: governorName,
         },
       })
     )

@@ -72,9 +72,9 @@ export default class UserService {
     return new Map(userDetails.map(details => [details.username, details]))
   }
 
-  async getStaffFromNames(firstName: string, lastName: string, user: User): Promise<StaffSearchByName[]> {
+  async getStaffFromNames(name: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const users = await this.hmppsAuthClient.getUsersFromName(`${firstName} ${lastName}`, token)
+    const users = await this.hmppsAuthClient.getUsersFromName(name, token)
 
     const userDetailsMapById = await this.getUserDetailsMap(users.content, token)
 

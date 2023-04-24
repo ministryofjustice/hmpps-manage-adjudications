@@ -12,10 +12,8 @@ import adjudicationUrls from '../../utils/urlGenerator'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
-  OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT = 'OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT',
-  OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT = 'OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT',
-  OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH = 'OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH',
-  OFFICER_MISSING_LAST_NAME_INPUT_SEARCH = 'OFFICER_MISSING_LAST_NAME_INPUT_SEARCH',
+  OFFICER_MISSING_NAME_INPUT_SUBMIT = 'OFFICER_MISSING_NAME_INPUT_SUBMIT',
+  OFFICER_MISSING_NAME_INPUT_SEARCH = 'OFFICER_MISSING_NAME_INPUT_SEARCH',
   OFFICER_MISSING_ID_SUBMIT = 'OFFICER_MISSING_ID_SUBMIT',
 }
 const error: { [key in ErrorType]: FormError } = {
@@ -24,21 +22,13 @@ const error: { [key in ErrorType]: FormError } = {
     href: '#selectedAnswerId',
     text: 'Search for a prison officer',
   },
-  OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT: {
-    href: '#officerSearchFirstNameInput',
-    text: 'Enter the person’s first name',
+  OFFICER_MISSING_NAME_INPUT_SUBMIT: {
+    href: '#officerSearchNameInput',
+    text: 'Enter the person’s name',
   },
-  OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT: {
-    href: '#officerSearchLastNameInput',
-    text: 'Enter the person’s last name',
-  },
-  OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH: {
-    href: '#officerSearchFirstNameInput',
-    text: 'Enter the person’s first name',
-  },
-  OFFICER_MISSING_LAST_NAME_INPUT_SEARCH: {
-    href: '#officerSearchLastNameInput',
-    text: 'Enter the person’s last name',
+  OFFICER_MISSING_NAME_INPUT_SEARCH: {
+    href: '#officerSearchNameInput',
+    text: 'Enter the person’s name',
   },
 }
 
@@ -54,8 +44,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     return {
       pathname: adjudicationUrls.selectAssociatedStaff.root,
       query: {
-        staffFirstName: (form.selectedAnswerData as OfficerData).officerSearchFirstNameInput,
-        staffLastName: (form.selectedAnswerData as OfficerData).officerSearchLastNameInput,
+        staffName: (form.selectedAnswerData as OfficerData).officerSearchNameInput,
       },
     }
   }
@@ -66,8 +55,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
       selectedAnswerId,
       selectedAnswerData: {
         officerId: req.body.officerId,
-        officerSearchFirstNameInput: req.body.officerSearchFirstNameInput,
-        officerSearchLastNameInput: req.body.officerSearchLastNameInput,
+        officerSearchNameInput: req.body.officerSearchNameInput,
       },
     }
   }
@@ -95,25 +83,16 @@ export default class OfficerDecisionHelper extends DecisionHelper {
 
   validateSearch = (officerData: OfficerData) => {
     const searchingErrors = []
-    if (!officerData.officerSearchFirstNameInput) {
-      searchingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SEARCH)
-    }
-    if (!officerData.officerSearchLastNameInput) {
-      searchingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SEARCH)
+    if (!officerData.officerSearchNameInput) {
+      searchingErrors.push(error.OFFICER_MISSING_NAME_INPUT_SEARCH)
     }
     return searchingErrors
   }
 
   validateSubmission = (officerData: OfficerData) => {
     const submittingErrors = []
-    if (!officerData.officerSearchFirstNameInput) {
-      submittingErrors.push(error.OFFICER_MISSING_FIRST_NAME_INPUT_SUBMIT)
-    }
-    if (!officerData.officerSearchLastNameInput) {
-      submittingErrors.push(error.OFFICER_MISSING_LAST_NAME_INPUT_SUBMIT)
-    }
-    if (officerData.officerSearchFirstNameInput && officerData.officerSearchLastNameInput) {
-      submittingErrors.push(error.OFFICER_MISSING_ID_SUBMIT)
+    if (!officerData.officerSearchNameInput) {
+      submittingErrors.push(error.OFFICER_MISSING_NAME_INPUT_SUBMIT)
     }
     return submittingErrors
   }
@@ -131,11 +110,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     const officerId = (form.selectedAnswerData as OfficerData)?.officerId
     if (officerId) {
       const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
-      const officerName = convertToTitleCase(decisionOfficer.name).split(' ')
-      return {
-        firstName: officerName[0],
-        lastName: officerName[1],
-      }
+      return convertToTitleCase(decisionOfficer.name)
     }
     return null
   }
