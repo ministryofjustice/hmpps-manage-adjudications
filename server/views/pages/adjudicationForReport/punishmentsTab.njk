@@ -24,32 +24,35 @@
 
       {% if not readOnly %}
         <div>
+          {% if not caution %}
+            {{ govukButton({
+              text: 'Change punishments',
+              element: "a",
+              href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+              classes: "govuk-button--secondary govuk-!-margin-right-3",
+              attributes: { "data-qa": "change-punishments" }
+            }) }}
+          {% endif %}
+
           {{ govukButton({
-          text: 'Change punishments',
-          element: "a",
-          href: adjudicationUrls.awardPunishments.urls.start(reportNo),
-          classes: "govuk-button--secondary govuk-!-margin-right-3",
-          attributes: { "data-qa": "change-punishments" }
-        }) }}
-          {{ govukButton({
-          text: 'Report a quashed guilty finding',
-          element: "a",
-          href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(reportNo),
-          classes: "govuk-button--secondary govuk-!-margin-right-3",
-          attributes: { "data-qa": "report-quashed-guilty-finding" }
-        }) }}
+            text: 'Report a quashed guilty finding',
+            element: "a",
+            href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(reportNo),
+            classes: "govuk-button--secondary govuk-!-margin-right-3",
+            attributes: { "data-qa": "report-quashed-guilty-finding" }
+          }) }}
         </div>
       {% endif %}
 
-    {% else %}
+    {% elif not readOnly and not caution %}
       <div>
         {{ govukButton({
-        text: 'Award punishments',
-        element: "a",
-        href: adjudicationUrls.awardPunishments.urls.start(reportNo),
-        classes: "govuk-button--submit govuk-!-margin-right-3",
-        attributes: { "data-qa": "award-punishments" }
-      }) }}
+              text: 'Award punishments',
+              element: "a",
+              href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "award-punishments" }
+            }) }}
       </div>
     {% endif %}
 
