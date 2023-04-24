@@ -5,6 +5,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
+
 {% set title = 'Enter the hearing outcome' %}
 
 {% block pageTitle %}
@@ -26,20 +27,9 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" name="adjudicatorType" value="{{ adjudicatorType }}"/>
 
-    {{ govukInput({
-      label: {
-        text: "Name of adjudicator"
-      },
-      value: adjudicatorName,
-      classes: "govuk-input--width-20 govuk-!-margin-bottom-5",
-      id: "adjudicatorName",
-      name: "adjudicatorName",
-      attributes: {
-        'data-qa': "adjudicator-name"
-      },
-      errorMessage: "adjudicatorName" | findError(errors)
-    }) }}
+    {% include "../../partials/adjudicatorSearch.njk" %}
 
     {{ govukRadios({
       name: "hearingOutcome",

@@ -1,0 +1,66 @@
+{% if adjudicatorType == OicHearingType.GOV_ADULT or adjudicatorType == OicHearingType.GOV_YOI%}
+    {% if governorId != null %}
+    <input type="hidden" name="governorId" value="{{ governorId }}"/>
+    <div>
+      <p data-qa="chosen-governor-name">
+        <span class="govuk-!-font-weight-bold">Name</span>
+        -
+        {{ governorName }}
+      </p>
+      <p data-qa="chosen-governor-id">
+        <span class="govuk-!-font-weight-bold">User ID</span>
+        -
+        {{ governorId }}
+      </p>
+      <div>
+        {{ govukButton({
+            text: 'Delete',
+            classes: "govuk-button--secondary",
+            type: "submit",
+            name: "deleteUser",
+            value: "deleteUser",
+            attributes: {
+              'data-qa': 'deleteUser'
+            }
+        }) }}
+      </div>
+    </div>
+
+    {% else %}
+    {{ govukInput({
+      label: {
+        text: "Name of adjudicator"
+      },
+      value: governorName,
+      classes: "govuk-input--width-20",
+      id: "governorName",
+      name: "governorName",
+      attributes: {
+        'data-qa': "governor-name"
+      },
+      errorMessage: "governorName" | findError(errors)
+    }) }}
+    {{ govukButton({
+        text: "Search",
+        classes: "govuk-button--secondary searchButton",
+        type: "submit",
+        name: "searchGov",
+        value: "searchGov",
+        attributes: {'data-qa': 'gov-search'}
+    }) }}
+    {% endif %}
+{% else %}
+    {{ govukInput({
+      label: {
+        text: "Name of adjudicator"
+      },
+      value: inAdName,
+      classes: "govuk-input--width-20 govuk-!-margin-bottom-5",
+      id: "inAdName",
+      name: "inAdName",
+      attributes: {
+        'data-qa': "independent-adjudicator-name"
+      },
+      errorMessage: "inAdName" | findError(errors)
+    }) }}
+{%endif%}

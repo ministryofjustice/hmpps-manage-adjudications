@@ -34,6 +34,7 @@ export default class SelectAssociatedPrisonerRoutes {
     const staffFirstName = JSON.stringify(req.query.staffFirstName)?.replace(/"/g, '')
     const staffLastName = JSON.stringify(req.query.staffLastName)?.replace(/"/g, '')
     const { redirectUrl } = req.session
+    const extendedRedirectUrl = this.getExtendedRedirectUrl(redirectUrl)
 
     if (!staffFirstName || !staffLastName)
       return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -44,13 +45,14 @@ export default class SelectAssociatedPrisonerRoutes {
       searchResults,
       staffFirstName,
       staffLastName,
-      redirectUrl,
+      redirectUrl: extendedRedirectUrl,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { staffFirstName, staffLastName } = req.body
     const { redirectUrl } = req.session
+
     const error = validateForm({ staffFirstName, staffLastName })
     if (error) return this.renderView(req, res, { error, staffFirstName, staffLastName })
     return res.redirect(
@@ -59,5 +61,12 @@ export default class SelectAssociatedPrisonerRoutes {
         query: { staffFirstName, staffLastName, redirectUrl },
       })
     )
+  }
+
+  getExtendedRedirectUrl = (redirectUrl: string) => {
+    if (!redirectUrl) return null
+    if (redirectUrl.includes('selectedPerson')) return redirectUrl
+    if (redirectUrl.includes('?')) return `${redirectUrl}&selectedPerson=`
+    return `${redirectUrl}?selectedPerson=`
   }
 }

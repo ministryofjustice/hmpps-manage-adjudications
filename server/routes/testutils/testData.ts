@@ -363,10 +363,10 @@ export default class TestData {
     return alertFlagLabels.filter(alert => codes.includes(alert.alertCodes[0]))
   }
 
-  userFromUsername = (username = 'USER1') => {
+  userFromUsername = (username = 'USER1', name = 'Test User') => {
     return {
       activeCaseLoadId: 'MDI',
-      name: 'Test User',
+      name,
       username,
       token: 'token-1',
       authSource: 'auth',
@@ -381,15 +381,21 @@ export default class TestData {
     }
   }
 
-  staffFromName = (activeCaseLoadId = 'MDI') => {
+  staffFromName = (
+    activeCaseLoadId = 'MDI',
+    username = 'JSMITH_GEN',
+    name = 'John Smith',
+    firstName = 'John',
+    lastName = 'Smith'
+  ) => {
     return {
-      username: 'JSMITH_GEN',
+      username,
       staffId: 485592,
       email: 'john.smith@digital.justice.gov.uk',
       verified: true,
-      firstName: 'John',
-      lastName: 'Smith',
-      name: 'John Smith',
+      firstName,
+      lastName,
+      name,
       activeCaseLoadId,
     }
   }

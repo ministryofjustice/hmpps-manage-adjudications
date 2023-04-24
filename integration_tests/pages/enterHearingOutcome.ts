@@ -5,7 +5,17 @@ export default class EnterHearingOutcomePage extends Page {
     super('Enter the hearing outcome')
   }
 
-  adjudicatorName = (): PageElement => cy.get('[data-qa="adjudicator-name"]')
+  governorName = (): PageElement => cy.get('[data-qa="governor-name"]')
+
+  inAdName = (): PageElement => cy.get('[data-qa="independent-adjudicator-name"]')
+
+  searchButton = (): PageElement => cy.get('[data-qa="gov-search"]')
+
+  deleteButton = (): PageElement => cy.get('[data-qa="deleteUser"]')
+
+  chosenGovernorName = (): PageElement => cy.get('[data-qa="chosen-governor-name"]')
+
+  chosenGovernorId = (): PageElement => cy.get('[data-qa="chosen-governor-id"]')
 
   radioButtons = (): PageElement => cy.get('[data-qa="radio-buttons"]')
 
