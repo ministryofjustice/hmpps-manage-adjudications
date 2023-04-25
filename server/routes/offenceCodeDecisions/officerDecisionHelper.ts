@@ -94,6 +94,9 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     if (!officerData.officerSearchNameInput) {
       submittingErrors.push(error.OFFICER_MISSING_NAME_INPUT_SUBMIT)
     }
+    if (officerData.officerSearchNameInput) {
+      submittingErrors.push(error.OFFICER_MISSING_ID_SUBMIT)
+    }
     return submittingErrors
   }
 
@@ -110,7 +113,9 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     const officerId = (form.selectedAnswerData as OfficerData)?.officerId
     if (officerId) {
       const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
-      return convertToTitleCase(decisionOfficer.name)
+      return {
+        name: convertToTitleCase(decisionOfficer.name),
+      }
     }
     return null
   }

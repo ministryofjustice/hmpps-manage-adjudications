@@ -26,9 +26,7 @@ export default class OffenceCodeSelection extends Page {
 
   victimPrisonerName = (): PageElement => cy.get('[data-qa="victim-prisoner-name"]')
 
-  victimOfficerSearchFirstNameInput = (): PageElement => cy.get('input[id="officerSearchFirstNameInput"]')
-
-  victimOfficerSearchLastNameInput = (): PageElement => cy.get('input[id="officerSearchLastNameInput"]')
+  victimOfficerSearchNameInput = (): PageElement => cy.get('input[id="officerSearchNameInput"]')
 
   victimOfficerPrisonerHiddenInput = (): PageElement => cy.get('input[id="officerId"]')
 
@@ -42,9 +40,7 @@ export default class OffenceCodeSelection extends Page {
 
   victimOtherPersonSearchNameInput = (): PageElement => cy.get('input[id="otherPersonNameInput"]')
 
-  victimStaffSearchFirstNameInput = (): PageElement => cy.get('input[id="staffSearchFirstNameInput"]')
-
-  victimStaffSearchLastNameInput = (): PageElement => cy.get('input[id="staffSearchLastNameInput"]')
+  victimStaffSearchNameInput = (): PageElement => cy.get('input[id="staffSearchNameInput"]')
 
   prisonerOutsideEstablishmentNameInput = (): PageElement => cy.get('input[id="prisonerOutsideEstablishmentNameInput"]')
 

@@ -32,7 +32,6 @@ export default class SelectAssociatedPrisonerRoutes {
     const staffName = JSON.stringify(req.query.staffName)?.replace(/"/g, '')
     const { redirectUrl } = req.session
     const extendedRedirectUrl = this.getExtendedRedirectUrl(redirectUrl)
-
     if (!staffName)
       return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
 

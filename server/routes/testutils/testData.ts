@@ -342,19 +342,16 @@ export default class TestData {
 
   singleWitness = ({
     code = WitnessCode.OFFICER,
-    firstName = 'Firstname',
-    lastName = 'Lastname',
+    name = 'Firstname Lastname',
     reporter = 'user1',
   }: {
     code?: WitnessCode
-    firstName?: string
-    lastName?: string
+    name?: string
     reporter?: string
   }): WitnessDetails => {
     return {
       code,
-      firstName,
-      lastName,
+      name,
       reporter,
     }
   }

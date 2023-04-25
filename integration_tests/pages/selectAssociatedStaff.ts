@@ -5,9 +5,7 @@ export default class SelectAssociatedStaff extends Page {
     super('Select a staff member')
   }
 
-  firstNameInput = (): PageElement => cy.get('[data-qa="search-first-name-input"]')
-
-  lastNameInput = (): PageElement => cy.get('[data-qa="search-last-name-input"]')
+  nameInput = (): PageElement => cy.get('[data-qa="search-name-input"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="search-submit"]')
 

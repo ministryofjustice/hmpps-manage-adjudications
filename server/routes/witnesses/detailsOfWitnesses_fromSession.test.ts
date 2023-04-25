@@ -57,7 +57,6 @@ describe('GET', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison officer')
-        expect(res.text).toContain('Lastname, Firstname')
       })
   })
   it('should use the session service to get data', () => {

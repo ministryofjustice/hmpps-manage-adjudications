@@ -81,17 +81,12 @@ context('Select associated staff', () => {
     whatTypeOfOffencePage.continue().click()
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio('1-1-1-3').check()
-    whoWasAssaultedPage.victimStaffSearchFirstNameInput().type('John')
-    whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Smith')
+    whoWasAssaultedPage.victimStaffSearchNameInput().type('John Smith')
     whoWasAssaultedPage.searchStaff().click()
-    cy.visit(`${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=John&staffLastName=Smith`)
     const selectAssociatedStaffPage: SelectAssociatedStaff = Page.verifyOnPage(SelectAssociatedStaff)
-
-    selectAssociatedStaffPage.firstNameInput().should('exist')
-    selectAssociatedStaffPage.lastNameInput().should('exist')
+    selectAssociatedStaffPage.nameInput().should('exist')
     selectAssociatedStaffPage.resultsTable().should('exist')
     selectAssociatedStaffPage.noResultsMessage().should('not.exist')
-
     selectAssociatedStaffPage
       .resultsTable()
       .find('th')
@@ -118,7 +113,7 @@ context('Select associated staff', () => {
     cy.get('#governorName').type('John Smith')
     cy.get('[data-qa="gov-search"]').click()
     const SelectStaffMemberPage = new SelectAssociatedStaff()
-    cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=John&staffLastName=Smith`)
+    cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=John%20Smith`)
     SelectStaffMemberPage.selectStaffMemberLink('JSMITH_GEN').click()
     cy.url().should('include', `${adjudicationUrls.enterHearingOutcome.urls.start(100)}?selectedPerson=JSMITH_GEN`)
   })
@@ -132,11 +127,10 @@ context('Select associated staff', () => {
     whatTypeOfOffencePage.continue().click()
     const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
     whoWasAssaultedPage.radio('1-1-1-3').check()
-    whoWasAssaultedPage.victimStaffSearchFirstNameInput().type('John')
-    whoWasAssaultedPage.victimStaffSearchLastNameInput().type('Smith')
+    whoWasAssaultedPage.victimStaffSearchNameInput().type('John Smith')
     whoWasAssaultedPage.searchStaff().click()
     const SelectStaffMemberPage = new SelectAssociatedStaff()
-    cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=John&staffLastName=Smith`)
+    cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=John%20Smith`)
     SelectStaffMemberPage.selectStaffMemberLink('JSMITH_GEN').click()
     cy.url().should(
       'include',

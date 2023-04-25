@@ -127,8 +127,7 @@ export type EvidenceDetails = {
 
 export type WitnessDetails = {
   code: WitnessCode
-  firstName: string
-  lastName: string
+  name: string
   reporter?: string
 }
 

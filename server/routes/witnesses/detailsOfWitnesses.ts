@@ -86,7 +86,6 @@ export default class DetailsOfWitnessesPage {
         addWitnessButtonHref: addWitnessUrl,
       })
     }
-
     return res.render(`pages/detailsOfWitnesses`, {
       currentUser: user.username,
       adjudicationNumber,

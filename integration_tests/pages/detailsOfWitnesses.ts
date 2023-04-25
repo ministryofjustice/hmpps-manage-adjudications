@@ -22,25 +22,19 @@ export default class Witnesses extends Page {
 
   addWitnessType = (): PageElement => cy.get('[data-qa="add-witness-radio-buttons"]')
 
-  witnessOfficerSearchFirstNameInput = (): PageElement => cy.get('input[id="officerSearchFirstNameInput"]')
-
-  witnessOfficerSearchLastNameInput = (): PageElement => cy.get('input[id="officerSearchLastNameInput"]')
+  witnessOfficerSearchNameInput = (): PageElement => cy.get('input[id="officerSearchNameInput"]')
 
   witnessOfficerHiddenInput = (): PageElement => cy.get('input[id="officerId"]')
 
   witnessOfficerName = (): PageElement => cy.get('[data-qa="officer-name"]')
 
-  witnessStaffSearchFirstNameInput = (): PageElement => cy.get('input[id="staffSearchFirstNameInput"]')
-
-  witnessStaffSearchLastNameInput = (): PageElement => cy.get('input[id="staffSearchLastNameInput"]')
+  witnessStaffSearchNameInput = (): PageElement => cy.get('input[id="staffSearchNameInput"]')
 
   witnessStaffHiddenInput = (): PageElement => cy.get('input[id="staffId"]')
 
   witnessStaffName = (): PageElement => cy.get('[data-qa="staff-name"]')
 
-  witnessOtherFirstNameInput = (): PageElement => cy.get('input[id="otherPersonFirstNameInput"]')
-
-  witnessOtherLastNameInput = (): PageElement => cy.get('input[id="otherPersonLastNameInput"]')
+  witnessOtherNameInput = (): PageElement => cy.get('input[id="otherPersonNameInput"]')
 
   searchStaff = (): PageElement => cy.get('button[data-qa="staff-search"]')
 

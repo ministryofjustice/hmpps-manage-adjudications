@@ -5,7 +5,7 @@ import * as pathModule from 'path'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType } from './utils'
+import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType, properCaseName } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import {
@@ -255,9 +255,13 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     }
   })
 
-  njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
-    if (!witnessLastName) return witnessFirstName
-    return `${witnessLastName}, ${witnessFirstName}`
+  njkEnv.addFilter('witnessName', (witnessName: string) => {
+    if (!witnessName) return ''
+    const names = witnessName.split(' ')
+    if (names.length < 2) return properCaseName(witnessName)
+    const firstName = names[0]
+    const lastName = names.reverse()[0]
+    return `${properCaseName(lastName)}, ${properCaseName(firstName)} `
   })
 
   njkEnv.addFilter('toTextValue', (array, selected) => {
