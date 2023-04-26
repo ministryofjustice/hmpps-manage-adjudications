@@ -167,13 +167,30 @@ export default class EnterHearingOutcomePage {
     return this.hearingsService.getHearingOutcome(adjudicationId, user)
   }
 
-  search = async (req: Request, res: Response): Promise<void> => {
-    const { governorName } = req.body
+  validateSearch = (govName: string) => {
+    if (!govName) {
+      return {
+        href: '#governorName',
+        text: 'Enter the name of the adjudicator',
+      }
+    }
+    return null
+  }
 
-    // const errors = do some validation here
-    // if (errors && errors.length !== 0) {
-    //   return this.renderView(req, res, { errors, ...form?, adjudicationNumber })
-    // }
+  search = async (req: Request, res: Response): Promise<void> => {
+    const { hearingOutcome, inAdName, adjudicatorType, governorId, governorName } = req.body
+
+    const error = this.validateSearch(governorName)
+    if (error) {
+      return this.renderView(req, res, {
+        error,
+        hearingOutcome,
+        inAdName,
+        adjudicatorType,
+        governorId,
+        governorName,
+      })
+    }
     req.session.redirectUrl = `${adjudicationUrls.enterHearingOutcome.root}${req.path}`
     return res.redirect(
       url.format({
