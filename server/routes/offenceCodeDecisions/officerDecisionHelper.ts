@@ -113,8 +113,10 @@ export default class OfficerDecisionHelper extends DecisionHelper {
     const officerId = (form.selectedAnswerData as OfficerData)?.officerId
     if (officerId) {
       const decisionOfficer = await this.userService.getStaffFromUsername(officerId, user)
+      const officerName = convertToTitleCase(decisionOfficer.name).split(' ')
       return {
-        name: convertToTitleCase(decisionOfficer.name),
+        firstName: officerName[0],
+        lastName: officerName.slice(1).join(' '),
       }
     }
     return null

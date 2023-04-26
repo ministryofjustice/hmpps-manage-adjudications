@@ -121,7 +121,8 @@ export default class AddWitnessRoutes {
     const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
     const witnessToAdd = {
       code: WitnessCode[selectedAnswerId],
-      name: witnessName.name,
+      firstName: witnessName.firstName,
+      lastName: witnessName.lastName,
       reporter: user.username,
     }
 

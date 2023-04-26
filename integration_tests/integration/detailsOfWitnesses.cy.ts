@@ -15,7 +15,8 @@ const witnessesListMultiUser = [
   testData.singleWitness({ reporter: 'USER1' }),
   testData.singleWitness({
     code: WitnessCode.OTHER_PERSON,
-    name: 'Digital Prison',
+    firstName: 'Digital',
+    lastName: 'Prison',
     reporter: 'USER1',
   }),
   testData.singleWitness({ code: WitnessCode.STAFF, reporter: 'USER2' }),
@@ -249,14 +250,14 @@ context('Details of witnesses', () => {
     detailsOfWitnessesPage.witnessOfficerHiddenInput().should('have.value', 'AOWENS')
     detailsOfWitnessesPage.witnessOfficerName().contains('Test User')
     detailsOfWitnessesPage.addWitnessSubmit().click()
-    // detailsOfWitnessesPage
-    //   .witnessesTable()
-    //   .find('td')
-    //   .then($data => {
-    //     expect($data.get(12).innerText).to.contain('User, Test')
-    //     expect($data.get(13).innerText).to.contain('Prison officer')
-    //     expect($data.get(14).innerText).to.contain('Remove')
-    //   })
+    detailsOfWitnessesPage
+      .witnessesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(12).innerText).to.contain('User, Test')
+        expect($data.get(13).innerText).to.contain('Prison officer')
+        expect($data.get(14).innerText).to.contain('Remove')
+      })
   })
   it('should be able to add a member of staff using search', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(202))

@@ -7,6 +7,11 @@ import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import Question from '../../offenceCodeDecisions/Question'
 
+export type WitnessData = {
+  firstName?: string
+  lastName?: string
+}
+
 export default class DecisionHelper {
   constructor(readonly decisionTreeService: DecisionTreeService) {}
 
@@ -53,7 +58,7 @@ export default class DecisionHelper {
     }
   }
 
-  witnessNamesForSession(form: DecisionForm, user: User): Promise<{ name?: string }> {
+  witnessNamesForSession(form: DecisionForm, user: User): Promise<WitnessData> {
     return new Promise(resolve => {
       resolve({})
     })

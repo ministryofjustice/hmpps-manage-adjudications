@@ -111,8 +111,10 @@ export default class StaffDecisionHelper extends DecisionHelper {
     const staffId = (form.selectedAnswerData as StaffData)?.staffId
     if (staffId) {
       const decisionStaff = await this.userService.getStaffFromUsername(staffId, user)
+      const staffName = convertToTitleCase(decisionStaff.name).split(' ')
       return {
-        name: convertToTitleCase(decisionStaff.name),
+        firstName: staffName[0],
+        lastName: staffName.slice(1).join(' '),
       }
     }
     return null

@@ -14,7 +14,7 @@
     {% set rows = (rows.push(
         [
             {
-                text: data.code | damageCode if dataType == "damages" else data.name | witnessName
+                text: data.code | damageCode if dataType == "damages" else data.lastName | witnessName(data.firstName)
             }, 
             {
                 text: data.details if dataType == "damages" else data.code | witnessCode,

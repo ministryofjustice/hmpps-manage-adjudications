@@ -95,17 +95,20 @@ describe('GET', () => {
           [
             {
               code: WitnessCode.OTHER_PERSON,
-              name: 'Firstname Lastname',
+              firstName: 'Firstname',
+              lastName: 'Lastname',
               reporter: 'user1',
             },
             {
               code: WitnessCode.OFFICER,
-              name: 'Firstname Lastname',
+              firstName: 'Firstname',
+              lastName: 'Lastname',
               reporter: 'user1',
             },
             {
               code: WitnessCode.STAFF,
-              name: 'Firstname Lastname',
+              firstName: 'Firstname',
+              lastName: 'Lastname',
               reporter: 'user1',
             },
           ],

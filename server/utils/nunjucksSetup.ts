@@ -255,13 +255,9 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     }
   })
 
-  njkEnv.addFilter('witnessName', (witnessName: string) => {
-    if (!witnessName) return ''
-    const names = witnessName.split(' ')
-    if (names.length < 2) return properCaseName(witnessName)
-    const firstName = names[0]
-    const lastName = names.reverse()[0]
-    return `${properCaseName(lastName)}, ${properCaseName(firstName)} `
+  njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
+    if (!witnessLastName) return witnessFirstName
+    return `${witnessLastName}, ${witnessFirstName}`
   })
 
   njkEnv.addFilter('toTextValue', (array, selected) => {
