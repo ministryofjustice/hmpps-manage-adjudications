@@ -214,7 +214,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         selectedAnswerId: aPrisonOfficerAnswer.id(),
       })
       .expect(res => {
-        expect(res.text).toContain('Enter the person’s first name')
+        expect(res.text).toContain('Enter the person’s name')
       })
   })
 
@@ -226,8 +226,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         searchUser: 'searchUser',
       })
       .expect(res => {
-        expect(res.text).toContain('Enter the person’s first name')
-        expect(res.text).toContain('Enter the person’s last name')
+        expect(res.text).toContain('Enter the person’s name')
       })
   })
 
@@ -238,7 +237,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         selectedAnswerId: aMemberOfStaffAnswer.id(),
       })
       .expect(res => {
-        expect(res.text).toContain('Enter the person’s first name')
+        expect(res.text).toContain('Enter the person’s name')
       })
   })
 
@@ -250,8 +249,7 @@ describe('POST /offence-code-selection/100/assisted/1 validation', () => {
         searchUser: 'searchUser',
       })
       .expect(res => {
-        expect(res.text).toContain('Enter the person’s first name')
-        expect(res.text).toContain('Enter the person’s last name')
+        expect(res.text).toContain('Enter the person’s name')
       })
   })
 })
@@ -275,14 +273,10 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
       .send({
         selectedAnswerId: aPrisonOfficerAnswer.id(),
         searchUser: 'searchUser',
-        officerSearchFirstNameInput: 'FirstName',
-        officerSearchLastNameInput: 'LastName',
+        officerSearchNameInput: 'FirstName LastName',
       })
       .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`
-      )
+      .expect('Location', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=FirstName%20LastName`)
   })
 
   it(`A ${Type.STAFF} answer should redirect to search when searching`, () => {
@@ -291,14 +285,10 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
       .send({
         selectedAnswerId: aMemberOfStaffAnswer.id(),
         searchUser: 'searchUser',
-        staffSearchFirstNameInput: 'FirstName',
-        staffSearchLastNameInput: 'LastName',
+        staffSearchNameInput: 'FirstName LastName',
       })
       .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=FirstName&staffLastName=LastName`
-      )
+      .expect('Location', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=FirstName%20LastName`)
   })
 
   it(`A ${Type.PRISONER_OUTSIDE_ESTABLISHMENT} answer should redirect to add offence`, () => {

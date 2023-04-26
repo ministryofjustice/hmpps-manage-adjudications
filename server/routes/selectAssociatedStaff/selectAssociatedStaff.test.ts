@@ -45,7 +45,7 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get(`${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=john&staffLastName=smith`)
+        .get(`${adjudicationUrls.selectAssociatedStaff.root}?staffName=john%20smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
@@ -66,7 +66,7 @@ describe('GET /select-associated-staff', () => {
 
     it('should load the search for a prisoner page', () => {
       return request(app)
-        .get(`${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=john&staffLastName=smith`)
+        .get(`${adjudicationUrls.selectAssociatedStaff.root}?staffName=john%20smith`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a staff member')
@@ -81,10 +81,10 @@ describe('POST /select-associated-staff', () => {
   it('should redirect to select staff member page with the correct search text and redirect URL intact', () => {
     return request(app)
       .post(adjudicationUrls.selectAssociatedStaff.root)
-      .send({ staffFirstName: 'john', staffLastName: 'doe' })
+      .send({ staffName: 'john doe' })
       .expect(
         'Location',
-        `${adjudicationUrls.selectAssociatedStaff.root}?staffFirstName=john&staffLastName=doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3%26selectedPerson%3D`
+        `${adjudicationUrls.selectAssociatedStaff.root}?staffName=john%20doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3%26selectedPerson%3D`
       )
   })
 

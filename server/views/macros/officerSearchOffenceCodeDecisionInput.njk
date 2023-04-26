@@ -4,15 +4,18 @@
 {% macro officerSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedAnswerViewData, errors) %}
     {% set selectedAnswerId = decisionForm.selectedAnswerId %}
     {% set officerId = decisionForm.selectedAnswerData.officerId %}
-    {% set officerSearchFirstNameInput = decisionForm.selectedAnswerData.officerSearchFirstNameInput %}
-    {% set officerSearchLastNameInput = decisionForm.selectedAnswerData.officerSearchLastNameInput %}
+    {% set officerSearchNameInput = decisionForm.selectedAnswerData.officerSearchNameInput %}
     {% set officerName = selectedAnswerViewData.officerName %}
 
     {% if selectedAnswerId == answerId and officerId != null %}
-        <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}" />
+        <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}"/>
         <div>
-            <p data-qa="victim-officer-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }} </p>
-            <p><span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }} </p>
+            <p data-qa="victim-officer-name">
+                <span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }}
+            </p>
+            <p>
+                <span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }}
+            </p>
             <div>
                 {{ govukButton({
                     text: 'Delete',
@@ -24,30 +27,20 @@
             </div>
         </div>
     {% else %}
-        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
-        <div id="officerName" class="govuk-form-group flex-container flex-column">
-            {{ govukInput({
-                id: "officerSearchFirstNameInput",
-                name: "officerSearchFirstNameInput",
-                classes: "govuk-!-width-one-third",
-                value: selectedAnswerId == answerId and officerSearchFirstNameInput,
-                errorMessage: errors | findErrors(["officerSearchFirstNameInput"]),
+        <div id="officerName" class="flex-container flex-center">
+            <div class="govuk-!-margin-right-3 officerSearchNameInputContainer">
+                {{ govukInput({
+                id: "officerSearchNameInput",
+                name: "officerSearchNameInput",
+                classes: "govuk-!-width-full-width",
+                value: selectedAnswerId == answerId and officerSearchNameInput,
+                errorMessage: errors | findErrors(["officerSearchNameInput"]),
                 label: {
-                    text: "First name"
+                    text: "Enter their name",
+                    classes: "govuk-!-font-weight-bold"
                 }
             }) }}
-            {{ govukInput({
-                id: "officerSearchLastNameInput",
-                name: "officerSearchLastNameInput",
-                classes: "govuk-!-width-one-third",
-                value: selectedAnswerId == answerId and officerSearchLastNameInput,
-                errorMessage: errors | findErrors(["officerSearchLastNameInput"]),
-                label: {
-                    text: "Last name"
-                }
-            }) }}
-        </div>
-        <div>
+            </div>
             {{ govukButton({
                 text: "Search",
                 classes: "govuk-button--secondary conditionalRadioSearchButton",
@@ -57,6 +50,7 @@
                 attributes: {"data-qa": "officer-search"}
             }) }}
         </div>
+
     {% endif %}
 
 {% endmacro %}

@@ -9,8 +9,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 type PageData = {
   error?: FormError
   searchResults?: StaffSearchWithCurrentLocation[]
-  staffFirstName: string
-  staffLastName: string
+  staffName: string
   redirectUrl?: string
 }
 
@@ -18,47 +17,43 @@ export default class SelectAssociatedPrisonerRoutes {
   constructor(private readonly userService: UserService, private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, searchResults, staffFirstName, staffLastName, redirectUrl } = pageData
+    const { error, searchResults, staffName, redirectUrl } = pageData
 
     return res.render('pages/associatedStaffSelect', {
       errors: error ? [error] : [],
       searchResults,
-      staffFirstName,
-      staffLastName,
+      staffName,
       redirectUrl,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const staffFirstName = JSON.stringify(req.query.staffFirstName)?.replace(/"/g, '')
-    const staffLastName = JSON.stringify(req.query.staffLastName)?.replace(/"/g, '')
+    const staffName = JSON.stringify(req.query.staffName)?.replace(/"/g, '')
     const { redirectUrl } = req.session
     const extendedRedirectUrl = this.getExtendedRedirectUrl(redirectUrl)
-
-    if (!staffFirstName || !staffLastName)
+    if (!staffName)
       return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
 
-    const results = await this.userService.getStaffFromNames(staffFirstName, staffLastName, user)
+    const results = await this.userService.getStaffFromNames(staffName, user)
     const searchResults = await this.placeOnReportService.getAssociatedStaffDetails(results, user)
     return this.renderView(req, res, {
       searchResults,
-      staffFirstName,
-      staffLastName,
+      staffName,
       redirectUrl: extendedRedirectUrl,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { staffFirstName, staffLastName } = req.body
+    const { staffName } = req.body
     const { redirectUrl } = req.session
 
-    const error = validateForm({ staffFirstName, staffLastName })
-    if (error) return this.renderView(req, res, { error, staffFirstName, staffLastName })
+    const error = validateForm({ staffName })
+    if (error) return this.renderView(req, res, { error, staffName })
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectAssociatedStaff.root,
-        query: { staffFirstName, staffLastName, redirectUrl },
+        query: { staffName, redirectUrl },
       })
     )
   }

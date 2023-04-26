@@ -6,13 +6,11 @@ export type DecisionForm = {
 }
 export type StaffData = {
   staffId?: string
-  staffSearchFirstNameInput?: string
-  staffSearchLastNameInput?: string
+  staffSearchNameInput?: string
 }
 export type OfficerData = {
   officerId?: string
-  officerSearchFirstNameInput?: string
-  officerSearchLastNameInput?: string
+  officerSearchNameInput?: string
 }
 export type PrisonerData = {
   prisonerId?: string
@@ -21,8 +19,6 @@ export type PrisonerData = {
 
 export type OtherPersonData = {
   otherPersonNameInput?: string
-  otherPersonFirstNameInput?: string
-  otherPersonLastNameInput?: string
 }
 
 export type PrisonerOutsideEstablishmentData = {

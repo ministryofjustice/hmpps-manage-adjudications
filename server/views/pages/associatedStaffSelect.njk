@@ -28,31 +28,17 @@
 
     <div class="horizontal-form govuk-!-margin-bottom-3" id="staffFullName">
       {{ govukInput({
-      id: "staffFirstName",
-      name: "staffFirstName",
-      value: staffFirstName,
+      id: "staffName",
+      name: "staffName",
+      value: staffName,
       label: {
-        html: 'First name'
+        html: 'Name'
       },
       classes: "govuk-!-width-full",
       attributes: {
-        'data-qa': "search-first-name-input"
+        'data-qa': "search-name-input"
       },
-      errorMessage: errors | findErrors(['staffFirstName', 'staffFullName' ])
-    }) }}
-
-      {{ govukInput({
-      id: "staffLastName",
-      name: "staffLastName",
-      value: staffLastName,
-      label: {
-        html: 'Last name'
-      },
-      classes: "govuk-!-width-full",
-      attributes: {
-        'data-qa': "search-last-name-input"
-      },
-      errorMessage: errors | findErrors(['staffLastName', 'staffFullName' ])
+      errorMessage: errors | findErrors(['staffName'])
     }) }}
 
       {{ govukButton({

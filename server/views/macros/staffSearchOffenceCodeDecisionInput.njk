@@ -4,8 +4,7 @@
 {% macro staffSearchOffenceCodeDecisionInput(answerId, decisionForm, selectedAnswerViewData, errors) %}
   {% set selectedAnswerId = decisionForm.selectedAnswerId %}
   {% set staffId = decisionForm.selectedAnswerData.staffId %}
-  {% set staffSearchFirstNameInput = decisionForm.selectedAnswerData.staffSearchFirstNameInput %}
-  {% set staffSearchLastNameInput = decisionForm.selectedAnswerData.staffSearchLastNameInput %}
+  {% set staffSearchNameInput = decisionForm.selectedAnswerData.staffSearchNameInput %}
   {% set staffName = selectedAnswerViewData.staffName %}
 
   {% if selectedAnswerId == answerId and staffId != null %}
@@ -33,26 +32,16 @@
     </div>
   {% else %}
 
-    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Enter their name</p>
     <div id="staffName" class="govuk-form-group flex-container flex-column">
       {{ govukInput({
-                id: "staffSearchFirstNameInput",
-                name: "staffSearchFirstNameInput",
+                id: "staffSearchNameInput",
+                name: "staffSearchNameInput",
                 classes: "govuk-!-width-one-third",
-                value: selectedAnswerId == answerId and staffSearchFirstNameInput,
-                errorMessage: errors | findErrors(["staffSearchFirstNameInput"]),
+                value: selectedAnswerId == answerId and staffSearchNameInput,
+                errorMessage: errors | findErrors(["staffSearchNameInput"]),
                 label: {
-                    text: "First name"
-                }
-            }) }}
-      {{ govukInput({
-                id: "staffSearchLastNameInput",
-                name: "staffSearchLastNameInput",
-                classes: "govuk-!-width-one-third",
-                value: selectedAnswerId == answerId and staffSearchLastNameInput,
-                errorMessage: errors | findErrors(["staffSearchLastNameInput"]),
-                label: {
-                    text: "Last name"
+                    text: "Enter their name",
+                    classes: "govuk-!-font-weight-bold"
                 }
             }) }}
     </div>

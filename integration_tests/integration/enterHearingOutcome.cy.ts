@@ -242,7 +242,19 @@ context('Enter hearing outcome', () => {
           expect($error.get(0).innerText).to.contain('Select the next step after this hearing')
         })
     })
-    it('shows correct error message if adjuicator name is missing - governor - name not entered', () => {
+    it('shows correct error message if adjudicator name is missing - governor - name not entered and search performed', () => {
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
+      enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
+      enterHearingOutcomePage.searchButton().click()
+      enterHearingOutcomePage
+        .errorSummary()
+        .find('li')
+        .then($error => {
+          expect($error.get(0).innerText).to.contain('Enter the name of the adjudicator')
+        })
+    })
+    it('shows correct error message if adjudicator name is missing - governor - name not entered', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
@@ -254,7 +266,7 @@ context('Enter hearing outcome', () => {
           expect($error.get(0).innerText).to.contain('Search for a governor')
         })
     })
-    it('shows correct error message if adjuicator name is missing - governor - search not performed', () => {
+    it('shows correct error message if adjudicator name is missing - governor - search not performed', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
@@ -267,7 +279,7 @@ context('Enter hearing outcome', () => {
           expect($error.get(0).innerText).to.contain('Search for a governor')
         })
     })
-    it('shows correct error message if adjuicator name is missing - independent adjudicator', () => {
+    it('shows correct error message if adjudicator name is missing - independent adjudicator', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()

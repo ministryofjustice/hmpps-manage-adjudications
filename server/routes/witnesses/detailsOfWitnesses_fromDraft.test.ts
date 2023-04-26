@@ -82,8 +82,6 @@ describe('GET', () => {
       .get(adjudicationUrls.detailsOfWitnesses.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Lastname, Firstname')
-        expect(res.text).toContain('Lastname, Firstname')
         expect(res.text).toContain('Prison officer')
       })
   })
@@ -98,20 +96,20 @@ describe('GET', () => {
             {
               code: WitnessCode.OTHER_PERSON,
               firstName: 'Firstname',
-              reporter: 'user1',
               lastName: 'Lastname',
+              reporter: 'user1',
             },
             {
               code: WitnessCode.OFFICER,
               firstName: 'Firstname',
-              reporter: 'user1',
               lastName: 'Lastname',
+              reporter: 'user1',
             },
             {
               code: WitnessCode.STAFF,
               firstName: 'Firstname',
-              reporter: 'user1',
               lastName: 'Lastname',
+              reporter: 'user1',
             },
           ],
           100

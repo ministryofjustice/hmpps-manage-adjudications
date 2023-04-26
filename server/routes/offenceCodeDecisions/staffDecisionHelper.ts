@@ -12,10 +12,8 @@ import adjudicationUrls from '../../utils/urlGenerator'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
-  STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT = 'STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT',
-  STAFF_MISSING_LAST_NAME_INPUT_SUBMIT = 'STAFF_MISSING_LAST_NAME_INPUT_SUBMIT',
-  STAFF_MISSING_FIRST_NAME_INPUT_SEARCH = 'STAFF_MISSING_FIRST_NAME_INPUT_SEARCH',
-  STAFF_MISSING_LAST_NAME_INPUT_SEARCH = 'STAFF_MISSING_LAST_NAME_INPUT_SEARCH',
+  STAFF_MISSING_NAME_INPUT_SUBMIT = 'STAFF_MISSING_NAME_INPUT_SUBMIT',
+  STAFF_MISSING_NAME_INPUT_SEARCH = 'STAFF_MISSING_NAME_INPUT_SEARCH',
   STAFF_MISSING_ID_SUBMIT = 'STAFF_MISSING_ID_SUBMIT',
 }
 
@@ -25,21 +23,13 @@ const error: { [key in ErrorType]: FormError } = {
     href: '#selectedAnswerId',
     text: 'Search for a member of staff',
   },
-  STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT: {
-    href: '#staffSearchFirstNameInput',
-    text: 'Enter the person’s first name',
+  STAFF_MISSING_NAME_INPUT_SUBMIT: {
+    href: '#staffSearchNameInput',
+    text: 'Enter the person’s name',
   },
-  STAFF_MISSING_LAST_NAME_INPUT_SUBMIT: {
-    href: '#staffSearchLastNameInput',
-    text: 'Enter the person’s last name',
-  },
-  STAFF_MISSING_FIRST_NAME_INPUT_SEARCH: {
-    href: '#staffSearchFirstNameInput',
-    text: 'Enter the person’s first name',
-  },
-  STAFF_MISSING_LAST_NAME_INPUT_SEARCH: {
-    href: '#staffSearchLastNameInput',
-    text: 'Enter the person’s last name',
+  STAFF_MISSING_NAME_INPUT_SEARCH: {
+    href: '#staffSearchNameInput',
+    text: 'Enter the person’s name',
   },
 }
 
@@ -55,8 +45,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
     return {
       pathname: adjudicationUrls.selectAssociatedStaff.root,
       query: {
-        staffFirstName: (form.selectedAnswerData as StaffData).staffSearchFirstNameInput,
-        staffLastName: (form.selectedAnswerData as StaffData).staffSearchLastNameInput,
+        staffName: (form.selectedAnswerData as StaffData).staffSearchNameInput,
       },
     }
   }
@@ -67,8 +56,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
       selectedAnswerId,
       selectedAnswerData: {
         staffId: req.body.staffId,
-        staffSearchFirstNameInput: req.body.staffSearchFirstNameInput,
-        staffSearchLastNameInput: req.body.staffSearchLastNameInput,
+        staffSearchNameInput: req.body.staffSearchNameInput,
       },
     }
   }
@@ -96,25 +84,16 @@ export default class StaffDecisionHelper extends DecisionHelper {
 
   validateSearch = (staffData: StaffData) => {
     const searchingErrors = []
-    if (!staffData.staffSearchFirstNameInput) {
-      searchingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SEARCH)
-    }
-    if (!staffData.staffSearchLastNameInput) {
-      searchingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SEARCH)
+    if (!staffData.staffSearchNameInput) {
+      searchingErrors.push(error.STAFF_MISSING_NAME_INPUT_SEARCH)
     }
     return searchingErrors
   }
 
   validateSubmission = (staffData: StaffData) => {
     const submittingErrors = []
-    if (!staffData.staffSearchFirstNameInput) {
-      submittingErrors.push(error.STAFF_MISSING_FIRST_NAME_INPUT_SUBMIT)
-    }
-    if (!staffData.staffSearchLastNameInput) {
-      submittingErrors.push(error.STAFF_MISSING_LAST_NAME_INPUT_SUBMIT)
-    }
-    if (staffData.staffSearchFirstNameInput && staffData.staffSearchLastNameInput) {
-      submittingErrors.push(error.STAFF_MISSING_ID_SUBMIT)
+    if (!staffData.staffSearchNameInput) {
+      submittingErrors.push(error.STAFF_MISSING_NAME_INPUT_SUBMIT)
     }
     return submittingErrors
   }
@@ -135,7 +114,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
       const staffName = convertToTitleCase(decisionStaff.name).split(' ')
       return {
         firstName: staffName[0],
-        lastName: staffName[1],
+        lastName: staffName.slice(1).join(' '),
       }
     }
     return null
