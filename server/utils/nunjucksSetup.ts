@@ -5,7 +5,7 @@ import * as pathModule from 'path'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType, properCaseName } from './utils'
+import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import {
