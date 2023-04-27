@@ -26,6 +26,10 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
+      <p class="govuk-body">
+        If the prisoner is given a caution, no further punishments can be given for this offence.
+      </p>
+
       {{ govukRadios({
                 idPrefix: 'caution',
                 id: 'caution',
