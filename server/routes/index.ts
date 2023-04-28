@@ -61,6 +61,7 @@ import PunishmentRoutes from './punishment'
 import awardPunishmentsRoutes from './punishments/awardPunishments'
 import PunishmentScheduleRoutes from './punishmentSchedule'
 import checkPunishmentRoutes from './punishments/checkPunishments'
+import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedPunishments'
 
 export default function routes(
   router: Router,
@@ -270,6 +271,10 @@ export default function routes(
 
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
+  router.use(
+    adjudicationUrls.activateSuspendedPunishments.root,
+    activateSuspendedPunishmentsRoutes({ punishmentsService, userService })
+  )
 
   return router
 }

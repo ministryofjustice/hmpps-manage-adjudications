@@ -32,6 +32,7 @@ export type PunishmentData = {
   startDate?: string
   endDate?: string
   suspendedUntil?: string
+  activatedFrom?: number
 }
 
 export type PunishmentSchedule = {
@@ -49,6 +50,21 @@ export type PunishmentDataWithSchedule = {
   otherPrivilege?: string
   stoppagePercentage?: number
   schedule: PunishmentSchedule
+}
+
+export interface SuspendedPunishment extends PunishmentDataWithSchedule {
+  activatedBy: number
+  activatedFrom: number
+}
+
+export type SuspendedPunishmentsResult = {
+  reportNumber: number
+  punishment: SuspendedPunishment
+}
+
+export type SuspendedPunishmentDetails = {
+  suspendedPunishments: SuspendedPunishmentsResult[]
+  prisonerName: string
 }
 
 export function convertPrivilegeType(privilege: PrivilegeType) {

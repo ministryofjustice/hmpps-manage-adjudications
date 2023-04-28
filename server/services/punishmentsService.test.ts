@@ -21,7 +21,7 @@ describe('PunishmentsService', () => {
   let service: PunishmentsService
 
   beforeEach(() => {
-    service = new PunishmentsService()
+    service = new PunishmentsService(null)
   })
 
   afterEach(() => {
