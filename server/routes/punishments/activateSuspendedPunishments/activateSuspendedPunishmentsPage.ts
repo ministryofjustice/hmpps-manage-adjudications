@@ -1,3 +1,4 @@
+import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 
@@ -38,8 +39,15 @@ export default class ActivateSuspendedPunishmentsPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { activate } = req.body
 
-    // TODO work out if we can use existing schedule page
-    return res.redirect(adjudicationUrls.punishmentSchedule.urls.start(adjudicationNumber))
+    const punishmentToActivate = activate.split('-').slice(-1) || null
+
+    return res.redirect(
+      url.format({
+        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.start(adjudicationNumber),
+        query: { punishmentToActivate },
+      })
+    )
   }
 }

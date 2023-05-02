@@ -13,9 +13,10 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <h2 class="govuk-heading-m">{{ prisonerName | possessive }} suspended punishments</h2>
-
+  <form method="POST" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     {{ activateSuspendedPunishmentsTable(suspendedPunishments) }}
-
+  </form>
   <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{manuallyActivateSuspendedPunishmentsHref}}">enter details to activate it manually</a>
   </p>
 
