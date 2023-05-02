@@ -101,7 +101,6 @@ export default class PunishmentsService {
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
 
     const suspendedPunishments = await new ManageAdjudicationsClient(user).getSuspendedPunishments(prisoner.offenderNo)
-
     return {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       suspendedPunishments,

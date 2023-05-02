@@ -12,15 +12,15 @@
 {% endblock %}
 {% block content %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
-  <h2 class="govuk-heading-m">{{ prisonerName | possessive }} suspended punishments</h2>
+  <h2 class="govuk-heading-m" data-qa="subheading">{{ prisonerName | possessive }} suspended punishments</h2>
   <form method="POST" novalidate="novalidate">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     {{ activateSuspendedPunishmentsTable(suspendedPunishments) }}
   </form>
-  <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{manuallyActivateSuspendedPunishmentsHref}}">enter details to activate it manually</a>
+  <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{manuallyActivateSuspendedPunishmentsHref}}" data-qa="enter-manually-link">enter details to activate it manually</a>
   </p>
 
   <p class="govuk-body">
-    <a href="{{awardPunishmentsHref}}">Return to 'Award punishments'</a>
+    <a href="{{awardPunishmentsHref}}" data-qa="cancel">Return to 'Award punishments'</a>
   </p>
 {% endblock %}

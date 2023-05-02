@@ -17,7 +17,6 @@ export default class ActivateSuspendedPunishmentsPage {
       adjudicationNumber,
       user
     )
-
     return res.render(`pages/activateSuspendedPunishments.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       manuallyActivateSuspendedPunishmentsHref:
@@ -40,8 +39,7 @@ export default class ActivateSuspendedPunishmentsPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { activate } = req.body
-
-    const punishmentToActivate = activate.split('-').slice(-1) || null
+    const punishmentToActivate = activate.split('-').slice(-1)[0] || null
 
     return res.redirect(
       url.format({

@@ -107,6 +107,7 @@ export default defineConfig({
         stubDeleteReport: adjudications.stubDeleteReport,
         stubCreatePunishments: adjudications.stubCreatePunishments,
         stubAmendPunishments: adjudications.stubAmendPunishments,
+        stubGetSuspendedPunishments: adjudications.stubGetSuspendedPunishments,
       })
     },
 
