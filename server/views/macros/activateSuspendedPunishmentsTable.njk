@@ -11,23 +11,23 @@
       [
           {
             text: sanction.type | convertPunishmentType(sanction.stoppagePercentage, sanction.privilegeType, sanction.otherPrivilege),
-            classes: "columnWidth30"
+            classes: "columnWidth30 verticalAlign"
           },
           {
             text: punishment.reportNumber,
-            classes: "columnWidth15"
+            classes: "columnWidth15 verticalAlign"
           },
           {
             text: sanction.schedule.days,
-            classes: "columnWidth15"
+            classes: "columnWidth15 verticalAlign"
           },
           {
             text: sanction.schedule.suspendedUntil,
-            classes: "columnWidth12"
+            classes: "columnWidth15 verticalAlign"
           },
           {
             html: activateButton,
-            classes: ""
+            classes: "activateButtonContainer"
           }
       ]
     ), rows) %}
