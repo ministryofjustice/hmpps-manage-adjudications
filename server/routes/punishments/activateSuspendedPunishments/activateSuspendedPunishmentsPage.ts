@@ -39,12 +39,12 @@ export default class ActivateSuspendedPunishmentsPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { activate } = req.body
-    const punishmentToActivate = activate.split('-').slice(-1)[0] || null
+    const punishmentNumberToActivate = activate.split('-').slice(-1)[0] || null
 
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.start(adjudicationNumber),
-        query: { punishmentToActivate },
+        query: { punishmentNumberToActivate },
       })
     )
   }

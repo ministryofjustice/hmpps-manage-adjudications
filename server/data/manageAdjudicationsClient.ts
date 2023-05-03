@@ -40,7 +40,7 @@ import {
   OutcomeCode,
   QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
-import { PunishmentData, SuspendedPunishmentsResult } from './PunishmentResult'
+import { PunishmentData, SuspendedPunishmentResult } from './PunishmentResult'
 import { User } from './hmppsAuthClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -554,7 +554,7 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getSuspendedPunishments(prisonerNumber: string): Promise<SuspendedPunishmentsResult[]> {
+  async getSuspendedPunishments(prisonerNumber: string): Promise<SuspendedPunishmentResult[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${prisonerNumber}/suspended`,
     })

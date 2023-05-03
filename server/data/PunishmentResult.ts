@@ -57,13 +57,13 @@ export interface SuspendedPunishment extends PunishmentDataWithSchedule {
   activatedFrom: number
 }
 
-export type SuspendedPunishmentsResult = {
+export type SuspendedPunishmentResult = {
   reportNumber: number
   punishment: SuspendedPunishment
 }
 
 export type SuspendedPunishmentDetails = {
-  suspendedPunishments: SuspendedPunishmentsResult[]
+  suspendedPunishments: SuspendedPunishmentResult[]
   prisonerName: string
 }
 

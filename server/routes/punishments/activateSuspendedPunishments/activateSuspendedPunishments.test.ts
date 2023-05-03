@@ -83,6 +83,9 @@ describe('POST', () => {
       .send({
         activate: 'suspended-punishment-71',
       })
-      .expect('Location', `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentToActivate=71`)
+      .expect(
+        'Location',
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentNumberToActivate=71`
+      )
   })
 })

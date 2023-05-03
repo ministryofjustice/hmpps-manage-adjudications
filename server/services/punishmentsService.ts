@@ -95,12 +95,12 @@ export default class PunishmentsService {
 
   async getSuspendedPunishmentDetails(adjudicationNumber: number, user: User): Promise<SuspendedPunishmentDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
-      adjudicationNumber
-    )
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const { reportedAdjudication } = await manageAdjudicationsClient.getReportedAdjudication(adjudicationNumber)
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
 
-    const suspendedPunishments = await new ManageAdjudicationsClient(user).getSuspendedPunishments(prisoner.offenderNo)
+    const suspendedPunishments = await manageAdjudicationsClient.getSuspendedPunishments(prisoner.offenderNo)
+
     return {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       suspendedPunishments,
