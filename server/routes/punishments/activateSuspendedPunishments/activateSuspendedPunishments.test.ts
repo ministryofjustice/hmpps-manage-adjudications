@@ -14,21 +14,30 @@ const punishmentsService = new PunishmentsService(null) as jest.Mocked<Punishmen
 
 let app: Express
 
-const punishmentsOnSession = [
-  {
-    redisId: 'asdfg-123-erty',
-    type: PunishmentType.PRIVILEGE,
-    privilegeType: PrivilegeType.FACILITIES,
-    days: 10,
-    startDate: '2023-04-10',
-    endDate: '2023-04-20',
-  },
-]
+const suspendedPunishments = {
+  prisonerName: 'James Wellbeloved',
+  suspendedPunishments: [
+    {
+      reportNumber: 100,
+      punishment: {
+        id: 71,
+        type: PunishmentType.PRIVILEGE,
+        privilegeType: PrivilegeType.MONEY,
+        activatedBy: 0,
+        activatedFrom: 0,
+        schedule: {
+          days: 5,
+          suspendedUntil: '2023-04-29',
+        },
+      },
+    },
+  ],
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getAllSessionPunishments.mockResolvedValue(punishmentsOnSession)
+  punishmentsService.getSuspendedPunishmentDetails.mockResolvedValue(suspendedPunishments)
 })
 
 afterEach(() => {
@@ -42,7 +51,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.checkPunishments.urls.start(100))
+      .get(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -53,32 +62,30 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
-      .get(adjudicationUrls.checkPunishments.urls.start(100))
+      .get(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Check your answers before submitting')
+        expect(res.text).toContain('Activate an existing suspended punishment')
       })
+  })
+  it('should call the endpoint to get suspended punishments', () => {
+    return request(app)
+      .get(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
+      .expect('Content-Type', /html/)
+      .then(() => expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith(100, expect.anything()))
   })
 })
 
 describe('POST', () => {
-  it('should successfully call the endpoint', () => {
+  it('should redirect correctly', () => {
     return request(app)
-      .post(`${adjudicationUrls.checkPunishments.urls.start(100)}`)
-      .send()
-      .then(() =>
-        expect(punishmentsService.createPunishmentSet).toHaveBeenCalledWith(
-          punishmentsOnSession,
-          100,
-          expect.anything()
-        )
+      .post(`${adjudicationUrls.activateSuspendedPunishments.urls.start(100)}`)
+      .send({
+        activate: 'suspended-punishment-71',
+      })
+      .expect(
+        'Location',
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentNumberToActivate=71`
       )
-  })
-  it('should redirect after submission', () => {
-    return request(app)
-      .post(`${adjudicationUrls.checkPunishments.urls.start(100)}`)
-      .send()
-      .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
   })
 })

@@ -37,7 +37,7 @@
         {{ govukButton({
         text: 'Activate an existing suspended punishment',
         element: "a",
-        href: "",
+        href: adjudicationUrls.activateSuspendedPunishments.urls.start(adjudicationNumber),
         classes: "govuk-button--secondary govuk-!-margin-bottom-5",
         attributes: { "data-qa": "activate-suspended-punishment-button" }
       }) }}

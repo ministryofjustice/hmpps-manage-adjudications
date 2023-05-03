@@ -1,12 +1,16 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
-import { User } from '../data/hmppsAuthClient'
-import { PunishmentData, PunishmentDataWithSchedule } from '../data/PunishmentResult'
+import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import { PunishmentData, PunishmentDataWithSchedule, SuspendedPunishmentDetails } from '../data/PunishmentResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+import PrisonApiClient from '../data/prisonApiClient'
+import { convertToTitleCase } from '../utils/utils'
 
 export default class PunishmentsService {
+  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+
   private createSessionForAdjudicationIfNotExists(req: Request, adjudicationNumber: number) {
     if (!req.session.punishments) {
       req.session.punishments = {}
@@ -77,8 +81,8 @@ export default class PunishmentsService {
   async editPunishmentSet(
     punishments: PunishmentData[],
     adjudicationNumber: number,
-    user: User // : Promise<ReportedAdjudicationResult>
-  ) {
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).amendPunishments(adjudicationNumber, punishments)
   }
 
@@ -87,5 +91,19 @@ export default class PunishmentsService {
       adjudicationNumber
     )
     return reportedAdjudication.punishments
+  }
+
+  async getSuspendedPunishmentDetails(adjudicationNumber: number, user: User): Promise<SuspendedPunishmentDetails> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const { reportedAdjudication } = await manageAdjudicationsClient.getReportedAdjudication(adjudicationNumber)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
+
+    const suspendedPunishments = await manageAdjudicationsClient.getSuspendedPunishments(prisoner.offenderNo)
+
+    return {
+      prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      suspendedPunishments,
+    }
   }
 }

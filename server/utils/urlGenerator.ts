@@ -628,6 +628,36 @@ const adjudicationUrls = {
         `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}/edit`,
     },
   },
+  activateSuspendedPunishments: {
+    root: '/activate-suspended-punishments',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.activateSuspendedPunishments.root}/${adjudicationNumber}`,
+    },
+  },
+  manuallyActivateSuspendedPunishment: {
+    root: '/manually-activate-suspended-punishment',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.manuallyActivateSuspendedPunishment.root}/${adjudicationNumber}`,
+    },
+  },
+  suspendedPunishmentSchedule: {
+    root: '/suspended-punishment-schedule',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

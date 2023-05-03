@@ -1,0 +1,26 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../macros/activateSuspendedPunishmentsTable.njk" import activateSuspendedPunishmentsTable %}
+
+{% set title = "Activate an existing suspended punishment" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <h2 class="govuk-heading-m" data-qa="subheading">{{ prisonerName | possessive }} suspended punishments</h2>
+  <form method="POST" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ activateSuspendedPunishmentsTable(suspendedPunishments) }}
+  </form>
+  <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{manuallyActivateSuspendedPunishmentsHref}}" data-qa="enter-manually-link">enter details to activate it manually</a>
+  </p>
+
+  <p class="govuk-body">
+    <a href="{{awardPunishmentsHref}}" data-qa="cancel">Return to 'Award punishments'</a>
+  </p>
+{% endblock %}
