@@ -18,7 +18,7 @@ const errors: { [key: string]: FormError } = {
   },
   DAYS_TOO_FEW: {
     href: '#days',
-    text: 'Enter 1 or more days',
+    text: 'Enter one or more days',
   },
   MISSING_SUSPENDED_DECISION: {
     href: '#suspended',

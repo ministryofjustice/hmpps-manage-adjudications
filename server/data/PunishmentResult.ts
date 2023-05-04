@@ -50,11 +50,11 @@ export type PunishmentDataWithSchedule = {
   otherPrivilege?: string
   stoppagePercentage?: number
   schedule: PunishmentSchedule
+  activatedFrom?: number
 }
 
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
   activatedBy?: number
-  activatedFrom?: number
 }
 
 export type SuspendedPunishmentResult = {
@@ -116,7 +116,7 @@ export function convertPunishmentType(
 }
 
 export function flattenPunishment(punishment: PunishmentDataWithSchedule): PunishmentData {
-  const { id, redisId, type, privilegeType, otherPrivilege, stoppagePercentage, schedule } = punishment
+  const { id, redisId, type, privilegeType, otherPrivilege, stoppagePercentage, schedule, activatedFrom } = punishment
   const { days, startDate, endDate, suspendedUntil } = schedule
   return {
     id,
@@ -129,6 +129,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     ...(suspendedUntil && { suspendedUntil }),
     ...(startDate && { startDate }),
     ...(endDate && { endDate }),
+    ...(activatedFrom && { activatedFrom }),
   }
 }
 

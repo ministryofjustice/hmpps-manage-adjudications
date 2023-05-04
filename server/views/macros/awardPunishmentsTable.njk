@@ -35,11 +35,11 @@
             classes: "columnWidth12"
           },
           {
-            text: '-',
+            text: data.activatedFrom if data.activatedFrom else '-',
             classes: "columnWidth20"
           },
           {
-          html: changeColumnValue if not readOnly else '',
+          html: changeColumnValue if not readOnly and not data.activatedFrom else '',
           classes: "changeColumn"
           },
           {

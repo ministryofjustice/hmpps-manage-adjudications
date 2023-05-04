@@ -1,10 +1,12 @@
 import url from 'url'
+import { v4 as uuidv4 } from 'uuid'
+
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { hasAnyRole } from '../../utils/utils'
+import { datePickerToApi, hasAnyRole } from '../../utils/utils'
 import PunishmentsService from '../../services/punishmentsService'
 import { PunishmentData, PunishmentType, SuspendedPunishment, flattenPunishment } from '../../data/PunishmentResult'
 import validateForm from './suspendedPunishmentScheduleValidation'
@@ -21,14 +23,21 @@ export default class SuspendedPunishmentSchedulePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { error } = pageData
+    const { punishmentType } = req.query
 
-    // const additionalDays = do a check on the punishment to see if it is additional days or prospective additional days and pass that in to decide whether to show start and end dates
+    const { error, days, startDate, endDate } = pageData
+
+    const isTypeAdditionalDays = [PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(
+      punishmentType as PunishmentType
+    )
 
     return res.render(`pages/suspendedPunishmentSchedule.njk`, {
       errors: error ? [error] : [],
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
-      //   additionalDays,
+      days,
+      startDate,
+      endDate,
+      isTypeAdditionalDays,
     })
   }
 
@@ -38,7 +47,7 @@ export default class SuspendedPunishmentSchedulePage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, null)
+    return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -48,7 +57,7 @@ export default class SuspendedPunishmentSchedulePage {
     const type = PunishmentType[punishmentType as string]
     const { days, startDate, endDate } = req.body
 
-    const activatePunishmentId = Number(punishmentNumberToActivate)
+    const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
 
     const error = validateForm({
       days,
@@ -60,16 +69,19 @@ export default class SuspendedPunishmentSchedulePage {
     if (error) return this.renderView(req, res, { error, days, startDate, endDate })
 
     try {
-      const suspendedPunishments = await (
-        await this.punishmentsService.getSuspendedPunishmentDetails(adjudicationNumber, user)
-      ).suspendedPunishments
-      const punishmentToActivate = suspendedPunishments.filter(punishment => {
-        return punishment.punishment.id === activatePunishmentId
-      })[0]?.punishment
+      const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(
+        adjudicationNumber,
+        user
+      )
+      const punishmentToUpdate = suspendedPunishments.filter(susPun => {
+        return susPun.punishment.id === suspendedPunishmentIdToActivate
+      })
 
-      const updatedPunishment = this.updatePunishment(punishmentToActivate, days, startDate, endDate)
-
-      this.punishmentsService.addSessionPunishment(req, updatedPunishment, adjudicationNumber)
+      if (punishmentToUpdate.length) {
+        const { punishment, reportNumber } = punishmentToUpdate[0]
+        const updatedPunishment = this.updatePunishment(punishment, days, startDate, endDate, reportNumber)
+        this.punishmentsService.addSessionPunishment(req, updatedPunishment, adjudicationNumber)
+      }
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.activateSuspendedPunishments.urls.start(adjudicationNumber)
       throw postError
@@ -87,14 +99,17 @@ export default class SuspendedPunishmentSchedulePage {
     existingPunishment: SuspendedPunishment,
     days: number,
     startDate: string,
-    endDate: string
+    endDate: string,
+    activatedFromReportNumber: number
   ): PunishmentData {
     const activePunishment = {
       ...existingPunishment,
+      redisId: uuidv4(),
+      activatedFrom: activatedFromReportNumber,
       schedule: {
         days,
-        startDate,
-        endDate,
+        startDate: startDate ? datePickerToApi(startDate) : null,
+        endDate: endDate ? datePickerToApi(endDate) : null,
         suspendedUntil: null as never,
       },
     }

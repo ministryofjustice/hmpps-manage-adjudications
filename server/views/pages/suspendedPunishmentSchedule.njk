@@ -6,6 +6,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set title = "Punishment schedule" %}
+
 {% block pageTitle %}
   {{ title }}
 {% endblock %}
@@ -27,16 +28,17 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {{ govukInput({
-             id: "days",
-             name: "days",
-             value: days,
-             classes: "govuk-input--width-5",
-             errorMessage: errors | findErrors(["days"]),
-             label: {
-             text: "How many days will this punishment last?"
-             }
-             }) }}
+        id: "days",
+        name: "days",
+        value: days,
+        classes: "govuk-input--width-5",
+        errorMessage: errors | findErrors(["days"]),
+        label: {
+        text: "How many days will this punishment last?"
+        }
+      }) }}
 
+      {% if not isTypeAdditionalDays %}
         {{
           datePicker({
           id: 'startDate',
@@ -44,7 +46,8 @@
           name: 'startDate',
           date: startDate,
           attributes: {'data-disable-future-date':'false', 'data-qa': "start-date-picker" },
-          classes: 'govuk-input--width-10'
+          classes: 'govuk-input--width-10',
+          errorMessage: errors | findErrors(['startDate'])
           })   
         }}
         {{
@@ -54,20 +57,22 @@
           name: 'endDate',
           date: endDate,
           attributes: {'data-disable-future-date':'false', 'data-qa': "end-date-picker" },
-          classes: 'govuk-input--width-10'
+          classes: 'govuk-input--width-10',
+          errorMessage: errors | findErrors(['endDate'])
           })
         }}
+      {% endif %}
 
-        <div class="govuk-button-group">
-          {{ govukButton({
-              text: 'Continue',
-              type: "submit",
-              classes: "govuk-button--submit govuk-!-margin-right-3",
-              attributes: { "data-qa": "punishment-schedule-submit" }
-              }) }}
-          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-schedule-cancel'>Return to 'Award Punishments'</a>
-        </div>
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "punishment-schedule-submit" }
+        }) }}
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-schedule-cancel'>Return to 'Award Punishments'</a>
+      </div>
 
-      </form>
-    </div>
-  {% endblock %}
+    </form>
+  </div>
+{% endblock %}
