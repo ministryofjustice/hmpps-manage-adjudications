@@ -1,0 +1,73 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "Punishment schedule" %}
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukInput({
+             id: "days",
+             name: "days",
+             value: days,
+             classes: "govuk-input--width-5",
+             errorMessage: errors | findErrors(["days"]),
+             label: {
+             text: "How many days will this punishment last?"
+             }
+             }) }}
+
+        {{
+          datePicker({
+          id: 'startDate',
+          label: 'When will this punishment start?',
+          name: 'startDate',
+          date: startDate,
+          attributes: {'data-disable-future-date':'false', 'data-qa': "start-date-picker" },
+          classes: 'govuk-input--width-10'
+          })   
+        }}
+        {{
+          datePicker({
+          id: 'endDate',
+          label: 'What is the last day of this punishment?',
+          name: 'endDate',
+          date: endDate,
+          attributes: {'data-disable-future-date':'false', 'data-qa': "end-date-picker" },
+          classes: 'govuk-input--width-10'
+          })
+        }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+              text: 'Continue',
+              type: "submit",
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "punishment-schedule-submit" }
+              }) }}
+          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-schedule-cancel'>Return to 'Award Punishments'</a>
+        </div>
+
+      </form>
+    </div>
+  {% endblock %}
