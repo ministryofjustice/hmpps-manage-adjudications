@@ -7,6 +7,8 @@ export default class AwardPunishmentsPage extends Page {
 
   newPunishment = (): PageElement => cy.get('[data-qa="add-new-punishment-button"]')
 
+  activateSuspendedPunishment = (): PageElement => cy.get('[data-qa="activate-suspended-punishment-button"]')
+
   punishmentsTable = (): PageElement => cy.get('[data-qa="punishments-table"]')
 
   editPunishment = (): PageElement => cy.get('[data-qa="edit-punishment"]')
