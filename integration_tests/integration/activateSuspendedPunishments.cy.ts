@@ -127,7 +127,7 @@ context('acivate suspended punishments page', () => {
       const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentSchedule.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100))
         expect(loc.search).to.eq('?punishmentNumberToActivate=72&punishmentType=PRIVILEGE')
       })
     })

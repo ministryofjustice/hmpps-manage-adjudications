@@ -68,7 +68,7 @@ describe('GET suspended punishment schedule', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.start(100))
+      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -79,7 +79,7 @@ describe('GET suspended punishment schedule', () => {
 describe('GET suspended punishment schedule', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.start(100))
+      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Punishment schedule')
@@ -91,7 +91,7 @@ describe('POST suspended punishment schedule', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           100
         )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`
       )
@@ -121,7 +121,7 @@ describe('POST suspended punishment schedule', () => {
   it('should successfully call the endpoint and redirect - additional days', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           100
         )}?punishmentType=ADDITIONAL_DAYS&punishmentNumberToActivate=73`
       )
@@ -147,7 +147,7 @@ describe('POST suspended punishment schedule', () => {
   it('should successfully call the endpoint and redirect - prospective additional days', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           100
         )}?punishmentType=PROSPECTIVE_DAYS&punishmentNumberToActivate=74`
       )

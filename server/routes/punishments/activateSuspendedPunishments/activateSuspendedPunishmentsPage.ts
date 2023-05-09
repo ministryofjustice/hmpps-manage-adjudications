@@ -56,7 +56,7 @@ export default class ActivateSuspendedPunishmentsPage {
 
     return res.redirect(
       url.format({
-        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.start(adjudicationNumber),
+        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.existing(adjudicationNumber),
         query: { punishmentNumberToActivate, punishmentType },
       })
     )

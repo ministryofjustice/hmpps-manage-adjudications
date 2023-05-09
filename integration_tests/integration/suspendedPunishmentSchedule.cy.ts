@@ -136,7 +136,7 @@ context('Suspended punishment schedule', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements - types other than additional days/prospective additional days', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentType=PRIVILEGE`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.submitButton().should('exist')
       suspendedPunishmentSchedulePage.cancelButton().should('exist')
@@ -145,7 +145,7 @@ context('Suspended punishment schedule', () => {
       suspendedPunishmentSchedulePage.endDate().should('exist')
     })
     it('should contain the required page elements - type additional days', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(101)}?punishmentType=ADDITIONAL_DAYS`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(101)}?punishmentType=ADDITIONAL_DAYS`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.submitButton().should('exist')
       suspendedPunishmentSchedulePage.cancelButton().should('exist')
@@ -154,7 +154,7 @@ context('Suspended punishment schedule', () => {
       suspendedPunishmentSchedulePage.endDate().should('not.exist')
     })
     it('should contain the required page elements - type prospective additional days', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(102)}?punishmentType=PROSPECTIVE_DAYS`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(102)}?punishmentType=PROSPECTIVE_DAYS`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.submitButton().should('exist')
       suspendedPunishmentSchedulePage.cancelButton().should('exist')
@@ -163,7 +163,7 @@ context('Suspended punishment schedule', () => {
       suspendedPunishmentSchedulePage.endDate().should('not.exist')
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentType=PRIVILEGE`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.cancelButton().click()
       cy.location().should(loc => {
@@ -173,7 +173,7 @@ context('Suspended punishment schedule', () => {
   })
   describe('Validation', () => {
     it('should error when no days entered', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentType=PRIVILEGE`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.submitButton().click()
 
@@ -185,7 +185,7 @@ context('Suspended punishment schedule', () => {
         })
     })
     it('should error when suspended no start date selected', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentType=PRIVILEGE`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.days().type('10')
       forceDateInput(10, 10, 2030, '[data-qa="end-date-picker"]')
@@ -199,7 +199,7 @@ context('Suspended punishment schedule', () => {
         })
     })
     it('should error when suspended no end date selected', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentType=PRIVILEGE`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.days().type('10')
       forceDateInput(10, 10, 2030, '[data-qa="start-date-picker"]')
@@ -213,14 +213,14 @@ context('Suspended punishment schedule', () => {
         })
     })
     it('additional days - no error when dates are not entered', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(101)}?punishmentType=ADDITIONAL_DAYS`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(101)}?punishmentType=ADDITIONAL_DAYS`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.days().type('10')
       suspendedPunishmentSchedulePage.submitButton().click()
       suspendedPunishmentSchedulePage.errorSummary().should('not.exist')
     })
     it('prospective additional days - no error when dates are not entered', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.start(102)}?punishmentType=ADDITIONAL_DAYS`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(102)}?punishmentType=ADDITIONAL_DAYS`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.days().type('10')
       suspendedPunishmentSchedulePage.submitButton().click()
@@ -231,7 +231,7 @@ context('Suspended punishment schedule', () => {
   describe('saves successfully and redirects', () => {
     it('should save when user enters days, start date and end date', () => {
       cy.visit(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           100
         )}?punishmentType=PRIVILEGE&punishmentNumberToActivate=71`
       )
@@ -246,7 +246,7 @@ context('Suspended punishment schedule', () => {
     })
     it('should save when user enters days - additional days', () => {
       cy.visit(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           101
         )}?punishmentType=ADDITIONAL_DAYS&punishmentNumberToActivate=72`
       )
@@ -259,7 +259,7 @@ context('Suspended punishment schedule', () => {
     })
     it('should save when user enters days - prospective additional days', () => {
       cy.visit(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           102
         )}?punishmentType=PROSPECTIVE_DAYS&punishmentNumberToActivate=73`
       )

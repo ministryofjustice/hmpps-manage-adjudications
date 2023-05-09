@@ -651,11 +651,14 @@ const adjudicationUrls = {
   suspendedPunishmentSchedule: {
     root: '/suspended-punishment-schedule',
     matchers: {
-      start: '/:adjudicationNumber',
+      existingPunishment: '/:adjudicationNumber/existing',
+      manualPunishment: '/:adjudicationNumber/manual',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}`,
+      existing: (adjudicationNumber: number) =>
+        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/existing`,
+      manual: (adjudicationNumber: number) =>
+        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/manual`,
     },
   },
   homepage: {
