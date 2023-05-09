@@ -39,7 +39,7 @@ context('acivate suspended punishments page', () => {
           },
         },
         {
-          reportNumber: 100,
+          reportNumber: 101,
           punishment: {
             id: 72,
             type: PunishmentType.PRIVILEGE,
@@ -102,8 +102,8 @@ context('acivate suspended punishments page', () => {
         .suspendedPunishmentsTable()
         .find('td')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Loss of money')
-          expect($summaryData.get(1).innerText).to.contain('100')
+          expect($summaryData.get(0).innerText).to.contain('Loss of canteen')
+          expect($summaryData.get(1).innerText).to.contain('101')
           expect($summaryData.get(2).innerText).to.contain('5')
           expect($summaryData.get(3).innerText).to.contain('29 Apr 2023')
         })
@@ -122,21 +122,13 @@ context('acivate suspended punishments page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100))
       )
     })
-    it('goes to manually add suspended punishment page if link is clicked', () => {
-      cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
-      const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
-      activateSuspendedPunishmentsPage.enterManuallyLink().click()
-      cy.location().should(loc =>
-        expect(loc.pathname).to.eq(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100))
-      )
-    })
     it('goes to the suspended punishment schedule page if the activate button is clicked', () => {
       cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
       const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentSchedule.urls.start(100))
-        expect(loc.search).to.eq('?punishmentNumberToActivate=71')
+        expect(loc.search).to.eq('?punishmentNumberToActivate=72&punishmentType=PRIVILEGE')
       })
     })
   })

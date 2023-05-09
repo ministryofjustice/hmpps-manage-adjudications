@@ -50,11 +50,11 @@ export type PunishmentDataWithSchedule = {
   otherPrivilege?: string
   stoppagePercentage?: number
   schedule: PunishmentSchedule
+  activatedFrom?: number
 }
 
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
-  activatedBy: number
-  activatedFrom: number
+  activatedBy?: number
 }
 
 export type SuspendedPunishmentResult = {
@@ -115,22 +115,25 @@ export function convertPunishmentType(
   }
 }
 
+export function flattenPunishment(punishment: PunishmentDataWithSchedule): PunishmentData {
+  const { id, redisId, type, privilegeType, otherPrivilege, stoppagePercentage, schedule, activatedFrom } = punishment
+  const { days, startDate, endDate, suspendedUntil } = schedule
+  return {
+    id,
+    redisId,
+    type,
+    days,
+    ...(privilegeType && { privilegeType }),
+    ...(otherPrivilege && { otherPrivilege }),
+    ...(stoppagePercentage && { stoppagePercentage }),
+    ...(suspendedUntil && { suspendedUntil }),
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+    ...(activatedFrom && { activatedFrom }),
+  }
+}
+
 export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {
   if (!punishments) return null
-  return punishments.map(punishment => {
-    const { id, redisId, type, privilegeType, otherPrivilege, stoppagePercentage, schedule } = punishment
-    const { days, startDate, endDate, suspendedUntil } = schedule
-    return {
-      id,
-      redisId,
-      type,
-      days,
-      ...(privilegeType && { privilegeType }),
-      ...(otherPrivilege && { otherPrivilege }),
-      ...(stoppagePercentage && { stoppagePercentage }),
-      ...(suspendedUntil && { suspendedUntil }),
-      ...(startDate && { startDate }),
-      ...(endDate && { endDate }),
-    }
-  })
+  return punishments.map(punishment => flattenPunishment(punishment))
 }

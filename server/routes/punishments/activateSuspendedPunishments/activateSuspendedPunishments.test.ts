@@ -31,6 +31,19 @@ const suspendedPunishments = {
         },
       },
     },
+    {
+      reportNumber: 101,
+      punishment: {
+        id: 60,
+        type: PunishmentType.CONFINEMENT,
+        activatedBy: 0,
+        activatedFrom: 0,
+        schedule: {
+          days: 5,
+          suspendedUntil: '2023-05-20',
+        },
+      },
+    },
   ],
 }
 
@@ -38,6 +51,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSuspendedPunishmentDetails.mockResolvedValue(suspendedPunishments)
+  punishmentsService.getSuspendedPunishment.mockResolvedValue(suspendedPunishments.suspendedPunishments)
 })
 
 afterEach(() => {
@@ -81,11 +95,13 @@ describe('POST', () => {
     return request(app)
       .post(`${adjudicationUrls.activateSuspendedPunishments.urls.start(100)}`)
       .send({
-        activate: 'suspended-punishment-71',
+        activate: 'suspended-punishment-60',
       })
       .expect(
         'Location',
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(100)}?punishmentNumberToActivate=71`
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.start(
+          100
+        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE`
       )
   })
 })

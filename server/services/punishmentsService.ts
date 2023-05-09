@@ -2,7 +2,12 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import { PunishmentData, PunishmentDataWithSchedule, SuspendedPunishmentDetails } from '../data/PunishmentResult'
+import {
+  PunishmentData,
+  PunishmentDataWithSchedule,
+  SuspendedPunishmentDetails,
+  SuspendedPunishmentResult,
+} from '../data/PunishmentResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -100,10 +105,18 @@ export default class PunishmentsService {
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
 
     const suspendedPunishments = await manageAdjudicationsClient.getSuspendedPunishments(prisoner.offenderNo)
-
     return {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       suspendedPunishments,
     }
+  }
+
+  async getSuspendedPunishment(
+    adjudicationNumber: number,
+    punishmentId: number,
+    user: User
+  ): Promise<SuspendedPunishmentResult[]> {
+    const punishments = (await this.getSuspendedPunishmentDetails(adjudicationNumber, user)).suspendedPunishments
+    return punishments.filter(punishment => punishment.punishment.id === punishmentId)
   }
 }

@@ -62,7 +62,6 @@ export default class AwardPunishmentsPage {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
     }
     const continueHref = await this.getContinueHref(adjudicationNumber, user)
-
     return res.render(`pages/awardPunishments.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       redirectAfterRemoveUrl,

@@ -3,12 +3,10 @@ import { PunishmentType } from '../../data/PunishmentResult'
 import { datePickerToApi } from '../../utils/utils'
 
 type PunishmentScheduleForm = {
-  punishmentType: PunishmentType
   days: number
-  suspended?: string
-  suspendedUntil?: string
   startDate?: string
   endDate?: string
+  punishmentType: PunishmentType
 }
 
 const errors: { [key: string]: FormError } = {
@@ -19,14 +17,6 @@ const errors: { [key: string]: FormError } = {
   DAYS_TOO_FEW: {
     href: '#days',
     text: 'Enter one or more days',
-  },
-  MISSING_SUSPENDED_DECISION: {
-    href: '#suspended',
-    text: 'Select yes if this punishment is to be suspended',
-  },
-  MISSING_SUSPENDED_UNTIL: {
-    href: '#suspendedUntil',
-    text: 'Enter the date the punishment is suspended until',
   },
   MISSING_START_DATE: {
     href: '#startDate',
@@ -45,20 +35,16 @@ const errors: { [key: string]: FormError } = {
 export default function validateForm({
   punishmentType,
   days,
-  suspended,
-  suspendedUntil,
   startDate,
   endDate,
 }: PunishmentScheduleForm): FormError | null {
   if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
   if (days === undefined || days === null || !days) return errors.MISSING_DAYS
-  if (!suspended) return errors.MISSING_SUSPENDED_DECISION
-  if (suspended === 'yes' && !suspendedUntil) return errors.MISSING_SUSPENDED_UNTIL
-  if (suspended === 'no' && !startDate) {
+  if (!startDate) {
     if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) return null
     return errors.MISSING_START_DATE
   }
-  if (suspended === 'no' && !endDate) {
+  if (!endDate) {
     if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) return null
     return errors.MISSING_END_DATE
   }

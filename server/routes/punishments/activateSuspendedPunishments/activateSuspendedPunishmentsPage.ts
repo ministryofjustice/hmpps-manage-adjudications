@@ -17,12 +17,17 @@ export default class ActivateSuspendedPunishmentsPage {
       adjudicationNumber,
       user
     )
+    // Should only show suspended punishments that have not been added in this reports
+    const suspendedPunishmentsFromOtherReports = suspendedPunishmentDetails.suspendedPunishments.filter(
+      susPun => susPun.reportNumber !== adjudicationNumber
+    )
+
     return res.render(`pages/activateSuspendedPunishments.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       manuallyActivateSuspendedPunishmentsHref:
         adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(adjudicationNumber),
       prisonerName: suspendedPunishmentDetails.prisonerName,
-      suspendedPunishments: suspendedPunishmentDetails.suspendedPunishments,
+      suspendedPunishments: suspendedPunishmentsFromOtherReports,
       errors: error ? [error] : [],
     })
   }
@@ -38,13 +43,21 @@ export default class ActivateSuspendedPunishmentsPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
     const { activate } = req.body
     const punishmentNumberToActivate = activate.split('-').slice(-1)[0] || null
+
+    const punishmentToActivate = await this.punishmentsService.getSuspendedPunishment(
+      adjudicationNumber,
+      Number(punishmentNumberToActivate),
+      user
+    )
+    const punishmentType = punishmentToActivate[0].punishment.type
 
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.start(adjudicationNumber),
-        query: { punishmentNumberToActivate },
+        query: { punishmentNumberToActivate, punishmentType },
       })
     )
   }

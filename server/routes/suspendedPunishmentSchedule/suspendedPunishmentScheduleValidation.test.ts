@@ -1,35 +1,22 @@
 import { PunishmentType } from '../../data/PunishmentResult'
-import validateForm from './punishmentScheduleValidation'
+import validateForm from './suspendedPunishmentScheduleValidation'
 
 describe('validateForm', () => {
-  it('Valid submit has no errors when suspended', () => {
+  it('Valid submit has no errors - punishment type not additional days', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
-        suspended: 'yes',
-        suspendedUntil: '3/4/2023',
+        startDate: '01/6/2023',
+        endDate: '10/6/2023',
       })
     ).toBeNull()
   })
-  it('Valid submit when not suspended', () => {
+  it('Valid submit has no errors - punishment type is additional days', () => {
     expect(
       validateForm({
-        punishmentType: PunishmentType.CONFINEMENT,
+        punishmentType: PunishmentType.ADDITIONAL_DAYS,
         days: 10,
-        suspended: 'no',
-        startDate: '3/4/2023',
-        endDate: '3/4/2023',
-      })
-    ).toBeNull()
-  })
-
-  it('Valid submit when prospective days', () => {
-    expect(
-      validateForm({
-        punishmentType: PunishmentType.PROSPECTIVE_DAYS,
-        days: 10,
-        suspended: 'no',
       })
     ).toBeNull()
   })
@@ -39,38 +26,14 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.ADDITIONAL_DAYS,
         days: 10,
-        suspended: 'no',
       })
     ).toBeNull()
   })
-  it('Valid submit when prospective days - suspended', () => {
-    expect(
-      validateForm({
-        punishmentType: PunishmentType.PROSPECTIVE_DAYS,
-        days: 10,
-        suspended: 'yes',
-        suspendedUntil: '10/5/2023',
-      })
-    ).toBeNull()
-  })
-
-  it('Valid submit when additional days - suspended', () => {
-    expect(
-      validateForm({
-        punishmentType: PunishmentType.ADDITIONAL_DAYS,
-        days: 10,
-        suspended: 'yes',
-        suspendedUntil: '10/5/2023',
-      })
-    ).toBeNull()
-  })
-
   it('shows error when no days select', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: null,
-        suspended: null,
       })
     ).toEqual({
       href: '#days',
@@ -82,35 +45,10 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 0,
-        suspended: null,
       })
     ).toEqual({
       href: '#days',
       text: 'Enter one or more days',
-    })
-  })
-  it('shows error when suspended decision not select', () => {
-    expect(
-      validateForm({
-        punishmentType: PunishmentType.CONFINEMENT,
-        days: 10,
-        suspended: null,
-      })
-    ).toEqual({
-      href: '#suspended',
-      text: 'Select yes if this punishment is to be suspended',
-    })
-  })
-  it('shows error when suspended date not set', () => {
-    expect(
-      validateForm({
-        punishmentType: PunishmentType.CONFINEMENT,
-        days: 10,
-        suspended: 'yes',
-      })
-    ).toEqual({
-      href: '#suspendedUntil',
-      text: 'Enter the date the punishment is suspended until',
     })
   })
   it('shows error when start date not set', () => {
@@ -118,7 +56,6 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
-        suspended: 'no',
       })
     ).toEqual({
       href: '#startDate',
@@ -130,7 +67,6 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
-        suspended: 'no',
         startDate: '3/4/2023',
       })
     ).toEqual({
@@ -143,7 +79,6 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
-        suspended: 'no',
         startDate: '13/4/2023',
         endDate: '3/4/2023',
       })
