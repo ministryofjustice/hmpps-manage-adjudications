@@ -23,7 +23,7 @@ const errors: { [key: string]: FormError } = {
   },
   MISSING_STOPPAGE_PERCENTAGE: {
     href: '#stoppagePercentage',
-    text: 'Enter the loss of privileges',
+    text: 'Enter the percentage of earnings to be stopped',
   },
   STOPPAGE_PERCENTAGE: {
     href: '#stoppagePercentage',
