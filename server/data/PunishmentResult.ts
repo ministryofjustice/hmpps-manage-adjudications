@@ -109,7 +109,7 @@ export function convertPunishmentType(
     case PunishmentType.REMOVAL_ACTIVITY:
       return 'Removal from activity'
     case PunishmentType.REMOVAL_WING:
-      return 'Removal from wing/unit'
+      return 'Removal from wing or unit'
     default:
       return null
   }

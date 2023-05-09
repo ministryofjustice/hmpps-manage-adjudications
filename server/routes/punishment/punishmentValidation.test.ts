@@ -72,7 +72,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#stoppagePercentage',
-      text: 'Enter the loss of privileges',
+      text: 'Enter the percentage of earnings to be stopped',
     })
   })
   it('shows error when stoppage percentage is more than 100', () => {

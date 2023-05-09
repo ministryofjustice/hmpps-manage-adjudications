@@ -87,7 +87,7 @@ context('Add a new punishment', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Enter the loss of privileges')
+          expect($error.get(0).innerText).to.contain('Enter the percentage of earnings to be stopped')
         })
     })
   })
