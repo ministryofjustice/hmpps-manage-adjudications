@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../macros/punishmentRadios.njk" import punishmentRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Manually activate an existing suspended punishment" %}
 
@@ -13,6 +14,13 @@
   {{ title }}
 {% endblock %}
 {% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -25,10 +33,13 @@
     },
     id: "reportNumber",
     name: "reportNumber",
-    classes: "govuk-input--width-5"
+    value: reportNumber,
+    classes: "govuk-input--width-5",
+    errorMessage: errors | findErrors(["reportNumber"]),
+    attributes: { "data-qa": "reportNumber" }
     }) }}
 
-    {{ punishmentRadios(privilegeType, otherPrivilege, stoppagePercentage, errors) }}
+    {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, errors) }}
 
     <div class="govuk-button-group">
       {{ govukButton({
