@@ -95,7 +95,6 @@ export default class PunishmentsService {
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
       adjudicationNumber
     )
-    console.log(reportedAdjudication.punishments)
     return reportedAdjudication.punishments
   }
 
