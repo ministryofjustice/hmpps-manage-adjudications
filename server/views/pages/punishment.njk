@@ -4,180 +4,39 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../macros/punishmentRadios.njk" import punishmentRadios %}
 
 {% set title = "Add a new punishment" %}
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
-{% set otherPrivilegeHtml %}
-{{ govukInput({
-  id: "otherPrivilege",
-  name: "otherPrivilege",
-  value: otherPrivilege,
-  classes: "govuk-!-width-one-third",
-  attributes: { "data-qa": "other-privilege" },
-  errorMessage: errors | findErrors(["otherPrivilege"]),
-  label: {
-      text: "Privilege to be withdrawn"
-  }
-}) }}
-{% endset -%}
-
-{% set privilegeHtml %}
-{{      govukRadios({
-             idPrefix: 'privilegeType',
-             id: 'privilegeType',
-             name: 'privilegeType',
-             fieldset: {
-             legend: {
-             isPageHeading: false 
-              }
-             },
-             attributes: { "data-qa": "privilege-radio-buttons" },
-             errorMessage: "privilegeType" | findError(errors),
-             items: [
-             {
-             value: "CANTEEN",
-             text: "Canteen",
-             checked: privilegeType == 'CANTEEN' 
-             },
-             {
-             value: "FACILITIES",
-             text: "Facilities to purchase",
-             checked: privilegeType == 'FACILITIES'
-             },
-             {
-             value: "MONEY",
-             text: "Use of private cash",
-             checked: privilegeType == 'MONEY'
-             },
-             {
-             value: "TV",
-             text: "TV",
-             checked: privilegeType == 'TV'
-             },
-             {
-             value: "ASSOCIATION",
-             text: "Association",
-             checked: privilegeType == 'ASSOCIATION'
-             },
-             {
-             value: "OTHER",
-             text: "Other",
-             checked: privilegeType == 'OTHER',
-             conditional: { html: otherPrivilegeHtml }      
-             }
-             ] }) 
-             }}
-{% endset -%}
-
-{% set stoppageOfEarningsHtml %}
-{{ govukInput({
-  id: "stoppagePercentage",
-  name: "stoppagePercentage",
-  value: stoppagePercentage,
-  classes: "govuk-input--width-5",
-  attributes: { "data-qa": "stoppage-percentage" },
-  errorMessage: errors | findErrors(["stoppagePercentage"]),
-  suffix: {
-    text: "%"
-  },
-  label: {
-      text: "Percentage of earnings to be stopped"
-  }
-}) }}
-{% endset -%}
-
 {% block content %}
-    {% if errors | length %}
-        {{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-    {% endif %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    <div>
-        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-
-            {{ govukRadios({
-             idPrefix: 'punishmentType',
-             id: 'punishmentType',
-             name: 'punishmentType',
-             fieldset: {
-             legend: {
-             text: "Type of punishment",
-             isPageHeading: false 
-              }
-             },
-             attributes: { "data-qa": "punishment-radio-buttons" },
-             errorMessage: "punishmentType" | findError(errors),
-             items: [
-             {
-             value: "PRIVILEGE",
-             text: "Loss of privileges",
-             checked: punishmentType == 'PRIVILEGE',
-             conditional: { html: privilegeHtml }      
-             },
-             {
-             value: "EARNINGS",
-             text: "Stoppage of earnings",
-             checked: punishmentType == 'EARNINGS',
-             conditional: { html: stoppageOfEarningsHtml }      
-             },
-             {
-             value: "CONFINEMENT",
-             text: "Cellular confinement",
-             checked: punishmentType == 'CONFINEMENT'
-             },
-             {
-             value: "REMOVAL_ACTIVITY",
-             text: "Removal from activity",
-             checked: punishmentType == 'REMOVAL_ACTIVITY'
-             },
-             {
-             value: "EXCLUSION_WORK",
-             text: "Exclusion from associated work",
-             checked: punishmentType == 'EXCLUSION_WORK'
-             },
-             {
-             value: "EXTRA_WORK",
-             text: "Extra work",
-             checked: punishmentType == 'EXTRA_WORK'
-             },
-             {
-             value: "REMOVAL_WING",
-             text: "Removal from wing or unit",
-             checked: punishmentType == 'REMOVAL_WING'
-             },
-             {
-             value: "ADDITIONAL_DAYS",
-             text: "Additional days",
-             checked: punishmentType == 'ADDITIONAL_DAYS'
-             },
-             {
-             value: "PROSPECTIVE_DAYS",
-             text: "Prospective additional days",
-             checked: punishmentType == 'PROSPECTIVE_DAYS'
-             }
-             ] }) 
-             }}
-
-            <div class="govuk-button-group">
-                {{ govukButton({
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, errors) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
               text: 'Continue',
               type: "submit",
               classes: "govuk-button--submit govuk-!-margin-right-3",
               attributes: { "data-qa": "punishment-submit" }
               }) }}
-                <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to 'Award Punishments'</a>
-            </div>
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to 'Award Punishments'</a>
+      </div>
 
-        </form>
-    </div>
+    </form>
+  </div>
 {% endblock %}

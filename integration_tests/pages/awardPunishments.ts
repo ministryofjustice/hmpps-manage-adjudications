@@ -14,4 +14,6 @@ export default class AwardPunishmentsPage extends Page {
   editPunishment = (): PageElement => cy.get('[data-qa="edit-punishment"]')
 
   deletePunishment = (): PageElement => cy.get('[data-qa="delete-punishment"]')
+
+  continue = (): PageElement => cy.get('[data-qa="punishments-continue"]')
 }

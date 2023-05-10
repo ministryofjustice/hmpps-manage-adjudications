@@ -1,0 +1,57 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/punishmentRadios.njk" import punishmentRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Manually activate an existing suspended punishment" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {{ govukInput({
+    label: {
+        text: "Report number",
+        classes: "govuk-body",
+        isPageHeading: false
+    },
+    id: "reportNumber",
+    name: "reportNumber",
+    value: reportNumber,
+    classes: "govuk-input--width-5",
+    errorMessage: errors | findErrors(["reportNumber"]),
+    attributes: { "data-qa": "reportNumber" }
+    }) }}
+
+    {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, errors) }}
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "submit" }
+        }) }}
+      <p class="govuk-body">
+        <a href="{{awardPunishmentsHref}}" data-qa="cancel">Return to 'Award punishments'</a>
+      </p>
+    </div>
+  </form>
+
+{% endblock %}
