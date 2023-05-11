@@ -2,7 +2,12 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentsAndDamagesPage from '../pages/punishmentsAndDamages'
-import { HearingOutcomeCode, OutcomeCode } from '../../server/data/HearingAndOutcomeResult'
+import {
+  HearingOutcomeCode,
+  OutcomeCode,
+  OutcomeHistory,
+  QuashGuiltyFindingReason,
+} from '../../server/data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 
@@ -153,7 +158,17 @@ context('Damages and punishments summary', () => {
                 }),
               },
             },
-          ],
+            {
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.QUASHED,
+                  amount: 100.5,
+                  caution: false,
+                  quashedReason: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
+                }),
+              },
+            },
+          ] as OutcomeHistory,
           punishments: [
             {
               id: 14,
@@ -406,8 +421,31 @@ context('Reporter view', () => {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
                   amount: 100.5,
-                  caution: true,
+                  caution: false,
                 }),
+              },
+            },
+            {
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.QUASHED,
+                  amount: 100.5,
+                  caution: false,
+                  quashedReason: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
+                }),
+              },
+            },
+          ] as OutcomeHistory,
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.PRIVILEGE,
+              privilegeType: PrivilegeType.OTHER,
+              otherPrivilege: 'games',
+              schedule: {
+                days: 10,
+                startDate: '2023-04-10',
+                endDate: '2023-04-20',
               },
             },
           ],
@@ -478,7 +516,7 @@ context('Reporter view', () => {
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
     punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('exist')
-    punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
+    punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
@@ -486,7 +524,7 @@ context('Reporter view', () => {
       .moneyCautionSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain('No')
+        expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
         expect($summaryData.get(1).innerText).to.contain('No')
       })
   })

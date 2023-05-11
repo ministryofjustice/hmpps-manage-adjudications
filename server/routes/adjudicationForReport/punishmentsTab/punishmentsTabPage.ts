@@ -61,7 +61,7 @@ export default class PunishmentsTabPage {
 
     const finalOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
       adjudicationNumber,
-      [ReportedAdjudicationStatus.CHARGE_PROVED],
+      [ReportedAdjudicationStatus.CHARGE_PROVED, ReportedAdjudicationStatus.QUASHED],
       user
     )
     const amount = finalOutcomeItem.outcome?.outcome?.amount || false
