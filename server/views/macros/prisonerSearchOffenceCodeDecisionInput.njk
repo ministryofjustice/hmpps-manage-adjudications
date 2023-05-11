@@ -9,15 +9,20 @@
     {% if selectedAnswerId == answerId and prisonerId != null %}
         <input type="hidden" name="prisonerId" value="{{ prisonerId }}" id="prisonerId"/>
         <div>
-            <p data-qa="victim-prisoner-name"><span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }} </p>
-            <p data-qa="victim-prisoner-number"><span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }} </p>
+            <p data-qa="victim-prisoner-name">
+                <span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }}
+            </p>
+            <p data-qa="victim-prisoner-number">
+                <span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }}
+            </p>
             <div>
                 {{ govukButton({
                     text: 'Delete',
                     classes: "govuk-button--secondary",
                     type: "submit",
                     name: "deleteUser",
-                    value: "deleteUser"
+                    value: "deleteUser",
+                    preventDoubleClick: true
                 }) }}
             </div>
         </div>
@@ -42,6 +47,7 @@
                 type: "submit",
                 name: "searchUser",
                 value: "searchUser",
+                preventDoubleClick: true,
                 attributes: {"data-qa": "prisoner-search"}
             }) }}
         </div>

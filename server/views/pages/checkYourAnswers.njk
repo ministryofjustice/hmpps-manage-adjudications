@@ -8,55 +8,56 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% if creationJourney %}
-{% set title = "Check your answers before placing them on report" %}
+  {% set title = "Check your answers before placing them on report" %}
 {% else %}
-{% set title = "Check your answers before changing the report" %}
+  {% set title = "Check your answers before changing the report" %}
 {% endif %}
 
 {% block pageTitle %}
-	{{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-	{{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
 
-	<h1 class="govuk-heading-l">{{ title }}</h1>
+  <h1 class="govuk-heading-l">{{ title }}</h1>
 
-	<div class="prisonerPlaybackSection">
-		{{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
-	</div>
+  <div class="prisonerPlaybackSection">
+    {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+  </div>
 
-	<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-		<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-		{% if not creationJourney %}
-			{{ adjudicationReviewStatusSummary(reviewData.reviewStatus, reviewData.reviewSummary) }}
-		{% endif %}
+    {% if not creationJourney %}
+      {{ adjudicationReviewStatusSummary(reviewData.reviewStatus, reviewData.reviewSummary) }}
+    {% endif %}
 
-		{{ adjudicationSummary(editIncidentDetailsURL, editOffenceDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, editIncidentStatementURL, incidentDetailsData, false, false, offences, damages, evidence, witnesses, userSetGenderData) }}
+    {{ adjudicationSummary(editIncidentDetailsURL, editOffenceDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, editIncidentStatementURL, incidentDetailsData, false, false, offences, damages, evidence, witnesses, userSetGenderData) }}
 
-		{% if creationJourney %}
-		<h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>
-		<p class="govuk-body govuk-!-margin-bottom-6 checkAnswers-conditions">By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
-		{% endif %}
+    {% if creationJourney %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-6">Place on report</h2>
+      <p class="govuk-body govuk-!-margin-bottom-6 checkAnswers-conditions">By accepting these details you are confirming that, to the best of your knowledge, these details are correct.</p>
+    {% endif %}
 
-		{{ govukButton({
+    {{ govukButton({
 				text: submitButtonText,
 				type: "submit",
 				classes: "govuk-button--submit govuk-!-margin-right-2",
-				attributes: { "data-qa": "check-answers-submit" }
+				attributes: { "data-qa": "check-answers-submit" },
+        preventDoubleClick: true
 			}) }}
 
-		{{ govukButton({
+    {{ govukButton({
 				text: secondaryButtonText,
 				classes: "govuk-button--secondary",
 				element: 'a',
 				href: exitUrl,
 				attributes: { "data-qa": "check-answers-exit" }
 			}) }}
-	</form>
+  </form>
 
 {% endblock %}

@@ -1,21 +1,23 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% macro adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) %}
-    <div data-qa="adjudication-review-panel">
-        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> {% include "../partials/reviewPanelRadios.njk" %}
-            {{ govukButton({
+  <div data-qa="adjudication-review-panel">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% include "../partials/reviewPanelRadios.njk" %}
+      {{ govukButton({
 					text: "Save and continue",
 					type: "submit",
 					classes: "govuk-button--submit govuk-!-margin-right-3",
+					preventDoubleClick: true,
 					attributes: { "data-qa": "review-submit" }
 			}) }}
-            {{ govukButton({
+      {{ govukButton({
 					text: 'Exit',
 					element: "a",
 					href: returnLinkURL,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "review-exit" }
 				}) }}
-            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"></form>
-        </div>
-    {% endmacro %}
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"></form>
+  </div>
+{% endmacro %}

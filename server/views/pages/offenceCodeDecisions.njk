@@ -76,6 +76,7 @@
         {{ govukButton({
             text: 'Continue',
             type: "submit",
+            preventDoubleClick: true,
             name: "decisionFormSubmit",
             classes: "govuk-button--submit govuk-!-margin-right-2",
             attributes: { "data-qa": "offence-code-decision-continue" }

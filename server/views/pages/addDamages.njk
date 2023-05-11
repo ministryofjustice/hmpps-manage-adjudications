@@ -7,32 +7,32 @@
 {% set title = "Add damages" %}
 
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-	{% if errors | length %}
-		{{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-	{% endif %}
+  {% endif %}
 
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
 
-                {% include "../partials/addDamagesRadios.njk" %}
+        {% include "../partials/addDamagesRadios.njk" %}
 
-                {{ govukTextarea({
+        {{ govukTextarea({
                     name: "damageDescription",
                     id: "damageDescription",
                     classes: "govuk-!-width-two-thirds",
@@ -47,20 +47,21 @@
                     errorMessage: "damageDescription" | findError(errors),
                     value: damageDescription
                 }) }}
-            
-                {{ govukButton({
+
+        {{ govukButton({
                     text: "Save and continue",
                     type: "submit",
                     classes: "govuk-button--submit govuk-!-margin-right-3",
-                    attributes: { "data-qa": "add-damages-submit" }
+                    attributes: { "data-qa": "add-damages-submit" },
+                    preventDoubleClick: true
                 }) }}
-                {{ govukButton({
+        {{ govukButton({
                     text: "Cancel",
                     href: cancelButtonHref,
                     classes: "govuk-button--secondary",
                     attributes: { "data-qa": "cancel-add-damages-button" }
                 }) }}
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+  </form>
 {% endblock %}

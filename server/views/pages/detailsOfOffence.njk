@@ -7,84 +7,86 @@
 {% set title = "Offence details" %}
 
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-    {% if errors | length %}
-        {{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
       }) }}
-    {% endif %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-        <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}"/>
-        <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
-            {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
-        </div>
-        {% if offence.questionsAndAnswers %}
-            <div class="prisoner-rule govuk-!-margin-bottom-5">
-                <p class="govuk-!-margin-bottom-1 govuk-label--s"
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}"/>
+    <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+      {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+    </div>
+    {% if offence.questionsAndAnswers %}
+      <div class="prisoner-rule govuk-!-margin-bottom-5">
+        <p class="govuk-!-margin-bottom-1 govuk-label--s"
                   data-qa="question-applicable-rule">Which set of rules apply to this prisoner?</p>
-                {% if isYouthOffender %}
-                    <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">YOI offences</p>
-                    <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ true | prisonRule }}</p>
-                {% else %}
-                    <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">Adult offences</p>
-                    <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ false | prisonRule }}</p>
-                {% endif %}
-            </div>
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-three-quarters">
-                    <div class="details-of-offence-questions-and-answers">
-                        <div class="q-and-a">
-                            {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber) }}
-                        </div>
-                        <div>
-                            <p class="govuk-body">
-                                <a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceData) }}'
-                                   data-qa="delete-1" class="govuk-link">Remove this offence</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div data-qa="offence-broke-section-1">
-                        <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
-                        {% if offence.incidentRule %}
-                            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
-                                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
-                            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription | safe }}</p>
-                        {% endif %}
-                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
-                                paragraph {{ offence.offenceRule.paragraphNumber }}</p>
-                        <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription  | safe }}</p>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                </div>
-            </div>
-            {{ govukButton({
-                text: "Save and continue",
-                type: "submit",
-                classes: "govuk-button--submit",
-                attributes: { "data-qa": "details-of-offence-submit" }
-            }) }}
+        {% if isYouthOffender %}
+          <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">YOI offences</p>
+          <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ true | prisonRule }}</p>
         {% else %}
-            <p class="govuk-body">This report does not currently have any offence details.</p>
-            <p class="govuk-body">You must add offence details.</p>
-            {{ govukButton({
-                text: "Continue",
-                type: "submit",
-                name: "addFirstOffence",
-                value: "addFirstOffence",
-                classes: "govuk-button--submit",
-                attributes: { "data-qa": "details-of-offence-continue" }
-            }) }}
+          <p class="govuk-!-margin-bottom-0 govuk-label--xs" data-qa="answer-applicable-rule-desc">Adult offences</p>
+          <p class="govuk-!-margin-bottom-5 govuk-label--xs" data-qa="answer-applicable-rule-para">{{ false | prisonRule }}</p>
         {% endif %}
-    </form>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+          <div class="details-of-offence-questions-and-answers">
+            <div class="q-and-a">
+              {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber) }}
+            </div>
+            <div>
+              <p class="govuk-body">
+                <a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceData) }}'
+                                   data-qa="delete-1" class="govuk-link">Remove this offence</a>
+              </p>
+            </div>
+          </div>
+          <div data-qa="offence-broke-section-1">
+            <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
+            {% if offence.incidentRule %}
+              <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
+                                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+              <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription | safe }}</p>
+            {% endif %}
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
+                                paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+            <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription  | safe }}</p>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+          </div>
+        </div>
+      </div>
+      {{ govukButton({
+          text: "Save and continue",
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit",
+          attributes: { "data-qa": "details-of-offence-submit" }
+      }) }}
+    {% else %}
+      <p class="govuk-body">This report does not currently have any offence details.</p>
+      <p class="govuk-body">You must add offence details.</p>
+      {{ govukButton({
+        text: "Continue",
+        type: "submit",
+        name: "addFirstOffence",
+        preventDoubleClick: true,
+        value: "addFirstOffence",
+        classes: "govuk-button--submit",
+        attributes: { "data-qa": "details-of-offence-continue" }
+    }) }}
+    {% endif %}
+  </form>
 {% endblock %}

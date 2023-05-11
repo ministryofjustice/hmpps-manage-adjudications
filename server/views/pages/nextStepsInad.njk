@@ -6,40 +6,41 @@
 {% from "../macros/nextSteps.njk" import nextSteps %}
 {% set title = "What is the next step?" %}
 {% block pageTitle %}
-				{{ title }}
+  {{ title }}
 {% endblock %}
 {% block beforeContent %}
-				{{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-				{% if errors | length %}
-								{{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-				{% endif %}
-				<h1 class="govuk-heading-l">{{ title }}</h1>
-				<div>
-								<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-												<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-												{{ nextSteps() }}
+      {{ nextSteps() }}
 
-												{{ govukButton({
+      {{ govukButton({
 					text: 'Continue',
 					type: "submit",
+          preventDoubleClick: true,
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "nextstep-inad-submit" }
 			}) }}
-												{{ govukButton({
+      {{ govukButton({
 					text: 'Cancel',
 					element: "a",
 					href: cancelHref,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "nextstep-inad-cancel" }
 			}) }}
-								</form>
-				</div>
+    </form>
+  </div>
 {% endblock %}

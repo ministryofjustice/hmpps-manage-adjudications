@@ -21,154 +21,155 @@
 {% set title = "Incident details" %}
 
 {% block pageTitle %}
-    {{
+  {{
         title
     }}
 {% endblock %}
 
 {% block beforeContent %}
-    {{
+  {{
         breadcrumb()
     }}
 {% endblock %}
 
 {% block content %}
 
-{% if errors | length %}
+  {% if errors | length %}
     {{    
-        govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors,
-            attributes: { "data-qa": "error-summary" }
-        }) 
+      govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: errors,
+          attributes: { "data-qa": "error-summary" }
+      }) 
     }}
-{% endif %}
+  {% endif %}
 
-<h1 class="govuk-heading-l">{{ title }}</h1>
+  <h1 class="govuk-heading-l">{{ title }}</h1>
 
-<div class="prisonerPlaybackSection">
+  <div class="prisonerPlaybackSection">
     {{
-        prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation)
+      prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation)
     }}
-</div>
+  </div>
 
-<div>
+  <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input 
-            type="hidden"
-            name="_csrf"
-            value="{{csrfToken }}"
-        />
+      <input 
+        type="hidden"
+        name="_csrf"
+        value="{{csrfToken }}"
+/>
 
-        {% if originalReporterUsername != null %}
-            <input    
-                    type="hidden" 
-                    name="originalReporterUsername" 
-                    value="{{originalReporterUsername }}" 
-                    id="originalReporterUsername"
-            />
-        {% endif %}
+      {% if originalReporterUsername != null %}
+        <input    
+          type="hidden" 
+          name="originalReporterUsername" 
+          value="{{originalReporterUsername }}" 
+          id="originalReporterUsername"
+/>
+      {% endif %}
 
-        {% include "../partials/reportingOfficer.njk" %}
+      {% include "../partials/reportingOfficer.njk" %}
 
-        <h2 class="govuk-heading-s">When did the incident happen?</h2>
-        {{
-            dateTimePicker({
-                errors: errors,
-                isDateError: isDateError,
-                isHourError: isHourError,
-                isMinuteError: isMinuteError,
-                dateTimeObj: data.incidentDate,
-                dateId: 'incidentDate',
-                dateLabel: 'Date of incident',
-                timeLabel: 'Time of incident',
-                dataQaDate: 'incident-details-date',
-                dataQaHour: 'incident-date-hour',
-                dataQaMinutes: 'incident-date-minutes'
-            })
+      <h2 class="govuk-heading-s">When did the incident happen?</h2>
+      {{
+        dateTimePicker({
+            errors: errors,
+            isDateError: isDateError,
+            isHourError: isHourError,
+            isMinuteError: isMinuteError,
+            dateTimeObj: data.incidentDate,
+            dateId: 'incidentDate',
+            dateLabel: 'Date of incident',
+            timeLabel: 'Time of incident',
+            dataQaDate: 'incident-details-date',
+            dataQaHour: 'incident-date-hour',
+            dataQaMinutes: 'incident-date-minutes'
+        })
         }}
 
-        {{
-            govukSelect({
-                id: 'locationId',
-                name: 'locationId',
-                label: {
-                    text: 'Location of incident',
-                    isPageHeading: false,
-                    classes: ''
+      {{
+        govukSelect({
+            id: 'locationId',
+            name: 'locationId',
+            label: {
+                text: 'Location of incident',
+                isPageHeading: false,
+                classes: ''
+            },
+            items: locations | toSelect('locationId', 'userDescription', data.locationId ),
+            classes: '',
+            errorMessage: 'locationId' | findError(errors)
+        })
+      }}
+
+      {{
+        govukRadios({
+            errorMessage: "discoveryRadioSelected" | findError(errors),
+            idPrefix: 'discoveryRadioSelected',
+            id: 'discoveryRadioSelected',
+            name: 'discoveryRadioSelected',
+            attributes: { "data-qa": "radio-buttons-discovery" },
+            fieldset: {
+                legend: {
+                text: "Was the incident discovered at the same time?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+                }
+            },
+            items: [
+                {
+                    value: "Yes",
+                    text: "Yes",
+                    checked: data.discoveryRadioSelected == 'Yes'
                 },
-                items: locations | toSelect('locationId', 'userDescription', data.locationId ),
-                classes: '',
-                errorMessage: 'locationId' | findError(errors)
-            })
-        }}
-
-        {{
-            govukRadios({
-                errorMessage: "discoveryRadioSelected" | findError(errors),
-                idPrefix: 'discoveryRadioSelected',
-                id: 'discoveryRadioSelected',
-                name: 'discoveryRadioSelected',
-                attributes: { "data-qa": "radio-buttons-discovery" },
-                fieldset: {
-                    legend: {
-                    text: "Was the incident discovered at the same time?",
-                    isPageHeading: false,
-                    classes: "govuk-fieldset__legend--s"
+                {
+                    value: "No",
+                    text: "No",
+                    checked: data.discoveryRadioSelected == 'No',
+                    conditional: {
+                        html: dateTimePicker({
+                            errors: errors,
+                            isDateError: isDiscoveryDateError,
+                            isHourError: isDiscoveryHourError,
+                            isMinuteError: isDiscoveryMinuteError,
+                            dateTimeObj: data.discoveryDate,
+                            dateId: 'discoveryDate',
+                            dateLabel: 'Date of discovery',
+                            timeLabel: 'Time of discovery',
+                            dataQaDate: 'discovery-details-date',
+                            dataQaHour: 'discovery-date-hour',
+                            dataQaMinutes: 'discovery-date-minutes'
+                        })
                     }
-                },
-                items: [
-                    {
-                        value: "Yes",
-                        text: "Yes",
-                        checked: data.discoveryRadioSelected == 'Yes'
-                    },
-                    {
-                        value: "No",
-                        text: "No",
-                        checked: data.discoveryRadioSelected == 'No',
-                        conditional: {
-                            html: dateTimePicker({
-                                errors: errors,
-                                isDateError: isDiscoveryDateError,
-                                isHourError: isDiscoveryHourError,
-                                isMinuteError: isDiscoveryMinuteError,
-                                dateTimeObj: data.discoveryDate,
-                                dateId: 'discoveryDate',
-                                dateLabel: 'Date of discovery',
-                                timeLabel: 'Time of discovery',
-                                dataQaDate: 'discovery-details-date',
-                                dataQaHour: 'discovery-date-hour',
-                                dataQaMinutes: 'discovery-date-minutes'
-                            })
-                        }
-                    }
-                ]
-            })
+                }
+            ]
+        })
+      }}
+
+      {{
+        govukButton({
+            text: submitButtonText,
+            type: "submit",
+            preventDoubleClick: true,
+            classes: "govuk-button--submit govuk-!-margin-right-3",
+            attributes: { "data-qa": "incident-details-submit" }
+        }) 
         }}
 
+      {% if exitButtonHref %}
         {{
-            govukButton({
-                text: submitButtonText,
-                type: "submit",
-                classes: "govuk-button--submit govuk-!-margin-right-3",
-                attributes: { "data-qa": "incident-details-submit" }
-            }) 
+          govukButton({
+              text: 'Exit',
+              element: "a",
+              href: exitButtonHref,
+              classes: "govuk-button--secondary",
+              attributes: { "data-qa": "incident-details-exit" }
+          }) 
         }}
-
-        {% if exitButtonHref %}
-            {{
-                govukButton({
-                    text: 'Exit',
-                    element: "a",
-                    href: exitButtonHref,
-                    classes: "govuk-button--secondary",
-                    attributes: { "data-qa": "incident-details-exit" }
-                }) 
-            }}
-        {% endif %}
+      {% endif %}
 
     </form>
-</div>
+  </div>
 
 {% endblock %}

@@ -7,31 +7,30 @@
 {% set title = "Witnesses" %}
 
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
-            {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                {% if witnesses | length > 0 %}
-                <div class="witnesses-table">
-                    {{ damagesWitnessesTable(witnesses, redirectAfterRemoveUrl, currentUser, 'witnesses') }}
-                </div>
-                {% else %}
-                <p class="govuk-body" data-qa="no-witnesses-p1">You have not added any witnesses to this report.</p>
-                <p class="govuk-body" data-qa="no-witnesses-p2">You can add witnesses or you can continue. You can also return later and add witnesses.</p>
-                {% endif %}
-
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+      {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        {% if witnesses | length > 0 %}
+          <div class="witnesses-table">
+            {{ damagesWitnessesTable(witnesses, redirectAfterRemoveUrl, currentUser, 'witnesses') }}
+          </div>
+        {% else %}
+          <p class="govuk-body" data-qa="no-witnesses-p1">You have not added any witnesses to this report.</p>
+          <p class="govuk-body" data-qa="no-witnesses-p2">You can add witnesses or you can continue. You can also return later and add witnesses.</p>
+        {% endif %}
 
         {{ govukButton({
             text: "Add a witness",
@@ -43,6 +42,7 @@
         {{ govukButton({
             text: "Save and continue",
             type: "submit",
+            preventDoubleClick: true,
             classes: "govuk-button--submit govuk-!-margin-right-3",
             attributes: { "data-qa": "details-of-witness-submit" }
         }) }}
@@ -52,7 +52,7 @@
             classes: "govuk-button--secondary",
             attributes: { "data-qa": "details-of-witness-exit" }
         }) }}
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+  </form>
 {% endblock %}

@@ -7,31 +7,31 @@
 {% set title = "Damages" %}
 
 {% block pageTitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
-            {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-            {% if damages | length > 0 %}
-            <div class="damages-table">
-                {{ damagesWitnessesTable(damages, redirectAfterRemoveUrl, currentUser, 'damages') }}
-            </div>
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
+      {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        {% if damages | length > 0 %}
+          <div class="damages-table">
+            {{ damagesWitnessesTable(damages, redirectAfterRemoveUrl, currentUser, 'damages') }}
+          </div>
 
-            {% else %}
-            <p class="govuk-body" data-qa="no-damages-p1">You have not added damages to this report.</p>
-            <p class="govuk-body" data-qa="no-damages-p2">You can add damages now or you can continue. You can also return later and add damages.</p>
-            {% endif %}
+        {% else %}
+          <p class="govuk-body" data-qa="no-damages-p1">You have not added damages to this report.</p>
+          <p class="govuk-body" data-qa="no-damages-p2">You can add damages now or you can continue. You can also return later and add damages.</p>
+        {% endif %}
 
         {{ govukButton({
             text: "Add damages",
@@ -43,6 +43,7 @@
         {{ govukButton({
             text: "Save and continue",
             type: "submit",
+            preventDoubleClick: true,
             classes: "govuk-button--submit govuk-!-margin-right-3",
             attributes: { "data-qa": "details-of-damages-submit" }
         }) }}
@@ -52,7 +53,7 @@
             classes: "govuk-button--secondary",
             attributes: { "data-qa": "exit-damages-button" }
         }) }}
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+  </form>
 {% endblock %}
