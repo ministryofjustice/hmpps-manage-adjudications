@@ -50,7 +50,8 @@
         text: 'Save',
         type: "submit",
         classes: "govuk-button--submit govuk-!-margin-right-3",
-        attributes: { "data-qa": "issue-date-and-time-submit" }
+        attributes: { "data-qa": "issue-date-and-time-submit" },
+        preventDoubleClick: true
       }) }}
       <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="issue-date-and-time-cancel">Cancel</a></p>
     </div>

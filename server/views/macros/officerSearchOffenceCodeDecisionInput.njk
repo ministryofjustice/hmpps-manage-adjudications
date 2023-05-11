@@ -22,7 +22,8 @@
                     classes: "govuk-button--secondary",
                     type: "submit",
                     name: "deleteUser",
-                    value: "deleteUser"
+                    value: "deleteUser",
+                    preventDoubleClick: true
                 }) }}
             </div>
         </div>
@@ -47,6 +48,7 @@
                 type: "submit",
                 name: "searchUser",
                 value: "searchUser",
+                preventDoubleClick: true,
                 attributes: {"data-qa": "officer-search"}
             }) }}
         </div>

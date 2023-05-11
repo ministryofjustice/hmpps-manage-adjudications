@@ -83,6 +83,7 @@
         {{ govukButton({
           text: submitButtonText,
           type: "submit",
+          preventDoubleClick: true,
           classes: "govuk-button--submit",
           attributes: { "data-qa": "incident-statement-submit" }
         }) }}

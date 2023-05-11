@@ -12,118 +12,122 @@
 
 {% set prisonOfficerHtml %}
 {% if selectedAnswerId == "OFFICER" and officerId != null %}
-    <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}"/>
+  <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}"/>
+  <div>
+    <p data-qa="officer-name">
+      <span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }}
+    </p>
+    <p>
+      <span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }}
+    </p>
     <div>
-        <p data-qa="officer-name">
-            <span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }}
-        </p>
-        <p>
-            <span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }}
-        </p>
-        <div>
-            {{ govukButton({
-                    text: 'Delete',
-                    classes: "govuk-button--secondary",
-                    type: "submit",
-                    name: "deleteUser",
-                    value: "deleteUser"
-                }) }}
-        </div>
+      {{ govukButton({
+          text: 'Delete',
+          classes: "govuk-button--secondary",
+          type: "submit",
+          name: "deleteUser",
+          preventDoubleClick: true,
+          value: "deleteUser"
+      }) }}
     </div>
+  </div>
 {% else %}
-    <div class="flex-container">
-        <div class="govuk-!-margin-right-3 officerSearchNameInputContainer" id="officerName" >
-            {{ govukInput({
-                id: "officerSearchNameInput",
-                name: "officerSearchNameInput",
-                classes: "govuk-!-width-full",
-                value: officerSearchNameInput,
-                errorMessage: errors | findErrors(["officerSearchNameInput"]),
-                label: {
-                    text: "Enter their name",
-                    classes: "govuk-!-font-weight-bold"
-                }
-            }) }}
-        </div>
-        {{ govukButton({
-                text: "Search",
-                classes: "govuk-button--secondary conditionalRadioSearchButton",
-                type: "submit",
-                name: "searchUser",
-                value: "searchUser",
-                attributes: {"data-qa": "officer-search"}
-            }) }}
+  <div class="flex-container">
+    <div class="govuk-!-margin-right-3 officerSearchNameInputContainer" id="officerName" >
+      {{ govukInput({
+          id: "officerSearchNameInput",
+          name: "officerSearchNameInput",
+          classes: "govuk-!-width-full",
+          value: officerSearchNameInput,
+          errorMessage: errors | findErrors(["officerSearchNameInput"]),
+          label: {
+              text: "Enter their name",
+              classes: "govuk-!-font-weight-bold"
+          }
+      }) }}
     </div>
-    {% endif %}
+    {{ govukButton({
+        text: "Search",
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+        type: "submit",
+        preventDoubleClick: true,
+        name: "searchUser",
+        value: "searchUser",
+        attributes: {"data-qa": "officer-search"}
+    }) }}
+  </div>
+{% endif %}
 {% endset -%}
 
-    {% set staffHtml %}
-    {% if selectedAnswerId == "STAFF" and staffId != null %}
-        <input type="hidden" id="staffId" name="staffId" value="{{ staffId }}"/>
-        <div>
-            <p data-qa="staff-name">
-                <span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }}
-            </p>
-            <p>
-                <span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }}
-            </p>
-            <div>
-                {{ govukButton({
-                    text: 'Delete',
-                    classes: "govuk-button--secondary",
-                    type: "submit",
-                    name: "deleteUser",
-                    value: "deleteUser"
-                }) }}
-            </div>
-        </div>
-    {% else %}
-        <div id="staffName" class="flex-container">
-            <div class="govuk-!-margin-right-3 officerSearchNameInputContainer">
-                {{ govukInput({
-                id: "staffSearchNameInput",
-                name: "staffSearchNameInput",
-                classes: "govuk-!-width-full",
-                value: selectedAnswerId == "STAFF" and staffSearchNameInput,
-                errorMessage: errors | findErrors(["staffSearchNameInput"]),
-                label: {
-                    text: "Enter their name",
-                    classes: "govuk-!-font-weight-bold"
-                }
-            }) }}
-            </div>
-            {{ govukButton({
-                text: "Search",
-                classes: "govuk-button--secondary conditionalRadioSearchButton",
-                type: "submit",
-                name: "searchUser",
-                value: "searchUser",
-                attributes: {'data-qa': 'staff-search'}
-            }) }}
-        </div>
-    {% endif %}
-    {% endset -%}
-
-    {% set otherHtml %}
-    <div class="govuk-form-group flex-container flex-column">
-        <div class="govuk-!-margin-right-3 officerSearchNameInputContainer">
-            {{ govukInput({
-            id: "otherPersonNameInput",
-            name: "otherPersonNameInput",
-            classes: "govuk-!-width-full",
-            value: otherPersonNameInput,
-            errorMessage: errors | findErrors(["otherPersonNameInput"]),
-                label: {
-                    text: "Enter their name",
-                    classes: "govuk-!-font-weight-bold"
-                }
-        }) }}
-        </div>
+{% set staffHtml %}
+{% if selectedAnswerId == "STAFF" and staffId != null %}
+  <input type="hidden" id="staffId" name="staffId" value="{{ staffId }}"/>
+  <div>
+    <p data-qa="staff-name">
+      <span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }}
+    </p>
+    <p>
+      <span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }}
+    </p>
+    <div>
+      {{ govukButton({
+          text: 'Delete',
+          classes: "govuk-button--secondary",
+          type: "submit",
+          preventDoubleClick: true,
+          name: "deleteUser",
+          value: "deleteUser"
+      }) }}
     </div>
+  </div>
+{% else %}
+  <div id="staffName" class="flex-container">
+    <div class="govuk-!-margin-right-3 officerSearchNameInputContainer">
+      {{ govukInput({
+          id: "staffSearchNameInput",
+          name: "staffSearchNameInput",
+          classes: "govuk-!-width-full",
+          value: selectedAnswerId == "STAFF" and staffSearchNameInput,
+          errorMessage: errors | findErrors(["staffSearchNameInput"]),
+          label: {
+              text: "Enter their name",
+              classes: "govuk-!-font-weight-bold"
+          }
+      }) }}
+    </div>
+    {{ govukButton({
+        text: "Search",
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+        type: "submit",
+        preventDoubleClick: true,
+        name: "searchUser",
+        value: "searchUser",
+        attributes: {'data-qa': 'staff-search'}
+    }) }}
+  </div>
+{% endif %}
+{% endset -%}
 
-    {% endset -%}
+{% set otherHtml %}
+<div class="govuk-form-group flex-container flex-column">
+  <div class="govuk-!-margin-right-3 officerSearchNameInputContainer">
+    {{ govukInput({
+        id: "otherPersonNameInput",
+        name: "otherPersonNameInput",
+        classes: "govuk-!-width-full",
+        value: otherPersonNameInput,
+        errorMessage: errors | findErrors(["otherPersonNameInput"]),
+            label: {
+                text: "Enter their name",
+                classes: "govuk-!-font-weight-bold"
+            }
+    }) }}
+  </div>
+</div>
 
-    {{ govukRadios({
+{% endset -%}
+
+{{ govukRadios({
   idPrefix: "selectedAnswerId",
   name: "selectedAnswerId",
   errorMessage: "selectedAnswerId" | findError(errors),

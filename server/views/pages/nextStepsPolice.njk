@@ -6,16 +6,16 @@
 {% from "../macros/nextSteps.njk" import nextSteps %}
 
 {% set title = "Will this charge continue to prosecution?" %}
-  {% block pageTitle %}
-    {{ title }}
-  {% endblock %}
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
 
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
 
 {% set nextStep %}
-  {{ nextSteps({ text: "What is the next step?", isPageHeading: false }) }}
+{{ nextSteps({ text: "What is the next step?", isPageHeading: false }) }}
 {% endset -%}
 
 {% block content %}
@@ -25,11 +25,11 @@
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-    {% endif %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-            {{ govukRadios({
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ govukRadios({
               idPrefix: 'prosecutionChosen',
               id: 'prosecutionChosen',
               name: 'prosecutionChosen',
@@ -48,18 +48,19 @@
                   checked: prosecutionChosen === 'no'
               }]
             }) }}
-            {{ govukButton({
+    {{ govukButton({
               text: 'Continue',
               type: "submit",
+              preventDoubleClick: true,
               classes: "govuk-button--submit govuk-!-margin-right-3",
               attributes: { "data-qa": "prosecution-submit" }
             }) }}
-            {{ govukButton({
+    {{ govukButton({
               text: 'Cancel',
               element: "a",
               href: cancelHref,
               classes: "govuk-button--secondary",
               attributes: { "data-qa": "prosecution-cancel" }
           }) }}
-        </form>
+  </form>
 {% endblock %}

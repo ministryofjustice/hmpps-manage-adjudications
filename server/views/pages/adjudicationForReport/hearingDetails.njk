@@ -44,6 +44,7 @@
               {{ govukButton({
                 text: 'Cancel this hearing',
                 type: "submit",
+                preventDoubleClick: true,
                 classes: "govuk-button--secondary govuk-!-margin-right-3",
                 name: "cancelHearingButton",
                 value: "cancelHearingButton-"+hearingId,

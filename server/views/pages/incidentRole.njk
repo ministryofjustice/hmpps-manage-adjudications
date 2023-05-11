@@ -7,56 +7,56 @@
 {% set title = "Incident role" %}
 
 {% block pageTitle %}
-	{{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block beforeContent %}
-	{{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-	{% if errors | length %}
-		{{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-	{% endif %}
+  {% endif %}
 
-    <h1 class="govuk-heading-l">What was {{ prisoner.friendlyName | possessive | safe }} role in this incident?</h1>
+  <h1 class="govuk-heading-l">What was {{ prisoner.friendlyName | possessive | safe }} role in this incident?</h1>
 
-	<div>
-		<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-			<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-            {% if originalIncidentRoleSelection != null %}
-                <input type="hidden" name="originalIncidentRoleSelection" value="{{ originalIncidentRoleSelection }}" id="originalIncidentRoleSelection"/>
-            {% endif %}
-            {% if lastIncidentRoleSelection != null %}
-                <input type="hidden" name="lastIncidentRoleSelection" value="{{ lastIncidentRoleSelection }}" id="lastIncidentRoleSelection"/>
-            {% endif %}
-            {% if lastAssociatedPrisonerNumberSelection != null %}
-                <input type="hidden" name="lastAssociatedPrisonerNumberSelection" value="{{ lastAssociatedPrisonerNumberSelection }}" id="lastAssociatedPrisonerNumberSelection"/>
-            {% endif %}
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% if originalIncidentRoleSelection != null %}
+        <input type="hidden" name="originalIncidentRoleSelection" value="{{ originalIncidentRoleSelection }}" id="originalIncidentRoleSelection"/>
+      {% endif %}
+      {% if lastIncidentRoleSelection != null %}
+        <input type="hidden" name="lastIncidentRoleSelection" value="{{ lastIncidentRoleSelection }}" id="lastIncidentRoleSelection"/>
+      {% endif %}
+      {% if lastAssociatedPrisonerNumberSelection != null %}
+        <input type="hidden" name="lastAssociatedPrisonerNumberSelection" value="{{ lastAssociatedPrisonerNumberSelection }}" id="lastAssociatedPrisonerNumberSelection"/>
+      {% endif %}
 
-			{% include "../partials/incidentDetailsRadios.njk" %}
+      {% include "../partials/incidentDetailsRadios.njk" %}
 
-
-			{{ govukButton({
+      {{ govukButton({
 					text: submitButtonText,
 					type: "submit",
+					preventDoubleClick: true,
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "incident-role-submit" }
 			}) }}
-			{% if exitButtonHref %}
-				{{ govukButton({
+      {% if exitButtonHref %}
+        {{ govukButton({
 					text: 'Exit',
 					element: "a",
 					href: exitButtonHref,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "incident-role-exit" }
 				}) }}
-			{% endif %}
-		</form>
-	</div>
+      {% endif %}
+    </form>
+  </div>
 
 {% endblock %}

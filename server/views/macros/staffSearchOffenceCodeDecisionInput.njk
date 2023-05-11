@@ -22,12 +22,13 @@
       </p>
       <div>
         {{ govukButton({
-                    text: 'Delete',
-                    classes: "govuk-button--secondary",
-                    type: "submit",
-                    name: "deleteUser",
-                    value: "deleteUser"
-                }) }}
+          text: 'Delete',
+          classes: "govuk-button--secondary",
+          type: "submit",
+          name: "deleteUser",
+          value: "deleteUser",
+          preventDoubleClick: true
+        }) }}
       </div>
     </div>
   {% else %}
@@ -47,13 +48,14 @@
     </div>
     <div>
       {{ govukButton({
-                text: "Search",
-                classes: "govuk-button--secondary conditionalRadioSearchButton",
-                type: "submit",
-                name: "searchUser",
-                value: "searchUser",
-                attributes: {'data-qa': 'staff-search'}
-            }) }}
+        text: "Search",
+        classes: "govuk-button--secondary conditionalRadioSearchButton",
+        type: "submit",
+        name: "searchUser",
+        value: "searchUser",
+        preventDoubleClick: true,
+        attributes: {'data-qa': 'staff-search'}
+      }) }}
     </div>
   {% endif %}
 

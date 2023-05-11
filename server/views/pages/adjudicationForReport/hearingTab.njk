@@ -50,6 +50,7 @@
             href: primaryButtonInfo.href,
             classes: "govuk-button govuk-!-margin-right-3",
             name: primaryButtonInfo.name,
+            preventDoubleClick: true,
             attributes: { "data-qa": primaryButtonInfo.qa }
           }) }}
           {% endif %}
@@ -60,6 +61,7 @@
             classes: "govuk-button--secondary",
             name: secondaryButtonInfo.name,
             value: secondaryButtonInfo.value,
+            preventDoubleClick: true,
             attributes: { "data-qa": secondaryButtonInfo.qa }
           }) }}
           {% endif %}
@@ -69,6 +71,7 @@
             href: tertiaryButtonInfo.href,
             classes: "govuk-button--secondary govuk-!-margin-right-3",
             name: tertiaryButtonInfo.name,
+            preventDoubleClick: true,
             attributes: { "data-qa": tertiaryButtonInfo.qa }
           }) }}
           {% endif %}
