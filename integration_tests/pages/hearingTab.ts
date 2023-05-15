@@ -52,6 +52,8 @@ export default class HearingTabPage extends Page {
 
   inAdReferralTable = (): PageElement => cy.get('[data-qa="inad-referral-table"]')
 
+  referralChangeLink = (): PageElement => cy.get('[data-qa="change-link-hearing-outcome-reason-for-referral"]')
+
   // Not proceed state
 
   notProceedTable = (): PageElement => cy.get('[data-qa="not-proceed-summary-table"]')

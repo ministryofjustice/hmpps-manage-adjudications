@@ -14,6 +14,8 @@ export default class AcceptedReportConfirmationRoute {
       user
     )
 
+    const reportLocked = await this.reportedAdjudicationsService.outcomeEnteredInNomis(adjudicationNumber, user)
+
     return res.render(`pages/acceptedReportConfirmation.njk`, {
       expiryTime: getTime(adjudicationDetails.reportExpirationDateTime, 'H:mm'),
       expiryDate: getDate(adjudicationDetails.reportExpirationDateTime),
@@ -22,6 +24,7 @@ export default class AcceptedReportConfirmationRoute {
       scheduleHearingLink: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
       viewReportLink: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
       allCompletedReportsLink: adjudicationUrls.allCompletedReports.urls.start(),
+      reportLocked,
     })
   }
 }
