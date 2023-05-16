@@ -410,6 +410,16 @@ context('Hearing details page', () => {
         historyWithInAdReferredHearing
       ),
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524305,
+      response: reportedAdjudicationResponse(
+        1524305,
+        ReportedAdjudicationStatus.REFER_INAD,
+        [],
+        historyWithInAdReferredHearing,
+        true
+      ),
+    })
     // Adjudication with hearing - referred to ind ad with schedule hearing referral outcome
     cy.task('stubGetReportedAdjudication', {
       id: 1524507,
@@ -430,6 +440,16 @@ context('Hearing details page', () => {
         historyWithReferredHearingWithProsecutionOutcome
       ),
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524306,
+      response: reportedAdjudicationResponse(
+        1524306,
+        ReportedAdjudicationStatus.REFER_POLICE,
+        [hearingWithReferToPoliceOutcome],
+        historyWithReferredHearingWithProsecutionOutcome,
+        true
+      ),
+    })
     // Adjudication with hearing - referred to police - with referral outcome - not proceed
     cy.task('stubGetReportedAdjudication', {
       id: 1524505,
@@ -438,6 +458,16 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.NOT_PROCEED,
         [],
         historyWithReferredHearingWithNotProceededOutcome
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524307,
+      response: reportedAdjudicationResponse(
+        1524307,
+        ReportedAdjudicationStatus.NOT_PROCEED,
+        [],
+        historyWithReferredHearingWithNotProceededOutcome,
+        true
       ),
     })
     // Adjudication not proceeded with
@@ -450,6 +480,16 @@ context('Hearing details page', () => {
         historyWithNotProceedOutcome
       ),
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524308,
+      response: reportedAdjudicationResponse(
+        1524308,
+        ReportedAdjudicationStatus.NOT_PROCEED,
+        [],
+        historyWithNotProceedOutcome,
+        true
+      ),
+    })
     // Adjudication referred to police no hearing
     cy.task('stubGetReportedAdjudication', {
       id: 1524503,
@@ -458,6 +498,16 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         [],
         historyWithPoliceRefer
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524309,
+      response: reportedAdjudicationResponse(
+        1524309,
+        ReportedAdjudicationStatus.REFER_POLICE,
+        [],
+        historyWithPoliceRefer,
+        true
       ),
     })
     // Adjudication referred to police no hearing, referral outcome - not proceed
@@ -480,6 +530,16 @@ context('Hearing details page', () => {
         historyWithCompleteAndDismissedFinding
       ),
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524400,
+      response: reportedAdjudicationResponse(
+        1524400,
+        ReportedAdjudicationStatus.DISMISSED,
+        [historyWithCompleteAndDismissedFinding[0].hearing],
+        historyWithCompleteAndDismissedFinding,
+        true
+      ),
+    })
     // Adjudication hearing complete and not proceeded with
     cy.task('stubGetReportedAdjudication', {
       id: 1524509,
@@ -498,6 +558,37 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.CHARGE_PROVED,
         [historyWithCompleteAndProvedFinding[0].hearing],
         historyWithCompleteAndProvedFinding
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524401,
+      response: reportedAdjudicationResponse(
+        1524401,
+        ReportedAdjudicationStatus.CHARGE_PROVED,
+        [historyWithCompleteAndProvedFinding[0].hearing],
+        historyWithCompleteAndProvedFinding,
+        true
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524402,
+      response: reportedAdjudicationResponse(
+        1524402,
+        ReportedAdjudicationStatus.QUASHED,
+        [historyWithCompleteAndProvedFinding[0].hearing],
+        [
+          historyWithCompleteAndProvedFinding[0],
+          {
+            outcome: {
+              outcome: testData.outcome({
+                code: OutcomeCode.QUASHED,
+                details: 'Some details',
+                quashedReason: QuashGuiltyFindingReason.FLAWED_CASE,
+              }),
+            },
+          },
+        ],
+        true
       ),
     })
     cy.signIn()
@@ -662,7 +753,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Hearing open outside timeframe\n\nSome details')
         })
-      cy.get('[data-qa="change-link-outcome-reason"]').should('exist')
+      hearingTabPage.changeOutcomeReason().should('exist')
       hearingTabPage.removeOutcomeButton().should('exist')
       cy.task('stubRemoveNotProceedOrQuashed', {
         adjudicationNumber: 1524502,
@@ -1087,6 +1178,7 @@ context('Hearing details page', () => {
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
       hearingTabPage.removeReferralButton().contains('Remove this referral')
     })
+
     it('Adjudication with one hearing with a refer to police outcome - successfully removes referral', () => {
       const hearingNoOutcome = testData.singleHearing({
         dateTimeOfHearing: hearingDateTimeTwo,
@@ -1165,6 +1257,7 @@ context('Hearing details page', () => {
       hearingTabPage.removeReferralButton().contains('Remove this referral')
       hearingTabPage.referralChangeLink().should('not.exist')
     })
+
     it('Adjudication with a hearing with a refer to independent adjudicator outcome', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524506))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
@@ -1469,7 +1562,7 @@ context('Hearing details page', () => {
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.changeLink().should('not.exist')
     })
-    it('does not show button to add an outcome if an outcome has been added in NOMIS', () => {
+    it('does not show button to add a hearing outcome if an outcome has been added in NOMIS', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524303))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
@@ -1477,12 +1570,64 @@ context('Hearing details page', () => {
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.changeLink().should('not.exist')
     })
-    it.skip('does not show button to add an outcome if an outcome has been added in NOMIS', () => {
+    it('does not show remove referral button or referral change link if an outcome has been added in NOMIS', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.report(1524304))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.enterReferralOutcomeButton().should('not.exist')
       hearingTabPage.removeReferralButton().should('not.exist')
       hearingTabPage.referralChangeLink().should('not.exist')
+    })
+    it('does not show remove referral button or referral change link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.report(1524305))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().should('not.exist')
+      hearingTabPage.referralChangeLink().should('not.exist')
+    })
+    it('does not show remove referral button or referral change link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524306))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.referralChangeLink().should('not.exist')
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().should('not.exist')
+    })
+    it('does not show enter referral outcome button, remove referral button or referral change link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524307))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+      hearingTabPage.removeReferralButton().should('not.exist')
+      hearingTabPage.referralChangeLink().should('not.exist')
+    })
+    it('does not show remove outcome button or change outcome link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524308))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.removeOutcomeButton().should('not.exist')
+      hearingTabPage.changeOutcomeReason().should('not.exist')
+    })
+    it('does not show remove outcome button or change outcome link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524309))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.removeOutcomeButton().should('not.exist')
+      hearingTabPage.changeOutcomeReason().should('not.exist')
+    })
+    it('does not show remove outcome button or change outcome link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524400))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.changeOutcomeReason().should('not.exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().should('not.exist')
+      hearingTabPage.changeLink().should('not.exist')
+    })
+    it('does not show remove outcome button or change outcome link if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524401))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.changeOutcomeReason().should('not.exist')
+      hearingTabPage.removeCompleteHearingOutcomeButton().should('not.exist')
+      hearingTabPage.changeLink().should('not.exist')
+    })
+    it('does not show change link for quash reason if an outcome has been added in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1524402))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.changeQuashReasonLink().should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

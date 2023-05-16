@@ -60,11 +60,15 @@ export default class HearingTabPage extends Page {
 
   removeOutcomeButton = (): PageElement => cy.get('[data-qa="remove-outcome-button"]')
 
+  changeOutcomeReason = (): PageElement => cy.get('[data-qa="change-link-outcome-reason"]')
+
   // Quashed
 
   quashedTable = (): PageElement => cy.get('[data-qa="quashed-table"]')
 
   removeQuashedOutcomeButton = (): PageElement => cy.get('[data-qa="remove-quashed-finding-button"]')
+
+  changeQuashReasonLink = (): PageElement => cy.get('[data-qa="change-link-quash-guilty-finding"]')
 
   // General
 

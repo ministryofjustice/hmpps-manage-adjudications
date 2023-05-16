@@ -1,6 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% macro outcomeQuashedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false) %}
-  {% if changeLinksAvailable %}
+{% macro outcomeQuashedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
+  {% set quashReasonChangeLinkAvailable = false if readOnly else changeLinksAvailable %}
+  {% if quashReasonChangeLinkAvailable %}
     {% set changeLink = {
       items: [
         {

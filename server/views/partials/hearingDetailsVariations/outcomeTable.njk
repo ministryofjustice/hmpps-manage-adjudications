@@ -9,13 +9,13 @@
     <div class="govuk-grid-column-three-quarters">
       <h2 class="govuk-heading-m" data-qa="outcome-table-title">{{ outcomeCode | outcomeTableTitle }}</h2>
         {% if outcomeCode === OutcomeCode.NOT_PROCEED %}
-          {{ outcomeNotProceedSummary(reportNo, outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, changeLinksAvailable) }}
+          {{ outcomeNotProceedSummary(reportNo, outcomeItem.outcome, { "data-qa": "not-proceed-summary-table" }, changeLinksAvailable, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
-          {{ outcomePoliceReferralSummary(reportNo, outcomeItem, { "data-qa": "police-referral-table" }, changeLinksAvailable, attachedToHearing) }}
+          {{ outcomePoliceReferralSummary(reportNo, outcomeItem, { "data-qa": "police-referral-table" }, changeLinksAvailable, attachedToHearing, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_INAD %}
-          {{ outcomeInAdReferralSummary(reportNo, outcomeItem, { "data-qa": "inad-referral-table" }, changeLinksAvailable) }}
+          {{ outcomeInAdReferralSummary(reportNo, outcomeItem, { "data-qa": "inad-referral-table" }, changeLinksAvailable, readOnly) }}
         {% elif outcomeCode === OutcomeCode.QUASHED %}
-          {{ outcomeQuashedSummary(reportNo, outcomeItem.outcome, { "data-qa": "quashed-table" }, changeLinksAvailable) }}
+          {{ outcomeQuashedSummary(reportNo, outcomeItem.outcome, { "data-qa": "quashed-table" }, changeLinksAvailable, readOnly) }}
         {% endif %}
     </div>
   </div>
