@@ -68,7 +68,7 @@ describe('GET suspended punishment schedule', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100))
+      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?days=10`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -79,7 +79,7 @@ describe('GET suspended punishment schedule', () => {
 describe('GET suspended punishment schedule', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100))
+      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?days=10`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Punishment schedule')

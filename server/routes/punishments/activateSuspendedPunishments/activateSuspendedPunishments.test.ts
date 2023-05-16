@@ -101,7 +101,7 @@ describe('POST', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
           100
-        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE`
+        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&days=5`
       )
   })
 })
