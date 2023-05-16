@@ -27,9 +27,9 @@ export default class ActivateSuspendedPunishmentsPage {
 
     let suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports
     if (sessionPunishments != null) {
-      const idsToFilter = (<PunishmentDataWithSchedule[]>sessionPunishments).map(m => m.id)
+      const idsToFilter = (<PunishmentDataWithSchedule[]>sessionPunishments).map(punishment => punishment.id)
       suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports.filter(
-        f => !idsToFilter.includes(f.punishment.id)
+        suspendedPunishments => !idsToFilter.includes(suspendedPunishments.punishment.id)
       )
     }
 
