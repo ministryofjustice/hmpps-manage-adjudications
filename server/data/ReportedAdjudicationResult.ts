@@ -40,6 +40,7 @@ export type ReportedAdjudication = {
   dateTimeOfFirstHearing?: string
   outcomes?: OutcomeHistory
   punishments?: PunishmentDataWithSchedule[]
+  outcomeEnteredInNomis?: boolean
 }
 
 export type ReportedAdjudicationResult = {

@@ -62,7 +62,7 @@ export default class HearingTabPage {
     const latestHearingId = reportedAdjudication.hearings?.length
       ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].id
       : null
-    const readOnly = this.pageOptions.isReporter()
+    const readOnly = this.pageOptions.isReporter() || reportedAdjudication.outcomeEnteredInNomis
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,

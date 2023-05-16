@@ -1,7 +1,10 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeNotProceedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false) %}
-  {% if changeLinksAvailable %}
+{% macro outcomeNotProceedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
+
+  {% set reasonForOutcomeChangeLinkAvailable = false if readOnly else changeLinksAvailable %}
+
+  {% if reasonForOutcomeChangeLinkAvailable %}
     {% set reasonChangeLink = {
     items: [
       {

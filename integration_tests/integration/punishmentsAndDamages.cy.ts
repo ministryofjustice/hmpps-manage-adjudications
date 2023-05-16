@@ -185,6 +185,133 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 112,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 112,
+          status: ReportedAdjudicationStatus.QUASHED,
+          prisonerNumber: 'G6415GD',
+          otherData: {
+            outcomeEnteredInNomis: true,
+          },
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  amount: 100.5,
+                  caution: false,
+                }),
+              },
+            },
+            {
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.QUASHED,
+                  amount: 100.5,
+                  caution: false,
+                  quashedReason: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
+                }),
+              },
+            },
+          ] as OutcomeHistory,
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.PRIVILEGE,
+              privilegeType: PrivilegeType.OTHER,
+              otherPrivilege: 'games',
+              schedule: {
+                days: 10,
+                startDate: '2023-04-10',
+                endDate: '2023-04-20',
+              },
+            },
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 110,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 110,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          otherData: {
+            outcomeEnteredInNomis: true,
+          },
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  amount: 100.5,
+                  caution: true,
+                }),
+              },
+            },
+          ],
+        }),
+      },
+    })
+
+    cy.task('stubGetReportedAdjudication', {
+      id: 111,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 111,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          otherData: {
+            outcomeEnteredInNomis: true,
+          },
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  amount: 100.5,
+                  caution: true,
+                }),
+              },
+            },
+          ],
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.PRIVILEGE,
+              privilegeType: PrivilegeType.OTHER,
+              otherPrivilege: 'chocolate',
+              schedule: {
+                days: 10,
+                startDate: '2023-04-10',
+                endDate: '2023-04-20',
+              },
+            },
+          ],
+        }),
+      },
+    })
   })
 
   describe('Loads', () => {
@@ -214,6 +341,14 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
       punishmentsAndDamagesPage.noPunishments().should('not.exist')
     })
+    it('should contain the required page elements - status `quashed`', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(112))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
+      punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
+      punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
+      cy.get('[data-qa="change-link"').should('not.exist')
+    })
     it('should contain the required page elements - charge proved, no punishments, caution true', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
@@ -239,7 +374,18 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
     })
-    it('should contain the required page elements - charge proved, punishments no punishments, caution false', () => {
+    it('should not show change links, change button or quash button if outcome is entered in NOMIS flag is present', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(110))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
+      punishmentsAndDamagesPage.punishmentsTabName().contains('Punishments and damages')
+
+      punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
+      punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
+      punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
+      cy.get('[data-qa="change-link"').should('not.exist')
+    })
+    it('should contain the required page elements - charge proved, no punishments, caution false', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(103))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
@@ -261,6 +407,16 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.reportQuashedButton().should('exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.noPunishments().should('not.exist')
+    })
+    it('should not have any buttons or change links if outcome entered in NOMIS - charge proved, punishments present', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(111))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
+      punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
+      punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
+      punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
+      punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
+      cy.get('[data-qa="change-link"').should('not.exist')
     })
   })
 

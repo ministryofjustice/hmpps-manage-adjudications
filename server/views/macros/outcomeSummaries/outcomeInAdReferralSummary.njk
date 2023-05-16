@@ -1,10 +1,10 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false) %}
+{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
 
-  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome else changeLinksAvailable %}
+  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome or readOnly else changeLinksAvailable %}
   
   {% if reasonForReferralChangeLinkAvailable %}
     {% set reasonForReferralChangeLink = {
