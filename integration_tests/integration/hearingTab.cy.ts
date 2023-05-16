@@ -358,7 +358,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.ADJOURNED,
         [hearingWithAdjournedOutcome],
         historyWithOneAdjournedHearing,
-        false
+        true
       ),
     })
     cy.task('stubGetReportedAdjudication', {
