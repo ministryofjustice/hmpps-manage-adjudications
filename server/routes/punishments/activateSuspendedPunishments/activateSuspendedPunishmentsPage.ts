@@ -23,13 +23,15 @@ export default class ActivateSuspendedPunishmentsPage {
       susPun => susPun.reportNumber !== adjudicationNumber
     )
 
-    const sessionPunishments = (<PunishmentDataWithSchedule[]>(
-      await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
-    )).map(m => m.id)
+    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
 
-    const suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports.filter(
-      sp => !sessionPunishments.includes(sp.punishment.id)
-    )
+    let suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports
+    if (sessionPunishments != null) {
+      const idsToFilter = (<PunishmentDataWithSchedule[]>sessionPunishments).map(m => m.id)
+      suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports.filter(
+        f => !idsToFilter.includes(f.punishment.id)
+      )
+    }
 
     return res.render(`pages/activateSuspendedPunishments.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
