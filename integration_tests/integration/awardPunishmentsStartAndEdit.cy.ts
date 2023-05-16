@@ -277,6 +277,12 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
       awardPunishmentsPage.activateSuspendedPunishment().click()
       const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
+      activateSuspendedPunishmentsPage
+        .suspendedPunishmentsTable()
+        .find('tr')
+        .then(row => {
+          expect(row.length).to.eq(4)
+        })
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedule)
       suspendedPunishmentSchedulePage.days().type('10')
@@ -308,6 +314,13 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
 
       punishmentSchedulePage.submitButton().click()
       awardPunishmentsPage.editPunishment().should('have.length', 1)
+      awardPunishmentsPage.activateSuspendedPunishment().click()
+      activateSuspendedPunishmentsPage
+        .suspendedPunishmentsTable()
+        .find('tr')
+        .then(row => {
+          expect(row.length).to.eq(3)
+        })
     })
   })
 })

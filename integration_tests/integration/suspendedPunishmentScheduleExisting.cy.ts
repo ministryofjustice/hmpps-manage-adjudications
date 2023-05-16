@@ -136,20 +136,24 @@ context('Suspended punishment schedule', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements - types other than additional days/prospective additional days', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE`)
+      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?punishmentType=PRIVILEGE&days=10`)
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.submitButton().should('exist')
       suspendedPunishmentSchedulePage.cancelButton().should('exist')
       suspendedPunishmentSchedulePage.days().should('exist')
+      suspendedPunishmentSchedulePage.days().should('have.value', 10)
       suspendedPunishmentSchedulePage.startDate().should('exist')
       suspendedPunishmentSchedulePage.endDate().should('exist')
     })
     it('should contain the required page elements - type additional days', () => {
-      cy.visit(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(101)}?punishmentType=ADDITIONAL_DAYS`)
+      cy.visit(
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(101)}?punishmentType=ADDITIONAL_DAYS&days=10`
+      )
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedulePage)
       suspendedPunishmentSchedulePage.submitButton().should('exist')
       suspendedPunishmentSchedulePage.cancelButton().should('exist')
       suspendedPunishmentSchedulePage.days().should('exist')
+      suspendedPunishmentSchedulePage.days().should('have.value', 10)
       suspendedPunishmentSchedulePage.startDate().should('not.exist')
       suspendedPunishmentSchedulePage.endDate().should('not.exist')
     })

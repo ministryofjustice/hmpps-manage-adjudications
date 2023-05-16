@@ -128,7 +128,7 @@ context('acivate suspended punishments page', () => {
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100))
-        expect(loc.search).to.eq('?punishmentNumberToActivate=72&punishmentType=PRIVILEGE')
+        expect(loc.search).to.eq('?punishmentNumberToActivate=72&punishmentType=PRIVILEGE&days=5')
       })
     })
   })

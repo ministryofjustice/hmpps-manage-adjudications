@@ -6,6 +6,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
+import { PunishmentDataWithSchedule } from '../../../data/PunishmentResult'
 
 export default class ActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
@@ -22,12 +23,22 @@ export default class ActivateSuspendedPunishmentsPage {
       susPun => susPun.reportNumber !== adjudicationNumber
     )
 
+    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+
+    let suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports
+    if (sessionPunishments != null) {
+      const idsToFilter = (<PunishmentDataWithSchedule[]>sessionPunishments).map(punishment => punishment.id)
+      suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports.filter(
+        suspendedPunishments => !idsToFilter.includes(suspendedPunishments.punishment.id)
+      )
+    }
+
     return res.render(`pages/activateSuspendedPunishments.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       manuallyActivateSuspendedPunishmentsHref:
         adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(adjudicationNumber),
       prisonerName: suspendedPunishmentDetails.prisonerName,
-      suspendedPunishments: suspendedPunishmentsFromOtherReports,
+      suspendedPunishments: suspendedPunishmentsToActivate,
       errors: error ? [error] : [],
     })
   }
@@ -53,11 +64,12 @@ export default class ActivateSuspendedPunishmentsPage {
       user
     )
     const punishmentType = punishmentToActivate[0].punishment.type
+    const { days } = punishmentToActivate[0].punishment.schedule
 
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.existing(adjudicationNumber),
-        query: { punishmentNumberToActivate, punishmentType },
+        query: { punishmentNumberToActivate, punishmentType, days },
       })
     )
   }
