@@ -14,6 +14,24 @@ const punishmentsService = new PunishmentsService(null) as jest.Mocked<Punishmen
 
 let app: Express
 
+const punishmentsOnSession = [
+  {
+    redisId: 'qwerty-123',
+    type: PunishmentType.CONFINEMENT,
+    days: 5,
+    startDate: '2023-04-20',
+    endDate: '2023-04-25',
+  },
+  {
+    redisId: 'asdfg-123-erty',
+    type: PunishmentType.PRIVILEGE,
+    privilegeType: PrivilegeType.FACILITIES,
+    days: 10,
+    startDate: '2023-04-10',
+    endDate: '2023-04-20',
+  },
+]
+
 const suspendedPunishments = {
   prisonerName: 'James Wellbeloved',
   suspendedPunishments: [
@@ -52,6 +70,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSuspendedPunishmentDetails.mockResolvedValue(suspendedPunishments)
   punishmentsService.getSuspendedPunishment.mockResolvedValue(suspendedPunishments.suspendedPunishments)
+  punishmentsService.getAllSessionPunishments.mockResolvedValue(punishmentsOnSession)
 })
 
 afterEach(() => {

@@ -6,6 +6,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
+import { PunishmentDataWithSchedule } from '../../../data/PunishmentResult'
 
 export default class ActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
@@ -22,12 +23,20 @@ export default class ActivateSuspendedPunishmentsPage {
       susPun => susPun.reportNumber !== adjudicationNumber
     )
 
+    const sessionPunishments = (<PunishmentDataWithSchedule[]>(
+      await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+    )).map(m => m.id)
+
+    const suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports.filter(
+      sp => !sessionPunishments.includes(sp.punishment.id)
+    )
+
     return res.render(`pages/activateSuspendedPunishments.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       manuallyActivateSuspendedPunishmentsHref:
         adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(adjudicationNumber),
       prisonerName: suspendedPunishmentDetails.prisonerName,
-      suspendedPunishments: suspendedPunishmentsFromOtherReports,
+      suspendedPunishments: suspendedPunishmentsToActivate,
       errors: error ? [error] : [],
     })
   }
