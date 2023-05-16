@@ -29,20 +29,6 @@ context('Report has been accepted', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
-      id: 1524494,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524494,
-          prisonerNumber: 'G6415GD',
-          dateTimeOfIncident: '2022-11-15T09:10:00',
-          handoverDeadline: '2022-11-17T09:30:00',
-          otherData: {
-            outcomeEnteredInNomis: true,
-          },
-        }),
-      },
-    })
     cy.signIn()
   })
 
@@ -105,10 +91,5 @@ context('Report has been accepted', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
     })
-  })
-  it('should not should schedule button for reports which have outcome entered in Nomis', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524494))
-    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
-    acceptedReportConfirmationPage.scheduleHearingButton().should('not.exist')
   })
 })

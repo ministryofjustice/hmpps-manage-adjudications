@@ -892,9 +892,4 @@ export default class ReportedAdjudicationsService {
     if (!reportedAdjudication.hearings?.length) return {}
     return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
   }
-
-  async outcomeEnteredInNomis(adjudicationNumber: number, user: User): Promise<boolean> {
-    const { reportedAdjudication } = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
-    return reportedAdjudication.outcomeEnteredInNomis === true
-  }
 }
