@@ -1,23 +1,11 @@
 import { config } from 'dotenv'
 import { setup, defaultClient, TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
 import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
-import applicationVersion from '../applicationVersion'
+import type { ApplicationInfo } from '../applicationInfo'
 
 export type ContextObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [name: string]: any
-}
-
-function defaultName(): string {
-  const {
-    packageData: { name },
-  } = applicationVersion
-  return name
-}
-
-function version(): string {
-  const { buildNumber } = applicationVersion
-  return buildNumber
 }
 
 export function initialiseAppInsights(): void {
@@ -31,11 +19,13 @@ export function initialiseAppInsights(): void {
   }
 }
 
-export function buildAppInsightsClient(name = defaultName()): TelemetryClient {
+export function buildAppInsightsClient(
+  { applicationName, buildNumber }: ApplicationInfo,
+  overrideName?: string
+): TelemetryClient {
   if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
-    defaultClient.context.tags['ai.cloud.role'] = name
-    defaultClient.context.tags['ai.application.ver'] = version()
-    defaultClient.addTelemetryProcessor(addUserDataToRequests)
+    defaultClient.context.tags['ai.cloud.role'] = overrideName || applicationName
+    defaultClient.context.tags['ai.application.ver'] = buildNumber
     return defaultClient
   }
   return null
