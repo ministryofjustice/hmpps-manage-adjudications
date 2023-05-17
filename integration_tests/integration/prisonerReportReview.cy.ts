@@ -435,6 +435,7 @@ context('Prisoner report - reviewer view', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.reviewStatus().find('input[value="accepted"]').check()
+    prisonerReportPage.acceptedRejectDetail().should('exist')
     prisonerReportPage.reviewSubmit().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.acceptedReportConfirmation.urls.start(12345))
@@ -488,10 +489,11 @@ context('Prisoner report - reviewer view', () => {
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.hearingsTab().should('not.exist')
   })
-  it('should not contain the review panel if status is RETURNED', () => {
+  it('should contain the review panel if status is RETURNED', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(56789))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    prisonerReportPage.reviewerPanel().should('not.exist')
+    prisonerReportPage.reviewerPanel().should('exist')
+    prisonerReportPage.reviewStatus().find('input[value="returned"]').should('not.exist')
   })
   it('should not contain the review panel if status is REJECTED', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(356789))
