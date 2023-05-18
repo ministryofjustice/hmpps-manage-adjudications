@@ -32,7 +32,7 @@ export default function validateForm({
   if (adjudicatorType.includes('GOV') && !governorId) {
     return errors.STAFF_MISSING_ID_SUBMIT
   }
-  if (adjudicatorType.includes('INAD') && !inAdName) {
+  if (adjudicatorType.includes('INAD') && (!inAdName || inAdName.trim().length === 0)) {
     return errors.MISSING_NAME
   }
   if (!hearingOutcome) {
