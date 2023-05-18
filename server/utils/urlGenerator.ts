@@ -661,6 +661,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/manual`,
     },
   },
+  reviewerEditOffenceWarning: {
+    root: '/edit-offence-warning',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.reviewerEditOffenceWarning.root}/${adjudicationNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
