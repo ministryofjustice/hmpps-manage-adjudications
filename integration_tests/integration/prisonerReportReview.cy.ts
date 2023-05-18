@@ -413,10 +413,10 @@ context('Prisoner report - reviewer view', () => {
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.incidentDetailsChangeLink().should('not.exist')
   })
-  it('should not show a link to the incident details page', () => {
+  it('should show a link to the offence details', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    prisonerReportPage.offenceDetailsChangeLink().should('not.exist')
+    prisonerReportPage.offenceDetailsChangeLink().should('exist')
   })
   it('should not show a link to edit the incident statement', () => {
     cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))

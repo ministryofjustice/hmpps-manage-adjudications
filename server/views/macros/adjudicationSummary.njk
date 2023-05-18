@@ -3,86 +3,97 @@
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, userSetGenderData) %}
+{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, userSetGenderData, review) %}
   {% if userSetGenderData %}
     <div class="adjudicationsSummary">
       {{ summaryList(userSetGenderData.data, null, { "data-qa": "gender-summary-table" }, null, userSetGenderData.changeLinkHref ) }}
     </div>
   {% endif %}
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
-   <h2 class="govuk-heading-m">Incident details</h2>
-  {% if not readOnly %}
-   <p class="govuk-body"><a href={{ detailsURL }} class="govuk-link" data-qa="adjudicationsSummary-details-changeLink" id="adjudication-summary-details-change-link">Change</a></p>
-  {% endif %}
+    <h2 class="govuk-heading-m">Incident details</h2>
+    {% if not readOnly %}
+      <p class="govuk-body">
+        <a href="{{ detailsURL }}" class="govuk-link" data-qa="adjudicationsSummary-details-changeLink" id="adjudication-summary-details-change-link">Change</a>
+      </p>
+    {% endif %}
   </div>
   <div class="adjudicationsSummary">
-   {{ summaryList(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
+    {{ summaryList(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
   </div>
-
-    <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
-      <h2 class="govuk-heading-m">Offence details</h2>
-     {% if not readOnly %}
-      <p class="govuk-body"><a href={{ offenceDetailsURL }} class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink" id="adjudication-summary-offence-change-link">Change</a></p>
-     {% endif %}
-    </div>
-
-    <div class="adjudicationsSummary">
-        {{ offenceQAndASummaryList(offence, incidentData.isYouthOffender, { "data-qa": "offence-summary-table" }) }}
-    </div>
-
-    <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
-      <h2 class="govuk-heading-m">Damages</h2>
-      {% if not readOnlyDamagesEvidenceWitnesses %}
-      <p class="govuk-body"><a href={{ damagesURL }} class="govuk-link" data-qa="adjudicationsSummary-damages-changeLink" id="adjudication-summary-damages-change-link">Change</a></p>
-      {% endif %}
-    </div>
-        <div class="adjudicationsSummary">
-      {% if damages.length > 0 %}
-        {{ damagesWitnessesTable(damages, null, null, 'damages') }}
-      {% else %}
-        <p class="govuk-body" data-qa="adjudicationsSummary-damages-none">None</p>
-      {% endif %}
-      </div>
-
-    <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
-      <h2 class="govuk-heading-m">Evidence</h2>
-      {% if not readOnlyDamagesEvidenceWitnesses %}
-      <p class="govuk-body"><a href={{ evidenceURL }} class="govuk-link" data-qa="adjudicationsSummary-evidence-changeLink" id="adjudication-summary-evidence-change-link">Change</a></p>
-      {% endif %}
-    </div>
-    <div class="adjudicationsSummary">
-      {% if evidence.photoVideo | length or evidence.baggedAndTagged | length %}
-        {% include "../partials/evidenceTableSection.njk" %}
-      {% else %}
-        <p class="govuk-body" data-qa="adjudicationsSummary-evidence-none">None</p>
-      {% endif %}
-      </div>
-
-    <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
-      <h2 class="govuk-heading-m">Witnesses</h2>
-      {% if not readOnlyDamagesEvidenceWitnesses %}
-      <p class="govuk-body"><a href={{ witnessesURL }} class="govuk-link" data-qa="adjudicationsSummary-witnesses-changeLink" id="adjudication-summary-witnesses-change-link">Change</a></p>
-      {% endif %}
-    </div>
-    <div class="adjudicationsSummary">
-      {% if witnesses.length > 0 %}
-        {{ damagesWitnessesTable(witnesses, null, null, 'witnesses') }}
-      {% else %}
-        <p class="govuk-body" data-qa="adjudicationsSummary-witnesses-none">None</p>
-        {% endif %}
-        </div>
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
-   <h2 class="govuk-heading-m">Incident statement</h2>
-   {% if not readOnly %}
-    <p class="govuk-body"><a href={{ statementURL }} class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink" id="adjudication-summary-statement-change-link">Change</a></p>
-   {% endif %}
-  </div>
-  <div class="adjudicationsSummary" data-qa="adjudicationsSummary-incidentStatement">
-   {{ incidentData.statement | formatStatement('"govuk-body"') | safe }}
+    <h2 class="govuk-heading-m">Offence details</h2>
+    {% if not readOnly or review %}
+      <p class="govuk-body">
+        <a href="{{ offenceDetailsURL }}" class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink" id="adjudication-summary-offence-change-link">Change</a>
+      </p>
+    {% endif %}
   </div>
 
- 
- <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+  <div class="adjudicationsSummary">
+    {{ offenceQAndASummaryList(offence, incidentData.isYouthOffender, { "data-qa": "offence-summary-table" }) }}
+  </div>
+
+  <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
+    <h2 class="govuk-heading-m">Damages</h2>
+    {% if not readOnlyDamagesEvidenceWitnesses %}
+      <p class="govuk-body">
+        <a href="{{ damagesURL }}" class="govuk-link" data-qa="adjudicationsSummary-damages-changeLink" id="adjudication-summary-damages-change-link">Change</a>
+      </p>
+    {% endif %}
+  </div>
+  <div class="adjudicationsSummary">
+    {% if damages.length > 0 %}
+      {{ damagesWitnessesTable(damages, null, null, 'damages') }}
+    {% else %}
+      <p class="govuk-body" data-qa="adjudicationsSummary-damages-none">None</p>
+    {% endif %}
+  </div>
+
+  <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
+    <h2 class="govuk-heading-m">Evidence</h2>
+    {% if not readOnlyDamagesEvidenceWitnesses %}
+      <p class="govuk-body">
+        <a href="{{ evidenceURL }}" class="govuk-link" data-qa="adjudicationsSummary-evidence-changeLink" id="adjudication-summary-evidence-change-link">Change</a>
+      </p>
+    {% endif %}
+  </div>
+  <div class="adjudicationsSummary">
+    {% if evidence.photoVideo | length or evidence.baggedAndTagged | length %}
+      {% include "../partials/evidenceTableSection.njk" %}
+    {% else %}
+      <p class="govuk-body" data-qa="adjudicationsSummary-evidence-none">None</p>
+    {% endif %}
+  </div>
+
+  <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
+    <h2 class="govuk-heading-m">Witnesses</h2>
+    {% if not readOnlyDamagesEvidenceWitnesses %}
+      <p class="govuk-body">
+        <a href="{{ witnessesURL }}" class="govuk-link" data-qa="adjudicationsSummary-witnesses-changeLink" id="adjudication-summary-witnesses-change-link">Change</a>
+      </p>
+    {% endif %}
+  </div>
+  <div class="adjudicationsSummary">
+    {% if witnesses.length > 0 %}
+      {{ damagesWitnessesTable(witnesses, null, null, 'witnesses') }}
+    {% else %}
+      <p class="govuk-body" data-qa="adjudicationsSummary-witnesses-none">None</p>
+    {% endif %}
+  </div>
+
+  <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
+    <h2 class="govuk-heading-m">Incident statement</h2>
+    {% if not readOnly %}
+      <p class="govuk-body">
+        <a href="{{ statementURL }}" class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink" id="adjudication-summary-statement-change-link">Change</a>
+      </p>
+    {% endif %}
+  </div>
+  <div class="adjudicationsSummary" data-qa="adjudicationsSummary-incidentStatement">
+    {{ incidentData.statement | formatStatement('"govuk-body"') | safe }}
+  </div>
+
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
 {% endmacro %}
