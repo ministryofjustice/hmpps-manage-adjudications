@@ -49,6 +49,19 @@ describe('validateForm', () => {
       text: 'Enter the name of the adjudicator',
     })
   })
+  it('shows error when adjudicator name is spaces - inAd', () => {
+    expect(
+      validateForm({
+        hearingOutcome: HearingOutcomeCode.COMPLETE,
+        adjudicatorType: OicHearingType.INAD_ADULT,
+        inAdName: ' ',
+        governorId: null,
+      })
+    ).toEqual({
+      href: '#inAdName',
+      text: 'Enter the name of the adjudicator',
+    })
+  })
   it('shows error when governor id is missing - gov', () => {
     expect(
       validateForm({
