@@ -44,6 +44,7 @@ context('Age of the prisoner', () => {
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     ageOfPrisonerPage.ageOfPrisoner().should('exist')
     ageOfPrisonerPage.ageOfPrisonerHint().should('exist')
+    ageOfPrisonerPage.yoiRemandHint().should('exist')
     ageOfPrisonerPage.prisonRuleRadios().should('exist')
     ageOfPrisonerPage.submitButton().should('exist')
     ageOfPrisonerPage.cancelButton().should('exist')
@@ -76,6 +77,7 @@ context('Age of the prisoner', () => {
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     ageOfPrisonerPage.ageOfPrisoner().should('not.exist')
     ageOfPrisonerPage.ageOfPrisonerHint().should('not.exist')
+    ageOfPrisonerPage.yoiRemandHint().should('exist')
   })
   it('should redirect the user to the role page if the page receives a valid submission', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
