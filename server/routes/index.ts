@@ -134,7 +134,6 @@ export default function routes(
     adjudicationUrls.prisonerReport.root,
     adjudicationReportRoutes({
       reportedAdjudicationsService,
-      locationService,
       userService,
       decisionTreeService,
     })

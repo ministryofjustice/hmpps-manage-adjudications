@@ -321,6 +321,15 @@ const adjudicationUrls = {
         `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true`,
     },
   },
+  aloOffenceEdit: {
+    root: '/warning',
+    matchers: {
+      edit: '/:adjudicationNumber/edit',
+    },
+    urls: {
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.aloOffenceEdit.root}/${adjudicationNumber}/edit`,
+    },
+  },
   hearingDetails: {
     root: '/hearing-details',
     matchers: {
