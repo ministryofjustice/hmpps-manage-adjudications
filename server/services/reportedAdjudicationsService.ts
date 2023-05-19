@@ -574,13 +574,17 @@ export default class ReportedAdjudicationsService {
     const governorHearings = hearings.filter(
       hearing => hearing.hearing.oicHearingType.includes('GOV') && hearing.hearing.outcome
     )
-    const governorUsernames = governorHearings.map(hearing => hearing.hearing.outcome?.adjudicator || null)
-
+    const governorUsernames = governorHearings.map(hearing => {
+      if (hearing.hearing.outcome.code === HearingOutcomeCode.NOMIS) return null
+      return hearing.hearing.outcome?.adjudicator
+    })
     const usernamesAndNames =
       (await Promise.all(
-        [...governorUsernames].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+        [...governorUsernames].map(
+          username => username && this.hmppsAuthClient.getUserFromUsername(username, user.token)
+        )
       )) || []
-    return new Map(usernamesAndNames.map(name => [name.username, name.name]))
+    return new Map(usernamesAndNames.map(name => [name?.username, name?.name] || null))
   }
 
   async getOutcomesHistory(history: OutcomeHistory, user: User) {
@@ -588,6 +592,7 @@ export default class ReportedAdjudicationsService {
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
     const governorMap = await this.getAdjudicatorNameMap(hearings, user)
+
     return history.map(historyItem => {
       if (historyItem.hearing) {
         // Reconstruct the data but add the hearing location name
@@ -595,7 +600,7 @@ export default class ReportedAdjudicationsService {
           hearing: {
             ...historyItem.hearing,
             locationName: locationNamesByIdMap.get(historyItem.hearing.locationId),
-            convertedAdjudicator: governorMap.get(historyItem.hearing.outcome?.adjudicator) || null,
+            convertedAdjudicator: governorMap.get(historyItem.hearing.outcome?.adjudicator) || 'Entered in NOMIS',
           },
           ...historyItem.outcome,
         }

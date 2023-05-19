@@ -65,6 +65,21 @@ const hearingWithAdjournedOutcome = testData.singleHearing({
   },
 })
 
+const hearingOutcomeEnteredInNOMIS = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeTwo,
+  id: 988,
+  locationId: 234,
+  oicHearingType: OicHearingType.GOV_ADULT,
+  outcome: {
+    id: 123,
+    adjudicator: ' ',
+    code: HearingOutcomeCode.NOMIS,
+    details: '123',
+    reason: HearingOutcomeAdjournReason.EVIDENCE,
+    plea: HearingOutcomePlea.NOT_ASKED,
+  },
+})
+
 const hearingWithReferToPoliceOutcome = testData.singleHearing({
   dateTimeOfHearing: hearingDateTimeTwo,
   id: 988,
@@ -95,6 +110,12 @@ const historyWithOneHearing = [
 const historyWithOneAdjournedHearing = [
   {
     hearing: hearingWithAdjournedOutcome,
+  },
+]
+
+const historyWithOneAdjournedHearingEnteredInNomis = [
+  {
+    hearing: hearingOutcomeEnteredInNOMIS,
   },
 ]
 
@@ -349,6 +370,16 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.ADJOURNED,
         [hearingWithAdjournedOutcome],
         historyWithOneAdjournedHearing
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1111111,
+      response: reportedAdjudicationResponse(
+        1111111,
+        ReportedAdjudicationStatus.ADJOURNED,
+        [hearingOutcomeEnteredInNOMIS],
+        historyWithOneAdjournedHearingEnteredInNomis,
+        true
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -1628,6 +1659,30 @@ context('Hearing details page', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524402))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.changeQuashReasonLink().should('not.exist')
+    })
+    it('Hearing outcome entered in NOMIS - adjudicator', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1111111))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+        })
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+        })
+      hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+      hearingTabPage.enterHearingOutcomeButton().should('not.exist')
+      hearingTabPage.changeLink().should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {
