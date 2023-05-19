@@ -57,7 +57,7 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
-      editOffencesDetailsURL: adjudicationUrls.aloOffenceEdit.urls.edit(adjudicationNumber),
+      editOffencesDetailsURL: adjudicationUrls.reviewerEditOffenceWarning.urls.edit(adjudicationNumber),
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
         adjudicationNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,

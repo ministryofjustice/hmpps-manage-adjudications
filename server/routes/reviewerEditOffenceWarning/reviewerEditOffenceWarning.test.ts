@@ -123,7 +123,7 @@ describe('GET - not reviewer', () => {
 describe('GET', () => {
   it('should load the age of prisoner page', () => {
     return request(app)
-      .get(adjudicationUrls.reviewerEditOffenceWarning.urls.start(100))
+      .get(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Are you sure you want to change the offence?')

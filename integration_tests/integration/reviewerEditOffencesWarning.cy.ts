@@ -133,7 +133,7 @@ context('Warning - reviewer edits offence', () => {
   })
   describe('warning page', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.start(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.paragraph1().should('exist')
       warningPage.paragraph2().should('exist')
@@ -142,7 +142,7 @@ context('Warning - reviewer edits offence', () => {
       warningPage.cancelButton().should('exist')
     })
     it('should contain the correct review summary details', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.start(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage
         .offenceDetailsSummary()
@@ -174,7 +174,7 @@ context('Warning - reviewer edits offence', () => {
         })
     })
     it('contains the correct paragraph content', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.start(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.paragraph1().should('contain.text', 'If you change the offence, you’ll delete the information below.')
       warningPage
@@ -182,7 +182,7 @@ context('Warning - reviewer edits offence', () => {
         .should('contain.text', 'Before changing it, make a note of any information you might need to re-enter later.')
     })
     it('clicking cancel button takes you to the original report', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.start(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.cancelButton().click()
       cy.location().should(loc => {
@@ -190,7 +190,7 @@ context('Warning - reviewer edits offence', () => {
       })
     })
     it('clicking continue button takes you to the age of prisoner page with new draft Id', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.start(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.continueButton().click()
       cy.location().should(loc => {

@@ -321,15 +321,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true`,
     },
   },
-  aloOffenceEdit: {
-    root: '/warning',
-    matchers: {
-      edit: '/:adjudicationNumber/edit',
-    },
-    urls: {
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.aloOffenceEdit.root}/${adjudicationNumber}/edit`,
-    },
-  },
   hearingDetails: {
     root: '/hearing-details',
     matchers: {
@@ -673,11 +664,10 @@ const adjudicationUrls = {
   reviewerEditOffenceWarning: {
     root: '/edit-offence-warning',
     matchers: {
-      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.reviewerEditOffenceWarning.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.reviewerEditOffenceWarning.root}/${adjudicationNumber}`,
     },
   },
   homepage: {

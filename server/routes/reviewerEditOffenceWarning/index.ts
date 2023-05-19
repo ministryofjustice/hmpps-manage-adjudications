@@ -27,7 +27,7 @@ export default function ReviewerEditOffenceWarningRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.reviewerEditOffenceWarning.matchers.start, reviewerEditOffenceWarningRoute.view)
+  get(adjudicationUrls.reviewerEditOffenceWarning.matchers.edit, reviewerEditOffenceWarningRoute.view)
 
   return router
 }
