@@ -1,46 +1,37 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
-
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-
 {% set title = "Age of the prisoner" %}
-
 {% block pageTitle %}
-				{{ title }}
+    {{ title }}
 {% endblock %}
-
 {% block beforeContent %}
-				{{ breadcrumb() }}
+    {{ breadcrumb() }}
 {% endblock %}
-
 {% block content %}
-				{% if errors | length %}
-								{{ govukErrorSummary({
+    {% if errors | length %}
+        {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-				{% endif %}
-
-				<h1 class="govuk-heading-l">{{ title }}</h1>
-
-				{% if ageOfPrisoner !== null %}
-								<div>
-												<p class="govuk-heading-s" data-qa="age-of-prisoner">{{ ageOfPrisoner.years }} years, {{ ageOfPrisoner.months }} months</p>
-												<p class="govuk-body" data-qa="age-of-prisoner-hint">This was the age of the prisoner when the incident happened.</p>
-								</div>
-				{% endif %}
-
-				<p class="govuk-body" data-qa="yoi-remand-hint">YOI prisoners on remand should be charged under Adult offences (Prison rule 51).</p>
-
-				<div>
-								<form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-												<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-												<input type="hidden" name="originalRuleSelection" value="{{ whichRuleChosen }}"/>
-
-												{{ govukRadios({
+    {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    {% if ageOfPrisoner !== null %}
+        <div>
+            <p class="govuk-heading-s" data-qa="age-of-prisoner">{{ ageOfPrisoner.years }} years,
+                {{ ageOfPrisoner.months }} months</p>
+            <p class="govuk-body" data-qa="age-of-prisoner-hint">This was the age of the prisoner when the incident happened.</p>
+        </div>
+    {% endif %}
+    <p class="govuk-body" data-qa="yoi-remand-hint">YOI prisoners on remand should be charged under Adult offences (Prison
+        rule 51).</p>
+    <div>
+        <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+            <input type="hidden" name="originalRuleSelection" value="{{ whichRuleChosen }}"/> {{ govukRadios({
 			idPrefix: 'whichRuleChosen',
 			id: 'whichRuleChosen',
 			name: 'whichRuleChosen',
@@ -72,22 +63,20 @@
 			}
 			]
 			}) }}
-
-												{{ govukButton({
+            {{ govukButton({
 					text: 'Save and continue',
 					type: "submit",
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "age-of-prisoner-submit" },
 					preventDoubleClick: true
 			}) }}
-												{{ govukButton({
+            {{ govukButton({
 					text: 'Cancel',
 					element: "a",
 					href: cancelButtonHref,
 					classes: "govuk-button--secondary",
 					attributes: { "data-qa": "age-of-prisoner-cancel" }
 				}) }}
-								</form>
-				</div>
-
+        </form>
+    </div>
 {% endblock %}
