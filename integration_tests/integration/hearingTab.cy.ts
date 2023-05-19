@@ -72,11 +72,8 @@ const hearingOutcomeEnteredInNOMIS = testData.singleHearing({
   oicHearingType: OicHearingType.GOV_ADULT,
   outcome: {
     id: 123,
-    adjudicator: ' ',
+    adjudicator: '',
     code: HearingOutcomeCode.NOMIS,
-    details: '123',
-    reason: HearingOutcomeAdjournReason.EVIDENCE,
-    plea: HearingOutcomePlea.NOT_ASKED,
   },
 })
 
@@ -400,7 +397,7 @@ context('Hearing details page', () => {
       response: reportedAdjudicationResponse(
         2222222,
         ReportedAdjudicationStatus.SCHEDULED,
-        [hearingOutcomeEnteredInNOMIS],
+        [],
         historyWithReferAndHearingInNOMIS,
         true
       ),
