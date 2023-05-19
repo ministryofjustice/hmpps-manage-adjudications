@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro hearingSummary(hearingDetails = {}, outcome = {}, attributes = {}, changeLinksAvailable = false, basicHearingChangeLinkHref = null, adjudicationNumber = null) %}
+{% macro hearingSummary(hearingDetails = {}, outcome = {}, attributes = {}, changeLinksAvailable = false, basicHearingChangeLinkHref = null, adjudicationNumber = null, outcomesRelease = false) %}
   {% set changeLinksAvailableForHearingBasicDetails = false if hearingDetails.outcome else changeLinksAvailable %}
   {% set changeLinksAvailableForAdjudicatorAndOutcome = false if outcome else changeLinksAvailable %}
 
@@ -37,6 +37,8 @@
     }  %}
   {% endif %}
 
+  {# Outcomes version #}
+  {% if outcomesRelease %}
   {% set rows = [
     {
         key: { text: 'Date and time of hearing' },
@@ -54,6 +56,26 @@
         actions: typeChangeLink
     }
   ] %}
+  {% else %}
+  {# Pre-outcomes version #}
+    {% set rows = [
+    {
+        key: { text: 'Date and time of hearing' },
+        value: { text: hearingDetails.dateTime.value },
+        actions: dateTimeChangeLink
+    },
+    {
+        key: { text: 'Location' },
+        value: { text: hearingDetails.location.value },
+        actions: locationChangeLink
+    },
+    {
+        key: { text: 'Type of hearing' },
+        value: { text: hearingDetails.type.value | convertOicHearingType },
+        actions: typeChangeLink
+    }
+  ] %}
+  {% endif %}
 
   {# Add the extra rows to the hearing table depending on the hearing outcome #}
   {% if hearingDetails.outcome %}
@@ -83,4 +105,5 @@
       attributes: attributes
     }) }}
   {% endif %}
+
 {% endmacro %}
