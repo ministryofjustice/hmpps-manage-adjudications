@@ -5,6 +5,7 @@ export enum HearingOutcomeCode {
   REFER_POLICE = 'REFER_POLICE',
   REFER_INAD = 'REFER_INAD',
   ADJOURN = 'ADJOURN',
+  NOMIS = 'NOMIS',
 }
 
 export enum OutcomeCode {

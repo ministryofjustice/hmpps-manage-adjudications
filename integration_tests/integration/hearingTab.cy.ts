@@ -65,6 +65,18 @@ const hearingWithAdjournedOutcome = testData.singleHearing({
   },
 })
 
+const hearingOutcomeEnteredInNOMIS = testData.singleHearing({
+  dateTimeOfHearing: hearingDateTimeTwo,
+  id: 988,
+  locationId: 234,
+  oicHearingType: OicHearingType.GOV_ADULT,
+  outcome: {
+    id: 123,
+    adjudicator: '',
+    code: HearingOutcomeCode.NOMIS,
+  },
+})
+
 const hearingWithReferToPoliceOutcome = testData.singleHearing({
   dateTimeOfHearing: hearingDateTimeTwo,
   id: 988,
@@ -95,6 +107,12 @@ const historyWithOneHearing = [
 const historyWithOneAdjournedHearing = [
   {
     hearing: hearingWithAdjournedOutcome,
+  },
+]
+
+const historyWithOneAdjournedHearingEnteredInNomis = [
+  {
+    hearing: hearingOutcomeEnteredInNOMIS,
   },
 ]
 
@@ -162,6 +180,19 @@ const historyWithInAdReferredHearingAndScheduleHearingReferralOutcome = [
       locationId: 123,
       oicHearingType: OicHearingType.GOV_ADULT,
     }),
+  },
+]
+
+const historyWithReferAndHearingInNOMIS = [
+  {
+    hearing: hearingWithReferToInAdOutcome,
+    outcome: {
+      outcome: testData.outcome({ details: 'This is my reason for referring.', code: OutcomeCode.REFER_INAD }),
+      referralOutcome: testData.referralOutcome({ code: ReferralOutcomeCode.SCHEDULE_HEARING }),
+    },
+  },
+  {
+    hearing: hearingOutcomeEnteredInNOMIS,
   },
 ]
 
@@ -349,6 +380,26 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.ADJOURNED,
         [hearingWithAdjournedOutcome],
         historyWithOneAdjournedHearing
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1111111,
+      response: reportedAdjudicationResponse(
+        1111111,
+        ReportedAdjudicationStatus.ADJOURNED,
+        [hearingOutcomeEnteredInNOMIS],
+        historyWithOneAdjournedHearingEnteredInNomis,
+        true
+      ),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 2222222,
+      response: reportedAdjudicationResponse(
+        2222222,
+        ReportedAdjudicationStatus.SCHEDULED,
+        [],
+        historyWithReferAndHearingInNOMIS,
+        true
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -1628,6 +1679,72 @@ context('Hearing details page', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review(1524402))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.changeQuashReasonLink().should('not.exist')
+    })
+    it('Hearing outcome entered in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(1111111))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Date and time of hearing')
+          expect($summaryLabels.get(1).innerText).to.contain('Location')
+          expect($summaryLabels.get(2).innerText).to.contain('Type of hearing')
+        })
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+        })
+      hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+      hearingTabPage.enterHearingOutcomeButton().should('not.exist')
+      hearingTabPage.changeLink().should('not.exist')
+    })
+    it('Hearing outcome entered in NOMIS - inad referral followed by new hearing scheduled in NOMIS', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review(2222222))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+        })
+
+      hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+        })
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
+          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+        })
+      hearingTabPage
+        .hearingSummaryTable(2)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+        })
+      hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
+      hearingTabPage.removeHearingButton().should('not.exist')
+      hearingTabPage.enterHearingOutcomeButton().should('not.exist')
+      hearingTabPage.changeLink().should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {
