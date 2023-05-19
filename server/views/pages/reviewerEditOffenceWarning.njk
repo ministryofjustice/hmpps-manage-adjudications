@@ -12,8 +12,8 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  <p class="govuk-body">If you change the offence, you’ll delete the information below.</p>
-  <p class="govuk-body">Before changing it, make a note of any information you might need to re-enter later.</p>
+  <p class="govuk-body" data-qa="p1">If you change the offence, you’ll delete the information below.</p>
+  <p class="govuk-body" data-qa="p2">Before changing it, make a note of any information you might need to re-enter later.</p>
 
   <section class="govuk-!-width-two-thirds">
   {{ offenceQAndASummaryList(offence, isYouthOffender, { "data-qa": "offence-summary-table" }) }}
