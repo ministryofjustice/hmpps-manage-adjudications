@@ -21,13 +21,11 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     {% if ageOfPrisoner !== null %}
         <div>
-            <p class="govuk-heading-s" data-qa="age-of-prisoner">{{ ageOfPrisoner.years }} years,
-                {{ ageOfPrisoner.months }} months</p>
+            <p class="govuk-heading-s" data-qa="age-of-prisoner">{{ ageOfPrisoner.years }} years, {{ ageOfPrisoner.months }} months</p>
             <p class="govuk-body" data-qa="age-of-prisoner-hint">This was the age of the prisoner when the incident happened.</p>
         </div>
     {% endif %}
-    <p class="govuk-body" data-qa="yoi-remand-hint">YOI prisoners on remand should be charged under Adult offences (Prison
-        rule 51).</p>
+    <p class="govuk-body" data-qa="yoi-remand-hint">YOI prisoners on remand should be charged under Adult offences (Prison rule 51).</p>
     <div>
         <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
