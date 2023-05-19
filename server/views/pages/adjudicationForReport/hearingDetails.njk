@@ -40,7 +40,7 @@
             {% set hearingNumber = loop.index %}
             <h2 class="govuk-heading-m" data-qa="hearing-index-{{hearingNumber}}">Hearing {{ hearingNumber }}</h2>
             {% if not readOnly %}
-              {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, true, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId)) }}
+              {{ hearingSummary(hearing, {}, { "data-qa": "details-summary-table" }, true, adjudicationUrls.scheduleHearing.urls.edit(reportNo, hearingId), null, false) }}
               {{ govukButton({
                 text: 'Cancel this hearing',
                 type: "submit",
@@ -51,7 +51,7 @@
                 attributes: { "data-qa": "cancelHearingButton-"+hearingId }
               }) }}
             {% else %}
-                {{ hearingSummary(hearing, { "data-qa": "details-summary-table" }, false) }}
+                {{ hearingSummary(hearing, {}, { "data-qa": "details-summary-table" }, false, null, null, false) }}
             {% endif %}
           {% endfor %}
         </div>
