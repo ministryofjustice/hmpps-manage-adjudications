@@ -585,11 +585,13 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       edit: '/:adjudicationNumber/edit/:redisId',
+      comment: '/:adjudicationNumber/comment',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}`,
       edit: (adjudicationNumber: number, redisId: string) =>
         `${adjudicationUrls.punishment.root}/${adjudicationNumber}/edit/${redisId}`,
+      comment: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}/comment`,
     },
   },
   punishmentSchedule: {

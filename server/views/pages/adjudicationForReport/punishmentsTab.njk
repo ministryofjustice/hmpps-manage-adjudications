@@ -75,4 +75,20 @@
     </div>
   {% endif %}
 
+  <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-2">Punishment comments</h2>
+
+  <br>
+  <hr>
+  <br>
+
+  <div>
+    {{ govukButton({
+      text: 'Add comment',
+      element: "a",
+      href: adjudicationUrls.punishment.urls.comment(reportNo),
+      classes: "govuk-button--secondary",
+      attributes: { "data-qa": "add-punishments-comment" }
+    }) }}
+  </div>
+
 {% endblock %}
