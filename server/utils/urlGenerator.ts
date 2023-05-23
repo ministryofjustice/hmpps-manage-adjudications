@@ -585,13 +585,11 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       edit: '/:adjudicationNumber/edit/:redisId',
-      comment: '/:adjudicationNumber/comment',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}`,
       edit: (adjudicationNumber: number, redisId: string) =>
         `${adjudicationUrls.punishment.root}/${adjudicationNumber}/edit/${redisId}`,
-      comment: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}/comment`,
     },
   },
   punishmentSchedule: {
@@ -638,6 +636,17 @@ const adjudicationUrls = {
     urls: {
       start: (adjudicationNumber: number) =>
         `${adjudicationUrls.activateSuspendedPunishments.root}/${adjudicationNumber}`,
+    },
+  },
+  punishmentComment: {
+    root: '/punishment-comment',
+    matchers: {
+      add: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit',
+    },
+    urls: {
+      add: (adjudicationNumber: number) => `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}/edit`,
     },
   },
   manuallyActivateSuspendedPunishment: {
