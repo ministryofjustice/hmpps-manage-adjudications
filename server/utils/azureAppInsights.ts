@@ -26,6 +26,7 @@ export function buildAppInsightsClient(
   if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
     defaultClient.context.tags['ai.cloud.role'] = overrideName || applicationName
     defaultClient.context.tags['ai.application.ver'] = buildNumber
+    defaultClient.addTelemetryProcessor(addUserDataToRequests)
     return defaultClient
   }
   return null
