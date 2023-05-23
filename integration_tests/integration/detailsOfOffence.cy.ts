@@ -22,7 +22,9 @@ const adjudicationWithOffences = testData.draftAdjudication({
 })
 
 const reportedAdjudicationWithOffences = testData.reportedAdjudication({
-  id: 202,
+  otherData: {
+    id: 202,
+  },
   adjudicationNumber: 1234,
   prisonerNumber: 'G6415GD',
   offenceDetails: {
@@ -30,6 +32,22 @@ const reportedAdjudicationWithOffences = testData.reportedAdjudication({
     offenceRule: {
       paragraphNumber: '1',
       paragraphDescription: 'Commits any assault',
+    },
+    victimPrisonersNumber: 'G5512G',
+  },
+})
+
+const reportedAdjudicationWithOffencesAloEdited = testData.reportedAdjudication({
+  otherData: {
+    id: 201,
+  },
+  adjudicationNumber: 12345,
+  prisonerNumber: 'G6415GD',
+  offenceDetails: {
+    offenceCode: 4001,
+    offenceRule: {
+      paragraphNumber: '4',
+      paragraphDescription: 'Fights with any person',
     },
     victimPrisonersNumber: 'G5512G',
   },
@@ -147,6 +165,10 @@ context('Details of offence', () => {
     cy.task('stubSaveOffenceDetails', {
       adjudicationNumber: 202,
       response: reportedAdjudicationWithOffences,
+    })
+    cy.task('stubAloAmendOffenceDetails', {
+      adjudicationNumber: 201,
+      response: reportedAdjudicationWithOffencesAloEdited,
     })
   })
 
@@ -378,5 +400,12 @@ context('Details of offence', () => {
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
     cy.url().should('include', adjudicationUrls.detailsOfDamages.urls.start(202))
+  })
+
+  it('When an ALO has edited the offence, it should redirect back to the prisoner report page', () => {
+    cy.visit(`${adjudicationUrls.detailsOfOffence.urls.aloEdit(201)}?offenceCode=4001`)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.saveAndContinue().click()
+    cy.url().should('include', adjudicationUrls.prisonerReport.urls.review(12345))
   })
 })

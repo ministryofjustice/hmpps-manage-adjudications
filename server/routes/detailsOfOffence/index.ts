@@ -29,6 +29,12 @@ export default function detailsOfOffenceRoutes({
     decisionTreeService
   )
 
+  const detailsOfOffenceUsingSessionAloEdit = new DetailsOfOffencePage(
+    PageRequestType.OFFENCES_FROM_SESSION_ALO_EDIT,
+    placeOnReportService,
+    decisionTreeService
+  )
+
   const addOffence = new AddOffenceRoutes()
 
   const deleteOffence = new DeleteOffenceRoutes(decisionTreeService)
@@ -37,10 +43,13 @@ export default function detailsOfOffenceRoutes({
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.detailsOfOffence.matchers.add, addOffence.add)
+  get(adjudicationUrls.detailsOfOffence.matchers.aloAdd, addOffence.aloAdd)
   get(adjudicationUrls.detailsOfOffence.matchers.start, detailsOfOffenceUsingDraft.view)
   post(adjudicationUrls.detailsOfOffence.matchers.start, detailsOfOffenceUsingDraft.submit)
   get(adjudicationUrls.detailsOfOffence.matchers.modified, detailsOfOffenceUsingSession.view)
   post(adjudicationUrls.detailsOfOffence.matchers.modified, detailsOfOffenceUsingSession.submit)
+  get(adjudicationUrls.detailsOfOffence.matchers.aloEdit, detailsOfOffenceUsingSessionAloEdit.view)
+  post(adjudicationUrls.detailsOfOffence.matchers.aloEdit, detailsOfOffenceUsingSessionAloEdit.submit)
   get(adjudicationUrls.detailsOfOffence.matchers.delete, deleteOffence.view)
   post(adjudicationUrls.detailsOfOffence.matchers.delete, deleteOffence.submit)
 

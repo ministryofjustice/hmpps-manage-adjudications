@@ -112,7 +112,7 @@ describe('GET - not reviewer', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?days=10`)
+      .get(`${adjudicationUrls.reviewerEditOffenceWarning.urls.edit(100)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -121,7 +121,7 @@ describe('GET - not reviewer', () => {
 })
 
 describe('GET', () => {
-  it('should load the age of prisoner page', () => {
+  it('should load the page', () => {
     return request(app)
       .get(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(100))
       .expect('Content-Type', /html/)

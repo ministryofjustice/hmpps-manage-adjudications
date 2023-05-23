@@ -42,7 +42,7 @@ export default class ReviewerEditOffenceWarningRoute {
     return res.render(`pages/reviewerEditOffenceWarning`, {
       offence,
       isYouthOffender: reportedAdjudication.isYouthOffender,
-      nextPageHref: adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(newDraftAdjudicationId),
+      nextPageHref: adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(newDraftAdjudicationId),
       cancelHref: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
     })
   }

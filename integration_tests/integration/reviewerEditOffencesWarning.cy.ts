@@ -193,10 +193,9 @@ context('Warning - reviewer edits offence', () => {
       cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.continueButton().click()
+      cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(177))
       cy.location().should(loc => {
-        // Needs to go to the submitted edit with reselect eq to true, but need to split this up for the test
-        expect(loc.pathname).to.eq(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(177))
-        expect(loc.search).to.eq('?reselectingFirstOffence=true')
+        expect(loc.search).to.eq('?reselectingFirstOffence=true&aloEdit=true')
       })
     })
   })
