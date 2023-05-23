@@ -23,7 +23,7 @@ RUN apt-get update && \
 FROM base as build
 
 ARG BUILD_NUMBER=1_0_0
-ENV GIT_REF ${GIT_REF:-xxxxxxxxxxxxxxxxxxx}
+ARG GIT_REF=not-available
 
 RUN apt-get update && \
     apt-get install -y make python g++
@@ -34,6 +34,10 @@ RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
 COPY . .
 RUN npm run build
 
+RUN export BUILD_NUMBER=${BUILD_NUMBER} && \
+    export GIT_REF=${GIT_REF} && \
+    npm run record-build-info
+
 RUN npm prune --no-audit --production
 
 # Stage: copy production assets and dependencies
@@ -43,6 +47,9 @@ COPY --from=build --chown=appuser:appgroup \
         /app/package.json \
         /app/package-lock.json \
         ./
+
+COPY --from=build --chown=appuser:appgroup \
+        /app/build-info.json ./dist/build-info.json
 
 COPY --from=build --chown=appuser:appgroup \
         /app/assets ./assets
