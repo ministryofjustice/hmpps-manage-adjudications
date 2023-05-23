@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import createError from 'http-errors'
 import config from './config'
 import GotenbergClient from './data/gotenbergClient'
@@ -36,12 +37,12 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
-  app.use(setUpHealthChecks(services.applicationInfo))
+  app.use(setUpHealthChecks())
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
-  nunjucksSetup(app, services.applicationInfo)
+  nunjucksSetup(app, path)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(authorisationMiddleware())
