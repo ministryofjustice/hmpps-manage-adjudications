@@ -119,4 +119,12 @@ export default class PunishmentsService {
     const punishments = (await this.getSuspendedPunishmentDetails(adjudicationNumber, user)).suspendedPunishments
     return punishments.filter(punishment => punishment.punishment.id === punishmentId)
   }
+
+  async createPunishmentComment(
+    adjudicationNumber: number,
+    punishmentComment: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).createPunishmentComment(adjudicationNumber, punishmentComment)
+  }
 }

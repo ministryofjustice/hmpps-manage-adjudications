@@ -66,6 +66,7 @@ export default class PunishmentCommentPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { punishmentComment } = req.body
 
@@ -73,6 +74,8 @@ export default class PunishmentCommentPage {
 
     if (error)
       return this.renderView(req, res, { error, punishmentComment })
+
+    await this.punishmentsService.createPunishmentComment(adjudicationNumber, punishmentComment, user)
 
     const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
     return res.redirect(

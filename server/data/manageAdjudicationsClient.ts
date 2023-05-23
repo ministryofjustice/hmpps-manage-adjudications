@@ -559,4 +559,14 @@ export default class ManageAdjudicationsClient {
       path: `/reported-adjudications/punishments/${prisonerNumber}/suspended`,
     })
   }
+
+  async createPunishmentComment(
+    adjudicationNumber: number,
+    punishmentComment: string
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+      data: { comment: punishmentComment },
+    })
+  }
 }
