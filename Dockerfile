@@ -14,10 +14,6 @@ RUN addgroup --gid 2000 --system appgroup && \
 
 WORKDIR /app
 
-# Cache breaking
-ENV BUILD_NUMBER ${BUILD_NUMBER:-1_0_0}
-ENV GIT_REF ${GIT_REF:-xxxxxxxxxxxxxxxxxxx}
-
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get autoremove -y && \
