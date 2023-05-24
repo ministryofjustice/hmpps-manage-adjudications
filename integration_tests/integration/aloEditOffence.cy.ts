@@ -5,6 +5,7 @@ import PrisonerReport from '../pages/prisonerReport'
 import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarning'
 import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
 import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
+import DetailsOfOffence from '../pages/detailsOfOffence'
 
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
@@ -37,31 +38,33 @@ const reportedAdjudication = (status: ReportedAdjudicationStatus) => {
   })
 }
 
-// const draftAdjudication = (adjudicationNumber: number) => {
-//   return testData.draftAdjudication({
-//     id: 177,
-//     adjudicationNumber,
-//     prisonerNumber: 'G6415GD',
-//     dateTimeOfIncident: '2021-12-01T09:40:00',
-//     incidentRole: {
-//       associatedPrisonersNumber: 'T3356FU',
-//       roleCode: '25c',
-//       offenceRule: {
-//         paragraphNumber: '25(c)',
-//         paragraphDescription:
-//           'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-//       },
-//     },
-//     offenceDetails: {
-//       offenceCode: 1001,
-//       offenceRule: {
-//         paragraphNumber: '1',
-//         paragraphDescription: 'Commits any assault',
-//       },
-//       victimPrisonersNumber: 'G5512G',
-//     },
-//   })
-// }
+const editedDraftAdjudication = {
+  draftAdjudication: testData.draftAdjudication({
+    id: 177,
+    adjudicationNumber: 12345,
+    prisonerNumber: 'G6415GD',
+    dateTimeOfIncident: '2021-11-03T13:10:00',
+    locationId: 25538,
+    incidentRole: {},
+  }),
+}
+
+const editedReportedAdjudication = testData.reportedAdjudication({
+  adjudicationNumber: 12345,
+  prisonerNumber: 'G6415GD',
+  dateTimeOfIncident: '2021-11-03T13:10:00',
+  locationId: 25538,
+  incidentRole: {},
+  offenceDetails: {
+    offenceCode: 1021,
+    offenceRule: {
+      paragraphNumber: '1(a)',
+      paragraphDescription: 'Commits any racially aggravated assault',
+    },
+    victimPrisonersNumber: 'G7123CI',
+    victimOtherPersonsName: ' James Robertson',
+  },
+})
 
 context('ALO edits offence', () => {
   beforeEach(() => {
@@ -194,6 +197,10 @@ context('ALO edits offence', () => {
     cy.task('stubSearchPrisonerDetails', {
       prisonerNumber: 'G7123CI',
     })
+    cy.task('stubAloAmendOffenceDetails', {
+      adjudicationNumber: 177,
+      response: editedReportedAdjudication,
+    })
     cy.signIn()
   })
   it('allows ALO to update the adjudication offence', () => {
@@ -220,6 +227,32 @@ context('ALO edits offence', () => {
     whoWasAssaultedPage.continue().click()
     const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
     raciallyAggravated.radio('1-1-1-4-1').click()
+    cy.task('stubGetDraftAdjudication', {
+      id: 177,
+      response: editedDraftAdjudication,
+    })
     whoWasAssaultedPage.continue().click()
+    const detailsOfOffencePage = new DetailsOfOffence()
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 1).contains('What type of offence did John Smith commit?')
+    detailsOfOffencePage
+      .questionAnswerSectionAnswer(1, 1)
+      .contains('Assault, fighting, or endangering the health or personal safety of others')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 3).contains('Who was assaulted?')
+    detailsOfOffencePage
+      .questionAnswerSectionAnswer(1, 3)
+      .contains("A prisoner who's left this establishment - James Robertson G7123CI")
+    detailsOfOffencePage.questionAnswerSectionQuestion(1, 4).contains('Was the incident a racially aggravated assault?')
+    detailsOfOffencePage.questionAnswerSectionAnswer(1, 4).contains('Yes')
+    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
+    detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
+    detailsOfOffencePage.prisonRule().contains('Which set of rules apply to this prisoner?')
+    detailsOfOffencePage.prisonRuleDesc().contains('Adult offences')
+    detailsOfOffencePage.prisonRulePara().contains('Prison rule 51')
+    detailsOfOffencePage.saveAndContinue().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(12345))
+    })
   })
 })
