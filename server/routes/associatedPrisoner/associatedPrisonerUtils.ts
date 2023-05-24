@@ -95,7 +95,19 @@ export const redirectToDeletePersonPage = (res: Response, prisonerToDelete: stri
   return res.redirect(`${adjudicationUrls.deletePerson.root}?associatedPersonId=${prisonerToDelete}`)
 }
 
-export const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: string) => {
+export const redirectToOffenceSelection = (
+  res: Response,
+  draftId: number,
+  incidentRoleCode: string,
+  isAloEdit: boolean
+) => {
+  if (isAloEdit)
+    return res.redirect(
+      adjudicationUrls.offenceCodeSelection.urls.aloEditStart(
+        draftId,
+        radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase()])
+      )
+    )
   return res.redirect(
     adjudicationUrls.offenceCodeSelection.urls.start(
       draftId,
@@ -104,8 +116,19 @@ export const redirectToOffenceSelection = (res: Response, draftId: number, incid
   )
 }
 
-export const setRedirectUrl = (req: Request, draftId: number, roleCode: string, isPreviouslySubmitted: boolean) => {
-  if (isPreviouslySubmitted) {
+export const setRedirectUrl = (
+  req: Request,
+  draftId: number,
+  roleCode: string,
+  isPreviouslySubmitted: boolean,
+  isAloEdit: boolean
+) => {
+  if (isAloEdit) {
+    const originalPageReferrerUrl = req.query.referrer as string
+    req.session.redirectUrl = `${adjudicationUrls.incidentAssociate.urls.aloEdit(draftId, roleCode)}${
+      originalPageReferrerUrl ? `?referrer=${originalPageReferrerUrl}` : ''
+    }`
+  } else if (isPreviouslySubmitted) {
     const originalPageReferrerUrl = req.query.referrer as string
     req.session.redirectUrl = `${adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode)}${
       originalPageReferrerUrl ? `?referrer=${originalPageReferrerUrl}` : ''

@@ -35,7 +35,7 @@ const adjudicationUrls = {
       add: '/:adjudicationNumber/add',
       aloAdd: '/:adjudicationNumber/alo-add',
       delete: '/:adjudicationNumber/delete',
-      aloEdit: '/:adjudicationNumber/alo-edit',
+      aloEdit: '/:adjudicationNumber/aloEdit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}`,
@@ -46,7 +46,7 @@ const adjudicationUrls = {
       delete: (adjudicationNumber: number, offenceData: OffenceData) =>
         `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete?offenceCode=${offenceData?.offenceCode}&victimOtherPersonsName=${offenceData?.victimOtherPersonsName}&victimPrisonersNumber=${offenceData?.victimPrisonersNumber}&victimStaffUsername=${offenceData?.victimStaffUsername}`,
       aloEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/alo-edit`,
+        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/aloEdit`,
     },
   },
   detailsOfDamages: {
@@ -180,12 +180,15 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber/:roleCode',
       submittedEdit: '/:adjudicationNumber/:roleCode/submitted/edit',
+      aloEdit: '/:adjudicationNumber/:roleCode/submitted/edit/alo',
     },
     urls: {
       start: (adjudicationNumber: number, roleCode: string) =>
         `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}`,
       submittedEdit: (adjudicationNumber: number, roleCode: string) =>
         `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit`,
+      aloEdit: (adjudicationNumber: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit/alo`,
     },
   },
   incidentStatement: {

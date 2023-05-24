@@ -19,6 +19,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstablishmentDecisionHelper'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { OffenceData } from './offenceData'
+import { User } from '../../data/hmppsAuthClient'
 
 type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
 
@@ -92,8 +93,10 @@ export default class OffenceCodeRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
+
     if (req.body.decisionFormCancel) {
-      return this.cancel(req, res, this.pageOptions)
+      return this.cancel(req, res, this.pageOptions, user)
     }
     if (req.body.deleteUser) {
       return this.deleteUser(req, res)
@@ -158,9 +161,17 @@ export default class OffenceCodeRoutes {
     )
   }
 
-  cancel = async (req: Request, res: Response, pageOptions: PageOptions): Promise<void> => {
+  cancel = async (req: Request, res: Response, pageOptions: PageOptions, user: User): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    if (pageOptions.isAloEdit()) return res.redirect(adjudicationUrls.prisonerReport.urls.review(adjudicationNumber))
+    if (pageOptions.isAloEdit()) {
+      try {
+        const draftAdj = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+        return res.redirect(adjudicationUrls.prisonerReport.urls.review(draftAdj.draftAdjudication.adjudicationNumber))
+      } catch (getCancelError) {
+        res.locals.redirectUrl = adjudicationUrls.homepage.root
+        throw getCancelError
+      }
+    }
     return res.redirect(adjudicationUrls.taskList.urls.start(adjudicationNumber))
   }
 

@@ -81,6 +81,9 @@ export default class DetailsOfOffencePage {
       incidentRole,
       isYouthOffender,
       offenceData: offence,
+      deleteOffenceHref: this.pageOptions.isAloEdit()
+        ? `${adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offence)}&aloEdit=true`
+        : adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offence),
     })
   }
 

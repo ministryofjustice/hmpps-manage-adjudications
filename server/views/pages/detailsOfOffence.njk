@@ -49,8 +49,8 @@
             </div>
             <div>
               <p class="govuk-body">
-                <a href='{{ adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offenceData) }}'
-                                   data-qa="delete-1" class="govuk-link">Remove this offence</a>
+                <a href='{{ deleteOffenceHref }}'
+                  data-qa="delete-1" class="govuk-link">Remove this offence</a>
               </p>
             </div>
           </div>
@@ -58,11 +58,11 @@
             <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>
             {% if offence.incidentRule %}
               <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
-                                    paragraph {{ offence.incidentRule.paragraphNumber }}</p>
+                paragraph {{ offence.incidentRule.paragraphNumber }}</p>
               <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.incidentRule.paragraphDescription | safe }}</p>
             {% endif %}
             <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.isYouthOffender | prisonRule }},
-                                paragraph {{ offence.offenceRule.paragraphNumber }}</p>
+              paragraph {{ offence.offenceRule.paragraphNumber }}</p>
             <p class="govuk-!-margin-bottom-1 govuk-label--xs">{{ offence.offenceRule.paragraphDescription  | safe }}</p>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
           </div>

@@ -51,6 +51,7 @@ type RequestValues = {
 type IncidentDetails = {
   prisonerNumber: string
   currentIncidentRoleSelection: IncidentRole
+  reportedAdjudicationNumber?: number
 }
 
 type TemporarilySavedData = {
@@ -122,7 +123,6 @@ export default class IncidentRolePage {
     }
 
     const incidentDetailsToSave = postValues.incidentDetails
-
     try {
       const incidentRoleChanged =
         postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
@@ -130,10 +130,12 @@ export default class IncidentRolePage {
       await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
       if ([IncidentRole.ASSISTED, IncidentRole.INCITED].includes(incidentDetailsToSave.currentIncidentRoleSelection)) {
         return redirectToAssociatedPrisoner(
+          req,
           res,
           postValues.draftId,
           incidentDetailsToSave.currentIncidentRoleSelection,
-          this.pageOptions.isPreviouslySubmitted()
+          this.pageOptions.isPreviouslySubmitted(),
+          this.pageOptions.isAloEdit()
         )
       }
       const offencesExist = !removeExistingOffences && offenceDetails && Object.keys(offenceDetails).length > 0
@@ -183,7 +185,7 @@ export default class IncidentRolePage {
       prisonerReportUrl = requestValues.originalPageReferrerUrl
     }
     if (this.pageOptions.isAloEdit()) {
-      prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(requestValues.draftId)
+      prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(data.incidentDetails.reportedAdjudicationNumber)
     }
     exitButtonData = {
       prisonerNumber,
@@ -273,6 +275,7 @@ const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult
   return {
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
     currentIncidentRoleSelection: incidentRoleCode,
+    reportedAdjudicationNumber: draftAdjudicationResult.draftAdjudication.adjudicationNumber || null,
   }
 }
 
@@ -414,7 +417,15 @@ const redirectToOffenceDetails = (res: Response, draftId: number, pageOptions: P
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
 }
 
-const redirectToAssociatedPrisoner = (res: Response, draftId: number, roleCode: string, isSubmitted: boolean) => {
+const redirectToAssociatedPrisoner = (
+  req: Request,
+  res: Response,
+  draftId: number,
+  roleCode: string,
+  isSubmitted: boolean,
+  isAloEdit: boolean
+) => {
+  if (isAloEdit) return res.redirect(adjudicationUrls.incidentAssociate.urls.aloEdit(draftId, roleCode))
   return isSubmitted
     ? res.redirect(adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode))
     : res.redirect(adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode))

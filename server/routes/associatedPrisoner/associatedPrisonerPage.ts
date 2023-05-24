@@ -26,6 +26,7 @@ import PrisonerSearchService from '../../services/prisonerSearchService'
 export enum PageRequestType {
   EDIT,
   EDIT_SUBMITTED,
+  ALO_EDIT,
 }
 
 class PageOptions {
@@ -33,6 +34,10 @@ class PageOptions {
 
   isPreviouslySubmitted(): boolean {
     return this.pageType === PageRequestType.EDIT_SUBMITTED
+  }
+
+  isAloEdit(): boolean {
+    return this.pageType === PageRequestType.ALO_EDIT
   }
 }
 
@@ -121,7 +126,7 @@ export default class AssociatedPrisonerPage {
 
     try {
       await this.saveToApiUpdate(draftId, roleAssociatedPrisoner, user as User)
-      return redirectToOffenceSelection(res, draftId, roleCode)
+      return redirectToOffenceSelection(res, draftId, roleCode, this.pageOptions.isAloEdit())
     } catch (postError) {
       this.setUpRedirectForEditError(res, draftId, roleCode)
       throw postError
@@ -132,7 +137,7 @@ export default class AssociatedPrisonerPage {
     const draftId = getDraftIdFromString(req.params.adjudicationNumber)
     const { roleCode } = req.params
 
-    setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted())
+    setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted(), this.pageOptions.isAloEdit())
 
     return redirectToDeletePersonPage(res, req.body.prisonerId)
   }
@@ -144,7 +149,7 @@ export default class AssociatedPrisonerPage {
     const { selectedAnswerId } = req.body
     const { prisonerNumber } = await this.readFromApi(draftId, user as User)
 
-    setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted())
+    setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted(), this.pageOptions.isAloEdit())
 
     if (!req.body.prisonerSearchNameInput || req.body.prisonerSearchNameInput === '') {
       const pageData = await this.getDisplayData(
@@ -231,8 +236,12 @@ export default class AssociatedPrisonerPage {
   }
 
   setUpRedirectForEditError = (res: Response, draftId: number, roleCode: string) => {
-    res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
-      ? adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode)
-      : adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode)
+    if (this.pageOptions.isAloEdit()) {
+      res.locals.redirectUrl = adjudicationUrls.incidentAssociate.urls.aloEdit(draftId, roleCode)
+    } else if (this.pageOptions.isPreviouslySubmitted()) {
+      res.locals.redirectUrl = adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode)
+    } else {
+      res.locals.redirectUrl = adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode)
+    }
   }
 }
