@@ -24,7 +24,6 @@ afterEach(() => {
 
 describe('GET /punishment-comment', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
