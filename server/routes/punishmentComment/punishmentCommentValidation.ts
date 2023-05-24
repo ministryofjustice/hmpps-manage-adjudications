@@ -8,7 +8,7 @@ type PunishmentCommentForm = {
 const errors: { [key: string]: FormError } = {
   PUNISHMENT_COMMENT_STRING_IS_BLANK: {
     href: '#punishmentComment',
-    text: 'Punishment comment cannot be blank',
+    text: 'Enter a comment',
   },
 }
 

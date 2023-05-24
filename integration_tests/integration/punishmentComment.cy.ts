@@ -47,7 +47,7 @@ context('Add a comment about punishment', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Punishment comment cannot be blank')
+          expect($error.get(0).innerText).to.contain('Enter a comment')
         })
     })
   })

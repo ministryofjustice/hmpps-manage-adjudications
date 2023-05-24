@@ -15,7 +15,7 @@ describe('validateForm', () => {
       })
     ).toEqual({
       href: '#punishmentComment',
-      text: 'Punishment comment cannot be blank',
+      text: 'Enter a comment',
     })
   })
 })
