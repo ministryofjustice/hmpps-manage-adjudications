@@ -54,13 +54,6 @@ export default class PunishmentCommentPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    if (this.pageOptions.isEdit()) {
-
-      return this.renderView(req, res, {
-        punishmentComment: 'edit this comment',
-      })
-    }
-
     return this.renderView(req, res, {})
   }
 
