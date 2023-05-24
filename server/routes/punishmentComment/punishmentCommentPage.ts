@@ -64,8 +64,9 @@ export default class PunishmentCommentPage {
 
     const error = validateForm({ punishmentComment })
 
-    if (error)
+    if (error) {
       return this.renderView(req, res, { error, punishmentComment })
+    }
 
     await this.punishmentsService.createPunishmentComment(adjudicationNumber, punishmentComment, user)
 
