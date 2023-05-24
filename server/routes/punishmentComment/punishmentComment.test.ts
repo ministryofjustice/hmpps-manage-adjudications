@@ -49,7 +49,21 @@ describe('GET /punishment-comment', () => {
 })
 
 describe('POST /punishment-comment', () => {
-  it('should successfully call the endpoint and redirect', () => {
+  it('should successfully call the endpoint', () => {
+    return request(app)
+      .post(`${adjudicationUrls.punishmentComment.urls.add(100)}`)
+      .send({
+        punishmentComment: 'some text',
+      })
+      .then(() =>
+        expect(punishmentsService.createPunishmentComment).toHaveBeenCalledWith(
+          100,
+          'some text',
+          expect.anything()
+        )
+      )
+  })
+  it('should redirect', () => {
     return request(app)
       .post(`${adjudicationUrls.punishmentComment.urls.add(100)}`)
       .send({
