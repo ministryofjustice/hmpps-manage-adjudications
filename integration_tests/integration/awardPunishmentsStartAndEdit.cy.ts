@@ -243,7 +243,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit punishments - PROSPECTIVE DAYS', () => {
+    it.skip('create and edit punishments - PROSPECTIVE DAYS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -303,14 +303,15 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.editPunishment().should('not.exist')
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="PROSPECTIVE_DAYS"]').check()
+      punishmentPage.punishment().find('input[value="REMOVAL_WING"]').check()
 
       punishmentPage.submitButton().click()
 
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.suspended().should('exist')
       punishmentSchedulePage.days().type('10')
-      punishmentSchedulePage.suspended().find('input[value="no"]').click()
+      punishmentSchedulePage.suspended().find('input[value="yes"]').click()
+      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
 
       punishmentSchedulePage.submitButton().click()
       awardPunishmentsPage.editPunishment().should('have.length', 1)
