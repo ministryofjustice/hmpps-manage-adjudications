@@ -74,7 +74,8 @@ export default class PunishmentsTabPage {
     const punishments = flattenPunishments(
       await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     )
-
+    /*
+    const names: Map<string, string> = new Map<string, string>()
     const punishmentComments = await Promise.all(
       reportedAdjudication.punishmentComments.map(async punishmentComment => {
         const { dateTime } = punishmentComment
@@ -82,8 +83,15 @@ export default class PunishmentsTabPage {
         const time = formatTimestampTo(dateTime, 'HH:mm')
 
         const userId = punishmentComment.createdByUserId
-        const creator = await this.userService.getStaffNameFromUsername(userId, user)
-        const name = getFormattedOfficerName(creator.name)
+        let name
+        if (names.has(userId)) {
+          name = names.get(userId)
+        } else {
+          const creator = await this.userService.getStaffNameFromUsername(userId, user)
+          name = getFormattedOfficerName(creator.name)
+          logger.info(`    name!!! ${name}`)
+          names.set(userId, name)
+        }
 
         return {
           id: punishmentComment.id,
@@ -94,6 +102,34 @@ export default class PunishmentsTabPage {
         }
       })
     )
+    */
+
+    const usernames = new Set(reportedAdjudication.punishmentComments.map(it => it.createdByUserId))
+    const users = await Promise.all(
+      Array.from(usernames).map(async username => this.userService.getStaffNameFromUsername(username, user))
+    )
+    const names: { [key: string]: string } = Object.fromEntries(
+      users.map(it => [it.username, getFormattedOfficerName(it.name)])
+    )
+
+    const punishmentComments = new Array<any>()
+    // eslint-disable-next-line no-restricted-syntax
+    for (const punishmentComment of reportedAdjudication.punishmentComments) {
+      const { dateTime } = punishmentComment
+      const date = formatTimestampTo(dateTime, 'D MMMM YYYY')
+      const time = formatTimestampTo(dateTime, 'HH:mm')
+
+      const userId = punishmentComment.createdByUserId
+      const name = names[userId]
+      const comment = {
+        id: punishmentComment.id,
+        comment: punishmentComment.comment,
+        date,
+        time,
+        name,
+      }
+      punishmentComments.push(comment)
+    }
 
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
