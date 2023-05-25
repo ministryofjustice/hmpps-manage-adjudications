@@ -42,7 +42,7 @@ describe('GET /punishment-comment', () => {
       .get(adjudicationUrls.punishmentComment.urls.add(100))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Add a comment about punishment')
+        expect(res.text).toContain('Add a comment about punishments')
       })
   })
 })
