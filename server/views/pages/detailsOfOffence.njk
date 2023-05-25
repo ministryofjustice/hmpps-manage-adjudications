@@ -47,12 +47,14 @@
             <div class="q-and-a">
               {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber) }}
             </div>
+            {% if not deleteOffenceLinkHidden %}
             <div>
               <p class="govuk-body">
                 <a href='{{ deleteOffenceHref }}'
                   data-qa="delete-1" class="govuk-link">Remove this offence</a>
               </p>
             </div>
+            {% endif %}
           </div>
           <div data-qa="offence-broke-section-1">
             <p class="govuk-!-margin-bottom-1 govuk-label--s">This offence broke:</p>

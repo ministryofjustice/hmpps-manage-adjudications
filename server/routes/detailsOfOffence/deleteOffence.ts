@@ -50,21 +50,17 @@ export default class DeleteOffenceRoutes {
 
   submit = async (req: Request, res: Response) => {
     const { confirmDelete } = req.body
-    const { aloEdit } = req.query
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     if (!confirmDelete) {
       return this.renderView(req, res, [error.MISSING_SELECTION])
     }
     if (confirmDelete === 'yes') {
-      if (aloEdit) return res.redirect(adjudicationUrls.detailsOfOffence.urls.aloEdit(adjudicationNumber))
       return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
     }
     const offenceData: OffenceData = { ...req.query }
     return this.redirect(
       {
-        pathname: aloEdit
-          ? adjudicationUrls.detailsOfOffence.urls.aloEdit(adjudicationNumber)
-          : adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber),
+        pathname: adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber),
         query: offenceData,
       },
       res
