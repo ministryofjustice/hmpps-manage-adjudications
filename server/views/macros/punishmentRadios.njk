@@ -3,7 +3,7 @@
 
 {% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, errors) %}
   {% set otherPrivilegeHtml %}
-    {{ govukInput({
+  {{ govukInput({
       id: "otherPrivilege",
       name: "otherPrivilege",
       value: otherPrivilege,
@@ -17,7 +17,7 @@
   {% endset -%}
 
   {% set privilegeHtml %}
-    {{ govukRadios({
+  {{ govukRadios({
         idPrefix: 'privilegeType',
         id: 'privilegeType',
         name: 'privilegeType',
@@ -65,7 +65,7 @@
   {% endset -%}
 
   {% set stoppageOfEarningsHtml %}
-    {{ govukInput({
+  {{ govukInput({
       id: "stoppagePercentage",
       name: "stoppagePercentage",
       value: stoppagePercentage,
@@ -78,7 +78,7 @@
       label: {
           text: "Percentage of earnings to be stopped"
       }
-    }) }} 
+    }) }}
   {% endset -%}
 
   {{ govukRadios({
@@ -130,16 +130,6 @@
     value: "REMOVAL_WING",
     text: "Removal from wing or unit",
     checked: punishmentType == 'REMOVAL_WING'
-    },
-    {
-    value: "ADDITIONAL_DAYS",
-    text: "Additional days",
-    checked: punishmentType == 'ADDITIONAL_DAYS'
-    },
-    {
-    value: "PROSPECTIVE_DAYS",
-    text: "Prospective additional days",
-    checked: punishmentType == 'PROSPECTIVE_DAYS'
     }
     ] }) 
   }}
