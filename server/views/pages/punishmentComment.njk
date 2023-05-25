@@ -31,27 +31,27 @@
       <div class="govuk-grid-column-three-quarters">
 
         {{ govukTextarea({
-                    name: "punishmentComment",
-                    id: "punishmentComment",
-                    classes: "govuk-!-width-two-thirds",
-                    attributes: { "data-qa": "edit-punishment-comment" },
-                    errorMessage: "punishmentComment" | findError(errors),
-                    value: punishmentComment
-                }) }}
+          name: "punishmentComment",
+          id: "punishmentComment",
+          classes: "govuk-!-width-two-thirds",
+          attributes: { "data-qa": "edit-punishment-comment" },
+          errorMessage: "punishmentComment" | findError(errors),
+          value: punishmentComment
+        }) }}
 
         {{ govukButton({
-                    text: "Save",
-                    type: "submit",
-                    classes: "govuk-button--submit govuk-!-margin-right-3",
-                    attributes: { "data-qa": "punishment-comment-submit" },
-                    preventDoubleClick: true
-                }) }}
+          text: "Save",
+          type: "submit",
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "punishment-comment-submit" },
+          preventDoubleClick: true
+        }) }}
         {{ govukButton({
-                    text: "Cancel",
-                    href: cancelHref,
-                    classes: "govuk-button--secondary",
-                    attributes: { "data-qa": "punishment-comment-cancel" }
-                }) }}
+          text: "Cancel",
+          href: cancelHref,
+          classes: "govuk-button--secondary",
+          attributes: { "data-qa": "punishment-comment-cancel" }
+        }) }}
       </div>
     </div>
   </form>

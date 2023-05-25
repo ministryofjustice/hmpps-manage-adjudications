@@ -63,6 +63,10 @@ export default class UserService {
     return { ...result, email: userEmail.email }
   }
 
+  async getStaffNameFromUsername(username: string, user: User): Promise<User> {
+    return this.hmppsAuthClient.getUserFromUsername(username, user.token)
+  }
+
   getUserDetailsMap = async (nomisUsers: NomisUserResult[], token: string): Promise<Map<string, User>> => {
     const nomisUsernames = nomisUsers.map(nomisUser => nomisUser.username)
     const userDetails =

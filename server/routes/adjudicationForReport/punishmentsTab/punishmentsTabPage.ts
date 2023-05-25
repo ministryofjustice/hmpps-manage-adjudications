@@ -5,6 +5,8 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
+import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
+import UserService from '../../../services/userService'
 
 export enum PageRequestType {
   REPORTER,
@@ -40,7 +42,8 @@ export default class PunishmentsTabPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -71,6 +74,24 @@ export default class PunishmentsTabPage {
       await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     )
 
+    const dateTime = reportedAdjudication.punishmentComments[0]?.dateTime
+    const date = formatTimestampTo(dateTime, 'D MMMM YYYY')
+    const time = formatTimestampTo(dateTime, 'HH:mm')
+
+    const userId = reportedAdjudication.punishmentComments[0].createdByUserId
+    const creator = await this.userService.getStaffNameFromUsername(userId, user)
+    const name = getFormattedOfficerName(creator.name)
+
+    const comment = {
+      id: reportedAdjudication.punishmentComments[0].id,
+      comment: reportedAdjudication.punishmentComments[0].comment,
+      date,
+      time,
+      name,
+    }
+
+    const punishmentComments = [comment]
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
@@ -84,6 +105,7 @@ export default class PunishmentsTabPage {
       moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
       cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
       punishments,
+      punishmentComments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
     })
   }

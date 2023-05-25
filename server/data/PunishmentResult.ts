@@ -67,6 +67,13 @@ export type SuspendedPunishmentDetails = {
   prisonerName: string
 }
 
+export type PunishmentComment = {
+  id: number
+  comment: string
+  createdByUserId: string
+  dateTime: string
+}
+
 export function convertPrivilegeType(privilege: PrivilegeType) {
   switch (privilege) {
     case PrivilegeType.ASSOCIATION:

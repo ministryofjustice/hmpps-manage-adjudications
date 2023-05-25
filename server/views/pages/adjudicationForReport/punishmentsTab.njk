@@ -6,6 +6,7 @@
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+{% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
 
 {% block pageTitle %}
   Punishments and damages
@@ -76,6 +77,14 @@
   {% endif %}
 
   <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
+
+  <div class="govuk-grid-row">
+    {% if punishmentComments | length > 0 %}
+      <div class="punishment-comments-table">
+        {{ punishmentCommentTable(punishmentComments, redirectAfterRemoveUrl, currentUser, 'punishment-comments') }}
+      </div>
+    {% endif %}
+  </div>
 
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-bottom-4">
 

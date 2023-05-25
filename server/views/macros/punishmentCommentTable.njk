@@ -1,0 +1,64 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro punishmentCommentTable(punishmentComments, redirectAfterRemoveUrl, currentUser, dataType) %}
+  {% set rows = [] %}
+    {% for comment in punishmentComments %}
+    {% set dataIndex = loop.index %}
+
+    {% if comment.reporter == currentUser %}
+      {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+dataIndex+'" data-qa="change-punishment-comment-'+dataIndex+'" class="govuk-link">Change</a></p>' %}
+      {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+dataIndex+'" data-qa="remove-punishment-comment-'+dataIndex+'" class="govuk-link">Remove</a></p>' %}
+    {% else %}
+      {% set changeLinkHref = null %}
+      {% set removeLinkHref = null %}
+    {% endif %}
+
+    {% set changeLink = {
+      items: [
+        {
+          href: changeLinkHref,
+          text: "Change",
+          visuallyHiddenText: ' change punishment comment',
+          attributes: {"data-qa": "change-punishment-comment-link" }
+        }
+      ]
+    } %}
+
+    {% set removeLink = {
+      items: [
+        {
+          href: removeLinkHref,
+          text: "Remove",
+          visuallyHiddenText: ' remove punishment comment',
+          attributes: {"data-qa": "remove-punishment-comment-link" }
+        }
+      ]
+    } %}
+      {% set rows = (rows.push(
+        [
+          {
+            text: comment.date+'  '+comment.time+'  '+comment.name
+          },
+          {
+            text: comment.comment,
+            classes: "word-break"
+          },
+          {
+            html: changeLinkHref,
+            classes: "removeColumn"
+          },
+          {
+            html: removeLinkHref,
+            classes: "removeColumn"
+          }
+        ]
+      ), rows) %}
+    {% endfor %}
+
+    {% if rows.length %}
+      {{ govukTable({
+        rows: rows,
+        attributes: {"data-qa": dataType+"-table"}
+      }) }}
+    {% endif %}
+{% endmacro %}
