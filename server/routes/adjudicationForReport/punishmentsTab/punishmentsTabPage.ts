@@ -7,6 +7,7 @@ import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
 import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
 import UserService from '../../../services/userService'
+import logger from "../../../../logger";
 
 export enum PageRequestType {
   REPORTER,
@@ -74,23 +75,25 @@ export default class PunishmentsTabPage {
       await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     )
 
-    const dateTime = reportedAdjudication.punishmentComments[0]?.dateTime
-    const date = formatTimestampTo(dateTime, 'D MMMM YYYY')
-    const time = formatTimestampTo(dateTime, 'HH:mm')
+    const punishmentComments = await Promise.all(
+      reportedAdjudication.punishmentComments.map(async punishmentComment => {
+        const { dateTime } = punishmentComment
+        const date = formatTimestampTo(dateTime, 'D MMMM YYYY')
+        const time = formatTimestampTo(dateTime, 'HH:mm')
 
-    const userId = reportedAdjudication.punishmentComments[0].createdByUserId
-    const creator = await this.userService.getStaffNameFromUsername(userId, user)
-    const name = getFormattedOfficerName(creator.name)
+        const userId = punishmentComment.createdByUserId
+        const creator = await this.userService.getStaffNameFromUsername(userId, user)
+        const name = getFormattedOfficerName(creator.name)
 
-    const comment = {
-      id: reportedAdjudication.punishmentComments[0].id,
-      comment: reportedAdjudication.punishmentComments[0].comment,
-      date,
-      time,
-      name,
-    }
-
-    const punishmentComments = [comment]
+        return {
+          id: punishmentComment.id,
+          comment: punishmentComment.comment,
+          date,
+          time,
+          name,
+        }
+      })
+    )
 
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
