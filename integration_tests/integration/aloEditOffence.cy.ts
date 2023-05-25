@@ -6,6 +6,7 @@ import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarnin
 import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
 import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
 import DetailsOfOffence from '../pages/detailsOfOffence'
+import DeleteOffencePage from '../pages/deleteOffence'
 
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
 
@@ -176,7 +177,7 @@ const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
   },
 })
 
-context.skip('ALO edits offence - test 1', () => {
+context('ALO edits offence - test 1', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -467,7 +468,6 @@ context('ALO edits offence - test 2', () => {
     whatDidItInvolvePage.continue().click()
     const detailsOfOffencePage = new DetailsOfOffence()
     cy.url().should('include', '/aloEdit')
-
     detailsOfOffencePage
       .questionAnswerSectionQuestion(1, 1)
       .contains('What type of offence did John Smith incite another prisoner to commit?')
@@ -488,5 +488,109 @@ context('ALO edits offence - test 2', () => {
     detailsOfOffencePage.prisonRuleDesc().contains('Adult offences')
     detailsOfOffencePage.prisonRulePara().contains('Prison rule 51')
     detailsOfOffencePage.saveAndContinue().click()
+  })
+  it('delete path - yes', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(1524493))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.offenceDetailsChangeLink().click()
+    const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
+    warningPage.continueButton().click()
+    const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
+    cy.url().should('include', '&aloEdit=true')
+    ageOfPrisonerPage.submitButton().click()
+    const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
+    cy.url().should('include', '/edit/alo')
+    incidentRolePage.radioButtons().find('input[value="incited"]').check()
+    incidentRolePage.submitButton().click()
+    const whoWasIncitedPage = new OffenceCodeSelection('Who did John Smith incite?')
+    cy.url().should('include', '/edit/alo')
+    whoWasIncitedPage.radios().find('[value="internal"]').check()
+    whoWasIncitedPage.victimPrisonerSearchInput().type('James Jones')
+    whoWasIncitedPage.searchPrisoner().click()
+    cy.url().should('include', 'select-associated-prisoner?searchTerm=James%20Jones')
+    cy.visit(
+      `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(188, 'incited', '1')}?selectedPerson=T3356FU`
+    )
+    const whatTypeOfOffencePage = new OffenceCodeSelection(
+      'What type of offence did John Smith incite another prisoner to commit?'
+    )
+    cy.url().should('include', '/aloEdit')
+    whatTypeOfOffencePage.radios().find('[value="1-4"]').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidItInvolvePage = new OffenceCodeSelection('What did the incident involve?')
+    cy.url().should('include', '/aloEdit')
+    whatDidItInvolvePage.radios().find('[value="1-4-3"]').check()
+    cy.task('stubGetDraftAdjudication', {
+      id: 188,
+      response: editedDraftAdjudicationTestTwo,
+    })
+    whatDidItInvolvePage.continue().click()
+    const detailsOfOffencePage = new DetailsOfOffence()
+    cy.url().should('include', '/aloEdit')
+    detailsOfOffencePage.deleteLink(1).click()
+    cy.url().should('include', 'aloEdit=true')
+    const deleteOffencePage = new DeleteOffencePage()
+    deleteOffencePage
+      .questionAnswerSectionQuestion(1, 1)
+      .contains('What type of offence did John Smith incite another prisoner to commit?')
+    deleteOffencePage.questionAnswerSectionAnswer(1, 1).contains('Sets fire to, or damages, the prison or any property')
+    deleteOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    deleteOffencePage.questionAnswerSectionAnswer(1, 2).contains('Displays or draws abusive or racist images')
+    deleteOffencePage.yesRadio().click()
+    deleteOffencePage.confirm().click()
+    cy.url().should('include', '/aloEdit')
+    detailsOfOffencePage.continue().click()
+    cy.url().should('include', '&aloEdit=true')
+  })
+  it.only('delete path - no', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review(1524493))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.offenceDetailsChangeLink().click()
+    const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
+    warningPage.continueButton().click()
+    const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
+    cy.url().should('include', '&aloEdit=true')
+    ageOfPrisonerPage.submitButton().click()
+    const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
+    cy.url().should('include', '/edit/alo')
+    incidentRolePage.radioButtons().find('input[value="incited"]').check()
+    incidentRolePage.submitButton().click()
+    const whoWasIncitedPage = new OffenceCodeSelection('Who did John Smith incite?')
+    cy.url().should('include', '/edit/alo')
+    whoWasIncitedPage.radios().find('[value="internal"]').check()
+    whoWasIncitedPage.victimPrisonerSearchInput().type('James Jones')
+    whoWasIncitedPage.searchPrisoner().click()
+    cy.url().should('include', 'select-associated-prisoner?searchTerm=James%20Jones')
+    cy.visit(
+      `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(188, 'incited', '1')}?selectedPerson=T3356FU`
+    )
+    const whatTypeOfOffencePage = new OffenceCodeSelection(
+      'What type of offence did John Smith incite another prisoner to commit?'
+    )
+    cy.url().should('include', '/aloEdit')
+    whatTypeOfOffencePage.radios().find('[value="1-4"]').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidItInvolvePage = new OffenceCodeSelection('What did the incident involve?')
+    cy.url().should('include', '/aloEdit')
+    whatDidItInvolvePage.radios().find('[value="1-4-3"]').check()
+    cy.task('stubGetDraftAdjudication', {
+      id: 188,
+      response: editedDraftAdjudicationTestTwo,
+    })
+    whatDidItInvolvePage.continue().click()
+    const detailsOfOffencePage = new DetailsOfOffence()
+    cy.url().should('include', '/aloEdit')
+    detailsOfOffencePage.deleteLink(1).click()
+    cy.url().should('include', 'aloEdit=true')
+    const deleteOffencePage = new DeleteOffencePage()
+    deleteOffencePage
+      .questionAnswerSectionQuestion(1, 1)
+      .contains('What type of offence did John Smith incite another prisoner to commit?')
+    deleteOffencePage.questionAnswerSectionAnswer(1, 1).contains('Sets fire to, or damages, the prison or any property')
+    deleteOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
+    deleteOffencePage.questionAnswerSectionAnswer(1, 2).contains('Displays or draws abusive or racist images')
+    deleteOffencePage.noRadio().click()
+    deleteOffencePage.confirm().click()
+    cy.url().should('include', '/aloEdit')
   })
 })

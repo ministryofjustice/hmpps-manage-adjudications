@@ -92,7 +92,12 @@ export default class DetailsOfOffencePage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
     if (req.body.addFirstOffence) {
-      return this.redirectToInitialOffenceSelectionPage(res, adjudicationNumber, isReportedAdjudication)
+      return this.redirectToInitialOffenceSelectionPage(
+        res,
+        adjudicationNumber,
+        isReportedAdjudication,
+        this.pageOptions.isAloEdit()
+      )
     }
 
     if (this.pageOptions.displayApiData()) {
@@ -134,7 +139,15 @@ export default class DetailsOfOffencePage {
       : {}
   }
 
-  redirectToInitialOffenceSelectionPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
+  redirectToInitialOffenceSelectionPage = (
+    res: Response,
+    adjudicationNumber: number,
+    isReportedDraft: boolean,
+    isAloEdit: boolean
+  ) => {
+    if (isAloEdit) {
+      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(adjudicationNumber))
+    }
     if (isReportedDraft) {
       return res.redirect(adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(adjudicationNumber))
     }
