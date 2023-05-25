@@ -263,7 +263,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
 
       awardPunishmentsPage.editPunishment().first().click()
 
-      punishmentPage.punishment().find('input[value="REMOVAL_WING"]').should('be.checked')
+      punishmentPage.punishment().find('input[value="PROSPECTIVE_DAYS"]').should('be.checked')
 
       punishmentPage.submitButton().click()
 
