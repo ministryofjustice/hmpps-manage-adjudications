@@ -37,19 +37,21 @@
       {% set rows = (rows.push(
         [
           {
-            text: comment.date+'  '+comment.time+'  '+comment.name
+            text: comment.date+' '+comment.time+' '+comment.name,
+            text2: comment.name,
+            classes: "govuk-table__cell cellWidth-140 govuk-table__cell--multiline"
           },
           {
             text: comment.comment,
-            classes: "word-break"
+            classes: "govuk-table__cell--full-width"
           },
           {
             html: changeLinkHref,
-            classes: "removeColumn"
+            classes: "linkUpdate"
           },
           {
             html: removeLinkHref,
-            classes: "removeColumn"
+            classes: "linkRemove"
           }
         ]
       ), rows) %}
