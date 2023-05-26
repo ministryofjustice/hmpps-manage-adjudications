@@ -8,6 +8,7 @@ import { flattenPunishments } from '../../../data/PunishmentResult'
 import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
 import UserService from '../../../services/userService'
 import logger from "../../../../logger";
+import urlGenerator from "../../../utils/urlGenerator";
 
 export enum PageRequestType {
   REPORTER,
@@ -74,35 +75,6 @@ export default class PunishmentsTabPage {
     const punishments = flattenPunishments(
       await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     )
-    /*
-    const names: Map<string, string> = new Map<string, string>()
-    const punishmentComments = await Promise.all(
-      reportedAdjudication.punishmentComments.map(async punishmentComment => {
-        const { dateTime } = punishmentComment
-        const date = formatTimestampTo(dateTime, 'D MMMM YYYY')
-        const time = formatTimestampTo(dateTime, 'HH:mm')
-
-        const userId = punishmentComment.createdByUserId
-        let name
-        if (names.has(userId)) {
-          name = names.get(userId)
-        } else {
-          const creator = await this.userService.getStaffNameFromUsername(userId, user)
-          name = getFormattedOfficerName(creator.name)
-          logger.info(`    name!!! ${name}`)
-          names.set(userId, name)
-        }
-
-        return {
-          id: punishmentComment.id,
-          comment: punishmentComment.comment,
-          date,
-          time,
-          name,
-        }
-      })
-    )
-    */
 
     const usernames = new Set(reportedAdjudication.punishmentComments.map(it => it.createdByUserId))
     const users = await Promise.all(
@@ -127,6 +99,8 @@ export default class PunishmentsTabPage {
         date,
         time,
         name,
+        changeLink: urlGenerator.punishmentComment.urls.edit(adjudicationNumber, punishmentComment.id),
+        removeLink: urlGenerator.punishmentComment.urls.delete(adjudicationNumber, punishmentComment.id),
       }
       punishmentComments.push(comment)
     }

@@ -17,4 +17,8 @@ export default class PunishmentCommentRoute {
   submit = async (req: Request, res: Response): Promise<void> => {
     await this.page.submit(req, res)
   }
+
+  delete = async (req: Request, res: Response): Promise<void> => {
+    await this.page.delete(req, res)
+  }
 }

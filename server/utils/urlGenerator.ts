@@ -626,6 +626,7 @@ const adjudicationUrls = {
       start: (adjudicationNumber: number) => `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}`,
       submittedEdit: (adjudicationNumber: number) =>
         `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}/edit`,
+
     },
   },
   activateSuspendedPunishments: {
@@ -642,11 +643,15 @@ const adjudicationUrls = {
     root: '/punishment-comment',
     matchers: {
       add: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      edit: '/:adjudicationNumber/edit/:id',
+      delete: '/:adjudicationNumber/delete/:id',
     },
     urls: {
       add: (adjudicationNumber: number) => `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}/edit`,
+      edit: (adjudicationNumber: number, id: number) =>
+        `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}/edit/${id}`,
+      delete: (adjudicationNumber: number, id: number) =>
+        `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}/delete/${id}`,
     },
   },
   manuallyActivateSuspendedPunishment: {

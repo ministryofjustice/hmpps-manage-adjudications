@@ -127,4 +127,12 @@ export default class PunishmentsService {
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).createPunishmentComment(adjudicationNumber, punishmentComment)
   }
+
+  async removePunishmentComment(
+    adjudicationNumber: number,
+    id: number,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).removePunishmentComment(adjudicationNumber, id)
+  }
 }

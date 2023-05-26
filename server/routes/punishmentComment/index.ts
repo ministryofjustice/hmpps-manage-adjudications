@@ -23,6 +23,7 @@ export default function PunishmentCommentRoutes({
 
   get(adjudicationUrls.punishmentComment.matchers.add, punishmentCommentRoute.view)
   post(adjudicationUrls.punishmentComment.matchers.add, punishmentCommentRoute.submit)
+  post(adjudicationUrls.punishmentComment.matchers.delete, punishmentCommentRoute.delete)
 
   return router
 }
