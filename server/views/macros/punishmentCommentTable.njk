@@ -2,12 +2,12 @@
 
 {% macro punishmentCommentTable(punishmentComments, redirectAfterRemoveUrl, currentUser, dataType) %}
   {% set rows = [] %}
-    {% for comment in punishmentComments %}
-    {% set dataIndex = loop.index %}
+  {% for comment in punishmentComments %}
+    {% set commentId = comment.id %}
 
     {% if comment.reporter == currentUser %}
-      {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+dataIndex+'" data-qa="change-punishment-comment-'+dataIndex+'" class="govuk-link">Change</a></p>' %}
-      {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+dataIndex+'" data-qa="remove-punishment-comment-'+dataIndex+'" class="govuk-link">Remove</a></p>' %}
+      {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.changeLink+'" data-qa="change-punishment-comment-'+commentId+'" class="govuk-link">Change</a></p>' %}
+      {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.removeLink+'" data-qa="remove-punishment-comment-'+commentId+'" class="govuk-link">Remove</a></p>' %}
     {% else %}
       {% set changeLinkHref = null %}
       {% set removeLinkHref = null %}
@@ -16,10 +16,10 @@
     {% set changeLink = {
       items: [
         {
-          href: changeLinkHref,
+          href: comment.changeLink,
           text: "Change",
-          visuallyHiddenText: ' change punishment comment',
-          attributes: {"data-qa": "change-punishment-comment-link" }
+          visuallyHiddenText: ' change punishment comment '+commentId,
+          attributes: {"data-qa": "change-punishment-comment-link-"+commentId }
         }
       ]
     } %}
@@ -27,40 +27,39 @@
     {% set removeLink = {
       items: [
         {
-          href: removeLinkHref,
+          href: comment.removeLink,
           text: "Remove",
-          visuallyHiddenText: ' remove punishment comment',
-          attributes: {"data-qa": "remove-punishment-comment-link" }
+          visuallyHiddenText: ' remove punishment comment '+commentId,
+          attributes: {"data-qa": "remove-punishment-comment-link-"+commentId }
         }
       ]
     } %}
-      {% set rows = (rows.push(
-        [
-          {
-            text: comment.date+' '+comment.time+' '+comment.name,
-            text2: comment.name,
-            classes: "govuk-table__cell cellWidth-140 govuk-table__cell--multiline"
-          },
-          {
-            text: comment.comment,
-            classes: "govuk-table__cell--full-width"
-          },
-          {
-            html: changeLinkHref,
-            classes: "linkUpdate"
-          },
-          {
-            html: removeLinkHref,
-            classes: "linkRemove"
-          }
-        ]
-      ), rows) %}
-    {% endfor %}
+    {% set rows = (rows.push(
+      [
+        {
+          text: comment.date+' '+comment.time+' '+comment.name,
+          classes: "govuk-table__cell cellWidth-140 govuk-table__cell--multiline"
+        },
+        {
+          text: comment.comment,
+          classes: "govuk-table__cell--full-width"
+        },
+        {
+          html: changeLinkHref,
+          classes: "linkUpdate"
+        },
+        {
+          html: removeLinkHref,
+          classes: "linkRemove"
+        }
+      ]
+    ), rows) %}
+  {% endfor %}
 
-    {% if rows.length %}
-      {{ govukTable({
-        rows: rows,
-        attributes: {"data-qa": dataType+"-table"}
-      }) }}
-    {% endif %}
+  {% if rows.length %}
+    {{ govukTable({
+      rows: rows,
+      attributes: {"data-qa": dataType+"-table"}
+    }) }}
+  {% endif %}
 {% endmacro %}
