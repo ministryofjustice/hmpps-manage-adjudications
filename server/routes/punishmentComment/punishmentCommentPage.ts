@@ -39,11 +39,12 @@ export default class PunishmentCommentPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { error } = pageData
+    const { error, punishmentComment } = pageData
 
     return res.render(`pages/punishmentComment.njk`, {
       cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
       errors: error ? [error] : [],
+      punishmentComment,
     })
   }
 
@@ -52,6 +53,22 @@ export default class PunishmentCommentPage {
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
+    }
+
+    if (this.pageOptions.isEdit()) {
+      const { user } = res.locals
+      const adjudicationNumber = Number(req.params.adjudicationNumber)
+      const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
+
+      const id = Number(req.params.id)
+      const punishmentComment = punishmentComments.find(comment => comment.id === id)
+      if (!punishmentComment) {
+        return res.render('pages/notFound.njk', {
+          url: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+        })
+      }
+
+      return this.renderView(req, res, { punishmentComment: punishmentComment.comment })
     }
 
     return this.renderView(req, res, {})
@@ -68,7 +85,12 @@ export default class PunishmentCommentPage {
       return this.renderView(req, res, { error, punishmentComment })
     }
 
-    await this.punishmentsService.createPunishmentComment(adjudicationNumber, punishmentComment, user)
+    if (this.pageOptions.isEdit()) {
+      const id = Number(req.params.id)
+      await this.punishmentsService.editPunishmentComment(adjudicationNumber, id, punishmentComment, user)
+    } else {
+      await this.punishmentsService.createPunishmentComment(adjudicationNumber, punishmentComment, user)
+    }
 
     const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
     return res.redirect(

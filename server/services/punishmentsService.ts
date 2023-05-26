@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import {
+  PunishmentComment,
   PunishmentData,
   PunishmentDataWithSchedule,
   SuspendedPunishmentDetails,
@@ -98,6 +99,13 @@ export default class PunishmentsService {
     return reportedAdjudication.punishments
   }
 
+  async getPunishmentCommentsFromServer(adjudicationNumber: number, user: User): Promise<PunishmentComment[]> {
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
+      adjudicationNumber
+    )
+    return reportedAdjudication.punishmentComments
+  }
+
   async getSuspendedPunishmentDetails(adjudicationNumber: number, user: User): Promise<SuspendedPunishmentDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
@@ -126,6 +134,15 @@ export default class PunishmentsService {
     user: User
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).createPunishmentComment(adjudicationNumber, punishmentComment)
+  }
+
+  async editPunishmentComment(
+    adjudicationNumber: number,
+    id: number,
+    punishmentComment: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).amendPunishmentComment(adjudicationNumber, id, punishmentComment)
   }
 
   async removePunishmentComment(

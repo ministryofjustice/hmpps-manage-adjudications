@@ -570,6 +570,17 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async amendPunishmentComment(
+    adjudicationNumber: number,
+    id: number,
+    punishmentComment: string
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+      data: { id, comment: punishmentComment },
+    })
+  }
+
   async removePunishmentComment(adjudicationNumber: number, id: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${adjudicationNumber}/punishments/comment/${id}`,

@@ -6,6 +6,7 @@ import PunishmentCommentRoute from './punishmentComment'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PunishmentsService from '../../services/punishmentsService'
+import PunishmentCommentEditRoute from './punishmentCommentEdit'
 
 export default function PunishmentCommentRoutes({
   userService,
@@ -17,12 +18,15 @@ export default function PunishmentCommentRoutes({
   const router = express.Router()
 
   const punishmentCommentRoute = new PunishmentCommentRoute(userService, punishmentsService)
+  const punishmentCommentEditRoute = new PunishmentCommentEditRoute(userService, punishmentsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.punishmentComment.matchers.add, punishmentCommentRoute.view)
   post(adjudicationUrls.punishmentComment.matchers.add, punishmentCommentRoute.submit)
+  get(adjudicationUrls.punishmentComment.matchers.edit, punishmentCommentEditRoute.view)
+  post(adjudicationUrls.punishmentComment.matchers.edit, punishmentCommentEditRoute.submit)
   get(adjudicationUrls.punishmentComment.matchers.delete, punishmentCommentRoute.delete)
 
   return router
