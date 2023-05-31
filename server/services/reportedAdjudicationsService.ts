@@ -138,9 +138,11 @@ export default class ReportedAdjudicationsService {
     const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const [prisoner, secondaryLanguages, prisonerNeurodiversities] = await Promise.all([
-      new PrisonApiClient(token).getPrisonerDetails(adjudicationData.reportedAdjudication.prisonerNumber),
-      new PrisonApiClient(token).getSecondaryLanguages(adjudicationData.reportedAdjudication.bookingId),
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
+      adjudicationData.reportedAdjudication.prisonerNumber
+    )
+    const [secondaryLanguages, prisonerNeurodiversities] = await Promise.all([
+      new PrisonApiClient(token).getSecondaryLanguages(prisoner.bookingId),
       this.curiousApiService.getNeurodiversitiesForReport(adjudicationData.reportedAdjudication.prisonerNumber, token),
     ])
 
