@@ -18,7 +18,6 @@ import { PunishmentDataWithSchedule } from './PunishmentResult'
 export type ReportedAdjudication = {
   adjudicationNumber: number
   prisonerNumber: string
-  bookingId: number
   createdDateTime: string
   createdByUserId: string
   incidentDetails: IncidentDetails

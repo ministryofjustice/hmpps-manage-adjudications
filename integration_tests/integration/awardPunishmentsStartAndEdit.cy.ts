@@ -33,7 +33,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
             locationId: 25538,
             offenceDetails: { offenceCode: 1001 },
           }),
-          bookingId: 123,
         },
       },
     })

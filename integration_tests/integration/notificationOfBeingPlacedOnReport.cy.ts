@@ -27,7 +27,6 @@ context('Prisoner has been placed on report', () => {
             locationId: 25538,
             offenceDetails: { offenceCode: 1001 },
           }),
-          bookingId: 123,
         },
       },
     })

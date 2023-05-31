@@ -30,7 +30,6 @@ context('Print a copy of this report', () => {
             handoverDeadline: '2020-12-08T10:00:00',
             locationId: 25538,
           }),
-          bookingId: 123,
         },
       },
     })

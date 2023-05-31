@@ -101,7 +101,6 @@ export default class TestData {
       isYouthOffender,
       createdDateTime: '2022-12-09T10:30:00',
       createdByUserId,
-      bookingId: 1,
       reviewedByUserId: 'USER2',
       damages,
       evidence,
@@ -464,6 +463,7 @@ export default class TestData {
       friendlyName: `${firstName} ${lastName}`,
       prisonerNumber: offenderNo,
       categoryCode: 'A',
+      bookingId: 123,
       currentLocation: assignedLivingUnitDesc,
       assignedLivingUnit: {
         agencyId: 'MDI',

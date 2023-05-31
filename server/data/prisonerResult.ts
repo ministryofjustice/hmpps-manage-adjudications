@@ -37,5 +37,8 @@ export default class PrisonerResult {
   dateOfBirth: string
 
   @Expose()
+  bookingId: number
+
+  @Expose()
   physicalAttributes: PhysicalAttributes
 }
