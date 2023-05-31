@@ -10,6 +10,8 @@ import { OffenceData } from '../offenceCodeDecisions/offenceData'
 export enum PageRequestType {
   OFFENCES_FROM_API,
   OFFENCES_FROM_SESSION,
+  OFFENCES_FROM_SESSION_ALO_EDIT,
+  ALO_ADD,
 }
 
 class PageOptions {
@@ -17,6 +19,14 @@ class PageOptions {
 
   displaySessionData(): boolean {
     return this.pageType === PageRequestType.OFFENCES_FROM_SESSION
+  }
+
+  displayApiData(): boolean {
+    return this.pageType === PageRequestType.OFFENCES_FROM_API
+  }
+
+  isAloEdit(): boolean {
+    return this.pageType === PageRequestType.OFFENCES_FROM_SESSION_ALO_EDIT
   }
 }
 
@@ -71,6 +81,8 @@ export default class DetailsOfOffencePage {
       incidentRole,
       isYouthOffender,
       offenceData: offence,
+      deleteOffenceLinkHidden: this.pageOptions.isAloEdit(),
+      deleteOffenceHref: adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offence),
     })
   }
 
@@ -79,10 +91,15 @@ export default class DetailsOfOffencePage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
     if (req.body.addFirstOffence) {
-      return this.redirectToInitialOffenceSelectionPage(res, adjudicationNumber, isReportedAdjudication)
+      return this.redirectToInitialOffenceSelectionPage(
+        res,
+        adjudicationNumber,
+        isReportedAdjudication,
+        this.pageOptions.isAloEdit()
+      )
     }
 
-    if (!this.pageOptions.displaySessionData()) {
+    if (this.pageOptions.displayApiData()) {
       return this.redirectToNextPage(res, adjudicationNumber)
     }
     const offenceData: OffenceData = { ...req.query }
@@ -93,12 +110,21 @@ export default class DetailsOfOffencePage {
       victimStaffUsername: offenceData?.victimStaffUsername,
       offenceCode: Number(offenceData?.offenceCode),
     }
+
+    if (this.pageOptions.isAloEdit()) {
+      const adjudicationReport = await this.placeOnReportService.aloAmendOffenceDetails(
+        adjudicationNumber,
+        offenceDetailsToSave,
+        user
+      )
+      return res.redirect(adjudicationUrls.prisonerReport.urls.review(adjudicationReport?.adjudicationNumber))
+    }
     await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetailsToSave, user)
     return this.redirectToNextPage(res, adjudicationNumber)
   }
 
   getOffences = (req: Request, draftAdjudication: DraftAdjudication): OffenceData => {
-    if (this.pageOptions.displaySessionData()) {
+    if (this.pageOptions.displaySessionData() || this.pageOptions.isAloEdit()) {
       return { ...req.query }
     }
     const { offenceDetails } = draftAdjudication
@@ -112,7 +138,15 @@ export default class DetailsOfOffencePage {
       : {}
   }
 
-  redirectToInitialOffenceSelectionPage = (res: Response, adjudicationNumber: number, isReportedDraft: boolean) => {
+  redirectToInitialOffenceSelectionPage = (
+    res: Response,
+    adjudicationNumber: number,
+    isReportedDraft: boolean,
+    isAloEdit: boolean
+  ) => {
+    if (isAloEdit) {
+      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(adjudicationNumber))
+    }
     if (isReportedDraft) {
       return res.redirect(adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(adjudicationNumber))
     }

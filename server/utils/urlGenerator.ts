@@ -10,6 +10,9 @@ const adjudicationUrls = {
       question: (incidentRole: string, questionId: string) =>
         `/:adjudicationNumber/:incidentRole(${incidentRole})/:questionId(${questionId})`,
       start: (incidentRole: string) => `/:adjudicationNumber/:incidentRole(${incidentRole})`,
+      aloEditStart: (incidentRole: string) => `/:adjudicationNumber/aloEdit/:incidentRole(${incidentRole})`,
+      aloEditQuestion: (incidentRole: string, questionId: string) =>
+        `/:adjudicationNumber/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
     },
     urls: {
       question: (adjudicationNumber: number, incidentRole: string, questionUrl: string) => {
@@ -17,6 +20,11 @@ const adjudicationUrls = {
       },
       start: (adjudicationNumber: number, incidentRole: string) =>
         `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/${incidentRole}`,
+      aloEditStart: (adjudicationNumber: number, incidentRole: string) =>
+        `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/aloEdit/${incidentRole}`,
+      aloEditQuestion: (adjudicationNumber: number, incidentRole: string, questionUrl: string) => {
+        return `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/aloEdit/${incidentRole}/${questionUrl}`
+      },
     },
   },
   detailsOfOffence: {
@@ -25,15 +33,20 @@ const adjudicationUrls = {
       start: '/:adjudicationNumber',
       modified: '/:adjudicationNumber/modified',
       add: '/:adjudicationNumber/add',
+      aloAdd: '/:adjudicationNumber/alo-add',
       delete: '/:adjudicationNumber/delete',
+      aloEdit: '/:adjudicationNumber/aloEdit',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}`,
       modified: (adjudicationNumber: number) =>
         `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/modified`,
       add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/add`,
+      aloAdd: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/alo-add`,
       delete: (adjudicationNumber: number, offenceData: OffenceData) =>
         `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete?offenceCode=${offenceData?.offenceCode}&victimOtherPersonsName=${offenceData?.victimOtherPersonsName}&victimPrisonersNumber=${offenceData?.victimPrisonersNumber}&victimStaffUsername=${offenceData?.victimStaffUsername}`,
+      aloEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/aloEdit`,
     },
   },
   detailsOfDamages: {
@@ -152,11 +165,14 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       submittedEdit: '/:adjudicationNumber/submitted/edit',
+      aloSubmittedEdit: '/:adjudicationNumber/submitted/edit/alo',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}`,
       submittedEdit: (adjudicationNumber: number) =>
         `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}/submitted/edit`,
+      aloSubmittedEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}/submitted/edit/alo`,
     },
   },
   incidentAssociate: {
@@ -164,12 +180,15 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber/:roleCode',
       submittedEdit: '/:adjudicationNumber/:roleCode/submitted/edit',
+      aloEdit: '/:adjudicationNumber/:roleCode/submitted/edit/alo',
     },
     urls: {
       start: (adjudicationNumber: number, roleCode: string) =>
         `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}`,
       submittedEdit: (adjudicationNumber: number, roleCode: string) =>
         `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit`,
+      aloEdit: (adjudicationNumber: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit/alo`,
     },
   },
   incidentStatement: {
@@ -319,6 +338,8 @@ const adjudicationUrls = {
         `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit`,
       submittedEditWithResettingOffences: (adjudicationNumber: number) =>
         `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true`,
+      aloSubmittedEditWithResettingOffences: (adjudicationNumber: number) =>
+        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true&aloEdit=true`,
     },
   },
   hearingDetails: {
@@ -659,6 +680,15 @@ const adjudicationUrls = {
         `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/existing`,
       manual: (adjudicationNumber: number) =>
         `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/manual`,
+    },
+  },
+  reviewerEditOffenceWarning: {
+    root: '/edit-offence-warning',
+    matchers: {
+      edit: '/:adjudicationNumber',
+    },
+    urls: {
+      edit: (adjudicationNumber: number) => `${adjudicationUrls.reviewerEditOffenceWarning.root}/${adjudicationNumber}`,
     },
   },
   homepage: {

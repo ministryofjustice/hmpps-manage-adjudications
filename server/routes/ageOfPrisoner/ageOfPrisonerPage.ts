@@ -12,6 +12,7 @@ import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 type PageData = {
   error?: FormError
   whichRuleChosen?: string
+  aloEdit?: boolean
 }
 
 export enum PageRequestType {
@@ -27,8 +28,9 @@ class PageOptions {
   }
 }
 
-const getRedirectUrls = (pageOptions: PageOptions, adjudicationNumber: number) => {
+const getRedirectUrls = (pageOptions: PageOptions, adjudicationNumber: number, isAloEdit: boolean) => {
   if (pageOptions.isPreviouslySubmitted()) {
+    if (isAloEdit) return adjudicationUrls.incidentRole.urls.aloSubmittedEdit(adjudicationNumber)
     return adjudicationUrls.incidentRole.urls.submittedEdit(adjudicationNumber)
   }
   return adjudicationUrls.incidentRole.urls.start(adjudicationNumber)
@@ -55,6 +57,7 @@ export default class AgeOfPrisonerPage {
   private renderView = async (res: Response, idValue: number, pageData: PageData): Promise<void> => {
     const { error } = pageData
     const { user } = res.locals
+    const aloEditingOffence = pageData.aloEdit as unknown as boolean
 
     const [prisoner, adjudicationDetails] = await Promise.all([
       this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
@@ -65,11 +68,15 @@ export default class AgeOfPrisonerPage {
       calculateAge(prisoner.dateOfBirth, adjudicationDetails.draftAdjudication.incidentDetails.dateTimeOfIncident) ||
       null
 
+    const cancelHref = aloEditingOffence
+      ? adjudicationUrls.prisonerReport.urls.review(adjudicationDetails.draftAdjudication.adjudicationNumber)
+      : adjudicationUrls.taskList.urls.start(adjudicationDetails.draftAdjudication.id)
+
     return res.render(`pages/ageOfPrisoner`, {
       errors: error ? [error] : [],
       ageOfPrisoner,
       whichRuleChosen: getPreviouslyChosenRule(adjudicationDetails.draftAdjudication),
-      cancelButtonHref: adjudicationUrls.taskList.urls.start(adjudicationDetails.draftAdjudication.id),
+      cancelButtonHref: cancelHref,
     })
   }
 
@@ -80,22 +87,25 @@ export default class AgeOfPrisonerPage {
     } else {
       delete req.session.forceOffenceSelection
     }
-    return this.renderView(res, adjudicationNumber, {})
+    return this.renderView(res, adjudicationNumber, {
+      aloEdit: req.query.aloEdit as unknown as boolean,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { whichRuleChosen, originalRuleSelection } = req.body
     const idValue = Number(req.params.adjudicationNumber)
+    const aloEdit = req.query.aloEdit as unknown as boolean
 
     const error = validateForm({ whichRuleChosen })
-    if (error) return this.renderView(res, idValue, { error, whichRuleChosen })
+    if (error) return this.renderView(res, idValue, { error, whichRuleChosen, aloEdit })
 
     const applicableRuleChanged = originalRuleSelection !== whichRuleChosen
 
     try {
       await this.placeOnReportService.addDraftYouthOffenderStatus(idValue, whichRuleChosen, applicableRuleChanged, user)
-      const redirectUrl = getRedirectUrls(this.pageOptions, idValue)
+      const redirectUrl = getRedirectUrls(this.pageOptions, idValue, aloEdit as boolean)
       return res.redirect(redirectUrl)
     } catch (postError) {
       logger.error(`Failed to post prison rule for draft adjudication: ${postError}`)

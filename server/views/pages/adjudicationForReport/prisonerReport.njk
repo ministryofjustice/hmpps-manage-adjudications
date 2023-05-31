@@ -14,22 +14,22 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
-    {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, punishmentsHref, reviewData.reviewStatus !== 'Rejected') }}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, punishmentsHref, reviewData.reviewStatus !== 'Rejected') }}
 
-    {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
+  {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
   <div class="prisoner-report-top-bar flex-center">
     <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
       <span class="govuk-!-font-weight-bold">Report number:</span>
       {{ reportNo }}</p>
     {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
   </div>
-  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, null) }}
+  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, null, review) }}
   {% if review %}
     {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}
   {% endif %}
   {% if not review %}
     <p class="govuk-body">
-      <a href={{ returnLinkURL }} class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
+      <a href="{{ returnLinkURL }}" class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
     </p>
   {% endif %}
 {% endblock %}

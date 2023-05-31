@@ -5,7 +5,7 @@ import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 
-export default class offenceCodeDecisionsRoutes {
+export default class offenceCodeDecisionsAloEditRoutes {
   page: OffenceCodeDecisionsPage
 
   constructor({
@@ -20,7 +20,7 @@ export default class offenceCodeDecisionsRoutes {
     prisonerSearchService: PrisonerSearchService
   }) {
     this.page = new OffenceCodeDecisionsPage(
-      PageRequestType.REPORTER,
+      PageRequestType.EDIT_ALO,
       placeOnReportService,
       userService,
       decisionTreeService,

@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
 {% set rejected %}
 {{ govukSelect({
 					id: 'rejectedReasonId',
@@ -73,7 +74,7 @@
                  ] | toSelect('value', 'text', pageData.reason),
 					classes: '',
                     attributes: {
-				   	'data-qa': "rejected-reason"
+				   	'data-qa': "returned-reason"
 				  },
 
 					errorMessage: 'returnedReasonId' | findError(pageData.errors)
@@ -94,6 +95,69 @@
 				errorMessage: "returnedDetails" | findError(pageData.errors)
 				}) }}
 {% endset -%}
+{% set accepted %}
+{{ govukTextarea({
+				name: "acceptedDetails",
+				id: "acceptedDetails",
+        rows: '8',
+				value: pageData.details,
+				label: {
+					text: "Use this box if you need to tell the reporting officer anything. This could be changes you've had to make before accepting",
+					classes: "govuk-!-margin-bottom-2"
+				},
+				classes: "govuk-!-width-three-quarters",
+				attributes: {
+					'data-qa': "accepted-details-input"
+				},
+				errorMessage: "acceptedDetails" | findError(pageData.errors)
+				}) }}
+{% endset -%}
+
+{% if pageData.returned %}
+  {% set items = [
+    {
+      value: "accepted",
+      text: "Accept it",
+      checked: pageData.status === "ACCEPTED",
+      conditional: {
+        html: accepted
+      }
+    }, {
+      value: "rejected",
+      text: "Reject It",
+      checked: pageData.status === "REJECTED",
+      conditional: {
+        html: rejected
+      }
+    }
+  ] %}
+{% else %}
+  {% set items = [
+    {
+      value: "accepted",
+      text: "Accept it",
+      checked: pageData.status === "ACCEPTED",
+      conditional: {
+        html: accepted
+      }
+    }, {
+      value: "returned",
+      text: "Return it to the reporting officer for changes to be made",
+      checked: pageData.status === "RETURNED",
+      conditional: {
+        html: returned
+      }
+    }, {
+      value: "rejected",
+      text: "Reject It",
+      checked: pageData.status === "REJECTED",
+      conditional: {
+        html: rejected
+      }
+    }
+  ] %}
+{% endif %}
+
 {{ govukRadios({
     errorMessage: "currentStatusSelected" | findError(pageData.errors),
     idPrefix: 'currentStatusSelected',
@@ -107,27 +171,5 @@
         classes: "govuk-fieldset__legend--s"
         }
     },
-    items: [
-    {
-      value: "accepted",
-      text: "Accept it",
-      checked: pageData.status === "ACCEPTED"
-    },
-    {
-      value: "returned",
-      text: "Return it to the reporting officer for changes to be made",
-      checked: pageData.status === "RETURNED",
-      conditional: {
-          html: returned
-      }
-    },
-    {
-      value: "rejected",
-      text: "Reject It",
-      checked: pageData.status === "REJECTED",
-      conditional: {
-         html: rejected
-      }
-    }
-  ]
+    items: items
     }) }}

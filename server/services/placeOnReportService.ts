@@ -424,6 +424,11 @@ export default class PlaceOnReportService {
     return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
   }
 
+  async aloAmendOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails, user: User) {
+    const client = new ManageAdjudicationsClient(user)
+    return client.aloAmendOffenceDetails(adjudicationNumber, offenceDetails)
+  }
+
   async saveAssociatedPrisoner(adjudicationNumber: number, associatedPrisoner: AssociatedPrisoner, user: User) {
     const client = new ManageAdjudicationsClient(user)
     return client.saveAssociatedPrisoner(adjudicationNumber, associatedPrisoner)

@@ -89,7 +89,6 @@ export default class DecisionTreeService {
     const offenceCode = Number(offenceData.offenceCode)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum, prisonerView)
-
     return {
       questionsAndAnswers,
       incidentRule: incidentRole.offenceRule,

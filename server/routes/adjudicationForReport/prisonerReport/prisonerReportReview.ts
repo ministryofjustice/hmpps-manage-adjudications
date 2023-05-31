@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
 import DecisionTreeService from '../../../services/decisionTreeService'
 import PrisonerReportPage, { PageRequestType } from './prisonerReportPage'
@@ -13,16 +12,10 @@ export default class prisonerReportReviewRoutes {
 
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly locationService: LocationService,
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService
   ) {
-    this.page = new PrisonerReportPage(
-      PageRequestType.REVIEWER,
-      reportedAdjudicationsService,
-      locationService,
-      decisionTreeService
-    )
+    this.page = new PrisonerReportPage(PageRequestType.REVIEWER, reportedAdjudicationsService, decisionTreeService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

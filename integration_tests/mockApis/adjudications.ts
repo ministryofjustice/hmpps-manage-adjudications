@@ -351,6 +351,27 @@ const stubSaveOffenceDetails = ({
     },
   })
 
+const stubAloAmendOffenceDetails = ({
+  adjudicationNumber,
+  response = {},
+}: {
+  adjudicationNumber: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/draft-adjudications/${adjudicationNumber}/alo-offence-details`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubSaveEvidenceDetails = ({
   adjudicationNumber,
   response = {},
@@ -1029,4 +1050,5 @@ export default {
   stubCreatePunishments,
   stubAmendPunishments,
   stubGetSuspendedPunishments,
+  stubAloAmendOffenceDetails,
 }

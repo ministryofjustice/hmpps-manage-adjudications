@@ -1,19 +1,20 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import LocationService from '../../../services/locationService'
 import DecisionTreeService from '../../../services/decisionTreeService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../../@types/template'
 import { getEvidenceCategory } from '../../../utils/utils'
 import { EvidenceDetails } from '../../../data/DraftAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 type PageData = {
   errors?: FormError[]
   status?: ReviewStatus
   reason?: string
   details?: string
+  returned?: boolean
 }
 
 export enum PageRequestType {
@@ -56,7 +57,7 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
-      editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
+      editOffencesDetailsURL: adjudicationUrls.reviewerEditOffenceWarning.urls.edit(adjudicationNumber),
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
         adjudicationNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
@@ -103,7 +104,6 @@ export default class prisonerReportRoutes {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly locationService: LocationService,
     private readonly decisionTreeService: DecisionTreeService
   ) {
     this.pageOptions = new PageOptions(pageType)
@@ -153,10 +153,12 @@ export default class prisonerReportRoutes {
 
     const review =
       this.pageOptions.isReviewerView() &&
-      ['AWAITING_REVIEW'].includes(reportedAdjudication.reportedAdjudication.status)
+      ['AWAITING_REVIEW', 'RETURNED'].includes(reportedAdjudication.reportedAdjudication.status)
+
+    const returned = reportedAdjudication.reportedAdjudication.status === ReportedAdjudicationStatus.RETURNED
 
     return res.render(`pages/adjudicationForReport/prisonerReport`, {
-      pageData,
+      pageData: { ...pageData, returned },
       prisoner,
       prisonerReportData,
       reviewData,
@@ -202,6 +204,9 @@ export default class prisonerReportRoutes {
     }
     if (status === ReviewStatus.RETURNED) {
       return req.body.returnedDetails
+    }
+    if (status === ReviewStatus.ACCEPTED) {
+      return req.body.acceptedDetails
     }
     return ''
   }

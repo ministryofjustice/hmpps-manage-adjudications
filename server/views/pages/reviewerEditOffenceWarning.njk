@@ -1,0 +1,42 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/offenceQAndASummaryList.njk" import offenceQAndASummaryList %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% set title = "Are you sure you want to change the offence?" %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  <p class="govuk-body" data-qa="p1">If you change the offence, you’ll delete the information below.</p>
+  <p class="govuk-body" data-qa="p2">Before changing it, make a note of any information you might need to re-enter later.</p>
+
+  <section class="govuk-!-width-two-thirds">
+  {{ offenceQAndASummaryList(offence, isYouthOffender, { "data-qa": "offence-summary-table" }) }}
+  </section>
+
+  <div>
+  {{ govukButton({
+    text: "Continue to change the offence",
+    type: "a",
+    href: nextPageHref,
+    classes: "govuk-button--submit govuk-!-margin-right-3",
+    attributes: { "data-qa": "continue-button" },
+    preventDoubleClick: true
+  }) }}
+  {{ govukButton({
+    text: "Cancel",
+    classes: "govuk-button--secondary",
+    type: "a",
+    href: cancelHref,
+    attributes: {'data-qa': 'cancel-button'},
+    preventDoubleClick: true
+  }) }}
+  </div>
+
+</div>
+{% endblock %}

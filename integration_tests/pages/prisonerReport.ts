@@ -51,6 +51,8 @@ export default class PrisonerReportPage extends Page {
 
   reviewRejectDetail = (): PageElement => cy.get('[data-qa="rejected-details-input"]')
 
+  acceptedRejectDetail = (): PageElement => cy.get('[data-qa="accepted-details-input"]')
+
   reviewReportReason = (): PageElement => cy.get('select[name="returnedReasonId"]')
 
   reviewReportDetail = (): PageElement => cy.get('[data-qa="returned-details-input"]')

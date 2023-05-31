@@ -51,6 +51,7 @@ type RequestValues = {
 type IncidentDetails = {
   prisonerNumber: string
   currentIncidentRoleSelection: IncidentRole
+  reportedAdjudicationNumber?: number
 }
 
 type TemporarilySavedData = {
@@ -65,6 +66,7 @@ type StashedIncidentDetails = {
 export enum PageRequestType {
   EDIT,
   EDIT_SUBMITTED,
+  EDIT_SUBMITTED_ALO,
 }
 
 class PageOptions {
@@ -72,6 +74,10 @@ class PageOptions {
 
   isPreviouslySubmitted(): boolean {
     return this.pageType === PageRequestType.EDIT_SUBMITTED
+  }
+
+  isAloEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT_SUBMITTED_ALO
   }
 }
 
@@ -117,7 +123,6 @@ export default class IncidentRolePage {
     }
 
     const incidentDetailsToSave = postValues.incidentDetails
-
     try {
       const incidentRoleChanged =
         postValues.originalIncidentRoleSelection !== incidentDetailsToSave.currentIncidentRoleSelection
@@ -125,17 +130,24 @@ export default class IncidentRolePage {
       await this.saveToApiUpdate(postValues.draftId, incidentDetailsToSave, removeExistingOffences, user as User)
       if ([IncidentRole.ASSISTED, IncidentRole.INCITED].includes(incidentDetailsToSave.currentIncidentRoleSelection)) {
         return redirectToAssociatedPrisoner(
+          req,
           res,
           postValues.draftId,
           incidentDetailsToSave.currentIncidentRoleSelection,
-          this.pageOptions.isPreviouslySubmitted()
+          this.pageOptions.isPreviouslySubmitted(),
+          this.pageOptions.isAloEdit()
         )
       }
       const offencesExist = !removeExistingOffences && offenceDetails && Object.keys(offenceDetails).length > 0
       if (!!req.session.forceOffenceSelection || !offencesExist) {
-        return redirectToOffenceSelection(res, postValues.draftId, incidentDetailsToSave.currentIncidentRoleSelection)
+        return redirectToOffenceSelection(
+          res,
+          postValues.draftId,
+          incidentDetailsToSave.currentIncidentRoleSelection,
+          this.pageOptions
+        )
       }
-      return redirectToOffenceDetails(res, postValues.draftId)
+      return redirectToOffenceDetails(res, postValues.draftId, this.pageOptions)
     } catch (postError) {
       this.setUpRedirectForEditError(res, postError, postValues.draftId)
       throw postError
@@ -172,6 +184,9 @@ export default class IncidentRolePage {
     if (this.pageOptions.isPreviouslySubmitted()) {
       prisonerReportUrl = requestValues.originalPageReferrerUrl
     }
+    if (this.pageOptions.isAloEdit()) {
+      prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(data.incidentDetails.reportedAdjudicationNumber)
+    }
     exitButtonData = {
       prisonerNumber,
       draftId: requestValues.draftId,
@@ -193,6 +208,9 @@ export default class IncidentRolePage {
     let prisonerReportUrl = null
     if (this.pageOptions.isPreviouslySubmitted()) {
       prisonerReportUrl = postValues.originalPageReferrerUrl
+    }
+    if (this.pageOptions.isAloEdit()) {
+      prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(postValues.draftId)
     }
     exitButtonData = {
       prisonerNumber,
@@ -223,9 +241,13 @@ export default class IncidentRolePage {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setUpRedirectForEditError = (res: Response, error: any, draftId: number) => {
     logger.error(`Failed to post edited incident details for draft adjudication: ${error}`)
-    res.locals.redirectUrl = this.pageOptions.isPreviouslySubmitted()
-      ? adjudicationUrls.incidentRole.urls.submittedEdit(draftId)
-      : adjudicationUrls.incidentRole.urls.start(draftId)
+    if (this.pageOptions.isPreviouslySubmitted()) {
+      adjudicationUrls.incidentRole.urls.submittedEdit(draftId)
+    } else if (this.pageOptions.isAloEdit()) {
+      adjudicationUrls.incidentRole.urls.aloSubmittedEdit(draftId)
+    } else {
+      adjudicationUrls.incidentRole.urls.start(draftId)
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -253,6 +275,7 @@ const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult
   return {
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
     currentIncidentRoleSelection: incidentRoleCode,
+    reportedAdjudicationNumber: draftAdjudicationResult.draftAdjudication.adjudicationNumber || null,
   }
 }
 
@@ -370,17 +393,39 @@ const getTaskListUrl = (draftId: number) => {
   return adjudicationUrls.taskList.urls.start(draftId)
 }
 
-const redirectToOffenceSelection = (res: Response, draftId: number, incidentRoleCode: IncidentRole) => {
+const redirectToOffenceSelection = (
+  res: Response,
+  draftId: number,
+  incidentRoleCode: IncidentRole,
+  pageOptions: PageOptions
+) => {
+  if (pageOptions.isAloEdit()) {
+    return res.redirect(
+      adjudicationUrls.offenceCodeSelection.urls.aloEditStart(
+        draftId,
+        radioSelectionCodeFromIncidentRole(incidentRoleCode)
+      )
+    )
+  }
   return res.redirect(
     adjudicationUrls.offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode))
   )
 }
 
-const redirectToOffenceDetails = (res: Response, draftId: number) => {
+const redirectToOffenceDetails = (res: Response, draftId: number, pageOptions: PageOptions) => {
+  if (pageOptions.isAloEdit()) return res.redirect(adjudicationUrls.detailsOfOffence.urls.aloEdit(draftId))
   return res.redirect(adjudicationUrls.detailsOfOffence.urls.start(draftId))
 }
 
-const redirectToAssociatedPrisoner = (res: Response, draftId: number, roleCode: string, isSubmitted: boolean) => {
+const redirectToAssociatedPrisoner = (
+  req: Request,
+  res: Response,
+  draftId: number,
+  roleCode: string,
+  isSubmitted: boolean,
+  isAloEdit: boolean
+) => {
+  if (isAloEdit) return res.redirect(adjudicationUrls.incidentAssociate.urls.aloEdit(draftId, roleCode))
   return isSubmitted
     ? res.redirect(adjudicationUrls.incidentAssociate.urls.submittedEdit(draftId, roleCode))
     : res.redirect(adjudicationUrls.incidentAssociate.urls.start(draftId, roleCode))

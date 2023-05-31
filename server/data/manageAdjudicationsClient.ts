@@ -262,6 +262,16 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async aloAmendOffenceDetails(
+    adjudicationNumber: number,
+    offenceDetails: OffenceDetails
+  ): Promise<ReportedAdjudication> {
+    return this.restClient.post({
+      path: `/draft-adjudications/${adjudicationNumber}/alo-offence-details`,
+      data: { offenceDetails },
+    })
+  }
+
   async saveYouthOffenderStatus(
     adjudicationNumber: number,
     applicableRulesData: ApplicableRules

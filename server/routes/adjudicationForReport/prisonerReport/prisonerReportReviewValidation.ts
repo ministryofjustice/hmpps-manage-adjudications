@@ -43,6 +43,10 @@ export const errors: { [key: string]: FormError } = {
     href: '#returnedDetails',
     text: 'Your statement must be 4,000 characters or less',
   },
+  ACCEPTED_DETAILS_WORD_COUNT_EXCEEDED: {
+    href: '#acceptedDetails',
+    text: 'Your statement must be 4,000 characters or less',
+  },
 }
 
 export default function validateForm({ status, reason, details }: reviewForm): FormError[] | null {
@@ -62,6 +66,10 @@ export default function validateForm({ status, reason, details }: reviewForm): F
     if (!details) returnedErrors.push(errors.MISSING_RETURN_DETAILS)
     if (returnedErrors.length !== 0) return returnedErrors
     if (details.length > 4000) return [errors.RETURN_DETAILS_WORD_COUNT_EXCEEDED]
+  }
+
+  if (status === ReviewStatus.ACCEPTED) {
+    if (details.length > 4000) return [errors.ACCEPTED_DETAILS_WORD_COUNT_EXCEEDED]
   }
 
   return null
