@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { Request } from 'express'
 import { convertToTitleCase } from '../utils/utils'
 import HmppsAuthClient, { User, NomisUserResult } from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
@@ -41,6 +42,13 @@ export default class UserService {
 
   async getUserRoles(token: string): Promise<string[]> {
     return this.hmppsAuthClient.getUserRoles(token)
+  }
+
+  async getUserWithSession(req: Request, token: string): Promise<UserDetails> {
+    if (!req.session.userDetails) {
+      req.session.userDetails = await this.getUser(token)
+    }
+    return req.session.userDetails
   }
 
   async getUser(token: string): Promise<UserDetails> {
