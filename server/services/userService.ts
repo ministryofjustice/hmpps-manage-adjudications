@@ -46,7 +46,6 @@ export default class UserService {
   }
 
   async getUserWithSession(req: Request, token: string): Promise<UserDetails> {
-    console.log('getting from session')
     if (!req.session.userDetails) {
       req.session.userDetails = await this.getUser(token)
     }
@@ -54,7 +53,6 @@ export default class UserService {
   }
 
   async getUser(token: string): Promise<UserDetails> {
-    console.log('getting user details from auth')
     const user = await this.hmppsAuthClient.getUser(token)
     const allCaseLoads = await new PrisonApiClient(token).getUserCaseLoads()
 
