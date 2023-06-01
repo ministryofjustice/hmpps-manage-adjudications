@@ -85,16 +85,28 @@ export default class PunishmentPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.body
 
-    const error = validateForm({ punishmentType, privilegeType, otherPrivilege, stoppagePercentage })
+    const stoppageOfEarningsPercentage = stoppagePercentage ? Number(String(stoppagePercentage).trim()) : null
+    const error = validateForm({
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage: stoppageOfEarningsPercentage,
+    })
 
     if (error)
-      return this.renderView(req, res, { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage })
+      return this.renderView(req, res, {
+        error,
+        punishmentType,
+        privilegeType,
+        otherPrivilege,
+        stoppagePercentage: stoppageOfEarningsPercentage,
+      })
 
     const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { punishmentType, privilegeType, otherPrivilege, stoppagePercentage },
+        query: { punishmentType, privilegeType, otherPrivilege, stoppagePercentage: stoppageOfEarningsPercentage },
       })
     )
   }

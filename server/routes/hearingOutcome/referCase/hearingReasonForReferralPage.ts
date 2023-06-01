@@ -94,12 +94,13 @@ export default class HearingReasonForReferralPage {
     const { referralReason, hearingOutcomeCode } = req.body
 
     const isEdit = this.pageOptions.isEdit()
+    const trimmedReferralReason = referralReason ? referralReason.trim() : null
 
-    const error = validateForm({ referralReason })
+    const error = validateForm({ referralReason: trimmedReferralReason })
     if (error)
       return this.renderView(req, res, {
         error,
-        referralReason,
+        referralReason: trimmedReferralReason,
       })
 
     try {
@@ -110,7 +111,7 @@ export default class HearingReasonForReferralPage {
         await this.hearingsService.editReferralHearingOutcome(
           adjudicationNumber,
           outcomeCode as HearingOutcomeCode,
-          referralReason,
+          trimmedReferralReason,
           user,
           adjudicator as string
         )
@@ -124,7 +125,7 @@ export default class HearingReasonForReferralPage {
           adjudicationNumber,
           hearingOutcome as HearingOutcomeCode,
           adjudicator as string,
-          referralReason,
+          trimmedReferralReason,
           user
         )
       }

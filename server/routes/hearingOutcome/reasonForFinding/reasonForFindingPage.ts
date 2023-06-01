@@ -96,11 +96,13 @@ export default class ReasonForFindingPage {
     const { reasonForFinding } = req.body
     const { adjudicator, plea } = req.query
 
-    const error = validateForm({ reasonForFinding })
+    const trimmedReasonForFinding = reasonForFinding ? reasonForFinding.trim() : null
+
+    const error = validateForm({ reasonForFinding: trimmedReasonForFinding })
     if (error)
       return this.renderView(req, res, {
         error,
-        reasonForFinding,
+        reasonForFinding: trimmedReasonForFinding,
       })
 
     if (!this.pageOptions.isEdit() && !this.validateQueryData(adjudicator as string, plea as HearingOutcomePlea)) {
@@ -111,7 +113,7 @@ export default class ReasonForFindingPage {
       if (this.pageOptions.isEdit()) {
         await this.hearingsService.editDismissedOutcome(
           adjudicationNumber,
-          reasonForFinding,
+          trimmedReasonForFinding,
           user,
           (adjudicator && (adjudicator as string)) || null,
           (plea && HearingOutcomePlea[plea.toString()]) || null
@@ -121,7 +123,7 @@ export default class ReasonForFindingPage {
           adjudicationNumber,
           adjudicator as string,
           plea as HearingOutcomePlea,
-          reasonForFinding,
+          trimmedReasonForFinding,
           user
         )
       }

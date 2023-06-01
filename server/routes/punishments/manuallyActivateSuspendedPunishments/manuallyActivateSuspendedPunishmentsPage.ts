@@ -49,7 +49,10 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = req.body
 
-    const error = this.validateInputs(reportNumber, punishmentType, privilegeType, otherPrivilege, stoppagePercentage)
+    const reportNo = reportNumber ? Number(reportNumber.trim()) : null
+    const stoppageOfEarnings = stoppagePercentage ? Number(stoppagePercentage.trim()) : null
+
+    const error = this.validateInputs(reportNo, punishmentType, privilegeType, otherPrivilege, stoppageOfEarnings)
 
     if (error)
       return this.renderView(req, res, {
@@ -57,8 +60,8 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
         punishmentType,
         privilegeType,
         otherPrivilege,
-        stoppagePercentage,
-        reportNumber,
+        stoppagePercentage: stoppageOfEarnings,
+        reportNumber: reportNo,
       })
 
     return res.redirect(
