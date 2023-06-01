@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import { Request } from 'express'
-import { use } from 'passport'
 import { convertToTitleCase } from '../utils/utils'
 import HmppsAuthClient, { User, NomisUserResult } from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
