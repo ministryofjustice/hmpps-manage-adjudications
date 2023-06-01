@@ -91,8 +91,10 @@ export default class DamagesOwedPage {
     const { damagesOwed, amount } = req.body
     const { plea, adjudicator } = req.query
 
-    const error = validateForm({ damagesOwed, amount })
-    if (error) return this.renderView(req, res, damagesOwed, amount, error)
+    const amountOwed = amount ? amount.trim() : null
+
+    const error = validateForm({ damagesOwed, amount: amountOwed })
+    if (error) return this.renderView(req, res, damagesOwed, amountOwed, error)
 
     try {
       if (
@@ -113,7 +115,7 @@ export default class DamagesOwedPage {
           query: {
             adjudicator: adjudicator as string,
             plea: plea && HearingOutcomePlea[plea.toString()],
-            amount: damagesOwed === 'yes' ? amount : null,
+            amount: damagesOwed === 'yes' ? amountOwed : null,
             damagesOwed: damagesOwed === 'yes',
           },
         })

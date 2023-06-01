@@ -94,8 +94,10 @@ export default class PunishmentSchedulePage {
     const type = PunishmentType[punishmentType as string]
     const displaySuspended = ![PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(type)
 
+    const trimmedDays = days ? Number(String(days).trim()) : null
+
     const error = validateForm({
-      days,
+      days: trimmedDays,
       suspended,
       suspendedUntil,
       startDate,
@@ -104,14 +106,22 @@ export default class PunishmentSchedulePage {
     })
 
     if (error)
-      return this.renderView(req, res, { error, days, suspended, suspendedUntil, startDate, endDate, displaySuspended })
+      return this.renderView(req, res, {
+        error,
+        days: trimmedDays,
+        suspended,
+        suspendedUntil,
+        startDate,
+        endDate,
+        displaySuspended,
+      })
     try {
       const punishmentData = {
         type,
         privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-        days,
+        days: trimmedDays,
         suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
         startDate: startDate ? datePickerToApi(startDate) : null,
         endDate: endDate ? datePickerToApi(endDate) : null,

@@ -92,12 +92,14 @@ export default class HearingAdournedPage {
     const { adjudicator } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
-    const error = validateForm({ adjournReason, adjournDetails, adjournPlea })
+    const trimmedAdjournDetails = adjournDetails ? adjournDetails.trim() : null
+
+    const error = validateForm({ adjournReason, adjournDetails: trimmedAdjournDetails, adjournPlea })
     if (error)
       return this.renderView(req, res, {
         error,
         adjournReason,
-        adjournDetails,
+        adjournDetails: trimmedAdjournDetails,
         adjournPlea,
       })
 
@@ -105,7 +107,7 @@ export default class HearingAdournedPage {
       if (this.pageOptions.isEdit()) {
         await this.hearingsService.editAdjournHearingOutcome(
           adjudicationNumber,
-          adjournDetails,
+          trimmedAdjournDetails,
           adjournReason,
           adjournPlea,
           user,
@@ -116,7 +118,7 @@ export default class HearingAdournedPage {
           adjudicationNumber,
           HearingOutcomeCode.ADJOURN,
           adjudicator as string,
-          adjournDetails,
+          trimmedAdjournDetails,
           adjournReason,
           adjournPlea,
           user

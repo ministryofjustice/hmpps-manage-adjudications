@@ -83,19 +83,21 @@ export default class ReportAQuashedGuiltyFindingPage {
     const { user } = res.locals
     const { quashReason, quashDetails } = req.body
 
-    const error = validateForm({ quashReason, quashDetails })
+    const trimmedQuashDetails = quashDetails ? quashDetails.trim() : null
+
+    const error = validateForm({ quashReason, quashDetails: trimmedQuashDetails })
     if (error)
       return this.renderView(req, res, {
         error,
         quashReason,
-        quashDetails,
+        quashDetails: trimmedQuashDetails,
       })
 
     try {
       if (this.pageOptions.isEdit()) {
-        await this.outcomesService.editQuashedOutcome(adjudicationNumber, quashReason, quashDetails, user)
+        await this.outcomesService.editQuashedOutcome(adjudicationNumber, quashReason, trimmedQuashDetails, user)
       } else {
-        await this.outcomesService.quashAGuiltyFinding(adjudicationNumber, quashReason, quashDetails, user)
+        await this.outcomesService.quashAGuiltyFinding(adjudicationNumber, quashReason, trimmedQuashDetails, user)
       }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {

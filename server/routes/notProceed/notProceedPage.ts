@@ -106,8 +106,10 @@ export default class NotProceedPage {
     const { notProceedReason, notProceedDetails } = req.body
     const { adjudicator, plea } = req.query
 
-    const error = validateForm({ notProceedReason, notProceedDetails })
-    if (error) return this.renderView(req, res, { error, notProceedReason, notProceedDetails })
+    const details = notProceedDetails ? notProceedDetails.trim() : null
+
+    const error = validateForm({ notProceedReason, notProceedDetails: details })
+    if (error) return this.renderView(req, res, { error, notProceedReason, notProceedDetails: details })
     try {
       if (this.pageOptions.isCompleteHearing()) {
         if (
@@ -120,7 +122,7 @@ export default class NotProceedPage {
           await this.hearingsService.editNotProceedHearingOutcome(
             adjudicationNumber,
             notProceedReason,
-            notProceedDetails,
+            details,
             user,
             (adjudicator && (adjudicator as string)) || null,
             (plea && HearingOutcomePlea[plea.toString()]) || null
@@ -131,14 +133,14 @@ export default class NotProceedPage {
             adjudicator as string,
             plea as HearingOutcomePlea,
             notProceedReason,
-            notProceedDetails,
+            details,
             user
           )
         }
       } else if (this.pageOptions.isEdit()) {
-        await this.outcomesService.editNotProceedOutcome(adjudicationNumber, notProceedReason, notProceedDetails, user)
+        await this.outcomesService.editNotProceedOutcome(adjudicationNumber, notProceedReason, details, user)
       } else {
-        await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, notProceedDetails, user)
+        await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, details, user)
       }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
