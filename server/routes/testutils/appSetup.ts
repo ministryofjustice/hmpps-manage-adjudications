@@ -1,7 +1,6 @@
 import express, { Router, Express } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
-import path from 'path'
 
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
@@ -22,6 +21,15 @@ import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
 import config from '../../config'
 import PunishmentsService from '../../services/punishmentsService'
+
+import type { ApplicationInfo } from '../../applicationInfo'
+
+const testAppInfo: ApplicationInfo = {
+  applicationName: 'test',
+  buildNumber: '1',
+  gitRef: 'long ref',
+  gitShortHash: 'short ref',
+}
 
 const user = {
   name: 'john smith',
@@ -73,7 +81,7 @@ function appSetup(route: Router, production: boolean, session: Record<string, un
 
   app.set('view engine', 'njk')
 
-  nunjucksSetup(app, path)
+  nunjucksSetup(app, testAppInfo)
 
   app.use((req, res, next) => {
     res.locals = {}
@@ -120,6 +128,7 @@ export default function appWithAllRoutes(
       hearingsService: {} as HearingsService,
       outcomesService: {} as OutcomesService,
       punishmentsService: {} as PunishmentsService,
+      applicationInfo: {} as ApplicationInfo,
       ...overrides,
     }),
     production,

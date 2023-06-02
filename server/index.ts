@@ -1,5 +1,5 @@
-import createApp from './app'
 import { services } from './services'
+import createApp from './app'
 
 const app = createApp(services)
 

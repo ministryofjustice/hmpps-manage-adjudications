@@ -1,3 +1,4 @@
+import { dataAccess } from '../data'
 import UserService from './userService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
@@ -38,6 +39,7 @@ const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
 const outcomesService = new OutcomesService(hmppsAuthClient)
 const punishmentsService = new PunishmentsService(hmppsAuthClient)
+const { applicationInfo } = dataAccess()
 
 export const services = {
   userService,
@@ -52,6 +54,7 @@ export const services = {
   hearingsService,
   outcomesService,
   punishmentsService,
+  applicationInfo,
 }
 
 export type Services = typeof services
