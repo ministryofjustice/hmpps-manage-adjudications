@@ -14,7 +14,6 @@ import WitnessesSessionService from './witnessesSessionService'
 import HearingsService from './hearingsService'
 import OutcomesService from './outcomesService'
 import PunishmentsService from './punishmentsService'
-import { dataAccess } from '../data'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
@@ -39,7 +38,6 @@ const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
 const outcomesService = new OutcomesService(hmppsAuthClient)
 const punishmentsService = new PunishmentsService(hmppsAuthClient)
-const { applicationInfo } = dataAccess()
 
 export const services = {
   userService,
@@ -54,7 +52,6 @@ export const services = {
   hearingsService,
   outcomesService,
   punishmentsService,
-  applicationInfo,
 }
 
 export type Services = typeof services
