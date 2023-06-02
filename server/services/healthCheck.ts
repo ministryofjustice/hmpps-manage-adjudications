@@ -1,7 +1,6 @@
 import { serviceCheckFactory } from '../data/healthCheck'
 import config from '../config'
 import type { AgentConfig } from '../config'
-import type { ApplicationInfo } from '../applicationInfo'
 
 interface HealthCheckStatus {
   name: string
@@ -25,17 +24,24 @@ function service(name: string, url: string, agentConfig: AgentConfig): HealthChe
       .catch(err => ({ name, status: 'ERROR', message: err }))
 }
 
-function addAppInfo(result: HealthCheckResult, applicationInfo: ApplicationInfo): HealthCheckResult {
+function addAppInfo(result: HealthCheckResult): HealthCheckResult {
+  const buildInformation = getBuild()
   const buildInfo = {
     uptime: process.uptime(),
-    build: {
-      buildNumber: applicationInfo.buildNumber,
-      gitRef: applicationInfo.gitRef,
-    },
-    version: applicationInfo.buildNumber,
+    build: buildInformation,
+    version: buildInformation && buildInformation.buildNumber,
   }
 
   return { ...result, ...buildInfo }
+}
+
+function getBuild() {
+  try {
+    // eslint-disable-next-line import/no-unresolved,global-require
+    return require('../../build-info.json')
+  } catch (ex) {
+    return null
+  }
 }
 
 function gatherCheckInfo(aggregateStatus: Record<string, unknown>, currentStatus: HealthCheckStatus) {
@@ -59,11 +65,7 @@ const apiChecks = [
     : []),
 ]
 
-export default function healthCheck(
-  applicationInfo: ApplicationInfo,
-  callback: HealthCheckCallback,
-  checks = apiChecks
-): void {
+export default function healthCheck(callback: HealthCheckCallback, checks = apiChecks): void {
   Promise.all(checks.map(fn => fn())).then(checkResults => {
     const allOk = checkResults.every(item => item.status === 'ok')
 
@@ -72,6 +74,6 @@ export default function healthCheck(
       checks: checkResults.reduce(gatherCheckInfo, {}),
     }
 
-    callback(addAppInfo(result, applicationInfo))
+    callback(addAppInfo(result))
   })
 }
