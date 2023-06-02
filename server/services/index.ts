@@ -1,3 +1,4 @@
+import { dataAccess } from '../data'
 import UserService from './userService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
@@ -14,7 +15,6 @@ import WitnessesSessionService from './witnessesSessionService'
 import HearingsService from './hearingsService'
 import OutcomesService from './outcomesService'
 import PunishmentsService from './punishmentsService'
-import { dataAccess } from '../data'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
