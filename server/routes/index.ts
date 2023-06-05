@@ -288,10 +288,5 @@ export default function routes(
     reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
   )
 
-  router.use(
-    adjudicationUrls.dataInsights.root,
-    reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
-  )
-
   return router
 }

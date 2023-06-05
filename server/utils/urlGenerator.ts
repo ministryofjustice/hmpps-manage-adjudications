@@ -696,6 +696,9 @@ const adjudicationUrls = {
     matchers: {
       start: '/',
     },
+    urls: {
+      start: () => `${adjudicationUrls.dataInsights.root}/`,
+    },
   },
   homepage: {
     root: '/place-a-prisoner-on-report',

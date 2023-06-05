@@ -11,7 +11,7 @@ context('Adjudication data', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.dataInsights.root)
+    cy.visit(adjudicationUrls.dataInsights.urls.start())
     const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     dataInsightsPage.checkOnPage()
   })

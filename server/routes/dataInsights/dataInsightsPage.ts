@@ -24,7 +24,6 @@ export default class DataInsightsPage {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    return this.renderView(res, adjudicationNumber, {})
+    return this.renderView(res, null, {})
   }
 }
