@@ -32,12 +32,7 @@ beforeEach(() => {
       outcomes: [],
     }),
   })
-  app = appWithAllRoutes(
-    { production: false },
-    { reportedAdjudicationsService, userService, outcomesService },
-    {},
-    'true'
-  )
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService, outcomesService }, {})
 })
 
 afterEach(() => {

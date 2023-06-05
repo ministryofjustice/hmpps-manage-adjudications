@@ -19,7 +19,6 @@ import DamagesSessionService from '../../services/damagesSessionService'
 import WitnessesSessionService from '../../services/witnessesSessionService'
 import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
-import config from '../../config'
 import PunishmentsService from '../../services/punishmentsService'
 
 import type { ApplicationInfo } from '../../applicationInfo'
@@ -108,11 +107,9 @@ function appSetup(route: Router, production: boolean, session: Record<string, un
 export default function appWithAllRoutes(
   { production = false }: { production?: boolean },
   overrides: Partial<Services> = {},
-  session = {},
-  outcomeFeatureFlag = 'false'
+  session = {}
 ): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  config.outcomeFeatureFlag = outcomeFeatureFlag
 
   return appSetup(
     allRoutes(standardRouter(new MockUserService()), {

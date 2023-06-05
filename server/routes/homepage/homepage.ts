@@ -4,7 +4,6 @@ import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResul
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
-import config from '../../config'
 
 type TaskType = {
   id: string
@@ -107,48 +106,31 @@ export default class HomepageRoutes {
     )
     const disRelatedTasks = createTasks().filter(task => task.heading.includes('DIS'))
 
-    if (config.outcomeFeatureFlag === 'true') {
-      reviewerTasks.push({
-        id: 'enter-outcomes',
-        heading: 'Enter outcomes',
-        href: adjudicationUrls.viewScheduledHearings.root,
-        roles: ['ADJUDICATIONS_REVIEWER'],
-        enabled: true,
-      })
-      reviewerTasks.map(task => {
-        if (task.id === 'view-scheduled-hearings') {
-          return task.links.push({
-            text: 'Schedule hearings',
-            href: adjudicationUrls.allCompletedReports.urls.filter({
-              fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
-              toDate: momentDateToDatePicker(moment()),
-              status: [
-                ReportedAdjudicationStatus.UNSCHEDULED,
-                ReportedAdjudicationStatus.ADJOURNED,
-                ReportedAdjudicationStatus.REFER_INAD,
-              ],
-            }),
-            id: 'schedule-hearings',
-          })
-        }
-        return task
-      })
-    } else {
-      reviewerTasks.map(task => {
-        if (task.id === 'view-all-reports') {
-          return task.links.push({
-            text: 'Schedule hearings',
-            href: adjudicationUrls.allCompletedReports.urls.filter({
-              fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
-              toDate: momentDateToDatePicker(moment()),
-              status: ReportedAdjudicationStatus.UNSCHEDULED,
-            }),
-            id: 'schedule-hearings',
-          })
-        }
-        return task
-      })
-    }
+    reviewerTasks.push({
+      id: 'enter-outcomes',
+      heading: 'Enter outcomes',
+      href: adjudicationUrls.viewScheduledHearings.root,
+      roles: ['ADJUDICATIONS_REVIEWER'],
+      enabled: true,
+    })
+    reviewerTasks.map(task => {
+      if (task.id === 'view-scheduled-hearings') {
+        return task.links.push({
+          text: 'Schedule hearings',
+          href: adjudicationUrls.allCompletedReports.urls.filter({
+            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+            toDate: momentDateToDatePicker(moment()),
+            status: [
+              ReportedAdjudicationStatus.UNSCHEDULED,
+              ReportedAdjudicationStatus.ADJOURNED,
+              ReportedAdjudicationStatus.REFER_INAD,
+            ],
+          }),
+          id: 'schedule-hearings',
+        })
+      }
+      return task
+    })
 
     return res.render('pages/homepage', {
       reviewerTasks: reviewerTasks.filter(task => hasAnyRole(task.roles, userRoles)),

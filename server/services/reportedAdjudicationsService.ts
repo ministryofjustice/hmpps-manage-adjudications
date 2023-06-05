@@ -611,35 +611,12 @@ export default class ReportedAdjudicationsService {
     })
   }
 
-  async deleteHearingV1(
-    adjudicationNumber: number,
-    hearingIdToCancel: number,
-    user: User
-  ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).cancelHearingV1(adjudicationNumber, hearingIdToCancel)
-  }
-
   async deleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).cancelHearing(adjudicationNumber)
   }
 
   async deleteCompleteHearingOutcome(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).cancelCompleteHearing(adjudicationNumber)
-  }
-
-  async scheduleHearingV1(
-    adjudicationNumber: number,
-    locationId: number,
-    dateTimeOfHearing: string,
-    oicHearingType: string,
-    user: User
-  ) {
-    const dataToSend = {
-      locationId,
-      dateTimeOfHearing,
-      oicHearingType,
-    }
-    return new ManageAdjudicationsClient(user).createHearingV1(adjudicationNumber, dataToSend)
   }
 
   async scheduleHearing(
@@ -655,22 +632,6 @@ export default class ReportedAdjudicationsService {
       oicHearingType,
     }
     return new ManageAdjudicationsClient(user).createHearing(adjudicationNumber, dataToSend)
-  }
-
-  async rescheduleHearingV1(
-    adjudicationNumber: number,
-    hearingId: number,
-    locationId: number,
-    dateTimeOfHearing: string,
-    oicHearingType: string,
-    user: User
-  ) {
-    const dataToSend = {
-      locationId,
-      dateTimeOfHearing,
-      oicHearingType,
-    }
-    return new ManageAdjudicationsClient(user).amendHearingV1(adjudicationNumber, hearingId, dataToSend)
   }
 
   async rescheduleHearing(

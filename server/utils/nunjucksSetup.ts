@@ -320,7 +320,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
   njkEnv.addGlobal('supportUrl', config.supportUrl)
   njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
-  njkEnv.addGlobal('outcomesFlag', config.outcomeFeatureFlag)
 
   njkEnv.addFilter('possessive', possessive)
   njkEnv.addFilter('formatTimestampTo', formatTimestampTo)

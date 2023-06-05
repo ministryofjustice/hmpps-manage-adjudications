@@ -9,7 +9,6 @@ import {
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
-import config from '../config'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -164,19 +163,8 @@ const statusKeyMatch = (
 
 export const reportedAdjudicationStatuses = (filter: UiFilter) => {
   const statuses = Object.keys(ReportedAdjudicationStatus)
-  let filteredStatuses
-  if (config.outcomeFeatureFlag === 'false') {
-    filteredStatuses = statuses.filter(
-      key =>
-        key === ReportedAdjudicationStatus.AWAITING_REVIEW ||
-        key === ReportedAdjudicationStatus.REJECTED ||
-        key === ReportedAdjudicationStatus.RETURNED ||
-        key === ReportedAdjudicationStatus.SCHEDULED ||
-        key === ReportedAdjudicationStatus.UNSCHEDULED
-    )
-  } else {
-    filteredStatuses = statuses.filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
-  }
+
+  const filteredStatuses = statuses.filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
 
   return filteredStatuses.map(key => {
     return {
