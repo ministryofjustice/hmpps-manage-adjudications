@@ -9,7 +9,6 @@ import {
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
-import config from '../config'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',

@@ -19,7 +19,6 @@ import DamagesSessionService from '../../services/damagesSessionService'
 import WitnessesSessionService from '../../services/witnessesSessionService'
 import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
-import config from '../../config'
 import PunishmentsService from '../../services/punishmentsService'
 
 import type { ApplicationInfo } from '../../applicationInfo'
