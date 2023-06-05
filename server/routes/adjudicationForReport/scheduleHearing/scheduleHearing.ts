@@ -19,8 +19,7 @@ export default class scheduleHearingRoutes {
       PageRequestType.CREATION,
       reportedAdjudicationsService,
       locationService,
-      userService,
-      config.outcomeFeatureFlag === 'true'
+      userService
     )
   }
 

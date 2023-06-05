@@ -20,7 +20,6 @@ generic-service:
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     MAINTENANCE_MODE: false
-    OUTCOME_FEATURE_FLAG: true
     
   allowlist: null
 

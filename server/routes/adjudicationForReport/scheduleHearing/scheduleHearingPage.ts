@@ -60,8 +60,7 @@ export default class scheduleHearingRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService,
-    private readonly outcomesActive: boolean
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -99,35 +98,16 @@ export default class scheduleHearingRoutes {
     const hearingDetailsToSave = postValues.hearingDetails
     try {
       const isYOI = await this.getYoiInfo(adjudicationNumber, user)
-      if (this.outcomesActive) {
-        if (this.pageOptions.isEdit()) {
-          await this.reportedAdjudicationsService.rescheduleHearing(
-            adjudicationNumber,
-            hearingDetailsToSave.locationId,
-            formatDate(hearingDetailsToSave.hearingDate),
-            getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
-            user
-          )
-        } else {
-          await this.reportedAdjudicationsService.scheduleHearing(
-            adjudicationNumber,
-            hearingDetailsToSave.locationId,
-            formatDate(hearingDetailsToSave.hearingDate),
-            getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
-            user
-          )
-        }
-      } else if (this.pageOptions.isEdit()) {
-        await this.reportedAdjudicationsService.rescheduleHearingV1(
+      if (this.pageOptions.isEdit()) {
+        await this.reportedAdjudicationsService.rescheduleHearing(
           adjudicationNumber,
-          hearingId,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
           user
         )
       } else {
-        await this.reportedAdjudicationsService.scheduleHearingV1(
+        await this.reportedAdjudicationsService.scheduleHearing(
           adjudicationNumber,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
@@ -135,6 +115,7 @@ export default class scheduleHearingRoutes {
           user
         )
       }
+
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
     } catch (postError) {
       if (this.pageOptions.isEdit()) {

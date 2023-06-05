@@ -340,12 +340,6 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async cancelHearingV1(adjudicationNumber: number, hearingId: number): Promise<ReportedAdjudicationResult> {
-    return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
-    })
-  }
-
   async cancelHearing(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${adjudicationNumber}/hearing/v2`,
@@ -358,30 +352,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createHearingV1(
-    adjudicationNumber: number,
-    hearingDetails: HearingDetails
-  ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing`,
-      data: hearingDetails,
-    })
-  }
-
   async createHearing(adjudicationNumber: number, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/hearing/v2`,
-      data: hearingDetails,
-    })
-  }
-
-  async amendHearingV1(
-    adjudicationNumber: number,
-    hearingId: number,
-    hearingDetails: HearingDetails
-  ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/${hearingId}`,
       data: hearingDetails,
     })
   }
