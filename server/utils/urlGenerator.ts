@@ -691,6 +691,12 @@ const adjudicationUrls = {
       edit: (adjudicationNumber: number) => `${adjudicationUrls.reviewerEditOffenceWarning.root}/${adjudicationNumber}`,
     },
   },
+  dataInsights: {
+    root: '/data-insights',
+    matchers: {
+      start: '/',
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
