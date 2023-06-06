@@ -33,6 +33,9 @@ export default function setUpWebSecurity(): Router {
           connectSrc: ["'self'", '*.googletagmanager.com', '*.google-analytics.com', '*.analytics.google.com'],
         },
       },
+      // When we updated Helmet past v6, these policies were set to true as default,
+      // but crossOriginEmbedderPolicy: true breaks the styling on our datepickers,
+      // and crossOriginResourcePolicy: true prevents the stylesheet loading for the PDFs.
       crossOriginEmbedderPolicy: false,
       crossOriginResourcePolicy: false,
     })
