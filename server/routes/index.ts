@@ -1,5 +1,6 @@
 import type { Router } from 'express'
 
+import config from '../config'
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
 import incidentRoleRoutes from './incidentRole'
@@ -27,6 +28,7 @@ import detailsOfEvidenceRoutes from './evidence'
 import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
 import hearingTabRoutes from './adjudicationForReport/hearingTab'
+import dataInsightsRoutes from './dataInsights'
 
 import adjudicationReportRoutes from './adjudicationForReport/prisonerReport'
 import scheduleHearingRoutes from './adjudicationForReport/scheduleHearing'
@@ -175,6 +177,10 @@ export default function routes(
     adjudicationUrls.hearingDetails.root,
     hearingTabRoutes({ reportedAdjudicationsService, userService, outcomesService })
   )
+
+  if (config.dataInsightsFlag === 'true') {
+    router.use(adjudicationUrls.dataInsights.root, dataInsightsRoutes())
+  }
 
   router.use(
     adjudicationUrls.scheduleHearing.root,

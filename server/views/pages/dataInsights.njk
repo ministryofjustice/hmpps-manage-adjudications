@@ -1,0 +1,21 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = "Adjudication data" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+
+  <h1 class="govuk-heading-l">
+    {{ title }}
+  </h1>
+
+{% endblock %}
