@@ -8,7 +8,7 @@ context('Adjudication data', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetDataInsightsChart', {
-      id: 1,
+      id: 123,
       response: {
         agencyId: 100,
         data: { year: 2023 },
