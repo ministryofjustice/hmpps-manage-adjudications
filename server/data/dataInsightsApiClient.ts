@@ -13,7 +13,6 @@ export default class DataInsightsApiClient {
   }
 
   async getDataInsightsChart(agencyId: AgencyId): Promise<ChartDetailsResult> {
-    console.log('==>>getDataInsightsChart', agencyId)
     return this.restClient.get({
       path: `/api/data-insights/chart/${agencyId}`,
     })
