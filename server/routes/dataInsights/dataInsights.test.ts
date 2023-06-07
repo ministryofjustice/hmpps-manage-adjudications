@@ -3,12 +3,25 @@ import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import config from '../../config'
+import ChartService from '../../services/chartService'
+import TestData from '../testutils/testData'
+
+jest.mock('../../services/chartService.ts')
+
+const testData = new TestData()
+const chartService = new ChartService(null) as jest.Mocked<ChartService>
 
 let app: Express
 const defaultConfig = config
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, {})
+  chartService.getChart.mockResolvedValue(
+    testData.chartDetailsResult({
+      agencyId: '12345',
+      data: { year: 2023 },
+    })
+  )
+  app = appWithAllRoutes({ production: false }, { chartService })
 })
 
 afterEach(() => {

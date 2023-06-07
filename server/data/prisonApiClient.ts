@@ -10,6 +10,8 @@ import { Agency, AgencyId, Location, LocationId } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
 import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
 
+import { ChartDetailsResult } from '../services/ChartDetailsResult'
+
 export interface CaseLoad {
   caseLoadId: string
   description: string
@@ -121,6 +123,12 @@ export default class PrisonApiClient {
   async getSecondaryLanguages(bookingId: number): Promise<SecondaryLanguage[]> {
     return this.restClient.get({
       path: `/api/bookings/${bookingId}/secondary-languages`,
+    })
+  }
+
+  async getDataInsightsChart(agencyId: AgencyId): Promise<ChartDetailsResult> {
+    return this.restClient.get({
+      path: `/api/data-insights/chart/${agencyId}`,
     })
   }
 }

@@ -1,9 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
+import ChartService from '../../services/chartService'
+import { AgencyId, LocationId } from '../../data/PrisonLocationResult'
+import { ChartDetailsResult } from '../../services/ChartDetailsResult'
 
 type PageData = {
   error?: FormError
+  chartDetails?: ChartDetailsResult
 }
 
 class PageOptions {}
@@ -11,19 +15,25 @@ class PageOptions {}
 export default class DataInsightsPage {
   pageOptions: PageOptions
 
-  constructor() {
+  constructor(private readonly chartService: ChartService) {
     this.pageOptions = new PageOptions()
   }
 
-  private renderView = async (res: Response, idValue: number, pageData: PageData): Promise<void> => {
+  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
 
+    const agencyId: AgencyId = '123'
+    const locationId: LocationId = 456
+    const { user } = res.locals
+
+    const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
     return res.render(`pages/dataInsights.njk`, {
       errors: error ? [error] : [],
+      chartDetails,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    return this.renderView(res, null, {})
+    return this.renderView(req, res, {})
   }
 }

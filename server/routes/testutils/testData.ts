@@ -14,7 +14,7 @@ import {
 } from '../../data/DraftAdjudicationResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
-import { Location } from '../../data/PrisonLocationResult'
+import { AgencyId, Location } from '../../data/PrisonLocationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
@@ -31,6 +31,7 @@ import {
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
 import { PunishmentDataWithSchedule } from '../../data/PunishmentResult'
+import { ChartDetailsResult } from '../../services/ChartDetailsResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -475,6 +476,19 @@ export default class TestData {
       physicalAttributes: {
         gender,
       },
+    }
+  }
+
+  chartDetailsResult = ({
+    agencyId,
+    data = { year: 2023 },
+  }: {
+    agencyId: AgencyId
+    data: object
+  }): ChartDetailsResult => {
+    return {
+      agencyId,
+      data,
     }
   }
 }
