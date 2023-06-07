@@ -12,7 +12,6 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.resetAllMocks()
-  config.transfersFeatureFlag = 'false'
 })
 
 describe('GET', () => {
@@ -24,5 +23,20 @@ describe('GET', () => {
       .expect(res => {
         expect(res.text).toContain('Is the prisoner still in this establishment')
       })
+  })
+})
+describe('POST', () => {
+  config.transfersFeatureFlag = 'true'
+  it('should redirect to the correct url', () => {
+    return request(app)
+      .post(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
+      .send({ stillInEstablishment: 'true' })
+      .expect('Location', adjudicationUrls.searchForPrisoner.root)
+  })
+  it('should redirect to the correct url', () => {
+    return request(app)
+      .post(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
+      .send({ stillInEstablishment: 'false' })
+      .expect('Location', `${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
   })
 })
