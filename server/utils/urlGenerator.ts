@@ -700,6 +700,15 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.dataInsights.root}/`,
     },
   },
+  isPrisonerStillInEstablishment: {
+    root: '/prisoner-in-establishment',
+    matchers: {
+      start: '/',
+    },
+    urls: {
+      start: () => `${adjudicationUrls.isPrisonerStillInEstablishment.root}/`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {
