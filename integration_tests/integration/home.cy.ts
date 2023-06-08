@@ -97,7 +97,7 @@ context('Home page', () => {
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.startANewReportLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.searchForPrisoner.root)
+      expect(loc.pathname).to.eq(adjudicationUrls.isPrisonerStillInEstablishment.root)
     })
   })
   it('should link to the correct location - continue report', () => {

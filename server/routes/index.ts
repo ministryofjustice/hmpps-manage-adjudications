@@ -65,6 +65,7 @@ import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedP
 import suspendedPunishmentScheduleRoutes from './suspendedPunishmentSchedule'
 import manuallyActivateSuspendedPunishmentsRoutes from './punishments/manuallyActivateSuspendedPunishments'
 import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
+import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
 
 export default function routes(
   router: Router,
@@ -288,6 +289,10 @@ export default function routes(
     adjudicationUrls.reviewerEditOffenceWarning.root,
     reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
   )
+
+  if (config.transfersFeatureFlag === 'true') {
+    router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
+  }
 
   return router
 }
