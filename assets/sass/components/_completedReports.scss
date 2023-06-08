@@ -32,22 +32,3 @@
 .viewReport {
     width: 96px;
 }
-
-// -- OUTCOMES FLAG OFF -- STYLES BELOW --
-
-#statusFilterBox-outcomesFlagOff {
-    margin-top:-47px;
-    margin-left: 40px;
-
-    .horizontal-form, .govuk-form-group {
-        margin-bottom: 0px!important;
-    }
-    .govuk-checkboxes__item {
-        width: 144px!important;
-    }
-    .statusFilterCheckboxes {
-        width: 375px;
-        display: flex;
-        flex-wrap: wrap;
-    }
-}

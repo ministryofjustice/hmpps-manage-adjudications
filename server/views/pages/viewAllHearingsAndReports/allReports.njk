@@ -33,25 +33,12 @@
     </a>
     {% endset -%}
 
-    {% if outcomesFlag === 'false' %}
-      {% set viewHearinglLinkHtml = "" %}
-      {% if completedReport.status === ReportedAdjudicationStatus.SCHEDULED %}
-        {% set viewHearinglLinkHtml %}
-        <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">View hearings<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
-        {% endset -%}
-      {% elif completedReport.status === ReportedAdjudicationStatus.UNSCHEDULED %}
-        {% set viewHearinglLinkHtml %}
-        <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">Schedule hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
-        {% endset -%}
-      {% endif %}
+    {% if completedReport.status | statusNotAwaitingRejectedReturned %}
+      {% set viewHearinglLinkHtml %}
+      <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link-{{ hearingNumber }}">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+      {% endset %}
     {% else %}
-      {% if completedReport.status | statusNotAwaitingRejectedReturned %}
-        {% set viewHearinglLinkHtml %}
-        <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link-{{ hearingNumber }}">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
-        {% endset %}
-      {% else %}
-        {% set viewHearinglLinkHtml = null %}
-      {% endif %}
+      {% set viewHearinglLinkHtml = null %}
     {% endif %}
 
     {% set rows = (rows.push([
