@@ -109,6 +109,7 @@ export default defineConfig({
         stubAmendPunishments: adjudications.stubAmendPunishments,
         stubGetSuspendedPunishments: adjudications.stubGetSuspendedPunishments,
         stubAloAmendOffenceDetails: adjudications.stubAloAmendOffenceDetails,
+        stubGetDataInsightsChart: adjudications.stubGetDataInsightsChart,
       })
     },
 

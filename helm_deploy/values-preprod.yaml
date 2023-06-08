@@ -17,10 +17,11 @@ generic-service:
     PRISON_API_URL: https://api-preprod.prison.service.justice.gov.uk
     SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
     PRISONER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
+    DATA_INSIGHTS_API_URL: https://todo-dev.prison.service.justice.gov.uk
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     MAINTENANCE_MODE: false
-    DATA_INSIGHTS_FLAG: true
+    DATA_INSIGHTS_FLAG: false
     TRANSFERS_FEATURE_FLAG: false
 
   allowlist:

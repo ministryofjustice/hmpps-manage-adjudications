@@ -82,6 +82,7 @@ export default function routes(
     hearingsService,
     outcomesService,
     punishmentsService,
+    chartService,
   }: Services
 ): Router {
   router.use(
@@ -180,7 +181,7 @@ export default function routes(
   )
 
   if (config.dataInsightsFlag === 'true') {
-    router.use(adjudicationUrls.dataInsights.root, dataInsightsRoutes())
+    router.use(adjudicationUrls.dataInsights.root, dataInsightsRoutes({ chartService }))
   }
 
   router.use(

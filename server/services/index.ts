@@ -15,11 +15,13 @@ import WitnessesSessionService from './witnessesSessionService'
 import HearingsService from './hearingsService'
 import OutcomesService from './outcomesService'
 import PunishmentsService from './punishmentsService'
+import ChartService from './chartService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const placeOnReportService = new PlaceOnReportService(hmppsAuthClient)
 const curiousApiService = new CuriousApiService()
+const chartService = new ChartService(hmppsAuthClient)
 const locationService = new LocationService(hmppsAuthClient)
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   hmppsAuthClient,
@@ -55,6 +57,7 @@ export const services = {
   outcomesService,
   punishmentsService,
   applicationInfo,
+  chartService,
 }
 
 export type Services = typeof services

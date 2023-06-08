@@ -998,6 +998,21 @@ const stubGetSuspendedPunishments = ({ prisonerNumber, response }): SuperAgentRe
     },
   })
 
+const stubGetDataInsightsChart = ({ id, response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/api/data-insights/chart/${id}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1051,4 +1066,5 @@ export default {
   stubAmendPunishments,
   stubGetSuspendedPunishments,
   stubAloAmendOffenceDetails,
+  stubGetDataInsightsChart,
 }
