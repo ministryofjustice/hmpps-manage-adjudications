@@ -34,7 +34,7 @@
     {% endset -%}
 
     {% set viewHearinglLinkHtml %}
-    <a href="{{ adjudicationUrls.hearingDetails.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">{% if outcomesFlag === 'false' %}View or edit hearing {% else %}View hearing  {% endif %}<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+    <a href="{{ adjudicationUrls.hearingDetails.urls.review(hearing.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link-{{ hearingNumber }}">View hearing<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([
