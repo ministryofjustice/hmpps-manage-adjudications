@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import { FormError } from '../../@types/template'
-import ChartService from '../../services/chartService'
-import { AgencyId, LocationId } from '../../data/PrisonLocationResult'
-import { ChartDetailsResult } from '../../services/ChartDetailsResult'
+import { FormError } from '../../../@types/template'
+import ChartService from '../../../services/chartService'
+import { AgencyId, LocationId } from '../../../data/PrisonLocationResult'
+import { ChartDetailsResult } from '../../../services/ChartDetailsResult'
+import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 
 type PageData = {
   error?: FormError
@@ -12,7 +13,7 @@ type PageData = {
 
 class PageOptions {}
 
-export default class DataInsightsPage {
+export default class PunishmentsTabPage {
   pageOptions: PageOptions
 
   constructor(private readonly chartService: ChartService) {
@@ -27,9 +28,10 @@ export default class DataInsightsPage {
     const { user } = res.locals
 
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
-    return res.render(`pages/dataInsights.njk`, {
+    return res.render(`pages/dataInsight/punishmentsTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,
+      tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PUNISHMENTS),
     })
   }
 

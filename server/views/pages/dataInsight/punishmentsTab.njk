@@ -1,0 +1,20 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../../macros/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+
+{% set title = "Adjudication data - Punishments" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+
+  {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+{% endblock %}

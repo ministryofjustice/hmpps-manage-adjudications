@@ -479,13 +479,7 @@ export default class TestData {
     }
   }
 
-  chartDetailsResult = ({
-    agencyId,
-    data = { year: 2023 },
-  }: {
-    agencyId: AgencyId
-    data: object
-  }): ChartDetailsResult => {
+  chartDetailsResult = ({ agencyId, data }: { agencyId: AgencyId; data: object }): ChartDetailsResult => {
     return {
       agencyId,
       data,

@@ -17,8 +17,38 @@ context('Adjudication data', () => {
     cy.signIn()
   })
 
-  it('should contain the required page elements', () => {
+  it('should contain the required page elements on /data-insights', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.start())
+    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    dataInsightsPage.checkOnPage()
+  })
+
+  it('should contain the required page elements /data-insights/totals-adjudications-and-locations', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations())
+    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    dataInsightsPage.checkOnPage()
+  })
+
+  it('should contain the required page elements /data-insights/protected-characteristics-and-vulnerabilities', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
+    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    dataInsightsPage.checkOnPage()
+  })
+
+  it('should contain the required page elements /data-insights/offence-type', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
+    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    dataInsightsPage.checkOnPage()
+  })
+
+  it('should contain the required page elements /data-insights/punishments', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.punishments())
+    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    dataInsightsPage.checkOnPage()
+  })
+
+  it('should contain the required page elements /data-insights/pleas-and-findings', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.pleasAndFindings())
     const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     dataInsightsPage.checkOnPage()
   })
