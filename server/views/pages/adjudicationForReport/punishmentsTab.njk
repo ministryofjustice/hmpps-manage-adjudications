@@ -78,13 +78,9 @@
 
   <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
 
-  <div class="govuk-grid-row">
-    {% if punishmentComments | length > 0 %}
-      <div class="punishment-comments-table">
-        {{ punishmentCommentTable(punishmentComments, redirectAfterRemoveUrl, currentUser, 'punishment-comments') }}
-      </div>
-    {% endif %}
-  </div>
+  {% if punishmentComments | length > 0 %}
+    {{ punishmentCommentTable(punishmentComments, redirectAfterRemoveUrl, currentUser, 'punishment-comments') }}
+  {% endif %}
 
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-bottom-4">
 
