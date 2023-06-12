@@ -1,0 +1,16 @@
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+
+{% macro dataInsightsTabHeaderSingular(tabsOptions) %}
+
+  <h1 class="govuk-heading-l">
+    {{ tabsOptions.title }}
+  </h1>
+
+  <div class="govuk-!-margin-top-5">
+    {{ mojSubNavigation({
+      items: tabsOptions.items,
+      classes: "govuk-!-margin-bottom-3"
+    }) }}
+  </div>
+{% endmacro %}

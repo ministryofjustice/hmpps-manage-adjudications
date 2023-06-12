@@ -27,9 +27,14 @@ import detailsOfDamagesRoutes from './damages'
 import detailsOfEvidenceRoutes from './evidence'
 import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
-import hearingTabRoutes from './adjudicationForReport/hearingTab'
-import dataInsightsRoutes from './dataInsights'
 
+import totalsAdjudicationsAndLocationsRoutes from './dataInsights/totalsAdjudicationsAndLocationsTab'
+import protectedCharacteristicsAndVulnerabilitiesRoutes from './dataInsights/protectedCharacteristicsAndVulnerabilitiesTab'
+import offenceTypeRoutes from './dataInsights/offenceTypeTab'
+import punishmentsRoutes from './dataInsights/punishmentsTab'
+import pleasAndFindingsRoutes from './dataInsights/pleasAndFindingsTab'
+
+import hearingTabRoutes from './adjudicationForReport/hearingTab'
 import adjudicationReportRoutes from './adjudicationForReport/prisonerReport'
 import scheduleHearingRoutes from './adjudicationForReport/scheduleHearing'
 import viewScheduledHearingsRoutes from './viewAllHearingsAndReports/allHearings'
@@ -181,7 +186,18 @@ export default function routes(
   )
 
   if (config.dataInsightsFlag === 'true') {
-    router.use(adjudicationUrls.dataInsights.root, dataInsightsRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartService }))
+    router.use(
+      adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
+      totalsAdjudicationsAndLocationsRoutes({ chartService })
+    )
+    router.use(
+      adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities(),
+      protectedCharacteristicsAndVulnerabilitiesRoutes({ chartService })
+    )
+    router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartService }))
   }
 
   router.use(

@@ -695,9 +695,22 @@ const adjudicationUrls = {
     root: '/data-insights',
     matchers: {
       start: '/',
+      totalsAdjudicationsAndLocations: '/totals-adjudications-and-locations',
+      protectedCharacteristicsAndVulnerabilities: '/protected-characteristics-and-vulnerabilities',
+      offenceType: '/offence-type',
+      punishments: '/punishments',
+      pleasAndFindings: '/pleas-and-findings',
     },
     urls: {
-      start: () => `${adjudicationUrls.dataInsights.root}/`,
+      start: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.start}`,
+      totalsAdjudicationsAndLocations: () =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
+      protectedCharacteristicsAndVulnerabilities: () =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities}`,
+      offenceType: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}`,
+      punishments: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}`,
+      pleasAndFindings: () =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.pleasAndFindings}`,
     },
   },
   isPrisonerStillInEstablishment: {
