@@ -83,13 +83,15 @@
   {% endif %}
 
   <div>
-    {{ govukButton({
-      text: 'Add comment',
-      element: "a",
-      href: adjudicationUrls.punishmentComment.urls.add(reportNo),
-      classes: "govuk-button--secondary",
-      attributes: { "data-qa": "add-punishments-comment" }
-    }) }}
+    {% if not readOnly %}
+      {{ govukButton({
+        text: 'Add comment',
+        element: "a",
+        href: adjudicationUrls.punishmentComment.urls.add(reportNo),
+        classes: "govuk-button--secondary",
+        attributes: { "data-qa": "add-punishments-comment" }
+      }) }}
+    {% endif %}
   </div>
 
 {% endblock %}
