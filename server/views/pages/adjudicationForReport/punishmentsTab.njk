@@ -79,7 +79,7 @@
   <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
 
   {% if punishmentComments | length > 0 %}
-    {{ punishmentCommentTable(punishmentComments, redirectAfterRemoveUrl, currentUser, 'punishment-comments') }}
+    {{ punishmentCommentTable(punishmentComments, 'punishment-comments') }}
   {% endif %}
 
   <div>

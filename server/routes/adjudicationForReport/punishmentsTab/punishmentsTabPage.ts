@@ -7,8 +7,6 @@ import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
 import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
 import UserService from '../../../services/userService'
-import logger from "../../../../logger";
-import urlGenerator from "../../../utils/urlGenerator";
 
 export enum PageRequestType {
   REPORTER,
@@ -88,19 +86,16 @@ export default class PunishmentsTabPage {
     // eslint-disable-next-line no-restricted-syntax
     for (const punishmentComment of reportedAdjudication.punishmentComments) {
       const { dateTime } = punishmentComment
-      const date = formatTimestampTo(dateTime, 'D MMMM YYYY')
-      const time = formatTimestampTo(dateTime, 'HH:mm')
 
-      const userId = punishmentComment.createdByUserId
-      const name = names[userId]
       const comment = {
         id: punishmentComment.id,
         comment: punishmentComment.comment,
-        date,
-        time,
-        name,
-        changeLink: urlGenerator.punishmentComment.urls.edit(adjudicationNumber, punishmentComment.id),
-        removeLink: urlGenerator.punishmentComment.urls.delete(adjudicationNumber, punishmentComment.id),
+        date: formatTimestampTo(dateTime, 'D MMMM YYYY'),
+        time: formatTimestampTo(dateTime, 'HH:mm'),
+        name: names[punishmentComment.createdByUserId],
+        changeLink: adjudicationUrls.punishmentComment.urls.edit(adjudicationNumber, punishmentComment.id),
+        removeLink: adjudicationUrls.punishmentComment.urls.delete(adjudicationNumber, punishmentComment.id),
+        isOwner: user.username === punishmentComment.createdByUserId,
       }
       punishmentComments.push(comment)
     }
