@@ -5,7 +5,7 @@
   {% for comment in punishmentComments %}
     {% set commentId = comment.id %}
 
-    {% if comment.isOwner %}
+    {% if not readOnly and comment.isOwner %}
       {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.changeLink+'" data-qa="change-punishment-comment-'+commentId+'" class="govuk-link">Change</a></p>' %}
       {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.removeLink+'" data-qa="remove-punishment-comment-'+commentId+'" class="govuk-link">Remove</a></p>' %}
     {% else %}
