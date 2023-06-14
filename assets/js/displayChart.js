@@ -19,7 +19,7 @@ const CHART_COMMANDS = (function () {
     loadCharts: chartSettingList => {
       if (chartSettingList) {
         chartSettingList.forEach(chartSettings => {
-          loadChart(chartSettings)
+          loadChart(chartSettings.chartData)
         })
       }
     },
