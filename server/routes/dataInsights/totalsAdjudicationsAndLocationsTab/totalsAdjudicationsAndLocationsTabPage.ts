@@ -20,7 +20,7 @@ const LIGHT_BLUE = '#5694ca'
 const LIGHT_BLUE_DARKER = '#4388c4'
 const TURQUOISE = '#28a197'
 const LIGHT_PURPLE = '#8c8ec0'
-const LIGHT_GREY = '#b1b4b6'
+// const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
 
 export default class TotalsAdjudicationsAndLocationsTabPage {
