@@ -4,6 +4,7 @@ import PrisonerSearchService from '../../services/prisonerSearchService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 import TestData from '../testutils/testData'
+import config from '../../config'
 
 jest.mock('../../services/prisonerSearchService')
 
@@ -24,6 +25,8 @@ afterEach(() => {
 describe('GET /select-prisoner', () => {
   describe('with results', () => {
     beforeEach(() => {
+      config.transfersFeatureFlag = 'false'
+
       const searchResult = testData.prisonerSearchSummary({
         firstName: 'John',
         lastName: 'Smith',
@@ -36,6 +39,27 @@ describe('GET /select-prisoner', () => {
     it('should load the search for a prisoner page', () => {
       return request(app)
         .get(`${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith`)
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Select a prisoner')
+          expect(res.text).toContain('<p class="align-right"><strong>Prisoners listed:</strong> 1</p>')
+          expect(res.text).toContain(
+            '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />'
+          )
+          expect(res.text).toContain('Smith, John')
+          expect(res.text).toContain('1-2-015')
+          expect(res.text).toContain(
+            `<a href="${adjudicationUrls.incidentDetails.urls.start(
+              'A1234AA'
+            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`
+          )
+        })
+    })
+
+    it('should load the search for a prisoner page for a transfer', () => {
+      config.transfersFeatureFlag = 'true'
+      return request(app)
+        .get(`${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith&transfer=true`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Select a prisoner')
