@@ -257,7 +257,7 @@ const stubGetReportedAdjudications =
     }
     const apiResponse = apiPageResponseFrom(apiRequest, allContent)
     const path =
-      `${prefix}reports?page=${number}&size=${size}` +
+      `${prefix}?page=${number}&size=${size}` +
       `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
       `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
       `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
@@ -276,9 +276,11 @@ const stubGetReportedAdjudications =
     })
   }
 
-const stubGetAllReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/')
+const stubGetAllReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/reports')
 
-const stubGetYourReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/my-')
+const stubGetYourReportedAdjudications = stubGetReportedAdjudications(
+  '/adjudications/reported-adjudications/my-reports'
+)
 
 const stubCreateDraftFromCompleteAdjudication = ({
   adjudicationNumber,
