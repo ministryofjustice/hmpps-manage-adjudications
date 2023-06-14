@@ -7,16 +7,36 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 const testData = new TestData()
 
 const reportedAdjudication = (
+  adjudicationNumber,
   status: ReportedAdjudicationStatus,
   reviewedByUserId = null,
   statusReason = null,
-  statusDetails = null
+  statusDetails = null,
+  locationId = 25538
 ) => {
   return testData.reportedAdjudication({
-    adjudicationNumber: 1524493,
+    adjudicationNumber,
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     status,
+    locationId,
+    offenceDetails: {
+      offenceCode: 1001,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+      victimPrisonersNumber: 'G5512G',
+    },
+    incidentRole: {
+      associatedPrisonersNumber: 'T3356FU',
+      roleCode: '25c',
+      offenceRule: {
+        paragraphNumber: '25(c)',
+        paragraphDescription:
+          'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+      },
+    },
     otherData: {
       reviewedByUserId,
       statusReason,
@@ -70,13 +90,14 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
       response: {
-        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.AWAITING_REVIEW),
+        reportedAdjudication: reportedAdjudication(12345, ReportedAdjudicationStatus.AWAITING_REVIEW),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
       response: {
         reportedAdjudication: reportedAdjudication(
+          56789,
           ReportedAdjudicationStatus.RETURNED,
           'USER1',
           'offence',
@@ -87,25 +108,26 @@ context('Prisoner report - reviewer view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 456790,
       response: {
-        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.ACCEPTED, 'USER1'),
+        reportedAdjudication: reportedAdjudication(456790, ReportedAdjudicationStatus.ACCEPTED, 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 456791,
       response: {
-        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.SCHEDULED, 'USER1'),
+        reportedAdjudication: reportedAdjudication(456791, ReportedAdjudicationStatus.SCHEDULED, 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 456789,
       response: {
-        reportedAdjudication: reportedAdjudication(ReportedAdjudicationStatus.UNSCHEDULED, 'USER1'),
+        reportedAdjudication: reportedAdjudication(456789, ReportedAdjudicationStatus.UNSCHEDULED, 'USER1'),
       },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 356789,
       response: {
         reportedAdjudication: reportedAdjudication(
+          356789,
           ReportedAdjudicationStatus.REJECTED,
           'USER1',
           'unsuitable',
@@ -123,12 +145,6 @@ context('Prisoner report - reviewer view', () => {
       adjudicationNumber: 56789,
       response: {
         draftAdjudication: draftAdjudication(56789),
-      },
-    })
-    cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 356789,
-      response: {
-        draftAdjudication: draftAdjudication(356789),
       },
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {

@@ -3,6 +3,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { OffenceDetails } from '../../server/data/DraftAdjudicationResult'
 
 const testData = new TestData()
 
@@ -19,7 +20,7 @@ const createDraftFromReportedAdjudicationResponse = (
       adjudicationNumber,
       locationId: 25538,
       prisonerNumber: 'G6415GD',
-      dateTimeOfIncident: '2021-12-01T09:40:00',
+      dateTimeOfIncident: '2021-12-09T10:30:00',
       incidentStatement: {
         statement: 'TESTING',
         completed: true,
@@ -39,7 +40,8 @@ const reportedAdjudicationResponse = (
   statusDetails = null,
   damages = [],
   evidence = [],
-  witnesses = []
+  witnesses = [],
+  offenceDetails = {} as OffenceDetails
 ) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
@@ -49,9 +51,23 @@ const reportedAdjudicationResponse = (
       dateTimeOfIncident: '2021-12-09T10:30:00',
       dateTimeOfDiscovery: '2021-12-10T09:40:00',
       status,
+      incidentStatement: {
+        statement: 'TESTING',
+        completed: true,
+      },
       damages,
       evidence,
       witnesses,
+      offenceDetails,
+      incidentRole: {
+        associatedPrisonersNumber: 'T3356FU',
+        roleCode: '25c',
+        offenceRule: {
+          paragraphNumber: '25(c)',
+          paragraphDescription:
+            'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+        },
+      },
       otherData: {
         reviewedByUserId,
         statusReason,
@@ -74,8 +90,8 @@ const draftAdjudicationResponse = (
       id,
       adjudicationNumber,
       prisonerNumber: 'G6415GD',
-      dateTimeOfIncident: '2021-12-01T09:40:00',
-      dateTimeOfDiscovery: '2021-12-02T10:42:00',
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      dateTimeOfDiscovery: '2021-12-10T09:40:00',
       locationId: 25538,
       isYouthOffender,
       incidentStatement: {
@@ -143,16 +159,8 @@ context('Prisoner report - reporter view', () => {
       response: createDraftFromReportedAdjudicationResponse(12345, 177),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 56789,
-      response: createDraftFromReportedAdjudicationResponse(56789, 188),
-    })
-    cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 23456,
       response: createDraftFromReportedAdjudicationResponse(23456, 189),
-    })
-    cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 34567,
-      response: createDraftFromReportedAdjudicationResponse(34567, 190),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 98765,
@@ -169,17 +177,27 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: reportedAdjudicationResponse(1524493, ReportedAdjudicationStatus.AWAITING_REVIEW),
+      response: reportedAdjudicationResponse(12345, ReportedAdjudicationStatus.AWAITING_REVIEW),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
       response: reportedAdjudicationResponse(
-        1524493,
+        56789,
         ReportedAdjudicationStatus.REJECTED,
         'USER1',
         'expired',
         'Too long ago to report now.',
-        [testData.singleDamage({})]
+        [testData.singleDamage({})],
+        [],
+        [],
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        }
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -194,27 +212,53 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 34567,
-      response: reportedAdjudicationResponse(1524493, ReportedAdjudicationStatus.UNSCHEDULED, 'USER1'),
+      response: reportedAdjudicationResponse(
+        1524493,
+        ReportedAdjudicationStatus.UNSCHEDULED,
+        'USER1',
+        '',
+        '',
+        [],
+        [],
+        [],
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        }
+      ),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 98765,
-      response: reportedAdjudicationResponse(1524494, ReportedAdjudicationStatus.ACCEPTED, 'USER1'),
+      response: reportedAdjudicationResponse(
+        1524494,
+        ReportedAdjudicationStatus.ACCEPTED,
+        'USER1',
+        '',
+        '',
+        [],
+        [],
+        [],
+        {
+          offenceCode: 1001,
+          offenceRule: {
+            paragraphNumber: '1',
+            paragraphDescription: 'Commits any assault',
+          },
+          victimPrisonersNumber: 'G5512G',
+        }
+      ),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
       response: draftAdjudicationResponse(177, 12345, true),
     })
     cy.task('stubGetDraftAdjudication', {
-      id: 188,
-      response: draftAdjudicationResponse(188, 56789, false),
-    })
-    cy.task('stubGetDraftAdjudication', {
       id: 189,
       response: draftAdjudicationResponse(189, 23456, false),
-    })
-    cy.task('stubGetDraftAdjudication', {
-      id: 190,
-      response: draftAdjudicationResponse(190, 34567, false),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 191,
@@ -320,8 +364,8 @@ context('Prisoner report - reporter view', () => {
           .find('dd')
           .then($summaryData => {
             expect($summaryData.get(0).innerText).to.contain('T. User')
-            expect($summaryData.get(1).innerText).to.contain('1 December 2021')
-            expect($summaryData.get(2).innerText).to.contain('09:40')
+            expect($summaryData.get(1).innerText).to.contain('9 December 2021')
+            expect($summaryData.get(2).innerText).to.contain('10:30')
             expect($summaryData.get(3).innerText).to.contain('Houseblock 1')
           })
       })

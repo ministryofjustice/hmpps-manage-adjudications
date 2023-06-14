@@ -3,7 +3,7 @@
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, userSetGenderData, review) %}
+{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, offence, damages, evidence, witnesses, userSetGenderData, editAndReviewAvailability) %}
   {% if userSetGenderData %}
     <div class="adjudicationsSummary">
       {{ summaryList(userSetGenderData.data, null, { "data-qa": "gender-summary-table" }, null, userSetGenderData.changeLinkHref ) }}
@@ -11,7 +11,7 @@
   {% endif %}
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
     <h2 class="govuk-heading-m">Incident details</h2>
-    {% if not readOnly %}
+    {% if editAndReviewAvailability.incidentDetailsEditable %}
       <p class="govuk-body">
         <a href="{{ detailsURL }}" class="govuk-link" data-qa="adjudicationsSummary-details-changeLink" id="adjudication-summary-details-change-link">Change</a>
       </p>
@@ -23,7 +23,7 @@
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
     <h2 class="govuk-heading-m">Offence details</h2>
-    {% if not readOnly or review %}
+    {% if editAndReviewAvailability.offencesEditable %}
       <p class="govuk-body">
         <a href="{{ offenceDetailsURL }}" class="govuk-link" data-qa="adjudicationsSummary-offence-changeLink" id="adjudication-summary-offence-change-link">Change</a>
       </p>
@@ -36,7 +36,7 @@
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
     <h2 class="govuk-heading-m">Damages</h2>
-    {% if not readOnlyDamagesEvidenceWitnesses %}
+    {% if editAndReviewAvailability.damagesEvidenceWitnessesEditable %}
       <p class="govuk-body">
         <a href="{{ damagesURL }}" class="govuk-link" data-qa="adjudicationsSummary-damages-changeLink" id="adjudication-summary-damages-change-link">Change</a>
       </p>
@@ -52,7 +52,7 @@
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
     <h2 class="govuk-heading-m">Evidence</h2>
-    {% if not readOnlyDamagesEvidenceWitnesses %}
+    {% if editAndReviewAvailability.damagesEvidenceWitnessesEditable %}
       <p class="govuk-body">
         <a href="{{ evidenceURL }}" class="govuk-link" data-qa="adjudicationsSummary-evidence-changeLink" id="adjudication-summary-evidence-change-link">Change</a>
       </p>
@@ -68,7 +68,7 @@
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
     <h2 class="govuk-heading-m">Witnesses</h2>
-    {% if not readOnlyDamagesEvidenceWitnesses %}
+    {% if editAndReviewAvailability.damagesEvidenceWitnessesEditable %}
       <p class="govuk-body">
         <a href="{{ witnessesURL }}" class="govuk-link" data-qa="adjudicationsSummary-witnesses-changeLink" id="adjudication-summary-witnesses-change-link">Change</a>
       </p>
@@ -84,7 +84,7 @@
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
     <h2 class="govuk-heading-m">Incident statement</h2>
-    {% if not readOnly %}
+    {% if editAndReviewAvailability.statementEditable %}
       <p class="govuk-body">
         <a href="{{ statementURL }}" class="govuk-link" data-qa="adjudicationsSummary-statement-changeLink" id="adjudication-summary-statement-change-link">Change</a>
       </p>

@@ -58,7 +58,7 @@ export default class DecisionTreeService {
     }
   }
 
-  private async adjudicationIncidentData(adjudication: DraftAdjudication | ReportedAdjudication, user: User) {
+  async adjudicationIncidentData(adjudication: DraftAdjudication | ReportedAdjudication, user: User) {
     let incidentRole = null
     if (adjudication.incidentRole) {
       incidentRole = incidentRoleFromCode(adjudication.incidentRole.roleCode)

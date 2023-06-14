@@ -485,18 +485,16 @@ describe('reportedAdjudicationsService', () => {
       statusReason: string = null,
       statusDetails: string = null
     ) => {
-      return {
-        reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
-          prisonerNumber: 'G6123VU',
-          status,
-          otherData: {
-            reviewedByUserId,
-            statusReason,
-            statusDetails,
-          },
-        }),
-      }
+      return testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status,
+        otherData: {
+          reviewedByUserId,
+          statusReason,
+          statusDetails,
+        },
+      })
     }
     it('returns the correct information for a returned adjudication', async () => {
       const result = await service.getReviewDetails(
