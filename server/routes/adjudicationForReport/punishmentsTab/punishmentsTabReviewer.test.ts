@@ -39,12 +39,12 @@ beforeEach(() => {
   })
 
   userService.getStaffNameFromUsername.mockResolvedValue({
-    username: 'SMITH',
+    username: 'user1',
     name: 'JOHN SMITH',
     activeCaseLoadId: '',
     token: 'some token',
     authSource: '',
-    userId: 'SMITH',
+    userId: 'user1',
   } as User)
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, punishmentsService, userService })
@@ -56,6 +56,7 @@ afterEach(() => {
 
 describe('GET Punishments and damages tab', () => {
   it('should show punishment comments', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 1524493,
@@ -67,7 +68,7 @@ describe('GET Punishments and damages tab', () => {
       }),
     })
     return request(app)
-      .get(adjudicationUrls.punishmentsAndDamages.urls.report(12345))
+      .get(adjudicationUrls.punishmentsAndDamages.urls.review(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Is any money being recovered for damages?')
@@ -77,12 +78,15 @@ describe('GET Punishments and damages tab', () => {
         expect(response.text).toContain('J. Smith')
         expect(response.text).toContain('06:00')
         expect(response.text).toContain('punishment comment text')
-        expect(response.text).not.toContain('Add comment')
+        expect(response.text).toContain('>Change<')
+        expect(response.text).toContain('>Remove<')
+        expect(response.text).toContain('Add comment')
         expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(1)
       })
   })
 
   it('should show punishment comments even if no punishment added', () => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         adjudicationNumber: 1524493,
@@ -93,7 +97,7 @@ describe('GET Punishments and damages tab', () => {
       }),
     })
     return request(app)
-      .get(adjudicationUrls.punishmentsAndDamages.urls.report(12345))
+      .get(adjudicationUrls.punishmentsAndDamages.urls.review(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('There are no punishments added.')
@@ -103,7 +107,9 @@ describe('GET Punishments and damages tab', () => {
         expect(response.text).toContain('J. Smith')
         expect(response.text).toContain('06:00')
         expect(response.text).toContain('punishment comment text')
-        expect(response.text).not.toContain('Add comment')
+        expect(response.text).toContain('>Change<')
+        expect(response.text).toContain('>Remove<')
+        expect(response.text).toContain('Add comment')
         expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(1)
       })
   })

@@ -395,7 +395,7 @@ export default class TestData {
   singlePunishmentComment = ({
     id = 1,
     comment = 'punishment comment text',
-    createdByUserId = 'USER1',
+    createdByUserId = 'user1',
     dateTime = '2023-01-01T06:00:00',
   }: {
     id?: number
