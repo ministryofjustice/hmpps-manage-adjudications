@@ -190,7 +190,6 @@ const stubGetReportedAdjudication = ({
   })
 
 const stubGetAllDraftAdjudicationsForUser = ({
-  agencyId = 'MDI',
   number = 0,
   size = 20,
   allContent = [],
@@ -199,7 +198,6 @@ const stubGetAllDraftAdjudicationsForUser = ({
     fromDate: moment().subtract(7, 'days').format('YYYY-MM-DD'),
   },
 }: {
-  agencyId: string
   number: number
   size: number
   allContent: unknown[]
@@ -214,7 +212,7 @@ const stubGetAllDraftAdjudicationsForUser = ({
   }
   const apiResponse = apiPageResponseFrom(apiRequest, allContent)
   const path =
-    `/adjudications/draft-adjudications/my/agency/${agencyId}?page=${number}&size=${size}` +
+    `/adjudications/draft-adjudications/my-reports?page=${number}&size=${size}` +
     `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
     `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
   return stubFor({
@@ -235,7 +233,6 @@ const stubGetAllDraftAdjudicationsForUser = ({
 const stubGetReportedAdjudications =
   (prefix: string) =>
   ({
-    agencyId = 'MDI',
     number = 0,
     size = 20,
     allContent = [],
@@ -245,7 +242,6 @@ const stubGetReportedAdjudications =
       fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
     },
   }: {
-    agencyId: string
     number: number
     size: number
     allContent: unknown[]
@@ -261,7 +257,7 @@ const stubGetReportedAdjudications =
     }
     const apiResponse = apiPageResponseFrom(apiRequest, allContent)
     const path =
-      `${prefix}agency/${agencyId}?page=${number}&size=${size}` +
+      `${prefix}reports?page=${number}&size=${size}` +
       `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
       `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
       `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
@@ -282,7 +278,7 @@ const stubGetReportedAdjudications =
 
 const stubGetAllReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/')
 
-const stubGetYourReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/my/')
+const stubGetYourReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/my-')
 
 const stubCreateDraftFromCompleteAdjudication = ({
   adjudicationNumber,
@@ -603,14 +599,9 @@ const stubAmendHearing = ({ adjudicationNumber, status = 200, response = {} }): 
     },
   })
 
-const stubGetHearingsGivenAgencyAndDate = ({
-  agencyId = 'MDI',
-  hearingDate,
-  status = 200,
-  response = {},
-}): SuperAgentRequest => {
+const stubGetHearingsGivenAgencyAndDate = ({ hearingDate, status = 200, response = {} }): SuperAgentRequest => {
   const today = moment().format('YYYY-MM-DD')
-  const url = `/adjudications/reported-adjudications/hearings/agency/${agencyId}`
+  const url = `/adjudications/reported-adjudications/hearings`
   const path = `${url}?hearingDate=${hearingDate || today}`
   return stubFor({
     request: {
@@ -643,14 +634,12 @@ const stubAmendPrisonerGender = ({ draftId, response }): SuperAgentRequest =>
   })
 
 const stubGetIssueDataFilteredOnDiscDate = ({
-  agencyId = 'MDI',
   filter = {
     fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
     toDate: moment().format('YYYY-MM-DD'),
   },
   response,
 }: {
-  agencyId: string
   filter: {
     fromDate: string
     toDate: string
@@ -658,7 +647,7 @@ const stubGetIssueDataFilteredOnDiscDate = ({
   response
 }): SuperAgentRequest => {
   const path =
-    `/adjudications/reported-adjudications/agency/${agencyId}/issue?` +
+    `/adjudications/reported-adjudications/for-issue?` +
     `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
     `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
   return stubFor({
@@ -677,7 +666,6 @@ const stubGetIssueDataFilteredOnDiscDate = ({
 }
 
 const stubGetIssueDataFilteredOnHearingDate = ({
-  agencyId = 'MDI',
   filter = {
     fromDate: moment().format('YYYY-MM-DD'),
     toDate: moment().add(2, 'days').format('YYYY-MM-DD'),
@@ -685,7 +673,6 @@ const stubGetIssueDataFilteredOnHearingDate = ({
   },
   response,
 }: {
-  agencyId: string
   filter: {
     fromDate: string
     toDate: string
@@ -694,7 +681,7 @@ const stubGetIssueDataFilteredOnHearingDate = ({
   response
 }): SuperAgentRequest => {
   const path =
-    `/adjudications/reported-adjudications/agency/${agencyId}/print?` +
+    `/adjudications/reported-adjudications/for-print?` +
     `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
     `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
     `${(filter.issueStatus && `&issueStatus=${filter.issueStatus}`) || `&issueStatus=${allIssueStatuses}`}`

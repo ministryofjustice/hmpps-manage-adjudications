@@ -276,11 +276,7 @@ export default class PlaceOnReportService {
     filter: ContinueReportApiFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<DraftAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user).getAllDraftAdjudicationsForUser(
-      user.activeCaseLoadId,
-      filter,
-      pageRequest
-    )
+    const pageResponse = await new ManageAdjudicationsClient(user).getAllDraftAdjudicationsForUser(filter, pageRequest)
 
     const prisonerDetails = new Map(
       (
