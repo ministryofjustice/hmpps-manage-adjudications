@@ -123,43 +123,29 @@ export default class prisonerReportRoutes {
     const { user } = res.locals
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
-    const reportedAdjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       adjudicationNumber,
       user
     )
-    const { status } = reportedAdjudication.reportedAdjudication
 
+    const { status } = reportedAdjudication
     const draftRequired = this.statusAllowsEditRequiringDraft(status)
 
     const { newDraftAdjudicationId, draftAdjudication, prisoner, prisonerReportData, offence } =
-      await this.prisonerReportDetails(
-        draftRequired,
-        user,
-        adjudicationNumber,
-        reportedAdjudication.reportedAdjudication
-      )
+      await this.prisonerReportDetails(draftRequired, user, adjudicationNumber, reportedAdjudication)
 
-    const reviewData = await this.reportedAdjudicationsService.getReviewDetails(
-      reportedAdjudication.reportedAdjudication,
-      user
-    )
+    const reviewData = await this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
 
     const prisonerReportVariables = getVariablesForPageType(
       this.pageOptions,
       prisoner.prisonerNumber,
-      draftRequired
-        ? draftAdjudication.adjudicationNumber
-        : reportedAdjudication.reportedAdjudication.adjudicationNumber,
+      draftRequired ? draftAdjudication.adjudicationNumber : reportedAdjudication.adjudicationNumber,
       newDraftAdjudicationId
     )
 
-    const convertedEvidence = convertEvidenceToTableFormat(reportedAdjudication.reportedAdjudication.evidence)
+    const convertedEvidence = convertEvidenceToTableFormat(reportedAdjudication.evidence)
 
-    const editAndReviewAvailability = this.getEditAndReviewAvailability(
-      reportedAdjudication.reportedAdjudication,
-      this.pageOptions,
-      status
-    )
+    const editAndReviewAvailability = this.getEditAndReviewAvailability(reportedAdjudication, this.pageOptions, status)
 
     const returned = status === ReportedAdjudicationStatus.RETURNED
 
@@ -168,14 +154,14 @@ export default class prisonerReportRoutes {
       prisoner,
       prisonerReportData,
       reviewData,
-      reportNo: reportedAdjudication.reportedAdjudication.adjudicationNumber,
+      reportNo: reportedAdjudication.adjudicationNumber,
       draftAdjudicationNumber: draftRequired ? draftAdjudication.id : null,
       offence,
       ...prisonerReportVariables,
       editAndReviewAvailability,
-      damages: reportedAdjudication.reportedAdjudication.damages,
+      damages: reportedAdjudication.damages,
       evidence: convertedEvidence,
-      witnesses: reportedAdjudication.reportedAdjudication.witnesses,
+      witnesses: reportedAdjudication.witnesses,
     })
   }
 
