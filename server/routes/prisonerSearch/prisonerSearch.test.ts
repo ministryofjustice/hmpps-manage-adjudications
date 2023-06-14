@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
+import config from '../../config'
 
 let app: Express
 
@@ -26,7 +27,18 @@ describe('GET /search-for-prisoner', () => {
 })
 
 describe('POST /search-for-prisoner', () => {
+  it('should redirect to select prisoner page with the correct search text and transfer', () => {
+    config.transfersFeatureFlag = 'true'
+
+    return request(app)
+      .post(`${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
+      .send({ searchTerm: 'Smith' })
+      .expect('Location', `${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith&transfer=true`)
+  })
+
   it('should redirect to select prisoner page with the correct search text', () => {
+    config.transfersFeatureFlag = 'false'
+
     return request(app)
       .post(adjudicationUrls.searchForPrisoner.root)
       .send({ searchTerm: 'Smith' })
