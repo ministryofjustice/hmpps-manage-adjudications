@@ -1000,6 +1000,21 @@ const stubGetDataInsightsChart = ({ id, response = {} }): SuperAgentRequest =>
     },
   })
 
+const stubCreatePunishmentComment = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1052,6 +1067,7 @@ export default {
   stubCreatePunishments,
   stubAmendPunishments,
   stubGetSuspendedPunishments,
+  stubCreatePunishmentComment,
   stubAloAmendOffenceDetails,
   stubGetDataInsightsChart,
 }

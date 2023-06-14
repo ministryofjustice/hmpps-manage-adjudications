@@ -25,7 +25,11 @@ export default function PunishmentsAndDamagesRoutes({
     userService,
     punishmentsService
   )
-  const hearingTabReporterRoute = new PunishmentsTabReporterRoute(reportedAdjudicationsService, punishmentsService)
+  const hearingTabReporterRoute = new PunishmentsTabReporterRoute(
+    reportedAdjudicationsService,
+    userService,
+    punishmentsService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 

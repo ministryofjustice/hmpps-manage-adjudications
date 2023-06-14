@@ -6,6 +6,7 @@
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
 {% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+{% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
 
 {% block pageTitle %}
   Punishments and damages
@@ -74,5 +75,23 @@
       <p class="govuk-body govuk-!-margin-top-3">You can only add punishments if the charge is proved.</p>
     </div>
   {% endif %}
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
+
+  {% if punishmentComments | length > 0 %}
+    {{ punishmentCommentTable(punishmentComments, readOnly) }}
+  {% endif %}
+
+  <div>
+    {% if not readOnly %}
+      {{ govukButton({
+        text: 'Add comment',
+        element: "a",
+        href: adjudicationUrls.punishmentComment.urls.add(reportNo),
+        classes: "govuk-button--secondary",
+        attributes: { "data-qa": "add-punishments-comment" }
+      }) }}
+    {% endif %}
+  </div>
 
 {% endblock %}
