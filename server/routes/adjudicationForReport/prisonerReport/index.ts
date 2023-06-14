@@ -3,6 +3,7 @@ import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import PrisonerReportRoutes from './prisonerReport'
 import PrisonerReportReviewRoutes from './prisonerReportReview'
+import PrisonerReportViewRoutes from './prisonerReportViewOnly'
 
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import UserService from '../../../services/userService'
@@ -26,6 +27,7 @@ export default function prisonerReportRoutes({
     userService,
     decisionTreeService
   )
+  const prisonerReportViewRoute = new PrisonerReportViewRoutes(reportedAdjudicationsService, decisionTreeService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
@@ -33,6 +35,7 @@ export default function prisonerReportRoutes({
   get(adjudicationUrls.prisonerReport.matchers.report, prisonerReportRoute.view)
   get(adjudicationUrls.prisonerReport.matchers.review, prisonerReportReview.view)
   post(adjudicationUrls.prisonerReport.matchers.review, prisonerReportReview.submit)
+  get(adjudicationUrls.prisonerReport.matchers.viewOnly, prisonerReportViewRoute.view)
 
   return router
 }
