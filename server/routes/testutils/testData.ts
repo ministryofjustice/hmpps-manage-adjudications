@@ -30,7 +30,14 @@ import {
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
-import { PunishmentDataWithSchedule } from '../../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentComment,
+  PunishmentData,
+  PunishmentDataWithSchedule,
+  PunishmentSchedule,
+  PunishmentType,
+} from '../../data/PunishmentResult'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -52,6 +59,7 @@ export default class TestData {
     hearings = null,
     outcomes = null,
     punishments = null,
+    punishmentComments = [],
     dateTimeOfFirstHearing = null,
     issuingOfficer = null,
     dateTimeOfIssue = null,
@@ -76,6 +84,7 @@ export default class TestData {
     hearings?: HearingDetails[]
     outcomes?: OutcomeHistory
     punishments?: PunishmentDataWithSchedule[]
+    punishmentComments?: PunishmentComment[]
     dateTimeOfFirstHearing?: string
     issuingOfficer?: string
     dateTimeOfIssue?: string
@@ -109,6 +118,7 @@ export default class TestData {
       hearings,
       outcomes,
       punishments,
+      punishmentComments,
       dateTimeOfFirstHearing,
       issuingOfficer,
       dateTimeOfIssue,
@@ -302,6 +312,102 @@ export default class TestData {
       code,
       details,
       reason,
+    }
+  }
+  /*
+  punishment = ({
+    id = 1,
+    redisId = 'redisId',
+    type = PunishmentType.ADDITIONAL_DAYS,
+    privilegeType = PrivilegeType.CANTEEN,
+    otherPrivilege = 'lalalala',
+    stoppagePercentage = 0,
+    days = 10,
+    startDate = '2023-04-03',
+    endDate = '2023-04-12',
+    suspendedUntil = '2023-04-03',
+    activatedFrom = 0,
+  }: {
+    id?: number
+    redisId?: string
+    type?: PunishmentType
+    privilegeType?: PrivilegeType
+    otherPrivilege?: string
+    stoppagePercentage?: number
+    days?: number
+    startDate?: string
+    endDate?: string
+    suspendedUntil?: string
+    activatedFrom?: number
+  }): PunishmentData => {
+    return {
+      id,
+      redisId,
+      type,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      days,
+      startDate,
+      endDate,
+      suspendedUntil,
+      activatedFrom,
+    }
+  }
+  */
+
+  punishmentWithSchedule = ({
+    id = 1,
+    redisId = 'redisId',
+    type = PunishmentType.PRIVILEGE,
+    privilegeType = PrivilegeType.CANTEEN,
+    otherPrivilege = 'lalalala',
+    stoppagePercentage = 0,
+    schedule = {
+      days: 10,
+      startDate: '2023-04-03',
+      endDate: '2023-04-12',
+      suspendedUntil: '2023-04-03',
+    },
+    activatedFrom = 0,
+  }: {
+    redisId?: string
+    id?: number
+    type?: PunishmentType
+    privilegeType?: PrivilegeType
+    otherPrivilege?: string
+    stoppagePercentage?: number
+    schedule?: PunishmentSchedule
+    activatedFrom?: number
+  }): PunishmentDataWithSchedule => {
+    return {
+      id,
+      redisId,
+      type,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      schedule,
+      activatedFrom,
+    }
+  }
+
+  singlePunishmentComment = ({
+    id = 1,
+    comment = 'punishment comment text',
+    createdByUserId = 'USER1',
+    dateTime = '2023-01-01T06:00:00',
+  }: {
+    id?: number
+    comment?: string
+    createdByUserId?: string
+    dateTime?: string
+  }): PunishmentComment => {
+    return {
+      id,
+      comment,
+      createdByUserId,
+      dateTime,
     }
   }
 
