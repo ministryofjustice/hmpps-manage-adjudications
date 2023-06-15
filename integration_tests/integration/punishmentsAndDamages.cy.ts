@@ -332,7 +332,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage
         .noPunishments()
         .contains('There are no punishments added. You can only add punishments if the charge is proved.')
-      punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
     })
     it('should contain the required page elements - status `quashed`', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(102))
@@ -349,7 +349,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       // punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
       // punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should contain the required page elements - status `quashed`', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(112))
@@ -390,7 +390,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       // punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
       // punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should not show change links, change button or quash button if outcome is entered in NOMIS flag is present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(110))
@@ -418,7 +418,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       // punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
       // punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should contain the required page elements - charge proved, punishments and comments present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
@@ -433,7 +433,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       // punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
       // punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should not have any buttons or change links if outcome entered in NOMIS - charge proved, punishments present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(111))
