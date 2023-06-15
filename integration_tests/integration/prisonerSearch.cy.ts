@@ -95,11 +95,13 @@ context('Prisoner Search', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           enhanced: false,
+          prisonId: 'LEI',
         }),
         testData.prisonerSearchSummary({
           firstName: 'John',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
+          prisonId: 'MDI',
           enhanced: false,
         }),
       ],
@@ -110,7 +112,7 @@ context('Prisoner Search', () => {
     prisonerSearchPage.searchTermInput().type('A1234AA')
     prisonerSearchPage.submitButton().click()
     prisonerSearchPage.errorSummary().should('not.exist')
-    prisonerSearchPage.resultsRows().should('have.length', 2)
+    prisonerSearchPage.resultsRows().should('have.length', 1)
   })
 
   it('should have the correct href for the start a report link', () => {

@@ -415,6 +415,7 @@ export default class TestData {
     enhanced = true,
     gender = 'Male',
     startHref = null,
+    prisonId = 'MDI',
   }: {
     firstName: string
     lastName: string
@@ -422,19 +423,21 @@ export default class TestData {
     enhanced?: boolean
     gender?: string
     startHref?: string
+    prisonId?: string
   }): PrisonerSearchSummary => {
     return {
       cellLocation: '1-2-015',
       prisonerNumber,
       prisonName: 'HMP Moorland',
       gender,
-      prisonId: 'MDI',
+      prisonId,
       firstName,
       lastName,
       startHref: enhanced ? startHref : null,
       displayCellLocation: enhanced ? '1-2-015' : null,
       displayName: enhanced ? `${lastName}, ${firstName}` : null,
       friendlyName: enhanced ? `${firstName} ${lastName}` : null,
+      onlyShowPrisonName: false,
     }
   }
 

@@ -31,6 +31,7 @@ describe('GET /select-prisoner', () => {
         firstName: 'John',
         lastName: 'Smith',
         prisonerNumber: 'A1234AA',
+        prisonId: 'LEI',
         startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
       })
       return prisonerSearchService.search.mockResolvedValue([searchResult])

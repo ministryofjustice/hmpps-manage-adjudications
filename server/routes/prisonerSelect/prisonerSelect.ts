@@ -37,7 +37,11 @@ export default class PrisonerSelectRoutes {
 
     if (!searchTerm) return res.redirect(adjudicationUrls.searchForPrisoner.root)
 
-    const searchResults = await this.prisonerSearchService.search({ searchTerm, prisonIds }, user)
+    let searchResults = await this.prisonerSearchService.search({ searchTerm, prisonIds }, user)
+
+    if (prisonIds.length === 0) {
+      searchResults = searchResults.filter(prisoner => prisoner.prisonId !== user.activeCaseLoadId)
+    }
 
     return this.renderView(req, res, { searchResults, searchTerm })
   }

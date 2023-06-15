@@ -13,6 +13,8 @@ export interface PrisonerSearchSummary extends PrisonerSearchResult {
   friendlyName: string
   displayCellLocation: string
   startHref: string
+  prisonName: string
+  onlyShowPrisonName: boolean
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
@@ -71,6 +73,7 @@ export default class PrisonerSearchService {
     const enhancedResults = results.map(prisoner => {
       return {
         ...prisoner,
+        onlyShowPrisonName: prisoner.prisonId !== user.activeCaseLoadId,
         ...PrisonerSearchService.enhancePrisoner(prisoner),
       }
     })
