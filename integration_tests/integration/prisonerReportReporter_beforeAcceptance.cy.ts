@@ -63,19 +63,6 @@ const reportedAdjudicationResponse = ({
   }
 }
 
-const createDraftFromReportedAdjudicationResponse = (reportedAdj: ReportedAdjudicationResult, id: number) => {
-  const { reportedAdjudication } = reportedAdj
-  return {
-    draftAdjudication: testData.draftAdjudication({
-      id,
-      locationId: 25538,
-      dateTimeOfIncident: '2021-12-09T10:30:00',
-      dateTimeOfDiscovery: '2021-12-10T09:40:00',
-      ...reportedAdjudication,
-    }),
-  }
-}
-
 const draftAdjudicationResponse = (reportedAdj: ReportedAdjudicationResult, id: number) => {
   const { reportedAdjudication } = reportedAdj
   return {
@@ -142,7 +129,7 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 12345,
-      response: createDraftFromReportedAdjudicationResponse(awaitingReviewReport, 177),
+      response: draftAdjudicationResponse(awaitingReviewReport, 177),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
@@ -175,7 +162,7 @@ context('Prisoner report - reporter view', () => {
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 1524493,
-      response: createDraftFromReportedAdjudicationResponse(returnedReport, 188),
+      response: draftAdjudicationResponse(returnedReport, 188),
     })
     cy.task('stubGetDraftAdjudication', {
       id: 188,
