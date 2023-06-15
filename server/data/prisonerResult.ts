@@ -41,4 +41,7 @@ export default class PrisonerResult {
 
   @Expose()
   physicalAttributes: PhysicalAttributes
+
+  @Expose()
+  agencyId: string
 }

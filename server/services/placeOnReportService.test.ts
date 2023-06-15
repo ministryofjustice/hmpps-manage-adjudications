@@ -65,6 +65,13 @@ describe('placeOnReportService', () => {
 
   describe('startNewDraftAdjudication', () => {
     it('returns the adjudication details with new id', async () => {
+      getPrisonerDetails.mockResolvedValue(
+        testData.prisonerResultSummary({
+          offenderNo: 'A1234AA',
+          firstName: 'John',
+          lastName: 'Smith',
+        })
+      )
       startNewDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 1,
@@ -89,6 +96,7 @@ describe('placeOnReportService', () => {
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
         gender: PrisonerGender.MALE,
+        overrideAgencyId: null,
       })
       expect(result).toEqual({
         draftAdjudication: testData.draftAdjudication({
@@ -97,6 +105,34 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
         }),
+      })
+    })
+    it('returns the adjudication details with new id and override agency id', async () => {
+      getPrisonerDetails.mockResolvedValue(
+        testData.prisonerResultSummary({
+          offenderNo: 'A1234AA',
+          firstName: 'John',
+          lastName: 'Smith',
+          agencyId: 'LEI',
+        })
+      )
+
+      await service.startNewDraftAdjudication(
+        '2021-10-28T15:40:25.884',
+        3,
+        'G2996UX',
+        user,
+        PrisonerGender.MALE,
+        '2021-10-29T15:40:25.884'
+      )
+      expect(startNewDraftAdjudication).toBeCalledWith({
+        dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
+        locationId: 3,
+        prisonerNumber: 'G2996UX',
+        agencyId: 'MDI',
+        gender: PrisonerGender.MALE,
+        overrideAgencyId: 'LEI',
       })
     })
   })
