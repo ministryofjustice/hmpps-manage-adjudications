@@ -69,9 +69,7 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
   }
 
-  async getReviewDetails(adjudicationData: ReportedAdjudicationResult, user: User) {
-    const { reportedAdjudication } = adjudicationData
-
+  async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {
     if (reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW)
       return { reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status) }
 
@@ -452,18 +450,19 @@ export default class ReportedAdjudicationsService {
     return newDraftAdjudicationData.draftAdjudication.id
   }
 
-  async getPrisonerReport(user: User, draftAdjudication: DraftAdjudication): Promise<PrisonerReport> {
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
+  async getPrisonerReport(user: User, adjudication: DraftAdjudication & ReportedAdjudication): Promise<PrisonerReport> {
+    const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
+    const reporter = await this.hmppsAuthClient.getUserFromUsername(userId, user.token)
 
-    const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
+    const dateTime = adjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')
     const time = getTime(dateTime)
 
-    const dateTimeDiscovery = draftAdjudication.incidentDetails.dateTimeOfDiscovery
+    const dateTimeDiscovery = adjudication.incidentDetails.dateTimeOfDiscovery
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
 
-    const location = await this.locationService.getIncidentLocation(draftAdjudication.incidentDetails.locationId, user)
+    const location = await this.locationService.getIncidentLocation(adjudication.incidentDetails.locationId, user)
 
     const incidentDetails = [
       {
@@ -494,8 +493,8 @@ export default class ReportedAdjudicationsService {
 
     return {
       incidentDetails,
-      statement: draftAdjudication.incidentStatement?.statement,
-      isYouthOffender: draftAdjudication.isYouthOffender,
+      statement: adjudication.incidentStatement?.statement,
+      isYouthOffender: adjudication.isYouthOffender,
     }
   }
 

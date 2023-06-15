@@ -64,4 +64,6 @@ export default class PrisonerReportPage extends Page {
   returnLink = (): PageElement => cy.get('[data-qa="prisoner-report-return-link"]')
 
   hearingsTab = (): PageElement => cy.get('[data-qa="hearingsTab"]')
+
+  punishmentsTab = (): PageElement => cy.get('[data-qa="punishmentsTab"]')
 }

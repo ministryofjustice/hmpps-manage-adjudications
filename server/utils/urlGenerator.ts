@@ -312,10 +312,12 @@ const adjudicationUrls = {
     matchers: {
       report: '/:adjudicationNumber/report',
       review: '/:adjudicationNumber/review',
+      viewOnly: '/:adjudicationNumber/view',
     },
     urls: {
       report: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/report`,
       review: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review`,
+      viewOnly: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/view`,
     },
   },
   deletePerson: {
