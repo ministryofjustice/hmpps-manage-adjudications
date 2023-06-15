@@ -22,7 +22,6 @@
   <div class="govuk-!-margin-bottom-6 chart-with-table-panel">
       {{ chart(chartSettingList[0].chartData) }}
     <div class="chart-table-panel">
-
       <div class="results-table">
         {{ govukTable({
           head: chartSettingList[0].tableData.head,
@@ -30,7 +29,6 @@
           attributes: { "data-qa": "results-table" }
         }) }}
       </div>
-
     </div>
   </div>
 
