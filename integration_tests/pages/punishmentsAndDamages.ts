@@ -23,9 +23,9 @@ export default class PunishmentsAndDamagesPage extends Page {
 
   punishmentCommentsTable = (): PageElement => cy.get('[data-qa="punishment-comments-table"]')
 
-  changePunishmentCommentLink = (): PageElement => cy.get('[data-qa="change-punishment-comment-0"]')
+  changePunishmentCommentLink = (): PageElement => cy.get('[data-qa="change-punishment-comment-1"]')
 
-  removePunishmentCommentLink = (): PageElement => cy.get('[data-qa="remove-punishment-comment-0"]')
+  removePunishmentCommentLink = (): PageElement => cy.get('[data-qa="remove-punishment-comment-1"]')
 
   addPunishmentCommentButton = (): PageElement => cy.get('[data-qa="add-punishment-comment"]')
 }
