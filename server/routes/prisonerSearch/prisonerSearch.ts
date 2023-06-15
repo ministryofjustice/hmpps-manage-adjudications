@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import validateForm from './prisonerSearchValidation'
 import { FormError } from '../../@types/template'
 import adjudicationUrls from '../../utils/urlGenerator'
+import config from '../../config'
 
 export default class PrisonerSearchRoutes {
   private renderView = async (req: Request, res: Response, error?: FormError): Promise<void> => {
@@ -15,11 +16,20 @@ export default class PrisonerSearchRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
+    const transfer = req.query.transfer as string
 
     const error = validateForm({ searchTerm })
 
     if (error) return this.renderView(req, res, error)
 
+    if (config.transfersFeatureFlag === 'true') {
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.selectPrisoner.root,
+          query: { searchTerm, transfer },
+        })
+      )
+    }
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
