@@ -314,47 +314,6 @@ export default class TestData {
       reason,
     }
   }
-  /*
-  punishment = ({
-    id = 1,
-    redisId = 'redisId',
-    type = PunishmentType.ADDITIONAL_DAYS,
-    privilegeType = PrivilegeType.CANTEEN,
-    otherPrivilege = 'lalalala',
-    stoppagePercentage = 0,
-    days = 10,
-    startDate = '2023-04-03',
-    endDate = '2023-04-12',
-    suspendedUntil = '2023-04-03',
-    activatedFrom = 0,
-  }: {
-    id?: number
-    redisId?: string
-    type?: PunishmentType
-    privilegeType?: PrivilegeType
-    otherPrivilege?: string
-    stoppagePercentage?: number
-    days?: number
-    startDate?: string
-    endDate?: string
-    suspendedUntil?: string
-    activatedFrom?: number
-  }): PunishmentData => {
-    return {
-      id,
-      redisId,
-      type,
-      privilegeType,
-      otherPrivilege,
-      stoppagePercentage,
-      days,
-      startDate,
-      endDate,
-      suspendedUntil,
-      activatedFrom,
-    }
-  }
-  */
 
   punishmentWithSchedule = ({
     id = 1,

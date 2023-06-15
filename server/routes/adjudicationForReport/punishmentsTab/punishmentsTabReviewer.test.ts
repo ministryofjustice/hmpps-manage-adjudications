@@ -55,7 +55,7 @@ afterEach(() => {
 })
 
 describe('GET Punishments and damages tab', () => {
-  it('should show punishment comments', () => {
+  it('should show punishment comments, allow to add comment, owner can change/remove comment', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
@@ -85,7 +85,7 @@ describe('GET Punishments and damages tab', () => {
       })
   })
 
-  it('should show punishment comments even if no punishment added', () => {
+  it('should show punishment comments even if no punishment added. Allow to add comment, owner can change/remove comment.', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
