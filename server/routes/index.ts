@@ -266,10 +266,7 @@ export default function routes(
     adjudicationUrls.hearingReasonForFinding.root,
     reasonForFindingRoutes({ reportedAdjudicationsService, hearingsService, userService })
   )
-  router.use(
-    adjudicationUrls.isThisACaution.root,
-    cautionRoutes({ reportedAdjudicationsService, hearingsService, userService })
-  )
+  router.use(adjudicationUrls.isThisACaution.root, cautionRoutes({ reportedAdjudicationsService, userService }))
   router.use(
     adjudicationUrls.reportAQuashedGuiltyFinding.root,
     reportAQuashedGuiltyFindingRoutes({ outcomesService, userService, reportedAdjudicationsService })
