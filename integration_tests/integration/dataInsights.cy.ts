@@ -19,37 +19,39 @@ context('Adjudication data', () => {
 
   it('should contain the required page elements on /data-insights', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.start())
-    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
-    dataInsightsPage.checkOnPage()
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
   })
 
   it('should contain the required page elements /data-insights/totals-adjudications-and-locations', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations())
-    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
-    dataInsightsPage.checkOnPage()
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
+    page.checkChartTitle('Total adjudications - over 24 months')
+    page.checkChartTitle('Total adjudications referred to independent adjudicator - over 24 months')
   })
 
   it('should contain the required page elements /data-insights/protected-characteristics-and-vulnerabilities', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
-    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
-    dataInsightsPage.checkOnPage()
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
-    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
-    dataInsightsPage.checkOnPage()
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.punishments())
-    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
-    dataInsightsPage.checkOnPage()
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
   })
 
   it('should contain the required page elements /data-insights/pleas-and-findings', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.pleasAndFindings())
-    const dataInsightsPage: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
-    dataInsightsPage.checkOnPage()
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
   })
 })
