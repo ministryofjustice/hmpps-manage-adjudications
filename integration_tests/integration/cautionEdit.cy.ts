@@ -136,11 +136,6 @@ context('Is this punishment a caution?', () => {
         }),
       },
     })
-    cy.task('stubAmendHearingOutcome', {
-      adjudicationNumber: 100,
-      status: ReportedAdjudicationStatus.CHARGE_PROVED,
-      response: {},
-    })
   })
 
   describe('Loads', () => {
@@ -191,7 +186,7 @@ context('Is this punishment a caution?', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.edit(100))
-        expect(loc.search).to.eq('?adjudicator=&amount=&plea=&damagesOwed=')
+        expect(loc.search).to.eq('?adjudicator=&amount=&plea=&damagesOwed=&caution=yes')
       })
     })
     it('should submit successfully, answer no', () => {
@@ -202,7 +197,8 @@ context('Is this punishment a caution?', () => {
       cautionPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.edit(100))
+        expect(loc.search).to.eq('?adjudicator=&amount=&plea=&damagesOwed=&caution=no')
       })
     })
   })

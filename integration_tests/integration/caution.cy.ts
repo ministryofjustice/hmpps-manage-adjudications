@@ -15,10 +15,6 @@ context('Is this punishment a caution?', () => {
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
-    cy.task('stubPostCompleteHearingChargeProved', {
-      adjudicationNumber: 100,
-      response: {},
-    })
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
@@ -66,7 +62,7 @@ context('Is this punishment a caution?', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
-        expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY&damagesOwed=')
+        expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY&damagesOwed=&caution=yes')
       })
     })
     it('should submit successfully, answer no', () => {
@@ -79,7 +75,8 @@ context('Is this punishment a caution?', () => {
       cautionPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+        expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY&damagesOwed=&caution=no')
       })
     })
   })

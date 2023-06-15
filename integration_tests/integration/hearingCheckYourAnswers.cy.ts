@@ -24,7 +24,9 @@ context('Check your answers before submitting', () => {
   describe('Loads', () => {
     it('should contain the required page elements', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().should('exist')
@@ -33,7 +35,9 @@ context('Check your answers before submitting', () => {
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.cancelLink().click()
@@ -43,7 +47,9 @@ context('Check your answers before submitting', () => {
     })
     it('shows the correct information in the summary table - money amount provided', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage
@@ -62,7 +68,11 @@ context('Check your answers before submitting', () => {
         })
     })
     it('shows the correct information in the summary table - money amount not provided', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=yes`
+      )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage
         .answersTable()
@@ -74,12 +84,41 @@ context('Check your answers before submitting', () => {
   })
 
   describe('saves', () => {
-    it('should submit successfully', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
+    it('should submit successfully- caution yes', () => {
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=yes`
+      )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      })
+    })
+    it('should submit successfully - caution no', () => {
+      cy.task('stubGetReportedAdjudication', {
+        id: 100,
+        response: {
+          reportedAdjudication: testData.reportedAdjudication({
+            adjudicationNumber: 100,
+            prisonerNumber: 'G6415GD',
+            dateTimeOfIncident: '2022-11-15T09:10:00',
+            handoverDeadline: '2022-11-17T09:30:00',
+            punishments: [],
+          }),
+        },
+      })
+
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=no`
+      )
+      const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
+      checkAnswersPage.submitButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(100))
       })
     })
     it('goes back to enter hearing outcome page if the query parameters are lost', () => {
