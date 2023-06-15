@@ -46,6 +46,7 @@ import { User } from './hmppsAuthClient'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
+  overrideAgencyId?: string
   gender: PrisonerGender
 }
 

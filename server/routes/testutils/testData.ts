@@ -449,6 +449,7 @@ export default class TestData {
     includeBirthday = true,
     language = 'English',
     assignedLivingUnitDesc = '1-2-015',
+    agencyId = 'MDI',
   }: {
     offenderNo: string
     firstName: string
@@ -457,6 +458,7 @@ export default class TestData {
     includeBirthday?: boolean
     language?: string
     assignedLivingUnitDesc?: string
+    agencyId?: string
   }): PrisonerResultSummary => {
     return {
       offenderNo,
@@ -479,6 +481,7 @@ export default class TestData {
       physicalAttributes: {
         gender,
       },
+      agencyId,
     }
   }
 
