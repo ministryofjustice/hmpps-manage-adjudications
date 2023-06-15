@@ -23,6 +23,189 @@ const LIGHT_PURPLE = '#8c8ec0'
 // const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
 
+const createBarsAndLineChartSettings = (params: {
+  elementId: string
+  chartTitle: string
+  barData: number[]
+  lineData: number[]
+  labels: string[][]
+  head: never[]
+  rows: {
+    text: string | number
+    classes: string
+  }[][]
+}) => {
+  const dataLength = params.barData.length
+  const barsColors = [...[...Array(dataLength - 1)].map(() => DARK_BLUE), LIGHT_BLUE]
+  const barsColorsDarker = [...[...Array(dataLength - 1)].map(() => DARK_BLUE_DARKER), LIGHT_BLUE_DARKER]
+
+  return {
+    title: params.chartTitle,
+    chartData: {
+      elementId: params.elementId,
+      chartOptions: {
+        data: {
+          datasets: [
+            {
+              type: 'bar',
+              order: 2,
+              label: 'This year 2023',
+              data: params.barData,
+              backgroundColor: barsColors,
+              hoverBackgroundColor: barsColorsDarker,
+              hoverBorderWidth: 1,
+              hoverBorderColor: barsColorsDarker,
+            },
+            {
+              type: 'line',
+              order: 1,
+              label: 'Previous year 2022',
+              data: params.lineData,
+              fill: false,
+              borderColor: TURQUOISE,
+              backgroundColor: TURQUOISE,
+              pointBackgroundColor: TURQUOISE,
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 1,
+              pointHoverBackgroundColor: ['#ffffff', '#000000'],
+              pointHoverBorderColor: TURQUOISE,
+              pointHoverBorderWidth: 3,
+              tension: 0,
+              borderWidth: 2,
+              pointStyle: 'circle',
+              font: {
+                size: 16,
+                weight: '600',
+              },
+            },
+            {
+              type: 'line',
+              order: 3,
+              label: 'Current incomplete month',
+              data: [],
+              fill: false,
+              borderColor: LIGHT_BLUE,
+              backgroundColor: LIGHT_BLUE,
+              tension: 1,
+            },
+          ],
+          labels: params.labels,
+        },
+        options: {
+          scales: {
+            x: {
+              border: {
+                color: 'black',
+              },
+              display: true,
+              ticks: {
+                display: true,
+                color: 'black',
+                font: {
+                  size: 16,
+                  weight: '600',
+                },
+              },
+              grid: {
+                display: false,
+              },
+            },
+            y: {
+              beginAtZero: true,
+              display: true,
+              ticks: {
+                stepSize: 20,
+                font: {
+                  size: 20,
+                  weight: '400',
+                },
+              },
+            },
+          },
+          plugins: {
+            layout: {
+              padding: 30,
+            },
+            legend: {
+              onClick: null,
+              position: 'top',
+              labels: {
+                font: {
+                  size: 20,
+                  family: FONT_FAMILY,
+                },
+                padding: 20,
+                boxWidth: 40,
+                boxHeight: 25,
+              },
+            },
+            title: {
+              display: false,
+              text: params.chartTitle,
+              font: {
+                size: 30,
+                family: FONT_FAMILY,
+              },
+            },
+            tooltip: {
+              backgroundColor: LIGHT_PURPLE,
+              titleColor: 'white',
+              titleFontX: FONT_FAMILY,
+              titleAlign: 'center',
+              titleSpacing: 2,
+              titleMarginBottom: 6,
+              titleFont: {
+                size: 18,
+                family: FONT_FAMILY,
+              },
+              bodyColor: 'white',
+              bodySpacing: 2,
+              bodyFont: {
+                size: 14,
+                family: FONT_FAMILY,
+              },
+            },
+          },
+        },
+      } as ChartOptions,
+    },
+    tableData: {
+      head: params.head,
+      rows: params.rows,
+    },
+  }
+}
+
+const getRows = (barData: number[], lineData: number[]) => {
+  const rows2: { text: string | number; classes: string }[][] = [
+    [
+      {
+        text: 'Number this year 2023',
+        classes: 'chart-table-panel-series',
+      },
+      ...barData.map(value => {
+        return {
+          text: value,
+          classes: 'chart-table-panel-value',
+        }
+      }),
+    ],
+    [
+      {
+        text: 'Number previous year 2022',
+        classes: 'chart-table-panel-series',
+      },
+      ...lineData.map(value => {
+        return {
+          text: value,
+          classes: 'chart-table-panel-value',
+        }
+      }),
+    ],
+  ]
+  return rows2
+}
+
 export default class TotalsAdjudicationsAndLocationsTabPage {
   pageOptions: PageOptions
 
@@ -39,191 +222,51 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
 
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
 
-    const chartTitle = 'Total adjudications - over 24 months'
-    const lineData = [50, 55, 62, 70, 65, 55, 64, 65, 62, 64, 55, 55]
-    const barData = [65, 60, 67, 75, 70, 60, 69, 70, 67, 69, 60, 35]
-
-    const head: never[] = []
-    const rows = [
-      [
-        {
-          text: 'Number this year 2023',
-          classes: 'chart-table-panel-series',
-          attributes: {},
-        },
-        ...lineData.map(value => {
-          return {
-            text: value,
-            classes: 'chart-table-panel-value',
-          }
-        }),
-      ],
-      [
-        {
-          text: 'Number previous year 2022',
-          classes: 'chart-table-panel-series',
-          attributes: {},
-        },
-        ...barData.map(value => {
-          return {
-            text: value,
-            classes: 'chart-table-panel-value',
-          }
-        }),
-      ],
+    const labels: string[][] = [
+      ['Apr', '2022'],
+      ['May', '2022'],
+      ['Jun', '2022'],
+      ['Jul', '2022'],
+      ['Aug', '2022'],
+      ['Sep', '2022'],
+      ['Oct', '2022'],
+      ['Nov', '2022'],
+      ['Dec', '2022'],
+      ['Jan', '2023'],
+      ['Feb', '2023'],
+      ['Mar', '2023'],
     ]
 
-    const barsColors = [...[...Array(11)].map(() => DARK_BLUE), LIGHT_BLUE]
-    const barsColorsDarker = [...[...Array(11)].map(() => DARK_BLUE_DARKER), LIGHT_BLUE_DARKER]
-    const chartOne = {
-      title: chartTitle,
-      chartData: {
+    const head: never[] = []
+
+    const barData1 = [65, 60, 67, 75, 70, 60, 69, 70, 67, 69, 60, 35]
+    const lineData1 = [50, 55, 62, 70, 65, 55, 64, 65, 62, 64, 55, 55]
+    const rows1 = getRows(barData1, lineData1)
+
+    const barData2 = [40, 35, 72, 78, 35, 45, 74, 35, 72, 74, 45, 45]
+    const lineData2 = [75, 30, 57, 55, 40, 30, 59, 40, 27, 69, 50, 25]
+    const rows2 = getRows(barData2, lineData2)
+
+    const chartSettingList = [
+      createBarsAndLineChartSettings({
         elementId: 'tab-1-chart-1',
-        chartOptions: {
-          data: {
-            datasets: [
-              {
-                type: 'bar',
-                order: 2,
-                label: 'This year 2023',
-                data: barData,
-                backgroundColor: barsColors,
-                hoverBackgroundColor: barsColorsDarker,
-                hoverBorderWidth: 1,
-                hoverBorderColor: barsColorsDarker,
-              },
-              {
-                type: 'line',
-                order: 1,
-                label: 'Previous year 2022',
-                data: lineData,
-                fill: false,
-                borderColor: TURQUOISE,
-                backgroundColor: TURQUOISE,
-                pointBackgroundColor: TURQUOISE,
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 1,
-                pointHoverBackgroundColor: ['#ffffff', '#000000'],
-                pointHoverBorderColor: TURQUOISE,
-                pointHoverBorderWidth: 3,
-                tension: 0,
-                borderWidth: 2,
-                pointStyle: 'circle',
-                font: {
-                  size: 16,
-                  weight: '600',
-                },
-              },
-              {
-                type: 'line',
-                order: 3,
-                label: 'Current incomplete month',
-                data: [],
-                fill: false,
-                borderColor: LIGHT_BLUE,
-                backgroundColor: LIGHT_BLUE,
-                tension: 1,
-              },
-            ],
-            labels: [
-              ['Apr', '2022'],
-              ['May', '2022'],
-              ['Jun', '2022'],
-              ['Jul', '2022'],
-              ['Aug', '2022'],
-              ['Sep', '2022'],
-              ['Oct', '2022'],
-              ['Nov', '2022'],
-              ['Dec', '2022'],
-              ['Jan', '2023'],
-              ['Feb', '2023'],
-              ['Mar', '2023'],
-            ],
-          },
-          options: {
-            scales: {
-              x: {
-                border: {
-                  color: 'black',
-                },
-                display: true,
-                ticks: {
-                  display: true,
-                  color: 'black',
-                  font: {
-                    size: 16,
-                    weight: '600',
-                  },
-                },
-                grid: {
-                  display: false,
-                },
-              },
-              y: {
-                beginAtZero: true,
-                display: true,
-                ticks: {
-                  stepSize: 20,
-                  font: {
-                    size: 20,
-                    weight: '400',
-                  },
-                },
-              },
-            },
-            plugins: {
-              layout: {
-                padding: 30,
-              },
-              legend: {
-                onClick: null,
-                position: 'top',
-                labels: {
-                  font: {
-                    size: 20,
-                    family: FONT_FAMILY,
-                  },
-                  padding: 20,
-                  boxWidth: 40,
-                  boxHeight: 25,
-                },
-              },
-              title: {
-                display: false,
-                text: chartTitle,
-                font: {
-                  size: 30,
-                  family: FONT_FAMILY,
-                },
-              },
-              tooltip: {
-                backgroundColor: LIGHT_PURPLE,
-                titleColor: 'white',
-                titleFontX: FONT_FAMILY,
-                titleAlign: 'center',
-                titleSpacing: 2,
-                titleMarginBottom: 6,
-                titleFont: {
-                  size: 18,
-                  family: FONT_FAMILY,
-                },
-                bodyColor: 'white',
-                bodySpacing: 2,
-                bodyFont: {
-                  size: 14,
-                  family: FONT_FAMILY,
-                },
-              },
-            },
-          },
-        } as ChartOptions,
-      },
-      tableData: {
+        chartTitle: 'Total adjudications - over 24 months',
+        barData: barData1,
+        lineData: lineData1,
+        labels,
         head,
-        rows,
-      },
-    }
-    const chartSettingList = [chartOne]
+        rows: rows1,
+      }),
+      createBarsAndLineChartSettings({
+        elementId: 'tab-1-chart-2',
+        chartTitle: 'Total adjudications referred to independent adjudicator - over 24 months',
+        barData: barData2,
+        lineData: lineData2,
+        labels,
+        head,
+        rows: rows2,
+      }),
+    ]
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {
       errors: error ? [error] : [],
