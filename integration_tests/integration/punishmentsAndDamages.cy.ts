@@ -361,7 +361,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       // punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
       // punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
     })
     it('should contain the required page elements - charge proved, no punishments, caution true', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
@@ -673,7 +673,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
-    // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+    punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
   })
   it('should contain the required page elements - status `charge proved` - punishments present', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(99))
@@ -705,7 +705,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
-    // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+    punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
   })
   it('should contain the required page elements - status quashed', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(102))
@@ -726,6 +726,6 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
-    // punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+    punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
   })
 })
