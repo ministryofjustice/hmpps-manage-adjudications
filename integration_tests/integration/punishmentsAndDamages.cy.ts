@@ -18,7 +18,7 @@ context('Damages and punishments summary', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
-      username: 'user1',
+      username: 'USER1',
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
@@ -68,7 +68,7 @@ context('Damages and punishments summary', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -96,7 +96,7 @@ context('Damages and punishments summary', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -124,7 +124,7 @@ context('Damages and punishments summary', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -185,7 +185,7 @@ context('Damages and punishments summary', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -239,7 +239,7 @@ context('Damages and punishments summary', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -496,7 +496,7 @@ context('Reporter view', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
-      username: 'user1',
+      username: 'USER1',
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'NOT_A_REVIEWER' }])
@@ -546,7 +546,7 @@ context('Reporter view', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -574,7 +574,7 @@ context('Reporter view', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -635,7 +635,7 @@ context('Reporter view', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({})],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
