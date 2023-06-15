@@ -39,6 +39,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
 
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
 
+    const chartTitle = 'Total adjudications - over 24 months'
     const lineData = [50, 55, 62, 70, 65, 55, 64, 65, 62, 64, 55, 55]
     const barData = [65, 60, 67, 75, 70, 60, 69, 70, 67, 69, 60, 35]
 
@@ -75,6 +76,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const barsColors = [...[...Array(11)].map(() => DARK_BLUE), LIGHT_BLUE]
     const barsColorsDarker = [...[...Array(11)].map(() => DARK_BLUE_DARKER), LIGHT_BLUE_DARKER]
     const chartOne = {
+      title: chartTitle,
       chartData: {
         elementId: 'tab-1-chart-1',
         chartOptions: {
@@ -170,18 +172,25 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
               },
             },
             plugins: {
+              layout: {
+                padding: 30,
+              },
               legend: {
+                onClick: null,
                 position: 'top',
                 labels: {
                   font: {
                     size: 20,
                     family: FONT_FAMILY,
                   },
+                  padding: 20,
+                  boxWidth: 40,
+                  boxHeight: 25,
                 },
               },
               title: {
-                display: true,
-                text: 'Total adjudications - over 24 months',
+                display: false,
+                text: chartTitle,
                 font: {
                   size: 30,
                   family: FONT_FAMILY,

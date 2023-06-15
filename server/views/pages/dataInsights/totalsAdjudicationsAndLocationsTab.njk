@@ -19,17 +19,8 @@
 
   {{ dataInsightsTabHeaderSingular(tabsOptions) }}
 
-  <div class="govuk-!-margin-bottom-6 chart-with-table-panel">
-      {{ chart(chartSettingList[0].chartData) }}
-    <div class="chart-table-panel">
-      <div class="results-table">
-        {{ govukTable({
-          head: chartSettingList[0].tableData.head,
-          rows: chartSettingList[0].tableData.rows,
-          attributes: { "data-qa": "results-table" }
-        }) }}
-      </div>
-    </div>
+  <div class="govuk-!-margin-bottom-6 main-chart-panel">
+      {{ chart(chartSettingList[0]) }}
   </div>
 
 {% endblock %}
