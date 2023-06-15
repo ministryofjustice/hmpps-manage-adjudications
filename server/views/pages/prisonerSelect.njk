@@ -32,7 +32,11 @@
       <img src="/prisoner/{{ prisoner.prisonerNumber }}/image" alt="Photograph of {{ prisoner.displayName }}" class="results-table__image" />
     {% endset -%}
     {% set prisonerLinkHtml %}
+     {% if prisoner.onlyShowPrisonName %}
+      {{ prisoner.prisonName }}
+    {% else %}
       <a href="{{ digitalPrisonServiceUrl }}/prisoner/{{ prisoner.prisonerNumber }}" class="govuk-link">View profile</a>
+        {% endif %}
     {% endset -%}
     {% set startReportlLinkHtml %}
       <a href="{{ prisoner.startHref }}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for {{ prisoner.friendlyName }}</span></a>

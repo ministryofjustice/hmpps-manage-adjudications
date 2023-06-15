@@ -137,12 +137,11 @@ export default class ManageAdjudicationsClient {
   }
 
   async getAllDraftAdjudicationsForUser(
-    agencyId: string,
     filter: ContinueReportApiFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<DraftAdjudication>> {
     const path =
-      `/draft-adjudications/my/agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}` +
+      `/draft-adjudications/my-reports?page=${pageRequest.number}&size=${pageRequest.size}` +
       `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
       `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
 
@@ -196,12 +195,11 @@ export default class ManageAdjudicationsClient {
   private getCompletedAdjudications =
     (prefix: string) =>
     async (
-      agencyId: string,
       filter: ReportedAdjudicationFilter,
       pageRequest: ApiPageRequest
     ): Promise<ApiPageResponse<ReportedAdjudication>> => {
       const path =
-        `${prefix}agency/${agencyId}?page=${pageRequest.number}&size=${pageRequest.size}` +
+        `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
         `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
@@ -211,16 +209,15 @@ export default class ManageAdjudicationsClient {
       })
     }
 
-  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/')
+  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/reports')
 
-  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my/')
+  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
 
   async getReportedAdjudicationIssueData(
-    agencyId: string,
     filter: ReportedAdjudicationDISFormFilter
   ): Promise<ReportedAdjudicationsResult> {
     const path =
-      `/reported-adjudications/agency/${agencyId}/issue?` +
+      `/reported-adjudications/for-issue?` +
       `${(filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
       `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
     return this.restClient.get({
@@ -229,11 +226,10 @@ export default class ManageAdjudicationsClient {
   }
 
   async getReportedAdjudicationPrintData(
-    agencyId: string,
     filter: ReportedAdjudicationDISFormFilter
   ): Promise<ReportedAdjudicationsResult> {
     const path =
-      `/reported-adjudications/agency/${agencyId}/print?${
+      `/reported-adjudications/for-print?${
         (filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''
       }` +
       `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
@@ -366,9 +362,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async getHearingsGivenAgencyAndDate(agencyId: string, chosenHearingDate: string): Promise<ScheduledHearingList> {
+  async getHearingsGivenAgencyAndDate(chosenHearingDate: string): Promise<ScheduledHearingList> {
     return this.restClient.get({
-      path: `/reported-adjudications/hearings/agency/${agencyId}?hearingDate=${chosenHearingDate}`,
+      path: `/reported-adjudications/hearings?hearingDate=${chosenHearingDate}`,
     })
   }
 

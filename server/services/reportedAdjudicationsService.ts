@@ -204,11 +204,7 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user).getYourCompletedAdjudications(
-      user.activeCaseLoadId,
-      filter,
-      pageRequest
-    )
+    const pageResponse = await new ManageAdjudicationsClient(user).getYourCompletedAdjudications(filter, pageRequest)
 
     const prisonerDetails = new Map(
       (
@@ -233,11 +229,7 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user).getAllCompletedAdjudications(
-      user.activeCaseLoadId,
-      filter,
-      pageRequest
-    )
+    const pageResponse = await new ManageAdjudicationsClient(user).getAllCompletedAdjudications(filter, pageRequest)
 
     const prisonerDetails = new Map(
       (
@@ -270,9 +262,9 @@ export default class ReportedAdjudicationsService {
     filterUsingHearingDate: boolean
   ): Promise<ReportedAdjudicationsResult> {
     if (filterUsingHearingDate) {
-      return new ManageAdjudicationsClient(user).getReportedAdjudicationPrintData(user.activeCaseLoadId, filter)
+      return new ManageAdjudicationsClient(user).getReportedAdjudicationPrintData(filter)
     }
-    return new ManageAdjudicationsClient(user).getReportedAdjudicationIssueData(user.activeCaseLoadId, filter)
+    return new ManageAdjudicationsClient(user).getReportedAdjudicationIssueData(filter)
   }
 
   async getAdjudicationDISFormData(
@@ -649,8 +641,7 @@ export default class ReportedAdjudicationsService {
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {
-    const agencyId = user.activeCaseLoadId
-    const results = await new ManageAdjudicationsClient(user).getHearingsGivenAgencyAndDate(agencyId, chosenHearingDate)
+    const results = await new ManageAdjudicationsClient(user).getHearingsGivenAgencyAndDate(chosenHearingDate)
 
     const { hearings } = results
 
