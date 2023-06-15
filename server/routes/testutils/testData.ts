@@ -33,7 +33,6 @@ import {
 import {
   PrivilegeType,
   PunishmentComment,
-  PunishmentData,
   PunishmentDataWithSchedule,
   PunishmentSchedule,
   PunishmentType,

@@ -12,7 +12,12 @@ export default class PunishmentTabRoute {
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService
   ) {
-    this.page = new PunishmentsTabPage(PageRequestType.REPORTER, reportedAdjudicationsService, punishmentsService, userService)
+    this.page = new PunishmentsTabPage(
+      PageRequestType.REPORTER,
+      reportedAdjudicationsService,
+      punishmentsService,
+      userService
+    )
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

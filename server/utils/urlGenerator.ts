@@ -647,7 +647,6 @@ const adjudicationUrls = {
       start: (adjudicationNumber: number) => `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}`,
       submittedEdit: (adjudicationNumber: number) =>
         `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}/edit`,
-
     },
   },
   activateSuspendedPunishments: {

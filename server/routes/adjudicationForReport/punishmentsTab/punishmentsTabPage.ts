@@ -82,7 +82,7 @@ export default class PunishmentsTabPage {
       users.map(it => [it.username, getFormattedOfficerName(it.name)])
     )
 
-    const punishmentComments = new Array<any>()
+    const punishmentComments = []
     // eslint-disable-next-line no-restricted-syntax
     for (const punishmentComment of reportedAdjudication.punishmentComments) {
       const { dateTime } = punishmentComment
