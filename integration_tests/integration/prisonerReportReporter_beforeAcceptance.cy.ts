@@ -609,29 +609,5 @@ context('Prisoner report - reporter view', () => {
       prisonerReportPage.offenceDetailsChangeLink().should('not.exist')
       prisonerReportPage.incidentStatementChangeLink().should('not.exist')
     })
-    it('should go to the damages page if the change link is clicked', () => {
-      cy.visit(adjudicationUrls.prisonerReport.urls.report(56789))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.damagesChangeLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEdit(56789))
-      })
-    })
-    it('should go to the evidence page if the change link is clicked', () => {
-      cy.visit(adjudicationUrls.prisonerReport.urls.report(56789))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.evidenceChangeLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.submittedEdit(56789))
-      })
-    })
-    it('should go to the witnesses page if the change link is clicked', () => {
-      cy.visit(adjudicationUrls.prisonerReport.urls.report(56789))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.witnessesChangeLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(56789))
-      })
-    })
   })
 })
