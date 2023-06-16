@@ -1002,6 +1002,21 @@ const stubGetDataInsightsChart = ({ id, response = {} }): SuperAgentRequest =>
     },
   })
 
+const stubGetAgencyReportCounts = ({ response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/report-counts`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1056,4 +1071,5 @@ export default {
   stubGetSuspendedPunishments,
   stubAloAmendOffenceDetails,
   stubGetDataInsightsChart,
+  stubGetAgencyReportCounts,
 }

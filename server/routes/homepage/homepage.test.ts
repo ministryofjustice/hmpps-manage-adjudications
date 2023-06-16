@@ -2,17 +2,29 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import UserService from '../../services/userService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+
 import adjudicationUrls from '../../utils/urlGenerator'
 
 jest.mock('../../services/userService.ts')
+jest.mock('../../services/reportedAdjudicationsService.ts')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService })
+  app = appWithAllRoutes({ production: false }, { userService, reportedAdjudicationsService })
   userService.getUserRoles.mockResolvedValue([])
+  reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
+    transferReviewTotal: 1,
+    reviewTotal: 1,
+  })
 })
 
 afterEach(() => {

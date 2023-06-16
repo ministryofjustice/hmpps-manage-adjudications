@@ -5,6 +5,7 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import config from '../../config'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type TaskType = {
   id: string
@@ -22,7 +23,7 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (): TaskType[] => {
+const createTasks = (reviewTotal: number): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
@@ -58,7 +59,7 @@ const createTasks = (): TaskType[] => {
       href: adjudicationUrls.allCompletedReports.root,
       links: [
         {
-          text: 'Review reports',
+          text: `Review reports (${reviewTotal})`,
           href: adjudicationUrls.allCompletedReports.urls.filter({
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
@@ -98,17 +99,21 @@ const createTasks = (): TaskType[] => {
 }
 
 export default class HomepageRoutes {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+  ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const { reviewTotal } = await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)
 
-    const enabledTasks = createTasks().filter(task => task.enabled)
+    const enabledTasks = createTasks(reviewTotal).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
-    const disRelatedTasks = createTasks().filter(task => task.heading.includes('DIS'))
+    const disRelatedTasks = createTasks(reviewTotal).filter(task => task.heading.includes('DIS'))
 
     reviewerTasks.push({
       id: 'enter-outcomes',
@@ -117,6 +122,7 @@ export default class HomepageRoutes {
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
     })
+
     reviewerTasks.map(task => {
       if (task.id === 'view-scheduled-hearings') {
         return task.links.push({
