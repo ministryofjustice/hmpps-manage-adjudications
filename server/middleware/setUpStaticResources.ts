@@ -34,6 +34,13 @@ export default function setUpStaticResources(): Router {
     router.use('/assets/js/jquery.min.js', express.static(path.join(process.cwd(), dir), cacheControl))
   })
 
+  Array.of('chart.umd.js', 'chart.umd.js.map').forEach(file => {
+    router.use(
+      `/assets/js/${file}`,
+      express.static(path.join(process.cwd(), `/node_modules/chart.js/dist/${file}`), cacheControl)
+    )
+  })
+
   // Don't cache dynamic resources
   router.use(noCache())
 
