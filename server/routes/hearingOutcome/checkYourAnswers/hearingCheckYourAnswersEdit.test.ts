@@ -6,6 +6,7 @@ import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import TestData from '../../testutils/testData'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -71,13 +72,76 @@ describe('GET /', () => {
 describe('POST', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}`)
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?caution=yes`)
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
       .then(() =>
         expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
           100,
           true,
+          expect.anything(),
+          null,
+          null,
+          null,
+          null
+        )
+      )
+  })
+  it('should successfully call the endpoint and redirect', () => {
+    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+      reportedAdjudication: testData.reportedAdjudication({
+        adjudicationNumber: 1524493,
+        prisonerNumber: 'G6415GD',
+        outcomes: [],
+        punishments: [],
+      }),
+    })
+    return request(app)
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?caution=no`)
+      .expect(302)
+      .expect('Location', adjudicationUrls.awardPunishments.urls.start(100))
+      .then(() =>
+        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
+          100,
+          false,
+          expect.anything(),
+          null,
+          null,
+          null,
+          null
+        )
+      )
+  })
+
+  it('should successfully call the endpoint and redirect', () => {
+    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+      reportedAdjudication: testData.reportedAdjudication({
+        adjudicationNumber: 1524493,
+        prisonerNumber: 'G6415GD',
+        outcomes: [],
+        punishments: [
+          {
+            id: 14,
+            type: PunishmentType.PRIVILEGE,
+            privilegeType: PrivilegeType.OTHER,
+            otherPrivilege: 'chocolate',
+            schedule: {
+              days: 10,
+              startDate: '2023-04-10',
+              endDate: '2023-04-20',
+            },
+          },
+        ],
+      }),
+    })
+    return request(app)
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?caution=no`)
+      .expect(302)
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .then(() =>
+        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
+          100,
+          false,
           expect.anything(),
           null,
           null,

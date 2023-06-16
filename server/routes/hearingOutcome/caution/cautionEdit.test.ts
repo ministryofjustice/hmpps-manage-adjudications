@@ -3,18 +3,15 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
-import HearingsService from '../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/userService')
-jest.mock('../../../services/hearingsService')
 jest.mock('../../../services/reportedAdjudicationsService')
 
 const testData = new TestData()
 
 const userService = new UserService(null) as jest.Mocked<UserService>
-const hearingsService = new HearingsService(null) as jest.Mocked<HearingsService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -33,7 +30,7 @@ const outcomeHistory = {
 }
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { hearingsService, userService, reportedAdjudicationsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue(outcomeHistory)
 })
@@ -44,7 +41,7 @@ afterEach(() => {
 
 describe('GET /is-caution', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { hearingsService, userService, reportedAdjudicationsService }, {})
+    app = appWithAllRoutes({ production: false }, { userService, reportedAdjudicationsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
@@ -76,17 +73,9 @@ describe('POST /is-caution', () => {
         caution: 'no',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.start(100))
-      .then(() =>
-        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
-          100,
-          false,
-          expect.anything(),
-          null,
-          null,
-          null,
-          null
-        )
+      .expect(
+        'Location',
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=&damagesOwed=&caution=no`
       )
   })
   it('should not call the endpoint and redirect to the check answers page if answer is yes', () => {
@@ -98,8 +87,7 @@ describe('POST /is-caution', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=&damagesOwed=`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=&damagesOwed=&caution=yes`
       )
-      .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

@@ -28,10 +28,11 @@ export default class OffenceTypeTabPage {
     const { user } = res.locals
 
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
-    return res.render(`pages/dataInsight/offenceTypeTab.njk`, {
+    return res.render(`pages/dataInsights/offenceTypeTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.OFFENCE_TYPE),
+      chartSettingList: [],
     })
   }
 

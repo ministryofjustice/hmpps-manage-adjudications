@@ -6,8 +6,9 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../../@types/template'
 import { getEvidenceCategory } from '../../../utils/utils'
-import { EvidenceDetails } from '../../../data/DraftAdjudicationResult'
-import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { User } from '../../../data/hmppsAuthClient'
 
 type PageData = {
   errors?: FormError[]
@@ -20,13 +21,22 @@ type PageData = {
 export enum PageRequestType {
   REPORTER,
   REVIEWER,
+  VIEW,
 }
 
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
+  isReporterView(): boolean {
+    return this.pageType === PageRequestType.REPORTER
+  }
+
   isReviewerView(): boolean {
     return this.pageType === PageRequestType.REVIEWER
+  }
+
+  isReadOnlyView(): boolean {
+    return this.pageType === PageRequestType.VIEW
   }
 }
 
@@ -111,68 +121,63 @@ export default class prisonerReportRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
-
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-
-    const [newDraftAdjudicationId, reportedAdjudication] = await Promise.all([
-      this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, adjudicationNumber),
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(adjudicationNumber, user),
-    ])
-
-    const { draftAdjudication, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
-
-    const [prisonerReportData, reviewData] = await Promise.all([
-      this.reportedAdjudicationsService.getPrisonerReport(user, draftAdjudication),
-      this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user),
-    ])
-
-    const offence = await this.decisionTreeService.getAdjudicationOffences(
-      draftAdjudication.offenceDetails,
-      prisoner,
-      associatedPrisoner,
-      draftAdjudication.incidentRole,
-      user,
-      false
+    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+      adjudicationNumber,
+      user
     )
+
+    const { status } = reportedAdjudication
+    const draftRequired = this.statusAllowsEditRequiringDraft(status)
+
+    const { newDraftAdjudicationId, draftAdjudication, prisoner, prisonerReportData, offence } =
+      await this.prisonerReportDetails(draftRequired, user, adjudicationNumber, reportedAdjudication)
+
+    const reviewData = await this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
 
     const prisonerReportVariables = getVariablesForPageType(
       this.pageOptions,
       prisoner.prisonerNumber,
-      draftAdjudication.adjudicationNumber,
+      draftRequired ? draftAdjudication.adjudicationNumber : reportedAdjudication.adjudicationNumber,
       newDraftAdjudicationId
     )
 
-    const convertedEvidence = convertEvidenceToTableFormat(reportedAdjudication.reportedAdjudication.evidence)
+    const convertedEvidence = convertEvidenceToTableFormat(reportedAdjudication.evidence)
 
-    const readOnly =
-      this.pageOptions.isReviewerView() ||
-      ['ACCEPTED', 'REJECTED', 'UNSCHEDULED', 'SCHEDULED'].includes(reportedAdjudication.reportedAdjudication.status)
+    const editAndReviewAvailability = this.getEditAndReviewAvailability(reportedAdjudication, this.pageOptions, status)
 
-    const readOnlyDamagesEvidenceWitnesses = reportedAdjudication.reportedAdjudication.status === 'REJECTED'
-
-    const review =
-      this.pageOptions.isReviewerView() &&
-      ['AWAITING_REVIEW', 'RETURNED'].includes(reportedAdjudication.reportedAdjudication.status)
-
-    const returned = reportedAdjudication.reportedAdjudication.status === ReportedAdjudicationStatus.RETURNED
+    const returned = status === ReportedAdjudicationStatus.RETURNED
 
     return res.render(`pages/adjudicationForReport/prisonerReport`, {
       pageData: { ...pageData, returned },
       prisoner,
       prisonerReportData,
       reviewData,
-      reportNo: draftAdjudication.adjudicationNumber,
-      draftAdjudicationNumber: draftAdjudication.id,
+      reportNo: reportedAdjudication.adjudicationNumber,
+      draftAdjudicationNumber: draftRequired ? draftAdjudication.id : null,
       offence,
       ...prisonerReportVariables,
-      readOnly,
-      review,
-      readOnlyDamagesEvidenceWitnesses,
-      damages: reportedAdjudication.reportedAdjudication.damages,
+      editAndReviewAvailability,
+      damages: reportedAdjudication.damages,
       evidence: convertedEvidence,
-      witnesses: reportedAdjudication.reportedAdjudication.witnesses,
+      witnesses: reportedAdjudication.witnesses,
     })
+  }
+
+  getEditAndReviewAvailability = (
+    reportedAdjudication: ReportedAdjudication,
+    pageOptions: PageOptions,
+    status: ReportedAdjudicationStatus
+  ) => {
+    const awaitingReviewOrReturned = ['AWAITING_REVIEW', 'RETURNED'].includes(reportedAdjudication.status)
+
+    return {
+      incidentDetailsEditable: pageOptions.isReporterView() && awaitingReviewOrReturned,
+      offencesEditable: !pageOptions.isReadOnlyView() && awaitingReviewOrReturned,
+      statementEditable: pageOptions.isReporterView() && awaitingReviewOrReturned,
+      damagesEvidenceWitnessesEditable: status !== 'REJECTED',
+      reviewAvailable: pageOptions.isReviewerView() && awaitingReviewOrReturned,
+    }
   }
 
   reviewStatus = (selected: string): ReviewStatus => {
@@ -209,6 +214,71 @@ export default class prisonerReportRoutes {
       return req.body.acceptedDetails
     }
     return ''
+  }
+
+  statusAllowsEditRequiringDraft = (status: ReportedAdjudicationStatus): boolean => {
+    return [ReportedAdjudicationStatus.AWAITING_REVIEW, ReportedAdjudicationStatus.RETURNED].includes(status)
+  }
+
+  prisonerReportDetails = async (
+    draftRequired: boolean,
+    user: User,
+    adjudicationNumber: number,
+    reportedAdjudication: ReportedAdjudication
+  ) => {
+    if (draftRequired) {
+      const newDraftAdjudicationId = await this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(
+        user,
+        adjudicationNumber
+      )
+      const { draftAdjudication, prisoner, associatedPrisoner } =
+        await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
+
+      const prisonerReportData = await this.reportedAdjudicationsService.getPrisonerReport(
+        user,
+        draftAdjudication as ReportedAdjudication & DraftAdjudication
+      )
+      const offence = await this.decisionTreeService.getAdjudicationOffences(
+        draftAdjudication.offenceDetails,
+        prisoner,
+        associatedPrisoner,
+        draftAdjudication.incidentRole,
+        user,
+        false
+      )
+      return {
+        newDraftAdjudicationId,
+        draftAdjudication,
+        prisoner,
+        associatedPrisoner,
+        prisonerReportData,
+        offence,
+      }
+    }
+    const { prisoner, associatedPrisoner } = await this.decisionTreeService.adjudicationIncidentData(
+      reportedAdjudication,
+      user
+    )
+    const prisonerReportData = await this.reportedAdjudicationsService.getPrisonerReport(
+      user,
+      reportedAdjudication as ReportedAdjudication & DraftAdjudication
+    )
+    const offence = await this.decisionTreeService.getAdjudicationOffences(
+      reportedAdjudication.offenceDetails,
+      prisoner,
+      associatedPrisoner,
+      reportedAdjudication.incidentRole,
+      user,
+      false
+    )
+    return {
+      newDraftAdjudicationId: null as number,
+      draftAdjudication: null as DraftAdjudication,
+      prisoner,
+      associatedPrisoner,
+      prisonerReportData,
+      offence,
+    }
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {

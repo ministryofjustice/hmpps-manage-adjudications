@@ -28,10 +28,11 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
     const { user } = res.locals
 
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
-    return res.render(`pages/dataInsight/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
+    return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES),
+      chartSettingList: [],
     })
   }
 

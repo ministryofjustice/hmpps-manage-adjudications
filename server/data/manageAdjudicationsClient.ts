@@ -46,6 +46,7 @@ import { User } from './hmppsAuthClient'
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
   agencyId: string
+  overrideAgencyId?: string
   gender: PrisonerGender
 }
 
@@ -199,7 +200,7 @@ export default class ManageAdjudicationsClient {
       pageRequest: ApiPageRequest
     ): Promise<ApiPageResponse<ReportedAdjudication>> => {
       const path =
-        `${prefix}reports?page=${pageRequest.number}&size=${pageRequest.size}` +
+        `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
         `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
@@ -209,9 +210,9 @@ export default class ManageAdjudicationsClient {
       })
     }
 
-  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/')
+  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/reports')
 
-  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-')
+  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
 
   async getReportedAdjudicationIssueData(
     filter: ReportedAdjudicationDISFormFilter

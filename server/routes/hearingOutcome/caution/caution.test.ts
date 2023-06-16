@@ -3,19 +3,15 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
-import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
-jest.mock('../../../services/hearingsService')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
-const hearingsService = new HearingsService(null) as jest.Mocked<HearingsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { hearingsService, userService }, {})
+  app = appWithAllRoutes({ production: false }, { userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 })
 
@@ -25,7 +21,7 @@ afterEach(() => {
 
 describe('GET /is-caution', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { hearingsService, userService }, {})
+    app = appWithAllRoutes({ production: false }, { userService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
@@ -57,16 +53,11 @@ describe('POST /is-caution', () => {
         caution: 'no',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.start(100))
-      .then(() =>
-        expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
-          'Roxanne Red',
-          HearingOutcomePlea.GUILTY,
-          false,
-          expect.anything(),
-          null
-        )
+      .expect(
+        'Location',
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
+          100
+        )}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY&damagesOwed=&caution=no`
       )
   })
   it('should not call the endpoint and redirect to the check answers page if answer is yes', () => {
@@ -80,8 +71,7 @@ describe('POST /is-caution', () => {
         'Location',
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
           100
-        )}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY&damagesOwed=`
+        )}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY&damagesOwed=&caution=yes`
       )
-      .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

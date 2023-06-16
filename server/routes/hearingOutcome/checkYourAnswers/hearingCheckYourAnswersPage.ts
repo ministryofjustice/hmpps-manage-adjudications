@@ -36,10 +36,14 @@ export default class HearingCheckYourAnswersPage {
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { amount, adjudicator, plea } = req.query
+    const { amount, adjudicator, plea, caution } = req.query
     let actualAmount = amount as string
 
-    const queryParamsPresent = this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string)
+    const queryParamsPresent = this.validateDataFromQueryPage(
+      plea as HearingOutcomePlea,
+      adjudicator as string,
+      caution as string
+    )
 
     if (this.pageOptions.isEdit() && !actualAmount) {
       try {
@@ -60,7 +64,7 @@ export default class HearingCheckYourAnswersPage {
     return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
       moneyRecoveredBoolean: queryParamsPresent ? !!amount : !!actualAmount,
       moneyRecoveredAmount: (+actualAmount).toFixed(2),
-      cautionAnswer: true,
+      cautionAnswer: caution === 'yes',
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
       moneyChangeLinkHref: `${adjudicationUrls.moneyRecoveredForDamages.urls.start(
         adjudicationNumber
@@ -83,20 +87,20 @@ export default class HearingCheckYourAnswersPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { plea, adjudicator, amount, damagesOwed } = req.query
+    const { plea, adjudicator, amount, damagesOwed, caution } = req.query
     const actualAmount = amount as string
 
     try {
       if (
         !this.pageOptions.isEdit() &&
-        !this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string)
+        !this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string, caution as string)
       ) {
         return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
       }
       if (this.pageOptions.isEdit()) {
         await this.hearingsService.editChargeProvedOutcome(
           adjudicationNumber,
-          true,
+          caution === 'yes',
           user,
           (adjudicator && (adjudicator as string)) || null,
           (plea && HearingOutcomePlea[plea.toString()]) || null,
@@ -108,11 +112,23 @@ export default class HearingCheckYourAnswersPage {
           adjudicationNumber,
           adjudicator as string,
           HearingOutcomePlea[plea as string],
-          true,
+          caution === 'yes',
           user,
           !actualAmount ? null : actualAmount
         )
       }
+
+      if (caution === 'no') {
+        const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+          adjudicationNumber,
+          user
+        )
+        if (adjudication.reportedAdjudication.punishments.length !== 0) {
+          return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+        }
+        return res.redirect(adjudicationUrls.awardPunishments.urls.start(adjudicationNumber))
+      }
+
       return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber)
@@ -120,8 +136,8 @@ export default class HearingCheckYourAnswersPage {
     }
   }
 
-  private validateDataFromQueryPage = (plea: HearingOutcomePlea, adjudicator: string) => {
-    if (!plea || !adjudicator) return false
+  private validateDataFromQueryPage = (plea: HearingOutcomePlea, adjudicator: string, caution: string) => {
+    if (!plea || !adjudicator || !caution) return false
     return true
   }
 }

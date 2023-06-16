@@ -23,11 +23,11 @@
       {{ reportNo }}</p>
     {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
   </div>
-  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, readOnly, readOnlyDamagesEvidenceWitnesses, offence, damages, evidence, witnesses, null, review) }}
-  {% if review %}
+  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, offence, damages, evidence, witnesses, null, editAndReviewAvailability) }}
+  {% if editAndReviewAvailability.reviewAvailable %}
     {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}
   {% endif %}
-  {% if not review %}
+  {% if not editAndReviewAvailability.reviewAvailable %}
     <p class="govuk-body">
       <a href="{{ returnLinkURL }}" class="govuk-link" data-qa="prisoner-report-return-link">{{ returnLinkContent }}</a>
     </p>

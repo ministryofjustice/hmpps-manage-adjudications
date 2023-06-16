@@ -104,6 +104,7 @@ export default class PlaceOnReportService {
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user)
+    const prisoner = await this.getPrisonerDetails(prisonerNumber, user)
     const requestBody = {
       dateTimeOfIncident,
       agencyId: user.activeCaseLoadId,
@@ -111,6 +112,7 @@ export default class PlaceOnReportService {
       prisonerNumber,
       dateTimeOfDiscovery,
       gender,
+      overrideAgencyId: prisoner.agencyId !== user.activeCaseLoadId ? prisoner.agencyId : null,
     }
     return client.startNewDraftAdjudication(requestBody)
   }

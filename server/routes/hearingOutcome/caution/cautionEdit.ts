@@ -1,18 +1,13 @@
 import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
 import CautionPage, { PageRequestType } from './cautionPage'
 
 export default class CautionEditRoutes {
   page: CautionPage
 
-  constructor(
-    reportedAdjudicationsService: ReportedAdjudicationsService,
-    hearingsService: HearingsService,
-    userService: UserService
-  ) {
-    this.page = new CautionPage(PageRequestType.EDIT, reportedAdjudicationsService, hearingsService, userService)
+  constructor(reportedAdjudicationsService: ReportedAdjudicationsService, userService: UserService) {
+    this.page = new CautionPage(PageRequestType.EDIT, reportedAdjudicationsService, userService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

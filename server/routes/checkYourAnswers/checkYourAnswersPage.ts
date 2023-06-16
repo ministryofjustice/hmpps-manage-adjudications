@@ -100,7 +100,7 @@ export default class CheckYourAnswersPage {
       draftAdjudication.adjudicationNumber,
       user
     )
-    return this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
+    return this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication.reportedAdjudication, user)
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -161,6 +161,13 @@ export default class CheckYourAnswersPage {
       damages: draftAdjudication.damages,
       evidence: convertedEvidence,
       witnesses: draftAdjudication.witnesses,
+      editAndReviewAvailability: {
+        incidentDetailsEditable: true,
+        offencesEditable: true,
+        statementEditable: true,
+        damagesEvidenceWitnessesEditable: true,
+        reviewAvailable: false,
+      },
     })
   }
 

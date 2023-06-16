@@ -28,10 +28,11 @@ export default class PleasAndFindingsTabPage {
     const { user } = res.locals
 
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
-    return res.render(`pages/dataInsight/pleasAndFindingsTab.njk`, {
+    return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PLEAS_AND_FINDINGS),
+      chartSettingList: [],
     })
   }
 

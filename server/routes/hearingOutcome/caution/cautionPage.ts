@@ -4,7 +4,6 @@ import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
-import HearingsService from '../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
 import UserService from '../../../services/userService'
@@ -32,7 +31,6 @@ export default class CautionPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly hearingsService: HearingsService,
     private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
@@ -81,7 +79,7 @@ export default class CautionPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { caution } = req.body
     const { plea, adjudicator, amount, damagesOwed } = req.query
-    const { user } = res.locals
+    // const { user } = res.locals
 
     const error = validateForm({ caution })
     if (error) return this.renderView(req, res, caution, error)
@@ -94,50 +92,24 @@ export default class CautionPage {
         return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
       }
 
-      const actualAmount = amount as string
-
-      if (caution === 'yes') {
-        let path = adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber)
-
-        if (this.pageOptions.isEdit()) {
-          path = adjudicationUrls.hearingsCheckAnswers.urls.edit(adjudicationNumber)
-        }
-
-        return res.redirect(
-          url.format({
-            pathname: path,
-            query: {
-              adjudicator: adjudicator as string,
-              amount: amount as string,
-              plea: plea as string,
-              damagesOwed: damagesOwed ? Boolean(damagesOwed) : null,
-            },
-          })
-        )
-      }
+      let path = adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber)
 
       if (this.pageOptions.isEdit()) {
-        await this.hearingsService.editChargeProvedOutcome(
-          adjudicationNumber,
-          false,
-          user,
-          (adjudicator && (adjudicator as string)) || null,
-          (plea && HearingOutcomePlea[plea.toString()]) || null,
-          !actualAmount ? null : actualAmount,
-          damagesOwed ? Boolean(damagesOwed) : null
-        )
-      } else {
-        await this.hearingsService.createChargedProvedHearingOutcome(
-          adjudicationNumber,
-          adjudicator as string,
-          HearingOutcomePlea[plea.toString()],
-          false,
-          user,
-          !actualAmount ? null : actualAmount
-        )
+        path = adjudicationUrls.hearingsCheckAnswers.urls.edit(adjudicationNumber)
       }
 
-      return res.redirect(adjudicationUrls.awardPunishments.urls.start(adjudicationNumber))
+      return res.redirect(
+        url.format({
+          pathname: path,
+          query: {
+            adjudicator: adjudicator as string,
+            amount: amount as string,
+            plea: plea as string,
+            damagesOwed: damagesOwed ? Boolean(damagesOwed) : null,
+            caution,
+          },
+        })
+      )
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
       throw postError

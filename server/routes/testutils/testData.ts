@@ -479,6 +479,7 @@ export default class TestData {
     enhanced = true,
     gender = 'Male',
     startHref = null,
+    prisonId = 'MDI',
   }: {
     firstName: string
     lastName: string
@@ -486,19 +487,21 @@ export default class TestData {
     enhanced?: boolean
     gender?: string
     startHref?: string
+    prisonId?: string
   }): PrisonerSearchSummary => {
     return {
       cellLocation: '1-2-015',
       prisonerNumber,
       prisonName: 'HMP Moorland',
       gender,
-      prisonId: 'MDI',
+      prisonId,
       firstName,
       lastName,
       startHref: enhanced ? startHref : null,
       displayCellLocation: enhanced ? '1-2-015' : null,
       displayName: enhanced ? `${lastName}, ${firstName}` : null,
       friendlyName: enhanced ? `${firstName} ${lastName}` : null,
+      onlyShowPrisonName: false,
     }
   }
 
@@ -510,6 +513,7 @@ export default class TestData {
     includeBirthday = true,
     language = 'English',
     assignedLivingUnitDesc = '1-2-015',
+    agencyId = 'MDI',
   }: {
     offenderNo: string
     firstName: string
@@ -518,6 +522,7 @@ export default class TestData {
     includeBirthday?: boolean
     language?: string
     assignedLivingUnitDesc?: string
+    agencyId?: string
   }): PrisonerResultSummary => {
     return {
       offenderNo,
@@ -540,6 +545,7 @@ export default class TestData {
       physicalAttributes: {
         gender,
       },
+      agencyId,
     }
   }
 
