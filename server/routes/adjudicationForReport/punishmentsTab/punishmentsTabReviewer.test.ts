@@ -92,6 +92,7 @@ describe('GET Punishments and damages tab', () => {
         adjudicationNumber: 1524493,
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-12-09T10:30:00',
+        status: ReportedAdjudicationStatus.QUASHED,
         punishments: null,
         punishmentComments: [testData.singlePunishmentComment({})],
       }),
@@ -100,8 +101,6 @@ describe('GET Punishments and damages tab', () => {
       .get(adjudicationUrls.punishmentsAndDamages.urls.review(12345))
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('There are no punishments added.')
-        expect(response.text).toContain('You can only add punishments if the charge is proved.')
         expect(response.text).toContain('Punishment comments')
         expect(response.text).toContain('1 January 2023')
         expect(response.text).toContain('J. Smith')
