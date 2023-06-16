@@ -230,6 +230,7 @@ export default class prisonerReportRoutes {
   }
 
   statusAllowsEditRequiringDraft = (status: ReportedAdjudicationStatus): boolean => {
+    if (this.pageOptions.isReadOnlyView()) return false
     return [ReportedAdjudicationStatus.AWAITING_REVIEW, ReportedAdjudicationStatus.RETURNED].includes(status)
   }
 
