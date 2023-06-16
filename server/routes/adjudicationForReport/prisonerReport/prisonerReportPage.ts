@@ -87,6 +87,15 @@ const getVariablesForPageType = (
       reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(adjudicationNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(adjudicationNumber),
+      editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber)}`,
+      editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber)}`,
+      editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
+        adjudicationNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber)}`,
     }
   }
   return {
