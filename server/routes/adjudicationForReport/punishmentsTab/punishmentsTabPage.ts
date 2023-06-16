@@ -105,6 +105,8 @@ export default class PunishmentsTabPage {
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudication.status,
       readOnly,
+      isReporter: this.pageOptions.isReporter(),
+      outcomeEnteredInNomis: reportedAdjudication.outcomeEnteredInNomis,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
       quashed: reportedAdjudication.status === ReportedAdjudicationStatus.QUASHED,
       moneyRecoveredBoolean: !!amount,

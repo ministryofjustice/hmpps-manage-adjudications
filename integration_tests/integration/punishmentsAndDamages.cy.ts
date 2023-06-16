@@ -332,7 +332,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage
         .noPunishments()
         .contains('There are no punishments added. You can only add punishments if the charge is proved.')
-      // punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+      punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
     })
     it('should contain the required page elements - status `quashed`', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(102))
@@ -358,8 +358,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
       cy.get('[data-qa="change-link"').should('not.exist')
-      // punishmentsAndDamagesPage.punishmentCommentsTable().should('not.exist')
-      punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+      punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
     })
     it('should contain the required page elements - charge proved, no punishments, caution true', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
@@ -399,7 +398,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-      punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+      punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
       cy.get('[data-qa="change-link"').should('not.exist')
     })
     it('should contain the required page elements - charge proved, no punishments, caution false', () => {
@@ -441,7 +440,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
-      punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+      punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
       cy.get('[data-qa="change-link"').should('not.exist')
     })
   })
@@ -674,7 +673,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage
       .noPunishments()
       .contains('There are no punishments added. You can only add punishments if the charge is proved.')
-    punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+    punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
   })
   it('should contain the required page elements - status `charge proved` - no punishments', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(100))

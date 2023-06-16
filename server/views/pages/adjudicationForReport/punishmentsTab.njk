@@ -76,22 +76,28 @@
     </div>
   {% endif %}
 
-  <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
+  {% if (chargeProved or quashed) and not outcomeEnteredInNomis %}
+    <div data-qa="punishment-comments-section">
 
-  {% if punishmentComments | length > 0 %}
-    {{ punishmentCommentTable(punishmentComments, readOnly) }}
+      <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
+
+      {% if punishmentComments | length > 0 %}
+        {{ punishmentCommentTable(punishmentComments, isReporter) }}
+      {% endif %}
+
+      <div>
+        {% if not isReporter %}
+          {{ govukButton({
+            text: 'Add comment',
+            element: "a",
+            href: adjudicationUrls.punishmentComment.urls.add(reportNo),
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "add-punishment-comment" }
+          }) }}
+        {% endif %}
+      </div>
+
+    </div>
   {% endif %}
-
-  <div>
-    {% if not readOnly %}
-      {{ govukButton({
-        text: 'Add comment',
-        element: "a",
-        href: adjudicationUrls.punishmentComment.urls.add(reportNo),
-        classes: "govuk-button--secondary",
-        attributes: { "data-qa": "add-punishment-comment" }
-      }) }}
-    {% endif %}
-  </div>
 
 {% endblock %}
