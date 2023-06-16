@@ -485,6 +485,30 @@ context('Damages and punishments summary', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(103))
       })
     })
+    it('add comment goes to add comment page', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.addPunishmentCommentButton().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.add(99))
+      })
+    })
+    it('change comment goes to edit comment page', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.changePunishmentCommentLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.edit(99, 1))
+      })
+    })
+    it('remove comment requests comment deletion', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.removePunishmentCommentLink().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.delete(99, 1))
+      })
+    })
   })
 })
 
