@@ -73,6 +73,34 @@ context('Damages and punishments summary', () => {
       },
     })
     cy.task('stubGetReportedAdjudication', {
+      id: 98,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 98,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                  amount: 100.5,
+                  caution: false,
+                }),
+              },
+            },
+          ],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER2' })],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -442,6 +470,18 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
       cy.get('[data-qa="change-link"').should('not.exist')
+    })
+    it('should not allow to change/remove punishment comments by not owner', () => {
+      cy.task('stubGetUserFromUsername', {
+        username: 'USER2',
+        response: testData.userFromUsername('USER2'),
+      })
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(98))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
+      punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
+      punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
+      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
   })
 
