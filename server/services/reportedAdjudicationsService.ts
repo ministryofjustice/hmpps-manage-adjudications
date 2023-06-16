@@ -1,7 +1,7 @@
 import { ConfirmedOnReportData, ConfirmedOnReportChangedData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
-import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsClient, { AgencyReportCounts } from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
 import {
   ReportedAdjudication,
@@ -849,5 +849,9 @@ export default class ReportedAdjudicationsService {
     const { reportedAdjudication } = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
     if (!reportedAdjudication.hearings?.length) return {}
     return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
+  }
+
+  async getAgencyReportCounts(user: User): Promise<AgencyReportCounts> {
+    return new ManageAdjudicationsClient(user).getAgencyReportCounts()
   }
 }

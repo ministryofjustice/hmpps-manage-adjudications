@@ -41,6 +41,7 @@ export type ReportedAdjudication = {
   punishments?: PunishmentDataWithSchedule[]
   punishmentComments?: PunishmentComment[]
   outcomeEnteredInNomis?: boolean
+  transferableActionsAllowed?: boolean
 }
 
 export type ReportedAdjudicationResult = {

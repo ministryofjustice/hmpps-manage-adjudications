@@ -46,6 +46,8 @@ context('Home page', () => {
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
+    homepage.reviewReportsLink().should('contain.text', 'Review reports (2)')
+    // TODO put back once new link in page homepage.transferReportsLink().should('contain.text', 'View reports from other prisons (1)')
   })
 
   it('should link to the correct location - view all reports (main link)', () => {

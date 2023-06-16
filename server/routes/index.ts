@@ -173,7 +173,7 @@ export default function routes(
       reportedAdjudicationsService,
     })
   )
-  router.use('/', homepageRoutes({ userService }))
+  router.use('/', homepageRoutes({ userService, reportedAdjudicationsService }))
   router.use(adjudicationUrls.ageOfPrisoner.root, ageOfPrisonerRoutes({ placeOnReportService }))
 
   router.use(

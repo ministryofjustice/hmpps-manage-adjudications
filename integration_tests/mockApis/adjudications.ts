@@ -1017,6 +1017,21 @@ const stubCreatePunishmentComment = ({ adjudicationNumber, response }): SuperAge
     },
   })
 
+const stubGetAgencyReportCounts = ({ response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/report-counts`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1072,4 +1087,5 @@ export default {
   stubCreatePunishmentComment,
   stubAloAmendOffenceDetails,
   stubGetDataInsightsChart,
+  stubGetAgencyReportCounts,
 }
