@@ -28,25 +28,10 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 1524493,
+      adjudicationNumber: 12345,
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-09T10:30:00',
     }),
-  })
-
-  const draftAdjudication = testData.draftAdjudication({
-    id: 12345,
-    adjudicationNumber: 1524661,
-    prisonerNumber: 'G5512GK',
-    dateTimeOfIncident: '2021-03-08T10:45:00',
-    offenceDetails: {
-      offenceCode: 1002,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G6123VU',
-    },
   })
 
   const prisoner = testData.prisonerResultSummary({
@@ -56,8 +41,7 @@ beforeEach(() => {
     assignedLivingUnitDesc: '1-1-010',
   })
 
-  decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
-    draftAdjudication,
+  decisionTreeService.adjudicationIncidentData.mockResolvedValue({
     incidentRole: IncidentRole.COMMITTED,
     prisoner,
     associatedPrisoner: undefined,
@@ -67,7 +51,6 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
     isYouthOffender: false,
-
     incidentDetails: [
       {
         label: 'Reporting Officer',
