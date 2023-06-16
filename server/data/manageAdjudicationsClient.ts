@@ -98,6 +98,11 @@ export type AmendedOutcomeData = {
   quashedReason?: QuashGuiltyFindingReason
 }
 
+export type AgencyReportCounts = {
+  reviewTotal: number
+  transferReviewTotal: number
+}
+
 export default class ManageAdjudicationsClient {
   restClient: RestClient
 
@@ -537,6 +542,12 @@ export default class ManageAdjudicationsClient {
   async getSuspendedPunishments(prisonerNumber: string): Promise<SuspendedPunishmentResult[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${prisonerNumber}/suspended`,
+    })
+  }
+
+  async getAgencyReportCounts(): Promise<AgencyReportCounts> {
+    return this.restClient.get({
+      path: `/reported-adjudications/report-counts`,
     })
   }
 }

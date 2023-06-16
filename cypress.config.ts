@@ -29,7 +29,18 @@ export default defineConfig({
         reset: resetStubs,
 
         getSignInUrl: auth.getSignInUrl,
-        stubSignIn: (caseLoads: CaseLoad[]) => Promise.all([auth.stubSignIn(), prisonApi.stubUserCaseloads(caseLoads)]),
+        stubSignIn: (caseLoads: CaseLoad[]) =>
+          Promise.all([
+            auth.stubSignIn(),
+            adjudications.stubGetAgencyReportCounts({
+              response: {
+                reviewTotal: 2,
+                transferReviewTotal: 1,
+              },
+            }),
+            prisonApi.stubUserCaseloads(caseLoads),
+          ]),
+
         stubGetUserFromUsername: auth.stubGetUserFromUsername,
 
         stubSearch: prisonerSearch.stubSearch,
@@ -110,6 +121,7 @@ export default defineConfig({
         stubGetSuspendedPunishments: adjudications.stubGetSuspendedPunishments,
         stubAloAmendOffenceDetails: adjudications.stubAloAmendOffenceDetails,
         stubGetDataInsightsChart: adjudications.stubGetDataInsightsChart,
+        stubGetAgencyReportCounts: adjudications.stubGetAgencyReportCounts,
       })
     },
 
