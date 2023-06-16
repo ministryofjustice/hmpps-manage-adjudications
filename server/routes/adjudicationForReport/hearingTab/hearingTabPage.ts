@@ -9,6 +9,7 @@ import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './he
 export enum PageRequestType {
   REPORTER,
   REVIEWER,
+  VIEW,
 }
 
 class PageOptions {
@@ -16,6 +17,10 @@ class PageOptions {
 
   isReporter(): boolean {
     return this.pageType === PageRequestType.REPORTER
+  }
+
+  isViewOnly(): boolean {
+    return this.pageType === PageRequestType.VIEW
   }
 }
 
@@ -25,6 +30,13 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
       reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.adjudicationNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.adjudicationNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.adjudicationNumber),
+    }
+  }
+  if (pageOptions.isViewOnly()) {
+    return {
+      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.adjudicationNumber),
     }
   }
   return {

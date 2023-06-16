@@ -23,4 +23,6 @@ export default class AllCompletedReportsPage extends Page {
   uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
 
   checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
+
+  viewReportLink = () => cy.get('[data-qa="view-report-link"]')
 }

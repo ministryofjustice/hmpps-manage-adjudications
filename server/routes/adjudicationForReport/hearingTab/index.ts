@@ -3,6 +3,7 @@ import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import HearingTabReviewerRoute from './hearingTabReviewer'
 import HearingTabReporterRoute from './hearingTabReporter'
+import HearingTabViewOnlyRoute from './hearingTabViewOnly'
 
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -27,12 +28,15 @@ export default function HearingDetailsRoutes({
   )
   const hearingTabReporterRoute = new HearingTabReporterRoute(reportedAdjudicationsService, outcomesService)
 
+  const hearingTabViewOnlyRoute = new HearingTabViewOnlyRoute(reportedAdjudicationsService, outcomesService)
+
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.hearingDetails.matchers.review, hearingTabReviewerRoute.view)
   post(adjudicationUrls.hearingDetails.matchers.review, hearingTabReviewerRoute.submit)
   get(adjudicationUrls.hearingDetails.matchers.report, hearingTabReporterRoute.view)
+  get(adjudicationUrls.hearingDetails.matchers.viewOnly, hearingTabViewOnlyRoute.view)
 
   return router
 }

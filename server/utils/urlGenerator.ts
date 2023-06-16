@@ -349,10 +349,12 @@ const adjudicationUrls = {
     matchers: {
       review: '/:adjudicationNumber/review',
       report: '/:adjudicationNumber/report',
+      viewOnly: '/:adjudicationNumber/view',
     },
     urls: {
       review: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/review`,
       report: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/report`,
+      viewOnly: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/view`,
     },
   },
   scheduleHearing: {
@@ -595,12 +597,15 @@ const adjudicationUrls = {
     matchers: {
       review: '/:adjudicationNumber/review',
       report: '/:adjudicationNumber/report',
+      viewOnly: '/:adjudicationNumber/view',
     },
     urls: {
       review: (adjudicationNumber: number) =>
         `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/review`,
       report: (adjudicationNumber: number) =>
         `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/report`,
+      viewOnly: (adjudicationNumber: number) =>
+        `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/view`,
     },
   },
   punishment: {

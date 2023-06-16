@@ -82,6 +82,13 @@ const getVariablesForPageType = (
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
     }
   }
+  if (pageOptions.isReadOnlyView()) {
+    return {
+      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(adjudicationNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(adjudicationNumber),
+    }
+  }
   return {
     printHref: `${adjudicationUrls.printReport.urls.start(
       adjudicationNumber
