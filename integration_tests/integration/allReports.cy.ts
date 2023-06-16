@@ -444,4 +444,45 @@ context('All Completed Reports', () => {
     adjudicationsFilter.toDateInput().should('have.value', moment().format('DD/MM/YYYY'))
     adjudicationsFilter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
   })
+
+  it('dynamic links for transferred prisoners', () => {
+    cy.task('stubGetAllReportedAdjudications', {})
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: testData.userFromUsername('USER1'),
+    })
+    const reportedAdjudications = [
+      testData.reportedAdjudication({
+        adjudicationNumber: 1,
+        prisonerNumber: 'A1234AA',
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        otherData: {
+          overrideAgencyId: 'LEI',
+        },
+      }),
+      testData.reportedAdjudication({
+        adjudicationNumber: 2,
+        prisonerNumber: 'A1234AA',
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        otherData: {
+          overrideAgencyId: null,
+        },
+      }),
+    ]
+    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: reportedAdjudications })
+    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    allCompletedReportsPage.viewReportLink().first().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(1))
+    })
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    allCompletedReportsPage.viewReportLink().last().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(2))
+    })
+  })
 })
