@@ -28,20 +28,26 @@
 
   {% set rows = [] %}
   {% for completedReport in allCompletedReports.content %}
-    {% set viewCompletedReportlLinkHtml %}
-    <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
-    </a>
-    {% endset -%}
-
-    {% if completedReport.status | statusNotAwaitingRejectedReturned %}
-      {% set viewHearinglLinkHtml %}
-      <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link-{{ hearingNumber }}">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
-      {% endset %}
+    {% if completedReport.overrideAgencyId == null %}
+      {% set viewCompletedReportlLinkHtml %}
+      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+      </a>
+      {% endset -%}
     {% else %}
-      {% set viewHearinglLinkHtml = null %}
-    {% endif %}
+      {% set viewCompletedReportlLinkHtml %}
+      <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+        {% endset -%}
+      {% endif %}
 
-    {% set rows = (rows.push([
+      {% if completedReport.status | statusNotAwaitingRejectedReturned %}
+        {% set viewHearinglLinkHtml %}
+        <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link-{{ hearingNumber }}">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+        {% endset %}
+      {% else %}
+        {% set viewHearinglLinkHtml = null %}
+      {% endif %}
+
+      {% set rows = (rows.push([
       { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
         "data-sort-value": completedReport.dateTimeOfDiscovery
@@ -53,11 +59,11 @@
       { html: viewHearinglLinkHtml, classes: 'hearingsAndReferrals' },
       { html: viewCompletedReportlLinkHtml, classes: 'viewReport' }
     ]), rows) %}
-  {% endfor %}
-  {% if rows | length %}
-    {{ mojPagination(pagination) }}
-    <div class="results-table">
-      {{ govukTable({
+    {% endfor %}
+    {% if rows | length %}
+      {{ mojPagination(pagination) }}
+      <div class="results-table">
+        {{ govukTable({
       head: [
         { text: "Discovery date and time",
                   attributes: {
@@ -73,9 +79,9 @@
       rows: rows,
       attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
     }) }}
-    </div>
-    {{ mojPagination(pagination) }}
-  {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
-  {% endif %}
-{% endblock %}
+      </div>
+      {{ mojPagination(pagination) }}
+    {% else %}
+      <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
+    {% endif %}
+  {% endblock %}
