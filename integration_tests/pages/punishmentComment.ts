@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class PunishmentCommentPage extends Page {
   constructor() {
-    super('Add a comment about punishment')
+    super('Add a comment about punishments')
   }
 
   punishmentComment = (): PageElement => cy.get('[data-qa="edit-punishment-comment"]')

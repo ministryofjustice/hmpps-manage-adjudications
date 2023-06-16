@@ -4,7 +4,7 @@ import TestData from '../../server/routes/testutils/testData'
 import PunishmentCommentPage from '../pages/punishmentComment'
 
 const testData = new TestData()
-context('Add a comment about punishment', () => {
+context('Add a comment about punishments', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
