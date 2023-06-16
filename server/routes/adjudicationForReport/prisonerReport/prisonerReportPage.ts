@@ -169,13 +169,26 @@ export default class prisonerReportRoutes {
     pageOptions: PageOptions,
     status: ReportedAdjudicationStatus
   ) => {
-    const awaitingReviewOrReturned = ['AWAITING_REVIEW', 'RETURNED'].includes(reportedAdjudication.status)
+    const awaitingReviewOrReturned = [
+      ReportedAdjudicationStatus.AWAITING_REVIEW,
+      ReportedAdjudicationStatus.RETURNED,
+    ].includes(reportedAdjudication.status)
+    const { transferableActionsAllowed } = reportedAdjudication
+    const transferableActionsAllowedAfterReview =
+      transferableActionsAllowed &&
+      ![
+        ReportedAdjudicationStatus.AWAITING_REVIEW,
+        ReportedAdjudicationStatus.RETURNED,
+        ReportedAdjudicationStatus.REJECTED,
+      ].includes(reportedAdjudication.status)
 
     return {
       incidentDetailsEditable: pageOptions.isReporterView() && awaitingReviewOrReturned,
       offencesEditable: !pageOptions.isReadOnlyView() && awaitingReviewOrReturned,
       statementEditable: pageOptions.isReporterView() && awaitingReviewOrReturned,
-      damagesEvidenceWitnessesEditable: status !== 'REJECTED',
+      damagesEvidenceWitnessesEditable: pageOptions.isReadOnlyView()
+        ? transferableActionsAllowedAfterReview
+        : status !== 'REJECTED',
       reviewAvailable: pageOptions.isReviewerView() && awaitingReviewOrReturned,
     }
   }

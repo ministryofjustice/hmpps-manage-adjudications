@@ -40,6 +40,7 @@ export type ReportedAdjudication = {
   outcomes?: OutcomeHistory
   punishments?: PunishmentDataWithSchedule[]
   outcomeEnteredInNomis?: boolean
+  transferableActionsAllowed?: boolean
 }
 
 export type ReportedAdjudicationResult = {

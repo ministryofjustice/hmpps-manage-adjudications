@@ -2,7 +2,7 @@ import PrisonerReport from '../pages/prisonerReport'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { ReportedAdjudicationResult, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 
@@ -11,11 +11,13 @@ const reportedAdjudicationResponse = ({
   status,
   statusReason = null,
   statusDetails = null,
+  transferableActionsAllowed = false,
 }: {
   adjudicationNumber: number
   status: ReportedAdjudicationStatus
   statusReason?: string
   statusDetails?: string
+  transferableActionsAllowed?: boolean
 }) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
@@ -54,7 +56,21 @@ const reportedAdjudicationResponse = ({
         statusReason,
         statusDetails,
         isYouthOffender: false,
+        transferableActionsAllowed,
       },
+    }),
+  }
+}
+
+const draftAdjudication = (reportedAdj: ReportedAdjudicationResult, id: number) => {
+  const { reportedAdjudication } = reportedAdj
+  return {
+    draftAdjudication: testData.draftAdjudication({
+      id,
+      locationId: 25538,
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      dateTimeOfDiscovery: '2021-12-10T09:40:00',
+      ...reportedAdjudication,
     }),
   }
 }
@@ -105,6 +121,31 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       response: reportedAdjudicationResponse({
         adjudicationNumber: 1524493,
         status: ReportedAdjudicationStatus.UNSCHEDULED,
+      }),
+    })
+    const awaitingReviewReport = reportedAdjudicationResponse({
+      adjudicationNumber: 1524495,
+      status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+      transferableActionsAllowed: true,
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524495,
+      response: awaitingReviewReport,
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      adjudicationNumber: 1524495,
+      response: draftAdjudication(awaitingReviewReport, 1),
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 1,
+      response: draftAdjudication(awaitingReviewReport, 1),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524494,
+      response: reportedAdjudicationResponse({
+        adjudicationNumber: 1524494,
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        transferableActionsAllowed: true,
       }),
     })
     cy.task('stubGetOffenceRule', {
@@ -235,36 +276,65 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.reportNumber().should('contain.text', '1524493')
     })
-    it('should go to the damages page if the change link is clicked', () => {
-      cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.damagesChangeLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEdit(1524493))
-      })
-    })
-    it('should go to the evidence page if the change link is clicked', () => {
-      cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.evidenceChangeLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.submittedEdit(1524493))
-      })
-    })
-    it('should go to the witnesses page if the change link is clicked', () => {
-      cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.witnessesChangeLink().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(1524493))
-      })
-    })
-    it('should not have any other change links present', () => {
+    it('should not have any change links available for changes requiring a draft', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.offenceDetailsChangeLink().should('not.exist')
       prisonerReportPage.incidentDetailsChangeLink().should('not.exist')
       prisonerReportPage.incidentStatementChangeLink().should('not.exist')
+    })
+  })
+  describe('Flag works', () => {
+    describe('transferableActionsAllowed flag off', () => {
+      it('should not have access to the damages, evidence and witnesses change links if flag is false', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.damagesChangeLink().should('not.exist')
+        prisonerReportPage.evidenceChangeLink().should('not.exist')
+        prisonerReportPage.witnessesChangeLink().should('not.exist')
+      })
+    })
+    describe('transferableActionsAllowed flag on - report status AWAITING_REVIEW', () => {
+      it('should not have access to the damages, evidence and witnesses change links even if flag is true', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524495))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.damagesChangeLink().should('not.exist')
+        prisonerReportPage.evidenceChangeLink().should('not.exist')
+        prisonerReportPage.witnessesChangeLink().should('not.exist')
+      })
+    })
+    describe('transferableActionsAllowed flag on - report status UNSCHEDULED', () => {
+      it('should have access to the damages, evidence and witnesses change links if flag is true', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524494))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.damagesChangeLink().should('exist')
+        prisonerReportPage.evidenceChangeLink().should('exist')
+        prisonerReportPage.witnessesChangeLink().should('exist')
+      })
+      it('should go to the damages page if the change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524494))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.damagesChangeLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.submittedEdit(1524494))
+        })
+      })
+      it('should go to the evidence page if the change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524494))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.evidenceChangeLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.submittedEdit(1524494))
+        })
+      })
+      it('should go to the witnesses page if the change link is clicked', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524494))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.witnessesChangeLink().click()
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(1524494))
+        })
+      })
     })
   })
 })
