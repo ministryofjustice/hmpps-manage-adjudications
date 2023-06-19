@@ -28,14 +28,14 @@
 
   {% set rows = [] %}
   {% for completedReport in allCompletedReports.content %}
-    {% if completedReport.overrideAgencyId == null %}
-      {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
-      </a>
-      {% endset -%}
-    {% else %}
+    {% if completedReport.transferableActionsAllowed == false %}
       {% set viewCompletedReportlLinkHtml %}
       <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+        {% endset -%}
+      {% else %}
+        {% set viewCompletedReportlLinkHtml %}
+        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+        </a>
         {% endset -%}
       {% endif %}
 
