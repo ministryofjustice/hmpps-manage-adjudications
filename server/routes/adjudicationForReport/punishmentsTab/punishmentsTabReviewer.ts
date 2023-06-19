@@ -6,7 +6,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsTabPage, { PageRequestType } from './punishmentsTabPage'
 
-export default class PunishmentTabRoute {
+export default class PunishmentTabReviewerRoute {
   page: PunishmentsTabPage
 
   constructor(

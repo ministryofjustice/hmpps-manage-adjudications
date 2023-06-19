@@ -3,14 +3,14 @@ import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import PunishmentsTabPage, { PageRequestType } from './punishmentsTabPage'
 
-export default class PunishmentTabReporterRoute {
+export default class PunishmentTabViewRoute {
   page: PunishmentsTabPage
 
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly punishmentsService: PunishmentsService
   ) {
-    this.page = new PunishmentsTabPage(PageRequestType.REPORTER, reportedAdjudicationsService, punishmentsService)
+    this.page = new PunishmentsTabPage(PageRequestType.VIEW, reportedAdjudicationsService, punishmentsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
