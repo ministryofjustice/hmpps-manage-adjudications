@@ -1017,6 +1017,35 @@ const stubCreatePunishmentComment = ({ adjudicationNumber, response }): SuperAge
     },
   })
 
+const stubEditPunishmentComment = ({ adjudicationNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubDeletePunishmentComment = ({ adjudicationNumber, id }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments/comment/${id}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    },
+  })
+
 const stubGetAgencyReportCounts = ({ response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -1085,6 +1114,8 @@ export default {
   stubAmendPunishments,
   stubGetSuspendedPunishments,
   stubCreatePunishmentComment,
+  stubEditPunishmentComment,
+  stubDeletePunishmentComment,
   stubAloAmendOffenceDetails,
   stubGetDataInsightsChart,
   stubGetAgencyReportCounts,

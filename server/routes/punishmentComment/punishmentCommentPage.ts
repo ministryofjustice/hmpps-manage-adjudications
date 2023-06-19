@@ -99,19 +99,4 @@ export default class PunishmentCommentPage {
       })
     )
   }
-
-  delete = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const id = Number(req.params.id)
-
-    await this.punishmentsService.removePunishmentComment(adjudicationNumber, id, user)
-
-    const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
-    return res.redirect(
-      url.format({
-        pathname: redirectUrlPrefix,
-      })
-    )
-  }
 }
