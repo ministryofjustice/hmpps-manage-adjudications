@@ -234,8 +234,8 @@ context('Transfers flow', () => {
         hearingTabPage.hearingSummaryTable(1).should('not.exist')
         hearingTabPage.schedulingUnavailableP1().should('not.exist')
         hearingTabPage.schedulingUnavailableP2().should('not.exist')
-        // hearingTabPage.nextStepRadios().should('not.exist')
-        // hearingTabPage.nextStepConfirmationButton().should('not.exist')
+        hearingTabPage.nextStepRadios().should('not.exist')
+        hearingTabPage.nextStepConfirmationButton().should('not.exist')
       })
       it('hearings tab - scheduled - should be locked', () => {
         cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly(2))
@@ -245,9 +245,9 @@ context('Transfers flow', () => {
         hearingTabPage.noHearingsScheduled().should('not.exist')
         hearingTabPage.hearingIndex(1).should('exist')
         hearingTabPage.hearingSummaryTable(1).should('exist')
-        // hearingTabPage.enterHearingOutcomeButton().should('not.exist')
-        // hearingTabPage.removeHearingButton().should('not.exist')
-        // hearingTabPage.changeLink().should('not.exist')
+        hearingTabPage.enterHearingOutcomeButton().should('not.exist')
+        hearingTabPage.removeHearingButton().should('not.exist')
+        hearingTabPage.changeLink().should('not.exist')
       })
       it('hearings tab - refer to police - should be locked', () => {
         cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly(3))
@@ -256,9 +256,9 @@ context('Transfers flow', () => {
         hearingTabPage.schedulingUnavailableP2().should('not.exist')
         hearingTabPage.noHearingsScheduled().should('not.exist')
         hearingTabPage.hearingIndex(1).should('exist')
-        // hearingTabPage.enterReferralOutcomeButton().should('not.exist')
-        // hearingTabPage.removeReferralButton().should('not.exist')
-        // hearingTabPage.referralChangeLink().should('not.exist')
+        hearingTabPage.enterReferralOutcomeButton().should('not.exist')
+        hearingTabPage.removeReferralButton().should('not.exist')
+        hearingTabPage.referralChangeLink().should('not.exist')
       })
       it('punishments tab - unscheduled - should be locked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(1))
@@ -279,20 +279,20 @@ context('Transfers flow', () => {
         punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
         punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-        // punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
-        // punishmentsAndDamagesPage.moneyCautionChangeLink().first().should('not.exist')
+        punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
+        punishmentsAndDamagesPage.moneyCautionChangeLink().should('not.exist')
       })
       it('punishments tab - proved, punishments - should be locked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(5))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
-        // punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
-        // punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
-        // punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-        // punishmentsAndDamagesPage.moneyCautionChangeLink().first().should('not.exist')
+        punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
+        punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
+        punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
+        punishmentsAndDamagesPage.moneyCautionChangeLink().should('not.exist')
       })
     })
-    describe.only('TransferrableActionsAllowed is true', () => {
+    describe('TransferrableActionsAllowed is true', () => {
       beforeEach(() => {
         const transferredPrisonersAdjudicationUnscheduled = testData.reportedAdjudication({
           adjudicationNumber: 1,

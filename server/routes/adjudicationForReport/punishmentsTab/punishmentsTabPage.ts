@@ -69,7 +69,8 @@ export default class PunishmentsTabPage {
       reportedAdjudication.prisonerNumber,
       user
     )
-    const readOnly = this.pageOptions.isReporter() || reportedAdjudication.outcomeEnteredInNomis
+    const readOnly =
+      this.pageOptions.isReporter() || this.pageOptions.isViewOnly() || reportedAdjudication.outcomeEnteredInNomis
 
     const finalOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
       adjudicationNumber,
