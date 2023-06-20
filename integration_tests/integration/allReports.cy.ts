@@ -458,6 +458,7 @@ context('All Completed Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
           overrideAgencyId: 'LEI',
           transferableActionsAllowed: true,
@@ -468,6 +469,7 @@ context('All Completed Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
       }),
       // Report has been transferred and this user is in the override agency (so actions not allowed)
       testData.reportedAdjudication({
@@ -475,6 +477,7 @@ context('All Completed Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
           overrideAgencyId: 'LEI',
           transferableActionsAllowed: false,
@@ -498,6 +501,21 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.viewReportLink().last().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(3))
+    })
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    allCompletedReportsPage.viewHearingsLink().first().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1))
+    })
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    allCompletedReportsPage.viewHearingsLink().eq(1).click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(2))
+    })
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    allCompletedReportsPage.viewHearingsLink().eq(2).click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly(3))
     })
   })
 })

@@ -25,4 +25,6 @@ export default class AllCompletedReportsPage extends Page {
   checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 
   viewReportLink = () => cy.get('[data-qa="view-report-link"]')
+
+  viewHearingsLink = () => cy.get('[data-qa="view-edit-hearing-link"]')
 }
