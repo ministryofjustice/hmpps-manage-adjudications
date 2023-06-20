@@ -19,6 +19,7 @@ export default class AcceptedReportConfirmationRoute {
       expiryDate: getDate(adjudicationDetails.reportExpirationDateTime),
       bannerText: `${possessive(adjudicationDetails.prisonerFullName)} report has been accepted`,
       prisonerName: adjudicationDetails.prisonerFullName,
+      showScheduleHearingButton: adjudicationDetails.transferableActionsAllowed,
       scheduleHearingLink: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
       viewReportLink: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
       allCompletedReportsLink: adjudicationUrls.allCompletedReports.urls.start(),

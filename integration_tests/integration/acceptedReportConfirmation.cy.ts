@@ -26,6 +26,23 @@ context('Report has been accepted', () => {
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2022-11-15T09:10:00',
           handoverDeadline: '2022-11-17T09:30:00',
+          otherData: {
+            transferableActionsAllowed: true,
+          },
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1524494,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 1524494,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-03-10T09:00:00',
+          handoverDeadline: '2023-03-12T09:00:00',
+          otherData: {
+            transferableActionsAllowed: false,
+          },
         }),
       },
     })
@@ -40,6 +57,17 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.p2().should('exist')
     acceptedReportConfirmationPage.p3().should('exist')
     acceptedReportConfirmationPage.scheduleHearingButton().should('exist')
+    acceptedReportConfirmationPage.viewReportLink().should('exist')
+    acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
+  })
+  it('should contain the required page elements - transfer lock', () => {
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524494))
+    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
+    acceptedReportConfirmationPage.banner().should('exist')
+    acceptedReportConfirmationPage.p1().should('exist')
+    acceptedReportConfirmationPage.p2().should('exist')
+    acceptedReportConfirmationPage.p3().should('exist')
+    acceptedReportConfirmationPage.scheduleHearingButton().should('not.exist')
     acceptedReportConfirmationPage.viewReportLink().should('exist')
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
   })

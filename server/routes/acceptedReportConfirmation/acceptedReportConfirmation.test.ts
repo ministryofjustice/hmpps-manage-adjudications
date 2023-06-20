@@ -14,16 +14,15 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
 
 let app: Express
 
-beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
-})
-
 const reportedAdjudicationInformation = {
   reportExpirationDateTime: '2020-12-23T07:21',
   prisonerFullName: 'John Smith',
+  transferableActionsAllowed: true,
 }
-
-reportedAdjudicationsService.getAcceptedReportConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)
+beforeEach(() => {
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
+  reportedAdjudicationsService.getAcceptedReportConfirmationDetails.mockResolvedValue(reportedAdjudicationInformation)
+})
 
 afterEach(() => {
   jest.resetAllMocks()
