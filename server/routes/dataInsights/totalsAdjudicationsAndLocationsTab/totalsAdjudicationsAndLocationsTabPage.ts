@@ -3,8 +3,8 @@ import { Request, Response } from 'express'
 import { ChartOptions } from 'chart.js'
 import { FormError } from '../../../@types/template'
 import ChartService from '../../../services/chartService'
-import { AgencyId, LocationId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult } from '../../../services/ChartDetailsResult'
+import { AgencyId } from '../../../data/PrisonLocationResult'
+import { ChartDetailsResult, ChartEntry, getMonthShortName } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 
 type PageData = {
@@ -36,8 +36,8 @@ const createBarsAndLineChartSettings = (params: {
   }[][]
 }) => {
   const dataLength = params.barData.length
-  const barsColors = [...[...Array(dataLength - 1)].map(() => DARK_BLUE), LIGHT_BLUE]
-  const barsColorsDarker = [...[...Array(dataLength - 1)].map(() => DARK_BLUE_DARKER), LIGHT_BLUE_DARKER]
+  const barsColors = [...[...Array(Math.max(dataLength - 1, 0))].map(() => DARK_BLUE), LIGHT_BLUE]
+  const barsColorsDarker = [...[...Array(Math.max(dataLength - 1, 0))].map(() => DARK_BLUE_DARKER), LIGHT_BLUE_DARKER]
 
   return {
     title: params.chartTitle,
@@ -216,61 +216,46 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
 
-    const agencyId: AgencyId = '123'
-    const locationId: LocationId = 456
     const { user } = res.locals
+    const { username } = user
+    const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
+    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId)
+    const { chartEntries } = chartDetails
 
-    const labels: string[][] = [
-      ['Apr', '2022'],
-      ['May', '2022'],
-      ['Jun', '2022'],
-      ['Jul', '2022'],
-      ['Aug', '2022'],
-      ['Sep', '2022'],
-      ['Oct', '2022'],
-      ['Nov', '2022'],
-      ['Dec', '2022'],
-      ['Jan', '2023'],
-      ['Feb', '2023'],
-      ['Mar', '2023'],
-    ]
-
-    const head: never[] = []
-
-    const barData1 = [65, 60, 67, 75, 70, 60, 69, 70, 67, 69, 60, 35]
-    const lineData1 = [50, 55, 62, 70, 65, 55, 64, 65, 62, 64, 55, 55]
-    const rows1 = getRows(barData1, lineData1)
+    const labels: string[][] = chartEntries.map((entry: ChartEntry) => {
+      return [getMonthShortName(entry.month), `${entry.year_curr}`]
+    })
 
     const barData2 = [40, 35, 72, 78, 35, 45, 74, 35, 72, 74, 45, 45]
     const lineData2 = [75, 30, 57, 55, 40, 30, 59, 40, 27, 69, 50, 25]
-    const rows2 = getRows(barData2, lineData2)
 
     const chartSettingList = [
       createBarsAndLineChartSettings({
         elementId: 'tab-1-chart-1',
         chartTitle: 'Total adjudications - over 24 months',
-        barData: barData1,
-        lineData: lineData1,
+        barData: chartEntries.map((entry: ChartEntry) => entry.count_curr),
+        lineData: chartEntries.map((entry: ChartEntry) => entry.count_prev),
         labels,
-        head,
-        rows: rows1,
+        head: [],
+        rows: getRows(
+          chartEntries.map((entry: ChartEntry) => entry.count_curr),
+          chartEntries.map((entry: ChartEntry) => entry.count_prev)
+        ),
       }),
       createBarsAndLineChartSettings({
-        elementId: 'tab-1-chart-2',
+        elementId: 'test_chart_1b',
         chartTitle: 'Total adjudications referred to independent adjudicator - over 24 months',
         barData: barData2,
         lineData: lineData2,
         labels,
-        head,
-        rows: rows2,
+        head: [],
+        rows: getRows(barData2, lineData2),
       }),
     ]
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {
       errors: error ? [error] : [],
-      chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.TOTALS_ADJUDICATIONS_AND_LOCATIONS),
       chartSettingList,
     })
