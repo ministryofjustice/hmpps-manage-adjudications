@@ -36,7 +36,7 @@ describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
       })
   })
   it('should show error message if punishment comment no found', () => {
-    punishmentsService.getPunishmentCommentsFromServer.mockResolvedValue([])
+    punishmentsService.getPunishmentCommentsFromServer.mockResolvedValue(null)
     return request(app)
       .get(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
       .expect('Content-Type', /html/)
@@ -63,7 +63,7 @@ describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
       .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Please select required option')
+        expect(res.text).toContain('Select yes if you want to remove this comment')
         expect(punishmentsService.removePunishmentComment).not.toBeCalled()
       })
   })

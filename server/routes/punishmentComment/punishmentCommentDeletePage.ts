@@ -34,7 +34,7 @@ export default class ConfirmDeletionPage {
     const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
 
     const id = Number(req.params.id)
-    const punishmentComment = punishmentComments.find(comment => comment.id === id)
+    const punishmentComment = punishmentComments?.find(comment => comment.id === id)
     if (!punishmentComment) {
       return res.render('pages/notFound.njk', {
         url: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
@@ -52,7 +52,7 @@ export default class ConfirmDeletionPage {
     const { removeComment } = req.body
 
     if (removeComment === undefined) {
-      const error = { href: '#removeComment', text: 'Please select required option' } as FormError
+      const error = { href: '#removeComment', text: 'Select yes if you want to remove this comment' } as FormError
       const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
       const punishmentComment = punishmentComments.find(comment => comment.id === id)
       if (!punishmentComment) {
