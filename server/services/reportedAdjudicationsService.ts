@@ -680,6 +680,7 @@ export default class ReportedAdjudicationsService {
     return {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.incidentDetails.handoverDeadline,
       prisonerFullName: formatName(prisoner.firstName, prisoner.lastName),
+      transferableActionsAllowed: adjudicationData.reportedAdjudication.transferableActionsAllowed,
     }
   }
 
