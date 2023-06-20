@@ -271,8 +271,7 @@ export default class IncidentDetailsPage {
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, currentUser),
       this.placeOnReportService.getReporterName(originalReporterUsername, currentUser),
     ])
-    const { agencyId } = prisoner.assignedLivingUnit
-    const possibleLocations = await this.locationService.getIncidentLocations(agencyId, currentUser)
+    const possibleLocations = await this.locationService.getIncidentLocations(currentUser.activeCaseLoadId, currentUser)
 
     return {
       reporter,
