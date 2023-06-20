@@ -38,7 +38,17 @@ describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
   it('should show error message if punishment comment no found', () => {
     punishmentsService.getPunishmentCommentsFromServer.mockResolvedValue([])
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .get(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Page not found')
+        expect(punishmentsService.removePunishmentComment).not.toBeCalled()
+      })
+  })
+  it('should not load deletion page if user does not have role "ADJUDICATIONS_REVIEWER"', () => {
+    userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
+    return request(app)
+      .get(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
