@@ -79,7 +79,7 @@ context('Delete punishment comment', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Please select required option')
+          expect($error.get(0).innerText).to.contain('Select yes if you want to remove this comment')
         })
     })
     it('should submit successfully and redirect - option "Yes"', () => {
