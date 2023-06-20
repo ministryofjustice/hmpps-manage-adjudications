@@ -27,7 +27,7 @@ export default class PunishmentsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId)
+    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, '1a')
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,

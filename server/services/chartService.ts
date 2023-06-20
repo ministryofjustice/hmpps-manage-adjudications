@@ -6,8 +6,8 @@ import DataInsightsApiClient from '../data/dataInsightsApiClient'
 export default class ChartService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  async getChart(username: string, agencyId: AgencyId): Promise<ChartDetailsResult> {
+  async getChart(username: string, agencyId: AgencyId, chartName: string): Promise<ChartDetailsResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new DataInsightsApiClient(token).getDataInsightsChart(agencyId)
+    return new DataInsightsApiClient(token).getDataInsightsChart(agencyId, chartName)
   }
 }

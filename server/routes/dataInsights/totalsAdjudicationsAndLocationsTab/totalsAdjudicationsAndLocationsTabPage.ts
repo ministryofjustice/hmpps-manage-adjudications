@@ -220,44 +220,37 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId)
-    const { chartEntries } = chartDetails
-
-    const labels: string[][] = chartEntries.map((entry: ChartEntry) => {
-      return [getMonthShortName(entry.month), `${entry.year_curr}`]
-    })
-
-    const barData2 = [40, 35, 72, 78, 35, 45, 74, 35, 72, 74, 45, 45]
-    const lineData2 = [75, 30, 57, 55, 40, 30, 59, 40, 27, 69, 50, 25]
-
     const chartSettingList = [
-      createBarsAndLineChartSettings({
-        elementId: 'tab-1-chart-1',
-        chartTitle: 'Total adjudications - over 24 months',
-        barData: chartEntries.map((entry: ChartEntry) => entry.count_curr),
-        lineData: chartEntries.map((entry: ChartEntry) => entry.count_prev),
-        labels,
-        head: [],
-        rows: getRows(
-          chartEntries.map((entry: ChartEntry) => entry.count_curr),
-          chartEntries.map((entry: ChartEntry) => entry.count_prev)
-        ),
-      }),
-      createBarsAndLineChartSettings({
-        elementId: 'test_chart_1b',
-        chartTitle: 'Total adjudications referred to independent adjudicator - over 24 months',
-        barData: barData2,
-        lineData: lineData2,
-        labels,
-        head: [],
-        rows: getRows(barData2, lineData2),
-      }),
+      await this.extracted(username, agencyId, '1a'),
+      await this.extracted(username, 'BCI', '1b'),
     ]
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.TOTALS_ADJUDICATIONS_AND_LOCATIONS),
       chartSettingList,
+    })
+  }
+
+  private async extracted(username: string, agencyId: string, chartName: string) {
+    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, chartName)
+    const { chartEntries } = chartDetails
+
+    const labels: string[][] = chartEntries.map((entry: ChartEntry) => {
+      return [getMonthShortName(entry.month), `${entry.year_curr}`]
+    })
+
+    return createBarsAndLineChartSettings({
+      elementId: chartName,
+      chartTitle: 'Total adjudications - over 24 months',
+      barData: chartEntries.map((entry: ChartEntry) => entry.count_curr),
+      lineData: chartEntries.map((entry: ChartEntry) => entry.count_prev),
+      labels,
+      head: [],
+      rows: getRows(
+        chartEntries.map((entry: ChartEntry) => entry.count_curr),
+        chartEntries.map((entry: ChartEntry) => entry.count_prev)
+      ),
     })
   }
 

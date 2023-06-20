@@ -2,6 +2,7 @@ import { AgencyId } from '../data/PrisonLocationResult'
 
 export interface ChartDetailsResult {
   agencyId: AgencyId
+  chartName: string
   chartEntries: ChartEntry[]
 }
 

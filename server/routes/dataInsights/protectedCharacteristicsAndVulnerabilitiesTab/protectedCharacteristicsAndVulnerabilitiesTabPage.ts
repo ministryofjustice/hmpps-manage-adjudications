@@ -27,7 +27,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId)
+    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, '1a')
     return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,
