@@ -4,7 +4,7 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import PunishmentsTabPage, { PageRequestType } from './punishmentsTabPage'
 import UserService from '../../../services/userService'
 
-export default class PunishmentTabRoute {
+export default class PunishmentTabReporterRoute {
   page: PunishmentsTabPage
 
   constructor(

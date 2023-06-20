@@ -11,6 +11,7 @@ import UserService from '../../../services/userService'
 export enum PageRequestType {
   REPORTER,
   REVIEWER,
+  VIEW,
 }
 
 class PageOptions {
@@ -19,9 +20,20 @@ class PageOptions {
   isReporter(): boolean {
     return this.pageType === PageRequestType.REPORTER
   }
+
+  isViewOnly(): boolean {
+    return this.pageType === PageRequestType.VIEW
+  }
 }
 
 const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication: ReportedAdjudication) => {
+  if (pageOptions.isViewOnly()) {
+    return {
+      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+    }
+  }
   if (pageOptions.isReporter()) {
     return {
       reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.adjudicationNumber),

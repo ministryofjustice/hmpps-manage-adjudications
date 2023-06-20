@@ -3,6 +3,7 @@ import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import PunishmentsTabReviewerRoute from './punishmentsTabReviewer'
 import PunishmentsTabReporterRoute from './punishmentsTabReporter'
+import PunishmentsTabViewRoute from './punishmentsTabView'
 
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -20,12 +21,17 @@ export default function PunishmentsAndDamagesRoutes({
 }): Router {
   const router = express.Router()
 
-  const hearingTabReviewerRoute = new PunishmentsTabReviewerRoute(
+  const punishmentsTabReviewerRoute = new PunishmentsTabReviewerRoute(
     reportedAdjudicationsService,
     userService,
     punishmentsService
   )
-  const hearingTabReporterRoute = new PunishmentsTabReporterRoute(
+  const punishmentsTabReporterRoute = new PunishmentsTabReporterRoute(
+    reportedAdjudicationsService,
+    userService,
+    punishmentsService
+  )
+  const punishmentsTabReadOnlyRoute = new PunishmentsTabViewRoute(
     reportedAdjudicationsService,
     userService,
     punishmentsService
@@ -33,8 +39,9 @@ export default function PunishmentsAndDamagesRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.punishmentsAndDamages.matchers.review, hearingTabReviewerRoute.view)
-  get(adjudicationUrls.punishmentsAndDamages.matchers.report, hearingTabReporterRoute.view)
+  get(adjudicationUrls.punishmentsAndDamages.matchers.review, punishmentsTabReviewerRoute.view)
+  get(adjudicationUrls.punishmentsAndDamages.matchers.report, punishmentsTabReporterRoute.view)
+  get(adjudicationUrls.punishmentsAndDamages.matchers.viewOnly, punishmentsTabReadOnlyRoute.view)
 
   return router
 }

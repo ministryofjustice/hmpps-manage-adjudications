@@ -7,6 +7,8 @@ export default class PunishmentsAndDamagesPage extends Page {
 
   moneyCautionSummary = (): PageElement => cy.get('[data-qa="money-caution-summary"]')
 
+  moneyCautionChangeLink = (): PageElement => cy.get('[data-qa="change-link"]')
+
   punishmentsTabName = (): PageElement => cy.get('[data-qa="punishmentsTab"]')
 
   awardPunishmentsTable = (): PageElement => cy.get('[data-qa="punishments-table"]')

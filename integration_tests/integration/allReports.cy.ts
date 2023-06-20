@@ -451,6 +451,7 @@ context('All Completed Reports', () => {
       username: 'USER1',
       response: testData.userFromUsername('USER1'),
     })
+    // Report has been transferred and this user is in the original agency (so actions allowed)
     const reportedAdjudications = [
       testData.reportedAdjudication({
         adjudicationNumber: 1,
@@ -459,6 +460,7 @@ context('All Completed Reports', () => {
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
         otherData: {
           overrideAgencyId: 'LEI',
+          transferableActionsAllowed: true,
         },
       }),
       testData.reportedAdjudication({
@@ -466,8 +468,16 @@ context('All Completed Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+      }),
+      // Report has been transferred and this user is in the override agency (so actions not allowed)
+      testData.reportedAdjudication({
+        adjudicationNumber: 3,
+        prisonerNumber: 'A1234AA',
+        dateTimeOfIncident: '2021-11-15T11:30:00',
+        dateTimeOfDiscovery: '2345-11-15T11:30:00',
         otherData: {
-          overrideAgencyId: null,
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: false,
         },
       }),
     ]
@@ -477,12 +487,17 @@ context('All Completed Reports', () => {
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.viewReportLink().first().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(1))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1))
+    })
+    cy.visit(adjudicationUrls.allCompletedReports.root)
+    allCompletedReportsPage.viewReportLink().eq(1).click() // this is the second report (zero indexed)
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(2))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
     allCompletedReportsPage.viewReportLink().last().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(2))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(3))
     })
   })
 })
