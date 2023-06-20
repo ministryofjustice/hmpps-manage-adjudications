@@ -48,7 +48,7 @@ export default class ConfirmDeletionPage {
     const { removeComment } = req.body
 
     if (removeComment === undefined) {
-      const error = { text: 'Please select required option' } as FormError
+      const error = { href: '#removeComment', text: 'Please select required option' } as FormError
       const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
       const punishmentComment = punishmentComments.find(comment => comment.id === id)
       if (!punishmentComment) {
