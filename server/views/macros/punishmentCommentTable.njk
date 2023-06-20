@@ -1,0 +1,44 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro punishmentCommentTable(punishmentComments, isReporter) %}
+  {% set rows = [] %}
+  {% for comment in punishmentComments %}
+    {% set commentId = comment.id %}
+
+    {% if not isReporter and comment.isOwner %}
+      {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.changeLink+'" data-qa="change-punishment-comment-'+commentId+'" class="govuk-link">Change</a></p>' %}
+      {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.removeLink+'" data-qa="remove-punishment-comment-'+commentId+'" class="govuk-link">Remove</a></p>' %}
+    {% else %}
+      {% set changeLinkHref = null %}
+      {% set removeLinkHref = null %}
+    {% endif %}
+
+    {% set rows = (rows.push(
+      [
+        {
+          html: comment.date+'<br>'+comment.time+'<br>'+comment.name,
+          classes: "govuk-table__cell cellWidth-140 govuk-table__cell--multiline"
+        },
+        {
+          text: comment.comment,
+          classes: "govuk-table__cell--full-width"
+        },
+        {
+          html: changeLinkHref,
+          classes: "tableLink"
+        },
+        {
+          html: removeLinkHref,
+          classes: "tableLink"
+        }
+      ]
+    ), rows) %}
+  {% endfor %}
+
+  {% if rows.length %}
+    {{ govukTable({
+      rows: rows,
+      attributes: {"data-qa": "punishment-comments-table"}
+    }) }}
+  {% endif %}
+{% endmacro %}

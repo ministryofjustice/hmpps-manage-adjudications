@@ -5,6 +5,8 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
+import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
+import UserService from '../../../services/userService'
 
 export enum PageRequestType {
   REPORTER,
@@ -52,7 +54,8 @@ export default class PunishmentsTabPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -83,11 +86,39 @@ export default class PunishmentsTabPage {
       await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     )
 
+    const usernames = new Set(reportedAdjudication.punishmentComments.map(it => it.createdByUserId))
+    const users = await Promise.all(
+      Array.from(usernames).map(async username => this.userService.getStaffNameFromUsername(username, user))
+    )
+    const names: { [key: string]: string } = Object.fromEntries(
+      users.map(it => [it.username, getFormattedOfficerName(it.name)])
+    )
+
+    const punishmentComments = []
+    // eslint-disable-next-line no-restricted-syntax
+    for (const punishmentComment of reportedAdjudication.punishmentComments) {
+      const { dateTime } = punishmentComment
+
+      const comment = {
+        id: punishmentComment.id,
+        comment: punishmentComment.comment,
+        date: formatTimestampTo(dateTime, 'D MMMM YYYY'),
+        time: formatTimestampTo(dateTime, 'HH:mm'),
+        name: names[punishmentComment.createdByUserId],
+        changeLink: adjudicationUrls.punishmentComment.urls.edit(adjudicationNumber, punishmentComment.id),
+        removeLink: adjudicationUrls.punishmentComment.urls.delete(adjudicationNumber, punishmentComment.id),
+        isOwner: user.username === punishmentComment.createdByUserId,
+      }
+      punishmentComments.push(comment)
+    }
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
       reviewStatus: reportedAdjudication.status,
       readOnly,
+      isReporter: this.pageOptions.isReporter(),
+      outcomeEnteredInNomis: reportedAdjudication.outcomeEnteredInNomis,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
       quashed: reportedAdjudication.status === ReportedAdjudicationStatus.QUASHED,
       moneyRecoveredBoolean: !!amount,
@@ -96,6 +127,7 @@ export default class PunishmentsTabPage {
       moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
       cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
       punishments,
+      punishmentComments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
     })
   }

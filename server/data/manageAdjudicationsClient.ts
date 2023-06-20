@@ -545,6 +545,33 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async createPunishmentComment(
+    adjudicationNumber: number,
+    punishmentComment: string
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+      data: { comment: punishmentComment },
+    })
+  }
+
+  async amendPunishmentComment(
+    adjudicationNumber: number,
+    id: number,
+    punishmentComment: string
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+      data: { id, comment: punishmentComment },
+    })
+  }
+
+  async removePunishmentComment(adjudicationNumber: number, id: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment/${id}`,
+    })
+  }
+
   async getAgencyReportCounts(): Promise<AgencyReportCounts> {
     return this.restClient.get({
       path: `/reported-adjudications/report-counts`,

@@ -5,6 +5,9 @@ import PunishmentsService from './punishmentsService'
 
 const getReportedAdjudication = jest.fn()
 const createPunishments = jest.fn()
+const createPunishmentComment = jest.fn()
+const amendPunishmentComment = jest.fn()
+const removePunishmentComment = jest.fn()
 const getPrisonerDetails = jest.fn()
 const getSuspendedPunishments = jest.fn()
 
@@ -12,6 +15,9 @@ jest.mock('../data/manageAdjudicationsClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
       createPunishments,
+      createPunishmentComment,
+      amendPunishmentComment,
+      removePunishmentComment,
       getReportedAdjudication,
       getSuspendedPunishments,
     }
@@ -148,6 +154,87 @@ describe('PunishmentsService', () => {
         prisonerName: 'John Smith',
         suspendedPunishments: punishments,
       })
+    })
+  })
+  describe('createPunishmentComment', () => {
+    it('returns adjudication when punishments comment sent', async () => {
+      const punishmentComments = [
+        {
+          id: 50,
+          comment: 'punishment comment text',
+          createdByUsrId: 'userId',
+          dateTime: '2023-04-03',
+        },
+      ]
+      createPunishmentComment.mockResolvedValue(
+        testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          otherData: {
+            punishmentComments,
+          },
+        })
+      )
+      const result = await service.createPunishmentComment(100, 'punishment comment text', user)
+      expect(result).toEqual(
+        testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          otherData: {
+            punishmentComments,
+          },
+        })
+      )
+    })
+  })
+  describe('editPunishmentComment', () => {
+    it('returns adjudication when edited punishments comment sent', async () => {
+      const punishmentComments = [
+        {
+          id: 50,
+          comment: 'new punishment comment text',
+          createdByUsrId: 'userId',
+          dateTime: '2023-04-03',
+        },
+      ]
+      amendPunishmentComment.mockResolvedValue(
+        testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          otherData: {
+            punishmentComments,
+          },
+        })
+      )
+      const result = await service.editPunishmentComment(100, 50, 'new punishment comment text', user)
+      expect(result).toEqual(
+        testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          otherData: {
+            punishmentComments,
+          },
+        })
+      )
+    })
+  })
+  describe('deletePunishmentComment', () => {
+    it('returns adjudication when punishments comment was deleted', async () => {
+      removePunishmentComment.mockResolvedValue(
+        testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          otherData: {},
+        })
+      )
+      const result = await service.removePunishmentComment(100, 50, user)
+      expect(result).toEqual(
+        testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          otherData: {},
+        })
+      )
     })
   })
 })
