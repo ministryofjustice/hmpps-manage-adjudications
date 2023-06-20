@@ -445,7 +445,7 @@ context('All Completed Reports', () => {
     adjudicationsFilter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
   })
 
-  it.only('dynamic links for transferred prisoners', () => {
+  it('dynamic links for transferred prisoners', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
