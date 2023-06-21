@@ -10,7 +10,6 @@ import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicat
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsAuthClient'
 import LocationService from '../../../services/locationService'
-import { OutcomeDetailsHistory } from '../../../data/HearingAndOutcomeResult'
 
 type PageData = {
   errors?: FormError[]
@@ -199,7 +198,7 @@ export default class prisonerReportRoutes {
   hearingWithoutOutcomePresent = (reportedAdjudication: ReportedAdjudication) => {
     const { outcomes } = reportedAdjudication
     const latestHearing = outcomes?.length && outcomes[outcomes.length - 1]
-    return !latestHearing?.hearing.outcome || null
+    return !latestHearing?.hearing?.outcome || null
   }
 
   getBannerText = async (overrideAgencyId: string, originatingAgencyId: string, prisonerNumber: string, user: User) => {
