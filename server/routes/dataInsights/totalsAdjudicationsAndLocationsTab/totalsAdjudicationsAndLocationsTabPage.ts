@@ -221,8 +221,13 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const agencyId: AgencyId = user.activeCaseLoadId
 
     const chartSettingList = [
-      await this.extracted(username, agencyId, '1a'),
-      await this.extracted(username, 'BCI', '1b'),
+      await this.produceChart(username, agencyId, '1a', 'Total adjudications - over 24 months'),
+      await this.produceChart(
+        username,
+        'BCI',
+        '1b',
+        'Total adjudications referred to independent adjudicator - over 24 months'
+      ),
     ]
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {
@@ -232,7 +237,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     })
   }
 
-  private async extracted(username: string, agencyId: string, chartName: string) {
+  private async produceChart(username: string, agencyId: string, chartName: string, chartTitle: string) {
     const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, chartName)
     const { chartEntries } = chartDetails
 
@@ -242,7 +247,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
 
     return createBarsAndLineChartSettings({
       elementId: chartName,
-      chartTitle: 'Total adjudications - over 24 months',
+      chartTitle,
       barData: chartEntries.map((entry: ChartEntry) => entry.count_curr),
       lineData: chartEntries.map((entry: ChartEntry) => entry.count_prev),
       labels,
