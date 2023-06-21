@@ -12,20 +12,9 @@ export default class DataInsightsApiClient {
     this.restClient = new RestClient('Data Insights API', config.apis.dataInsights, token)
   }
 
-  async getDataInsightsChart(agencyId: AgencyId): Promise<ChartDetailsResult> {
-    try {
-      return this.restClient.get({
-        path: `/api/data-insights/chart/${agencyId}`,
-      })
-    } catch (e) {
-      return new Promise(resolve => {
-        resolve({
-          agencyId,
-          data: {
-            year: 2011,
-          },
-        })
-      })
-    }
+  async getDataInsightsChart(agencyId: AgencyId, chartName: string): Promise<ChartDetailsResult> {
+    return this.restClient.get({
+      path: `/api/data-insights/chart/${agencyId}/${chartName}`,
+    })
   }
 }

@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartService from '../../../services/chartService'
-import { AgencyId, LocationId } from '../../../data/PrisonLocationResult'
+import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 
@@ -23,11 +23,11 @@ export default class PunishmentsTabPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
 
-    const agencyId: AgencyId = '123'
-    const locationId: LocationId = 456
     const { user } = res.locals
+    const { username } = user
+    const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(locationId, user, agencyId)
+    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, '1a')
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,
