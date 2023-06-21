@@ -1,0 +1,15 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% macro transferBanner(bannerText, showTransferHearingWarning) %}
+  {% set html %}
+  <p class="govuk-notification-banner__heading">{{ bannerText }}</p>
+  {% if hearingWithoutOutcomePresent %}
+    <p class="govuk-body">They must enter the outcome of the scheduled hearing before any changes can be made.</p>
+  {% endif %}
+  {% endset %}
+
+  {{ govukNotificationBanner({
+    html: html,
+    classes: transferBanner
+    }) }}
+{% endmacro %}

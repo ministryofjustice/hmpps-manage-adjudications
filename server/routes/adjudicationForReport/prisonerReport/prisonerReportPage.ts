@@ -9,6 +9,8 @@ import { getEvidenceCategory } from '../../../utils/utils'
 import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsAuthClient'
+import LocationService from '../../../services/locationService'
+import { OutcomeDetailsHistory } from '../../../data/HearingAndOutcomeResult'
 
 type PageData = {
   errors?: FormError[]
@@ -130,7 +132,8 @@ export default class prisonerReportRoutes {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly locationService: LocationService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -164,6 +167,15 @@ export default class prisonerReportRoutes {
 
     const returned = status === ReportedAdjudicationStatus.RETURNED
 
+    const transferBannerContent = await this.getBannerText(
+      reportedAdjudication.overrideAgencyId,
+      reportedAdjudication.originatingAgencyId,
+      reportedAdjudication.prisonerNumber,
+      user
+    )
+
+    const hearingWithoutOutcomePresent = this.hearingWithoutOutcomePresent(reportedAdjudication)
+
     return res.render(`pages/adjudicationForReport/prisonerReport`, {
       pageData: { ...pageData, returned },
       prisoner,
@@ -177,7 +189,36 @@ export default class prisonerReportRoutes {
       damages: reportedAdjudication.damages,
       evidence: convertedEvidence,
       witnesses: reportedAdjudication.witnesses,
+      transferBannerContent,
+      showTransferHearingWarning:
+        user.activeCaseLoadId === reportedAdjudication.overrideAgencyId && hearingWithoutOutcomePresent,
+      overrideAgencyId: reportedAdjudication.overrideAgencyId,
     })
+  }
+
+  hearingWithoutOutcomePresent = (reportedAdjudication: ReportedAdjudication) => {
+    const { outcomes } = reportedAdjudication
+    const latestHearing = outcomes?.length && outcomes[outcomes.length - 1]
+    return !latestHearing?.hearing.outcome || null
+  }
+
+  getBannerText = async (overrideAgencyId: string, originatingAgencyId: string, prisonerNumber: string, user: User) => {
+    if (!overrideAgencyId || !overrideAgencyId.length) return null
+    // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
+    if (user.activeCaseLoadId === originatingAgencyId) {
+      const movementData = await this.reportedAdjudicationsService.getPrisonerLatestADMMovement(prisonerNumber, user)
+      const { movementDate, prisonerName, toAgencyDescription } = movementData
+      return movementData
+        ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
+        : `This prisoner was transferred to another establishment.`
+    }
+    // Prisoner has been transferred and current user is in the override agency
+    if (user.activeCaseLoadId === overrideAgencyId) {
+      const agencyName =
+        (await this.locationService.getAgency(originatingAgencyId, user))?.description || 'another establishment.'
+      return `This incident was reported at ${agencyName}`
+    }
+    return null
   }
 
   getEditAndReviewAvailability = (

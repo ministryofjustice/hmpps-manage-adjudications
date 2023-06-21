@@ -144,6 +144,7 @@ export default function routes(
       reportedAdjudicationsService,
       userService,
       decisionTreeService,
+      locationService,
     })
   )
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
