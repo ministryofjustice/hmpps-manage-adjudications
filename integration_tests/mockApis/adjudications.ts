@@ -987,11 +987,11 @@ const stubGetSuspendedPunishments = ({ prisonerNumber, response }): SuperAgentRe
     },
   })
 
-const stubGetDataInsightsChart = ({ id, response = {} }): SuperAgentRequest =>
+const stubGetDataInsightsChart = ({ agencyId, chartName, response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/api/data-insights/chart/${id}`,
+      url: `/api/data-insights/chart/${agencyId}/${chartName}`,
     },
     response: {
       status: 200,

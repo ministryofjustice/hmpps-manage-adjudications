@@ -72,11 +72,6 @@ describe('GET schedule a hearing', () => {
         expect(response.text).toContain('Schedule a hearing')
         expect(locationService.getHearingLocations).toHaveBeenCalledTimes(1)
         expect(locationService.getHearingLocations).toHaveBeenCalledWith('MDI', expect.anything())
-        expect(reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber).toHaveBeenCalledWith(
-          1524494,
-          expect.anything()
-        )
       })
   })
 })

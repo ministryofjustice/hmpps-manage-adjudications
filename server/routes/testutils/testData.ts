@@ -14,7 +14,7 @@ import {
 } from '../../data/DraftAdjudicationResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
-import { AgencyId, Location } from '../../data/PrisonLocationResult'
+import { Location } from '../../data/PrisonLocationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
@@ -556,12 +556,7 @@ export default class TestData {
     }
   }
 
-  chartDetailsResult = ({ agencyId, data }: { agencyId: AgencyId; data: object }): ChartDetailsResult => {
-    return {
-      agencyId,
-      data,
-    }
-  }
+  chartDetailsResult = (value: ChartDetailsResult) => value
 
   prisonerMovement = ({
     offenderNo = 'A1234AA',

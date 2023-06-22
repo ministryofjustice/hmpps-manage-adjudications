@@ -17,8 +17,9 @@ const defaultConfig = config
 beforeEach(() => {
   chartService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
-      agencyId: '12345',
-      data: { year: 2023 },
+      agencyId: 'MDI',
+      chartName: '1a',
+      chartEntries: [],
     })
   )
   app = appWithAllRoutes({ production: false }, { chartService })

@@ -63,14 +63,7 @@ context('Schedule a hearing page', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubGetPrisonerDetails', {
-      prisonerNumber: 'G6415GD',
-      response: testData.prisonerResultSummary({
-        offenderNo: 'G6415GD',
-        firstName: 'JOHN',
-        lastName: 'SMITH',
-      }),
-    })
+
     cy.task('stubGetLocationsByType', {
       agencyId: 'MDI',
       response: testData.residentialLocations(),
