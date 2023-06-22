@@ -183,7 +183,7 @@ const stubGetMovementByOffender = ({ response = [], status = 200 }): SuperAgentR
   stubFor({
     request: {
       method: 'POST',
-      url: `/prisonApi/api/movements/offenders?movementType=ADM&latestOnly=true&allBookings=false`,
+      url: `/prisonApi/api/movements/offenders?movementType=ADM&latestOnly=false&allBookings=false`,
     },
     response: {
       status,
