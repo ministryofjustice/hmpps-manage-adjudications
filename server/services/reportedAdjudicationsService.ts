@@ -856,13 +856,18 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsClient(user).getAgencyReportCounts()
   }
 
-  async getPrisonerLatestADMMovement(prisonerNo: string, user: User): Promise<OffenderBannerInfo> {
+  async getPrisonerLatestADMMovement(
+    prisonerNo: string,
+    overrideAgencyId: string,
+    user: User
+  ): Promise<OffenderBannerInfo> {
     const [movementInfo, prisoner] = await Promise.all([
       new PrisonApiClient(user.token).getMovementByOffender(prisonerNo),
       new PrisonApiClient(user.token).getPrisonerDetails(prisonerNo),
     ])
-    const movement = Array.isArray(movementInfo) ? movementInfo[0] : movementInfo
-    const { movementDate, toAgencyDescription } = movement
+    const moveToOverrideAgencyIdList = movementInfo.filter(prisonerMove => prisonerMove.toAgency === overrideAgencyId)
+    if (!moveToOverrideAgencyIdList.length) return null
+    const { movementDate, toAgencyDescription } = moveToOverrideAgencyIdList[0]
     const convertedMovementDate = formatTimestampTo(movementDate, 'D MMMM YYYY')
     return {
       movementDate: convertedMovementDate,
@@ -881,7 +886,7 @@ export default class ReportedAdjudicationsService {
     // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
     if (user.activeCaseLoadId === originatingAgencyId) {
       try {
-        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, user)
+        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, 'LEI', user)
         const { movementDate, prisonerName, toAgencyDescription } = movementData
         return movementData
           ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`

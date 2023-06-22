@@ -1079,10 +1079,16 @@ describe('reportedAdjudicationsService', () => {
     })
   })
   describe('getPrisonerLatestADMMovement', () => {
+    it('should return null if there are no transfers that match the overrideAgencyId', async () => {
+      getMovementByOffender.mockResolvedValue([])
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', user)
+      expect(result).toEqual(null)
+    })
     it('should return correct info', async () => {
       getMovementByOffender.mockResolvedValue(testData.prisonerMovement({}))
       getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
-      const result = await service.getPrisonerLatestADMMovement('A1234AA', user)
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', user)
       expect(result).toEqual({
         movementDate: '19 November 2030',
         toAgencyDescription: 'Leeds (HMP)',
@@ -1090,7 +1096,7 @@ describe('reportedAdjudicationsService', () => {
       })
     })
   })
-  describe.only('getTransferBannerInfo', () => {
+  describe('getTransferBannerInfo', () => {
     it('if there is no overrideAgencyId, should return content as null', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
         adjudicationNumber: 123,
@@ -1125,7 +1131,7 @@ describe('reportedAdjudicationsService', () => {
         transferBannerContent: 'Harry Potter was transferred to Leeds (HMP) on 19 November 2030',
       })
     })
-    it.only('if the user is based in the agency where the adjudication has been transferred to', async () => {
+    it('if the user is based in the agency where the adjudication has been transferred to', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
         adjudicationNumber: 123,
         prisonerNumber: 'G6123VU',

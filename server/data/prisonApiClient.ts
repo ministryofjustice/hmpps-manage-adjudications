@@ -148,9 +148,9 @@ export default class PrisonApiClient {
     })
   }
 
-  async getMovementByOffender(offenderNo: string): Promise<OffenderMovementInfo> {
+  async getMovementByOffender(offenderNo: string): Promise<OffenderMovementInfo[]> {
     return this.restClient.post({
-      path: `/api/movements/offenders?movementType=ADM&latestOnly=true&allBookings=false`,
+      path: `/api/movements/offenders?movementType=ADM&latestOnly=false&allBookings=false`,
       data: [offenderNo],
     })
   }
