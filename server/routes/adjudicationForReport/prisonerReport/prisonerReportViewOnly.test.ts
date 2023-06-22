@@ -46,7 +46,10 @@ beforeEach(() => {
     prisoner,
     associatedPrisoner: undefined,
   })
-
+  reportedAdjudicationsService.getTransferBannerInfo.mockResolvedValue({
+    transferBannerContent: null,
+    originatingAgencyToAddOutcome: false,
+  })
   locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({

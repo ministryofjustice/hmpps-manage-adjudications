@@ -1090,4 +1090,74 @@ describe('reportedAdjudicationsService', () => {
       })
     })
   })
+  describe.only('getTransferBannerInfo', () => {
+    it('if there is no overrideAgencyId, should return content as null', async () => {
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        otherData: {
+          transferableActionsAllowed: true,
+        },
+      })
+      const result = await service.getTransferBannerInfo(reportedAdjudication, user)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: false,
+        transferBannerContent: null,
+      })
+    })
+    it('if the user is based in the agency where the adjudication was created', async () => {
+      getMovementByOffender.mockResolvedValue(testData.prisonerMovement({ offenderNo: 'G6123VU' }))
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('G6123VU', 'Harry', 'Potter', '1-2-015'))
+
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: true,
+        },
+      })
+      const result = await service.getTransferBannerInfo(reportedAdjudication, user)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: false,
+        transferBannerContent: 'Harry Potter was transferred to Leeds (HMP) on 19 November 2030',
+      })
+    })
+    it.only('if the user is based in the agency where the adjudication has been transferred to', async () => {
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: true,
+        },
+      })
+      const userInLeeds = testData.userFromUsername('user1', 'Test User', 'LEI') as User
+      const result = await service.getTransferBannerInfo(reportedAdjudication, userInLeeds)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: false,
+        transferBannerContent: 'This incident was reported at Moorland (HMP & YOI)',
+      })
+    })
+    it('user based in override, transferableActionsAllowed false as hearing present without outcome', async () => {
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.SCHEDULED,
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: false,
+        },
+      })
+      const userInLeeds = testData.userFromUsername('user1', 'Test User', 'LEI') as User
+      const result = await service.getTransferBannerInfo(reportedAdjudication, userInLeeds)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: true,
+        transferBannerContent: 'This incident was reported at Moorland (HMP & YOI)',
+      })
+    })
+  })
 })

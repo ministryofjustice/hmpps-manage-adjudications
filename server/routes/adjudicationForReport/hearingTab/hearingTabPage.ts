@@ -77,6 +77,11 @@ export default class HearingTabPage {
     const readOnly =
       this.pageOptions.isReporter() || this.pageOptions.isViewOnly() || reportedAdjudication.outcomeEnteredInNomis
 
+    const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
+      reportedAdjudication,
+      user
+    )
+
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
@@ -104,6 +109,9 @@ export default class HearingTabPage {
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
+      transferBannerContent: getTransferBannerInfo.transferBannerContent,
+      showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
+      overrideAgencyId: reportedAdjudication.overrideAgencyId,
     })
   }
 

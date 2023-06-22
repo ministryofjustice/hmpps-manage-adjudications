@@ -15,6 +15,11 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
+
+  {% if overrideAgencyId %}
+    {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
+  {% endif %}
+
   {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref) }}
 
   {% if chargeProved %}

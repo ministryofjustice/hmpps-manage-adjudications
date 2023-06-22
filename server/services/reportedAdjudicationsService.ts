@@ -870,4 +870,51 @@ export default class ReportedAdjudicationsService {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
     }
   }
+
+  private getBannerText = async (
+    overrideAgencyId: string,
+    originatingAgencyId: string,
+    prisonerNumber: string,
+    user: User
+  ) => {
+    if (!overrideAgencyId || !overrideAgencyId.length) return null
+    // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
+    if (user.activeCaseLoadId === originatingAgencyId) {
+      try {
+        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, user)
+        const { movementDate, prisonerName, toAgencyDescription } = movementData
+        return movementData
+          ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
+          : `This prisoner was transferred to another establishment.`
+      } catch {
+        return null
+      }
+    }
+    // Prisoner has been transferred and current user is in the override agency
+    if (user.activeCaseLoadId === overrideAgencyId) {
+      try {
+        const agencyName =
+          (await this.locationService.getAgency(originatingAgencyId, user))?.description || 'another establishment.'
+        return `This incident was reported at ${agencyName}`
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+
+  async getTransferBannerInfo(reportedAdjudication: ReportedAdjudication, user: User) {
+    const { overrideAgencyId, originatingAgencyId, prisonerNumber, status, transferableActionsAllowed } =
+      reportedAdjudication
+    const transferBannerContent = await this.getBannerText(overrideAgencyId, originatingAgencyId, prisonerNumber, user)
+
+    const originatingAgencyToAddOutcome =
+      status === ReportedAdjudicationStatus.SCHEDULED &&
+      user.activeCaseLoadId === reportedAdjudication.overrideAgencyId &&
+      transferableActionsAllowed === false
+    return {
+      transferBannerContent,
+      originatingAgencyToAddOutcome,
+    }
+  }
 }

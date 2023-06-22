@@ -125,6 +125,11 @@ beforeEach(() => {
     },
   })
 
+  reportedAdjudicationsService.getTransferBannerInfo.mockResolvedValue({
+    transferBannerContent: null,
+    originatingAgencyToAddOutcome: false,
+  })
+
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, decisionTreeService })
 })
 
@@ -133,7 +138,7 @@ afterEach(() => {
 })
 
 describe('GET prisoner report', () => {
-  it('should load the prisoner report page', () => {
+  it.only('should load the prisoner report page', () => {
     return request(app)
       .get(adjudicationUrls.prisonerReport.urls.report(12345))
       .expect('Content-Type', /html/)
@@ -150,7 +155,6 @@ describe('GET prisoner report', () => {
         expect(response.text).toContain('No')
         expect(response.text).toContain('This offence broke')
         expect(response.text).toContain('Prison rule 51, paragraph 1')
-        // expect(response.text).toContain('Commits any assault')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
       })
   })

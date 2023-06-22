@@ -32,6 +32,10 @@ beforeEach(() => {
       outcomes: [],
     }),
   })
+  reportedAdjudicationsService.getTransferBannerInfo.mockResolvedValue({
+    transferBannerContent: null,
+    originatingAgencyToAddOutcome: false,
+  })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService, outcomesService }, {})
 })
 

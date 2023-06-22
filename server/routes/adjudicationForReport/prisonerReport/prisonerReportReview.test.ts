@@ -36,7 +36,10 @@ beforeEach(() => {
       dateTimeOfIncident: '2021-12-09T10:30:00',
     }),
   })
-
+  reportedAdjudicationsService.getTransferBannerInfo.mockResolvedValue({
+    transferBannerContent: null,
+    originatingAgencyToAddOutcome: false,
+  })
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 12345,
