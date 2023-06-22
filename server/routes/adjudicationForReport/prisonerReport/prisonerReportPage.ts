@@ -173,7 +173,9 @@ export default class prisonerReportRoutes {
       user
     )
 
-    const hearingWithoutOutcomePresent = this.hearingWithoutOutcomePresent(reportedAdjudication)
+    const originatingAgencyToAddOutcome =
+      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED &&
+      reportedAdjudication.transferableActionsAllowed === false
 
     return res.render(`pages/adjudicationForReport/prisonerReport`, {
       pageData: { ...pageData, returned },
@@ -190,32 +192,34 @@ export default class prisonerReportRoutes {
       witnesses: reportedAdjudication.witnesses,
       transferBannerContent,
       showTransferHearingWarning:
-        user.activeCaseLoadId === reportedAdjudication.overrideAgencyId && hearingWithoutOutcomePresent,
+        user.activeCaseLoadId === reportedAdjudication.overrideAgencyId && originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
     })
-  }
-
-  hearingWithoutOutcomePresent = (reportedAdjudication: ReportedAdjudication) => {
-    const { outcomes } = reportedAdjudication
-    const latestHearing = outcomes?.length && outcomes[outcomes.length - 1]
-    return !latestHearing?.hearing?.outcome || null
   }
 
   getBannerText = async (overrideAgencyId: string, originatingAgencyId: string, prisonerNumber: string, user: User) => {
     if (!overrideAgencyId || !overrideAgencyId.length) return null
     // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
     if (user.activeCaseLoadId === originatingAgencyId) {
-      const movementData = await this.reportedAdjudicationsService.getPrisonerLatestADMMovement(prisonerNumber, user)
-      const { movementDate, prisonerName, toAgencyDescription } = movementData
-      return movementData
-        ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
-        : `This prisoner was transferred to another establishment.`
+      try {
+        const movementData = await this.reportedAdjudicationsService.getPrisonerLatestADMMovement(prisonerNumber, user)
+        const { movementDate, prisonerName, toAgencyDescription } = movementData
+        return movementData
+          ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
+          : `This prisoner was transferred to another establishment.`
+      } catch {
+        return null
+      }
     }
     // Prisoner has been transferred and current user is in the override agency
     if (user.activeCaseLoadId === overrideAgencyId) {
-      const agencyName =
-        (await this.locationService.getAgency(originatingAgencyId, user))?.description || 'another establishment.'
-      return `This incident was reported at ${agencyName}`
+      try {
+        const agencyName =
+          (await this.locationService.getAgency(originatingAgencyId, user))?.description || 'another establishment.'
+        return `This incident was reported at ${agencyName}`
+      } catch {
+        return null
+      }
     }
     return null
   }

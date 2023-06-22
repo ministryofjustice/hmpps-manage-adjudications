@@ -38,6 +38,7 @@ import {
   PunishmentType,
 } from '../../data/PunishmentResult'
 import { ChartDetailsResult } from '../../services/ChartDetailsResult'
+import { OffenderMovementInfo } from '../../data/prisonApiClient'
 
 export default class TestData {
   reportedAdjudication = ({
@@ -64,6 +65,7 @@ export default class TestData {
     issuingOfficer = null,
     dateTimeOfIssue = null,
     createdByUserId = 'USER1',
+    originatingAgencyId = 'MDI',
     otherData,
   }: {
     adjudicationNumber: number
@@ -89,6 +91,7 @@ export default class TestData {
     issuingOfficer?: string
     dateTimeOfIssue?: string
     createdByUserId?: string
+    originatingAgencyId?: string
     otherData?: any
   }) => {
     return {
@@ -121,6 +124,7 @@ export default class TestData {
       dateTimeOfFirstHearing,
       issuingOfficer,
       dateTimeOfIssue,
+      originatingAgencyId,
       ...otherData,
     }
   }
@@ -232,19 +236,22 @@ export default class TestData {
     id = 101,
     locationId = 775,
     oicHearingType = OicHearingType.GOV_ADULT,
+    agencyId = 'MDI',
   }: {
     dateTimeOfHearing: string
     outcome?: HearingOutcomeResult
     id?: number
     locationId?: number
     oicHearingType?: OicHearingType
+    agencyId?: string
   }): HearingDetails => {
     return {
       id,
       locationId,
       dateTimeOfHearing,
       oicHearingType,
-      outcome,
+      agencyId,
+      outcome: outcome && outcome,
     }
   }
 
@@ -427,9 +434,9 @@ export default class TestData {
     return alertFlagLabels.filter(alert => codes.includes(alert.alertCodes[0]))
   }
 
-  userFromUsername = (username = 'USER1', name = 'Test User') => {
+  userFromUsername = (username = 'USER1', name = 'Test User', activeCaseLoadId = 'MDI') => {
     return {
-      activeCaseLoadId: 'MDI',
+      activeCaseLoadId,
       name,
       username,
       token: 'token-1',
@@ -554,5 +561,39 @@ export default class TestData {
       agencyId,
       data,
     }
+  }
+
+  prisonerMovement = ({
+    offenderNo = 'A1234AA',
+    fromAgency = 'MDI',
+    fromAgencyDescription = 'Moorland (HMP & YOI)',
+    toAgency = 'LEI',
+    toAgencyDescription = 'Leeds (HMP)',
+  }: {
+    offenderNo?: string
+    fromAgency?: string
+    fromAgencyDescription?: string
+    toAgency?: string
+    toAgencyDescription?: string
+  }): OffenderMovementInfo[] => {
+    return [
+      {
+        offenderNo,
+        createDateTime: '2030-11-19T15:48:40.579962663',
+        fromAgency,
+        fromAgencyDescription,
+        toAgency,
+        toAgencyDescription,
+        fromCity: '',
+        toCity: '',
+        movementType: 'ADM',
+        movementTypeDescription: 'Admission',
+        directionCode: 'IN',
+        movementDate: '2030-11-19',
+        movementTime: '15:35:17',
+        movementReason: 'Transfer In from Other Establishment',
+        commentText: 'Prisoner was transferred to Leeds',
+      },
+    ]
   }
 }

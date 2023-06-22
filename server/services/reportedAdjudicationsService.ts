@@ -1,6 +1,6 @@
 import { ConfirmedOnReportData, ConfirmedOnReportChangedData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import PrisonApiClient, { OffenderBannerInfo, OffenderMovementInfo } from '../data/prisonApiClient'
+import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
 import ManageAdjudicationsClient, { AgencyReportCounts } from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
 import {
@@ -27,7 +27,6 @@ import {
   formatTimestampTo,
   formatName,
   convertOicHearingType,
-  datePickerDateToMoment,
 } from '../utils/utils'
 import { LocationId } from '../data/PrisonLocationResult'
 import {
@@ -863,13 +862,10 @@ export default class ReportedAdjudicationsService {
       new PrisonApiClient(user.token).getPrisonerDetails(prisonerNo),
     ])
     const movement = Array.isArray(movementInfo) ? movementInfo[0] : movementInfo
-    const { movementDate, fromAgency, fromAgencyDescription, toAgency, toAgencyDescription } = movement
+    const { movementDate, toAgencyDescription } = movement
     const convertedMovementDate = formatTimestampTo(movementDate, 'D MMMM YYYY')
     return {
       movementDate: convertedMovementDate,
-      fromAgency,
-      fromAgencyDescription,
-      toAgency,
       toAgencyDescription,
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
     }

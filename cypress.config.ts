@@ -46,6 +46,7 @@ export default defineConfig({
         stubSearch: prisonerSearch.stubSearch,
         stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
         stubAuthUser: auth.stubUser,
+        stubUserOriginatingAgency: auth.stubUserOriginatingAgency,
         stubUserRoles: auth.stubUserRoles,
         stubGetUser: auth.stubGetUser,
         stubGetUserFromNames: auth.stubGetUserFromNames,
@@ -66,6 +67,7 @@ export default defineConfig({
         stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,
         stubGetUsersLocations: prisonApi.stubGetUsersLocations,
         stubGetPrisonersAlerts: prisonApi.stubGetPrisonersAlerts,
+        stubGetMovementByOffender: prisonApi.stubGetMovementByOffender,
 
         stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
         stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,

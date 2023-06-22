@@ -12,12 +12,14 @@ const reportedAdjudicationResponse = ({
   statusReason = null,
   statusDetails = null,
   transferableActionsAllowed = false,
+  overrideAgencyId = null,
 }: {
   adjudicationNumber: number
   status: ReportedAdjudicationStatus
   statusReason?: string
   statusDetails?: string
   transferableActionsAllowed?: boolean
+  overrideAgencyId?: string
 }) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
@@ -57,6 +59,8 @@ const reportedAdjudicationResponse = ({
         statusDetails,
         isYouthOffender: false,
         transferableActionsAllowed,
+        overrideAgencyId,
+        originatingAgencyId: 'MDI',
       },
     }),
   }
@@ -127,6 +131,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       adjudicationNumber: 1524495,
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       transferableActionsAllowed: true,
+      overrideAgencyId: 'LEI',
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524495,
@@ -146,6 +151,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
         adjudicationNumber: 1524494,
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         transferableActionsAllowed: true,
+        overrideAgencyId: 'LEI',
       }),
     })
     cy.task('stubGetOffenceRule', {

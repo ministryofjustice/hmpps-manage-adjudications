@@ -2,9 +2,9 @@
 
 {% macro transferBanner(bannerText, showTransferHearingWarning) %}
   {% set html %}
-  <p class="govuk-notification-banner__heading">{{ bannerText }}</p>
-  {% if hearingWithoutOutcomePresent %}
-    <p class="govuk-body">They must enter the outcome of the scheduled hearing before any changes can be made.</p>
+  <p class="govuk-notification-banner__heading" data-qa="transferBanner-header">{{ bannerText }}</p>
+  {% if showTransferHearingWarning %}
+    <p class="govuk-body" data-qa="transferBanner-outcomePara">They must enter the outcome of the scheduled hearing before any changes can be made.</p>
   {% endif %}
   {% endset %}
 

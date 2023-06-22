@@ -29,12 +29,19 @@ const getHearingsGivenAgencyAndDate = jest.fn()
 const getReportedAdjudicationIssueData = jest.fn()
 const getReportedAdjudicationPrintData = jest.fn()
 const getAlertsForPrisoner = jest.fn()
+const getMovementByOffender = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getPrisonerDetails, getSecondaryLanguages, getBatchPrisonerDetails, getAlertsForPrisoner }
+    return {
+      getPrisonerDetails,
+      getSecondaryLanguages,
+      getBatchPrisonerDetails,
+      getAlertsForPrisoner,
+      getMovementByOffender,
+    }
   })
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
@@ -720,13 +727,13 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 123456,
           dateTimeOfDiscovery: '2022-11-11T09:00:00',
           dateTimeOfHearing: '2022-11-14T11:00:00',
-
           formattedDateTimeOfHearing: '14 November 2022 - 11:00',
           friendlyName: 'John Smith',
           nameAndNumber: 'Smith, John - G6123VU',
           oicHearingType: OicHearingType.GOV_ADULT as string,
           prisonerNumber: 'G6123VU',
           locationId: 775,
+          agencyId: 'MDI',
         },
       ])
     })
@@ -1069,6 +1076,18 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfHearing: '2023-03-21T19:00:00',
         })
       )
+    })
+  })
+  describe('getPrisonerLatestADMMovement', () => {
+    it('should return correct info', async () => {
+      getMovementByOffender.mockResolvedValue(testData.prisonerMovement({}))
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', user)
+      expect(result).toEqual({
+        movementDate: '19 November 2030',
+        toAgencyDescription: 'Leeds (HMP)',
+        prisonerName: 'Harry Potter',
+      })
     })
   })
 })

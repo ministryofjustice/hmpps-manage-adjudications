@@ -66,4 +66,8 @@ export default class PrisonerReportPage extends Page {
   hearingsTab = (): PageElement => cy.get('[data-qa="hearingsTab"]')
 
   punishmentsTab = (): PageElement => cy.get('[data-qa="punishmentsTab"]')
+
+  transferBannerHeader = (): PageElement => cy.get('[data-qa="transferBanner-header"]')
+
+  transferBannerParagraph = (): PageElement => cy.get('[data-qa="transferBanner-outcomePara"]')
 }

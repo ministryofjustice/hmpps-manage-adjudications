@@ -15,11 +15,11 @@ context('Transfers flow', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubAuthUser')
+    cy.task('stubUserOriginatingAgency', 'MDI')
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
-      response: testData.userFromUsername('USER1'),
+      response: testData.userFromUsername(),
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER2',
@@ -88,6 +88,7 @@ context('Transfers flow', () => {
                 dateTimeOfHearing: '2030-11-17T11:30:00',
                 id: 987,
                 locationId: 1,
+                agencyId: 'MDI',
               }),
             },
           ],
@@ -202,6 +203,9 @@ context('Transfers flow', () => {
             reportedAdjudication: transferredPrisonersAdjudicationProvedPunishments,
           },
         })
+        cy.task('stubGetMovementByOffender', {
+          response: testData.prisonerMovement({}),
+        })
       })
       it('all reports to prisoner report, tabs go to correct places', () => {
         cy.visit(adjudicationUrls.allCompletedReports.root)
@@ -211,6 +215,7 @@ context('Transfers flow', () => {
           expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(1))
         })
         const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage.transferBannerParagraph().should('not.exist')
         prisonerReportPage.damagesChangeLink().should('not.exist')
         prisonerReportPage.evidenceChangeLink().should('not.exist')
         prisonerReportPage.witnessesChangeLink().should('not.exist')
@@ -226,6 +231,14 @@ context('Transfers flow', () => {
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(1))
         })
+      })
+      it('Transfer banner - user in originating agency', () => {
+        cy.visit(adjudicationUrls.prisonerReport.urls.review(1))
+        const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+        prisonerReportPage
+          .transferBannerHeader()
+          .contains('Harry Potter was transferred to Leeds (HMP) on 19 November 2030')
+        prisonerReportPage.transferBannerParagraph().should('not.exist')
       })
       it('hearings tab - unscheduled - should be locked', () => {
         cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly(1))
@@ -525,6 +538,109 @@ context('Transfers flow', () => {
         punishmentsAndDamagesPage.reportQuashedButton().should('exist')
         punishmentsAndDamagesPage.moneyCautionChangeLink().first().should('exist')
       })
+    })
+  })
+})
+context('Transfer banner', () => {
+  describe('User is in override agency', () => {
+    beforeEach(() => {
+      cy.task('stubUserOriginatingAgency', 'LEI')
+      cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+      cy.task('stubGetUserFromUsername', {
+        username: 'USER1',
+        response: testData.userFromUsername('USER1', 'Test User', 'LEI'),
+      })
+      cy.task('stubGetPrisonerDetails', {
+        prisonerNumber: 'A1234AA',
+        response: testData.prisonerResultSummary({
+          offenderNo: 'A1234AA',
+          firstName: 'HARRY',
+          lastName: 'POTTER',
+        }),
+      })
+      cy.task('stubGetLocation', {
+        locationId: 1,
+        response: {
+          locationId: 1,
+          agencyId: 'MDI',
+          locationPrefix: 'MDI-1',
+          userDescription: 'Houseblock 1',
+        },
+      })
+      cy.task('stubGetOffenceRule', {
+        offenceCode: 20002,
+        response: {
+          paragraphNumber: '20',
+          paragraphDescription: 'Uses threatening, abusive or insulting words or behaviour',
+        },
+      })
+      const transferredPrisonersAdjudicationUnscheduled = testData.reportedAdjudication({
+        adjudicationNumber: 6,
+        prisonerNumber: 'A1234AA',
+        dateTimeOfIncident: '2030-11-15T11:30:00',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        incidentStatement: {
+          statement: 'This is a statement',
+          completed: true,
+        },
+        offenceDetails: {
+          offenceCode: 20002,
+          offenceRule: {
+            paragraphNumber: '20',
+            paragraphDescription: 'Uses threatening, abusive or insulting words or behaviour',
+          },
+        },
+        outcomes: [],
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: false,
+        },
+      })
+
+      const transferredPrisonersAdjudicationScheduled = {
+        ...transferredPrisonersAdjudicationUnscheduled,
+        adjudicationNumber: 7,
+        status: ReportedAdjudicationStatus.SCHEDULED,
+        outcomes: [
+          {
+            hearing: testData.singleHearing({
+              dateTimeOfHearing: '2030-11-17T11:30:00',
+              id: 987,
+              locationId: 1,
+              agencyId: 'MDI',
+            }),
+          },
+        ],
+      }
+      cy.task('stubGetReportedAdjudication', {
+        id: 6,
+        response: {
+          reportedAdjudication: transferredPrisonersAdjudicationUnscheduled,
+        },
+      })
+      cy.task('stubGetReportedAdjudication', {
+        id: 7,
+        response: {
+          reportedAdjudication: transferredPrisonersAdjudicationScheduled,
+        },
+      })
+      cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
+      cy.signIn()
+    })
+    it('prisoner report - scheduled - should show correct title and no extra content', () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(6))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.transferBannerHeader().contains('This incident was reported at Moorland (HMP & YOI)')
+      prisonerReportPage.transferBannerParagraph().should('not.exist')
+    })
+    it('prisoner report - scheduled - should show correct title and extra content in banner as hearing is incomplete and user is in override agency', () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(7))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.transferBannerHeader().contains('This incident was reported at Moorland (HMP & YOI)')
+      prisonerReportPage
+        .transferBannerParagraph()
+        .contains('They must enter the outcome of the scheduled hearing before any changes can be made.')
     })
   })
 })

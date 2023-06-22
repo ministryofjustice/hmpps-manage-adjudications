@@ -47,13 +47,11 @@ export interface OffenderMovementInfo {
   movementDate: string
   movementTime: string
   movementReason: string
+  commentText?: string
 }
 
 export interface OffenderBannerInfo {
   movementDate: string
-  fromAgency: string
-  fromAgencyDescription: string
-  toAgency: string
   toAgencyDescription: string
   prisonerName: string
 }
