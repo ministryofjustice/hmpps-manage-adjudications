@@ -179,6 +179,19 @@ const stubGetPrisonersAlerts = ({ prisonerNumber, response = [], status = 200 })
     },
   })
 
+const stubGetMovementByOffender = ({ response = [], status = 200 }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/prisonApi/api/movements/offenders?movementType=ADM&latestOnly=false&allBookings=false`,
+    },
+    response: {
+      status,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubUserCaseloads,
@@ -191,4 +204,5 @@ export default {
   stubGetBatchPrisonerDetails,
   stubGetUsersLocations,
   stubGetPrisonersAlerts,
+  stubGetMovementByOffender,
 }

@@ -88,6 +88,7 @@ export type HearingDetails = {
   dateTimeOfHearing: string
   oicHearingType: string
   outcome?: HearingOutcomeDetails
+  agencyId?: string
 }
 
 export type HearingOutcomeDetails = {

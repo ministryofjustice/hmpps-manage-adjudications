@@ -7,6 +7,7 @@
 {% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
+{% from "../../macros/transferBanner.njk" import transferBanner%}
 
 {% block pageTitle %}
   Punishments and damages
@@ -15,6 +16,11 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
+
+  {% if overrideAgencyId %}
+    {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
+  {% endif %}
+
   {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref) }}
 
   {% if chargeProved %}

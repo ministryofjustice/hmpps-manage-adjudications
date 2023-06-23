@@ -9,25 +9,37 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import UserService from '../../../services/userService'
 import DecisionTreeService from '../../../services/decisionTreeService'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import LocationService from '../../../services/locationService'
 
 export default function prisonerReportRoutes({
   reportedAdjudicationsService,
   userService,
   decisionTreeService,
+  locationService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
   userService: UserService
   decisionTreeService: DecisionTreeService
+  locationService: LocationService
 }): Router {
   const router = express.Router()
 
-  const prisonerReportRoute = new PrisonerReportRoutes(reportedAdjudicationsService, decisionTreeService)
+  const prisonerReportRoute = new PrisonerReportRoutes(
+    reportedAdjudicationsService,
+    decisionTreeService,
+    locationService
+  )
   const prisonerReportReview = new PrisonerReportReviewRoutes(
     reportedAdjudicationsService,
     userService,
-    decisionTreeService
+    decisionTreeService,
+    locationService
   )
-  const prisonerReportViewRoute = new PrisonerReportViewRoutes(reportedAdjudicationsService, decisionTreeService)
+  const prisonerReportViewRoute = new PrisonerReportViewRoutes(
+    reportedAdjudicationsService,
+    decisionTreeService,
+    locationService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

@@ -1,6 +1,6 @@
 import { ConfirmedOnReportData, ConfirmedOnReportChangedData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
-import PrisonApiClient from '../data/prisonApiClient'
+import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
 import ManageAdjudicationsClient, { AgencyReportCounts } from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
 import {
@@ -854,5 +854,72 @@ export default class ReportedAdjudicationsService {
 
   async getAgencyReportCounts(user: User): Promise<AgencyReportCounts> {
     return new ManageAdjudicationsClient(user).getAgencyReportCounts()
+  }
+
+  async getPrisonerLatestADMMovement(
+    prisonerNo: string,
+    overrideAgencyId: string,
+    user: User
+  ): Promise<OffenderBannerInfo> {
+    const [movementInfo, prisoner] = await Promise.all([
+      new PrisonApiClient(user.token).getMovementByOffender(prisonerNo),
+      new PrisonApiClient(user.token).getPrisonerDetails(prisonerNo),
+    ])
+    const moveToOverrideAgencyIdList = movementInfo.filter(prisonerMove => prisonerMove.toAgency === overrideAgencyId)
+    if (!moveToOverrideAgencyIdList.length) return null
+    const { movementDate, toAgencyDescription } = moveToOverrideAgencyIdList[0]
+    const convertedMovementDate = formatTimestampTo(movementDate, 'D MMMM YYYY')
+    return {
+      movementDate: convertedMovementDate,
+      toAgencyDescription,
+      prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+    }
+  }
+
+  private getBannerText = async (
+    overrideAgencyId: string,
+    originatingAgencyId: string,
+    prisonerNumber: string,
+    user: User
+  ) => {
+    if (!overrideAgencyId || !overrideAgencyId.length) return null
+    // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
+    if (user.activeCaseLoadId === originatingAgencyId) {
+      try {
+        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, 'LEI', user)
+        const { movementDate, prisonerName, toAgencyDescription } = movementData
+        return movementData
+          ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
+          : `This prisoner was transferred to another establishment.`
+      } catch {
+        return null
+      }
+    }
+    // Prisoner has been transferred and current user is in the override agency
+    if (user.activeCaseLoadId === overrideAgencyId) {
+      try {
+        const agencyName =
+          (await this.locationService.getAgency(originatingAgencyId, user))?.description || 'another establishment.'
+        return `This incident was reported at ${agencyName}`
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+
+  async getTransferBannerInfo(reportedAdjudication: ReportedAdjudication, user: User) {
+    const { overrideAgencyId, originatingAgencyId, prisonerNumber, status, transferableActionsAllowed } =
+      reportedAdjudication
+    const transferBannerContent = await this.getBannerText(overrideAgencyId, originatingAgencyId, prisonerNumber, user)
+
+    const originatingAgencyToAddOutcome =
+      status === ReportedAdjudicationStatus.SCHEDULED &&
+      user.activeCaseLoadId === reportedAdjudication.overrideAgencyId &&
+      transferableActionsAllowed === false
+    return {
+      transferBannerContent,
+      originatingAgencyToAddOutcome,
+    }
   }
 }

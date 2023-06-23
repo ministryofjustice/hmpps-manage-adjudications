@@ -183,7 +183,7 @@ export default class PlaceOnReportService {
       },
       {
         label: 'Location',
-        value: locationObj.userDescription,
+        value: locationObj?.userDescription || '',
       },
       {
         label: 'Date of discovery',

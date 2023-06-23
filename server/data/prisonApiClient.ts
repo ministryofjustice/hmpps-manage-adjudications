@@ -32,6 +32,30 @@ export interface Inmate {
   alertsDetails: string[]
 }
 
+export interface OffenderMovementInfo {
+  offenderNo: string
+  createDateTime: string
+  fromAgency: string
+  fromAgencyDescription: string
+  toAgency: string
+  toAgencyDescription: string
+  fromCity: string
+  toCity: string
+  movementType: string
+  movementTypeDescription: string
+  directionCode: string
+  movementDate: string
+  movementTime: string
+  movementReason: string
+  commentText?: string
+}
+
+export interface OffenderBannerInfo {
+  movementDate: string
+  toAgencyDescription: string
+  prisonerName: string
+}
+
 export default class PrisonApiClient {
   restClient: RestClient
 
@@ -121,6 +145,13 @@ export default class PrisonApiClient {
   async getSecondaryLanguages(bookingId: number): Promise<SecondaryLanguage[]> {
     return this.restClient.get({
       path: `/api/bookings/${bookingId}/secondary-languages`,
+    })
+  }
+
+  async getMovementByOffender(offenderNo: string): Promise<OffenderMovementInfo[]> {
+    return this.restClient.post({
+      path: `/api/movements/offenders?movementType=ADM&latestOnly=false&allBookings=false`,
+      data: [offenderNo],
     })
   }
 }

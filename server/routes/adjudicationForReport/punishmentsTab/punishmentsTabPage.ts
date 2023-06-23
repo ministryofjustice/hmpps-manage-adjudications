@@ -113,6 +113,11 @@ export default class PunishmentsTabPage {
       punishmentComments.push(comment)
     }
 
+    const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
+      reportedAdjudication,
+      user
+    )
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
@@ -130,6 +135,9 @@ export default class PunishmentsTabPage {
       punishments,
       punishmentComments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
+      transferBannerContent: getTransferBannerInfo.transferBannerContent,
+      showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
+      overrideAgencyId: reportedAdjudication.overrideAgencyId,
     })
   }
 }

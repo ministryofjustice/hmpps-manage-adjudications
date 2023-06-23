@@ -9,6 +9,7 @@ import { getEvidenceCategory } from '../../../utils/utils'
 import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsAuthClient'
+import LocationService from '../../../services/locationService'
 
 type PageData = {
   errors?: FormError[]
@@ -130,7 +131,8 @@ export default class prisonerReportRoutes {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly locationService: LocationService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -164,6 +166,11 @@ export default class prisonerReportRoutes {
 
     const returned = status === ReportedAdjudicationStatus.RETURNED
 
+    const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
+      reportedAdjudication,
+      user
+    )
+
     return res.render(`pages/adjudicationForReport/prisonerReport`, {
       pageData: { ...pageData, returned },
       prisoner,
@@ -177,6 +184,9 @@ export default class prisonerReportRoutes {
       damages: reportedAdjudication.damages,
       evidence: convertedEvidence,
       witnesses: reportedAdjudication.witnesses,
+      transferBannerContent: getTransferBannerInfo.transferBannerContent,
+      showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
+      overrideAgencyId: reportedAdjudication.overrideAgencyId,
     })
   }
 

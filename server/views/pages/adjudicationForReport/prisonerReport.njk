@@ -6,6 +6,7 @@
 {% from "../../macros/adjudicationReviewPanel.njk" import adjudicationReviewPanel %}
 {% from "../../macros/adjudicationSummary.njk" import adjudicationSummary %}
 {% from "../../macros/adjudicationReviewSummary.njk" import adjudicationReviewSummary %}
+{% from "../../macros/transferBanner.njk" import transferBanner%}
 
 {% block pageTitle %}
   Prisoner’s report
@@ -14,6 +15,11 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
+
+  {% if overrideAgencyId %}
+    {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
+  {% endif %}
+
   {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, punishmentsHref, reviewData.reviewStatus !== 'Rejected') }}
 
   {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}

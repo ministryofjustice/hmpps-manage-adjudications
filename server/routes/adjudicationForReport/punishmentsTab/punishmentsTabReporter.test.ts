@@ -37,7 +37,10 @@ beforeEach(() => {
       }),
     }),
   })
-
+  reportedAdjudicationsService.getTransferBannerInfo.mockResolvedValue({
+    transferBannerContent: null,
+    originatingAgencyToAddOutcome: false,
+  })
   userService.getStaffNameFromUsername.mockResolvedValue({
     username: 'SMITH',
     name: 'JOHN SMITH',

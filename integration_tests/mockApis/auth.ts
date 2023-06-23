@@ -101,7 +101,7 @@ const token = () =>
     },
   })
 
-const stubUser = () =>
+const stubUser = ({ username = 'USER1', activeCaseLoadId = 'MDI' }: { username?: string; activeCaseLoadId?: string }) =>
   stubFor({
     request: {
       method: 'GET',
@@ -114,10 +114,10 @@ const stubUser = () =>
       },
       jsonBody: {
         staffId: 231232,
-        username: 'USER1',
+        username,
         active: true,
         name: 'john smith',
-        activeCaseLoadId: 'MDI',
+        activeCaseLoadId,
       },
     },
   })
@@ -222,7 +222,8 @@ export default {
   stubPing,
   stubSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(), tokenVerification.stubVerifyToken()]),
-  stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),
+  stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser({}), stubUserRoles()]),
+  stubUserOriginatingAgency: (activeCaseLoadId: string): Promise<Response> => stubUser({ activeCaseLoadId }),
   stubGetUserFromUsername,
   stubUserRoles,
   stubGetUser,

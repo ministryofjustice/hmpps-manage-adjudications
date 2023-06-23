@@ -29,12 +29,19 @@ const getHearingsGivenAgencyAndDate = jest.fn()
 const getReportedAdjudicationIssueData = jest.fn()
 const getReportedAdjudicationPrintData = jest.fn()
 const getAlertsForPrisoner = jest.fn()
+const getMovementByOffender = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getPrisonerDetails, getSecondaryLanguages, getBatchPrisonerDetails, getAlertsForPrisoner }
+    return {
+      getPrisonerDetails,
+      getSecondaryLanguages,
+      getBatchPrisonerDetails,
+      getAlertsForPrisoner,
+      getMovementByOffender,
+    }
   })
 })
 jest.mock('../data/manageAdjudicationsClient', () => {
@@ -720,13 +727,13 @@ describe('reportedAdjudicationsService', () => {
           adjudicationNumber: 123456,
           dateTimeOfDiscovery: '2022-11-11T09:00:00',
           dateTimeOfHearing: '2022-11-14T11:00:00',
-
           formattedDateTimeOfHearing: '14 November 2022 - 11:00',
           friendlyName: 'John Smith',
           nameAndNumber: 'Smith, John - G6123VU',
           oicHearingType: OicHearingType.GOV_ADULT as string,
           prisonerNumber: 'G6123VU',
           locationId: 775,
+          agencyId: 'MDI',
         },
       ])
     })
@@ -1069,6 +1076,94 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfHearing: '2023-03-21T19:00:00',
         })
       )
+    })
+  })
+  describe('getPrisonerLatestADMMovement', () => {
+    it('should return null if there are no transfers that match the overrideAgencyId', async () => {
+      getMovementByOffender.mockResolvedValue([])
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', user)
+      expect(result).toEqual(null)
+    })
+    it('should return correct info', async () => {
+      getMovementByOffender.mockResolvedValue(testData.prisonerMovement({}))
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', user)
+      expect(result).toEqual({
+        movementDate: '19 November 2030',
+        toAgencyDescription: 'Leeds (HMP)',
+        prisonerName: 'Harry Potter',
+      })
+    })
+  })
+  describe('getTransferBannerInfo', () => {
+    it('if there is no overrideAgencyId, should return content as null', async () => {
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        otherData: {
+          transferableActionsAllowed: true,
+        },
+      })
+      const result = await service.getTransferBannerInfo(reportedAdjudication, user)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: false,
+        transferBannerContent: null,
+      })
+    })
+    it('if the user is based in the agency where the adjudication was created', async () => {
+      getMovementByOffender.mockResolvedValue(testData.prisonerMovement({ offenderNo: 'G6123VU' }))
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('G6123VU', 'Harry', 'Potter', '1-2-015'))
+
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: true,
+        },
+      })
+      const result = await service.getTransferBannerInfo(reportedAdjudication, user)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: false,
+        transferBannerContent: 'Harry Potter was transferred to Leeds (HMP) on 19 November 2030',
+      })
+    })
+    it('if the user is based in the agency where the adjudication has been transferred to', async () => {
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: true,
+        },
+      })
+      const userInLeeds = testData.userFromUsername('user1', 'Test User', 'LEI') as User
+      const result = await service.getTransferBannerInfo(reportedAdjudication, userInLeeds)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: false,
+        transferBannerContent: 'This incident was reported at Moorland (HMP & YOI)',
+      })
+    })
+    it('user based in override, transferableActionsAllowed false as hearing present without outcome', async () => {
+      const reportedAdjudication = testData.reportedAdjudication({
+        adjudicationNumber: 123,
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.SCHEDULED,
+        otherData: {
+          overrideAgencyId: 'LEI',
+          transferableActionsAllowed: false,
+        },
+      })
+      const userInLeeds = testData.userFromUsername('user1', 'Test User', 'LEI') as User
+      const result = await service.getTransferBannerInfo(reportedAdjudication, userInLeeds)
+      expect(result).toEqual({
+        originatingAgencyToAddOutcome: true,
+        transferBannerContent: 'This incident was reported at Moorland (HMP & YOI)',
+      })
     })
   })
 })

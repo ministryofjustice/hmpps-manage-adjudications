@@ -6,6 +6,7 @@ import PrisonerReportPage, { PageRequestType } from './prisonerReportPage'
 
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import LocationService from '../../../services/locationService'
 
 export default class prisonerReportReviewRoutes {
   page: PrisonerReportPage
@@ -13,9 +14,15 @@ export default class prisonerReportReviewRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly userService: UserService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly locationService: LocationService
   ) {
-    this.page = new PrisonerReportPage(PageRequestType.REVIEWER, reportedAdjudicationsService, decisionTreeService)
+    this.page = new PrisonerReportPage(
+      PageRequestType.REVIEWER,
+      reportedAdjudicationsService,
+      decisionTreeService,
+      locationService
+    )
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
