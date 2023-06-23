@@ -8,11 +8,18 @@ import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import {
   IssueStatus,
+  OicHearingType,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
-import { HearingOutcomeCode, OutcomeCode, OutcomeHistory, ReferralOutcomeCode } from '../data/HearingAndOutcomeResult'
+import {
+  HearingOutcomeCode,
+  HearingOutcomePlea,
+  OutcomeCode,
+  OutcomeHistory,
+  ReferralOutcomeCode,
+} from '../data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 
@@ -711,7 +718,6 @@ describe('reportedAdjudicationsService', () => {
         ],
       })
       getBatchPrisonerDetails.mockResolvedValue([])
-      // getAlertsForPrisoner.mockResolvedValue([])
       const defaultFilter: ReportedAdjudicationDISFormFilter = {
         fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
         toDate: moment('01/01/2021', 'DD/MM/YYYY'),
@@ -786,6 +792,126 @@ describe('reportedAdjudicationsService', () => {
           },
         }),
       ])
+    })
+  })
+  describe.only('getOutcomesHistory', () => {
+    it('returns empty array if there is no history present', async () => {
+      const result = await service.getOutcomesHistory([], user)
+      expect(result).toEqual([])
+    })
+    it('returns the correct data when everything is available except location name', async () => {
+      const hearingOutcome = testData.hearingOutcome({
+        adjudicator: 'Jacob Marley',
+        code: HearingOutcomeCode.COMPLETE,
+        optionalItems: {
+          plea: HearingOutcomePlea.GUILTY,
+        },
+      })
+      const history = [
+        {
+          hearing: testData.singleHearing({
+            dateTimeOfHearing: '2023-06-23T18:00:00',
+            outcome: hearingOutcome,
+            oicHearingType: OicHearingType.INAD_ADULT,
+          }),
+
+          outcome: {
+            outcome: testData.outcome({
+              caution: true,
+              code: OutcomeCode.CHARGE_PROVED,
+              amount: 0,
+              quashedReason: undefined,
+              reason: undefined,
+            }),
+          },
+        },
+      ]
+      const result = await service.getOutcomesHistory(history, user)
+      const expectedResult = [
+        {
+          hearing: {
+            agencyId: 'MDI',
+            convertedAdjudicator: null as void,
+            dateTimeOfHearing: '2023-06-23T18:00:00',
+            id: 101,
+            locationId: 775,
+            locationName: 'Moorland (HMP & YOI)',
+            oicHearingType: OicHearingType.INAD_ADULT,
+            outcome: {
+              adjudicator: 'Jacob Marley',
+              code: HearingOutcomeCode.COMPLETE,
+              id: 1,
+              plea: HearingOutcomePlea.GUILTY,
+            },
+          },
+          outcome: {
+            caution: true,
+            code: OutcomeCode.CHARGE_PROVED,
+            details: 'Some details',
+            id: 1,
+            amount: 0,
+          },
+        },
+      ]
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the correct data when everything is available', async () => {
+      locationService.getIncidentLocation.mockResolvedValue(testData.residentialLocations()[0])
+      const hearingOutcome = testData.hearingOutcome({
+        adjudicator: 'Jacob Marley',
+        code: HearingOutcomeCode.COMPLETE,
+        optionalItems: {
+          plea: HearingOutcomePlea.GUILTY,
+        },
+      })
+      const history = [
+        {
+          hearing: testData.singleHearing({
+            dateTimeOfHearing: '2023-06-23T18:00:00',
+            outcome: hearingOutcome,
+            oicHearingType: OicHearingType.INAD_ADULT,
+            locationId: 25538,
+          }),
+
+          outcome: {
+            outcome: testData.outcome({
+              caution: true,
+              code: OutcomeCode.CHARGE_PROVED,
+              amount: 0,
+              quashedReason: undefined,
+              reason: undefined,
+            }),
+          },
+        },
+      ]
+      const result = await service.getOutcomesHistory(history, user)
+      const expectedResult = [
+        {
+          hearing: {
+            agencyId: 'MDI',
+            convertedAdjudicator: null as void,
+            dateTimeOfHearing: '2023-06-23T18:00:00',
+            id: 101,
+            locationId: 25538,
+            locationName: 'Houseblock 1, Moorland (HMP & YOI)',
+            oicHearingType: OicHearingType.INAD_ADULT,
+            outcome: {
+              adjudicator: 'Jacob Marley',
+              code: HearingOutcomeCode.COMPLETE,
+              id: 1,
+              plea: HearingOutcomePlea.GUILTY,
+            },
+          },
+          outcome: {
+            caution: true,
+            code: OutcomeCode.CHARGE_PROVED,
+            details: 'Some details',
+            id: 1,
+            amount: 0,
+          },
+        },
+      ]
+      expect(result).toEqual(expectedResult)
     })
   })
   describe('getLastOutcomeItem', () => {

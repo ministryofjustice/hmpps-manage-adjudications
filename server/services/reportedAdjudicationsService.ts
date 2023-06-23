@@ -563,20 +563,25 @@ export default class ReportedAdjudicationsService {
   async getOutcomesHistory(history: OutcomeHistory, user: User) {
     if (!history.length) return []
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
-    const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
-    const agencyNameByLocationIdMap = await this.getAgencyNameMap(hearings, user)
-    const governorMap = await this.getAdjudicatorNameMap(hearings, user)
+
+    const [locationNamesByIdMap, agencyNameByLocationIdMap, governorMap] = await Promise.all([
+      this.getHearingLocationMap(hearings, user),
+      this.getAgencyNameMap(hearings, user),
+      this.getAdjudicatorNameMap(hearings, user),
+    ])
 
     return history.map(historyItem => {
       if (historyItem.hearing) {
         // Reconstruct the data but add the hearing location name
+        const hearingLocationName = locationNamesByIdMap.get(historyItem.hearing.locationId) || ''
+        const convertedGovAdjudicator = governorMap.get(historyItem.hearing.outcome?.adjudicator) || 'Entered in NOMIS'
         return {
           hearing: {
             ...historyItem.hearing,
-            locationName: `${locationNamesByIdMap.get(historyItem.hearing.locationId)}, ${agencyNameByLocationIdMap.get(
-              historyItem.hearing.agencyId
-            )}`,
-            convertedAdjudicator: governorMap.get(historyItem.hearing.outcome?.adjudicator) || 'Entered in NOMIS',
+            locationName: hearingLocationName
+              ? `${hearingLocationName}, ${agencyNameByLocationIdMap.get(historyItem.hearing.agencyId)}`
+              : `${agencyNameByLocationIdMap.get(historyItem.hearing.agencyId)}`,
+            convertedAdjudicator: historyItem.hearing.oicHearingType.includes('GOV') ? convertedGovAdjudicator : null,
           },
           ...historyItem.outcome,
         }
