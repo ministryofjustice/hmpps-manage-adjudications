@@ -186,6 +186,11 @@ context('Prisoner report - reporter view', () => {
         authSource: 'auth',
       },
     })
+    cy.task('stubGetAgency', {
+      agencyId: 'MDI',
+      response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+    })
+
     return cy.signIn()
   })
   describe('Report status AWAITING_REVIEW', () => {

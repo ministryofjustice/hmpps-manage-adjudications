@@ -462,7 +462,10 @@ export default class ReportedAdjudicationsService {
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
 
-    const location = await this.locationService.getIncidentLocation(adjudication.incidentDetails.locationId, user)
+    const [location, agencyName] = await Promise.all([
+      this.locationService.getIncidentLocation(adjudication.incidentDetails.locationId, user),
+      this.locationService.getAgency(adjudication.originatingAgencyId, user),
+    ])
 
     const incidentDetails = [
       {
@@ -479,7 +482,7 @@ export default class ReportedAdjudicationsService {
       },
       {
         label: 'Location',
-        value: `${location?.userDescription || ''}`,
+        value: `${location?.userDescription || ''}, ${agencyName.description}`,
       },
       {
         label: 'Date of discovery',
@@ -525,35 +528,6 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getHearingDetails(hearings: HearingDetails[], user: User) {
-    if (!hearings.length) return []
-    const locationIds = new Set(hearings.map(hearing => hearing.locationId))
-    const locationNamesAndIds =
-      (await Promise.all(
-        [...locationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
-      )) || []
-
-    const locationNamesByIdMap = new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
-
-    return hearings.map(hearing => {
-      return {
-        id: hearing.id,
-        dateTime: {
-          label: 'Date and time of hearing',
-          value: formatTimestampTo(hearing.dateTimeOfHearing, 'D MMMM YYYY - HH:mm'),
-        },
-        location: {
-          label: 'Location',
-          value: locationNamesByIdMap.get(hearing.locationId),
-        },
-        type: {
-          label: 'Type of hearing',
-          value: convertOicHearingType(hearing.oicHearingType),
-        },
-      }
-    })
-  }
-
   getHearingLocationMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<number, string>> => {
     const hearingLocationIds = hearings.map(hearing => hearing.hearing.locationId)
     const locationNamesAndIds =
@@ -561,6 +535,13 @@ export default class ReportedAdjudicationsService {
         [...hearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
       )) || []
     return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+  }
+
+  getAgencyNameMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
+    const agencyIds = hearings.map(hearing => hearing.hearing.agencyId)
+    const agencyNamesForAgencyIds =
+      (await Promise.all([...agencyIds].map(agencyId => this.locationService.getAgency(agencyId, user)))) || []
+    return new Map(agencyNamesForAgencyIds.map(agency => [agency.agencyId, agency.description]))
   }
 
   getAdjudicatorNameMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
@@ -584,6 +565,7 @@ export default class ReportedAdjudicationsService {
     if (!history.length) return []
     const hearings = history.filter((item: OutcomeDetailsHistory & HearingDetailsHistory) => !!item.hearing)
     const locationNamesByIdMap = await this.getHearingLocationMap(hearings, user)
+    const agencyNameByLocationIdMap = await this.getAgencyNameMap(hearings, user)
     const governorMap = await this.getAdjudicatorNameMap(hearings, user)
 
     return history.map(historyItem => {
@@ -592,7 +574,9 @@ export default class ReportedAdjudicationsService {
         return {
           hearing: {
             ...historyItem.hearing,
-            locationName: locationNamesByIdMap.get(historyItem.hearing.locationId),
+            locationName: `${locationNamesByIdMap.get(historyItem.hearing.locationId)}, ${agencyNameByLocationIdMap.get(
+              historyItem.hearing.agencyId
+            )}`,
             convertedAdjudicator: governorMap.get(historyItem.hearing.outcome?.adjudicator) || 'Entered in NOMIS',
           },
           ...historyItem.outcome,

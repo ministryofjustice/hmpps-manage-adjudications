@@ -171,6 +171,10 @@ context('Prisoner report - view only - for transferred prisoners', () => {
         authSource: 'auth',
       },
     })
+    cy.task('stubGetAgency', {
+      agencyId: 'MDI',
+      response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+    })
     return cy.signIn()
   })
   describe('Status UNSCHEDULED', () => {

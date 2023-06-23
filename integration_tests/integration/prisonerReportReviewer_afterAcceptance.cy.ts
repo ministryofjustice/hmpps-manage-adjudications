@@ -144,6 +144,8 @@ context('Prisoner report - reviewer view', () => {
         jsonBody: {},
       },
     })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
     cy.signIn()
   })
   describe('report UNSCHEDULED', () => {

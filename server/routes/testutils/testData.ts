@@ -145,6 +145,7 @@ export default class TestData {
     incidentStatement = {} as IncidentStatement,
     isYouthOffender = false,
     startedByUserId = 'USER1',
+    originatingAgencyId = 'MDI',
     otherData = {} as any,
   }: {
     id: number
@@ -162,6 +163,7 @@ export default class TestData {
     incidentStatement?: IncidentStatement
     isYouthOffender?: boolean
     startedByUserId?: string
+    originatingAgencyId?: string
     otherData?: any
   }) => {
     return {
@@ -183,6 +185,7 @@ export default class TestData {
       evidence,
       witnesses,
       isYouthOffender,
+      originatingAgencyId,
       ...otherData,
     }
   }

@@ -464,7 +464,7 @@ describe('reportedAdjudicationsService', () => {
           },
           {
             label: 'Location',
-            value: 'Closed Visits',
+            value: 'Closed Visits, Moorland (HMP & YOI)',
           },
           {
             label: 'Date of discovery',
@@ -612,132 +612,6 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(expectedResult)
     })
   })
-  describe('getHearingDetails', () => {
-    it('returns the correct information multiple hearings', async () => {
-      const hearings = [
-        {
-          ...testData.singleHearing({
-            dateTimeOfHearing: '2022-10-20T11:11:00',
-            id: 1234,
-          }),
-          locationId: 27187,
-        },
-        {
-          ...testData.singleHearing({
-            dateTimeOfHearing: '2022-10-21T11:11:00',
-            id: 23445,
-          }),
-          locationId: 27187,
-        },
-      ]
-      const result = await service.getHearingDetails(hearings, user)
-      const expectedResult = [
-        {
-          id: 1234,
-          dateTime: {
-            label: 'Date and time of hearing',
-            value: '20 October 2022 - 11:11',
-          },
-          location: {
-            label: 'Location',
-            value: 'Adj',
-          },
-          type: {
-            label: 'Type of hearing',
-            value: 'Governor',
-          },
-        },
-        {
-          id: 23445,
-          dateTime: {
-            label: 'Date and time of hearing',
-            value: '21 October 2022 - 11:11',
-          },
-          location: {
-            label: 'Location',
-            value: 'Adj',
-          },
-          type: {
-            label: 'Type of hearing',
-            value: 'Governor',
-          },
-        },
-      ]
-      expect(result).toEqual(expectedResult)
-    })
-    it('returns the correct information for one hearing', async () => {
-      const hearings = [
-        { ...testData.singleHearing({ dateTimeOfHearing: '2022-10-20T11:11:00', id: 1234 }), locationId: 27187 },
-      ]
-      const result = await service.getHearingDetails(hearings, user)
-      const expectedResult = [
-        {
-          id: 1234,
-          dateTime: {
-            label: 'Date and time of hearing',
-            value: '20 October 2022 - 11:11',
-          },
-          location: {
-            label: 'Location',
-            value: 'Adj',
-          },
-          type: {
-            label: 'Type of hearing',
-            value: 'Governor',
-          },
-        },
-      ]
-      expect(result).toEqual(expectedResult)
-    })
-    it('returns the correct information for no hearings', async () => {
-      const result = await service.getHearingDetails([], user)
-      expect(result).toEqual([])
-    })
-  })
-  describe('getAllHearings', () => {
-    const batchPrisonerDetails = [
-      testData.simplePrisoner('G6123VU', 'JOHN', 'SMITH', '1-0-015'),
-      testData.simplePrisoner('G6174VU', 'James', 'Moriarty', '1-0-015'),
-    ]
-    it('deals with no hearings', async () => {
-      getHearingsGivenAgencyAndDate.mockResolvedValue({ hearings: [] })
-      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
-      const result = await service.getAllHearings('2022-10-19', user)
-      expect(result).toEqual([])
-    })
-    it('mapipulates data correctly', async () => {
-      getHearingsGivenAgencyAndDate.mockResolvedValue({
-        hearings: [
-          {
-            ...testData.singleHearing({
-              dateTimeOfHearing: '2022-11-14T11:00:00',
-              id: 1234,
-            }),
-            dateTimeOfDiscovery: '2022-11-11T09:00:00',
-            prisonerNumber: 'G6123VU',
-            adjudicationNumber: 123456,
-          },
-        ],
-      })
-      getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
-      const result = await service.getAllHearings('2022-11-14', user)
-      expect(result).toEqual([
-        {
-          id: 1234,
-          adjudicationNumber: 123456,
-          dateTimeOfDiscovery: '2022-11-11T09:00:00',
-          dateTimeOfHearing: '2022-11-14T11:00:00',
-          formattedDateTimeOfHearing: '14 November 2022 - 11:00',
-          friendlyName: 'John Smith',
-          nameAndNumber: 'Smith, John - G6123VU',
-          oicHearingType: OicHearingType.GOV_ADULT as string,
-          prisonerNumber: 'G6123VU',
-          locationId: 775,
-          agencyId: 'MDI',
-        },
-      ])
-    })
-  })
   describe('getAdjudicationDISFormData', () => {
     it('success - confirm DIS1/2 has been issued page', async () => {
       getReportedAdjudicationIssueData.mockResolvedValue({
@@ -751,7 +625,6 @@ describe('reportedAdjudicationsService', () => {
         ],
       })
       getBatchPrisonerDetails.mockResolvedValue([testData.simplePrisoner('G6123VU', 'JOHN', 'SMITH', '1-0-015')])
-      // getAlertsForPrisoner.mockResolvedValue([])
       const defaultFilter: ReportedAdjudicationDISFormFilter = {
         fromDate: moment('03/02/2023', 'DD/MM/YYYY'),
         toDate: moment('05/02/2021', 'DD/MM/YYYY'),
