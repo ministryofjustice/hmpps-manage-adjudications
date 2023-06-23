@@ -17,7 +17,7 @@
 {% endblock %}
 {% block content %}
 
-  {% if overrideAgencyId %}
+  {% if overrideAgencyId and transferBannerContent %}
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
