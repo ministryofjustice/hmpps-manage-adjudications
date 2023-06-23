@@ -8,7 +8,6 @@ import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import {
   IssueStatus,
-  OicHearingType,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'

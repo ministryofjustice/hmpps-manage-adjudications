@@ -26,7 +26,6 @@ import {
   formatLocation,
   formatTimestampTo,
   formatName,
-  convertOicHearingType,
 } from '../utils/utils'
 import { LocationId } from '../data/PrisonLocationResult'
 import {
