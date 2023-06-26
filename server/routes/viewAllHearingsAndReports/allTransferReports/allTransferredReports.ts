@@ -17,7 +17,7 @@ import {
 } from '../../../utils/adjudicationFilterHelper'
 import { FormError } from '../../../@types/template'
 
-export default class AllCompletedReportsRoutes {
+export default class AllTransferredReportsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly userService: UserService
@@ -29,8 +29,8 @@ export default class AllCompletedReportsRoutes {
     filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
-  ): Promise<void> =>
-    res.render(`pages/viewAllHearingsAndReports/allReports`, {
+  ): Promise<void> => {
+    res.render(`pages/viewAllHearingsAndReports/allTransferredReports`, {
       allCompletedReports: results,
       filter,
       checkboxes: reportedAdjudicationStatuses(filter),
@@ -41,12 +41,13 @@ export default class AllCompletedReportsRoutes {
       viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
-      activeTab: 'viewCompletedReports',
+      activeTab: 'viewTransferredReports',
       errors,
       activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
       transferReportCount:
         (await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)).transferReviewTotal || '',
     })
+  }
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
@@ -54,7 +55,7 @@ export default class AllCompletedReportsRoutes {
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
-        { ...filter, transfersOnly: false },
+        { ...filter, transfersOnly: true },
         pageRequestFrom(20, +req.query.pageNumber || 1)
       )
       return this.renderView(req, res, uiFilter, results, [])
@@ -69,12 +70,12 @@ export default class AllCompletedReportsRoutes {
         return this.renderView(
           req,
           res,
-          { ...uiFilter, transfersOnly: false },
+          { ...uiFilter, transfersOnly: true },
           { size: 20, number: 0, totalElements: 0, content: [] },
           errors
         )
       }
-      return res.redirect(adjudicationUrls.allCompletedReports.urls.filter(uiFilter))
+      return res.redirect(adjudicationUrls.allTransferredReports.urls.filter(uiFilter))
     })
   }
 

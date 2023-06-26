@@ -69,8 +69,8 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number): TaskType
           id: 'review-reports',
         },
         {
-          text: `View reports from other prisons (${transferReviewTotal})`,
-          href: adjudicationUrls.allCompletedReports.urls.filter({
+          text: `View reports from transfers in (${transferReviewTotal})`,
+          href: adjudicationUrls.allTransferredReports.urls.filter({
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
             status: allStatuses,

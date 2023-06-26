@@ -42,7 +42,7 @@ export default class YourCompletedReportsRoutes {
     const filter = filterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
-      filter,
+      { ...filter, transfersOnly: false },
       pageRequestFrom(20, +req.query.pageNumber || 1)
     )
     return this.renderView(req, res, uiFilter, results, [])

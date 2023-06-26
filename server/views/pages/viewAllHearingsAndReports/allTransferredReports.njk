@@ -11,6 +11,7 @@
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
+
 {% block content %}
   {% if errors | length %}
     {{ govukErrorSummary({
@@ -21,6 +22,7 @@
   {% endif %}
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
+
   {{ adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) }}
 
   {{ adjudicationFilter(filter, checkboxes, errors, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}

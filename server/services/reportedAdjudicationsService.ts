@@ -229,7 +229,6 @@ export default class ReportedAdjudicationsService {
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsClient(user).getAllCompletedAdjudications(filter, pageRequest)
-
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))

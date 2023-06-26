@@ -1,17 +1,24 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) %}
+{% macro adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) %}
+  {% set activeCaseloadNameText %}View reports from {{activeCaseloadName}}{% endset %}
+  {% set transferredReportsText %}View reports from transfers in ({% if tranferReportCount %}{{transferReportCount}}{% else %}0{% endif %}){% endset %}
   {% set items = [{
       text: 'View all hearings',
       href: viewScheduledHearingsHref,
       attributes: { 'data-qa': 'viewScheduledHearingsTab' },
       active: activeTab === 'viewScheduledHearings'
     } , {
-      text: 'View all reports',
+      html: activeCaseloadNameText,
       href: viewAllCompletedReportsHref,
       attributes: { 'data-qa': 'viewAllCompletedReportsTab' },
       active: activeTab === 'viewCompletedReports'
+    }, {
+      text: transferredReportsText,
+      href: viewTransferredReportsHref,
+      attributes: { 'data-qa': 'viewTransferredReportsTab' },
+      active: activeTab === 'viewTransferredReports'
     }] 
   %}
 

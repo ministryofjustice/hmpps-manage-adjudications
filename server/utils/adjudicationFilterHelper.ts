@@ -25,7 +25,7 @@ export type UiFilter = {
   fromDate: string
   toDate: string
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
-  transfersOnly: boolean
+  transfersOnly?: boolean
 }
 
 export type DISUiFilter = {
@@ -104,7 +104,6 @@ export const uiFilterFromBody = (req: Request) => {
     fromDate: req.body.fromDate.date,
     toDate: req.body.toDate.date,
     status: req.body.status as ReportedAdjudicationStatus,
-    transfersOnly: req.body.transfersOnly,
   }
 }
 
@@ -130,7 +129,6 @@ export const filterFromUiFilter = (filter: UiFilter) => {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
     status: filter.status || allStatuses,
-    transfersOnly: filter.transfersOnly,
   }
 }
 
