@@ -283,6 +283,8 @@ context('ALO edits offence - test 1', () => {
       adjudicationNumber: 177,
       response: editedReportedAdjudicationTestOne,
     })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
     cy.signIn()
   })
   it('allows ALO to update the adjudication offence - from assist to commit etc', () => {
@@ -427,6 +429,8 @@ context('ALO edits offence - test 2', () => {
       adjudicationNumber: 188,
       response: editedReportedAdjudicationTestTwo,
     })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
     cy.signIn()
   })
 

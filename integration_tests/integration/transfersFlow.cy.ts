@@ -206,6 +206,10 @@ context('Transfers flow', () => {
         cy.task('stubGetMovementByOffender', {
           response: testData.prisonerMovement({}),
         })
+        cy.task('stubGetAgency', {
+          agencyId: 'MDI',
+          response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+        })
       })
       it('all reports to prisoner report, tabs go to correct places', () => {
         cy.visit(adjudicationUrls.allCompletedReports.root)
@@ -450,6 +454,10 @@ context('Transfers flow', () => {
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationProvedPunishments,
           },
+        })
+        cy.task('stubGetAgency', {
+          agencyId: 'MDI',
+          response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
         })
       })
       it('all reports to prisoner report, tabs go to correct places', () => {
