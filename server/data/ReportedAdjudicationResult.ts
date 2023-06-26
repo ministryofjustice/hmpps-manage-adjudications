@@ -85,6 +85,7 @@ export type ReportedAdjudicationFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  transfersOnly: boolean
 }
 
 export type ReportedAdjudicationDISFormFilter = {

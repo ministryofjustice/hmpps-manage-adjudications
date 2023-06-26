@@ -98,7 +98,7 @@ describe('POST /your-completed-reports', () => {
       .send({ fromDate: { date: '01/01/2021' }, toDate: { date: '02/01/2021' }, status: 'AWAITING_REVIEW' })
       .expect(
         'Location',
-        `${adjudicationUrls.yourCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`
+        `${adjudicationUrls.yourCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=`
       )
   })
 })

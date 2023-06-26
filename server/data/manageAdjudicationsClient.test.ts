@@ -269,6 +269,7 @@ describe('manageAdjudicationsClient', () => {
           toDate: moment('2022-01-01', 'YYYY-MM-DD'),
           fromDate: moment('2022-01-01', 'YYYY-MM-DD'),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          transfersOnly: false,
         },
         request
       )
@@ -312,6 +313,7 @@ describe('manageAdjudicationsClient', () => {
           fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
           toDate: moment('01/01/2021', 'DD/MM/YYYY'),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          transfersOnly: false,
         },
         request
       )

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus, allStatuses } from '../../data/ReportedAdjudicationResult'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
@@ -23,7 +23,7 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (reviewTotal: number): TaskType[] => {
+const createTasks = (reviewTotal: number, transferReviewTotal: number): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
@@ -64,8 +64,19 @@ const createTasks = (reviewTotal: number): TaskType[] => {
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
             status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+            transfersOnly: false,
           }),
           id: 'review-reports',
+        },
+        {
+          text: `View reports from other prisons (${transferReviewTotal})`,
+          href: adjudicationUrls.allCompletedReports.urls.filter({
+            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+            toDate: momentDateToDatePicker(moment()),
+            status: allStatuses,
+            transfersOnly: true,
+          }),
+          id: 'review-transferred-reports',
         },
       ],
       roles: ['ADJUDICATIONS_REVIEWER'],
@@ -106,14 +117,16 @@ export default class HomepageRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const { reviewTotal } = await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)
+    const { reviewTotal, transferReviewTotal } = await this.reportedAdjudicationsService.getAgencyReportCounts(
+      res.locals.user
+    )
 
-    const enabledTasks = createTasks(reviewTotal).filter(task => task.enabled)
+    const enabledTasks = createTasks(reviewTotal, transferReviewTotal).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
-    const disRelatedTasks = createTasks(reviewTotal).filter(task => task.heading.includes('DIS'))
+    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal).filter(task => task.heading.includes('DIS'))
 
     reviewerTasks.push({
       id: 'enter-outcomes',
@@ -135,6 +148,7 @@ export default class HomepageRoutes {
               ReportedAdjudicationStatus.ADJOURNED,
               ReportedAdjudicationStatus.REFER_INAD,
             ],
+            transfersOnly: false,
           }),
           id: 'schedule-hearings',
         })

@@ -99,7 +99,7 @@ describe('POST /all-completed-reports', () => {
       .send({ fromDate: { date: '01/01/2021' }, toDate: { date: '02/01/2021' }, status: 'AWAITING_REVIEW' })
       .expect(
         'Location',
-        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`
+        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=`
       )
   })
   it('should render the not found page without the correct role', () => {

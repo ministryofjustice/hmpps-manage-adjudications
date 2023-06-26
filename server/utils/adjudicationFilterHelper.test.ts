@@ -26,6 +26,7 @@ describe('reportedAdjudicationStatuses', () => {
         ReportedAdjudicationStatus.UNSCHEDULED,
         ReportedAdjudicationStatus.ACCEPTED,
       ],
+      transfersOnly: false,
     }
     const result = reportedAdjudicationStatuses(filter)
     expect(result).toEqual(expectedResult)
@@ -64,6 +65,7 @@ describe('reportedAdjudicationStatuses', () => {
         ReportedAdjudicationStatus.REFER_INAD,
         ReportedAdjudicationStatus.REFER_POLICE,
       ],
+      transfersOnly: false,
     }
     const result = reportedAdjudicationStatuses(filter)
     expect(result).toEqual(expectedResult)
@@ -88,6 +90,7 @@ describe('reportedAdjudicationStatuses', () => {
       fromDate: '22/11/2022',
       toDate: '24/11/2022',
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+      transfersOnly: false,
     }
     const result = reportedAdjudicationStatuses(filter)
     expect(result).toEqual(expectedResult)
@@ -112,6 +115,7 @@ describe('reportedAdjudicationStatuses', () => {
       fromDate: '22/11/2022',
       toDate: '24/11/2022',
       status: ReportedAdjudicationStatus.UNSCHEDULED,
+      transfersOnly: false,
     }
     const result = reportedAdjudicationStatuses(filter)
     expect(result).toEqual(expectedResult)
@@ -136,6 +140,7 @@ describe('reportedAdjudicationStatuses', () => {
       fromDate: '22/11/2022',
       toDate: '24/11/2022',
       status: [ReportedAdjudicationStatus.RETURNED, ReportedAdjudicationStatus.REJECTED],
+      transfersOnly: false,
     }
     const result = reportedAdjudicationStatuses(filter)
     expect(result).toEqual(expectedResult)
