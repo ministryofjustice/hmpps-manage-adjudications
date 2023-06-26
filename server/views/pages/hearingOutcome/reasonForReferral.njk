@@ -2,7 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set title = 'What is the reason for the referral?' %}
 
@@ -27,7 +27,7 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     <input id="hearingOutcomeCode" type="hidden" name="hearingOutcomeCode" value="{{ hearingOutcomeCode }}" />
 
-    {{ govukTextarea({
+    {{ govukCharacterCount({
       label: {
         text: "Reason"
       },
@@ -39,7 +39,8 @@
       attributes: {
         'data-qa': "referral-reason"
       },
-      errorMessage: "referralReason" | findError(errors)
+      errorMessage: "referralReason" | findError(errors),
+      maxlength: 4000
     }) }}
 
     <div class="flex-container flex-center">

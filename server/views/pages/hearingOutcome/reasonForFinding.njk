@@ -2,7 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set title = 'What is the reason for this finding?' %}
 
@@ -27,7 +27,7 @@
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-    {{ govukTextarea({
+    {{ govukCharacterCount({
       label: {
         text: "Give more details"
       },
@@ -39,7 +39,8 @@
       attributes: {
         'data-qa': "finding-details"
       },
-      errorMessage: "reasonForFinding" | findError(errors)
+      errorMessage: "reasonForFinding" | findError(errors),
+      maxlength: 4000
     }) }}
 
     <div class="flex-container flex-center">

@@ -2,7 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
@@ -75,7 +75,7 @@
         errorMessage: 'adjournReason' | findError(errors)
     }) }}
 
-    {{ govukTextarea({
+    {{ govukCharacterCount({
       label: {
         text: "Give more details"
       },
@@ -87,7 +87,8 @@
       attributes: {
         'data-qa': "adjourn-details"
       },
-      errorMessage: "adjournDetails" | findError(errors)
+      errorMessage: "adjournDetails" | findError(errors),
+      maxlength: 4000
     }) }}
 
     {{ govukRadios({

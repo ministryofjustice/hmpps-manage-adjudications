@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set title = 'Report a quashed guilty finding' %}
 
@@ -53,7 +53,7 @@
         errorMessage: 'quashReason' | findError(errors)
     }) }}
 
-    {{ govukTextarea({
+    {{ govukCharacterCount({
       label: {
         text: "Give more details"
       },
@@ -65,7 +65,8 @@
       attributes: {
         'data-qa': "quash-details"
       },
-      errorMessage: "quashDetails" | findError(errors)
+      errorMessage: "quashDetails" | findError(errors),
+      maxlength: 4000
     }) }}
 
     <div class="flex-container flex-center">
