@@ -30,7 +30,7 @@ export default class AllTransferredReportsRoutes {
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
   ): Promise<void> => {
-    res.render(`pages/viewAllHearingsAndReports/allTransferredReports`, {
+    return res.render(`pages/viewAllHearingsAndReports/allTransferredReports`, {
       allCompletedReports: results,
       filter,
       checkboxes: reportedAdjudicationStatuses(filter),
@@ -44,8 +44,6 @@ export default class AllTransferredReportsRoutes {
       activeTab: 'viewTransferredReports',
       errors,
       activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
-      transferReportCount:
-        (await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)).transferReviewTotal || '',
     })
   }
 

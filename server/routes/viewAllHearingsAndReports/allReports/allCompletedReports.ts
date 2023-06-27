@@ -44,8 +44,6 @@ export default class AllCompletedReportsRoutes {
       activeTab: 'viewCompletedReports',
       errors,
       activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
-      transferReportCount:
-        (await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)).transferReviewTotal || '',
     })
 
   view = async (req: Request, res: Response): Promise<void> => {

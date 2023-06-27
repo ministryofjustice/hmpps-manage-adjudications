@@ -240,6 +240,7 @@ const stubGetReportedAdjudications =
       status: null,
       toDate: moment().format('YYYY-MM-DD'),
       fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+      transfersOnly: false,
     },
   }: {
     number: number
@@ -247,8 +248,9 @@ const stubGetReportedAdjudications =
     allContent: unknown[]
     filter: {
       status: ReportedAdjudicationStatus
-      fromDate: string
-      toDate: string
+      fromDate?: string
+      toDate?: string
+      transfersOnly?: boolean
     }
   }): SuperAgentRequest => {
     const apiRequest = {
@@ -260,7 +262,8 @@ const stubGetReportedAdjudications =
       `${prefix}?page=${number}&size=${size}` +
       `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
       `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
-      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
+      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+      `${(filter.transfersOnly && `&transfersOnly=${filter.transfersOnly}`) || ''}`
     return stubFor({
       request: {
         method: 'GET',

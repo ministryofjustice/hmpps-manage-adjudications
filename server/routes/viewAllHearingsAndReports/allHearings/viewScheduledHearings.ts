@@ -30,8 +30,6 @@ export default class viewScheduledHearingsRoutes {
       activeTab: 'viewScheduledHearings',
       errors,
       activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
-      transferReportCount:
-        (await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)).transferReviewTotal || '',
     })
   }
 

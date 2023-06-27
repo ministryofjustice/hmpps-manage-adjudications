@@ -3,7 +3,6 @@
 
 {% macro adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) %}
   {% set activeCaseloadNameText %}View reports from {{activeCaseloadName}}{% endset %}
-  {% set transferredReportsText %}View reports from transfers in ({% if tranferReportCount %}{{transferReportCount}}{% else %}0{% endif %}){% endset %}
   {% set items = [{
       text: 'View all hearings',
       href: viewScheduledHearingsHref,
@@ -15,7 +14,7 @@
       attributes: { 'data-qa': 'viewAllCompletedReportsTab' },
       active: activeTab === 'viewCompletedReports'
     }, {
-      text: transferredReportsText,
+      text: 'View reports from transfers in',
       href: viewTransferredReportsHref,
       attributes: { 'data-qa': 'viewTransferredReportsTab' },
       active: activeTab === 'viewTransferredReports'

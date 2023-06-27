@@ -553,6 +553,7 @@ context('Transfer banner', () => {
   describe('User is in override agency', () => {
     beforeEach(() => {
       cy.task('stubUserOriginatingAgency', 'LEI')
+      cy.task('stubGetAgency', { agencyId: 'LEI', response: { agencyId: 'LEI', description: 'Leeds (HMP)' } })
       cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
       cy.task('stubGetUserFromUsername', {
         username: 'USER1',
@@ -632,8 +633,6 @@ context('Transfer banner', () => {
           reportedAdjudication: transferredPrisonersAdjudicationScheduled,
         },
       })
-      cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-
       cy.signIn()
     })
     it('prisoner report - scheduled - should show correct title and no extra content', () => {

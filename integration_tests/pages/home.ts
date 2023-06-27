@@ -19,11 +19,13 @@ export default class Home extends Page {
 
   viewYourCompletedReportsLink = (): PageElement => cy.get('a').contains('View your completed reports')
 
-  viewAllReportsCard = (): PageElement => cy.get('a').contains('View all reports')
+  viewAllReportsCard = (caseload: string): PageElement => cy.get('a').contains(`View reports from ${caseload}`)
+
+  viewTransferReportsCard = (): PageElement => cy.get('a').contains('View all reports')
 
   reviewReportsLink = (): PageElement => cy.get('[data-qa="review-reports"]')
 
-  transferReportsLink = (): PageElement => cy.get('[data-qa="view-transfer-reports"]')
+  transferReportsLink = (): PageElement => cy.get('[data-qa="view-transferred-reports"]')
 
   scheduleHearingsLink = (): PageElement => cy.get('[data-qa="schedule-hearings"]')
 

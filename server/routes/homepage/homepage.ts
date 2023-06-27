@@ -23,7 +23,7 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (reviewTotal: number, transferReviewTotal: number): TaskType[] => {
+const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCaseloadName: string): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
@@ -55,7 +55,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number): TaskType
     },
     {
       id: 'view-all-reports',
-      heading: 'View all reports',
+      heading: `View reports from ${activeCaseloadName}`,
       href: adjudicationUrls.allCompletedReports.root,
       links: [
         {
@@ -76,7 +76,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number): TaskType
             status: allStatuses,
             transfersOnly: true,
           }),
-          id: 'review-transferred-reports',
+          id: 'view-transferred-reports',
         },
       ],
       roles: ['ADJUDICATIONS_REVIEWER'],
@@ -116,17 +116,21 @@ export default class HomepageRoutes {
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const { reviewTotal, transferReviewTotal } = await this.reportedAdjudicationsService.getAgencyReportCounts(
-      res.locals.user
-    )
+    const [userRoles, counts, activeCaseloadName] = await Promise.all([
+      this.userService.getUserRoles(res.locals.user.token),
+      this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user),
+      this.userService.getNameOfActiveCaseload(res.locals.user),
+    ])
+    const { reviewTotal, transferReviewTotal } = counts
 
-    const enabledTasks = createTasks(reviewTotal, transferReviewTotal).filter(task => task.enabled)
+    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
-    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal).filter(task => task.heading.includes('DIS'))
+    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task =>
+      task.heading.includes('DIS')
+    )
 
     reviewerTasks.push({
       id: 'enter-outcomes',
