@@ -259,7 +259,21 @@ const adjudicationUrls = {
       filter: (filter: UiFilter) =>
         url.format({
           pathname: adjudicationUrls.allCompletedReports.root,
-          query: { ...filter },
+          query: { ...filter, transfersOnly: false },
+        }),
+    },
+    matchers: {
+      start: '/',
+    },
+  },
+  allTransferredReports: {
+    root: '/all-transferred-reports',
+    urls: {
+      start: () => adjudicationUrls.allTransferredReports.root,
+      filter: (filter: UiFilter) =>
+        url.format({
+          pathname: adjudicationUrls.allTransferredReports.root,
+          query: { ...filter, transfersOnly: true },
         }),
     },
     matchers: {

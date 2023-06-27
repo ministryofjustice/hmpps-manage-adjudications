@@ -59,7 +59,7 @@ describe('GET /all-completed-reports', () => {
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .get(adjudicationUrls.allCompletedReports.root)
+      .get(adjudicationUrls.allTransferredReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -69,7 +69,7 @@ describe('GET /all-completed-reports', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 
     return request(app)
-      .get(adjudicationUrls.allCompletedReports.root)
+      .get(adjudicationUrls.allTransferredReports.root)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Adjudications')
@@ -82,7 +82,7 @@ describe('GET /all-completed-reports', () => {
       transferReviewTotal: 2,
     })
     return request(app)
-      .get(adjudicationUrls.allCompletedReports.root)
+      .get(adjudicationUrls.allTransferredReports.root)
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Smith, John - G6123VU')
@@ -99,7 +99,7 @@ describe('POST /all-completed-reports', () => {
   it('should redirect with the correct filter parameters', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .post(adjudicationUrls.allCompletedReports.root)
+      .post(adjudicationUrls.allTransferredReports.root)
       .send({
         fromDate: { date: '01/01/2021' },
         toDate: { date: '02/01/2021' },
@@ -107,13 +107,13 @@ describe('POST /all-completed-reports', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=false`
+        `${adjudicationUrls.allTransferredReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=true`
       )
   })
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .post(adjudicationUrls.allCompletedReports.root)
+      .post(adjudicationUrls.allTransferredReports.root)
       .expect(res => {
         expect(res.text).toContain('Page not found')
       })

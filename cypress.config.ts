@@ -27,7 +27,6 @@ export default defineConfig({
     setupNodeEvents(on) {
       on('task', {
         reset: resetStubs,
-
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: (caseLoads: CaseLoad[]) =>
           Promise.all([
@@ -39,6 +38,10 @@ export default defineConfig({
               },
             }),
             prisonApi.stubUserCaseloads(caseLoads),
+            prisonApi.stubGetAgency({
+              agencyId: 'MDI',
+              response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+            }),
           ]),
 
         stubGetUserFromUsername: auth.stubGetUserFromUsername,

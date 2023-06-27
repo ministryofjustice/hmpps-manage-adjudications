@@ -1,0 +1,64 @@
+  {% set rows = [] %}
+  {% for completedReport in allCompletedReports.content %}
+    {% if completedReport.transferableActionsAllowed == false %}
+      {% set viewCompletedReportlLinkHtml %}
+      <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+        {% endset -%}
+      {% else %}
+        {% set viewCompletedReportlLinkHtml %}
+        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+        </a>
+        {% endset -%}
+      {% endif %}
+
+      {% if completedReport.status | statusNotAwaitingRejectedReturned %}
+        {% if completedReport.transferableActionsAllowed == false %}
+          {% set viewHearinglLinkHtml %}
+          <a href="{{ adjudicationUrls.hearingDetails.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+          {% endset %}
+        {% else %}
+          {% set viewHearinglLinkHtml %}
+          <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+          {% endset %}
+          {% endif %}
+        {% else %}
+          {% set viewHearinglLinkHtml = null %}
+        {% endif %}
+
+        {% set rows = (rows.push([
+      { text: completedReport.formattedDateTimeOfDiscovery,
+        attributes: {
+        "data-sort-value": completedReport.dateTimeOfDiscovery
+      }
+      },
+      { text: completedReport.displayName + " - " + completedReport.prisonerNumber },
+      { text: completedReport.statusDisplayName },
+      { text: completedReport.formattedDateTimeOfScheduledHearing },
+      { html: viewHearinglLinkHtml, classes: 'hearingsAndReferrals' },
+      { html: viewCompletedReportlLinkHtml, classes: 'viewReport' }
+    ]), rows) %}
+      {% endfor %}
+      {% if rows | length %}
+        {{ mojPagination(pagination) }}
+        <div class="results-table">
+          {{ govukTable({
+      head: [
+        { text: "Discovery date and time",
+                  attributes: {
+          "aria-sort": "descending"
+        }
+        },
+        { html: "Name and prison number" },
+        { text: "Status" },
+        { text: "Latest scheduled hearing" },
+        { text: "" },
+        { text: "" }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
+    }) }}
+        </div>
+        {{ mojPagination(pagination) }}
+      {% else %}
+        <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
+      {% endif %}

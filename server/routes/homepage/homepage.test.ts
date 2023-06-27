@@ -25,6 +25,7 @@ beforeEach(() => {
     transferReviewTotal: 1,
     reviewTotal: 1,
   })
+  userService.getNameOfActiveCaseload.mockResolvedValue('Moorland (HMP & YOI)')
 })
 
 afterEach(() => {
@@ -46,7 +47,7 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('View all reports')
+        expect(res.text).not.toContain('View reports from Moorland (HMP & YOI)')
       })
   })
   it('the review tile should be visible with the correct role', () => {
@@ -55,7 +56,7 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('View all reports')
+        expect(res.text).toContain('View reports from Moorland (HMP & YOI)')
       })
   })
 })
