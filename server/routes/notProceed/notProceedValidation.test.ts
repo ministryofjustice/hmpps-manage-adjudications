@@ -1,4 +1,5 @@
 import { NotProceedReason } from '../../data/HearingAndOutcomeResult'
+import { wordLimitExceedingString } from '../../utils/utils'
 import validateForm from './notProceedValidation'
 
 describe('validateForm', () => {
@@ -30,6 +31,17 @@ describe('validateForm', () => {
     ).toEqual({
       href: '#notProceedDetails',
       text: 'Enter more details',
+    })
+  })
+  it('character count - returns the expected response for an invalid submit', () => {
+    expect(
+      validateForm({
+        notProceedReason: NotProceedReason.NOT_FAIR,
+        notProceedDetails: wordLimitExceedingString,
+      })
+    ).toStrictEqual({
+      href: '#notProceedDetails',
+      text: 'Your statement must be 4,000 characters or fewer',
     })
   })
 })

@@ -16,7 +16,7 @@ const errors: { [key: string]: FormError } = {
   },
   WORD_COUNT_EXCEEDED: {
     href: '#damageDescription',
-    text: 'Your details must be 4,000 characters or fewer',
+    text: 'Your statement must be 4,000 characters or fewer',
   },
 }
 
