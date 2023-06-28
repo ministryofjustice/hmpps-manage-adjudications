@@ -9,7 +9,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import {
   fillInDefaults,
   filterFromUiFilter,
-  reportedAdjudicationStatuses,
+  transferredAdjudicationStatuses,
   UiFilter,
   uiFilterFromBody,
   uiFilterFromRequest,
@@ -33,7 +33,7 @@ export default class AllTransferredReportsRoutes {
     return res.render(`pages/viewAllHearingsAndReports/allTransferredReports`, {
       allCompletedReports: results,
       filter,
-      checkboxes: reportedAdjudicationStatuses(filter),
+      checkboxes: transferredAdjudicationStatuses(filter),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)

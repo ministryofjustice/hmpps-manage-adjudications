@@ -55,6 +55,7 @@ context('Transferred Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        status: ReportedAdjudicationStatus.UNSCHEDULED,
       })
     })
     cy.task('stubGetAllReportedAdjudications', {
@@ -88,9 +89,7 @@ context('Transferred Reports', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
         expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
-        expect($data.get(2).innerText).to.contain('Awaiting review')
-        // test hearings link is not populated
-        expect($data.get(4).innerText).to.equal('')
+        expect($data.get(2).innerText).to.contain('Unscheduled')
         expect($data.get(5).innerText).to.contain('View report')
       })
   })

@@ -177,3 +177,23 @@ export const reportedAdjudicationStatuses = (filter: UiFilter) => {
     }
   })
 }
+
+export const transferredAdjudicationStatuses = (filter: UiFilter) => {
+  const statuses = Object.keys(ReportedAdjudicationStatus)
+
+  const filteredStatuses = statuses.filter(
+    key =>
+      key === ReportedAdjudicationStatus.UNSCHEDULED ||
+      key === ReportedAdjudicationStatus.REFER_INAD ||
+      key === ReportedAdjudicationStatus.REFER_POLICE ||
+      key === ReportedAdjudicationStatus.ADJOURNED
+  )
+
+  return filteredStatuses.map(key => {
+    return {
+      value: key,
+      text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
+      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+    }
+  })
+}
