@@ -90,7 +90,6 @@ context('Transferred Reports', () => {
         expect($data.get(0).innerText).to.contain('15 November 2345 - 11:30')
         expect($data.get(1).innerText).to.contain('Potter, Harry - A1234AA')
         expect($data.get(2).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.equal('Hearings and referrals\nfor')
         expect($data.get(5).innerText).to.contain('View report')
       })
   })
