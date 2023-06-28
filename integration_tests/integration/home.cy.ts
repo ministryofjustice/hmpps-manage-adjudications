@@ -89,7 +89,7 @@ context('Home page', () => {
   it('should link to the correct location - view transferred reports', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
-    )}&status=SCHEDULED&status=UNSCHEDULED&status=AWAITING_REVIEW&status=RETURNED&status=REJECTED&status=ADJOURNED&status=NOT_PROCEED&status=DISMISSED&status=REFER_POLICE&status=REFER_INAD&status=CHARGE_PROVED&status=QUASHED&status=PROSECUTION&transfersOnly=true`
+    )}&status=UNSCHEDULED&status=REFER_POLICE&status=ADJOURNED&status=REFER_INAD&transfersOnly=true`
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)

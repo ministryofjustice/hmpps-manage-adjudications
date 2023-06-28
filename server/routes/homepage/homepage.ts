@@ -73,7 +73,12 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
           href: adjudicationUrls.allTransferredReports.urls.filter({
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
-            status: allStatuses,
+            status: [
+              ReportedAdjudicationStatus.UNSCHEDULED,
+              ReportedAdjudicationStatus.REFER_POLICE,
+              ReportedAdjudicationStatus.ADJOURNED,
+              ReportedAdjudicationStatus.REFER_INAD,
+            ],
             transfersOnly: true,
           }),
           id: 'view-transferred-reports',
