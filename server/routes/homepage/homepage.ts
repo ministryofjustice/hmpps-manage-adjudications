@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import { ReportedAdjudicationStatus, allStatuses } from '../../data/ReportedAdjudicationResult'
+import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
