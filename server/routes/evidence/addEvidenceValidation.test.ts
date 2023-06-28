@@ -1,4 +1,5 @@
 import validateForm from './addEvidenceValidation'
+import { wordLimitExceedingString } from '../../utils/utils'
 
 describe('ValidateForm', () => {
   it('returns null if there are no errors', () => {
@@ -56,6 +57,19 @@ describe('ValidateForm', () => {
     expect(result).toStrictEqual({
       href: '#batIdentifier',
       text: 'Enter the seal number',
+    })
+  })
+  it('returns the expected response for an invalid submit', () => {
+    expect(
+      validateForm({
+        evidenceDescription: wordLimitExceedingString,
+        evidenceType: 'photo',
+        bwcIdentifier: undefined,
+        batIdentifier: undefined,
+      })
+    ).toStrictEqual({
+      href: '#evidenceDescription',
+      text: 'Your statement must be 4,000 characters or fewer',
     })
   })
 })

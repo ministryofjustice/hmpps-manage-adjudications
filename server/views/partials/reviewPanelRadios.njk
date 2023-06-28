@@ -2,115 +2,117 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set rejected %}
 {{ govukSelect({
-					id: 'rejectedReasonId',
-					name: 'rejectedReasonId',
-        	label: {
-						text: 'What is the reason?',
-						isPageHeading: false,
-						classes: ''
-					},
-					items: [
-            {
-               value: "unsuitable",
-               text: "Not suitable for an adjudication"
-             },
-             {
-               value: "alternative",
-               text: "Should be dealt with in another way"
-             },
-             {
-               value: "expired",
-               text: "More than 48 hours have elapsed since the incident"
-             }
-          ] | toSelect('value', 'text', pageData.reason),
-					classes: '',
-          attributes: {
-				   	'data-qa': "rejected-reason"
-				  },
-					errorMessage: 'rejectedReasonId' | findError(pageData.errors)
-				}) }}
-{{ govukTextarea({
-				name: "rejectedDetails",
-				id: "rejectedDetails",
-        rows: '8',
-				value: pageData.details,
-				label: {
-					text: "Give more details for why you have rejected it",
-					classes: "govuk-!-margin-bottom-2"
-				},
-				classes: "govuk-!-width-three-quarters",
-				attributes: {
-					'data-qa': "rejected-details-input"
-				},
-				errorMessage: "rejectedDetails" | findError(pageData.errors)
-				}) }}
+  id: 'rejectedReasonId',
+  name: 'rejectedReasonId',
+  label: {
+    text: 'What is the reason?',
+    isPageHeading: false,
+    classes: ''
+  },
+  items: [
+    {
+        value: "unsuitable",
+        text: "Not suitable for an adjudication"
+      },
+      {
+        value: "alternative",
+        text: "Should be dealt with in another way"
+      },
+      {
+        value: "expired",
+        text: "More than 48 hours have elapsed since the incident"
+      }
+  ] | toSelect('value', 'text', pageData.reason),
+  classes: '',
+  attributes: {
+    'data-qa': "rejected-reason"
+  },
+  errorMessage: 'rejectedReasonId' | findError(pageData.errors)
+}) }}
+{{ govukCharacterCount({
+  name: "rejectedDetails",
+  id: "rejectedDetails",
+  rows: '8',
+  value: pageData.details,
+  label: {
+    text: "Give more details for why you have rejected it",
+    classes: "govuk-!-margin-bottom-2"
+  },
+  classes: "govuk-!-width-three-quarters",
+  attributes: {
+    'data-qa': "rejected-details-input"
+  },
+  errorMessage: "rejectedDetails" | findError(pageData.errors),
+  maxlength: 4000
+}) }}
 {% endset -%}
 {% set returned %}
 {{ govukSelect({
-					id: 'returnedReasonId',
-					name: 'returnedReasonId',
-        	label: {
-						text: 'What is the reason?',
-						isPageHeading: false,
-						classes: ''
-					},
-				  items: [
-                   {
-                     value: "details",
-                     text: "Incorrect incident details"
-                   },
-                   {
-                     value: "statement",
-                     text: "Incorrect or insufficient information in statement"
-                   },
-                   {
-                     value: "offence",
-                     text: "Incorrect offence chosen"
-                   }
-                 ] | toSelect('value', 'text', pageData.reason),
-					classes: '',
-                    attributes: {
-				   	'data-qa': "returned-reason"
-				  },
-
-					errorMessage: 'returnedReasonId' | findError(pageData.errors)
-				}) }}
-{{ govukTextarea({
-				name: "returnedDetails",
-				id: "returnedDetails",
-        rows: '8',
-				value: pageData.details,
-				label: {
-					text: "What does the reporting officer need to know",
-					classes: "govuk-!-margin-bottom-2"
-				},
-				classes: "govuk-!-width-three-quarters",
-				attributes: {
-					'data-qa': "returned-details-input"
-				},
-				errorMessage: "returnedDetails" | findError(pageData.errors)
-				}) }}
+  id: 'returnedReasonId',
+  name: 'returnedReasonId',
+  label: {
+    text: 'What is the reason?',
+    isPageHeading: false,
+    classes: ''
+  },
+  items: [
+            {
+              value: "details",
+              text: "Incorrect incident details"
+            },
+            {
+              value: "statement",
+              text: "Incorrect or insufficient information in statement"
+            },
+            {
+              value: "offence",
+              text: "Incorrect offence chosen"
+            }
+          ] | toSelect('value', 'text', pageData.reason),
+  classes: '',
+            attributes: {
+    'data-qa': "returned-reason"
+  },
+  errorMessage: 'returnedReasonId' | findError(pageData.errors)
+}) }}
+{{ govukCharacterCount({
+  name: "returnedDetails",
+  id: "returnedDetails",
+  rows: '8',
+  value: pageData.details,
+  label: {
+    text: "What does the reporting officer need to know",
+    classes: "govuk-!-margin-bottom-2"
+  },
+  classes: "govuk-!-width-three-quarters",
+  attributes: {
+    'data-qa': "returned-details-input"
+  },
+  errorMessage: "returnedDetails" | findError(pageData.errors),
+  maxlength: 4000
+}) }}
 {% endset -%}
 {% set accepted %}
-{{ govukTextarea({
-				name: "acceptedDetails",
-				id: "acceptedDetails",
-        rows: '8',
-				value: pageData.details,
-				label: {
-					text: "Use this box if you need to tell the reporting officer anything. This could be changes you've had to make before accepting",
-					classes: "govuk-!-margin-bottom-2"
-				},
-				classes: "govuk-!-width-three-quarters",
-				attributes: {
-					'data-qa': "accepted-details-input"
-				},
-				errorMessage: "acceptedDetails" | findError(pageData.errors)
-				}) }}
+{{ govukCharacterCount({
+  name: "acceptedDetails",
+  id: "acceptedDetails",
+  rows: '8',
+  value: pageData.details,
+  label: {
+    text: "Use this box if you need to tell the reporting officer anything. This could be changes you've had to make before accepting",
+    classes: "govuk-!-margin-bottom-2"
+  },
+  classes: "govuk-!-width-three-quarters",
+  attributes: {
+    'data-qa': "accepted-details-input"
+  },
+  errorMessage: "acceptedDetails" | findError(pageData.errors),
+  maxlength: 4000
+}) }}
 {% endset -%}
 
 {% if pageData.returned %}
@@ -159,17 +161,17 @@
 {% endif %}
 
 {{ govukRadios({
-    errorMessage: "currentStatusSelected" | findError(pageData.errors),
-    idPrefix: 'currentStatusSelected',
-    id: 'currentStatusSelected',
-    name: 'currentStatusSelected',
-    attributes: { "data-qa": "review-radio-buttons" },
-    fieldset: {
-        legend: {
-        text: "What would you like to do with this report?",
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-        }
-    },
-    items: items
-    }) }}
+  errorMessage: "currentStatusSelected" | findError(pageData.errors),
+  idPrefix: 'currentStatusSelected',
+  id: 'currentStatusSelected',
+  name: 'currentStatusSelected',
+  attributes: { "data-qa": "review-radio-buttons" },
+  fieldset: {
+      legend: {
+      text: "What would you like to do with this report?",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+      }
+  },
+  items: items
+}) }}

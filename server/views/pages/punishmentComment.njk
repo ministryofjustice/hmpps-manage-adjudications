@@ -1,7 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Add a comment about punishments" %}
@@ -30,28 +30,29 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
 
-        {{ govukTextarea({
-                    name: "punishmentComment",
-                    id: "punishmentComment",
-                    classes: "govuk-!-width-two-thirds",
-                    attributes: { "maxlength": "4000", "data-qa": "edit-punishment-comment" },
-                    errorMessage: "punishmentComment" | findError(errors),
-                    value: punishmentComment
-                }) }}
+        {{ govukCharacterCount({
+          name: "punishmentComment",
+          id: "punishmentComment",
+          classes: "govuk-!-width-two-thirds",
+          attributes: { "maxlength": "4000", "data-qa": "edit-punishment-comment" },
+          errorMessage: "punishmentComment" | findError(errors),
+          value: punishmentComment,
+          maxlength: 4000
+        }) }}
 
         {{ govukButton({
-                    text: "Save",
-                    type: "submit",
-                    classes: "govuk-button--submit govuk-!-margin-right-3",
-                    attributes: { "data-qa": "punishment-comment-submit" },
-                    preventDoubleClick: true
-                }) }}
+          text: "Save",
+          type: "submit",
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "punishment-comment-submit" },
+          preventDoubleClick: true
+        }) }}
         {{ govukButton({
-                    text: "Cancel",
-                    href: cancelHref,
-                    classes: "govuk-button--secondary",
-                    attributes: { "data-qa": "punishment-comment-cancel" }
-                }) }}
+          text: "Cancel",
+          href: cancelHref,
+          classes: "govuk-button--secondary",
+          attributes: { "data-qa": "punishment-comment-cancel" }
+        }) }}
       </div>
     </div>
   </form>

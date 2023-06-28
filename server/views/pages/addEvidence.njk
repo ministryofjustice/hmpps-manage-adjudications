@@ -1,7 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Add a piece of evidence" %}
@@ -32,7 +32,7 @@
 
                 {% include "../partials/addEvidenceRadios.njk" %}
 
-                {{ govukTextarea({
+                {{ govukCharacterCount({
                     name: "evidenceDescription",
                     id: "evidenceDescription",
                     classes: "govuk-!-width-two-thirds",
@@ -45,7 +45,8 @@
                     },
                     attributes: { "data-qa": "add-evidence-description" },
                     errorMessage: "evidenceDescription" | findError(errors),
-                    value: evidenceDescription
+                    value: evidenceDescription,
+                    maxlength: 4000
                 }) }}
             
                 {{ govukButton({

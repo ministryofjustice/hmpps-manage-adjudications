@@ -3,7 +3,7 @@
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
@@ -36,10 +36,11 @@
       <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-        {{ govukTextarea({
+        {{ govukCharacterCount({
           name: "incidentStatement",
           id: "incidentStatement",
           value: incidentStatement,
+          maxlength: 4000,
           label: {
             text: "Write the full details of the alleged offence.",
             classes: "govuk-!-margin-bottom-2"
