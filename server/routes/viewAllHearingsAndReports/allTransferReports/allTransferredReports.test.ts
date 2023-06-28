@@ -5,6 +5,7 @@ import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
+import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -26,6 +27,7 @@ beforeEach(() => {
     adjudicationNumber: 2,
     prisonerNumber: 'G6123VU',
     dateTimeOfIncident: '2021-11-15T11:45:00',
+    status: ReportedAdjudicationStatus.ADJOURNED,
     otherData: {
       displayName: 'Smith, John',
       formattedDateTimeOfIncident: '15 November 2021 - 11:45',
@@ -36,6 +38,7 @@ beforeEach(() => {
     adjudicationNumber: 1,
     prisonerNumber: 'G6174VU',
     dateTimeOfIncident: '2021-11-15T11:30:00',
+    status: ReportedAdjudicationStatus.ADJOURNED,
     otherData: {
       displayName: 'Moriarty, James',
       formattedDateTimeOfIncident: '15 November 2021 - 11:30',
@@ -87,15 +90,15 @@ describe('GET /all-completed-reports', () => {
       .expect(response => {
         expect(response.text).toContain('Smith, John - G6123VU')
         expect(response.text).toContain('15 November 2021 - 11:45')
-        expect(response.text).toContain('Awaiting review')
+        expect(response.text).toContain('Adjourned')
         expect(response.text).toContain('Moriarty, James - G6174VU')
         expect(response.text).toContain('15 November 2021 - 11:30')
-        expect(response.text).toContain('Awaiting review')
+        expect(response.text).toContain('Adjourned')
       })
   })
 })
 
-describe('POST /all-completed-reports', () => {
+describe('POST /all-transferred-reports', () => {
   it('should redirect with the correct filter parameters', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
@@ -103,11 +106,11 @@ describe('POST /all-completed-reports', () => {
       .send({
         fromDate: { date: '01/01/2021' },
         toDate: { date: '02/01/2021' },
-        status: 'AWAITING_REVIEW',
+        status: ReportedAdjudicationStatus.ADJOURNED,
       })
       .expect(
         'Location',
-        `${adjudicationUrls.allTransferredReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=true`
+        `${adjudicationUrls.allTransferredReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=ADJOURNED&transfersOnly=true`
       )
   })
   it('should render the not found page without the correct role', () => {
