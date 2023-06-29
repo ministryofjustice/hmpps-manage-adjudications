@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class HearingTabPage extends Page {
   constructor() {
-    super('Adjudication for report')
+    super('Adjudication for charge')
   }
 
   // Empty state
