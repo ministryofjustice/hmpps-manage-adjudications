@@ -125,7 +125,7 @@ jobs:
       - run:
           name: integration tests
           command:  |
-            npm run int-test -- --test $(circleci tests glob "integration_tests/integration/*.cy.ts" | circleci tests split --split-by=timings)
+            npm run int-test -- $(circleci tests glob "integration_tests/integration/*.cy.ts" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test_results
       - store_artifacts:
