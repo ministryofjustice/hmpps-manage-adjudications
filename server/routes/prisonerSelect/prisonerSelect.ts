@@ -4,7 +4,6 @@ import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
 import adjudicationUrls from '../../utils/urlGenerator'
-import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -22,7 +21,7 @@ export default class PrisonerSelectRoutes {
 
     let searchResults = null
     if (!error) {
-      if (config.transfersFeatureFlag === 'true' && transfer === 'true') {
+      if (transfer === 'true') {
         prisonIds.pop()
       }
 
@@ -58,10 +57,18 @@ export default class PrisonerSelectRoutes {
 
     if (error) return this.renderView(req, res, { error, searchTerm, transfer })
 
+    if (transfer === 'true') {
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.selectPrisoner.root,
+          query: { searchTerm, transfer },
+        })
+      )
+    }
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
-        query: { searchTerm, transfer },
+        query: { searchTerm },
       })
     )
   }

@@ -310,9 +310,7 @@ export default function routes(
     reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
   )
 
-  if (config.transfersFeatureFlag === 'true') {
-    router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
-  }
+  router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
 
   return router
 }

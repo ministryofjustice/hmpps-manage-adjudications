@@ -4,7 +4,6 @@ import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResul
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
-import config from '../../config'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type TaskType = {
@@ -29,10 +28,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       id: 'start-a-new-report',
       heading: 'Start a new report',
       description: 'Start creating a new report.',
-      href:
-        config.transfersFeatureFlag === 'true'
-          ? adjudicationUrls.isPrisonerStillInEstablishment.root
-          : adjudicationUrls.searchForPrisoner.root,
+      href: adjudicationUrls.isPrisonerStillInEstablishment.root,
       roles: [],
       enabled: true,
     },
