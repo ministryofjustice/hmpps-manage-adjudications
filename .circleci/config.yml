@@ -97,6 +97,7 @@ jobs:
           path: test_results/unit-test-reports.html
 
   integration_test:
+    parallelism: 4
     executor: integration-tests
     steps:
       - checkout
@@ -123,7 +124,8 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: integration tests
-          command: npm run int-test
+          command:  |
+            npm run int-test -- --test $(circleci tests glob "integration_tests/integration/*.cy.ts" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test_results
       - store_artifacts:
