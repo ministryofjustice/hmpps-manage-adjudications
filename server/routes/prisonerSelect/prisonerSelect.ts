@@ -57,10 +57,18 @@ export default class PrisonerSelectRoutes {
 
     if (error) return this.renderView(req, res, { error, searchTerm, transfer })
 
+    if (transfer === 'true') {
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.selectPrisoner.root,
+          query: { searchTerm, transfer },
+        })
+      )
+    }
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
-        query: { searchTerm, transfer },
+        query: { searchTerm },
       })
     )
   }

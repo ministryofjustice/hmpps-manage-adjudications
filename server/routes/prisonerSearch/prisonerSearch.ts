@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import validateForm from './prisonerSearchValidation'
 import { FormError } from '../../@types/template'
 import adjudicationUrls from '../../utils/urlGenerator'
-import config from '../../config'
 
 export default class PrisonerSearchRoutes {
   private renderView = async (req: Request, res: Response, error?: FormError): Promise<void> => {
@@ -22,7 +21,7 @@ export default class PrisonerSearchRoutes {
 
     if (error) return this.renderView(req, res, error)
 
-    if (transfer) {
+    if (transfer === 'true') {
       return res.redirect(
         url.format({
           pathname: adjudicationUrls.selectPrisoner.root,

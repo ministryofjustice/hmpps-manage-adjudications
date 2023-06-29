@@ -2,7 +2,6 @@ import { Express } from 'express'
 import request from 'supertest'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
-import config from '../../config'
 
 let app: Express
 

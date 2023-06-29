@@ -97,7 +97,7 @@ describe('POST /select-prisoner', () => {
     return request(app)
       .post(adjudicationUrls.selectPrisoner.root)
       .send({ searchTerm: 'Smith' })
-      .expect('Location', `${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith&transfer=`)
+      .expect('Location', `${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith`)
   })
 
   it('should render validation messages', () => {

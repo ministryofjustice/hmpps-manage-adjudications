@@ -4,7 +4,6 @@ import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResul
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
-import config from '../../config'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type TaskType = {
