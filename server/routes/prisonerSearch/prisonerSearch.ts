@@ -22,7 +22,7 @@ export default class PrisonerSearchRoutes {
 
     if (error) return this.renderView(req, res, error)
 
-    if (config.transfersFeatureFlag === 'true') {
+    if (transfer) {
       return res.redirect(
         url.format({
           pathname: adjudicationUrls.selectPrisoner.root,

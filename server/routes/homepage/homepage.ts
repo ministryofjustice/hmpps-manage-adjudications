@@ -29,10 +29,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       id: 'start-a-new-report',
       heading: 'Start a new report',
       description: 'Start creating a new report.',
-      href:
-        config.transfersFeatureFlag === 'true'
-          ? adjudicationUrls.isPrisonerStillInEstablishment.root
-          : adjudicationUrls.searchForPrisoner.root,
+      href: adjudicationUrls.isPrisonerStillInEstablishment.root,
       roles: [],
       enabled: true,
     },

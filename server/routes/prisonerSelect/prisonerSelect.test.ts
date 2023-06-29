@@ -4,7 +4,6 @@ import PrisonerSearchService from '../../services/prisonerSearchService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import appWithAllRoutes from '../testutils/appSetup'
 import TestData from '../testutils/testData'
-import config from '../../config'
 
 jest.mock('../../services/prisonerSearchService')
 
@@ -25,8 +24,6 @@ afterEach(() => {
 describe('GET /select-prisoner', () => {
   describe('with results', () => {
     beforeEach(() => {
-      config.transfersFeatureFlag = 'false'
-
       const searchResult = testData.prisonerSearchSummary({
         firstName: 'John',
         lastName: 'Smith',
@@ -58,7 +55,6 @@ describe('GET /select-prisoner', () => {
     })
 
     it('should load the search for a prisoner page for a transfer', () => {
-      config.transfersFeatureFlag = 'true'
       return request(app)
         .get(`${adjudicationUrls.selectPrisoner.root}?searchTerm=Smith&transfer=true`)
         .expect('Content-Type', /html/)

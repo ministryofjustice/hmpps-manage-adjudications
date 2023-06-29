@@ -28,8 +28,6 @@ describe('GET /search-for-prisoner', () => {
 
 describe('POST /search-for-prisoner', () => {
   it('should redirect to select prisoner page with the correct search text and transfer', () => {
-    config.transfersFeatureFlag = 'true'
-
     return request(app)
       .post(`${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
       .send({ searchTerm: 'Smith' })
@@ -37,8 +35,6 @@ describe('POST /search-for-prisoner', () => {
   })
 
   it('should redirect to select prisoner page with the correct search text', () => {
-    config.transfersFeatureFlag = 'false'
-
     return request(app)
       .post(adjudicationUrls.searchForPrisoner.root)
       .send({ searchTerm: 'Smith' })

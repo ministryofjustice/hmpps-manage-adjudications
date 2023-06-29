@@ -4,7 +4,6 @@ import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
 import adjudicationUrls from '../../utils/urlGenerator'
-import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -22,7 +21,7 @@ export default class PrisonerSelectRoutes {
 
     let searchResults = null
     if (!error) {
-      if (config.transfersFeatureFlag === 'true' && transfer === 'true') {
+      if (transfer === 'true') {
         prisonIds.pop()
       }
 
