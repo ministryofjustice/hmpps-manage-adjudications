@@ -125,11 +125,11 @@ jobs:
       - run:
           name: integration tests
           command:  |
-            TESTFILES=$(circleci tests glob "integration_tests/integration/*.cy.ts" | circleci tests split --split-by=timings)
-            echo "${TESTFILES}"
-            npm run int-test -- ${TESTFILES}
+            TESTFILES=$(circleci tests glob "integration_tests/integration/*.cy.ts" | circleci tests split --split-by=timings --timings-type=filename --time-default=10s)
+            echo "Files tested: ${TESTFILES}"
+            npm run int-test -- --spec ${TESTFILES}
       - store_test_results:
-          path: test_results/cypress
+          path: test_results
       - store_artifacts:
           path: integration_tests/videos
       - store_artifacts:
