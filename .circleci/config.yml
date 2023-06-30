@@ -129,7 +129,7 @@ jobs:
             echo "Files tested: ${TESTFILES}"
             npm run int-test -- --spec ${TESTFILES}
       - store_test_results:
-          path: test_results/cypress/results
+          path: test_results
       - store_artifacts:
           path: integration_tests/videos
       - store_artifacts:
