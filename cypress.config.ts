@@ -18,6 +18,7 @@ export default defineConfig({
   reporter: 'cypress-multi-reporters',
   reporterOptions: {
     configFile: 'reporter-config.json',
+    mochaFile: 'test_results/cypress/results-[hash].xml',
   },
   videoUploadOnPasses: false,
   taskTimeout: 60000,
