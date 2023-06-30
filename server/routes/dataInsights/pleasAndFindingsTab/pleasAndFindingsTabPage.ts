@@ -32,7 +32,7 @@ export default class PleasAndFindingsTabPage {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PLEAS_AND_FINDINGS),
-      chartSettingList: [],
+      chartSettingMap: {},
     })
   }
 

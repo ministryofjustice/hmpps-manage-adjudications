@@ -32,7 +32,7 @@ export default class PunishmentsTabPage {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PUNISHMENTS),
-      chartSettingList: [],
+      chartSettingMap: {},
     })
   }
 

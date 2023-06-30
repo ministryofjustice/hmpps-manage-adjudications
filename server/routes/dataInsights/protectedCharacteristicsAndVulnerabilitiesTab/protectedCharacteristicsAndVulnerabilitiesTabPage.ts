@@ -32,7 +32,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES),
-      chartSettingList: [],
+      chartSettingMap: {},
     })
   }
 
