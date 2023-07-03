@@ -1,7 +1,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, errors) %}
+{% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, isIndependentAdjudicatorHearing, errors) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
@@ -81,19 +81,7 @@
     }) }}
   {% endset -%}
 
-  {{ govukRadios({
-    idPrefix: 'punishmentType',
-    id: 'punishmentType',
-    name: 'punishmentType',
-    fieldset: {
-    legend: {
-    text: "Type of punishment",
-    isPageHeading: false 
-    }
-    },
-    attributes: { "data-qa": "punishment-radio-buttons" },
-    errorMessage: "punishmentType" | findError(errors),
-    items: [
+  {% set radioButtonItems =  [
     {
     value: "PRIVILEGE",
     text: "Loss of privileges",
@@ -131,6 +119,33 @@
     text: "Removal from wing or unit",
     checked: punishmentType == 'REMOVAL_WING'
     }
-    ] }) 
+    ] %}
+
+  {% if isIndependentAdjudicatorHearing %}
+    {% set radioButtonItems = (radioButtonItems.push({
+      value: "ADDITIONAL_DAYS",
+      text: "Additional days",
+      checked: punishmentType == 'ADDITIONAL_DAYS'
+    },
+    {
+      value: "PROSPECTIVE_DAYS",
+      text: "Prospective additional days",
+      checked: punishmentType == 'PROSPECTIVE_DAYS'
+    }), radioButtonItems) %}
+  {% endif %}
+
+  {{ govukRadios({
+    idPrefix: 'punishmentType',
+    id: 'punishmentType',
+    name: 'punishmentType',
+    fieldset: {
+    legend: {
+    text: "Type of punishment",
+    isPageHeading: false 
+    }
+    },
+    attributes: { "data-qa": "punishment-radio-buttons" },
+    errorMessage: "punishmentType" | findError(errors),
+    items: radioButtonItems  }) 
   }}
 {% endmacro %}

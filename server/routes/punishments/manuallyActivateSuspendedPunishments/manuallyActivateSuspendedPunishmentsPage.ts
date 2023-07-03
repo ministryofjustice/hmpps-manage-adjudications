@@ -25,6 +25,9 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = pageData
 
+    // This is a placeholder until NN-5270
+    const isIndependentAdjudicatorHearing = false
+
     return res.render(`pages/manuallyActivateSuspendedPunishment.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       errors: error ? [error] : [],
@@ -33,6 +36,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
       otherPrivilege,
       stoppagePercentage,
       reportNumber,
+      isIndependentAdjudicatorHearing,
     })
   }
 
