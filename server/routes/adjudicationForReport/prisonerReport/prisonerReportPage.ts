@@ -171,7 +171,7 @@ export default class prisonerReportRoutes {
       user
     )
 
-    const hideReportNumberAndPrintStatuses = [
+    const hideReportNumberAndPrintForAdjudicationStatuses = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
       ReportedAdjudicationStatus.REJECTED,
       ReportedAdjudicationStatus.RETURNED,
@@ -193,7 +193,7 @@ export default class prisonerReportRoutes {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      showReportNumberAndPrint: !hideReportNumberAndPrintStatuses,
+      showReportNumberAndPrint: !hideReportNumberAndPrintForAdjudicationStatuses,
     })
   }
 
