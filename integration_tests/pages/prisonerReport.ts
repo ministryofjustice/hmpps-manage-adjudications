@@ -70,4 +70,6 @@ export default class PrisonerReportPage extends Page {
   transferBannerHeader = (): PageElement => cy.get('[data-qa="transferBanner-header"]')
 
   transferBannerParagraph = (): PageElement => cy.get('[data-qa="transferBanner-outcomePara"]')
+
+  printLink = (): PageElement => cy.get('[data-qa="printLink"]')
 }

@@ -181,6 +181,7 @@ context('Prisoner report - reporter view', () => {
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
       prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.printLink().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
