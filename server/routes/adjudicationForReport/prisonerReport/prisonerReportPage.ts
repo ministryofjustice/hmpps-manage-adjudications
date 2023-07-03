@@ -175,7 +175,7 @@ export default class prisonerReportRoutes {
       ReportedAdjudicationStatus.AWAITING_REVIEW,
       ReportedAdjudicationStatus.REJECTED,
       ReportedAdjudicationStatus.RETURNED,
-    ]
+    ].includes(reportedAdjudication.status)
 
     return res.render(`pages/adjudicationForReport/prisonerReport`, {
       pageData: { ...pageData, returned },
@@ -193,7 +193,7 @@ export default class prisonerReportRoutes {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      showReportNumberAndPrint: hideReportNumberAndPrintStatuses.includes(reportedAdjudication.status),
+      showReportNumberAndPrint: !hideReportNumberAndPrintStatuses,
     })
   }
 

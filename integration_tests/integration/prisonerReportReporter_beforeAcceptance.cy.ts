@@ -443,8 +443,7 @@ context('Prisoner report - reporter view', () => {
     })
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(1524493))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reportNumber().should('contain.text', '1524493')
+      cy.get('h1').should('contain.text', '1524493')
     })
     it('should not contain the review panel', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(1524493))
@@ -598,8 +597,7 @@ context('Prisoner report - reporter view', () => {
     })
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(56789))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reportNumber().should('contain.text', '56789')
+      cy.get('h1').should('contain.text', '56789')
     })
     it('should not contain the review panel', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(56789))
