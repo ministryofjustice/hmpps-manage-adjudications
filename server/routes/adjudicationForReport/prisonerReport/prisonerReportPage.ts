@@ -187,6 +187,7 @@ export default class prisonerReportRoutes {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
+      showReportNumberAndPrint: reportedAdjudication.status !== ReportedAdjudicationStatus.AWAITING_REVIEW,
     })
   }
 

@@ -202,7 +202,8 @@ context('Prisoner report - reporter view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.reportNumber().should('not.exist')
+      prisonerReportPage.printLink().should('not.exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
@@ -288,8 +289,7 @@ context('Prisoner report - reporter view', () => {
     })
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reportNumber().should('contain.text', '12345')
+      cy.get('h1').should('contain.text', '12345')
     })
     it('should not contain the review panel', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(12345))
