@@ -7,6 +7,12 @@ export default function validateForm({ reasonForFinding }: { reasonForFinding: s
       text: 'Enter the reason for this finding',
     }
   }
+  if (reasonForFinding.length > 4000) {
+    return {
+      href: '#reasonForFinding',
+      text: 'Your statement must be 4,000 characters or fewer',
+    }
+  }
 
   return null
 }

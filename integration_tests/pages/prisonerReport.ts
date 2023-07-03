@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class PrisonerReportPage extends Page {
   constructor() {
-    super('report')
+    super('Adjudication for charge')
   }
 
   reviewSummaryTitle = (): PageElement => cy.get('[data-qa="review-status"]')
@@ -70,4 +70,6 @@ export default class PrisonerReportPage extends Page {
   transferBannerHeader = (): PageElement => cy.get('[data-qa="transferBanner-header"]')
 
   transferBannerParagraph = (): PageElement => cy.get('[data-qa="transferBanner-outcomePara"]')
+
+  printLink = (): PageElement => cy.get('[data-qa="printLink"]')
 }

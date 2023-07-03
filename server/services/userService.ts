@@ -105,4 +105,9 @@ export default class UserService {
       }
     })
   }
+
+  async getNameOfActiveCaseload(user: User): Promise<string> {
+    const agency = await new PrisonApiClient(user.token).getAgency(user.activeCaseLoadId)
+    return agency.description
+  }
 }

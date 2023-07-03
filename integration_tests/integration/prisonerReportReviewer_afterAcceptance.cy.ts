@@ -144,6 +144,8 @@ context('Prisoner report - reviewer view', () => {
         jsonBody: {},
       },
     })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
     cy.signIn()
   })
   describe('report UNSCHEDULED', () => {
@@ -156,6 +158,7 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
       prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.printLink().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.returnLink().contains('Return to all completed reports')
       prisonerReportPage.damageSummary().should('exist')

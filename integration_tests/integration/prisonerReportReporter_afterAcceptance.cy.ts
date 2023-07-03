@@ -168,6 +168,7 @@ context('Prisoner report - reporter view', () => {
         authSource: 'auth',
       },
     })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     return cy.signIn()
   })
   describe('Status ACCEPTED [legacy to check for backwards compatibility]', () => {
@@ -180,6 +181,7 @@ context('Prisoner report - reporter view', () => {
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
       prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.printLink().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
@@ -230,7 +232,7 @@ context('Prisoner report - reporter view', () => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
           expect($summaryData.get(1).innerText).to.contain('9 December 2021')
           expect($summaryData.get(2).innerText).to.contain('10:30')
-          expect($summaryData.get(3).innerText).to.contain('Houseblock 1')
+          expect($summaryData.get(3).innerText).to.contain('Houseblock 1, Moorland (HMP & YOI)')
         })
     })
     it('should contain the correct offence details', () => {
@@ -375,7 +377,7 @@ context('Prisoner report - reporter view', () => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
           expect($summaryData.get(1).innerText).to.contain('9 December 2021')
           expect($summaryData.get(2).innerText).to.contain('10:30')
-          expect($summaryData.get(3).innerText).to.contain('Houseblock 1')
+          expect($summaryData.get(3).innerText).to.contain('Houseblock 1, Moorland (HMP & YOI)')
         })
     })
     it('should contain the correct offence details', () => {

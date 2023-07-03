@@ -8,6 +8,7 @@ context('Home page', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.signIn()
   })
 
@@ -24,7 +25,7 @@ context('Home page', () => {
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
-    homepage.viewAllReportsCard().should('not.exist')
+    homepage.viewAllReportsCard('Moorland (HMP & YOI)').should('not.exist')
     homepage.viewScheduledHearingsCard().should('not.exist')
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
@@ -40,21 +41,21 @@ context('Home page', () => {
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
-    homepage.viewAllReportsCard().should('exist')
+    homepage.viewAllReportsCard('Moorland (HMP & YOI)').should('exist')
     homepage.viewScheduledHearingsCard().should('exist')
     homepage.enterOutcomesCard().should('exist')
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
     homepage.reviewReportsLink().should('contain.text', 'Review reports (2)')
-    // TODO put back once new link in page homepage.transferReportsLink().should('contain.text', 'View reports from other prisons (1)')
+    homepage.transferReportsLink().should('contain.text', 'View reports from transfers in (1)')
   })
 
   it('should link to the correct location - view all reports (main link)', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homepage.viewAllReportsCard().click()
+    homepage.viewAllReportsCard('Moorland (HMP & YOI)').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
     })
@@ -62,7 +63,7 @@ context('Home page', () => {
   it('should link to the correct location - view all reports (review reports link)', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
-    )}&status=AWAITING_REVIEW`
+    )}&status=AWAITING_REVIEW&transfersOnly=false`
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
@@ -75,7 +76,7 @@ context('Home page', () => {
   it('should link to the correct location - view all reports (schedule reports link)', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
-    )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD`
+    )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD&transfersOnly=false`
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
@@ -85,7 +86,20 @@ context('Home page', () => {
       expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
     })
   })
-  it('should link to the correct location - view schedule hearings', () => {
+  it('should link to the correct location - view transferred reports', () => {
+    const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
+      'DD/MM/YYYY'
+    )}&status=UNSCHEDULED&status=REFER_POLICE&status=ADJOURNED&status=REFER_INAD&transfersOnly=true`
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.transferReportsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.allTransferredReports.root)
+      expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
+    })
+  })
+  it('should link to the correct location - view scheduled hearings', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)

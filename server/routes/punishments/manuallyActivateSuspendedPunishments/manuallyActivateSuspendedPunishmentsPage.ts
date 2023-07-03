@@ -82,7 +82,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
     if (!reportNumber) {
       return {
         href: '#reportNumber',
-        text: 'Enter report number',
+        text: 'Enter charge number',
       }
     }
     const punishmentError = validateForm({ punishmentType, privilegeType, otherPrivilege, stoppagePercentage })

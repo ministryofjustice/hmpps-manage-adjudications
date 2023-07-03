@@ -20,6 +20,10 @@ const errors: { [key: string]: FormError } = {
     href: '#adjournPlea',
     text: 'Select the plea for the offence',
   },
+  WORD_COUNT_EXCEEDED: {
+    href: '#adjournDetails',
+    text: 'Your statement must be 4,000 characters or fewer',
+  },
 }
 
 export default function validateForm({ adjournReason, adjournDetails, adjournPlea }: adjournForm): FormError | null {
@@ -34,6 +38,8 @@ export default function validateForm({ adjournReason, adjournDetails, adjournPle
   if (!adjournPlea) {
     return errors.MISSING_PLEA
   }
+
+  if (adjournDetails.length > 4000) return errors.WORD_COUNT_EXCEEDED
 
   return null
 }

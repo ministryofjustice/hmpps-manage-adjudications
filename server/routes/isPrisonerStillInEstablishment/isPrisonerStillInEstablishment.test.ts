@@ -2,7 +2,6 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
-import config from '../../config'
 
 let app: Express
 
@@ -15,7 +14,6 @@ afterEach(() => {
 })
 
 describe('GET', () => {
-  config.transfersFeatureFlag = 'true'
   it('should load the page', () => {
     return request(app)
       .get(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
@@ -26,7 +24,6 @@ describe('GET', () => {
   })
 })
 describe('POST', () => {
-  config.transfersFeatureFlag = 'true'
   it('should redirect to the correct url', () => {
     return request(app)
       .post(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())

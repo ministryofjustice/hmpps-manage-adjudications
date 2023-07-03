@@ -23,12 +23,14 @@
   {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, punishmentsHref, reviewData.reviewStatus !== 'Rejected') }}
 
   {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
-  <div class="prisoner-report-top-bar flex-center">
-    <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
-      <span class="govuk-!-font-weight-bold">Report number:</span>
-      {{ reportNo }}</p>
-    {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
-  </div>
+  {% if showReportNumberAndPrint %}
+    <div class="prisoner-report-top-bar flex-center">
+      <p class="govuk-body govuk-!-padding-top-2" data-qa="reportNumber">
+        <span class="govuk-!-font-weight-bold">Charge number:</span>
+        {{ reportNo }}</p>
+      {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
+    </div>
+  {% endif %}
   {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftAdjudicationNumber), prisonerReportData, offence, damages, evidence, witnesses, null, editAndReviewAvailability) }}
   {% if editAndReviewAvailability.reviewAvailable %}
     {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}

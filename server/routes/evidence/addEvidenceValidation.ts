@@ -24,6 +24,10 @@ const errors: { [key: string]: FormError } = {
     href: '#batIdentifier',
     text: 'Enter the seal number',
   },
+  WORD_COUNT_EXCEEDED: {
+    href: '#evidenceDescription',
+    text: 'Your statement must be 4,000 characters or fewer',
+  },
 }
 
 export default function validateForm({
@@ -36,6 +40,7 @@ export default function validateForm({
   if (evidenceType === 'BODY_WORN_CAMERA' && !bwcIdentifier) return errors.BWC_IDENTIFIER_MISSING
   if (evidenceType === 'BAGGED_AND_TAGGED' && !batIdentifier) return errors.BAT_IDENTIFIER_MISSING
   if (!evidenceDescription) return errors.MISSING_TEXT
+  if (evidenceDescription.length > 4000) return errors.WORD_COUNT_EXCEEDED
 
   return null
 }

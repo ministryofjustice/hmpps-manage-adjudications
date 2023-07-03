@@ -14,6 +14,10 @@ const errors: { [key: string]: FormError } = {
     href: '#quashDetails',
     text: 'Enter more details',
   },
+  WORD_COUNT_EXCEEDED: {
+    href: '#quashDetails',
+    text: 'Your statement must be 4,000 characters or fewer',
+  },
 }
 
 export default function validateForm({ quashReason, quashDetails }: quashedGuiltyFindingForm): FormError | null {
@@ -23,6 +27,7 @@ export default function validateForm({ quashReason, quashDetails }: quashedGuilt
   if (!quashDetails) {
     return errors.MISSING_DETAILS
   }
+  if (quashDetails.length > 4000) return errors.WORD_COUNT_EXCEEDED
 
   return null
 }

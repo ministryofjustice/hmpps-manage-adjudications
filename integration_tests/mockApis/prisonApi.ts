@@ -108,7 +108,7 @@ const stubGetLocation = ({ locationId, response }: { locationId: number; respons
     },
   })
 
-const stubGetAgency = ({ agencyId, response }: { agencyId: number; response: Agency }): SuperAgentRequest =>
+const stubGetAgency = ({ agencyId, response }: { agencyId: string; response: Agency }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',

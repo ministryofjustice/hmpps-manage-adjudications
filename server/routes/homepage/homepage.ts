@@ -4,7 +4,6 @@ import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResul
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
-import config from '../../config'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type TaskType = {
@@ -23,16 +22,13 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (reviewTotal: number): TaskType[] => {
+const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCaseloadName: string): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
       heading: 'Start a new report',
       description: 'Start creating a new report.',
-      href:
-        config.transfersFeatureFlag === 'true'
-          ? adjudicationUrls.isPrisonerStillInEstablishment.root
-          : adjudicationUrls.searchForPrisoner.root,
+      href: adjudicationUrls.isPrisonerStillInEstablishment.root,
       roles: [],
       enabled: true,
     },
@@ -55,7 +51,7 @@ const createTasks = (reviewTotal: number): TaskType[] => {
     },
     {
       id: 'view-all-reports',
-      heading: 'View all reports',
+      heading: `View reports from ${activeCaseloadName}`,
       href: adjudicationUrls.allCompletedReports.root,
       links: [
         {
@@ -64,8 +60,24 @@ const createTasks = (reviewTotal: number): TaskType[] => {
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
             status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+            transfersOnly: false,
           }),
           id: 'review-reports',
+        },
+        {
+          text: `View reports from transfers in (${transferReviewTotal})`,
+          href: adjudicationUrls.allTransferredReports.urls.filter({
+            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+            toDate: momentDateToDatePicker(moment()),
+            status: [
+              ReportedAdjudicationStatus.UNSCHEDULED,
+              ReportedAdjudicationStatus.REFER_POLICE,
+              ReportedAdjudicationStatus.ADJOURNED,
+              ReportedAdjudicationStatus.REFER_INAD,
+            ],
+            transfersOnly: true,
+          }),
+          id: 'view-transferred-reports',
         },
       ],
       roles: ['ADJUDICATIONS_REVIEWER'],
@@ -105,15 +117,21 @@ export default class HomepageRoutes {
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const { reviewTotal } = await this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user)
+    const [userRoles, counts, activeCaseloadName] = await Promise.all([
+      this.userService.getUserRoles(res.locals.user.token),
+      this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user),
+      this.userService.getNameOfActiveCaseload(res.locals.user),
+    ])
+    const { reviewTotal, transferReviewTotal } = counts
 
-    const enabledTasks = createTasks(reviewTotal).filter(task => task.enabled)
+    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
-    const disRelatedTasks = createTasks(reviewTotal).filter(task => task.heading.includes('DIS'))
+    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task =>
+      task.heading.includes('DIS')
+    )
 
     reviewerTasks.push({
       id: 'enter-outcomes',
@@ -135,6 +153,7 @@ export default class HomepageRoutes {
               ReportedAdjudicationStatus.ADJOURNED,
               ReportedAdjudicationStatus.REFER_INAD,
             ],
+            transfersOnly: false,
           }),
           id: 'schedule-hearings',
         })

@@ -208,7 +208,8 @@ export default class ManageAdjudicationsClient {
         `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
 
       return this.restClient.get({
         path,

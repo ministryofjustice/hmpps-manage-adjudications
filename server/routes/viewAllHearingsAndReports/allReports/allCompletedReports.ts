@@ -40,8 +40,10 @@ export default class AllCompletedReportsRoutes {
       ),
       viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
+      viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
       activeTab: 'viewCompletedReports',
       errors,
+      activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
     })
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -50,7 +52,7 @@ export default class AllCompletedReportsRoutes {
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
-        filter,
+        { ...filter, transfersOnly: false },
         pageRequestFrom(20, +req.query.pageNumber || 1)
       )
       return this.renderView(req, res, uiFilter, results, [])
@@ -62,7 +64,13 @@ export default class AllCompletedReportsRoutes {
       const uiFilter = uiFilterFromBody(req)
       const errors = validate(uiFilter)
       if (errors && errors.length !== 0) {
-        return this.renderView(req, res, uiFilter, { size: 20, number: 0, totalElements: 0, content: [] }, errors)
+        return this.renderView(
+          req,
+          res,
+          { ...uiFilter, transfersOnly: false },
+          { size: 20, number: 0, totalElements: 0, content: [] },
+          errors
+        )
       }
       return res.redirect(adjudicationUrls.allCompletedReports.urls.filter(uiFilter))
     })

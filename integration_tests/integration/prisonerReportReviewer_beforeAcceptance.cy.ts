@@ -191,6 +191,8 @@ context('Prisoner report - reviewer view', () => {
         jsonBody: {},
       },
     })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
     cy.signIn()
   })
   describe('report AWAITING REVIEW', () => {
@@ -202,7 +204,8 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.reportNumber().should('not.exist')
+      prisonerReportPage.printLink().should('not.exist')
       prisonerReportPage.returnLink().should('not.exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
@@ -289,9 +292,7 @@ context('Prisoner report - reviewer view', () => {
     })
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
-      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-
-      prisonerReportPage.reportNumber().should('contain.text', '12345')
+      cy.get('h1').should('contain.text', '12345')
     })
     it('should not show a link to the edit incident details page', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
@@ -379,7 +380,8 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.reportNumber().should('not.exist')
+      prisonerReportPage.printLink().should('not.exist')
       prisonerReportPage.returnLink().should('not.exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
@@ -437,7 +439,8 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.reportNumber().should('not.exist')
+      prisonerReportPage.printLink().should('not.exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.returnLink().contains('Return to all completed reports')
       prisonerReportPage.damageSummary().should('exist')

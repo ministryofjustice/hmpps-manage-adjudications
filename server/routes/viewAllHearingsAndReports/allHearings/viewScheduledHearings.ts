@@ -26,8 +26,10 @@ export default class viewScheduledHearingsRoutes {
       clearUrl: adjudicationUrls.viewScheduledHearings.urls.start(),
       viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
+      viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
       activeTab: 'viewScheduledHearings',
       errors,
+      activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
     })
   }
 

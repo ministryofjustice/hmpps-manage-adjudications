@@ -1,4 +1,5 @@
 import { HearingOutcomeAdjournReason, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
+import { wordLimitExceedingString } from '../../../utils/utils'
 import validateForm from './hearingAdjournValidation'
 
 describe('validateForm', () => {
@@ -45,6 +46,27 @@ describe('validateForm', () => {
     ).toEqual({
       href: '#adjournPlea',
       text: 'Select the plea for the offence',
+    })
+  })
+  it('character count - returns the expected response for a valid submit', () => {
+    expect(
+      validateForm({
+        adjournReason: HearingOutcomeAdjournReason.EVIDENCE,
+        adjournDetails: 'blah blah',
+        adjournPlea: HearingOutcomePlea.ABSTAIN,
+      })
+    ).toBeNull()
+  })
+  it('character count - returns the expected response for an invalid submit', () => {
+    expect(
+      validateForm({
+        adjournReason: HearingOutcomeAdjournReason.EVIDENCE,
+        adjournDetails: wordLimitExceedingString,
+        adjournPlea: HearingOutcomePlea.ABSTAIN,
+      })
+    ).toStrictEqual({
+      href: '#adjournDetails',
+      text: 'Your statement must be 4,000 characters or fewer',
     })
   })
 })

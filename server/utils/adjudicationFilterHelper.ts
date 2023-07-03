@@ -25,6 +25,7 @@ export type UiFilter = {
   fromDate: string
   toDate: string
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  transfersOnly?: boolean
 }
 
 export type DISUiFilter = {
@@ -59,6 +60,7 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
     status: req.query.status as ReportedAdjudicationStatus,
+    transfersOnly: req.query.transfersOnly as unknown as boolean,
   }
 }
 
@@ -71,6 +73,7 @@ export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
     status: uiFilter.status || allStatuses,
+    transfersOnly: uiFilter.transfersOnly,
   }
 }
 
@@ -165,6 +168,26 @@ export const reportedAdjudicationStatuses = (filter: UiFilter) => {
   const statuses = Object.keys(ReportedAdjudicationStatus)
 
   const filteredStatuses = statuses.filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
+
+  return filteredStatuses.map(key => {
+    return {
+      value: key,
+      text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
+      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+    }
+  })
+}
+
+export const transferredAdjudicationStatuses = (filter: UiFilter) => {
+  const statuses = Object.keys(ReportedAdjudicationStatus)
+
+  const filteredStatuses = statuses.filter(
+    key =>
+      key === ReportedAdjudicationStatus.UNSCHEDULED ||
+      key === ReportedAdjudicationStatus.REFER_INAD ||
+      key === ReportedAdjudicationStatus.REFER_POLICE ||
+      key === ReportedAdjudicationStatus.ADJOURNED
+  )
 
   return filteredStatuses.map(key => {
     return {

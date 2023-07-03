@@ -15,6 +15,10 @@ const errors: { [key: string]: FormError } = {
     href: '#notProceedDetails',
     text: 'Enter more details',
   },
+  WORD_COUNT_EXCEEDED: {
+    href: '#notProceedDetails',
+    text: 'Your statement must be 4,000 characters or fewer',
+  },
 }
 
 export default function validateForm({ notProceedReason, notProceedDetails }: NotProceedForm): FormError | null {
@@ -23,6 +27,6 @@ export default function validateForm({ notProceedReason, notProceedDetails }: No
   if (!notProceedDetails) {
     return errors.MISSING_DETAILS
   }
-
+  if (notProceedDetails.length > 4000) return errors.WORD_COUNT_EXCEEDED
   return null
 }

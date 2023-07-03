@@ -1,27 +1,50 @@
 
-.main-chart-panel {
-}
-
-.chart-with-data-panel {
+.main-chart-with-data-panel {
 }
 
 .chart-generic-panel {
+}
+
+.chart-generic-panel-vertical-bars-and-line {
   height: 500px;
   padding-left: 225px;
+}
+
+.chart-generic-panel-horizontal-bars {
+  padding-left: 20px;
 }
 
 .chart-table-panel {
 }
 
-.chart-table-panel-series {
+.vertical-chart-table-head-cell {
   width: 190px;
   font-weight: bold;
   text-align: right;
   padding-right: 40px;
 }
 
-.chart-table-panel-value {
+.vertical-chart-table-row-cell {
   width: 40px;
 }
 
+.horizontal-chart-table-head-cell {
+  width: 110px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+}
 
+.horizontal-chart-table-row-cell {
+  text-align: center;
+  line-height: 35px;
+  border: none;
+}
+
+.chart-horizontal-panel {
+  padding-top: 50px;
+  padding-left: 20px;
+}
+
+.chart-horizontal-panel-canvas {
+}

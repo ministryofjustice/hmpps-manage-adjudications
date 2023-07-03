@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class PunishmentsAndDamagesPage extends Page {
   constructor() {
-    super('Adjudication for report')
+    super('Adjudication for charge')
   }
 
   moneyCautionSummary = (): PageElement => cy.get('[data-qa="money-caution-summary"]')

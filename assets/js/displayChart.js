@@ -16,12 +16,5 @@ const CHART_COMMANDS = (function () {
 
   return {
     loadChart: loadChart,
-    loadCharts: chartSettingList => {
-      if (chartSettingList) {
-        chartSettingList.forEach(chartSettings => {
-          loadChart(chartSettings.chartData)
-        })
-      }
-    },
   }
 })()

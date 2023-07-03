@@ -1,4 +1,5 @@
 import { QuashGuiltyFindingReason } from '../../../data/HearingAndOutcomeResult'
+import { wordLimitExceedingString } from '../../../utils/utils'
 import validateForm from './reportAQuashedGuiltyFindingValidation'
 
 describe('validateForm', () => {
@@ -21,7 +22,7 @@ describe('validateForm', () => {
       text: 'Select why the guilty finding was quashed',
     })
   })
-  it('shows error when teh details is missing', () => {
+  it('shows error when the details is missing', () => {
     expect(
       validateForm({
         quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
@@ -30,6 +31,17 @@ describe('validateForm', () => {
     ).toEqual({
       href: '#quashDetails',
       text: 'Enter more details',
+    })
+  })
+  it('character count - returns the expected response for an invalid submit', () => {
+    expect(
+      validateForm({
+        quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
+        quashDetails: wordLimitExceedingString,
+      })
+    ).toStrictEqual({
+      href: '#quashDetails',
+      text: 'Your statement must be 4,000 characters or fewer',
     })
   })
 })

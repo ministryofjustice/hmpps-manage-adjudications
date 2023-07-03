@@ -77,6 +77,10 @@ describe('GET /all-completed-reports', () => {
   })
   it('should load the correct details', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+    reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
+      reviewTotal: 100,
+      transferReviewTotal: 2,
+    })
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
@@ -96,10 +100,14 @@ describe('POST /all-completed-reports', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
       .post(adjudicationUrls.allCompletedReports.root)
-      .send({ fromDate: { date: '01/01/2021' }, toDate: { date: '02/01/2021' }, status: 'AWAITING_REVIEW' })
+      .send({
+        fromDate: { date: '01/01/2021' },
+        toDate: { date: '02/01/2021' },
+        status: 'AWAITING_REVIEW',
+      })
       .expect(
         'Location',
-        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`
+        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=false`
       )
   })
   it('should render the not found page without the correct role', () => {

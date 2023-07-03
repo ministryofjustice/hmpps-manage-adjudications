@@ -1,7 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Add damages" %}
@@ -32,35 +32,36 @@
 
         {% include "../partials/addDamagesRadios.njk" %}
 
-        {{ govukTextarea({
-                    name: "damageDescription",
-                    id: "damageDescription",
-                    classes: "govuk-!-width-two-thirds",
-                    label: {
-                        text: "Add details about these damages",
-                        for: "damage-detail"
-                    },
-                    hint: {
-                        text: "This could be what was damaged or what needs to be cleaned, for example."
-                    },
-                    attributes: { "data-qa": "add-damages-description" },
-                    errorMessage: "damageDescription" | findError(errors),
-                    value: damageDescription
-                }) }}
+        {{ govukCharacterCount({
+          name: "damageDescription",
+          id: "damageDescription",
+          classes: "govuk-!-width-two-thirds",
+          label: {
+              text: "Add details about these damages",
+              for: "damage-detail"
+          },
+          hint: {
+              text: "This could be what was damaged or what needs to be cleaned, for example."
+          },
+          attributes: { "data-qa": "add-damages-description" },
+          errorMessage: "damageDescription" | findError(errors),
+          value: damageDescription,
+          maxlength: 4000
+        }) }}
 
         {{ govukButton({
-                    text: "Save and continue",
-                    type: "submit",
-                    classes: "govuk-button--submit govuk-!-margin-right-3",
-                    attributes: { "data-qa": "add-damages-submit" },
-                    preventDoubleClick: true
-                }) }}
+          text: "Save and continue",
+          type: "submit",
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "add-damages-submit" },
+          preventDoubleClick: true
+        }) }}
         {{ govukButton({
-                    text: "Cancel",
-                    href: cancelButtonHref,
-                    classes: "govuk-button--secondary",
-                    attributes: { "data-qa": "cancel-add-damages-button" }
-                }) }}
+          text: "Cancel",
+          href: cancelButtonHref,
+          classes: "govuk-button--secondary",
+          attributes: { "data-qa": "cancel-add-damages-button" }
+        }) }}
       </div>
     </div>
   </form>

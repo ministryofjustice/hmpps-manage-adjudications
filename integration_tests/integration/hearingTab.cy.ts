@@ -55,6 +55,7 @@ const hearingWithAdjournedOutcome = testData.singleHearing({
   id: 988,
   locationId: 234,
   oicHearingType: OicHearingType.INAD_ADULT,
+  agencyId: 'MDI',
   outcome: {
     id: 123,
     adjudicator: 'Judge Green',
@@ -81,6 +82,7 @@ const hearingWithReferToPoliceOutcome = testData.singleHearing({
   dateTimeOfHearing: hearingDateTimeTwo,
   id: 988,
   locationId: 234,
+  agencyId: 'LEI',
   oicHearingType: OicHearingType.INAD_ADULT,
   outcome: testData.hearingOutcome({ optionalItems: { details: 'This is my reason for referring.' } }),
 })
@@ -642,6 +644,14 @@ context('Hearing details page', () => {
         true
       ),
     })
+    cy.task('stubGetAgency', {
+      agencyId: 'MDI',
+      response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+    })
+    cy.task('stubGetAgency', {
+      agencyId: 'LEI',
+      response: { agencyId: 'LEI', description: 'Leeds (HMP)' },
+    })
     cy.signIn()
   })
   describe('Test scenarios - reviewer view', () => {
@@ -928,7 +938,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Adj 1, Moorland (HMP & YOI)')
           expect($summaryData.get(3).innerText).to.contain('Change')
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(5).innerText).to.contain('Change')
@@ -960,7 +970,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Green')
           expect($summaryData.get(4).innerText).to.contain('Change')
@@ -1041,7 +1051,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Green')
           expect($summaryData.get(4).innerText).to.contain('Adjourn the hearing for another reason')
@@ -1054,7 +1064,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
           expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Adj 1, Moorland (HMP & YOI)')
           expect($summaryData.get(3).innerText).to.contain('Change')
           expect($summaryData.get(4).innerText).to.contain('Governor')
           expect($summaryData.get(5).innerText).to.contain('Change')
@@ -1132,7 +1142,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Green')
           expect($summaryData.get(4).innerText).to.contain('Change')
@@ -1167,7 +1177,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Leeds (HMP)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
@@ -1204,7 +1214,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Leeds (HMP)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
@@ -1276,7 +1286,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Leeds (HMP)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the police')
@@ -1318,7 +1328,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
@@ -1351,7 +1361,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
@@ -1383,7 +1393,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
           expect($summaryData.get(1).innerText).to.contain('Change')
-          expect($summaryData.get(2).innerText).to.contain('Adj 1')
+          expect($summaryData.get(2).innerText).to.contain('Adj 1, Moorland (HMP & YOI)')
           expect($summaryData.get(3).innerText).to.contain('Change')
           expect($summaryData.get(4).innerText).to.contain('Governor')
         })
@@ -1409,7 +1419,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Change')
@@ -1447,7 +1457,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Governor')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Change')
@@ -1485,7 +1495,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Governor')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Change')
@@ -1696,7 +1706,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Governor')
         })
       hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
@@ -1712,7 +1722,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
@@ -1738,7 +1748,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Governor')
         })
       hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
@@ -1841,7 +1851,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(1).innerText).to.contain('Adj 1, Moorland (HMP & YOI)')
         })
     })
     it('Adjudication SCHEDULED multiple hearings to show', () => {
@@ -1867,7 +1877,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Green')
           expect($summaryData.get(4).innerText).to.contain('Adjourn the hearing for another reason')
@@ -1879,7 +1889,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeOneFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(1).innerText).to.contain('Adj 1, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Governor')
         })
       hearingTabPage.changeLink().should('not.exist')
@@ -1893,7 +1903,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 2')
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
@@ -1924,7 +1934,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
-          expect($summaryData.get(1).innerText).to.contain('Adj 1')
+          expect($summaryData.get(1).innerText).to.contain('Adj 1, Moorland (HMP & YOI)')
           expect($summaryData.get(2).innerText).to.contain('Governor')
         })
     })

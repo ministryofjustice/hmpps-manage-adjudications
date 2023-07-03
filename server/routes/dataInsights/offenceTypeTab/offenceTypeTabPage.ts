@@ -32,7 +32,7 @@ export default class OffenceTypeTabPage {
       errors: error ? [error] : [],
       chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.OFFENCE_TYPE),
-      chartSettingList: [],
+      chartSettingMap: {},
     })
   }
 

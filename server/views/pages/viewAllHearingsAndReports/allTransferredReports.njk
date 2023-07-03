@@ -1,0 +1,32 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{% from "../../macros/adjudicationFilter.njk" import adjudicationFilter %}
+{% from '../../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
+
+{% set title = "Adjudications" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {{ adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) }}
+
+  {{ adjudicationFilter(filter, checkboxes, errors, adjudicationUrls.allCompletedReports.urls.start(), csrfToken) }}
+
+  {% include '../../partials/reportsList.njk' %}
+
+  {% endblock %}

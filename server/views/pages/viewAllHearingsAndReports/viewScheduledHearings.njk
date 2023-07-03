@@ -21,7 +21,7 @@
   {% endif %}
   <h1 class="govuk-heading-l">Adjudications</h1>
 
-  {{ adjudicationTabHeaderAll(activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref) }}
+  {{ adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) }}
 
   {{ hearingsFilter(uiChosenDate, errors, clearUrl, csrfToken) }}
 

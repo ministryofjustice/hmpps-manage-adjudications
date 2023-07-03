@@ -206,6 +206,10 @@ context('Transfers flow', () => {
         cy.task('stubGetMovementByOffender', {
           response: testData.prisonerMovement({}),
         })
+        cy.task('stubGetAgency', {
+          agencyId: 'MDI',
+          response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+        })
       })
       it('all reports to prisoner report, tabs go to correct places', () => {
         cy.visit(adjudicationUrls.allCompletedReports.root)
@@ -451,6 +455,10 @@ context('Transfers flow', () => {
             reportedAdjudication: transferredPrisonersAdjudicationProvedPunishments,
           },
         })
+        cy.task('stubGetAgency', {
+          agencyId: 'MDI',
+          response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+        })
       })
       it('all reports to prisoner report, tabs go to correct places', () => {
         cy.visit(adjudicationUrls.allCompletedReports.root)
@@ -545,6 +553,7 @@ context('Transfer banner', () => {
   describe('User is in override agency', () => {
     beforeEach(() => {
       cy.task('stubUserOriginatingAgency', 'LEI')
+      cy.task('stubGetAgency', { agencyId: 'LEI', response: { agencyId: 'LEI', description: 'Leeds (HMP)' } })
       cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
       cy.task('stubGetUserFromUsername', {
         username: 'USER1',
@@ -624,8 +633,6 @@ context('Transfer banner', () => {
           reportedAdjudication: transferredPrisonersAdjudicationScheduled,
         },
       })
-      cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-
       cy.signIn()
     })
     it('prisoner report - scheduled - should show correct title and no extra content', () => {

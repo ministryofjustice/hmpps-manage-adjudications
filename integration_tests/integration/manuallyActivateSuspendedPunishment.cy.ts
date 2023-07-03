@@ -110,7 +110,7 @@ context('Manually activate an existing suspended punishment', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Enter report number')
+          expect($error.get(0).innerText).to.contain('Enter charge number')
         })
     })
     it('should error when no punishment type selected', () => {
