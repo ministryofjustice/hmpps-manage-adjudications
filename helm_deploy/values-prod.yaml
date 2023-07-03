@@ -2,7 +2,6 @@
 # Per environment values which override defaults in hmpps-manage-adjudications/values.yaml
 
 generic-service:
-  replicaCount: 4
 
   ingress:
     host: manage-adjudications.hmpps.service.justice.gov.uk
@@ -23,7 +22,6 @@ generic-service:
     MAINTENANCE_MODE: false
     DATA_INSIGHTS_FLAG: false
     TRANSFERS_FEATURE_FLAG: false
-
 
   allowlist:
     global-protect: "35.176.93.186/32"
