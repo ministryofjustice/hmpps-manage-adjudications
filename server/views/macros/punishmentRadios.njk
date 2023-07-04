@@ -1,7 +1,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, isIndependentAdjudicatorHearing, errors) %}
+{% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, isIndependentAdjudicatorHearing, showAdditionalDaysOptions, errors) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
@@ -11,7 +11,7 @@
       attributes: { "data-qa": "other-privilege" },
       errorMessage: errors | findErrors(["otherPrivilege"]),
       label: {
-          text: "Privilege to be withdrawn"
+        text: "Privilege to be withdrawn"
       }
     }) }}
   {% endset -%}
@@ -122,6 +122,8 @@
     ] %}
 
   {% if isIndependentAdjudicatorHearing %}
+    {% if showAdditionalDaysOptions %} 
+    {# This second check will be removed later, with the added days flag #}
     {% set radioButtonItems = (radioButtonItems.push({
       value: "ADDITIONAL_DAYS",
       text: "Additional days",
@@ -132,6 +134,7 @@
       text: "Prospective additional days",
       checked: punishmentType == 'PROSPECTIVE_DAYS'
     }), radioButtonItems) %}
+    {% endif %}
   {% endif %}
 
   {{ govukRadios({
