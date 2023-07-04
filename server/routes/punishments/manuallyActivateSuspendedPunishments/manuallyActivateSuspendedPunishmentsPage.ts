@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
 import validateForm from '../../punishment/punishmentValidation'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import config from '../../../config'
 
 type PageData = {
   error?: FormError
@@ -25,6 +26,9 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = pageData
 
+    // This is a placeholder until NN-5270
+    const isIndependentAdjudicatorHearing = false
+
     return res.render(`pages/manuallyActivateSuspendedPunishment.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       errors: error ? [error] : [],
@@ -33,6 +37,8 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
       otherPrivilege,
       stoppagePercentage,
       reportNumber,
+      isIndependentAdjudicatorHearing,
+      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 

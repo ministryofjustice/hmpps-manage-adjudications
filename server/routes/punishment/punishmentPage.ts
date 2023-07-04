@@ -8,6 +8,8 @@ import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -36,14 +38,19 @@ export default class PunishmentPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = pageData
+
+    const lastHearing = await this.reportedAdjudicationsService.getLatestHearing(adjudicationNumber, user)
+    const isIndependentAdjudicatorHearing = lastHearing.oicHearingType.includes('INAD')
 
     return res.render(`pages/punishment.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
@@ -52,6 +59,8 @@ export default class PunishmentPage {
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
+      isIndependentAdjudicatorHearing,
+      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 

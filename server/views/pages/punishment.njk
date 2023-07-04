@@ -26,7 +26,7 @@
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, errors) }}
+      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, isIndependentAdjudicatorHearing, showAdditionalDaysOptions, errors) }}
       <div class="govuk-button-group">
         {{ govukButton({
               text: 'Continue',
