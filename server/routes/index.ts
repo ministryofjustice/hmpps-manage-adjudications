@@ -287,10 +287,7 @@ export default function routes(
     punishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, punishmentsService })
   )
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
-  router.use(
-    adjudicationUrls.punishment.root,
-    PunishmentRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-  )
+  router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
 
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))

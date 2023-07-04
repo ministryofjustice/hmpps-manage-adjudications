@@ -24,10 +24,13 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = pageData
 
-    // This is a placeholder until NN-5270
-    const isIndependentAdjudicatorHearing = false
+    const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
+      adjudicationNumber,
+      user
+    )
 
     return res.render(`pages/manuallyActivateSuspendedPunishment.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),

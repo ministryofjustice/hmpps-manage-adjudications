@@ -152,4 +152,13 @@ export default class PunishmentsService {
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).removePunishmentComment(adjudicationNumber, id)
   }
+
+  async checkAdditionalDaysAvailability(adjudicationNumber: number, user: User): Promise<boolean> {
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
+      adjudicationNumber
+    )
+    if (!reportedAdjudication.hearings?.length) return false
+    const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
+    return lastHearing.oicHearingType.includes('INAD')
+  }
 }
