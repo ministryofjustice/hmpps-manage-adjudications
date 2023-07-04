@@ -111,7 +111,7 @@ export default class PunishmentPage {
         stoppagePercentage: stoppageOfEarningsPercentage,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req)
+    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req, punishmentType as PunishmentType)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
@@ -120,7 +120,13 @@ export default class PunishmentPage {
     )
   }
 
-  private getRedirectUrl = (adjudicationNumber: number, req: Request) => {
+  private getRedirectUrl = (adjudicationNumber: number, req: Request, punishmentType: PunishmentType) => {
+    if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
+      if (this.pageOptions.isEdit()) {
+        return adjudicationUrls.numberOfAdditionalDays.urls.edit(adjudicationNumber, req.params.redisId)
+      }
+      return adjudicationUrls.numberOfAdditionalDays.urls.start(adjudicationNumber)
+    }
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.punishmentSchedule.urls.edit(adjudicationNumber, req.params.redisId)
     }
