@@ -517,6 +517,221 @@ context('Adjudication data', () => {
         proportion_round: 0.09,
       },
     ]
+    const chartEntries3b = [
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Possession of unauthorised articles, or drugs or alcohol related',
+        count: 75.0,
+        proportion: 0.03987240829346093,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+        count: 81.0,
+        proportion: 0.0430622009569378,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Arson or damage to the prison or property',
+        count: 52.0,
+        proportion: 0.02764486975013291,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Assault, fighting, or endangering the health or personal safety of others',
+        count: 81.0,
+        proportion: 0.0430622009569378,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type:
+          'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+        count: 87.0,
+        proportion: 0.046251993620414676,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Unknown',
+        count: 99.0,
+        proportion: 0.05263157894736842,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Stopping someone who is not a prisoner from doing their job',
+        count: 41.0,
+        proportion: 0.021796916533758637,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Disrespectful, threatening, abusive, or insulting behaviour',
+        count: 71.0,
+        proportion: 0.037745879851143006,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Escape or failure to comply with temporary release conditions',
+        count: 88.0,
+        proportion: 0.04678362573099415,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Detains another person',
+        count: 65.0,
+        proportion: 0.03455608718766613,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Possession of unauthorised articles, or drugs or alcohol related',
+        count: 29.0,
+        proportion: 0.01541733120680489,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+        count: 48.0,
+        proportion: 0.025518341307814992,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Arson or damage to the prison or property',
+        count: 67.0,
+        proportion: 0.03561935140882509,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Assault, fighting, or endangering the health or personal safety of others',
+        count: 18.0,
+        proportion: 0.009569377990430622,
+        proportion_round: 0.01,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type:
+          'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+        count: 89.0,
+        proportion: 0.04731525784157363,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Unknown',
+        count: 67.0,
+        proportion: 0.03561935140882509,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Stopping someone who is not a prisoner from doing their job',
+        count: 42.0,
+        proportion: 0.022328548644338118,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Disrespectful, threatening, abusive, or insulting behaviour',
+        count: 42.0,
+        proportion: 0.022328548644338118,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Escape or failure to comply with temporary release conditions',
+        count: 71.0,
+        proportion: 0.037745879851143006,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Detains another person',
+        count: 66.0,
+        proportion: 0.03508771929824561,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Possession of unauthorised articles, or drugs or alcohol related',
+        count: 79.0,
+        proportion: 0.04199893673577884,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+        count: 82.0,
+        proportion: 0.043593833067517275,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Arson or damage to the prison or property',
+        count: 82.0,
+        proportion: 0.043593833067517275,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Assault, fighting, or endangering the health or personal safety of others',
+        count: 60.0,
+        proportion: 0.03189792663476874,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type:
+          'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+        count: 89.0,
+        proportion: 0.04731525784157363,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Unknown',
+        count: 42.0,
+        proportion: 0.022328548644338118,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Stopping someone who is not a prisoner from doing their job',
+        count: 73.0,
+        proportion: 0.03880914407230197,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Disrespectful, threatening, abusive, or insulting behaviour',
+        count: 16.0,
+        proportion: 0.008506113769271665,
+        proportion_round: 0.01,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Escape or failure to comply with temporary release conditions',
+        count: 63.0,
+        proportion: 0.03349282296650718,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Detains another person',
+        count: 16.0,
+        proportion: 0.008506113769271665,
+        proportion_round: 0.01,
+      },
+    ]
     const chartEntries = {
       '1a': chartEntries1a1b,
       '1b': chartEntries1a1b,
@@ -524,6 +739,7 @@ context('Adjudication data', () => {
       '1f': chartEntries1f,
       '2a': chartEntries2a,
       '2b': chartEntries2b,
+      '3b': chartEntries3b,
     }
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'MDI',
@@ -579,6 +795,15 @@ context('Adjudication data', () => {
         chartEntries: chartEntries['2b'],
       } as ChartDetailsResult,
     })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '3b',
+      response: {
+        agencyId: 'MDI',
+        chartName: '3b',
+        chartEntries: chartEntries['3b'],
+      } as ChartDetailsResult,
+    })
     cy.signIn()
   })
 
@@ -602,12 +827,17 @@ context('Adjudication data', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkChartTitle('Percentage and number of prisoners in the establishment currently (2a)')
+    page.checkChartTitle(
+      'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability – last 30 days (2b)'
+    )
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkChartTitle('Adjudication offence type by location – last 30 days (3b)')
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {

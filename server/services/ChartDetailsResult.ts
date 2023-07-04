@@ -17,6 +17,7 @@ export interface ChartEntryVerticalBar {
 
 export interface ChartEntryHorizontalBar {
   incident_loc?: string
+  offence_type?: string
   wing_loc?: string
   value?: string
   characteristic?: string

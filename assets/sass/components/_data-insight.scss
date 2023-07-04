@@ -51,12 +51,23 @@
 
 .protected-characteristics-and-vulnerabilities-tab {
 
-  .protected-characteristic-select {
+  .filter-selector {
     width: 295px;
   }
 
   .show-results-button {
     margin-top: 30px;
     margin-left: -90px;
+  }
+}
+
+.offence-type-tab {
+
+  .filter-selector {
+  }
+
+  .show-results-button {
+    margin-top: 30px;
+    margin-left: 5px;
   }
 }

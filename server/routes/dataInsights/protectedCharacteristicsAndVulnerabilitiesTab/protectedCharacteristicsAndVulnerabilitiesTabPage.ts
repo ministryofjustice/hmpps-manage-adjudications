@@ -38,23 +38,23 @@ const getHorizontalBarsChartHeadByCharacteristic = (characteristic: string) => {
 export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
   pageOptions: PageOptions
 
-  protectedCharacteristics: ProtectedCharacteristic[]
-
   constructor(private readonly chartService: ChartService) {
     this.pageOptions = new PageOptions()
-    this.protectedCharacteristics = ProtectedCharacteristic.getProtectedCharacteristicsAndVulnerabilitiesValues()
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const characteristic = ProtectedCharacteristic.valueOfOrElse(
-      req.query.characteristic as string,
-      this.protectedCharacteristics[0]
-    )
-
     const { error } = pageData
     const { user } = res.locals
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
+
+    const protectedCharacteristics: ProtectedCharacteristic[] =
+      ProtectedCharacteristic.getProtectedCharacteristicsAndVulnerabilitiesValues()
+
+    const characteristic = ProtectedCharacteristic.valueOfOrElse(
+      req.query.characteristic as string,
+      protectedCharacteristics[0]
+    )
 
     const chartSettingMap = {}
 
@@ -92,13 +92,11 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       getHorizontalBarsChartHeadByCharacteristic(characteristic.text)
     )
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, '1a')
     return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
       errors: error ? [error] : [],
-      chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES),
       chartSettingMap,
-      protectedCharacteristics: this.protectedCharacteristics,
+      protectedCharacteristics,
       characteristic: characteristic.value,
     })
   }

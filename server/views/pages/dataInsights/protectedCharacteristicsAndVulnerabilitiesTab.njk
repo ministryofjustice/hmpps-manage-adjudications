@@ -1,6 +1,5 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
@@ -36,7 +35,7 @@
               classes: ''
             },
             items: protectedCharacteristics | toSelect('value', 'text', characteristic),
-            classes: 'flex-column protected-characteristic-select',
+            classes: 'flex-column filter-selector',
             errorMessage: 'characteristic' | findError(errors)
           }) }}
 

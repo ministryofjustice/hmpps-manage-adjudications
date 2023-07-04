@@ -10,8 +10,10 @@ export default function offenceTypeRoutes({ chartService }: { chartService: Char
   const route = new OffenceTypeRoutes(chartService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.dataInsights.matchers.start, route.view)
+  post(adjudicationUrls.dataInsights.matchers.start, route.submit)
 
   return router
 }

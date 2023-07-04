@@ -745,7 +745,10 @@ const adjudicationUrls = {
         `${adjudicationUrls.dataInsights.root}${
           adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities
         }${characteristic ? `?characteristic=${characteristic}` : ''}`,
-      offenceType: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}`,
+      offenceType: (offenceType?: string) =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
+          offenceType ? `?offence-type=${offenceType}` : ''
+        }`,
       punishments: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}`,
       pleasAndFindings: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.pleasAndFindings}`,

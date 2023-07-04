@@ -1,7 +1,9 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
 
 {% set title = "Adjudication data - Offence type" %}
 
@@ -15,7 +17,45 @@
 
 {% block content %}
 
-  {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+  <div class="offence-type-tab">
+
+    {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+    <div>
+      <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        <div class="flex-container">
+          {{ govukSelect({
+            id: 'offenceType',
+            name: 'offenceType',
+            label: {
+              text: 'Select offence type',
+              isPageHeading: false,
+              classes: ''
+            },
+            items: offenceTypes | toSelect('value', 'text', offenceType),
+            classes: 'flex-column filter-selector',
+            errorMessage: 'offenceType' | findError(errors)
+          }) }}
+
+          {{ govukButton({
+            text: 'Show results',
+            type: 'submit',
+            preventDoubleClick: true,
+            classes: 'govuk-button--submit govuk-!-margin-right-3 flex-column show-results-button',
+            attributes: { 'data-qa': 'not-proceed-submit' }
+          }) }}
+        </div>
+
+      </form>
+    </div>
+
+    <div class="govuk-!-margin-bottom-6 main-chart-panel">
+      {{ horizontalBarsChart(chartSettingMap['3b']) }}
+    </div>
+
+  </div>
 
 {% endblock %}
 
