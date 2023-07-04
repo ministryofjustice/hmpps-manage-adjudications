@@ -3,6 +3,7 @@ import {
   ChartDetailsResult,
   ChartEntryHorizontalBar,
   ChartEntryVerticalBar,
+  DataFilter,
   getMonthShortName,
   HorizontalTableCell,
 } from '../../services/ChartDetailsResult'
@@ -49,11 +50,17 @@ export const produceHorizontalBarsChart = async (
   agencyId: string,
   chartTitle: string,
   chartDetails: ChartDetailsResult,
+  dataFilter: DataFilter,
   labelFieldSource: HorizontalTableCell,
   barsDataSource: HorizontalTableCell,
-  rowsSource: HorizontalTableCell[]
+  rowsSource: HorizontalTableCell[],
+  head: { text: string; classes: string }[]
 ) => {
-  const chartEntries = chartDetails.chartEntries as ChartEntryHorizontalBar[]
+  const chartEntries = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).filter(
+    (row: ChartEntryHorizontalBar) => {
+      return dataFilter.filter(row)
+    }
+  )
 
   const barData = chartEntries.map((row: ChartEntryHorizontalBar) => {
     return barsDataSource.source(row) as number
@@ -68,7 +75,7 @@ export const produceHorizontalBarsChart = async (
     chartTitle,
     barData,
     labels,
-    head: getHorizontalBarsChartHead(),
+    head,
     rows: getHorizontalBarsChartRows(chartEntries, rowsSource),
   })
 }

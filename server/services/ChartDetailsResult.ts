@@ -18,6 +18,8 @@ export interface ChartEntryVerticalBar {
 export interface ChartEntryHorizontalBar {
   incident_loc?: string
   wing_loc?: string
+  value?: string
+  characteristic?: string
   count: number
   proportion: number
   proportion_round: number
@@ -25,6 +27,10 @@ export interface ChartEntryHorizontalBar {
 
 export interface HorizontalTableCell {
   source: ((row: ChartEntryHorizontalBar) => string) | ((row: ChartEntryHorizontalBar) => number)
+}
+
+export interface DataFilter {
+  filter: (row: ChartEntryHorizontalBar) => boolean
 }
 
 export const MONTH_SHORT_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

@@ -5,7 +5,11 @@ import ChartService from '../../../services/chartService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { produceHorizontalBarsChart, produceVerticalBarsAndLineCharts } from '../chartService'
+import {
+  getHorizontalBarsChartHead,
+  produceHorizontalBarsChart,
+  produceVerticalBarsAndLineCharts,
+} from '../chartService'
 
 type PageData = {
   error?: FormError
@@ -52,13 +56,15 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Total adjudications by location of adjudication offence – last 30 days (1d)',
       await this.chartService.getChart(username, agencyId, '1d'),
+      { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
-      ]
+      ],
+      getHorizontalBarsChartHead()
     )
 
     chartSettingMap['1f'] = await produceHorizontalBarsChart(
@@ -67,13 +73,15 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Total adjudications by residential location of offender – last 30 days (1f)',
       await this.chartService.getChart(username, agencyId, '1f'),
+      { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.wing_loc },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => row.wing_loc },
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
-      ]
+      ],
+      getHorizontalBarsChartHead()
     )
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {
