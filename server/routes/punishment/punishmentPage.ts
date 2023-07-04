@@ -8,7 +8,6 @@ import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import config from '../../config'
 
 type PageData = {
@@ -38,8 +37,7 @@ export default class PunishmentPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly punishmentsService: PunishmentsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -49,8 +47,10 @@ export default class PunishmentPage {
     const { user } = res.locals
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = pageData
 
-    const lastHearing = await this.reportedAdjudicationsService.getLatestHearing(adjudicationNumber, user)
-    const isIndependentAdjudicatorHearing = lastHearing.oicHearingType.includes('INAD')
+    const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
+      adjudicationNumber,
+      user
+    )
 
     return res.render(`pages/punishment.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),

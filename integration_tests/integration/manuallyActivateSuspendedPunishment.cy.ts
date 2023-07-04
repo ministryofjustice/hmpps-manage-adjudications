@@ -7,7 +7,7 @@ import AwardPunishmentsPage from '../pages/awardPunishments'
 import CheckPunishmentsPage from '../pages/checkPunishments'
 import PunishmentsAndDamagesPage from '../pages/punishmentsAndDamages'
 import { forceDateInput } from '../componentDrivers/dateInput'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { HearingOutcomeCode, OutcomeCode } from '../../server/data/HearingAndOutcomeResult'
 
@@ -45,6 +45,25 @@ context('Manually activate an existing suspended punishment', () => {
                 }),
               },
             },
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 101,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-03-10T22:00:00',
+              oicHearingType: OicHearingType.INAD_ADULT,
+              outcome: testData.hearingOutcome({
+                code: HearingOutcomeCode.COMPLETE,
+              }),
+            }),
           ],
         }),
       },
@@ -88,6 +107,8 @@ context('Manually activate an existing suspended punishment', () => {
       punishmentPage.submitButton().should('exist')
       punishmentPage.cancelButton().should('exist')
       punishmentPage.punishment().should('exist')
+      cy.get('#punishmentType-8').should('not.exist')
+      cy.get('#punishmentType-9').should('not.exist')
     })
     it('cancel link goes back to punishments page', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100))
@@ -96,6 +117,13 @@ context('Manually activate an existing suspended punishment', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
       })
+    })
+    it('should show additional days and prospective additional days radios if the hearing is IA', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(101))
+      cy.get('#punishmentType-8').should('exist')
+      cy.get('[for="punishmentType-8"]').should('include.text', 'Additional days')
+      cy.get('#punishmentType-9').should('exist')
+      cy.get('[for="punishmentType-9"]').should('include.text', 'Prospective additional days')
     })
   })
 
