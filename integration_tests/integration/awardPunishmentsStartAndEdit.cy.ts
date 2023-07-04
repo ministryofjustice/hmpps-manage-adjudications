@@ -8,7 +8,7 @@ import AwardPunishmentsPage from '../pages/awardPunishments'
 import PunishmentSchedulePage from '../pages/punishmentSchedule'
 import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
-import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 context('e2e tests to create and edit punishments and schedules with redis', () => {
@@ -28,10 +28,36 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         reportedAdjudication: {
           ...testData.reportedAdjudication({
             punishments: [],
-            adjudicationNumber: 3,
+            adjudicationNumber: 100,
             prisonerNumber: 'G6415GD',
             locationId: 25538,
             offenceDetails: { offenceCode: 1001 },
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2024-11-23T17:00:00',
+                id: 68,
+              }),
+            ],
+          }),
+        },
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: {
+          ...testData.reportedAdjudication({
+            punishments: [],
+            adjudicationNumber: 101,
+            prisonerNumber: 'G6415GD',
+            locationId: 25538,
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2024-11-23T17:00:00',
+                oicHearingType: OicHearingType.INAD_ADULT,
+                id: 69,
+              }),
+            ],
           }),
         },
       },
@@ -242,8 +268,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it.skip('create and edit punishments - PROSPECTIVE DAYS', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
+    it('create and edit punishments - PROSPECTIVE DAYS', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start(101))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
       awardPunishmentsPage.newPunishment().click()

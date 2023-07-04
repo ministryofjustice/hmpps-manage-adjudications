@@ -2,6 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
+import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
 context('Add a new punishment', () => {
@@ -14,6 +15,39 @@ context('Add a new punishment', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetReportedAdjudication', {
+      id: 100,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 101,
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 60,
+              oicHearingType: OicHearingType.INAD_YOI,
+            }),
+          ],
+        }),
+      },
+    })
     cy.signIn()
   })
   describe('Loads', () => {
@@ -31,6 +65,13 @@ context('Add a new punishment', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
       })
+    })
+    it('should show additional days and prospective additional days radios if the hearing is IA', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start(101))
+      cy.get('#punishmentType-8').should('exist')
+      cy.get('[for="punishmentType-8"]').should('include.text', 'Additional days')
+      cy.get('#punishmentType-9').should('exist')
+      cy.get('[for="punishmentType-9"]').should('include.text', 'Prospective additional days')
     })
   })
 
