@@ -13,9 +13,14 @@ const errors: { [key: string]: FormError } = {
     href: '#days',
     text: 'Enter one or more days',
   },
+  NOT_NUMERICAL: {
+    href: '#days',
+    text: 'Enter a number of days',
+  },
 }
 
 export default function validateForm({ days }: NumberOfAddedDaysForm): FormError | null {
+  if (Number.isNaN(days) || typeof days === 'string') return errors.NOT_NUMERICAL
   if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
   if (days === undefined || days === null || !days) return errors.MISSING_DAYS
   return null

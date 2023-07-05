@@ -1,22 +1,14 @@
 import validateForm from './numberOfAdditionalDaysValidation'
 
 describe('validateForm', () => {
-  it('Valid submit when prospective days', () => {
+  it('Valid submit when days correct', () => {
     expect(
       validateForm({
         days: 10,
       })
     ).toBeNull()
   })
-
-  it('Valid submit when additional days', () => {
-    expect(
-      validateForm({
-        days: 10,
-      })
-    ).toBeNull()
-  })
-  it('shows error when no days select', () => {
+  it('shows error when no days entered', () => {
     expect(
       validateForm({
         days: null,
@@ -24,6 +16,17 @@ describe('validateForm', () => {
     ).toEqual({
       href: '#days',
       text: 'Enter how many days the punishment will last',
+    })
+  })
+  it('shows error when something other than a number is entered', () => {
+    expect(
+      validateForm({
+        // @ts-expect-error: Ignore typecheck here
+        days: 'hello',
+      })
+    ).toEqual({
+      href: '#days',
+      text: 'Enter a number of days',
     })
   })
   it('shows error when too few days are entered', () => {

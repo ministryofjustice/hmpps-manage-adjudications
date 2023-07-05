@@ -796,7 +796,7 @@ describe('reportedAdjudicationsService', () => {
       ])
     })
   })
-  describe.only('getOutcomesHistory', () => {
+  describe('getOutcomesHistory', () => {
     it('returns empty array if there is no history present', async () => {
       const result = await service.getOutcomesHistory([], user)
       expect(result).toEqual([])
