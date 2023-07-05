@@ -646,6 +646,30 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
+  numberOfAdditionalDays: {
+    root: '/number-additional-days',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:redisId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/edit/${redisId}`,
+    },
+  },
+  isPunishmentSuspended: {
+    root: '/punishment-suspended',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:redisId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.isPunishmentSuspended.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.isPunishmentSuspended.root}/${adjudicationNumber}/edit/${redisId}`,
+    },
+  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {

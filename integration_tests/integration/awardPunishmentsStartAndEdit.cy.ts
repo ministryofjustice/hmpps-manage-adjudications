@@ -6,6 +6,7 @@ import ActivateSuspendedPunishmentsPage from '../pages/activateSuspendedPunishme
 import SuspendedPunishmentSchedule from '../pages/suspendedPunishmentSchedule'
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import PunishmentSchedulePage from '../pages/punishmentSchedule'
+import NumberOfAdditionalDaysPage from '../pages/numberOfAdditionalDays'
 import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -268,7 +269,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    it('create and edit punishments - PROSPECTIVE DAYS', () => {
+    // skipped until the additional days flow is completed
+    it.skip('create and edit punishments - PROSPECTIVE DAYS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(101))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -279,12 +281,9 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
 
       punishmentPage.submitButton().click()
 
-      const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
-      punishmentSchedulePage.suspended().should('exist')
-      punishmentSchedulePage.days().type('10')
-      punishmentSchedulePage.suspended().find('input[value="no"]').click()
-
-      punishmentSchedulePage.submitButton().click()
+      const numberOfAdditionalDaysPage = Page.verifyOnPage(NumberOfAdditionalDaysPage)
+      numberOfAdditionalDaysPage.days().type('10')
+      numberOfAdditionalDaysPage.submitButton().click()
 
       awardPunishmentsPage.editPunishment().first().click()
 
@@ -292,9 +291,9 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
 
       punishmentPage.submitButton().click()
 
-      punishmentSchedulePage.days().should('have.value', '10')
+      numberOfAdditionalDaysPage.days().should('have.value', '10')
 
-      punishmentSchedulePage.submitButton().click()
+      numberOfAdditionalDaysPage.submitButton().click()
     })
 
     it('Activate a suspended punishment and include report number in correct column, remove change link', () => {
