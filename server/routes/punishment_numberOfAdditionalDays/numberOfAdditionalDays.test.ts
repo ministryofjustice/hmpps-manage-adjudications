@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
 import PunishmentsService from '../../services/punishmentsService'
+import config from '../../config'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')
@@ -16,6 +17,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  config.addedDaysFlag = 'true'
 })
 
 afterEach(() => {
@@ -38,7 +40,7 @@ describe('GET number of additional days page', () => {
 })
 
 describe('GET number of additional days page', () => {
-  it('should load the `Not proceed` page', () => {
+  it('should load the page', () => {
     return request(app)
       .get(adjudicationUrls.numberOfAdditionalDays.urls.start(100))
       .expect('Content-Type', /html/)
@@ -57,14 +59,14 @@ describe('POST number of additional days page', () => {
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
       )
       .send({
-        days: 10,
+        numberOfDays: 10,
       })
       .expect(302)
       .expect(
         'Location',
         `${adjudicationUrls.isPunishmentSuspended.urls.start(
           100
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&numberOfDays=10`
       )
   })
 })

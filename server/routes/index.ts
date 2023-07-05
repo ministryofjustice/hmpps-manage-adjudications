@@ -290,11 +290,12 @@ export default function routes(
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
-  router.use(
-    adjudicationUrls.numberOfAdditionalDays.root,
-    NumberOfAdditionalDaysRoutes({ userService, punishmentsService })
-  )
-
+  if (config.addedDaysFlag === 'true') {
+    router.use(
+      adjudicationUrls.numberOfAdditionalDays.root,
+      NumberOfAdditionalDaysRoutes({ userService, punishmentsService })
+    )
+  }
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
   router.use(

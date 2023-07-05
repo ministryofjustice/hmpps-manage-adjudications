@@ -4,17 +4,17 @@ describe('validateForm', () => {
   it('Valid submit when days correct', () => {
     expect(
       validateForm({
-        days: 10,
+        numberOfDays: 10,
       })
     ).toBeNull()
   })
   it('shows error when no days entered', () => {
     expect(
       validateForm({
-        days: null,
+        numberOfDays: null,
       })
     ).toEqual({
-      href: '#days',
+      href: '#numberOfDays',
       text: 'Enter how many days the punishment will last',
     })
   })
@@ -22,20 +22,20 @@ describe('validateForm', () => {
     expect(
       validateForm({
         // @ts-expect-error: Ignore typecheck here
-        days: 'hello',
+        numberOfDays: 'hello',
       })
     ).toEqual({
-      href: '#days',
+      href: '#numberOfDays',
       text: 'Enter a number of days',
     })
   })
   it('shows error when too few days are entered', () => {
     expect(
       validateForm({
-        days: 0,
+        numberOfDays: 0,
       })
     ).toEqual({
-      href: '#days',
+      href: '#numberOfDays',
       text: 'Enter one or more days',
     })
   })

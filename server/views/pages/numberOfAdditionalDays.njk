@@ -27,11 +27,11 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {{ govukInput({
-        id: "days",
-        name: "days",
-        value: days,
+        id: "numberOfDays",
+        name: "numberOfDays",
+        value: numberOfDays,
         classes: "govuk-input--width-5",
-        errorMessage: errors | findErrors(["days"])
+        errorMessage: errors | findErrors(["numberOfDays"])
       }) }}
 
       <div class="govuk-button-group">

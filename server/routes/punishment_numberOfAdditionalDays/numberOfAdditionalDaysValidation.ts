@@ -1,27 +1,27 @@
 import { FormError } from '../../@types/template'
 
 type NumberOfAddedDaysForm = {
-  days: number
+  numberOfDays: number
 }
 
 const errors: { [key: string]: FormError } = {
-  MISSING_DAYS: {
-    href: '#days',
-    text: 'Enter how many days the punishment will last',
+  NOT_NUMERICAL: {
+    href: '#numberOfDays',
+    text: 'Enter a number of days',
   },
   DAYS_TOO_FEW: {
-    href: '#days',
+    href: '#numberOfDays',
     text: 'Enter one or more days',
   },
-  NOT_NUMERICAL: {
-    href: '#days',
-    text: 'Enter a number of days',
+  MISSING_DAYS: {
+    href: '#numberOfDays',
+    text: 'Enter how many days the punishment will last',
   },
 }
 
-export default function validateForm({ days }: NumberOfAddedDaysForm): FormError | null {
-  if (Number.isNaN(days) || typeof days === 'string') return errors.NOT_NUMERICAL
-  if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
-  if (days === undefined || days === null || !days) return errors.MISSING_DAYS
+export default function validateForm({ numberOfDays }: NumberOfAddedDaysForm): FormError | null {
+  if (Number.isNaN(numberOfDays) || typeof numberOfDays === 'string') return errors.NOT_NUMERICAL
+  if (Number.isInteger(numberOfDays) && numberOfDays <= 0) return errors.DAYS_TOO_FEW
+  if (numberOfDays === undefined || numberOfDays === null || !numberOfDays) return errors.MISSING_DAYS
   return null
 }

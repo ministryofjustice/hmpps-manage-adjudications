@@ -10,7 +10,7 @@ import PunishmentsService from '../../services/punishmentsService'
 
 type PageData = {
   error?: FormError
-  days?: number
+  numberOfDays?: number
 }
 
 export enum PageRequestType {
@@ -39,12 +39,12 @@ export default class PunishmentSchedulePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { error, days } = pageData
+    const { error, numberOfDays } = pageData
 
     return res.render(`pages/numberOfAdditionalDays.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       errors: error ? [error] : [],
-      days,
+      numberOfDays,
     })
   }
 
@@ -63,7 +63,7 @@ export default class PunishmentSchedulePage {
         req.params.redisId
       )
       return this.renderView(req, res, {
-        days: sessionData.days,
+        numberOfDays: sessionData.numberOfDays,
       })
     }
 
@@ -72,25 +72,25 @@ export default class PunishmentSchedulePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { days } = req.body
+    const { numberOfDays } = req.body
 
-    const trimmedDays = days ? Number(String(days).trim()) : null
+    const trimmedDays = numberOfDays ? Number(String(numberOfDays).trim()) : null
 
     const error = validateForm({
-      days: trimmedDays,
+      numberOfDays: trimmedDays,
     })
 
     if (error)
       return this.renderView(req, res, {
         error,
-        days: trimmedDays,
+        numberOfDays: trimmedDays,
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { ...req.query, days: trimmedDays },
+        query: { ...req.query, numberOfDays: trimmedDays },
       })
     )
   }
