@@ -1,13 +1,13 @@
 import { Express } from 'express'
 import request from 'supertest'
-import appWithAllRoutes from '../testutils/appSetup'
-import adjudicationUrls from '../../utils/urlGenerator'
-import UserService from '../../services/userService'
-import PunishmentsService from '../../services/punishmentsService'
-import config from '../../config'
+import appWithAllRoutes from '../../testutils/appSetup'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import UserService from '../../../services/userService'
+import PunishmentsService from '../../../services/punishmentsService'
+import config from '../../../config'
 
-jest.mock('../../services/userService')
-jest.mock('../../services/punishmentsService')
+jest.mock('../../../services/userService')
+jest.mock('../../../services/punishmentsService')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null) as jest.Mocked<PunishmentsService>
@@ -59,14 +59,14 @@ describe('POST number of additional days page', () => {
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
       )
       .send({
-        numberOfDays: 10,
+        days: 10,
       })
       .expect(302)
       .expect(
         'Location',
         `${adjudicationUrls.isPunishmentSuspended.urls.start(
           100
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&numberOfDays=10`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )
   })
 })

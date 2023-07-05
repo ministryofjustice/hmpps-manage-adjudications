@@ -67,7 +67,8 @@ import PunishmentCommentRoutes from './punishmentComment'
 import PunishmentRoutes from './punishment'
 import awardPunishmentsRoutes from './punishments/awardPunishments'
 import PunishmentScheduleRoutes from './punishmentSchedule'
-import NumberOfAdditionalDaysRoutes from './punishment_numberOfAdditionalDays'
+import numberOfAdditionalDaysRoutes from './additionalDays/numberOfAdditionalDays'
+import willPunishmentBeSuspendedRoutes from './additionalDays/willPunishmentBeSuspended'
 import checkPunishmentRoutes from './punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedPunishments'
 import suspendedPunishmentScheduleRoutes from './suspendedPunishmentSchedule'
@@ -293,7 +294,11 @@ export default function routes(
   if (config.addedDaysFlag === 'true') {
     router.use(
       adjudicationUrls.numberOfAdditionalDays.root,
-      NumberOfAdditionalDaysRoutes({ userService, punishmentsService })
+      numberOfAdditionalDaysRoutes({ userService, punishmentsService })
+    )
+    router.use(
+      adjudicationUrls.isPunishmentSuspended.root,
+      willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
     )
   }
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
