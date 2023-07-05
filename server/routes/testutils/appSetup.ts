@@ -22,7 +22,7 @@ import OutcomesService from '../../services/outcomesService'
 import PunishmentsService from '../../services/punishmentsService'
 
 import type { ApplicationInfo } from '../../applicationInfo'
-import ChartService from '../../services/chartService'
+import ChartApiService from '../../services/chartApiService'
 
 const testAppInfo: ApplicationInfo = {
   applicationName: 'test',
@@ -127,7 +127,7 @@ export default function appWithAllRoutes(
       outcomesService: {} as OutcomesService,
       punishmentsService: {} as PunishmentsService,
       applicationInfo: {} as ApplicationInfo,
-      chartService: {} as ChartService,
+      chartApiService: {} as ChartApiService,
       ...overrides,
     }),
     production,

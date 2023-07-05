@@ -3,26 +3,26 @@ import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import config from '../../../config'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import TestData from '../../testutils/testData'
 
-jest.mock('../../../services/chartService.ts')
+jest.mock('../../../services/chartApiService.ts')
 
 const testData = new TestData()
-const chartService = new ChartService(null) as jest.Mocked<ChartService>
+const chartApiService = new ChartApiService(null) as jest.Mocked<ChartApiService>
 
 let app: Express
 const defaultConfig = config
 
 beforeEach(() => {
-  chartService.getChart.mockResolvedValue(
+  chartApiService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
       agencyId: 'MDI',
-      chartName: '1a',
+      chartName: '3b',
       chartEntries: [],
     })
   )
-  app = appWithAllRoutes({ production: false }, { chartService })
+  app = appWithAllRoutes({ production: false }, { chartApiService })
 })
 
 afterEach(() => {

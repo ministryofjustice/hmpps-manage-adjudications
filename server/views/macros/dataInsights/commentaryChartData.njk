@@ -1,0 +1,16 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro commentaryChartData(chartSetting) %}
+	<div class="main-chart-with-data-panel commentary-chart-with-data-panel" id="chart-panel-{{ chartSetting.chartData.elementId }}">
+
+		<h2 class="govuk-heading-m govuk-!-margin-bottom-4">{{ chartSetting.title }}</h2>
+
+		{% for chartEntry in chartSetting.chartData.chartEntries %}
+			<div class="chart-table-panel">
+				<div class="govuk-!-font-size-48 govuk-!-font-weight-bold">{{ chartEntry.count }}</div>
+				<div class="govuk-!-margin-top-2 govuk-!-font-size-19">This is approximately <span class="govuk-!-font-weight-bold">{{ chartEntry.proportion_round}}</span> of your population over this period.</div>
+			</div>
+		{% endfor %}
+
+	</div>
+{% endmacro %}

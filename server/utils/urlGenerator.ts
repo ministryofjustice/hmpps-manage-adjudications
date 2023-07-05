@@ -765,9 +765,14 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.start}`,
       totalsAdjudicationsAndLocations: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
-      protectedCharacteristicsAndVulnerabilities: () =>
-        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities}`,
-      offenceType: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}`,
+      protectedCharacteristicsAndVulnerabilities: (characteristic?: string) =>
+        `${adjudicationUrls.dataInsights.root}${
+          adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities
+        }${characteristic ? `?characteristic=${characteristic}` : ''}`,
+      offenceType: (offenceType?: string) =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
+          offenceType ? `?offence-type=${offenceType}` : ''
+        }`,
       punishments: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}`,
       pleasAndFindings: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.pleasAndFindings}`,

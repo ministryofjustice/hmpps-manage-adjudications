@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
@@ -16,7 +16,7 @@ class PageOptions {}
 export default class PleasAndFindingsTabPage {
   pageOptions: PageOptions
 
-  constructor(private readonly chartService: ChartService) {
+  constructor(private readonly chartApiService: ChartApiService) {
     this.pageOptions = new PageOptions()
   }
 
@@ -27,7 +27,7 @@ export default class PleasAndFindingsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartService.getChart(username, agencyId, '1a')
+    const chartDetails: ChartDetailsResult = await this.chartApiService.getChart(username, agencyId, '1a')
     return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {
       errors: error ? [error] : [],
       chartDetails,

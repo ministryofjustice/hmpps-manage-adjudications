@@ -1,15 +1,19 @@
 import { Request, Response } from 'express'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import ProtectedCharacteristicsAndVulnerabilitiesTabPage from './protectedCharacteristicsAndVulnerabilitiesTabPage'
 
 export default class ProtectedCharacteristicsAndVulnerabilitiesRoutes {
   page: ProtectedCharacteristicsAndVulnerabilitiesTabPage
 
-  constructor(private readonly chartService: ChartService) {
-    this.page = new ProtectedCharacteristicsAndVulnerabilitiesTabPage(chartService)
+  constructor(private readonly chartApiService: ChartApiService) {
+    this.page = new ProtectedCharacteristicsAndVulnerabilitiesTabPage(chartApiService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     await this.page.view(req, res)
+  }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    await this.page.submit(req, res)
   }
 }

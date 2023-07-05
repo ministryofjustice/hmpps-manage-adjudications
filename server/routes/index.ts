@@ -90,7 +90,7 @@ export default function routes(
     hearingsService,
     outcomesService,
     punishmentsService,
-    chartService,
+    chartApiService,
   }: Services
 ): Router {
   router.use(
@@ -194,18 +194,18 @@ export default function routes(
   )
 
   if (config.dataInsightsFlag === 'true') {
-    router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartApiService }))
     router.use(
       adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
-      totalsAdjudicationsAndLocationsRoutes({ chartService })
+      totalsAdjudicationsAndLocationsRoutes({ chartApiService })
     )
     router.use(
       adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities(),
-      protectedCharacteristicsAndVulnerabilitiesRoutes({ chartService })
+      protectedCharacteristicsAndVulnerabilitiesRoutes({ chartApiService })
     )
-    router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartService }))
-    router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartService }))
-    router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartApiService }))
+    router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartApiService }))
+    router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartApiService }))
   }
 
   router.use(

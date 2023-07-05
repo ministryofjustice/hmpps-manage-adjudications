@@ -1,13 +1,13 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import PleasAndFindingsRoutes from './pleasAndFindings'
 
-export default function pleasAndFindingsRoutes({ chartService }: { chartService: ChartService }): Router {
+export default function pleasAndFindingsRoutes({ chartApiService }: { chartApiService: ChartApiService }): Router {
   const router = express.Router()
 
-  const route = new PleasAndFindingsRoutes(chartService)
+  const route = new PleasAndFindingsRoutes(chartApiService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
