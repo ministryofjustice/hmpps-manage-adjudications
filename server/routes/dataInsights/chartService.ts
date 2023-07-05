@@ -7,6 +7,7 @@ import {
   getMonthShortName,
   HorizontalTableCell,
 } from '../../services/ChartDetailsResult'
+import DropDownEntry from './dropDownEntry'
 
 const DARK_BLUE = '#003078'
 const DARK_BLUE_DARKER = '#00265f'
@@ -419,4 +420,16 @@ export const getHorizontalBarsChartRows = (
   ]
 
   return rows
+}
+
+export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: HorizontalTableCell) => {
+  return Array.from(
+    new Set(
+      chartEntries.map((row: ChartEntryHorizontalBar) => {
+        return cell.source(row) as string
+      })
+    )
+  ).map(value => {
+    return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
+  })
 }

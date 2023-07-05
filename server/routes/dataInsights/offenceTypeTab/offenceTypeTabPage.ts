@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
-import ChartService, { getUniqueItems } from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { produceHorizontalBarsChart } from '../chartService'
+import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import DropDownEntry from '../dropDownEntry'
 
@@ -37,7 +37,7 @@ const getHorizontalBarsChartHeadByCharacteristic = () => {
 export default class OffenceTypeTabPage {
   pageOptions: PageOptions
 
-  constructor(private readonly chartService: ChartService) {
+  constructor(private readonly chartApiService: ChartApiService) {
     this.pageOptions = new PageOptions()
   }
 
@@ -48,16 +48,16 @@ export default class OffenceTypeTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails = await this.chartService.getChart(username, agencyId, '3b')
+    const chartDetails = await this.chartApiService.getChart(username, agencyId, '3b')
     const chartEntries = chartDetails.chartEntries as ChartEntryHorizontalBar[]
 
     const offenceTypes: DropDownEntry[] = getUniqueItems(chartEntries, {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
-    const offenceType = DropDownEntry.getByValueOrElse(
+    const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       offenceTypes,
       req.query['offence-type'] as string,
-      offenceTypes[0]
+      offenceTypes.length > 0 ? offenceTypes[0] : undefined
     )
 
     const chartSettingMap = {}
@@ -68,7 +68,7 @@ export default class OffenceTypeTabPage {
       agencyId,
       'Adjudication offence type by location – last 30 days (3b)',
       chartDetails,
-      { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType.text },
+      { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
       [
@@ -84,7 +84,7 @@ export default class OffenceTypeTabPage {
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.OFFENCE_TYPE),
       chartSettingMap,
       offenceTypes,
-      offenceType: offenceType.value,
+      offenceType: offenceType?.value,
     })
   }
 

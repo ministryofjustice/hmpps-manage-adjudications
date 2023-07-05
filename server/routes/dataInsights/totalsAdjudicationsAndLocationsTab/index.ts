@@ -2,16 +2,16 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TotalsAdjudicationsAndLocationsRoutes from './totalsAdjudicationsAndLocations'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 
 export default function totalsAdjudicationsAndLocationsRoutes({
-  chartService,
+  chartApiService,
 }: {
-  chartService: ChartService
+  chartApiService: ChartApiService
 }): Router {
   const router = express.Router()
 
-  const route = new TotalsAdjudicationsAndLocationsRoutes(chartService)
+  const route = new TotalsAdjudicationsAndLocationsRoutes(chartApiService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 

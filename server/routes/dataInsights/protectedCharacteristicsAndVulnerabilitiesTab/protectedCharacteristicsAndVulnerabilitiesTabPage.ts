@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
@@ -38,7 +38,7 @@ const getHorizontalBarsChartHeadByCharacteristic = (characteristic: string) => {
 export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
   pageOptions: PageOptions
 
-  constructor(private readonly chartService: ChartService) {
+  constructor(private readonly chartApiService: ChartApiService) {
     this.pageOptions = new PageOptions()
   }
 
@@ -63,7 +63,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       username,
       agencyId,
       'Percentage and number of prisoners in the establishment currently (2a)',
-      await this.chartService.getChart(username, agencyId, '2a'),
+      await this.chartApiService.getChart(username, agencyId, '2a'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic.value },
       { source: (row: ChartEntryHorizontalBar) => row.value },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
@@ -80,7 +80,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       username,
       agencyId,
       'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability – last 30 days (2b)',
-      await this.chartService.getChart(username, agencyId, '2b'),
+      await this.chartApiService.getChart(username, agencyId, '2b'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic.value },
       { source: (row: ChartEntryHorizontalBar) => row.value },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },

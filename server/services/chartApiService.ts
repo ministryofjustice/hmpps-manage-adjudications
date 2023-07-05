@@ -1,10 +1,9 @@
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import { AgencyId } from '../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar, HorizontalTableCell } from './ChartDetailsResult'
+import { ChartDetailsResult } from './ChartDetailsResult'
 import DataInsightsApiClient from '../data/dataInsightsApiClient'
-import DropDownEntry from '../routes/dataInsights/dropDownEntry'
 
-export default class ChartService {
+export default class ChartApiService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
   async getChart(
@@ -17,14 +16,3 @@ export default class ChartService {
     return new DataInsightsApiClient(token).getDataInsightsChart(agencyId, chartName, characteristic)
   }
 }
-
-export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: HorizontalTableCell) =>
-  Array.from(
-    new Set(
-      chartEntries.map((row: ChartEntryHorizontalBar) => {
-        return cell.source(row) as string
-      })
-    )
-  ).map(value => {
-    return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
-  })
