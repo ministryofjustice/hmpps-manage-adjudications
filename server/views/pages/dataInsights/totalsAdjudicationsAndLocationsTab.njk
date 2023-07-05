@@ -5,6 +5,7 @@
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../partials/charts/verticalBarsAndLineChart.njk" import verticalBarsAndLineChart %}
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
+{% from "../../partials/charts/commentaryChart.njk" import commentaryChart %}
 
 {% set title = "Adjudication data - Totals - adjudications and locations" %}
 
@@ -18,22 +19,29 @@
 
 {% block content %}
 
-  {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+  <div class="totals-adjudications-and-locations-tab">
 
-  <div class="govuk-!-margin-bottom-6 main-chart-panel">
+    {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+    <div class="govuk-!-margin-bottom-6">
       {{ verticalBarsAndLineChart(chartSettingMap['1a']) }}
-  </div>
+    </div>
 
-  <div class="govuk-!-margin-bottom-6 main-chart-panel">
+    <div class="govuk-!-margin-bottom-6">
+      {{ commentaryChart(chartSettingMap['1c']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
       {{ verticalBarsAndLineChart(chartSettingMap['1b']) }}
-  </div>
+    </div>
 
-  <div class="govuk-!-margin-bottom-6 main-chart-panel">
-    {{ horizontalBarsChart(chartSettingMap['1d']) }}
-  </div>
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChart(chartSettingMap['1d']) }}
+    </div>
 
-  <div class="govuk-!-margin-bottom-6 main-chart-panel">
-    {{ horizontalBarsChart(chartSettingMap['1f']) }}
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChart(chartSettingMap['1f']) }}
+    </div>
   </div>
 
 {% endblock %}

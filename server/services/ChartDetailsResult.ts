@@ -26,8 +26,13 @@ export interface ChartEntryHorizontalBar {
   proportion_round: number
 }
 
+export interface ChartEntryCommentary {
+  count: number
+  proportion_round: string
+}
+
 export interface HorizontalTableCell {
-  source: ((row: ChartEntryHorizontalBar) => string) | ((row: ChartEntryHorizontalBar) => number)
+  source: (row: ChartEntryHorizontalBar) => number | string | ChartEntryCommentary
 }
 
 export interface DataFilter {

@@ -95,6 +95,13 @@ context('Adjudication data', () => {
         count_prev: 44,
       },
     ]
+    const chartEntries1c = [
+      {
+        count: 55.0,
+        proportion: 0.11910779024541196,
+        proportion_round: 0.12,
+      },
+    ]
     const chartEntries1d = [
       {
         incident_loc: 'Wing A',
@@ -735,6 +742,7 @@ context('Adjudication data', () => {
     const chartEntries = {
       '1a': chartEntries1a1b,
       '1b': chartEntries1a1b,
+      '1c': chartEntries1c,
       '1d': chartEntries1d,
       '1f': chartEntries1f,
       '2a': chartEntries2a,
@@ -757,6 +765,15 @@ context('Adjudication data', () => {
         agencyId: 'MDI',
         chartName: '1b',
         chartEntries: chartEntries['1b'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '1c',
+      response: {
+        agencyId: 'MDI',
+        chartName: '1c',
+        chartEntries: chartEntries['1c'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
@@ -819,6 +836,7 @@ context('Adjudication data', () => {
     page.checkOnPage()
     page.checkChartTitle('Total adjudications - over 24 months (1a)')
     page.checkChartTitle('Total adjudications referred to independent adjudicator - over 24 months (1b)')
+    page.checkChartTitle('Number of people with an adjudication in the past 30 days (1c)')
     page.checkChartTitle('Total adjudications by location of adjudication offence – last 30 days (1d)')
     page.checkChartTitle('Total adjudications by residential location of offender – last 30 days (1f)')
   })

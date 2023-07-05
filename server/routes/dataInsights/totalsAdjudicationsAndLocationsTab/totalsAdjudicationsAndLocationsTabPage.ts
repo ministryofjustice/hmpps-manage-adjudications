@@ -3,10 +3,11 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
+import { ChartDetailsResult, ChartEntryCommentary, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import {
   getHorizontalBarsChartHead,
+  produceCommentaryChart,
   produceHorizontalBarsChart,
   produceVerticalBarsAndLineCharts,
 } from '../chartService'
@@ -48,6 +49,22 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Total adjudications referred to independent adjudicator - over 24 months (1b)',
       await this.chartApiService.getChart(username, agencyId, '1b')
+    )
+
+    chartSettingMap['1c'] = await produceCommentaryChart(
+      '1c',
+      username,
+      agencyId,
+      'Number of people with an adjudication in the past 30 days (1c)',
+      await this.chartApiService.getChart(username, agencyId, '1c'),
+      {
+        source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
+          return {
+            count: row.count,
+            proportion_round: `${Math.trunc(row.proportion_round * 100)}%`,
+          } as ChartEntryCommentary
+        },
+      }
     )
 
     chartSettingMap['1d'] = await produceHorizontalBarsChart(
