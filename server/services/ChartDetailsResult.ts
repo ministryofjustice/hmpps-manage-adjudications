@@ -26,13 +26,22 @@ export interface ChartEntryHorizontalBar {
   proportion_round: number
 }
 
+export interface ChartEntryLine {
+  offence_type: string
+  month: number
+  year: number
+  count: number
+  proportion: number
+  proportion_round: number
+}
+
 export interface ChartEntryCommentary {
   count: number
   proportion_round: string
 }
 
-export interface HorizontalTableCell {
-  source: (row: ChartEntryHorizontalBar) => number | string | ChartEntryCommentary
+export interface RowSource {
+  source: (row: ChartEntryHorizontalBar | ChartEntryLine) => number | string | ChartEntryCommentary
 }
 
 export interface DataFilter {
@@ -42,5 +51,5 @@ export interface DataFilter {
 export const MONTH_SHORT_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export const getMonthShortName = (monthNumber: number) => {
-  return monthNumber > 0 && monthNumber < 13 ? MONTH_SHORT_NAMES[monthNumber - 1] : 'Wrong'
+  return monthNumber > 0 && monthNumber < 13 ? MONTH_SHORT_NAMES[Math.trunc(monthNumber) - 1] : 'Wrong'
 }
