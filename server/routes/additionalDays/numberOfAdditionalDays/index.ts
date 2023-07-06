@@ -1,12 +1,12 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import NumberOfAdditionalDaysRoute from './numberOfAdditionalDays'
 import NumberOfAdditionalDaysEditRoute from './numberOfAdditionalDaysEdit'
 
-import UserService from '../../services/userService'
-import adjudicationUrls from '../../utils/urlGenerator'
-import PunishmentsService from '../../services/punishmentsService'
+import UserService from '../../../services/userService'
+import adjudicationUrls from '../../../utils/urlGenerator'
+import PunishmentsService from '../../../services/punishmentsService'
 
 export default function NumberOfAdditionalDaysRoutes({
   userService,

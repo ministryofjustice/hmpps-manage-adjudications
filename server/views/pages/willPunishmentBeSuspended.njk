@@ -2,9 +2,10 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set title = "Enter the number of additional days" %}
+{% set title = "Will this punishment be suspended?" %}
 
 {% block pageTitle %}
   {{ title }}
@@ -12,6 +13,20 @@
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
+
+{% set suspendedUntilHtml %}
+<h2 class="govuk-heading-s">When will it be suspended until?</h2>
+{{
+  datePicker({
+    id: 'suspendedUntil',
+    label: 'Suspended until',
+    name: 'suspendedUntil',
+    date: suspendedUntil,
+    attributes: {'data-disable-future-date':'false', 'data-qa': "suspended-until-date-picker" },
+    classes: 'govuk-input--width-10'
+  })
+  }}
+{% endset -%}
 
 {% block content %}
   {% if errors | length %}
@@ -26,13 +41,26 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-      {{ govukInput({
-        id: "days",
-        name: "days",
-        value: days,
-        classes: "govuk-input--width-5",
-        errorMessage: errors | findErrors(["days"])
-      }) }}
+      {{ govukRadios({
+        idPrefix: 'suspended',
+        id: 'suspended',
+        name: 'suspended',
+        attributes: { "data-qa": "suspended-radio-buttons" },
+        errorMessage: "suspended" | findError(errors),
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: suspended == 'yes',
+            conditional: { html: suspendedUntilHtml }       
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: suspended == 'no'
+          }
+        ] }) 
+      }}
 
       <div class="govuk-button-group">
         {{ govukButton({
