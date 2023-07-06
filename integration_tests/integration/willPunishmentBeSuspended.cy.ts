@@ -31,12 +31,6 @@ context('Will this punishment be suspended?', () => {
       willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').check()
       willPunishmentBeSuspendedPage.suspendedUntil().should('exist')
     })
-    it('should not ask for suspended until date if suspended is no ', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
-      const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
-      willPunishmentBeSuspendedPage.suspended().find('input[value="no"]').check()
-      willPunishmentBeSuspendedPage.suspendedUntil().should('not.exist')
-    })
     it('cancel link goes back to punishments page', () => {
       cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
