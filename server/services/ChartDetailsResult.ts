@@ -27,7 +27,9 @@ export interface ChartEntryHorizontalBar {
 }
 
 export interface ChartEntryLine {
-  offence_type: string
+  offence_type?: string
+  plea?: string
+  finding?: string
   month: number
   year: number
   count: number
