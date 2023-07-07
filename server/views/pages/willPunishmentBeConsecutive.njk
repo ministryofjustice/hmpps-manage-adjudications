@@ -1,0 +1,63 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title %} Will this punishment be consecutive to another one given to {{prisonerName}}? {% endset %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+        idPrefix: 'consecutive',
+        id: 'consecutive',
+        name: 'consecutive',
+        attributes: { "data-qa": "consecutive-radio-buttons" },
+        errorMessage: "consecutive" | findError(errors),
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: consecutive == 'yes'
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: consecutive == 'no'
+          }
+        ] }) 
+      }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "submit" }
+        }) }}
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award Punishments'</a>
+      </div>
+
+    </form>
+  </div>
+{% endblock %}

@@ -682,6 +682,19 @@ const adjudicationUrls = {
         `${adjudicationUrls.isPunishmentConsecutive.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
+  whichPunishmentIsItConsecutiveTo: {
+    root: '/punishment-consecutive-to',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:redisId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${adjudicationNumber}/edit/${redisId}`,
+    },
+  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {

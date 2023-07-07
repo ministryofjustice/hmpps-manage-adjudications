@@ -13,6 +13,7 @@ import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { convertToTitleCase } from '../utils/utils'
+import PrisonerResult from '../data/prisonerResult'
 
 export default class PunishmentsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -160,5 +161,20 @@ export default class PunishmentsService {
     if (!reportedAdjudication.hearings?.length) return false
     const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
     return lastHearing.oicHearingType.includes('INAD')
+  }
+
+  async getPrisonerDetails(adjudicationNumber: number, user: User): Promise<PrisonerResult & { friendlyName: string }> {
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
+      adjudicationNumber
+    )
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
+
+    const enhancedResult = {
+      ...prisoner,
+      friendlyName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+    }
+
+    return enhancedResult
   }
 }
