@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
+import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -43,7 +44,13 @@ export default class PunishmentPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = pageData
+
+    const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
+      adjudicationNumber,
+      user
+    )
 
     return res.render(`pages/punishment.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
@@ -52,6 +59,8 @@ export default class PunishmentPage {
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
+      isIndependentAdjudicatorHearing,
+      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 
@@ -102,7 +111,7 @@ export default class PunishmentPage {
         stoppagePercentage: stoppageOfEarningsPercentage,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req)
+    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req, punishmentType as PunishmentType)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
@@ -111,7 +120,13 @@ export default class PunishmentPage {
     )
   }
 
-  private getRedirectUrl = (adjudicationNumber: number, req: Request) => {
+  private getRedirectUrl = (adjudicationNumber: number, req: Request, punishmentType: PunishmentType) => {
+    if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
+      if (this.pageOptions.isEdit()) {
+        return adjudicationUrls.numberOfAdditionalDays.urls.edit(adjudicationNumber, req.params.redisId)
+      }
+      return adjudicationUrls.numberOfAdditionalDays.urls.start(adjudicationNumber)
+    }
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.punishmentSchedule.urls.edit(adjudicationNumber, req.params.redisId)
     }

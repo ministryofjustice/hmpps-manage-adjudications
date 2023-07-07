@@ -1,5 +1,6 @@
 import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
 import { PrivilegeType, PunishmentType } from '../data/PunishmentResult'
+import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import PunishmentsService from './punishmentsService'
 
@@ -235,6 +236,55 @@ describe('PunishmentsService', () => {
           otherData: {},
         })
       )
+    })
+  })
+  describe('checkAdditionalDaysAvailability', () => {
+    it('returns false if there are no hearings present on the adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+        }),
+      })
+      const result = await service.checkAdditionalDaysAvailability(100, user)
+      expect(result).toEqual(false)
+    })
+    it('returns false if the last hearing on the adjudication is a governor hearing', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              oicHearingType: OicHearingType.GOV_ADULT,
+              id: 69,
+            }),
+          ],
+        }),
+      })
+      const result = await service.checkAdditionalDaysAvailability(100, user)
+      expect(result).toEqual(false)
+    })
+    it('returns true if the last hearing on the adjudication is an independent adjudicator hearing', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 100,
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              oicHearingType: OicHearingType.INAD_ADULT,
+              id: 69,
+            }),
+          ],
+        }),
+      })
+      const result = await service.checkAdditionalDaysAvailability(100, user)
+      expect(result).toEqual(true)
     })
   })
 })

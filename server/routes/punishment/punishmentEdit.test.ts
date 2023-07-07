@@ -6,21 +6,33 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
 import PunishmentsService from '../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import TestData from '../testutils/testData'
 
+const testData = new TestData()
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')
+jest.mock('../../services/reportedAdjudicationsService')
 
 const userService = new UserService(null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null) as jest.Mocked<PunishmentsService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.EXCLUSION_WORK,
   })
+  reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
+    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
+  )
 })
 
 afterEach(() => {
@@ -29,7 +41,7 @@ afterEach(() => {
 
 describe('GET /punishment', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+    app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
@@ -43,7 +55,7 @@ describe('GET /punishment', () => {
 })
 
 describe('GET /punishment', () => {
-  it('should load the `Not proceed` page', () => {
+  it('should load the page', () => {
     return request(app)
       .get(adjudicationUrls.punishment.urls.edit(100, uuidv4()))
       .expect('Content-Type', /html/)

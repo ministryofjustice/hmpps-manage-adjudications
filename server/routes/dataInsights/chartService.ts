@@ -1,11 +1,14 @@
 import { ChartOptions } from 'chart.js'
 import {
   ChartDetailsResult,
+  ChartEntryCommentary,
   ChartEntryHorizontalBar,
   ChartEntryVerticalBar,
+  DataFilter,
   getMonthShortName,
   HorizontalTableCell,
 } from '../../services/ChartDetailsResult'
+import DropDownEntry from './dropDownEntry'
 
 const DARK_BLUE = '#003078'
 const DARK_BLUE_DARKER = '#00265f'
@@ -49,11 +52,17 @@ export const produceHorizontalBarsChart = async (
   agencyId: string,
   chartTitle: string,
   chartDetails: ChartDetailsResult,
+  dataFilter: DataFilter,
   labelFieldSource: HorizontalTableCell,
   barsDataSource: HorizontalTableCell,
-  rowsSource: HorizontalTableCell[]
+  rowsSource: HorizontalTableCell[],
+  head: { text: string; classes: string }[]
 ) => {
-  const chartEntries = chartDetails.chartEntries as ChartEntryHorizontalBar[]
+  const chartEntries = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).filter(
+    (row: ChartEntryHorizontalBar) => {
+      return dataFilter.filter(row)
+    }
+  )
 
   const barData = chartEntries.map((row: ChartEntryHorizontalBar) => {
     return barsDataSource.source(row) as number
@@ -68,11 +77,30 @@ export const produceHorizontalBarsChart = async (
     chartTitle,
     barData,
     labels,
-    head: getHorizontalBarsChartHead(),
+    head,
     rows: getHorizontalBarsChartRows(chartEntries, rowsSource),
   })
 }
 
+export const produceCommentaryChart = async (
+  chartName: string,
+  username: string,
+  agencyId: string,
+  chartTitle: string,
+  chartDetails: ChartDetailsResult,
+  rowsSource: HorizontalTableCell
+) => {
+  const chartEntries: ChartEntryCommentary[] = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).map(
+    (row: ChartEntryHorizontalBar) => {
+      return rowsSource.source(row) as ChartEntryCommentary
+    }
+  )
+  return createCommentaryChartSettings({
+    elementId: chartName,
+    chartTitle,
+    chartEntries,
+  })
+}
 export const createHorizontalBarsChartSettings = (params: {
   elementId: string
   chartTitle: string
@@ -349,7 +377,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
 }
 
 export const getVerticalBarsAndLineChartRows = (barData: number[], lineData: number[]) => {
-  const rows: { text: string | number; classes: string }[][] = [
+  return [
     [
       {
         text: 'Number this year 2023',
@@ -375,11 +403,10 @@ export const getVerticalBarsAndLineChartRows = (barData: number[], lineData: num
       }),
     ],
   ]
-  return rows
 }
 
 export const getHorizontalBarsChartHead = () => {
-  const head: { text: string; classes: string }[] = [
+  return [
     {
       text: 'Location',
       classes: 'horizontal-chart-table-head-cell',
@@ -393,23 +420,46 @@ export const getHorizontalBarsChartHead = () => {
       classes: 'horizontal-chart-table-head-cell',
     },
   ]
-  return head
 }
 
 export const getHorizontalBarsChartRows = (
   chartEntries: ChartEntryHorizontalBar[],
   rowsSource: HorizontalTableCell[]
 ) => {
-  const rows: { text: string | number; classes: string }[][] = [
+  return [
     ...chartEntries.map((row: ChartEntryHorizontalBar) => {
       return rowsSource.map((horizontalTableCell: HorizontalTableCell) => {
         return {
-          text: horizontalTableCell.source(row),
+          text: horizontalTableCell.source(row) as number | string,
           classes: 'horizontal-chart-table-row-cell',
         }
       })
     }),
   ]
+}
 
-  return rows
+export const createCommentaryChartSettings = (params: {
+  elementId: string
+  chartTitle: string
+  chartEntries: ChartEntryCommentary[]
+}) => {
+  return {
+    title: params.chartTitle,
+    chartData: {
+      elementId: params.elementId,
+      chartEntries: params.chartEntries,
+    },
+  }
+}
+
+export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: HorizontalTableCell) => {
+  return Array.from(
+    new Set(
+      chartEntries.map((row: ChartEntryHorizontalBar) => {
+        return cell.source(row) as string
+      })
+    )
+  ).map(value => {
+    return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
+  })
 }

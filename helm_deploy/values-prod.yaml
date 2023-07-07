@@ -2,7 +2,6 @@
 # Per environment values which override defaults in hmpps-manage-adjudications/values.yaml
 
 generic-service:
-  replicaCount: 4
 
   ingress:
     host: manage-adjudications.hmpps.service.justice.gov.uk
@@ -22,6 +21,7 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     MAINTENANCE_MODE: false
     DATA_INSIGHTS_FLAG: false
+    ADDED_DAYS_FLAG: false
 
   allowlist:
     global-protect: "35.176.93.186/32"

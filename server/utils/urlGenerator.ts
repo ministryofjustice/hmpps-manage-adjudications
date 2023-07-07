@@ -646,6 +646,42 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
+  numberOfAdditionalDays: {
+    root: '/number-additional-days',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:redisId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/edit/${redisId}`,
+    },
+  },
+  isPunishmentSuspended: {
+    root: '/punishment-suspended',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:redisId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.isPunishmentSuspended.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.isPunishmentSuspended.root}/${adjudicationNumber}/edit/${redisId}`,
+    },
+  },
+  isPunishmentConsecutive: {
+    root: '/punishment-consecutive',
+    matchers: {
+      start: '/:adjudicationNumber',
+      edit: '/:adjudicationNumber/edit/:redisId',
+    },
+    urls: {
+      start: (adjudicationNumber: number) => `${adjudicationUrls.isPunishmentConsecutive.root}/${adjudicationNumber}`,
+      edit: (adjudicationNumber: number, redisId: string) =>
+        `${adjudicationUrls.isPunishmentConsecutive.root}/${adjudicationNumber}/edit/${redisId}`,
+    },
+  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {
@@ -741,9 +777,14 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.start}`,
       totalsAdjudicationsAndLocations: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
-      protectedCharacteristicsAndVulnerabilities: () =>
-        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities}`,
-      offenceType: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}`,
+      protectedCharacteristicsAndVulnerabilities: (characteristic?: string) =>
+        `${adjudicationUrls.dataInsights.root}${
+          adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities
+        }${characteristic ? `?characteristic=${characteristic}` : ''}`,
+      offenceType: (offenceType?: string) =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
+          offenceType ? `?offence-type=${offenceType}` : ''
+        }`,
       punishments: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}`,
       pleasAndFindings: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.pleasAndFindings}`,

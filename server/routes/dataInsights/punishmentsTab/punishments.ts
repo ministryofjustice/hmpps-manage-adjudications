@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import ChartService from '../../../services/chartService'
+import ChartApiService from '../../../services/chartApiService'
 import PunishmentsTabPage from './punishmentsTabPage'
 
 export default class PunishmentsRoutes {
   page: PunishmentsTabPage
 
-  constructor(private readonly chartService: ChartService) {
-    this.page = new PunishmentsTabPage(chartService)
+  constructor(private readonly chartApiService: ChartApiService) {
+    this.page = new PunishmentsTabPage(chartApiService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

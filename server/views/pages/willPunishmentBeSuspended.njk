@@ -1,0 +1,78 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title = "Will this punishment be suspended?" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% set suspendedUntilHtml %}
+<h2 class="govuk-heading-s">When will it be suspended until?</h2>
+{{
+  datePicker({
+    id: 'suspendedUntil',
+    label: 'Suspended until',
+    name: 'suspendedUntil',
+    date: suspendedUntil,
+    attributes: {'data-disable-future-date':'false', 'data-qa': "suspended-until-date-picker" },
+    classes: 'govuk-input--width-10'
+  })
+  }}
+{% endset -%}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+        idPrefix: 'suspended',
+        id: 'suspended',
+        name: 'suspended',
+        attributes: { "data-qa": "suspended-radio-buttons" },
+        errorMessage: "suspended" | findError(errors),
+        items: [
+          {
+            value: "yes",
+            text: "Yes",
+            checked: suspended == 'yes',
+            conditional: { html: suspendedUntilHtml }       
+          },
+          {
+            value: "no",
+            text: "No",
+            checked: suspended == 'no'
+          }
+        ] }) 
+      }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "submit" }
+        }) }}
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award Punishments'</a>
+      </div>
+
+    </form>
+  </div>
+{% endblock %}

@@ -67,6 +67,8 @@ import PunishmentCommentRoutes from './punishmentComment'
 import PunishmentRoutes from './punishment'
 import awardPunishmentsRoutes from './punishments/awardPunishments'
 import PunishmentScheduleRoutes from './punishmentSchedule'
+import numberOfAdditionalDaysRoutes from './additionalDays/numberOfAdditionalDays'
+import willPunishmentBeSuspendedRoutes from './additionalDays/willPunishmentBeSuspended'
 import checkPunishmentRoutes from './punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedPunishments'
 import suspendedPunishmentScheduleRoutes from './suspendedPunishmentSchedule'
@@ -89,7 +91,7 @@ export default function routes(
     hearingsService,
     outcomesService,
     punishmentsService,
-    chartService,
+    chartApiService,
   }: Services
 ): Router {
   router.use(
@@ -193,18 +195,18 @@ export default function routes(
   )
 
   if (config.dataInsightsFlag === 'true') {
-    router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartApiService }))
     router.use(
       adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
-      totalsAdjudicationsAndLocationsRoutes({ chartService })
+      totalsAdjudicationsAndLocationsRoutes({ chartApiService })
     )
     router.use(
       adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities(),
-      protectedCharacteristicsAndVulnerabilitiesRoutes({ chartService })
+      protectedCharacteristicsAndVulnerabilitiesRoutes({ chartApiService })
     )
-    router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartService }))
-    router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartService }))
-    router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartService }))
+    router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartApiService }))
+    router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartApiService }))
+    router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartApiService }))
   }
 
   router.use(
@@ -289,7 +291,16 @@ export default function routes(
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
-
+  if (config.addedDaysFlag === 'true') {
+    router.use(
+      adjudicationUrls.numberOfAdditionalDays.root,
+      numberOfAdditionalDaysRoutes({ userService, punishmentsService })
+    )
+    router.use(
+      adjudicationUrls.isPunishmentSuspended.root,
+      willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
+    )
+  }
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
   router.use(

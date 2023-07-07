@@ -1,7 +1,9 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
 
 {% set title = "Adjudication data - Protected characteristics and vulnerabilities" %}
 
@@ -15,8 +17,49 @@
 
 {% block content %}
 
-  {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+  <div class="protected-characteristics-and-vulnerabilities-tab">
 
+    {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+    <div>
+      <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        <div class="flex-container">
+          {{ govukSelect({
+            id: 'characteristic',
+            name: 'characteristic',
+            label: {
+              text: 'Select a protected characteristic or vulnerability',
+              isPageHeading: false,
+              classes: ''
+            },
+            items: protectedCharacteristics | toSelect('value', 'text', characteristic),
+            classes: 'flex-column filter-selector',
+            errorMessage: 'characteristic' | findError(errors)
+          }) }}
+
+          {{ govukButton({
+            text: 'Show results',
+            type: 'submit',
+            preventDoubleClick: true,
+            classes: 'govuk-button--submit govuk-!-margin-right-3 flex-column show-results-button',
+            attributes: { 'data-qa': 'not-proceed-submit' }
+          }) }}
+        </div>
+
+      </form>
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChart(chartSettingMap['2a']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChart(chartSettingMap['2b']) }}
+    </div>
+
+  </div>
 {% endblock %}
 
 {% block pageScripts %}

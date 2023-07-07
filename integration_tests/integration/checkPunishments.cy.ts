@@ -26,6 +26,12 @@ context('Check punishments', () => {
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           punishments: [],
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
         }),
       },
     })
@@ -56,6 +62,12 @@ context('Check punishments', () => {
           adjudicationNumber: 456,
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
           punishments: [
             {
               id: 14,

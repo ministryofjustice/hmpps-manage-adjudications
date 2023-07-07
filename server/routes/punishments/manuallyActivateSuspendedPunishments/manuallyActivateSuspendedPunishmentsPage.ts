@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
 import validateForm from '../../punishment/punishmentValidation'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import config from '../../../config'
 
 type PageData = {
   error?: FormError
@@ -23,7 +24,13 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = pageData
+
+    const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
+      adjudicationNumber,
+      user
+    )
 
     return res.render(`pages/manuallyActivateSuspendedPunishment.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
@@ -33,6 +40,8 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
       otherPrivilege,
       stoppagePercentage,
       reportNumber,
+      isIndependentAdjudicatorHearing,
+      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 

@@ -95,6 +95,13 @@ context('Adjudication data', () => {
         count_prev: 44,
       },
     ]
+    const chartEntries1c = [
+      {
+        count: 55.0,
+        proportion: 0.11910779024541196,
+        proportion_round: 0.12,
+      },
+    ]
     const chartEntries1d = [
       {
         incident_loc: 'Wing A',
@@ -135,12 +142,612 @@ context('Adjudication data', () => {
         proportion_round: 0.29,
       },
     ]
-
+    const chartEntries2a = [
+      {
+        count: 9.0,
+        characteristic: 'disability',
+        value: 'No recorded disability',
+        proportion: 0.042419608614623266,
+        proportion_round: 0.04,
+      },
+      {
+        count: 42.0,
+        characteristic: 'disability',
+        value: 'Recorded disability',
+        proportion: 0.0512267517913957,
+        proportion_round: 0.05,
+      },
+      {
+        count: 94.0,
+        characteristic: 'disability',
+        value: 'Unknown',
+        proportion: 0.06086981740341011,
+        proportion_round: 0.06,
+      },
+      {
+        count: 41.0,
+        characteristic: 'ethnic_group',
+        value: 'Asian or Asian British',
+        proportion: 0.0671880208225094,
+        proportion_round: 0.07,
+      },
+      {
+        count: 92.0,
+        characteristic: 'ethnic_group',
+        value: 'Black or Black British',
+        proportion: 0.011123958587031158,
+        proportion_round: 0.01,
+      },
+      {
+        count: 7.0,
+        characteristic: 'ethnic_group',
+        value: 'Mixed',
+        proportion: 0.04682370780864016,
+        proportion_round: 0.05,
+      },
+      {
+        count: 10.0,
+        characteristic: 'ethnic_group',
+        value: 'Other',
+        proportion: 0.06159075868742536,
+        proportion_round: 0.06,
+      },
+      {
+        count: 25.0,
+        characteristic: 'ethnic_group',
+        value: 'Unknown',
+        proportion: 0.011321202186661017,
+        proportion_round: 0.01,
+      },
+      {
+        count: 55.0,
+        characteristic: 'ethnic_group',
+        value: 'White',
+        proportion: 0.028097483253542943,
+        proportion_round: 0.03,
+      },
+      {
+        count: 17.0,
+        characteristic: 'religion_group',
+        value: 'Buddhist',
+        proportion: 0.032008928800079654,
+        proportion_round: 0.03,
+      },
+      {
+        count: 17.0,
+        characteristic: 'religion_group',
+        value: 'Christian',
+        proportion: 0.062290564318016634,
+        proportion_round: 0.06,
+      },
+      {
+        count: 13.0,
+        characteristic: 'religion_group',
+        value: 'Hindu',
+        proportion: 0.08859030564091602,
+        proportion_round: 0.09,
+      },
+      {
+        count: 17.0,
+        characteristic: 'religion_group',
+        value: 'Jewish',
+        proportion: 0.09806182665513968,
+        proportion_round: 0.1,
+      },
+      {
+        count: 80.0,
+        characteristic: 'religion_group',
+        value: 'Muslim',
+        proportion: 0.08355700790063217,
+        proportion_round: 0.08,
+      },
+      {
+        count: 55.0,
+        characteristic: 'religion_group',
+        value: 'No religion',
+        proportion: 0.013572197913272034,
+        proportion_round: 0.01,
+      },
+      {
+        count: 0.0,
+        characteristic: 'religion_group',
+        value: 'Other',
+        proportion: 0.05524091469453936,
+        proportion_round: 0.06,
+      },
+      {
+        count: 46.0,
+        characteristic: 'religion_group',
+        value: 'Sikh',
+        proportion: 0.04704217143393935,
+        proportion_round: 0.05,
+      },
+      {
+        count: 83.0,
+        characteristic: 'religion_group',
+        value: 'Unkown',
+        proportion: 0.011984712489148164,
+        proportion_round: 0.01,
+      },
+      {
+        count: 49.0,
+        characteristic: 'sex_orientation',
+        value: 'Bisexual',
+        proportion: 0.07971827513348709,
+        proportion_round: 0.08,
+      },
+      {
+        count: 28.0,
+        characteristic: 'sex_orientation',
+        value: 'Heterosexual',
+        proportion: 0.023971711268847274,
+        proportion_round: 0.02,
+      },
+      {
+        count: 67.0,
+        characteristic: 'sex_orientation',
+        value: 'Homosexual',
+        proportion: 0.09713242091016339,
+        proportion_round: 0.1,
+      },
+      {
+        count: 26.0,
+        characteristic: 'sex_orientation',
+        value: 'Other',
+        proportion: 0.07698888448696663,
+        proportion_round: 0.08,
+      },
+      {
+        count: 88.0,
+        characteristic: 'sex_orientation',
+        value: 'Unknown',
+        proportion: 0.0674970658336493,
+        proportion_round: 0.07,
+      },
+    ]
+    const chartEntries2b = [
+      {
+        characteristic: 'age_group',
+        value: '15-17',
+        count: 64.0,
+        proportion: 0.19814241486068113,
+        proportion_round: 0.2,
+      },
+      {
+        characteristic: 'age_group',
+        value: '18-25',
+        count: 76.0,
+        proportion: 0.23529411764705882,
+        proportion_round: 0.24,
+      },
+      {
+        characteristic: 'age_group',
+        value: '26-35',
+        count: 20.0,
+        proportion: 0.06191950464396285,
+        proportion_round: 0.06,
+      },
+      {
+        characteristic: 'age_group',
+        value: '36-45',
+        count: 16.0,
+        proportion: 0.04953560371517028,
+        proportion_round: 0.05,
+      },
+      {
+        characteristic: 'age_group',
+        value: '46-55',
+        count: 64.0,
+        proportion: 0.19814241486068113,
+        proportion_round: 0.2,
+      },
+      {
+        characteristic: 'age_group',
+        value: '56-65',
+        count: 12.0,
+        proportion: 0.03715170278637771,
+        proportion_round: 0.04,
+      },
+      {
+        characteristic: 'age_group',
+        value: '66+',
+        count: 28.0,
+        proportion: 0.08668730650154799,
+        proportion_round: 0.09,
+      },
+      {
+        characteristic: 'age_group',
+        value: 'Unknown',
+        count: 43.0,
+        proportion: 0.13312693498452013,
+        proportion_round: 0.13,
+      },
+      {
+        characteristic: 'disability',
+        value: 'No recorded disability',
+        count: 71.0,
+        proportion: 0.3212669683257919,
+        proportion_round: 0.32,
+      },
+      {
+        characteristic: 'disability',
+        value: 'Recorded disability',
+        count: 67.0,
+        proportion: 0.3031674208144796,
+        proportion_round: 0.3,
+      },
+      {
+        characteristic: 'disability',
+        value: 'Unknown',
+        count: 83.0,
+        proportion: 0.3755656108597285,
+        proportion_round: 0.38,
+      },
+      {
+        characteristic: 'ethnic_group',
+        value: 'Asian or Asian British',
+        count: 25.0,
+        proportion: 0.08333333333333333,
+        proportion_round: 0.08,
+      },
+      {
+        characteristic: 'ethnic_group',
+        value: 'Black or Black British',
+        count: 85.0,
+        proportion: 0.2833333333333333,
+        proportion_round: 0.28,
+      },
+      {
+        characteristic: 'ethnic_group',
+        value: 'Mixed',
+        count: 17.0,
+        proportion: 0.056666666666666664,
+        proportion_round: 0.06,
+      },
+      {
+        characteristic: 'ethnic_group',
+        value: 'Other',
+        count: 96.0,
+        proportion: 0.32,
+        proportion_round: 0.32,
+      },
+      {
+        characteristic: 'ethnic_group',
+        value: 'Unknown',
+        count: 7.0,
+        proportion: 0.023333333333333334,
+        proportion_round: 0.02,
+      },
+      {
+        characteristic: 'ethnic_group',
+        value: 'White',
+        count: 70.0,
+        proportion: 0.23333333333333334,
+        proportion_round: 0.23,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Buddhist',
+        count: 74.0,
+        proportion: 0.14919354838709678,
+        proportion_round: 0.15,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Christian',
+        count: 5.0,
+        proportion: 0.010080645161290322,
+        proportion_round: 0.01,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Hindu',
+        count: 64.0,
+        proportion: 0.12903225806451613,
+        proportion_round: 0.13,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Jewish',
+        count: 91.0,
+        proportion: 0.18346774193548387,
+        proportion_round: 0.18,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Muslim',
+        count: 75.0,
+        proportion: 0.15120967741935484,
+        proportion_round: 0.15,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'No religion',
+        count: 54.0,
+        proportion: 0.10887096774193548,
+        proportion_round: 0.11,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Other',
+        count: 94.0,
+        proportion: 0.18951612903225806,
+        proportion_round: 0.19,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Sikh',
+        count: 4.0,
+        proportion: 0.008064516129032258,
+        proportion_round: 0.01,
+      },
+      {
+        characteristic: 'religion_group',
+        value: 'Unkown',
+        count: 35.0,
+        proportion: 0.07056451612903226,
+        proportion_round: 0.07,
+      },
+      {
+        characteristic: 'sexual_orientation',
+        value: 'Bisexual',
+        count: 57.0,
+        proportion: 0.19063545150501673,
+        proportion_round: 0.19,
+      },
+      {
+        characteristic: 'sexual_orientation',
+        value: 'Heterosexual',
+        count: 99.0,
+        proportion: 0.3311036789297659,
+        proportion_round: 0.33,
+      },
+      {
+        characteristic: 'sexual_orientation',
+        value: 'Homosexual',
+        count: 21.0,
+        proportion: 0.07023411371237458,
+        proportion_round: 0.07,
+      },
+      {
+        characteristic: 'sexual_orientation',
+        value: 'Other',
+        count: 96.0,
+        proportion: 0.3210702341137124,
+        proportion_round: 0.32,
+      },
+      {
+        characteristic: 'sexual_orientation',
+        value: 'Unknown',
+        count: 26.0,
+        proportion: 0.08695652173913043,
+        proportion_round: 0.09,
+      },
+    ]
+    const chartEntries3b = [
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Possession of unauthorised articles, or drugs or alcohol related',
+        count: 75.0,
+        proportion: 0.03987240829346093,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+        count: 81.0,
+        proportion: 0.0430622009569378,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Arson or damage to the prison or property',
+        count: 52.0,
+        proportion: 0.02764486975013291,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Assault, fighting, or endangering the health or personal safety of others',
+        count: 81.0,
+        proportion: 0.0430622009569378,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type:
+          'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+        count: 87.0,
+        proportion: 0.046251993620414676,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Unknown',
+        count: 99.0,
+        proportion: 0.05263157894736842,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Stopping someone who is not a prisoner from doing their job',
+        count: 41.0,
+        proportion: 0.021796916533758637,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Disrespectful, threatening, abusive, or insulting behaviour',
+        count: 71.0,
+        proportion: 0.037745879851143006,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Escape or failure to comply with temporary release conditions',
+        count: 88.0,
+        proportion: 0.04678362573099415,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing A',
+        offence_type: 'Detains another person',
+        count: 65.0,
+        proportion: 0.03455608718766613,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Possession of unauthorised articles, or drugs or alcohol related',
+        count: 29.0,
+        proportion: 0.01541733120680489,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+        count: 48.0,
+        proportion: 0.025518341307814992,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Arson or damage to the prison or property',
+        count: 67.0,
+        proportion: 0.03561935140882509,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Assault, fighting, or endangering the health or personal safety of others',
+        count: 18.0,
+        proportion: 0.009569377990430622,
+        proportion_round: 0.01,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type:
+          'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+        count: 89.0,
+        proportion: 0.04731525784157363,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Unknown',
+        count: 67.0,
+        proportion: 0.03561935140882509,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Stopping someone who is not a prisoner from doing their job',
+        count: 42.0,
+        proportion: 0.022328548644338118,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Disrespectful, threatening, abusive, or insulting behaviour',
+        count: 42.0,
+        proportion: 0.022328548644338118,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Escape or failure to comply with temporary release conditions',
+        count: 71.0,
+        proportion: 0.037745879851143006,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing B',
+        offence_type: 'Detains another person',
+        count: 66.0,
+        proportion: 0.03508771929824561,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Possession of unauthorised articles, or drugs or alcohol related',
+        count: 79.0,
+        proportion: 0.04199893673577884,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+        count: 82.0,
+        proportion: 0.043593833067517275,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Arson or damage to the prison or property',
+        count: 82.0,
+        proportion: 0.043593833067517275,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Assault, fighting, or endangering the health or personal safety of others',
+        count: 60.0,
+        proportion: 0.03189792663476874,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type:
+          'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+        count: 89.0,
+        proportion: 0.04731525784157363,
+        proportion_round: 0.05,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Unknown',
+        count: 42.0,
+        proportion: 0.022328548644338118,
+        proportion_round: 0.02,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Stopping someone who is not a prisoner from doing their job',
+        count: 73.0,
+        proportion: 0.03880914407230197,
+        proportion_round: 0.04,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Disrespectful, threatening, abusive, or insulting behaviour',
+        count: 16.0,
+        proportion: 0.008506113769271665,
+        proportion_round: 0.01,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Escape or failure to comply with temporary release conditions',
+        count: 63.0,
+        proportion: 0.03349282296650718,
+        proportion_round: 0.03,
+      },
+      {
+        incident_loc: 'Wing C',
+        offence_type: 'Detains another person',
+        count: 16.0,
+        proportion: 0.008506113769271665,
+        proportion_round: 0.01,
+      },
+    ]
     const chartEntries = {
       '1a': chartEntries1a1b,
       '1b': chartEntries1a1b,
+      '1c': chartEntries1c,
       '1d': chartEntries1d,
       '1f': chartEntries1f,
+      '2a': chartEntries2a,
+      '2b': chartEntries2b,
+      '3b': chartEntries3b,
     }
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'MDI',
@@ -162,6 +769,15 @@ context('Adjudication data', () => {
     })
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'MDI',
+      chartName: '1c',
+      response: {
+        agencyId: 'MDI',
+        chartName: '1c',
+        chartEntries: chartEntries['1c'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
       chartName: '1d',
       response: {
         agencyId: 'MDI',
@@ -176,6 +792,33 @@ context('Adjudication data', () => {
         agencyId: 'MDI',
         chartName: '1f',
         chartEntries: chartEntries['1f'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '2a',
+      response: {
+        agencyId: 'MDI',
+        chartName: '2a',
+        chartEntries: chartEntries['2a'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '2b',
+      response: {
+        agencyId: 'MDI',
+        chartName: '2b',
+        chartEntries: chartEntries['2b'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '3b',
+      response: {
+        agencyId: 'MDI',
+        chartName: '3b',
+        chartEntries: chartEntries['3b'],
       } as ChartDetailsResult,
     })
     cy.signIn()
@@ -193,6 +836,7 @@ context('Adjudication data', () => {
     page.checkOnPage()
     page.checkChartTitle('Total adjudications - over 24 months (1a)')
     page.checkChartTitle('Total adjudications referred to independent adjudicator - over 24 months (1b)')
+    page.checkChartTitle('Number of people with an adjudication in the past 30 days (1c)')
     page.checkChartTitle('Total adjudications by location of adjudication offence – last 30 days (1d)')
     page.checkChartTitle('Total adjudications by residential location of offender – last 30 days (1f)')
   })
@@ -201,12 +845,17 @@ context('Adjudication data', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkChartTitle('Percentage and number of prisoners in the establishment currently (2a)')
+    page.checkChartTitle(
+      'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability – last 30 days (2b)'
+    )
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkChartTitle('Adjudication offence type by location – last 30 days (3b)')
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {

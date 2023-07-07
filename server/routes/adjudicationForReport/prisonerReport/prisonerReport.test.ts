@@ -138,7 +138,7 @@ afterEach(() => {
 })
 
 describe('GET prisoner report', () => {
-  it.only('should load the prisoner report page', () => {
+  it('should load the prisoner report page', () => {
     return request(app)
       .get(adjudicationUrls.prisonerReport.urls.report(12345))
       .expect('Content-Type', /html/)
