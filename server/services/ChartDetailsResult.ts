@@ -29,6 +29,7 @@ export interface ChartEntryLine {
   offence_type?: string
   plea?: string
   finding?: string
+  sanction?: string
   month: number
   year: number
   count: number
@@ -45,8 +46,12 @@ export interface RowSource {
 }
 
 export interface DataFilter {
-  filter: (row: ChartEntryHorizontalBar) => boolean
+  filter: (row: ChartEntryHorizontalBar | ChartEntryLine) => boolean
 }
+
+export const ALL_DATA_FILTER = {
+  filter: () => true,
+} as DataFilter
 
 export const MONTH_SHORT_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 

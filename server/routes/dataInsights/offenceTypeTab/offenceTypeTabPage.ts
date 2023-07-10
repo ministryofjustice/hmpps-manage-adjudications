@@ -3,7 +3,12 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar, ChartEntryLine } from '../../../services/ChartDetailsResult'
+import {
+  ChartDetailsResult,
+  ChartEntryHorizontalBar,
+  ChartEntryLine,
+  ALL_DATA_FILTER,
+} from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { getUniqueItems, produceHorizontalBarsChart, produceLinesCharts } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -56,6 +61,7 @@ export default class OffenceTypeTabPage {
       agencyId,
       'Total adjudications by adjudication offence type – current month and previous 12 months (3a)',
       await this.chartApiService.getChart(username, agencyId, '3a'),
+      ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
       { source: (row: ChartEntryHorizontalBar) => row.count }
     )

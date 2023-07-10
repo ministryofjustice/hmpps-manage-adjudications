@@ -109,10 +109,13 @@ export const produceLinesCharts = async (
   agencyId: string,
   chartTitle: string,
   chartDetails: ChartDetailsResult,
+  dataFilter: DataFilter,
   legendsSource: RowSource,
   yValueSource: RowSource
 ) => {
-  const chartEntries = chartDetails.chartEntries as ChartEntryLine[]
+  const chartEntries = (chartDetails.chartEntries as ChartEntryLine[]).filter((row: ChartEntryLine) => {
+    return dataFilter.filter(row)
+  })
 
   const chartEntriesMap: Map<string, ChartEntryLine[]> = chartEntries.reduce(
     (entryMap: Map<string, ChartEntryLine[]>, row: ChartEntryLine) =>
