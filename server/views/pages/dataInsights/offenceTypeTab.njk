@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
+{% from "../../partials/charts/linesChart.njk" import linesChart %}
 
 {% set title = "Adjudication data - Offence type" %}
 
@@ -20,6 +21,10 @@
   <div class="offence-type-tab">
 
     {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ linesChart(chartSettingMap['3a']) }}
+    </div>
 
     <div>
       <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">

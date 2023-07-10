@@ -3,8 +3,9 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult } from '../../../services/ChartDetailsResult'
+import { ChartDetailsResult, ChartEntryHorizontalBar, ChartEntryLine } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
+import { produceLinesCharts } from '../chartService'
 
 type PageData = {
   error?: FormError
@@ -27,12 +28,32 @@ export default class PleasAndFindingsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails: ChartDetailsResult = await this.chartApiService.getChart(username, agencyId, '1a')
+    const chartSettingMap = {}
+
+    chartSettingMap['5a'] = await produceLinesCharts(
+      '5a',
+      username,
+      agencyId,
+      'Pleas given – current month and previous 12 months (5a)',
+      await this.chartApiService.getChart(username, agencyId, '5a'),
+      { source: (row: ChartEntryLine) => row.plea },
+      { source: (row: ChartEntryHorizontalBar) => row.count }
+    )
+
+    chartSettingMap['5b'] = await produceLinesCharts(
+      '5b',
+      username,
+      agencyId,
+      'Total adjudications by findings – current month and previous 12 months (5b)',
+      await this.chartApiService.getChart(username, agencyId, '5b'),
+      { source: (row: ChartEntryLine) => row.finding },
+      { source: (row: ChartEntryHorizontalBar) => row.count }
+    )
+
     return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {
       errors: error ? [error] : [],
-      chartDetails,
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PLEAS_AND_FINDINGS),
-      chartSettingMap: {},
+      chartSettingMap,
     })
   }
 

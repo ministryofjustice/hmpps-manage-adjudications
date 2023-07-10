@@ -1,0 +1,5 @@
+{% from "../../macros/dataInsights/linesChartData.njk" import linesChartData %}
+
+{% macro linesChart(chartSetting) %}
+    {{ linesChartData(chartSetting) }}
+{% endmacro %}
