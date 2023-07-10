@@ -15,7 +15,7 @@ const DARK_BLUE = '#003078'
 const DARK_BLUE_DARKER = '#00265f'
 const LIGHT_BLUE = '#5694ca'
 const LIGHT_BLUE_DARKER = '#4388c4'
-const TURQUOISE = '#28a197'
+const TURQUOISE = ['#28a197', '#238d84']
 const LIGHT_PURPLE = '#8c8ec0'
 // const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
@@ -296,16 +296,18 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               label: 'Previous year 2022',
               data: params.lineData,
               fill: false,
-              borderColor: TURQUOISE,
-              backgroundColor: TURQUOISE,
-              pointBackgroundColor: TURQUOISE,
+              borderColor: TURQUOISE[0],
+              backgroundColor: TURQUOISE[0],
+              hoverBorderColor: TURQUOISE[1],
+              pointBackgroundColor: TURQUOISE[0],
               pointBorderColor: '#ffffff',
               pointBorderWidth: 1,
-              pointHoverBackgroundColor: ['#ffffff', '#000000'],
-              pointHoverBorderColor: TURQUOISE,
+              pointHoverBackgroundColor: '#ffffff',
+              pointHoverBorderColor: TURQUOISE[1],
               pointHoverBorderWidth: 3,
               tension: 0,
               borderWidth: 2,
+              hoverBorderWidth: 4,
               pointStyle: 'circle',
               font: {
                 size: 16,
@@ -326,6 +328,9 @@ export const createVerticalBarsAndLineChartSettings = (params: {
           labels: params.labels,
         },
         options: {
+          hover: {
+            mode: 'dataset',
+          } as object,
           scales: {
             x: {
               border: {
