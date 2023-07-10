@@ -4,10 +4,10 @@ import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import {
+  ALL_DATA_FILTER,
   ChartDetailsResult,
   ChartEntryHorizontalBar,
   ChartEntryLine,
-  ALL_DATA_FILTER,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { getUniqueItems, produceLinesCharts } from '../chartService'
@@ -63,7 +63,7 @@ export default class PunishmentsTabPage {
       username,
       agencyId,
       'Punishments given for each adjudication offence type - current month and previous 12 months (4b)',
-      await this.chartApiService.getChart(username, agencyId, '4b'),
+      chartDetails4b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryLine) => row.sanction },
       { source: (row: ChartEntryHorizontalBar) => row.count }

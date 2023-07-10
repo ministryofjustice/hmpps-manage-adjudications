@@ -68,7 +68,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       agencyId,
       'Percentage and number of prisoners in the establishment currently (2a)',
       chartDetails2a,
-      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic.text },
+      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
@@ -76,7 +76,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic.text)
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text)
     )
 
     chartSettingMap['2b'] = await produceHorizontalBarsChart(
@@ -85,7 +85,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       agencyId,
       'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability – last 30 days (2b)',
       await this.chartApiService.getChart(username, agencyId, '2b'),
-      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic.text },
+      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
@@ -93,7 +93,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic.text)
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text)
     )
 
     return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
@@ -101,7 +101,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES),
       chartSettingMap,
       protectedCharacteristics,
-      characteristic: characteristic.value,
+      characteristic: characteristic?.value,
     })
   }
 
