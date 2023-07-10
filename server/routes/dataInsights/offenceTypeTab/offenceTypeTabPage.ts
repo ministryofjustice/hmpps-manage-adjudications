@@ -61,9 +61,7 @@ export default class OffenceTypeTabPage {
     )
 
     const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')
-    const chartEntries3b = chartDetails3b.chartEntries as ChartEntryHorizontalBar[]
-
-    const offenceTypes: DropDownEntry[] = getUniqueItems(chartEntries3b, {
+    const offenceTypes: DropDownEntry[] = getUniqueItems(chartDetails3b.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
@@ -80,10 +78,10 @@ export default class OffenceTypeTabPage {
       chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => `${row.incident_loc}` },
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic()

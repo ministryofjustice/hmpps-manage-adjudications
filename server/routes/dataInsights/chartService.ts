@@ -226,7 +226,6 @@ export const createHorizontalBarsChartSettings = (params: {
             tooltip: {
               backgroundColor: LIGHT_PURPLE,
               titleColor: 'white',
-              titleFontX: FONT_FAMILY,
               titleAlign: 'center',
               titleSpacing: 2,
               titleMarginBottom: 6,
@@ -385,7 +384,6 @@ export const createVerticalBarsAndLineChartSettings = (params: {
             tooltip: {
               backgroundColor: LIGHT_PURPLE,
               titleColor: 'white',
-              titleFontX: FONT_FAMILY,
               titleAlign: 'center',
               titleSpacing: 2,
               titleMarginBottom: 6,
@@ -566,7 +564,6 @@ export const createLinesChartsSettings = (params: {
             tooltip: {
               backgroundColor: LIGHT_PURPLE,
               titleColor: 'white',
-              titleFontX: FONT_FAMILY,
               titleAlign: 'center',
               titleSpacing: 2,
               titleMarginBottom: 6,
@@ -672,7 +669,9 @@ export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: Ro
         return cell.source(row) as string
       })
     )
-  ).map(value => {
-    return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
-  })
+  )
+    .sort()
+    .map(value => {
+      return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
+    })
 }

@@ -23,7 +23,6 @@ export interface ChartEntryHorizontalBar {
   characteristic?: string
   count: number
   proportion: number
-  proportion_round: number
 }
 
 export interface ChartEntryLine {
@@ -34,12 +33,11 @@ export interface ChartEntryLine {
   year: number
   count: number
   proportion: number
-  proportion_round: number
 }
 
 export interface ChartEntryCommentary {
   count: number
-  proportion_round: string
+  proportion: string
 }
 
 export interface RowSource {
