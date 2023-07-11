@@ -3,7 +3,12 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar, ChartEntryLine } from '../../../services/ChartDetailsResult'
+import {
+  ChartDetailsResult,
+  ChartEntryHorizontalBar,
+  ChartEntryLine,
+  ALL_DATA_FILTER,
+} from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { getUniqueItems, produceHorizontalBarsChart, produceLinesCharts } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -56,14 +61,13 @@ export default class OffenceTypeTabPage {
       agencyId,
       'Total adjudications by adjudication offence type – current month and previous 12 months (3a)',
       await this.chartApiService.getChart(username, agencyId, '3a'),
+      ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
       { source: (row: ChartEntryHorizontalBar) => row.count }
     )
 
     const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')
-    const chartEntries3b = chartDetails3b.chartEntries as ChartEntryHorizontalBar[]
-
-    const offenceTypes: DropDownEntry[] = getUniqueItems(chartEntries3b, {
+    const offenceTypes: DropDownEntry[] = getUniqueItems(chartDetails3b.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
@@ -80,10 +84,10 @@ export default class OffenceTypeTabPage {
       chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => `${row.incident_loc}` },
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic()

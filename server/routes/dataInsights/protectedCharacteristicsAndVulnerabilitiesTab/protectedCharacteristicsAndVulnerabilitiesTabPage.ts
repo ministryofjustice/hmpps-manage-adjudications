@@ -5,14 +5,13 @@ import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { produceHorizontalBarsChart } from '../chartService'
+import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import ProtectedCharacteristic from '../protectedCharacteristic'
+import DropDownEntry from '../dropDownEntry'
 
 type PageData = {
   error?: FormError
   chartDetails?: ChartDetailsResult
-  characteristic: ProtectedCharacteristic
 }
 
 class PageOptions {}
@@ -48,12 +47,17 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const protectedCharacteristics: ProtectedCharacteristic[] =
-      ProtectedCharacteristic.getProtectedCharacteristicsAndVulnerabilitiesValues()
-
-    const characteristic = ProtectedCharacteristic.valueOfOrElse(
+    const chartDetails2a = await this.chartApiService.getChart(username, agencyId, '2a')
+    const protectedCharacteristics: DropDownEntry[] = getUniqueItems(
+      chartDetails2a.chartEntries as ChartEntryHorizontalBar[],
+      {
+        source: (row: ChartEntryHorizontalBar) => row.characteristic,
+      }
+    )
+    const characteristic: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
+      protectedCharacteristics,
       req.query.characteristic as string,
-      protectedCharacteristics[0]
+      protectedCharacteristics.length > 0 ? protectedCharacteristics[0] : undefined
     )
 
     const chartSettingMap = {}
@@ -63,16 +67,16 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       username,
       agencyId,
       'Percentage and number of prisoners in the establishment currently (2a)',
-      await this.chartApiService.getChart(username, agencyId, '2a'),
-      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic.value },
+      chartDetails2a,
+      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
-        { source: (row: ChartEntryHorizontalBar) => `${row.value}` }, // [${row.characteristic}]
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${row.value}` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic.text)
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text)
     )
 
     chartSettingMap['2b'] = await produceHorizontalBarsChart(
@@ -81,15 +85,15 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       agencyId,
       'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability – last 30 days (2b)',
       await this.chartApiService.getChart(username, agencyId, '2b'),
-      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic.value },
+      { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => `${row.value}` },
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic.text)
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text)
     )
 
     return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
@@ -97,7 +101,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES),
       chartSettingMap,
       protectedCharacteristics,
-      characteristic: characteristic.value,
+      characteristic: characteristic?.value,
     })
   }
 

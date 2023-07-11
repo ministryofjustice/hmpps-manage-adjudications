@@ -3,7 +3,12 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar, ChartEntryLine } from '../../../services/ChartDetailsResult'
+import {
+  ChartDetailsResult,
+  ChartEntryHorizontalBar,
+  ChartEntryLine,
+  ALL_DATA_FILTER,
+} from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { produceLinesCharts } from '../chartService'
 
@@ -36,6 +41,7 @@ export default class PleasAndFindingsTabPage {
       agencyId,
       'Pleas given – current month and previous 12 months (5a)',
       await this.chartApiService.getChart(username, agencyId, '5a'),
+      ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.plea },
       { source: (row: ChartEntryHorizontalBar) => row.count }
     )
@@ -46,6 +52,7 @@ export default class PleasAndFindingsTabPage {
       agencyId,
       'Total adjudications by findings – current month and previous 12 months (5b)',
       await this.chartApiService.getChart(username, agencyId, '5b'),
+      ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.finding },
       { source: (row: ChartEntryHorizontalBar) => row.count }
     )
