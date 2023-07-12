@@ -5,6 +5,7 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import config from '../../config'
 
 type TaskType = {
   id: string
@@ -22,7 +23,12 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCaseloadName: string): TaskType[] => {
+const createTasks = (
+  reviewTotal: number,
+  transferReviewTotal: number,
+  activeCaseloadName: string,
+  dataInsightsEnabled: boolean
+): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
@@ -107,6 +113,15 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       roles: [],
       enabled: true,
     },
+    {
+      id: 'data-insights',
+      heading: 'Adjudication data',
+      description:
+        'Data visualisation for adjudications at this establishment, including by location and different prisoner characteristics',
+      href: adjudicationUrls.dataInsights.root,
+      roles: [],
+      enabled: dataInsightsEnabled,
+    },
   ]
 }
 
@@ -124,14 +139,22 @@ export default class HomepageRoutes {
     ])
     const { reviewTotal, transferReviewTotal } = counts
 
-    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
+    const { activeCaseLoadId } = res.locals.user
+    const dataInsightsEnabled = config.dataInsightsFlag === 'true' && activeCaseLoadId === 'RNI'
+
+    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName, dataInsightsEnabled).filter(
+      task => task.enabled
+    )
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
-    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task =>
-      task.heading.includes('DIS')
-    )
+    const disRelatedTasks = createTasks(
+      reviewTotal,
+      transferReviewTotal,
+      activeCaseloadName,
+      dataInsightsEnabled
+    ).filter(task => task.heading.includes('DIS'))
 
     reviewerTasks.push({
       id: 'enter-outcomes',
