@@ -94,24 +94,6 @@ context('Adjudication data', () => {
     })
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'MDI',
-      chartName: '5a',
-      response: {
-        agencyId: 'MDI',
-        chartName: '5a',
-        chartEntries: chartEntries['5a'],
-      } as ChartDetailsResult,
-    })
-    cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
-      chartName: '5b',
-      response: {
-        agencyId: 'MDI',
-        chartName: '5b',
-        chartEntries: chartEntries['5b'],
-      } as ChartDetailsResult,
-    })
-    cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
       chartName: '4a',
       response: {
         agencyId: 'MDI',
@@ -126,6 +108,33 @@ context('Adjudication data', () => {
         agencyId: 'MDI',
         chartName: '4b',
         chartEntries: chartEntries['4b'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '4c',
+      response: {
+        agencyId: 'MDI',
+        chartName: '4c',
+        chartEntries: chartEntries['4c'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '5a',
+      response: {
+        agencyId: 'MDI',
+        chartName: '5a',
+        chartEntries: chartEntries['5a'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '5b',
+      response: {
+        agencyId: 'MDI',
+        chartName: '5b',
+        chartEntries: chartEntries['5b'],
       } as ChartDetailsResult,
     })
     cy.signIn()
@@ -174,6 +183,7 @@ context('Adjudication data', () => {
     page.checkChartTitle(
       'Punishments given for each adjudication offence type - current month and previous 12 months (4b)'
     )
+    page.checkChartTitle('Suspended and activated punishments - current month and last 12 months (4c)')
   })
 
   it('should contain the required page elements /data-insights/pleas-and-findings', () => {
@@ -13236,6 +13246,281 @@ const getChartEntriesMap = () => {
       proportion: 0.01,
     },
   ]
+  const chartEntries4c = [
+    {
+      status: 'Activated',
+      month: 7.0,
+      year: 2022.0,
+      count: 7.0,
+      proportion: 0.05,
+    },
+    {
+      status: 'Activated',
+      month: 8.0,
+      year: 2022.0,
+      count: 74.0,
+      proportion: 0.3,
+    },
+    {
+      status: 'Activated',
+      month: 9.0,
+      year: 2022.0,
+      count: 64.0,
+      proportion: 0.3,
+    },
+    {
+      status: 'Activated',
+      month: 10.0,
+      year: 2022.0,
+      count: 32.0,
+      proportion: 0.22,
+    },
+    {
+      status: 'Activated',
+      month: 11.0,
+      year: 2022.0,
+      count: 64.0,
+      proportion: 0.27,
+    },
+    {
+      status: 'Activated',
+      month: 12.0,
+      year: 2022.0,
+      count: 48.0,
+      proportion: 0.41,
+    },
+    {
+      status: 'Activated',
+      month: 1.0,
+      year: 2023.0,
+      count: 29.0,
+      proportion: 0.19,
+    },
+    {
+      status: 'Activated',
+      month: 2.0,
+      year: 2023.0,
+      count: 21.0,
+      proportion: 0.22,
+    },
+    {
+      status: 'Activated',
+      month: 3.0,
+      year: 2023.0,
+      count: 87.0,
+      proportion: 0.32,
+    },
+    {
+      status: 'Activated',
+      month: 4.0,
+      year: 2023.0,
+      count: 38.0,
+      proportion: 0.32,
+    },
+    {
+      status: 'Activated',
+      month: 5.0,
+      year: 2023.0,
+      count: 53.0,
+      proportion: 0.28,
+    },
+    {
+      status: 'Activated',
+      month: 6.0,
+      year: 2023.0,
+      count: 2.0,
+      proportion: 0.01,
+    },
+    {
+      status: 'Activated',
+      month: 7.0,
+      year: 2023.0,
+      count: 32.0,
+      proportion: 0.31,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 7.0,
+      year: 2022.0,
+      count: 39.0,
+      proportion: 0.29,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 8.0,
+      year: 2022.0,
+      count: 78.0,
+      proportion: 0.32,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 9.0,
+      year: 2022.0,
+      count: 55.0,
+      proportion: 0.26,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 10.0,
+      year: 2022.0,
+      count: 93.0,
+      proportion: 0.65,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 11.0,
+      year: 2022.0,
+      count: 78.0,
+      proportion: 0.33,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 12.0,
+      year: 2022.0,
+      count: 43.0,
+      proportion: 0.37,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 1.0,
+      year: 2023.0,
+      count: 31.0,
+      proportion: 0.2,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 2.0,
+      year: 2023.0,
+      count: 67.0,
+      proportion: 0.71,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 3.0,
+      year: 2023.0,
+      count: 84.0,
+      proportion: 0.31,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 4.0,
+      year: 2023.0,
+      count: 35.0,
+      proportion: 0.3,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 5.0,
+      year: 2023.0,
+      count: 55.0,
+      proportion: 0.29,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 6.0,
+      year: 2023.0,
+      count: 83.0,
+      proportion: 0.53,
+    },
+    {
+      status: 'Quashed/Reduced',
+      month: 7.0,
+      year: 2023.0,
+      count: 61.0,
+      proportion: 0.6,
+    },
+    {
+      status: 'Suspended',
+      month: 7.0,
+      year: 2022.0,
+      count: 89.0,
+      proportion: 0.66,
+    },
+    {
+      status: 'Suspended',
+      month: 8.0,
+      year: 2022.0,
+      count: 91.0,
+      proportion: 0.37,
+    },
+    {
+      status: 'Suspended',
+      month: 9.0,
+      year: 2022.0,
+      count: 91.0,
+      proportion: 0.43,
+    },
+    {
+      status: 'Suspended',
+      month: 10.0,
+      year: 2022.0,
+      count: 18.0,
+      proportion: 0.13,
+    },
+    {
+      status: 'Suspended',
+      month: 11.0,
+      year: 2022.0,
+      count: 92.0,
+      proportion: 0.39,
+    },
+    {
+      status: 'Suspended',
+      month: 12.0,
+      year: 2022.0,
+      count: 25.0,
+      proportion: 0.22,
+    },
+    {
+      status: 'Suspended',
+      month: 1.0,
+      year: 2023.0,
+      count: 96.0,
+      proportion: 0.62,
+    },
+    {
+      status: 'Suspended',
+      month: 2.0,
+      year: 2023.0,
+      count: 7.0,
+      proportion: 0.07,
+    },
+    {
+      status: 'Suspended',
+      month: 3.0,
+      year: 2023.0,
+      count: 98.0,
+      proportion: 0.36,
+    },
+    {
+      status: 'Suspended',
+      month: 4.0,
+      year: 2023.0,
+      count: 45.0,
+      proportion: 0.38,
+    },
+    {
+      status: 'Suspended',
+      month: 5.0,
+      year: 2023.0,
+      count: 83.0,
+      proportion: 0.43,
+    },
+    {
+      status: 'Suspended',
+      month: 6.0,
+      year: 2023.0,
+      count: 71.0,
+      proportion: 0.46,
+    },
+    {
+      status: 'Suspended',
+      month: 7.0,
+      year: 2023.0,
+      count: 9.0,
+      proportion: 0.09,
+    },
+  ]
   const chartEntries5a = [
     {
       plea: 'Guilty',
@@ -14254,6 +14539,7 @@ const getChartEntriesMap = () => {
     '3b': chartEntries3b,
     '4a': chartEntries4a,
     '4b': chartEntries4b,
+    '4c': chartEntries4c,
     '5a': chartEntries5a,
     '5b': chartEntries5b,
   }

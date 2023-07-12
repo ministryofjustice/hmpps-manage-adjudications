@@ -10,7 +10,7 @@ import {
   ChartEntryLine,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { getUniqueItems, produceLinesCharts } from '../chartService'
+import { getUniqueItems, produceLinesCharts, produceMultiVerticalBarsCharts } from '../chartService'
 import DropDownEntry from '../dropDownEntry'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
@@ -67,6 +67,18 @@ export default class PunishmentsTabPage {
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryLine) => row.sanction },
       { source: (row: ChartEntryHorizontalBar) => row.count }
+    )
+
+    chartSettingMap['4c'] = await produceMultiVerticalBarsCharts(
+      '4c',
+      username,
+      agencyId,
+      'Suspended and activated punishments - current month and last 12 months (4c)',
+      await this.chartApiService.getChart(username, agencyId, '4c'),
+      { source: (row: ChartEntryLine) => row.status },
+      { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
+      { source: (row: ChartEntryLine) => `${row.year}-${row.month}` },
+      { source: (row: ChartEntryLine) => row.count }
     )
 
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {
