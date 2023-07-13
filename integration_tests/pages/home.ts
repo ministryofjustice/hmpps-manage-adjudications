@@ -33,5 +33,7 @@ export default class Home extends Page {
 
   confirmDisHasBeenIssuedLink = (): PageElement => cy.get('[data-qa="confirm-dis-has-been-issued"]')
 
+  dataInsightsLink = (): PageElement => cy.get('[data-qa="data-insights"]')
+
   enterOutcomesCard = (): PageElement => cy.get('a').contains('Enter outcomes')
 }

@@ -25,7 +25,12 @@
   height: 800px;
 }
 
-.vertical-chart-table-head-cell {
+.chart-generic-panel-multi-vertical-bars {
+  height: 500px;
+  padding-left: 205px;
+}
+
+.vertical-chart-table-head-cell, .multi-vertical-bars-chart-table-head-cell {
   width: 190px;
   font-weight: bold;
   text-align: right;
@@ -34,6 +39,11 @@
 
 .vertical-chart-table-row-cell {
   width: 40px;
+}
+
+.multi-vertical-bars-chart-table-row-cell {
+  width: 40px;
+  word-spacing: 20px;
 }
 
 .horizontal-chart-table-head-cell {

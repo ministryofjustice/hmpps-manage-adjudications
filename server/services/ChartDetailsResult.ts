@@ -30,6 +30,7 @@ export interface ChartEntryLine {
   plea?: string
   finding?: string
   sanction?: string
+  status?: string
   month: number
   year: number
   count: number
@@ -39,6 +40,11 @@ export interface ChartEntryLine {
 export interface ChartEntryCommentary {
   count: number
   proportion: string
+}
+
+export interface TableRowEntry {
+  label: string
+  data: number[] | string[]
 }
 
 export interface RowSource {
