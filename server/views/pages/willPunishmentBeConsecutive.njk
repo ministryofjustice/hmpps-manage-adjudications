@@ -2,10 +2,9 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../macros/datePicker.njk" import datePicker %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set title = "Will this punishment be suspended?" %}
+{% set title %} Will this punishment be consecutive to another one given to {{prisonerName}}? {% endset %}
 
 {% block pageTitle %}
   {{ title }}
@@ -14,19 +13,6 @@
   {{ breadcrumb() }}
 {% endblock %}
 
-{% set suspendedUntilHtml %}
-<h2 class="govuk-heading-s">When will it be suspended until?</h2>
-{{
-  datePicker({
-    id: 'suspendedUntil',
-    label: 'Suspended until',
-    name: 'suspendedUntil',
-    date: suspendedUntil,
-    attributes: {'data-disable-future-date':'false', 'data-qa': "suspended-until-date-picker" },
-    classes: 'govuk-input--width-10'
-  })
-  }}
-{% endset -%}
 
 {% block content %}
   {% if errors | length %}
@@ -42,22 +28,21 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {{ govukRadios({
-        idPrefix: 'suspended',
-        id: 'suspended',
-        name: 'suspended',
-        attributes: { "data-qa": "suspended-radio-buttons" },
-        errorMessage: "suspended" | findError(errors),
+        idPrefix: 'consecutive',
+        id: 'consecutive',
+        name: 'consecutive',
+        attributes: { "data-qa": "consecutive-radio-buttons" },
+        errorMessage: "consecutive" | findError(errors),
         items: [
           {
             value: "yes",
             text: "Yes",
-            checked: suspended == 'yes',
-            conditional: { html: suspendedUntilHtml }       
+            checked: consecutive == 'yes'
           },
           {
             value: "no",
             text: "No",
-            checked: suspended == 'no'
+            checked: consecutive == 'no'
           }
         ] }) 
       }}

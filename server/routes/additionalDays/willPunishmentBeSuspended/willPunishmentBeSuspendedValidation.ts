@@ -1,6 +1,6 @@
 import { FormError } from '../../../@types/template'
 
-type PunishmentScheduleForm = {
+type WillPunishmentBeSuspendedForm = {
   suspended?: string
   suspendedUntil?: string
 }
@@ -16,7 +16,7 @@ const errors: { [key: string]: FormError } = {
   },
 }
 
-export default function validateForm({ suspended, suspendedUntil }: PunishmentScheduleForm): FormError | null {
+export default function validateForm({ suspended, suspendedUntil }: WillPunishmentBeSuspendedForm): FormError | null {
   if (!suspended) return errors.MISSING_SUSPENDED_DECISION
   if (suspended === 'yes' && !suspendedUntil) return errors.MISSING_SUSPENDED_UNTIL
 
