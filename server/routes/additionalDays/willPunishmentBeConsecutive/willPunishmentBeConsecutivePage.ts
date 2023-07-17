@@ -42,7 +42,7 @@ export default class WillPunishmentBeConsecutivePage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
-    const { error } = pageData
+    const { error, consecutive } = pageData
 
     const prisoner = await this.punishmentsService.getPrisonerDetails(adjudicationNumber, user)
 
@@ -50,6 +50,7 @@ export default class WillPunishmentBeConsecutivePage {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       errors: error ? [error] : [],
       prisonerName: prisoner.friendlyName || 'this prisoner',
+      consecutive,
     })
   }
 

@@ -172,7 +172,10 @@ export default class PunishmentsService {
 
     const enhancedResult = {
       ...prisoner,
-      friendlyName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      friendlyName:
+        prisoner.firstName && prisoner.lastName
+          ? convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
+          : null,
     }
 
     return enhancedResult
