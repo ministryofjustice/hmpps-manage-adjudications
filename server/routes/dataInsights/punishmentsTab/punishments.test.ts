@@ -18,7 +18,21 @@ beforeEach(() => {
   chartApiService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
       agencyId: 'MDI',
-      chartName: '1a',
+      chartName: '4a',
+      chartEntries: [],
+    })
+  )
+  chartApiService.getChart.mockResolvedValue(
+    testData.chartDetailsResult({
+      agencyId: 'MDI',
+      chartName: '4b',
+      chartEntries: [],
+    })
+  )
+  chartApiService.getChart.mockResolvedValue(
+    testData.chartDetailsResult({
+      agencyId: 'MDI',
+      chartName: '4c',
       chartEntries: [],
     })
   )

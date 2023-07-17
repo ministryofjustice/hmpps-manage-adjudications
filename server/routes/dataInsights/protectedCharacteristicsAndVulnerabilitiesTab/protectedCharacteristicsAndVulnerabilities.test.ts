@@ -22,6 +22,13 @@ beforeEach(() => {
       chartEntries: [],
     })
   )
+  chartApiService.getChart.mockResolvedValue(
+    testData.chartDetailsResult({
+      agencyId: 'MDI',
+      chartName: '2b',
+      chartEntries: [],
+    })
+  )
   app = appWithAllRoutes({ production: false }, { chartApiService })
 })
 

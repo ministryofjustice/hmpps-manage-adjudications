@@ -1,0 +1,23 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro multiVerticalBarsChartData(chartSetting) %}
+	<div class="main-chart-with-data-panel" id="chart-panel-{{ chartSetting.chartData.elementId }}">
+
+		<h2 class="govuk-heading-m govuk-!-margin-bottom-6">{{ chartSetting.title }}</h2>
+
+		<div class="chart-generic-panel chart-generic-panel-multi-vertical-bars">
+			<canvas id="{{ chartSetting.chartData.elementId }}"></canvas>
+		</div>
+
+		<div class="chart-table-panel">
+			<div class="results-table">
+				{{ govukTable({
+					head: chartSetting.tableData.head,
+					rows: chartSetting.tableData.rows,
+					attributes: { "data-qa": "results-table" }
+				}) }}
+			</div>
+		</div>
+
+	</div>
+{% endmacro %}

@@ -3,9 +3,14 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
+import {
+  ChartDetailsResult,
+  ChartEntryHorizontalBar,
+  ChartEntryLine,
+  ALL_DATA_FILTER,
+} from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
+import { getUniqueItems, produceHorizontalBarsChart, produceLinesCharts } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import DropDownEntry from '../dropDownEntry'
 
@@ -48,10 +53,21 @@ export default class OffenceTypeTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
 
-    const chartDetails = await this.chartApiService.getChart(username, agencyId, '3b')
-    const chartEntries = chartDetails.chartEntries as ChartEntryHorizontalBar[]
+    const chartSettingMap = {}
 
-    const offenceTypes: DropDownEntry[] = getUniqueItems(chartEntries, {
+    chartSettingMap['3a'] = await produceLinesCharts(
+      '3a',
+      username,
+      agencyId,
+      'Total adjudications by adjudication offence type – current month and previous 12 months (3a)',
+      await this.chartApiService.getChart(username, agencyId, '3a'),
+      ALL_DATA_FILTER,
+      { source: (row: ChartEntryLine) => row.offence_type },
+      { source: (row: ChartEntryHorizontalBar) => row.count }
+    )
+
+    const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')
+    const offenceTypes: DropDownEntry[] = getUniqueItems(chartDetails3b.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
@@ -60,20 +76,18 @@ export default class OffenceTypeTabPage {
       offenceTypes.length > 0 ? offenceTypes[0] : undefined
     )
 
-    const chartSettingMap = {}
-
     chartSettingMap['3b'] = await produceHorizontalBarsChart(
       '3b',
       username,
       agencyId,
       'Adjudication offence type by location – last 30 days (3b)',
-      chartDetails,
+      chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => `${row.incident_loc}` },
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic()

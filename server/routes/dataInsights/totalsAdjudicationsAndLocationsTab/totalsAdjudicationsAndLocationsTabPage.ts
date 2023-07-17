@@ -61,7 +61,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
           return {
             count: row.count,
-            proportion_round: `${Math.trunc(row.proportion_round * 100)}%`,
+            proportion: `${Math.trunc(row.proportion * 100)}%`,
           } as ChartEntryCommentary
         },
       }
@@ -75,10 +75,10 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       await this.chartApiService.getChart(username, agencyId, '1d'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHead()
@@ -92,10 +92,10 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       await this.chartApiService.getChart(username, agencyId, '1f'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.wing_loc },
-      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion_round * 100) },
+      { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
       [
         { source: (row: ChartEntryHorizontalBar) => row.wing_loc },
-        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion_round * 100)}%` },
+        { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHead()

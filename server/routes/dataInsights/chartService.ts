@@ -1,12 +1,14 @@
-import { ChartOptions } from 'chart.js'
+import { ChartDataset, ChartOptions, Defaults, LegendOptions, LinearScaleOptions } from 'chart.js'
 import {
   ChartDetailsResult,
   ChartEntryCommentary,
   ChartEntryHorizontalBar,
+  ChartEntryLine,
   ChartEntryVerticalBar,
   DataFilter,
   getMonthShortName,
-  HorizontalTableCell,
+  RowSource,
+  TableRowEntry,
 } from '../../services/ChartDetailsResult'
 import DropDownEntry from './dropDownEntry'
 
@@ -14,8 +16,10 @@ const DARK_BLUE = '#003078'
 const DARK_BLUE_DARKER = '#00265f'
 const LIGHT_BLUE = '#5694ca'
 const LIGHT_BLUE_DARKER = '#4388c4'
-const TURQUOISE = '#28a197'
+const TURQUOISE = ['#28a197', '#238d84']
 const LIGHT_PURPLE = '#8c8ec0'
+const YELLOW = '#ffdd00'
+
 // const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
 
@@ -46,6 +50,73 @@ export const produceVerticalBarsAndLineCharts = async (
   })
 }
 
+export const produceMultiVerticalBarsCharts = async (
+  chartName: string,
+  username: string,
+  agencyId: string,
+  chartTitle: string,
+  chartDetails: ChartDetailsResult,
+  legendsSource: RowSource,
+  yValueSource: RowSource,
+  totalCountGroupByKey: RowSource,
+  totalCountGroupBySource: RowSource
+) => {
+  const chartEntries = chartDetails.chartEntries as ChartEntryLine[]
+
+  const chartEntriesMap: Map<string, ChartEntryLine[]> = chartEntries.reduce(
+    (entryMap: Map<string, ChartEntryLine[]>, row: ChartEntryLine) =>
+      entryMap.set(
+        legendsSource.source(row) as string,
+        [...(entryMap.get(legendsSource.source(row) as string) || []), row].sort((row1, row2) => {
+          if (row1.year === row2.year) {
+            return row1.month - row2.month
+          }
+          return row1.year - row2.year
+        })
+      ),
+    new Map<string, ChartEntryLine[]>()
+  )
+
+  const totalCountGroupBy: Map<string, number> = chartEntries.reduce(
+    (entryMap: Map<string, number>, row: ChartEntryLine) =>
+      entryMap.set(
+        totalCountGroupByKey.source(row) as string,
+        (totalCountGroupBySource.source(row) as number) +
+          ((entryMap.get(totalCountGroupByKey.source(row) as string) as number) || 0)
+      ),
+    new Map<string, number>()
+  )
+
+  const legends = Array.from(chartEntriesMap.keys())
+
+  return createMultiVerticalBarsChartSettings({
+    elementId: chartName,
+    chartTitle,
+    chartEntriesMap,
+    yValueSource,
+    head: [],
+    rows: getMultiVerticalBarsRows([
+      ...legends.map(legend => {
+        return {
+          label: legend,
+          data: chartEntriesMap
+            .get(legend)
+            .map((entry: ChartEntryLine) => `${entry.count} ${Math.trunc(entry.proportion * 100)}%`),
+        } as TableRowEntry
+      }),
+      {
+        label: 'Total adjudications',
+        data:
+          legends.length > 0
+            ? chartEntriesMap
+                .get(legends[0])
+                .map((entry: ChartEntryLine) => totalCountGroupBy.get(totalCountGroupByKey.source(entry) as string))
+            : [],
+      },
+    ]),
+  })
+}
+
 export const produceHorizontalBarsChart = async (
   chartName: string,
   username: string,
@@ -53,9 +124,9 @@ export const produceHorizontalBarsChart = async (
   chartTitle: string,
   chartDetails: ChartDetailsResult,
   dataFilter: DataFilter,
-  labelFieldSource: HorizontalTableCell,
-  barsDataSource: HorizontalTableCell,
-  rowsSource: HorizontalTableCell[],
+  labelFieldSource: RowSource,
+  barsDataSource: RowSource,
+  rowsSource: RowSource[],
   head: { text: string; classes: string }[]
 ) => {
   const chartEntries = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).filter(
@@ -88,7 +159,7 @@ export const produceCommentaryChart = async (
   agencyId: string,
   chartTitle: string,
   chartDetails: ChartDetailsResult,
-  rowsSource: HorizontalTableCell
+  rowsSource: RowSource
 ) => {
   const chartEntries: ChartEntryCommentary[] = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).map(
     (row: ChartEntryHorizontalBar) => {
@@ -101,6 +172,43 @@ export const produceCommentaryChart = async (
     chartEntries,
   })
 }
+
+export const produceLinesCharts = async (
+  chartName: string,
+  username: string,
+  agencyId: string,
+  chartTitle: string,
+  chartDetails: ChartDetailsResult,
+  dataFilter: DataFilter,
+  legendsSource: RowSource,
+  yValueSource: RowSource
+) => {
+  const chartEntries = (chartDetails.chartEntries as ChartEntryLine[]).filter((row: ChartEntryLine) => {
+    return dataFilter.filter(row)
+  })
+
+  const chartEntriesMap: Map<string, ChartEntryLine[]> = chartEntries.reduce(
+    (entryMap: Map<string, ChartEntryLine[]>, row: ChartEntryLine) =>
+      entryMap.set(
+        legendsSource.source(row) as string,
+        [...(entryMap.get(legendsSource.source(row) as string) || []), row].sort((row1, row2) => {
+          if (row1.year === row2.year) {
+            return row1.month - row2.month
+          }
+          return row1.year - row2.year
+        })
+      ),
+    new Map<string, ChartEntryLine[]>()
+  )
+
+  return createLinesChartsSettings({
+    elementId: chartName,
+    chartTitle,
+    chartEntriesMap,
+    yValueSource,
+  })
+}
+
 export const createHorizontalBarsChartSettings = (params: {
   elementId: string
   chartTitle: string
@@ -191,7 +299,6 @@ export const createHorizontalBarsChartSettings = (params: {
             tooltip: {
               backgroundColor: LIGHT_PURPLE,
               titleColor: 'white',
-              titleFontX: FONT_FAMILY,
               titleAlign: 'center',
               titleSpacing: 2,
               titleMarginBottom: 6,
@@ -236,8 +343,8 @@ export const createVerticalBarsAndLineChartSettings = (params: {
   }[][]
 }) => {
   const dataLength = params.barData.length
-  const barsColors = [...[...Array(Math.max(dataLength - 1, 0))].map(() => DARK_BLUE), LIGHT_BLUE]
-  const barsColorsDarker = [...[...Array(Math.max(dataLength - 1, 0))].map(() => DARK_BLUE_DARKER), LIGHT_BLUE_DARKER]
+  const barsColors = createCustomArray(dataLength, DARK_BLUE, LIGHT_BLUE)
+  const barsColorsDarker = createCustomArray(dataLength, DARK_BLUE_DARKER, LIGHT_BLUE_DARKER)
 
   return {
     title: params.chartTitle,
@@ -262,16 +369,18 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               label: 'Previous year 2022',
               data: params.lineData,
               fill: false,
-              borderColor: TURQUOISE,
-              backgroundColor: TURQUOISE,
-              pointBackgroundColor: TURQUOISE,
+              borderColor: TURQUOISE[0],
+              backgroundColor: TURQUOISE[0],
+              hoverBorderColor: TURQUOISE[1],
+              pointBackgroundColor: TURQUOISE[0],
               pointBorderColor: '#ffffff',
               pointBorderWidth: 1,
-              pointHoverBackgroundColor: ['#ffffff', '#000000'],
-              pointHoverBorderColor: TURQUOISE,
+              pointHoverBackgroundColor: '#ffffff',
+              pointHoverBorderColor: TURQUOISE[1],
               pointHoverBorderWidth: 3,
               tension: 0,
               borderWidth: 2,
+              hoverBorderWidth: 4,
               pointStyle: 'circle',
               font: {
                 size: 16,
@@ -292,6 +401,9 @@ export const createVerticalBarsAndLineChartSettings = (params: {
           labels: params.labels,
         },
         options: {
+          hover: {
+            mode: 'dataset',
+          } as object,
           scales: {
             x: {
               border: {
@@ -350,7 +462,6 @@ export const createVerticalBarsAndLineChartSettings = (params: {
             tooltip: {
               backgroundColor: LIGHT_PURPLE,
               titleColor: 'white',
-              titleFontX: FONT_FAMILY,
               titleAlign: 'center',
               titleSpacing: 2,
               titleMarginBottom: 6,
@@ -372,6 +483,323 @@ export const createVerticalBarsAndLineChartSettings = (params: {
     tableData: {
       head: params.head,
       rows: params.rows,
+    },
+  }
+}
+
+export const createMultiVerticalBarsChartSettings = (params: {
+  elementId: string
+  chartTitle: string
+  chartEntriesMap: Map<string, ChartEntryLine[]>
+  yValueSource: RowSource
+  head: never[]
+  rows: {
+    text: string | number
+    classes: string
+  }[][]
+}) => {
+  const linesLegends = Array.from(params.chartEntriesMap.keys())
+
+  const labels: string[][] =
+    linesLegends.length > 0
+      ? params.chartEntriesMap.get(linesLegends[0]).map((entry: ChartEntryLine) => {
+          return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
+        })
+      : []
+
+  const barsColors: string[] = [DARK_BLUE, YELLOW, LIGHT_BLUE]
+  const barsColorsDarker = [DARK_BLUE_DARKER, YELLOW, LIGHT_BLUE_DARKER]
+
+  const datasets = linesLegends.map((legend, i) => {
+    const chartEntries: ChartEntryLine[] = params.chartEntriesMap.get(legend)
+    return {
+      type: 'bar',
+      order: i + 1,
+      label: legend,
+      data: chartEntries.map((row: ChartEntryLine) => {
+        return params.yValueSource.source(row) as number
+      }),
+      backgroundColor: barsColors[i],
+      hoverBackgroundColor: barsColorsDarker[i],
+      hoverBorderWidth: 1,
+      hoverBorderColor: barsColorsDarker[i],
+    } as ChartDataset<'bar'> & object
+  })
+
+  return {
+    title: params.chartTitle,
+    chartData: {
+      elementId: params.elementId,
+      chartOptions: {
+        data: {
+          datasets,
+          labels,
+        },
+        options: {
+          hover: {
+            mode: 'dataset',
+          } as object,
+          scales: {
+            x: {
+              stacked: true,
+              border: {
+                color: 'black',
+              },
+              display: true,
+              ticks: {
+                display: true,
+                color: 'black',
+                font: {
+                  size: 16,
+                  weight: '600',
+                },
+              },
+              grid: {
+                display: false,
+              },
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              display: true,
+              ticks: {
+                stepSize: 20,
+                font: {
+                  size: 20,
+                  weight: '400',
+                },
+              },
+            },
+          },
+          plugins: {
+            layout: {
+              padding: 30,
+            },
+            legend: {
+              onClick: null,
+              position: 'top',
+              labels: {
+                font: {
+                  size: 20,
+                  family: FONT_FAMILY,
+                },
+                padding: 20,
+                boxWidth: 40,
+                boxHeight: 25,
+              },
+            },
+            title: {
+              display: false,
+              text: params.chartTitle,
+              font: {
+                size: 30,
+                family: FONT_FAMILY,
+              },
+            },
+            tooltip: {
+              backgroundColor: LIGHT_PURPLE,
+              titleColor: 'white',
+              titleAlign: 'center',
+              titleSpacing: 2,
+              titleMarginBottom: 6,
+              titleFont: {
+                size: 18,
+                family: FONT_FAMILY,
+              },
+              bodyColor: 'white',
+              bodySpacing: 2,
+              bodyFont: {
+                size: 14,
+                family: FONT_FAMILY,
+              },
+            },
+          },
+        },
+      } as ChartOptions,
+    },
+    tableData: {
+      head: params.head,
+      rows: params.rows,
+    },
+  }
+}
+
+export const createLinesChartsSettings = (params: {
+  elementId: string
+  chartTitle: string
+  chartEntriesMap: Map<string, ChartEntryLine[]>
+  yValueSource: RowSource
+}) => {
+  const linesLegends = Array.from(params.chartEntriesMap.keys())
+
+  const labels: string[][] =
+    linesLegends.length > 0
+      ? params.chartEntriesMap.get(linesLegends[0]).map((entry: ChartEntryLine) => {
+          return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
+        })
+      : []
+
+  const lineColorsOptions = [
+    ['#5694ca', '#397bb4'],
+    ['#003078', '#001c45'],
+    ['#ffdd00', '#ccb100'],
+    ['#d53880', '#b42667'],
+    ['#b1b4b6', '#979b9d'],
+    ['#28a197', '#1e7871'],
+    ['#aa2a16', '#7d1f10'],
+    ['#f47738', '#ec580d'],
+    ['#f499be', '#ef6ba1'],
+    ['#4c2c92', '#38206b'],
+  ]
+  const lineColors = [...lineColorsOptions, ...lineColorsOptions, ...lineColorsOptions].splice(0, linesLegends.length)
+
+  const datasets = linesLegends.map((legend, i) => {
+    const chartEntries: ChartEntryLine[] = params.chartEntriesMap.get(legend)
+    return {
+      type: 'line',
+      order: i + 1,
+      label: legend,
+      data: chartEntries.map((row: ChartEntryLine) => {
+        return params.yValueSource.source(row) as number
+      }),
+      borderColor: lineColors[i][0],
+      backgroundColor: lineColors[i][0],
+
+      hoverColor: '#D53880',
+      hoverBorderColor: lineColors[i][1],
+      hoverBorderWidth: 4,
+
+      pointBackgroundColor: lineColors[i][0],
+      pointBorderColor: lineColors[i][0],
+      pointBorderWidth: 1,
+      pointHoverBackgroundColor: '#ffffff',
+      pointHoverBorderColor: lineColors[i][1],
+      pointHoverBorderWidth: 3,
+      tension: 0,
+      borderWidth: 2,
+      pointStyle: 'circle',
+      font: {
+        size: 16,
+        weight: '600',
+      },
+    } as ChartDataset<'line'> & object
+    // ChartDataset<'line'> & LineOptions  & Defaults & PointPrefixedHoverOptions & PointElement & LineOptions & object
+  })
+  return {
+    title: params.chartTitle,
+    chartData: {
+      elementId: params.elementId,
+      chartOptions: {
+        data: {
+          datasets,
+          labels,
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          hover: {
+            mode: 'dataset',
+          } as object,
+          scales: {
+            x: {
+              offset: true,
+              border: {
+                color: 'black',
+              },
+              display: true,
+              ticks: {
+                display: true,
+                color: 'black',
+                font: {
+                  size: 16,
+                  weight: '600',
+                },
+              },
+              grid: {
+                display: false,
+              },
+            } as object,
+            y: {
+              title: {
+                display: false,
+                text: 'Count',
+                color: 'black',
+                font: {
+                  size: 16,
+                  weight: '600',
+                },
+                align: 'end',
+              },
+              beginAtZero: true,
+              offset: true,
+              display: true,
+              ticks: {
+                stepSize: 20,
+                font: {
+                  size: 20,
+                  weight: '400',
+                },
+              },
+            } as LinearScaleOptions & object,
+          } as object,
+          plugins: {
+            layout: {
+              padding: 30,
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              align: 'start',
+              labels: {
+                font: {
+                  size: 18,
+                  family: FONT_FAMILY,
+                },
+                padding: 20,
+                boxWidth: 20,
+                boxHeight: 25,
+              },
+              title: {
+                display: true,
+                // padding: 15,
+                padding: {
+                  top: 20,
+                  bottom: 0,
+                },
+                font: {
+                  size: 18,
+                  family: FONT_FAMILY,
+                },
+                text: 'Notes: click on the legends below to hide/display the line chart.',
+              },
+            } as LegendOptions<'line'>,
+            title: {
+              display: false,
+            },
+            tooltip: {
+              backgroundColor: LIGHT_PURPLE,
+              titleColor: 'white',
+              titleAlign: 'center',
+              titleSpacing: 2,
+              titleMarginBottom: 6,
+              titleFont: {
+                size: 18,
+                family: FONT_FAMILY,
+              },
+              bodyColor: 'white',
+              bodySpacing: 2,
+              bodyFont: {
+                size: 14,
+                family: FONT_FAMILY,
+              },
+            },
+          } as object, // try as PluginOptionsByType<'line'> & object
+        } as Defaults,
+      } as ChartOptions<'line'>,
+    },
+    tableData: {
+      head: [] as never[],
+      rows: [] as never[],
     },
   }
 }
@@ -405,6 +833,23 @@ export const getVerticalBarsAndLineChartRows = (barData: number[], lineData: num
   ]
 }
 
+export const getMultiVerticalBarsRows = (tableRowEntries: TableRowEntry[]) => {
+  return tableRowEntries.map((tableRowEntry: TableRowEntry) => {
+    return [
+      {
+        text: tableRowEntry.label,
+        classes: 'multi-vertical-bars-chart-table-head-cell',
+      },
+      ...tableRowEntry.data.map(value => {
+        return {
+          text: value,
+          classes: 'multi-vertical-bars-chart-table-row-cell',
+        }
+      }),
+    ]
+  })
+}
+
 export const getHorizontalBarsChartHead = () => {
   return [
     {
@@ -422,15 +867,12 @@ export const getHorizontalBarsChartHead = () => {
   ]
 }
 
-export const getHorizontalBarsChartRows = (
-  chartEntries: ChartEntryHorizontalBar[],
-  rowsSource: HorizontalTableCell[]
-) => {
+export const getHorizontalBarsChartRows = (chartEntries: ChartEntryHorizontalBar[], rowsSource: RowSource[]) => {
   return [
     ...chartEntries.map((row: ChartEntryHorizontalBar) => {
-      return rowsSource.map((horizontalTableCell: HorizontalTableCell) => {
+      return rowsSource.map((rowSource: RowSource) => {
         return {
-          text: horizontalTableCell.source(row) as number | string,
+          text: rowSource.source(row) as number | string,
           classes: 'horizontal-chart-table-row-cell',
         }
       })
@@ -452,14 +894,21 @@ export const createCommentaryChartSettings = (params: {
   }
 }
 
-export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: HorizontalTableCell) => {
+export const createCustomArray = (size: number, mainValue: string, lastValue: string): string[] => [
+  ...[...Array(Math.max(size - 1, 0))].map(() => mainValue),
+  lastValue,
+]
+
+export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: RowSource) => {
   return Array.from(
     new Set(
       chartEntries.map((row: ChartEntryHorizontalBar) => {
         return cell.source(row) as string
       })
     )
-  ).map(value => {
-    return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
-  })
+  )
+    .sort()
+    .map(value => {
+      return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
+    })
 }

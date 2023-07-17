@@ -2,6 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../partials/charts/linesChart.njk" import linesChart %}
 
 {% set title = "Adjudication data - Pleas and findings" %}
 
@@ -14,8 +15,19 @@
 {% endblock %}
 
 {% block content %}
+  <div class="pleas-and-findings-tab">
 
-  {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+    {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ linesChart(chartSettingMap['5a']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ linesChart(chartSettingMap['5b']) }}
+    </div>
+
+  </div>
 
 {% endblock %}
 

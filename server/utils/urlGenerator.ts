@@ -798,7 +798,10 @@ const adjudicationUrls = {
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
           offenceType ? `?offence-type=${offenceType}` : ''
         }`,
-      punishments: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}`,
+      punishments: (offenceType?: string) =>
+        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}${
+          offenceType ? `?offence-type=${offenceType}` : ''
+        }`,
       pleasAndFindings: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.pleasAndFindings}`,
     },
