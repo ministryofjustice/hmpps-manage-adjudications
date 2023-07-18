@@ -4,7 +4,7 @@ export interface ChartDetailsResult {
   agencyId: AgencyId
   chartName: string
   characteristic?: string
-  chartEntries: ChartEntryVerticalBar[] | ChartEntryHorizontalBar[]
+  chartEntries: ChartEntryVerticalBar[] | ChartEntryHorizontalBar[] | ChartEntryLine[] | ChartEntryDuoLine[]
 }
 
 export interface ChartEntryVerticalBar {
@@ -40,6 +40,16 @@ export interface ChartEntryLine {
   proportion: number
 }
 
+export interface ChartEntryDuoLine {
+  month: number
+  year: number
+  count: number
+  count_one: number
+  count_more: number
+  prop_one: number
+  prop_more: number
+}
+
 export interface ChartEntryCommentary {
   count: number
   proportion: string
@@ -51,7 +61,7 @@ export interface TableRowEntry {
 }
 
 export interface RowSource {
-  source: (row: ChartEntryHorizontalBar | ChartEntryLine) => number | string | ChartEntryCommentary
+  source: (row: ChartEntryHorizontalBar | ChartEntryLine | ChartEntryDuoLine) => number | string | ChartEntryCommentary
 }
 
 export interface DataFilter {

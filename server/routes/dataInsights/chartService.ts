@@ -2,6 +2,7 @@ import { ChartDataset, ChartOptions, Defaults, LegendOptions, LinearScaleOptions
 import {
   ChartDetailsResult,
   ChartEntryCommentary,
+  ChartEntryDuoLine,
   ChartEntryHorizontalBar,
   ChartEntryLine,
   ChartEntryVerticalBar,
@@ -94,6 +95,7 @@ export const produceMultiVerticalBarsCharts = async (
     chartTitle,
     chartEntriesMap,
     yValueSource,
+    barColors: ['DARK_BLUE', 'YELLOW', 'LIGHT_BLUE'],
     head: [],
     rows: getMultiVerticalBarsRows([
       ...legends.map(legend => {
@@ -106,6 +108,70 @@ export const produceMultiVerticalBarsCharts = async (
       }),
       {
         label: 'Total adjudications',
+        data:
+          legends.length > 0
+            ? chartEntriesMap
+                .get(legends[0])
+                .map((entry: ChartEntryLine) => totalCountGroupBy.get(totalCountGroupByKey.source(entry) as string))
+            : [],
+      },
+    ]),
+  })
+}
+
+export const produceDuoVerticalBarsCharts = async (
+  chartName: string,
+  username: string,
+  agencyId: string,
+  chartTitle: string,
+  chartDetails: ChartDetailsResult,
+  legendsSource: { label: string; countSource: RowSource; propSource: RowSource }[],
+  yValueSource: RowSource,
+  totalCountGroupByKey: RowSource,
+  totalCountGroupBySource: RowSource
+) => {
+  const chartEntries = chartDetails.chartEntries as ChartEntryDuoLine[]
+
+  const chartEntriesMap: Map<string, ChartEntryLine[]> = new Map<string, ChartEntryLine[]>()
+  const totalCountGroupBy: Map<string, number> = new Map<string, number>()
+
+  chartEntries.forEach((row: ChartEntryDuoLine) => {
+    legendsSource.forEach(legend => {
+      chartEntriesMap.set(
+        legend.label,
+        [...(chartEntriesMap.get(legend.label) || [])].concat([
+          {
+            month: row.month,
+            year: row.year,
+            count: legend.countSource.source(row),
+            proportion: legend.propSource.source(row),
+          } as ChartEntryLine,
+        ])
+      )
+    })
+    totalCountGroupBy.set(totalCountGroupByKey.source(row) as string, totalCountGroupBySource.source(row) as number)
+  })
+
+  const legends = Array.from(chartEntriesMap.keys())
+
+  return createMultiVerticalBarsChartSettings({
+    elementId: chartName,
+    chartTitle,
+    chartEntriesMap,
+    yValueSource,
+    barColors: ['DARK_BLUE', 'LIGHT_BLUE'],
+    head: [],
+    rows: getMultiVerticalBarsRows([
+      ...legendsSource.map(legend => {
+        return {
+          label: legend.label,
+          data: chartEntriesMap
+            .get(legend.label)
+            .map((entry: ChartEntryLine) => `${entry.count} ${Math.trunc(entry.proportion * 100)}%`),
+        } as TableRowEntry
+      }),
+      {
+        label: 'Total resolved adjudications',
         data:
           legends.length > 0
             ? chartEntriesMap
@@ -492,6 +558,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
   chartTitle: string
   chartEntriesMap: Map<string, ChartEntryLine[]>
   yValueSource: RowSource
+  barColors: ('DARK_BLUE' | 'YELLOW' | 'LIGHT_BLUE')[]
   head: never[]
   rows: {
     text: string | number
@@ -507,8 +574,11 @@ export const createMultiVerticalBarsChartSettings = (params: {
         })
       : []
 
-  const barsColors: string[] = [DARK_BLUE, YELLOW, LIGHT_BLUE]
-  const barsColorsDarker = [DARK_BLUE_DARKER, YELLOW, LIGHT_BLUE_DARKER]
+  const barsColorsByKey: Map<string, string[]> = new Map([
+    ['DARK_BLUE', [DARK_BLUE, DARK_BLUE_DARKER]],
+    ['YELLOW', [YELLOW, YELLOW]],
+    ['LIGHT_BLUE', [LIGHT_BLUE, LIGHT_BLUE_DARKER]],
+  ])
 
   const datasets = linesLegends.map((legend, i) => {
     const chartEntries: ChartEntryLine[] = params.chartEntriesMap.get(legend)
@@ -519,10 +589,10 @@ export const createMultiVerticalBarsChartSettings = (params: {
       data: chartEntries.map((row: ChartEntryLine) => {
         return params.yValueSource.source(row) as number
       }),
-      backgroundColor: barsColors[i],
-      hoverBackgroundColor: barsColorsDarker[i],
+      backgroundColor: barsColorsByKey.get(params.barColors[i])[0],
+      hoverBackgroundColor: barsColorsByKey.get(params.barColors[i])[1],
       hoverBorderWidth: 1,
-      hoverBorderColor: barsColorsDarker[i],
+      hoverBorderColor: barsColorsByKey.get(params.barColors[i])[1],
     } as ChartDataset<'bar'> & object
   })
 

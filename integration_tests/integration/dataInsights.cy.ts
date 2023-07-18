@@ -173,6 +173,15 @@ context('Adjudication data', () => {
         chartEntries: chartEntries['5b'],
       } as ChartDetailsResult,
     })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '5c',
+      response: {
+        agencyId: 'MDI',
+        chartName: '5c',
+        chartEntries: chartEntries['5c'],
+      } as ChartDetailsResult,
+    })
     cy.signIn()
   })
 
@@ -230,6 +239,9 @@ context('Adjudication data', () => {
     page.checkOnPage()
     page.checkChartTitle('Pleas given – current month and previous 12 months (5a)')
     page.checkChartTitle('Total adjudications by findings – current month and previous 12 months (5b)')
+    page.checkChartTitle(
+      'Adjudications resolved with more than one hearing – current month and previous 12 months (5c)'
+    )
   })
 })
 
@@ -22384,6 +22396,125 @@ const getChartEntriesMap = () => {
       proportion: 0.25,
     },
   ]
+  const chartEntries5c = [
+    {
+      month: 7.0,
+      year: 2022.0,
+      count_one: 21.0,
+      count_more: 32.0,
+      count: 53.0,
+      prop_one: 0.4,
+      prop_more: 0.6,
+    },
+    {
+      month: 8.0,
+      year: 2022.0,
+      count_one: 42.0,
+      count_more: 10.0,
+      count: 52.0,
+      prop_one: 0.81,
+      prop_more: 0.19,
+    },
+    {
+      month: 9.0,
+      year: 2022.0,
+      count_one: 20.0,
+      count_more: 38.0,
+      count: 58.0,
+      prop_one: 0.34,
+      prop_more: 0.66,
+    },
+    {
+      month: 10.0,
+      year: 2022.0,
+      count_one: 89.0,
+      count_more: 84.0,
+      count: 173.0,
+      prop_one: 0.51,
+      prop_more: 0.49,
+    },
+    {
+      month: 11.0,
+      year: 2022.0,
+      count_one: 91.0,
+      count_more: 44.0,
+      count: 135.0,
+      prop_one: 0.67,
+      prop_more: 0.33,
+    },
+    {
+      month: 12.0,
+      year: 2022.0,
+      count_one: 36.0,
+      count_more: 61.0,
+      count: 97.0,
+      prop_one: 0.37,
+      prop_more: 0.63,
+    },
+    {
+      month: 1.0,
+      year: 2023.0,
+      count_one: 67.0,
+      count_more: 24.0,
+      count: 91.0,
+      prop_one: 0.74,
+      prop_more: 0.26,
+    },
+    {
+      month: 2.0,
+      year: 2023.0,
+      count_one: 83.0,
+      count_more: 16.0,
+      count: 99.0,
+      prop_one: 0.84,
+      prop_more: 0.16,
+    },
+    {
+      month: 3.0,
+      year: 2023.0,
+      count_one: 14.0,
+      count_more: 45.0,
+      count: 59.0,
+      prop_one: 0.24,
+      prop_more: 0.76,
+    },
+    {
+      month: 4.0,
+      year: 2023.0,
+      count_one: 75.0,
+      count_more: 3.0,
+      count: 78.0,
+      prop_one: 0.96,
+      prop_more: 0.04,
+    },
+    {
+      month: 5.0,
+      year: 2023.0,
+      count_one: 35.0,
+      count_more: 90.0,
+      count: 125.0,
+      prop_one: 0.28,
+      prop_more: 0.72,
+    },
+    {
+      month: 6.0,
+      year: 2023.0,
+      count_one: 58.0,
+      count_more: 52.0,
+      count: 110.0,
+      prop_one: 0.53,
+      prop_more: 0.47,
+    },
+    {
+      month: 7.0,
+      year: 2023.0,
+      count_one: 48.0,
+      count_more: 91.0,
+      count: 139.0,
+      prop_one: 0.35,
+      prop_more: 0.65,
+    },
+  ]
 
   return {
     '1a': chartEntries1a,
@@ -22404,5 +22535,6 @@ const getChartEntriesMap = () => {
     '4c': chartEntries4c,
     '5a': chartEntries5a,
     '5b': chartEntries5b,
+    '5c': chartEntries5c,
   }
 }
