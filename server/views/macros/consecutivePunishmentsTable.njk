@@ -1,0 +1,59 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro consecutivePunishmentsTable(punishmentsArray) %}
+  {% set rows = [] %}
+  {% for punishment in punishmentsArray %}
+    {% set sanction = punishment.punishment %}
+      {% set selectButton = '<button type="submit" name="select"  value="consecutive-punishment-report-'+punishment.reportNumber+'" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" data-qa="select-button" >Select this punishment</button>' %}
+
+    {% set rows = (rows.push(
+      [
+          {
+            text: punishment.formattedType,
+            classes: "columnWidth30 verticalAlign"
+          },
+          {
+            text: sanction.schedule.days,
+            classes: "columnWidth15 verticalAlign"
+          },
+          {
+            text: punishment.reportNumber,
+            classes: "columnWidth15 verticalAlign"
+          },
+          {
+            text: punishment.chargeProvedDate | formatTimestampTo('D MMM YYYY'),
+            classes: "columnWidth15 verticalAlign"
+          },
+          {
+            html: selectButton,
+            classes: "activateButtonContainer"
+          }
+      ]
+    ), rows) %}
+  {% endfor %}
+  {% if rows.length %}
+    {{ govukTable({
+        head: [
+          {
+            text: "Type"
+          },
+          {
+            text: "Number of days"
+          },
+          {
+            text: "Charge number"
+          },
+          {
+            text: "Date charge proved"
+          },
+          {
+            text: null
+          }
+        ],
+        rows: rows,
+        attributes: {"data-qa": "consecutive-punishments-table"}
+      }) }}
+  {% endif %}
+
+{% endmacro %}

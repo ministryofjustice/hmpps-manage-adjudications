@@ -1,8 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import UserService from '../../../services/userService'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { apiDateToDatePicker, datePickerToApi, hasAnyRole } from '../../../utils/utils'
+import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
@@ -42,12 +41,11 @@ export default class WhichPunishmentConsecutiveToPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const possibleConsecutivePunishments = this.punishmentsService.getPossibleConsecutivePunishments(
+    const possibleConsecutivePunishments = await this.punishmentsService.getPossibleConsecutivePunishments(
       adjudicationNumber,
       type,
       user
     )
-
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       manuallySelectConsecutivePunishment: '#',
@@ -59,9 +57,9 @@ export default class WhichPunishmentConsecutiveToPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
     const type = PunishmentType[punishmentType as string]
-    const { consecutiveReportNumber } = req.body
+    const { select } = req.body
 
-    // submit buttons add to session - requires charge number of the punishment chosen (get it from submit button id?)
+    const chargeNumberOfSelectedPunishment = select.split('-').slice(-1)[0] || null
     try {
       const punishmentData = {
         type,
@@ -69,7 +67,7 @@ export default class WhichPunishmentConsecutiveToPage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days: Number(days),
-        consecutiveReportNumber: Number(consecutiveReportNumber),
+        consecutiveReportNumber: Number(chargeNumberOfSelectedPunishment),
       }
 
       if (this.pageOptions.isEdit()) {

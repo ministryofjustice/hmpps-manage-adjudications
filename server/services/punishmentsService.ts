@@ -191,7 +191,6 @@ export default class PunishmentsService {
   ): ConsecutiveAdditionalDaysEnhanced {
     return {
       ...possibleConsecutivePunishment,
-      formattedChargeProvedDate: formatTimestampToDate(possibleConsecutivePunishment.chargeProvedDate, 'D MMM YYYY'),
       formattedType: possibleConsecutivePunishment.consecutiveReportNumber
         ? `${convertPunishmentType(
             possibleConsecutivePunishment.punishment.type,
@@ -215,7 +214,6 @@ export default class PunishmentsService {
       reportedAdjudication.prisonerNumber,
       punishmentType
     )
-
     return possibleConsecutivePunishments.map(punishment => this.enhancePossibleConsecutivePunishments(punishment))
   }
 }

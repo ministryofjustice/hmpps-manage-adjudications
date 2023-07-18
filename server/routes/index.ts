@@ -76,6 +76,7 @@ import manuallyActivateSuspendedPunishmentsRoutes from './punishments/manuallyAc
 import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
 import willPunishmentBeConsecutiveRoutes from './additionalDays/willPunishmentBeConsecutive'
+import whichPunishmentConsecutiveToRoutes from './additionalDays/whichPunishmentConsecutiveTo'
 
 export default function routes(
   router: Router,
@@ -304,6 +305,10 @@ export default function routes(
     router.use(
       adjudicationUrls.isPunishmentConsecutive.root,
       willPunishmentBeConsecutiveRoutes({ userService, punishmentsService })
+    )
+    router.use(
+      adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
+      whichPunishmentConsecutiveToRoutes({ userService, punishmentsService })
     )
   }
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))

@@ -1,9 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../macros/datePicker.njk" import datePicker %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../macros/consecutivePunishmentsTable.njk" import consecutivePunishmentsTable %}
 
 {% set title = "Which punishment will it be consecutive to?" %}
 
@@ -20,8 +18,14 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
+        {% if possibleConsecutivePunishments.length %}
+          {{ consecutivePunishmentsTable(possibleConsecutivePunishments) }}
+        {% else %}
+          <p class="govuk-body">There are no existing punishments to select.</p>
+        {% endif %}
+
         <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{ manuallySelectConsecutivePunishment }}" data-qa="enter-manually-link">enter details to select it manually</a>.</p>
-        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments'</a>
+        <p class="govuk-body"><a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments'</a></p>
       </form>
     </div>
   {% endblock %}

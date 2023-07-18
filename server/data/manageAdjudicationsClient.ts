@@ -112,12 +112,11 @@ export type ConsecutiveAdditionalDaysReport = {
   reportNumber: number
   chargeProvedDate: string
   punishment: PunishmentDataWithSchedule
-  consecutiveReportNumber: number
-  consecutiveReportAvailable: boolean
+  consecutiveReportNumber?: number
+  consecutiveReportAvailable?: boolean
 }
 
 export interface ConsecutiveAdditionalDaysEnhanced extends ConsecutiveAdditionalDaysReport {
-  formattedChargeProvedDate: string
   formattedType: string
 }
 
