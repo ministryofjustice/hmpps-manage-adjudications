@@ -1,0 +1,5 @@
+{% from "../../macros/dataInsights/horizontalBarsChartWithSelectData.njk" import horizontalBarsChartWithSelectData %}
+
+{% macro horizontalBarsChartWithSelect(chartSetting, selectorSettings, allSelectorParams, csrfToken) %}
+    {{ horizontalBarsChartWithSelectData(chartSetting, selectorSettings, allSelectorParams, csrfToken) }}
+{% endmacro %}

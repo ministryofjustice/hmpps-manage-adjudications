@@ -21,6 +21,9 @@ export interface ChartEntryHorizontalBar {
   wing_loc?: string
   value?: string
   characteristic?: string
+  finding?: string
+  plea?: string
+  sanction?: string
   count: number
   proportion: number
 }

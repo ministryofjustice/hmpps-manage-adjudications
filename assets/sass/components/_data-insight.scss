@@ -49,18 +49,25 @@
 .horizontal-chart-table-head-cell {
   width: 110px;
   font-weight: bold;
-  text-align: center;
+  text-align: right;
   border: none;
 }
 
+.horizontal-chart-table-head-cell-width-auto {
+  min-width: 110px;
+  width: auto;
+  vertical-align: top !important;
+}
+
 .horizontal-chart-table-row-cell {
-  text-align: center;
+  text-align: right;
+  vertical-align: top !important;
   line-height: 35px;
   border: none;
 }
 
 .chart-horizontal-panel {
-  padding-top: 50px;
+  padding-top: 60px;
   padding-left: 20px;
 }
 
@@ -72,13 +79,26 @@
 
 .protected-characteristics-and-vulnerabilities-tab {
 
-  .filter-selector {
-    width: 295px;
+  .protected-characteristic-or-vulnerability-selector {
+    .filter-selector {
+      width: 295px;
+    }
+
+    .show-results-button {
+      margin-top: 30px;
+      margin-left: -90px;
+    }
   }
 
-  .show-results-button {
-    margin-top: 30px;
-    margin-left: -90px;
+  .punishment-type-selector {
+    .filter-selector {
+      width: 295px;
+    }
+
+    .show-results-button {
+      margin-top: 30px;
+      margin-left: 5px;
+    }
   }
 }
 

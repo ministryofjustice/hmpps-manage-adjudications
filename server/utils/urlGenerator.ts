@@ -777,10 +777,14 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.start}`,
       totalsAdjudicationsAndLocations: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
-      protectedCharacteristicsAndVulnerabilities: (characteristic?: string) =>
-        `${adjudicationUrls.dataInsights.root}${
+      protectedCharacteristicsAndVulnerabilities: (params: { characteristic?: string; offenceType?: string } = {}) => {
+        const queryParams = Object.keys(params)
+          .map(key => `${key}=${params[key]}`)
+          .join('&')
+        return `${adjudicationUrls.dataInsights.root}${
           adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities
-        }${characteristic ? `?characteristic=${characteristic}` : ''}`,
+        }${queryParams ? `?${queryParams}` : ''}`
+      },
       offenceType: (offenceType?: string) =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
           offenceType ? `?offence-type=${offenceType}` : ''

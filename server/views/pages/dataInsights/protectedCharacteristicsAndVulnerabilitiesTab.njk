@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
+{% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
 
 {% set title = "Adjudication data - Protected characteristics and vulnerabilities" %}
 
@@ -24,17 +25,18 @@
     <div>
       <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="allSelectorParams" value="{{ allSelectorParams | dump }}"/>
 
-        <div class="flex-container">
+        <div class="flex-container protected-characteristic-or-vulnerability-selector">
           {{ govukSelect({
-            id: 'characteristic',
-            name: 'characteristic',
+            id: allSelectorSettings.characteristic.id,
+            name: allSelectorSettings.characteristic.id,
             label: {
-              text: 'Select a protected characteristic or vulnerability',
+              text: allSelectorSettings.characteristic.label,
               isPageHeading: false,
               classes: ''
             },
-            items: protectedCharacteristics | toSelect('value', 'text', characteristic),
+            items: allSelectorSettings.characteristic.items | toSelect('value', 'text', allSelectorParams.characteristic),
             classes: 'flex-column filter-selector',
             errorMessage: 'characteristic' | findError(errors)
           }) }}
@@ -57,6 +59,22 @@
 
     <div class="govuk-!-margin-bottom-6">
       {{ horizontalBarsChart(chartSettingMap['2b']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2d'], allSelectorSettings['offenceType'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2e'], allSelectorSettings['sanction'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2f'], allSelectorSettings['plea'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2g'], allSelectorSettings['finding'], allSelectorParams, csrfToken) }}
     </div>
 
   </div>
