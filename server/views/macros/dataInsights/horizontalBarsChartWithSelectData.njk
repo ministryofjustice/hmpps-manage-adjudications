@@ -12,7 +12,7 @@
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 <input type="hidden" name="allSelectorParams" value="{{ allSelectorParams | dump }}"/>
 
-                <div class="flex-container punishment-type-selector">
+                <div class="flex-container {{ selectorSettings.class }}">
                     {{ govukSelect({
                         id: selectorSettings.id,
                         name: selectorSettings.id,

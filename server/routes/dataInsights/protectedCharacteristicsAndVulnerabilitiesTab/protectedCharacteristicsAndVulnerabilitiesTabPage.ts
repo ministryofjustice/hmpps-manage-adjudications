@@ -235,26 +235,31 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
           id: 'characteristic',
           label: 'Select a protected characteristic or vulnerability',
           items: protectedCharacteristics,
+          class: 'protected-characteristic-or-vulnerability',
         },
         offenceType: {
           id: 'offenceType',
           label: 'Select offence type',
           items: offenceTypes,
+          class: 'punishment-type-selector',
         },
         sanction: {
           id: 'sanction',
           label: 'Select punishment type',
           items: sanctions,
+          class: 'punishment-type-selector',
         },
         plea: {
           id: 'plea',
           label: 'Select plea',
           items: pleas,
+          class: 'punishment-type-selector',
         },
         finding: {
           id: 'finding',
           label: 'Select finding',
           items: findings,
+          class: 'punishment-type-selector',
         },
       },
     })

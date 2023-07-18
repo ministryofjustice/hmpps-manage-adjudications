@@ -27,7 +27,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         <input type="hidden" name="allSelectorParams" value="{{ allSelectorParams | dump }}"/>
 
-        <div class="flex-container protected-characteristic-or-vulnerability-selector">
+        <div class="flex-container {{ allSelectorSettings.characteristic.class }}">
           {{ govukSelect({
             id: allSelectorSettings.characteristic.id,
             name: allSelectorSettings.characteristic.id,
@@ -65,7 +65,7 @@
       {{ horizontalBarsChartWithSelect(chartSettingMap['2d'], allSelectorSettings['offenceType'], allSelectorParams, csrfToken) }}
     </div>
 
-    <div class="govuk-!-margin-bottom-6">
+    <div class="govuk-!-margin-bottom-6 punishment-by-protected-or-responsivity-characteristic">
       {{ horizontalBarsChartWithSelect(chartSettingMap['2e'], allSelectorSettings['sanction'], allSelectorParams, csrfToken) }}
     </div>
 
