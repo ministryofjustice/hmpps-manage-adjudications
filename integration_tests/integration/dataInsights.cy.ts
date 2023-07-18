@@ -76,6 +76,42 @@ context('Adjudication data', () => {
     })
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'MDI',
+      chartName: '2d',
+      response: {
+        agencyId: 'MDI',
+        chartName: '2d',
+        chartEntries: chartEntries['2d'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '2e',
+      response: {
+        agencyId: 'MDI',
+        chartName: '2e',
+        chartEntries: chartEntries['2e'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '2f',
+      response: {
+        agencyId: 'MDI',
+        chartName: '2f',
+        chartEntries: chartEntries['2f'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
+      chartName: '2g',
+      response: {
+        agencyId: 'MDI',
+        chartName: '2g',
+        chartEntries: chartEntries['2g'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'MDI',
       chartName: '3a',
       response: {
         agencyId: 'MDI',
