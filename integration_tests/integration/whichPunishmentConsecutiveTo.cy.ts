@@ -120,7 +120,7 @@ context('which punishment will it be consecutive to page', () => {
           expect($summaryData.get(1).innerText).to.contain('10')
           expect($summaryData.get(2).innerText).to.contain('90')
           expect($summaryData.get(3).innerText).to.contain('21 Jun 2023')
-          expect($summaryData.get(5).innerText).to.contain('Additional days\n(consecutive to charge 111')
+          expect($summaryData.get(5).innerText).to.contain('Additional days (consecutive to charge 111')
           expect($summaryData.get(6).innerText).to.contain('5')
           expect($summaryData.get(7).innerText).to.contain('95')
           expect($summaryData.get(8).innerText).to.contain('15 Jun 2023')
