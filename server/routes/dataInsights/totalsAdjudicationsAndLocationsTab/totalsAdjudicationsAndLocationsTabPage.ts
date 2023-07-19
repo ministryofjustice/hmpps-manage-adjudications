@@ -6,7 +6,7 @@ import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult, ChartEntryCommentary, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import {
-  getHorizontalBarsChartHead,
+  getTotalsAdjudicationsHorizontalBarsChartHead,
   produceCommentaryChart,
   produceHorizontalBarsChart,
   produceVerticalBarsAndLineCharts,
@@ -40,6 +40,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Total adjudications - over 24 months (1a)',
+      'This is a high-level view of adjudication reports created over time. What do recent numbers tell you about prison stability? Are there any surprises or possible actions?',
       await this.chartApiService.getChart(username, agencyId, '1a')
     )
 
@@ -48,6 +49,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Total adjudications referred to independent adjudicator - over 24 months (1b)',
+      'This chart shows adjudications which had at least 1 hearing with an independent adjudicator. Use it to explore any concerns you may have about numbers being referred to IAs. What do the numbers tell you about possible actions and future trends?',
       await this.chartApiService.getChart(username, agencyId, '1b')
     )
 
@@ -56,6 +58,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Number of people with an adjudication in the past 30 days (1c)',
+      '',
       await this.chartApiService.getChart(username, agencyId, '1c'),
       {
         source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
@@ -72,6 +75,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Total adjudications by location of adjudication offence – last 30 days (1d)',
+      'Use this chart to see where recent rule-breaking took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness. ',
       await this.chartApiService.getChart(username, agencyId, '1d'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
@@ -81,7 +85,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHead()
+      getTotalsAdjudicationsHorizontalBarsChartHead()
     )
 
     chartSettingMap['1f'] = await produceHorizontalBarsChart(
@@ -89,6 +93,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Total adjudications by residential location of offender – last 30 days (1f)',
+      'Use this chart to explore where prisoners who broke the rules live. This may give you insights into the different residential populations, staff cultures, and could help inform keyworker priorities.',
       await this.chartApiService.getChart(username, agencyId, '1f'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.wing_loc },
@@ -98,7 +103,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHead()
+      getTotalsAdjudicationsHorizontalBarsChartHead()
     )
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {

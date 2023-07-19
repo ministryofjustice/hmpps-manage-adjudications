@@ -69,7 +69,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2a',
       username,
       agencyId,
-      'Overview of prisoners in the establishment currently (2a)',
+      'Percentage and number of prisoners in the establishment currently (2a)',
+      'This chart shows the recent numbers of prisoners in your establishment in each sub-group of the selected characteristic. It provides context and a comparison for the subsequent charts.',
       chartDetails2a,
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
@@ -86,7 +87,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2b',
       username,
       agencyId,
-      'Adjudication reports by protected or responsivity characteristic – last 30 days (2b)',
+      'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability - last 30 days (2b)',
+      'Use this chart to see adjudications by this characteristic and compare them to prison numbers. Are there any imbalances you might want to explore further?',
       await this.chartApiService.getChart(username, agencyId, '2b'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
@@ -112,7 +114,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2d',
       username,
       agencyId,
-      'Adjudication offence type by protected or responsivity characteristic - last 30 days (2d)',
+      'Offence type by protected characteristic or vulnerability - last 30 days (2d)',
+      'Select an offence type to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2d,
       {
         filter: (row: ChartEntryHorizontalBar) =>
@@ -141,7 +144,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2e',
       username,
       agencyId,
-      'Punishment by protected or responsivity characteristic - last 30 days (2e)',
+      'Punishment by protected characteristic or vulnerability - last 30 days (2e)',
+      'Select a punishment type to explore differences between characteristics. Compared  to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2e,
       {
         filter: (row: ChartEntryHorizontalBar) =>
@@ -174,7 +178,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2f',
       username,
       agencyId,
-      'Plea by protected or responsivity characteristic - last 30 days (2f)',
+      'Plea by protected characteristic or vulnerability - last 30 days (2f)',
+      'Select a plea to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2f,
       {
         filter: (row: ChartEntryHorizontalBar) =>
@@ -203,7 +208,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2g',
       username,
       agencyId,
-      'Finding by protected or responsivity characteristic - last 30 days (2g)',
+      'Finding by protected characteristic or vulnerability - last 30 days (2g)',
+      'Select a finding to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2g,
       {
         filter: (row: ChartEntryHorizontalBar) =>

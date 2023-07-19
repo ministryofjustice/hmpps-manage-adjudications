@@ -29,6 +29,7 @@ export const produceVerticalBarsAndLineCharts = async (
   username: string,
   agencyId: string,
   chartTitle: string,
+  chartHint: string,
   chartDetails: ChartDetailsResult
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryVerticalBar[]
@@ -40,6 +41,7 @@ export const produceVerticalBarsAndLineCharts = async (
   return createVerticalBarsAndLineChartSettings({
     elementId: chartName,
     chartTitle,
+    chartHint,
     barData: chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_curr),
     lineData: chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_prev),
     labels,
@@ -56,6 +58,7 @@ export const produceMultiVerticalBarsCharts = async (
   username: string,
   agencyId: string,
   chartTitle: string,
+  chartHint: string,
   chartDetails: ChartDetailsResult,
   legendsSource: RowSource,
   yValueSource: RowSource,
@@ -93,6 +96,7 @@ export const produceMultiVerticalBarsCharts = async (
   return createMultiVerticalBarsChartSettings({
     elementId: chartName,
     chartTitle,
+    chartHint,
     chartEntriesMap,
     yValueSource,
     barColors: ['DARK_BLUE', 'YELLOW', 'LIGHT_BLUE'],
@@ -124,6 +128,7 @@ export const produceDuoVerticalBarsCharts = async (
   username: string,
   agencyId: string,
   chartTitle: string,
+  chartHint: string,
   chartDetails: ChartDetailsResult,
   legendsSource: { label: string; countSource: RowSource; propSource: RowSource }[],
   yValueSource: RowSource,
@@ -157,6 +162,7 @@ export const produceDuoVerticalBarsCharts = async (
   return createMultiVerticalBarsChartSettings({
     elementId: chartName,
     chartTitle,
+    chartHint,
     chartEntriesMap,
     yValueSource,
     barColors: ['DARK_BLUE', 'LIGHT_BLUE'],
@@ -188,6 +194,7 @@ export const produceHorizontalBarsChart = async (
   username: string,
   agencyId: string,
   chartTitle: string,
+  chartHint: string,
   chartDetails: ChartDetailsResult,
   dataFilter: DataFilter,
   labelFieldSource: RowSource,
@@ -212,6 +219,7 @@ export const produceHorizontalBarsChart = async (
   return createHorizontalBarsChartSettings({
     elementId: chartName,
     chartTitle,
+    chartHint,
     barData,
     labels,
     head,
@@ -224,6 +232,7 @@ export const produceCommentaryChart = async (
   username: string,
   agencyId: string,
   chartTitle: string,
+  chartHint: string,
   chartDetails: ChartDetailsResult,
   rowsSource: RowSource
 ) => {
@@ -235,6 +244,7 @@ export const produceCommentaryChart = async (
   return createCommentaryChartSettings({
     elementId: chartName,
     chartTitle,
+    chartHint,
     chartEntries,
   })
 }
@@ -244,6 +254,7 @@ export const produceLinesCharts = async (
   username: string,
   agencyId: string,
   chartTitle: string,
+  chartHint: string,
   chartDetails: ChartDetailsResult,
   dataFilter: DataFilter,
   legendsSource: RowSource,
@@ -270,6 +281,7 @@ export const produceLinesCharts = async (
   return createLinesChartsSettings({
     elementId: chartName,
     chartTitle,
+    chartHint,
     chartEntriesMap,
     yValueSource,
   })
@@ -278,6 +290,7 @@ export const produceLinesCharts = async (
 export const createHorizontalBarsChartSettings = (params: {
   elementId: string
   chartTitle: string
+  chartHint: string
   barData: number[] | string[]
   labels: string[]
   head: { text: string; classes: string }[]
@@ -291,6 +304,7 @@ export const createHorizontalBarsChartSettings = (params: {
 
   return {
     title: params.chartTitle,
+    chartHint: params.chartHint,
     chartData: {
       elementId: params.elementId,
       chartOptions: {
@@ -399,6 +413,7 @@ export const createHorizontalBarsChartSettings = (params: {
 export const createVerticalBarsAndLineChartSettings = (params: {
   elementId: string
   chartTitle: string
+  chartHint: string
   barData: number[]
   lineData: number[]
   labels: string[][]
@@ -414,6 +429,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
 
   return {
     title: params.chartTitle,
+    chartHint: params.chartHint,
     chartData: {
       elementId: params.elementId,
       chartOptions: {
@@ -422,7 +438,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
             {
               type: 'bar',
               order: 2,
-              label: 'This year 2023',
+              label: 'This year',
               data: params.barData,
               backgroundColor: barsColors,
               hoverBackgroundColor: barsColorsDarker,
@@ -432,7 +448,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
             {
               type: 'line',
               order: 1,
-              label: 'Previous year 2022',
+              label: 'Previous year',
               data: params.lineData,
               fill: false,
               borderColor: TURQUOISE[0],
@@ -556,6 +572,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
 export const createMultiVerticalBarsChartSettings = (params: {
   elementId: string
   chartTitle: string
+  chartHint: string
   chartEntriesMap: Map<string, ChartEntryLine[]>
   yValueSource: RowSource
   barColors: ('DARK_BLUE' | 'YELLOW' | 'LIGHT_BLUE')[]
@@ -598,6 +615,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
 
   return {
     title: params.chartTitle,
+    chartHint: params.chartHint,
     chartData: {
       elementId: params.elementId,
       chartOptions: {
@@ -697,6 +715,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
 export const createLinesChartsSettings = (params: {
   elementId: string
   chartTitle: string
+  chartHint: string
   chartEntriesMap: Map<string, ChartEntryLine[]>
   yValueSource: RowSource
 }) => {
@@ -757,6 +776,7 @@ export const createLinesChartsSettings = (params: {
   })
   return {
     title: params.chartTitle,
+    chartHint: params.chartHint,
     chartData: {
       elementId: params.elementId,
       chartOptions: {
@@ -878,7 +898,7 @@ export const getVerticalBarsAndLineChartRows = (barData: number[], lineData: num
   return [
     [
       {
-        text: 'Number this year 2023',
+        text: 'Number this year',
         classes: 'vertical-chart-table-head-cell',
       },
       ...barData.map(value => {
@@ -890,7 +910,7 @@ export const getVerticalBarsAndLineChartRows = (barData: number[], lineData: num
     ],
     [
       {
-        text: 'Number previous year 2022',
+        text: 'Number previous year',
         classes: 'vertical-chart-table-head-cell',
       },
       ...lineData.map(value => {
@@ -920,18 +940,18 @@ export const getMultiVerticalBarsRows = (tableRowEntries: TableRowEntry[]) => {
   })
 }
 
-export const getHorizontalBarsChartHead = () => {
+export const getTotalsAdjudicationsHorizontalBarsChartHead = () => {
   return [
     {
       text: 'Location',
+      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-width-auto',
+    },
+    {
+      text: 'Percentage of reports',
       classes: 'horizontal-chart-table-head-cell',
     },
     {
-      text: 'Percentage',
-      classes: 'horizontal-chart-table-head-cell',
-    },
-    {
-      text: 'Number',
+      text: 'Number of reports',
       classes: 'horizontal-chart-table-head-cell',
     },
   ]
@@ -953,10 +973,12 @@ export const getHorizontalBarsChartRows = (chartEntries: ChartEntryHorizontalBar
 export const createCommentaryChartSettings = (params: {
   elementId: string
   chartTitle: string
+  chartHint: string
   chartEntries: ChartEntryCommentary[]
 }) => {
   return {
     title: params.chartTitle,
+    chartHint: params.chartHint,
     chartData: {
       elementId: params.elementId,
       chartEntries: params.chartEntries,
