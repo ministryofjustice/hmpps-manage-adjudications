@@ -7,6 +7,9 @@ import SuspendedPunishmentSchedule from '../pages/suspendedPunishmentSchedule'
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import PunishmentSchedulePage from '../pages/punishmentSchedule'
 import NumberOfAdditionalDaysPage from '../pages/numberOfAdditionalDays'
+import WillPunishmentBeSuspendedPage from '../pages/willPunishmentBeSuspended'
+import WillPunishmentBeConsecutivePage from '../pages/willPunishmentBeConsective'
+import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiveTo'
 import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -136,6 +139,35 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           ],
         }),
       },
+    })
+    cy.task('stubGetConsecutivePunishments', {
+      prisonerNumber: 'G6415GD',
+      punishmentType: PunishmentType.PROSPECTIVE_DAYS,
+      response: [
+        {
+          reportNumber: 90,
+          chargeProvedDate: '2023-06-21',
+          punishment: {
+            id: 70,
+            type: PunishmentType.PROSPECTIVE_DAYS,
+            schedule: {
+              days: 10,
+            },
+          },
+        },
+        {
+          reportNumber: 95,
+          chargeProvedDate: '2023-06-15',
+          punishment: {
+            type: PunishmentType.PROSPECTIVE_DAYS,
+            id: 71,
+            consecutiveReportNumber: 111,
+            schedule: {
+              days: 5,
+            },
+          },
+        },
+      ],
     })
   })
 
@@ -269,8 +301,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
-    // skipped until the additional days flow is completed
-    it.skip('create and edit punishments - PROSPECTIVE DAYS', () => {
+    it('create and edit punishments - PROSPECTIVE DAYS', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start(101))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -285,16 +316,27 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       numberOfAdditionalDaysPage.days().type('10')
       numberOfAdditionalDaysPage.submitButton().click()
 
-      awardPunishmentsPage.editPunishment().first().click()
+      const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
+      willPunishmentBeSuspendedPage.suspended().find('input[value="no"]').click()
+      willPunishmentBeSuspendedPage.submitButton().click()
 
-      punishmentPage.punishment().find('input[value="PROSPECTIVE_DAYS"]').should('be.checked')
+      const willPunishmentBeConsecutivePage = Page.verifyOnPage(WillPunishmentBeConsecutivePage)
+      willPunishmentBeConsecutivePage.consecutive().find('input[value="yes"]').click()
+      willPunishmentBeConsecutivePage.submitButton().click()
 
-      punishmentPage.submitButton().click()
+      const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
+      whichPunishmentConsecutiveToPage.selectButton().last().click()
 
-      numberOfAdditionalDaysPage.days().should('have.value', '10')
-      // check for consecutiveReportNumber comment
-
-      numberOfAdditionalDaysPage.submitButton().click()
+      Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage
+        .punishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Prospective additional days\n(consecutive to charge 95)')
+          expect($summaryData.get(1).innerText).to.contain('-')
+          expect($summaryData.get(2).innerText).to.contain('-')
+          expect($summaryData.get(3).innerText).to.contain('10')
+        })
     })
 
     it('Activate a suspended punishment and include report number in correct column, remove change link', () => {

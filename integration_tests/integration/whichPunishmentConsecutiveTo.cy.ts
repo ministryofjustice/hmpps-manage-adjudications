@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiveTo'
-import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
+import { PunishmentType } from '../../server/data/PunishmentResult'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
