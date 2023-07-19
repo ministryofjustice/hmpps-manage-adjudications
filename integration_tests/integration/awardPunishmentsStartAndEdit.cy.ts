@@ -292,6 +292,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.submitButton().click()
 
       numberOfAdditionalDaysPage.days().should('have.value', '10')
+      // check for consecutiveReportNumber comment
 
       numberOfAdditionalDaysPage.submitButton().click()
     })
