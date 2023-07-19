@@ -130,6 +130,7 @@ export default defineConfig({
         stubAloAmendOffenceDetails: adjudications.stubAloAmendOffenceDetails,
         stubGetDataInsightsChart: adjudications.stubGetDataInsightsChart,
         stubGetAgencyReportCounts: adjudications.stubGetAgencyReportCounts,
+        stubGetConsecutivePunishments: adjudications.stubGetConsecutivePunishments,
       })
     },
 

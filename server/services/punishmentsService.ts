@@ -6,11 +6,12 @@ import {
   PunishmentComment,
   PunishmentData,
   PunishmentDataWithSchedule,
+  PunishmentType,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
 } from '../data/PunishmentResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
-import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../data/manageAdjudicationsClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { convertToTitleCase } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
@@ -179,5 +180,19 @@ export default class PunishmentsService {
     }
 
     return enhancedResult
+  }
+
+  async getPossibleConsecutivePunishments(
+    adjudicationNumber: number,
+    punishmentType: PunishmentType,
+    user: User
+  ): Promise<ConsecutiveAdditionalDaysReport[]> {
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
+      adjudicationNumber
+    )
+    return new ManageAdjudicationsClient(user).getPossibleConsecutivePunishments(
+      reportedAdjudication.prisonerNumber,
+      punishmentType
+    )
   }
 }

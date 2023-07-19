@@ -40,7 +40,12 @@ import {
   OutcomeCode,
   QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
-import { PunishmentData, SuspendedPunishmentResult } from './PunishmentResult'
+import {
+  PunishmentData,
+  PunishmentDataWithSchedule,
+  PunishmentType,
+  SuspendedPunishmentResult,
+} from './PunishmentResult'
 import { User } from './hmppsAuthClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -101,6 +106,14 @@ export type AmendedOutcomeData = {
 export type AgencyReportCounts = {
   reviewTotal: number
   transferReviewTotal: number
+}
+
+export type ConsecutiveAdditionalDaysReport = {
+  reportNumber: number
+  chargeProvedDate: string
+  punishment: PunishmentDataWithSchedule
+  consecutiveReportNumber?: number
+  consecutiveReportAvailable?: boolean
 }
 
 export default class ManageAdjudicationsClient {
@@ -576,6 +589,15 @@ export default class ManageAdjudicationsClient {
   async getAgencyReportCounts(): Promise<AgencyReportCounts> {
     return this.restClient.get({
       path: `/reported-adjudications/report-counts`,
+    })
+  }
+
+  async getPossibleConsecutivePunishments(
+    prisonerNumber: string,
+    punishmentType: PunishmentType
+  ): Promise<ConsecutiveAdditionalDaysReport[]> {
+    return this.restClient.get({
+      path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}`,
     })
   }
 }
