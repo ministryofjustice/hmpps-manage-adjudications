@@ -10,7 +10,7 @@
     {% set rows = (rows.push(
       [
           {
-            text: sanction.type | convertPunishmentType(sanction.stoppagePercentage, sanction.privilegeType, sanction.otherPrivilege),
+            text: sanction.type | convertPunishmentType(false, null, sanction.stoppagePercentage, sanction.privilegeType, sanction.otherPrivilege),
             classes: "columnWidth30 verticalAlign"
           },
           {
