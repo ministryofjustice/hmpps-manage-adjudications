@@ -6,7 +6,7 @@
 		<h2 class="govuk-heading-m govuk-!-margin-bottom-4">{{ chartSetting.title }}</h2>
 
 		{% for chartEntry in chartSetting.chartData.chartEntries %}
-			<div class="chart-table-panel">
+			<div class="govuk-body chart-table-panel">
 				<div class="govuk-!-font-size-48 govuk-!-font-weight-bold">{{ chartEntry.count }}</div>
 				<div class="govuk-!-margin-top-2 govuk-!-font-size-19">This is approximately <span class="govuk-!-font-weight-bold">{{ chartEntry.proportion}}</span> of your population over this period.</div>
 			</div>
