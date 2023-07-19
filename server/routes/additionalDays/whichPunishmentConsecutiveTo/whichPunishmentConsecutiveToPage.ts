@@ -46,9 +46,10 @@ export default class WhichPunishmentConsecutiveToPage {
       type,
       user
     )
+
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
-      manuallySelectConsecutivePunishment: '#',
+      manuallySelectConsecutivePunishment: this.getManualConsecutivePunishmentUrl(adjudicationNumber, req),
       possibleConsecutivePunishments,
     })
   }
@@ -85,5 +86,12 @@ export default class WhichPunishmentConsecutiveToPage {
       throw postError
     }
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+  }
+
+  private getManualConsecutivePunishmentUrl = (adjudicationNumber: number, req: Request) => {
+    if (this.pageOptions.isEdit()) {
+      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(adjudicationNumber, req.params.redisId)
+    }
+    return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(adjudicationNumber)
   }
 }

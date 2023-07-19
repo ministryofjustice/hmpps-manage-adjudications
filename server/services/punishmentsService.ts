@@ -9,15 +9,11 @@ import {
   PunishmentType,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
-  convertPunishmentType,
 } from '../data/PunishmentResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
-import ManageAdjudicationsClient, {
-  ConsecutiveAdditionalDaysEnhanced,
-  ConsecutiveAdditionalDaysReport,
-} from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../data/manageAdjudicationsClient'
 import PrisonApiClient from '../data/prisonApiClient'
-import { convertToTitleCase, formatTimestampToDate } from '../utils/utils'
+import { convertToTitleCase } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
 
 export default class PunishmentsService {
@@ -186,22 +182,6 @@ export default class PunishmentsService {
     return enhancedResult
   }
 
-  enhancePossibleConsecutivePunishments(
-    possibleConsecutivePunishment: ConsecutiveAdditionalDaysReport
-  ): ConsecutiveAdditionalDaysEnhanced {
-    return {
-      ...possibleConsecutivePunishment,
-      formattedType: possibleConsecutivePunishment.consecutiveReportNumber
-        ? `${convertPunishmentType(
-            possibleConsecutivePunishment.punishment.type,
-            null,
-            null,
-            null
-          )} (consecutive to charge ${possibleConsecutivePunishment.consecutiveReportNumber})`
-        : convertPunishmentType(possibleConsecutivePunishment.punishment.type, null, null, null),
-    }
-  }
-
   async getPossibleConsecutivePunishments(
     adjudicationNumber: number,
     punishmentType: PunishmentType,
@@ -210,10 +190,9 @@ export default class PunishmentsService {
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
       adjudicationNumber
     )
-    const possibleConsecutivePunishments = await new ManageAdjudicationsClient(user).getPossibleConsecutivePunishments(
+    return new ManageAdjudicationsClient(user).getPossibleConsecutivePunishments(
       reportedAdjudication.prisonerNumber,
       punishmentType
     )
-    return possibleConsecutivePunishments.map(punishment => this.enhancePossibleConsecutivePunishments(punishment))
   }
 }

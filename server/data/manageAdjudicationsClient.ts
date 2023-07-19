@@ -116,10 +116,6 @@ export type ConsecutiveAdditionalDaysReport = {
   consecutiveReportAvailable?: boolean
 }
 
-export interface ConsecutiveAdditionalDaysEnhanced extends ConsecutiveAdditionalDaysReport {
-  formattedType: string
-}
-
 export default class ManageAdjudicationsClient {
   restClient: RestClient
 
