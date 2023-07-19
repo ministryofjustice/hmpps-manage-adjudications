@@ -46,7 +46,6 @@ export default class WhichPunishmentConsecutiveToPage {
       type,
       user
     )
-
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       manuallySelectConsecutivePunishment: this.getManualConsecutivePunishmentUrl(adjudicationNumber, req),

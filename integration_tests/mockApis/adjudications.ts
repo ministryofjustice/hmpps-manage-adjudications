@@ -1064,6 +1064,21 @@ const stubGetAgencyReportCounts = ({ response = {} }): SuperAgentRequest =>
     },
   })
 
+const stubGetConsecutivePunishments = ({ prisonerNumber, punishmentType, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1122,4 +1137,5 @@ export default {
   stubAloAmendOffenceDetails,
   stubGetDataInsightsChart,
   stubGetAgencyReportCounts,
+  stubGetConsecutivePunishments,
 }

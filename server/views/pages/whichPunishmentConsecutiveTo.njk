@@ -21,7 +21,7 @@
         {% if possibleConsecutivePunishments.length %}
           {{ consecutivePunishmentsTable(possibleConsecutivePunishments) }}
         {% else %}
-          <p class="govuk-body">There are no existing punishments to select.</p>
+          <p class="govuk-body" data-qa='no-data'>There are no existing punishments to select.</p>
         {% endif %}
 
         <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{ manuallySelectConsecutivePunishment }}" data-qa="enter-manually-link">enter details to select it manually</a>.</p>
