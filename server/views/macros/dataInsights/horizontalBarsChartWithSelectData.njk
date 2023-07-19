@@ -1,0 +1,61 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro horizontalBarsChartWithSelectData(chartSetting, selectorSettings, allSelectorParams, csrfToken) %}
+    <div class="main-chart-with-data-panel" id="chart-panel-{{ chartSetting.chartData.elementId }}">
+
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-6">{{ chartSetting.title }}</h2>
+
+        <div>
+            <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <input type="hidden" name="allSelectorParams" value="{{ allSelectorParams | dump }}"/>
+
+                <div class="flex-container {{ selectorSettings.class }}">
+                    {{ govukSelect({
+                        id: selectorSettings.id,
+                        name: selectorSettings.id,
+                        label: {
+                            text: selectorSettings.label,
+                            isPageHeading: false,
+                            classes: ''
+                        },
+                        items: selectorSettings.items | toSelect('value', 'text', allSelectorParams[selectorSettings.id]),
+                        classes: 'flex-column filter-selector',
+                        errorMessage: selectorSettings.id | findError(errors)
+                    }) }}
+
+                    {{ govukButton({
+                        text: 'Show results',
+                        type: 'submit',
+                        preventDoubleClick: true,
+                        classes: 'govuk-button--submit govuk-!-margin-right-3 flex-column show-results-button',
+                        attributes: { 'data-qa': 'not-proceed-submit' }
+                    }) }}
+                </div>
+
+            </form>
+        </div>
+
+        {% if chartSetting.tableData.rows | length %}
+            <div class="chart-generic-panel chart-generic-panel-horizontal-bars flex-container">
+                <div class="chart-table-panel flex-column">
+                    <div class="results-table">
+                        {{ govukTable({
+                            head: chartSetting.tableData.head,
+                            rows: chartSetting.tableData.rows,
+                            attributes: { "data-qa": "results-table" }
+                        }) }}
+                    </div>
+                </div>
+                <div class="chart-horizontal-panel flex-column">
+                    <canvas id="{{ chartSetting.chartData.elementId }}" class="chart-horizontal-panel-canvas"></canvas>
+                </div>
+            </div>
+        {% else %}
+            <p class="govuk-!-padding-top-3" data-qa="no-results-message">No data to display.</p>
+        {% endif %}
+
+    </div>
+{% endmacro %}

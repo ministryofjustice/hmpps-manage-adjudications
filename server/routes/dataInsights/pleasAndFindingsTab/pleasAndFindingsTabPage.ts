@@ -4,13 +4,14 @@ import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import {
+  ALL_DATA_FILTER,
   ChartDetailsResult,
+  ChartEntryDuoLine,
   ChartEntryHorizontalBar,
   ChartEntryLine,
-  ALL_DATA_FILTER,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { produceLinesCharts } from '../chartService'
+import { produceDuoVerticalBarsCharts, produceLinesCharts } from '../chartService'
 
 type PageData = {
   error?: FormError
@@ -55,6 +56,29 @@ export default class PleasAndFindingsTabPage {
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.finding },
       { source: (row: ChartEntryHorizontalBar) => row.count }
+    )
+
+    chartSettingMap['5c'] = await produceDuoVerticalBarsCharts(
+      '5c',
+      username,
+      agencyId,
+      'Adjudications resolved with more than one hearing – current month and previous 12 months (5c)',
+      await this.chartApiService.getChart(username, agencyId, '5c'),
+      [
+        {
+          label: '1 hearing',
+          countSource: { source: (row: ChartEntryDuoLine) => row.count_one },
+          propSource: { source: (row: ChartEntryDuoLine) => row.prop_one },
+        },
+        {
+          label: 'More than 1 hearing',
+          countSource: { source: (row: ChartEntryDuoLine) => row.count_more },
+          propSource: { source: (row: ChartEntryDuoLine) => row.prop_more },
+        },
+      ],
+      { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
+      { source: (row: ChartEntryDuoLine) => `${row.year}-${row.month}` },
+      { source: (row: ChartEntryDuoLine) => row.count }
     )
 
     return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {

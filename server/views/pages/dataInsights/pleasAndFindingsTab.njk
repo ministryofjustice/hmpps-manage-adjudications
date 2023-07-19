@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../partials/charts/linesChart.njk" import linesChart %}
+{% from "../../partials/charts/multiVerticalBarsChart.njk" import multiVerticalBarsChart %}
 
 {% set title = "Adjudication data - Pleas and findings" %}
 
@@ -25,6 +26,10 @@
 
     <div class="govuk-!-margin-bottom-6">
       {{ linesChart(chartSettingMap['5b']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ multiVerticalBarsChart(chartSettingMap['5c']) }}
     </div>
 
   </div>
