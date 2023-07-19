@@ -102,7 +102,7 @@ export function convertPunishmentType(
   otherPrivilege: string
 ) {
   const additionalDaysWithConsecutiveReportNo = `Additional days\n(consecutive to charge ${consecutiveReportNo}`
-  const prospectiveAdditionalDaysWithConsecutiveReportNo = `Prospective additional days\n(consecutive to charge ${consecutiveReportNo}`
+  const prospectiveAdditionalDaysWithConsecutiveReportNo = `Prospective additional days\n(consecutive to charge ${consecutiveReportNo})`
   switch (type) {
     case PunishmentType.ADDITIONAL_DAYS:
       return consecutivePunishmentContentFlag && consecutiveReportNo
