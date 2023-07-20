@@ -40,7 +40,7 @@ export default class CheckPunishmentsPage {
 
     const punishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
     let renderEmptyTable = false
-    if (punishments.length === 0) {
+    if (!!punishments && punishments.length === 0) {
       const punishmentsFromApi = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
       renderEmptyTable = !!punishmentsFromApi && punishmentsFromApi.length > 0
     }

@@ -51,7 +51,7 @@ export default class AwardPunishmentsPage {
 
     let renderEmptyTable = false
 
-    if (punishments.length === 0 && this.pageOptions.displaySessionData()) {
+    if (!!punishments && punishments.length === 0 && this.pageOptions.displaySessionData()) {
       const apiPunishments = this.getPunishmentsFromApi(req, adjudicationNumber, user)
       renderEmptyTable = !!apiPunishments && (await apiPunishments).length > 0
     }
