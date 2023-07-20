@@ -25,14 +25,14 @@
         </p>
       </div>
 
-      {% if punishments | length %}
+      {% if renderEmptyTable or(punishments | length) %}
         {{ awardPunishmentsTable(punishments, null, adjudicationNumber, true) }}
       {% else %}
         <p class="govuk-body" data-qa="emptyState">No punishments have been awarded for this adjudication.</p>
       {% endif %}
 
       <div class="flex-container flex-center">
-        {% if punishments | length %}
+        {% if renderEmptyTable or(punishments | length) %}
           {{ govukButton({
         text: 'Confirm and submit',
         type: 'submit',

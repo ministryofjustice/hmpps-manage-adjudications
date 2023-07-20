@@ -49,6 +49,13 @@ export default class AwardPunishmentsPage {
 
     let punishments = await this.getPunishments(req, adjudicationNumber, user)
 
+    let renderEmptyTable = false
+
+    if (punishments.length === 0 && this.pageOptions.displaySessionData()) {
+      const apiPunishments = this.getPunishmentsFromApi(req, adjudicationNumber, user)
+      renderEmptyTable = !!apiPunishments && (await apiPunishments).length > 0
+    }
+
     // // If we are not displaying session data then fill in the session data
     if (this.pageOptions.displayAPIData()) {
       // Set up session to allow for adding and deleting
@@ -61,6 +68,7 @@ export default class AwardPunishmentsPage {
       await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, adjudicationNumber)
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
     }
+
     const continueHref = await this.getContinueHref(adjudicationNumber, user)
     return res.render(`pages/awardPunishments.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
@@ -68,6 +76,7 @@ export default class AwardPunishmentsPage {
       adjudicationNumber,
       punishments,
       continueHref,
+      renderEmptyTable,
     })
   }
 
@@ -75,6 +84,10 @@ export default class AwardPunishmentsPage {
     if (this.pageOptions.displaySessionData()) {
       return this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
     }
+    return this.getPunishmentsFromApi(req, adjudicationNumber, user)
+  }
+
+  getPunishmentsFromApi = async (req: Request, adjudicationNumber: number, user: User) => {
     const punishments = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     return flattenPunishments(punishments)
   }

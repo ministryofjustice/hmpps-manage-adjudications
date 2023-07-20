@@ -39,12 +39,18 @@ export default class CheckPunishmentsPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
 
     const punishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+    let renderEmptyTable = false
+    if (punishments.length === 0) {
+      const punishmentsFromApi = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
+      renderEmptyTable = !!punishmentsFromApi && punishmentsFromApi.length > 0
+    }
 
     return res.render(`pages/checkPunishments.njk`, {
       adjudicationNumber,
       punishments,
       changePunishmentLink: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
       cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      renderEmptyTable,
     })
   }
 

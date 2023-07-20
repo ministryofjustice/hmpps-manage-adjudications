@@ -13,6 +13,7 @@ import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiv
 import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import CheckPunishments from '../pages/checkPunishments'
 
 const susPun = [
   {
@@ -109,6 +110,33 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         },
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 102,
+      response: {
+        reportedAdjudication: {
+          ...testData.reportedAdjudication({
+            punishments: [
+              {
+                type: PunishmentType.CONFINEMENT,
+                schedule: {
+                  days: 10,
+                },
+              },
+            ],
+            adjudicationNumber: 101,
+            prisonerNumber: 'G6415GD',
+            locationId: 25538,
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2024-11-23T17:00:00',
+                oicHearingType: OicHearingType.INAD_ADULT,
+                id: 69,
+              }),
+            ],
+          }),
+        },
+      },
+    })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: testData.prisonerResultSummary({
@@ -176,6 +204,17 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           },
         },
       ],
+    })
+    cy.task('stubAmendPunishments', {
+      adjudicationNumber: 102,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          adjudicationNumber: 456,
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          punishments: [],
+        }),
+      },
     })
   })
 
@@ -307,6 +346,21 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.suspendedUntil().should('have.value', '10/10/2030')
 
       punishmentSchedulePage.submitButton().click()
+    })
+
+    it.only('remove all punishments on edit should show empty table', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start(102))
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+
+      awardPunishmentsPage.deletePunishment().first().click()
+      cy.get('[data-qa="punishments-continue').click()
+
+      const checkPunishmentsPage: CheckPunishments = Page.verifyOnPage(CheckPunishments)
+      checkPunishmentsPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(102))
+      })
     })
 
     it('create and edit punishments - PROSPECTIVE DAYS', () => {
