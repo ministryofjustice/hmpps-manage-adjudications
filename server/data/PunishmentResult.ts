@@ -95,13 +95,19 @@ export function convertPrivilegeType(privilege: PrivilegeType) {
 
 export function convertPunishmentType(
   type: PunishmentType,
+  consecutivePunishmentContentFlag: boolean,
+  consecutiveReportNo: number,
   stoppage: number,
   privilege: PrivilegeType,
   otherPrivilege: string
 ) {
+  const additionalDaysWithConsecutiveReportNo = `Additional days\n(consecutive to charge ${consecutiveReportNo}`
+  const prospectiveAdditionalDaysWithConsecutiveReportNo = `Prospective additional days\n(consecutive to charge ${consecutiveReportNo})`
   switch (type) {
     case PunishmentType.ADDITIONAL_DAYS:
-      return 'Additional days'
+      return consecutivePunishmentContentFlag && consecutiveReportNo
+        ? additionalDaysWithConsecutiveReportNo
+        : 'Additional days'
     case PunishmentType.CONFINEMENT:
       return 'Cellular confinement'
     case PunishmentType.EARNINGS:
@@ -114,7 +120,9 @@ export function convertPunishmentType(
       if (privilege === PrivilegeType.OTHER) return `Loss of ${otherPrivilege.toLowerCase()}`
       return `Loss of ${convertPrivilegeType(privilege)}`
     case PunishmentType.PROSPECTIVE_DAYS:
-      return 'Prospective additional days'
+      return consecutivePunishmentContentFlag && consecutiveReportNo
+        ? prospectiveAdditionalDaysWithConsecutiveReportNo
+        : 'Prospective additional days'
     case PunishmentType.REMOVAL_ACTIVITY:
       return 'Removal from activity'
     case PunishmentType.REMOVAL_WING:

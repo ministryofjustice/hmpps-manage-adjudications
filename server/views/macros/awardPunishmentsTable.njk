@@ -11,13 +11,7 @@
       .urls
       .edit(adjudicationNumber, redisId) %}
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change</a></p>' %}
-
-    {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
-
-    {% if data.consecutiveReportNumber %}
-        {% set typeColumnValue = typeColumnValue + '<br>' + '(consecutive to charge ' + data.consecutiveReportNumber + ')' %}
-    {% endif %}
-
+    {% set typeColumnValue = data.type | convertPunishmentType(true, data.consecutiveReportNumber, data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
     {% set rows = (rows.push(
       [
           {
