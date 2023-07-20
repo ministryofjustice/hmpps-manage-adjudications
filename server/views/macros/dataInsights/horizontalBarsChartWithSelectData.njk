@@ -1,11 +1,17 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% macro horizontalBarsChartWithSelectData(chartSetting, selectorSettings, allSelectorParams, csrfToken) %}
     <div class="main-chart-with-data-panel" id="chart-panel-{{ chartSetting.chartData.elementId }}">
 
         <h2 class="govuk-heading-m govuk-!-margin-bottom-6">{{ chartSetting.title }}</h2>
+
+        {{ govukDetails({
+            summaryText: "How you can use this chart",
+            text: chartSetting.chartHint
+        }) }}
 
         <div>
             <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">

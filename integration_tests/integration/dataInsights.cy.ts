@@ -206,41 +206,43 @@ context('Adjudication data', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Overview of prisoners in the establishment currently (2a)')
-    page.checkChartTitle('Adjudication reports by protected or responsivity characteristic – last 30 days (2b)')
-    page.checkChartTitle('Adjudication offence type by protected or responsivity characteristic - last 30 days (2d)')
-    page.checkChartTitle('Punishment by protected or responsivity characteristic - last 30 days (2e)')
-    page.checkChartTitle('Plea by protected or responsivity characteristic - last 30 days (2f)')
-    page.checkChartTitle('Finding by protected or responsivity characteristic - last 30 days (2g)')
+    page.checkChartTitle('Percentage and number of prisoners in the establishment currently (2a)')
+    page.checkChartTitle(
+      'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability - last 30 days (2b)'
+    )
+    page.checkChartTitle('Offence type by protected characteristic or vulnerability - last 30 days (2d)')
+    page.checkChartTitle('Punishment by protected characteristic or vulnerability - last 30 days (2e)')
+    page.checkChartTitle('Plea by protected characteristic or vulnerability - last 30 days (2f)')
+    page.checkChartTitle('Finding by protected characteristic or vulnerability - last 30 days (2g)')
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Total adjudications by adjudication offence type – current month and previous 12 months (3a)')
-    page.checkChartTitle('Adjudication offence type by location – last 30 days (3b)')
+    page.checkChartTitle('Total adjudications by adjudication offence type - current month and previous 12 months (3a)')
+    page.checkChartTitle('Adjudication offence type by location - last 30 days (3b)')
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.punishments())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Punishments given – current month and previous 12 months (4a)')
+    page.checkChartTitle('Total adjudications by punishment - current month and previous 12 months (4a)')
     page.checkChartTitle(
-      'Punishments given for each adjudication offence type - current month and previous 12 months (4b)'
+      'Total adjudications for each adjudication offence type broken down by punishment - current month and previous 12 months (4b)'
     )
-    page.checkChartTitle('Suspended and activated punishments - current month and last 12 months (4c)')
+    page.checkChartTitle('Percentage of suspended and activated punishments - current month and last 12 months (4c)')
   })
 
   it('should contain the required page elements /data-insights/pleas-and-findings', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.pleasAndFindings())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Pleas given – current month and previous 12 months (5a)')
-    page.checkChartTitle('Total adjudications by findings – current month and previous 12 months (5b)')
+    page.checkChartTitle('Total adjudications by plea - current month and previous 12 months (5a)')
+    page.checkChartTitle('Total Adjudications by findings - current month and previous 12 months (5b)')
     page.checkChartTitle(
-      'Adjudications resolved with more than one hearing – current month and previous 12 months (5c)'
+      'Percentage of resolved adjudications with more than one hearing - current month and previous 12 months (5c)'
     )
   })
 })

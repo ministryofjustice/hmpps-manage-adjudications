@@ -21,18 +21,18 @@ type PageData = {
 
 class PageOptions {}
 
-const getHorizontalBarsChartHeadByCharacteristic = () => {
+const getOffenceTypeHorizontalBarsChartHead = () => {
   const head: { text: string; classes: string }[] = [
     {
       text: 'Location',
+      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-width-auto',
+    },
+    {
+      text: 'Percentage of offences',
       classes: 'horizontal-chart-table-head-cell',
     },
     {
-      text: 'Percentage',
-      classes: 'horizontal-chart-table-head-cell',
-    },
-    {
-      text: 'Number',
+      text: 'Number of offences',
       classes: 'horizontal-chart-table-head-cell',
     },
   ]
@@ -59,7 +59,8 @@ export default class OffenceTypeTabPage {
       '3a',
       username,
       agencyId,
-      'Total adjudications by adjudication offence type – current month and previous 12 months (3a)',
+      'Total adjudications by adjudication offence type - current month and previous 12 months (3a)',
+      'This chart shows the frequency of the different offence types leading to an adjudication. Are there any insights or trends which can inform any actions?',
       await this.chartApiService.getChart(username, agencyId, '3a'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
@@ -80,7 +81,8 @@ export default class OffenceTypeTabPage {
       '3b',
       username,
       agencyId,
-      'Adjudication offence type by location – last 30 days (3b)',
+      'Adjudication offence type by location - last 30 days (3b)',
+      'Select an offence type to see where offences took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
       chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
@@ -90,7 +92,7 @@ export default class OffenceTypeTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic()
+      getOffenceTypeHorizontalBarsChartHead()
     )
 
     return res.render(`pages/dataInsights/offenceTypeTab.njk`, {

@@ -1,9 +1,15 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% macro horizontalBarsChartData(chartSetting) %}
     <div class="main-chart-with-data-panel" id="chart-panel-{{ chartSetting.chartData.elementId }}">
 
         <h2 class="govuk-heading-m govuk-!-margin-bottom-6">{{ chartSetting.title }}</h2>
+
+        {{ govukDetails({
+            summaryText: "How you can use this chart",
+            text: chartSetting.chartHint
+        }) }}
 
         {% if chartSetting.tableData.rows | length %}
             <div class="chart-generic-panel chart-generic-panel-horizontal-bars flex-container">
