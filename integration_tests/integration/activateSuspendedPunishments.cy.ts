@@ -23,6 +23,7 @@ context('acivate suspended punishments page', () => {
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
+      reportNumber: 100,
       response: [
         {
           reportNumber: 100,

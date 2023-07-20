@@ -975,11 +975,11 @@ const stubAmendPunishments = ({ adjudicationNumber, response }): SuperAgentReque
     },
   })
 
-const stubGetSuspendedPunishments = ({ prisonerNumber, response }): SuperAgentRequest =>
+const stubGetSuspendedPunishments = ({ prisonerNumber, reportNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/reported-adjudications/punishments/${prisonerNumber}/suspended`,
+      url: `/adjudications/reported-adjudications/punishments/${prisonerNumber}/suspended?reportNumber=${reportNumber}`,
     },
     response: {
       status: 200,

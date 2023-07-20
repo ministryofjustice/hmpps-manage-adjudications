@@ -14,6 +14,49 @@ import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
+const susPun = [
+  {
+    reportNumber: 101,
+    punishment: {
+      id: 71,
+      type: PunishmentType.PRIVILEGE,
+      privilegeType: PrivilegeType.MONEY,
+      activatedBy: 0,
+      activatedFrom: 0,
+      schedule: {
+        days: 5,
+        suspendedUntil: '2023-04-29',
+      },
+    },
+  },
+  {
+    reportNumber: 101,
+    punishment: {
+      id: 73,
+      type: PunishmentType.ADDITIONAL_DAYS,
+      activatedBy: 0,
+      activatedFrom: 0,
+      schedule: {
+        days: 5,
+        suspendedUntil: '2023-04-29',
+      },
+    },
+  },
+  {
+    reportNumber: 101,
+    punishment: {
+      id: 74,
+      type: PunishmentType.PROSPECTIVE_DAYS,
+      activatedBy: 0,
+      activatedFrom: 0,
+      schedule: {
+        days: 5,
+        suspendedUntil: '2023-04-29',
+      },
+    },
+  },
+]
+
 const testData = new TestData()
 context('e2e tests to create and edit punishments and schedules with redis', () => {
   beforeEach(() => {
@@ -76,48 +119,13 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      response: [
-        {
-          reportNumber: 101,
-          punishment: {
-            id: 71,
-            type: PunishmentType.PRIVILEGE,
-            privilegeType: PrivilegeType.MONEY,
-            activatedBy: 0,
-            activatedFrom: 0,
-            schedule: {
-              days: 5,
-              suspendedUntil: '2023-04-29',
-            },
-          },
-        },
-        {
-          reportNumber: 101,
-          punishment: {
-            id: 73,
-            type: PunishmentType.ADDITIONAL_DAYS,
-            activatedBy: 0,
-            activatedFrom: 0,
-            schedule: {
-              days: 5,
-              suspendedUntil: '2023-04-29',
-            },
-          },
-        },
-        {
-          reportNumber: 101,
-          punishment: {
-            id: 74,
-            type: PunishmentType.PROSPECTIVE_DAYS,
-            activatedBy: 0,
-            activatedFrom: 0,
-            schedule: {
-              days: 5,
-              suspendedUntil: '2023-04-29',
-            },
-          },
-        },
-      ],
+      reportNumber: 100,
+      response: susPun,
+    })
+    cy.task('stubGetSuspendedPunishments', {
+      prisonerNumber: 'G6415GD',
+      reportNumber: 101,
+      response: susPun,
     })
     cy.task('stubGetReportedAdjudication', {
       id: 102,
