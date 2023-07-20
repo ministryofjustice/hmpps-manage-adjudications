@@ -21,6 +21,9 @@ export enum PrivilegeType {
   OTHER = 'OTHER',
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export type PunishmentData = {
   id?: number
   redisId?: string
@@ -36,6 +39,22 @@ export type PunishmentData = {
   consecutiveReportNumber?: number
 }
 
+export type PunishmentDataV2 = {
+  id?: number
+  redisId?: string
+  type: PunishmentType
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
+  days: number
+  startDate?: string
+  endDate?: string
+  suspendedUntil?: string
+  activatedFrom?: number
+  consecutiveReportNumber?: number
+  damagesOwedAmount?: number
+}
+
 export type PunishmentSchedule = {
   days: number
   startDate?: string
@@ -43,6 +62,9 @@ export type PunishmentSchedule = {
   suspendedUntil?: string
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export type PunishmentDataWithSchedule = {
   redisId?: string
   id?: number
@@ -53,6 +75,19 @@ export type PunishmentDataWithSchedule = {
   schedule: PunishmentSchedule
   activatedFrom?: number
   consecutiveReportNumber?: number
+}
+
+export type PunishmentDataWithScheduleV2 = {
+  redisId?: string
+  id?: number
+  type: PunishmentType
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
+  schedule: PunishmentSchedule
+  activatedFrom?: number
+  consecutiveReportNumber?: number
+  amount?: number
 }
 
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
