@@ -12,7 +12,7 @@ import {
 } from '../data/PunishmentResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../data/manageAdjudicationsClient'
-import PrisonApiClient from '../data/prisonApiClient'
+import PrisonApiClient, { SanctionStatus } from '../data/prisonApiClient'
 import { convertToTitleCase } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
 
@@ -197,5 +197,21 @@ export default class PunishmentsService {
       reportedAdjudication.prisonerNumber,
       punishmentType
     )
+  }
+
+  async validateChargeNumber(adjudicationNumber: number, type: PunishmentType, user: User): Promise<boolean> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
+      adjudicationNumber
+    )
+    if (![PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(type)) return false
+    const sanctionStatus =
+      type === PunishmentType.ADDITIONAL_DAYS ? SanctionStatus.IMMEDIATE : SanctionStatus.PROSPECTIVE
+    const response = await new PrisonApiClient(token).validateCharge(
+      adjudicationNumber,
+      sanctionStatus,
+      reportedAdjudication.prisonerNumber
+    )
+    return response.status === 200
   }
 }
