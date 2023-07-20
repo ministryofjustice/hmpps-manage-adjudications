@@ -9,6 +9,8 @@ import {
   DataFilter,
   getMonthShortName,
   RowSource,
+  TableHead,
+  TableRow,
   TableRowEntry,
 } from '../../services/ChartDetailsResult'
 import DropDownEntry from './dropDownEntry'
@@ -200,7 +202,7 @@ export const produceHorizontalBarsChart = async (
   labelFieldSource: RowSource,
   barsDataSource: RowSource,
   rowsSource: RowSource[],
-  head: { text: string; classes: string }[]
+  head: TableHead[]
 ) => {
   const chartEntries = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).filter(
     (row: ChartEntryHorizontalBar) => {
@@ -293,11 +295,8 @@ export const createHorizontalBarsChartSettings = (params: {
   chartHint: string
   barData: number[] | string[]
   labels: string[]
-  head: { text: string; classes: string }[]
-  rows: {
-    text: string | number
-    classes: string
-  }[][]
+  head: TableHead[]
+  rows: TableRow[][]
 }) => {
   const barsColors = [DARK_BLUE]
   const barsColorsDarker = [DARK_BLUE_DARKER]
@@ -417,11 +416,8 @@ export const createVerticalBarsAndLineChartSettings = (params: {
   barData: number[]
   lineData: number[]
   labels: string[][]
-  head: never[]
-  rows: {
-    text: string | number
-    classes: string
-  }[][]
+  head: TableHead[]
+  rows: TableRow[][]
 }) => {
   const dataLength = params.barData.length
   const barsColors = createCustomArray(dataLength, DARK_BLUE, LIGHT_BLUE)
@@ -576,11 +572,8 @@ export const createMultiVerticalBarsChartSettings = (params: {
   chartEntriesMap: Map<string, ChartEntryLine[]>
   yValueSource: RowSource
   barColors: ('DARK_BLUE' | 'YELLOW' | 'LIGHT_BLUE')[]
-  head: never[]
-  rows: {
-    text: string | number
-    classes: string
-  }[][]
+  head: TableHead[]
+  rows: TableRow[][]
 }) => {
   const linesLegends = Array.from(params.chartEntriesMap.keys())
 
@@ -727,6 +720,9 @@ export const createLinesChartsSettings = (params: {
           return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
         })
       : []
+
+  const head = getMultiLinesChartHead()
+  const rows = getMultipleLineChartRows(params.chartEntriesMap, labels)
 
   const lineColorsOptions = [
     ['#5694ca', '#397bb4'],
@@ -888,8 +884,8 @@ export const createLinesChartsSettings = (params: {
       } as ChartOptions<'line'>,
     },
     tableData: {
-      head: [] as never[],
-      rows: [] as never[],
+      head,
+      rows,
     },
   }
 }
@@ -944,7 +940,7 @@ export const getTotalsAdjudicationsHorizontalBarsChartHead = () => {
   return [
     {
       text: 'Location',
-      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-width-auto',
+      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-first',
     },
     {
       text: 'Percentage of reports',
@@ -955,6 +951,55 @@ export const getTotalsAdjudicationsHorizontalBarsChartHead = () => {
       classes: 'horizontal-chart-table-head-cell',
     },
   ]
+}
+
+export const getMultiLinesChartHead = (): TableHead[] => []
+
+export const getMultipleLineChartRows = (
+  chartEntriesMap: Map<string, ChartEntryLine[]>,
+  monthYearLabels: string[][]
+): TableRow[][] => {
+  const rows = [] as TableRow[][]
+  Array.from(chartEntriesMap.keys()).forEach((key: string) => {
+    rows.push([
+      {
+        text: key,
+        classes: 'multiple-line-table-row-cell multiple-line-table-row-cell-first govuk-!-font-weight-bold',
+        colspan: 14,
+      } as TableRow,
+    ])
+    rows.push([
+      {
+        text: '',
+        classes: 'multiple-line-table-row-cell multiple-line-table-row-cell-first',
+      } as TableRow,
+      ...monthYearLabels.map(monthYear => ({
+        text: `${monthYear[0]} ${monthYear[1]}`,
+        classes: 'multiple-line-table-head-cell',
+      })),
+    ])
+    rows.push([
+      {
+        text: 'Number',
+        classes: 'multiple-line-table-row-cell multiple-line-table-row-cell-first',
+      } as TableRow,
+      ...chartEntriesMap.get(key).map((entry: ChartEntryLine) => ({
+        text: `${entry.count}`,
+        classes: 'multiple-line-table-row-cell',
+      })),
+    ])
+    rows.push([
+      {
+        text: 'Percentage',
+        classes: 'multiple-line-table-row-cell multiple-line-table-row-cell-first',
+      } as TableRow,
+      ...chartEntriesMap.get(key).map((entry: ChartEntryLine) => ({
+        text: `${Math.trunc(entry.proportion * 100)}%`,
+        classes: 'multiple-line-table-row-cell',
+      })),
+    ])
+  })
+  return rows
 }
 
 export const getHorizontalBarsChartRows = (chartEntries: ChartEntryHorizontalBar[], rowsSource: RowSource[]) => {

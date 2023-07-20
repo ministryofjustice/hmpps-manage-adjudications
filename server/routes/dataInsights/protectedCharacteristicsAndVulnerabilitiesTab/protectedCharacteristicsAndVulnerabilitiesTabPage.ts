@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
-import { ChartDetailsResult, ChartEntryHorizontalBar } from '../../../services/ChartDetailsResult'
+import { ChartDetailsResult, ChartEntryHorizontalBar, TableHead } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -21,10 +21,10 @@ const getHorizontalBarsChartHeadByCharacteristic = (
   percentageLabel: string,
   numberLabel: string
 ) => {
-  const head: { text: string; classes: string }[] = [
+  const head: TableHead[] = [
     {
       text: mainLabel,
-      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-width-auto',
+      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-first',
     },
     {
       text: percentageLabel,
@@ -69,7 +69,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2a',
       username,
       agencyId,
-      'Percentage and number of prisoners in the establishment currently (2a)',
+      'Overview of prisoners in the establishment - last 30 days',
       'This chart shows the recent numbers of prisoners in your establishment in each sub-group of the selected characteristic. It provides context and a comparison for the subsequent charts.',
       chartDetails2a,
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
@@ -87,7 +87,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2b',
       username,
       agencyId,
-      'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability - last 30 days (2b)',
+      'Adjudication reports by protected or responsivity characteristic - last 30 days',
       'Use this chart to see adjudications by this characteristic and compare them to prison numbers. Are there any imbalances you might want to explore further?',
       await this.chartApiService.getChart(username, agencyId, '2b'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
@@ -114,7 +114,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2d',
       username,
       agencyId,
-      'Offence type by protected characteristic or vulnerability - last 30 days (2d)',
+      'Adjudication offence type by protected or responsivity characteristic - last 30 days',
       'Select an offence type to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2d,
       {
@@ -144,7 +144,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2e',
       username,
       agencyId,
-      'Punishment by protected characteristic or vulnerability - last 30 days (2e)',
+      'Punishment by protected or responsivity characteristic - last 30 days',
       'Select a punishment type to explore differences between characteristics. Compared  to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2e,
       {
@@ -178,7 +178,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2f',
       username,
       agencyId,
-      'Plea by protected characteristic or vulnerability - last 30 days (2f)',
+      'Plea by protected or responsivity characteristic - last 30 days',
       'Select a plea to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2f,
       {
@@ -208,7 +208,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       '2g',
       username,
       agencyId,
-      'Finding by protected characteristic or vulnerability - last 30 days (2g)',
+      'Finding by protected or responsivity characteristic - last 30 days',
       'Select a finding to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
       chartDetails2g,
       {
