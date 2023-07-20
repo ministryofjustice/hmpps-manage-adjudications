@@ -195,55 +195,49 @@ context('Adjudication data', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Total adjudications - over 24 months (1a)')
-    page.checkChartTitle('Total adjudications referred to independent adjudicator - over 24 months (1b)')
-    page.checkChartTitle('Number of people with an adjudication in the past 30 days (1c)')
-    page.checkChartTitle('Total adjudications by location of adjudication offence – last 30 days (1d)')
-    page.checkChartTitle('Total adjudications by residential location of offender – last 30 days (1f)')
+    page.checkChartTitle('Adjudication reports created - over 24 months')
+    page.checkChartTitle('Adjudication reports referred to independent adjudicator - over 24 months')
+    page.checkChartTitle('Number of people placed on report in the past 30 days')
+    page.checkChartTitle('Adjudication reports by location of adjudication incident - last 30 days')
+    page.checkChartTitle('Adjudication reports by residential location of prisoner - last 30 days')
   })
 
   it('should contain the required page elements /data-insights/protected-characteristics-and-vulnerabilities', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Percentage and number of prisoners in the establishment currently (2a)')
-    page.checkChartTitle(
-      'Percentage and number of prisoners with an adjudication by protected characteristic or vulnerability - last 30 days (2b)'
-    )
-    page.checkChartTitle('Offence type by protected characteristic or vulnerability - last 30 days (2d)')
-    page.checkChartTitle('Punishment by protected characteristic or vulnerability - last 30 days (2e)')
-    page.checkChartTitle('Plea by protected characteristic or vulnerability - last 30 days (2f)')
-    page.checkChartTitle('Finding by protected characteristic or vulnerability - last 30 days (2g)')
+    page.checkChartTitle('Overview of prisoners in the establishment - last 30 days')
+    page.checkChartTitle('Adjudication reports by protected or responsivity characteristic - last 30 days')
+    page.checkChartTitle('Adjudication offence type by protected or responsivity characteristic - last 30 days')
+    page.checkChartTitle('Punishment by protected or responsivity characteristic - last 30 days')
+    page.checkChartTitle('Plea by protected or responsivity characteristic - last 30 days')
+    page.checkChartTitle('Finding by protected or responsivity characteristic - last 30 days')
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Total adjudications by adjudication offence type - current month and previous 12 months (3a)')
-    page.checkChartTitle('Adjudication offence type by location - last 30 days (3b)')
+    page.checkChartTitle('Adjudication offence types - current month and previous 12 months')
+    page.checkChartTitle('Adjudication offence type by location - last 30 days')
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.punishments())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Total adjudications by punishment - current month and previous 12 months (4a)')
-    page.checkChartTitle(
-      'Total adjudications for each adjudication offence type broken down by punishment - current month and previous 12 months (4b)'
-    )
-    page.checkChartTitle('Percentage of suspended and activated punishments - current month and last 12 months (4c)')
+    page.checkChartTitle('Punishments given – current month and previous 12 months')
+    page.checkChartTitle('Punishments given for each adjudication offence type - current month and previous 12 months')
+    page.checkChartTitle('Suspended and activated punishments - current month and last 12 months')
   })
 
   it('should contain the required page elements /data-insights/pleas-and-findings', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.pleasAndFindings())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
-    page.checkChartTitle('Total adjudications by plea - current month and previous 12 months (5a)')
-    page.checkChartTitle('Total Adjudications by findings - current month and previous 12 months (5b)')
-    page.checkChartTitle(
-      'Percentage of resolved adjudications with more than one hearing - current month and previous 12 months (5c)'
-    )
+    page.checkChartTitle('Pleas given - current month and previous 12 months')
+    page.checkChartTitle('Findings - current month and previous 12 months')
+    page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
   })
 })
 

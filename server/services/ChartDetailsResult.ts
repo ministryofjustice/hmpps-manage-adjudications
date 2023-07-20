@@ -60,6 +60,16 @@ export interface TableRowEntry {
   data: number[] | string[]
 }
 
+export interface TableHead {
+  text: string
+  classes: string
+}
+
+export interface TableRow {
+  text: string | number
+  classes: string
+}
+
 export interface RowSource {
   source: (row: ChartEntryHorizontalBar | ChartEntryLine | ChartEntryDuoLine) => number | string | ChartEntryCommentary
 }

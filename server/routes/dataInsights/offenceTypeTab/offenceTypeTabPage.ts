@@ -8,6 +8,8 @@ import {
   ChartEntryHorizontalBar,
   ChartEntryLine,
   ALL_DATA_FILTER,
+  TableHead,
+  TableRow,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { getUniqueItems, produceHorizontalBarsChart, produceLinesCharts } from '../chartService'
@@ -22,10 +24,10 @@ type PageData = {
 class PageOptions {}
 
 const getOffenceTypeHorizontalBarsChartHead = () => {
-  const head: { text: string; classes: string }[] = [
+  const head: TableHead[] = [
     {
       text: 'Location',
-      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-width-auto',
+      classes: 'horizontal-chart-table-head-cell horizontal-chart-table-head-cell-first',
     },
     {
       text: 'Percentage of offences',
@@ -59,7 +61,7 @@ export default class OffenceTypeTabPage {
       '3a',
       username,
       agencyId,
-      'Total adjudications by adjudication offence type - current month and previous 12 months (3a)',
+      'Adjudication offence types - current month and previous 12 months',
       'This chart shows the frequency of the different offence types leading to an adjudication. Are there any insights or trends which can inform any actions?',
       await this.chartApiService.getChart(username, agencyId, '3a'),
       ALL_DATA_FILTER,
@@ -81,7 +83,7 @@ export default class OffenceTypeTabPage {
       '3b',
       username,
       agencyId,
-      'Adjudication offence type by location - last 30 days (3b)',
+      'Adjudication offence type by location - last 30 days',
       'Select an offence type to see where offences took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
       chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },

@@ -1,5 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
 
 {% macro linesChartData(chartSetting) %}
 	<div class="main-chart-with-data-panel" id="chart-panel-{{ chartSetting.chartData.elementId }}">
@@ -11,19 +12,42 @@
 			text: chartSetting.chartHint
 		}) }}
 
-		<div class="chart-generic-panel chart-generic-panel-multiple-line">
-			<canvas id="{{ chartSetting.chartData.elementId }}"></canvas>
-		</div>
-
-		<div class="chart-table-panel" style="display: none">
-			<div class="results-table">
-				{{ govukTable({
-					head: chartSetting.tableData.head,
-					rows: chartSetting.tableData.rows,
-					attributes: { "data-qa": "results-table" }
-				}) }}
+		{% set chartView %}
+			<div class="chart-generic-panel chart-generic-panel-multiple-line">
+				<canvas id="{{ chartSetting.chartData.elementId }}"></canvas>
 			</div>
-		</div>
+		{% endset -%}
+
+		{% set tableView %}
+			<div class="chart-table-panel">
+				<div class="results-table">
+					{{ govukTable({
+						head: chartSetting.tableData.head,
+						rows: chartSetting.tableData.rows,
+						attributes: { "data-qa": "results-table" }
+					}) }}
+				</div>
+			</div>
+		{% endset -%}
+
+		{{ govukTabs({
+			items: [
+				{
+					label: "Chart view",
+					id: "chart-view-" + chartSetting.chartData.elementId,
+					panel: {
+						html: chartView
+					}
+				},
+				{
+					label: "Table view",
+					id: "table-view-" + chartSetting.chartData.elementId,
+					panel: {
+						html: tableView
+					}
+				}
+			]
+		}) }}
 
 	</div>
 {% endmacro %}
