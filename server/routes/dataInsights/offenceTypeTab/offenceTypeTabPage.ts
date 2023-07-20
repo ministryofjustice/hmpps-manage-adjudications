@@ -4,12 +4,11 @@ import { FormError } from '../../../@types/template'
 import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import {
+  ALL_DATA_FILTER,
   ChartDetailsResult,
   ChartEntryHorizontalBar,
   ChartEntryLine,
-  ALL_DATA_FILTER,
   TableHead,
-  TableRow,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { getUniqueItems, produceHorizontalBarsChart, produceLinesCharts } from '../chartService'
