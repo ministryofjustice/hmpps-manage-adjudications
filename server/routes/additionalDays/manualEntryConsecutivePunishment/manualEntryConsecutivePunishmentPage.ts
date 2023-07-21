@@ -95,6 +95,7 @@ export default class ManualEntryConsecutivePunishmentPage {
     const chargeNumberValid = await this.punishmentsService.validateChargeNumber(
       adjudicationNumber,
       type as PunishmentType,
+      trimmedChargeNumber,
       user
     )
     if (!chargeNumberValid) {

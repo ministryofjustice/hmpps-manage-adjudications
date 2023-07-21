@@ -15,6 +15,7 @@ import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../d
 import PrisonApiClient, { SanctionStatus } from '../data/prisonApiClient'
 import { convertToTitleCase } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
+import logger from '../../logger'
 
 export default class PunishmentsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -199,8 +200,12 @@ export default class PunishmentsService {
     )
   }
 
-  async validateChargeNumber(adjudicationNumber: number, type: PunishmentType, user: User): Promise<boolean> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+  async validateChargeNumber(
+    adjudicationNumber: number,
+    type: PunishmentType,
+    chargeNumber: number,
+    user: User
+  ): Promise<boolean> {
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
       adjudicationNumber
     )
@@ -208,12 +213,17 @@ export default class PunishmentsService {
     const sanctionStatus =
       type === PunishmentType.ADDITIONAL_DAYS ? SanctionStatus.IMMEDIATE : SanctionStatus.PROSPECTIVE
 
-    const response = await new PrisonApiClient(token).validateCharge(
-      adjudicationNumber,
-      sanctionStatus,
-      reportedAdjudication.prisonerNumber
-    )
-
-    return response.status === 200
+    try {
+      const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+      const response = await new PrisonApiClient(token).validateCharge(
+        chargeNumber,
+        sanctionStatus,
+        reportedAdjudication.prisonerNumber
+      )
+      return response.status === 200
+    } catch (error) {
+      logger.error(`Invalid charge number - ${error.status}: ${error.text}`)
+      return false
+    }
   }
 }

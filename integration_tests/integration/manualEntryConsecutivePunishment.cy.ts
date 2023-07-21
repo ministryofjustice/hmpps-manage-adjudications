@@ -15,9 +15,10 @@ context('Which charge will it be consecutive to?', () => {
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubValidateChargeNumber', {
-      adjudicationNumber: 100,
+      chargeNumber: 1234567,
       sanctionStatus: 'IMMEDIATE',
       offenderNo: 'G6123VU',
+      responseBody: { status: 200 },
     })
     cy.task('stubGetReportedAdjudication', {
       id: 100,
@@ -91,7 +92,9 @@ context('Which charge will it be consecutive to?', () => {
   describe('saves successfully and redirects', () => {
     it('should redirect when days are entered correctly', () => {
       cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100)}?punishmentType=ADDITIONAL_DAYS`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
+          100
+        )}?punishmentType=ADDITIONAL_DAYS&days=3`
       )
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.chargeNumber().type('1234567')

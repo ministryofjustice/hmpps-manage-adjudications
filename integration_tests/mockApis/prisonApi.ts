@@ -193,7 +193,7 @@ const stubGetMovementByOffender = ({ response = [], status = 200 }): SuperAgentR
   })
 
 const stubValidateChargeNumber = ({
-  adjudicationNumber,
+  chargeNumber,
   sanctionStatus,
   offenderNo,
   responseBody = {},
@@ -202,7 +202,7 @@ const stubValidateChargeNumber = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/prisonApi/api/adjudications/adjudication/${adjudicationNumber}/sanction/${sanctionStatus}/${offenderNo}/validate`,
+      url: `/prisonApi/api/adjudications/adjudication/${chargeNumber}/sanction/${sanctionStatus}/${offenderNo}/validate`,
     },
     response: {
       status,
