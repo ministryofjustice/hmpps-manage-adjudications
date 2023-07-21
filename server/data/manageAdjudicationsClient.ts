@@ -17,6 +17,7 @@ import {
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
+  ReportedAdjudicationResultV2,
   ReportedAdjudication,
   ReportedAdjudicationFilter,
   ReviewAdjudication,
@@ -42,6 +43,7 @@ import {
 } from './HearingAndOutcomeResult'
 import {
   PunishmentData,
+  PunishmentDataV2,
   PunishmentDataWithSchedule,
   PunishmentType,
   SuspendedPunishmentResult,
@@ -74,6 +76,9 @@ export type NotProceedHearingOutcomeDetails = {
   details: string
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export type ChargeProvedHearingOutcomeDetails = {
   adjudicator: string
   plea: HearingOutcomePlea
@@ -81,11 +86,19 @@ export type ChargeProvedHearingOutcomeDetails = {
   amount?: number
 }
 
+export type ChargeProvedHearingOutcomeDetailsV2 = {
+  adjudicator: string
+  plea: HearingOutcomePlea
+}
+
 export type QuashData = {
   reason: QuashGuiltyFindingReason
   details: string
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export type AmendedHearingOutcomeData = {
   adjudicator?: string
   adjournReason?: HearingOutcomeAdjournReason
@@ -95,6 +108,14 @@ export type AmendedHearingOutcomeData = {
   caution?: boolean
   amount?: string
   damagesOwed?: boolean
+}
+
+export type AmendedHearingOutcomeDataV2 = {
+  adjudicator?: string
+  adjournReason?: HearingOutcomeAdjournReason
+  notProceedReason?: NotProceedReason
+  details?: string
+  plea?: HearingOutcomePlea
 }
 
 export type AmendedOutcomeData = {
@@ -195,9 +216,18 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  /**
+   * @deprecated The method should not be used
+   */
   async getReportedAdjudication(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.get({
       path: `/reported-adjudications/${adjudicationNumber}`,
+    })
+  }
+
+  async getReportedAdjudicationV2(adjudicationNumber: number): Promise<ReportedAdjudicationResultV2> {
+    return this.restClient.get({
+      path: `/reported-adjudications/${adjudicationNumber}/v2`,
     })
   }
 
@@ -488,12 +518,25 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  /**
+   * @deprecated The method should not be used
+   */
   async createChargeProvedHearingOutcome(
     adjudicationNumber: number,
     chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved`,
+      data: { ...chargeProvedHearingOutcomeDetails },
+    })
+  }
+
+  async createChargeProvedHearingOutcomeV2(
+    adjudicationNumber: number,
+    chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetailsV2
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved/v2`,
       data: { ...chargeProvedHearingOutcomeDetails },
     })
   }
@@ -515,6 +558,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  /**
+   * @deprecated The method should not be used
+   */
   async amendHearingOutcome(
     adjudicationNumber: number,
     status: ReportedAdjudicationStatus,
@@ -526,6 +572,17 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async amendHearingOutcomeV2(
+    adjudicationNumber: number,
+    status: ReportedAdjudicationStatus,
+    amendedData: AmendedHearingOutcomeDataV2
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/${status}/v2`,
+      data: { ...amendedData },
+    })
+  }
+
   async amendOutcome(adjudicationNumber: number, amendedData: AmendedOutcomeData): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/outcome`,
@@ -533,6 +590,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  /**
+   * @deprecated The method should not be used
+   */
   async createPunishments(
     adjudicationNumber: number,
     punishments: PunishmentData[]
@@ -543,12 +603,35 @@ export default class ManageAdjudicationsClient {
     })
   }
 
+  async createPunishmentsV2(
+    adjudicationNumber: number,
+    punishments: PunishmentDataV2[]
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/v2`,
+      data: { punishments: [...punishments] },
+    })
+  }
+
+  /**
+   * @deprecated The method should not be used
+   */
   async amendPunishments(
     adjudicationNumber: number,
     punishments: PunishmentData[]
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${adjudicationNumber}/punishments`,
+      data: { punishments: [...punishments] },
+    })
+  }
+
+  async amendPunishmentsV2(
+    adjudicationNumber: number,
+    punishments: PunishmentDataV2[]
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${adjudicationNumber}/punishments/v2`,
       data: { punishments: [...punishments] },
     })
   }
