@@ -24,6 +24,7 @@ beforeEach(() => {
     type: PunishmentType.ADDITIONAL_DAYS,
     days: 10,
   })
+  punishmentsService.validateChargeNumber.mockResolvedValue(true)
   config.addedDaysFlag = 'true'
 })
 
@@ -35,7 +36,6 @@ describe('GET', () => {
   beforeEach(() => {
     app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
-    punishmentsService.validateChargeNumber.mockResolvedValue(true)
     config.addedDaysFlag = 'true'
   })
   it('should load the `Page not found` page', () => {

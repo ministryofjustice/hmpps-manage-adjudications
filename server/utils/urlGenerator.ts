@@ -708,6 +708,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${adjudicationNumber}/edit/${redisId}`,
     },
   },
+  manualConsecutivePunishmentError: {
+    root: '/punishment-consecutive-to/manual/error',
+    matchers: {
+      start: '/:adjudicationNumber',
+    },
+    urls: {
+      start: (adjudicationNumber: number) =>
+        `${adjudicationUrls.manualConsecutivePunishmentError.root}/${adjudicationNumber}`,
+    },
+  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {

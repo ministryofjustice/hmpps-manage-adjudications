@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
+import url from 'url'
+import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
@@ -96,7 +98,12 @@ export default class ManualEntryConsecutivePunishmentPage {
       user
     )
     if (!chargeNumberValid) {
-      // TODO: Redirect to new page (coming soon)
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.manualConsecutivePunishmentError.urls.start(adjudicationNumber),
+          query: { ...(req.query as ParsedUrlQueryInput) },
+        })
+      )
     }
 
     try {
