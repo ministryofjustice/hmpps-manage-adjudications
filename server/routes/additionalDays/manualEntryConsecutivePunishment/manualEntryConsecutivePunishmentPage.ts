@@ -90,12 +90,11 @@ export default class ManualEntryConsecutivePunishmentPage {
         chargeNumber: trimmedChargeNumber,
       })
 
-    const chargeNumberValid = this.punishmentsService.validateChargeNumber(
+    const chargeNumberValid = await this.punishmentsService.validateChargeNumber(
       adjudicationNumber,
       type as PunishmentType,
       user
     )
-
     if (!chargeNumberValid) {
       // TODO: Redirect to new page (coming soon)
     }

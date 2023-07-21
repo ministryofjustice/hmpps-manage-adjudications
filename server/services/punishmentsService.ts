@@ -207,11 +207,13 @@ export default class PunishmentsService {
     if (![PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(type)) return false
     const sanctionStatus =
       type === PunishmentType.ADDITIONAL_DAYS ? SanctionStatus.IMMEDIATE : SanctionStatus.PROSPECTIVE
+
     const response = await new PrisonApiClient(token).validateCharge(
       adjudicationNumber,
       sanctionStatus,
       reportedAdjudication.prisonerNumber
     )
+
     return response.status === 200
   }
 }
