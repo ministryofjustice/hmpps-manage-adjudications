@@ -60,29 +60,32 @@ export default class PleasAndFindingsTabPage {
       { source: (row: ChartEntryHorizontalBar) => row.count }
     )
 
-    chartSettingMap['5c'] = await produceDuoVerticalBarsCharts(
-      '5c',
-      username,
-      agencyId,
-      'Adjudications resolved with more than one hearing - current month and previous 12 months',
-      'Use this chart to understand and monitor how many adjudications are adjourned after first hearing. Are these levels as low as you would want, suggesting it only happens when warranted?',
-      await this.chartApiService.getChart(username, agencyId, '5c'),
-      [
-        {
-          label: '1 hearing',
-          countSource: { source: (row: ChartEntryDuoLine) => row.count_one },
-          propSource: { source: (row: ChartEntryDuoLine) => row.prop_one },
-        },
-        {
-          label: 'More than 1 hearing',
-          countSource: { source: (row: ChartEntryDuoLine) => row.count_more },
-          propSource: { source: (row: ChartEntryDuoLine) => row.prop_more },
-        },
-      ],
-      { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
-      { source: (row: ChartEntryDuoLine) => `${row.year}-${row.month}` },
-      { source: (row: ChartEntryDuoLine) => row.count }
-    )
+    if (false) {
+      // hiding 5c chart
+      chartSettingMap['5c'] = await produceDuoVerticalBarsCharts(
+        '5c',
+        username,
+        agencyId,
+        'Adjudications resolved with more than one hearing - current month and previous 12 months',
+        'Use this chart to understand and monitor how many adjudications are adjourned after first hearing. Are these levels as low as you would want, suggesting it only happens when warranted?',
+        await this.chartApiService.getChart(username, agencyId, '5c'),
+        [
+          {
+            label: '1 hearing',
+            countSource: { source: (row: ChartEntryDuoLine) => row.count_one },
+            propSource: { source: (row: ChartEntryDuoLine) => row.prop_one },
+          },
+          {
+            label: 'More than 1 hearing',
+            countSource: { source: (row: ChartEntryDuoLine) => row.count_more },
+            propSource: { source: (row: ChartEntryDuoLine) => row.prop_more },
+          },
+        ],
+        { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
+        { source: (row: ChartEntryDuoLine) => `${row.year}-${row.month}` },
+        { source: (row: ChartEntryDuoLine) => row.count }
+      )
+    }
 
     return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {
       errors: error ? [error] : [],
