@@ -6,7 +6,7 @@ import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import validateForm from './manualEntryConsecutivePunishmentValidation'
-import { PunishmentType } from '../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -75,7 +75,8 @@ export default class ManualEntryConsecutivePunishmentPage {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
     const { user } = res.locals
     const { chargeNumber } = req.body
-    const { type } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const type = PunishmentType[punishmentType as string]
 
     const trimmedChargeNumber = chargeNumber ? Number(String(chargeNumber).trim()) : null
 
@@ -105,7 +106,30 @@ export default class ManualEntryConsecutivePunishmentPage {
       })
     }
 
-    // TODO save to session here
+    try {
+      const punishmentData = {
+        type,
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
+        stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+        days: Number(days),
+        consecutiveReportNumber: trimmedChargeNumber,
+      }
+
+      if (this.pageOptions.isEdit()) {
+        await this.punishmentsService.updateSessionPunishment(
+          req,
+          punishmentData,
+          adjudicationNumber,
+          req.params.redisId
+        )
+      } else {
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, adjudicationNumber)
+      }
+    } catch (postError) {
+      res.locals.redirectUrl = adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber)
+      throw postError
+    }
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
   }
