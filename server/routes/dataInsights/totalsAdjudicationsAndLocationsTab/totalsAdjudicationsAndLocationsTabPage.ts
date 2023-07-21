@@ -57,7 +57,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       '1c',
       username,
       agencyId,
-      'Number of people placed on report in the past 30 days (1c)',
+      'Number of people placed on report in the past 30 days',
       '',
       await this.chartApiService.getChart(username, agencyId, '1c'),
       {
