@@ -97,13 +97,7 @@ export default class ManualEntryConsecutivePunishmentPage {
     )
 
     if (!chargeNumberValid) {
-      return this.renderView(req, res, {
-        error: {
-          href: '#chargeNumber',
-          text: 'NEW MESSAGE',
-        },
-        chargeNumber: trimmedChargeNumber,
-      })
+      // TODO: Redirect to new page (coming soon)
     }
 
     try {

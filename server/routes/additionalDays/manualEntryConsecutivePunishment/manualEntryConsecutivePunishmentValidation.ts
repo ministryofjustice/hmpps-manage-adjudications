@@ -7,15 +7,15 @@ type ConsecutivePunishmentChargeNumberForm = {
 const errors: { [key: string]: FormError } = {
   NOT_NUMERICAL: {
     href: '#chargeNumber',
-    text: 'NEW MESSAGE',
+    text: 'Charge number must only include numbers',
   },
   MISSING_CHARGE: {
     href: '#chargeNumber',
-    text: 'Enter the charge number',
+    text: 'Enter a charge number',
   },
   NOT_CORRECT_LENGTH: {
     href: '#chargeNumber',
-    text: 'NEW MESSAGE',
+    text: 'Charge number must be 7 numbers long',
   },
 }
 
