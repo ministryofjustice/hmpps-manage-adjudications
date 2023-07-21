@@ -16,6 +16,7 @@ type PageData = {
 export enum PageRequestType {
   CREATION,
   EDIT,
+  MANUAL_EDIT,
 }
 
 class PageOptions {
@@ -23,6 +24,10 @@ class PageOptions {
 
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT
+  }
+
+  isManualEdit(): boolean {
+    return this.pageType === PageRequestType.MANUAL_EDIT
   }
 }
 
@@ -99,6 +104,9 @@ export default class NumberOfAdditionalDaysPage {
   private getRedirectUrl = (adjudicationNumber: number, req: Request) => {
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.isPunishmentSuspended.urls.edit(adjudicationNumber, req.params.redisId)
+    }
+    if (this.pageOptions.isManualEdit()) {
+      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(adjudicationNumber, req.params.redisId)
     }
     return adjudicationUrls.isPunishmentSuspended.urls.start(adjudicationNumber)
   }
