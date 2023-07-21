@@ -120,13 +120,17 @@
     .filter-selector {
       width: 100%;
     }
+
     .show-results-button {
       margin-top: 30px;
       margin-left: 5px;
     }
   }
 
-  .punishment-type-selector {
+  .offenceType-type-selector,
+  .sanction-type-selector,
+  .plea-type-selector,
+  .finding-type-selector {
     .filter-selector {
       width: auto;
     }
@@ -151,6 +155,17 @@
   .show-results-button {
     margin-top: 30px;
     margin-left: 5px;
+  }
+
+  .offenceType-type-selector {
+    .filter-selector {
+      width: auto;
+    }
+
+    .show-results-button {
+      margin-top: 30px;
+      margin-left: 5px;
+    }
   }
 }
 

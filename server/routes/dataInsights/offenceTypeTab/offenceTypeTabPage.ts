@@ -74,7 +74,7 @@ export default class OffenceTypeTabPage {
     })
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       offenceTypes,
-      req.query['offence-type'] as string,
+      req.query.offenceType as string,
       offenceTypes.length > 0 ? offenceTypes[0] : undefined
     )
 
@@ -100,8 +100,17 @@ export default class OffenceTypeTabPage {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.OFFENCE_TYPE),
       chartSettingMap,
-      offenceTypes,
-      offenceType: offenceType?.value,
+      allSelectorParams: {
+        offenceType: offenceType?.value,
+      },
+      allSelectorSettings: {
+        offenceType: {
+          id: 'offenceType',
+          label: 'Select offence type',
+          items: offenceTypes,
+          class: 'offenceType-type-selector',
+        },
+      },
     })
   }
 
@@ -110,7 +119,11 @@ export default class OffenceTypeTabPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { offenceType } = req.body
-    return res.redirect(adjudicationUrls.dataInsights.urls.offenceType(offenceType))
+    const { offenceType, allSelectorParams } = req.body
+    const params = {
+      ...JSON.parse(allSelectorParams),
+      ...(offenceType !== undefined ? { offenceType } : {}),
+    }
+    return res.redirect(adjudicationUrls.dataInsights.urls.offenceType(params))
   }
 }
