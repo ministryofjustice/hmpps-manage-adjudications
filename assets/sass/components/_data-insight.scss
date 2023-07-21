@@ -20,6 +20,7 @@
 }
 
 .chart-table-panel {
+  margin-bottom: 40px;
 }
 
 .chart-generic-panel-multiple-line {
@@ -103,16 +104,15 @@
 }
 
 .totals-adjudications-and-locations-tab {
-}
-
-.chart-horizontal-panel {
-  padding-top: 60px;
-  padding-left: 20px;
+  .chart-horizontal-panel {
+    padding-top: 60px;
+    padding-left: 20px;
+  }
 }
 
 .protected-characteristics-and-vulnerabilities-tab {
   .chart-horizontal-panel {
-    padding-top: 68px;
+    padding-top: 72px;
     padding-left: 20px;
   }
 
@@ -150,6 +150,11 @@
 
 .offence-type-tab {
   .filter-selector {
+  }
+
+  .chart-horizontal-panel {
+    padding-top: 60px;
+    padding-left: 20px;
   }
 
   .show-results-button {

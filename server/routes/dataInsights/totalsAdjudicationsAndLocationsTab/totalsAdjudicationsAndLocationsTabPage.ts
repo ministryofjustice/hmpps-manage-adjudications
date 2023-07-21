@@ -85,7 +85,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getTotalsAdjudicationsHorizontalBarsChartHead()
+      getTotalsAdjudicationsHorizontalBarsChartHead(),
+      'Percentage'
     )
 
     chartSettingMap['1f'] = await produceHorizontalBarsChart(
@@ -103,7 +104,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getTotalsAdjudicationsHorizontalBarsChartHead()
+      getTotalsAdjudicationsHorizontalBarsChartHead(),
+      'Percentage'
     )
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {

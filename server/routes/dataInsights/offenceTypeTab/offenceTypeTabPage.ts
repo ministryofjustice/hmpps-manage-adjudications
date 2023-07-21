@@ -93,7 +93,8 @@ export default class OffenceTypeTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getOffenceTypeHorizontalBarsChartHead()
+      getOffenceTypeHorizontalBarsChartHead(),
+      'Percentage'
     )
 
     return res.render(`pages/dataInsights/offenceTypeTab.njk`, {
