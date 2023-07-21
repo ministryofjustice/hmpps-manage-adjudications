@@ -67,4 +67,23 @@ describe('POST', () => {
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&reportNo=123456`
       )
   })
+
+  it.each([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS])(
+    'should redirect to additional days',
+    (punishmentType: string) => {
+      return request(app)
+        .post(`${adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100)}`)
+        .send({
+          punishmentType,
+          reportNumber: '123456',
+        })
+        .expect(
+          'Location',
+          `${adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(
+            100,
+            undefined
+          )}?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
+        )
+    }
+  )
 })
