@@ -60,6 +60,7 @@ export default class PleasAndFindingsTabPage {
       { source: (row: ChartEntryHorizontalBar) => row.count }
     )
 
+    // eslint-disable-next-line no-constant-condition
     if (false) {
       // hiding 5c chart
       chartSettingMap['5c'] = await produceDuoVerticalBarsCharts(
