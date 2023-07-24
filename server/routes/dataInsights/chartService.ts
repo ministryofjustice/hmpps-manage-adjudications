@@ -202,7 +202,8 @@ export const produceHorizontalBarsChart = async (
   labelFieldSource: RowSource,
   barsDataSource: RowSource,
   rowsSource: RowSource[],
-  head: TableHead[]
+  head: TableHead[],
+  xAxisLabel: string
 ) => {
   const chartEntries = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).filter(
     (row: ChartEntryHorizontalBar) => {
@@ -218,14 +219,17 @@ export const produceHorizontalBarsChart = async (
     return labelFieldSource.source(row) as string
   })
 
+  const rows = getHorizontalBarsChartRows(chartEntries, rowsSource)
+
   return createHorizontalBarsChartSettings({
     elementId: chartName,
     chartTitle,
     chartHint,
     barData,
     labels,
+    xAxisLabel,
     head,
-    rows: getHorizontalBarsChartRows(chartEntries, rowsSource),
+    rows,
   })
 }
 
@@ -294,6 +298,7 @@ export const createHorizontalBarsChartSettings = (params: {
   chartTitle: string
   chartHint: string
   barData: number[] | string[]
+  xAxisLabel: string
   labels: string[]
   head: TableHead[]
   rows: TableRow[][]
@@ -348,11 +353,26 @@ export const createHorizontalBarsChartSettings = (params: {
                 color: 'black',
                 font: {
                   size: 16,
+                  family: FONT_FAMILY,
                   weight: '600',
                 },
               },
               grid: {
                 display: true,
+              },
+              title: {
+                display: true,
+                align: 'end',
+                text: params.xAxisLabel,
+                color: 'black',
+                font: {
+                  size: 16,
+                  family: FONT_FAMILY,
+                  weight: '400',
+                },
+                padding: {
+                  top: 10,
+                },
               },
             },
             y: {
@@ -363,7 +383,7 @@ export const createHorizontalBarsChartSettings = (params: {
               grid: {
                 display: false,
               },
-            },
+            } as LinearScaleOptions & object,
           },
           plugins: {
             layout: {
@@ -462,6 +482,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               pointStyle: 'circle',
               font: {
                 size: 16,
+                family: FONT_FAMILY,
                 weight: '600',
               },
             },
@@ -493,6 +514,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
                 color: 'black',
                 font: {
                   size: 16,
+                  family: FONT_FAMILY,
                   weight: '600',
                 },
               },
@@ -507,6 +529,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
                 stepSize: 20,
                 font: {
                   size: 20,
+                  family: FONT_FAMILY,
                   weight: '400',
                 },
               },
@@ -632,6 +655,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
                 color: 'black',
                 font: {
                   size: 16,
+                  family: FONT_FAMILY,
                   weight: '600',
                 },
               },
@@ -647,6 +671,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
                 stepSize: 20,
                 font: {
                   size: 20,
+                  family: FONT_FAMILY,
                   weight: '400',
                 },
               },
@@ -765,6 +790,7 @@ export const createLinesChartsSettings = (params: {
       pointStyle: 'circle',
       font: {
         size: 16,
+        family: FONT_FAMILY,
         weight: '600',
       },
     } as ChartDataset<'line'> & object
@@ -798,13 +824,14 @@ export const createLinesChartsSettings = (params: {
                 color: 'black',
                 font: {
                   size: 16,
+                  family: FONT_FAMILY,
                   weight: '600',
                 },
               },
               grid: {
                 display: false,
               },
-            } as object,
+            },
             y: {
               title: {
                 display: false,
@@ -812,6 +839,7 @@ export const createLinesChartsSettings = (params: {
                 color: 'black',
                 font: {
                   size: 16,
+                  family: FONT_FAMILY,
                   weight: '600',
                 },
                 align: 'end',
@@ -823,6 +851,7 @@ export const createLinesChartsSettings = (params: {
                 stepSize: 20,
                 font: {
                   size: 20,
+                  family: FONT_FAMILY,
                   weight: '400',
                 },
               },

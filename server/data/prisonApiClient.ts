@@ -56,6 +56,11 @@ export interface OffenderBannerInfo {
   prisonerName: string
 }
 
+export enum SanctionStatus {
+  IMMEDIATE = 'IMMEDIATE',
+  PROSPECTIVE = 'PROSPECTIVE',
+}
+
 export default class PrisonApiClient {
   restClient: RestClient
 
@@ -152,6 +157,12 @@ export default class PrisonApiClient {
     return this.restClient.post({
       path: `/api/movements/offenders?movementType=ADM&latestOnly=false&allBookings=false`,
       data: [offenderNo],
+    })
+  }
+
+  async validateCharge(chargeNumber: number, status: SanctionStatus, offenderNo: string): Promise<{ status: number }> {
+    return this.restClient.get({
+      path: `/api/adjudications/adjudication/${chargeNumber}/sanction/${status}/${offenderNo}/validate`,
     })
   }
 }

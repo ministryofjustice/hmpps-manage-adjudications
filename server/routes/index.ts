@@ -77,6 +77,7 @@ import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
 import willPunishmentBeConsecutiveRoutes from './additionalDays/willPunishmentBeConsecutive'
 import whichPunishmentConsecutiveToRoutes from './additionalDays/whichPunishmentConsecutiveTo'
+import ManualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntryConsecutivePunishment'
 
 export default function routes(
   router: Router,
@@ -293,6 +294,7 @@ export default function routes(
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
+
   if (config.addedDaysFlag === 'true') {
     router.use(
       adjudicationUrls.numberOfAdditionalDays.root,
@@ -309,6 +311,10 @@ export default function routes(
     router.use(
       adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
       whichPunishmentConsecutiveToRoutes({ userService, punishmentsService })
+    )
+    router.use(
+      adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root,
+      ManualEntryConsecutivePunishmentRoutes({ userService, punishmentsService })
     )
   }
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))

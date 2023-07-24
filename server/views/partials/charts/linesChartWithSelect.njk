@@ -1,0 +1,5 @@
+{% from "../../macros/dataInsights/linesChartWithSelectData.njk" import linesChartWithSelectData %}
+
+{% macro linesChartWithSelect(chartSetting, selectorSettings, allSelectorParams, csrfToken) %}
+    {{ linesChartWithSelectData(chartSetting, selectorSettings, allSelectorParams, csrfToken) }}
+{% endmacro %}

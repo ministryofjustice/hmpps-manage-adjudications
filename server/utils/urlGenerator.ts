@@ -813,7 +813,7 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.start}`,
       totalsAdjudicationsAndLocations: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
-      protectedCharacteristicsAndVulnerabilities: (params: { characteristic?: string; offenceType?: string } = {}) => {
+      protectedCharacteristicsAndVulnerabilities: (params: object = {}) => {
         const queryParams = Object.keys(params)
           .map(key => `${key}=${params[key]}`)
           .join('&')
@@ -821,14 +821,22 @@ const adjudicationUrls = {
           adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities
         }${queryParams ? `?${queryParams}` : ''}`
       },
-      offenceType: (offenceType?: string) =>
-        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
-          offenceType ? `?offence-type=${offenceType}` : ''
-        }`,
-      punishments: (offenceType?: string) =>
-        `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}${
-          offenceType ? `?offence-type=${offenceType}` : ''
-        }`,
+      offenceType: (params: object = {}) => {
+        const queryParams = Object.keys(params)
+          .map(key => `${key}=${params[key]}`)
+          .join('&')
+        return `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
+          queryParams ? `?${queryParams}` : ''
+        }`
+      },
+      punishments: (params: object = {}) => {
+        const queryParams = Object.keys(params)
+          .map(key => `${key}=${params[key]}`)
+          .join('&')
+        return `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}${
+          queryParams ? `?${queryParams}` : ''
+        }`
+      },
       pleasAndFindings: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.pleasAndFindings}`,
     },
