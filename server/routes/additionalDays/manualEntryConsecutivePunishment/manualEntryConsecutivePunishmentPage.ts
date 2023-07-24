@@ -2,11 +2,18 @@
 import { Request, Response } from 'express'
 import url from 'url'
 import { ParsedUrlQueryInput } from 'querystring'
+import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
+import validateForm from './manualEntryConsecutivePunishmentValidation'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+
+type PageData = {
+  error?: FormError
+  chargeNumber?: number
+}
 
 export enum PageRequestType {
   CREATION,
@@ -21,7 +28,7 @@ class PageOptions {
   }
 }
 
-export default class WhichPunishmentConsecutiveToPage {
+export default class ManualEntryConsecutivePunishmentPage {
   pageOptions: PageOptions
 
   constructor(
@@ -32,37 +39,74 @@ export default class WhichPunishmentConsecutiveToPage {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  view = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
-    const userRoles = await this.userService.getUserRoles(user.token)
+  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { punishmentType } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const { error, chargeNumber } = pageData
+
+    return res.render(`pages/manualEntryConsecutivePunishment.njk`, {
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      errors: error ? [error] : [],
+      chargeNumber,
+    })
+  }
+
+  view = async (req: Request, res: Response): Promise<void> => {
+    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const possibleConsecutivePunishments = await this.punishmentsService.getPossibleConsecutivePunishments(
-      adjudicationNumber,
-      type,
-      user
-    )
+    if (this.pageOptions.isEdit()) {
+      const sessionData = await this.punishmentsService.getSessionPunishment(
+        req,
+        adjudicationNumber,
+        req.params.redisId
+      )
 
-    return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
-      manuallySelectConsecutivePunishment: this.getManualConsecutivePunishmentUrl(req, adjudicationNumber),
-      possibleConsecutivePunishments,
-    })
+      return this.renderView(req, res, {
+        chargeNumber: sessionData.chargeNumber,
+      })
+    }
+
+    return this.renderView(req, res, {})
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { user } = res.locals
+    const { chargeNumber } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
     const type = PunishmentType[punishmentType as string]
-    const { select } = req.body
 
-    const chargeNumberOfSelectedPunishment = select.split('-').slice(-1)[0] || null
+    const trimmedChargeNumber = chargeNumber ? Number(String(chargeNumber).trim()) : null
+
+    const error = validateForm({
+      chargeNumber: trimmedChargeNumber,
+    })
+
+    if (error)
+      return this.renderView(req, res, {
+        error,
+        chargeNumber: trimmedChargeNumber,
+      })
+
+    const chargeNumberValid = await this.punishmentsService.validateChargeNumber(
+      adjudicationNumber,
+      type as PunishmentType,
+      trimmedChargeNumber,
+      user
+    )
+    if (!chargeNumberValid) {
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.manualConsecutivePunishmentError.urls.start(adjudicationNumber),
+          query: { ...(req.query as ParsedUrlQueryInput) },
+        })
+      )
+    }
+
     try {
       const punishmentData = {
         type,
@@ -70,7 +114,7 @@ export default class WhichPunishmentConsecutiveToPage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days: Number(days),
-        consecutiveReportNumber: Number(chargeNumberOfSelectedPunishment),
+        consecutiveReportNumber: trimmedChargeNumber,
       }
 
       if (this.pageOptions.isEdit()) {
@@ -87,21 +131,7 @@ export default class WhichPunishmentConsecutiveToPage {
       res.locals.redirectUrl = adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber)
       throw postError
     }
+
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
-  }
-
-  private getPrefix = (adjudicationNumber: number, req: Request) => {
-    if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(adjudicationNumber, req.params.redisId)
-    }
-    return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(adjudicationNumber)
-  }
-
-  private getManualConsecutivePunishmentUrl = (req: Request, adjudicationNumber: number) => {
-    const prefix = this.getPrefix(adjudicationNumber, req)
-    return url.format({
-      pathname: prefix,
-      query: { ...(req.query as ParsedUrlQueryInput) },
-    })
   }
 }
