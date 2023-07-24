@@ -80,7 +80,12 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of prisoners', 'Number of prisoners')
+      getHorizontalBarsChartHeadByCharacteristic(
+        characteristic?.text,
+        'Percentage of prisoners',
+        'Number of prisoners'
+      ),
+      'Percentage'
     )
 
     chartSettingMap['2b'] = await produceHorizontalBarsChart(
@@ -98,7 +103,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of reports', 'Number of reports')
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of reports', 'Number of reports'),
+      'Percentage'
     )
 
     const chartDetails2d = await this.chartApiService.getChart(username, agencyId, '2d')
@@ -128,7 +134,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of offences', 'Number of offences')
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of offences', 'Number of offences'),
+      'Percentage'
     )
 
     const chartDetails2e = await this.chartApiService.getChart(username, agencyId, '2e')
@@ -162,7 +169,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         characteristic?.text,
         'Percentage of punishments',
         'Number of punishments'
-      )
+      ),
+      'Percentage'
     )
 
     const chartDetails2f = await this.chartApiService.getChart(username, agencyId, '2f')
@@ -192,7 +200,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of please', 'Number of please')
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of please', 'Number of please'),
+      'Percentage'
     )
 
     const chartDetails2g = await this.chartApiService.getChart(username, agencyId, '2g')
@@ -222,7 +231,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of findings', 'Number of findings')
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of findings', 'Number of findings'),
+      'Percentage'
     )
 
     return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
@@ -247,25 +257,25 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
           id: 'offenceType',
           label: 'Select offence type',
           items: offenceTypes,
-          class: 'punishment-type-selector',
+          class: 'offenceType-type-selector',
         },
         sanction: {
           id: 'sanction',
           label: 'Select punishment type',
           items: sanctions,
-          class: 'punishment-type-selector',
+          class: 'sanction-type-selector',
         },
         plea: {
           id: 'plea',
           label: 'Select plea',
           items: pleas,
-          class: 'punishment-type-selector',
+          class: 'plea-type-selector',
         },
         finding: {
           id: 'finding',
           label: 'Select finding',
           items: findings,
-          class: 'punishment-type-selector',
+          class: 'finding-type-selector',
         },
       },
     })

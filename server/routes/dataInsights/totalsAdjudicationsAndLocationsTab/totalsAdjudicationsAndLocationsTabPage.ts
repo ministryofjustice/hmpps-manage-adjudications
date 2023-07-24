@@ -57,7 +57,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       '1c',
       username,
       agencyId,
-      'Number of people placed on report in the past 30 days (1c)',
+      'Number of people placed on report in the past 30 days',
       '',
       await this.chartApiService.getChart(username, agencyId, '1c'),
       {
@@ -85,7 +85,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getTotalsAdjudicationsHorizontalBarsChartHead()
+      getTotalsAdjudicationsHorizontalBarsChartHead(),
+      'Percentage'
     )
 
     chartSettingMap['1f'] = await produceHorizontalBarsChart(
@@ -103,7 +104,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getTotalsAdjudicationsHorizontalBarsChartHead()
+      getTotalsAdjudicationsHorizontalBarsChartHead(),
+      'Percentage'
     )
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {

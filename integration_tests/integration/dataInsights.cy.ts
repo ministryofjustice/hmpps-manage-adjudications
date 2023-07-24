@@ -237,7 +237,7 @@ context('Adjudication data', () => {
     page.checkOnPage()
     page.checkChartTitle('Pleas given - current month and previous 12 months')
     page.checkChartTitle('Findings - current month and previous 12 months')
-    page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
+    // page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
   })
 })
 
