@@ -26,7 +26,7 @@
       </div>
 
       {% if punishments | length %}
-        {{ awardPunishmentsTable(punishments, null, adjudicationNumber, true) }}
+        {{ awardPunishmentsTable(punishments, null, adjudicationNumber, true, false) }}
       {% else %}
         <p class="govuk-body" data-qa="emptyState">No punishments have been awarded for this adjudication.</p>
       {% endif %}

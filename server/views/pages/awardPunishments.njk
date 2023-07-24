@@ -19,7 +19,7 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {% if punishments | length %}
-        {{ awardPunishmentsTable(punishments, redirectAfterRemoveUrl, adjudicationNumber, false) }}
+        {{ awardPunishmentsTable(punishments, redirectAfterRemoveUrl, adjudicationNumber, false, false) }}
       {% else %}
         <p class="govuk-body">No punishments have been awarded for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments below.</p>
       {% endif %}
