@@ -82,6 +82,11 @@ export default class ManualEntryConsecutivePunishmentPage {
 
     const trimmedChargeNumber = chargeNumber ? Number(String(chargeNumber).trim()) : null
 
+    const redirectForErrorPage = url.format({
+      pathname: this.getRedirectUrlForErrorPage(adjudicationNumber, req),
+      query: { ...(req.query as ParsedUrlQueryInput) },
+    })
+
     const error = validateForm({
       chargeNumber: trimmedChargeNumber,
     })
@@ -102,7 +107,7 @@ export default class ManualEntryConsecutivePunishmentPage {
       return res.redirect(
         url.format({
           pathname: adjudicationUrls.manualConsecutivePunishmentError.urls.start(adjudicationNumber),
-          query: { ...(req.query as ParsedUrlQueryInput) },
+          query: { ...req.query, chargeNumber: trimmedChargeNumber, redirectUrl: redirectForErrorPage },
         })
       )
     }
@@ -133,5 +138,12 @@ export default class ManualEntryConsecutivePunishmentPage {
     }
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+  }
+
+  getRedirectUrlForErrorPage = (adjudicationNumber: number, req: Request) => {
+    if (this.pageOptions.isEdit()) {
+      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(adjudicationNumber, req.params.redisId)
+    }
+    return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(adjudicationNumber)
   }
 }

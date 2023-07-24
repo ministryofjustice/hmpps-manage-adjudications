@@ -1,0 +1,33 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title %} Charge number {{ chargeNumber }} is not linked to a punishment of added days for {{ prisonerName }}
+{% endset %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  <p class="govuk-body" data-qa="para1">You cannot make the punishment of added days consecutive to charge number {{ chargeNumber }}.</p>
+
+    <div class="govuk-button-group">
+    {{ govukButton({
+    text: 'Enter a different charge number',
+    element: "a",
+    href: buttonHref,
+    classes: "govuk-button",
+    attributes: { "data-qa": "button" }
+    }) }}
+    <p class="govuk-body">
+      <a href="{{ cancelHref }}" data-qa="cancel">Return to 'Award punishments'</a>
+    </p>
+  </div>
+{% endblock %}
