@@ -206,6 +206,7 @@ export default class PunishmentsService {
     chargeNumber: number,
     user: User
   ): Promise<boolean> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(
       adjudicationNumber
     )
@@ -214,13 +215,13 @@ export default class PunishmentsService {
       type === PunishmentType.ADDITIONAL_DAYS ? SanctionStatus.IMMEDIATE : SanctionStatus.PROSPECTIVE
 
     try {
-      const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
       const response = await new PrisonApiClient(token).validateCharge(
         chargeNumber,
         sanctionStatus,
         reportedAdjudication.prisonerNumber
       )
-      return response.status === 200
+      if (response) return true
+      return true
     } catch (error) {
       logger.error(`Invalid charge number - ${error.status}: ${error.text}`)
       return false
