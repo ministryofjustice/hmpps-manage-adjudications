@@ -340,7 +340,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         .punishmentsTable()
         .find('td')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Prospective additional days (consecutive to charge 95)')
+          expect($summaryData.get(0).innerText).to.contain('Prospective additional days\n(consecutive to charge 95)')
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('10')
