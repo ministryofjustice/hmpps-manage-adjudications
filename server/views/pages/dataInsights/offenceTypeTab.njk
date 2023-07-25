@@ -1,6 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
 {% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
 {% from "../../partials/charts/linesChart.njk" import linesChart %}
 
@@ -26,6 +27,10 @@
 
     <div class="govuk-!-margin-bottom-6">
       {{ horizontalBarsChartWithSelect(chartSettingMap['3b'], allSelectorSettings['offenceType'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6 govuk-!-margin-top-8">
+      {{ officialSensitiveBanner() }}
     </div>
 
   </div>

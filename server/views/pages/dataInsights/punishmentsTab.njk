@@ -1,6 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
 {% from "../../partials/charts/linesChart.njk" import linesChart %}
 {% from "../../partials/charts/linesChartWithSelect.njk" import linesChartWithSelect %}
 {% from "../../partials/charts/multiVerticalBarsChart.njk" import multiVerticalBarsChart %}
@@ -31,6 +32,10 @@
 
     <div class="govuk-!-margin-bottom-6">
       {{ multiVerticalBarsChart(chartSettingMap['4c']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6 govuk-!-margin-top-8">
+      {{ officialSensitiveBanner() }}
     </div>
 
   </div>

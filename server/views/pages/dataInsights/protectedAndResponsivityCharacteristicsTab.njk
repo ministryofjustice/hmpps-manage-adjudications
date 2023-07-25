@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
 {% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
 
@@ -75,6 +76,10 @@
 
     <div class="govuk-!-margin-bottom-6">
       {{ horizontalBarsChartWithSelect(chartSettingMap['2g'], allSelectorSettings['finding'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6 govuk-!-margin-top-8">
+      {{ officialSensitiveBanner() }}
     </div>
 
   </div>
