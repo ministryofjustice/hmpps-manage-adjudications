@@ -39,7 +39,7 @@ export const produceVerticalBarsAndLineCharts = async (
   const chartEntries = chartDetails.chartEntries as ChartEntryVerticalBar[]
 
   const labels: string[][] = chartEntries.map((entry: ChartEntryVerticalBar) => {
-    return [getMonthShortName(entry.month), `${entry.year_curr}`]
+    return [getMonthShortName(entry.month), ` ${entry.year_curr}`]
   })
 
   return createVerticalBarsAndLineChartSettings({
@@ -105,7 +105,7 @@ export const produceMultiVerticalBarsCharts = async (
     chartHint,
     chartEntriesMap,
     yValueSource,
-    barColors: ['DARK_BLUE', 'YELLOW', 'LIGHT_BLUE'],
+    barColors: ['LIGHT_BLUE', 'DARK_BLUE', 'YELLOW'],
     head: [],
     rows: getMultiVerticalBarsRows([
       ...legends.map(legend => {
@@ -404,23 +404,7 @@ export const createHorizontalBarsChartSettings = (params: {
             title: {
               display: false,
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
-              },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            tooltip: tooltipOptions,
             labels: {
               display: false,
             },
@@ -576,23 +560,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
                 family: FONT_FAMILY,
               },
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
-              },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            tooltip: tooltipOptions,
             customTitle: {
               y: {
                 display: true,
@@ -630,7 +598,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
   const labels: string[][] =
     linesLegends.length > 0
       ? params.chartEntriesMap.get(linesLegends[0]).map((entry: ChartEntryLine) => {
-          return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
+          return [getMonthShortName(entry.month), ` ${Math.trunc(entry.year)}`]
         })
       : []
 
@@ -726,23 +694,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
             title: {
               display: false,
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
-              },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            tooltip: tooltipOptions,
             customTitle: {
               y: {
                 display: true,
@@ -777,7 +729,7 @@ export const createLinesChartsSettings = (params: {
   const labels: string[][] =
     linesLegends.length > 0
       ? params.chartEntriesMap.get(linesLegends[0]).map((entry: ChartEntryLine) => {
-          return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
+          return [getMonthShortName(entry.month), ` ${Math.trunc(entry.year)}`]
         })
       : []
 
@@ -929,23 +881,7 @@ export const createLinesChartsSettings = (params: {
             title: {
               display: false,
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
-              },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            tooltip: tooltipOptions,
             customTitle: {
               y: {
                 display: true,
@@ -1041,7 +977,8 @@ export const getMultipleLineChartRows = (
     rows.push([
       {
         text: key,
-        classes: 'multiple-line-table-row-cell multiple-line-table-row-cell-first govuk-!-font-weight-bold',
+        classes:
+          'multiple-line-table-row-cell multiple-line-table-row-cell-first multiple-line-table-row-cell-header govuk-!-font-weight-bold',
         colspan: 14,
       } as TableRow,
     ])
@@ -1106,6 +1043,26 @@ export const createCommentaryChartSettings = (params: {
       chartEntries: params.chartEntries,
     },
   }
+}
+
+const tooltipOptions = {
+  backgroundColor: '#d9d9d9',
+  cornerRadius: 0,
+  titleColor: BLACK,
+  titleAlign: 'left',
+  titleSpacing: 2,
+  titleMarginBottom: 6,
+  titleFont: {
+    size: 18,
+    family: FONT_FAMILY,
+  },
+  padding: 10,
+  bodyColor: BLACK,
+  bodySpacing: 2,
+  bodyFont: {
+    size: 14,
+    family: FONT_FAMILY,
+  },
 }
 
 export const createCustomArray = (size: number, mainValue: string, lastValue: string): string[] => [
