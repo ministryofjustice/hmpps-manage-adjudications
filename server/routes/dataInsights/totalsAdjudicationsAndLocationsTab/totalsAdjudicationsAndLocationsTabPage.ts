@@ -41,7 +41,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports created - over 24 months',
       'This is a high-level view of adjudication reports created over time. What do recent numbers tell you about prison stability? Are there any surprises or possible actions?',
-      await this.chartApiService.getChart(username, agencyId, '1a')
+      await this.chartApiService.getChart(username, agencyId, '1a'),
+      'Number'
     )
 
     chartSettingMap['1b'] = await produceVerticalBarsAndLineCharts(
@@ -50,7 +51,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports referred to independent adjudicator - over 24 months',
       'This chart shows adjudications which had at least 1 hearing with an independent adjudicator. Use it to explore any concerns you may have about numbers being referred to IAs. What do the numbers tell you about possible actions and future trends?',
-      await this.chartApiService.getChart(username, agencyId, '1b')
+      await this.chartApiService.getChart(username, agencyId, '1b'),
+      'Number'
     )
 
     chartSettingMap['1c'] = await produceCommentaryChart(

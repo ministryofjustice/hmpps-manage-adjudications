@@ -65,7 +65,8 @@ export default class OffenceTypeTabPage {
       await this.chartApiService.getChart(username, agencyId, '3a'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
-      { source: (row: ChartEntryHorizontalBar) => row.count }
+      { source: (row: ChartEntryHorizontalBar) => row.count },
+      'Count'
     )
 
     const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')

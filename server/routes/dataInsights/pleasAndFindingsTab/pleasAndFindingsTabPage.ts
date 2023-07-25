@@ -45,7 +45,8 @@ export default class PleasAndFindingsTabPage {
       await this.chartApiService.getChart(username, agencyId, '5a'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.plea },
-      { source: (row: ChartEntryHorizontalBar) => row.count }
+      { source: (row: ChartEntryHorizontalBar) => row.count },
+      'Count'
     )
 
     chartSettingMap['5b'] = await produceLinesCharts(
@@ -57,7 +58,8 @@ export default class PleasAndFindingsTabPage {
       await this.chartApiService.getChart(username, agencyId, '5b'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.finding },
-      { source: (row: ChartEntryHorizontalBar) => row.count }
+      { source: (row: ChartEntryHorizontalBar) => row.count },
+      'Count'
     )
 
     // eslint-disable-next-line no-constant-condition
@@ -84,7 +86,8 @@ export default class PleasAndFindingsTabPage {
         ],
         { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
         { source: (row: ChartEntryDuoLine) => `${row.year}-${row.month}` },
-        { source: (row: ChartEntryDuoLine) => row.count }
+        { source: (row: ChartEntryDuoLine) => row.count },
+        'Percentage'
       )
     }
 
