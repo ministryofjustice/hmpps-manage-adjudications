@@ -2,16 +2,16 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import ChartApiService from '../../../services/chartApiService'
-import ProtectedCharacteristicsAndVulnerabilitiesRoutes from './protectedCharacteristicsAndVulnerabilities'
+import ProtectedAndResponsivityCharacteristicsRoutes from './protectedAndResponsivityCharacteristics'
 
-export default function protectedCharacteristicsAndVulnerabilitiesRoutes({
+export default function protectedAndResponsivityCharacteristicsRoutes({
   chartApiService,
 }: {
   chartApiService: ChartApiService
 }): Router {
   const router = express.Router()
 
-  const route = new ProtectedCharacteristicsAndVulnerabilitiesRoutes(chartApiService)
+  const route = new ProtectedAndResponsivityCharacteristicsRoutes(chartApiService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))

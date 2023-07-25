@@ -37,12 +37,12 @@ afterEach(() => {
   config.dataInsightsFlag = 'false'
 })
 
-describe('GET /data-insights/protected-characteristics-and-vulnerabilities', () => {
+describe('GET /data-insights/protected-and-responsivity-characteristics', () => {
   defaultConfig.dataInsightsFlag = 'true'
 
   it('should load the adjudication data', () => {
     return request(app)
-      .get(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
+      .get(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics())
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Adjudication data')

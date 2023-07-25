@@ -6,7 +6,7 @@
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
 {% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
 
-{% set title = "Adjudication data - Protected characteristics and vulnerabilities" %}
+{% set title = "Adjudication data - Protected and responsivity characteristics" %}
 
 {% block pageTitle %}
   {{ title }}
@@ -18,7 +18,7 @@
 
 {% block content %}
 
-  <div class="protected-characteristics-and-vulnerabilities-tab">
+  <div class="protected-and-responsivity-characteristics-tab">
 
     {{ dataInsightsTabHeaderSingular(tabsOptions) }}
 
@@ -27,16 +27,16 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         <input type="hidden" name="allSelectorParams" value="{{ allSelectorParams | dump }}"/>
 
-        <div class="flex-container {{ allSelectorSettings.characteristic.class }}">
+        <div class="flex-container {{ allSelectorSettings['characteristic'].class }}">
           {{ govukSelect({
-            id: allSelectorSettings.characteristic.id,
-            name: allSelectorSettings.characteristic.id,
+            id: allSelectorSettings['characteristic'].id,
+            name: allSelectorSettings['characteristic'].id,
             label: {
-              text: allSelectorSettings.characteristic.label,
+              text: allSelectorSettings['characteristic'].label,
               isPageHeading: false,
               classes: ''
             },
-            items: allSelectorSettings.characteristic.items | toSelect('value', 'text', allSelectorParams.characteristic),
+            items: allSelectorSettings['characteristic'].items | toSelect('value', 'text', allSelectorParams.characteristic),
             classes: 'flex-column filter-selector',
             errorMessage: 'characteristic' | findError(errors)
           }) }}
@@ -66,7 +66,7 @@
     </div>
 
     <div class="govuk-!-margin-bottom-6 punishment-by-protected-or-responsivity-characteristic">
-      {{ horizontalBarsChartWithSelect(chartSettingMap['2e'], allSelectorSettings['sanction'], allSelectorParams, csrfToken) }}
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2e'], allSelectorSettings['punishment'], allSelectorParams, csrfToken) }}
     </div>
 
     <div class="govuk-!-margin-bottom-6">

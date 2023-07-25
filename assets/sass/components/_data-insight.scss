@@ -115,13 +115,13 @@
   }
 }
 
-.protected-characteristics-and-vulnerabilities-tab {
+.protected-and-responsivity-characteristics-tab {
   .chart-horizontal-panel {
     padding-top: 72px;
     padding-left: 20px;
   }
 
-  .protected-characteristic-or-vulnerability {
+  .characteristic-type-selector {
     .filter-selector {
       width: 100%;
     }
@@ -133,7 +133,7 @@
   }
 
   .offenceType-type-selector,
-  .sanction-type-selector,
+  .punishment-type-selector,
   .plea-type-selector,
   .finding-type-selector {
     .filter-selector {
