@@ -44,7 +44,6 @@
       {% endif %}
     </div>
 
-
       <div class="govuk-grid-row">
         <ul class="card-group govuk-!-margin-bottom-0">
           {% for task in reviewerTasks %}
@@ -78,6 +77,25 @@
                 }) }}
             </li>
           {% endfor %}
+        </ul>
+        {% if disRelatedTasks.length %}
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-bottom-7 govuk-!-margin-top-2" data-qa="section-break">
+        {% endif %}
+      </div>
+
+      <div class="govuk-grid-row">
+        <ul class="card-group">
+          <li class="govuk-grid-column-one-third card-group__item">
+            {% if dataInsightsTask.enabled %}
+              {{ card({
+                  "href": dataInsightsTask.href,
+                  "clickable": "true",
+                  "heading": dataInsightsTask.heading,
+                  "description": dataInsightsTask.description,
+                  "id": dataInsightsTask.id
+                }) }}
+                {% endif %}
+            </li>
         </ul>
       </div>
     </div>

@@ -23,12 +23,7 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (
-  reviewTotal: number,
-  transferReviewTotal: number,
-  activeCaseloadName: string,
-  dataInsightsEnabled: boolean
-): TaskType[] => {
+const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCaseloadName: string): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
@@ -98,6 +93,13 @@ const createTasks = (
       links: [],
     },
     {
+      id: 'enter-outcomes',
+      heading: 'Enter outcomes',
+      href: adjudicationUrls.viewScheduledHearings.root,
+      roles: ['ADJUDICATIONS_REVIEWER'],
+      enabled: true,
+    },
+    {
       id: 'print-completed-dis-forms',
       heading: 'Print completed DIS 1/2 forms',
       description: '',
@@ -112,15 +114,6 @@ const createTasks = (
       href: adjudicationUrls.confirmDISFormsIssued.root,
       roles: [],
       enabled: true,
-    },
-    {
-      id: 'data-insights',
-      heading: 'Adjudication data',
-      description:
-        'Data visualisation for adjudications at this establishment, including by location and different prisoner characteristics',
-      href: adjudicationUrls.dataInsights.root,
-      roles: [],
-      enabled: dataInsightsEnabled,
     },
   ]
 }
@@ -139,30 +132,14 @@ export default class HomepageRoutes {
     ])
     const { reviewTotal, transferReviewTotal } = counts
 
-    const { activeCaseLoadId } = res.locals.user
-    const dataInsightsEnabled = config.dataInsightsFlag === 'true' && activeCaseLoadId === 'RNI'
-
-    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName, dataInsightsEnabled).filter(
-      task => task.enabled
-    )
+    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
     )
-    const disRelatedTasks = createTasks(
-      reviewTotal,
-      transferReviewTotal,
-      activeCaseloadName,
-      dataInsightsEnabled
-    ).filter(task => task.heading.includes('DIS'))
-
-    reviewerTasks.push({
-      id: 'enter-outcomes',
-      heading: 'Enter outcomes',
-      href: adjudicationUrls.viewScheduledHearings.root,
-      roles: ['ADJUDICATIONS_REVIEWER'],
-      enabled: true,
-    })
+    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task =>
+      task.heading.includes('DIS')
+    )
 
     reviewerTasks.map(task => {
       if (task.id === 'view-scheduled-hearings') {
@@ -184,10 +161,20 @@ export default class HomepageRoutes {
       return task
     })
 
+    const dataInsightsTask = {
+      id: 'data-insights',
+      heading: 'Adjudications data',
+      description:
+        'Charts and data for adjudications in this establishment, including by location and different prisoner characteristics.',
+      href: adjudicationUrls.dataInsights.root,
+      enabled: config.dataInsightsFlag === 'true' && res.locals.user.activeCaseLoadId === 'RNI',
+    }
+
     return res.render('pages/homepage', {
       reviewerTasks: reviewerTasks.filter(task => hasAnyRole(task.roles, userRoles)),
       reporterTasks,
       disRelatedTasks,
+      dataInsightsTask,
     })
   }
 }
