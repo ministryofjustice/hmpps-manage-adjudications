@@ -7,10 +7,12 @@
     {% set sanction = punishment.punishment %}
       {% set activateButton = '<button type="submit" name="activate"  value="activate-punishment-'+sanction.id+'" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" data-qa="activate-button" >Activate</button>' %}
 
+    {% set typeColumnValue = sanction.type | convertPunishmentType(sanction.stoppagePercentage, sanction.privilegeType, sanction.otherPrivilege) %}
+
     {% set rows = (rows.push(
       [
           {
-            html: sanction.type | convertPunishmentType(false, null, sanction.stoppagePercentage, sanction.privilegeType, sanction.otherPrivilege),
+            html: typeColumnValue,
             classes: "columnWidth30 verticalAlign"
           },
           {

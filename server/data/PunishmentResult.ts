@@ -75,6 +75,7 @@ export type PunishmentDataWithSchedule = {
   schedule: PunishmentSchedule
   activatedFrom?: number
   consecutiveReportNumber?: number
+  consecutiveReportAvailable?: boolean
 }
 
 export type PunishmentDataWithScheduleV2 = {
@@ -130,19 +131,13 @@ export function convertPrivilegeType(privilege: PrivilegeType) {
 
 export function convertPunishmentType(
   type: PunishmentType,
-  consecutivePunishmentContentFlag: boolean,
-  consecutiveReportNo: number,
   stoppage: number,
   privilege: PrivilegeType,
   otherPrivilege: string
 ) {
-  const additionalDaysWithConsecutiveReportNo = `Additional days\n(consecutive to charge ${consecutiveReportNo}`
-  const prospectiveAdditionalDaysWithConsecutiveReportNo = `Prospective additional days\n(consecutive to charge ${consecutiveReportNo})`
   switch (type) {
     case PunishmentType.ADDITIONAL_DAYS:
-      return consecutivePunishmentContentFlag && consecutiveReportNo
-        ? additionalDaysWithConsecutiveReportNo
-        : 'Additional days'
+      return 'Additional days'
     case PunishmentType.CONFINEMENT:
       return 'Cellular confinement'
     case PunishmentType.EARNINGS:
@@ -155,9 +150,7 @@ export function convertPunishmentType(
       if (privilege === PrivilegeType.OTHER) return `Loss of ${otherPrivilege.toLowerCase()}`
       return `Loss of ${convertPrivilegeType(privilege)}`
     case PunishmentType.PROSPECTIVE_DAYS:
-      return consecutivePunishmentContentFlag && consecutiveReportNo
-        ? prospectiveAdditionalDaysWithConsecutiveReportNo
-        : 'Prospective additional days'
+      return 'Prospective additional days'
     case PunishmentType.REMOVAL_ACTIVITY:
       return 'Removal from activity'
     case PunishmentType.REMOVAL_WING:
@@ -178,6 +171,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     schedule,
     activatedFrom,
     consecutiveReportNumber,
+    consecutiveReportAvailable,
   } = punishment
   const { days, startDate, endDate, suspendedUntil } = schedule
   return {
@@ -193,6 +187,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     ...(endDate && { endDate }),
     ...(activatedFrom && { activatedFrom }),
     ...(consecutiveReportNumber && { consecutiveReportNumber }),
+    ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
   }
 }
 

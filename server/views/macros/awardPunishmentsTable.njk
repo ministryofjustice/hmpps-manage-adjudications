@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber, readOnly) %}
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber, readOnly, consecutiveReportLinkAvailable) %}
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
@@ -11,7 +11,17 @@
       .urls
       .edit(adjudicationNumber, redisId) %}
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change</a></p>' %}
-    {% set typeColumnValue = data.type | convertPunishmentType(true, data.consecutiveReportNumber, data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+
+    {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+
+    {% if data.consecutiveReportNumber %}
+      {% if data.consecutiveReportAvailable and consecutiveReportLinkAvailable %}
+        {% set typeColumnValue = typeColumnValue + '<br> (consecutive to charge <a href="'+ adjudicationUrls.punishmentsAndDamages.urls.review(data.consecutiveReportNumber) +'">' + data.consecutiveReportNumber + '</a>)' %}
+      {% else %}
+        {% set typeColumnValue = typeColumnValue + '<br>(consecutive to charge ' + data.consecutiveReportNumber + ')' %}
+    {% endif %}
+    {% endif %}
+
     {% set rows = (rows.push(
       [
           {
@@ -82,5 +92,4 @@
         attributes: {"data-qa": "punishments-table"}
       }) }}
   {% endif %}
-
 {% endmacro %}
