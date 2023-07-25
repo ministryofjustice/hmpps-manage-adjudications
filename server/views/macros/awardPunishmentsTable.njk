@@ -5,14 +5,16 @@
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
 
-    {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove</a></p>' %}
+    {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+
+    {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
     {% set changeUrl = adjudicationUrls
       .punishment
       .urls
       .edit(adjudicationNumber, redisId) %}
-    {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change</a></p>' %}
+    {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
 
-    {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+
 
     {% if data.consecutiveReportNumber %}
       {% if data.consecutiveReportAvailable and consecutiveReportLinkAvailable %}
