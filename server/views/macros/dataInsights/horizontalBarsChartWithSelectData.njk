@@ -13,6 +13,10 @@
             text: chartSetting.chartHint
         }) }}
 
+        {% if chartSetting.chartClarification %}
+            <p class="govuk-body">{{ chartSetting.chartClarification }}</p>
+        {% endif %}
+
         <div>
             <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

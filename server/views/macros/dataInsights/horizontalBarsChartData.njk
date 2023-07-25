@@ -11,6 +11,10 @@
             text: chartSetting.chartHint
         }) }}
 
+        {% if chartSetting.chartClarification %}
+            <p class="govuk-body">{{ chartSetting.chartClarification }}</p>
+        {% endif %}
+
         {% if chartSetting.tableData.rows | length %}
             <div class="chart-generic-panel chart-generic-panel-horizontal-bars flex-container">
                 <div class="chart-table-panel flex-column">

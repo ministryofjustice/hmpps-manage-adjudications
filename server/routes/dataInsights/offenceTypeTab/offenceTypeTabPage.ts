@@ -85,6 +85,7 @@ export default class OffenceTypeTabPage {
       agencyId,
       'Adjudication offence type by location - last 30 days',
       'Select an offence type to see where offences took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
+      'Only locations with at least 1 adjudication are shown.',
       chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },

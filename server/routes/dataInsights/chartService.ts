@@ -202,6 +202,7 @@ export const produceHorizontalBarsChart = async (
   agencyId: string,
   chartTitle: string,
   chartHint: string,
+  chartClarification: string,
   chartDetails: ChartDetailsResult,
   dataFilter: DataFilter,
   labelFieldSource: RowSource,
@@ -230,6 +231,7 @@ export const produceHorizontalBarsChart = async (
     elementId: chartName,
     chartTitle,
     chartHint,
+    chartClarification,
     barData,
     labels,
     xAxisLabel,
@@ -304,6 +306,7 @@ export const createHorizontalBarsChartSettings = (params: {
   elementId: string
   chartTitle: string
   chartHint: string
+  chartClarification: string
   barData: number[] | string[]
   xAxisLabel: string
   labels: string[]
@@ -316,6 +319,7 @@ export const createHorizontalBarsChartSettings = (params: {
   return {
     title: params.chartTitle,
     chartHint: params.chartHint,
+    chartClarification: params.chartClarification,
     chartData: {
       elementId: params.elementId,
       chartOptions: {
