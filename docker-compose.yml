@@ -5,7 +5,7 @@ services:
     image: 'bitnami/redis:7.0'
     networks:
       - hmpps
-    container_name: redis 
+    container_name: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -25,7 +25,7 @@ services:
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
   gotenberg:
-    image: gotenberg/gotenberg:7.8.3
+    image: gotenberg/gotenberg:7.9.1
     networks:
       - hmpps
     container_name: gotenberg
