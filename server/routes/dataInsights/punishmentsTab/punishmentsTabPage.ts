@@ -65,7 +65,7 @@ export default class PunishmentsTabPage {
       username,
       agencyId,
       'Punishments given for each adjudication offence type - current month and previous 12 months',
-      'Select an offence type to explore patterns of punishments given. Are you content with the consistency and appropriateness of the punishments? Are there any insights to inform actions? ',
+      'Select an offence type to explore patterns of punishments given. Are you content with the consistency and appropriateness of the punishments? Are there any insights to inform actions?',
       chartDetails4b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryLine) => row.sanction },

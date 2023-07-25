@@ -919,7 +919,7 @@ export const createLinesChartsSettings = (params: {
                   size: 18,
                   family: FONT_FAMILY,
                 },
-                text: 'Notes: click on the legends below to hide/display the line chart.',
+                text: 'Click on a legend to remove or include the chart line',
               },
             } as LegendOptions<'line'>,
             title: {

@@ -77,7 +77,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Adjudication reports by location of adjudication incident - last 30 days',
-      'Use this chart to see where recent rule-breaking took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness. ',
+      'Use this chart to see where recent rule-breaking took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
       await this.chartApiService.getChart(username, agencyId, '1d'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
