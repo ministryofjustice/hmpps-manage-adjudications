@@ -73,12 +73,20 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
         reportNumber: reportNo,
       })
 
+    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req, punishmentType as PunishmentType)
     return res.redirect(
       url.format({
-        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.manual(adjudicationNumber),
+        pathname: redirectUrlPrefix,
         query: { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNo: reportNumber },
       })
     )
+  }
+
+  private getRedirectUrl = (adjudicationNumber: number, req: Request, punishmentType: PunishmentType) => {
+    if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
+      return adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(adjudicationNumber, req.params.redisId)
+    }
+    return adjudicationUrls.suspendedPunishmentSchedule.urls.manual(adjudicationNumber)
   }
 
   validateInputs = (

@@ -271,6 +271,26 @@ context('Manually activate an existing suspended punishment', () => {
         )
       })
     })
+
+    const daysPunishmentTypes = [PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS]
+    daysPunishmentTypes.forEach(punishmentType => {
+      it(`should submit successfully and redirect for type PRIVILEGE - ${punishmentType}`, () => {
+        cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(101))
+        const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
+        punishmentPage.reportNumber().type('123456')
+        punishmentPage.punishment().find(`input[value="${punishmentType}"]`).check()
+
+        punishmentPage.submitButton().click()
+
+        cy.location().should(loc => {
+          expect(loc.pathname).to.eq(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(101, undefined))
+          expect(loc.search).to.eq(
+            `?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
+          )
+        })
+      })
+    })
+
     it('end to end', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)

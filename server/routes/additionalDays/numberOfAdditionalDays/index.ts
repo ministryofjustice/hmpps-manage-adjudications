@@ -3,6 +3,7 @@ import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import NumberOfAdditionalDaysRoute from './numberOfAdditionalDays'
 import NumberOfAdditionalDaysEditRoute from './numberOfAdditionalDaysEdit'
+import NumberOfAdditionalDaysManualEditRoute from './numberOfAdditionalDaysManualEdit'
 
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -19,6 +20,10 @@ export default function NumberOfAdditionalDaysRoutes({
 
   const numberOfAdditionalDaysRoute = new NumberOfAdditionalDaysRoute(userService, punishmentsService)
   const numberOfAdditionalDaysEditRoute = new NumberOfAdditionalDaysEditRoute(userService, punishmentsService)
+  const numberOfAdditionalDaysManualEditRoute = new NumberOfAdditionalDaysManualEditRoute(
+    userService,
+    punishmentsService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
@@ -27,6 +32,8 @@ export default function NumberOfAdditionalDaysRoutes({
   post(adjudicationUrls.numberOfAdditionalDays.matchers.start, numberOfAdditionalDaysRoute.submit)
   get(adjudicationUrls.numberOfAdditionalDays.matchers.edit, numberOfAdditionalDaysEditRoute.view)
   post(adjudicationUrls.numberOfAdditionalDays.matchers.edit, numberOfAdditionalDaysEditRoute.submit)
+  get(adjudicationUrls.numberOfAdditionalDays.matchers.manualEdit, numberOfAdditionalDaysManualEditRoute.view)
+  post(adjudicationUrls.numberOfAdditionalDays.matchers.manualEdit, numberOfAdditionalDaysManualEditRoute.submit)
 
   return router
 }
