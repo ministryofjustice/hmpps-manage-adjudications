@@ -20,11 +20,9 @@ const DARK_BLUE_DARKER = '#00265f'
 const LIGHT_BLUE = '#5694ca'
 const LIGHT_BLUE_DARKER = '#4388c4'
 const TURQUOISE = ['#28a197', '#238d84']
-const LIGHT_PURPLE = '#8c8ec0'
 const YELLOW = '#ffdd00'
 const BLACK = '#0b0c0c'
 
-// const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
 
 export const produceVerticalBarsAndLineCharts = async (
