@@ -22,6 +22,7 @@ const LIGHT_BLUE_DARKER = '#4388c4'
 const TURQUOISE = ['#28a197', '#238d84']
 const LIGHT_PURPLE = '#8c8ec0'
 const YELLOW = '#ffdd00'
+const BLACK = '#0b0c0c'
 
 // const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
@@ -351,14 +352,14 @@ export const createHorizontalBarsChartSettings = (params: {
           scales: {
             x: {
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               beginAtZero: true,
               ticks: {
                 display: true,
                 stepSize: 25,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -372,7 +373,7 @@ export const createHorizontalBarsChartSettings = (params: {
                 display: true,
                 align: 'end',
                 text: params.xAxisLabel,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -515,12 +516,12 @@ export const createVerticalBarsAndLineChartSettings = (params: {
           scales: {
             x: {
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               ticks: {
                 display: true,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -536,6 +537,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               display: true,
               ticks: {
                 stepSize: 20,
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -555,6 +557,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               onClick: undefined as undefined,
               position: 'top',
               labels: {
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -567,6 +570,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
             title: {
               display: false,
               text: params.chartTitle,
+              color: BLACK,
               font: {
                 size: 30,
                 family: FONT_FAMILY,
@@ -595,7 +599,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
                 text: params.yAxisLabel,
                 left: 0,
                 top: 10,
-                color: 'black',
+                color: BLACK,
                 font: `18px ${FONT_FAMILY}`,
               },
             } as object,
@@ -670,12 +674,12 @@ export const createMultiVerticalBarsChartSettings = (params: {
             x: {
               stacked: true,
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               ticks: {
                 display: true,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -692,6 +696,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
               display: true,
               ticks: {
                 stepSize: 20,
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -708,6 +713,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
               onClick: null,
               position: 'top',
               labels: {
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -719,11 +725,6 @@ export const createMultiVerticalBarsChartSettings = (params: {
             },
             title: {
               display: false,
-              text: params.chartTitle,
-              font: {
-                size: 30,
-                family: FONT_FAMILY,
-              },
             },
             tooltip: {
               backgroundColor: LIGHT_PURPLE,
@@ -748,7 +749,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
                 text: params.yAxisLabel,
                 left: 0,
                 top: 30,
-                color: 'black',
+                color: BLACK,
                 font: `18px ${FONT_FAMILY}`,
               },
             } as object,
@@ -850,12 +851,12 @@ export const createLinesChartsSettings = (params: {
             x: {
               offset: true,
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               ticks: {
                 display: true,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -870,7 +871,7 @@ export const createLinesChartsSettings = (params: {
               title: {
                 display: false,
                 text: 'Count',
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -883,6 +884,7 @@ export const createLinesChartsSettings = (params: {
               display: true,
               ticks: {
                 stepSize: 20,
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -900,6 +902,7 @@ export const createLinesChartsSettings = (params: {
               position: 'bottom',
               align: 'start',
               labels: {
+                color: BLACK,
                 font: {
                   size: 18,
                   family: FONT_FAMILY,
@@ -915,6 +918,7 @@ export const createLinesChartsSettings = (params: {
                   top: 20,
                   bottom: 0,
                 },
+                color: BLACK,
                 font: {
                   size: 18,
                   family: FONT_FAMILY,
@@ -948,7 +952,7 @@ export const createLinesChartsSettings = (params: {
                 text: params.yAxisLabel,
                 left: 0,
                 top: 8,
-                color: 'black',
+                color: BLACK,
                 font: `18px ${FONT_FAMILY}`,
               },
             } as object,
