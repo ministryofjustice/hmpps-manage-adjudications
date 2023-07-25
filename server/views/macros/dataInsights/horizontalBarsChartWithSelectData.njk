@@ -36,11 +36,10 @@
                         text: 'Show results',
                         type: 'submit',
                         preventDoubleClick: true,
-                        classes: 'govuk-button--submit govuk-!-margin-right-3 flex-column show-results-button',
+                        classes: (selectorSettings.selectorSubmitButtonClass if selectorSettings.selectorSubmitButtonClass else 'govuk-button--submit') + ' govuk-!-margin-right-3 flex-column show-results-button',
                         attributes: { 'data-qa': 'not-proceed-submit' }
                     }) }}
                 </div>
-
             </form>
         </div>
 

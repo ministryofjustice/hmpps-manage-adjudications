@@ -111,6 +111,7 @@ export default class OffenceTypeTabPage {
           label: 'Select offence type',
           items: offenceTypes,
           class: 'offenceType-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--submit',
         },
       },
     })
