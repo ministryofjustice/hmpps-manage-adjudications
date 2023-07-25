@@ -2,11 +2,11 @@
   {% for completedReport in allCompletedReports.content %}
     {% if completedReport.transferableActionsAllowed == false %}
       {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span>
         {% endset -%}
       {% else %}
         {% set viewCompletedReportlLinkHtml %}
-        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span>
+        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span>
         </a>
         {% endset -%}
       {% endif %}
@@ -14,11 +14,11 @@
       {% if completedReport.status | statusNotAwaitingRejectedReturned %}
         {% if completedReport.transferableActionsAllowed == false %}
           {% set viewHearinglLinkHtml %}
-          <a href="{{ adjudicationUrls.hearingDetails.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+          <a href="{{ adjudicationUrls.hearingDetails.urls.viewOnly(completedReport.adjudicationNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
           {% endset %}
         {% else %}
           {% set viewHearinglLinkHtml %}
-          <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
+          <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.adjudicationNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
           {% endset %}
           {% endif %}
         {% else %}
