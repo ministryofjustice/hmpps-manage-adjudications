@@ -2,6 +2,7 @@ import moment from 'moment'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import HomepagePage from '../pages/home'
 import Page from '../pages/page'
+import { CaseLoad } from '../../server/data/prisonApiClient'
 
 context('Home page', () => {
   beforeEach(() => {
@@ -146,6 +147,40 @@ context('Home page', () => {
     homepage.confirmDisHasBeenIssuedLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.confirmDISFormsIssued.root)
+    })
+  })
+  it('link should not exist to the correct location - adjudication data', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.dataInsightsLink().should('not.exist')
+  })
+})
+
+context('Home page for RNI - Ranby (HMP)', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', [
+      {
+        caseLoadId: 'RNI',
+        description: 'Ranby (HMP)',
+        currentlyActive: true,
+        type: '',
+        caseloadFunction: '',
+      },
+    ] as CaseLoad[])
+    cy.task('stubAuthUser', {
+      username: 'USER1',
+      activeCaseLoadId: 'RNI',
+    })
+    cy.signIn()
+  })
+
+  it('should link to the correct location - adjudication data', () => {
+    cy.visit(adjudicationUrls.homepage.root)
+    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
+    homepage.dataInsightsLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.dataInsights.root)
     })
   })
 })

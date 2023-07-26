@@ -2,182 +2,194 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page from '../pages/page'
 import DataInsightsPage from '../pages/dataInsights'
 import { ChartDetailsResult } from '../../server/services/ChartDetailsResult'
+import { CaseLoad } from '../../server/data/prisonApiClient'
 
 context('Adjudication data', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubAuthUser')
+    cy.task('stubSignIn', [
+      {
+        caseLoadId: 'RNI',
+        description: 'Ranby (HMP)',
+        currentlyActive: true,
+        type: '',
+        caseloadFunction: '',
+      },
+    ] as CaseLoad[])
+    cy.task('stubAuthUser', {
+      username: 'USER1',
+      activeCaseLoadId: 'RNI',
+    })
 
     const chartEntries = getChartEntriesMap()
 
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '1a',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '1a',
         chartEntries: chartEntries['1a'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '1b',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '1b',
         chartEntries: chartEntries['1b'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '1c',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '1c',
         chartEntries: chartEntries['1c'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '1d',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '1d',
         chartEntries: chartEntries['1d'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '1f',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '1f',
         chartEntries: chartEntries['1f'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '2a',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '2a',
         chartEntries: chartEntries['2a'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '2b',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '2b',
         chartEntries: chartEntries['2b'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '2d',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '2d',
         chartEntries: chartEntries['2d'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '2e',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '2e',
         chartEntries: chartEntries['2e'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '2f',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '2f',
         chartEntries: chartEntries['2f'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '2g',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '2g',
         chartEntries: chartEntries['2g'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '3a',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '3a',
         chartEntries: chartEntries['3a'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '3b',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '3b',
         chartEntries: chartEntries['3b'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '4a',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '4a',
         chartEntries: chartEntries['4a'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '4b',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '4b',
         chartEntries: chartEntries['4b'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '4c',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '4c',
         chartEntries: chartEntries['4c'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '5a',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '5a',
         chartEntries: chartEntries['5a'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '5b',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '5b',
         chartEntries: chartEntries['5b'],
       } as ChartDetailsResult,
     })
     cy.task('stubGetDataInsightsChart', {
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '5c',
       response: {
-        agencyId: 'MDI',
+        agencyId: 'RNI',
         chartName: '5c',
         chartEntries: chartEntries['5c'],
       } as ChartDetailsResult,
