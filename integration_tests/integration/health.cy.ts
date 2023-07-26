@@ -7,7 +7,6 @@ context('Health check', () => {
       cy.task('stubPrisonerSearchPing')
       cy.task('stubPrisonApiPing')
       cy.task('stubAdjudicationsPing')
-      cy.task('stubCuriousPing')
     })
     it('Health check page is visible', () => {
       cy.request('/health').its('body.healthy').should('equal', true)
@@ -26,7 +25,6 @@ context('Health check', () => {
       cy.task('stubPrisonerSearchPing', 500)
       cy.task('stubPrisonApiPing', 500)
       cy.task('stubAdjudicationsPing', 500)
-      cy.task('stubCuriousPing', 500)
     })
 
     it('Health check page is visible and returning unhealthy', () => {
@@ -40,7 +38,6 @@ context('Health check', () => {
         expect(response.body.checks.tokenVerification.status).to.eq(500)
         expect(response.body.checks.adjudications.status).to.eq(500)
         expect(response.body.checks.prisonApi.status).to.eq(500)
-        expect(response.body.checks.curious.status).to.eq(500)
       })
     })
   })
