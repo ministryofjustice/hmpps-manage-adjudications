@@ -651,14 +651,14 @@ const adjudicationUrls = {
     matchers: {
       start: '/:adjudicationNumber',
       edit: '/:adjudicationNumber/edit/:redisId',
-      manualEdit: '/:adjudicationNumber/manualEdit/:redisId',
+      manualEdit: '/:adjudicationNumber/manualEdit/',
     },
     urls: {
       start: (adjudicationNumber: number) => `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}`,
       edit: (adjudicationNumber: number, redisId: string) =>
         `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/edit/${redisId}`,
-      manualEdit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/manualEdit/${redisId}`,
+      manualEdit: (adjudicationNumber: number) =>
+        `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/manualEdit`,
     },
   },
   isPunishmentSuspended: {

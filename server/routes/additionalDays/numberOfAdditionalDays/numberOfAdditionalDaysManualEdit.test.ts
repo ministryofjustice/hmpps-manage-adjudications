@@ -38,7 +38,7 @@ describe('GET number of additional days page', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(100, uuidv4()))
+      .get(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -49,7 +49,7 @@ describe('GET number of additional days page', () => {
 describe('GET number of additional days page', () => {
   it('should load the  page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(100, uuidv4()))
+      .get(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Enter the number of additional days')
@@ -62,8 +62,7 @@ describe('POST number of additional days page', () => {
     return request(app)
       .post(
         `${adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(
-          100,
-          'XYZ'
+          100
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
       )
       .send({
@@ -72,9 +71,8 @@ describe('POST number of additional days page', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(
-          100,
-          'XYZ'
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
+          100
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )
   })
