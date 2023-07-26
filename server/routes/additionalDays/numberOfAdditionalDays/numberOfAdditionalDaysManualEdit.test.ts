@@ -1,6 +1,5 @@
 import { Express } from 'express'
 import request from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
