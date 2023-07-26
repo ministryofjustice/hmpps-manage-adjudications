@@ -283,7 +283,7 @@ context('Manually activate an existing suspended punishment', () => {
         punishmentPage.submitButton().click()
 
         cy.location().should(loc => {
-          expect(loc.pathname).to.eq(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(101, undefined))
+          expect(loc.pathname).to.eq(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(101))
           expect(loc.search).to.eq(
             `?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
           )

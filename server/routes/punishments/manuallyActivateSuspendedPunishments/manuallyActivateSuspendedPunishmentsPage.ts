@@ -84,7 +84,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
 
   private getRedirectUrl = (adjudicationNumber: number, req: Request, punishmentType: PunishmentType) => {
     if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
-      return adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(adjudicationNumber, req.params.redisId)
+      return adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(adjudicationNumber)
     }
     return adjudicationUrls.suspendedPunishmentSchedule.urls.manual(adjudicationNumber)
   }

@@ -106,7 +106,7 @@ export default class NumberOfAdditionalDaysPage {
       return adjudicationUrls.isPunishmentSuspended.urls.edit(adjudicationNumber, req.params.redisId)
     }
     if (this.pageOptions.isManualEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(adjudicationNumber, req.params.redisId)
+      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(adjudicationNumber)
     }
     return adjudicationUrls.isPunishmentSuspended.urls.start(adjudicationNumber)
   }
