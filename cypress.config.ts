@@ -33,9 +33,9 @@ export default defineConfig({
             {
               caseLoadId: 'MDI',
               description: 'Moorland (HMP & YOI)',
+              type: 'INST',
+              caseloadFunction: 'TEST',
               currentlyActive: true,
-              type: '',
-              caseloadFunction: '',
             },
           ]
           const agencyIdResponse =

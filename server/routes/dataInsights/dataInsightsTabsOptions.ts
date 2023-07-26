@@ -54,9 +54,11 @@ export const checkDataInsightsPermissions = (
   res: Response,
   pageViewCallBack: (req: Request, res: Response) => void
 ) => {
-  const { activeCaseLoadId } = res.locals.user
+  const activeCaseLoadId = getActiveCaseLoadId(res)
   if (config.dataInsightsFlag === 'true' && ['RNI'].includes(activeCaseLoadId)) {
     return pageViewCallBack(req, res)
   }
   return res.redirect(adjudicationUrls.homepage.root)
 }
+
+export const getActiveCaseLoadId = (res: Response) => res.locals.user.activeCaseLoadId
