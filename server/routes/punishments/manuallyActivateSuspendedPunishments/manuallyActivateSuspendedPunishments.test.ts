@@ -80,8 +80,7 @@ describe('POST', () => {
         .expect(
           'Location',
           `${adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(
-            100,
-            undefined
+            100
           )}?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
         )
     }
