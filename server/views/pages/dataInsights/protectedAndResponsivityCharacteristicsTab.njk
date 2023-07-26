@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
+{% from "../../macros/dataInsights/giveFeedbackBanner.njk" import giveFeedbackBanner %}
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
 {% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
 
@@ -14,6 +15,8 @@
 {% endblock %}
 
 {% block beforeContent %}
+  {{ giveFeedbackBanner() }}
+
   {{ breadcrumb() }}
 {% endblock %}
 
@@ -66,7 +69,7 @@
       {{ horizontalBarsChartWithSelect(chartSettingMap['2d'], allSelectorSettings['offenceType'], allSelectorParams, csrfToken) }}
     </div>
 
-    <div class="govuk-!-margin-bottom-6 punishment-by-protected-or-responsivity-characteristic">
+    <div class="govuk-!-margin-bottom-6">
       {{ horizontalBarsChartWithSelect(chartSettingMap['2e'], allSelectorSettings['punishment'], allSelectorParams, csrfToken) }}
     </div>
 
@@ -82,7 +85,6 @@
       <div>
         <h3 class="govuk-heading-m govuk-!-margin-bottom-5">About ‘learning disability and other challenges (LDC)’</h3>
 
-        <p class="govuk-body">This data does not represent official statistics and should not be published outside of the MoJ, unless for approved business purposes. Some charts contain information that could identify someone.</p>
         <p class="govuk-body">LDC is a term used to describe people who are likely to have a lower-than-average intelligence quotient (IQ) and require support in their everyday living and coping with prisons and probation.</p>
         <p class="govuk-body">These people are:</p>
         <ul class='govuk-list govuk-list--bullet'>

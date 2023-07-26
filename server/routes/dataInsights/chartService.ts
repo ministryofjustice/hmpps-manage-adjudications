@@ -19,8 +19,8 @@ const DARK_BLUE = '#003078'
 const DARK_BLUE_DARKER = '#00265f'
 const LIGHT_BLUE = '#5694ca'
 const LIGHT_BLUE_DARKER = '#4388c4'
-const TURQUOISE = ['#28a197', '#238d84']
-const YELLOW = '#ffdd00'
+const TURQUOISE = '#28a197'
+const TURQUOISE_DARKER = '#238d84'
 const BLACK = '#0b0c0c'
 
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
@@ -103,7 +103,7 @@ export const produceMultiVerticalBarsCharts = async (
     chartHint,
     chartEntriesMap,
     yValueSource,
-    barColors: ['LIGHT_BLUE', 'DARK_BLUE', 'YELLOW'],
+    barColors: ['LIGHT_BLUE', 'DARK_BLUE', 'TURQUOISE'],
     head: [],
     rows: getMultiVerticalBarsRows([
       ...legends.map(legend => {
@@ -463,14 +463,14 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               label: 'Previous year',
               data: params.lineData,
               fill: false,
-              borderColor: TURQUOISE[0],
-              backgroundColor: TURQUOISE[0],
-              hoverBorderColor: TURQUOISE[1],
-              pointBackgroundColor: TURQUOISE[0],
+              borderColor: TURQUOISE,
+              backgroundColor: TURQUOISE,
+              hoverBorderColor: TURQUOISE_DARKER,
+              pointBackgroundColor: TURQUOISE,
               pointBorderColor: '#ffffff',
               pointBorderWidth: 1,
               pointHoverBackgroundColor: '#ffffff',
-              pointHoverBorderColor: TURQUOISE[1],
+              pointHoverBorderColor: TURQUOISE_DARKER,
               pointHoverBorderWidth: 3,
               tension: 0,
               borderWidth: 2,
@@ -590,7 +590,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
   chartHint: string
   chartEntriesMap: Map<string, ChartEntryLine[]>
   yValueSource: RowSource
-  barColors: ('DARK_BLUE' | 'YELLOW' | 'LIGHT_BLUE')[]
+  barColors: ('DARK_BLUE' | 'LIGHT_BLUE' | 'TURQUOISE')[]
   head: TableHead[]
   rows: TableRow[][]
   yAxisLabel: string
@@ -606,8 +606,8 @@ export const createMultiVerticalBarsChartSettings = (params: {
 
   const barsColorsByKey: Map<string, string[]> = new Map([
     ['DARK_BLUE', [DARK_BLUE, DARK_BLUE_DARKER]],
-    ['YELLOW', [YELLOW, YELLOW]],
     ['LIGHT_BLUE', [LIGHT_BLUE, LIGHT_BLUE_DARKER]],
+    ['TURQUOISE', [TURQUOISE, TURQUOISE_DARKER]],
   ])
 
   const datasets = linesLegends.map((legend, i) => {
