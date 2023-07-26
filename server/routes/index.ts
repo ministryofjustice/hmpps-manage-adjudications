@@ -30,7 +30,7 @@ import detailsOfWitnessesRoutes from './witnesses'
 import associatedPrisonerRoutes from './associatedPrisoner'
 
 import totalsAdjudicationsAndLocationsRoutes from './dataInsights/totalsAdjudicationsAndLocationsTab'
-import protectedCharacteristicsAndVulnerabilitiesRoutes from './dataInsights/protectedCharacteristicsAndVulnerabilitiesTab'
+import protectedAndResponsivityCharacteristicsRoutes from './dataInsights/protectedAndResponsivityCharacteristicsTab'
 import offenceTypeRoutes from './dataInsights/offenceTypeTab'
 import punishmentsRoutes from './dataInsights/punishmentsTab'
 import pleasAndFindingsRoutes from './dataInsights/pleasAndFindingsTab'
@@ -205,8 +205,8 @@ export default function routes(
       totalsAdjudicationsAndLocationsRoutes({ chartApiService })
     )
     router.use(
-      adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities(),
-      protectedCharacteristicsAndVulnerabilitiesRoutes({ chartApiService })
+      adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(),
+      protectedAndResponsivityCharacteristicsRoutes({ chartApiService })
     )
     router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartApiService }))
     router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartApiService }))

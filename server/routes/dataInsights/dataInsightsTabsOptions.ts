@@ -2,7 +2,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 
 export const enum DataInsightsTab {
   TOTALS_ADJUDICATIONS_AND_LOCATIONS = 'totalsAdjudicationsAndLocations',
-  PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES = 'protectedCharacteristicsAndVulnerabilities',
+  PROTECTED_AND_RESPONSIVITY_CHARACTERISTICS = 'protectedAndResponsivityCharacteristics',
   OFFENCE_TYPE = 'offenceType',
   PUNISHMENTS = 'punishments',
   PLEAS_AND_FINDINGS = 'pleasAndFindings',
@@ -20,10 +20,10 @@ export function getDataInsightsTabsOptions(activeTab: string) {
         href: adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
       },
       {
-        text: 'Protected characteristics and vulnerabilities',
+        text: 'Protected and responsivity characteristics',
         attributes: {},
-        active: activeTab === DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES,
-        href: adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities(),
+        active: activeTab === DataInsightsTab.PROTECTED_AND_RESPONSIVITY_CHARACTERISTICS,
+        href: adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(),
       },
       {
         text: 'Offence type',

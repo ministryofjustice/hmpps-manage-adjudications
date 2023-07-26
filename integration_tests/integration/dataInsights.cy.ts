@@ -202,8 +202,8 @@ context('Adjudication data', () => {
     page.checkChartTitle('Adjudication reports by residential location of prisoner - last 30 days')
   })
 
-  it('should contain the required page elements /data-insights/protected-characteristics-and-vulnerabilities', () => {
-    cy.visit(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities())
+  it('should contain the required page elements /data-insights/protected-and-responsivity-characteristics', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
     page.checkChartTitle('Overview of prisoners in the establishment - last 30 days')

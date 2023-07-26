@@ -20,10 +20,9 @@ const DARK_BLUE_DARKER = '#00265f'
 const LIGHT_BLUE = '#5694ca'
 const LIGHT_BLUE_DARKER = '#4388c4'
 const TURQUOISE = ['#28a197', '#238d84']
-const LIGHT_PURPLE = '#8c8ec0'
 const YELLOW = '#ffdd00'
+const BLACK = '#0b0c0c'
 
-// const LIGHT_GREY = '#b1b4b6'
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
 
 export const produceVerticalBarsAndLineCharts = async (
@@ -32,12 +31,13 @@ export const produceVerticalBarsAndLineCharts = async (
   agencyId: string,
   chartTitle: string,
   chartHint: string,
-  chartDetails: ChartDetailsResult
+  chartDetails: ChartDetailsResult,
+  yAxisLabel: string
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryVerticalBar[]
 
   const labels: string[][] = chartEntries.map((entry: ChartEntryVerticalBar) => {
-    return [getMonthShortName(entry.month), `${entry.year_curr}`]
+    return [getMonthShortName(entry.month), ` ${entry.year_curr}`]
   })
 
   return createVerticalBarsAndLineChartSettings({
@@ -52,6 +52,7 @@ export const produceVerticalBarsAndLineCharts = async (
       chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_curr),
       chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_prev)
     ),
+    yAxisLabel,
   })
 }
 
@@ -65,7 +66,8 @@ export const produceMultiVerticalBarsCharts = async (
   legendsSource: RowSource,
   yValueSource: RowSource,
   totalCountGroupByKey: RowSource,
-  totalCountGroupBySource: RowSource
+  totalCountGroupBySource: RowSource,
+  yAxisLabel: string
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryLine[]
 
@@ -101,7 +103,7 @@ export const produceMultiVerticalBarsCharts = async (
     chartHint,
     chartEntriesMap,
     yValueSource,
-    barColors: ['DARK_BLUE', 'YELLOW', 'LIGHT_BLUE'],
+    barColors: ['LIGHT_BLUE', 'DARK_BLUE', 'YELLOW'],
     head: [],
     rows: getMultiVerticalBarsRows([
       ...legends.map(legend => {
@@ -122,6 +124,7 @@ export const produceMultiVerticalBarsCharts = async (
             : [],
       },
     ]),
+    yAxisLabel,
   })
 }
 
@@ -135,7 +138,8 @@ export const produceDuoVerticalBarsCharts = async (
   legendsSource: { label: string; countSource: RowSource; propSource: RowSource }[],
   yValueSource: RowSource,
   totalCountGroupByKey: RowSource,
-  totalCountGroupBySource: RowSource
+  totalCountGroupBySource: RowSource,
+  yAxisLabel: string
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryDuoLine[]
 
@@ -188,6 +192,7 @@ export const produceDuoVerticalBarsCharts = async (
             : [],
       },
     ]),
+    yAxisLabel,
   })
 }
 
@@ -197,6 +202,7 @@ export const produceHorizontalBarsChart = async (
   agencyId: string,
   chartTitle: string,
   chartHint: string,
+  chartClarification: string,
   chartDetails: ChartDetailsResult,
   dataFilter: DataFilter,
   labelFieldSource: RowSource,
@@ -225,6 +231,7 @@ export const produceHorizontalBarsChart = async (
     elementId: chartName,
     chartTitle,
     chartHint,
+    chartClarification,
     barData,
     labels,
     xAxisLabel,
@@ -264,7 +271,8 @@ export const produceLinesCharts = async (
   chartDetails: ChartDetailsResult,
   dataFilter: DataFilter,
   legendsSource: RowSource,
-  yValueSource: RowSource
+  yValueSource: RowSource,
+  yAxisLabel: string
 ) => {
   const chartEntries = (chartDetails.chartEntries as ChartEntryLine[]).filter((row: ChartEntryLine) => {
     return dataFilter.filter(row)
@@ -290,6 +298,7 @@ export const produceLinesCharts = async (
     chartHint,
     chartEntriesMap,
     yValueSource,
+    yAxisLabel,
   })
 }
 
@@ -297,6 +306,7 @@ export const createHorizontalBarsChartSettings = (params: {
   elementId: string
   chartTitle: string
   chartHint: string
+  chartClarification: string
   barData: number[] | string[]
   xAxisLabel: string
   labels: string[]
@@ -309,6 +319,7 @@ export const createHorizontalBarsChartSettings = (params: {
   return {
     title: params.chartTitle,
     chartHint: params.chartHint,
+    chartClarification: params.chartClarification,
     chartData: {
       elementId: params.elementId,
       chartOptions: {
@@ -343,14 +354,14 @@ export const createHorizontalBarsChartSettings = (params: {
           scales: {
             x: {
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               beginAtZero: true,
               ticks: {
                 display: true,
                 stepSize: 25,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -364,7 +375,7 @@ export const createHorizontalBarsChartSettings = (params: {
                 display: true,
                 align: 'end',
                 text: params.xAxisLabel,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -374,7 +385,7 @@ export const createHorizontalBarsChartSettings = (params: {
                   top: 10,
                 },
               },
-            },
+            } as LinearScaleOptions & object,
             y: {
               display: false,
               ticks: {
@@ -395,23 +406,7 @@ export const createHorizontalBarsChartSettings = (params: {
             title: {
               display: false,
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
-              },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            tooltip: tooltipOptions,
             labels: {
               display: false,
             },
@@ -438,6 +433,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
   labels: string[][]
   head: TableHead[]
   rows: TableRow[][]
+  yAxisLabel: string
 }) => {
   const dataLength = params.barData.length
   const barsColors = createCustomArray(dataLength, DARK_BLUE, LIGHT_BLUE)
@@ -490,7 +486,7 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               type: 'line',
               order: 3,
               label: 'Current incomplete month',
-              data: [],
+              data: [] as unknown[],
               fill: false,
               borderColor: LIGHT_BLUE,
               backgroundColor: LIGHT_BLUE,
@@ -506,12 +502,12 @@ export const createVerticalBarsAndLineChartSettings = (params: {
           scales: {
             x: {
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               ticks: {
                 display: true,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -521,28 +517,33 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               grid: {
                 display: false,
               },
-            },
+            } as LinearScaleOptions & object,
             y: {
               beginAtZero: true,
               display: true,
               ticks: {
                 stepSize: 20,
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
                   weight: '400',
                 },
               },
-            },
+              title: {
+                display: false,
+              },
+            } as LinearScaleOptions & object,
           },
           plugins: {
             layout: {
               padding: 30,
             },
             legend: {
-              onClick: null,
+              onClick: undefined as undefined,
               position: 'top',
               labels: {
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -555,31 +556,26 @@ export const createVerticalBarsAndLineChartSettings = (params: {
             title: {
               display: false,
               text: params.chartTitle,
+              color: BLACK,
               font: {
                 size: 30,
                 family: FONT_FAMILY,
               },
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
+            tooltip: tooltipOptions,
+            customTitle: {
+              y: {
+                display: true,
+                text: params.yAxisLabel,
+                left: 0,
+                top: 10,
+                color: BLACK,
+                font: `18px ${FONT_FAMILY}`,
               },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            } as object,
           },
         },
-      } as ChartOptions,
+      },
     },
     tableData: {
       head: params.head,
@@ -597,13 +593,14 @@ export const createMultiVerticalBarsChartSettings = (params: {
   barColors: ('DARK_BLUE' | 'YELLOW' | 'LIGHT_BLUE')[]
   head: TableHead[]
   rows: TableRow[][]
+  yAxisLabel: string
 }) => {
   const linesLegends = Array.from(params.chartEntriesMap.keys())
 
   const labels: string[][] =
     linesLegends.length > 0
       ? params.chartEntriesMap.get(linesLegends[0]).map((entry: ChartEntryLine) => {
-          return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
+          return [getMonthShortName(entry.month), ` ${Math.trunc(entry.year)}`]
         })
       : []
 
@@ -647,12 +644,12 @@ export const createMultiVerticalBarsChartSettings = (params: {
             x: {
               stacked: true,
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               ticks: {
                 display: true,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -662,20 +659,21 @@ export const createMultiVerticalBarsChartSettings = (params: {
               grid: {
                 display: false,
               },
-            },
+            } as LinearScaleOptions & object,
             y: {
               stacked: true,
               beginAtZero: true,
               display: true,
               ticks: {
                 stepSize: 20,
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
                   weight: '400',
                 },
               },
-            },
+            } as LinearScaleOptions & object,
           },
           plugins: {
             layout: {
@@ -685,6 +683,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
               onClick: null,
               position: 'top',
               labels: {
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -696,29 +695,18 @@ export const createMultiVerticalBarsChartSettings = (params: {
             },
             title: {
               display: false,
-              text: params.chartTitle,
-              font: {
-                size: 30,
-                family: FONT_FAMILY,
-              },
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
+            tooltip: tooltipOptions,
+            customTitle: {
+              y: {
+                display: true,
+                text: params.yAxisLabel,
+                left: 0,
+                top: 30,
+                color: BLACK,
+                font: `18px ${FONT_FAMILY}`,
               },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            } as object,
           },
         },
       } as ChartOptions,
@@ -736,13 +724,14 @@ export const createLinesChartsSettings = (params: {
   chartHint: string
   chartEntriesMap: Map<string, ChartEntryLine[]>
   yValueSource: RowSource
+  yAxisLabel: string
 }) => {
   const linesLegends = Array.from(params.chartEntriesMap.keys())
 
   const labels: string[][] =
     linesLegends.length > 0
       ? params.chartEntriesMap.get(linesLegends[0]).map((entry: ChartEntryLine) => {
-          return [getMonthShortName(entry.month), `${Math.trunc(entry.year)}`]
+          return [getMonthShortName(entry.month), ` ${Math.trunc(entry.year)}`]
         })
       : []
 
@@ -816,12 +805,12 @@ export const createLinesChartsSettings = (params: {
             x: {
               offset: true,
               border: {
-                color: 'black',
+                color: BLACK,
               },
               display: true,
               ticks: {
                 display: true,
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -831,12 +820,12 @@ export const createLinesChartsSettings = (params: {
               grid: {
                 display: false,
               },
-            },
+            } as LinearScaleOptions & object,
             y: {
               title: {
                 display: false,
                 text: 'Count',
-                color: 'black',
+                color: BLACK,
                 font: {
                   size: 16,
                   family: FONT_FAMILY,
@@ -849,6 +838,7 @@ export const createLinesChartsSettings = (params: {
               display: true,
               ticks: {
                 stepSize: 20,
+                color: BLACK,
                 font: {
                   size: 20,
                   family: FONT_FAMILY,
@@ -866,6 +856,7 @@ export const createLinesChartsSettings = (params: {
               position: 'bottom',
               align: 'start',
               labels: {
+                color: BLACK,
                 font: {
                   size: 18,
                   family: FONT_FAMILY,
@@ -881,33 +872,28 @@ export const createLinesChartsSettings = (params: {
                   top: 20,
                   bottom: 0,
                 },
+                color: BLACK,
                 font: {
                   size: 18,
                   family: FONT_FAMILY,
                 },
-                text: 'Notes: click on the legends below to hide/display the line chart.',
+                text: 'Click on a legend to remove or include the chart line',
               },
             } as LegendOptions<'line'>,
             title: {
               display: false,
             },
-            tooltip: {
-              backgroundColor: LIGHT_PURPLE,
-              titleColor: 'white',
-              titleAlign: 'center',
-              titleSpacing: 2,
-              titleMarginBottom: 6,
-              titleFont: {
-                size: 18,
-                family: FONT_FAMILY,
+            tooltip: tooltipOptions,
+            customTitle: {
+              y: {
+                display: true,
+                text: params.yAxisLabel,
+                left: 0,
+                top: 8,
+                color: BLACK,
+                font: `18px ${FONT_FAMILY}`,
               },
-              bodyColor: 'white',
-              bodySpacing: 2,
-              bodyFont: {
-                size: 14,
-                family: FONT_FAMILY,
-              },
-            },
+            } as object,
           } as object, // try as PluginOptionsByType<'line'> & object
         } as Defaults,
       } as ChartOptions<'line'>,
@@ -993,7 +979,8 @@ export const getMultipleLineChartRows = (
     rows.push([
       {
         text: key,
-        classes: 'multiple-line-table-row-cell multiple-line-table-row-cell-first govuk-!-font-weight-bold',
+        classes:
+          'multiple-line-table-row-cell multiple-line-table-row-cell-first multiple-line-table-row-cell-header govuk-!-font-weight-bold',
         colspan: 14,
       } as TableRow,
     ])
@@ -1058,6 +1045,26 @@ export const createCommentaryChartSettings = (params: {
       chartEntries: params.chartEntries,
     },
   }
+}
+
+const tooltipOptions = {
+  backgroundColor: '#d9d9d9',
+  cornerRadius: 0,
+  titleColor: BLACK,
+  titleAlign: 'left',
+  titleSpacing: 2,
+  titleMarginBottom: 6,
+  titleFont: {
+    size: 18,
+    family: FONT_FAMILY,
+  },
+  padding: 10,
+  bodyColor: BLACK,
+  bodySpacing: 2,
+  bodyFont: {
+    size: 14,
+    family: FONT_FAMILY,
+  },
 }
 
 export const createCustomArray = (size: number, mainValue: string, lastValue: string): string[] => [

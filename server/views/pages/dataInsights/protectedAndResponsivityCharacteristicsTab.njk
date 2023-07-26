@@ -1,0 +1,126 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
+{% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
+{% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
+{% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
+
+{% set title = "Adjudication data - Protected and responsivity characteristics" %}
+
+{% block pageTitle %}
+  {{ title }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="protected-and-responsivity-characteristics-tab">
+
+    {{ dataInsightsTabHeaderSingular(tabsOptions) }}
+
+    <div>
+      <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="allSelectorParams" value="{{ allSelectorParams | dump }}"/>
+
+        <div class="flex-container {{ allSelectorSettings['characteristic'].class }}">
+          {{ govukSelect({
+            id: allSelectorSettings['characteristic'].id,
+            name: allSelectorSettings['characteristic'].id,
+            label: {
+              text: allSelectorSettings['characteristic'].label,
+              isPageHeading: false,
+              classes: ''
+            },
+            items: allSelectorSettings['characteristic'].items | toSelect('value', 'text', allSelectorParams.characteristic),
+            classes: 'flex-column filter-selector',
+            errorMessage: 'characteristic' | findError(errors)
+          }) }}
+
+          {{ govukButton({
+            text: 'Show results',
+            type: 'submit',
+            preventDoubleClick: true,
+            classes: 'govuk-button--submit govuk-!-margin-right-3 flex-column show-results-button',
+            attributes: { 'data-qa': 'not-proceed-submit' }
+          }) }}
+        </div>
+
+      </form>
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChart(chartSettingMap['2a']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChart(chartSettingMap['2b']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2d'], allSelectorSettings['offenceType'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6 punishment-by-protected-or-responsivity-characteristic">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2e'], allSelectorSettings['punishment'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2f'], allSelectorSettings['plea'], allSelectorParams, csrfToken) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ horizontalBarsChartWithSelect(chartSettingMap['2g'], allSelectorSettings['finding'], allSelectorParams, csrfToken) }}
+    </div>
+
+    {% if allSelectorParams['characteristic'] === 'learning-disability' %}
+      <div>
+        <h3 class="govuk-heading-m govuk-!-margin-bottom-5">About ‘learning disability and other challenges (LDC)’</h3>
+
+        <p class="govuk-body">This data does not represent official statistics and should not be published outside of the MoJ, unless for approved business purposes. Some charts contain information that could identify someone.</p>
+        <p class="govuk-body">LDC is a term used to describe people who are likely to have a lower-than-average intelligence quotient (IQ) and require support in their everyday living and coping with prisons and probation.</p>
+        <p class="govuk-body">These people are:</p>
+        <ul class='govuk-list govuk-list--bullet'>
+          <li class='govuk-!-margin-bottom-1'>often over-represented in adjudications</li>
+          <li class='govuk-!-margin-bottom-1'>associated with being more likely to have further proven misconduct - read evidence</li>
+        </ul>
+        <p class="govuk-body">The learning screening tool uses OASys data to identify people in custody who may have a learning disability or other communication challenge.</p>
+        <p class="govuk-body">The screen is not a way of diagnosing people, but helps you to identify people who may need a different approach or further assessment for their needs.</p>
+        <p class="govuk-body">Counts below 3 are shown as zero to stop personal or sensitive information being disclosed.</p>
+      </div>
+    {% endif %}
+
+    {% if allSelectorParams['characteristic'] === 'maturity' %}
+      <div>
+        <h3 class="govuk-heading-m govuk-!-margin-bottom-5">About ‘maturity’</h3>
+
+        <p class="govuk-body">This identifies young adults with low psychosocial maturity. This is about people’s ability to manage themselves and relationships with others. It includes managing emotions, perspective taking, taking responsibility for actions and resisting peer influence.</p>
+        <p class="govuk-body">These people are:</p>
+        <ul class='govuk-list govuk-list--bullet'>
+          <li class='govuk-!-margin-bottom-1'>often over-represented in adjudications</li>
+          <li class='govuk-!-margin-bottom-1'>associated with being more likely to have further proven misconduct - read evidence</li>
+        </ul>
+        <p class="govuk-body">The maturity screening result is only for males aged 18-25 with a complete OASys.</p>
+        <p class="govuk-body">It helps you target resources and support this group to get better results. It supports staff to take maturity into account when dealing with young adults and how they engage with or respond to day-to-day life in prison, regimes, licence conditions and community supervision.</p>
+        <p class="govuk-body">Counts below 3 are shown as zero to stop personal or sensitive information being disclosed.</p>
+      </div>
+    {% endif %}
+
+    <div class="govuk-!-margin-bottom-6 govuk-!-margin-top-8">
+      {{ officialSensitiveBanner() }}
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script type="text/javascript" src="/assets/js/chart.umd.js"></script>
+  <script type="text/javascript" src="/assets/js/displayChart.js"></script>
+  <script id="chart-settings" type="text/javascript" src="/assets/js/loadChart.js"
+          data-chart-settings="{{ chartSettingMap | dump }}"></script>
+{% endblock %}

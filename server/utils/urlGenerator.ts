@@ -807,7 +807,7 @@ const adjudicationUrls = {
     matchers: {
       start: '/',
       totalsAdjudicationsAndLocations: '/totals-adjudications-and-locations',
-      protectedCharacteristicsAndVulnerabilities: '/protected-characteristics-and-vulnerabilities',
+      protectedAndResponsivityCharacteristics: '/protected-and-responsivity-characteristics',
       offenceType: '/offence-type',
       punishments: '/punishments',
       pleasAndFindings: '/pleas-and-findings',
@@ -816,12 +816,12 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.start}`,
       totalsAdjudicationsAndLocations: () =>
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
-      protectedCharacteristicsAndVulnerabilities: (params: object = {}) => {
+      protectedAndResponsivityCharacteristics: (params: object = {}) => {
         const queryParams = Object.keys(params)
           .map(key => `${key}=${params[key]}`)
           .join('&')
         return `${adjudicationUrls.dataInsights.root}${
-          adjudicationUrls.dataInsights.matchers.protectedCharacteristicsAndVulnerabilities
+          adjudicationUrls.dataInsights.matchers.protectedAndResponsivityCharacteristics
         }${queryParams ? `?${queryParams}` : ''}`
       },
       offenceType: (params: object = {}) => {

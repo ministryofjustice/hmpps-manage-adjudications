@@ -65,7 +65,8 @@ export default class OffenceTypeTabPage {
       await this.chartApiService.getChart(username, agencyId, '3a'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
-      { source: (row: ChartEntryHorizontalBar) => row.count }
+      { source: (row: ChartEntryHorizontalBar) => row.count },
+      'Count'
     )
 
     const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')
@@ -84,6 +85,7 @@ export default class OffenceTypeTabPage {
       agencyId,
       'Adjudication offence type by location - last 30 days',
       'Select an offence type to see where offences took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
+      'Only locations with at least 1 adjudication are shown.',
       chartDetails3b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
@@ -110,6 +112,7 @@ export default class OffenceTypeTabPage {
           label: 'Select offence type',
           items: offenceTypes,
           class: 'offenceType-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--submit',
         },
       },
     })

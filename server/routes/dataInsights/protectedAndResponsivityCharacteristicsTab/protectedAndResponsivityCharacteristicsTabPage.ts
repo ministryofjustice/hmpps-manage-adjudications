@@ -38,7 +38,7 @@ const getHorizontalBarsChartHeadByCharacteristic = (
   return head
 }
 
-export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
+export default class ProtectedAndResponsivityCharacteristicsTabPage {
   pageOptions: PageOptions
 
   constructor(private readonly chartApiService: ChartApiService) {
@@ -54,16 +54,13 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
     const chartSettingMap = {}
 
     const chartDetails2a = await this.chartApiService.getChart(username, agencyId, '2a')
-    const protectedCharacteristics: DropDownEntry[] = getUniqueItems(
-      chartDetails2a.chartEntries as ChartEntryHorizontalBar[],
-      {
-        source: (row: ChartEntryHorizontalBar) => row.characteristic,
-      }
-    )
+    const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {
+      source: (row: ChartEntryHorizontalBar) => row.characteristic,
+    })
     const characteristic: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
-      protectedCharacteristics,
+      characteristics,
       req.query.characteristic as string,
-      protectedCharacteristics.length > 0 ? protectedCharacteristics[0] : undefined
+      characteristics.length > 0 ? characteristics[0] : undefined
     )
     chartSettingMap['2a'] = await produceHorizontalBarsChart(
       '2a',
@@ -71,6 +68,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       agencyId,
       'Overview of prisoners in the establishment - last 30 days',
       'This chart shows the recent numbers of prisoners in your establishment in each sub-group of the selected characteristic. It provides context and a comparison for the subsequent charts.',
+      '',
       chartDetails2a,
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
@@ -94,6 +92,7 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       agencyId,
       'Adjudication reports by protected or responsivity characteristic - last 30 days',
       'Use this chart to see adjudications by this characteristic and compare them to prison numbers. Are there any imbalances you might want to explore further?',
+      '',
       await this.chartApiService.getChart(username, agencyId, '2b'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
@@ -121,7 +120,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       username,
       agencyId,
       'Adjudication offence type by protected or responsivity characteristic - last 30 days',
-      'Select an offence type to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select an offence type to explore differences within this characteristic. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      '',
       chartDetails2d,
       {
         filter: (row: ChartEntryHorizontalBar) =>
@@ -139,24 +139,25 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
     )
 
     const chartDetails2e = await this.chartApiService.getChart(username, agencyId, '2e')
-    const sanctions: DropDownEntry[] = getUniqueItems(chartDetails2e.chartEntries as ChartEntryHorizontalBar[], {
+    const punishments: DropDownEntry[] = getUniqueItems(chartDetails2e.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.sanction,
     })
-    const sanction: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
-      sanctions,
-      req.query.sanction as string,
-      sanctions.length > 0 ? sanctions[0] : undefined
+    const punishment: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
+      punishments,
+      req.query.punishment as string,
+      punishments.length > 0 ? punishments[0] : undefined
     )
     chartSettingMap['2e'] = await produceHorizontalBarsChart(
       '2e',
       username,
       agencyId,
       'Punishment by protected or responsivity characteristic - last 30 days',
-      'Select a punishment type to explore differences between characteristics. Compared  to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select a punishment type to explore differences within this. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      '',
       chartDetails2e,
       {
         filter: (row: ChartEntryHorizontalBar) =>
-          row.characteristic === characteristic?.text && row.sanction === sanction?.text,
+          row.characteristic === characteristic?.text && row.sanction === punishment?.text,
       },
       { source: (row: ChartEntryHorizontalBar) => row.value },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
@@ -187,7 +188,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       username,
       agencyId,
       'Plea by protected or responsivity characteristic - last 30 days',
-      'Select a plea to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select a plea to explore differences within this characteristic. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      '',
       chartDetails2f,
       {
         filter: (row: ChartEntryHorizontalBar) =>
@@ -218,7 +220,8 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       username,
       agencyId,
       'Finding by protected or responsivity characteristic - last 30 days',
-      'Select a finding to explore differences between characteristics. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select a finding to explore differences within this characteristic. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      '',
       chartDetails2g,
       {
         filter: (row: ChartEntryHorizontalBar) =>
@@ -235,47 +238,52 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
       'Percentage'
     )
 
-    return res.render(`pages/dataInsights/protectedCharacteristicsAndVulnerabilitiesTab.njk`, {
+    return res.render(`pages/dataInsights/protectedAndResponsivityCharacteristicsTab.njk`, {
       errors: error ? [error] : [],
-      tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_CHARACTERISTICS_AND_VULNERABILITIES),
+      tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_AND_RESPONSIVITY_CHARACTERISTICS),
       chartSettingMap,
       allSelectorParams: {
         characteristic: characteristic?.value,
         offenceType: offenceType?.value,
-        sanction: sanction?.value,
+        punishment: punishment?.value,
         plea: plea?.value,
         finding: finding?.value,
       },
       allSelectorSettings: {
         characteristic: {
           id: 'characteristic',
-          label: 'Select a protected characteristic or vulnerability',
-          items: protectedCharacteristics,
-          class: 'protected-characteristic-or-vulnerability',
+          label: 'Select a characteristic',
+          items: characteristics,
+          class: 'characteristic-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--submit',
         },
         offenceType: {
           id: 'offenceType',
           label: 'Select offence type',
           items: offenceTypes,
           class: 'offenceType-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--secondary',
         },
-        sanction: {
-          id: 'sanction',
+        punishment: {
+          id: 'punishment',
           label: 'Select punishment type',
-          items: sanctions,
-          class: 'sanction-type-selector',
+          items: punishments,
+          class: 'punishment-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--secondary',
         },
         plea: {
           id: 'plea',
           label: 'Select plea',
           items: pleas,
           class: 'plea-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--secondary',
         },
         finding: {
           id: 'finding',
           label: 'Select finding',
           items: findings,
           class: 'finding-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--secondary',
         },
       },
     })
@@ -286,15 +294,15 @@ export default class ProtectedCharacteristicsAndVulnerabilitiesTabPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { characteristic, offenceType, sanction, plea, finding, allSelectorParams } = req.body
+    const { characteristic, offenceType, punishment, plea, finding, allSelectorParams } = req.body
     const params = {
       ...JSON.parse(allSelectorParams),
       ...(characteristic !== undefined ? { characteristic } : {}),
       ...(offenceType !== undefined ? { offenceType } : {}),
-      ...(sanction !== undefined ? { sanction } : {}),
+      ...(punishment !== undefined ? { punishment } : {}),
       ...(plea !== undefined ? { plea } : {}),
       ...(finding !== undefined ? { finding } : {}),
     }
-    return res.redirect(adjudicationUrls.dataInsights.urls.protectedCharacteristicsAndVulnerabilities(params))
+    return res.redirect(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(params))
   }
 }

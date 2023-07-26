@@ -41,7 +41,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports created - over 24 months',
       'This is a high-level view of adjudication reports created over time. What do recent numbers tell you about prison stability? Are there any surprises or possible actions?',
-      await this.chartApiService.getChart(username, agencyId, '1a')
+      await this.chartApiService.getChart(username, agencyId, '1a'),
+      'Number'
     )
 
     chartSettingMap['1b'] = await produceVerticalBarsAndLineCharts(
@@ -50,7 +51,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports referred to independent adjudicator - over 24 months',
       'This chart shows adjudications which had at least 1 hearing with an independent adjudicator. Use it to explore any concerns you may have about numbers being referred to IAs. What do the numbers tell you about possible actions and future trends?',
-      await this.chartApiService.getChart(username, agencyId, '1b')
+      await this.chartApiService.getChart(username, agencyId, '1b'),
+      'Number'
     )
 
     chartSettingMap['1c'] = await produceCommentaryChart(
@@ -75,7 +77,8 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       username,
       agencyId,
       'Adjudication reports by location of adjudication incident - last 30 days',
-      'Use this chart to see where recent rule-breaking took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness. ',
+      'Use this chart to see where recent rule-breaking took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
+      'Only locations with at least 1 adjudication are shown.',
       await this.chartApiService.getChart(username, agencyId, '1d'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
@@ -95,6 +98,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports by residential location of prisoner - last 30 days',
       'Use this chart to explore where prisoners who broke the rules live. This may give you insights into the different residential populations, staff cultures, and could help inform keyworker priorities.',
+      'Only locations with at least 1 adjudication are shown.',
       await this.chartApiService.getChart(username, agencyId, '1f'),
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.wing_loc },

@@ -46,7 +46,8 @@ export default class PunishmentsTabPage {
       await this.chartApiService.getChart(username, agencyId, '4a'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.sanction },
-      { source: (row: ChartEntryHorizontalBar) => row.count }
+      { source: (row: ChartEntryHorizontalBar) => row.count },
+      'Count'
     )
 
     const chartDetails4b = await this.chartApiService.getChart(username, agencyId, '4b')
@@ -64,11 +65,12 @@ export default class PunishmentsTabPage {
       username,
       agencyId,
       'Punishments given for each adjudication offence type - current month and previous 12 months',
-      'Select an offence type to explore patterns of punishments given. Are you content with the consistency and appropriateness of the punishments? Are there any insights to inform actions? ',
+      'Select an offence type to explore patterns of punishments given. Are you content with the consistency and appropriateness of the punishments? Are there any insights to inform actions?',
       chartDetails4b,
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryLine) => row.sanction },
-      { source: (row: ChartEntryHorizontalBar) => row.count }
+      { source: (row: ChartEntryHorizontalBar) => row.count },
+      'Count'
     )
 
     chartSettingMap['4c'] = await produceMultiVerticalBarsCharts(
@@ -76,12 +78,13 @@ export default class PunishmentsTabPage {
       username,
       agencyId,
       'Suspended and activated punishments - current month and last 12 months',
-      'This chart shows suspended punishments as a proportion of total punishments given. Are you content with these levels and any trends shown.',
+      'This chart shows suspended punishments as a proportion of total punishments given. Are you content with these levels and any trends shown?',
       await this.chartApiService.getChart(username, agencyId, '4c'),
       { source: (row: ChartEntryLine) => row.status },
       { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
       { source: (row: ChartEntryLine) => `${row.year}-${row.month}` },
-      { source: (row: ChartEntryLine) => row.count }
+      { source: (row: ChartEntryLine) => row.count },
+      'Percentage'
     )
 
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {
@@ -97,6 +100,7 @@ export default class PunishmentsTabPage {
           label: 'Select offence type',
           items: offenceTypes,
           class: 'offenceType-type-selector',
+          selectorSubmitButtonClass: 'govuk-button--submit',
         },
       },
     })
