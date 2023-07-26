@@ -1,0 +1,11 @@
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% macro giveFeedbackBanner() %}
+	{{ govukPhaseBanner({
+		tag: {
+			text: "Give feedback"
+		},
+		html: '<a href="mailto:adjudications@digital.justice.gov.uk?subject=Adjudications data feedback">Email your feedback</a> to help us improve this new service',
+		classes: 'govuk-!-padding-bottom-5'
+	}) }}
+{% endmacro %}
