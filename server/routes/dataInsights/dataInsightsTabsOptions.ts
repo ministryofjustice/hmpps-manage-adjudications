@@ -1,4 +1,6 @@
+import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
+import config from '../../config'
 
 export const enum DataInsightsTab {
   TOTALS_ADJUDICATIONS_AND_LOCATIONS = 'totalsAdjudicationsAndLocations',
@@ -45,4 +47,16 @@ export function getDataInsightsTabsOptions(activeTab: string) {
       },
     ],
   }
+}
+
+export const checkDataInsightsPermissions = (
+  req: Request,
+  res: Response,
+  pageViewCallBack: (req: Request, res: Response) => void
+) => {
+  const { activeCaseLoadId } = res.locals.user
+  if (config.dataInsightsFlag === 'true' && ['RNI'].includes(activeCaseLoadId)) {
+    return pageViewCallBack(req, res)
+  }
+  return res.redirect(adjudicationUrls.homepage.root)
 }

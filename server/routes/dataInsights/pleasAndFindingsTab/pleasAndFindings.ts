@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ChartApiService from '../../../services/chartApiService'
 import PleasAndFindingsTabPage from './pleasAndFindingsTabPage'
+import { checkDataInsightsPermissions } from '../dataInsightsTabsOptions'
 
 export default class PleasAndFindingsRoutes {
   page: PleasAndFindingsTabPage
@@ -10,6 +11,6 @@ export default class PleasAndFindingsRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    await this.page.view(req, res)
+    await checkDataInsightsPermissions(req, res, this.page.view)
   }
 }
