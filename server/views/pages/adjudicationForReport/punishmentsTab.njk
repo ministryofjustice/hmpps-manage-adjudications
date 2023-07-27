@@ -85,9 +85,8 @@
   {% if (chargeProved or quashed) and not outcomeEnteredInNomis %}
     <div data-qa="punishment-comments-section">
 
-      <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
-
       {% if punishmentComments | length > 0 %}
+        <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
         {{ punishmentCommentTable(punishmentComments, isReporter) }}
       {% endif %}
 
