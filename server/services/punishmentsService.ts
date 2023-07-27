@@ -10,12 +10,13 @@ import {
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
 } from '../data/PunishmentResult'
-import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../data/manageAdjudicationsClient'
 import PrisonApiClient, { SanctionStatus } from '../data/prisonApiClient'
-import { convertToTitleCase } from '../utils/utils'
+import { convertToTitleCase, formatTimestampTo, getFormattedOfficerName } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
 import logger from '../../logger'
+import adjudicationUrls from '../utils/urlGenerator'
 
 export default class PunishmentsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -226,5 +227,29 @@ export default class PunishmentsService {
       logger.error(`Invalid charge number - ${error.status}: ${error.text}`)
       return false
     }
+  }
+
+  async formatPunishmentComments(reportedAdjudication: ReportedAdjudication, adjudicationNumber: number, user: User) {
+    const { punishmentComments } = reportedAdjudication
+    const usernames = new Set(punishmentComments.map(it => it.createdByUserId))
+    const users = await Promise.all(
+      Array.from(usernames).map(async username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+    )
+    const names: { [key: string]: string } = Object.fromEntries(
+      users.map(it => [it.username, getFormattedOfficerName(it.name)])
+    )
+
+    return punishmentComments.map(comment => {
+      return {
+        id: comment.id,
+        comment: comment.comment,
+        date: formatTimestampTo(comment.dateTime, 'D MMMM YYYY'),
+        time: formatTimestampTo(comment.dateTime, 'HH:mm'),
+        name: names[comment.createdByUserId],
+        changeLink: adjudicationUrls.punishmentComment.urls.edit(adjudicationNumber, comment.id),
+        removeLink: adjudicationUrls.punishmentComment.urls.delete(adjudicationNumber, comment.id),
+        isOwner: user.username === comment.createdByUserId,
+      }
+    })
   }
 }

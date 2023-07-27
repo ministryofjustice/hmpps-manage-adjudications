@@ -8,7 +8,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
 import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { User } from '../../../data/hmppsAuthClient'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/punishmentsService.ts')
@@ -41,15 +40,18 @@ beforeEach(() => {
     transferBannerContent: null,
     originatingAgencyToAddOutcome: false,
   })
-  userService.getStaffNameFromUsername.mockResolvedValue({
-    username: 'SMITH',
-    name: 'JOHN SMITH',
-    activeCaseLoadId: '',
-    token: 'some token',
-    authSource: '',
-    userId: 'SMITH',
-  } as User)
-
+  punishmentsService.formatPunishmentComments.mockResolvedValue([
+    {
+      id: 1,
+      comment: 'punishment comment text',
+      date: '1 January 2023',
+      time: '06:00',
+      name: 'J. Smith',
+      changeLink: '',
+      removeLink: '',
+      isOwner: true,
+    },
+  ])
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, punishmentsService, userService })
 })
 
