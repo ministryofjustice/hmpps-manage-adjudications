@@ -122,9 +122,6 @@ export default class PunishmentsTabPage {
       user
     )
 
-    console.log('HIYA!')
-    console.log(this.pageOptions.isReviewer())
-
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
