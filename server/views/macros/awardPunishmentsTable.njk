@@ -18,7 +18,7 @@
 
     {% if data.consecutiveReportNumber %}
       {% if data.consecutiveReportAvailable and consecutiveReportLinkAvailable %}
-        {% set typeColumnValue = typeColumnValue + '<br> (consecutive to charge <a href="'+ adjudicationUrls.punishmentsAndDamages.urls.review(data.consecutiveReportNumber) +'">' + data.consecutiveReportNumber + '</a>)' %}
+        {% set typeColumnValue = typeColumnValue + '<br> (consecutive to charge <a data-qa="consecutive-link" href="'+ adjudicationUrls.punishmentsAndDamages.urls.review(data.consecutiveReportNumber) +'">' + data.consecutiveReportNumber + '</a>)' %}
       {% else %}
         {% set typeColumnValue = typeColumnValue + '<br>(consecutive to charge ' + data.consecutiveReportNumber + ')' %}
     {% endif %}

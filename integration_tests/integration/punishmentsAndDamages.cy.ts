@@ -67,6 +67,15 @@ context('Damages and punishments summary', () => {
                 endDate: '2023-04-20',
               },
             },
+            {
+              id: 352,
+              type: PunishmentType.ADDITIONAL_DAYS,
+              schedule: {
+                days: 5,
+              },
+              consecutiveReportNumber: 1525853,
+              consecutiveReportAvailable: true,
+            },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
@@ -460,6 +469,14 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
+    it('should not have a hyperlink on the consecutive report content', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.get('[data-qa="consecutive-link"]').should('exist')
+      cy.get('[data-qa="consecutive-link"]').click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(1525853))
+      })
+    })
     it('should not have any buttons or change links if outcome entered in NOMIS - charge proved, punishments present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(111))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
@@ -695,6 +712,15 @@ context('Reporter view', () => {
                 endDate: '2023-04-20',
               },
             },
+            {
+              id: 352,
+              type: PunishmentType.ADDITIONAL_DAYS,
+              schedule: {
+                days: 5,
+              },
+              consecutiveReportNumber: 1525853,
+              consecutiveReportAvailable: true,
+            },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
@@ -788,5 +814,9 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
+  })
+  it('should not have a hyperlink on the consecutive report content', () => {
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(102))
+    cy.get('[data-qa="consecutive-link"]').should('not.exist')
   })
 })

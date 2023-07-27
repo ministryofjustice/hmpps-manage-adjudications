@@ -17,6 +17,10 @@ export enum PageRequestType {
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
+  isReviewer(): boolean {
+    return this.pageType === PageRequestType.REVIEWER
+  }
+
   isReporter(): boolean {
     return this.pageType === PageRequestType.REPORTER
   }
@@ -118,6 +122,9 @@ export default class PunishmentsTabPage {
       user
     )
 
+    console.log('HIYA!')
+    console.log(this.pageOptions.isReviewer())
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.adjudicationNumber,
@@ -133,6 +140,7 @@ export default class PunishmentsTabPage {
       moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
       cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
       punishments,
+      consecutiveReportLinkAvailable: this.pageOptions.isReviewer(),
       punishmentComments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
       transferBannerContent: getTransferBannerInfo.transferBannerContent,

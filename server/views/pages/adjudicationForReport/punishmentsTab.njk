@@ -27,7 +27,7 @@
     {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, readOnly, moneyChangeLinkHref, cautionChangeLinkHref) }}
 
     {% if punishments | length %}
-      {{ awardPunishmentsTable(punishments, null, reportNo, true, true) }}
+      {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
 
       {% if not readOnly %}
         <div>
@@ -54,12 +54,12 @@
     {% elif not readOnly and not caution %}
       <div>
         {{ govukButton({
-              text: 'Award punishments',
-              element: "a",
-              href: adjudicationUrls.awardPunishments.urls.start(reportNo),
-              classes: "govuk-button--submit govuk-!-margin-right-3",
-              attributes: { "data-qa": "award-punishments" }
-            }) }}
+          text: 'Award punishments',
+          element: "a",
+          href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "award-punishments" }
+        }) }}
       </div>
     {% endif %}
 
@@ -73,7 +73,7 @@
         }
       }) }}
     {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, true) }}
-    {{ awardPunishmentsTable(punishments, null, reportNo, true, true) }}
+    {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
 
   {% else %}
     <div data-qa="no-punishments">
