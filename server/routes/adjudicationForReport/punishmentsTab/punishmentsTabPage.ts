@@ -5,7 +5,6 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
-import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
 import UserService from '../../../services/userService'
 
 export enum PageRequestType {

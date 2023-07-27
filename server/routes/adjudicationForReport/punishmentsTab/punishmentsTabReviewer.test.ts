@@ -8,7 +8,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
 import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { User } from '../../../data/hmppsAuthClient'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/punishmentsService.ts')
