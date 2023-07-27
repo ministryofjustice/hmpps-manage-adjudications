@@ -5,7 +5,6 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
-import { formatTimestampTo, getFormattedOfficerName } from '../../../utils/utils'
 import UserService from '../../../services/userService'
 
 export enum PageRequestType {
@@ -91,31 +90,11 @@ export default class PunishmentsTabPage {
       await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
     )
 
-    const usernames = new Set(reportedAdjudication.punishmentComments.map(it => it.createdByUserId))
-    const users = await Promise.all(
-      Array.from(usernames).map(async username => this.userService.getStaffNameFromUsername(username, user))
+    const punishmentComments = await this.punishmentsService.formatPunishmentComments(
+      reportedAdjudication,
+      adjudicationNumber,
+      user
     )
-    const names: { [key: string]: string } = Object.fromEntries(
-      users.map(it => [it.username, getFormattedOfficerName(it.name)])
-    )
-
-    const punishmentComments = []
-    // eslint-disable-next-line no-restricted-syntax
-    for (const punishmentComment of reportedAdjudication.punishmentComments) {
-      const { dateTime } = punishmentComment
-
-      const comment = {
-        id: punishmentComment.id,
-        comment: punishmentComment.comment,
-        date: formatTimestampTo(dateTime, 'D MMMM YYYY'),
-        time: formatTimestampTo(dateTime, 'HH:mm'),
-        name: names[punishmentComment.createdByUserId],
-        changeLink: adjudicationUrls.punishmentComment.urls.edit(adjudicationNumber, punishmentComment.id),
-        removeLink: adjudicationUrls.punishmentComment.urls.delete(adjudicationNumber, punishmentComment.id),
-        isOwner: user.username === punishmentComment.createdByUserId,
-      }
-      punishmentComments.push(comment)
-    }
 
     const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
       reportedAdjudication,

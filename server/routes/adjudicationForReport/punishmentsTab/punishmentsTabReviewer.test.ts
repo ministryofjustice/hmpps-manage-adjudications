@@ -8,7 +8,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
 import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { User } from '../../../data/hmppsAuthClient'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/punishmentsService.ts')
@@ -43,14 +42,18 @@ beforeEach(() => {
     originatingAgencyToAddOutcome: false,
   })
 
-  userService.getStaffNameFromUsername.mockResolvedValue({
-    username: 'user1',
-    name: 'JOHN SMITH',
-    activeCaseLoadId: '',
-    token: 'some token',
-    authSource: '',
-    userId: 'user1',
-  } as User)
+  punishmentsService.formatPunishmentComments.mockResolvedValue([
+    {
+      id: 1,
+      comment: 'punishment comment text',
+      date: '1 January 2023',
+      time: '06:00',
+      name: 'J. Smith',
+      changeLink: '',
+      removeLink: '',
+      isOwner: true,
+    },
+  ])
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, punishmentsService, userService })
 })
@@ -83,8 +86,8 @@ describe('GET Punishments and damages tab', () => {
         expect(response.text).toContain('J. Smith')
         expect(response.text).toContain('06:00')
         expect(response.text).toContain('punishment comment text')
-        expect(response.text).toContain('>Change<')
-        expect(response.text).toContain('>Remove<')
+        expect(response.text).toContain('Change')
+        expect(response.text).toContain('Remove')
         expect(response.text).toContain('Add comment')
         expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(1)
       })
