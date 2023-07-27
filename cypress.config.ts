@@ -28,8 +28,31 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
         getSignInUrl: auth.getSignInUrl,
-        stubSignIn: (caseLoads: CaseLoad[]) =>
-          Promise.all([
+        stubSignIn: (caseLoads: CaseLoad[]) => {
+          const userCaseLoads: CaseLoad[] = caseLoads || [
+            {
+              caseLoadId: 'MDI',
+              description: 'Moorland (HMP & YOI)',
+              type: 'INST',
+              caseloadFunction: 'TEST',
+              currentlyActive: true,
+            },
+          ]
+          const agencyIdResponse =
+            userCaseLoads.length > 0
+              ? {
+                  agencyId: userCaseLoads[0].caseLoadId,
+                  response: {
+                    agencyId: userCaseLoads[0].caseLoadId,
+                    description: userCaseLoads[0].description,
+                  },
+                }
+              : {
+                  agencyId: 'MDI',
+                  response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
+                }
+
+          return Promise.all([
             auth.stubSignIn(),
             adjudications.stubGetAgencyReportCounts({
               response: {
@@ -37,18 +60,15 @@ export default defineConfig({
                 transferReviewTotal: 1,
               },
             }),
-            prisonApi.stubUserCaseloads(caseLoads),
-            prisonApi.stubGetAgency({
-              agencyId: 'MDI',
-              response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' },
-            }),
-          ]),
-
+            prisonApi.stubUserCaseloads(userCaseLoads),
+            prisonApi.stubGetAgency(agencyIdResponse),
+          ])
+        },
         stubGetUserFromUsername: auth.stubGetUserFromUsername,
 
         stubSearch: prisonerSearch.stubSearch,
         stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
-        stubAuthUser: auth.stubUser,
+        stubAuthUser: auth.stubAuthUser,
         stubUserOriginatingAgency: auth.stubUserOriginatingAgency,
         stubUserRoles: auth.stubUserRoles,
         stubGetUser: auth.stubGetUser,

@@ -202,7 +202,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
         { source: (row: ChartEntryHorizontalBar) => `${Math.trunc(row.proportion * 100)}%` },
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
-      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of please', 'Number of please'),
+      getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of pleas', 'Number of pleas'),
       'Percentage'
     )
 

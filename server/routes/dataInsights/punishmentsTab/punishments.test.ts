@@ -5,6 +5,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import config from '../../../config'
 import ChartApiService from '../../../services/chartApiService'
 import TestData from '../../testutils/testData'
+import * as dataInsightsTabsOptions from '../dataInsightsTabsOptions'
 
 jest.mock('../../../services/chartApiService.ts')
 
@@ -15,23 +16,24 @@ let app: Express
 const defaultConfig = config
 
 beforeEach(() => {
+  jest.spyOn(dataInsightsTabsOptions, 'getActiveCaseLoadId').mockReturnValue('RNI')
   chartApiService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '4a',
       chartEntries: [],
     })
   )
   chartApiService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '4b',
       chartEntries: [],
     })
   )
   chartApiService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
-      agencyId: 'MDI',
+      agencyId: 'RNI',
       chartName: '4c',
       chartEntries: [],
     })

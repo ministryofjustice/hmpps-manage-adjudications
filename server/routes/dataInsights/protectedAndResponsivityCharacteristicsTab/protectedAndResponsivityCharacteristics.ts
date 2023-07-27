@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ChartApiService from '../../../services/chartApiService'
 import ProtectedAndResponsivityCharacteristicsTabPage from './protectedAndResponsivityCharacteristicsTabPage'
+import { checkDataInsightsPermissions } from '../dataInsightsTabsOptions'
 
 export default class ProtectedAndResponsivityCharacteristicsRoutes {
   page: ProtectedAndResponsivityCharacteristicsTabPage
@@ -10,7 +11,7 @@ export default class ProtectedAndResponsivityCharacteristicsRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    await this.page.view(req, res)
+    await checkDataInsightsPermissions(req, res, this.page.view)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
