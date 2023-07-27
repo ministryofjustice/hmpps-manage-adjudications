@@ -469,7 +469,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
-    it('should not have a hyperlink on the consecutive report content', () => {
+    it('should have a hyperlink on the consecutive report content', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
       cy.get('[data-qa="consecutive-link"]').should('exist')
       cy.get('[data-qa="consecutive-link"]').click()
