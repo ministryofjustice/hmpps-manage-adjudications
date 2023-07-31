@@ -19,7 +19,7 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {% if punishments | length %}
-        {{ awardPunishmentsTable(punishments, redirectAfterRemoveUrl, adjudicationNumber, false, false) }}
+        {{ awardPunishmentsTable(punishments, redirectAfterRemoveUrl, chargeNumber, false, false) }}
       {% else %}
         <p class="govuk-body">No punishments have been awarded for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments below.</p>
       {% endif %}
@@ -28,7 +28,7 @@
         {{ govukButton({
         text: 'Add a new punishment',
         element: "a",
-        href: adjudicationUrls.punishment.urls.start(adjudicationNumber),
+        href: adjudicationUrls.punishment.urls.start(chargeNumber),
         classes: "govuk-button--secondary govuk-!-margin-bottom-3",
         attributes: { "data-qa": "add-new-punishment-button" }
       }) }}
@@ -37,7 +37,7 @@
         {{ govukButton({
         text: 'Activate an existing suspended punishment',
         element: "a",
-        href: adjudicationUrls.activateSuspendedPunishments.urls.start(adjudicationNumber),
+        href: adjudicationUrls.activateSuspendedPunishments.urls.start(chargeNumber),
         classes: "govuk-button--secondary govuk-!-margin-bottom-5",
         attributes: { "data-qa": "activate-suspended-punishment-button" }
       }) }}

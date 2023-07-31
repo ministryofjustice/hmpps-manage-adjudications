@@ -58,7 +58,7 @@ afterEach(() => {
 describe('GET /damages/100', () => {
   it('should load the damages page with details from the session', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfDamages.urls.modified(100))
+      .get(adjudicationUrls.detailsOfDamages.urls.modified('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Redecoration')
@@ -68,7 +68,7 @@ describe('GET /damages/100', () => {
   })
   it('should use the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfDamages.urls.modified(100))
+      .get(adjudicationUrls.detailsOfDamages.urls.modified('100'))
       .expect(200)
       .then(() => expect(damagesSessionService.setAllSessionDamages).not.toHaveBeenCalled())
       .then(() => expect(damagesSessionService.getAllSessionDamages).toHaveBeenCalledWith(expect.anything(), 100))
@@ -79,7 +79,7 @@ describe('POST', () => {
   it('should call the save endpoint with evidence present', () => {
     const damagesToSave = [testData.singleDamage({}), testData.singleDamage({})]
     return request(app)
-      .post(adjudicationUrls.detailsOfDamages.urls.modified(100))
+      .post(adjudicationUrls.detailsOfDamages.urls.modified('100'))
       .expect(302)
       .then(() =>
         expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith(100, damagesToSave, expect.anything())

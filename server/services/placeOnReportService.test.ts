@@ -204,6 +204,7 @@ describe('placeOnReportService', () => {
         draftAdjudication: testData.draftAdjudication({
           id: 10,
           adjudicationNumber: 123456,
+          chargeNumber: '123456',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:21:00',
@@ -408,7 +409,7 @@ describe('placeOnReportService', () => {
         }),
       })
 
-      const response = await service.getDraftIncidentDetailsForEditing(4, user)
+      const response = await service.getDraftIncidentDetailsForEditing('4', user)
       expect(response).toEqual(expectedResult)
     })
   })

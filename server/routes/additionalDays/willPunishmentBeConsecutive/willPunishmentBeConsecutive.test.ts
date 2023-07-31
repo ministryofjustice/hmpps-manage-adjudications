@@ -41,7 +41,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentConsecutive.urls.start(100))
+      .get(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -52,7 +52,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentConsecutive.urls.start(100))
+      .get(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Will this punishment be consecutive to another one given to John Smith')
@@ -65,7 +65,7 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.start(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )
       .send({
@@ -75,7 +75,7 @@ describe('POST', () => {
       .expect(
         'Location',
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10&consecutive=yes`
       )
   })
@@ -83,7 +83,7 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.start(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )
       .send({
@@ -102,6 +102,6 @@ describe('POST', () => {
           100
         )
       })
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
   })
 })

@@ -7,13 +7,13 @@ export default class PrintReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { referrer } = req.query
     const { user } = res.locals
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
     return res.render(`pages/printReport`, {
-      adjudicationNumber,
+      chargeNumber,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'dddd, D MMMM yyyy'),
       prisonerFirstAndLastName: formatName(adjudicationDetails.prisonerFirstName, adjudicationDetails.prisonerLastName),

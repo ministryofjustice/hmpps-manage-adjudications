@@ -48,7 +48,7 @@ describe('GET hearing details page - reviewer version', () => {
     reportedAdjudicationsService.getOutcomesHistory.mockResolvedValue([])
     reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails.mockResolvedValue(null as never)
     return request(app)
-      .get(adjudicationUrls.hearingDetails.urls.review(1524493))
+      .get(adjudicationUrls.hearingDetails.urls.review('1524493'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
@@ -100,7 +100,7 @@ describe('GET hearing details page - reviewer version', () => {
       },
     ])
     return request(app)
-      .get(adjudicationUrls.hearingDetails.urls.review(1524495))
+      .get(adjudicationUrls.hearingDetails.urls.review('1524495'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Charge proved beyond reasonable doubt')
@@ -112,7 +112,7 @@ describe('GET hearing details page - reviewer version', () => {
 describe('POST cancel hearing', () => {
   it('should call the cancel endpoint if user cancels a hearing', () => {
     return request(app)
-      .post(adjudicationUrls.hearingDetails.urls.review(1524494))
+      .post(adjudicationUrls.hearingDetails.urls.review('1524494'))
       .send({ removeHearingButton: 'cancelHearingButton-101' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)

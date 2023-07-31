@@ -64,8 +64,8 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getReportedAdjudicationDetails(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+  async getReportedAdjudicationDetails(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
   }
 
   async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {
@@ -131,8 +131,8 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportData> {
-    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+  async getConfirmationDetails(chargeNumber: string, user: User): Promise<ConfirmedOnReportData> {
+    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
@@ -177,8 +177,8 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getSimpleConfirmationDetails(adjudicationNumber: number, user: User): Promise<ConfirmedOnReportChangedData> {
-    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+  async getSimpleConfirmationDetails(chargeNumber: string, user: User): Promise<ConfirmedOnReportChangedData> {
+    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
@@ -313,13 +313,13 @@ export default class ReportedAdjudicationsService {
   }
 
   async updateAdjudicationStatus(
-    adjudicationNumber: number,
+    chargeNumber: string,
     status: ReviewStatus,
     reason: string,
     details: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateAdjudicationStatus(adjudicationNumber, {
+    return new ManageAdjudicationsClient(user).updateAdjudicationStatus(chargeNumber, {
       status,
       statusReason: reason,
       statusDetails: details,
@@ -327,27 +327,27 @@ export default class ReportedAdjudicationsService {
   }
 
   async updateDamageDetails(
-    adjudicationNumber: number,
+    chargeNumber: string,
     damages: DamageDetails[],
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateDamageDetails(adjudicationNumber, damages)
+    return new ManageAdjudicationsClient(user).updateDamageDetails(chargeNumber, damages)
   }
 
   async updateEvidenceDetails(
-    adjudicationNumber: number,
+    chargeNumber: string,
     evidence: EvidenceDetails[],
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateEvidenceDetails(adjudicationNumber, evidence)
+    return new ManageAdjudicationsClient(user).updateEvidenceDetails(chargeNumber, evidence)
   }
 
   async updateWitnessDetails(
-    adjudicationNumber: number,
+    chargeNumber: string,
     witnesses: WitnessDetails[],
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateWitnessDetails(adjudicationNumber, witnesses)
+    return new ManageAdjudicationsClient(user).updateWitnessDetails(chargeNumber, witnesses)
   }
 
   private getPrisonerDisplayNames(prisonerResult: PrisonerSimpleResult) {
@@ -441,9 +441,9 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async createDraftFromCompleteAdjudication(user: User, adjudicationNumber: number): Promise<number> {
+  async createDraftFromCompleteAdjudication(user: User, chargeNumber: string): Promise<number> {
     const newDraftAdjudicationData = await new ManageAdjudicationsClient(user).createDraftFromCompleteAdjudication(
-      adjudicationNumber
+      chargeNumber
     )
     return newDraftAdjudicationData.draftAdjudication.id
   }
@@ -514,8 +514,8 @@ export default class ReportedAdjudicationsService {
     return enhancedResult
   }
 
-  async getPrisonerDetailsFromAdjNumber(adjudicationNumber: number, user: User): Promise<PrisonerResultSummary> {
-    const reportedAdjudication = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
+  async getPrisonerDetailsFromAdjNumber(chargeNumber: string, user: User): Promise<PrisonerResultSummary> {
+    const reportedAdjudication = await this.getReportedAdjudicationDetails(chargeNumber, user)
     return this.getPrisonerDetails(reportedAdjudication.reportedAdjudication.prisonerNumber, user)
   }
 
@@ -589,16 +589,16 @@ export default class ReportedAdjudicationsService {
     })
   }
 
-  async deleteHearing(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).cancelHearing(adjudicationNumber)
+  async deleteHearing(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).cancelHearing(chargeNumber)
   }
 
-  async deleteCompleteHearingOutcome(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).cancelCompleteHearing(adjudicationNumber)
+  async deleteCompleteHearingOutcome(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).cancelCompleteHearing(chargeNumber)
   }
 
   async scheduleHearing(
-    adjudicationNumber: number,
+    chargeNumber: string,
     locationId: number,
     dateTimeOfHearing: string,
     oicHearingType: string,
@@ -609,11 +609,11 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user).createHearing(adjudicationNumber, dataToSend)
+    return new ManageAdjudicationsClient(user).createHearing(chargeNumber, dataToSend)
   }
 
   async rescheduleHearing(
-    adjudicationNumber: number,
+    chargeNumber: string,
     locationId: number,
     dateTimeOfHearing: string,
     oicHearingType: string,
@@ -624,7 +624,7 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user).amendHearing(adjudicationNumber, dataToSend)
+    return new ManageAdjudicationsClient(user).amendHearing(chargeNumber, dataToSend)
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {
@@ -656,8 +656,8 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  async getAcceptedReportConfirmationDetails(adjudicationNumber: number, user: User) {
-    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+  async getAcceptedReportConfirmationDetails(chargeNumber: string, user: User) {
+    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
 
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
@@ -691,28 +691,28 @@ export default class ReportedAdjudicationsService {
     return null
   }
 
-  async issueDISForm(adjudicationNumber: number, dateTimeOfIssue: string, user: User) {
-    return new ManageAdjudicationsClient(user).putDateTimeOfIssue(adjudicationNumber, dateTimeOfIssue)
+  async issueDISForm(chargeNumber: string, dateTimeOfIssue: string, user: User) {
+    return new ManageAdjudicationsClient(user).putDateTimeOfIssue(chargeNumber, dateTimeOfIssue)
   }
 
   getPrimaryButtonInfoForHearingDetails(
     history: OutcomeHistory,
     readOnly: boolean,
-    adjudicationNumber: number
+    chargeNumber: string
   ): { href: string; text: string; name: string; qa: string } | null {
     if (!history.length || readOnly) return null
     const finalHistoryItem = history[history.length - 1]
     if (finalHistoryItem.hearing && !finalHistoryItem.outcome) {
       if (!finalHistoryItem.hearing.outcome)
         return {
-          href: adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber),
+          href: adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber),
           text: 'Enter the hearing outcome',
           name: 'enterHearingOutcomeButton',
           qa: 'enter-hearing-outcome-button',
         }
       if (finalHistoryItem.hearing.outcome.code === HearingOutcomeCode.ADJOURN)
         return {
-          href: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
+          href: adjudicationUrls.scheduleHearing.urls.start(chargeNumber),
           text: 'Schedule another hearing',
           name: 'scheduleAnotherHearingButton',
           qa: 'schedule-another-hearing-button',
@@ -724,7 +724,7 @@ export default class ReportedAdjudicationsService {
         !finalHistoryItem.outcome.referralOutcome
       ) {
         return {
-          href: adjudicationUrls.nextStepsPolice.urls.start(adjudicationNumber),
+          href: adjudicationUrls.nextStepsPolice.urls.start(chargeNumber),
           text: 'Enter the referral outcome',
           name: 'enterReferralOutcomeButton',
           qa: 'enter-referral-outcome-button',
@@ -735,7 +735,7 @@ export default class ReportedAdjudicationsService {
         !finalHistoryItem.outcome.referralOutcome
       ) {
         return {
-          href: adjudicationUrls.nextStepsInad.urls.start(adjudicationNumber),
+          href: adjudicationUrls.nextStepsInad.urls.start(chargeNumber),
           text: 'Continue to next step',
           name: 'continueToNextStepButton',
           qa: 'continue-to-next-step-button',
@@ -806,12 +806,12 @@ export default class ReportedAdjudicationsService {
     return null
   }
 
-  getTertiaryButtonInfoForHearingDetails(history: OutcomeHistory, readOnly: boolean, adjudicationNumber: number) {
+  getTertiaryButtonInfoForHearingDetails(history: OutcomeHistory, readOnly: boolean, chargeNumber: string) {
     if (!history.length || readOnly) return null
     const finalHistoryItem = history[history.length - 1]
     if (finalHistoryItem.outcome?.outcome.code === OutcomeCode.CHARGE_PROVED) {
       return {
-        href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(adjudicationNumber),
+        href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(chargeNumber),
         text: 'Report a quashed guilty finding',
         name: 'reportQuashedFinding',
         value: 'reportQuashedFinding',
@@ -822,19 +822,19 @@ export default class ReportedAdjudicationsService {
   }
 
   async getLastOutcomeItem(
-    adjudicationNumber: number,
+    chargeNumber: string,
     acceptableStatuses: ReportedAdjudicationStatus[],
     user: User
   ): Promise<OutcomeDetailsHistory | HearingDetailsHistory | Record<string, never>> {
-    const adjudication = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
+    const adjudication = await this.getReportedAdjudicationDetails(chargeNumber, user)
     const { reportedAdjudication } = adjudication
     if (!acceptableStatuses.includes(reportedAdjudication.status)) return {}
     if (!reportedAdjudication.outcomes) throw new Error(`Missing outcomes data`)
     return reportedAdjudication.outcomes[reportedAdjudication.outcomes.length - 1]
   }
 
-  async getLatestHearing(adjudicationNumber: number, user: User): Promise<HearingDetails | Record<string, never>> {
-    const { reportedAdjudication } = await this.getReportedAdjudicationDetails(adjudicationNumber, user)
+  async getLatestHearing(chargeNumber: string, user: User): Promise<HearingDetails | Record<string, never>> {
+    const { reportedAdjudication } = await this.getReportedAdjudicationDetails(chargeNumber, user)
     if (!reportedAdjudication.hearings?.length) return {}
     return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
   }

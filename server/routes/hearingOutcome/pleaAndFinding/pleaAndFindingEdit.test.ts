@@ -46,7 +46,7 @@ afterEach(() => {
 describe('GET /hearing-plea-finding edit', () => {
   it('should load the `Plea and finding` edit page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
+      .get(adjudicationUrls.hearingPleaAndFinding.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Plea and finding')
@@ -57,7 +57,9 @@ describe('GET /hearing-plea-finding edit', () => {
 describe('POST /hearing-plea-finding edit', () => {
   it('should redirect to the correct URL after correct submission - proved finding', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.CHARGE_PROVED,
@@ -65,12 +67,14 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.moneyRecoveredForDamages.urls.edit('100')}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.DISMISSED,
@@ -78,12 +82,14 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingReasonForFinding.urls.edit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.hearingReasonForFinding.urls.edit('100')}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.NOT_PROCEED,
@@ -91,12 +97,14 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit('100')}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should use the query parameter adjudicator name rather than api adjudicator name if one is present', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.NOT_PROCEED,
@@ -105,7 +113,7 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit('100')}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
 })

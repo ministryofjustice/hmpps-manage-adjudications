@@ -12,18 +12,15 @@ export default class ActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, error: FormError | null): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
-    const suspendedPunishmentDetails = await this.punishmentsService.getSuspendedPunishmentDetails(
-      adjudicationNumber,
-      user
-    )
+    const suspendedPunishmentDetails = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
     // Should only show suspended punishments that have not been added in this reports
     const suspendedPunishmentsFromOtherReports = suspendedPunishmentDetails.suspendedPunishments.filter(
-      susPun => susPun.reportNumber !== adjudicationNumber
+      susPun => susPun.chargeNumber !== chargeNumber
     )
 
-    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
 
     let suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports
     if (sessionPunishments != null) {
@@ -34,9 +31,9 @@ export default class ActivateSuspendedPunishmentsPage {
     }
 
     return res.render(`pages/activateSuspendedPunishments.njk`, {
-      awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       manuallyActivateSuspendedPunishmentsHref:
-        adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(adjudicationNumber),
+        adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(chargeNumber),
       prisonerName: suspendedPunishmentDetails.prisonerName,
       suspendedPunishments: suspendedPunishmentsToActivate,
       errors: error ? [error] : [],
@@ -53,13 +50,13 @@ export default class ActivateSuspendedPunishmentsPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const { activate } = req.body
     const punishmentNumberToActivate = activate.split('-').slice(-1)[0] || null
 
     const punishmentToActivate = await this.punishmentsService.getSuspendedPunishment(
-      adjudicationNumber,
+      chargeNumber,
       Number(punishmentNumberToActivate),
       user
     )
@@ -68,7 +65,7 @@ export default class ActivateSuspendedPunishmentsPage {
 
     return res.redirect(
       url.format({
-        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.existing(adjudicationNumber),
+        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.existing(chargeNumber),
         query: { punishmentNumberToActivate, punishmentType, days },
       })
     )

@@ -38,7 +38,7 @@ describe('GET number of additional days page', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.numberOfAdditionalDays.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -49,7 +49,7 @@ describe('GET number of additional days page', () => {
 describe('GET number of additional days page', () => {
   it('should load the  page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.numberOfAdditionalDays.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Enter the number of additional days')
@@ -62,7 +62,7 @@ describe('POST number of additional days page', () => {
     return request(app)
       .post(
         `${adjudicationUrls.numberOfAdditionalDays.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
       )
@@ -73,7 +73,7 @@ describe('POST number of additional days page', () => {
       .expect(
         'Location',
         `${adjudicationUrls.isPunishmentSuspended.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )

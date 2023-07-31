@@ -23,14 +23,14 @@ afterEach(() => {
 describe('Add evidence', () => {
   it('should add the evidence and redirect to the evidence details page - draft adjudication', () => {
     return request(app)
-      .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}?submitted=false`)
+      .post(`${adjudicationUrls.detailsOfEvidence.urls.add('100')}?submitted=false`)
       .send({
         evidenceType: 'BAGGED_AND_TAGGED',
         evidenceDescription: 'Some details here',
         batIdentifier: 'JO12345',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.detailsOfEvidence.urls.modified(100))
+      .expect('Location', adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .then(() =>
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),
@@ -41,14 +41,14 @@ describe('Add evidence', () => {
   })
   it('should add the evidence and redirect to the evidence details page - submitted adjudication edit', () => {
     return request(app)
-      .post(`${adjudicationUrls.detailsOfEvidence.urls.add(100)}?submitted=true`)
+      .post(`${adjudicationUrls.detailsOfEvidence.urls.add('100')}?submitted=true`)
       .send({
         evidenceType: 'BAGGED_AND_TAGGED',
         evidenceDescription: 'Some details here',
         batIdentifier: 'JO12345',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(100))
+      .expect('Location', adjudicationUrls.detailsOfEvidence.urls.submittedEditModified('100'))
       .then(() =>
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),

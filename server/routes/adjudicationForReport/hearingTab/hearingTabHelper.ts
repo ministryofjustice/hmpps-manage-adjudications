@@ -14,14 +14,14 @@ export const getSchedulingUnavailableStatuses = (reportedAdjudication: ReportedA
   )
 }
 
-export const getNextPageForChosenStep = (nextStep: NextStep, adjudicationNumber: number): string => {
+export const getNextPageForChosenStep = (nextStep: NextStep, chargeNumber: string): string => {
   switch (nextStep) {
     case NextStep.SCHEDULE_HEARING:
-      return adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber)
+      return adjudicationUrls.scheduleHearing.urls.start(chargeNumber)
     case NextStep.REFER_POLICE:
-      return adjudicationUrls.reasonForReferral.urls.start(adjudicationNumber)
+      return adjudicationUrls.reasonForReferral.urls.start(chargeNumber)
     case NextStep.NOT_PROCEED:
-      return adjudicationUrls.reasonForNotProceeding.urls.start(adjudicationNumber)
+      return adjudicationUrls.reasonForNotProceeding.urls.start(chargeNumber)
     default:
       return null
   }

@@ -44,18 +44,17 @@ export default class DetailsOfOffencePage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     // This is actually the draftId
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const { draftAdjudication, incidentRole, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
+      await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
     const offence = this.getOffences(req, draftAdjudication)
-
     if (!offence || Object.keys(offence).length === 0) {
       return res.render(`pages/detailsOfOffence`, {
         prisoner,
       })
     }
     const isYouthOffender = draftAdjudication.isYouthOffender || false
-    const reportedAdjudicationNumber = draftAdjudication.adjudicationNumber
+    const reportedChargeNumber = draftAdjudication.chargeNumber
     const { gender } = draftAdjudication
     const answerData = await this.decisionTreeService.answerDataDetails(offence, user)
     const offenceCode = Number(offence.offenceCode)
@@ -76,31 +75,31 @@ export default class DetailsOfOffencePage {
     return res.render(`pages/detailsOfOffence`, {
       prisoner,
       offence: offenceToDisplay,
-      adjudicationNumber,
-      reportedAdjudicationNumber,
+      draftId,
+      reportedChargeNumber,
       incidentRole,
       isYouthOffender,
       offenceData: offence,
       deleteOffenceLinkHidden: this.pageOptions.isAloEdit(),
-      deleteOffenceHref: adjudicationUrls.detailsOfOffence.urls.delete(adjudicationNumber, offence),
+      deleteOffenceHref: adjudicationUrls.detailsOfOffence.urls.delete(draftId, offence),
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const isReportedAdjudication = !!req.body.reportedAdjudicationNumber
+    const draftId = Number(req.params.draftId)
+    const isReportedAdjudication = !!req.body.reportedChargeNumber
     if (req.body.addFirstOffence) {
       return this.redirectToInitialOffenceSelectionPage(
         res,
-        adjudicationNumber,
+        draftId,
         isReportedAdjudication,
         this.pageOptions.isAloEdit()
       )
     }
 
     if (this.pageOptions.displayApiData()) {
-      return this.redirectToNextPage(res, adjudicationNumber)
+      return this.redirectToNextPage(res, draftId)
     }
     const offenceData: OffenceData = { ...req.query }
 
@@ -113,14 +112,14 @@ export default class DetailsOfOffencePage {
 
     if (this.pageOptions.isAloEdit()) {
       const adjudicationReport = await this.placeOnReportService.aloAmendOffenceDetails(
-        adjudicationNumber,
+        draftId,
         offenceDetailsToSave,
         user
       )
-      return res.redirect(adjudicationUrls.prisonerReport.urls.review(adjudicationReport?.adjudicationNumber))
+      return res.redirect(adjudicationUrls.prisonerReport.urls.review(adjudicationReport?.chargeNumber))
     }
-    await this.placeOnReportService.saveOffenceDetails(adjudicationNumber, offenceDetailsToSave, user)
-    return this.redirectToNextPage(res, adjudicationNumber)
+    await this.placeOnReportService.saveOffenceDetails(draftId, offenceDetailsToSave, user)
+    return this.redirectToNextPage(res, draftId)
   }
 
   getOffences = (req: Request, draftAdjudication: DraftAdjudication): OffenceData => {
@@ -140,20 +139,20 @@ export default class DetailsOfOffencePage {
 
   redirectToInitialOffenceSelectionPage = (
     res: Response,
-    adjudicationNumber: number,
+    draftId: number,
     isReportedDraft: boolean,
     isAloEdit: boolean
   ) => {
     if (isAloEdit) {
-      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(adjudicationNumber))
+      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(draftId))
     }
     if (isReportedDraft) {
-      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(adjudicationNumber))
+      return res.redirect(adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(draftId))
     }
-    return res.redirect(adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(adjudicationNumber))
+    return res.redirect(adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(draftId))
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number) => {
-    return res.redirect(adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber))
+  redirectToNextPage = (res: Response, draftId: number) => {
+    return res.redirect(adjudicationUrls.detailsOfDamages.urls.start(draftId))
   }
 }

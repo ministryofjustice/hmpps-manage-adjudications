@@ -72,7 +72,7 @@ describe('GET Punishments and damages tab', () => {
       }),
     })
     return request(app)
-      .get(adjudicationUrls.punishmentsAndDamages.urls.report(12345))
+      .get(adjudicationUrls.punishmentsAndDamages.urls.report('12345'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Is any money being recovered for damages?')
@@ -99,7 +99,7 @@ describe('GET Punishments and damages tab', () => {
       }),
     })
     return request(app)
-      .get(adjudicationUrls.punishmentsAndDamages.urls.report(12345))
+      .get(adjudicationUrls.punishmentsAndDamages.urls.report('12345'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Punishment comments')

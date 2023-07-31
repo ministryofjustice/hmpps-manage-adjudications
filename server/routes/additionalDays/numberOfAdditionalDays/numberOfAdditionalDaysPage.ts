@@ -43,18 +43,18 @@ export default class NumberOfAdditionalDaysPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { error, days } = pageData
 
     return res.render(`pages/numberOfAdditionalDays.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       days,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
@@ -62,11 +62,7 @@ export default class NumberOfAdditionalDaysPage {
     }
 
     if (this.pageOptions.isEdit()) {
-      const sessionData = await this.punishmentsService.getSessionPunishment(
-        req,
-        adjudicationNumber,
-        req.params.redisId
-      )
+      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
 
       return this.renderView(req, res, {
         days: sessionData.days,
@@ -77,7 +73,7 @@ export default class NumberOfAdditionalDaysPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { days } = req.body
 
     const trimmedDays = days ? Number(String(days).trim()) : null
@@ -92,7 +88,7 @@ export default class NumberOfAdditionalDaysPage {
         days: trimmedDays,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req)
+    const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
@@ -101,13 +97,13 @@ export default class NumberOfAdditionalDaysPage {
     )
   }
 
-  private getRedirectUrl = (adjudicationNumber: number, req: Request) => {
+  private getRedirectUrl = (chargeNumber: string, req: Request) => {
     if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.isPunishmentSuspended.urls.edit(adjudicationNumber, req.params.redisId)
+      return adjudicationUrls.isPunishmentSuspended.urls.edit(chargeNumber, req.params.redisId)
     }
     if (this.pageOptions.isManualEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(adjudicationNumber)
+      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
     }
-    return adjudicationUrls.isPunishmentSuspended.urls.start(adjudicationNumber)
+    return adjudicationUrls.isPunishmentSuspended.urls.start(chargeNumber)
   }
 }

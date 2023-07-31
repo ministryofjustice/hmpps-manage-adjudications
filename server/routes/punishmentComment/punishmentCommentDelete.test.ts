@@ -28,7 +28,7 @@ afterEach(() => {
 describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
   it('should load punishment comment confirm deletion page', () => {
     return request(app)
-      .get(adjudicationUrls.punishmentComment.urls.delete(100, 1))
+      .get(adjudicationUrls.punishmentComment.urls.delete('100', 1))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Do you want to remove this comment?')
@@ -38,7 +38,7 @@ describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
   it('should show error message if punishment comment no found', () => {
     punishmentsService.getPunishmentCommentsFromServer.mockResolvedValue(null)
     return request(app)
-      .get(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .get(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -48,7 +48,7 @@ describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
   it('should not load deletion page if user does not have role "ADJUDICATIONS_REVIEWER"', () => {
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
     return request(app)
-      .get(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .get(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -60,7 +60,7 @@ describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
 describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
   it('should show error message if delete option is not chosen', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Select yes if you want to remove this comment')
@@ -69,7 +69,7 @@ describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
   })
   it('should not delete if "No" option chosen', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .send({
         removeComment: 'no',
       })
@@ -78,7 +78,7 @@ describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
   it('should not delete if user does not have role "ADJUDICATIONS_REVIEWER"', () => {
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .send({
         removeComment: 'yes',
       })
@@ -86,7 +86,7 @@ describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
   })
   it('should successfully call the endpoint if "Yes" option chosen', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .send({
         removeComment: 'yes',
       })
@@ -94,11 +94,11 @@ describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
   })
   it('should redirect', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.delete(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)
       .send({
         removeComment: 'yes',
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.punishmentsAndDamages.urls.review(100)}`)
+      .expect('Location', `${adjudicationUrls.punishmentsAndDamages.urls.review('100')}`)
   })
 })

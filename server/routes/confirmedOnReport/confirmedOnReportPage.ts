@@ -34,19 +34,12 @@ export default class confirmedOnReportPage {
   }
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
     const { user } = res.locals
-    const adjudicationNumberValue: number = parseInt(adjudicationNumber as string, 10)
-    if (Number.isNaN(adjudicationNumberValue)) {
-      throw new Error('No adjudication number provided')
-    }
+    const { chargeNumber } = req.params
 
     const submittedEditConfirmationDetails = this.getSubmittedEditReturnLinkDetails(req)
 
-    const adjudicationDetails = await this.reportedAdjudicationsService.getSimpleConfirmationDetails(
-      adjudicationNumberValue,
-      user
-    )
+    const adjudicationDetails = await this.reportedAdjudicationsService.getSimpleConfirmationDetails(chargeNumber, user)
 
     const prisonerFirstAndLastName = formatName(
       adjudicationDetails.prisonerFirstName,

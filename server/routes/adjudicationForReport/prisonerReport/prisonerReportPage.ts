@@ -53,75 +53,75 @@ const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
 const getVariablesForPageType = (
   pageOptions: PageOptions,
   prisonerNumber: string,
-  adjudicationNumber: number,
+  chargeNumber: string,
   draftAdjudicationNumber: number
 ) => {
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
       printHref: `${adjudicationUrls.printReport.urls.start(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
         draftAdjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
-      editOffencesDetailsURL: adjudicationUrls.reviewerEditOffenceWarning.urls.edit(adjudicationNumber),
+      editOffencesDetailsURL: adjudicationUrls.reviewerEditOffenceWarning.urls.edit(chargeNumber),
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(adjudicationNumber)}`,
-      reportHref: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
+      reportHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
     }
   }
   if (pageOptions.isReadOnlyView()) {
     return {
-      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(adjudicationNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(adjudicationNumber),
+      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(chargeNumber),
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber)}`,
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
       editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber)}`,
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
       editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(adjudicationNumber)}`,
+        chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
     }
   }
   return {
     printHref: `${adjudicationUrls.printReport.urls.start(
-      adjudicationNumber
-    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+      chargeNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
       prisonerNumber,
       draftAdjudicationNumber
-    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
     editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber),
     editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-      adjudicationNumber
-    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+      chargeNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-      adjudicationNumber
-    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
+      chargeNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-      adjudicationNumber
-    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(adjudicationNumber)}`,
-    reportHref: adjudicationUrls.prisonerReport.urls.report(adjudicationNumber),
-    hearingsHref: adjudicationUrls.hearingDetails.urls.report(adjudicationNumber),
-    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(adjudicationNumber),
+      chargeNumber
+    )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
+    reportHref: adjudicationUrls.prisonerReport.urls.report(chargeNumber),
+    hearingsHref: adjudicationUrls.hearingDetails.urls.report(chargeNumber),
+    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(chargeNumber),
   }
 }
 
@@ -139,9 +139,9 @@ export default class prisonerReportRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      adjudicationNumber,
+      chargeNumber,
       user
     )
 
@@ -149,14 +149,14 @@ export default class prisonerReportRoutes {
     const draftRequired = this.statusAllowsEditRequiringDraft(status)
 
     const { newDraftAdjudicationId, draftAdjudication, prisoner, prisonerReportData, offence } =
-      await this.prisonerReportDetails(draftRequired, user, adjudicationNumber, reportedAdjudication)
+      await this.prisonerReportDetails(draftRequired, user, chargeNumber, reportedAdjudication)
 
     const reviewData = await this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
 
     const prisonerReportVariables = getVariablesForPageType(
       this.pageOptions,
       prisoner.prisonerNumber,
-      draftRequired ? draftAdjudication.adjudicationNumber : reportedAdjudication.adjudicationNumber,
+      draftRequired ? draftAdjudication.chargeNumber : reportedAdjudication.chargeNumber,
       newDraftAdjudicationId
     )
 
@@ -182,8 +182,8 @@ export default class prisonerReportRoutes {
       prisoner,
       prisonerReportData,
       reviewData,
-      reportNo: reportedAdjudication.adjudicationNumber,
-      draftAdjudicationNumber: draftRequired ? draftAdjudication.id : null,
+      reportNo: reportedAdjudication.chargeNumber,
+      draftChargeNumber: draftRequired ? draftAdjudication.id : null,
       offence,
       ...prisonerReportVariables,
       editAndReviewAvailability,
@@ -270,13 +270,13 @@ export default class prisonerReportRoutes {
   prisonerReportDetails = async (
     draftRequired: boolean,
     user: User,
-    adjudicationNumber: number,
+    chargeNumber: string,
     reportedAdjudication: ReportedAdjudication
   ) => {
     if (draftRequired) {
       const newDraftAdjudicationId = await this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(
         user,
-        adjudicationNumber
+        chargeNumber
       )
       const { draftAdjudication, prisoner, associatedPrisoner } =
         await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
@@ -329,7 +329,7 @@ export default class prisonerReportRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
 
     const status = this.reviewStatus(req.body.currentStatusSelected)
@@ -339,9 +339,9 @@ export default class prisonerReportRoutes {
     const errors = validateForm({ status, reason, details })
     if (errors) return this.renderView(req, res, { errors, status, reason, details })
 
-    await this.reportedAdjudicationsService.updateAdjudicationStatus(adjudicationNumber, status, reason, details, user)
+    await this.reportedAdjudicationsService.updateAdjudicationStatus(chargeNumber, status, reason, details, user)
     if (status === ReviewStatus.UNSCHEDULED) {
-      return res.redirect(adjudicationUrls.acceptedReportConfirmation.urls.start(adjudicationNumber))
+      return res.redirect(adjudicationUrls.acceptedReportConfirmation.urls.start(chargeNumber))
     }
     return res.redirect(adjudicationUrls.allCompletedReports.root)
   }

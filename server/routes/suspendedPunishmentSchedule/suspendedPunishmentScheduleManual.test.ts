@@ -30,7 +30,7 @@ describe('GET suspended punishment schedule', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.manual(100))
+      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.manual('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -41,7 +41,7 @@ describe('GET suspended punishment schedule', () => {
 describe('GET suspended punishment schedule', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.manual(100))
+      .get(adjudicationUrls.suspendedPunishmentSchedule.urls.manual('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Punishment schedule')
@@ -53,7 +53,7 @@ describe('POST suspended punishment schedule', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(100)}?punishmentType=CONFINEMENT&reportNo=123456`
+        `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual('100')}?punishmentType=CONFINEMENT&reportNo=123456`
       )
       .send({
         days: 10,
@@ -61,7 +61,7 @@ describe('POST suspended punishment schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -83,7 +83,7 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
-          100
+          '100'
         )}?punishmentType=EARNINGS&stoppagePercentage=10&reportNo=123456`
       )
       .send({
@@ -92,7 +92,7 @@ describe('POST suspended punishment schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -114,7 +114,7 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
-          100
+          '100'
         )}?punishmentType=PRIVILEGE&privilegeType=TV&reportNo=123456`
       )
       .send({
@@ -123,7 +123,7 @@ describe('POST suspended punishment schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -145,7 +145,7 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
-          100
+          '100'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&reportNo=123456`
       )
       .send({
@@ -154,7 +154,7 @@ describe('POST suspended punishment schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -176,14 +176,14 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&reportNo=123456`
       )
       .send({
         days: 5,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -205,14 +205,14 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
-          100
+          '100'
         )}?punishmentType=PROSPECTIVE_DAYS&reportNo=123456`
       )
       .send({
         days: 3,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),

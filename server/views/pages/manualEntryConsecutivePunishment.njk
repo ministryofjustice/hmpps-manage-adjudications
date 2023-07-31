@@ -27,11 +27,11 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {{ govukInput({
-        id: "chargeNumber",
-        name: "chargeNumber",
-        value: chargeNumber,
+        id: "consecutiveChargeNumber",
+        name: "consecutiveChargeNumber",
+        value: consecutiveChargeNumber,
         classes: "govuk-input--width-5",
-        errorMessage: errors | findErrors(["chargeNumber"]),
+        errorMessage: errors | findErrors(["consecutiveChargeNumber"]),
         label: {
             text: 'Charge number'
         },

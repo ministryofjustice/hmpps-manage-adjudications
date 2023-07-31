@@ -91,7 +91,7 @@ afterEach(() => {
 describe('GET', () => {
   it('should load the evidence page', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfEvidence.urls.start(100))
+      .get(adjudicationUrls.detailsOfEvidence.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Photo')
@@ -102,7 +102,7 @@ describe('GET', () => {
   })
   it('should not have used the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfEvidence.urls.start(100))
+      .get(adjudicationUrls.detailsOfEvidence.urls.start('100'))
       .expect(200)
       .then(() =>
         expect(evidenceSessionService.setAllSessionEvidence).toHaveBeenCalledWith(
@@ -145,22 +145,22 @@ describe('POST', () => {
   it('should save the evidence if it is the first time calling the endpoint (even if list is empty)', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfEvidence.urls.start(101))
+      .get(adjudicationUrls.detailsOfEvidence.urls.start('101'))
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfEvidence.urls.start(101))
+          .post(adjudicationUrls.detailsOfEvidence.urls.start('101'))
           .then(() => expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith(101, [], expect.anything()))
       )
   })
   it('should not save the evidence if it is the not first time calling the endpoint and no changes have been made', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfEvidence.urls.start(102))
+      .get(adjudicationUrls.detailsOfEvidence.urls.start('102'))
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfEvidence.urls.start(102))
+          .post(adjudicationUrls.detailsOfEvidence.urls.start('102'))
           .then(() => expect(placeOnReportService.saveEvidenceDetails).not.toHaveBeenCalled())
       )
   })

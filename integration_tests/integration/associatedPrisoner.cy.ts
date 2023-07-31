@@ -95,7 +95,7 @@ context('Incident assist', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     associatedPrisonerPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question('34', 'assisted', '1'))
     })
   })
 
@@ -110,7 +110,7 @@ context('Incident assist', () => {
     associatedPrisonerPage.submitButton().click()
 
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question('34', 'assisted', '1'))
     })
   })
 

@@ -1,31 +1,31 @@
 import { Request } from 'express'
 
 export default class DamagesSessionService {
-  addSessionDamage(req: Request, damageData: unknown, draftAdjudicationNumber: number) {
+  addSessionDamage(req: Request, damageData: unknown, draftAdjudicationNumber: number | string) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.damages[draftAdjudicationNumber].push(damageData)
   }
 
-  deleteSessionDamage(req: Request, index: number, draftAdjudicationNumber: number) {
+  deleteSessionDamage(req: Request, index: number, draftAdjudicationNumber: number | string) {
     req.session.damages?.[draftAdjudicationNumber]?.splice(index - 1, 1)
   }
 
-  deleteAllSessionDamages(req: Request, draftAdjudicationNumber: number) {
+  deleteAllSessionDamages(req: Request, draftAdjudicationNumber: number | string) {
     req.session.damages?.[draftAdjudicationNumber]?.splice(0, req.session.damages?.[draftAdjudicationNumber]?.length)
   }
 
-  setAllSessionDamages(req: Request, damageData: unknown, draftAdjudicationNumber: number) {
+  setAllSessionDamages(req: Request, damageData: unknown, draftAdjudicationNumber: number | string) {
     this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
     req.session.damages[draftAdjudicationNumber] = damageData
   }
 
-  getAndDeleteAllSessionDamages(req: Request, draftAdjudicationNumber: number) {
+  getAndDeleteAllSessionDamages(req: Request, draftAdjudicationNumber: number | string) {
     const allSessionDamages = this.getAllSessionDamages(req, draftAdjudicationNumber)
     delete req.session.damages?.[draftAdjudicationNumber]
     return allSessionDamages
   }
 
-  getAllSessionDamages(req: Request, draftAdjudicationNumber: number) {
+  getAllSessionDamages(req: Request, draftAdjudicationNumber: number | string) {
     return req.session?.damages?.[draftAdjudicationNumber]
   }
 
@@ -33,8 +33,8 @@ export default class DamagesSessionService {
     return req.session.damages?.[draftAdjudicationNumber][index - 1]
   }
 
-  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+  setReferrerOnSession(req: Request, referrer: string, chargeNumber: string) {
+    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     req.session.damages.referrer = referrer
   }
 
@@ -52,7 +52,7 @@ export default class DamagesSessionService {
     delete req.session.damages.referrer
   }
 
-  private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
+  private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number | string) {
     if (!req.session.damages) {
       req.session.damages = {}
     }

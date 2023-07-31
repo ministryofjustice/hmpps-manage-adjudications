@@ -34,31 +34,31 @@ class PageOptions {
 const getVariablesForPageType = (
   pageOptions: PageOptions,
   prisonerNumber: string,
-  adjudicationNumber: number,
+  draftId: number,
   incidentDetailsData: CheckYourAnswers
 ) => {
   if (pageOptions.isEditByReporter()) {
     return {
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
-        adjudicationNumber
-      )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(adjudicationNumber)}`,
-      editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(adjudicationNumber),
-      editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(adjudicationNumber),
-      exitUrl: adjudicationUrls.prisonerReport.urls.report(incidentDetailsData.adjudicationNumber),
-      editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber),
-      editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
-      editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
+        draftId
+      )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(draftId)}`,
+      editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(draftId),
+      editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftId),
+      exitUrl: adjudicationUrls.prisonerReport.urls.report(incidentDetailsData.chargeNumber),
+      editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(draftId),
+      editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(draftId),
+      editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(draftId),
     }
   }
   return {
-    editIncidentDetailsURL: adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, adjudicationNumber),
-    editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.start(adjudicationNumber),
-    editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.start(adjudicationNumber),
-    editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(adjudicationNumber),
-    editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(adjudicationNumber),
-    editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber),
-    exitUrl: adjudicationUrls.taskList.urls.start(adjudicationNumber),
+    editIncidentDetailsURL: adjudicationUrls.incidentDetails.urls.edit(prisonerNumber, draftId),
+    editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.start(draftId),
+    editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.start(draftId),
+    editDamagesURL: adjudicationUrls.detailsOfDamages.urls.start(draftId),
+    editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(draftId),
+    editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(draftId),
+    exitUrl: adjudicationUrls.taskList.urls.start(draftId),
   }
 }
 
@@ -71,15 +71,15 @@ const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
   }
 }
 
-const getRedirectUrls = (pageOptions: PageOptions, completeAdjudicationNumber: number) => {
+const getRedirectUrls = (pageOptions: PageOptions, completedReportNumber: string) => {
   if (pageOptions.isEditByReporter())
-    return adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(completeAdjudicationNumber)
-  return adjudicationUrls.confirmedOnReport.urls.start(completeAdjudicationNumber)
+    return adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(completedReportNumber)
+  return adjudicationUrls.confirmedOnReport.urls.start(completedReportNumber)
 }
 
-const getErrorRedirectUrl = (pageOptions: PageOptions, adjudicationNumber: number) => {
+const getErrorRedirectUrl = (pageOptions: PageOptions, draftId: number) => {
   if (pageOptions.isEditByReporter()) return adjudicationUrls.yourCompletedReports.root
-  return adjudicationUrls.taskList.urls.start(adjudicationNumber)
+  return adjudicationUrls.taskList.urls.start(draftId)
 }
 
 export default class CheckYourAnswersPage {
@@ -97,7 +97,7 @@ export default class CheckYourAnswersPage {
 
   getReviewData = async (draftAdjudication: DraftAdjudication, user: User) => {
     const reportedAdjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      draftAdjudication.adjudicationNumber,
+      draftAdjudication.chargeNumber,
       user
     )
     return this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication.reportedAdjudication, user)
@@ -106,14 +106,14 @@ export default class CheckYourAnswersPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error } = pageData
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const { draftAdjudication, prisoner, associatedPrisoner } =
-      await this.decisionTreeService.draftAdjudicationIncidentData(adjudicationNumber, user)
+      await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
 
     const incidentLocations = await this.locationService.getIncidentLocations(user.activeCaseLoadId, user)
 
     const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
-      adjudicationNumber,
+      draftId,
       incidentLocations,
       user
     )
@@ -137,7 +137,7 @@ export default class CheckYourAnswersPage {
         user,
         false
       ),
-      getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, adjudicationNumber, incidentDetailsData),
+      getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, draftId, incidentDetailsData),
     ])
 
     const convertedEvidence = convertEvidenceToTableFormat(draftAdjudication.evidence)
@@ -146,7 +146,7 @@ export default class CheckYourAnswersPage {
       errors: error ? [error] : [],
       prisoner,
       incidentDetailsData,
-      adjudicationNumber,
+      draftId,
       offences,
       creationJourney: this.pageOptions.isCreation(),
       statementEditable: true,
@@ -172,17 +172,14 @@ export default class CheckYourAnswersPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
 
     try {
-      const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(
-        adjudicationNumber,
-        user
-      )
+      const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(draftId, user)
       const redirectUrl = getRedirectUrls(this.pageOptions, completeAdjudicationNumber)
       return res.redirect(redirectUrl)
     } catch (postError) {
-      const errorRedirectUrl = getErrorRedirectUrl(this.pageOptions, adjudicationNumber)
+      const errorRedirectUrl = getErrorRedirectUrl(this.pageOptions, draftId)
       res.locals.redirectUrl = errorRedirectUrl
       throw postError
     }
