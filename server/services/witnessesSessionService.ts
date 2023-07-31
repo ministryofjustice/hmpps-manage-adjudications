@@ -2,39 +2,36 @@ import { Request } from 'express'
 import { WitnessDetails } from '../data/DraftAdjudicationResult'
 
 export default class WitnessesSessionService {
-  addSessionWitness(req: Request, witnessData: WitnessDetails, draftAdjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.witnesses[draftAdjudicationNumber].push(witnessData)
+  addSessionWitness(req: Request, witnessData: WitnessDetails, chargeNumber: string) {
+    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
+    req.session.witnesses[chargeNumber].push(witnessData)
   }
 
-  deleteSessionWitness(req: Request, index: number, draftAdjudicationNumber: number) {
-    req.session.witnesses?.[draftAdjudicationNumber]?.splice(index - 1, 1)
+  deleteSessionWitness(req: Request, index: number, chargeNumber: string) {
+    req.session.witnesses?.[chargeNumber]?.splice(index - 1, 1)
   }
 
-  deleteAllSessionWitnesses(req: Request, draftAdjudicationNumber: number) {
-    req.session.witnesses?.[draftAdjudicationNumber]?.splice(
-      0,
-      req.session.witnesses?.[draftAdjudicationNumber]?.length
-    )
+  deleteAllSessionWitnesses(req: Request, chargeNumber: string) {
+    req.session.witnesses?.[chargeNumber]?.splice(0, req.session.witnesses?.[chargeNumber]?.length)
   }
 
-  setAllSessionWitnesses(req: Request, witnessData: WitnessDetails[], draftAdjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.witnesses[draftAdjudicationNumber] = witnessData
+  setAllSessionWitnesses(req: Request, witnessData: WitnessDetails[], chargeNumber: string) {
+    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
+    req.session.witnesses[chargeNumber] = witnessData
   }
 
-  getAndDeleteAllSessionWitnesses(req: Request, draftAdjudicationNumber: number) {
-    const allSessionWitnesses = this.getAllSessionWitnesses(req, draftAdjudicationNumber)
-    delete req.session.witnesses?.[draftAdjudicationNumber]
+  getAndDeleteAllSessionWitnesses(req: Request, chargeNumber: string) {
+    const allSessionWitnesses = this.getAllSessionWitnesses(req, chargeNumber)
+    delete req.session.witnesses?.[chargeNumber]
     return allSessionWitnesses
   }
 
-  getAllSessionWitnesses(req: Request, draftAdjudicationNumber: number) {
-    return req.session?.witnesses?.[draftAdjudicationNumber]
+  getAllSessionWitnesses(req: Request, chargeNumber: string) {
+    return req.session?.witnesses?.[chargeNumber]
   }
 
-  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+  setReferrerOnSession(req: Request, referrer: string, chargeNumber: string) {
+    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     req.session.witnesses.referrer = referrer
   }
 
@@ -64,12 +61,12 @@ export default class WitnessesSessionService {
     delete req.session.witnesses.submitted
   }
 
-  private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
+  private createSessionForAdjudicationIfNotExists(req: Request, chargeNumber: string) {
     if (!req.session.witnesses) {
       req.session.witnesses = {}
     }
-    if (!req.session.witnesses[draftAdjudicationNumber]) {
-      req.session.witnesses[draftAdjudicationNumber] = []
+    if (!req.session.witnesses[chargeNumber]) {
+      req.session.witnesses[chargeNumber] = []
     }
   }
 }

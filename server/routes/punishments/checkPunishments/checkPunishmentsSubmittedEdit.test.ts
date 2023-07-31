@@ -49,7 +49,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.checkPunishments.urls.submittedEdit(100))
+      .get(adjudicationUrls.checkPunishments.urls.submittedEdit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -60,7 +60,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
-      .get(adjudicationUrls.checkPunishments.urls.submittedEdit(100))
+      .get(adjudicationUrls.checkPunishments.urls.submittedEdit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Check your answers before submitting')
@@ -71,7 +71,7 @@ describe('GET', () => {
 describe('POST', () => {
   it('should successfully call the endpoint', () => {
     return request(app)
-      .post(`${adjudicationUrls.checkPunishments.urls.submittedEdit(100)}`)
+      .post(`${adjudicationUrls.checkPunishments.urls.submittedEdit('100')}`)
       .send()
       .then(() =>
         expect(punishmentsService.editPunishmentSet).toHaveBeenCalledWith(punishmentsOnSession, 100, expect.anything())
@@ -79,9 +79,9 @@ describe('POST', () => {
   })
   it('should redirect after submission', () => {
     return request(app)
-      .post(`${adjudicationUrls.checkPunishments.urls.submittedEdit(100)}`)
+      .post(`${adjudicationUrls.checkPunishments.urls.submittedEdit('100')}`)
       .send()
       .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
   })
 })

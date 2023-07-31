@@ -52,28 +52,28 @@ export default class DetailsOfWitnessesPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const witnessToDelete = Number(req.query.delete) || null
     const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
-    const exitButtonHref = this.getExitUrl(req, adjudicationNumber, isSubmittedEdit)
+    const exitButtonHref = this.getExitUrl(req, chargeNumber, isSubmittedEdit)
     const addWitnessUrl = isSubmittedEdit
-      ? `${adjudicationUrls.detailsOfWitnesses.urls.add(adjudicationNumber)}?submitted=true`
-      : `${adjudicationUrls.detailsOfWitnesses.urls.add(adjudicationNumber)}?submitted=false`
+      ? `${adjudicationUrls.detailsOfWitnesses.urls.add(chargeNumber)}?submitted=true`
+      : `${adjudicationUrls.detailsOfWitnesses.urls.add(chargeNumber)}?submitted=false`
     const redirectAfterRemoveUrl = isSubmittedEdit
-      ? `${adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(adjudicationNumber)}?delete=`
-      : `${adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber)}?delete=`
+      ? `${adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(chargeNumber)}?delete=`
+      : `${adjudicationUrls.detailsOfWitnesses.urls.modified(chargeNumber)}?delete=`
 
-    const { adjudication, prisoner } = await this.getAdjudicationAndPrisoner(adjudicationNumber, isSubmittedEdit, user)
-    const witnesses = this.getWitnesses(req, adjudicationNumber, adjudication)
+    const { adjudication, prisoner } = await this.getAdjudicationAndPrisoner(chargeNumber, isSubmittedEdit, user)
+    const witnesses = this.getWitnesses(req, chargeNumber, adjudication)
 
     // If we are not displaying session data then fill in the session data
     if (this.pageOptions.isShowingAPIData()) {
       // Set up session to allow for adding and deleting
-      this.witnessesSessionService.setAllSessionWitnesses(req, witnesses, adjudicationNumber)
+      this.witnessesSessionService.setAllSessionWitnesses(req, witnesses, chargeNumber)
     }
 
     if (witnessToDelete) {
-      this.witnessesSessionService.deleteSessionWitness(req, witnessToDelete, adjudicationNumber)
+      this.witnessesSessionService.deleteSessionWitness(req, witnessToDelete, chargeNumber)
     }
 
     // If the user cancelled out of adding a new witness, we need to make sure the session is cleared
@@ -88,7 +88,7 @@ export default class DetailsOfWitnessesPage {
     }
     return res.render(`pages/detailsOfWitnesses`, {
       currentUser: user.username,
-      adjudicationNumber,
+      chargeNumber,
       witnesses,
       prisoner,
       redirectAfterRemoveUrl,
@@ -99,74 +99,74 @@ export default class DetailsOfWitnessesPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
     const draftAdjudicationResult = !isSubmittedEdit
-      ? await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+      ? await this.placeOnReportService.getDraftAdjudicationDetails(Number(chargeNumber), user)
       : null
     const referrer = this.witnessesSessionService.getAndDeleteReferrerOnSession(req)
 
     // If displaying data on draft, nothing has changed so no save needed  - unless it's the first time viewing the page, when we need to record that the page visit
     if (this.pageOptions.isShowingAPIDataAndPageVisited(draftAdjudicationResult?.draftAdjudication.witnessesSaved)) {
-      this.witnessesSessionService.deleteAllSessionWitnesses(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
+      this.witnessesSessionService.deleteAllSessionWitnesses(req, chargeNumber)
+      return this.redirectToNextPage(res, chargeNumber, isSubmittedEdit, referrer)
     }
 
-    const witnessDetails = this.witnessesSessionService.getAndDeleteAllSessionWitnesses(req, adjudicationNumber) || []
+    const witnessDetails = this.witnessesSessionService.getAndDeleteAllSessionWitnesses(req, chargeNumber) || []
 
     if (isSubmittedEdit) {
-      await this.reportedAdjudicationsService.updateWitnessDetails(adjudicationNumber, witnessDetails, user)
+      await this.reportedAdjudicationsService.updateWitnessDetails(chargeNumber, witnessDetails, user)
     } else {
-      await this.placeOnReportService.saveWitnessDetails(adjudicationNumber, witnessDetails, user)
+      await this.placeOnReportService.saveWitnessDetails(chargeNumber, witnessDetails, user)
     }
-    return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
+    return this.redirectToNextPage(res, chargeNumber, isSubmittedEdit, referrer)
   }
 
-  getAdjudicationAndPrisoner = async (adjudicationNumber: number, isSubmittedEdit: boolean, user: User) => {
+  getAdjudicationAndPrisoner = async (id: number | string, isSubmittedEdit: boolean, user: User) => {
     if (!isSubmittedEdit) {
       const [draftAdjudicationResult, prisoner] = await Promise.all([
-        this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user),
-        this.placeOnReportService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user),
+        this.placeOnReportService.getDraftAdjudicationDetails(id as number, user),
+        this.placeOnReportService.getPrisonerDetailsFromAdjNumber(id as number, user),
       ])
       const { draftAdjudication } = draftAdjudicationResult
       return { adjudication: draftAdjudication, prisoner }
     }
     const [reportedAdjudicationResult, prisoner] = await Promise.all([
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(adjudicationNumber, user),
-      this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user),
+      this.reportedAdjudicationsService.getReportedAdjudicationDetails(id as string, user),
+      this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(id as string, user),
     ])
     const { reportedAdjudication } = reportedAdjudicationResult
     return { adjudication: reportedAdjudication, prisoner }
   }
 
-  getWitnesses = (req: Request, adjudicationNumber: number, adjudication: DraftAdjudication | ReportedAdjudication) => {
+  getWitnesses = (req: Request, chargeNumber: string, adjudication: DraftAdjudication | ReportedAdjudication) => {
     if (this.pageOptions.isShowingSessionData()) {
-      return this.witnessesSessionService.getAllSessionWitnesses(req, adjudicationNumber)
+      return this.witnessesSessionService.getAllSessionWitnesses(req, chargeNumber)
     }
 
     return adjudication.witnesses || []
   }
 
-  getExitUrl = (req: Request, adjudicationNumber: number, isSubmittedEdit: boolean) => {
-    const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
+  getExitUrl = (req: Request, chargeNumber: string, isSubmittedEdit: boolean) => {
+    const taskListUrl = adjudicationUrls.taskList.urls.start(chargeNumber)
     const prisonerReportUrl = req.query.referrer as string
-    if (prisonerReportUrl) this.witnessesSessionService.setReferrerOnSession(req, prisonerReportUrl, adjudicationNumber)
+    if (prisonerReportUrl) this.witnessesSessionService.setReferrerOnSession(req, prisonerReportUrl, chargeNumber)
     return isSubmittedEdit ? this.witnessesSessionService.getReferrerFromSession(req) : taskListUrl
   }
 
   redirectToNextPage = async (
     res: Response,
-    adjudicationNumber: number,
+    chargeNumber: string | number,
     isReportedDraft: boolean,
     referrer: string = null
   ) => {
     if (isReportedDraft) {
       return res.redirect(
         `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
-          adjudicationNumber
+          chargeNumber as string
         )}?referrer=${referrer}`
       )
     }
-    return res.redirect(adjudicationUrls.incidentStatement.urls.start(adjudicationNumber))
+    return res.redirect(adjudicationUrls.incidentStatement.urls.start(chargeNumber as number))
   }
 }

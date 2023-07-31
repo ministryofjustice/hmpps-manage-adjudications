@@ -22,7 +22,7 @@ export default class AddDateAndTimeOfIssueRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const { issuedDate } = req.body
     const validationErrors = validateForm(issuedDate)
@@ -31,10 +31,10 @@ export default class AddDateAndTimeOfIssueRoutes {
     }
 
     try {
-      await this.reportedAdjudicationsService.issueDISForm(adjudicationNumber, formatDate(issuedDate), user)
+      await this.reportedAdjudicationsService.issueDISForm(chargeNumber, formatDate(issuedDate), user)
     } catch (postError) {
-      logger.error(`Failed to post issue date time for adjudication ${adjudicationNumber}: ${postError}`)
-      res.locals.redirectUrl = adjudicationUrls.addIssueDateTime.urls.start(adjudicationNumber)
+      logger.error(`Failed to post issue date time for adjudication ${chargeNumber}: ${postError}`)
+      res.locals.redirectUrl = adjudicationUrls.addIssueDateTime.urls.start(chargeNumber)
     }
     return res.redirect(adjudicationUrls.confirmDISFormsIssued.urls.start())
   }

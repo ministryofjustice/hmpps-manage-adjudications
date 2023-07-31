@@ -21,7 +21,7 @@ import PrisonerSearchService from '../../services/prisonerSearchService'
 import { OffenceData } from './offenceData'
 import { User } from '../../data/hmppsAuthClient'
 
-type PageData = { errors?: FormError[]; adjudicationNumber: number; incidentRole: string } & DecisionForm
+type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } & DecisionForm
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -74,7 +74,7 @@ export default class OffenceCodeRoutes {
   ])
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const { incidentRole } = req.params
     const selectedAnswerId = req.query.selectedAnswerId as string
     const selectedPerson = req.query.selectedPerson as string
@@ -82,14 +82,14 @@ export default class OffenceCodeRoutes {
       // We are coming back from a user selection.
       const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
       const form = answerTypeHelper.formAfterSearch(selectedAnswerId, selectedPerson)
-      return this.renderView(req, res, { ...form, adjudicationNumber, incidentRole })
+      return this.renderView(req, res, { ...form, draftId, incidentRole })
     }
     if (req.query.selectedAnswerId) {
       // We are coming from delete.
-      return this.renderView(req, res, { adjudicationNumber, incidentRole, selectedAnswerId })
+      return this.renderView(req, res, { draftId, incidentRole, selectedAnswerId })
     }
     // We are viewing the page normally
-    return this.renderView(req, res, { adjudicationNumber, incidentRole })
+    return this.renderView(req, res, { draftId, incidentRole })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -108,33 +108,35 @@ export default class OffenceCodeRoutes {
   }
 
   submitDecision = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { incidentRole } = req.params
+    const { incidentRole, draftId } = req.params
+    const draftChargeId = Number(draftId)
     const { selectedAnswerId } = req.body
     const offenceToAdd: OffenceData = { ...req.query }
+
     // Validation
     if (!selectedAnswerId) {
-      return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber, incidentRole })
+      return this.renderView(req, res, { errors: [error.MISSING_DECISION], draftId: draftChargeId, incidentRole })
     }
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
     const errors = await answerTypeHelper.validateForm(form, req, res.locals.user)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
+      return this.renderView(req, res, { errors, ...form, draftId: draftChargeId, incidentRole })
     }
+
     const updatedOffenceData = answerTypeHelper.updatedOffenceData(offenceToAdd, form)
     const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
       let nextQuestionUrl = ''
       if (this.pageOptions.isAloEdit()) {
         nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(
-          adjudicationNumber,
+          draftChargeId,
           incidentRole,
           selectedAnswer.getChildQuestion().id()
         )}`
       } else {
         nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
-          adjudicationNumber,
+          draftChargeId,
           incidentRole,
           selectedAnswer.getChildQuestion().id()
         )}`
@@ -151,28 +153,28 @@ export default class OffenceCodeRoutes {
     // offence data payload
     if (this.pageOptions.isAloEdit()) {
       return this.redirect(
-        { pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(adjudicationNumber), query: updatedOffenceData },
+        { pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftChargeId), query: updatedOffenceData },
         res
       )
     }
     return this.redirect(
-      { pathname: adjudicationUrls.detailsOfOffence.urls.add(adjudicationNumber), query: updatedOffenceData },
+      { pathname: adjudicationUrls.detailsOfOffence.urls.add(draftChargeId), query: updatedOffenceData },
       res
     )
   }
 
   cancel = async (req: Request, res: Response, pageOptions: PageOptions, user: User): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     if (pageOptions.isAloEdit()) {
       try {
-        const draftAdj = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
-        return res.redirect(adjudicationUrls.prisonerReport.urls.review(draftAdj.draftAdjudication.adjudicationNumber))
+        const draftAdj = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
+        return res.redirect(adjudicationUrls.prisonerReport.urls.review(draftAdj.draftAdjudication.chargeNumber))
       } catch (getCancelError) {
         res.locals.redirectUrl = adjudicationUrls.homepage.root
         throw getCancelError
       }
     }
-    return res.redirect(adjudicationUrls.taskList.urls.start(adjudicationNumber))
+    return res.redirect(adjudicationUrls.taskList.urls.start(draftId))
   }
 
   deleteUser = async (req: Request, res: Response): Promise<void> => {
@@ -181,41 +183,38 @@ export default class OffenceCodeRoutes {
   }
 
   search = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { incidentRole } = req.params
+    const { incidentRole, draftId } = req.params
+    const draftChargeId = Number(draftId)
     const { selectedAnswerId } = req.body
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
     const errors = await answerTypeHelper.validateForm(form, req, res.locals.user)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, { errors, ...form, adjudicationNumber, incidentRole })
+      return this.renderView(req, res, { errors, ...form, draftId: draftChargeId, incidentRole })
     }
     req.session.redirectUrl = `${this.urlHere(req)}?selectedAnswerId=${selectedAnswerId}`
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
   redirectToStart = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { incidentRole } = req.params
+    const { incidentRole, draftId } = req.params
+    const draftChargeId = Number(draftId)
     if (this.pageOptions.isAloEdit())
       return res.redirect(
-        adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(
-          adjudicationNumber,
-          incidentRole,
-          this.decisions().id()
-        )
+        adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftChargeId, incidentRole, this.decisions().id())
       )
     return res.redirect(
-      adjudicationUrls.offenceCodeSelection.urls.question(adjudicationNumber, incidentRole, this.decisions().id())
+      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions().id())
     )
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { adjudicationNumber, incidentRole, errors } = pageData
+    const { draftId, incidentRole, errors } = pageData
+    const draftChargeId = Number(draftId)
     const { user } = res.locals
     const { questionId } = req.params
     const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
-      Number(adjudicationNumber),
+      draftChargeId,
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)

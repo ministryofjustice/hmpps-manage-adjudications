@@ -35,7 +35,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100))
+      .get(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -46,7 +46,9 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
-      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100)}?punishmentType=ADDITIONAL_DAYS`)
+      .get(
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Which charge will it be consecutive to?')
@@ -59,7 +61,7 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
       .send({

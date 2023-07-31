@@ -25,7 +25,7 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-    <input type="hidden" name="reportedAdjudicationNumber" value="{{ reportedAdjudicationNumber }}"/>
+    <input type="hidden" name="reportedChargeNumber" value="{{ reportedChargeNumber }}"/>
     <div class="prisonerPlaybackSection govuk-!-margin-bottom-6">
       {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
     </div>
@@ -45,7 +45,7 @@
         <div class="govuk-grid-column-three-quarters">
           <div class="details-of-offence-questions-and-answers">
             <div class="q-and-a">
-              {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, adjudicationNumber) }}
+              {{ offenceQuestionsAndAnswers(offence.questionsAndAnswers, chargeNumber) }}
             </div>
             {% if not deleteOffenceLinkHidden %}
             <div>

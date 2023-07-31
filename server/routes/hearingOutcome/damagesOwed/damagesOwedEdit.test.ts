@@ -46,7 +46,7 @@ describe('GET /money-recovered', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      .get(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -57,7 +57,7 @@ describe('GET /money-recovered', () => {
 describe('GET /money-recovered', () => {
   it('should load the `Damages owed page` page with correct values', () => {
     return request(app)
-      .get(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      .get(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('100.00')
@@ -68,7 +68,7 @@ describe('GET /money-recovered', () => {
 describe('POST /money-recovered', () => {
   it('should pass the amount to the next edit page', () => {
     return request(app)
-      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}`)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit('100')}`)
       .send({
         damagesOwed: 'yes',
         amount: '100.10',
@@ -76,12 +76,12 @@ describe('POST /money-recovered', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=&plea=&amount=100.10&damagesOwed=true`
+        `${adjudicationUrls.isThisACaution.urls.edit('100')}?adjudicator=&plea=&amount=100.10&damagesOwed=true`
       )
   })
   it('should  not pass the amount to the edit next page', () => {
     return request(app)
-      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}`)
+      .post(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit('100')}`)
       .send({
         damagesOwed: 'no',
         amount: null,
@@ -89,7 +89,7 @@ describe('POST /money-recovered', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.isThisACaution.urls.edit(100)}?adjudicator=&plea=&amount=&damagesOwed=false`
+        `${adjudicationUrls.isThisACaution.urls.edit('100')}?adjudicator=&plea=&amount=&damagesOwed=false`
       )
   })
 })

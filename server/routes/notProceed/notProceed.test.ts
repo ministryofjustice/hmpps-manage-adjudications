@@ -30,7 +30,7 @@ describe('GET /not-proceed', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      .get(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -41,7 +41,7 @@ describe('GET /not-proceed', () => {
 describe('GET /not-proceed', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      .get(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the reason for not proceeding?')
@@ -52,13 +52,13 @@ describe('GET /not-proceed', () => {
 describe('POST /not-proceed', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
-      .post(`${adjudicationUrls.reasonForNotProceeding.urls.start(100)}`)
+      .post(`${adjudicationUrls.reasonForNotProceeding.urls.start('100')}`)
       .send({
         notProceedReason: NotProceedReason.NOT_FAIR,
         notProceedDetails: 'details',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() =>
         expect(outcomesService.createNotProceed).toHaveBeenCalledWith(
           100,

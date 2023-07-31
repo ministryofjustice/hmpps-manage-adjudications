@@ -26,7 +26,7 @@ afterEach(() => {
 describe('GET /hearing-plea-finding', () => {
   it('should load the `Plea and finding` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingPleaAndFinding.urls.start(100))
+      .get(adjudicationUrls.hearingPleaAndFinding.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Plea and finding')
@@ -37,7 +37,9 @@ describe('GET /hearing-plea-finding', () => {
 describe('POST /hearing-plea-finding', () => {
   it('should redirect to the correct URL after correct submission - proved finding', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.start(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.CHARGE_PROVED,
@@ -45,12 +47,14 @@ describe('POST /hearing-plea-finding', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.moneyRecoveredForDamages.urls.start(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.moneyRecoveredForDamages.urls.start('100')}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.start(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.DISMISSED,
@@ -58,12 +62,14 @@ describe('POST /hearing-plea-finding', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingReasonForFinding.urls.start(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.hearingReasonForFinding.urls.start('100')}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingPleaAndFinding.urls.start(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`)
+      .post(
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+      )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
         hearingFinding: HearingOutcomeFinding.NOT_PROCEED,
@@ -71,7 +77,9 @@ describe('POST /hearing-plea-finding', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100)}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(
+          '100'
+        )}?adjudicator=Judge%20Red&plea=GUILTY`
       )
   })
 })

@@ -47,7 +47,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -58,7 +58,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Will this punishment be consecutive to another one given to John Smith')
@@ -71,7 +71,7 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )
@@ -82,7 +82,7 @@ describe('POST', () => {
       .expect(
         'Location',
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10&consecutive=yes`
       )
@@ -91,7 +91,7 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
-          100,
+          '100',
           uuidv4()
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
       )
@@ -112,6 +112,6 @@ describe('POST', () => {
           expect.anything()
         )
       })
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
   })
 })

@@ -118,7 +118,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
-      const response = await client.getReportedAdjudication(3)
+      const response = await client.getReportedAdjudication('3')
 
       expect(response).toEqual(result)
     })
@@ -345,7 +345,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
-      const response = await client.createDraftFromCompleteAdjudication(12347)
+      const response = await client.createDraftFromCompleteAdjudication('12347')
       expect(response).toEqual(result)
       expect(response.draftAdjudication.prisonerNumber).toEqual('A7820DY')
       expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-12-01T09:40:00')
@@ -422,7 +422,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
-      const response = await client.saveDamageDetails(2469, damagesData)
+      const response = await client.saveDamageDetails('2469', damagesData)
       expect(response).toEqual(result)
     })
   })
@@ -461,7 +461,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
-      const response = await client.saveEvidenceDetails(2469, evidenceData)
+      const response = await client.saveEvidenceDetails('2469', evidenceData)
       expect(response).toEqual(result)
     })
   })

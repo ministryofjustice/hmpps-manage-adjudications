@@ -66,7 +66,7 @@ afterEach(() => {
 describe('GET schedule a hearing', () => {
   it('should load the schedule hearing page', () => {
     return request(app)
-      .get(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .get(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Schedule a hearing')
@@ -78,14 +78,14 @@ describe('GET schedule a hearing', () => {
 describe('POST new schedule hearing', () => {
   it('should successfully submit a hearing when all details provided - GOV', () => {
     return request(app)
-      .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
         hearingType: 'GOV',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('1524494'))
       .expect(response => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
@@ -100,14 +100,14 @@ describe('POST new schedule hearing', () => {
   })
   it('should successfully submit a hearing when all details provided - IND', () => {
     return request(app)
-      .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
         hearingType: 'IND_ADJ',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(1524494))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('1524494'))
       .expect(response => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
@@ -123,7 +123,7 @@ describe('POST new schedule hearing', () => {
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.scheduleHearing.mockRejectedValue(new Error('Internal Error'))
     return request(app)
-      .post(adjudicationUrls.scheduleHearing.urls.start(1524494))
+      .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,

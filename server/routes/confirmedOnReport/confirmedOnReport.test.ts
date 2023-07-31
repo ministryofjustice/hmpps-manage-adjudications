@@ -34,7 +34,7 @@ afterEach(() => {
 describe('GET /prisoner-placed-on-report', () => {
   it('should load the confirmation of placed on report page', () => {
     return request(app)
-      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
+      .get(adjudicationUrls.confirmedOnReport.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Your report for John Smith has been submitted for review')
@@ -46,7 +46,7 @@ describe('GET /prisoner-placed-on-report', () => {
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getSimpleConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)
-      .get(adjudicationUrls.confirmedOnReport.urls.start(123))
+      .get(adjudicationUrls.confirmedOnReport.urls.start('123'))
 
       .expect('Content-Type', /html/)
       .expect(res => {

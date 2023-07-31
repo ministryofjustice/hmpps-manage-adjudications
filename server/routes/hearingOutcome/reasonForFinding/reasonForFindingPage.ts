@@ -43,10 +43,9 @@ export default class ReasonForFindingPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, reasonForFinding } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-
+    const { chargeNumber } = req.params
     return res.render(`pages/hearingOutcome/reasonForFinding.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       reasonForFinding,
     })
@@ -59,7 +58,7 @@ export default class ReasonForFindingPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(user.token)
 
     let reasonForFinding = null
@@ -67,7 +66,7 @@ export default class ReasonForFindingPage {
     if (this.pageOptions.isEdit()) {
       try {
         const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-          adjudicationNumber,
+          chargeNumber,
           [ReportedAdjudicationStatus.DISMISSED],
           res.locals.user
         )
@@ -76,7 +75,7 @@ export default class ReasonForFindingPage {
           reasonForFinding = lastOutcomeItem.outcome?.outcome.details
         }
       } catch (postError) {
-        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
         throw postError
       }
     }
@@ -92,7 +91,7 @@ export default class ReasonForFindingPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { reasonForFinding } = req.body
     const { adjudicator, plea } = req.query
 
@@ -106,13 +105,13 @@ export default class ReasonForFindingPage {
       })
 
     if (!this.pageOptions.isEdit() && !this.validateQueryData(adjudicator as string, plea as HearingOutcomePlea)) {
-      return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+      return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
     }
 
     try {
       if (this.pageOptions.isEdit()) {
         await this.hearingsService.editDismissedOutcome(
-          adjudicationNumber,
+          chargeNumber,
           trimmedReasonForFinding,
           user,
           (adjudicator && (adjudicator as string)) || null,
@@ -120,16 +119,16 @@ export default class ReasonForFindingPage {
         )
       } else {
         await this.hearingsService.createDismissedHearingOutcome(
-          adjudicationNumber,
+          chargeNumber,
           adjudicator as string,
           plea as HearingOutcomePlea,
           trimmedReasonForFinding,
           user
         )
       }
-      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber)
       throw postError
     }
   }

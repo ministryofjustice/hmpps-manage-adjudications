@@ -43,11 +43,11 @@ export default class PunishmentSchedulePage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { error, days, suspended, suspendedUntil, startDate, endDate, displaySuspended } = pageData
 
     return res.render(`pages/punishmentSchedule.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       days,
       suspended,
@@ -59,7 +59,7 @@ export default class PunishmentSchedulePage {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     const punishmentType = PunishmentType[req.query.punishmentType as string]
     const displaySuspended = ![PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)
@@ -69,11 +69,7 @@ export default class PunishmentSchedulePage {
     }
 
     if (this.pageOptions.isEdit()) {
-      const sessionData = await this.punishmentsService.getSessionPunishment(
-        req,
-        adjudicationNumber,
-        req.params.redisId
-      )
+      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
         days: sessionData.days,
         suspended: sessionData.suspendedUntil ? 'yes' : 'no',
@@ -88,7 +84,7 @@ export default class PunishmentSchedulePage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { days, suspended, suspendedUntil, startDate, endDate } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
     const type = PunishmentType[punishmentType as string]
@@ -128,20 +124,15 @@ export default class PunishmentSchedulePage {
       }
 
       if (this.pageOptions.isEdit()) {
-        await this.punishmentsService.updateSessionPunishment(
-          req,
-          punishmentData,
-          adjudicationNumber,
-          req.params.redisId
-        )
+        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
       } else {
-        await this.punishmentsService.addSessionPunishment(req, punishmentData, adjudicationNumber)
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
       }
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError
     }
 
-    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

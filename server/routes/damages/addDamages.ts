@@ -15,14 +15,14 @@ export default class AddDamagesRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, damageType, damageDescription } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const submitted = req.query.submitted as string
 
     // eslint-disable-next-line no-extra-boolean-cast
     const cancelButtonHref =
       submitted === 'true'
-        ? adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)
-        : adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)
+        ? adjudicationUrls.detailsOfDamages.urls.submittedEditModified(chargeNumber)
+        : adjudicationUrls.detailsOfDamages.urls.modified(chargeNumber)
 
     return res.render(`pages/addDamages`, {
       errors: error ? [error] : [],
@@ -38,7 +38,7 @@ export default class AddDamagesRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const submitted = req.query.submitted as string
     const { damageType, damageDescription } = req.body
 
@@ -56,13 +56,13 @@ export default class AddDamagesRoutes {
       reporter: user.username,
     }
 
-    this.damagesSessionService.addSessionDamage(req, damageToAdd, adjudicationNumber)
-    const redirectUrl = this.getRedirectUrl(submitted === 'true', adjudicationNumber)
+    this.damagesSessionService.addSessionDamage(req, damageToAdd, chargeNumber)
+    const redirectUrl = this.getRedirectUrl(submitted === 'true', chargeNumber)
     return res.redirect(redirectUrl)
   }
 
-  getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {
-    if (submitted) return adjudicationUrls.detailsOfDamages.urls.submittedEditModified(adjudicationNumber)
-    return adjudicationUrls.detailsOfDamages.urls.modified(adjudicationNumber)
+  getRedirectUrl = (submitted: boolean, chargeNumber: string) => {
+    if (submitted) return adjudicationUrls.detailsOfDamages.urls.submittedEditModified(chargeNumber)
+    return adjudicationUrls.detailsOfDamages.urls.modified(chargeNumber)
   }
 }

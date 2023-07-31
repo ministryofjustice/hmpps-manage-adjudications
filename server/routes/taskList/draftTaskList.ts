@@ -8,17 +8,12 @@ export default class DraftTaskListRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
+    const chargeNumber = Number(req.params.chargeNumber)
     const { user } = res.locals
 
-    const idValue: number = parseInt(id as string, 10)
-    if (Number.isNaN(idValue)) {
-      throw new Error('No adjudication number provided')
-    }
-
     const [prisoner, taskListDetails] = await Promise.all([
-      this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
-      this.placeOnReportService.getInfoForTaskListStatuses(idValue, user),
+      this.placeOnReportService.getPrisonerDetailsFromAdjNumber(chargeNumber, user),
+      this.placeOnReportService.getInfoForTaskListStatuses(chargeNumber, user),
     ])
 
     const {
@@ -36,7 +31,7 @@ export default class DraftTaskListRoutes {
       // incident details
       {
         id: 'incident-details-info',
-        linkUrl: adjudicationUrls.incidentDetails.urls.edit(prisoner.prisonerNumber, idValue),
+        linkUrl: adjudicationUrls.incidentDetails.urls.edit(prisoner.prisonerNumber, chargeNumber),
         linkAttributes: 'incident-details-link',
         linkText: 'Incident details',
         statusClass: 'govuk-tag',
@@ -54,7 +49,7 @@ export default class DraftTaskListRoutes {
       // damages
       {
         id: 'damages-info',
-        linkUrl: adjudicationUrls.detailsOfDamages.urls.start(idValue),
+        linkUrl: adjudicationUrls.detailsOfDamages.urls.start(chargeNumber),
         linkAttributes: 'damages-link',
         linkText: 'Damages',
         statusClass: damagesStatus.classes,
@@ -63,7 +58,7 @@ export default class DraftTaskListRoutes {
       // evidence
       {
         id: 'evidence-info',
-        linkUrl: adjudicationUrls.detailsOfEvidence.urls.start(idValue),
+        linkUrl: adjudicationUrls.detailsOfEvidence.urls.start(chargeNumber),
         linkAttributes: 'evidence-link',
         linkText: 'Evidence',
         statusClass: evidenceStatus.classes,
@@ -72,7 +67,7 @@ export default class DraftTaskListRoutes {
       // witnesses
       {
         id: 'witnesses-info',
-        linkUrl: adjudicationUrls.detailsOfWitnesses.urls.start(idValue),
+        linkUrl: adjudicationUrls.detailsOfWitnesses.urls.start(chargeNumber),
         linkAttributes: 'witnesses-link',
         linkText: 'Witnesses',
         statusClass: witnessesStatus.classes,
@@ -81,7 +76,7 @@ export default class DraftTaskListRoutes {
       // incident statement
       {
         id: 'incident-statement-info',
-        linkUrl: adjudicationUrls.incidentStatement.urls.start(idValue),
+        linkUrl: adjudicationUrls.incidentStatement.urls.start(chargeNumber),
         linkAttributes: 'incident-statement-link',
         linkText: 'Incident statement',
         statusClass: incidentStatementStatus.classes,
@@ -90,7 +85,7 @@ export default class DraftTaskListRoutes {
       // accept details (check your answers)
       {
         id: 'accept-details-info',
-        linkUrl: adjudicationUrls.checkYourAnswers.urls.start(idValue),
+        linkUrl: adjudicationUrls.checkYourAnswers.urls.start(chargeNumber),
         linkAttributes: 'accept-details-link',
         linkText: 'Accept details and place on report',
         statusClass: 'govuk-tag govuk-tag--grey',

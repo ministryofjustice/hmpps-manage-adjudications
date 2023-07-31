@@ -257,7 +257,7 @@ describe('POST /details-of-offence/100', () => {
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
           .send({ reportedAdjudicationNumber: 1524493 })
           .expect(302)
-          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start(100))
+          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start('100'))
       )
   })
 })

@@ -37,10 +37,10 @@ export default class CautionPage {
   }
 
   private renderView = async (req: Request, res: Response, caution: string, error: FormError | null): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     return res.render(`pages/caution.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       caution,
     })
@@ -48,7 +48,7 @@ export default class CautionPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -59,7 +59,7 @@ export default class CautionPage {
     if (this.pageOptions.isEdit()) {
       try {
         const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-          adjudicationNumber,
+          chargeNumber,
           [ReportedAdjudicationStatus.CHARGE_PROVED],
           res.locals.user
         )
@@ -67,7 +67,7 @@ export default class CautionPage {
           caution = lastOutcomeItem.outcome.outcome.caution ? 'yes' : 'no'
         }
       } catch (postError) {
-        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
         throw postError
       }
     }
@@ -76,7 +76,7 @@ export default class CautionPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { caution } = req.body
     const { plea, adjudicator, amount, damagesOwed } = req.query
     // const { user } = res.locals
@@ -89,13 +89,13 @@ export default class CautionPage {
         !this.pageOptions.isEdit() &&
         !this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)
       ) {
-        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
       }
 
-      let path = adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber)
+      let path = adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber)
 
       if (this.pageOptions.isEdit()) {
-        path = adjudicationUrls.hearingsCheckAnswers.urls.edit(adjudicationNumber)
+        path = adjudicationUrls.hearingsCheckAnswers.urls.edit(chargeNumber)
       }
 
       return res.redirect(
@@ -111,7 +111,7 @@ export default class CautionPage {
         })
       )
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }

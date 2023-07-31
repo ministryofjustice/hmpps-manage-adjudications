@@ -20,6 +20,7 @@ import { PunishmentComment, PunishmentDataWithSchedule, PunishmentDataWithSchedu
  */
 export type ReportedAdjudication = {
   adjudicationNumber: number
+  chargeNumber: string
   prisonerNumber: string
   createdDateTime: string
   createdByUserId: string

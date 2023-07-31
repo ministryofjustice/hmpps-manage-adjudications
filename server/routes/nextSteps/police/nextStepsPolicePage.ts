@@ -17,11 +17,11 @@ export default class NextStepsPolicePage {
   constructor(private readonly userService: UserService, private readonly outcomesService: OutcomesService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { error, prosecutionChosen, nextStepChosen } = pageData
 
     return res.render(`pages/nextStepsPolice.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       prosecutionChosen,
       nextStepChosen,
@@ -39,7 +39,7 @@ export default class NextStepsPolicePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { prosecutionChosen, nextStepChosen } = req.body
 
     const error = validateForm({ prosecutionChosen, nextStepChosen })
@@ -47,15 +47,15 @@ export default class NextStepsPolicePage {
 
     try {
       if (prosecutionChosen === 'yes') {
-        await this.outcomesService.createProsecution(adjudicationNumber, user)
-        return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+        await this.outcomesService.createProsecution(chargeNumber, user)
+        return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
       }
 
       if (nextStepChosen === 'schedule_hearing')
-        return res.redirect(adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber))
-      return res.redirect(adjudicationUrls.reasonForNotProceeding.urls.start(adjudicationNumber))
+        return res.redirect(adjudicationUrls.scheduleHearing.urls.start(chargeNumber))
+      return res.redirect(adjudicationUrls.reasonForNotProceeding.urls.start(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }

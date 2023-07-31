@@ -8,7 +8,7 @@ export default class ManualConsecutivePunishmentErrorPage {
   constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeId } = req.params
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
 
@@ -16,11 +16,11 @@ export default class ManualConsecutivePunishmentErrorPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const prisoner = await this.punishmentsService.getPrisonerDetails(adjudicationNumber, user)
+    const prisoner = await this.punishmentsService.getPrisonerDetails(chargeId, user)
     const { redirectUrl, chargeNumber } = req.query
 
     return res.render(`pages/manualConsecutivePunishmentError.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeId),
       chargeNumber,
       prisonerName: prisoner.friendlyName || 'this prisoner',
       buttonHref: redirectUrl,

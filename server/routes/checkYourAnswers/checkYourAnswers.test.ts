@@ -88,7 +88,7 @@ beforeEach(() => {
     },
   })
 
-  placeOnReportService.completeDraftAdjudication.mockResolvedValue(2342)
+  placeOnReportService.completeDraftAdjudication.mockResolvedValue('2342')
 
   placeOnReportService.getGenderDataForTable.mockResolvedValue({
     data: [
@@ -169,7 +169,7 @@ describe('POST /check-your-answers', () => {
     return request(app)
       .post(adjudicationUrls.checkYourAnswers.urls.start(100))
       .expect(302)
-      .expect('Location', adjudicationUrls.confirmedOnReport.urls.start(2342))
+      .expect('Location', adjudicationUrls.confirmedOnReport.urls.start('2342'))
   })
 
   it('should throw an error on api failure', () => {

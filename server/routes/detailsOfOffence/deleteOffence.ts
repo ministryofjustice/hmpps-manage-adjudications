@@ -25,9 +25,9 @@ export default class DeleteOffenceRoutes {
 
   private async renderView(req: Request, res: Response, errors: FormError[]) {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const { incidentRole, prisoner, associatedPrisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(
-      adjudicationNumber,
+      draftId,
       user
     )
 
@@ -50,17 +50,17 @@ export default class DeleteOffenceRoutes {
 
   submit = async (req: Request, res: Response) => {
     const { confirmDelete } = req.body
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     if (!confirmDelete) {
       return this.renderView(req, res, [error.MISSING_SELECTION])
     }
     if (confirmDelete === 'yes') {
-      return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber))
+      return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(draftId))
     }
     const offenceData: OffenceData = { ...req.query }
     return this.redirect(
       {
-        pathname: adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber),
+        pathname: adjudicationUrls.detailsOfOffence.urls.modified(draftId),
         query: offenceData,
       },
       res

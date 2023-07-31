@@ -73,7 +73,7 @@ describe('PunishmentsService', () => {
           },
         })
       )
-      const result = await service.createPunishmentSet(punishments, 100, user)
+      const result = await service.createPunishmentSet(punishments, '100', user)
       expect(result).toEqual(
         testData.reportedAdjudication({
           adjudicationNumber: 100,
@@ -104,7 +104,7 @@ describe('PunishmentsService', () => {
           },
         })
       )
-      const result = await service.createPunishmentSet([punishments], 100, user)
+      const result = await service.createPunishmentSet([punishments], '100', user)
       expect(result).toEqual(
         testData.reportedAdjudication({
           adjudicationNumber: 100,
@@ -150,7 +150,7 @@ describe('PunishmentsService', () => {
         })
       )
       getSuspendedPunishments.mockResolvedValue(punishments)
-      const result = await service.getSuspendedPunishmentDetails(100, user)
+      const result = await service.getSuspendedPunishmentDetails('100', user)
       expect(result).toEqual({
         prisonerName: 'John Smith',
         suspendedPunishments: punishments,
@@ -176,7 +176,7 @@ describe('PunishmentsService', () => {
           },
         })
       )
-      const result = await service.createPunishmentComment(100, 'punishment comment text', user)
+      const result = await service.createPunishmentComment('100', 'punishment comment text', user)
       expect(result).toEqual(
         testData.reportedAdjudication({
           adjudicationNumber: 100,
@@ -207,7 +207,7 @@ describe('PunishmentsService', () => {
           },
         })
       )
-      const result = await service.editPunishmentComment(100, 50, 'new punishment comment text', user)
+      const result = await service.editPunishmentComment('100', 50, 'new punishment comment text', user)
       expect(result).toEqual(
         testData.reportedAdjudication({
           adjudicationNumber: 100,
@@ -228,7 +228,7 @@ describe('PunishmentsService', () => {
           otherData: {},
         })
       )
-      const result = await service.removePunishmentComment(100, 50, user)
+      const result = await service.removePunishmentComment('100', 50, user)
       expect(result).toEqual(
         testData.reportedAdjudication({
           adjudicationNumber: 100,
@@ -247,7 +247,7 @@ describe('PunishmentsService', () => {
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
         }),
       })
-      const result = await service.checkAdditionalDaysAvailability(100, user)
+      const result = await service.checkAdditionalDaysAvailability('100', user)
       expect(result).toEqual(false)
     })
     it('returns false if the last hearing on the adjudication is a governor hearing', async () => {
@@ -265,7 +265,7 @@ describe('PunishmentsService', () => {
           ],
         }),
       })
-      const result = await service.checkAdditionalDaysAvailability(100, user)
+      const result = await service.checkAdditionalDaysAvailability('100', user)
       expect(result).toEqual(false)
     })
     it('returns true if the last hearing on the adjudication is an independent adjudicator hearing', async () => {
@@ -283,7 +283,7 @@ describe('PunishmentsService', () => {
           ],
         }),
       })
-      const result = await service.checkAdditionalDaysAvailability(100, user)
+      const result = await service.checkAdditionalDaysAvailability('100', user)
       expect(result).toEqual(true)
     })
   })

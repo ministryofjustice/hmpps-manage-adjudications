@@ -28,12 +28,12 @@ class PageOptions {
   }
 }
 
-const getRedirectUrls = (pageOptions: PageOptions, adjudicationNumber: number, isAloEdit: boolean) => {
+const getRedirectUrls = (pageOptions: PageOptions, draftId: number, isAloEdit: boolean) => {
   if (pageOptions.isPreviouslySubmitted()) {
-    if (isAloEdit) return adjudicationUrls.incidentRole.urls.aloSubmittedEdit(adjudicationNumber)
-    return adjudicationUrls.incidentRole.urls.submittedEdit(adjudicationNumber)
+    if (isAloEdit) return adjudicationUrls.incidentRole.urls.aloSubmittedEdit(draftId)
+    return adjudicationUrls.incidentRole.urls.submittedEdit(draftId)
   }
-  return adjudicationUrls.incidentRole.urls.start(adjudicationNumber)
+  return adjudicationUrls.incidentRole.urls.start(draftId)
 }
 
 const getPreviouslyChosenRule = (draftAdjudication: DraftAdjudication): string => {
@@ -54,14 +54,14 @@ export default class AgeOfPrisonerPage {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  private renderView = async (res: Response, idValue: number, pageData: PageData): Promise<void> => {
+  private renderView = async (res: Response, draftId: number, pageData: PageData): Promise<void> => {
     const { error } = pageData
     const { user } = res.locals
     const aloEditingOffence = pageData.aloEdit as unknown as boolean
 
     const [prisoner, adjudicationDetails] = await Promise.all([
-      this.placeOnReportService.getPrisonerDetailsFromAdjNumber(idValue, user),
-      this.placeOnReportService.getDraftAdjudicationDetails(idValue, user),
+      this.placeOnReportService.getPrisonerDetailsFromAdjNumber(draftId, user),
+      this.placeOnReportService.getDraftAdjudicationDetails(draftId, user),
     ])
 
     const ageOfPrisoner =
@@ -69,7 +69,7 @@ export default class AgeOfPrisonerPage {
       null
 
     const cancelHref = aloEditingOffence
-      ? adjudicationUrls.prisonerReport.urls.review(adjudicationDetails.draftAdjudication.adjudicationNumber)
+      ? adjudicationUrls.prisonerReport.urls.review(adjudicationDetails.draftAdjudication.chargeNumber)
       : adjudicationUrls.taskList.urls.start(adjudicationDetails.draftAdjudication.id)
 
     return res.render(`pages/ageOfPrisoner`, {
@@ -81,13 +81,13 @@ export default class AgeOfPrisonerPage {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     if (req.query.reselectingFirstOffence) {
       req.session.forceOffenceSelection = true
     } else {
       delete req.session.forceOffenceSelection
     }
-    return this.renderView(res, adjudicationNumber, {
+    return this.renderView(res, draftId, {
       aloEdit: req.query.aloEdit as unknown as boolean,
     })
   }
@@ -95,23 +95,23 @@ export default class AgeOfPrisonerPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { whichRuleChosen, originalRuleSelection } = req.body
-    const idValue = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const aloEdit = req.query.aloEdit as unknown as boolean
 
     const error = validateForm({ whichRuleChosen })
-    if (error) return this.renderView(res, idValue, { error, whichRuleChosen, aloEdit })
+    if (error) return this.renderView(res, draftId, { error, whichRuleChosen, aloEdit })
 
     const applicableRuleChanged = originalRuleSelection !== whichRuleChosen
 
     try {
-      await this.placeOnReportService.addDraftYouthOffenderStatus(idValue, whichRuleChosen, applicableRuleChanged, user)
-      const redirectUrl = getRedirectUrls(this.pageOptions, idValue, aloEdit as boolean)
+      await this.placeOnReportService.addDraftYouthOffenderStatus(draftId, whichRuleChosen, applicableRuleChanged, user)
+      const redirectUrl = getRedirectUrls(this.pageOptions, draftId, aloEdit as boolean)
       return res.redirect(redirectUrl)
     } catch (postError) {
       logger.error(`Failed to post prison rule for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(idValue)
+      res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.start(draftId)
       if (req.query.reselectingFirstOffence) {
-        res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(idValue)
+        res.locals.redirectUrl = adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(draftId)
       }
       throw postError
     }

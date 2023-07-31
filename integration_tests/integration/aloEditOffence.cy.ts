@@ -41,6 +41,7 @@ const originalDraftTestOne = {
 const originalReportedTestOne = {
   reportedAdjudication: testData.reportedAdjudication({
     adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
@@ -76,6 +77,7 @@ const editedDraftAdjudicationTestOne = {
 
 const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
   adjudicationNumber: 12345,
+  chargeNumber: '12345',
   prisonerNumber: 'G6415GD',
   dateTimeOfIncident: '2021-11-03T13:10:00',
   locationId: 25538,
@@ -94,6 +96,7 @@ const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
 const originalReportedTestTwo = {
   reportedAdjudication: testData.reportedAdjudication({
     adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     locationId: 25538,
@@ -155,6 +158,7 @@ const editedDraftAdjudicationTestTwo = {
 
 const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
   adjudicationNumber: 1524493,
+  chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
   dateTimeOfIncident: '2021-12-09T10:30:00',
   locationId: 25538,
@@ -288,7 +292,7 @@ context('ALO edits offence - test 1', () => {
     cy.signIn()
   })
   it('allows ALO to update the adjudication offence - from assist to commit etc', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review('12345'))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.offenceDetailsChangeLink().click()
     const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
@@ -337,7 +341,7 @@ context('ALO edits offence - test 1', () => {
     detailsOfOffencePage.deleteLink(1).should('not.exist')
     detailsOfOffencePage.saveAndContinue().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(12345))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('12345'))
     })
   })
 })
@@ -435,7 +439,7 @@ context('ALO edits offence - test 2', () => {
   })
 
   it('allows ALO to update the adjudication offence - from commit to incite etc', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(1524493))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review('1524493'))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.offenceDetailsChangeLink().click()
     const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
@@ -454,7 +458,7 @@ context('ALO edits offence - test 2', () => {
     whoWasIncitedPage.searchPrisoner().click()
     cy.url().should('include', 'select-associated-prisoner?searchTerm=James%20Jones')
     cy.visit(
-      `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(188, 'incited', '1')}?selectedPerson=T3356FU`
+      `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion('188', 'incited', '1')}?selectedPerson=T3356FU`
     )
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith incite another prisoner to commit?'
@@ -494,7 +498,7 @@ context('ALO edits offence - test 2', () => {
     detailsOfOffencePage.deleteLink(1).should('not.exist')
     detailsOfOffencePage.saveAndContinue().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1524493))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('1524493'))
     })
   })
 })
