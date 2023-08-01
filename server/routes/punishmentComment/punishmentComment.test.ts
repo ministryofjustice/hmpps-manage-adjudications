@@ -67,7 +67,7 @@ describe('POST /punishment-comment', () => {
         punishmentComment: 'some text',
       })
       .then(() =>
-        expect(punishmentsService.createPunishmentComment).toHaveBeenCalledWith(100, 'some text', expect.anything())
+        expect(punishmentsService.createPunishmentComment).toHaveBeenCalledWith('100', 'some text', expect.anything())
       )
   })
   it('should redirect', () => {

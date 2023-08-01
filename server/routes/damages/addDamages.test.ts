@@ -37,7 +37,7 @@ describe('Add damages', () => {
             details: 'Repainting required',
             reporter: 'user1',
           },
-          100
+          '100'
         )
       )
   })
@@ -59,7 +59,7 @@ describe('Add damages', () => {
             details: 'Repainting required',
             reporter: 'user1',
           },
-          100
+          '100'
         )
       )
   })

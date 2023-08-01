@@ -107,7 +107,9 @@ describe('GET', () => {
     return request(app)
       .get(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       .expect('Content-Type', /html/)
-      .then(() => expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith(100, expect.anything()))
+      .then(() =>
+        expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith('100', expect.anything())
+      )
   })
 })
 

@@ -69,7 +69,7 @@ describe('POST', () => {
       .then(() =>
         expect(punishmentsService.createPunishmentSet).toHaveBeenCalledWith(
           punishmentsOnSession,
-          100,
+          '100',
           expect.anything()
         )
       )

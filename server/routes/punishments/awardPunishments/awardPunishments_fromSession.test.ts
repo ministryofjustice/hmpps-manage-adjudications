@@ -78,6 +78,6 @@ describe('GET', () => {
       .expect(200)
       .then(() => expect(punishmentsService.setAllSessionPunishments).not.toHaveBeenCalled())
       .then(() => expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(1))
-      .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })

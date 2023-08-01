@@ -52,7 +52,7 @@ describe('POST /reason-for-finding', () => {
       .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() =>
         expect(hearingsService.createDismissedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Joanne Rhubarb',
           HearingOutcomePlea.UNFIT,
           'This is a reason',

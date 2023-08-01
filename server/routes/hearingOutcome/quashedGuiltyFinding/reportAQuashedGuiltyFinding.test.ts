@@ -61,7 +61,7 @@ describe('POST', () => {
       .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() =>
         expect(outcomesService.quashAGuiltyFinding).toHaveBeenCalledWith(
-          100,
+          '100',
           QuashGuiltyFindingReason.APPEAL_UPHELD,
           'Some details about this decision',
           expect.anything()

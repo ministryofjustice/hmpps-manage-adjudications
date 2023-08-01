@@ -64,7 +64,7 @@ describe('GET', () => {
       .get(adjudicationUrls.detailsOfWitnesses.urls.modified('100'))
       .expect(200)
       .then(() => expect(witnessesSessionService.setAllSessionWitnesses).not.toHaveBeenCalled())
-      .then(() => expect(witnessesSessionService.getAllSessionWitnesses).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(witnessesSessionService.getAllSessionWitnesses).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })
 
@@ -76,7 +76,11 @@ describe('POST', () => {
       .post(adjudicationUrls.detailsOfWitnesses.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(100, witnessesOnSession, expect.anything())
+        expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(
+          '100',
+          witnessesOnSession,
+          expect.anything()
+        )
       )
   })
 })

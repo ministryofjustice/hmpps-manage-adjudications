@@ -80,7 +80,7 @@ describe('POST /reason-for-referral', () => {
       })
       .then(() =>
         expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_POLICE,
           '123',
           expect.anything(),
@@ -97,7 +97,7 @@ describe('POST /reason-for-referral', () => {
       })
       .then(() =>
         expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_INAD,
           '123',
           expect.anything(),
@@ -118,7 +118,7 @@ describe('POST /reason-for-referral', () => {
       })
       .then(() =>
         expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_INAD,
           '123',
           expect.anything(),

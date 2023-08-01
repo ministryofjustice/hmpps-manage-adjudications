@@ -117,7 +117,7 @@ describe('POST suspended punishment schedule', () => {
             endDate: '2023-04-13',
             activatedFrom: 102,
           },
-          100
+          '100'
         )
       )
   })
@@ -143,7 +143,7 @@ describe('POST suspended punishment schedule', () => {
             days: 5,
             activatedFrom: 103,
           },
-          100
+          '100'
         )
       )
   })
@@ -169,7 +169,7 @@ describe('POST suspended punishment schedule', () => {
             days: 3,
             activatedFrom: 104,
           },
-          100
+          '100'
         )
       )
   })

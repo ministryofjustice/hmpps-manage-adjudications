@@ -75,7 +75,7 @@ describe('submit edited punishment comment', () => {
         punishmentComment: 'new text',
       })
       .then(() => {
-        expect(punishmentsService.editPunishmentComment).toHaveBeenCalledWith(100, 1, 'new text', expect.anything())
+        expect(punishmentsService.editPunishmentComment).toHaveBeenCalledWith('100', 1, 'new text', expect.anything())
       })
   })
   it('should redirect', () => {

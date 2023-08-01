@@ -36,7 +36,7 @@ describe('GET /report-has-been-accepted', () => {
       .expect(response => {
         expect(reportedAdjudicationsService.getAcceptedReportConfirmationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getAcceptedReportConfirmationDetails).toHaveBeenCalledWith(
-          123,
+          '123',
           expect.anything()
         )
         expect(response.text).toContain('John Smith’s report has been accepted')

@@ -35,7 +35,7 @@ describe('Add evidence', () => {
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),
           testData.singleEvidence({ identifier: 'JO12345' }),
-          100
+          '100'
         )
       )
   })
@@ -53,7 +53,7 @@ describe('Add evidence', () => {
         expect(evidenceSessionService.addSessionEvidence).toHaveBeenCalledWith(
           expect.anything(),
           testData.singleEvidence({ identifier: 'JO12345' }),
-          100
+          '100'
         )
       )
   })

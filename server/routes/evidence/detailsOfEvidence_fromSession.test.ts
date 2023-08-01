@@ -82,7 +82,7 @@ describe('GET /evidence/100', () => {
       .get(adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .expect(200)
       .then(() => expect(evidenceSessionService.setAllSessionEvidence).not.toHaveBeenCalled())
-      .then(() => expect(evidenceSessionService.getAllSessionEvidence).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(evidenceSessionService.getAllSessionEvidence).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })
 
@@ -95,7 +95,7 @@ describe('POST', () => {
       .post(adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith(100, evidenceToSave, expect.anything())
+        expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith('100', evidenceToSave, expect.anything())
       )
   })
 })

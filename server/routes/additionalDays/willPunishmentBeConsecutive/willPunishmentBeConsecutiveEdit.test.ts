@@ -108,7 +108,7 @@ describe('POST', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100,
+          '100',
           expect.anything()
         )
       })

@@ -71,7 +71,7 @@ describe('GET /damages/100', () => {
       .get(adjudicationUrls.detailsOfDamages.urls.modified('100'))
       .expect(200)
       .then(() => expect(damagesSessionService.setAllSessionDamages).not.toHaveBeenCalled())
-      .then(() => expect(damagesSessionService.getAllSessionDamages).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(damagesSessionService.getAllSessionDamages).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })
 
@@ -82,7 +82,7 @@ describe('POST', () => {
       .post(adjudicationUrls.detailsOfDamages.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith(100, damagesToSave, expect.anything())
+        expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith('100', damagesToSave, expect.anything())
       )
   })
 })

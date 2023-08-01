@@ -61,7 +61,7 @@ describe('POST /not-proceed', () => {
       .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() =>
         expect(outcomesService.createNotProceed).toHaveBeenCalledWith(
-          100,
+          '100',
           NotProceedReason.NOT_FAIR,
           'details',
           expect.anything()

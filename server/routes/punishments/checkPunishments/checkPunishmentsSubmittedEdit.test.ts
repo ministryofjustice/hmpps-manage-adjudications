@@ -74,7 +74,11 @@ describe('POST', () => {
       .post(`${adjudicationUrls.checkPunishments.urls.submittedEdit('100')}`)
       .send()
       .then(() =>
-        expect(punishmentsService.editPunishmentSet).toHaveBeenCalledWith(punishmentsOnSession, 100, expect.anything())
+        expect(punishmentsService.editPunishmentSet).toHaveBeenCalledWith(
+          punishmentsOnSession,
+          '100',
+          expect.anything()
+        )
       )
   })
   it('should redirect after submission', () => {

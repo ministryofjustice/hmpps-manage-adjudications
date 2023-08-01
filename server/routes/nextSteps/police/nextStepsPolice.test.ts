@@ -58,6 +58,6 @@ describe('POST /nextSteps/police', () => {
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
-      .then(() => expect(outcomesService.createProsecution).toHaveBeenCalledWith(100, expect.anything()))
+      .then(() => expect(outcomesService.createProsecution).toHaveBeenCalledWith('100', expect.anything()))
   })
 })
