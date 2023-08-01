@@ -129,7 +129,7 @@ describe('GET /damages', () => {
               reporter: 'TESTER_GEN',
             },
           ],
-          100
+          '100'
         )
       )
       .then(() => expect(damagesSessionService.getAllSessionDamages).not.toHaveBeenCalled())
@@ -142,7 +142,7 @@ describe('GET /damages', () => {
       .then(() =>
         agent
           .post(adjudicationUrls.detailsOfDamages.urls.start('101'))
-          .then(() => expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith(101, [], expect.anything()))
+          .then(() => expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith('101', [], expect.anything()))
       )
   })
   it('should not save the damages list if this is not the first time calling the endpoint and no changes have been made', () => {

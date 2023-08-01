@@ -90,7 +90,7 @@ describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
       .send({
         removeComment: 'yes',
       })
-      .then(() => expect(punishmentsService.removePunishmentComment).toHaveBeenCalledWith(100, 1, expect.anything()))
+      .then(() => expect(punishmentsService.removePunishmentComment).toHaveBeenCalledWith('100', 1, expect.anything()))
   })
   it('should redirect', () => {
     return request(app)

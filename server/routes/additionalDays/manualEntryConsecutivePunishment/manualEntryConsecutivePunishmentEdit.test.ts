@@ -20,7 +20,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
-    consecutiveReportNumber: 7654321,
+    consecutiveReportNumber: '7654321',
     type: PunishmentType.ADDITIONAL_DAYS,
     days: 10,
   })
@@ -74,7 +74,7 @@ describe('POST', () => {
         )}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
       .send({
-        chargeNumber: 1234567,
+        consecutiveChargeNumber: 1234567,
       })
       .then(() => {
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
@@ -87,7 +87,7 @@ describe('POST', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100,
+          '100',
           'XYZ'
         )
       })

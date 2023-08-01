@@ -36,7 +36,7 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 1524494,
+      chargeNumber: '1524494',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
     }),
@@ -44,7 +44,7 @@ beforeEach(() => {
 
   reportedAdjudicationsService.scheduleHearing.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 1524494,
+      chargeNumber: '1524494',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
       status: ReportedAdjudicationStatus.SCHEDULED,
@@ -89,7 +89,7 @@ describe('POST new schedule hearing', () => {
       .expect(response => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
-          1524494,
+          '1524494',
           27008,
           '2045-11-03T11:00',
           OicHearingType.GOV_ADULT as string,
@@ -111,7 +111,7 @@ describe('POST new schedule hearing', () => {
       .expect(response => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
-          1524494,
+          '1524494',
           27008,
           '2045-11-03T11:00',
           OicHearingType.INAD_ADULT as string,

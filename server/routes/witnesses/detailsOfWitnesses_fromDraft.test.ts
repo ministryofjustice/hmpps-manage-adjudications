@@ -112,7 +112,7 @@ describe('GET', () => {
               reporter: 'user1',
             },
           ],
-          100
+          '100'
         )
       )
       .then(() => expect(witnessesSessionService.getAllSessionWitnesses).not.toHaveBeenCalled())
@@ -127,17 +127,19 @@ describe('POST', () => {
       .then(() =>
         agent
           .post(adjudicationUrls.detailsOfWitnesses.urls.start('101'))
-          .then(() => expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(101, [], expect.anything()))
+          .then(() =>
+            expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith('101', [], expect.anything())
+          )
       )
   })
   it('should not save the witnesses if it is the not first time calling the endpoint and no changes have been made', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfWitnesses.urls.start('102'))
+      .get(adjudicationUrls.detailsOfWitnesses.urls.start(102))
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfWitnesses.urls.start('102'))
+          .post(adjudicationUrls.detailsOfWitnesses.urls.start(102))
           .then(() => expect(placeOnReportService.saveWitnessDetails).not.toHaveBeenCalled())
       )
   })

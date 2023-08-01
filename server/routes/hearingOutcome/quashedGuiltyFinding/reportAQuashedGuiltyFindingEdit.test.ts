@@ -81,7 +81,7 @@ describe('POST', () => {
       .then(() => expect(outcomesService.quashAGuiltyFinding).not.toHaveBeenCalled())
       .then(() =>
         expect(outcomesService.editQuashedOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           QuashGuiltyFindingReason.APPEAL_UPHELD,
           'Some details about this decision',
           expect.anything()

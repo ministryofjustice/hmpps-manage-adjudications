@@ -64,7 +64,7 @@ describe('POST /reason-for-referral', () => {
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       .then(() =>
         expect(hearingsService.createReferral).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_POLICE,
           'Roxanne Red',
           '123',

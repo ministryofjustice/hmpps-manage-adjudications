@@ -71,7 +71,7 @@ describe('POST', () => {
       .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
           true,
@@ -91,7 +91,7 @@ describe('POST', () => {
       .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
           true,
@@ -119,7 +119,7 @@ describe('POST', () => {
       .expect('Location', adjudicationUrls.awardPunishments.urls.start('100'))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
           false,

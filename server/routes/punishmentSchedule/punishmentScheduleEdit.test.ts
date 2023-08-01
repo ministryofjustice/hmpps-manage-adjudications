@@ -85,7 +85,7 @@ describe('POST /punishment-schedule', () => {
             stoppagePercentage: null,
             suspendedUntil: null,
           },
-          100,
+          '100',
           'XYZ'
         )
       )

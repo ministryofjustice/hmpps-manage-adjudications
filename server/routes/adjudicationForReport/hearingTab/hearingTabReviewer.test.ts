@@ -75,7 +75,7 @@ describe('GET hearing details page - reviewer version', () => {
     })
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524495,
+        chargeNumber: '1524495',
         status: ReportedAdjudicationStatus.CHARGE_PROVED,
         prisonerNumber: 'G6415GD',
         outcomes: [
@@ -116,7 +116,7 @@ describe('POST cancel hearing', () => {
       .send({ removeHearingButton: 'cancelHearingButton-101' })
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
-        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith(1524494, expect.anything())
+        expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith('1524494', expect.anything())
       })
   })
 })

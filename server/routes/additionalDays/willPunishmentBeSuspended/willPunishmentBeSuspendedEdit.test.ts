@@ -82,7 +82,7 @@ describe('POST punishment-suspended page', () => {
             stoppagePercentage: null,
             suspendedUntil: '2024-04-14',
           },
-          100,
+          '100',
           'XYZ'
         )
       )

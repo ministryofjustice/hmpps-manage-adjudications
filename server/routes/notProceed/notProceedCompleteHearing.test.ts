@@ -74,7 +74,7 @@ describe('POST /not-proceed', () => {
       })
       .then(() =>
         expect(hearingsService.createNotProceedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Rod Red',
           HearingOutcomePlea.UNFIT,
           NotProceedReason.NOT_FAIR,

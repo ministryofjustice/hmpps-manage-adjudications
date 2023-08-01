@@ -86,7 +86,7 @@ describe('POST /not-proceed', () => {
       })
       .then(() =>
         expect(hearingsService.editNotProceedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           NotProceedReason.NOT_FAIR,
           'details',
           expect.anything(),

@@ -84,7 +84,7 @@ describe('GET', () => {
       .expect('Content-Type', /html/)
       .then(() =>
         expect(punishmentsService.getPossibleConsecutivePunishments).toHaveBeenCalledWith(
-          100,
+          '100',
           PunishmentType.ADDITIONAL_DAYS,
           expect.anything()
         )
@@ -112,7 +112,7 @@ describe('POST', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100
+          '100'
         )
       })
   })

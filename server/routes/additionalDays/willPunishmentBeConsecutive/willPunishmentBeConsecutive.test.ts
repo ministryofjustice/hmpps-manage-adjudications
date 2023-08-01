@@ -99,7 +99,7 @@ describe('POST', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100
+          '100'
         )
       })
       .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))

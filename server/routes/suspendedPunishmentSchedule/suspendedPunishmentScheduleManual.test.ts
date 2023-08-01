@@ -75,7 +75,7 @@ describe('POST suspended punishment schedule', () => {
             privilegeType: null,
             activatedFrom: 123456,
           },
-          100
+          '100'
         )
       )
   })
@@ -106,7 +106,7 @@ describe('POST suspended punishment schedule', () => {
             privilegeType: null,
             activatedFrom: 123456,
           },
-          100
+          '100'
         )
       )
   })
@@ -137,7 +137,7 @@ describe('POST suspended punishment schedule', () => {
             privilegeType: PrivilegeType.TV,
             activatedFrom: 123456,
           },
-          100
+          '100'
         )
       )
   })
@@ -168,7 +168,7 @@ describe('POST suspended punishment schedule', () => {
             privilegeType: PrivilegeType.OTHER,
             activatedFrom: 123456,
           },
-          100
+          '100'
         )
       )
   })
@@ -197,7 +197,7 @@ describe('POST suspended punishment schedule', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100
+          '100'
         )
       )
   })
@@ -226,7 +226,7 @@ describe('POST suspended punishment schedule', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100
+          '100'
         )
       )
   })

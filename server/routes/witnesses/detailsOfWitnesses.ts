@@ -122,18 +122,19 @@ export default class DetailsOfWitnessesPage {
     return this.redirectToNextPage(res, chargeNumber, isSubmittedEdit, referrer)
   }
 
-  getAdjudicationAndPrisoner = async (id: number | string, isSubmittedEdit: boolean, user: User) => {
+  getAdjudicationAndPrisoner = async (id: string, isSubmittedEdit: boolean, user: User) => {
     if (!isSubmittedEdit) {
+      const draftId = Number(id)
       const [draftAdjudicationResult, prisoner] = await Promise.all([
-        this.placeOnReportService.getDraftAdjudicationDetails(id as number, user),
-        this.placeOnReportService.getPrisonerDetailsFromAdjNumber(id as number, user),
+        this.placeOnReportService.getDraftAdjudicationDetails(draftId, user),
+        this.placeOnReportService.getPrisonerDetailsFromAdjNumber(draftId, user),
       ])
       const { draftAdjudication } = draftAdjudicationResult
       return { adjudication: draftAdjudication, prisoner }
     }
     const [reportedAdjudicationResult, prisoner] = await Promise.all([
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(id as string, user),
-      this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(id as string, user),
+      this.reportedAdjudicationsService.getReportedAdjudicationDetails(id, user),
+      this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(id, user),
     ])
     const { reportedAdjudication } = reportedAdjudicationResult
     return { adjudication: reportedAdjudication, prisoner }
