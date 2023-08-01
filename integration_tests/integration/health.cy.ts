@@ -3,6 +3,7 @@ context('Health check', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubAuthPing')
+      cy.task('stubManageUsersApiPing')
       cy.task('stubTokenPing')
       cy.task('stubPrisonerSearchPing')
       cy.task('stubPrisonApiPing')
@@ -21,6 +22,7 @@ context('Health check', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubAuthPing', 500)
+      cy.task('stubManageUsersApiPing', 500)
       cy.task('stubTokenPing', 500)
       cy.task('stubPrisonerSearchPing', 500)
       cy.task('stubPrisonApiPing', 500)
@@ -34,6 +36,7 @@ context('Health check', () => {
     it('All dependant APIs are unhealthy', () => {
       cy.request({ url: '/health', method: 'GET', failOnStatusCode: false }).then(response => {
         expect(response.body.checks.hmppsAuth.status).to.eq(500)
+        expect(response.body.checks.hmppsManageUsers.status).to.eq(500)
         expect(response.body.checks.prisonerSearch.status).to.eq(500)
         expect(response.body.checks.tokenVerification.status).to.eq(500)
         expect(response.body.checks.adjudications.status).to.eq(500)

@@ -78,6 +78,7 @@ export default defineConfig({
 
         stubTokenPing: status => tokenVerification.stubPing(status),
         stubAuthPing: status => auth.stubPing(status),
+        stubManageUsersApiPing: status => users.stubPing(status),
         stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
         stubPrisonApiPing: status => prisonApi.stubPing(status),
         stubAdjudicationsPing: status => adjudications.stubPing(status),

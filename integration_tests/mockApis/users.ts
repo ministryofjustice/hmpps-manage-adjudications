@@ -1,6 +1,17 @@
 import { Response, SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 
+const stubPing = (status = 200): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/users/health/ping',
+    },
+    response: {
+      status,
+    },
+  })
+
 const stubUser = ({ username = 'USER1', activeCaseLoadId = 'MDI' }: { username?: string; activeCaseLoadId?: string }) =>
   stubFor({
     request: {
@@ -118,6 +129,7 @@ const stubGetEmail = ({
   })
 
 export default {
+  stubPing,
   stubAuthUser: (args?: { username?: string; activeCaseLoadId?: string }): Promise<[Response, Response]> =>
     Promise.all([stubUser({ username: args?.username, activeCaseLoadId: args?.activeCaseLoadId }), stubUserRoles()]),
   stubUserOriginatingAgency: (activeCaseLoadId: string): Promise<Response> => stubUser({ activeCaseLoadId }),
