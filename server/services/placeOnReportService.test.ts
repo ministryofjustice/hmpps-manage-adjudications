@@ -5,6 +5,7 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
+import HmppsManageUsersClient from '../data/hmppsManageUsersClient'
 
 const testData = new TestData()
 
@@ -23,6 +24,7 @@ const getAgency = jest.fn()
 const saveYouthOffenderStatus = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../data/hmppsManageUsersClient')
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
     return { getPrisonerImage, getPrisonerDetails, getAgency, getBatchPrisonerDetails }
@@ -45,6 +47,7 @@ jest.mock('../data/manageAdjudicationsClient', () => {
 })
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const hmppsManageUsersClient = new HmppsManageUsersClient() as jest.Mocked<HmppsManageUsersClient>
 
 const token = 'some token'
 
@@ -56,7 +59,7 @@ describe('placeOnReportService', () => {
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
 
-    service = new PlaceOnReportService(hmppsAuthClient)
+    service = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient)
   })
 
   afterEach(() => {
@@ -139,7 +142,7 @@ describe('placeOnReportService', () => {
 
   describe('getReporter', () => {
     it('returns the users name', async () => {
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
       const result = await service.getReporterName('TEST_GEN', user)
       expect(result).toEqual('Test User')
     })
@@ -161,7 +164,7 @@ describe('placeOnReportService', () => {
         }),
       })
 
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
 
       const locations = testData.residentialLocations()
 
@@ -215,7 +218,7 @@ describe('placeOnReportService', () => {
         }),
       })
 
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
 
       const locations = testData.residentialLocations()
 

@@ -15,7 +15,7 @@ jest.mock('../../services/locationService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 
 const testData = new TestData()
-const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
 

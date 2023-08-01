@@ -48,7 +48,7 @@ import {
   PunishmentType,
   SuspendedPunishmentResult,
 } from './PunishmentResult'
-import { User } from './hmppsAuthClient'
+import { User } from './hmppsManageUsersClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string

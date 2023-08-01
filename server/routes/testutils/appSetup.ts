@@ -65,7 +65,7 @@ const user = {
 
 class MockUserService extends UserService {
   constructor() {
-    super(undefined)
+    super(undefined, undefined)
   }
 
   async getUser(token: string) {

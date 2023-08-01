@@ -1,6 +1,7 @@
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonLocation, Location, AgencyId, LocationId, Agency } from '../data/PrisonLocationResult'
+import { User } from '../data/hmppsManageUsersClient'
 
 export default class LocationService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}

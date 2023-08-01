@@ -9,7 +9,7 @@ import { HearingOutcomeCode, HearingOutcomeDetails } from '../../../data/Hearing
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingOutcomeValidation'
-import { User } from '../../../data/hmppsAuthClient'
+import { User } from '../../../data/hmppsManageUsersClient'
 import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {

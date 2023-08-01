@@ -8,7 +8,7 @@ import { FormError } from '../../../@types/template'
 import { getEvidenceCategory } from '../../../utils/utils'
 import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
-import { User } from '../../../data/hmppsAuthClient'
+import { User } from '../../../data/hmppsManageUsersClient'
 import LocationService from '../../../services/locationService'
 
 type PageData = {

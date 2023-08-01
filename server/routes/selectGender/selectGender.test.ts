@@ -8,7 +8,7 @@ import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 
 jest.mock('../../services/placeOnReportService.ts')
 
-const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
 const testData = new TestData()
 
 let app: Express

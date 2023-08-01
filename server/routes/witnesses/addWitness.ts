@@ -13,7 +13,7 @@ import OfficerDecisionHelper from '../offenceCodeDecisions/officerDecisionHelper
 import OtherPersonWitnesDecisionHelper from './otherPersonWitnesDecisionHelper'
 import Question from '../../offenceCodeDecisions/Question'
 import { DecisionForm } from '../offenceCodeDecisions/decisionForm'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type PageData = {

@@ -3,7 +3,7 @@ import ReportedAdjudicationsService from './reportedAdjudicationsService'
 
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
 import {
@@ -20,6 +20,7 @@ import {
   OutcomeHistory,
   ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
+import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 
 const testData = new TestData()
 
@@ -38,6 +39,7 @@ const getAlertsForPrisoner = jest.fn()
 const getMovementByOffender = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../data/hmppsManageUsersClient')
 
 jest.mock('../data/prisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
@@ -72,6 +74,7 @@ jest.mock('./curiousApiService', () => {
 jest.mock('./locationService')
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const hmppsManageUsersClient = new HmppsManageUsersClient() as jest.Mocked<HmppsManageUsersClient>
 const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
@@ -102,8 +105,13 @@ describe('reportedAdjudicationsService', () => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     locationService.getIncidentLocation.mockResolvedValue(location)
     locationService.getAgency.mockResolvedValue(agency)
-    hmppsAuthClient.getUserFromUsername.mockResolvedValue(user)
-    service = new ReportedAdjudicationsService(hmppsAuthClient, curiousApiService, locationService)
+    hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(user)
+    service = new ReportedAdjudicationsService(
+      hmppsAuthClient,
+      hmppsManageUsersClient,
+      curiousApiService,
+      locationService
+    )
   })
 
   afterEach(() => {
@@ -348,7 +356,7 @@ describe('reportedAdjudicationsService', () => {
         }),
         testData.prisonerResultSummary({ offenderNo: 'G6415GD', firstName: 'Peter', lastName: 'Smith' }),
       ]
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
       getBatchPrisonerDetails.mockResolvedValue(batchPrisonerDetails)
       getAllCompletedAdjudications.mockResolvedValue({
         size: 20,
@@ -438,7 +446,7 @@ describe('reportedAdjudicationsService', () => {
         locationPrefix: 'MDI-VISITS-CLO_VIS',
         userDescription: 'Closed Visits',
       })
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
     })
     it('returns the correct information', async () => {
       const draftAdjudication = testData.draftAdjudication({
@@ -492,7 +500,7 @@ describe('reportedAdjudicationsService', () => {
 
   describe('getReviewDetails', () => {
     beforeEach(() => {
-      hmppsAuthClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
     })
     const adjudicationData = (
       status: ReportedAdjudicationStatus,

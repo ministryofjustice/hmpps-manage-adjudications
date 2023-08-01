@@ -9,7 +9,7 @@ import TestData from '../testutils/testData'
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/prisonerSearchService.ts')
 
-const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const testData = new TestData()
 let app: Express

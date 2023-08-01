@@ -1,6 +1,6 @@
 import PrisonerResult from '../data/prisonerResult'
 import { convertNameForPlaceholder, convertToTitleCase, possessive } from '../utils/utils'
-import { User } from '../data/hmppsAuthClient'
+import { User } from '../data/hmppsManageUsersClient'
 
 export type PlaceholderValues = {
   prisonerFirstName: string

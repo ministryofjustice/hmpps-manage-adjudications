@@ -5,7 +5,6 @@ import type TokenStore from './tokenStore'
 import logger from '../../logger'
 import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
-import RestClient from './restClient'
 
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url
@@ -32,78 +31,8 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
     .timeout(timeoutSpec)
 }
 
-export interface User {
-  username: string
-  name: string
-  activeCaseLoadId: string
-  token: string
-  authSource: string
-  userId?: string
-}
-
-export interface UserRole {
-  roleCode: string
-}
-
-export type MatchedUserResult = {
-  exists: boolean
-  username: string
-  verified: boolean
-  email?: string
-  name: string
-  activeCaseLoadId?: string
-  staffId: number
-}
-
-export type NomisUserResponse = {
-  content: NomisUserResult[]
-}
-
-export type NomisUserResult = {
-  username: string
-  email: string
-  firstName: string
-  lastName: string
-}
-
-export type UserEmail = {
-  username: string
-  email: string
-  verified: boolean
-}
-
 export default class HmppsAuthClient {
   constructor(private readonly tokenStore: TokenStore) {}
-
-  private restClient(token: string): RestClient {
-    return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
-  }
-
-  getUser(token: string): Promise<User> {
-    logger.info(`Getting user details: calling HMPPS Auth`)
-    return this.restClient(token).get({ path: '/api/user/me' })
-  }
-
-  getUserFromUsername(username: string, token: string): Promise<User> {
-    return this.restClient(token).get({ path: `/api/user/${username}` })
-  }
-
-  getUsersFromName(name: string, token: string): Promise<NomisUserResponse> {
-    return this.restClient(token).get({
-      path: `/api/user/search`,
-      query: querystring.stringify({ name: name?.trim(), authSources: ['nomis'] }),
-    })
-  }
-
-  getUserEmail(username: string, token: string): Promise<UserEmail> {
-    return this.restClient(token).get({ path: `/api/user/${username}/email` })
-  }
-
-  getUserRoles(token: string): Promise<string[]> {
-    return this.restClient(token)
-      .get({ path: '/api/user/me/roles' })
-      .then(roles => (<UserRole[]>roles).map(role => role.roleCode)) as Promise<string[]>
-  }
 
   async getSystemClientToken(username?: string): Promise<string> {
     const key = username || '%ANONYMOUS%'

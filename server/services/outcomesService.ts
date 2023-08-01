@@ -1,7 +1,8 @@
 import { NotProceedReason, OutcomeCode, QuashGuiltyFindingReason } from '../data/HearingAndOutcomeResult'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
+import { User } from '../data/hmppsManageUsersClient'
 
 export default class OutcomesService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}

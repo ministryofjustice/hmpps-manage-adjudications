@@ -1,10 +1,11 @@
 import PrisonerSearchService from './prisonerSearchService'
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import { makeSearchApiNotFoundError } from '../test/helpers'
 import TestData from '../routes/testutils/testData'
 import adjudicationUrls from '../utils/urlGenerator'
+import { User } from '../data/hmppsManageUsersClient'
 
 const search = jest.fn()
 const searchPrisonerDetails = jest.fn()
@@ -14,6 +15,7 @@ const getPrisonerDetails = jest.fn()
 const testData = new TestData()
 
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../data/hmppsManageUsersClient')
 jest.mock('../data/prisonerSearchClient', () => {
   return jest.fn().mockImplementation(() => {
     return { search, getPrisonerDetails: searchPrisonerDetails }

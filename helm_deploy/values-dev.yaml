@@ -11,6 +11,7 @@ generic-service:
     INGRESS_URL: "https://manage-adjudications-dev.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    HMPPS_MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICE_URL: https://digital-dev.prison.service.justice.gov.uk
     MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk
     CURIOUS_API_URL: https://testservices.sequation.net/sequation-virtual-campus2-api

@@ -9,8 +9,9 @@ import adjudicationUrls from '../../utils/urlGenerator'
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
-const userService = new UserService(null) as jest.Mocked<UserService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
   null,
   null,
   null
