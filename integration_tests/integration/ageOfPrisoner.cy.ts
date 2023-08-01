@@ -19,7 +19,7 @@ context('Age of the prisoner', () => {
       }),
     })
     cy.task('stubSaveYouthOffenderStatus', {
-      adjudicationNumber: '3456',
+      id: 3456,
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 3456,

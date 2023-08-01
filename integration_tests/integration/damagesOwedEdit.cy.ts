@@ -25,7 +25,7 @@ context('Is any money being recovered for damages?', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
@@ -60,7 +60,7 @@ context('Is any money being recovered for damages?', () => {
       },
     })
     cy.task('stubGetReportedAdjudication', {
-      id: 101,
+      id: '101',
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
@@ -101,7 +101,7 @@ context('Is any money being recovered for damages?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements with amount owed present', () => {
-      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.submitButton().should('exist')
       damagesOwedPage.cancelButton().should('exist')
@@ -112,7 +112,7 @@ context('Is any money being recovered for damages?', () => {
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').should('not.be.checked')
     })
     it('should contain the required page elements with no amount owed present', () => {
-      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(101))
+      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit('101'))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.submitButton().should('exist')
       damagesOwedPage.cancelButton().should('exist')
@@ -121,18 +121,18 @@ context('Is any money being recovered for damages?', () => {
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
 
   describe('Validation', () => {
     it(`error when no amount entered`, () => {
-      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="yes"]').check()
       damagesOwedPage.amount().clear()
@@ -146,7 +146,7 @@ context('Is any money being recovered for damages?', () => {
         })
     })
     it(`error when amount is not numeric entered`, () => {
-      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+      cy.visit(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="yes"]').check()
       damagesOwedPage.amount().clear()
@@ -164,25 +164,25 @@ context('Is any money being recovered for damages?', () => {
 
   describe('submit', () => {
     it('saves successfully when damages owed', () => {
-      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}`)
+      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit('100')}`)
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
 
       damagesOwedPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit('100'))
         expect(loc.search).to.eq('?adjudicator=&plea=&amount=100.50&damagesOwed=true')
       })
     })
 
     it('saves successfully when damages not owed', () => {
-      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit(100)}`)
+      cy.visit(`${adjudicationUrls.moneyRecoveredForDamages.urls.edit('100')}`)
       const damagesOwedPage = Page.verifyOnPage(DamagesOwedPage)
       damagesOwedPage.damagesOwedRadioButtons().find('input[value="no"]').check()
       damagesOwedPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit('100'))
         expect(loc.search).to.eq('?adjudicator=&plea=&amount=&damagesOwed=false')
       })
     })

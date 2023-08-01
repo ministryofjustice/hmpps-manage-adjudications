@@ -25,7 +25,6 @@ const reportedAdjudicationWithOffences = testData.reportedAdjudication({
   otherData: {
     id: 202,
   },
-  adjudicationNumber: 1234,
   chargeNumber: '1234',
   prisonerNumber: 'G6415GD',
   offenceDetails: {
@@ -42,7 +41,6 @@ const reportedAdjudicationWithOffencesAloEdited = testData.reportedAdjudication(
   otherData: {
     id: 201,
   },
-  adjudicationNumber: 12345,
   chargeNumber: '12345',
   prisonerNumber: 'G6415GD',
   offenceDetails: {
@@ -161,22 +159,22 @@ context('Details of offence', () => {
       },
     })
     cy.task('stubSaveOffenceDetails', {
-      adjudicationNumber: 201,
+      draftId: 201,
       response: adjudicationWithOffences,
     })
     cy.task('stubSaveOffenceDetails', {
-      adjudicationNumber: 202,
+      draftId: 202,
       response: reportedAdjudicationWithOffences,
     })
     cy.task('stubAloAmendOffenceDetails', {
-      adjudicationNumber: 201,
+      draftId: 201,
       response: reportedAdjudicationWithOffencesAloEdited,
     })
   })
 
   it('select an offence for the first time and see it on the offence details page - assault.', () => {
     // Choose a complex offence so that we test all of the functionality.
-    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start('200', 'assisted'))
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -226,7 +224,7 @@ context('Details of offence', () => {
 
   it('select an offence for the first time and see it on the offence details page. - endanger', () => {
     // Choose a complex offence so that we test all of the functionality.
-    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start('200', 'assisted'))
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -277,7 +275,7 @@ context('Details of offence', () => {
 
   it('select an offence for the first time and see it on the offence details page. - fighting', () => {
     // Choose a complex offence so that we test all of the functionality.
-    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start('200', 'assisted'))
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -321,7 +319,7 @@ context('Details of offence', () => {
   })
 
   it('should replace existing offences if a new offence is added', () => {
-    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start('200', 'assisted'))
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
     )
@@ -388,7 +386,7 @@ context('Details of offence', () => {
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {
-      adjudicationNumber: 201,
+      draftId: 201,
       offenceDetails: {
         offenceCode: 4001,
       },

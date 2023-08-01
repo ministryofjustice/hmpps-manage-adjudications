@@ -88,10 +88,10 @@ context('Incident assist submitted edit', () => {
       },
     })
     cy.task('stubSaveAssociatedPrisoner', {
-      adjudicationNumber: 34,
+      draftId: 34,
     })
     cy.task('stubSaveAssociatedPrisoner', {
-      adjudicationNumber: 35,
+      draftId: 35,
     })
     cy.task('stubSearchPrisonerDetails', {
       prisonerNumber: 'T3356FU',
@@ -189,7 +189,7 @@ context('Incident assist submitted edit', () => {
     associatedPrisonerPage.submitButton().click()
 
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question('34', 'assisted', '1'))
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'assisted', '1'))
     })
   })
 
@@ -202,7 +202,7 @@ context('Incident assist submitted edit', () => {
     cy.get('[data-qa="select-prisoner-link"]').click()
     associatedPrisonerPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question('35', 'assisted', '1'))
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(35, 'assisted', '1'))
     })
   })
 

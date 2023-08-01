@@ -14,7 +14,7 @@ const testData = new TestData()
 const originalDraftTestOne = {
   draftAdjudication: testData.draftAdjudication({
     id: 177,
-    adjudicationNumber: 12345,
+    chargeNumber: '12345',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-11-03T13:10:00',
     locationId: 25538,
@@ -67,7 +67,7 @@ const originalReportedTestOne = {
 const editedDraftAdjudicationTestOne = {
   draftAdjudication: testData.draftAdjudication({
     id: 177,
-    adjudicationNumber: 12345,
+    chargeNumber: '12345',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-11-03T13:10:00',
     locationId: 25538,
@@ -115,7 +115,7 @@ const originalReportedTestTwo = {
 const originalDraftTestTwo = {
   draftAdjudication: testData.draftAdjudication({
     id: 188,
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     locationId: 25538,
@@ -134,7 +134,7 @@ const originalDraftTestTwo = {
 const editedDraftAdjudicationTestTwo = {
   draftAdjudication: testData.draftAdjudication({
     id: 188,
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
@@ -232,11 +232,11 @@ context('ALO edits offence - test 1', () => {
     })
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 177,
-          adjudicationNumber: 12345,
+          chargeNumber: '12345',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-03T13:10:00',
         }),
@@ -261,7 +261,7 @@ context('ALO edits offence - test 1', () => {
       },
     })
     cy.task('stubSaveYouthOffenderStatus', {
-      adjudicationNumber: '177',
+      id: '177',
       response: testData.draftAdjudication({
         id: 177,
         prisonerNumber: 'G6415GD',
@@ -284,7 +284,7 @@ context('ALO edits offence - test 1', () => {
       prisonerNumber: 'G7123CI',
     })
     cy.task('stubAloAmendOffenceDetails', {
-      adjudicationNumber: 177,
+      draftId: 177,
       response: editedReportedAdjudicationTestOne,
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
@@ -389,6 +389,7 @@ context('ALO edits offence - test 2', () => {
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       response: originalDraftTestTwo,
     })
     cy.task('stubGetDraftAdjudication', {
@@ -411,7 +412,8 @@ context('ALO edits offence - test 2', () => {
       },
     })
     cy.task('stubSaveYouthOffenderStatus', {
-      adjudicationNumber: '188',
+      id: 188,
+      chargeNumber: '188',
       response: originalDraftTestTwo,
     })
     cy.task('stubUpdateDraftIncidentRole', {
@@ -430,7 +432,7 @@ context('ALO edits offence - test 2', () => {
       prisonerNumber: 'T3356FU',
     })
     cy.task('stubAloAmendOffenceDetails', {
-      adjudicationNumber: 188,
+      draftId: 188,
       response: editedReportedAdjudicationTestTwo,
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
@@ -458,7 +460,7 @@ context('ALO edits offence - test 2', () => {
     whoWasIncitedPage.searchPrisoner().click()
     cy.url().should('include', 'select-associated-prisoner?searchTerm=James%20Jones')
     cy.visit(
-      `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion('188', 'incited', '1')}?selectedPerson=T3356FU`
+      `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(188, 'incited', '1')}?selectedPerson=T3356FU`
     )
     const whatTypeOfOffencePage = new OffenceCodeSelection(
       'What type of offence did John Smith incite another prisoner to commit?'

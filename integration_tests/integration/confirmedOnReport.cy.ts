@@ -22,7 +22,7 @@ context('Report has been submitted for review', () => {
       id: 1524242,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 3,
+          chargeNumber: '3',
           prisonerNumber: 'G6415GD',
           createdByUserId: 'AJONES',
         }),
@@ -70,7 +70,7 @@ context('Report has been submitted for review', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.confirmedOnReport.urls.start(1524242))
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.start('1524242'))
     Page.verifyOnPage(ConfirmedOnReport)
     cy.contains('This report will be reviewed. The reviewer can do one of 3 things')
     cy.contains('Check your prison’s processes.')
@@ -80,7 +80,7 @@ context('Report has been submitted for review', () => {
   })
 
   it('should redirect the user to your completed reports on finish', () => {
-    cy.visit(adjudicationUrls.confirmedOnReport.urls.start(1524242))
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.start('1524242'))
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishLink().click()
     cy.location().should(loc => {

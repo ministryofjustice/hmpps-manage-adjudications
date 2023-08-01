@@ -9,7 +9,7 @@ const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
   return {
     draftAdjudication: testData.draftAdjudication({
       id: 3456,
-      adjudicationNumber: 234,
+      chargeNumber: '234',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-11-03T11:09:42',
       locationId: 234,
@@ -40,7 +40,7 @@ const completeDraftAdjudicationResponse = (isYouthOffender: boolean) => {
 }
 
 const submitCompleteDraftResponse = {
-  adjudicationNumber: 234,
+  chargeNumber: '234',
 }
 
 const completeReportedAdjudicationResponse = (
@@ -51,7 +51,7 @@ const completeReportedAdjudicationResponse = (
 ) => {
   return {
     reportedAdjudication: {
-      adjudicationNumber: 234,
+      chargeNumber: '234',
       status,
       reviewedByUserId,
       statusReason,
@@ -228,7 +228,7 @@ context('Check Your Answers', () => {
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       checkYourAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(234))
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.confirmationOfChange('234'))
       })
     })
     it('should go to the prisoner report page if the user cancels', () => {

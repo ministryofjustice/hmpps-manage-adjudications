@@ -286,16 +286,16 @@ const stubGetYourReportedAdjudications = stubGetReportedAdjudications(
 )
 
 const stubCreateDraftFromCompleteAdjudication = ({
-  adjudicationNumber,
+  chargeNumber,
   response = {},
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/create-draft-adjudication`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/create-draft-adjudication`,
     },
     response: {
       status: 200,
@@ -332,16 +332,16 @@ const stubGetOffenceRule = ({
   })
 
 const stubSaveOffenceDetails = ({
-  adjudicationNumber,
+  draftId,
   response = {},
 }: {
-  adjudicationNumber: number
+  draftId: number
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/draft-adjudications/${adjudicationNumber}/offence-details`,
+      url: `/adjudications/draft-adjudications/${draftId}/offence-details`,
     },
     response: {
       status: 200,
@@ -353,16 +353,16 @@ const stubSaveOffenceDetails = ({
   })
 
 const stubAloAmendOffenceDetails = ({
-  adjudicationNumber,
+  draftId,
   response = {},
 }: {
-  adjudicationNumber: number
+  draftId: number
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/draft-adjudications/${adjudicationNumber}/alo-offence-details`,
+      url: `/adjudications/draft-adjudications/${draftId}/alo-offence-details`,
     },
     response: {
       status: 200,
@@ -395,16 +395,16 @@ const stubSaveEvidenceDetails = ({
   })
 
 const stubSaveWitnessDetails = ({
-  adjudicationNumber,
+  chargeNumber,
   response = {},
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/draft-adjudications/${adjudicationNumber}/witnesses`,
+      url: `/adjudications/draft-adjudications/${chargeNumber}/witnesses`,
     },
     response: {
       status: 200,
@@ -415,15 +415,9 @@ const stubSaveWitnessDetails = ({
     },
   })
 
-const verifySaveOffenceDetails = ({
-  adjudicationNumber,
-  offenceDetails,
-}: {
-  adjudicationNumber: number
-  offenceDetails: OffenceDetails
-}) =>
+const verifySaveOffenceDetails = ({ draftId, offenceDetails }: { draftId: number; offenceDetails: OffenceDetails }) =>
   verifyRequest({
-    requestUrlPattern: `/adjudications/draft-adjudications/${adjudicationNumber}/offence-details`,
+    requestUrlPattern: `/adjudications/draft-adjudications/${draftId}/offence-details`,
     method: 'PUT',
     body: {
       offenceDetails,
@@ -446,16 +440,16 @@ const stubUpdateAdjudicationStatus = ({
   })
 
 const stubSaveYouthOffenderStatus = ({
-  adjudicationNumber,
+  id,
   response = {},
 }: {
-  adjudicationNumber: number
+  id: number
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/draft-adjudications/${adjudicationNumber}/applicable-rules`,
+      url: `/adjudications/draft-adjudications/${id}/applicable-rules`,
     },
     response: {
       status: 200,
@@ -466,11 +460,11 @@ const stubSaveYouthOffenderStatus = ({
     },
   })
 
-const stubSaveAssociatedPrisoner = ({ adjudicationNumber, status = 200, response = {} }): SuperAgentRequest =>
+const stubSaveAssociatedPrisoner = ({ draftId, status = 200, response = {} }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/draft-adjudications/${adjudicationNumber}/associated-prisoner`,
+      url: `/adjudications/draft-adjudications/${draftId}/associated-prisoner`,
     },
     response: {
       status,
@@ -705,11 +699,11 @@ const stubGetIssueDataFilteredOnHearingDate = ({
   })
 }
 
-const stubPutDateTimeOfIssue = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubPutDateTimeOfIssue = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/issue`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/issue`,
     },
     response: {
       status: 200,
@@ -855,11 +849,11 @@ const stubPostCompleteDismissedHearing = ({ adjudicationNumber, response }): Sup
     },
   })
 
-const stubPostCompleteHearingChargeProved = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubPostCompleteHearingChargeProved = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved`,
     },
     response: {
       status: 200,
@@ -870,11 +864,11 @@ const stubPostCompleteHearingChargeProved = ({ adjudicationNumber, response }): 
     },
   })
 
-const stubPostCompleteHearingNotProceed = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubPostCompleteHearingNotProceed = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/complete-hearing/not-proceed`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/complete-hearing/not-proceed`,
     },
     response: {
       status: 200,
@@ -900,11 +894,11 @@ const stubPostQuashOutcome = ({ adjudicationNumber, response }): SuperAgentReque
     },
   })
 
-const stubAmendHearingOutcome = ({ adjudicationNumber, status, response }): SuperAgentRequest =>
+const stubAmendHearingOutcome = ({ chargeNumber, status, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/hearing/outcome/${status}`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`,
     },
     response: {
       status: 200,
@@ -945,11 +939,11 @@ const stubDeleteReport = ({ id, response }): SuperAgentRequest =>
     },
   })
 
-const stubCreatePunishments = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubCreatePunishments = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments`,
     },
     response: {
       status: 200,
@@ -960,11 +954,11 @@ const stubCreatePunishments = ({ adjudicationNumber, response }): SuperAgentRequ
     },
   })
 
-const stubAmendPunishments = ({ adjudicationNumber, response }): SuperAgentRequest =>
+const stubAmendPunishments = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${adjudicationNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments`,
     },
     response: {
       status: 200,

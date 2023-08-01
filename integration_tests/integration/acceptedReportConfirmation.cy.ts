@@ -23,6 +23,7 @@ context('Report has been accepted', () => {
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2022-11-15T09:10:00',
           handoverDeadline: '2022-11-17T09:30:00',
@@ -50,7 +51,7 @@ context('Report has been accepted', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.banner().should('exist')
     acceptedReportConfirmationPage.p1().should('exist')
@@ -66,7 +67,7 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
   })
   it('should contain the required page elements - transfer lock', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524494))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524494'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.banner().should('exist')
     acceptedReportConfirmationPage.p1().should('exist')
@@ -82,7 +83,7 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
   })
   it('should contain the correct content', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.banner().should('contain', 'John Smith’s report has been accepted')
     acceptedReportConfirmationPage
@@ -107,23 +108,23 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.allCompletedReportsLink().should('contain', 'Return to all completed reports')
   })
   it('should link to the correct schedule hearing page', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.scheduleHearingButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(1524493))
+      expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start('1524493'))
     })
   })
   it('should link to the prisoner report', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.viewReportLink().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1524493))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('1524493'))
     })
   })
   it('should link to the completed reports page', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.allCompletedReportsLink().click()
     cy.location().should(loc => {
@@ -131,7 +132,7 @@ context('Report has been accepted', () => {
     })
   })
   it('in text link should go to the completed reports page', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start(1524493))
+    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.inTextReportsLink().click()
     cy.location().should(loc => {
