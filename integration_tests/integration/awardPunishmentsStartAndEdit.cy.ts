@@ -151,6 +151,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     cy.task('stubGetConsecutivePunishments', {
       prisonerNumber: 'G6415GD',
       punishmentType: PunishmentType.PROSPECTIVE_DAYS,
+      chargeNumber: 101,
       response: [
         {
           reportNumber: 90,

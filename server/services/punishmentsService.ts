@@ -181,7 +181,8 @@ export default class PunishmentsService {
     const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
     return new ManageAdjudicationsClient(user).getPossibleConsecutivePunishments(
       reportedAdjudication.prisonerNumber,
-      punishmentType
+      punishmentType,
+      adjudicationNumber.toString()
     )
   }
 

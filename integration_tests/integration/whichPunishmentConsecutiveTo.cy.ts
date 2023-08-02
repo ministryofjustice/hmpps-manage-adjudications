@@ -32,6 +32,7 @@ context('which punishment will it be consecutive to page', () => {
     cy.task('stubGetConsecutivePunishments', {
       prisonerNumber: 'G6415GD',
       punishmentType: PunishmentType.ADDITIONAL_DAYS,
+      chargeNumber: '100',
       response: [
         {
           reportNumber: 90,
@@ -61,6 +62,7 @@ context('which punishment will it be consecutive to page', () => {
     cy.task('stubGetConsecutivePunishments', {
       prisonerNumber: 'AY124DP',
       punishmentType: PunishmentType.ADDITIONAL_DAYS,
+      chargeNumber: '101',
       response: [],
     })
     cy.task('stubGetReportedAdjudication', {
