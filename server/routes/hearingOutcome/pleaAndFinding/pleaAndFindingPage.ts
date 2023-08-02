@@ -52,10 +52,9 @@ export default class PleaAndFindingPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, hearingPlea, hearingFinding, adjudicatorNameFromApi } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-
+    const { chargeNumber } = req.params
     return res.render(`pages/hearingOutcome/pleaAndFinding.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       hearingPlea,
       hearingFinding,
@@ -66,7 +65,7 @@ export default class PleaAndFindingPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -75,7 +74,7 @@ export default class PleaAndFindingPage {
     let readApiHearingOutcome = null
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
-        adjudicationNumber,
+        chargeNumber,
         [
           ReportedAdjudicationStatus.DISMISSED,
           ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -101,7 +100,7 @@ export default class PleaAndFindingPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { hearingPlea, hearingFinding, adjudicatorName } = req.body
     const isEdit = this.pageOptions.isEdit()
     const { adjudicator } = req.query
@@ -117,7 +116,7 @@ export default class PleaAndFindingPage {
     const nameOfAdjudicator = adjudicator || adjudicatorName
 
     try {
-      const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], adjudicationNumber)
+      const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], chargeNumber)
       return res.redirect(
         url.format({
           pathname: redirectUrl,
@@ -125,30 +124,30 @@ export default class PleaAndFindingPage {
         })
       )
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
-    adjudicationId: number,
+    chargeNumber: string,
     user: User
   ): Promise<HearingOutcomeDetails> => {
-    return this.hearingsService.getHearingOutcome(adjudicationId, user)
+    return this.hearingsService.getHearingOutcome(chargeNumber, user)
   }
 
-  getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, adjudicationNumber: number) => {
+  getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, chargeNumber: string) => {
     if (isEdit) {
       if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
-        return adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber)
+        return adjudicationUrls.moneyRecoveredForDamages.urls.edit(chargeNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
-        return adjudicationUrls.hearingReasonForFinding.urls.edit(adjudicationNumber)
-      return adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(adjudicationNumber)
+        return adjudicationUrls.hearingReasonForFinding.urls.edit(chargeNumber)
+      return adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(chargeNumber)
     }
     if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
-      return adjudicationUrls.moneyRecoveredForDamages.urls.start(adjudicationNumber)
+      return adjudicationUrls.moneyRecoveredForDamages.urls.start(chargeNumber)
     if (hearingFinding === HearingOutcomeFinding.DISMISSED)
-      return adjudicationUrls.hearingReasonForFinding.urls.start(adjudicationNumber)
-    return adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(adjudicationNumber)
+      return adjudicationUrls.hearingReasonForFinding.urls.start(chargeNumber)
+    return adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(chargeNumber)
   }
 }

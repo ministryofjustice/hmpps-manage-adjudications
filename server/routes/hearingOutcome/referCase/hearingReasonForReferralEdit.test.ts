@@ -45,7 +45,7 @@ afterEach(() => {
 describe('GET /reason-for-referral', () => {
   it('should load the `Reason for referral` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingReasonForReferral.urls.edit(100))
+      .get(adjudicationUrls.hearingReasonForReferral.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the reason for the referral?')
@@ -58,7 +58,7 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`
       )
       .send({
@@ -66,13 +66,13 @@ describe('POST /reason-for-referral', () => {
         hearingOutcomeCode: HearingOutcomeCode.REFER_POLICE,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start(100))
+      .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
   })
   it('should successfully call the endpoint and redirect to the confirmation page if query params present', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`
       )
       .send({
@@ -81,7 +81,7 @@ describe('POST /reason-for-referral', () => {
       })
       .then(() =>
         expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_POLICE,
           '123',
           expect.anything(),
@@ -91,14 +91,14 @@ describe('POST /reason-for-referral', () => {
   })
   it('should successfully call the endpoint and redirect to the confirmation page if query params are not present', () => {
     return request(app)
-      .post(adjudicationUrls.hearingReasonForReferral.urls.edit(100))
+      .post(adjudicationUrls.hearingReasonForReferral.urls.edit('100'))
       .send({
         referralReason: '123',
         hearingOutcomeCode: HearingOutcomeCode.REFER_INAD,
       })
       .then(() =>
         expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_INAD,
           '123',
           expect.anything(),
@@ -110,7 +110,7 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_INAD`
       )
       .send({
@@ -119,7 +119,7 @@ describe('POST /reason-for-referral', () => {
       })
       .then(() =>
         expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.REFER_INAD,
           '123',
           expect.anything(),

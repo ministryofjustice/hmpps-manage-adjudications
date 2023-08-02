@@ -28,10 +28,10 @@ const draftAdjudication = (id: number, damages: DamageDetails[]) => {
   }
 }
 
-const reportedAdjudication = (adjudicationNumber: number, damages: DamageDetails[]) => {
+const reportedAdjudication = (chargeNumber: string, damages: DamageDetails[]) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       damages,
     }),
@@ -68,15 +68,15 @@ context('Details of damages', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: reportedAdjudication(12345, null),
+      response: reportedAdjudication('12345', null),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 23456,
-      response: reportedAdjudication(23456, damagesList),
+      response: reportedAdjudication('23456', damagesList),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 34567,
-      response: reportedAdjudication(34567, damagesListMultiUser),
+      response: reportedAdjudication('34567', damagesListMultiUser),
     })
   })
   it('should show the damages page with no damages added to begin with', () => {

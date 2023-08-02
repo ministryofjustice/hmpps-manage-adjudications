@@ -15,10 +15,10 @@ context('Will this charge continue to prosecution?', () => {
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubCreateProsecution', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
         }),
       },
@@ -27,7 +27,7 @@ context('Will this charge continue to prosecution?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.submitButton().should('exist')
       nextStepsPolicePage.cancelButton().should('exist')
@@ -37,15 +37,15 @@ context('Will this charge continue to prosecution?', () => {
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').should('not.be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
     it('shows correct fields when No is selected', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
       nextStepsPolicePage.nextStepRadioButtons().should('exist')
@@ -55,7 +55,7 @@ context('Will this charge continue to prosecution?', () => {
   })
   describe('Validation', () => {
     it('should show error if no answer to prosecution', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
 
       nextStepsPolicePage.submitButton().click()
@@ -68,7 +68,7 @@ context('Will this charge continue to prosecution?', () => {
         })
     })
     it('should show error if no answer to next steps', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
 
@@ -84,18 +84,18 @@ context('Will this charge continue to prosecution?', () => {
   })
   describe('Continue', () => {
     it('redirects to hearing review when prosecution is Yes', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="yes"]').check()
 
       nextStepsPolicePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
     it('redirects to schedule hearing when prosecution is No and schedule hearing', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
       nextStepsPolicePage.nextStepRadioButtons().find('input[value="schedule_hearing"]').check()
@@ -103,11 +103,11 @@ context('Will this charge continue to prosecution?', () => {
       nextStepsPolicePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start('100'))
       })
     })
     it('redirects to not proceed reason when prosecution is No and Not proceed', () => {
-      cy.visit(adjudicationUrls.nextStepsPolice.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
       nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
       nextStepsPolicePage.nextStepRadioButtons().find('input[value="not_proceed"]').check()
@@ -115,7 +115,7 @@ context('Will this charge continue to prosecution?', () => {
       nextStepsPolicePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       })
     })
   })

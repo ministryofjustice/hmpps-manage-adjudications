@@ -24,7 +24,7 @@ context('Print a copy of this report', () => {
       response: {
         reportedAdjudication: {
           ...testData.reportedAdjudication({
-            adjudicationNumber: 3,
+            chargeNumber: '1524242',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2020-12-06T10:00:00',
             handoverDeadline: '2020-12-08T10:00:00',
@@ -73,7 +73,7 @@ context('Print a copy of this report', () => {
       response: testData.residentialLocations(),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 1524242,
+      chargeNumber: '1524242',
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 177,
@@ -93,7 +93,7 @@ context('Print a copy of this report', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.printReport.urls.start(1524242))
+    cy.visit(adjudicationUrls.printReport.urls.start('1524242'))
     Page.verifyOnPage(PrintReport)
     cy.contains('John Smith must be given a copy of this report by 10:00 on Tuesday, 8 December 2020.')
     cy.contains('John Smith’s preferred language is:')
@@ -105,7 +105,7 @@ context('Print a copy of this report', () => {
 
   it('should redirect the user to the referrer on finish', () => {
     cy.visit(
-      `${adjudicationUrls.printReport.urls.start(1524242)}?referrer=${adjudicationUrls.prisonerReport.urls.report(
+      `${adjudicationUrls.printReport.urls.start('1524242')}?referrer=${adjudicationUrls.prisonerReport.urls.report(
         1524242
       )}`
     )

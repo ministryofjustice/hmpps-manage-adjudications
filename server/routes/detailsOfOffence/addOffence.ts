@@ -5,11 +5,11 @@ import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class AddOffenceRoutes {
   add = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const offenceToAdd: OffenceData = { ...req.query }
     return this.redirect(
       {
-        pathname: adjudicationUrls.detailsOfOffence.urls.modified(adjudicationNumber),
+        pathname: adjudicationUrls.detailsOfOffence.urls.modified(draftId),
         query: offenceToAdd,
       },
       res
@@ -17,11 +17,11 @@ export default class AddOffenceRoutes {
   }
 
   aloAdd = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const draftId = Number(req.params.draftId)
     const offenceToAdd: OffenceData = { ...req.query }
     return this.redirect(
       {
-        pathname: adjudicationUrls.detailsOfOffence.urls.aloEdit(adjudicationNumber),
+        pathname: adjudicationUrls.detailsOfOffence.urls.aloEdit(draftId),
         query: offenceToAdd,
       },
       res

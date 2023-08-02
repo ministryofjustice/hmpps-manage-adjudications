@@ -106,7 +106,7 @@ describe('manageAdjudicationsClient', () => {
     it('should return the reported adjudication data', async () => {
       const result = {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 3,
+          chargeNumber: '3',
           prisonerNumber: 'A12345',
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         }),
@@ -118,7 +118,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
-      const response = await client.getReportedAdjudication(3)
+      const response = await client.getReportedAdjudication('3')
 
       expect(response).toEqual(result)
     })
@@ -148,7 +148,7 @@ describe('manageAdjudicationsClient', () => {
   describe('submitCompleteDraftAdjudication', () => {
     const result = {
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 2345221,
+        chargeNumber: '2345221',
         prisonerNumber: 'G6123VU',
       }),
     }
@@ -167,7 +167,7 @@ describe('manageAdjudicationsClient', () => {
   describe('editDraftIncidentDetails', () => {
     const result = {
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 2345221,
+        chargeNumber: '2345221',
         prisonerNumber: 'G6123VU',
       }),
     }
@@ -236,11 +236,11 @@ describe('manageAdjudicationsClient', () => {
   describe('getYourCompletedAdjudications', () => {
     const content = [
       testData.reportedAdjudication({
-        adjudicationNumber: 2,
+        chargeNumber: '2',
         prisonerNumber: 'G6123VU',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 1,
+        chargeNumber: '1',
         prisonerNumber: 'G6174VU',
       }),
     ]
@@ -280,11 +280,11 @@ describe('manageAdjudicationsClient', () => {
   describe('getAllCompletedAdjudications', () => {
     const content = [
       testData.reportedAdjudication({
-        adjudicationNumber: 2,
+        chargeNumber: '2',
         prisonerNumber: 'G6123VU',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 1,
+        chargeNumber: '1',
         prisonerNumber: 'G6174VU',
       }),
     ]
@@ -345,7 +345,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
 
-      const response = await client.createDraftFromCompleteAdjudication(12347)
+      const response = await client.createDraftFromCompleteAdjudication('12347')
       expect(response).toEqual(result)
       expect(response.draftAdjudication.prisonerNumber).toEqual('A7820DY')
       expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-12-01T09:40:00')
@@ -422,7 +422,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
-      const response = await client.saveDamageDetails(2469, damagesData)
+      const response = await client.saveDamageDetails('2469', damagesData)
       expect(response).toEqual(result)
     })
   })
@@ -461,7 +461,7 @@ describe('manageAdjudicationsClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.activeCaseLoadId)
         .reply(200, result)
-      const response = await client.saveEvidenceDetails(2469, evidenceData)
+      const response = await client.saveEvidenceDetails('2469', evidenceData)
       expect(response).toEqual(result)
     })
   })

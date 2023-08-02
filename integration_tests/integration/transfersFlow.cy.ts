@@ -56,7 +56,7 @@ context('Transfers flow', () => {
     describe('TransferrableActionsAllowed is false', () => {
       beforeEach(() => {
         const transferredPrisonersAdjudicationUnscheduled = testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2030-11-15T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -80,7 +80,7 @@ context('Transfers flow', () => {
 
         const transferredPrisonersAdjudicationScheduled = {
           ...transferredPrisonersAdjudicationUnscheduled,
-          adjudicationNumber: 2,
+          chargeNumber: 2,
           status: ReportedAdjudicationStatus.SCHEDULED,
           outcomes: [
             {
@@ -96,7 +96,7 @@ context('Transfers flow', () => {
 
         const transferredPrisonersAdjudicationReferPolice = {
           ...transferredPrisonersAdjudicationUnscheduled,
-          adjudicationNumber: 3,
+          chargeNumber: 3,
           status: ReportedAdjudicationStatus.REFER_POLICE,
           outcomes: [
             {
@@ -113,7 +113,7 @@ context('Transfers flow', () => {
         }
 
         const transferredPrisonersAdjudicationProved = testData.reportedAdjudication({
-          adjudicationNumber: 4,
+          chargeNumber: '4',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2030-11-15T11:30:00',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -153,7 +153,7 @@ context('Transfers flow', () => {
 
         const transferredPrisonersAdjudicationProvedPunishments = {
           ...transferredPrisonersAdjudicationProved,
-          adjudicationNumber: 5,
+          chargeNumber: 5,
           punishments: [
             {
               id: 14,
@@ -228,12 +228,12 @@ context('Transfers flow', () => {
         prisonerReportPage.incidentStatementChangeLink().should('not.exist')
         prisonerReportPage.hearingsTab().click()
         cy.location().should(loc => {
-          expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly(1))
+          expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly('1'))
         })
         cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1))
         prisonerReportPage.punishmentsTab().click()
         cy.location().should(loc => {
-          expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(1))
+          expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('1'))
         })
       })
       it('Transfer banner - user in originating agency', () => {
@@ -245,7 +245,7 @@ context('Transfers flow', () => {
         prisonerReportPage.transferBannerParagraph().should('not.exist')
       })
       it('hearings tab - unscheduled - should be locked', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly(1))
+        cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly('1'))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.noHearingsScheduled().should('exist')
         hearingTabPage.hearingSummaryTable(1).should('not.exist')
@@ -255,7 +255,7 @@ context('Transfers flow', () => {
         hearingTabPage.nextStepConfirmationButton().should('not.exist')
       })
       it('hearings tab - scheduled - should be locked', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly(2))
+        cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly('2'))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.schedulingUnavailableP1().should('not.exist')
         hearingTabPage.schedulingUnavailableP2().should('not.exist')
@@ -267,7 +267,7 @@ context('Transfers flow', () => {
         hearingTabPage.changeLink().should('not.exist')
       })
       it('hearings tab - refer to police - should be locked', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly(3))
+        cy.visit(adjudicationUrls.hearingDetails.urls.viewOnly('3'))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.schedulingUnavailableP1().should('not.exist')
         hearingTabPage.schedulingUnavailableP2().should('not.exist')
@@ -278,7 +278,7 @@ context('Transfers flow', () => {
         hearingTabPage.referralChangeLink().should('not.exist')
       })
       it('punishments tab - unscheduled - should be locked', () => {
-        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(1))
+        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('1'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
         punishmentsAndDamagesPage.quashedWarning().should('not.exist')
@@ -291,7 +291,7 @@ context('Transfers flow', () => {
           .contains('There are no punishments added. You can only add punishments if the charge is proved.')
       })
       it('punishments tab - proved, no punishments - should be locked', () => {
-        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(4))
+        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('4'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -300,7 +300,7 @@ context('Transfers flow', () => {
         punishmentsAndDamagesPage.moneyCautionChangeLink().should('not.exist')
       })
       it('punishments tab - proved, punishments - should be locked', () => {
-        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly(5))
+        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('5'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -312,7 +312,7 @@ context('Transfers flow', () => {
     describe('TransferrableActionsAllowed is true', () => {
       beforeEach(() => {
         const transferredPrisonersAdjudicationUnscheduled = testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2030-11-15T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -335,7 +335,7 @@ context('Transfers flow', () => {
         })
         const transferredPrisonersAdjudicationScheduled = {
           ...transferredPrisonersAdjudicationUnscheduled,
-          adjudicationNumber: 2,
+          chargeNumber: 2,
           status: ReportedAdjudicationStatus.SCHEDULED,
           outcomes: [
             {
@@ -350,7 +350,7 @@ context('Transfers flow', () => {
 
         const transferredPrisonersAdjudicationReferPolice = {
           ...transferredPrisonersAdjudicationUnscheduled,
-          adjudicationNumber: 3,
+          chargeNumber: 3,
           status: ReportedAdjudicationStatus.REFER_POLICE,
           outcomes: [
             {
@@ -366,7 +366,7 @@ context('Transfers flow', () => {
           ],
         }
         const transferredPrisonersAdjudicationProved = testData.reportedAdjudication({
-          adjudicationNumber: 4,
+          chargeNumber: '4',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2030-11-15T11:30:00',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -406,7 +406,7 @@ context('Transfers flow', () => {
 
         const transferredPrisonersAdjudicationProvedPunishments = {
           ...transferredPrisonersAdjudicationProved,
-          adjudicationNumber: 5,
+          chargeNumber: 5,
           punishments: [
             {
               id: 14,
@@ -476,16 +476,16 @@ context('Transfers flow', () => {
         prisonerReportPage.incidentStatementChangeLink().should('not.exist')
         prisonerReportPage.hearingsTab().click()
         cy.location().should(loc => {
-          expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1))
+          expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1'))
         })
         cy.visit(adjudicationUrls.prisonerReport.urls.review(1))
         prisonerReportPage.punishmentsTab().click()
         cy.location().should(loc => {
-          expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(1))
+          expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('1'))
         })
       })
       it('hearings tab - unscheduled - should be unlocked', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.review(1))
+        cy.visit(adjudicationUrls.hearingDetails.urls.review('1'))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.noHearingsScheduled().should('exist')
         hearingTabPage.hearingSummaryTable(1).should('not.exist')
@@ -495,7 +495,7 @@ context('Transfers flow', () => {
         hearingTabPage.nextStepConfirmationButton().should('exist')
       })
       it('hearings tab - scheduled - should be unlocked', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.review(2))
+        cy.visit(adjudicationUrls.hearingDetails.urls.review('2'))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.schedulingUnavailableP1().should('not.exist')
         hearingTabPage.schedulingUnavailableP2().should('not.exist')
@@ -507,7 +507,7 @@ context('Transfers flow', () => {
         hearingTabPage.changeLink().should('exist')
       })
       it('hearings tab - refer to police - should be unlocked', () => {
-        cy.visit(adjudicationUrls.hearingDetails.urls.review(3))
+        cy.visit(adjudicationUrls.hearingDetails.urls.review('3'))
         const hearingTabPage = Page.verifyOnPage(hearingTab)
         hearingTabPage.schedulingUnavailableP1().should('not.exist')
         hearingTabPage.schedulingUnavailableP2().should('not.exist')
@@ -518,7 +518,7 @@ context('Transfers flow', () => {
         hearingTabPage.referralChangeLink().should('exist')
       })
       it('punishments tab - unscheduled - should be locked', () => {
-        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(1))
+        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('1'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
         punishmentsAndDamagesPage.quashedWarning().should('not.exist')
@@ -531,7 +531,7 @@ context('Transfers flow', () => {
           .contains('There are no punishments added. You can only add punishments if the charge is proved.')
       })
       it('punishments tab - proved, no punishments - should be unlocked', () => {
-        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(4))
+        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('4'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -539,7 +539,7 @@ context('Transfers flow', () => {
         punishmentsAndDamagesPage.moneyCautionChangeLink().first().should('exist')
       })
       it('punishments tab - proved, punishments - should be unlocked', () => {
-        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(5))
+        cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('5'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
         punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('exist')
@@ -584,7 +584,7 @@ context('Transfer banner', () => {
         },
       })
       const transferredPrisonersAdjudicationUnscheduled = testData.reportedAdjudication({
-        adjudicationNumber: 6,
+        chargeNumber: '6',
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2030-11-15T11:30:00',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -608,7 +608,7 @@ context('Transfer banner', () => {
 
       const transferredPrisonersAdjudicationScheduled = {
         ...transferredPrisonersAdjudicationUnscheduled,
-        adjudicationNumber: 7,
+        chargeNumber: '7',
         status: ReportedAdjudicationStatus.SCHEDULED,
         outcomes: [
           {

@@ -18,14 +18,14 @@ export default class AddEvidenceRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, evidenceType, evidenceDescription, bwcIdentifier, batIdentifier } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const submitted = req.query.submitted as string
 
     // eslint-disable-next-line no-extra-boolean-cast
     const cancelButtonHref =
       submitted === 'true'
-        ? adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(adjudicationNumber)
-        : adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)
+        ? adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(chargeNumber)
+        : adjudicationUrls.detailsOfEvidence.urls.modified(chargeNumber)
 
     return res.render(`pages/addEvidence`, {
       errors: error ? [error] : [],
@@ -43,7 +43,7 @@ export default class AddEvidenceRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const submitted = req.query.submitted as string
     const { evidenceDescription, evidenceType, bwcIdentifier, batIdentifier } = req.body
 
@@ -66,8 +66,8 @@ export default class AddEvidenceRoutes {
       ...(evidenceIdentifier && { identifier: evidenceIdentifier }),
     }
 
-    this.evidenceSessionService.addSessionEvidence(req, evidenceToAdd, adjudicationNumber)
-    const redirectUrl = this.getRedirectUrl(submitted === 'true', adjudicationNumber)
+    this.evidenceSessionService.addSessionEvidence(req, evidenceToAdd, chargeNumber)
+    const redirectUrl = this.getRedirectUrl(submitted === 'true', chargeNumber)
     return res.redirect(redirectUrl)
   }
 
@@ -81,8 +81,8 @@ export default class AddEvidenceRoutes {
     return null
   }
 
-  getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {
-    if (submitted) return adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(adjudicationNumber)
-    return adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)
+  getRedirectUrl = (submitted: boolean, chargeNumber: string) => {
+    if (submitted) return adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(chargeNumber)
+    return adjudicationUrls.detailsOfEvidence.urls.modified(chargeNumber)
   }
 }

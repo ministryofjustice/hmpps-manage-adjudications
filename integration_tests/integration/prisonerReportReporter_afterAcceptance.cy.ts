@@ -13,7 +13,7 @@ import {
 const testData = new TestData()
 
 const reportedAdjudicationResponse = ({
-  adjudicationNumber,
+  chargeNumber,
   status,
   reviewedByUserId = null,
   statusReason = null,
@@ -24,7 +24,7 @@ const reportedAdjudicationResponse = ({
   offenceDetails = {} as OffenceDetails,
   isYouthOffender = false,
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   status: ReportedAdjudicationStatus
   reviewedByUserId?: string
   statusReason?: string
@@ -37,7 +37,7 @@ const reportedAdjudicationResponse = ({
 }) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       locationId: 25538,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -114,7 +114,7 @@ context('Prisoner report - reporter view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: reportedAdjudicationResponse({
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         reviewedByUserId: 'USER1',
         damages: [testData.singleDamage({})],
@@ -134,7 +134,7 @@ context('Prisoner report - reporter view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse({
-        adjudicationNumber: 1524494,
+        chargeNumber: '1524494',
         status: ReportedAdjudicationStatus.ACCEPTED,
         reviewedByUserId: 'USER1',
         damages: [testData.singleDamage({})],

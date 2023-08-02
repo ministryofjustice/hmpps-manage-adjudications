@@ -52,11 +52,11 @@ export default class NotProceedPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { error, notProceedReason, notProceedDetails } = pageData
 
     return res.render(`pages/notProceed.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       notProceedReason,
       notProceedDetails,
@@ -65,7 +65,7 @@ export default class NotProceedPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -77,7 +77,7 @@ export default class NotProceedPage {
     if (this.pageOptions.isEdit()) {
       try {
         const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-          adjudicationNumber,
+          chargeNumber,
           [ReportedAdjudicationStatus.NOT_PROCEED],
           res.locals.user
         )
@@ -89,7 +89,7 @@ export default class NotProceedPage {
           details = lastOutcomeItem.outcome.outcome.details
         }
       } catch (postError) {
-        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
         throw postError
       }
     }
@@ -102,7 +102,7 @@ export default class NotProceedPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { notProceedReason, notProceedDetails } = req.body
     const { adjudicator, plea } = req.query
 
@@ -116,11 +116,11 @@ export default class NotProceedPage {
           !this.pageOptions.isEdit() &&
           !this.validateDataFromEnterHearingOutcomePage(plea as HearingOutcomePlea, adjudicator as string)
         ) {
-          return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+          return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
         }
         if (this.pageOptions.isEdit()) {
           await this.hearingsService.editNotProceedHearingOutcome(
-            adjudicationNumber,
+            chargeNumber,
             notProceedReason,
             details,
             user,
@@ -129,7 +129,7 @@ export default class NotProceedPage {
           )
         } else {
           await this.hearingsService.createNotProceedHearingOutcome(
-            adjudicationNumber,
+            chargeNumber,
             adjudicator as string,
             plea as HearingOutcomePlea,
             notProceedReason,
@@ -138,13 +138,13 @@ export default class NotProceedPage {
           )
         }
       } else if (this.pageOptions.isEdit()) {
-        await this.outcomesService.editNotProceedOutcome(adjudicationNumber, notProceedReason, details, user)
+        await this.outcomesService.editNotProceedOutcome(chargeNumber, notProceedReason, details, user)
       } else {
-        await this.outcomesService.createNotProceed(adjudicationNumber, notProceedReason, details, user)
+        await this.outcomesService.createNotProceed(chargeNumber, notProceedReason, details, user)
       }
-      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }

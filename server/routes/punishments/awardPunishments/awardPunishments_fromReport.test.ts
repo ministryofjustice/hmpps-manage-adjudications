@@ -44,7 +44,7 @@ afterEach(() => {
 describe('GET', () => {
   it('should load the page with details from the server', () => {
     return request(app)
-      .get(adjudicationUrls.awardPunishments.urls.start(100))
+      .get(adjudicationUrls.awardPunishments.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(`Stoppage of earnings: 10%`)
@@ -52,18 +52,18 @@ describe('GET', () => {
   })
   it('should get data from server', () => {
     return request(app)
-      .get(adjudicationUrls.awardPunishments.urls.start(100))
+      .get(adjudicationUrls.awardPunishments.urls.start('100'))
       .expect(200)
-      .then(() => expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledWith(100, expect.anything()))
+      .then(() => expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledWith('100', expect.anything()))
       .then(() => expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(2))
       .then(() => expect(punishmentsService.setAllSessionPunishments).toHaveBeenCalled())
-      .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), '100'))
   })
   it('should call delete function if url contains delete query', () => {
     return request(app)
-      .get(`${adjudicationUrls.awardPunishments.urls.start(100)}?delete=redisId`)
+      .get(`${adjudicationUrls.awardPunishments.urls.start('100')}?delete=redisId`)
       .then(() => {
-        expect(punishmentsService.deleteSessionPunishments).toHaveBeenCalledWith(expect.anything(), 'redisId', 100)
+        expect(punishmentsService.deleteSessionPunishments).toHaveBeenCalledWith(expect.anything(), 'redisId', '100')
       })
   })
 })

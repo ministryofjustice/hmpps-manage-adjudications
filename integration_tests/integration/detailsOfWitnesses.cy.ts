@@ -33,10 +33,10 @@ const draftAdjudication = (id: number, witnesses: WitnessDetails[]) => {
   }
 }
 
-const reportedAdjudication = (adjudicationNumber: number, witnesses: WitnessDetails[]) => {
+const reportedAdjudication = (chargeNumber: string, witnesses: WitnessDetails[]) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       witnesses,
     }),
@@ -91,20 +91,20 @@ context('Details of witnesses', () => {
       response: testData.emailFromUsername('JPLANET'),
     })
     cy.task('stubSaveWitnessDetails', {
-      adjudicationNumber: 201,
+      chargeNumber: '201',
       response: draftAdjudication(201, witnessesList),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: reportedAdjudication(12345, null),
+      response: reportedAdjudication('12345', null),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 23456,
-      response: reportedAdjudication(23456, witnessesList),
+      response: reportedAdjudication('23456', witnessesList),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 34567,
-      response: reportedAdjudication(34567, witnessesListMultiUser),
+      response: reportedAdjudication('34567', witnessesListMultiUser),
     })
   })
   it('should show the witnesses page with no witnesses added to begin with', () => {

@@ -156,23 +156,29 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async postDraftIncidentStatement(id: number, incidentStatement: IncidentStatement): Promise<DraftAdjudicationResult> {
+  async postDraftIncidentStatement(
+    draftId: number,
+    incidentStatement: IncidentStatement
+  ): Promise<DraftAdjudicationResult> {
     return this.restClient.post({
-      path: `/draft-adjudications/${id}/incident-statement`,
+      path: `/draft-adjudications/${draftId}/incident-statement`,
       data: { ...incidentStatement },
     })
   }
 
-  async putDraftIncidentStatement(id: number, incidentStatement: IncidentStatement): Promise<DraftAdjudicationResult> {
+  async putDraftIncidentStatement(
+    draftId: number,
+    incidentStatement: IncidentStatement
+  ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${id}/incident-statement`,
+      path: `/draft-adjudications/${draftId}/incident-statement`,
       data: { ...incidentStatement },
     })
   }
 
-  async getDraftAdjudication(id: number): Promise<DraftAdjudicationResult> {
+  async getDraftAdjudication(chargeNumber: string | number): Promise<DraftAdjudicationResult> {
     return this.restClient.get({
-      path: `/draft-adjudications/${id}`,
+      path: `/draft-adjudications/${chargeNumber}`,
     })
   }
 
@@ -219,24 +225,24 @@ export default class ManageAdjudicationsClient {
   /**
    * @deprecated The method should not be used
    */
-  async getReportedAdjudication(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async getReportedAdjudication(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.get({
-      path: `/reported-adjudications/${adjudicationNumber}`,
+      path: `/reported-adjudications/${chargeNumber}`,
     })
   }
 
-  async getReportedAdjudicationV2(adjudicationNumber: number): Promise<ReportedAdjudicationResultV2> {
+  async getReportedAdjudicationV2(chargeNumber: string): Promise<ReportedAdjudicationResultV2> {
     return this.restClient.get({
-      path: `/reported-adjudications/${adjudicationNumber}/v2`,
+      path: `/reported-adjudications/${chargeNumber}/v2`,
     })
   }
 
   async updateAdjudicationStatus(
-    adjudicationNumber: number,
+    chargeNumber: string,
     payload: ReviewAdjudication
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/status`,
+      path: `/reported-adjudications/${chargeNumber}/status`,
       data: payload,
     })
   }
@@ -289,9 +295,9 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createDraftFromCompleteAdjudication(adjudicationNumber: number): Promise<DraftAdjudicationResult> {
+  async createDraftFromCompleteAdjudication(chargeNumber: string): Promise<DraftAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/create-draft-adjudication`,
+      path: `/reported-adjudications/${chargeNumber}/create-draft-adjudication`,
     })
   }
 
@@ -301,113 +307,104 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails) {
+  async saveOffenceDetails(draftId: number, offenceDetails: OffenceDetails) {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/offence-details`,
+      path: `/draft-adjudications/${draftId}/offence-details`,
       data: { offenceDetails },
     })
   }
 
-  async aloAmendOffenceDetails(
-    adjudicationNumber: number,
-    offenceDetails: OffenceDetails
-  ): Promise<ReportedAdjudication> {
+  async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails): Promise<ReportedAdjudication> {
     return this.restClient.post({
-      path: `/draft-adjudications/${adjudicationNumber}/alo-offence-details`,
+      path: `/draft-adjudications/${draftId}/alo-offence-details`,
       data: { offenceDetails },
     })
   }
 
   async saveYouthOffenderStatus(
-    adjudicationNumber: number,
+    draftId: number,
     applicableRulesData: ApplicableRules
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/applicable-rules`,
+      path: `/draft-adjudications/${draftId}/applicable-rules`,
       data: applicableRulesData,
     })
   }
 
   async saveAssociatedPrisoner(
-    adjudicationNumber: number,
+    draftId: number,
     associatedPrisoner: AssociatedPrisoner
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/associated-prisoner`,
+      path: `/draft-adjudications/${draftId}/associated-prisoner`,
       data: associatedPrisoner,
     })
   }
 
-  async saveDamageDetails(adjudicationNumber: number, damages: DamageDetails[]): Promise<DraftAdjudicationResult> {
+  async saveDamageDetails(chargeNumber: string, damages: DamageDetails[]): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/damages`,
+      path: `/draft-adjudications/${chargeNumber}/damages`,
       data: { damages },
     })
   }
 
-  async updateDamageDetails(adjudicationNumber: number, damages: DamageDetails[]): Promise<ReportedAdjudicationResult> {
+  async updateDamageDetails(chargeNumber: string, damages: DamageDetails[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/damages/edit`,
+      path: `/reported-adjudications/${chargeNumber}/damages/edit`,
       data: { damages },
     })
   }
 
-  async saveEvidenceDetails(adjudicationNumber: number, evidence: EvidenceDetails[]): Promise<DraftAdjudicationResult> {
+  async saveEvidenceDetails(chargeNumber: string, evidence: EvidenceDetails[]): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/evidence`,
+      path: `/draft-adjudications/${chargeNumber}/evidence`,
       data: { evidence },
     })
   }
 
-  async updateEvidenceDetails(
-    adjudicationNumber: number,
-    evidence: EvidenceDetails[]
-  ): Promise<ReportedAdjudicationResult> {
+  async updateEvidenceDetails(chargeNumber: string, evidence: EvidenceDetails[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/evidence/edit`,
+      path: `/reported-adjudications/${chargeNumber}/evidence/edit`,
       data: { evidence },
     })
   }
 
-  async saveWitnessDetails(adjudicationNumber: number, witnesses: WitnessDetails[]): Promise<DraftAdjudicationResult> {
+  async saveWitnessDetails(chargeNumber: string, witnesses: WitnessDetails[]): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${adjudicationNumber}/witnesses`,
+      path: `/draft-adjudications/${chargeNumber}/witnesses`,
       data: { witnesses },
     })
   }
 
-  async updateWitnessDetails(
-    adjudicationNumber: number,
-    witnesses: WitnessDetails[]
-  ): Promise<ReportedAdjudicationResult> {
+  async updateWitnessDetails(chargeNumber: string, witnesses: WitnessDetails[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/witnesses/edit`,
+      path: `/reported-adjudications/${chargeNumber}/witnesses/edit`,
       data: { witnesses },
     })
   }
 
-  async cancelHearing(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async cancelHearing(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/v2`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/v2`,
     })
   }
 
-  async cancelCompleteHearing(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async cancelCompleteHearing(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/remove-completed-hearing`,
+      path: `/reported-adjudications/${chargeNumber}/remove-completed-hearing`,
     })
   }
 
-  async createHearing(adjudicationNumber: number, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
+  async createHearing(chargeNumber: string, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/v2`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/v2`,
       data: hearingDetails,
     })
   }
 
-  async amendHearing(adjudicationNumber: number, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
+  async amendHearing(chargeNumber: string, hearingDetails: HearingDetails): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/v2`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/v2`,
       data: hearingDetails,
     })
   }
@@ -418,26 +415,26 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async amendGender(id: number, chosenGender: { gender: PrisonerGender }): Promise<DraftAdjudicationResult> {
+  async amendGender(draftId: number, chosenGender: { gender: PrisonerGender }): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
-      path: `/draft-adjudications/${id}/gender`,
+      path: `/draft-adjudications/${draftId}/gender`,
       data: { ...chosenGender },
     })
   }
 
-  async putDateTimeOfIssue(adjudicationNumber: number, dateTimeOfIssue: string): Promise<ReportedAdjudicationResult> {
+  async putDateTimeOfIssue(chargeNumber: string, dateTimeOfIssue: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/issue`,
+      path: `/reported-adjudications/${chargeNumber}/issue`,
       data: { dateTimeOfIssue },
     })
   }
 
   async createAdjourn(
-    adjudicationNumber: number,
+    chargeNumber: string,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/outcome/adjourn`,
       data: {
         adjudicator: hearingOutcomeDetails.adjudicator,
         reason: hearingOutcomeDetails.reason,
@@ -448,11 +445,11 @@ export default class ManageAdjudicationsClient {
   }
 
   async createReferral(
-    adjudicationNumber: number,
+    chargeNumber: string,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/referral`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/outcome/referral`,
       data: {
         code: hearingOutcomeDetails.code,
         adjudicator: hearingOutcomeDetails.adjudicator,
@@ -461,25 +458,22 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async createProsecution(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async createProsecution(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome/prosecution`,
+      path: `/reported-adjudications/${chargeNumber}/outcome/prosecution`,
     })
   }
 
-  async createNotProceed(adjudicationNumber: number, outcomeDetails: OutcomeInfo): Promise<ReportedAdjudicationResult> {
+  async createNotProceed(chargeNumber: string, outcomeDetails: OutcomeInfo): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome/not-proceed`,
+      path: `/reported-adjudications/${chargeNumber}/outcome/not-proceed`,
       data: { reason: outcomeDetails.reason, details: outcomeDetails.details },
     })
   }
 
-  async createPoliceReferral(
-    adjudicationNumber: number,
-    outcomeDetails: OutcomeInfo
-  ): Promise<ReportedAdjudicationResult> {
+  async createPoliceReferral(chargeNumber: string, outcomeDetails: OutcomeInfo): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome/refer-police`,
+      path: `/reported-adjudications/${chargeNumber}/outcome/refer-police`,
       data: { details: outcomeDetails.details },
     })
   }
@@ -490,30 +484,30 @@ export default class ManageAdjudicationsClient {
     })
   }
 
-  async removeNotProceedOrQuashed(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async removeNotProceedOrQuashed(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome`,
+      path: `/reported-adjudications/${chargeNumber}/outcome`,
     })
   }
 
-  async removeAdjourn(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async removeAdjourn(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/adjourn`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/outcome/adjourn`,
     })
   }
 
-  async removeReferral(adjudicationNumber: number): Promise<ReportedAdjudicationResult> {
+  async removeReferral(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/remove-referral`,
+      path: `/reported-adjudications/${chargeNumber}/remove-referral`,
     })
   }
 
   async createDismissedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     hearingOutcomeDetails: HearingDismissedOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/dismissed`,
+      path: `/reported-adjudications/${chargeNumber}/complete-hearing/dismissed`,
       data: { ...hearingOutcomeDetails },
     })
   }
@@ -522,38 +516,38 @@ export default class ManageAdjudicationsClient {
    * @deprecated The method should not be used
    */
   async createChargeProvedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved`,
+      path: `/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved`,
       data: { ...chargeProvedHearingOutcomeDetails },
     })
   }
 
   async createChargeProvedHearingOutcomeV2(
-    adjudicationNumber: number,
+    chargeNumber: string,
     chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetailsV2
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/charge-proved/v2`,
+      path: `/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved/v2`,
       data: { ...chargeProvedHearingOutcomeDetails },
     })
   }
 
   async createNotProceedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     notProceedHearingOutcomeDetails: NotProceedHearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/complete-hearing/not-proceed`,
+      path: `/reported-adjudications/${chargeNumber}/complete-hearing/not-proceed`,
       data: { ...notProceedHearingOutcomeDetails },
     })
   }
 
-  async quashOutcome(adjudicationNumber: number, quashData: QuashData): Promise<ReportedAdjudicationResult> {
+  async quashOutcome(chargeNumber: string, quashData: QuashData): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome/quashed`,
+      path: `/reported-adjudications/${chargeNumber}/outcome/quashed`,
       data: { ...quashData },
     })
   }
@@ -562,30 +556,30 @@ export default class ManageAdjudicationsClient {
    * @deprecated The method should not be used
    */
   async amendHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     status: ReportedAdjudicationStatus,
     amendedData: AmendedHearingOutcomeData
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/${status}`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`,
       data: { ...amendedData },
     })
   }
 
   async amendHearingOutcomeV2(
-    adjudicationNumber: number,
+    chargeNumber: string,
     status: ReportedAdjudicationStatus,
     amendedData: AmendedHearingOutcomeDataV2
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/hearing/outcome/${status}/v2`,
+      path: `/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
       data: { ...amendedData },
     })
   }
 
-  async amendOutcome(adjudicationNumber: number, amendedData: AmendedOutcomeData): Promise<ReportedAdjudicationResult> {
+  async amendOutcome(chargeNumber: string, amendedData: AmendedOutcomeData): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/outcome`,
+      path: `/reported-adjudications/${chargeNumber}/outcome`,
       data: { ...amendedData },
     })
   }
@@ -593,22 +587,19 @@ export default class ManageAdjudicationsClient {
   /**
    * @deprecated The method should not be used
    */
-  async createPunishments(
-    adjudicationNumber: number,
-    punishments: PunishmentData[]
-  ): Promise<ReportedAdjudicationResult> {
+  async createPunishments(chargeNumber: string, punishments: PunishmentData[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments`,
+      path: `/reported-adjudications/${chargeNumber}/punishments`,
       data: { punishments: [...punishments] },
     })
   }
 
   async createPunishmentsV2(
-    adjudicationNumber: number,
+    chargeNumber: string,
     punishments: PunishmentDataV2[]
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments/v2`,
+      path: `/reported-adjudications/${chargeNumber}/punishments/v2`,
       data: { punishments: [...punishments] },
     })
   }
@@ -616,56 +607,47 @@ export default class ManageAdjudicationsClient {
   /**
    * @deprecated The method should not be used
    */
-  async amendPunishments(
-    adjudicationNumber: number,
-    punishments: PunishmentData[]
-  ): Promise<ReportedAdjudicationResult> {
+  async amendPunishments(chargeNumber: string, punishments: PunishmentData[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments`,
+      path: `/reported-adjudications/${chargeNumber}/punishments`,
       data: { punishments: [...punishments] },
     })
   }
 
-  async amendPunishmentsV2(
-    adjudicationNumber: number,
-    punishments: PunishmentDataV2[]
-  ): Promise<ReportedAdjudicationResult> {
+  async amendPunishmentsV2(chargeNumber: string, punishments: PunishmentDataV2[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments/v2`,
+      path: `/reported-adjudications/${chargeNumber}/punishments/v2`,
       data: { punishments: [...punishments] },
     })
   }
 
-  async getSuspendedPunishments(prisonerNumber: string, reportNumber: number): Promise<SuspendedPunishmentResult[]> {
+  async getSuspendedPunishments(prisonerNumber: string, reportNumber: string): Promise<SuspendedPunishmentResult[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${prisonerNumber}/suspended?reportNumber=${reportNumber}`,
     })
   }
 
-  async createPunishmentComment(
-    adjudicationNumber: number,
-    punishmentComment: string
-  ): Promise<ReportedAdjudicationResult> {
+  async createPunishmentComment(chargeNumber: string, punishmentComment: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+      path: `/reported-adjudications/${chargeNumber}/punishments/comment`,
       data: { comment: punishmentComment },
     })
   }
 
   async amendPunishmentComment(
-    adjudicationNumber: number,
+    chargeNumber: string,
     id: number,
     punishmentComment: string
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment`,
+      path: `/reported-adjudications/${chargeNumber}/punishments/comment`,
       data: { id, comment: punishmentComment },
     })
   }
 
-  async removePunishmentComment(adjudicationNumber: number, id: number): Promise<ReportedAdjudicationResult> {
+  async removePunishmentComment(chargeNumber: string, id: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
-      path: `/reported-adjudications/${adjudicationNumber}/punishments/comment/${id}`,
+      path: `/reported-adjudications/${chargeNumber}/punishments/comment/${id}`,
     })
   }
 
@@ -677,10 +659,11 @@ export default class ManageAdjudicationsClient {
 
   async getPossibleConsecutivePunishments(
     prisonerNumber: string,
-    punishmentType: PunishmentType
+    punishmentType: PunishmentType,
+    chargeNumber: string
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     return this.restClient.get({
-      path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}`,
+      path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}&chargeNumber=${chargeNumber}`,
     })
   }
 }

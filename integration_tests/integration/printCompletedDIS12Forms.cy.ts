@@ -58,7 +58,7 @@ context('Print completed DIS forms', () => {
   it('have working links to take the user to the print page for the adjudication', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
@@ -73,23 +73,23 @@ context('Print completed DIS forms', () => {
     })
     cy.visit(adjudicationUrls.printCompletedDisForms.root)
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
-    printCompletedDISFormsPage.printDISFormsLink(12345).should('exist')
-    printCompletedDISFormsPage.printDISFormsLink(12345).click()
+    printCompletedDISFormsPage.printDISFormsLink('12345').should('exist')
+    printCompletedDISFormsPage.printDISFormsLink('12345').click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.printReport.urls.start(12345))
+      expect(loc.pathname).to.eq(adjudicationUrls.printReport.urls.start('12345'))
       expect(loc.search).to.eq(`?referrer=${adjudicationUrls.printCompletedDisForms.urls.start()}`)
     })
   })
   it('has all the correct data in the table', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
@@ -145,13 +145,13 @@ context('Print completed DIS forms', () => {
   it('should handle if there is prisoner information missing', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
@@ -208,13 +208,13 @@ context('Print completed DIS forms', () => {
   it('should filter on parameters given - no location', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),
@@ -256,13 +256,13 @@ context('Print completed DIS forms', () => {
   it('should filter on parameters given - location', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         dateTimeOfFirstHearing: '2022-12-06T10:00:00',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfFirstHearing: '2022-12-07T10:00:00',
       }),

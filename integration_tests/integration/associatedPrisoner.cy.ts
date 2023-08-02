@@ -52,7 +52,7 @@ context('Incident assist', () => {
       ],
     })
     cy.task('stubSaveAssociatedPrisoner', {
-      adjudicationNumber: 34,
+      draftId: 34,
     })
     cy.task('stubSearchPrisonerDetails', {
       prisonerNumber: 'T3356FU',

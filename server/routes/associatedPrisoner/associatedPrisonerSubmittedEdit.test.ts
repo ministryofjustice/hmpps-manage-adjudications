@@ -42,7 +42,7 @@ beforeEach(() => {
     draftAdjudication: testData.draftAdjudication({
       id: 100,
       prisonerNumber: 'G6415GD',
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
     }),
   })
 })

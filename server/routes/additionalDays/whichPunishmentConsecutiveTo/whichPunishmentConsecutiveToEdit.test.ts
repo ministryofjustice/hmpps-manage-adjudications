@@ -62,7 +62,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -74,7 +74,7 @@ describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(100, uuidv4())}?punishmentType=ADDITIONAL_DAYS`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -84,12 +84,12 @@ describe('GET', () => {
   it('should call the endpoint to get consecutive punishments', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(100, uuidv4())}?punishmentType=ADDITIONAL_DAYS`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`
       )
       .expect('Content-Type', /html/)
       .then(() =>
         expect(punishmentsService.getPossibleConsecutivePunishments).toHaveBeenCalledWith(
-          100,
+          '100',
           PunishmentType.ADDITIONAL_DAYS,
           expect.anything()
         )
@@ -102,7 +102,7 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
-          100,
+          '100',
           uuidv4()
         )}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
@@ -120,7 +120,7 @@ describe('POST', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100,
+          '100',
           expect.anything()
         )
       })

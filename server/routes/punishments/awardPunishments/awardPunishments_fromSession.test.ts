@@ -64,7 +64,7 @@ afterEach(() => {
 describe('GET', () => {
   it('should load the page with details from the session', () => {
     return request(app)
-      .get(adjudicationUrls.awardPunishments.urls.modified(100))
+      .get(adjudicationUrls.awardPunishments.urls.modified('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Loss of chocolate')
@@ -74,10 +74,10 @@ describe('GET', () => {
   })
   it('should use the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.awardPunishments.urls.modified(100))
+      .get(adjudicationUrls.awardPunishments.urls.modified('100'))
       .expect(200)
       .then(() => expect(punishmentsService.setAllSessionPunishments).not.toHaveBeenCalled())
       .then(() => expect(punishmentsService.getPunishmentsFromServer).toHaveBeenCalledTimes(1))
-      .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(punishmentsService.getAllSessionPunishments).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })

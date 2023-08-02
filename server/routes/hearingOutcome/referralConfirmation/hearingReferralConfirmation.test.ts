@@ -22,7 +22,7 @@ afterEach(() => {
 describe('GET /report-has-been-referred', () => {
   it('should load the `referral confirmation` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingReferralConfirmation.urls.start(100))
+      .get(adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Referral saved')

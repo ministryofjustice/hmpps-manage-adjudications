@@ -25,7 +25,7 @@ context('Plea and finding', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           outcomes: [
@@ -53,7 +53,7 @@ context('Plea and finding', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit('100'))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().should('exist')
       hearingPleaAndFindingPage.findingRadioButtons().should('exist')
@@ -62,53 +62,53 @@ context('Plea and finding', () => {
       hearingPleaAndFindingPage.errorSummary().should('not.exist')
     })
     it('should have the previously selected radios selected', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit('100'))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').should('be.checked')
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingPleaAndFinding.urls.edit('100'))
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Submits successfully', () => {
     it('goes to the money recovered for damages page if data successfully submitted - nothing changed', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       })
     })
     it('goes to the reason for finding page if data successfully submitted - change finding radio button to DISMISSED', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="NOT_GUILTY"]').click()
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="DISMISSED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForFinding.urls.edit('100'))
       })
     })
     it('goes to the reason for not proceeding page if data successfully submitted - change finding radio button to NOT_PROCEED', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click()
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit('100'))
       })
     })
   })

@@ -33,8 +33,8 @@ export default class DecisionTreeService {
     return this.decisionTree
   }
 
-  async draftAdjudicationIncidentData(adjudicationNumber: number, user: User) {
-    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+  async draftAdjudicationIncidentData(draftAdjudicationId: number, user: User) {
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftAdjudicationId, user)
     const data = await this.adjudicationIncidentData(draftAdjudication, user)
     return {
       draftAdjudication,
@@ -44,9 +44,9 @@ export default class DecisionTreeService {
     }
   }
 
-  async reportedAdjudicationIncidentData(adjudicationNumber: number, user: User) {
+  async reportedAdjudicationIncidentData(chargeNumber: string, user: User) {
     const { reportedAdjudication } = await this.reportedAdjudicationService.getReportedAdjudicationDetails(
-      adjudicationNumber,
+      chargeNumber,
       user
     )
     const data = await this.adjudicationIncidentData(reportedAdjudication, user)

@@ -14,7 +14,7 @@ const testData = new TestData()
 const originalDraftTestOne = {
   draftAdjudication: testData.draftAdjudication({
     id: 177,
-    adjudicationNumber: 12345,
+    chargeNumber: '12345',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-11-03T13:10:00',
     locationId: 25538,
@@ -40,7 +40,7 @@ const originalDraftTestOne = {
 
 const originalReportedTestOne = {
   reportedAdjudication: testData.reportedAdjudication({
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
@@ -66,7 +66,7 @@ const originalReportedTestOne = {
 const editedDraftAdjudicationTestOne = {
   draftAdjudication: testData.draftAdjudication({
     id: 177,
-    adjudicationNumber: 12345,
+    chargeNumber: '12345',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-11-03T13:10:00',
     locationId: 25538,
@@ -75,7 +75,7 @@ const editedDraftAdjudicationTestOne = {
 }
 
 const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
-  adjudicationNumber: 12345,
+  chargeNumber: '12345',
   prisonerNumber: 'G6415GD',
   dateTimeOfIncident: '2021-11-03T13:10:00',
   locationId: 25538,
@@ -93,7 +93,7 @@ const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
 
 const originalReportedTestTwo = {
   reportedAdjudication: testData.reportedAdjudication({
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     locationId: 25538,
@@ -112,7 +112,7 @@ const originalReportedTestTwo = {
 const originalDraftTestTwo = {
   draftAdjudication: testData.draftAdjudication({
     id: 188,
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     locationId: 25538,
@@ -131,7 +131,7 @@ const originalDraftTestTwo = {
 const editedDraftAdjudicationTestTwo = {
   draftAdjudication: testData.draftAdjudication({
     id: 188,
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
@@ -154,7 +154,7 @@ const editedDraftAdjudicationTestTwo = {
 }
 
 const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
-  adjudicationNumber: 1524493,
+  chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
   dateTimeOfIncident: '2021-12-09T10:30:00',
   locationId: 25538,
@@ -228,11 +228,11 @@ context('ALO edits offence - test 1', () => {
     })
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 177,
-          adjudicationNumber: 12345,
+          chargeNumber: '12345',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-03T13:10:00',
         }),
@@ -257,7 +257,7 @@ context('ALO edits offence - test 1', () => {
       },
     })
     cy.task('stubSaveYouthOffenderStatus', {
-      adjudicationNumber: '177',
+      id: '177',
       response: testData.draftAdjudication({
         id: 177,
         prisonerNumber: 'G6415GD',
@@ -280,7 +280,7 @@ context('ALO edits offence - test 1', () => {
       prisonerNumber: 'G7123CI',
     })
     cy.task('stubAloAmendOffenceDetails', {
-      adjudicationNumber: 177,
+      draftId: 177,
       response: editedReportedAdjudicationTestOne,
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
@@ -288,7 +288,7 @@ context('ALO edits offence - test 1', () => {
     cy.signIn()
   })
   it('allows ALO to update the adjudication offence - from assist to commit etc', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review('12345'))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.offenceDetailsChangeLink().click()
     const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
@@ -337,7 +337,7 @@ context('ALO edits offence - test 1', () => {
     detailsOfOffencePage.deleteLink(1).should('not.exist')
     detailsOfOffencePage.saveAndContinue().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(12345))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('12345'))
     })
   })
 })
@@ -384,7 +384,7 @@ context('ALO edits offence - test 2', () => {
     })
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       response: originalDraftTestTwo,
     })
     cy.task('stubGetDraftAdjudication', {
@@ -407,7 +407,8 @@ context('ALO edits offence - test 2', () => {
       },
     })
     cy.task('stubSaveYouthOffenderStatus', {
-      adjudicationNumber: '188',
+      id: 188,
+      chargeNumber: '188',
       response: originalDraftTestTwo,
     })
     cy.task('stubUpdateDraftIncidentRole', {
@@ -426,7 +427,7 @@ context('ALO edits offence - test 2', () => {
       prisonerNumber: 'T3356FU',
     })
     cy.task('stubAloAmendOffenceDetails', {
-      adjudicationNumber: 188,
+      draftId: 188,
       response: editedReportedAdjudicationTestTwo,
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
@@ -435,7 +436,7 @@ context('ALO edits offence - test 2', () => {
   })
 
   it('allows ALO to update the adjudication offence - from commit to incite etc', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review(1524493))
+    cy.visit(adjudicationUrls.prisonerReport.urls.review('1524493'))
     const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
     prisonerReportPage.offenceDetailsChangeLink().click()
     const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
@@ -494,7 +495,7 @@ context('ALO edits offence - test 2', () => {
     detailsOfOffencePage.deleteLink(1).should('not.exist')
     detailsOfOffencePage.saveAndContinue().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1524493))
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('1524493'))
     })
   })
 })

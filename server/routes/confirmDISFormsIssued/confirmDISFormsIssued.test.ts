@@ -25,14 +25,14 @@ beforeEach(() => {
 
   const adjudicationResponse = [
     testData.reportedAdjudication({
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       prisonerNumber: 'G7234VB',
       otherData: {
         displayName: 'Smith, James',
       },
     }),
     testData.reportedAdjudication({
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       prisonerNumber: 'G6123VU',
       otherData: {
         displayName: 'Tovey, Peter',

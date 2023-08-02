@@ -42,10 +42,10 @@ export default class ReasonForReferralPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, referralReason } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       referralReason,
     })
@@ -53,7 +53,7 @@ export default class ReasonForReferralPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -62,7 +62,7 @@ export default class ReasonForReferralPage {
     let refOutcome = null
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-        adjudicationNumber,
+        chargeNumber,
         [ReportedAdjudicationStatus.REFER_POLICE],
         user
       )
@@ -76,7 +76,7 @@ export default class ReasonForReferralPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { referralReason } = req.body
 
     const error = validateForm({ referralReason })
@@ -88,13 +88,13 @@ export default class ReasonForReferralPage {
 
     try {
       if (this.pageOptions.isEdit()) {
-        await this.outcomesService.editPoliceReferralOutcome(adjudicationNumber, referralReason, user)
+        await this.outcomesService.editPoliceReferralOutcome(chargeNumber, referralReason, user)
       } else {
-        await this.outcomesService.createPoliceReferral(adjudicationNumber, referralReason, user)
+        await this.outcomesService.createPoliceReferral(chargeNumber, referralReason, user)
       }
-      return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }

@@ -19,7 +19,7 @@ context('Add a new punishment', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6123VU',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
@@ -35,7 +35,7 @@ context('Add a new punishment', () => {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 101,
+          chargeNumber: '101',
           prisonerNumber: 'G6123VU',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
@@ -52,22 +52,22 @@ context('Add a new punishment', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.submitButton().should('exist')
       punishmentPage.cancelButton().should('exist')
       punishmentPage.punishment().should('exist')
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
     it('should show additional days and prospective additional days radios if the hearing is IA', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(101))
+      cy.visit(adjudicationUrls.punishment.urls.start('101'))
       cy.get('#punishmentType-8').should('exist')
       cy.get('[for="punishmentType-8"]').should('include.text', 'Additional days')
       cy.get('#punishmentType-9').should('exist')
@@ -77,7 +77,7 @@ context('Add a new punishment', () => {
 
   describe('Validation', () => {
     it('should error when no punishment type selected', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.submitButton().click()
 
@@ -89,7 +89,7 @@ context('Add a new punishment', () => {
         })
     })
     it('should error when no privilege type selected', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
 
@@ -103,7 +103,7 @@ context('Add a new punishment', () => {
         })
     })
     it('should error when no other privilege selected', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="OTHER"]').check()
@@ -118,7 +118,7 @@ context('Add a new punishment', () => {
         })
     })
     it('should error when no  stoppage percentage selected', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="EARNINGS"]').check()
 
@@ -135,19 +135,19 @@ context('Add a new punishment', () => {
 
   describe('Submit', () => {
     it('should submit successfully and redirect for type CONFINEMENT', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
 
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
       })
     })
 
     it('should submit successfully and redirect for type EARNINGS', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="EARNINGS"]').check()
       punishmentPage.stoppagePercentage().type('10')
@@ -155,12 +155,12 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
       })
     })
 
     it('should submit successfully and redirect for type PRIVILEGE - CANTEEN', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
@@ -169,12 +169,12 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
       })
     })
 
     it('should submit successfully and redirect for type PRIVILEGE - OTHER', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start(100))
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
@@ -184,7 +184,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
       })
     })
   })

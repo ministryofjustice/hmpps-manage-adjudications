@@ -79,7 +79,7 @@ afterEach(() => {
 describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfWitnesses.urls.start(100))
+      .get(adjudicationUrls.detailsOfWitnesses.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison officer')
@@ -87,7 +87,7 @@ describe('GET', () => {
   })
   it('should not have used the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfWitnesses.urls.start(100))
+      .get(adjudicationUrls.detailsOfWitnesses.urls.start('100'))
       .expect(200)
       .then(() =>
         expect(witnessesSessionService.setAllSessionWitnesses).toHaveBeenCalledWith(
@@ -112,7 +112,7 @@ describe('GET', () => {
               reporter: 'user1',
             },
           ],
-          100
+          '100'
         )
       )
       .then(() => expect(witnessesSessionService.getAllSessionWitnesses).not.toHaveBeenCalled())
@@ -122,12 +122,14 @@ describe('POST', () => {
   it('should save the witnesses if it is the first time calling the endpoint (even if list is empty)', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfWitnesses.urls.start(101))
+      .get(adjudicationUrls.detailsOfWitnesses.urls.start('101'))
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfWitnesses.urls.start(101))
-          .then(() => expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(101, [], expect.anything()))
+          .post(adjudicationUrls.detailsOfWitnesses.urls.start('101'))
+          .then(() =>
+            expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith('101', [], expect.anything())
+          )
       )
   })
   it('should not save the witnesses if it is the not first time calling the endpoint and no changes have been made', () => {

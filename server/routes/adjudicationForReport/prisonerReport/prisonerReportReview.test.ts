@@ -32,7 +32,7 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-09T10:30:00',
     }),
@@ -44,7 +44,7 @@ beforeEach(() => {
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 12345,
-      adjudicationNumber: 1524661,
+      chargeNumber: '1524661',
       prisonerNumber: 'G5512GK',
       dateTimeOfIncident: '2021-03-08T10:45:00',
       offenceDetails: {

@@ -17,7 +17,7 @@ context('Check your answers before submitting', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
     cy.task('stubPostCompleteHearingChargeProved', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       response: {},
     })
   })
@@ -25,7 +25,7 @@ context('Check your answers before submitting', () => {
     it('should contain the required page elements', () => {
       cy.visit(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
@@ -36,19 +36,19 @@ context('Check your answers before submitting', () => {
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.cancelLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
     it('shows the correct information in the summary table - money amount provided', () => {
       cy.visit(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
@@ -70,7 +70,7 @@ context('Check your answers before submitting', () => {
     it('shows the correct information in the summary table - money amount not provided', () => {
       cy.visit(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
@@ -87,13 +87,13 @@ context('Check your answers before submitting', () => {
     it('should submit successfully- caution yes', () => {
       cy.visit(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=yes`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       })
     })
     it('should submit successfully - caution no', () => {
@@ -101,7 +101,7 @@ context('Check your answers before submitting', () => {
         id: 100,
         response: {
           reportedAdjudication: testData.reportedAdjudication({
-            adjudicationNumber: 100,
+            chargeNumber: '100',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2022-11-15T09:10:00',
             handoverDeadline: '2022-11-17T09:30:00',
@@ -112,17 +112,17 @@ context('Check your answers before submitting', () => {
 
       cy.visit(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=no`
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start('100'))
       })
     })
     it('goes back to enter hearing outcome page if the query parameters are lost', () => {
-      cy.visit(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+      cy.visit(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage
         .answersTable()
@@ -132,7 +132,7 @@ context('Check your answers before submitting', () => {
         })
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       })
     })
   })

@@ -20,7 +20,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
   reportedAdjudicationsService.issueDISForm.mockResolvedValue({
-    reportedAdjudication: testData.reportedAdjudication({ adjudicationNumber: 12345, prisonerNumber: 'G6123VU' }),
+    reportedAdjudication: testData.reportedAdjudication({ chargeNumber: '12345', prisonerNumber: 'G6123VU' }),
   })
 })
 
@@ -31,7 +31,7 @@ afterEach(() => {
 describe('GET /add-issue-date-time', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.addIssueDateTime.urls.start(12345))
+      .get(adjudicationUrls.addIssueDateTime.urls.start('12345'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Add date and time')
@@ -42,11 +42,11 @@ describe('GET /add-issue-date-time', () => {
 describe('POST /add-issue-date-time', () => {
   it('should redirect back to the confirm issued forms page on a successful submit', () => {
     return request(app)
-      .post(adjudicationUrls.addIssueDateTime.urls.start(12345))
+      .post(adjudicationUrls.addIssueDateTime.urls.start('12345'))
       .send({ issuedDate: { date: '09/12/2022', time: { hour: '09', minute: '30' } } })
       .expect(() => {
         expect(reportedAdjudicationsService.issueDISForm).toBeCalledTimes(1)
-        expect(reportedAdjudicationsService.issueDISForm).toBeCalledWith(12345, '2022-12-09T09:30', expect.anything())
+        expect(reportedAdjudicationsService.issueDISForm).toBeCalledWith('12345', '2022-12-09T09:30', expect.anything())
       })
       .expect(302)
       .expect('Location', adjudicationUrls.confirmDISFormsIssued.urls.start())

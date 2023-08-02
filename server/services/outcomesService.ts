@@ -7,12 +7,12 @@ import { User } from '../data/hmppsManageUsersClient'
 export default class OutcomesService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  async createProsecution(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).createProsecution(adjudicationNumber)
+  async createProsecution(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).createProsecution(chargeNumber)
   }
 
   async createNotProceed(
-    adjudicationNumber: number,
+    chargeNumber: string,
     reason: NotProceedReason,
     details: string,
     user: User
@@ -22,46 +22,42 @@ export default class OutcomesService {
       reason,
       details,
     }
-    return new ManageAdjudicationsClient(user).createNotProceed(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user).createNotProceed(chargeNumber, outcomeDetails)
   }
 
-  async removeReferral(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).removeReferral(adjudicationNumber)
+  async removeReferral(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).removeReferral(chargeNumber)
   }
 
-  async removeNotProceedOrQuashed(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).removeNotProceedOrQuashed(adjudicationNumber)
+  async removeNotProceedOrQuashed(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).removeNotProceedOrQuashed(chargeNumber)
   }
 
-  async removeAdjournOutcome(adjudicationNumber: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).removeAdjourn(adjudicationNumber)
+  async removeAdjournOutcome(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsClient(user).removeAdjourn(chargeNumber)
   }
 
-  async createPoliceReferral(
-    adjudicationNumber: number,
-    details: string,
-    user: User
-  ): Promise<ReportedAdjudicationResult> {
+  async createPoliceReferral(chargeNumber: string, details: string, user: User): Promise<ReportedAdjudicationResult> {
     const outcomeDetails = {
       code: OutcomeCode.REFER_POLICE,
       details,
     }
-    return new ManageAdjudicationsClient(user).createPoliceReferral(adjudicationNumber, outcomeDetails)
+    return new ManageAdjudicationsClient(user).createPoliceReferral(chargeNumber, outcomeDetails)
   }
 
   async editPoliceReferralOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     referralReason: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user).amendOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).amendOutcome(chargeNumber, data)
   }
 
   async quashAGuiltyFinding(
-    adjudicationNumber: number,
+    chargeNumber: string,
     quashReason: QuashGuiltyFindingReason,
     quashDetails: string,
     user: User
@@ -70,11 +66,11 @@ export default class OutcomesService {
       details: quashDetails,
       reason: quashReason,
     }
-    return new ManageAdjudicationsClient(user).quashOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).quashOutcome(chargeNumber, data)
   }
 
   async editNotProceedOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     notProceedReason: NotProceedReason,
     details: string,
     user: User
@@ -83,11 +79,11 @@ export default class OutcomesService {
       details,
       reason: notProceedReason,
     }
-    return new ManageAdjudicationsClient(user).amendOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).amendOutcome(chargeNumber, data)
   }
 
   async editQuashedOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     quashReason: QuashGuiltyFindingReason,
     quashDetails: string,
     user: User
@@ -96,6 +92,6 @@ export default class OutcomesService {
       details: quashDetails,
       quashedReason: quashReason,
     }
-    return new ManageAdjudicationsClient(user).amendOutcome(adjudicationNumber, data)
+    return new ManageAdjudicationsClient(user).amendOutcome(chargeNumber, data)
   }
 }

@@ -2,7 +2,7 @@
   {% set adjudicatorChangeLink = {
   items: [
     {
-      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(chargeNumber, hearingId), 
       text: "Change",
       visuallyHiddenText: ' name of adjudicator',
       attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
@@ -12,7 +12,7 @@
   {% set outcomeChangeLink = {
   items: [
     {
-      href: adjudicationUrls.enterHearingOutcome.urls.edit(adjudicationNumber, hearingId), 
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(chargeNumber, hearingId), 
       text: "Change",
       visuallyHiddenText: ' outcome',
       attributes: {"data-qa": "change-link-hearing-outcome-outcome" }
@@ -22,7 +22,7 @@
   {% set ReasonDetailsPleaChangeLink = {
   items: [
     {
-      href: adjudicationUrls.hearingAdjourned.urls.edit(adjudicationNumber), 
+      href: adjudicationUrls.hearingAdjourned.urls.edit(chargeNumber), 
       text: "Change",
       visuallyHiddenText: ' adjourn reason, details and plea',
       attributes: {"data-qa": "change-link-hearing-outcome-reason-details-plea" }

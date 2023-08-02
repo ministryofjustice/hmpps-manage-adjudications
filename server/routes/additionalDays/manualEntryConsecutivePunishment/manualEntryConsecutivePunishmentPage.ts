@@ -12,7 +12,7 @@ import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
-  chargeNumber?: number
+  consecutiveChargeNumber?: number
 }
 
 export enum PageRequestType {
@@ -40,18 +40,18 @@ export default class ManualEntryConsecutivePunishmentPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const { error, chargeNumber } = pageData
+    const { chargeNumber } = req.params
+    const { error, consecutiveChargeNumber } = pageData
 
     return res.render(`pages/manualEntryConsecutivePunishment.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      chargeNumber,
+      consecutiveChargeNumber,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
@@ -59,14 +59,10 @@ export default class ManualEntryConsecutivePunishmentPage {
     }
 
     if (this.pageOptions.isEdit()) {
-      const sessionData = await this.punishmentsService.getSessionPunishment(
-        req,
-        adjudicationNumber,
-        req.params.redisId
-      )
+      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
 
       return this.renderView(req, res, {
-        chargeNumber: sessionData.chargeNumber,
+        consecutiveChargeNumber: sessionData.consecutiveChargeNumber,
       })
     }
 
@@ -74,40 +70,46 @@ export default class ManualEntryConsecutivePunishmentPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
-    const { chargeNumber } = req.body
+    const { consecutiveChargeNumber } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
     const type = PunishmentType[punishmentType as string]
 
-    const trimmedChargeNumber = chargeNumber ? Number(String(chargeNumber).trim()) : null
+    const trimmedConsecutiveChargeNumber = consecutiveChargeNumber
+      ? Number(String(consecutiveChargeNumber).trim())
+      : null
 
     const redirectForErrorPage = url.format({
-      pathname: this.getRedirectUrlForErrorPage(adjudicationNumber, req),
+      pathname: this.getRedirectUrlForErrorPage(chargeNumber, req),
       query: { ...(req.query as ParsedUrlQueryInput) },
     })
 
     const error = validateForm({
-      chargeNumber: trimmedChargeNumber,
+      consecutiveChargeNumber: trimmedConsecutiveChargeNumber,
     })
 
     if (error)
       return this.renderView(req, res, {
         error,
-        chargeNumber: trimmedChargeNumber,
+        consecutiveChargeNumber: trimmedConsecutiveChargeNumber,
       })
 
-    const chargeNumberValid = await this.punishmentsService.validateChargeNumber(
-      adjudicationNumber,
+    const consecutiveChargeNumberValid = await this.punishmentsService.validateChargeNumber(
+      chargeNumber,
       type as PunishmentType,
-      trimmedChargeNumber,
+      trimmedConsecutiveChargeNumber,
       user
     )
-    if (!chargeNumberValid) {
+    if (!consecutiveChargeNumberValid) {
       return res.redirect(
         url.format({
-          pathname: adjudicationUrls.manualConsecutivePunishmentError.urls.start(adjudicationNumber),
-          query: { ...req.query, chargeNumber: trimmedChargeNumber, redirectUrl: redirectForErrorPage },
+          pathname: adjudicationUrls.manualConsecutivePunishmentError.urls.start(chargeNumber),
+          query: {
+            ...req.query,
+            consecutiveChargeNumber: trimmedConsecutiveChargeNumber,
+            redirectUrl: redirectForErrorPage,
+          },
         })
       )
     }
@@ -119,31 +121,26 @@ export default class ManualEntryConsecutivePunishmentPage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days: Number(days),
-        consecutiveReportNumber: trimmedChargeNumber,
+        consecutiveReportNumber: trimmedConsecutiveChargeNumber,
       }
 
       if (this.pageOptions.isEdit()) {
-        await this.punishmentsService.updateSessionPunishment(
-          req,
-          punishmentData,
-          adjudicationNumber,
-          req.params.redisId
-        )
+        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
       } else {
-        await this.punishmentsService.addSessionPunishment(req, punishmentData, adjudicationNumber)
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
       }
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
       throw postError
     }
 
-    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 
-  getRedirectUrlForErrorPage = (adjudicationNumber: number, req: Request) => {
+  getRedirectUrlForErrorPage = (chargeNumber: string, req: Request) => {
     if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(adjudicationNumber, req.params.redisId)
+      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(chargeNumber, req.params.redisId)
     }
-    return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(adjudicationNumber)
+    return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
   }
 }

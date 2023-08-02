@@ -55,13 +55,13 @@ context('Confirm DIS forms have been issued', () => {
   it('has working links to add date and time of issue', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIssue: '2022-12-05T15:00:00',
       }),
 
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'G7234VB',
       }),
     ]
@@ -72,18 +72,18 @@ context('Confirm DIS forms have been issued', () => {
     confirmDISFormsIssued.addDateAndTimeLink(1).should('exist')
     confirmDISFormsIssued.addDateAndTimeLink(2).click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.addIssueDateTime.urls.start(23456))
+      expect(loc.pathname).to.eq(adjudicationUrls.addIssueDateTime.urls.start('23456'))
     })
   })
   it('should have the required elements - reports present but not issued', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIncident: '2022-12-05T11:11:00',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfIncident: '2022-12-06T12:10:00',
       }),
@@ -126,7 +126,7 @@ context('Confirm DIS forms have been issued', () => {
   it('should show the date and time of issuing, as the issuing officer if data is present, and contain a link to re-issue another date and time', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIncident: '2022-12-05T11:11:00',
         issuingOfficer: 'TEST_GEN',
@@ -153,7 +153,7 @@ context('Confirm DIS forms have been issued', () => {
   it('should handle if the prisoner details cannot be found', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIncident: '2022-12-05T11:11:00',
         issuingOfficer: 'TEST_GEN',
@@ -180,14 +180,14 @@ context('Confirm DIS forms have been issued', () => {
   it('should filter on the parameters given - dates only', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIncident: '2022-12-05T11:11:00',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         issuingOfficer: 'TEST_GEN',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfIncident: '2022-12-05T12:10:00',
         issuingOfficer: 'TEST_GEN',
@@ -215,14 +215,14 @@ context('Confirm DIS forms have been issued', () => {
   it('should filter on the parameters given - dates and location', () => {
     const adjudicationResponse = [
       testData.reportedAdjudication({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
         dateTimeOfIncident: '2022-12-05T11:11:00',
         issuingOfficer: 'TEST_GEN',
         dateTimeOfIssue: '2022-12-05T15:00:00',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 23456,
+        chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
         dateTimeOfIncident: '2022-12-06T11:11:00',
         issuingOfficer: 'TEST_GEN',

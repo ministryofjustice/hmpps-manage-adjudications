@@ -35,7 +35,7 @@ export default class HearingCheckYourAnswersPage {
   }
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { amount, adjudicator, plea, caution } = req.query
     let actualAmount = amount as string
 
@@ -48,7 +48,7 @@ export default class HearingCheckYourAnswersPage {
     if (this.pageOptions.isEdit() && !actualAmount) {
       try {
         const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-          adjudicationNumber,
+          chargeNumber,
           [ReportedAdjudicationStatus.CHARGE_PROVED],
           res.locals.user
         )
@@ -56,7 +56,7 @@ export default class HearingCheckYourAnswersPage {
           actualAmount = lastOutcomeItem.outcome.outcome.amount.toFixed(2)
         }
       } catch (postError) {
-        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
         throw postError
       }
     }
@@ -65,12 +65,12 @@ export default class HearingCheckYourAnswersPage {
       moneyRecoveredBoolean: queryParamsPresent ? !!amount : !!actualAmount,
       moneyRecoveredAmount: (+actualAmount).toFixed(2),
       cautionAnswer: caution === 'yes',
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       moneyChangeLinkHref: `${adjudicationUrls.moneyRecoveredForDamages.urls.start(
-        adjudicationNumber
+        chargeNumber
       )}?adjudicator=${adjudicator}&plea=${plea}`,
       cautionChangeLinkHref: `${adjudicationUrls.isThisACaution.urls.start(
-        adjudicationNumber
+        chargeNumber
       )}?adjudicator=${adjudicator}&plea=${plea}&amount=${amount}`,
     })
   }
@@ -85,7 +85,7 @@ export default class HearingCheckYourAnswersPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const { plea, adjudicator, amount, damagesOwed, caution } = req.query
     const actualAmount = amount as string
@@ -95,11 +95,11 @@ export default class HearingCheckYourAnswersPage {
         !this.pageOptions.isEdit() &&
         !this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string, caution as string)
       ) {
-        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
       }
       if (this.pageOptions.isEdit()) {
         await this.hearingsService.editChargeProvedOutcome(
-          adjudicationNumber,
+          chargeNumber,
           caution === 'yes',
           user,
           (adjudicator && (adjudicator as string)) || null,
@@ -109,7 +109,7 @@ export default class HearingCheckYourAnswersPage {
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(
-          adjudicationNumber,
+          chargeNumber,
           adjudicator as string,
           HearingOutcomePlea[plea as string],
           caution === 'yes',
@@ -119,19 +119,16 @@ export default class HearingCheckYourAnswersPage {
       }
 
       if (caution === 'no') {
-        const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-          adjudicationNumber,
-          user
-        )
+        const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
         if (adjudication.reportedAdjudication.punishments.length !== 0) {
-          return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+          return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
         }
-        return res.redirect(adjudicationUrls.awardPunishments.urls.start(adjudicationNumber))
+        return res.redirect(adjudicationUrls.awardPunishments.urls.start(chargeNumber))
       }
 
-      return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingsCheckAnswers.urls.start(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber)
       throw postError
     }
   }

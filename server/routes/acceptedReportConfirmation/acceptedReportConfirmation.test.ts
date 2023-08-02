@@ -32,12 +32,12 @@ afterEach(() => {
 describe('GET /report-has-been-accepted', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.acceptedReportConfirmation.urls.start(123))
+      .get(adjudicationUrls.acceptedReportConfirmation.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(reportedAdjudicationsService.getAcceptedReportConfirmationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getAcceptedReportConfirmationDetails).toHaveBeenCalledWith(
-          123,
+          '123',
           expect.anything()
         )
         expect(response.text).toContain('John Smith’s report has been accepted')
@@ -49,7 +49,7 @@ describe('GET /report-has-been-accepted', () => {
       new Error('error message content')
     )
     return request(app)
-      .get(adjudicationUrls.acceptedReportConfirmation.urls.start(123))
+      .get(adjudicationUrls.acceptedReportConfirmation.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: error message content')

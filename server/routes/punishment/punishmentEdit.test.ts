@@ -47,7 +47,7 @@ describe('GET /punishment', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.punishment.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.punishment.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -58,7 +58,7 @@ describe('GET /punishment', () => {
 describe('GET /punishment', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.punishment.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.punishment.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Add a new punishment')
@@ -69,7 +69,7 @@ describe('GET /punishment', () => {
 describe('POST /punishment', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishment.urls.edit(100, 'XYZ')}`)
+      .post(`${adjudicationUrls.punishment.urls.edit('100', 'XYZ')}`)
       .send({
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.OTHER,
@@ -79,7 +79,7 @@ describe('POST /punishment', () => {
       .expect(
         'Location',
         `${adjudicationUrls.punishmentSchedule.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
       )

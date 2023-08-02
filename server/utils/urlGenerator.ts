@@ -8,144 +8,141 @@ const adjudicationUrls = {
     root: '/offence-code-selection',
     matchers: {
       question: (incidentRole: string, questionId: string) =>
-        `/:adjudicationNumber/:incidentRole(${incidentRole})/:questionId(${questionId})`,
-      start: (incidentRole: string) => `/:adjudicationNumber/:incidentRole(${incidentRole})`,
-      aloEditStart: (incidentRole: string) => `/:adjudicationNumber/aloEdit/:incidentRole(${incidentRole})`,
+        `/:draftId/:incidentRole(${incidentRole})/:questionId(${questionId})`,
+      start: (incidentRole: string) => `/:draftId/:incidentRole(${incidentRole})`,
+      aloEditStart: (incidentRole: string) => `/:draftId/aloEdit/:incidentRole(${incidentRole})`,
       aloEditQuestion: (incidentRole: string, questionId: string) =>
-        `/:adjudicationNumber/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
+        `/:draftId/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
     },
     urls: {
-      question: (adjudicationNumber: number, incidentRole: string, questionUrl: string) => {
-        return `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/${incidentRole}/${questionUrl}`
+      question: (draftId: number, incidentRole: string, questionUrl: string) => {
+        return `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/${incidentRole}/${questionUrl}`
       },
-      start: (adjudicationNumber: number, incidentRole: string) =>
-        `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/${incidentRole}`,
-      aloEditStart: (adjudicationNumber: number, incidentRole: string) =>
-        `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/aloEdit/${incidentRole}`,
-      aloEditQuestion: (adjudicationNumber: number, incidentRole: string, questionUrl: string) => {
-        return `${adjudicationUrls.offenceCodeSelection.root}/${adjudicationNumber}/aloEdit/${incidentRole}/${questionUrl}`
+      start: (draftId: number, incidentRole: string) =>
+        `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/${incidentRole}`,
+      aloEditStart: (draftId: number, incidentRole: string) =>
+        `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/aloEdit/${incidentRole}`,
+      aloEditQuestion: (draftId: number, incidentRole: string, questionUrl: string) => {
+        return `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/aloEdit/${incidentRole}/${questionUrl}`
       },
     },
   },
   detailsOfOffence: {
     root: '/details-of-offence',
     matchers: {
-      start: '/:adjudicationNumber',
-      modified: '/:adjudicationNumber/modified',
-      add: '/:adjudicationNumber/add',
-      aloAdd: '/:adjudicationNumber/alo-add',
-      delete: '/:adjudicationNumber/delete',
-      aloEdit: '/:adjudicationNumber/aloEdit',
+      start: '/:draftId',
+      modified: '/:draftId/modified',
+      add: '/:draftId/add',
+      aloAdd: '/:draftId/alo-add',
+      delete: '/:draftId/delete',
+      aloEdit: '/:draftId/aloEdit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}`,
-      modified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/modified`,
-      add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/add`,
-      aloAdd: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/alo-add`,
-      delete: (adjudicationNumber: number, offenceData: OffenceData) =>
-        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/delete?offenceCode=${offenceData?.offenceCode}&victimOtherPersonsName=${offenceData?.victimOtherPersonsName}&victimPrisonersNumber=${offenceData?.victimPrisonersNumber}&victimStaffUsername=${offenceData?.victimStaffUsername}`,
-      aloEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfOffence.root}/${adjudicationNumber}/aloEdit`,
+      start: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}`,
+      modified: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/modified`,
+      add: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/add`,
+      aloAdd: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/alo-add`,
+      delete: (draftId: number, offenceData: OffenceData) =>
+        `${adjudicationUrls.detailsOfOffence.root}/${draftId}/delete?offenceCode=${offenceData?.offenceCode}&victimOtherPersonsName=${offenceData?.victimOtherPersonsName}&victimPrisonersNumber=${offenceData?.victimPrisonersNumber}&victimStaffUsername=${offenceData?.victimStaffUsername}`,
+      aloEdit: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/aloEdit`,
     },
   },
   detailsOfDamages: {
     root: '/damages',
     matchers: {
-      start: '/:adjudicationNumber',
-      add: '/:adjudicationNumber/add',
-      modified: '/:adjudicationNumber/modified',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
-      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
+      start: '/:chargeNumber',
+      add: '/:chargeNumber/add',
+      modified: '/:chargeNumber/modified',
+      submittedEdit: '/:chargeNumber/submitted/edit',
+      submittedEditModified: '/:chargeNumber/submitted/edit/modified',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}`,
-      add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/add`,
-      modified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/modified`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/submitted/edit`,
-      submittedEditModified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfDamages.root}/${adjudicationNumber}/submitted/edit/modified`,
+      start: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfDamages.root}/${chargeNumber}`,
+      add: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfDamages.root}/${chargeNumber}/add`,
+      modified: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfDamages.root}/${chargeNumber}/modified`,
+      submittedEdit: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfDamages.root}/${chargeNumber}/submitted/edit`,
+      submittedEditModified: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfDamages.root}/${chargeNumber}/submitted/edit/modified`,
     },
   },
   detailsOfEvidence: {
     root: '/evidence',
     matchers: {
-      start: '/:adjudicationNumber',
-      add: '/:adjudicationNumber/add',
-      modified: '/:adjudicationNumber/modified',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
-      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
+      start: '/:chargeNumber',
+      add: '/:chargeNumber/add',
+      modified: '/:chargeNumber/modified',
+      submittedEdit: '/:chargeNumber/submitted/edit',
+      submittedEditModified: '/:chargeNumber/submitted/edit/modified',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}`,
-      add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/add`,
-      modified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/modified`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/submitted/edit`,
-      submittedEditModified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfEvidence.root}/${adjudicationNumber}/submitted/edit/modified`,
+      start: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfEvidence.root}/${chargeNumber}`,
+      add: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfEvidence.root}/${chargeNumber}/add`,
+      modified: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfEvidence.root}/${chargeNumber}/modified`,
+      submittedEdit: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfEvidence.root}/${chargeNumber}/submitted/edit`,
+      submittedEditModified: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfEvidence.root}/${chargeNumber}/submitted/edit/modified`,
     },
   },
   detailsOfWitnesses: {
     root: '/witnesses',
     matchers: {
-      start: '/:adjudicationNumber',
-      add: '/:adjudicationNumber/add',
-      modified: '/:adjudicationNumber/modified',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
-      submittedEditModified: '/:adjudicationNumber/submitted/edit/modified',
+      start: '/:chargeNumber',
+      add: '/:chargeNumber/add',
+      modified: '/:chargeNumber/modified',
+      submittedEdit: '/:chargeNumber/submitted/edit',
+      submittedEditModified: '/:chargeNumber/submitted/edit/modified',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}`,
-      add: (adjudicationNumber: number) => `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/add`,
-      modified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/modified`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/submitted/edit`,
-      submittedEditModified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.detailsOfWitnesses.root}/${adjudicationNumber}/submitted/edit/modified`,
+      start: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfWitnesses.root}/${chargeNumber}`,
+      add: (chargeNumber: string | number) => `${adjudicationUrls.detailsOfWitnesses.root}/${chargeNumber}/add`,
+      modified: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${chargeNumber}/modified`,
+      submittedEdit: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${chargeNumber}/submitted/edit`,
+      submittedEditModified: (chargeNumber: string | number) =>
+        `${adjudicationUrls.detailsOfWitnesses.root}/${chargeNumber}/submitted/edit/modified`,
     },
   },
   taskList: {
     root: '/place-the-prisoner-on-report',
     matchers: {
-      start: '/:id',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (id: number) => `${adjudicationUrls.taskList.root}/${id}`,
+      start: (chargeNumber: string | number) => `${adjudicationUrls.taskList.root}/${chargeNumber}`,
     },
   },
   confirmedOnReport: {
     root: '/prisoner-placed-on-report',
     matchers: {
-      start: '/:adjudicationNumber',
-      confirmationOfChange: '/:adjudicationNumber/changes-confirmed/report',
-      confirmationOfChangePostReview: '/:adjudicationNumber/changes-confirmed/submitted-report',
+      start: '/:chargeNumber',
+      confirmationOfChange: '/:chargeNumber/changes-confirmed/report',
+      confirmationOfChangePostReview: '/:chargeNumber/changes-confirmed/submitted-report',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}`,
-      confirmationOfChange: (adjudicationNumber: number) =>
-        `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/report`,
-      confirmationOfChangePostReview: (adjudicationNumber: number) =>
-        `${adjudicationUrls.confirmedOnReport.root}/${adjudicationNumber}/changes-confirmed/submitted-report`,
+      start: (chargeNumber: string) => `${adjudicationUrls.confirmedOnReport.root}/${chargeNumber}`,
+      confirmationOfChange: (chargeNumber: string) =>
+        `${adjudicationUrls.confirmedOnReport.root}/${chargeNumber}/changes-confirmed/report`,
+      confirmationOfChangePostReview: (chargeNumber: string) =>
+        `${adjudicationUrls.confirmedOnReport.root}/${chargeNumber}/changes-confirmed/submitted-report`,
     },
   },
   incidentDetails: {
     root: '/incident-details',
     matchers: {
       start: '/:prisonerNumber',
-      edit: '/:prisonerNumber/:id/edit',
-      submittedEdit: '/:prisonerNumber/:id/submitted/edit',
+      edit: '/:prisonerNumber/:draftId/edit',
+      submittedEdit: '/:prisonerNumber/:draftId/submitted/edit',
     },
     urls: {
       start: (prisonerNumber: string) => `${adjudicationUrls.incidentDetails.root}/${prisonerNumber}`,
-      edit: (prisonerNumber: string, id: number) =>
-        `${adjudicationUrls.incidentDetails.root}/${prisonerNumber}/${id}/edit`,
-      submittedEdit: (prisonerNumber: string, id: number) =>
-        `${adjudicationUrls.incidentDetails.root}/${prisonerNumber}/${id}/submitted/edit`,
+      edit: (prisonerNumber: string, draftId: number) =>
+        `${adjudicationUrls.incidentDetails.root}/${prisonerNumber}/${draftId}/edit`,
+      submittedEdit: (prisonerNumber: string, draftId: number) =>
+        `${adjudicationUrls.incidentDetails.root}/${prisonerNumber}/${draftId}/submitted/edit`,
     },
   },
   selectGender: {
@@ -163,44 +160,40 @@ const adjudicationUrls = {
   incidentRole: {
     root: '/incident-role',
     matchers: {
-      start: '/:adjudicationNumber',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
-      aloSubmittedEdit: '/:adjudicationNumber/submitted/edit/alo',
+      start: '/:draftId',
+      submittedEdit: '/:draftId/submitted/edit',
+      aloSubmittedEdit: '/:draftId/submitted/edit/alo',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}/submitted/edit`,
-      aloSubmittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.incidentRole.root}/${adjudicationNumber}/submitted/edit/alo`,
+      start: (draftId: number) => `${adjudicationUrls.incidentRole.root}/${draftId}`,
+      submittedEdit: (draftId: number) => `${adjudicationUrls.incidentRole.root}/${draftId}/submitted/edit`,
+      aloSubmittedEdit: (draftId: number) => `${adjudicationUrls.incidentRole.root}/${draftId}/submitted/edit/alo`,
     },
   },
   incidentAssociate: {
     root: '/associated-prisoner',
     matchers: {
-      start: '/:adjudicationNumber/:roleCode',
-      submittedEdit: '/:adjudicationNumber/:roleCode/submitted/edit',
-      aloEdit: '/:adjudicationNumber/:roleCode/submitted/edit/alo',
+      start: '/:draftId/:roleCode',
+      submittedEdit: '/:draftId/:roleCode/submitted/edit',
+      aloEdit: '/:draftId/:roleCode/submitted/edit/alo',
     },
     urls: {
-      start: (adjudicationNumber: number, roleCode: string) =>
-        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}`,
-      submittedEdit: (adjudicationNumber: number, roleCode: string) =>
-        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit`,
-      aloEdit: (adjudicationNumber: number, roleCode: string) =>
-        `${adjudicationUrls.incidentAssociate.root}/${adjudicationNumber}/${roleCode}/submitted/edit/alo`,
+      start: (draftId: number, roleCode: string) => `${adjudicationUrls.incidentAssociate.root}/${draftId}/${roleCode}`,
+      submittedEdit: (draftId: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${draftId}/${roleCode}/submitted/edit`,
+      aloEdit: (draftId: number, roleCode: string) =>
+        `${adjudicationUrls.incidentAssociate.root}/${draftId}/${roleCode}/submitted/edit/alo`,
     },
   },
   incidentStatement: {
     root: '/incident-statement',
     matchers: {
-      start: '/:adjudicationNumber',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      start: '/:draftId',
+      submittedEdit: '/:draftId/submitted/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.incidentStatement.root}/${adjudicationNumber}`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.incidentStatement.root}/${adjudicationNumber}/submitted/edit`,
+      start: (draftId: number) => `${adjudicationUrls.incidentStatement.root}/${draftId}`,
+      submittedEdit: (draftId: number) => `${adjudicationUrls.incidentStatement.root}/${draftId}/submitted/edit`,
     },
   },
   searchForPrisoner: {
@@ -212,12 +205,12 @@ const adjudicationUrls = {
   checkYourAnswers: {
     root: '/check-your-answers',
     matchers: {
-      start: '/:adjudicationNumber',
-      reporterView: '/:adjudicationNumber/report',
+      start: '/:draftId',
+      reporterView: '/:draftId/report',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.checkYourAnswers.root}/${adjudicationNumber}`,
-      report: (adjudicationNumber: number) => `${adjudicationUrls.checkYourAnswers.root}/${adjudicationNumber}/report`,
+      start: (draftId: number) => `${adjudicationUrls.checkYourAnswers.root}/${draftId}`,
+      report: (draftId: number) => `${adjudicationUrls.checkYourAnswers.root}/${draftId}/report`,
     },
   },
   selectPrisoner: {
@@ -306,32 +299,32 @@ const adjudicationUrls = {
   printReport: {
     root: '/print-report',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.printReport.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.printReport.root}/${chargeNumber}`,
     },
   },
   printPdf: {
     root: '/print',
     matchers: {
-      start: '/:adjudicationNumber/pdf',
+      start: '/:chargeNumber/pdf',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.printPdf.root}/${adjudicationNumber}/pdf`,
+      start: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/pdf`,
     },
   },
   prisonerReport: {
     root: '/prisoner-report',
     matchers: {
-      report: '/:adjudicationNumber/report',
-      review: '/:adjudicationNumber/review',
-      viewOnly: '/:adjudicationNumber/view',
+      report: '/:chargeNumber/report',
+      review: '/:chargeNumber/review',
+      viewOnly: '/:chargeNumber/view',
     },
     urls: {
-      report: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/report`,
-      review: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/review`,
-      viewOnly: (adjudicationNumber: number) => `${adjudicationUrls.prisonerReport.root}/${adjudicationNumber}/view`,
+      report: (chargeNumber: string | number) => `${adjudicationUrls.prisonerReport.root}/${chargeNumber}/report`,
+      review: (chargeNumber: string | number) => `${adjudicationUrls.prisonerReport.root}/${chargeNumber}/review`,
+      viewOnly: (chargeNumber: string | number) => `${adjudicationUrls.prisonerReport.root}/${chargeNumber}/view`,
     },
   },
   deletePerson: {
@@ -343,44 +336,43 @@ const adjudicationUrls = {
   ageOfPrisoner: {
     root: '/age-of-prisoner',
     matchers: {
-      start: '/:adjudicationNumber',
-      submittedEdit: '/:adjudicationNumber/submitted/edit',
+      start: '/:draftId',
+      submittedEdit: '/:draftId/submitted/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}`,
-      startWithResettingOffences: (adjudicationNumber: number) =>
-        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}?reselectingFirstOffence=true`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit`,
-      submittedEditWithResettingOffences: (adjudicationNumber: number) =>
-        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true`,
-      aloSubmittedEditWithResettingOffences: (adjudicationNumber: number) =>
-        `${adjudicationUrls.ageOfPrisoner.root}/${adjudicationNumber}/submitted/edit?reselectingFirstOffence=true&aloEdit=true`,
+      start: (draftId: number) => `${adjudicationUrls.ageOfPrisoner.root}/${draftId}`,
+      startWithResettingOffences: (draftId: number) =>
+        `${adjudicationUrls.ageOfPrisoner.root}/${draftId}?reselectingFirstOffence=true`,
+      submittedEdit: (draftId: number) => `${adjudicationUrls.ageOfPrisoner.root}/${draftId}/submitted/edit`,
+      submittedEditWithResettingOffences: (draftId: number) =>
+        `${adjudicationUrls.ageOfPrisoner.root}/${draftId}/submitted/edit?reselectingFirstOffence=true`,
+      aloSubmittedEditWithResettingOffences: (draftId: number) =>
+        `${adjudicationUrls.ageOfPrisoner.root}/${draftId}/submitted/edit?reselectingFirstOffence=true&aloEdit=true`,
     },
   },
   hearingDetails: {
     root: '/hearing-details',
     matchers: {
-      review: '/:adjudicationNumber/review',
-      report: '/:adjudicationNumber/report',
-      viewOnly: '/:adjudicationNumber/view',
+      review: '/:chargeNumber/review',
+      report: '/:chargeNumber/report',
+      viewOnly: '/:chargeNumber/view',
     },
     urls: {
-      review: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/review`,
-      report: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/report`,
-      viewOnly: (adjudicationNumber: number) => `${adjudicationUrls.hearingDetails.root}/${adjudicationNumber}/view`,
+      review: (chargeNumber: string) => `${adjudicationUrls.hearingDetails.root}/${chargeNumber}/review`,
+      report: (chargeNumber: string) => `${adjudicationUrls.hearingDetails.root}/${chargeNumber}/report`,
+      viewOnly: (chargeNumber: string) => `${adjudicationUrls.hearingDetails.root}/${chargeNumber}/view`,
     },
   },
   scheduleHearing: {
     root: '/schedule-hearing',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:hearingId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:hearingId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.scheduleHearing.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, hearingId: number) =>
-        `${adjudicationUrls.scheduleHearing.root}/${adjudicationNumber}/edit/${hearingId}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.scheduleHearing.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, hearingId: number) =>
+        `${adjudicationUrls.scheduleHearing.root}/${chargeNumber}/edit/${hearingId}`,
     },
   },
   viewScheduledHearings: {
@@ -400,11 +392,10 @@ const adjudicationUrls = {
   acceptedReportConfirmation: {
     root: '/report-has-been-accepted',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.acceptedReportConfirmation.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.acceptedReportConfirmation.root}/${chargeNumber}`,
     },
   },
   confirmDISFormsIssued: {
@@ -424,10 +415,10 @@ const adjudicationUrls = {
   addIssueDateTime: {
     root: '/add-issue-date-time',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.addIssueDateTime.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.addIssueDateTime.root}/${chargeNumber}`,
     },
   },
   printCompletedDisForms: {
@@ -447,359 +438,342 @@ const adjudicationUrls = {
   enterHearingOutcome: {
     root: '/hearing-outcome',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.enterHearingOutcome.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.enterHearingOutcome.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.enterHearingOutcome.root}/${chargeNumber}/edit`,
     },
   },
   hearingPleaAndFinding: {
     root: '/hearing-plea-finding',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.hearingPleaAndFinding.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.hearingPleaAndFinding.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.hearingPleaAndFinding.root}/${chargeNumber}/edit`,
     },
   },
   hearingReasonForReferral: {
     root: '/reason-for-referral',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.hearingReasonForReferral.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.hearingReasonForReferral.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.hearingReasonForReferral.root}/${chargeNumber}/edit`,
     },
   },
   reasonForReferral: {
     root: '/reason-for-police-referral',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForReferral.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.reasonForReferral.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.reasonForReferral.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.reasonForReferral.root}/${chargeNumber}/edit`,
     },
   },
   hearingAdjourned: {
     root: '/hearing-adjourned',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.hearingAdjourned.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.hearingAdjourned.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.hearingAdjourned.root}/${chargeNumber}/edit`,
     },
   },
   hearingReferralConfirmation: {
     root: '/report-has-been-referred',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.hearingReferralConfirmation.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.hearingReferralConfirmation.root}/${chargeNumber}`,
     },
   },
   nextStepsPolice: {
     root: '/next-steps/police',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsPolice.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.nextStepsPolice.root}/${chargeNumber}`,
     },
   },
   nextStepsInad: {
     root: '/next-steps/inad',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.nextStepsInad.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.nextStepsInad.root}/${chargeNumber}`,
     },
   },
 
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.moneyRecoveredForDamages.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.moneyRecoveredForDamages.root}/${chargeNumber}/edit`,
     },
   },
   isThisACaution: {
     root: '/is-caution',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.isThisACaution.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.isThisACaution.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.isThisACaution.root}/${chargeNumber}/edit`,
     },
   },
   hearingReasonForFinding: {
     root: '/reason-for-finding',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.hearingReasonForFinding.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.hearingReasonForFinding.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.hearingReasonForFinding.root}/${chargeNumber}/edit`,
     },
   },
   reasonForNotProceeding: {
     root: '/reason-for-not-proceeding',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
-      completeHearingStart: '/complete-hearing/:adjudicationNumber',
-      completeHearingEdit: '/complete-hearing/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
+      completeHearingStart: '/complete-hearing/:chargeNumber',
+      completeHearingEdit: '/complete-hearing/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.reasonForNotProceeding.root}/${adjudicationNumber}/edit`,
-      completeHearingStart: (adjudicationNumber: number) =>
-        `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${adjudicationNumber}`,
-      completeHearingEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.reasonForNotProceeding.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.reasonForNotProceeding.root}/${chargeNumber}/edit`,
+      completeHearingStart: (chargeNumber: string) =>
+        `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${chargeNumber}`,
+      completeHearingEdit: (chargeNumber: string) =>
+        `${adjudicationUrls.reasonForNotProceeding.root}/complete-hearing/${chargeNumber}/edit`,
     },
   },
   reportAQuashedGuiltyFinding: {
     root: '/report-quashed-guilty-finding',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.reportAQuashedGuiltyFinding.root}/${chargeNumber}/edit`,
     },
   },
   hearingsCheckAnswers: {
     root: '/check-answers-before-submitting-hearing',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.hearingsCheckAnswers.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.hearingsCheckAnswers.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.hearingsCheckAnswers.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.hearingsCheckAnswers.root}/${chargeNumber}/edit`,
     },
   },
   punishmentsAndDamages: {
     root: '/punishment-details',
     matchers: {
-      review: '/:adjudicationNumber/review',
-      report: '/:adjudicationNumber/report',
-      viewOnly: '/:adjudicationNumber/view',
+      review: '/:chargeNumber/review',
+      report: '/:chargeNumber/report',
+      viewOnly: '/:chargeNumber/view',
     },
     urls: {
-      review: (adjudicationNumber: number) =>
-        `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/review`,
-      report: (adjudicationNumber: number) =>
-        `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/report`,
-      viewOnly: (adjudicationNumber: number) =>
-        `${adjudicationUrls.punishmentsAndDamages.root}/${adjudicationNumber}/view`,
+      review: (chargeNumber: string) => `${adjudicationUrls.punishmentsAndDamages.root}/${chargeNumber}/review`,
+      report: (chargeNumber: string) => `${adjudicationUrls.punishmentsAndDamages.root}/${chargeNumber}/report`,
+      viewOnly: (chargeNumber: string) => `${adjudicationUrls.punishmentsAndDamages.root}/${chargeNumber}/view`,
     },
   },
   punishment: {
     root: '/punishment',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.punishment.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.punishment.root}/${adjudicationNumber}/edit/${redisId}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.punishment.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishment.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   punishmentSchedule: {
     root: '/punishment-schedule',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.punishmentSchedule.root}/${adjudicationNumber}/edit/${redisId}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentSchedule.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentSchedule.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   numberOfAdditionalDays: {
     root: '/number-additional-days',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
-      manualEdit: '/:adjudicationNumber/manualEdit/',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+      manualEdit: '/:chargeNumber/manualEdit/',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/edit/${redisId}`,
-      manualEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.numberOfAdditionalDays.root}/${adjudicationNumber}/manualEdit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.numberOfAdditionalDays.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.numberOfAdditionalDays.root}/${chargeNumber}/edit/${redisId}`,
+      manualEdit: (chargeNumber: string) =>
+        `${adjudicationUrls.numberOfAdditionalDays.root}/${chargeNumber}/manualEdit`,
     },
   },
   isPunishmentSuspended: {
     root: '/punishment-suspended',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.isPunishmentSuspended.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.isPunishmentSuspended.root}/${adjudicationNumber}/edit/${redisId}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.isPunishmentSuspended.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.isPunishmentSuspended.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   isPunishmentConsecutive: {
     root: '/punishment-consecutive',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.isPunishmentConsecutive.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.isPunishmentConsecutive.root}/${adjudicationNumber}/edit/${redisId}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.isPunishmentConsecutive.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.isPunishmentConsecutive.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   whichPunishmentIsItConsecutiveTo: {
     root: '/punishment-consecutive-to',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${adjudicationNumber}/edit/${redisId}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   whichPunishmentIsItConsecutiveToManual: {
     root: '/punishment-consecutive-to/manual',
     matchers: {
-      start: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:redisId',
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, redisId: string) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${adjudicationNumber}/edit/${redisId}`,
+      start: (chargeNumber: string) =>
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   manualConsecutivePunishmentError: {
     root: '/punishment-consecutive-to/manual/error',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeId',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.manualConsecutivePunishmentError.root}/${adjudicationNumber}`,
+      start: (chargeId: string) => `${adjudicationUrls.manualConsecutivePunishmentError.root}/${chargeId}`,
     },
   },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {
-      start: '/:adjudicationNumber',
-      modified: '/:adjudicationNumber/modified',
+      start: '/:chargeNumber',
+      modified: '/:chargeNumber/modified',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}`,
-      modified: (adjudicationNumber: number) =>
-        `${adjudicationUrls.awardPunishments.root}/${adjudicationNumber}/modified`,
+      start: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}`,
+      modified: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}/modified`,
     },
   },
   checkPunishments: {
     root: '/check-punishments',
     matchers: {
-      start: '/:adjudicationNumber',
-      submittedEdit: '/:adjudicationNumber/edit',
+      start: '/:chargeNumber',
+      submittedEdit: '/:chargeNumber/edit',
     },
     urls: {
-      start: (adjudicationNumber: number) => `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}`,
-      submittedEdit: (adjudicationNumber: number) =>
-        `${adjudicationUrls.checkPunishments.root}/${adjudicationNumber}/edit`,
+      start: (chargeNumber: string) => `${adjudicationUrls.checkPunishments.root}/${chargeNumber}`,
+      submittedEdit: (chargeNumber: string) => `${adjudicationUrls.checkPunishments.root}/${chargeNumber}/edit`,
     },
   },
   activateSuspendedPunishments: {
     root: '/activate-suspended-punishments',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.activateSuspendedPunishments.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.activateSuspendedPunishments.root}/${chargeNumber}`,
     },
   },
   punishmentComment: {
     root: '/punishment-comment',
     matchers: {
-      add: '/:adjudicationNumber',
-      edit: '/:adjudicationNumber/edit/:id',
-      delete: '/:adjudicationNumber/delete/:id',
+      add: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:id',
+      delete: '/:chargeNumber/delete/:id',
     },
     urls: {
-      add: (adjudicationNumber: number) => `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}`,
-      edit: (adjudicationNumber: number, id: number) =>
-        `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}/edit/${id}`,
-      delete: (adjudicationNumber: number, id: number) =>
-        `${adjudicationUrls.punishmentComment.root}/${adjudicationNumber}/delete/${id}`,
+      add: (chargeNumber: string) => `${adjudicationUrls.punishmentComment.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, id: number) =>
+        `${adjudicationUrls.punishmentComment.root}/${chargeNumber}/edit/${id}`,
+      delete: (chargeNumber: string, id: number) =>
+        `${adjudicationUrls.punishmentComment.root}/${chargeNumber}/delete/${id}`,
     },
   },
   manuallyActivateSuspendedPunishment: {
     root: '/manually-activate-suspended-punishment',
     matchers: {
-      start: '/:adjudicationNumber',
+      start: '/:chargeNumber',
     },
     urls: {
-      start: (adjudicationNumber: number) =>
-        `${adjudicationUrls.manuallyActivateSuspendedPunishment.root}/${adjudicationNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.manuallyActivateSuspendedPunishment.root}/${chargeNumber}`,
     },
   },
   suspendedPunishmentSchedule: {
     root: '/suspended-punishment-schedule',
     matchers: {
-      existingPunishment: '/:adjudicationNumber/existing',
-      manualPunishment: '/:adjudicationNumber/manual',
+      existingPunishment: '/:chargeNumber/existing',
+      manualPunishment: '/:chargeNumber/manual',
     },
     urls: {
-      existing: (adjudicationNumber: number) =>
-        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/existing`,
-      manual: (adjudicationNumber: number) =>
-        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${adjudicationNumber}/manual`,
+      existing: (chargeNumber: string) =>
+        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${chargeNumber}/existing`,
+      manual: (chargeNumber: string) => `${adjudicationUrls.suspendedPunishmentSchedule.root}/${chargeNumber}/manual`,
     },
   },
   reviewerEditOffenceWarning: {
     root: '/edit-offence-warning',
     matchers: {
-      edit: '/:adjudicationNumber',
+      edit: '/:chargeNumber',
     },
     urls: {
-      edit: (adjudicationNumber: number) => `${adjudicationUrls.reviewerEditOffenceWarning.root}/${adjudicationNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.reviewerEditOffenceWarning.root}/${chargeNumber}`,
     },
   },
   dataInsights: {

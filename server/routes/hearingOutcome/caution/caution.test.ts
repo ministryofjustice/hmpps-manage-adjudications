@@ -26,7 +26,7 @@ describe('GET /is-caution', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isThisACaution.urls.start(100))
+      .get(adjudicationUrls.isThisACaution.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -37,7 +37,7 @@ describe('GET /is-caution', () => {
 describe('GET /is-caution', () => {
   it('should load the `is caution` page', () => {
     return request(app)
-      .get(adjudicationUrls.isThisACaution.urls.start(100))
+      .get(adjudicationUrls.isThisACaution.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Is the punishment a caution?')
@@ -48,7 +48,7 @@ describe('GET /is-caution', () => {
 describe('POST /is-caution', () => {
   it('should successfully call the endpoint and redirect if answer is no', () => {
     return request(app)
-      .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
+      .post(`${adjudicationUrls.isThisACaution.urls.start('100')}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
       .send({
         caution: 'no',
       })
@@ -56,13 +56,13 @@ describe('POST /is-caution', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY&damagesOwed=&caution=no`
       )
   })
   it('should not call the endpoint and redirect to the check answers page if answer is yes', () => {
     return request(app)
-      .post(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
+      .post(`${adjudicationUrls.isThisACaution.urls.start('100')}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=`)
       .send({
         caution: 'yes',
       })
@@ -70,7 +70,7 @@ describe('POST /is-caution', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&amount=&plea=GUILTY&damagesOwed=&caution=yes`
       )
   })

@@ -50,10 +50,10 @@ export default class HearingAdournedPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, adjournReason, adjournDetails, adjournPlea } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/adjourn.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       adjournReason,
       adjournDetails,
@@ -63,7 +63,7 @@ export default class HearingAdournedPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -72,7 +72,7 @@ export default class HearingAdournedPage {
     let readApi = null
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
-        adjudicationNumber,
+        chargeNumber,
         [ReportedAdjudicationStatus.ADJOURNED],
         user
       )) as HearingDetailsHistory
@@ -88,7 +88,7 @@ export default class HearingAdournedPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { adjudicator } = req.query
     const { adjournReason, adjournDetails, adjournPlea } = req.body
 
@@ -106,7 +106,7 @@ export default class HearingAdournedPage {
     try {
       if (this.pageOptions.isEdit()) {
         await this.hearingsService.editAdjournHearingOutcome(
-          adjudicationNumber,
+          chargeNumber,
           trimmedAdjournDetails,
           adjournReason,
           adjournPlea,
@@ -115,7 +115,7 @@ export default class HearingAdournedPage {
         )
       } else {
         await this.hearingsService.createAdjourn(
-          adjudicationNumber,
+          chargeNumber,
           HearingOutcomeCode.ADJOURN,
           adjudicator as string,
           trimmedAdjournDetails,
@@ -125,9 +125,9 @@ export default class HearingAdournedPage {
         )
       }
 
-      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }

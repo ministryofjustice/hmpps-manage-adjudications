@@ -27,22 +27,22 @@ class PageOptions {
 const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication: ReportedAdjudication) => {
   if (pageOptions.isReporter()) {
     return {
-      reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.adjudicationNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.adjudicationNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.adjudicationNumber),
+      reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.chargeNumber),
     }
   }
   if (pageOptions.isViewOnly()) {
     return {
-      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.adjudicationNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.adjudicationNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.chargeNumber),
     }
   }
   return {
-    reportHref: adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.adjudicationNumber),
-    hearingsHref: adjudicationUrls.hearingDetails.urls.review(reportedAdjudication.adjudicationNumber),
-    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(reportedAdjudication.adjudicationNumber),
+    reportHref: adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber),
+    hearingsHref: adjudicationUrls.hearingDetails.urls.review(reportedAdjudication.chargeNumber),
+    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(reportedAdjudication.chargeNumber),
   }
 }
 
@@ -59,9 +59,9 @@ export default class HearingTabPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      adjudicationNumber,
+      chargeNumber,
       user
     )
 
@@ -84,7 +84,7 @@ export default class HearingTabPage {
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
-      reportNo: reportedAdjudication.adjudicationNumber,
+      reportNo: reportedAdjudication.chargeNumber,
       reviewStatus: reportedAdjudication.status,
       schedulingNotAvailable: getSchedulingUnavailableStatuses(reportedAdjudication),
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,
@@ -98,12 +98,12 @@ export default class HearingTabPage {
       primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
         reportedAdjudication.outcomes,
         readOnly,
-        adjudicationNumber
+        chargeNumber
       ),
       tertiaryButtonInfo: this.reportedAdjudicationsService.getTertiaryButtonInfoForHearingDetails(
         reportedAdjudication.outcomes,
         readOnly,
-        adjudicationNumber
+        chargeNumber
       ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
@@ -116,7 +116,7 @@ export default class HearingTabPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const {
       removeHearingButton,
@@ -128,25 +128,25 @@ export default class HearingTabPage {
       removeQuashedFindingButton,
     } = req.body
     if (removeOutcomeButton || removeQuashedFindingButton) {
-      await this.outcomesService.removeNotProceedOrQuashed(adjudicationNumber, user)
+      await this.outcomesService.removeNotProceedOrQuashed(chargeNumber, user)
     }
     if (removeAdjournHearingOutcomeButton) {
-      await this.outcomesService.removeAdjournOutcome(adjudicationNumber, user)
+      await this.outcomesService.removeAdjournOutcome(chargeNumber, user)
     }
     if (removeHearingButton) {
-      await this.reportedAdjudicationsService.deleteHearing(adjudicationNumber, user)
+      await this.reportedAdjudicationsService.deleteHearing(chargeNumber, user)
     }
     if (removeCompleteHearingOutcomeButton) {
-      await this.reportedAdjudicationsService.deleteCompleteHearingOutcome(adjudicationNumber, user)
+      await this.reportedAdjudicationsService.deleteCompleteHearingOutcome(chargeNumber, user)
     }
     if (removeReferralButton) {
-      await this.outcomesService.removeReferral(adjudicationNumber, user)
+      await this.outcomesService.removeReferral(chargeNumber, user)
     }
     if (nextStep) {
-      const redirectUrl = getNextPageForChosenStep(nextStep, adjudicationNumber)
+      const redirectUrl = getNextPageForChosenStep(nextStep, chargeNumber)
       if (redirectUrl) return res.redirect(redirectUrl)
     }
 
-    return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+    return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
   }
 }

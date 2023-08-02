@@ -29,7 +29,7 @@ describe('GET /your-completed-reports', () => {
   describe('with results', () => {
     beforeEach(() => {
       const adjudicationOne = testData.reportedAdjudication({
-        adjudicationNumber: 2,
+        chargeNumber: '2',
         prisonerNumber: 'G6123VU',
         dateTimeOfIncident: '2021-11-15T11:45:00',
         otherData: {
@@ -39,7 +39,7 @@ describe('GET /your-completed-reports', () => {
         },
       })
       const adjudicationTwo = testData.reportedAdjudication({
-        adjudicationNumber: 1,
+        chargeNumber: '1',
         prisonerNumber: 'G6174VU',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         otherData: {

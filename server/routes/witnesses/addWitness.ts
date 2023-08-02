@@ -20,7 +20,7 @@ type PageData = {
   errors?: FormError[]
   selectedPerson?: string
   prisoner?: PrisonerResultSummary
-  adjudicationNumber?: number
+  chargeNumber?: string
 } & DecisionForm
 
 // eslint-disable-next-line no-shadow
@@ -51,22 +51,22 @@ export default class AddWitnessRoutes {
   ])
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { adjudicationNumber, errors } = pageData
+    const { chargeNumber, errors } = pageData
     const { user } = res.locals
     const submitted = req.query.submitted as string
     // we need to save whether this is a submitted edit on the session, so that we don't lose that information as we come back from the search
     if (submitted === 'true') this.witnessesSessionService.setSubmittedEditFlagOnSession(req)
 
     const prisoner = await this.getPrisoner(
-      adjudicationNumber,
+      chargeNumber,
       this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
       user
     )
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
     // eslint-disable-next-line no-extra-boolean-cast
     const cancelButtonHref = this.witnessesSessionService.getSubmittedEditFlagFromSession(req)
-      ? adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(adjudicationNumber)
-      : adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber)
+      ? adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(chargeNumber)
+      : adjudicationUrls.detailsOfWitnesses.urls.modified(chargeNumber)
 
     return res.render(`pages/addWitness`, {
       errors: errors || [],
@@ -79,7 +79,7 @@ export default class AddWitnessRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const selectedAnswerId = req.query.selectedAnswerId as string
     const selectedPerson = req.query.selectedPerson as string
     if (selectedPerson && selectedAnswerId) {
@@ -87,35 +87,35 @@ export default class AddWitnessRoutes {
       const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
       const form = answerTypeHelper.formAfterSearch(selectedAnswerId, selectedPerson)
 
-      return this.renderView(req, res, { ...form, adjudicationNumber })
+      return this.renderView(req, res, { ...form, chargeNumber })
     }
     if (req.query.selectedAnswerId) {
       // We are coming from delete.
-      return this.renderView(req, res, { adjudicationNumber, selectedAnswerId })
+      return this.renderView(req, res, { chargeNumber, selectedAnswerId })
     }
     // We are viewing the page normally
-    return this.renderView(req, res, { adjudicationNumber })
+    return this.renderView(req, res, { chargeNumber })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { selectedAnswerId } = req.body
     if (req.body.deleteUser) {
-      return this.deleteUser(req, res, adjudicationNumber)
+      return this.deleteUser(req, res, chargeNumber)
     }
 
     if (req.body.searchUser) {
       return this.search(req, res)
     }
     if (!selectedAnswerId) {
-      return this.renderView(req, res, { errors: [error.MISSING_DECISION], adjudicationNumber })
+      return this.renderView(req, res, { errors: [error.MISSING_DECISION], chargeNumber })
     }
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
     const errors = await answerTypeHelper.validateForm(form, req, res.locals.user)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, { errors, ...form, adjudicationNumber })
+      return this.renderView(req, res, { errors, ...form, chargeNumber })
     }
 
     const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
@@ -126,53 +126,53 @@ export default class AddWitnessRoutes {
       reporter: user.username,
     }
 
-    this.witnessesSessionService.addSessionWitness(req, witnessToAdd, adjudicationNumber)
+    this.witnessesSessionService.addSessionWitness(req, witnessToAdd, chargeNumber)
     const redirectUrl = this.getRedirectUrl(
       this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
-      adjudicationNumber
+      chargeNumber
     )
     this.witnessesSessionService.deleteSubmittedEditFlagOnSession(req)
     return res.redirect(redirectUrl)
   }
 
-  deleteUser = async (req: Request, res: Response, adjudicationNumber: number): Promise<void> => {
+  deleteUser = async (req: Request, res: Response, chargeNumber: string): Promise<void> => {
     const { selectedAnswerId } = req.body
 
     return this.redirect(
-      { pathname: adjudicationUrls.detailsOfWitnesses.urls.add(adjudicationNumber), query: { selectedAnswerId } },
+      { pathname: adjudicationUrls.detailsOfWitnesses.urls.add(chargeNumber), query: { selectedAnswerId } },
       res
     )
   }
 
   search = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { selectedAnswerId } = req.body
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
-    req.session.redirectUrl = `${adjudicationUrls.detailsOfWitnesses.urls.add(adjudicationNumber)}?selectedAnswerId=${
+    req.session.redirectUrl = `${adjudicationUrls.detailsOfWitnesses.urls.add(chargeNumber)}?selectedAnswerId=${
       req.body.selectedAnswerId
     }`
     const errors = await answerTypeHelper.validateForm(form, req, res.locals.user)
     if (errors && errors.length !== 0) {
-      return this.renderView(req, res, { errors, ...form, adjudicationNumber })
+      return this.renderView(req, res, { errors, ...form, chargeNumber })
     }
 
     req.session.redirectUrl = `${adjudicationUrls.detailsOfWitnesses.urls.add(
-      adjudicationNumber
+      chargeNumber
     )}?selectedAnswerId=${selectedAnswerId}`
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }
 
-  getRedirectUrl = (submitted: boolean, adjudicationNumber: number) => {
-    if (submitted) return adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(adjudicationNumber)
-    return adjudicationUrls.detailsOfWitnesses.urls.modified(adjudicationNumber)
+  getRedirectUrl = (submitted: boolean, chargeNumber: string) => {
+    if (submitted) return adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(chargeNumber)
+    return adjudicationUrls.detailsOfWitnesses.urls.modified(chargeNumber)
   }
 
-  getPrisoner = async (adjudicationNumber: number, isSubmittedEdit: boolean, user: User) => {
+  getPrisoner = async (chargeNumber: string, isSubmittedEdit: boolean, user: User) => {
     if (!isSubmittedEdit) {
-      return this.placeOnReportService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
+      return this.placeOnReportService.getPrisonerDetailsFromAdjNumber(Number(chargeNumber), user)
     }
-    return this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user)
+    return this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(chargeNumber, user)
   }
 
   // The helper that knows how to deal with the specifics of a particular decision type.

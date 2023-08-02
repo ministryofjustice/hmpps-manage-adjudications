@@ -50,7 +50,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit(100))
+      .get(adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -61,7 +61,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the quash page', () => {
     return request(app)
-      .get(adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit(100))
+      .get(adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Report a quashed guilty finding')
@@ -72,17 +72,17 @@ describe('GET', () => {
 describe('POST', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
-      .post(adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit(100))
+      .post(adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit('100'))
       .send({
         quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
         quashDetails: 'Some details about this decision',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() => expect(outcomesService.quashAGuiltyFinding).not.toHaveBeenCalled())
       .then(() =>
         expect(outcomesService.editQuashedOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           QuashGuiltyFindingReason.APPEAL_UPHELD,
           'Some details about this decision',
           expect.anything()

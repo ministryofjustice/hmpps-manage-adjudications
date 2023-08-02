@@ -97,6 +97,7 @@ export interface SuspendedPunishment extends PunishmentDataWithSchedule {
 
 export type SuspendedPunishmentResult = {
   reportNumber: number
+  chargeNumber: string
   punishment: SuspendedPunishment
 }
 

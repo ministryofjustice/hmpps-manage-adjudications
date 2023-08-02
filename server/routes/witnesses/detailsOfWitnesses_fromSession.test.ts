@@ -53,7 +53,7 @@ describe('GET', () => {
   })
   it('should load the page with details from the session', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfWitnesses.urls.modified(100))
+      .get(adjudicationUrls.detailsOfWitnesses.urls.modified('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Prison officer')
@@ -61,10 +61,10 @@ describe('GET', () => {
   })
   it('should use the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfWitnesses.urls.modified(100))
+      .get(adjudicationUrls.detailsOfWitnesses.urls.modified('100'))
       .expect(200)
       .then(() => expect(witnessesSessionService.setAllSessionWitnesses).not.toHaveBeenCalled())
-      .then(() => expect(witnessesSessionService.getAllSessionWitnesses).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(witnessesSessionService.getAllSessionWitnesses).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })
 
@@ -73,10 +73,14 @@ describe('POST', () => {
     witnessesSessionService.getAllSessionWitnesses.mockReturnValueOnce(witnessesOnSession)
     witnessesSessionService.getAndDeleteAllSessionWitnesses.mockReturnValueOnce(witnessesOnSession)
     return request(app)
-      .post(adjudicationUrls.detailsOfWitnesses.urls.modified(100))
+      .post(adjudicationUrls.detailsOfWitnesses.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(100, witnessesOnSession, expect.anything())
+        expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(
+          '100',
+          witnessesOnSession,
+          expect.anything()
+        )
       )
   })
 })

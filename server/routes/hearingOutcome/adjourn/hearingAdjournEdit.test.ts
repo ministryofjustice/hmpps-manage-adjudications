@@ -49,7 +49,7 @@ afterEach(() => {
 describe('GET /hearing-adjourned', () => {
   it('should load the `adjourn edit` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      .get(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Adjourn the hearing for another reason')
@@ -60,18 +60,18 @@ describe('GET /hearing-adjourned', () => {
 describe('POST /hearing-adjourned', () => {
   it('should successfully call the endpoint and redirect to the confirmation page - no adjudicator passed in', () => {
     return request(app)
-      .post(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      .post(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       .send({
         adjournReason: HearingOutcomeAdjournReason.INVESTIGATION,
         adjournDetails: '123',
         adjournPlea: HearingOutcomePlea.UNFIT,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() => expect(hearingsService.createAdjourn).not.toHaveBeenCalled())
       .then(() =>
         expect(hearingsService.editAdjournHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           '123',
           HearingOutcomeAdjournReason.INVESTIGATION,
           HearingOutcomePlea.UNFIT,
@@ -82,18 +82,18 @@ describe('POST /hearing-adjourned', () => {
   })
   it('should successfully call the endpoint and redirect to the confirmation page - adjudicator passed in', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Rebecca%20Red`)
+      .post(`${adjudicationUrls.hearingAdjourned.urls.edit('100')}?adjudicator=Rebecca%20Red`)
       .send({
         adjournReason: HearingOutcomeAdjournReason.INVESTIGATION,
         adjournDetails: '123',
         adjournPlea: HearingOutcomePlea.UNFIT,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() => expect(hearingsService.createAdjourn).not.toHaveBeenCalled())
       .then(() =>
         expect(hearingsService.editAdjournHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           '123',
           HearingOutcomeAdjournReason.INVESTIGATION,
           HearingOutcomePlea.UNFIT,

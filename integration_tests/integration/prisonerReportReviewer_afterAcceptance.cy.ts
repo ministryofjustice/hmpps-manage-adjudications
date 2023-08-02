@@ -7,14 +7,14 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 const testData = new TestData()
 
 const reportedAdjudicationResponse = ({
-  adjudicationNumber,
+  chargeNumber,
   status,
   reviewedByUserId = null,
   statusReason = null,
   statusDetails = null,
   isYouthOffender = false,
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   status: ReportedAdjudicationStatus
   reviewedByUserId?: string
   statusReason?: string
@@ -22,7 +22,7 @@ const reportedAdjudicationResponse = ({
   isYouthOffender: boolean
 }) => {
   return testData.reportedAdjudication({
-    adjudicationNumber,
+    chargeNumber,
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     status,
@@ -98,7 +98,7 @@ context('Prisoner report - reviewer view', () => {
       id: 456791,
       response: {
         reportedAdjudication: reportedAdjudicationResponse({
-          adjudicationNumber: 456791,
+          chargeNumber: '456791',
           status: ReportedAdjudicationStatus.SCHEDULED,
           reviewedByUserId: 'USER1',
           isYouthOffender: false,
@@ -109,7 +109,7 @@ context('Prisoner report - reviewer view', () => {
       id: 456789,
       response: {
         reportedAdjudication: reportedAdjudicationResponse({
-          adjudicationNumber: 456789,
+          chargeNumber: '456789',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
           reviewedByUserId: 'USER1',
           isYouthOffender: false,
@@ -137,7 +137,7 @@ context('Prisoner report - reviewer view', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUpdateAdjudicationStatus', {
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
@@ -284,7 +284,7 @@ context('Prisoner report - reviewer view', () => {
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.hearingsTab().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(456789))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('456789'))
       })
     })
     it('should go to the punishments page if the tab is clicked', () => {
@@ -292,7 +292,7 @@ context('Prisoner report - reviewer view', () => {
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.punishmentsTab().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(456789))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('456789'))
       })
     })
   })
@@ -431,7 +431,7 @@ context('Prisoner report - reviewer view', () => {
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.hearingsTab().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(456791))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('456791'))
       })
     })
     it('should go to the punishments page if the tab is clicked', () => {
@@ -439,7 +439,7 @@ context('Prisoner report - reviewer view', () => {
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.punishmentsTab().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(456791))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('456791'))
       })
     })
   })

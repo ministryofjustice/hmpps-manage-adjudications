@@ -18,7 +18,7 @@ context('Consecutive punishment charge number error', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
         }),
@@ -37,14 +37,14 @@ context('Consecutive punishment charge number error', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.manualConsecutivePunishmentError.urls.start(100))
+      cy.visit(adjudicationUrls.manualConsecutivePunishmentError.urls.start('100'))
       const manualEntryConsecutivePunishmentErrorPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentErrorPage)
       manualEntryConsecutivePunishmentErrorPage.info().should('exist')
       manualEntryConsecutivePunishmentErrorPage.cancelLink().should('exist')
       manualEntryConsecutivePunishmentErrorPage.button().should('exist')
     })
     it('should contain the info in the title and paragraph', () => {
-      cy.visit(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start(100)}?chargeNumber=1234567`)
+      cy.visit(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start('100')}?chargeNumber=1234567`)
       const manualEntryConsecutivePunishmentErrorPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentErrorPage)
       manualEntryConsecutivePunishmentErrorPage
         .h1()
@@ -56,24 +56,24 @@ context('Consecutive punishment charge number error', () => {
     it('should return to url in query', () => {
       cy.visit(
         `${adjudicationUrls.manualConsecutivePunishmentError.urls.start(
-          100
+          '100'
         )}?chargeNumber=1234567&redirectUrl=${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS`
       )
       const manualEntryConsecutivePunishmentErrorPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentErrorPage)
       manualEntryConsecutivePunishmentErrorPage.button().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(`${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100)}`)
+        expect(loc.pathname).to.eq(`${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100')}`)
         expect(loc.search).to.eq(`?punishmentType=ADDITIONAL_DAYS`)
       })
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(adjudicationUrls.manualConsecutivePunishmentError.urls.start(100))
+      cy.visit(adjudicationUrls.manualConsecutivePunishmentError.urls.start('100'))
       const manualEntryConsecutivePunishmentErrorPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentErrorPage)
       manualEntryConsecutivePunishmentErrorPage.cancelLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })

@@ -32,22 +32,22 @@ class PageOptions {
 const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication: ReportedAdjudication) => {
   if (pageOptions.isViewOnly()) {
     return {
-      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.adjudicationNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.adjudicationNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.adjudicationNumber),
+      reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.chargeNumber),
     }
   }
   if (pageOptions.isReporter()) {
     return {
-      reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.adjudicationNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.adjudicationNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.adjudicationNumber),
+      reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.chargeNumber),
     }
   }
   return {
-    reportHref: adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.adjudicationNumber),
-    hearingsHref: adjudicationUrls.hearingDetails.urls.review(reportedAdjudication.adjudicationNumber),
-    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(reportedAdjudication.adjudicationNumber),
+    reportHref: adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber),
+    hearingsHref: adjudicationUrls.hearingDetails.urls.review(reportedAdjudication.chargeNumber),
+    punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(reportedAdjudication.chargeNumber),
   }
 }
 
@@ -65,9 +65,9 @@ export default class PunishmentsTabPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      adjudicationNumber,
+      chargeNumber,
       user
     )
 
@@ -79,20 +79,18 @@ export default class PunishmentsTabPage {
       this.pageOptions.isReporter() || this.pageOptions.isViewOnly() || reportedAdjudication.outcomeEnteredInNomis
 
     const finalOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-      adjudicationNumber,
+      chargeNumber,
       [ReportedAdjudicationStatus.CHARGE_PROVED, ReportedAdjudicationStatus.QUASHED],
       user
     )
     const amount = finalOutcomeItem.outcome?.outcome?.amount || false
     const caution = finalOutcomeItem.outcome?.outcome?.caution || false
 
-    const punishments = flattenPunishments(
-      await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
-    )
+    const punishments = flattenPunishments(await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user))
 
     const punishmentComments = await this.punishmentsService.formatPunishmentComments(
       reportedAdjudication,
-      adjudicationNumber,
+      chargeNumber,
       user
     )
 
@@ -103,7 +101,7 @@ export default class PunishmentsTabPage {
 
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
-      reportNo: reportedAdjudication.adjudicationNumber,
+      reportNo: reportedAdjudication.chargeNumber,
       reviewStatus: reportedAdjudication.status,
       readOnly,
       isReporter: this.pageOptions.isReporter(),
@@ -113,8 +111,8 @@ export default class PunishmentsTabPage {
       moneyRecoveredBoolean: !!amount,
       moneyRecoveredAmount: amount && amount.toFixed(2),
       caution,
-      moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(adjudicationNumber),
-      cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(adjudicationNumber),
+      moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(chargeNumber),
+      cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(chargeNumber),
       punishments,
       consecutiveReportLinkAvailable: this.pageOptions.isReviewer(),
       punishmentComments,

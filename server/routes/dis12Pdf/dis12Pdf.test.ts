@@ -42,7 +42,7 @@ const offenceRule: OffenceRule = {
 }
 
 const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication({
-  adjudicationNumber: 1524493,
+  chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
   locationId: 197682,
   dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -95,7 +95,7 @@ describe('GET /all-completed-reports', () => {
     } as unknown as Response
 
     const req: Request = {
-      params: { adjudicationNumber: reportedAdjudication.adjudicationNumber },
+      params: { chargeNumber: reportedAdjudication.chargeNumber },
     } as unknown as Request
     await new AdjudicationPdf(reportedAdjudicationsService, decisionTreeService).renderPdf(req, res)
     expect(res.renderPdf).toHaveBeenCalled()
@@ -104,7 +104,7 @@ describe('GET /all-completed-reports', () => {
       {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         noticeOfBeingPlacedOnReportData: {
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           expirationDay: 'Wednesday, 23 December 2020',
           expirationTime: '07:21',
           incidentDate: 'Monday, 21 December 2020',
@@ -135,7 +135,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { adjudicationNumber: 1524493 },
+      { chargeNumber: '1524493' },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {

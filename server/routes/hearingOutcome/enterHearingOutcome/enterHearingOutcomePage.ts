@@ -46,33 +46,33 @@ export default class EnterHearingOutcomePage {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  private getRedirectUrl = (outcome: HearingOutcomeCode, adjudicationNumber: number) => {
+  private getRedirectUrl = (outcome: HearingOutcomeCode, chargeNumber: string) => {
     if (this.pageOptions.isEdit()) {
       switch (outcome) {
         case HearingOutcomeCode.ADJOURN:
-          return adjudicationUrls.hearingAdjourned.urls.edit(adjudicationNumber)
+          return adjudicationUrls.hearingAdjourned.urls.edit(chargeNumber)
         case HearingOutcomeCode.COMPLETE:
-          return adjudicationUrls.hearingPleaAndFinding.urls.edit(adjudicationNumber)
+          return adjudicationUrls.hearingPleaAndFinding.urls.edit(chargeNumber)
         default:
-          return adjudicationUrls.hearingReasonForReferral.urls.edit(adjudicationNumber)
+          return adjudicationUrls.hearingReasonForReferral.urls.edit(chargeNumber)
       }
     }
     switch (outcome) {
       case HearingOutcomeCode.ADJOURN:
-        return adjudicationUrls.hearingAdjourned.urls.start(adjudicationNumber)
+        return adjudicationUrls.hearingAdjourned.urls.start(chargeNumber)
       case HearingOutcomeCode.COMPLETE:
-        return adjudicationUrls.hearingPleaAndFinding.urls.start(adjudicationNumber)
+        return adjudicationUrls.hearingPleaAndFinding.urls.start(chargeNumber)
       default:
-        return adjudicationUrls.hearingReasonForReferral.urls.start(adjudicationNumber)
+        return adjudicationUrls.hearingReasonForReferral.urls.start(chargeNumber)
     }
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, hearingOutcome, inAdName, governorId, governorName, adjudicatorType } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/enterHearingOutcome.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       hearingOutcome,
       inAdName,
@@ -85,18 +85,18 @@ export default class EnterHearingOutcomePage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const selectedPerson = req.query.selectedPerson as string
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
-    const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(adjudicationNumber, user)
+    const adjudicatorType = await this.hearingsService.getHearingAdjudicatorType(chargeNumber, user)
 
     let readApiHearingOutcome: HearingOutcomeDetails = null
     let readApiHearingGovernor: UserWithEmail = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(adjudicationNumber, user)
+      readApiHearingOutcome = await this.getPreviouslyEnteredHearingOutcomeFromApi(chargeNumber, user)
       if (adjudicatorType.includes('GOV') && !selectedPerson) {
         readApiHearingGovernor = await this.userService.getStaffFromUsername(readApiHearingOutcome?.adjudicator, user)
       }
@@ -124,7 +124,7 @@ export default class EnterHearingOutcomePage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { hearingOutcome, inAdName, adjudicatorType, governorId, governorName } = req.body
 
     if (req.body.searchGov) {
@@ -150,7 +150,7 @@ export default class EnterHearingOutcomePage {
         governorName,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], adjudicationNumber)
+    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], chargeNumber)
     const adjudicator = governorId || inAdName
     return res.redirect(
       url.format({
@@ -161,10 +161,10 @@ export default class EnterHearingOutcomePage {
   }
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
-    adjudicationId: number,
+    chargeNumber: string,
     user: User
   ): Promise<HearingOutcomeDetails> => {
-    return this.hearingsService.getHearingOutcome(adjudicationId, user)
+    return this.hearingsService.getHearingOutcome(chargeNumber, user)
   }
 
   validateSearch = (govName: string) => {

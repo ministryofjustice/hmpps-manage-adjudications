@@ -18,7 +18,7 @@ context('What is the next step?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.nextStepsInad.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
       nextStepsInadPage.submitButton().should('exist')
       nextStepsInadPage.cancelButton().should('exist')
@@ -27,17 +27,17 @@ context('What is the next step?', () => {
       nextStepsInadPage.nextStepRadioButtons().find('input[value="not_proceed"]').should('not.be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.nextStepsInad.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
       nextStepsInadPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Validation', () => {
     it('should show error if no answer selected', () => {
-      cy.visit(adjudicationUrls.nextStepsInad.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
 
       nextStepsInadPage.submitButton().click()
@@ -52,24 +52,24 @@ context('What is the next step?', () => {
   })
   describe('Continue', () => {
     it('redirects to schedule hearing when schedule hearing', () => {
-      cy.visit(adjudicationUrls.nextStepsInad.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
       nextStepsInadPage.nextStepRadioButtons().find('input[value="schedule_hearing"]').check()
       nextStepsInadPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start('100'))
       })
     })
     it('redirects to not proceed reason when  Not proceed', () => {
-      cy.visit(adjudicationUrls.nextStepsInad.urls.start(100))
+      cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
       nextStepsInadPage.nextStepRadioButtons().find('input[value="not_proceed"]').check()
 
       nextStepsInadPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       })
     })
   })

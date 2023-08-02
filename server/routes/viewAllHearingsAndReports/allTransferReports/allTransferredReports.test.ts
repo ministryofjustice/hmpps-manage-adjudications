@@ -25,7 +25,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService })
 
   const adjudicationOne = testData.reportedAdjudication({
-    adjudicationNumber: 2,
+    chargeNumber: '2',
     prisonerNumber: 'G6123VU',
     dateTimeOfIncident: '2021-11-15T11:45:00',
     status: ReportedAdjudicationStatus.ADJOURNED,
@@ -36,7 +36,7 @@ beforeEach(() => {
     },
   })
   const adjudicationTwo = testData.reportedAdjudication({
-    adjudicationNumber: 1,
+    chargeNumber: '1',
     prisonerNumber: 'G6174VU',
     dateTimeOfIncident: '2021-11-15T11:30:00',
     status: ReportedAdjudicationStatus.ADJOURNED,

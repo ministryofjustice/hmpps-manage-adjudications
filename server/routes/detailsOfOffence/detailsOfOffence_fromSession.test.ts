@@ -75,7 +75,7 @@ const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSumm
 const adjudicationWithoutOffences = {
   draftAdjudication: testData.draftAdjudication({
     id: 100,
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
     dateTimeOfIncident: '2021-12-09T10:30:00',
     incidentRole: {
@@ -89,7 +89,7 @@ const adjudicationWithoutOffences = {
 const youthAdjudicationWithOffences = {
   draftAdjudication: testData.draftAdjudication({
     id: 102,
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     prisonerNumber: adjudicationPrisonerDetails.prisonerNumber,
     dateTimeOfIncident: '2021-12-09T10:30:00',
     isYouthOffender: true,
@@ -125,7 +125,7 @@ beforeEach(() => {
     }
   })
 
-  placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber.mockResolvedValue('G6415GD')
+  placeOnReportService.getPrisonerNumberFromDraftChargeNumber.mockResolvedValue('G6415GD')
 
   placeOnReportService.getOffenceRule.mockImplementation(offenceCode => {
     switch (offenceCode) {
@@ -246,9 +246,9 @@ describe('POST /details-of-offence/100', () => {
       .then(() =>
         agent
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
-          .send({ reportedAdjudicationNumber: 1524493 })
+          .send({ reportedChargeNumber: 1524493 })
           .expect(302)
-          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start(100))
+          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start('100'))
       )
   })
 })
@@ -276,7 +276,7 @@ describe('POST /details-of-offence/100 - adding first offence', () => {
       .then(() =>
         agent
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
-          .send({ reportedAdjudicationNumber: 1524493, addFirstOffence: true })
+          .send({ reportedChargeNumber: 1524493, addFirstOffence: true })
           .expect(302)
           .expect('Location', adjudicationUrls.ageOfPrisoner.urls.submittedEditWithResettingOffences(100))
       )

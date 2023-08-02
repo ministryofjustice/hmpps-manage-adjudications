@@ -30,7 +30,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100))
+      .get(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -41,7 +41,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
-      .get(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100))
+      .get(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Manually activate an existing suspended punishment')
@@ -52,7 +52,7 @@ describe('GET', () => {
 describe('POST', () => {
   it('should redirect correctly', () => {
     return request(app)
-      .post(`${adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100)}`)
+      .post(`${adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100')}`)
       .send({
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.OTHER,
@@ -63,7 +63,7 @@ describe('POST', () => {
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
-          100
+          '100'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&reportNo=123456`
       )
   })
@@ -72,7 +72,7 @@ describe('POST', () => {
     'should redirect to additional days',
     (punishmentType: string) => {
       return request(app)
-        .post(`${adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(100)}`)
+        .post(`${adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100')}`)
         .send({
           punishmentType,
           reportNumber: '123456',
@@ -80,7 +80,7 @@ describe('POST', () => {
         .expect(
           'Location',
           `${adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(
-            100
+            '100'
           )}?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
         )
     }

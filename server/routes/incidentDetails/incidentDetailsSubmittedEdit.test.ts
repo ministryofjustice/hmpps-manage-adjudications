@@ -29,7 +29,7 @@ beforeEach(() => {
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
     locationId: 1234,
     startedByUserId: 'TESTER2_GEN',
-    adjudicationNumber: 1524493,
+    chargeNumber: '1524493',
     dateTimeOfDiscovery: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
   })
 
@@ -123,7 +123,7 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
     placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
       draftAdjudication: testData.draftAdjudication({
         id: 34,
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
       }),

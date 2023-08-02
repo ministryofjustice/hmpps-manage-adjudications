@@ -1,40 +1,40 @@
 import { Request } from 'express'
 
 export default class DamagesSessionService {
-  addSessionDamage(req: Request, damageData: unknown, draftAdjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.damages[draftAdjudicationNumber].push(damageData)
+  addSessionDamage(req: Request, damageData: unknown, id: number | string) {
+    this.createSessionForAdjudicationIfNotExists(req, id)
+    req.session.damages[id].push(damageData)
   }
 
-  deleteSessionDamage(req: Request, index: number, draftAdjudicationNumber: number) {
-    req.session.damages?.[draftAdjudicationNumber]?.splice(index - 1, 1)
+  deleteSessionDamage(req: Request, index: number, id: number | string) {
+    req.session.damages?.[id]?.splice(index - 1, 1)
   }
 
-  deleteAllSessionDamages(req: Request, draftAdjudicationNumber: number) {
-    req.session.damages?.[draftAdjudicationNumber]?.splice(0, req.session.damages?.[draftAdjudicationNumber]?.length)
+  deleteAllSessionDamages(req: Request, id: number | string) {
+    req.session.damages?.[id]?.splice(0, req.session.damages?.[id]?.length)
   }
 
-  setAllSessionDamages(req: Request, damageData: unknown, draftAdjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.damages[draftAdjudicationNumber] = damageData
+  setAllSessionDamages(req: Request, damageData: unknown, id: number | string) {
+    this.createSessionForAdjudicationIfNotExists(req, id)
+    req.session.damages[id] = damageData
   }
 
-  getAndDeleteAllSessionDamages(req: Request, draftAdjudicationNumber: number) {
-    const allSessionDamages = this.getAllSessionDamages(req, draftAdjudicationNumber)
-    delete req.session.damages?.[draftAdjudicationNumber]
+  getAndDeleteAllSessionDamages(req: Request, id: number | string) {
+    const allSessionDamages = this.getAllSessionDamages(req, id)
+    delete req.session.damages?.[id]
     return allSessionDamages
   }
 
-  getAllSessionDamages(req: Request, draftAdjudicationNumber: number) {
-    return req.session?.damages?.[draftAdjudicationNumber]
+  getAllSessionDamages(req: Request, id: number | string) {
+    return req.session?.damages?.[id]
   }
 
-  getSessionDamage(req: Request, index: number, draftAdjudicationNumber: number) {
-    return req.session.damages?.[draftAdjudicationNumber][index - 1]
+  getSessionDamage(req: Request, index: number, id: number) {
+    return req.session.damages?.[id][index - 1]
   }
 
-  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+  setReferrerOnSession(req: Request, referrer: string, chargeNumber: string) {
+    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     req.session.damages.referrer = referrer
   }
 
@@ -52,12 +52,12 @@ export default class DamagesSessionService {
     delete req.session.damages.referrer
   }
 
-  private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
+  private createSessionForAdjudicationIfNotExists(req: Request, id: number | string) {
     if (!req.session.damages) {
       req.session.damages = {}
     }
-    if (!req.session.damages[draftAdjudicationNumber]) {
-      req.session.damages[draftAdjudicationNumber] = []
+    if (!req.session.damages[id]) {
+      req.session.damages[id] = []
     }
   }
 }

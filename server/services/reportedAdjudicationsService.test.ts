@@ -122,7 +122,7 @@ describe('reportedAdjudicationsService', () => {
     beforeEach(() => {
       const completedAdjudicationsContent = [
         testData.reportedAdjudication({
-          adjudicationNumber: 2,
+          chargeNumber: '2',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-01-01T11:45:00',
           incidentStatement: {
@@ -130,7 +130,7 @@ describe('reportedAdjudicationsService', () => {
           },
         }),
         testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'G6174VU',
           dateTimeOfIncident: '2021-01-01T11:30:00',
           incidentStatement: {
@@ -175,7 +175,7 @@ describe('reportedAdjudicationsService', () => {
       )
       const expectedAdjudicationContent = [
         testData.reportedAdjudication({
-          adjudicationNumber: 2,
+          chargeNumber: '2',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-01-01T11:45:00',
           dateTimeOfDiscovery: '2021-01-01T11:45:00',
@@ -195,7 +195,7 @@ describe('reportedAdjudicationsService', () => {
           },
         }),
         testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'G6174VU',
           dateTimeOfIncident: '2021-01-01T11:30:00',
           dateTimeOfDiscovery: '2021-01-01T11:30:00',
@@ -232,7 +232,7 @@ describe('reportedAdjudicationsService', () => {
       beforeEach(() => {
         getReportedAdjudication.mockResolvedValue({
           reportedAdjudication: testData.reportedAdjudication({
-            adjudicationNumber: 123,
+            chargeNumber: '123',
             prisonerNumber: 'A1234AA',
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
             incidentStatement: {
@@ -272,7 +272,7 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('returns the correct data', async () => {
-        const result = await service.getConfirmationDetails(123, user)
+        const result = await service.getConfirmationDetails('123', user)
 
         expect(result).toEqual({
           incidentAgencyName: 'Moorland (HMP & YOI)',
@@ -295,10 +295,10 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('makes the correct calls', async () => {
-        await service.getConfirmationDetails(123, user)
+        await service.getConfirmationDetails('123', user)
 
         expect(ManageAdjudicationsClient).toBeCalledWith(user)
-        expect(getReportedAdjudication).toBeCalledWith(123)
+        expect(getReportedAdjudication).toBeCalledWith('123')
         expect(PrisonApiClient).toBeCalledWith(token)
         expect(getPrisonerDetails).toBeCalledWith('A1234AA')
         expect(getNeurodiversitiesForReport).toBeCalledWith('A1234AA', token)
@@ -309,7 +309,7 @@ describe('reportedAdjudicationsService', () => {
       beforeEach(() => {
         getReportedAdjudication.mockResolvedValue({
           reportedAdjudication: testData.reportedAdjudication({
-            adjudicationNumber: 123,
+            chargeNumber: '123',
             prisonerNumber: 'A1234AA',
           }),
         })
@@ -324,7 +324,7 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('returns the correct data', async () => {
-        const result = await service.getConfirmationDetails(123, user)
+        const result = await service.getConfirmationDetails('123', user)
 
         expect(result.prisonerPreferredNonEnglishLanguage).toBeNull()
         expect(result.prisonerOtherLanguages.length).toEqual(0)
@@ -336,13 +336,13 @@ describe('reportedAdjudicationsService', () => {
     beforeEach(() => {
       const completedAdjudicationsContent = [
         testData.reportedAdjudication({
-          adjudicationNumber: 1524427,
+          chargeNumber: '1524427',
           prisonerNumber: 'A5041DY',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
         }),
         testData.reportedAdjudication({
-          adjudicationNumber: 1524425,
+          chargeNumber: '1524425',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
@@ -382,7 +382,7 @@ describe('reportedAdjudicationsService', () => {
 
       const expectedAdjudicationContent = [
         testData.reportedAdjudication({
-          adjudicationNumber: 1524427,
+          chargeNumber: '1524427',
           prisonerNumber: 'A5041DY',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
@@ -399,7 +399,7 @@ describe('reportedAdjudicationsService', () => {
           },
         }),
         testData.reportedAdjudication({
-          adjudicationNumber: 1524425,
+          chargeNumber: '1524425',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
@@ -509,7 +509,7 @@ describe('reportedAdjudicationsService', () => {
       statusDetails: string = null
     ) => {
       return testData.reportedAdjudication({
-        adjudicationNumber: 123,
+        chargeNumber: '123',
         prisonerNumber: 'G6123VU',
         status,
         otherData: {
@@ -633,7 +633,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudicationIssueData.mockResolvedValue({
         reportedAdjudications: [
           testData.reportedAdjudication({
-            adjudicationNumber: 1524493,
+            chargeNumber: '1524493',
             prisonerNumber: 'G6123VU',
             dateTimeOfIncident: '2023-02-05T06:00:00',
             hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -650,7 +650,7 @@ describe('reportedAdjudicationsService', () => {
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, false)
       expect(result).toEqual([
         testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2023-02-05T06:00:00',
           hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -676,7 +676,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudicationPrintData.mockResolvedValue({
         reportedAdjudications: [
           testData.reportedAdjudication({
-            adjudicationNumber: 1524493,
+            chargeNumber: '1524493',
             prisonerNumber: 'G6123VU',
             dateTimeOfIncident: '2023-02-05T06:00:00',
             hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -694,7 +694,7 @@ describe('reportedAdjudicationsService', () => {
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, true)
       expect(result).toEqual([
         testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2023-02-05T06:00:00',
           hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -720,7 +720,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudicationIssueData.mockResolvedValue({
         reportedAdjudications: [
           testData.reportedAdjudication({
-            adjudicationNumber: 1524493,
+            chargeNumber: '1524493',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2023-02-05T06:00:00',
             hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -737,7 +737,7 @@ describe('reportedAdjudicationsService', () => {
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, false)
       expect(result).toEqual([
         testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2023-02-05T06:00:00',
           hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -763,7 +763,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudicationPrintData.mockResolvedValue({
         reportedAdjudications: [
           testData.reportedAdjudication({
-            adjudicationNumber: 1524493,
+            chargeNumber: '1524493',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2023-02-05T06:00:00',
             hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -781,7 +781,7 @@ describe('reportedAdjudicationsService', () => {
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, true)
       expect(result).toEqual([
         testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2023-02-05T06:00:00',
           hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
@@ -928,7 +928,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the only item if there is only one outcome on the adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
+          chargeNumber: '123',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -950,7 +950,7 @@ describe('reportedAdjudicationsService', () => {
           ],
         }),
       })
-      const result = await service.getLastOutcomeItem(123, [ReportedAdjudicationStatus.CHARGE_PROVED], user)
+      const result = await service.getLastOutcomeItem('123', [ReportedAdjudicationStatus.CHARGE_PROVED], user)
       expect(result).toEqual({
         hearing: testData.singleHearing({
           dateTimeOfHearing: '2023-03-10T22:00:00',
@@ -969,7 +969,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the final item in the outcomes array if there are numerous available', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
+          chargeNumber: '123',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1008,7 +1008,7 @@ describe('reportedAdjudicationsService', () => {
           ],
         }),
       })
-      const result = await service.getLastOutcomeItem(123, [ReportedAdjudicationStatus.CHARGE_PROVED], user)
+      const result = await service.getLastOutcomeItem('123', [ReportedAdjudicationStatus.CHARGE_PROVED], user)
       expect(result).toEqual({
         hearing: testData.singleHearing({
           dateTimeOfHearing: '2023-03-15T15:00:00',
@@ -1028,7 +1028,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns an empty object if the last item in the outcomes array does not match the current status', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
+          chargeNumber: '123',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.ADJOURNED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1044,7 +1044,7 @@ describe('reportedAdjudicationsService', () => {
           ] as OutcomeHistory,
         }),
       })
-      const result = await service.getLastOutcomeItem(123, [ReportedAdjudicationStatus.CHARGE_PROVED], user)
+      const result = await service.getLastOutcomeItem('123', [ReportedAdjudicationStatus.CHARGE_PROVED], user)
       expect(result).toEqual({})
     })
   })
@@ -1052,19 +1052,19 @@ describe('reportedAdjudicationsService', () => {
     it('it returns an empty object if there are no hearings already', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
+          chargeNumber: '123',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
         }),
       })
-      const result = await service.getLatestHearing(123, user)
+      const result = await service.getLatestHearing('123', user)
       expect(result).toEqual({})
     })
     it('returns the latest hearing if there are some present', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
+          chargeNumber: '123',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.SCHEDULED,
           dateTimeOfIncident: '2023-03-20T10:00:00',
@@ -1078,7 +1078,7 @@ describe('reportedAdjudicationsService', () => {
           ],
         }),
       })
-      const result = await service.getLatestHearing(123, user)
+      const result = await service.getLatestHearing('123', user)
       expect(result).toEqual(
         testData.singleHearing({
           dateTimeOfHearing: '2023-03-21T19:00:00',
@@ -1107,7 +1107,7 @@ describe('reportedAdjudicationsService', () => {
   describe('getTransferBannerInfo', () => {
     it('if there is no overrideAgencyId, should return content as null', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
-        adjudicationNumber: 123,
+        chargeNumber: '123',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
@@ -1125,7 +1125,7 @@ describe('reportedAdjudicationsService', () => {
       getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('G6123VU', 'Harry', 'Potter', '1-2-015'))
 
       const reportedAdjudication = testData.reportedAdjudication({
-        adjudicationNumber: 123,
+        chargeNumber: '123',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
@@ -1141,7 +1141,7 @@ describe('reportedAdjudicationsService', () => {
     })
     it('if the user is based in the agency where the adjudication has been transferred to', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
-        adjudicationNumber: 123,
+        chargeNumber: '123',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
@@ -1158,7 +1158,7 @@ describe('reportedAdjudicationsService', () => {
     })
     it('user based in override, transferableActionsAllowed false as hearing present without outcome', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
-        adjudicationNumber: 123,
+        chargeNumber: '123',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.SCHEDULED,
         otherData: {

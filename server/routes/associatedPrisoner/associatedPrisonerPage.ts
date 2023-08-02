@@ -54,7 +54,7 @@ export default class AssociatedPrisonerPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const draftId = getDraftIdFromString(req.params.draftId)
     const { roleCode } = req.params
     const fromDelete = req.query.personDeleted as string
     const fromSearch = JSON.stringify(req.query.selectedPerson)?.replace(/"/g, '')
@@ -89,7 +89,7 @@ export default class AssociatedPrisonerPage {
   }
 
   save = async (req: Request, res: Response) => {
-    const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const draftId = getDraftIdFromString(req.params.draftId)
     const { roleCode } = req.params
     const { user } = res.locals
     const { selectedAnswerId } = req.body
@@ -134,7 +134,7 @@ export default class AssociatedPrisonerPage {
   }
 
   delete = async (req: Request, res: Response): Promise<void> => {
-    const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const draftId = getDraftIdFromString(req.params.draftId)
     const { roleCode } = req.params
 
     setRedirectUrl(req, draftId, roleCode, this.pageOptions.isPreviouslySubmitted(), this.pageOptions.isAloEdit())
@@ -144,7 +144,7 @@ export default class AssociatedPrisonerPage {
 
   search = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const draftId = getDraftIdFromString(req.params.adjudicationNumber)
+    const draftId = getDraftIdFromString(req.params.draftId)
     const { roleCode } = req.params
     const { selectedAnswerId } = req.body
     const { prisonerNumber } = await this.readFromApi(draftId, user as User)

@@ -61,7 +61,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(100))
+      .get(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -72,7 +72,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
-      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(100)}?punishmentType=ADDITIONAL_DAYS`)
+      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Which punishment will it be consecutive to?')
@@ -80,11 +80,11 @@ describe('GET', () => {
   })
   it('should call the endpoint to get consecutive punishments', () => {
     return request(app)
-      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(100)}?punishmentType=ADDITIONAL_DAYS`)
+      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`)
       .expect('Content-Type', /html/)
       .then(() =>
         expect(punishmentsService.getPossibleConsecutivePunishments).toHaveBeenCalledWith(
-          100,
+          '100',
           PunishmentType.ADDITIONAL_DAYS,
           expect.anything()
         )
@@ -96,7 +96,7 @@ describe('POST', () => {
   it('should add punishment to session with consecutive punishment report number present', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(100)}?punishmentType=ADDITIONAL_DAYS&days=5`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
       .send({
         select: 'consecutive-punishment-report-101',
@@ -112,7 +112,7 @@ describe('POST', () => {
             privilegeType: null,
             stoppagePercentage: null,
           },
-          100
+          '100'
         )
       })
   })

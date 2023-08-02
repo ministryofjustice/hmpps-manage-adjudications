@@ -37,7 +37,7 @@ describe('GET /hearing-outcome - edit', () => {
     hearingsService.getHearingAdjudicatorType.mockResolvedValue(OicHearingType.GOV_ADULT)
 
     return request(app)
-      .get(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .get(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Enter the hearing outcome')
@@ -47,7 +47,7 @@ describe('GET /hearing-outcome - edit', () => {
     hearingsService.getHearingAdjudicatorType.mockResolvedValue(OicHearingType.GOV_ADULT)
 
     return request(app)
-      .get(`${adjudicationUrls.enterHearingOutcome.urls.edit(100)}?selectedPerson=RRED_GEN`)
+      .get(`${adjudicationUrls.enterHearingOutcome.urls.edit('100')}?selectedPerson=RRED_GEN`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Enter the hearing outcome')
@@ -58,7 +58,7 @@ describe('GET /hearing-outcome - edit', () => {
 describe('POST /hearing-outcome - edit - governor adjudicator', () => {
   it('should redirect to the correct URL - refer to police (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'REFER_POLICE',
         governorId: 'RRED_GEN',
@@ -67,12 +67,12 @@ describe('POST /hearing-outcome - edit - governor adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingReasonForReferral.urls.edit(100)}?adjudicator=RRED_GEN&hearingOutcome=REFER_POLICE`
+        `${adjudicationUrls.hearingReasonForReferral.urls.edit('100')}?adjudicator=RRED_GEN&hearingOutcome=REFER_POLICE`
       )
   })
   it('should redirect to the correct URL - refer to independent adjudicator (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'REFER_INAD',
         governorId: 'RRED_GEN',
@@ -81,12 +81,12 @@ describe('POST /hearing-outcome - edit - governor adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingReasonForReferral.urls.edit(100)}?adjudicator=RRED_GEN&hearingOutcome=REFER_INAD`
+        `${adjudicationUrls.hearingReasonForReferral.urls.edit('100')}?adjudicator=RRED_GEN&hearingOutcome=REFER_INAD`
       )
   })
   it('should redirect to the correct URL - complete (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'COMPLETE',
         governorId: 'RRED_GEN',
@@ -95,12 +95,12 @@ describe('POST /hearing-outcome - edit - governor adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=RRED_GEN&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=RRED_GEN&hearingOutcome=COMPLETE`
       )
   })
   it('should redirect to the correct URL - adjourn (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'ADJOURN',
         governorId: 'RRED_GEN',
@@ -109,14 +109,14 @@ describe('POST /hearing-outcome - edit - governor adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=RRED_GEN&hearingOutcome=ADJOURN`
+        `${adjudicationUrls.hearingAdjourned.urls.edit('100')}?adjudicator=RRED_GEN&hearingOutcome=ADJOURN`
       )
   })
 })
 describe('POST /hearing-outcome - edit - independent adjudicator', () => {
   it('should redirect to the correct URL - refer to police (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'REFER_POLICE',
         inAdName: 'Rebecca Red',
@@ -126,13 +126,13 @@ describe('POST /hearing-outcome - edit - independent adjudicator', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100
+          '100'
         )}?adjudicator=Rebecca%20Red&hearingOutcome=REFER_POLICE`
       )
   })
   it('should redirect to the correct URL - refer to independent adjudicator (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'REFER_INAD',
         inAdName: 'Rebecca Red',
@@ -142,13 +142,13 @@ describe('POST /hearing-outcome - edit - independent adjudicator', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          100
+          '100'
         )}?adjudicator=Rebecca%20Red&hearingOutcome=REFER_INAD`
       )
   })
   it('should redirect to the correct URL - complete (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'COMPLETE',
         inAdName: 'Rebecca Red',
@@ -157,12 +157,12 @@ describe('POST /hearing-outcome - edit - independent adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit(100)}?adjudicator=Rebecca%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Rebecca%20Red&hearingOutcome=COMPLETE`
       )
   })
   it('should redirect to the correct URL - adjourn (edit version)', () => {
     return request(app)
-      .post(adjudicationUrls.enterHearingOutcome.urls.edit(100))
+      .post(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       .send({
         hearingOutcome: 'ADJOURN',
         inAdName: 'Rebecca Red',
@@ -171,7 +171,7 @@ describe('POST /hearing-outcome - edit - independent adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Rebecca%20Red&hearingOutcome=ADJOURN`
+        `${adjudicationUrls.hearingAdjourned.urls.edit('100')}?adjudicator=Rebecca%20Red&hearingOutcome=ADJOURN`
       )
   })
 })

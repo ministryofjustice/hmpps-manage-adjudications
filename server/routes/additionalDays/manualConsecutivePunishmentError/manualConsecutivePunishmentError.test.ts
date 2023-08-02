@@ -40,7 +40,7 @@ describe('GET charge number validation page', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.manualConsecutivePunishmentError.urls.start(100))
+      .get(adjudicationUrls.manualConsecutivePunishmentError.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -51,7 +51,7 @@ describe('GET charge number validation page', () => {
 describe('GET charge number validation page - correct title', () => {
   it('should load the page', () => {
     return request(app)
-      .get(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start(100)}?chargeNumber=1234567`)
+      .get(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start('100')}?chargeNumber=1234567`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Charge number 1234567 is not linked to a punishment of added days for John Smith')

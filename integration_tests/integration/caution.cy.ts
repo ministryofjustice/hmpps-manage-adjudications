@@ -18,7 +18,7 @@ context('Is this punishment a caution?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.isThisACaution.urls.start(100))
+      cy.visit(adjudicationUrls.isThisACaution.urls.start('100'))
       const cautionPage = Page.verifyOnPage(CautionPage)
       cautionPage.submitButton().should('exist')
       cautionPage.cancelButton().should('exist')
@@ -27,18 +27,18 @@ context('Is this punishment a caution?', () => {
       cautionPage.cautionRadioButtons().find('input[value="no"]').should('not.be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.isThisACaution.urls.start(100))
+      cy.visit(adjudicationUrls.isThisACaution.urls.start('100'))
       const cautionPage = Page.verifyOnPage(CautionPage)
       cautionPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
 
   describe('validation', () => {
     it('should show an error if no option selected', () => {
-      cy.visit(adjudicationUrls.isThisACaution.urls.start(100))
+      cy.visit(adjudicationUrls.isThisACaution.urls.start('100'))
       const cautionPage = Page.verifyOnPage(CautionPage)
 
       cautionPage.submitButton().click()
@@ -54,20 +54,20 @@ context('Is this punishment a caution?', () => {
 
   describe('saves', () => {
     it('should submit successfully, answer yes', () => {
-      cy.visit(`${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Tim&plea=GUILTY&amount=100.5`)
+      cy.visit(`${adjudicationUrls.isThisACaution.urls.start('100')}?adjudicator=Tim&plea=GUILTY&amount=100.5`)
       const cautionPage = Page.verifyOnPage(CautionPage)
       cautionPage.cautionRadioButtons().find('input[value="yes"]').check()
 
       cautionPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY&damagesOwed=&caution=yes')
       })
     })
     it('should submit successfully, answer no', () => {
       cy.visit(
-        `${adjudicationUrls.isThisACaution.urls.start(100)}?adjudicator=Tim&plea=GUILTY&amount=100.5&damagesOwed=`
+        `${adjudicationUrls.isThisACaution.urls.start('100')}?adjudicator=Tim&plea=GUILTY&amount=100.5&damagesOwed=`
       )
       const cautionPage = Page.verifyOnPage(CautionPage)
       cautionPage.cautionRadioButtons().find('input[value="no"]').check()
@@ -75,7 +75,7 @@ context('Is this punishment a caution?', () => {
       cautionPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=Tim&amount=100.5&plea=GUILTY&damagesOwed=&caution=no')
       })
     })

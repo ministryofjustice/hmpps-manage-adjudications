@@ -19,7 +19,7 @@ import { PunishmentComment, PunishmentDataWithSchedule, PunishmentDataWithSchedu
  * @deprecated The method should not be used
  */
 export type ReportedAdjudication = {
-  adjudicationNumber: number
+  chargeNumber: string
   prisonerNumber: string
   createdDateTime: string
   createdByUserId: string
@@ -50,7 +50,6 @@ export type ReportedAdjudication = {
 }
 
 export type ReportedAdjudicationV2 = {
-  adjudicationNumber: number
   prisonerNumber: string
   createdDateTime: string
   createdByUserId: string
@@ -149,9 +148,9 @@ export interface ScheduledHearing {
   dateTimeOfHearing: string
   dateTimeOfDiscovery: string
   status: ReportedAdjudicationStatus
-  adjudicationNumber: number
   prisonerNumber: string
   oicHearingType: OicHearingType
+  chargeNumber: string
 }
 
 export interface ScheduledHearingEnhanced extends ScheduledHearing {

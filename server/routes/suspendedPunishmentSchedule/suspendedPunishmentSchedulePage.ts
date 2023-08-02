@@ -51,7 +51,7 @@ export default class SuspendedPunishmentSchedulePage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { punishmentType } = req.query
 
     const { error, days, startDate, endDate } = pageData
@@ -62,7 +62,7 @@ export default class SuspendedPunishmentSchedulePage {
 
     return res.render(`pages/suspendedPunishmentSchedule.njk`, {
       errors: error ? [error] : [],
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       days,
       startDate,
       endDate,
@@ -86,7 +86,7 @@ export default class SuspendedPunishmentSchedulePage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const { punishmentNumberToActivate, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNo } =
       req.query
@@ -106,17 +106,14 @@ export default class SuspendedPunishmentSchedulePage {
 
     try {
       if (this.pageOptions.isExisting()) {
-        const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(
-          adjudicationNumber,
-          user
-        )
+        const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
         const punishmentToUpdate = suspendedPunishments.filter(susPun => {
           return susPun.punishment.id === suspendedPunishmentIdToActivate
         })
         if (punishmentToUpdate.length) {
           const { punishment, reportNumber } = punishmentToUpdate[0]
           const updatedPunishment = this.updatePunishment(punishment, days, startDate, endDate, reportNumber)
-          await this.punishmentsService.addSessionPunishment(req, updatedPunishment, adjudicationNumber)
+          await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
         }
       } else {
         const manuallyCreatedSuspendedPunishment = {
@@ -129,16 +126,16 @@ export default class SuspendedPunishmentSchedulePage {
           endDate: endDate ? datePickerToApi(endDate) : null,
           activatedFrom: Number(reportNo),
         }
-        await this.punishmentsService.addSessionPunishment(req, manuallyCreatedSuspendedPunishment, adjudicationNumber)
+        await this.punishmentsService.addSessionPunishment(req, manuallyCreatedSuspendedPunishment, chargeNumber)
       }
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.activateSuspendedPunishments.urls.start(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.activateSuspendedPunishments.urls.start(chargeNumber)
       throw postError
     }
 
     return res.redirect(
       url.format({
-        pathname: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+        pathname: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
         query: {},
       })
     )

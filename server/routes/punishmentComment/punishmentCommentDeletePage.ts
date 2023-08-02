@@ -30,14 +30,14 @@ export default class ConfirmDeletionPage {
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
-    const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
+    const { chargeNumber } = req.params
+    const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(chargeNumber, user)
 
     const id = Number(req.params.id)
     const punishmentComment = punishmentComments?.find(comment => comment.id === id)
     if (!punishmentComment) {
       return res.render('pages/notFound.njk', {
-        url: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+        url: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
       })
     }
 
@@ -47,17 +47,17 @@ export default class ConfirmDeletionPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const id = Number(req.params.id)
     const { removeComment } = req.body
 
     if (removeComment === undefined) {
       const error = { href: '#removeComment', text: 'Select yes if you want to remove this comment' } as FormError
-      const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
+      const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(chargeNumber, user)
       const punishmentComment = punishmentComments.find(comment => comment.id === id)
       if (!punishmentComment) {
         return res.render('pages/notFound.njk', {
-          url: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+          url: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
         })
       }
 
@@ -65,10 +65,10 @@ export default class ConfirmDeletionPage {
     }
 
     if (removeComment === 'yes' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
-      await this.punishmentsService.removePunishmentComment(adjudicationNumber, id, user)
+      await this.punishmentsService.removePunishmentComment(chargeNumber, id, user)
     }
 
-    const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
+    const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,

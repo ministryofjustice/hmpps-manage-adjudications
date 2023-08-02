@@ -6,11 +6,11 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 
 const testData = new TestData()
 
-const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number, id: number) => {
+const createDraftFromReportedAdjudicationResponse = (chargeNumber: string, id: number) => {
   return {
     draftAdjudication: testData.draftAdjudication({
       id,
-      adjudicationNumber,
+      chargeNumber,
       locationId: 25538,
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-01T09:40:00',
@@ -39,10 +39,10 @@ const createDraftFromReportedAdjudicationResponse = (adjudicationNumber: number,
   }
 }
 
-const reportedAdjudicationResponse = (adjudicationNumber: number, status: ReportedAdjudicationStatus) => {
+const reportedAdjudicationResponse = (chargeNumber: string, status: ReportedAdjudicationStatus) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       locationId: 25538,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -104,13 +104,13 @@ context('Warning - reviewer edits offence', () => {
       }),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 12345,
-      response: createDraftFromReportedAdjudicationResponse(12345, 177),
+      chargeNumber: '12345',
+      response: createDraftFromReportedAdjudicationResponse('12345', 177),
     })
 
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: reportedAdjudicationResponse(12345, ReportedAdjudicationStatus.AWAITING_REVIEW),
+      response: reportedAdjudicationResponse('12345', ReportedAdjudicationStatus.AWAITING_REVIEW),
     })
     cy.task('stubGetOffenceRule', {
       offenceCode: 1001,
@@ -133,7 +133,7 @@ context('Warning - reviewer edits offence', () => {
   })
   describe('warning page', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit('12345'))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.paragraph1().should('exist')
       warningPage.paragraph2().should('exist')
@@ -142,7 +142,7 @@ context('Warning - reviewer edits offence', () => {
       warningPage.cancelButton().should('exist')
     })
     it('should contain the correct review summary details', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit('12345'))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage
         .offenceDetailsSummary()
@@ -174,7 +174,7 @@ context('Warning - reviewer edits offence', () => {
         })
     })
     it('contains the correct paragraph content', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit('12345'))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.paragraph1().should('contain.text', 'If you change the offence, you’ll delete the information below.')
       warningPage
@@ -182,15 +182,15 @@ context('Warning - reviewer edits offence', () => {
         .should('contain.text', 'Before changing it, make a note of any information you might need to re-enter later.')
     })
     it('clicking cancel button takes you to the original report', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit('12345'))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(12345))
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('12345'))
       })
     })
     it('clicking continue button takes you to the age of prisoner page with new draft Id', () => {
-      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(12345))
+      cy.visit(adjudicationUrls.reviewerEditOffenceWarning.urls.edit('12345'))
       const warningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
       warningPage.continueButton().click()
       cy.url().should('include', adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(177))

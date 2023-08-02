@@ -37,6 +37,7 @@ const suspendedPunishments = {
   suspendedPunishments: [
     {
       reportNumber: 100,
+      chargeNumber: '100',
       punishment: {
         id: 71,
         type: PunishmentType.PRIVILEGE,
@@ -51,6 +52,7 @@ const suspendedPunishments = {
     },
     {
       reportNumber: 101,
+      chargeNumber: '101',
       punishment: {
         id: 60,
         type: PunishmentType.CONFINEMENT,
@@ -84,7 +86,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
+      .get(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -95,7 +97,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
-      .get(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
+      .get(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Activate an existing suspended punishment')
@@ -103,23 +105,25 @@ describe('GET', () => {
   })
   it('should call the endpoint to get suspended punishments', () => {
     return request(app)
-      .get(adjudicationUrls.activateSuspendedPunishments.urls.start(100))
+      .get(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       .expect('Content-Type', /html/)
-      .then(() => expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith(100, expect.anything()))
+      .then(() =>
+        expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith('100', expect.anything())
+      )
   })
 })
 
 describe('POST', () => {
   it('should redirect correctly', () => {
     return request(app)
-      .post(`${adjudicationUrls.activateSuspendedPunishments.urls.start(100)}`)
+      .post(`${adjudicationUrls.activateSuspendedPunishments.urls.start('100')}`)
       .send({
         activate: 'suspended-punishment-60',
       })
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
-          100
+          '100'
         )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&days=5`
       )
   })

@@ -23,7 +23,7 @@ let app: Express
 beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       prisonerNumber: 'G6415GD',
       outcomes: [],
     }),
@@ -45,7 +45,7 @@ describe('GET hearing details page - reporter version', () => {
     reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails.mockResolvedValue(null as never)
 
     return request(app)
-      .get(adjudicationUrls.hearingDetails.urls.report(1524493))
+      .get(adjudicationUrls.hearingDetails.urls.report('1524493'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('There are no hearings to schedule at the moment.')
