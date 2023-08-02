@@ -197,7 +197,8 @@ export default class PunishmentsService {
     )
     return new ManageAdjudicationsClient(user).getPossibleConsecutivePunishments(
       reportedAdjudication.prisonerNumber,
-      punishmentType
+      punishmentType,
+      adjudicationNumber.toString()
     )
   }
 

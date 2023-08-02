@@ -677,10 +677,11 @@ export default class ManageAdjudicationsClient {
 
   async getPossibleConsecutivePunishments(
     prisonerNumber: string,
-    punishmentType: PunishmentType
+    punishmentType: PunishmentType,
+    chargeNumber: string
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     return this.restClient.get({
-      path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}`,
+      path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}&chargeNumber=${chargeNumber}`,
     })
   }
 }
