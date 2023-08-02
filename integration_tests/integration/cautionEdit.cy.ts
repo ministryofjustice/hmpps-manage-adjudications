@@ -30,7 +30,6 @@ context('Is this punishment a caution?', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
           chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -68,7 +67,6 @@ context('Is this punishment a caution?', () => {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
           chargeNumber: '1524493',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
@@ -106,7 +104,6 @@ context('Is this punishment a caution?', () => {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
           chargeNumber: '1524493',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',

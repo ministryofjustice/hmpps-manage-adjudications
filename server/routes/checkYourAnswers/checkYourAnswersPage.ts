@@ -175,8 +175,8 @@ export default class CheckYourAnswersPage {
     const draftId = Number(req.params.draftId)
 
     try {
-      const completeAdjudicationNumber = await this.placeOnReportService.completeDraftAdjudication(draftId, user)
-      const redirectUrl = getRedirectUrls(this.pageOptions, completeAdjudicationNumber)
+      const completedChargeNumber = await this.placeOnReportService.completeDraftAdjudication(draftId, user)
+      const redirectUrl = getRedirectUrls(this.pageOptions, completedChargeNumber)
       return res.redirect(redirectUrl)
     } catch (postError) {
       const errorRedirectUrl = getErrorRedirectUrl(this.pageOptions, draftId)

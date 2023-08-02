@@ -25,7 +25,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
+describe('GET', () => {
   it('should load punishment comment confirm deletion page', () => {
     return request(app)
       .get(adjudicationUrls.punishmentComment.urls.delete('100', 1))
@@ -57,7 +57,7 @@ describe('GET /punishment-comment/:adjudicationNumber/delete/:id', () => {
   })
 })
 
-describe('POST /punishment-comment/:adjudicationNumber/delete/:id', () => {
+describe('POST', () => {
   it('should show error message if delete option is not chosen', () => {
     return request(app)
       .post(`${adjudicationUrls.punishmentComment.urls.delete('100', 1)}`)

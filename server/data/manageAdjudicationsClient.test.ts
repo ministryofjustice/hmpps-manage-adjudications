@@ -106,7 +106,7 @@ describe('manageAdjudicationsClient', () => {
     it('should return the reported adjudication data', async () => {
       const result = {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 3,
+          chargeNumber: '3',
           prisonerNumber: 'A12345',
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         }),
@@ -148,7 +148,7 @@ describe('manageAdjudicationsClient', () => {
   describe('submitCompleteDraftAdjudication', () => {
     const result = {
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 2345221,
+        chargeNumber: '2345221',
         prisonerNumber: 'G6123VU',
       }),
     }
@@ -167,7 +167,7 @@ describe('manageAdjudicationsClient', () => {
   describe('editDraftIncidentDetails', () => {
     const result = {
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 2345221,
+        chargeNumber: '2345221',
         prisonerNumber: 'G6123VU',
       }),
     }
@@ -236,11 +236,11 @@ describe('manageAdjudicationsClient', () => {
   describe('getYourCompletedAdjudications', () => {
     const content = [
       testData.reportedAdjudication({
-        adjudicationNumber: 2,
+        chargeNumber: '2',
         prisonerNumber: 'G6123VU',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 1,
+        chargeNumber: '1',
         prisonerNumber: 'G6174VU',
       }),
     ]
@@ -280,11 +280,11 @@ describe('manageAdjudicationsClient', () => {
   describe('getAllCompletedAdjudications', () => {
     const content = [
       testData.reportedAdjudication({
-        adjudicationNumber: 2,
+        chargeNumber: '2',
         prisonerNumber: 'G6123VU',
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 1,
+        chargeNumber: '1',
         prisonerNumber: 'G6174VU',
       }),
     ]

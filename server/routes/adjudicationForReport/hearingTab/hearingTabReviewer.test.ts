@@ -27,7 +27,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       prisonerNumber: 'G6415GD',
       outcomes: [],
     }),

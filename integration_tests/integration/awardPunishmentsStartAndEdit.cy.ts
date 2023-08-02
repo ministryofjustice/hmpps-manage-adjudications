@@ -75,7 +75,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         reportedAdjudication: {
           ...testData.reportedAdjudication({
             punishments: [],
-            adjudicationNumber: 100,
             chargeNumber: '100',
             prisonerNumber: 'G6415GD',
             locationId: 25538,
@@ -96,7 +95,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         reportedAdjudication: {
           ...testData.reportedAdjudication({
             punishments: [],
-            adjudicationNumber: 101,
             chargeNumber: '101',
             prisonerNumber: 'G6415GD',
             locationId: 25538,
@@ -133,7 +131,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 102,
           chargeNumber: '102',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',

@@ -28,7 +28,7 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-09T10:30:00',
     }),

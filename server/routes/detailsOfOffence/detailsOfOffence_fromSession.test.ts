@@ -124,7 +124,7 @@ beforeEach(() => {
     }
   })
 
-  placeOnReportService.getPrisonerNumberFromDraftAdjudicationNumber.mockResolvedValue('G6415GD')
+  placeOnReportService.getPrisonerNumberFromDraftChargeNumber.mockResolvedValue('G6415GD')
 
   placeOnReportService.getOffenceRule.mockImplementation(offenceCode => {
     switch (offenceCode) {

@@ -103,7 +103,7 @@ describe('POST', () => {
   it('should successfully call the endpoint and redirect - no amount given and caution is no', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         prisonerNumber: 'G6415GD',
         outcomes: [],
         punishments: [],

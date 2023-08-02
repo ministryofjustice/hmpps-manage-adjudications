@@ -63,7 +63,7 @@ context('Is any money being recovered for damages?', () => {
       id: '101',
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [

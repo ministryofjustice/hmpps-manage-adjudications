@@ -59,7 +59,6 @@ export type ExistingDraftIncidentDetails = {
   dateTimeOfDiscovery: SubmittedDateTime
   locationId: number
   startedByUserId: string
-  adjudicationNumber?: number
   chargeNumber?: string
 }
 
@@ -199,7 +198,6 @@ export default class PlaceOnReportService {
     return {
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
-      adjudicationNumber: draftAdjudication.adjudicationNumber,
       chargeNumber: draftAdjudication.chargeNumber,
       isYouthOffender: draftAdjudication.isYouthOffender,
     }
@@ -218,7 +216,6 @@ export default class PlaceOnReportService {
       dateTime: dateAndTimeOfIncident,
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
-      adjudicationNumber: response.draftAdjudication.adjudicationNumber,
       chargeNumber: response.draftAdjudication.chargeNumber,
       dateTimeOfDiscovery: dateAndTimeOfDiscovery,
     }
@@ -412,7 +409,7 @@ export default class PlaceOnReportService {
     }
   }
 
-  async getPrisonerNumberFromDraftAdjudicationNumber(draftId: number, user: User) {
+  async getPrisonerNumberFromDraftChargeNumber(draftId: number, user: User) {
     const draftAdjudication = await this.getDraftAdjudicationDetails(draftId, user)
     const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
     return prisonerDetails.prisonerNumber

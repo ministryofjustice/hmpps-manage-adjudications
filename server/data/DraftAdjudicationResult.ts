@@ -33,7 +33,6 @@ export type OffenceDetails = {
 
 export type DraftAdjudication = {
   id: number
-  adjudicationNumber?: number
   chargeNumber: string
   prisonerNumber: string
   startedByUserId: string
@@ -62,7 +61,6 @@ export type DraftAdjudicationResultList = {
 export type CheckYourAnswers = {
   incidentDetails: SummarySectionItems[]
   statement: string
-  adjudicationNumber?: number
   chargeNumber?: string
   isYouthOffender: boolean
 }

@@ -34,7 +34,7 @@ const prisonerData = testData.prisonerResultSummary({
 
 const draftData = testData.draftAdjudication({
   id: 1,
-  adjudicationNumber: 123,
+  chargeNumber: '123',
   prisonerNumber: 'G6415GD',
 })
 
@@ -83,7 +83,7 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber: 123,
+      chargeNumber: '123',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2023-05-30T09:30:00',
     }),

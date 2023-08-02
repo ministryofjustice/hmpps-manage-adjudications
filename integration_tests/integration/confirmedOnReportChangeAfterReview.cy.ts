@@ -22,7 +22,6 @@ context('Report has been changed', () => {
       id: 1524493,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
           chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
         }),

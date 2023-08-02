@@ -54,7 +54,7 @@ const getVariablesForPageType = (
   pageOptions: PageOptions,
   prisonerNumber: string,
   chargeNumber: string,
-  draftAdjudicationNumber: number
+  draftId: number
 ) => {
   if (pageOptions.isReviewerView()) {
     return {
@@ -64,7 +64,7 @@ const getVariablesForPageType = (
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
-        draftAdjudicationNumber
+        draftId
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
@@ -105,11 +105,11 @@ const getVariablesForPageType = (
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
       prisonerNumber,
-      draftAdjudicationNumber
+      draftId
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
-    editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftAdjudicationNumber),
+    editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftId),
     editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
       chargeNumber
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,

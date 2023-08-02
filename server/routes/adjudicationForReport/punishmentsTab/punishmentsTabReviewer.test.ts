@@ -67,7 +67,7 @@ describe('GET Punishments and damages tab', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-12-09T10:30:00',
         status: ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -97,7 +97,7 @@ describe('GET Punishments and damages tab', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-12-09T10:30:00',
         status: ReportedAdjudicationStatus.QUASHED,

@@ -43,7 +43,7 @@ const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSumm
 
 const reportedAdj = {
   reportedAdjudication: testData.reportedAdjudication({
-    adjudicationNumber: 100,
+    chargeNumber: '100',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     dateTimeOfIncident: '2022-12-09T10:30:00',
     incidentRole: {

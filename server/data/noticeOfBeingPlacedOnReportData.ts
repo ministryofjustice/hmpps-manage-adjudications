@@ -3,8 +3,6 @@ import { convertToTitleCase, formatTimestampTo, formatTimestampToDate, formatTim
 import { IncidentAndOffences } from '../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
-  adjudicationNumber: number
-
   chargeNumber: string
 
   statement: string

@@ -22,7 +22,6 @@ context('Check punishments', () => {
       id: 123,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 123,
           chargeNumber: '123',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
@@ -60,7 +59,6 @@ context('Check punishments', () => {
       id: 456,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 456,
           chargeNumber: '456',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
@@ -87,7 +85,6 @@ context('Check punishments', () => {
       chargeNumber: 456,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 456,
           chargeNumber: '456',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',

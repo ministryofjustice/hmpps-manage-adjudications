@@ -41,7 +41,6 @@ const offenceRule: OffenceRule = {
 }
 
 const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication({
-  adjudicationNumber: 1524493,
   chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
   locationId: 197682,

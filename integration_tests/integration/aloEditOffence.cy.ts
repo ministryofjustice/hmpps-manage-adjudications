@@ -40,7 +40,6 @@ const originalDraftTestOne = {
 
 const originalReportedTestOne = {
   reportedAdjudication: testData.reportedAdjudication({
-    adjudicationNumber: 1524493,
     chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -76,7 +75,6 @@ const editedDraftAdjudicationTestOne = {
 }
 
 const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
-  adjudicationNumber: 12345,
   chargeNumber: '12345',
   prisonerNumber: 'G6415GD',
   dateTimeOfIncident: '2021-11-03T13:10:00',
@@ -95,7 +93,6 @@ const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
 
 const originalReportedTestTwo = {
   reportedAdjudication: testData.reportedAdjudication({
-    adjudicationNumber: 1524493,
     chargeNumber: '1524493',
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -157,7 +154,6 @@ const editedDraftAdjudicationTestTwo = {
 }
 
 const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
-  adjudicationNumber: 1524493,
   chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
   dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -388,7 +384,6 @@ context('ALO edits offence - test 2', () => {
     })
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 1524493,
       chargeNumber: '1524493',
       response: originalDraftTestTwo,
     })
