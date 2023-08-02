@@ -22,7 +22,6 @@ context('Report has been accepted', () => {
       id: 1524493,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
           chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2022-11-15T09:10:00',
@@ -37,7 +36,7 @@ context('Report has been accepted', () => {
       id: 1524494,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524494,
+          chargeNumber: '1524494',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2023-03-10T09:00:00',
           handoverDeadline: '2023-03-12T09:00:00',

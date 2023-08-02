@@ -7,14 +7,14 @@ import { ReportedAdjudicationResult, ReportedAdjudicationStatus } from '../../se
 const testData = new TestData()
 
 const reportedAdjudicationResponse = ({
-  adjudicationNumber,
+  chargeNumber,
   status,
   reviewedByUserId = null,
   statusReason = null,
   statusDetails = null,
   isYouthOffender = false,
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   status: ReportedAdjudicationStatus
   reviewedByUserId?: string
   statusReason?: string
@@ -23,7 +23,7 @@ const reportedAdjudicationResponse = ({
 }) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       locationId: 25538,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -119,7 +119,7 @@ context('Prisoner report - reporter view', () => {
     })
 
     const awaitingReviewReport = reportedAdjudicationResponse({
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       isYouthOffender: false,
     })
@@ -128,7 +128,7 @@ context('Prisoner report - reporter view', () => {
       response: awaitingReviewReport,
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       response: draftAdjudicationResponse(awaitingReviewReport, 177),
     })
     cy.task('stubGetDraftAdjudication', {
@@ -139,7 +139,7 @@ context('Prisoner report - reporter view', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 56789,
       response: reportedAdjudicationResponse({
-        adjudicationNumber: 56789,
+        chargeNumber: '56789',
         status: ReportedAdjudicationStatus.REJECTED,
         isYouthOffender: false,
         reviewedByUserId: 'USER1',
@@ -149,7 +149,7 @@ context('Prisoner report - reporter view', () => {
     })
 
     const returnedReport = reportedAdjudicationResponse({
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       status: ReportedAdjudicationStatus.RETURNED,
       reviewedByUserId: 'USER1',
       statusReason: 'statement',
@@ -161,7 +161,7 @@ context('Prisoner report - reporter view', () => {
       response: returnedReport,
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       response: draftAdjudicationResponse(returnedReport, 188),
     })
     cy.task('stubGetDraftAdjudication', {

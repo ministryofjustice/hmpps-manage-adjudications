@@ -54,7 +54,7 @@ context('Select associated staff', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           outcomes: [
             {
@@ -109,13 +109,13 @@ context('Select associated staff', () => {
       })
   })
   it('contains the requires elements - original page: enter hearing outcome', () => {
-    cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+    cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
     cy.get('#governorName').type('John Smith')
     cy.get('[data-qa="gov-search"]').click()
     const SelectStaffMemberPage = new SelectAssociatedStaff()
     cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=John%20Smith`)
     SelectStaffMemberPage.selectStaffMemberLink('JSMITH_GEN').click()
-    cy.url().should('include', `${adjudicationUrls.enterHearingOutcome.urls.start(100)}?selectedPerson=JSMITH_GEN`)
+    cy.url().should('include', `${adjudicationUrls.enterHearingOutcome.urls.start('100')}?selectedPerson=JSMITH_GEN`)
   })
   it('returns to the previous page with the selected staff member details', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))

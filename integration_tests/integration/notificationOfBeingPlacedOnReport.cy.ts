@@ -21,9 +21,8 @@ context('Prisoner has been placed on report', () => {
       response: {
         reportedAdjudication: {
           ...testData.reportedAdjudication({
-            adjudicationNumber: 3,
+            chargeNumber: '1524242',
             prisonerNumber: 'G6415GD',
-            // dateTimeOfIncident: '2020-12-06T10:00:00',
             locationId: 25538,
             offenceDetails: { offenceCode: 1001 },
           }),
@@ -72,7 +71,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('The notification of being on report should present on the print report page', () => {
-    cy.request(adjudicationUrls.printPdf.urls.start(1524242)).should(res => {
+    cy.request(adjudicationUrls.printPdf.urls.start('1524242')).should(res => {
       expect(res.status).to.eq(200)
       expect(res.headers['content-disposition']).to.contain('adjudication-report-1524242')
       expect(res.headers['content-type']).to.eq('application/pdf')

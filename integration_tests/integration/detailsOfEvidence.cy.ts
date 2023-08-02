@@ -78,7 +78,7 @@ context('Details of evidence', () => {
       response: prisonerDetails,
     })
     cy.task('stubSaveEvidenceDetails', {
-      adjudicationNumber: 201,
+      chargeNumber: '201',
       response: draftAdjudication(201, evidenceList),
     })
     cy.task('stubGetReportedAdjudication', {

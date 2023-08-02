@@ -19,7 +19,7 @@ context('Punishment schedule', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.submitButton().should('exist')
       punishmentSchedulePage.cancelButton().should('exist')
@@ -27,7 +27,7 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.suspended().should('exist')
     })
     it('should not ask for start and end dates if the punishment type is additional days ', () => {
-      cy.visit(`${adjudicationUrls.punishmentSchedule.urls.start(100)}?punishmentType=ADDITIONAL_DAYS`)
+      cy.visit(`${adjudicationUrls.punishmentSchedule.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`)
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.days().type('10')
       punishmentSchedulePage.suspended().find('input[value="no"]').check()
@@ -35,7 +35,7 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.endDate().should('not.exist')
     })
     it('should not ask for start and end dates if the punishment type is prospective days ', () => {
-      cy.visit(`${adjudicationUrls.punishmentSchedule.urls.start(100)}?punishmentType=PROSPECTIVE_DAYS`)
+      cy.visit(`${adjudicationUrls.punishmentSchedule.urls.start('100')}?punishmentType=PROSPECTIVE_DAYS`)
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.days().type('10')
       punishmentSchedulePage.suspended().find('input[value="no"]').check()
@@ -43,17 +43,17 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.endDate().should('not.exist')
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })
   describe('Validation', () => {
     it('should error when no days entered', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.submitButton().click()
 
@@ -65,7 +65,7 @@ context('Punishment schedule', () => {
         })
     })
     it('should error when no suspended option selected', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.days().type('10')
 
@@ -79,7 +79,7 @@ context('Punishment schedule', () => {
         })
     })
     it('should error when suspended and no date selected', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.days().type('10')
       punishmentSchedulePage.suspended().find('input[value="yes"]').check()
@@ -93,7 +93,7 @@ context('Punishment schedule', () => {
         })
     })
     it('should error when not suspended and no start date entered', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.days().type('10')
       punishmentSchedulePage.suspended().find('input[value="no"]').check()
@@ -108,7 +108,7 @@ context('Punishment schedule', () => {
         })
     })
     it('should error when not suspended and no end date entered', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
       punishmentSchedulePage.days().type('10')
       punishmentSchedulePage.suspended().find('input[value="no"]').check()
@@ -127,7 +127,7 @@ context('Punishment schedule', () => {
 
   describe('saves successfully and redirects', () => {
     it('should save when days and suspended until', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
 
       punishmentSchedulePage.days().type('10')
@@ -137,11 +137,11 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
     it('should save when days and start date and end date', () => {
-      cy.visit(adjudicationUrls.punishmentSchedule.urls.start(100))
+      cy.visit(adjudicationUrls.punishmentSchedule.urls.start('100'))
       const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
 
       punishmentSchedulePage.days().type('10')
@@ -152,7 +152,7 @@ context('Punishment schedule', () => {
       punishmentSchedulePage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })

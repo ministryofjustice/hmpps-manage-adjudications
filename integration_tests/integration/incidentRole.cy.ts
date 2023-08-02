@@ -135,7 +135,7 @@ context('Incident role', () => {
     incidentRolePage.radioButtons().find('input[value="attempted"]').check()
     incidentRolePage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question('34', 'attempted', '1'))
+      expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'attempted', '1'))
     })
   })
   it('should submit form successfully if all data entered and go to associated prisoner page', () => {
@@ -176,7 +176,7 @@ context('Incident role', () => {
       incidentRolePage.radioButtons().find('input[value="attempted"]').check()
       incidentRolePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.not.eq(adjudicationUrls.offenceCodeSelection.urls.question('34', 'attempted', '1'))
+        expect(loc.pathname).to.not.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'attempted', '1'))
       })
       incidentRolePage.errorContinueButton().click()
       cy.location().should(loc => {

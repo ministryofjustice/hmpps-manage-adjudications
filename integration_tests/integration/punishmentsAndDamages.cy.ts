@@ -35,7 +35,7 @@ context('Damages and punishments summary', () => {
       id: 99,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 99,
+          chargeNumber: '99',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -85,7 +85,7 @@ context('Damages and punishments summary', () => {
       id: 98,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 98,
+          chargeNumber: '98',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -113,7 +113,7 @@ context('Damages and punishments summary', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -141,7 +141,7 @@ context('Damages and punishments summary', () => {
       id: 103,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 103,
+          chargeNumber: '103',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -169,7 +169,7 @@ context('Damages and punishments summary', () => {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 101,
+          chargeNumber: '101',
           status: ReportedAdjudicationStatus.SCHEDULED,
           prisonerNumber: 'G6415GD',
         }),
@@ -179,7 +179,7 @@ context('Damages and punishments summary', () => {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 102,
+          chargeNumber: '102',
           status: ReportedAdjudicationStatus.QUASHED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -230,7 +230,7 @@ context('Damages and punishments summary', () => {
       id: 112,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 112,
+          chargeNumber: '112',
           status: ReportedAdjudicationStatus.QUASHED,
           prisonerNumber: 'G6415GD',
           otherData: {
@@ -284,7 +284,7 @@ context('Damages and punishments summary', () => {
       id: 110,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 110,
+          chargeNumber: '110',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           otherData: {
@@ -315,7 +315,7 @@ context('Damages and punishments summary', () => {
       id: 111,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 111,
+          chargeNumber: '111',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           otherData: {
@@ -358,7 +358,7 @@ context('Damages and punishments summary', () => {
 
   describe('Loads', () => {
     it('should contain the required page elements - status not `charge proved`', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(101))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('101'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
       punishmentsAndDamagesPage.quashedWarning().should('not.exist')
@@ -372,7 +372,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
     })
     it('should contain the required page elements - status `quashed`', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(102))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('102'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
         .quashedWarning()
@@ -389,7 +389,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should contain the required page elements - status `quashed`', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(112))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('112'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
@@ -398,7 +398,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
     })
     it('should contain the required page elements - charge proved, no punishments, caution true', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.punishmentsTabName().contains('Punishments and damages')
@@ -427,7 +427,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should not show change links, change button or quash button if outcome is entered in NOMIS flag is present', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(110))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('110'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.punishmentsTabName().contains('Punishments and damages')
@@ -439,7 +439,7 @@ context('Damages and punishments summary', () => {
       cy.get('[data-qa="change-link"').should('not.exist')
     })
     it('should contain the required page elements - charge proved, no punishments, caution false', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(103))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('103'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
         .moneyCautionSummary()
@@ -455,7 +455,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should contain the required page elements - charge proved, punishments and comments present', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.quashedWarning().should('not.exist')
       punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
@@ -470,15 +470,15 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
     it('should have a hyperlink on the consecutive report content', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       cy.get('[data-qa="consecutive-link"]').should('exist')
       cy.get('[data-qa="consecutive-link"]').click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(1525853))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('1525853'))
       })
     })
     it('should not have any buttons or change links if outcome entered in NOMIS - charge proved, punishments present', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(111))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('111'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
@@ -493,7 +493,7 @@ context('Damages and punishments summary', () => {
         username: 'USER2',
         response: testData.userFromUsername('USER2'),
       })
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(98))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('98'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
@@ -504,65 +504,65 @@ context('Damages and punishments summary', () => {
 
   describe('links', () => {
     it('should got to money recovered edit', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       cy.get('[data-qa="change-link"').first().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
       })
     })
     it('should got to is caution edit', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       cy.get('[data-qa="change-link"').eq(1).click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit('100'))
       })
     })
     it('change punishments goes to award punishments page', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.changePunishmentsButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(99))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start('99'))
       })
     })
     it('report quashed goes to quash page', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.reportQuashedButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(99))
+        expect(loc.pathname).to.eq(adjudicationUrls.reportAQuashedGuiltyFinding.urls.start('99'))
       })
     })
     it('award punishments goes to award punishments', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(103))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('103'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.awardPunishmentsButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start(103))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start('103'))
       })
     })
     it('add comment goes to add comment page', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.addPunishmentCommentButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.add(99))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.add('99'))
       })
     })
     it('change comment goes to edit comment page', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.changePunishmentCommentLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.edit(99, 1))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.edit('99', 1))
       })
     })
     it('remove comment requests comment deletion', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.removePunishmentCommentLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.delete(99, 1))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentComment.urls.delete('99', 1))
       })
     })
   })
@@ -591,7 +591,7 @@ context('Reporter view', () => {
       id: 99,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 99,
+          chargeNumber: '99',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -632,7 +632,7 @@ context('Reporter view', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -660,7 +660,7 @@ context('Reporter view', () => {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 101,
+          chargeNumber: '101',
           status: ReportedAdjudicationStatus.SCHEDULED,
           prisonerNumber: 'G6415GD',
         }),
@@ -670,7 +670,7 @@ context('Reporter view', () => {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 102,
+          chargeNumber: '102',
           status: ReportedAdjudicationStatus.QUASHED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -728,7 +728,7 @@ context('Reporter view', () => {
     })
   })
   it('should contain the required page elements - status not `charge proved` - empty state', () => {
-    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(101))
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('101'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
     punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
     punishmentsAndDamagesPage.quashedWarning().should('not.exist')
@@ -742,7 +742,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
   })
   it('should contain the required page elements - status `charge proved` - no punishments', () => {
-    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(100))
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('100'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
     punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('not.exist')
@@ -763,7 +763,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
   })
   it('should contain the required page elements - status `charge proved` - punishments present', () => {
-    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(99))
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('99'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
     punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('not.exist')
@@ -795,7 +795,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
   })
   it('should contain the required page elements - status quashed', () => {
-    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(102))
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('102'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
     punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('exist')
@@ -816,7 +816,7 @@ context('Reporter view', () => {
     punishmentsAndDamagesPage.addPunishmentCommentButton().should('not.exist')
   })
   it('should not have a hyperlink on the consecutive report content', () => {
-    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report(102))
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('102'))
     cy.get('[data-qa="consecutive-link"]').should('not.exist')
   })
 })

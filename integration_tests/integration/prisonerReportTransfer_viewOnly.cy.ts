@@ -7,14 +7,14 @@ import { ReportedAdjudicationResult, ReportedAdjudicationStatus } from '../../se
 const testData = new TestData()
 
 const reportedAdjudicationResponse = ({
-  adjudicationNumber,
+  chargeNumber,
   status,
   statusReason = null,
   statusDetails = null,
   transferableActionsAllowed = false,
   overrideAgencyId = null,
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   status: ReportedAdjudicationStatus
   statusReason?: string
   statusDetails?: string
@@ -23,7 +23,7 @@ const reportedAdjudicationResponse = ({
 }) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       locationId: 25538,
       dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -123,12 +123,12 @@ context('Prisoner report - view only - for transferred prisoners', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: reportedAdjudicationResponse({
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
       }),
     })
     const awaitingReviewReport = reportedAdjudicationResponse({
-      adjudicationNumber: 1524495,
+      chargeNumber: '1524495',
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       transferableActionsAllowed: true,
       overrideAgencyId: 'LEI',
@@ -138,7 +138,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       response: awaitingReviewReport,
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 1524495,
+      chargeNumber: 1524495,
       response: draftAdjudication(awaitingReviewReport, 1),
     })
     cy.task('stubGetDraftAdjudication', {
@@ -148,7 +148,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse({
-        adjudicationNumber: 1524494,
+        chargeNumber: '1524494',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         transferableActionsAllowed: true,
         overrideAgencyId: 'LEI',

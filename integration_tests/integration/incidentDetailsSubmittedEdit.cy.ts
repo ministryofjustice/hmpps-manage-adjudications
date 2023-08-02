@@ -23,7 +23,7 @@ context('Incident details (edit after completion of report)', () => {
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 34,
-          adjudicationNumber: 1524455,
+          chargeNumber: '1524455',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-03T13:10:00',
           locationId: 25538,
@@ -177,7 +177,7 @@ context('Incident details (edit after completion of report)', () => {
         response: {
           draftAdjudication: testData.draftAdjudication({
             id: 34,
-            adjudicationNumber: 1524455,
+            chargeNumber: '1524455',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2021-11-03T13:10:00',
             dateTimeOfDiscovery: '2021-11-03T11:09:42',
@@ -261,7 +261,7 @@ context('Incident details (edit after completion of report)', () => {
         response: {
           draftAdjudication: testData.draftAdjudication({
             id: 34,
-            adjudicationNumber: 1524455,
+            chargeNumber: '1524455',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2021-11-03T13:10:00',
             dateTimeOfDiscovery: '2021-11-04T13:10:00',

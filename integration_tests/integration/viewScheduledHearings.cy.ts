@@ -22,7 +22,7 @@ const hearingsSetOne = [
       id: 1,
     }),
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
-    adjudicationNumber: 123456,
+    chargeNumber: '123456',
     prisonerNumber: 'G6345BY',
     status: ReportedAdjudicationStatus.CHARGE_PROVED,
   },
@@ -32,7 +32,7 @@ const hearingsSetOne = [
       id: 4,
     }),
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
-    adjudicationNumber: 123456,
+    chargeNumber: '123456',
     prisonerNumber: 'P3785CP',
     status: ReportedAdjudicationStatus.ADJOURNED,
   },
@@ -44,7 +44,7 @@ const hearingsSetTwo = [
       id: 2,
     }),
     dateTimeOfDiscovery: '2025-11-03T14:00:00',
-    adjudicationNumber: 567894,
+    chargeNumber: '567894',
     prisonerNumber: 'D9543CY',
     status: ReportedAdjudicationStatus.DISMISSED,
   },
@@ -54,7 +54,7 @@ const hearingsSetTwo = [
       id: 3,
     }),
     dateTimeOfDiscovery: '2025-11-04T09:00:00',
-    adjudicationNumber: 678912,
+    chargeNumber: '678912',
     prisonerNumber: 'M1876DT',
     status: ReportedAdjudicationStatus.ADJOURNED,
   },
@@ -148,7 +148,7 @@ context('View scheduled hearings', () => {
     cy.visit(adjudicationUrls.viewScheduledHearings.root)
     viewScheduledHearingsPage.viewOrEditHearingLink(1).click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(123456))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('123456'))
     })
   })
   it('should accept a user-chosen date (using datepicker)', () => {

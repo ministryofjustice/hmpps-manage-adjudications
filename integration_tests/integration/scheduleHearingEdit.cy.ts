@@ -7,10 +7,10 @@ import TestData from '../../server/routes/testutils/testData'
 
 const testData = new TestData()
 
-const reportedAdjudicationResponse = (adjudicationNumber: number, hearings = []) => {
+const reportedAdjudicationResponse = (chargeNumber: string, hearings = []) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-09T10:30:00',
       status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -75,22 +75,22 @@ context('Schedule a hearing page', () => {
 
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, [previouslyExistingHearing, originalHearing]),
+      response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, originalHearing]),
     })
     cy.task('stubAmendHearingV1', {
-      adjudicationNumber: 1524494,
+      chargeNumber: 1524494,
       hearingId: 333,
-      response: reportedAdjudicationResponse(1524494, [previouslyExistingHearing, changedDayHearing]),
+      response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, changedDayHearing]),
     })
     cy.task('stubAmendHearing', {
-      adjudicationNumber: 1524494,
-      response: reportedAdjudicationResponse(1524494, [previouslyExistingHearing, changedDayHearing]),
+      chargeNumber: 1524494,
+      response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, changedDayHearing]),
     })
 
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().should('exist')
     scheduleHearingsPage.datePicker().should('exist')
@@ -100,7 +100,7 @@ context('Schedule a hearing page', () => {
     scheduleHearingsPage.submitButton().should('exist')
   })
   it('should have pre-filled fields', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').should('be.checked')
     scheduleHearingsPage.datePicker().should('have.value', '01/01/2030')
@@ -116,54 +116,54 @@ context('Schedule a hearing page', () => {
     })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, [changedLocationHearing]),
+      response: reportedAdjudicationResponse('1524494', [changedLocationHearing]),
     })
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.locationSelector().select('25655')
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))
     })
   })
   it('should submit the form successfully when the type is changed', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="IND_ADJ"]').click()
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))
     })
   })
   it('should submit the form successfully when the date is changed', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, [changedDayHearing]),
+      response: reportedAdjudicationResponse('1524494', [changedDayHearing]),
     })
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     forceDateInputWithDate(new Date('2030-01-02'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))
     })
   })
   it('should submit the form successfully when the time is changed', () => {
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse(1524494, [changedTimeHearing]),
+      response: reportedAdjudicationResponse('1524494', [changedTimeHearing]),
     })
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.timeInputHours().select('11')
     scheduleHearingsPage.timeInputMinutes().select('30')
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1524494))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))
     })
   })
   it('should show error if hour is removed', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.timeInputHours().select('--')
     scheduleHearingsPage.submitButton().click()
@@ -175,7 +175,7 @@ context('Schedule a hearing page', () => {
       })
   })
   it('should show error if minute is removed', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.timeInputMinutes().select('--')
     scheduleHearingsPage.submitButton().click()
@@ -187,7 +187,7 @@ context('Schedule a hearing page', () => {
       })
   })
   it('should show error if the date entered is before the date of any existing hearings', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     forceDateInputWithDate(new Date('2029-12-28'), '[data-qa="hearing-date"]')
     scheduleHearingsPage.submitButton().click()
@@ -201,7 +201,7 @@ context('Schedule a hearing page', () => {
       })
   })
   it('should show error if the time entered is before the datetime of any existing hearings', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.timeInputHours().select('09')
     scheduleHearingsPage.timeInputMinutes().select('00')
@@ -216,7 +216,7 @@ context('Schedule a hearing page', () => {
       })
   })
   it('should show error if location is removed', () => {
-    cy.visit(adjudicationUrls.scheduleHearing.urls.edit(1524494, 333))
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.locationSelector().select('Select')
     scheduleHearingsPage.submitButton().click()

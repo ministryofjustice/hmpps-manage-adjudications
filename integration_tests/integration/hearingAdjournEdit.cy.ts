@@ -20,7 +20,7 @@ context('Adjourn the hearing', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.ADJOURNED,
           outcomes: [
@@ -40,11 +40,11 @@ context('Adjourn the hearing', () => {
       },
     })
     cy.task('stubAmendHearingOutcome', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       status: ReportedAdjudicationStatus.ADJOURNED,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           hearings: [
             testData.singleHearing({
@@ -64,7 +64,7 @@ context('Adjourn the hearing', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.adjournDetails().should('exist')
       hearingAdjourned.submitButton().should('exist')
@@ -74,24 +74,24 @@ context('Adjourn the hearing', () => {
       hearingAdjourned.errorSummary().should('not.exist')
     })
     it('should render the data held on api', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.adjournDetails().should('have.value', 'adjourned details')
       hearingAdjourned.adjournPlea().find('input[value="NOT_ASKED"]').should('be.checked')
       hearingAdjourned.adjournReason().should('have.value', 'LEGAL_ADVICE')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Submits successfully', () => {
     it('goes to the referral confirmation page if data successfully submitted', () => {
-      cy.visit(`${adjudicationUrls.hearingAdjourned.urls.edit(100)}?adjudicator=Judge%20Red&hearingOutcome=ADJOURN`)
+      cy.visit(`${adjudicationUrls.hearingAdjourned.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=ADJOURN`)
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
 
       hearingAdjourned.adjournReason().select('Further evidence needed')
@@ -99,11 +99,11 @@ context('Adjourn the hearing', () => {
       hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check()
       hearingAdjourned.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
     it('goes to the referral confirmation page if data successfully submitted - no new adjudicator passed in query', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
 
       hearingAdjourned.adjournReason().select('Further evidence needed')
@@ -111,13 +111,13 @@ context('Adjourn the hearing', () => {
       hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check()
       hearingAdjourned.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Validation', () => {
     it('shows correct error message if reason missing', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.adjournReason().select('Select')
       hearingAdjourned.submitButton().click()
@@ -129,7 +129,7 @@ context('Adjourn the hearing', () => {
         })
     })
     it('shows correct error message if details missing', () => {
-      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingAdjourned.urls.edit('100'))
       const hearingAdjourned = Page.verifyOnPage(HearingAdjourn)
       hearingAdjourned.adjournReason().select('Request for legal advice approved')
       hearingAdjourned.adjournDetails().clear()

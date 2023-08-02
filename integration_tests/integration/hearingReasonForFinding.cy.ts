@@ -35,10 +35,10 @@ context('What is the reason for this finding?', () => {
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubPostCompleteDismissedHearing', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           outcomes: historyWithCompleteAndDismissedFinding,
         }),
@@ -64,7 +64,7 @@ context('What is the reason for this finding?', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           outcomes: historyWithCompleteAndDismissedFinding,
           status: ReportedAdjudicationStatus.DISMISSED,
@@ -75,7 +75,7 @@ context('What is the reason for this finding?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().should('exist')
       HearingReasonForFindingPage.submitButton().should('exist')
@@ -83,37 +83,37 @@ context('What is the reason for this finding?', () => {
       HearingReasonForFindingPage.errorSummary().should('not.exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Submits successfully', () => {
     it('goes to the hearing details page if data successfully submitted', () => {
-      cy.visit(`${adjudicationUrls.hearingReasonForFinding.urls.start(100)}?adjudicator=Joanne%20Rhubarb&plea=GUILTY`)
+      cy.visit(`${adjudicationUrls.hearingReasonForFinding.urls.start('100')}?adjudicator=Joanne%20Rhubarb&plea=GUILTY`)
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().type('This is the reason for the finding.')
       HearingReasonForFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
     it('goes back to the enter hearing outcome page if the adjudicator name and hearing outcome code is missing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().type('This is the reason for the finding.')
       HearingReasonForFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       })
     })
   })
   describe('Validation', () => {
     it('shows correct error message if reason missing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.start('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.submitButton().click()
       HearingReasonForFindingPage.errorSummary()

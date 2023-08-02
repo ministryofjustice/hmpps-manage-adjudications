@@ -29,7 +29,7 @@ context('Edit punishment comment', () => {
       id: 99,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 99,
+          chargeNumber: '99',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           outcomes: [
@@ -54,13 +54,13 @@ context('Edit punishment comment', () => {
       },
     })
     cy.task('stubEditPunishmentComment', {
-      adjudicationNumber: 99,
+      chargeNumber: 99,
       id: 1,
     })
   })
   describe('Load punishment comment edit page', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.punishmentComment.urls.edit(99, 1))
+      cy.visit(adjudicationUrls.punishmentComment.urls.edit('99', 1))
       const page = Page.verifyOnPage(PunishmentCommentPage)
       page.punishmentComment().should('exist')
       page.submitButton().should('exist')
@@ -68,18 +68,18 @@ context('Edit punishment comment', () => {
       page.submitButton().should('exist')
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(adjudicationUrls.punishmentComment.urls.edit(99, 1))
+      cy.visit(adjudicationUrls.punishmentComment.urls.edit('99', 1))
       const page = Page.verifyOnPage(PunishmentCommentPage)
       page.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       })
     })
   })
 
   describe('Submit', () => {
     it('should error when punishment comment blank', () => {
-      cy.visit(adjudicationUrls.punishmentComment.urls.edit(99, 1))
+      cy.visit(adjudicationUrls.punishmentComment.urls.edit('99', 1))
       const page = Page.verifyOnPage(PunishmentCommentPage)
       page.punishmentComment().clear()
       page.submitButton().click()
@@ -92,13 +92,13 @@ context('Edit punishment comment', () => {
         })
     })
     it('should submit successfully and redirect', () => {
-      cy.visit(adjudicationUrls.punishmentComment.urls.edit(99, 1))
+      cy.visit(adjudicationUrls.punishmentComment.urls.edit('99', 1))
       const page = Page.verifyOnPage(PunishmentCommentPage)
       page.punishmentComment().type('some text')
       page.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review(99))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       })
     })
   })

@@ -28,7 +28,7 @@ context('Your Completed Reports', () => {
   it('pagination should work', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2022-01-01T11:30:00',
@@ -88,7 +88,7 @@ context('Your Completed Reports', () => {
       number: 0,
       allContent: [
         testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2022-01-01T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -131,7 +131,7 @@ context('Your Completed Reports', () => {
       number: 0,
       allContent: [
         testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2022-01-01T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -169,7 +169,7 @@ context('Your Completed Reports', () => {
   it('filtering and pagination should work together', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-10-10T11:30:00',
         dateTimeOfDiscovery: '2022-01-01T11:30:00',

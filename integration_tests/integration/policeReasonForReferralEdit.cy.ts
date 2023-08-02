@@ -20,7 +20,7 @@ context('What is the reason for the referral?', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.REFER_POLICE,
           outcomes: [
@@ -34,10 +34,10 @@ context('What is the reason for the referral?', () => {
       },
     })
     cy.task('stubAmendOutcome', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           outcomes: [
             {
@@ -55,7 +55,7 @@ context('What is the reason for the referral?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.reasonForReferral.urls.edit(100))
+      cy.visit(adjudicationUrls.reasonForReferral.urls.edit('100'))
       const policeReasonForReferralPage = Page.verifyOnPage(PoliceReasonForReferral)
       policeReasonForReferralPage.referralReason().should('exist')
       policeReasonForReferralPage.submitButton().should('exist')
@@ -63,33 +63,33 @@ context('What is the reason for the referral?', () => {
       policeReasonForReferralPage.errorSummary().should('not.exist')
     })
     it('should render existing data', () => {
-      cy.visit(adjudicationUrls.reasonForReferral.urls.edit(100))
+      cy.visit(adjudicationUrls.reasonForReferral.urls.edit('100'))
       const policeReasonForReferralPage = Page.verifyOnPage(PoliceReasonForReferral)
       policeReasonForReferralPage.referralReason().contains('Some details')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.reasonForReferral.urls.edit(100))
+      cy.visit(adjudicationUrls.reasonForReferral.urls.edit('100'))
       const policeReasonForReferralPage = Page.verifyOnPage(PoliceReasonForReferral)
       policeReasonForReferralPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Submits successfully', () => {
     it('goes to the referral confirmation page if data successfully submitted', () => {
-      cy.visit(adjudicationUrls.reasonForReferral.urls.edit(100))
+      cy.visit(adjudicationUrls.reasonForReferral.urls.edit('100'))
       const policeReasonForReferralPage = Page.verifyOnPage(PoliceReasonForReferral)
       policeReasonForReferralPage.referralReason().type('This is an amended reason')
       policeReasonForReferralPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReferralConfirmation.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       })
     })
   })
   describe('Validation', () => {
     it('shows correct error message if reason missing', () => {
-      cy.visit(adjudicationUrls.reasonForReferral.urls.edit(100))
+      cy.visit(adjudicationUrls.reasonForReferral.urls.edit('100'))
       const policeReasonForReferralPage = Page.verifyOnPage(PoliceReasonForReferral)
       policeReasonForReferralPage.referralReason().clear()
       policeReasonForReferralPage.submitButton().click()
