@@ -15,10 +15,10 @@ context('Will this charge continue to prosecution?', () => {
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubCreateNotProceed', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
         }),
       },
@@ -27,7 +27,7 @@ context('Will this charge continue to prosecution?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       const notProceedPage = Page.verifyOnPage(NotProceedPage)
       notProceedPage.submitButton().should('exist')
       notProceedPage.cancelButton().should('exist')
@@ -35,17 +35,17 @@ context('Will this charge continue to prosecution?', () => {
       notProceedPage.notProceedReason().should('exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       const notProceedPage = Page.verifyOnPage(NotProceedPage)
       notProceedPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Validation', () => {
     it('should show error if missing reason', () => {
-      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       const notProceedPage = Page.verifyOnPage(NotProceedPage)
 
       notProceedPage.submitButton().click()
@@ -58,7 +58,7 @@ context('Will this charge continue to prosecution?', () => {
         })
     })
     it('should show error if missing details', () => {
-      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       const notProceedPage = Page.verifyOnPage(NotProceedPage)
 
       notProceedPage.notProceedReason().select('Other')
@@ -75,7 +75,7 @@ context('Will this charge continue to prosecution?', () => {
 
   describe('Continue', () => {
     it('redirects to hearing review when saved', () => {
-      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start(100))
+      cy.visit(adjudicationUrls.reasonForNotProceeding.urls.start('100'))
       const notProceedPage = Page.verifyOnPage(NotProceedPage)
 
       notProceedPage.notProceedReason().select('Other')
@@ -84,7 +84,7 @@ context('Will this charge continue to prosecution?', () => {
       notProceedPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })

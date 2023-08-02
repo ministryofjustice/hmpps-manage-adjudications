@@ -31,13 +31,10 @@ export default class IncidentStatementRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const { adjudicationNumber } = req.params
+    const draftId = Number(req.params.draftId)
     const { user } = res.locals
 
-    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(
-      Number(adjudicationNumber),
-      user
-    )
+    const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
     const { draftAdjudication } = draftAdjudicationResult
     const prisoner = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
 
@@ -51,17 +48,16 @@ export default class IncidentStatementRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { incidentStatement, incidentStatementComplete } = req.body
     const { user } = res.locals
-    const { adjudicationNumber } = req.params
+    const draftId = Number(req.params.draftId)
 
     const error = validateForm({ incidentStatement, incidentStatementComplete })
     if (error) return this.renderView(req, res, { error, incidentStatement, incidentStatementComplete })
 
     const statementComplete: boolean = incidentStatementComplete === 'yes'
-    const adjudicationNumberValue = Number(adjudicationNumber)
 
     try {
       const draftAdjudicationResult = await this.placeOnReportService.addOrUpdateDraftIncidentStatement(
-        adjudicationNumberValue,
+        draftId,
         incidentStatement,
         statementComplete,
         user
@@ -72,7 +68,7 @@ export default class IncidentStatementRoutes {
       return res.redirect(pathname)
     } catch (postError) {
       logger.error(`Failed to post incident statement for draft adjudication: ${postError}`)
-      res.locals.redirectUrl = adjudicationUrls.incidentStatement.urls.start(adjudicationNumberValue)
+      res.locals.redirectUrl = adjudicationUrls.incidentStatement.urls.start(draftId)
       throw postError
     }
   }

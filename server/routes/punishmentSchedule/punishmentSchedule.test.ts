@@ -30,7 +30,7 @@ describe('GET /punishment-schedule', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.punishmentSchedule.urls.start(100))
+      .get(adjudicationUrls.punishmentSchedule.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -41,7 +41,7 @@ describe('GET /punishment-schedule', () => {
 describe('GET /punishment-schedule', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(adjudicationUrls.punishmentSchedule.urls.start(100))
+      .get(adjudicationUrls.punishmentSchedule.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Punishment schedule')
@@ -54,7 +54,7 @@ describe('POST /punishment-schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.punishmentSchedule.urls.start(
-          100
+          '100'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
       )
       .send({
@@ -64,7 +64,7 @@ describe('POST /punishment-schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -78,7 +78,7 @@ describe('POST /punishment-schedule', () => {
             stoppagePercentage: null,
             suspendedUntil: null,
           },
-          100
+          '100'
         )
       )
   })

@@ -102,7 +102,7 @@ afterEach(() => {
 describe('GET /damages', () => {
   it('should load the damages page', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfDamages.urls.start(100))
+      .get(adjudicationUrls.detailsOfDamages.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Redecoration')
@@ -112,7 +112,7 @@ describe('GET /damages', () => {
   })
   it('should not have used the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfDamages.urls.start(100))
+      .get(adjudicationUrls.detailsOfDamages.urls.start('100'))
       .expect(200)
       .then(() =>
         expect(damagesSessionService.setAllSessionDamages).toHaveBeenCalledWith(
@@ -129,7 +129,7 @@ describe('GET /damages', () => {
               reporter: 'TESTER_GEN',
             },
           ],
-          100
+          '100'
         )
       )
       .then(() => expect(damagesSessionService.getAllSessionDamages).not.toHaveBeenCalled())
@@ -137,22 +137,22 @@ describe('GET /damages', () => {
   it('should save the damages (even with empty list) if first time calling endpoint', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfDamages.urls.start(101))
+      .get(adjudicationUrls.detailsOfDamages.urls.start('101'))
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfDamages.urls.start(101))
-          .then(() => expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith(101, [], expect.anything()))
+          .post(adjudicationUrls.detailsOfDamages.urls.start('101'))
+          .then(() => expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith('101', [], expect.anything()))
       )
   })
   it('should not save the damages list if this is not the first time calling the endpoint and no changes have been made', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfDamages.urls.start(102))
+      .get(adjudicationUrls.detailsOfDamages.urls.start('102'))
       .expect(200)
       .then(() =>
         agent
-          .post(adjudicationUrls.detailsOfDamages.urls.start(102))
+          .post(adjudicationUrls.detailsOfDamages.urls.start('102'))
           .then(() => expect(placeOnReportService.saveDamageDetails).not.toHaveBeenCalled())
       )
   })

@@ -22,7 +22,7 @@ context('Report has been changed', () => {
       id: 1524493,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
         }),
       },
@@ -37,7 +37,7 @@ context('Report has been changed', () => {
   it('should contain the required page elements', () => {
     cy.visit(
       `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
-        1524493
+        '1524493'
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524493)}`
     )
     Page.verifyOnPage(ConfirmedOnReport)
@@ -50,7 +50,7 @@ context('Report has been changed', () => {
   it('should redirect the user to prisoner report on finish - reviewer', () => {
     cy.visit(
       `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
-        1524493
+        '1524493'
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(1524493)}`
     )
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
@@ -64,7 +64,7 @@ context('Report has been changed', () => {
   it('should redirect the user to prisoner report on finish - reporter', () => {
     cy.visit(
       `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
-        1524493
+        '1524493'
       )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524493)}`
     )
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
@@ -76,7 +76,7 @@ context('Report has been changed', () => {
   })
 
   it('should redirect to the homepage if there is no referrer present', () => {
-    cy.visit(adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(1524493))
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview('1524493'))
     const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
     confirmedOnReportPage.finishLink().should('contain.text', 'Back to homepage')
     confirmedOnReportPage.finishLink().click()

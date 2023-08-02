@@ -23,17 +23,17 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = pageData
 
     const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
-      adjudicationNumber,
+      chargeNumber,
       user
     )
 
     return res.render(`pages/manuallyActivateSuspendedPunishment.njk`, {
-      awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber),
+      awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       punishmentType,
       privilegeType,
@@ -55,7 +55,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = req.body
 
     const reportNo = reportNumber ? Number(reportNumber.trim()) : null
@@ -73,7 +73,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
         reportNumber: reportNo,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(adjudicationNumber, req, punishmentType as PunishmentType)
+    const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, punishmentType as PunishmentType)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
@@ -82,11 +82,11 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
     )
   }
 
-  private getRedirectUrl = (adjudicationNumber: number, req: Request, punishmentType: PunishmentType) => {
+  private getRedirectUrl = (chargeNumber: string, req: Request, punishmentType: PunishmentType) => {
     if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
-      return adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(adjudicationNumber)
+      return adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(chargeNumber)
     }
-    return adjudicationUrls.suspendedPunishmentSchedule.urls.manual(adjudicationNumber)
+    return adjudicationUrls.suspendedPunishmentSchedule.urls.manual(chargeNumber)
   }
 
   validateInputs = (

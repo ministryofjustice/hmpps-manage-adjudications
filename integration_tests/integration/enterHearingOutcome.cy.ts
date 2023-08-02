@@ -37,7 +37,7 @@ context('Enter hearing outcome', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           outcomes: [
             {
@@ -56,7 +56,7 @@ context('Enter hearing outcome', () => {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 101,
+          chargeNumber: '101',
           prisonerNumber: 'G6415GD',
           outcomes: [
             {
@@ -78,7 +78,7 @@ context('Enter hearing outcome', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements - governor hearing', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().should('exist')
       enterHearingOutcomePage.searchButton().should('exist')
@@ -89,7 +89,7 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.errorSummary().should('not.exist')
     })
     it('should contain the required page elements - independent adjudicator hearing', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().should('not.exist')
       enterHearingOutcomePage.inAdName().should('exist')
@@ -100,17 +100,17 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.errorSummary().should('not.exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Submits successfully - gov hearing', () => {
     it('goes to referral reason if police referral selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
       enterHearingOutcomePage.searchButton().click()
@@ -121,12 +121,12 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.chosenGovernorId().contains('JSMITH_GEN')
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=JSMITH_GEN&hearingOutcome=REFER_POLICE')
       })
     })
     it('goes to referral reason if independent adjudicator referral selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
       enterHearingOutcomePage.searchButton().click()
@@ -135,12 +135,12 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.radioButtons().find('input[value="REFER_INAD"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=JSMITH_GEN&hearingOutcome=REFER_INAD')
       })
     })
     it('goes to plea and finding if hearing complete selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
       enterHearingOutcomePage.searchButton().click()
@@ -149,12 +149,12 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.radioButtons().find('input[value="COMPLETE"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingPleaAndFinding.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingPleaAndFinding.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=JSMITH_GEN&hearingOutcome=COMPLETE')
       })
     })
     it('goes to reason for adjournment if adjourned selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
       enterHearingOutcomePage.searchButton().click()
@@ -163,60 +163,60 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingAdjourned.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingAdjourned.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=JSMITH_GEN&hearingOutcome=ADJOURN')
       })
     })
   })
   describe('Submits successfully - independent adjudicator hearing', () => {
     it('goes to referral reason if police referral selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().type('Roxanne Red')
       enterHearingOutcomePage.radioButtons().find('input[value="REFER_POLICE"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start(101))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start('101'))
         expect(loc.search).to.eq('?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE')
       })
     })
     it('goes to referral reason if independent adjudicator referral selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().type('Roxanne Red')
       enterHearingOutcomePage.radioButtons().find('input[value="REFER_INAD"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start(101))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start('101'))
         expect(loc.search).to.eq('?adjudicator=Roxanne%20Red&hearingOutcome=REFER_INAD')
       })
     })
     it('goes to plea and finding if hearing complete selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().type('Roxanne Red')
       enterHearingOutcomePage.radioButtons().find('input[value="COMPLETE"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingPleaAndFinding.urls.start(101))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingPleaAndFinding.urls.start('101'))
         expect(loc.search).to.eq('?adjudicator=Roxanne%20Red&hearingOutcome=COMPLETE')
       })
     })
     it('goes to reason for adjournment if adjourned selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().type('Roxanne Red')
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingAdjourned.urls.start(101))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingAdjourned.urls.start('101'))
         expect(loc.search).to.eq('?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN')
       })
     })
   })
   describe('Validation', () => {
     it('shows correct error message if hearing outcome missing - gov hearing', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
       enterHearingOutcomePage.searchButton().click()
@@ -231,7 +231,7 @@ context('Enter hearing outcome', () => {
         })
     })
     it('shows correct error message if hearing outcome missing - independent adjudicator hearing', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().type('Roxanne Red')
       enterHearingOutcomePage.submitButton().click()
@@ -243,7 +243,7 @@ context('Enter hearing outcome', () => {
         })
     })
     it('shows correct error message if adjudicator name is missing - governor - name not entered and search performed', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
       enterHearingOutcomePage.searchButton().click()
@@ -255,7 +255,7 @@ context('Enter hearing outcome', () => {
         })
     })
     it('shows correct error message if adjudicator name is missing - governor - name not entered', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
       enterHearingOutcomePage.submitButton().click()
@@ -267,7 +267,7 @@ context('Enter hearing outcome', () => {
         })
     })
     it('shows correct error message if adjudicator name is missing - governor - search not performed', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(100))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
@@ -280,7 +280,7 @@ context('Enter hearing outcome', () => {
         })
     })
     it('shows correct error message if adjudicator name is missing - independent adjudicator', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start(101))
+      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
       enterHearingOutcomePage.submitButton().click()

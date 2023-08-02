@@ -23,7 +23,7 @@ context('Incident Statement', () => {
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 3456,
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           locationId: 197682,
           dateTimeOfIncident: '2021-12-09T10:30:00',
@@ -40,7 +40,7 @@ context('Incident Statement', () => {
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 3456,
-          adjudicationNumber: 1524493,
+          chargeNumber: '1524493',
           prisonerNumber: 'G6415GD',
           locationId: 197682,
           dateTimeOfIncident: '2021-12-09T10:30:00',

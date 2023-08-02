@@ -40,7 +40,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+      .get(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -51,7 +51,7 @@ describe('GET', () => {
 describe('GET /', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+      .get(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Check your answers before submitting')
@@ -64,14 +64,14 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=yes`
       )
       .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
           true,
@@ -84,14 +84,14 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
       )
       .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review(100))
+      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
           true,
@@ -103,7 +103,7 @@ describe('POST', () => {
   it('should successfully call the endpoint and redirect - no amount given and caution is no', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
-        adjudicationNumber: 1524493,
+        chargeNumber: '1524493',
         prisonerNumber: 'G6415GD',
         outcomes: [],
         punishments: [],
@@ -112,14 +112,14 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          100
+          '100'
         )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=no`
       )
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.start(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.start('100'))
       .then(() =>
         expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
           false,
@@ -130,9 +130,9 @@ describe('POST', () => {
   })
   it('should not call the endpoint if query parameters are missing, instead redirecting them to enter the hearing outcome page', () => {
     return request(app)
-      .post(adjudicationUrls.hearingsCheckAnswers.urls.start(100))
+      .post(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
       .expect(302)
-      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100))
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start('100'))
       .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

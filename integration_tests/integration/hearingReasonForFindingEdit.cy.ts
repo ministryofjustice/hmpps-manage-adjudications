@@ -40,10 +40,10 @@ context('What is the reason for this finding?', () => {
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubPostCompleteDismissedHearing', {
-      adjudicationNumber: 100,
+      chargeNumber: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 100,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           outcomes: historyWithCompleteAndDismissedFinding,
         }),
@@ -70,7 +70,7 @@ context('What is the reason for this finding?', () => {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '100',
           prisonerNumber: 'G6415GD',
           status: ReportedAdjudicationStatus.DISMISSED,
           hearings: [
@@ -107,7 +107,7 @@ context('What is the reason for this finding?', () => {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 1524493,
+          chargeNumber: '101',
           prisonerNumber: 'G6415GD',
           hearings: [
             testData.singleHearing({
@@ -142,14 +142,14 @@ context('What is the reason for this finding?', () => {
       },
     })
     cy.task('stubAmendHearingOutcome', {
-      adjudicationNumber: 101,
+      chargeNumber: 101,
       status: ReportedAdjudicationStatus.DISMISSED,
       response: {},
     })
   })
   describe('Loads', () => {
     it('should contain the required page elements with reason showing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().should('exist')
       HearingReasonForFindingPage.findingReason().contains('reason details')
@@ -158,7 +158,7 @@ context('What is the reason for this finding?', () => {
       HearingReasonForFindingPage.errorSummary().should('not.exist')
     })
     it('should contain the required page elements with no reason showing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit(101))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit('101'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().should('exist')
       HearingReasonForFindingPage.findingReason().should('have.value', '')
@@ -167,28 +167,28 @@ context('What is the reason for this finding?', () => {
       HearingReasonForFindingPage.errorSummary().should('not.exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })
   describe('Submits successfully', () => {
     it('goes to the hearing details page if data successfully submitted', () => {
-      cy.visit(`${adjudicationUrls.hearingReasonForFinding.urls.edit(101)}`)
+      cy.visit(`${adjudicationUrls.hearingReasonForFinding.urls.edit('101')}`)
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().type('This is the reason for the finding.')
       HearingReasonForFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(101))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('101'))
       })
     })
   })
   describe('Validation', () => {
     it('shows correct error message if reason missing', () => {
-      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
+      cy.visit(adjudicationUrls.hearingReasonForFinding.urls.edit('100'))
       const HearingReasonForFindingPage = Page.verifyOnPage(HearingReasonForFinding)
       HearingReasonForFindingPage.findingReason().clear()
       HearingReasonForFindingPage.submitButton().click()

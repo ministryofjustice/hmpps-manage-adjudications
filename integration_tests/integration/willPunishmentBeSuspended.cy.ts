@@ -19,30 +19,30 @@ context('Will this punishment be suspended?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.submitButton().should('exist')
       willPunishmentBeSuspendedPage.cancelButton().should('exist')
       willPunishmentBeSuspendedPage.suspended().should('exist')
     })
     it('should ask for suspended until date if suspended is yes ', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').check()
       willPunishmentBeSuspendedPage.suspendedUntil().should('exist')
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })
   describe('Validation', () => {
     it('should error when no suspended option selected', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.submitButton().click()
       willPunishmentBeSuspendedPage
@@ -53,7 +53,7 @@ context('Will this punishment be suspended?', () => {
         })
     })
     it('should error when suspended and no date selected', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').check()
       willPunishmentBeSuspendedPage.submitButton().click()
@@ -69,22 +69,22 @@ context('Will this punishment be suspended?', () => {
 
   describe('saves successfully and redirects', () => {
     it(' the page redirects if the user selects no', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.suspended().find('input[value="no"]').check()
       willPunishmentBeSuspendedPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isPunishmentConsecutive.urls.start(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
       })
     })
     it('the page redirects to the award punishments page if the user selects yes', () => {
-      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start(100))
+      cy.visit(adjudicationUrls.isPunishmentSuspended.urls.start('100'))
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
       willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').check()
       forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
       willPunishmentBeSuspendedPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })

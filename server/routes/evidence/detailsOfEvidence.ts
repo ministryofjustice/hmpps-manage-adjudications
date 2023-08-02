@@ -53,29 +53,29 @@ export default class DetailsOfEvidencePage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const evidenceIndexToDelete = Number(req.query.delete) || null
     const evidenceTypeToDelete = (req.query.type as string) || null
     const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
-    const exitButtonHref = this.getExitUrl(req, adjudicationNumber, isSubmittedEdit)
+    const exitButtonHref = this.getExitUrl(req, chargeNumber, isSubmittedEdit)
 
     const addEvidenceUrl = isSubmittedEdit
-      ? `${adjudicationUrls.detailsOfEvidence.urls.add(adjudicationNumber)}?submitted=true`
-      : `${adjudicationUrls.detailsOfEvidence.urls.add(adjudicationNumber)}?submitted=false`
+      ? `${adjudicationUrls.detailsOfEvidence.urls.add(chargeNumber)}?submitted=true`
+      : `${adjudicationUrls.detailsOfEvidence.urls.add(chargeNumber)}?submitted=false`
 
     const redirectAfterRemoveUrl = isSubmittedEdit
-      ? `${adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(adjudicationNumber)}`
-      : `${adjudicationUrls.detailsOfEvidence.urls.modified(adjudicationNumber)}`
+      ? `${adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(chargeNumber)}`
+      : `${adjudicationUrls.detailsOfEvidence.urls.modified(chargeNumber)}`
 
-    const { adjudication, prisoner } = await this.getAdjudicationAndPrisoner(adjudicationNumber, isSubmittedEdit, user)
+    const { adjudication, prisoner } = await this.getAdjudicationAndPrisoner(chargeNumber, isSubmittedEdit, user)
 
-    const evidence = this.getEvidence(req, adjudicationNumber, adjudication)
+    const evidence = this.getEvidence(req, chargeNumber, adjudication)
     const allEvidence = [...evidence.photoVideo, ...evidence.baggedAndTagged]
 
     // If we are not displaying session data then fill in the session data
     if (this.pageOptions.isShowingAPIData()) {
       // Set up session to allow for adding and deleting
-      this.evidenceSessionService.setAllSessionEvidence(req, evidence, adjudicationNumber)
+      this.evidenceSessionService.setAllSessionEvidence(req, evidence, chargeNumber)
     }
 
     if (evidenceIndexToDelete) {
@@ -83,7 +83,7 @@ export default class DetailsOfEvidencePage {
         req,
         evidenceIndexToDelete,
         evidenceTypeToDelete === EvidenceCode.BAGGED_AND_TAGGED,
-        adjudicationNumber
+        chargeNumber
       )
     }
 
@@ -98,7 +98,7 @@ export default class DetailsOfEvidencePage {
 
     return res.render(`pages/detailsOfEvidence`, {
       currentUser: user.username,
-      adjudicationNumber,
+      chargeNumber,
       evidence,
       prisoner,
       redirectAfterRemoveUrl,
@@ -109,10 +109,10 @@ export default class DetailsOfEvidencePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const isSubmittedEdit = this.pageOptions.isSubmittedEdit()
     const draftAdjudicationResult = !isSubmittedEdit
-      ? await this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user)
+      ? await this.placeOnReportService.getDraftAdjudicationDetails(Number(chargeNumber), user)
       : null
 
     const referrer = this.evidenceSessionService.getAndDeleteReferrerOnSession(req)
@@ -120,26 +120,26 @@ export default class DetailsOfEvidencePage {
     // If displaying data on draft, nothing has changed so no save needed - unless it's the first time viewing the page, when we need to record that the page visit
     if (this.pageOptions.isShowingAPIDataAndPageVisited(draftAdjudicationResult?.draftAdjudication.evidenceSaved)) {
       this.evidenceSessionService.deleteReferrerOnSession(req)
-      this.evidenceSessionService.deleteAllSessionEvidence(req, adjudicationNumber)
-      return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
+      this.evidenceSessionService.deleteAllSessionEvidence(req, chargeNumber)
+      return this.redirectToNextPage(res, chargeNumber, isSubmittedEdit, referrer)
     }
 
-    const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, adjudicationNumber)
+    const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, chargeNumber)
 
     // we need to merge the different evidence types back together into one array
     const allEvidence = evidenceDetails ? [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged] : []
 
     if (isSubmittedEdit) {
-      await this.reportedAdjudicationsService.updateEvidenceDetails(adjudicationNumber, allEvidence, user)
+      await this.reportedAdjudicationsService.updateEvidenceDetails(chargeNumber, allEvidence, user)
     } else {
-      await this.placeOnReportService.saveEvidenceDetails(adjudicationNumber, allEvidence, user)
+      await this.placeOnReportService.saveEvidenceDetails(chargeNumber, allEvidence, user)
     }
-    return this.redirectToNextPage(res, adjudicationNumber, isSubmittedEdit, referrer)
+    return this.redirectToNextPage(res, chargeNumber, isSubmittedEdit, referrer)
   }
 
-  getEvidence = (req: Request, adjudicationNumber: number, adjudication: DraftAdjudication | ReportedAdjudication) => {
+  getEvidence = (req: Request, chargeNumber: string, adjudication: DraftAdjudication | ReportedAdjudication) => {
     if (this.pageOptions.isShowingSessionData()) {
-      return this.evidenceSessionService.getAllSessionEvidence(req, adjudicationNumber)
+      return this.evidenceSessionService.getAllSessionEvidence(req, chargeNumber)
     }
 
     const photoVideo = getEvidenceCategory(adjudication.evidence, false)
@@ -151,38 +151,37 @@ export default class DetailsOfEvidencePage {
     }
   }
 
-  getAdjudicationAndPrisoner = async (adjudicationNumber: number, isSubmittedEdit: boolean, user: User) => {
+  getAdjudicationAndPrisoner = async (chargeNumber: string, isSubmittedEdit: boolean, user: User) => {
     if (!isSubmittedEdit) {
+      const chargeNo = Number(chargeNumber)
       const [draftAdjudicationResult, prisoner] = await Promise.all([
-        this.placeOnReportService.getDraftAdjudicationDetails(adjudicationNumber, user),
-        this.placeOnReportService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user),
+        this.placeOnReportService.getDraftAdjudicationDetails(chargeNo, user),
+        this.placeOnReportService.getPrisonerDetailsFromAdjNumber(chargeNo, user),
       ])
       const { draftAdjudication } = draftAdjudicationResult
       return { adjudication: draftAdjudication, prisoner }
     }
     const [reportedAdjudicationResult, prisoner] = await Promise.all([
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(adjudicationNumber, user),
-      this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(adjudicationNumber, user),
+      this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user),
+      this.reportedAdjudicationsService.getPrisonerDetailsFromAdjNumber(chargeNumber, user),
     ])
     const { reportedAdjudication } = reportedAdjudicationResult
     return { adjudication: reportedAdjudication, prisoner }
   }
 
-  getExitUrl = (req: Request, adjudicationNumber: number, isSubmittedEdit: boolean) => {
-    const taskListUrl = adjudicationUrls.taskList.urls.start(adjudicationNumber)
+  getExitUrl = (req: Request, chargeNumber: string, isSubmittedEdit: boolean) => {
+    const taskListUrl = adjudicationUrls.taskList.urls.start(chargeNumber)
     const prisonerReportUrl = req.query.referrer as string
     if (this.pageOptions.displayAPIDataSubmitted() && prisonerReportUrl)
-      this.evidenceSessionService.setReferrerOnSession(req, prisonerReportUrl, adjudicationNumber)
+      this.evidenceSessionService.setReferrerOnSession(req, prisonerReportUrl, chargeNumber)
     return isSubmittedEdit ? this.evidenceSessionService.getReferrerFromSession(req) : taskListUrl
   }
 
-  redirectToNextPage = (res: Response, adjudicationNumber: number, isSubmittedEdit: boolean, referrer: string) => {
+  redirectToNextPage = (res: Response, chargeNumber: string, isSubmittedEdit: boolean, referrer: string) => {
     if (isSubmittedEdit)
       return res.redirect(
-        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
-          adjudicationNumber
-        )}?referrer=${referrer}`
+        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(chargeNumber)}?referrer=${referrer}`
       )
-    return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.start(adjudicationNumber))
+    return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.start(chargeNumber))
   }
 }

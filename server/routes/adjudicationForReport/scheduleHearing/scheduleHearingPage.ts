@@ -24,7 +24,7 @@ type SubmittedFormData = InitialFormData
 
 type DisplayDataFromApis = {
   possibleLocations: PrisonLocation[]
-  adjudicationNumber: number
+  chargeNumber: string
 }
 
 type PageData = {
@@ -67,24 +67,23 @@ export default class scheduleHearingRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const hearingId = Number(req.params.hearingId) // Only present if we're on the edit page
 
     let readApiHearingDetails: HearingDetails = null
     if (this.pageOptions.isEdit()) {
-      readApiHearingDetails = await this.readFromApi(adjudicationNumber, hearingId, user as User)
+      readApiHearingDetails = await this.readFromApi(chargeNumber, hearingId, user as User)
     }
-    const pageData = await this.getPageDataOnGet(adjudicationNumber, readApiHearingDetails, user)
+    const pageData = await this.getPageDataOnGet(chargeNumber, readApiHearingDetails, user)
     renderData(res, pageData, null)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const postValues = extractValuesFromPost(req)
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const hearingId = Number(req.params.hearingId) // Only present if we're on the edit page
-    const { dateTimeOfHearing } = await this.reportedAdjudicationsService.getLatestHearing(adjudicationNumber, user)
-
+    const { dateTimeOfHearing } = await this.reportedAdjudicationsService.getLatestHearing(chargeNumber, user)
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
       locationId: postValues.hearingDetails.locationId,
@@ -92,15 +91,15 @@ export default class scheduleHearingRoutes {
       latestExistingHearing: dateTimeOfHearing,
     })
     if (validationError) {
-      const pageData = await this.getPageDataOnGet(adjudicationNumber, postValues.hearingDetails, user)
+      const pageData = await this.getPageDataOnGet(chargeNumber, postValues.hearingDetails, user)
       return renderData(res, pageData, validationError)
     }
     const hearingDetailsToSave = postValues.hearingDetails
     try {
-      const isYOI = await this.getYoiInfo(adjudicationNumber, user)
+      const isYOI = await this.getYoiInfo(chargeNumber, user)
       if (this.pageOptions.isEdit()) {
         await this.reportedAdjudicationsService.rescheduleHearing(
-          adjudicationNumber,
+          chargeNumber,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
@@ -108,7 +107,7 @@ export default class scheduleHearingRoutes {
         )
       } else {
         await this.reportedAdjudicationsService.scheduleHearing(
-          adjudicationNumber,
+          chargeNumber,
           hearingDetailsToSave.locationId,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
@@ -116,24 +115,21 @@ export default class scheduleHearingRoutes {
         )
       }
 
-      return res.redirect(adjudicationUrls.hearingDetails.urls.review(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
       if (this.pageOptions.isEdit()) {
         logger.error(`Failed to amend hearing: ${postError}`)
-        res.locals.redirectUrl = adjudicationUrls.scheduleHearing.urls.edit(adjudicationNumber, hearingId)
+        res.locals.redirectUrl = adjudicationUrls.scheduleHearing.urls.edit(chargeNumber, hearingId)
       } else {
         logger.error(`Failed to schedule hearing: ${postError}`)
-        res.locals.redirectUrl = adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber)
+        res.locals.redirectUrl = adjudicationUrls.scheduleHearing.urls.start(chargeNumber)
       }
       throw postError
     }
   }
 
-  readFromApi = async (adjudicationNumber: number, hearingId: number, user: User): Promise<HearingDetails> => {
-    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      adjudicationNumber,
-      user
-    )
+  readFromApi = async (chargeNumber: string, hearingId: number, user: User): Promise<HearingDetails> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
     return {
@@ -144,32 +140,25 @@ export default class scheduleHearingRoutes {
     }
   }
 
-  getPageDataOnGet = async (
-    adjudicationNumber: number,
-    hearingDetails: HearingDetails,
-    user: User
-  ): Promise<PageData> => {
+  getPageDataOnGet = async (chargeNumber: string, hearingDetails: HearingDetails, user: User): Promise<PageData> => {
     return {
-      displayData: await this.getDisplayData(adjudicationNumber, user),
+      displayData: await this.getDisplayData(chargeNumber, user),
       formData: {
         hearingDetails,
       },
     }
   }
 
-  getDisplayData = async (adjudicationNumber: number, user: User): Promise<DisplayDataFromApis> => {
+  getDisplayData = async (chargeNumber: string, user: User): Promise<DisplayDataFromApis> => {
     const possibleLocations = await this.locationService.getHearingLocations(user.activeCaseLoadId, user)
     return {
       possibleLocations,
-      adjudicationNumber,
+      chargeNumber,
     }
   }
 
-  getYoiInfo = async (adjudicationNumber: number, user: User): Promise<boolean> => {
-    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      adjudicationNumber,
-      user
-    )
+  getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
     const { reportedAdjudication } = adjudication
     return reportedAdjudication.isYouthOffender
   }
@@ -184,7 +173,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError[]) => {
 
   return res.render(`pages/adjudicationForReport/scheduleHearing`, {
     errors: error || [],
-    cancelHref: adjudicationUrls.hearingDetails.urls.review(pageData.displayData.adjudicationNumber),
+    cancelHref: adjudicationUrls.hearingDetails.urls.review(pageData.displayData.chargeNumber),
     locations: pageData.displayData.possibleLocations,
     data,
   })

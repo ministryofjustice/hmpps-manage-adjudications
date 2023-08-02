@@ -38,11 +38,11 @@ export default class PunishmentCommentPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { error, punishmentComment } = pageData
 
     return res.render(`pages/punishmentComment.njk`, {
-      cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
       errors: error ? [error] : [],
       punishmentComment,
     })
@@ -57,14 +57,14 @@ export default class PunishmentCommentPage {
 
     if (this.pageOptions.isEdit()) {
       const { user } = res.locals
-      const adjudicationNumber = Number(req.params.adjudicationNumber)
-      const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(adjudicationNumber, user)
+      const { chargeNumber } = req.params
+      const punishmentComments = await this.punishmentsService.getPunishmentCommentsFromServer(chargeNumber, user)
 
       const id = Number(req.params.id)
       const punishmentComment = punishmentComments.find(comment => comment.id === id)
       if (!punishmentComment) {
         return res.render('pages/notFound.njk', {
-          url: adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber),
+          url: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
         })
       }
 
@@ -76,7 +76,7 @@ export default class PunishmentCommentPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { punishmentComment } = req.body
 
     const error = validateForm({ punishmentComment })
@@ -87,12 +87,12 @@ export default class PunishmentCommentPage {
 
     if (this.pageOptions.isEdit()) {
       const id = Number(req.params.id)
-      await this.punishmentsService.editPunishmentComment(adjudicationNumber, id, punishmentComment, user)
+      await this.punishmentsService.editPunishmentComment(chargeNumber, id, punishmentComment, user)
     } else {
-      await this.punishmentsService.createPunishmentComment(adjudicationNumber, punishmentComment, user)
+      await this.punishmentsService.createPunishmentComment(chargeNumber, punishmentComment, user)
     }
 
-    const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(adjudicationNumber)
+    const redirectUrlPrefix = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,

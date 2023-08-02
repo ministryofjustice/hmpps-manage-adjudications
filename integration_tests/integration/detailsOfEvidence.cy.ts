@@ -38,10 +38,10 @@ const draftAdjudication = (id: number, evidence: EvidenceDetails[]) => {
   }
 }
 
-const reportedAdjudication = (adjudicationNumber: number, evidence: EvidenceDetails[]) => {
+const reportedAdjudication = (chargeNumber: string, evidence: EvidenceDetails[]) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
-      adjudicationNumber,
+      chargeNumber,
       evidence,
       prisonerNumber: 'G6415GD',
     }),
@@ -78,20 +78,20 @@ context('Details of evidence', () => {
       response: prisonerDetails,
     })
     cy.task('stubSaveEvidenceDetails', {
-      adjudicationNumber: 201,
+      chargeNumber: '201',
       response: draftAdjudication(201, evidenceList),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
-      response: reportedAdjudication(12345, null),
+      response: reportedAdjudication('12345', null),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 23456,
-      response: reportedAdjudication(23456, evidenceList),
+      response: reportedAdjudication('23456', evidenceList),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 34567,
-      response: reportedAdjudication(34567, evidenceListMultiUser),
+      response: reportedAdjudication('34567', evidenceListMultiUser),
     })
   })
   it('should show the evidence page with no evidence', () => {

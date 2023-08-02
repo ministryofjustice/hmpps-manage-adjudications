@@ -22,6 +22,7 @@ beforeEach(() => {
     suspendedPunishments: [
       {
         reportNumber: 102,
+        chargeNumber: '102',
         punishment: {
           id: 72,
           type: PunishmentType.CONFINEMENT,
@@ -33,6 +34,7 @@ beforeEach(() => {
       },
       {
         reportNumber: 103,
+        chargeNumber: '103',
         punishment: {
           id: 73,
           type: PunishmentType.ADDITIONAL_DAYS,
@@ -44,6 +46,7 @@ beforeEach(() => {
       },
       {
         reportNumber: 104,
+        chargeNumber: '104',
         punishment: {
           id: 74,
           type: PunishmentType.PROSPECTIVE_DAYS,
@@ -68,7 +71,7 @@ describe('GET suspended punishment schedule', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?days=10`)
+      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing('100')}?days=10`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -79,7 +82,7 @@ describe('GET suspended punishment schedule', () => {
 describe('GET suspended punishment schedule', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(100)}?days=10`)
+      .get(`${adjudicationUrls.suspendedPunishmentSchedule.urls.existing('100')}?days=10`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Punishment schedule')
@@ -92,7 +95,7 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
-          100
+          '100'
         )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`
       )
       .send({
@@ -101,7 +104,7 @@ describe('POST suspended punishment schedule', () => {
         endDate: '13/4/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -114,7 +117,7 @@ describe('POST suspended punishment schedule', () => {
             endDate: '2023-04-13',
             activatedFrom: 102,
           },
-          100
+          '100'
         )
       )
   })
@@ -122,14 +125,14 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&punishmentNumberToActivate=73`
       )
       .send({
         days: 5,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -140,7 +143,7 @@ describe('POST suspended punishment schedule', () => {
             days: 5,
             activatedFrom: 103,
           },
-          100
+          '100'
         )
       )
   })
@@ -148,14 +151,14 @@ describe('POST suspended punishment schedule', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
-          100
+          '100'
         )}?punishmentType=PROSPECTIVE_DAYS&punishmentNumberToActivate=74`
       )
       .send({
         days: 3,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -166,7 +169,7 @@ describe('POST suspended punishment schedule', () => {
             days: 3,
             activatedFrom: 104,
           },
-          100
+          '100'
         )
       )
   })

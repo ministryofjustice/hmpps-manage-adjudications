@@ -8,9 +8,9 @@ export default class AcceptedReportConfirmationRoute {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const adjudicationDetails = await this.reportedAdjudicationsService.getAcceptedReportConfirmationDetails(
-      adjudicationNumber,
+      chargeNumber,
       user
     )
 
@@ -20,8 +20,8 @@ export default class AcceptedReportConfirmationRoute {
       bannerText: `${possessive(adjudicationDetails.prisonerFullName)} report has been accepted`,
       prisonerName: adjudicationDetails.prisonerFullName,
       showScheduleHearingButton: adjudicationDetails.transferableActionsAllowed,
-      scheduleHearingLink: adjudicationUrls.scheduleHearing.urls.start(adjudicationNumber),
-      viewReportLink: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
+      scheduleHearingLink: adjudicationUrls.scheduleHearing.urls.start(chargeNumber),
+      viewReportLink: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
       allCompletedReportsLink: adjudicationUrls.allCompletedReports.urls.start(),
     })
   }

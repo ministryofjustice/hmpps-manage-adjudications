@@ -34,7 +34,7 @@ describe('GET /hearing-adjourned', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingAdjourned.urls.start(100))
+      .get(adjudicationUrls.hearingAdjourned.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -45,7 +45,7 @@ describe('GET /hearing-adjourned', () => {
 describe('GET /hearing-adjourned', () => {
   it('should load the `Hearing Adjourned` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingAdjourned.urls.start(100))
+      .get(adjudicationUrls.hearingAdjourned.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Adjourn the hearing for another reason')
@@ -56,17 +56,17 @@ describe('GET /hearing-adjourned', () => {
 describe('POST /hearing-adjourned', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingAdjourned.urls.start(100)}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`)
+      .post(`${adjudicationUrls.hearingAdjourned.urls.start('100')}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`)
       .send({
         adjournReason: HearingOutcomeAdjournReason.EVIDENCE,
         adjournDetails: '123',
         adjournPlea: HearingOutcomePlea.NOT_ASKED,
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() =>
         expect(hearingsService.createAdjourn).toHaveBeenCalledWith(
-          100,
+          '100',
           HearingOutcomeCode.ADJOURN,
           'Roxanne Red',
           '123',

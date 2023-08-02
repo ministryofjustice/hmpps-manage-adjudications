@@ -46,7 +46,7 @@ afterEach(() => {
 describe('GET /print-report', () => {
   it('should load the print page', () => {
     return request(app)
-      .get(adjudicationUrls.printReport.urls.start(123))
+      .get(adjudicationUrls.printReport.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Print this report')
@@ -65,7 +65,7 @@ describe('GET /print-report', () => {
       prisonerNeurodiversities: null,
     })
     return request(app)
-      .get(adjudicationUrls.printReport.urls.start(123))
+      .get(adjudicationUrls.printReport.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('They have recorded disabilities')
@@ -78,7 +78,7 @@ describe('GET /print-report', () => {
       prisonerPreferredNonEnglishLanguage: null,
     })
     return request(app)
-      .get(adjudicationUrls.printReport.urls.start(123))
+      .get(adjudicationUrls.printReport.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).not.toContain('John Smith’s preferred language is')
@@ -92,7 +92,7 @@ describe('GET /print-report', () => {
       prisonerOtherLanguages: null,
     })
     return request(app)
-      .get(adjudicationUrls.printReport.urls.start(123))
+      .get(adjudicationUrls.printReport.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('John Smith’s preferred language is')
@@ -112,7 +112,7 @@ describe('GET /print-report', () => {
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getConfirmationDetails.mockRejectedValue(new Error('error message content'))
     return request(app)
-      .get(adjudicationUrls.printReport.urls.start(123))
+      .get(adjudicationUrls.printReport.urls.start('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Error: error message content')

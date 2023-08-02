@@ -19,7 +19,7 @@ context('Referral saved', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.hearingReferralConfirmation.urls.start(100))
+      cy.visit(adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       const hearingReferralConfirmationPage = Page.verifyOnPage(HearingReferralConfirmation)
       hearingReferralConfirmationPage
         .panelSubText()
@@ -39,11 +39,11 @@ context('Referral saved', () => {
         })
     })
     it('goes to hearing details page when link is clicked', () => {
-      cy.visit(adjudicationUrls.hearingReferralConfirmation.urls.start(100))
+      cy.visit(adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       const hearingReferralConfirmationPage = Page.verifyOnPage(HearingReferralConfirmation)
       hearingReferralConfirmationPage.returnLink().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
   })

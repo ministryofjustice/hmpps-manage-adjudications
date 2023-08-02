@@ -51,7 +51,7 @@ type RequestValues = {
 type IncidentDetails = {
   prisonerNumber: string
   currentIncidentRoleSelection: IncidentRole
-  reportedAdjudicationNumber?: number
+  chargeNumber?: string
 }
 
 type TemporarilySavedData = {
@@ -185,7 +185,7 @@ export default class IncidentRolePage {
       prisonerReportUrl = requestValues.originalPageReferrerUrl
     }
     if (this.pageOptions.isAloEdit()) {
-      prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(data.incidentDetails.reportedAdjudicationNumber)
+      prisonerReportUrl = adjudicationUrls.prisonerReport.urls.review(data.incidentDetails.chargeNumber)
     }
     exitButtonData = {
       prisonerNumber,
@@ -259,7 +259,7 @@ export default class IncidentRolePage {
 
 const extractValuesFromRequest = (req: Request): RequestValues => {
   const values = {
-    draftId: getDraftIdFromString(req.params.adjudicationNumber),
+    draftId: getDraftIdFromString(req.params.draftId),
     selectedPerson: JSON.stringify(req.query.selectedPerson)?.replace(/"/g, ''),
     deleteWanted: req.query.personDeleted as string,
     originalPageReferrerUrl: req.query.referrer as string,
@@ -275,7 +275,7 @@ const extractIncidentDetails = (draftAdjudicationResult: DraftAdjudicationResult
   return {
     prisonerNumber: draftAdjudicationResult.draftAdjudication.prisonerNumber,
     currentIncidentRoleSelection: incidentRoleCode,
-    reportedAdjudicationNumber: draftAdjudicationResult.draftAdjudication.adjudicationNumber || null,
+    chargeNumber: draftAdjudicationResult.draftAdjudication.chargeNumber || null,
   }
 }
 
@@ -302,7 +302,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
   }
   const values = {
     prisonerNumber: req.body.prisonerNumber,
-    draftId: getDraftIdFromString(req.params.adjudicationNumber),
+    draftId: getDraftIdFromString(req.params.draftId),
     searchForPersonRequest: req.body.search,
     deletePersonRequest: req.body.deleteAssociatedPrisoner,
     incidentDetails: {
@@ -395,20 +395,20 @@ const getTaskListUrl = (draftId: number) => {
 
 const redirectToOffenceSelection = (
   res: Response,
-  draftId: number,
+  chargeNumber: number,
   incidentRoleCode: IncidentRole,
   pageOptions: PageOptions
 ) => {
   if (pageOptions.isAloEdit()) {
     return res.redirect(
       adjudicationUrls.offenceCodeSelection.urls.aloEditStart(
-        draftId,
+        chargeNumber,
         radioSelectionCodeFromIncidentRole(incidentRoleCode)
       )
     )
   }
   return res.redirect(
-    adjudicationUrls.offenceCodeSelection.urls.start(draftId, radioSelectionCodeFromIncidentRole(incidentRoleCode))
+    adjudicationUrls.offenceCodeSelection.urls.start(chargeNumber, radioSelectionCodeFromIncidentRole(incidentRoleCode))
   )
 }
 

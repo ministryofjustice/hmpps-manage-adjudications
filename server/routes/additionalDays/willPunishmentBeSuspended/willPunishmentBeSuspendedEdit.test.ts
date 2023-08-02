@@ -38,7 +38,7 @@ describe('GET will this punishment be suspended page', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentSuspended.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.isPunishmentSuspended.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -49,7 +49,7 @@ describe('GET will this punishment be suspended page', () => {
 describe('GET punishment-suspended page', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentSuspended.urls.edit(100, uuidv4()))
+      .get(adjudicationUrls.isPunishmentSuspended.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Will this punishment be suspended?')
@@ -62,7 +62,7 @@ describe('POST punishment-suspended page', () => {
     return request(app)
       .post(
         `${adjudicationUrls.isPunishmentSuspended.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
       )
@@ -70,7 +70,7 @@ describe('POST punishment-suspended page', () => {
         suspended: 'yes',
         suspendedUntil: '14/4/2024',
       })
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified(100))
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
@@ -82,7 +82,7 @@ describe('POST punishment-suspended page', () => {
             stoppagePercentage: null,
             suspendedUntil: '2024-04-14',
           },
-          100,
+          '100',
           'XYZ'
         )
       )
@@ -91,7 +91,7 @@ describe('POST punishment-suspended page', () => {
     return request(app)
       .post(
         `${adjudicationUrls.isPunishmentSuspended.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6`
       )
@@ -102,7 +102,7 @@ describe('POST punishment-suspended page', () => {
       .expect(
         'Location',
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
-          100,
+          '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6&suspendedUntil=`
       )

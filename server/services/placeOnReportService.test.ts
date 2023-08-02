@@ -75,7 +75,7 @@ describe('placeOnReportService', () => {
       startNewDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 1,
-          adjudicationNumber: 4567123,
+          chargeNumber: '4567123',
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
         }),
@@ -101,7 +101,7 @@ describe('placeOnReportService', () => {
       expect(result).toEqual({
         draftAdjudication: testData.draftAdjudication({
           id: 1,
-          adjudicationNumber: 4567123,
+          chargeNumber: '4567123',
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
         }),
@@ -195,7 +195,7 @@ describe('placeOnReportService', () => {
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
         isYouthOffender: false,
-        adjudicationNumber: null as never,
+        chargeNumber: null as never,
       }
       expect(result).toEqual(expectedResult)
     })
@@ -203,7 +203,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,
-          adjudicationNumber: 123456,
+          chargeNumber: '123456',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:21:00',
@@ -248,7 +248,7 @@ describe('placeOnReportService', () => {
           },
         ],
         statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
-        adjudicationNumber: 123456,
+        chargeNumber: '123456',
         isYouthOffender: false,
       }
       expect(result).toEqual(expectedResult)
@@ -378,14 +378,14 @@ describe('placeOnReportService', () => {
     it('calls api and returns the reported adjudication number', async () => {
       submitCompleteDraftAdjudication.mockResolvedValue(
         testData.reportedAdjudication({
-          adjudicationNumber: 234,
+          chargeNumber: '234',
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
           prisonerNumber: 'G2996UX',
         })
       )
 
       const response = await service.completeDraftAdjudication(4, user)
-      expect(response).toStrictEqual(234)
+      expect(response).toStrictEqual('234')
     })
   })
   describe('getDraftIncidentDetailsForEditing', () => {
@@ -394,7 +394,7 @@ describe('placeOnReportService', () => {
         dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
         dateTimeOfDiscovery: { date: '09/11/2021', time: { hour: '10', minute: '00' } },
         locationId: 1234,
-        adjudicationNumber: null as never,
+        chargeNumber: null as never,
         startedByUserId: 'USER1',
       }
 
@@ -408,7 +408,7 @@ describe('placeOnReportService', () => {
         }),
       })
 
-      const response = await service.getDraftIncidentDetailsForEditing(4, user)
+      const response = await service.getDraftIncidentDetailsForEditing('4', user)
       expect(response).toEqual(expectedResult)
     })
   })
@@ -416,7 +416,7 @@ describe('placeOnReportService', () => {
     it('creates the edited incident details object and sends', async () => {
       const expectedResult = testData.draftAdjudication({
         id: 4,
-        adjudicationNumber: 234,
+        chargeNumber: '234',
         prisonerNumber: 'G2996UX',
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
@@ -879,7 +879,7 @@ describe('placeOnReportService', () => {
   describe('updateIncidentRole', () => {
     it('creates the incident role object and sends', async () => {
       const expectedResult = testData.reportedAdjudication({
-        adjudicationNumber: 234,
+        chargeNumber: '234',
         prisonerNumber: 'G2996UX',
         incidentRole: {
           associatedPrisonersNumber: 'G2996UX',
@@ -900,7 +900,7 @@ describe('placeOnReportService', () => {
   describe('addDraftYouthOffenderStatus', () => {
     it('creates the correct data payload if the prisoner is YOI and sends to the draft adjudication database', async () => {
       const expectedResult = testData.reportedAdjudication({
-        adjudicationNumber: 2483,
+        chargeNumber: '2483',
         prisonerNumber: 'G6123VU',
       })
 
@@ -914,7 +914,7 @@ describe('placeOnReportService', () => {
     })
     it('creates the correct data payload if the prisoner is an adult and sends to the draft adjudication database', async () => {
       const expectedResult = testData.reportedAdjudication({
-        adjudicationNumber: 2483,
+        chargeNumber: '2483',
         prisonerNumber: 'G6123VU',
       })
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)

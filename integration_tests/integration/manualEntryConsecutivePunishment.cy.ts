@@ -25,7 +25,7 @@ context('Which charge will it be consecutive to?', () => {
       response: {
         reportedAdjudication: testData.reportedAdjudication({
           prisonerNumber: 'G6123VU',
-          adjudicationNumber: 100,
+          chargeNumber: '100',
         }),
       },
     })
@@ -33,24 +33,24 @@ context('Which charge will it be consecutive to?', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100))
+      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.submitButton().should('exist')
       manualEntryConsecutivePunishmentPage.cancelButton().should('exist')
       manualEntryConsecutivePunishmentPage.chargeNumber().should('exist')
     })
     it('cancel link goes back to punishments page', () => {
-      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100))
+      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.cancelButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })
   describe('Validation', () => {
     it('should error when no charge number is entered', () => {
-      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100))
+      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.submitButton().click()
 
@@ -62,7 +62,7 @@ context('Which charge will it be consecutive to?', () => {
         })
     })
     it('should error when input is not numerical', () => {
-      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100))
+      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.chargeNumber().type('lssdsds')
       manualEntryConsecutivePunishmentPage.submitButton().click()
@@ -75,7 +75,7 @@ context('Which charge will it be consecutive to?', () => {
         })
     })
     it('should error when input is not 7 numbers long', () => {
-      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(100))
+      cy.visit(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.chargeNumber().type('1234')
       manualEntryConsecutivePunishmentPage.submitButton().click()
@@ -93,14 +93,14 @@ context('Which charge will it be consecutive to?', () => {
     it('should redirect when days are entered correctly', () => {
       cy.visit(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
-          100
+          '100'
         )}?punishmentType=ADDITIONAL_DAYS&days=3`
       )
       const manualEntryConsecutivePunishmentPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentPage)
       manualEntryConsecutivePunishmentPage.chargeNumber().type('1234567')
       manualEntryConsecutivePunishmentPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified(100))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })

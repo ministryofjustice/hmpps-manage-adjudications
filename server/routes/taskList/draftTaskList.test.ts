@@ -43,7 +43,7 @@ describe('GET /place-the-prisoner-on-report', () => {
   })
   it('should load the continue report page', () => {
     return request(app)
-      .get(adjudicationUrls.taskList.urls.start(3456))
+      .get(adjudicationUrls.taskList.urls.start('3456'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Incident details')

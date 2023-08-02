@@ -33,7 +33,7 @@ describe('GET /not-proceed', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100))
+      .get(adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -44,7 +44,7 @@ describe('GET /not-proceed', () => {
 describe('GET /not-proceed', () => {
   it('should load the `Not proceed` page', () => {
     return request(app)
-      .get(adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100))
+      .get(adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the reason for not proceeding?')
@@ -55,18 +55,18 @@ describe('GET /not-proceed', () => {
 describe('POST /not-proceed', () => {
   it('should redirect back to the enter hearing outcome page if the adjudicator and plea are missing from the query', () => {
     return request(app)
-      .post(adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100))
+      .post(adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100'))
       .send({
         notProceedReason: NotProceedReason.NOT_FAIR,
         notProceedDetails: 'details',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start(100))
+      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start('100'))
   })
   it('should call the correct endpoint (createNotProceedHearingOutcome) and redirect', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100)}?adjudicator=Rod%20Red&plea=UNFIT`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=UNFIT`
       )
       .send({
         notProceedReason: NotProceedReason.NOT_FAIR,
@@ -74,7 +74,7 @@ describe('POST /not-proceed', () => {
       })
       .then(() =>
         expect(hearingsService.createNotProceedHearingOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'Rod Red',
           HearingOutcomePlea.UNFIT,
           NotProceedReason.NOT_FAIR,
@@ -86,7 +86,7 @@ describe('POST /not-proceed', () => {
   it('should not call the createNotProceed endpoint (for referrals and not proceed without hearing)', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(100)}?adjudicator=Rod%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=GUILTY`
       )
       .send({
         notProceedReason: NotProceedReason.NOT_FAIR,

@@ -35,7 +35,7 @@ context('Existing draft adjudication', () => {
       }),
     })
     cy.task('stubSaveYouthOffenderStatus', {
-      adjudicationNumber: '3456',
+      id: 3456,
       response: {
         draftAdjudication: draftAdjudicationForCommittedYouthOffences,
       },

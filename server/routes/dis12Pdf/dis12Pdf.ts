@@ -12,13 +12,13 @@ export default class AdjudicationPdf {
   ) {}
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
-    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(adjudicationNumber, user)
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
 
     const { reportedAdjudication, associatedPrisoner, prisoner } =
-      await this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user)
+      await this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user)
     const offences = await this.decisionTreeService.getAdjudicationOffences(
       reportedAdjudication.offenceDetails,
       prisoner,
@@ -29,7 +29,7 @@ export default class AdjudicationPdf {
     )
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
-      adjudicationNumber,
+      chargeNumber,
       adjudicationDetails,
       offences
     )
@@ -37,11 +37,11 @@ export default class AdjudicationPdf {
       `pages/noticeOfBeingPlacedOnReport`,
       { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
       `pages/noticeOfBeingPlacedOnReportHeader`,
-      { adjudicationNumber },
+      { chargeNumber },
       `pages/noticeOfBeingPlacedOnReportFooter`,
       {},
       {
-        filename: `adjudication-report-${adjudicationNumber}`,
+        filename: `adjudication-report-${chargeNumber}`,
         pdfMargins,
       }
     )

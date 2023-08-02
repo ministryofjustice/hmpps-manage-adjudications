@@ -13,7 +13,7 @@ export default class ReviewerEditOffenceWarningRoute {
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { user } = res.locals
 
     const userRoles = await this.userService.getUserRoles(user.token)
@@ -22,9 +22,9 @@ export default class ReviewerEditOffenceWarningRoute {
     }
 
     const [newDraftAdjudicationId, reportedAdjudicationResult, incidentData] = await Promise.all([
-      this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, adjudicationNumber),
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(adjudicationNumber, user),
-      this.decisionTreeService.reportedAdjudicationIncidentData(adjudicationNumber, user),
+      this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, chargeNumber),
+      this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user),
+      this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user),
     ])
 
     const { reportedAdjudication } = reportedAdjudicationResult
@@ -43,7 +43,7 @@ export default class ReviewerEditOffenceWarningRoute {
       offence,
       isYouthOffender: reportedAdjudication.isYouthOffender,
       nextPageHref: adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(newDraftAdjudicationId),
-      cancelHref: adjudicationUrls.prisonerReport.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
     })
   }
 }

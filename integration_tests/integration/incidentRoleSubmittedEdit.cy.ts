@@ -23,7 +23,7 @@ context('Incident role (edit after completion of report)', () => {
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 34,
-          adjudicationNumber: 1524455,
+          chargeNumber: '1524455',
           prisonerNumber: 'G6415GD',
           incidentRole: {
             associatedPrisonersNumber: 'T3356FU',
@@ -37,7 +37,7 @@ context('Incident role (edit after completion of report)', () => {
       response: {
         draftAdjudication: testData.draftAdjudication({
           id: 34,
-          adjudicationNumber: 1524455,
+          chargeNumber: '1524455',
           prisonerNumber: 'G6415GD',
           incidentRole: {
             roleCode: '25a',

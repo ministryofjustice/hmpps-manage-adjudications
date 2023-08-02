@@ -46,7 +46,7 @@ describe('GET /is-caution', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isThisACaution.urls.edit(100))
+      .get(adjudicationUrls.isThisACaution.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -57,7 +57,7 @@ describe('GET /is-caution', () => {
 describe('GET /is-caution', () => {
   it('should load the `is caution` page', () => {
     return request(app)
-      .get(adjudicationUrls.isThisACaution.urls.edit(100))
+      .get(adjudicationUrls.isThisACaution.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Is the punishment a caution?')
@@ -68,26 +68,26 @@ describe('GET /is-caution', () => {
 describe('POST /is-caution', () => {
   it('should successfully call the endpoint and redirect if answer is no', () => {
     return request(app)
-      .post(`${adjudicationUrls.isThisACaution.urls.edit(100)}`)
+      .post(`${adjudicationUrls.isThisACaution.urls.edit('100')}`)
       .send({
         caution: 'no',
       })
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=&damagesOwed=&caution=no`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=&amount=&plea=&damagesOwed=&caution=no`
       )
   })
   it('should not call the endpoint and redirect to the check answers page if answer is yes', () => {
     return request(app)
-      .post(`${adjudicationUrls.isThisACaution.urls.edit(100)}`)
+      .post(`${adjudicationUrls.isThisACaution.urls.edit('100')}`)
       .send({
         caution: 'yes',
       })
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(100)}?adjudicator=&amount=&plea=&damagesOwed=&caution=yes`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=&amount=&plea=&damagesOwed=&caution=yes`
       )
   })
 })

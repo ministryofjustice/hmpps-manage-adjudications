@@ -43,7 +43,7 @@ const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSumm
 
 const reportedAdj = {
   reportedAdjudication: testData.reportedAdjudication({
-    adjudicationNumber: 100,
+    chargeNumber: '100',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     dateTimeOfIncident: '2022-12-09T10:30:00',
     incidentRole: {
@@ -112,7 +112,7 @@ describe('GET - not reviewer', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(`${adjudicationUrls.reviewerEditOffenceWarning.urls.edit(100)}`)
+      .get(`${adjudicationUrls.reviewerEditOffenceWarning.urls.edit('100')}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -123,7 +123,7 @@ describe('GET - not reviewer', () => {
 describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.reviewerEditOffenceWarning.urls.edit(100))
+      .get(adjudicationUrls.reviewerEditOffenceWarning.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Are you sure you want to change the offence?')

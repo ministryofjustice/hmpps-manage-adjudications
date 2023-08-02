@@ -29,7 +29,7 @@ describe('GET /reason-for-police-referral', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.reasonForReferral.urls.start(100))
+      .get(adjudicationUrls.reasonForReferral.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -40,7 +40,7 @@ describe('GET /reason-for-police-referral', () => {
 describe('GET /reason-for-police-referral', () => {
   it('should load the `Reason for referral` page', () => {
     return request(app)
-      .get(adjudicationUrls.reasonForReferral.urls.start(100))
+      .get(adjudicationUrls.reasonForReferral.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the reason for the referral?')
@@ -51,12 +51,12 @@ describe('GET /reason-for-police-referral', () => {
 describe('POST /reason-for-police-referral', () => {
   it('should successfully call the endpoint and redirect', () => {
     return request(app)
-      .post(adjudicationUrls.reasonForReferral.urls.start(100))
+      .post(adjudicationUrls.reasonForReferral.urls.start('100'))
       .send({
         referralReason: '123',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start(100))
-      .then(() => expect(outcomesService.createPoliceReferral).toHaveBeenCalledWith(100, '123', expect.anything()))
+      .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
+      .then(() => expect(outcomesService.createPoliceReferral).toHaveBeenCalledWith('100', '123', expect.anything()))
   })
 })

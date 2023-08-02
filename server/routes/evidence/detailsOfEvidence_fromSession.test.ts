@@ -68,7 +68,7 @@ describe('GET /evidence/100', () => {
   })
   it('should load the evidence page with details from the session', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfEvidence.urls.modified(100))
+      .get(adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Photo')
@@ -79,10 +79,10 @@ describe('GET /evidence/100', () => {
   })
   it('should use the session service to get data', () => {
     return request(app)
-      .get(adjudicationUrls.detailsOfEvidence.urls.modified(100))
+      .get(adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .expect(200)
       .then(() => expect(evidenceSessionService.setAllSessionEvidence).not.toHaveBeenCalled())
-      .then(() => expect(evidenceSessionService.getAllSessionEvidence).toHaveBeenCalledWith(expect.anything(), 100))
+      .then(() => expect(evidenceSessionService.getAllSessionEvidence).toHaveBeenCalledWith(expect.anything(), '100'))
   })
 })
 
@@ -92,10 +92,10 @@ describe('POST', () => {
     evidenceSessionService.getAndDeleteAllSessionEvidence.mockReturnValueOnce(evidenceOnSession)
     const evidenceToSave = [...evidenceOnSession.photoVideo, ...evidenceOnSession.baggedAndTagged]
     return request(app)
-      .post(adjudicationUrls.detailsOfEvidence.urls.modified(100))
+      .post(adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith(100, evidenceToSave, expect.anything())
+        expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith('100', evidenceToSave, expect.anything())
       )
   })
 })

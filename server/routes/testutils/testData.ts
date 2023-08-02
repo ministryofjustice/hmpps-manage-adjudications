@@ -42,7 +42,7 @@ import { OffenderMovementInfo } from '../../data/prisonApiClient'
 
 export default class TestData {
   reportedAdjudication = ({
-    adjudicationNumber,
+    chargeNumber,
     prisonerNumber,
     dateTimeOfIncident = '2023-01-01T06:00:00',
     gender = PrisonerGender.MALE,
@@ -68,7 +68,7 @@ export default class TestData {
     originatingAgencyId = 'MDI',
     otherData,
   }: {
-    adjudicationNumber: number
+    chargeNumber?: string
     prisonerNumber: string
     dateTimeOfIncident?: string
     gender?: PrisonerGender
@@ -95,7 +95,7 @@ export default class TestData {
     otherData?: any
   }) => {
     return {
-      adjudicationNumber,
+      chargeNumber,
       prisonerNumber,
       gender,
       incidentDetails: {
@@ -141,7 +141,7 @@ export default class TestData {
     damages = [],
     evidence = [],
     witnesses = [],
-    adjudicationNumber = null,
+    chargeNumber = null,
     incidentStatement = {} as IncidentStatement,
     isYouthOffender = false,
     startedByUserId = 'USER1',
@@ -159,7 +159,7 @@ export default class TestData {
     damages?: DamageDetails[]
     evidence?: EvidenceDetails[]
     witnesses?: WitnessDetails[]
-    adjudicationNumber?: number
+    chargeNumber?: string
     incidentStatement?: IncidentStatement
     isYouthOffender?: boolean
     startedByUserId?: string
@@ -169,7 +169,7 @@ export default class TestData {
     return {
       id,
       prisonerNumber,
-      adjudicationNumber,
+      chargeNumber,
       gender,
       incidentDetails: {
         locationId,

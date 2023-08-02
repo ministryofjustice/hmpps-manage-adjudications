@@ -7,14 +7,14 @@ import { ReportedAdjudicationResult, ReportedAdjudicationStatus } from '../../se
 const testData = new TestData()
 
 const reportedAdjudicationResponse = ({
-  adjudicationNumber,
+  chargeNumber,
   status,
   reviewedByUserId = null,
   statusReason = null,
   statusDetails = null,
   isYouthOffender = false,
 }: {
-  adjudicationNumber: number
+  chargeNumber: string
   status: ReportedAdjudicationStatus
   reviewedByUserId?: string
   statusReason?: string
@@ -22,7 +22,7 @@ const reportedAdjudicationResponse = ({
   isYouthOffender: boolean
 }) => {
   return testData.reportedAdjudication({
-    adjudicationNumber,
+    chargeNumber,
     prisonerNumber: 'G6415GD',
     dateTimeOfIncident: '2021-12-09T10:30:00',
     status,
@@ -109,7 +109,7 @@ context('Prisoner report - reviewer view', () => {
 
     const awaitingReviewReport = {
       reportedAdjudication: reportedAdjudicationResponse({
-        adjudicationNumber: 12345,
+        chargeNumber: '12345',
         status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         isYouthOffender: false,
       }),
@@ -120,7 +120,7 @@ context('Prisoner report - reviewer view', () => {
     })
     const returnedReport = {
       reportedAdjudication: reportedAdjudicationResponse({
-        adjudicationNumber: 56789,
+        chargeNumber: '56789',
         status: ReportedAdjudicationStatus.RETURNED,
         reviewedByUserId: 'USER1',
         statusReason: 'offence',
@@ -134,7 +134,7 @@ context('Prisoner report - reviewer view', () => {
     })
     const rejectedReport = {
       reportedAdjudication: reportedAdjudicationResponse({
-        adjudicationNumber: 356789,
+        chargeNumber: '356789',
         status: ReportedAdjudicationStatus.REJECTED,
         reviewedByUserId: 'USER1',
         statusReason: 'unsuitable',
@@ -148,11 +148,11 @@ context('Prisoner report - reviewer view', () => {
     })
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 12345,
+      chargeNumber: 12345,
       response: draftAdjudication(awaitingReviewReport, 1),
     })
     cy.task('stubCreateDraftFromCompleteAdjudication', {
-      adjudicationNumber: 56789,
+      chargeNumber: 56789,
       response: draftAdjudication(returnedReport, 2),
     })
     cy.task('stubGetLocation', {
@@ -184,7 +184,7 @@ context('Prisoner report - reviewer view', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUpdateAdjudicationStatus', {
-      adjudicationNumber: 12345,
+      chargeNumber: '12345',
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
@@ -324,7 +324,7 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.acceptedRejectDetail().should('exist')
       prisonerReportPage.reviewSubmit().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.acceptedReportConfirmation.urls.start(12345))
+        expect(loc.pathname).to.eq(adjudicationUrls.acceptedReportConfirmation.urls.start('12345'))
       })
     })
     it('should go to /all-completed-reports if status is rejected and save is pressed and form is valid', () => {

@@ -5,7 +5,7 @@ export default class ManualEntryConsecutivePunishmentPage extends Page {
     super('Which charge will it be consecutive to?')
   }
 
-  chargeNumber = (): PageElement => cy.get('input[id="chargeNumber"]')
+  chargeNumber = (): PageElement => cy.get('input[id="consecutiveChargeNumber"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 

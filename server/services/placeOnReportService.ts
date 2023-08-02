@@ -59,7 +59,7 @@ export type ExistingDraftIncidentDetails = {
   dateTimeOfDiscovery: SubmittedDateTime
   locationId: number
   startedByUserId: string
-  adjudicationNumber?: number
+  chargeNumber?: string
 }
 
 export default class PlaceOnReportService {
@@ -85,8 +85,8 @@ export default class PlaceOnReportService {
     return enhancedResult
   }
 
-  async getPrisonerDetailsFromAdjNumber(adjudicationNumber: number, user: User): Promise<PrisonerResultSummary> {
-    const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
+  async getPrisonerDetailsFromAdjNumber(draftId: number, user: User): Promise<PrisonerResultSummary> {
+    const draftAdjudication = await this.getDraftAdjudicationDetails(draftId, user)
     return this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
   }
 
@@ -118,7 +118,7 @@ export default class PlaceOnReportService {
   }
 
   async addDraftYouthOffenderStatus(
-    adjudicationNumber: number,
+    draftId: number,
     whichRuleChosen: string,
     removeExistingOffences: boolean,
     user: User
@@ -129,18 +129,18 @@ export default class PlaceOnReportService {
       removeExistingOffences,
     }
 
-    return client.saveYouthOffenderStatus(adjudicationNumber, requestBody)
+    return client.saveYouthOffenderStatus(draftId, requestBody)
   }
 
   async addOrUpdateDraftIncidentStatement(
-    id: number,
+    draftId: number,
     incidentStatement: string,
     completed: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
     const client = new ManageAdjudicationsClient(user)
 
-    const { draftAdjudication } = await client.getDraftAdjudication(id)
+    const { draftAdjudication } = await client.getDraftAdjudication(draftId)
     const editRequired = Boolean(draftAdjudication?.incidentStatement != null)
 
     const requestBody = {
@@ -148,14 +148,14 @@ export default class PlaceOnReportService {
       completed,
     }
     return editRequired
-      ? client.putDraftIncidentStatement(id, requestBody)
-      : client.postDraftIncidentStatement(id, requestBody)
+      ? client.putDraftIncidentStatement(draftId, requestBody)
+      : client.postDraftIncidentStatement(draftId, requestBody)
   }
 
-  async getCheckYourAnswersInfo(id: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
+  async getCheckYourAnswersInfo(draftId: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
 
-    const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(id)
+    const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(draftId)
     const { draftAdjudication } = draftAdjudicationInfo
     const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
 
@@ -198,14 +198,17 @@ export default class PlaceOnReportService {
     return {
       incidentDetails,
       statement: draftAdjudication.incidentStatement?.statement,
-      adjudicationNumber: draftAdjudication.adjudicationNumber,
+      chargeNumber: draftAdjudication.chargeNumber,
       isYouthOffender: draftAdjudication.isYouthOffender,
     }
   }
 
-  async getDraftIncidentDetailsForEditing(id: number, user: User): Promise<ExistingDraftIncidentDetails> {
+  async getDraftIncidentDetailsForEditing(
+    chargeNumber: string | number,
+    user: User
+  ): Promise<ExistingDraftIncidentDetails> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
-    const response = await manageAdjudicationsClient.getDraftAdjudication(id)
+    const response = await manageAdjudicationsClient.getDraftAdjudication(chargeNumber)
     const { incidentDetails } = response.draftAdjudication
     const dateAndTimeOfIncident = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfIncident)
     const dateAndTimeOfDiscovery = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfDiscovery)
@@ -213,7 +216,7 @@ export default class PlaceOnReportService {
       dateTime: dateAndTimeOfIncident,
       locationId: incidentDetails.locationId,
       startedByUserId: response.draftAdjudication.startedByUserId,
-      adjudicationNumber: response.draftAdjudication.adjudicationNumber,
+      chargeNumber: response.draftAdjudication.chargeNumber,
       dateTimeOfDiscovery: dateAndTimeOfDiscovery,
     }
   }
@@ -262,15 +265,15 @@ export default class PlaceOnReportService {
     return updatedAdjudication
   }
 
-  async completeDraftAdjudication(id: number, user: User): Promise<number> {
+  async completeDraftAdjudication(id: number, user: User): Promise<string> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
     const completedAdjudication = await manageAdjudicationsClient.submitCompleteDraftAdjudication(id)
-    return completedAdjudication.adjudicationNumber
+    return completedAdjudication.chargeNumber
   }
 
-  async getDraftAdjudicationDetails(id: number, user: User): Promise<DraftAdjudicationResult> {
+  async getDraftAdjudicationDetails(draftId: number, user: User): Promise<DraftAdjudicationResult> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
-    return manageAdjudicationsClient.getDraftAdjudication(id)
+    return manageAdjudicationsClient.getDraftAdjudication(draftId)
   }
 
   async getAllDraftAdjudicationsForUser(
@@ -315,9 +318,9 @@ export default class PlaceOnReportService {
     }
   }
 
-  async getInfoForTaskListStatuses(draftAdjudicationId: number, user: User): Promise<TaskListDetails> {
+  async getInfoForTaskListStatuses(draftId: number, user: User): Promise<TaskListDetails> {
     const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
-    const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftAdjudicationId)
+    const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftId)
 
     const statementComplete = draftAdjudication.incidentStatement?.completed || false
     const offenceDetailsComplete = this.checkOffenceDetails(draftAdjudication.offenceDetails)
@@ -349,10 +352,10 @@ export default class PlaceOnReportService {
     return Object.keys(offenceDetails).length > 0
   }
 
-  getNextOffencesUrl(offenceDetails: OffenceDetails, adjudicationId: number): string {
+  getNextOffencesUrl(offenceDetails: OffenceDetails, draftId: number): string {
     const offenceDetailsComplete = this.checkOffenceDetails(offenceDetails)
-    if (offenceDetailsComplete) return adjudicationUrls.detailsOfOffence.urls.start(adjudicationId)
-    return adjudicationUrls.ageOfPrisoner.urls.start(adjudicationId)
+    if (offenceDetailsComplete) return adjudicationUrls.detailsOfOffence.urls.start(draftId)
+    return adjudicationUrls.ageOfPrisoner.urls.start(draftId)
   }
 
   getIncidentStatementStatus = (statementPresent: boolean, statementComplete: boolean): IncidentStatementStatus => {
@@ -392,8 +395,8 @@ export default class PlaceOnReportService {
     )
   }
 
-  async getOffencePrisonerDetails(adjudicationNumber: number, user: User) {
-    const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
+  async getOffencePrisonerDetails(draftId: number, user: User) {
+    const draftAdjudication = await this.getDraftAdjudicationDetails(draftId, user)
     const { prisonerNumber } = draftAdjudication.draftAdjudication
     const associatedPrisonerNumber = draftAdjudication.draftAdjudication?.incidentRole?.associatedPrisonersNumber
     const [prisoner, associatedPrisoner] = await Promise.all([
@@ -406,8 +409,8 @@ export default class PlaceOnReportService {
     }
   }
 
-  async getPrisonerNumberFromDraftAdjudicationNumber(adjudicationNumber: number, user: User) {
-    const draftAdjudication = await this.getDraftAdjudicationDetails(adjudicationNumber, user)
+  async getPrisonerNumberFromDraftChargeNumber(draftId: number, user: User) {
+    const draftAdjudication = await this.getDraftAdjudicationDetails(draftId, user)
     const prisonerDetails = await this.getPrisonerDetails(draftAdjudication.draftAdjudication.prisonerNumber, user)
     return prisonerDetails.prisonerNumber
   }
@@ -417,42 +420,42 @@ export default class PlaceOnReportService {
     return client.getOffenceRule(offenceCode, isYouthOffender, gender)
   }
 
-  async saveOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails, user: User) {
+  async saveOffenceDetails(draftId: number, offenceDetails: OffenceDetails, user: User) {
     const client = new ManageAdjudicationsClient(user)
-    return client.saveOffenceDetails(adjudicationNumber, offenceDetails)
+    return client.saveOffenceDetails(draftId, offenceDetails)
   }
 
-  async aloAmendOffenceDetails(adjudicationNumber: number, offenceDetails: OffenceDetails, user: User) {
+  async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails, user: User) {
     const client = new ManageAdjudicationsClient(user)
-    return client.aloAmendOffenceDetails(adjudicationNumber, offenceDetails)
+    return client.aloAmendOffenceDetails(draftId, offenceDetails)
   }
 
-  async saveAssociatedPrisoner(adjudicationNumber: number, associatedPrisoner: AssociatedPrisoner, user: User) {
+  async saveAssociatedPrisoner(draftId: number, associatedPrisoner: AssociatedPrisoner, user: User) {
     const client = new ManageAdjudicationsClient(user)
-    return client.saveAssociatedPrisoner(adjudicationNumber, associatedPrisoner)
+    return client.saveAssociatedPrisoner(draftId, associatedPrisoner)
   }
 
-  async saveDamageDetails(adjudicationNumber: number, damageDetails: DamageDetails[], user: User) {
+  async saveDamageDetails(chargeNumber: string, damageDetails: DamageDetails[], user: User) {
     const client = new ManageAdjudicationsClient(user)
-    return client.saveDamageDetails(adjudicationNumber, damageDetails)
+    return client.saveDamageDetails(chargeNumber, damageDetails)
   }
 
-  async saveEvidenceDetails(adjudicationNumber: number, evidenceDetails: EvidenceDetails[], user: User) {
+  async saveEvidenceDetails(chargeNumber: string, evidenceDetails: EvidenceDetails[], user: User) {
     const client = new ManageAdjudicationsClient(user)
-    return client.saveEvidenceDetails(adjudicationNumber, evidenceDetails)
+    return client.saveEvidenceDetails(chargeNumber, evidenceDetails)
   }
 
-  async saveWitnessDetails(adjudicationNumber: number, witnessDetails: WitnessDetails[], user: User) {
+  async saveWitnessDetails(chargeNumber: string, witnessDetails: WitnessDetails[], user: User) {
     const client = new ManageAdjudicationsClient(user)
-    return client.saveWitnessDetails(adjudicationNumber, witnessDetails)
+    return client.saveWitnessDetails(chargeNumber, witnessDetails)
   }
 
-  async amendPrisonerGender(id: number, chosenGender: PrisonerGender, user: User) {
+  async amendPrisonerGender(draftId: number, chosenGender: PrisonerGender, user: User) {
     const genderData = {
       gender: chosenGender,
     }
     const client = new ManageAdjudicationsClient(user)
-    return client.amendGender(id, genderData)
+    return client.amendGender(draftId, genderData)
   }
 
   setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {

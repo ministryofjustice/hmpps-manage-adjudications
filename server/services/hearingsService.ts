@@ -17,7 +17,7 @@ export default class HearingsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
   async createReferral(
-    adjudicationNumber: number,
+    chargeNumber: string,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     referralReason: string,
@@ -28,11 +28,11 @@ export default class HearingsService {
       code: hearingOutcome,
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user).createReferral(adjudicationNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsClient(user).createReferral(chargeNumber, hearingOutcomeDetails)
   }
 
   async createAdjourn(
-    adjudicationNumber: number,
+    chargeNumber: string,
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     details: string,
@@ -47,25 +47,25 @@ export default class HearingsService {
       reason: adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user).createAdjourn(adjudicationNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsClient(user).createAdjourn(chargeNumber, hearingOutcomeDetails)
   }
 
-  async getHearingOutcome(adjudicationNumber: number, user: User) {
-    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+  async getHearingOutcome(chargeNumber: string, user: User) {
+    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
     return latestHearing?.hearing.outcome || null
   }
 
-  async getHearingAdjudicatorType(adjudicationNumber: number, user: User) {
-    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(adjudicationNumber)
+  async getHearingAdjudicatorType(chargeNumber: string, user: User) {
+    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
     return latestHearing.hearing.oicHearingType as OicHearingType
   }
 
   async createDismissedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     adjudicatorName: string,
     plea: HearingOutcomePlea,
     details: string,
@@ -77,11 +77,11 @@ export default class HearingsService {
       details,
     }
 
-    return new ManageAdjudicationsClient(user).createDismissedHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsClient(user).createDismissedHearingOutcome(chargeNumber, hearingOutcomeDetails)
   }
 
   async createChargedProvedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     adjudicatorName: string,
     plea: HearingOutcomePlea,
     caution: boolean,
@@ -95,14 +95,11 @@ export default class HearingsService {
       amount: !amount ? null : Number(amount),
     }
 
-    return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcome(
-      adjudicationNumber,
-      hearingOutcomeDetails
-    )
+    return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcome(chargeNumber, hearingOutcomeDetails)
   }
 
   async createNotProceedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     adjudicator: string,
     plea: HearingOutcomePlea,
     reason: NotProceedReason,
@@ -116,11 +113,11 @@ export default class HearingsService {
       details,
     }
 
-    return new ManageAdjudicationsClient(user).createNotProceedHearingOutcome(adjudicationNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsClient(user).createNotProceedHearingOutcome(chargeNumber, hearingOutcomeDetails)
   }
 
   async editAdjournHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     details: string,
     adjournReason: HearingOutcomeAdjournReason,
     plea: HearingOutcomePlea,
@@ -134,14 +131,14 @@ export default class HearingsService {
       plea,
     }
     return new ManageAdjudicationsClient(user).amendHearingOutcome(
-      adjudicationNumber,
+      chargeNumber,
       ReportedAdjudicationStatus.ADJOURNED,
       data
     )
   }
 
   async editReferralHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     hearingOutcome: HearingOutcomeCode,
     referralReason: string,
     user: User,
@@ -155,11 +152,11 @@ export default class HearingsService {
       hearingOutcome === HearingOutcomeCode.REFER_INAD
         ? ReportedAdjudicationStatus.REFER_INAD
         : ReportedAdjudicationStatus.REFER_POLICE
-    return new ManageAdjudicationsClient(user).amendHearingOutcome(adjudicationNumber, status, data)
+    return new ManageAdjudicationsClient(user).amendHearingOutcome(chargeNumber, status, data)
   }
 
   async editChargeProvedOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     caution: boolean,
     user: User,
     adjudicator?: string,
@@ -175,14 +172,14 @@ export default class HearingsService {
       damagesOwed,
     }
     return new ManageAdjudicationsClient(user).amendHearingOutcome(
-      adjudicationNumber,
+      chargeNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
       data
     )
   }
 
   async editDismissedOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     details: string,
     user: User,
     adjudicator?: string,
@@ -194,14 +191,14 @@ export default class HearingsService {
       details,
     }
     return new ManageAdjudicationsClient(user).amendHearingOutcome(
-      adjudicationNumber,
+      chargeNumber,
       ReportedAdjudicationStatus.DISMISSED,
       data
     )
   }
 
   async editNotProceedHearingOutcome(
-    adjudicationNumber: number,
+    chargeNumber: string,
     reason: NotProceedReason,
     details: string,
     user: User,
@@ -215,7 +212,7 @@ export default class HearingsService {
       notProceedReason: reason,
     }
     return new ManageAdjudicationsClient(user).amendHearingOutcome(
-      adjudicationNumber,
+      chargeNumber,
       ReportedAdjudicationStatus.NOT_PROCEED,
       data
     )

@@ -75,7 +75,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         reportedAdjudication: {
           ...testData.reportedAdjudication({
             punishments: [],
-            adjudicationNumber: 100,
+            chargeNumber: '100',
             prisonerNumber: 'G6415GD',
             locationId: 25538,
             offenceDetails: { offenceCode: 1001 },
@@ -95,7 +95,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         reportedAdjudication: {
           ...testData.reportedAdjudication({
             punishments: [],
-            adjudicationNumber: 101,
+            chargeNumber: '101',
             prisonerNumber: 'G6415GD',
             locationId: 25538,
             hearings: [
@@ -131,7 +131,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
-          adjudicationNumber: 102,
+          chargeNumber: '102',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           prisonerNumber: 'G6415GD',
           punishments: [
@@ -182,7 +182,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
 
   describe('e2e', () => {
     it('create and edit punishments - CONFINEMENT', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
       awardPunishmentsPage.newPunishment().click()
@@ -211,7 +211,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
 
     it('create and edit punishments - EARNINGS', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
       awardPunishmentsPage.newPunishment().click()
@@ -244,7 +244,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
 
     it('create and edit punishments - PRIVILEGE - CANTEEN', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
       awardPunishmentsPage.newPunishment().click()
@@ -276,7 +276,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
 
     it('create and edit punishments - PRIVILEGE - OTHER', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
       awardPunishmentsPage.newPunishment().click()
@@ -311,7 +311,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
 
     it('create and edit punishments - PROSPECTIVE DAYS', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(101))
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('101'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
       awardPunishmentsPage.newPunishment().click()
@@ -349,7 +349,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
 
     it('Activate a suspended punishment and include report number in correct column, remove change link', () => {
-      cy.visit(adjudicationUrls.awardPunishments.urls.start(100))
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
       awardPunishmentsPage.activateSuspendedPunishment().click()
       const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)

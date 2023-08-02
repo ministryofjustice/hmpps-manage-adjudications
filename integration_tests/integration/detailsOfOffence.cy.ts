@@ -25,7 +25,7 @@ const reportedAdjudicationWithOffences = testData.reportedAdjudication({
   otherData: {
     id: 202,
   },
-  adjudicationNumber: 1234,
+  chargeNumber: '1234',
   prisonerNumber: 'G6415GD',
   offenceDetails: {
     offenceCode: 1001,
@@ -41,7 +41,7 @@ const reportedAdjudicationWithOffencesAloEdited = testData.reportedAdjudication(
   otherData: {
     id: 201,
   },
-  adjudicationNumber: 12345,
+  chargeNumber: '12345',
   prisonerNumber: 'G6415GD',
   offenceDetails: {
     offenceCode: 4001,
@@ -159,15 +159,15 @@ context('Details of offence', () => {
       },
     })
     cy.task('stubSaveOffenceDetails', {
-      adjudicationNumber: 201,
+      draftId: 201,
       response: adjudicationWithOffences,
     })
     cy.task('stubSaveOffenceDetails', {
-      adjudicationNumber: 202,
+      draftId: 202,
       response: reportedAdjudicationWithOffences,
     })
     cy.task('stubAloAmendOffenceDetails', {
-      adjudicationNumber: 201,
+      draftId: 201,
       response: reportedAdjudicationWithOffencesAloEdited,
     })
   })
@@ -386,7 +386,7 @@ context('Details of offence', () => {
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
     cy.task('verifySaveOffenceDetails', {
-      adjudicationNumber: 201,
+      draftId: 201,
       offenceDetails: {
         offenceCode: 4001,
       },
@@ -406,6 +406,6 @@ context('Details of offence', () => {
     cy.visit(`${adjudicationUrls.detailsOfOffence.urls.aloEdit(201)}?offenceCode=4001`)
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
-    cy.url().should('include', adjudicationUrls.prisonerReport.urls.review(12345))
+    cy.url().should('include', adjudicationUrls.prisonerReport.urls.review('12345'))
   })
 })

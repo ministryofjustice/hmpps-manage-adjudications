@@ -60,7 +60,7 @@ beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 102,
-      adjudicationNumber: 1524493,
+      chargeNumber: '1524493',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-09T10:30:00',
       offenceDetails: {

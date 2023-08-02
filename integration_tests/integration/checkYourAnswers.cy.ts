@@ -99,7 +99,7 @@ context('Check Your Answers', () => {
       cy.task('stubSubmitCompleteDraftAdjudication', {
         id: 3456,
         response: {
-          adjudicationNumber: 234,
+          chargeNumber: '234',
           gender: PrisonerGender.MALE,
           incidentDetails: {
             dateTimeOfIncident: '2021-11-03T11:09:42',
@@ -295,7 +295,7 @@ context('Check Your Answers', () => {
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
       checkYourAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.start(234))
+        expect(loc.pathname).to.eq(adjudicationUrls.confirmedOnReport.urls.start('234'))
       })
     })
     it('should go to the task page if the user exits without submitting', () => {
@@ -369,7 +369,7 @@ context('Check Your Answers', () => {
       cy.task('stubSubmitCompleteDraftAdjudication', {
         id: 3456,
         response: testData.reportedAdjudication({
-          adjudicationNumber: 234,
+          chargeNumber: '234',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-07T11:09:42',
         }),

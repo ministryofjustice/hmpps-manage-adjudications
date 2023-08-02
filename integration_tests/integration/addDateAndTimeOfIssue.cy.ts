@@ -14,7 +14,7 @@ context('Add date and time', () => {
     cy.signIn()
   })
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.addIssueDateTime.urls.start(12345))
+    cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     addDateTimeOfIssuePage.errorSummary().should('not.exist')
     addDateTimeOfIssuePage.hintText().should('exist')
@@ -26,12 +26,12 @@ context('Add date and time', () => {
   })
   it('should redirect to the confirm form issue page on successful submit', () => {
     cy.task('stubPutDateTimeOfIssue', {
-      adjudicationNumber: 12345,
-      response: testData.reportedAdjudication({ adjudicationNumber: 12345, prisonerNumber: 'G6123VU' }),
+      chargeNumber: '12345',
+      response: testData.reportedAdjudication({ chargeNumber: '12345', prisonerNumber: 'G6123VU' }),
     })
     const date = new Date()
     const yesterday = new Date(date.setDate(date.getDate() - 1))
-    cy.visit(adjudicationUrls.addIssueDateTime.urls.start(12345))
+    cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     forceDateInputWithDate(yesterday, '[data-qa="issued-date"]')
     addDateTimeOfIssuePage.hourInput().type('20')
@@ -42,7 +42,7 @@ context('Add date and time', () => {
     })
   })
   it('should redirect to the confirm form issue page on cancel', () => {
-    cy.visit(adjudicationUrls.addIssueDateTime.urls.start(12345))
+    cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     addDateTimeOfIssuePage.cancelButton().click()
     cy.location().should(loc => {
@@ -50,7 +50,7 @@ context('Add date and time', () => {
     })
   })
   it('should show a validation message if no date is entered', () => {
-    cy.visit(adjudicationUrls.addIssueDateTime.urls.start(12345))
+    cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     addDateTimeOfIssuePage.hourInput().type('09')
     addDateTimeOfIssuePage.minutesInput().type('30')
@@ -64,7 +64,7 @@ context('Add date and time', () => {
   })
   it('should show a validation message if no time is entered', () => {
     const today = new Date()
-    cy.visit(adjudicationUrls.addIssueDateTime.urls.start(12345))
+    cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     forceDateInputWithDate(today, '[data-qa="issued-date"]')
     addDateTimeOfIssuePage.submitButton().click()

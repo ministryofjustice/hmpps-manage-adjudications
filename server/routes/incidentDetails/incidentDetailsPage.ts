@@ -297,7 +297,7 @@ export default class IncidentDetailsPage {
 
 const extractValuesFromRequest = (req: Request): RequestValues => {
   const values = {
-    draftId: getDraftIdFromString(req.params.id),
+    draftId: getDraftIdFromString(req.params.draftId),
     prisonerNumber: req.params.prisonerNumber,
     originalPageReferrerUrl: req.query.referrer as string,
   }
@@ -333,7 +333,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
 
   const values = {
     prisonerNumber: req.params.prisonerNumber,
-    draftId: getDraftIdFromString(req.params.id),
+    draftId: getDraftIdFromString(req.params.draftId),
     incidentDetails: {
       incidentDate: req.body.incidentDate,
       discoveryDate: discoveryDateTime,

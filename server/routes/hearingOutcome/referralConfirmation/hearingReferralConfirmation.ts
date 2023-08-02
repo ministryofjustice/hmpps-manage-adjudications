@@ -8,10 +8,10 @@ export default class HearingReasonForReferralPage {
   constructor(private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/hearingReferralConfirmation.njk`, {
-      returnLinkUrl: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      returnLinkUrl: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
     })
   }
 

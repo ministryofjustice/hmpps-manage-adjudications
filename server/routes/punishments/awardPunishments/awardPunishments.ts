@@ -42,47 +42,46 @@ export default class AwardPunishmentsPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const punishmentToDelete = req.query.delete || null
 
-    const redirectAfterRemoveUrl = `${adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber)}?delete=`
+    const redirectAfterRemoveUrl = `${adjudicationUrls.awardPunishments.urls.modified(chargeNumber)}?delete=`
 
-    let punishments = await this.getPunishments(req, adjudicationNumber, user)
+    let punishments = await this.getPunishments(req, chargeNumber, user)
 
     // // If we are not displaying session data then fill in the session data
     if (this.pageOptions.displayAPIData()) {
       // Set up session to allow for adding and deleting
-      this.punishmentsService.setAllSessionPunishments(req, punishments, adjudicationNumber)
+      this.punishmentsService.setAllSessionPunishments(req, punishments, chargeNumber)
       // Now we need to show the session data instead in order to have the redisId attached
-      punishments = await this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+      punishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
     }
 
     if (punishmentToDelete) {
-      await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, adjudicationNumber)
-      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(adjudicationNumber))
+      await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, chargeNumber)
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    const continueHref = await this.getContinueHref(adjudicationNumber, user)
+    const continueHref = await this.getContinueHref(chargeNumber, user)
     return res.render(`pages/awardPunishments.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       redirectAfterRemoveUrl,
-      adjudicationNumber,
+      chargeNumber,
       punishments,
       continueHref,
     })
   }
 
-  getPunishments = async (req: Request, adjudicationNumber: number, user: User) => {
+  getPunishments = async (req: Request, chargeNumber: string, user: User) => {
     if (this.pageOptions.displaySessionData()) {
-      return this.punishmentsService.getAllSessionPunishments(req, adjudicationNumber)
+      return this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
     }
-    const punishments = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
+    const punishments = await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user)
     return flattenPunishments(punishments)
   }
 
-  getContinueHref = async (adjudicationNumber: number, user: User) => {
-    const punishments = await this.punishmentsService.getPunishmentsFromServer(adjudicationNumber, user)
-    if (punishments && punishments.length)
-      return adjudicationUrls.checkPunishments.urls.submittedEdit(adjudicationNumber)
-    return adjudicationUrls.checkPunishments.urls.start(adjudicationNumber)
+  getContinueHref = async (chargeNumber: string, user: User) => {
+    const punishments = await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user)
+    if (punishments && punishments.length) return adjudicationUrls.checkPunishments.urls.submittedEdit(chargeNumber)
+    return adjudicationUrls.checkPunishments.urls.start(chargeNumber)
   }
 }

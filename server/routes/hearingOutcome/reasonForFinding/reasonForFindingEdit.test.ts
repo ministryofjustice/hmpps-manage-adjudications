@@ -45,7 +45,7 @@ afterEach(() => {
 describe('GET /reason-for-finding', () => {
   it('should load the `Reason for finding` page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingReasonForFinding.urls.edit(100))
+      .get(adjudicationUrls.hearingReasonForFinding.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('What is the reason for this finding')
@@ -56,15 +56,15 @@ describe('GET /reason-for-finding', () => {
 describe('POST /reason-for-finding', () => {
   it('should redirect to the correct URL after correct submission', () => {
     return request(app)
-      .post(`${adjudicationUrls.hearingReasonForFinding.urls.edit(100)}`)
+      .post(`${adjudicationUrls.hearingReasonForFinding.urls.edit('100')}`)
       .send({
         reasonForFinding: 'This is a reason',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.hearingDetails.urls.review(100))
+      .expect('Location', adjudicationUrls.hearingDetails.urls.review('100'))
       .then(() =>
         expect(hearingsService.editDismissedOutcome).toHaveBeenCalledWith(
-          100,
+          '100',
           'This is a reason',
           expect.anything(),
           null,

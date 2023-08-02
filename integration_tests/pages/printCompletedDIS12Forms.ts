@@ -11,6 +11,5 @@ export default class PrintCompletedDISFormsPage extends Page {
 
   printThisPageLink = (): PageElement => cy.get('[data-qa="printLink"]')
 
-  printDISFormsLink = (adjudicationNumber: number): PageElement =>
-    cy.get(`[data-qa="print-DIS1/2-${adjudicationNumber}"]`)
+  printDISFormsLink = (chargeNumber: string): PageElement => cy.get(`[data-qa="print-DIS1/2-${chargeNumber}"]`)
 }

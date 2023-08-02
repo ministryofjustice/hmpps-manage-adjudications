@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, adjudicationNumber, readOnly, consecutiveReportLinkAvailable) %}
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, chargeNumber, readOnly, consecutiveReportLinkAvailable) %}
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
@@ -11,7 +11,7 @@
     {% set changeUrl = adjudicationUrls
       .punishment
       .urls
-      .edit(adjudicationNumber, redisId) %}
+      .edit(chargeNumber, redisId) %}
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
 
 

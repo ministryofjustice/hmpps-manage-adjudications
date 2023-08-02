@@ -29,7 +29,7 @@ describe('load edit punishment comment page', () => {
   it('should load the `Page not found` page if no role ADJUDICATIONS_REVIEWER', () => {
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
     return request(app)
-      .get(adjudicationUrls.punishmentComment.urls.edit(100, 1))
+      .get(adjudicationUrls.punishmentComment.urls.edit('100', 1))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -38,7 +38,7 @@ describe('load edit punishment comment page', () => {
   it('should load the `Page not found` page if punishment comment not found in database', () => {
     punishmentsService.getPunishmentCommentsFromServer.mockResolvedValue([])
     return request(app)
-      .get(`${adjudicationUrls.punishmentComment.urls.edit(100, 1)}`)
+      .get(`${adjudicationUrls.punishmentComment.urls.edit('100', 1)}`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -47,7 +47,7 @@ describe('load edit punishment comment page', () => {
   })
   it('should load punishment comment page', () => {
     return request(app)
-      .get(adjudicationUrls.punishmentComment.urls.edit(100, 1))
+      .get(adjudicationUrls.punishmentComment.urls.edit('100', 1))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Add a comment about punishments')
@@ -61,7 +61,7 @@ describe('submit edited punishment comment', () => {
       testData.singlePunishmentComment({ comment: '' }),
     ])
     return request(app)
-      .post(adjudicationUrls.punishmentComment.urls.edit(100, 1))
+      .post(adjudicationUrls.punishmentComment.urls.edit('100', 1))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
@@ -70,21 +70,21 @@ describe('submit edited punishment comment', () => {
   })
   it('should successfully call the endpoint', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.edit(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.edit('100', 1)}`)
       .send({
         punishmentComment: 'new text',
       })
       .then(() => {
-        expect(punishmentsService.editPunishmentComment).toHaveBeenCalledWith(100, 1, 'new text', expect.anything())
+        expect(punishmentsService.editPunishmentComment).toHaveBeenCalledWith('100', 1, 'new text', expect.anything())
       })
   })
   it('should redirect', () => {
     return request(app)
-      .post(`${adjudicationUrls.punishmentComment.urls.edit(100, 1)}`)
+      .post(`${adjudicationUrls.punishmentComment.urls.edit('100', 1)}`)
       .send({
         punishmentComment: 'new text',
       })
       .expect(302)
-      .expect('Location', `${adjudicationUrls.punishmentsAndDamages.urls.review(100)}`)
+      .expect('Location', `${adjudicationUrls.punishmentsAndDamages.urls.review('100')}`)
   })
 })

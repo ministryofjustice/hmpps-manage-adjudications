@@ -37,7 +37,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 20, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -80,7 +80,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 20, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -122,7 +122,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -186,7 +186,7 @@ context('All Completed Reports', () => {
       number: 0,
       allContent: [
         testData.reportedAdjudication({
-          adjudicationNumber: 1,
+          chargeNumber: '1',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2022-01-01T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
@@ -219,7 +219,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -285,7 +285,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2222-10-10T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -369,7 +369,7 @@ context('All Completed Reports', () => {
     })
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 5, _ => {
       return testData.reportedAdjudication({
-        adjudicationNumber: _,
+        chargeNumber: _ as unknown as string,
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2222-10-10T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -460,7 +460,7 @@ context('All Completed Reports', () => {
     })
     const reportedAdjudications = [
       testData.reportedAdjudication({
-        adjudicationNumber: 1,
+        chargeNumber: '1',
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -471,7 +471,7 @@ context('All Completed Reports', () => {
         },
       }),
       testData.reportedAdjudication({
-        adjudicationNumber: 2,
+        chargeNumber: '2',
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -479,7 +479,7 @@ context('All Completed Reports', () => {
       }),
       // Report has been transferred and this user is in the override agency (so actions not allowed)
       testData.reportedAdjudication({
-        adjudicationNumber: 3,
+        chargeNumber: '3',
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
@@ -511,17 +511,17 @@ context('All Completed Reports', () => {
     cy.visit(adjudicationUrls.allCompletedReports.root)
     allCompletedReportsPage.viewHearingsLink().first().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(1))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1'))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
     allCompletedReportsPage.viewHearingsLink().eq(1).click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review(2))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('2'))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
     allCompletedReportsPage.viewHearingsLink().eq(2).click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly(3))
+      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly('3'))
     })
   })
 })

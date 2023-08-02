@@ -44,10 +44,10 @@ export default class HearingReasonForReferralPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, referralReason, hearingOutcomeCode } = pageData
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(adjudicationNumber),
+      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       referralReason,
       hearingOutcomeCode,
@@ -66,7 +66,7 @@ export default class HearingReasonForReferralPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -75,7 +75,7 @@ export default class HearingReasonForReferralPage {
     let hearingOutcome = null
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
-        adjudicationNumber,
+        chargeNumber,
         [ReportedAdjudicationStatus.REFER_INAD, ReportedAdjudicationStatus.REFER_POLICE],
         user
       )) as HearingDetailsHistory
@@ -89,7 +89,7 @@ export default class HearingReasonForReferralPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const adjudicationNumber = Number(req.params.adjudicationNumber)
+    const { chargeNumber } = req.params
     const { hearingOutcome, adjudicator } = req.query
     const { referralReason, hearingOutcomeCode } = req.body
 
@@ -109,7 +109,7 @@ export default class HearingReasonForReferralPage {
         const outcomeCode = hearingOutcome || hearingOutcomeCode
 
         await this.hearingsService.editReferralHearingOutcome(
-          adjudicationNumber,
+          chargeNumber,
           outcomeCode as HearingOutcomeCode,
           trimmedReferralReason,
           user,
@@ -118,11 +118,11 @@ export default class HearingReasonForReferralPage {
       } else {
         // We need to check the data from previous page hasn't been lost/tampered with
         if (!this.validDataFromEnterHearingOutcomePage(hearingOutcome as HearingOutcomeCode, adjudicator as string)) {
-          return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(adjudicationNumber))
+          return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
         }
 
         await this.hearingsService.createReferral(
-          adjudicationNumber,
+          chargeNumber,
           hearingOutcome as HearingOutcomeCode,
           adjudicator as string,
           trimmedReferralReason,
@@ -130,9 +130,9 @@ export default class HearingReasonForReferralPage {
         )
       }
 
-      return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(adjudicationNumber))
+      return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(adjudicationNumber)
+      res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
   }

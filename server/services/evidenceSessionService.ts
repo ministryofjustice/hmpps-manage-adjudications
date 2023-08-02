@@ -2,53 +2,42 @@ import { Request } from 'express'
 import { EvidenceDetails } from '../data/DraftAdjudicationResult'
 
 export default class EvidenceSessionService {
-  addSessionEvidence(req: Request, evidenceData: EvidenceDetails, draftAdjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
+  addSessionEvidence(req: Request, evidenceData: EvidenceDetails, id: number | string) {
+    this.createSessionForAdjudicationIfNotExists(req, id)
     if (evidenceData.code === 'BAGGED_AND_TAGGED') {
-      return req.session.evidence[draftAdjudicationNumber].baggedAndTagged.push(evidenceData)
+      return req.session.evidence[id].baggedAndTagged.push(evidenceData)
     }
 
-    return req.session.evidence[draftAdjudicationNumber].photoVideo.push(evidenceData)
+    return req.session.evidence[id].photoVideo.push(evidenceData)
   }
 
-  async deleteSessionEvidence(
-    req: Request,
-    index: number,
-    isBaggedAndTagged: boolean,
-    draftAdjudicationNumber: number
-  ) {
-    if (isBaggedAndTagged) return req.session.evidence?.[draftAdjudicationNumber]?.baggedAndTagged.splice(index - 1, 1)
-    return req.session.evidence?.[draftAdjudicationNumber]?.photoVideo.splice(index - 1, 1)
+  async deleteSessionEvidence(req: Request, index: number, isBaggedAndTagged: boolean, id: number | string) {
+    if (isBaggedAndTagged) return req.session.evidence?.[id]?.baggedAndTagged.splice(index - 1, 1)
+    return req.session.evidence?.[id]?.photoVideo.splice(index - 1, 1)
   }
 
-  deleteAllSessionEvidence(req: Request, draftAdjudicationNumber: number) {
-    req.session.evidence?.[draftAdjudicationNumber]?.photoVideo.splice(
-      0,
-      req.session.evidence?.[draftAdjudicationNumber]?.length
-    )
-    req.session.evidence?.[draftAdjudicationNumber]?.baggedAndTagged.splice(
-      0,
-      req.session.evidence?.[draftAdjudicationNumber]?.length
-    )
+  deleteAllSessionEvidence(req: Request, id: number | string) {
+    req.session.evidence?.[id]?.photoVideo.splice(0, req.session.evidence?.[id]?.length)
+    req.session.evidence?.[id]?.baggedAndTagged.splice(0, req.session.evidence?.[id]?.length)
   }
 
-  setAllSessionEvidence(req: Request, evidenceData: EvidenceDetails[], draftAdjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, draftAdjudicationNumber)
-    req.session.evidence[draftAdjudicationNumber] = evidenceData
+  setAllSessionEvidence(req: Request, evidenceData: EvidenceDetails[], id: number | string) {
+    this.createSessionForAdjudicationIfNotExists(req, id)
+    req.session.evidence[id] = evidenceData
   }
 
-  getAndDeleteAllSessionEvidence(req: Request, draftAdjudicationNumber: number) {
-    const allSessionEvidence = this.getAllSessionEvidence(req, draftAdjudicationNumber)
-    delete req.session.evidence?.[draftAdjudicationNumber]
+  getAndDeleteAllSessionEvidence(req: Request, id: number | string) {
+    const allSessionEvidence = this.getAllSessionEvidence(req, id)
+    delete req.session.evidence?.[id]
     return allSessionEvidence
   }
 
-  getAllSessionEvidence(req: Request, draftAdjudicationNumber: number) {
-    return req.session?.evidence?.[draftAdjudicationNumber]
+  getAllSessionEvidence(req: Request, id: number | string) {
+    return req.session?.evidence?.[id]
   }
 
-  setReferrerOnSession(req: Request, referrer: string, adjudicationNumber: number) {
-    this.createSessionForAdjudicationIfNotExists(req, adjudicationNumber)
+  setReferrerOnSession(req: Request, referrer: string, chargeNumber: string) {
+    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     req.session.evidence.referrer = referrer
   }
 
@@ -66,12 +55,12 @@ export default class EvidenceSessionService {
     delete req.session.evidence.referrer
   }
 
-  private createSessionForAdjudicationIfNotExists(req: Request, draftAdjudicationNumber: number) {
+  private createSessionForAdjudicationIfNotExists(req: Request, id: number | string) {
     if (!req.session.evidence) {
       req.session.evidence = {}
     }
-    if (!req.session.evidence[draftAdjudicationNumber]) {
-      req.session.evidence[draftAdjudicationNumber] = {
+    if (!req.session.evidence[id]) {
+      req.session.evidence[id] = {
         photoVideo: [],
         baggedAndTagged: [],
       }
