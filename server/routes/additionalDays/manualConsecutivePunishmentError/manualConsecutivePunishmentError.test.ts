@@ -26,7 +26,6 @@ beforeEach(() => {
       lastName: 'Smith',
     })
   )
-  config.addedDaysFlag = 'true'
 })
 
 afterEach(() => {

@@ -60,7 +60,6 @@ export default class PunishmentPage {
       otherPrivilege,
       stoppagePercentage,
       isIndependentAdjudicatorHearing,
-      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 

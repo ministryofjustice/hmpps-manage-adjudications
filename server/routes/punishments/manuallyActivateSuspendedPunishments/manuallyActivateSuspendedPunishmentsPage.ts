@@ -41,7 +41,6 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
       stoppagePercentage,
       reportNumber,
       isIndependentAdjudicatorHearing,
-      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 
