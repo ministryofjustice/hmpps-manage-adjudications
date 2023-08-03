@@ -39,14 +39,11 @@ export default class HearingCheckYourAnswersPage {
     const { chargeNumber } = req.params
     const { amount, adjudicator, plea, caution } = req.query
     let actualAmount = amount as string
-    let queryParamsPresent = true
-    if (config.v2EndpointsFlag === 'false') {
-      queryParamsPresent = this.validateDataFromQueryPage(
-        plea as HearingOutcomePlea,
-        adjudicator as string,
-        caution as string
-      )
-    }
+    const queryParamsPresent = this.validateDataFromQueryPage(
+      plea as HearingOutcomePlea,
+      adjudicator as string,
+      caution as string
+    )
 
     if (this.pageOptions.isEdit() && !actualAmount) {
       try {
@@ -153,6 +150,9 @@ export default class HearingCheckYourAnswersPage {
   }
 
   private validateDataFromQueryPage = (plea: HearingOutcomePlea, adjudicator: string, caution: string) => {
+    if (config.v2EndpointsFlag === 'true') {
+      return true
+    }
     if (!plea || !adjudicator || !caution) return false
     return true
   }
