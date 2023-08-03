@@ -10,6 +10,7 @@ import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import {
   OicHearingType,
   ReportedAdjudicationResult,
+  ReportedAdjudicationResultV2,
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import { User } from '../data/hmppsManageUsersClient'
@@ -99,6 +100,20 @@ export default class HearingsService {
     return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcome(chargeNumber, hearingOutcomeDetails)
   }
 
+  async createChargedProvedHearingOutcomeV2(
+    chargeNumber: string,
+    adjudicatorName: string,
+    plea: HearingOutcomePlea,
+    user: User
+  ): Promise<ReportedAdjudicationResultV2> {
+    const hearingOutcomeDetails = {
+      adjudicator: adjudicatorName,
+      plea,
+    }
+
+    return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcomeV2(chargeNumber, hearingOutcomeDetails)
+  }
+
   async createNotProceedHearingOutcome(
     chargeNumber: string,
     adjudicator: string,
@@ -173,6 +188,23 @@ export default class HearingsService {
       damagesOwed,
     }
     return new ManageAdjudicationsClient(user).amendHearingOutcome(
+      chargeNumber,
+      ReportedAdjudicationStatus.CHARGE_PROVED,
+      data
+    )
+  }
+
+  async editChargeProvedOutcomeV2(
+    chargeNumber: string,
+    user: User,
+    adjudicator?: string,
+    plea?: HearingOutcomePlea
+  ): Promise<ReportedAdjudicationResultV2> {
+    const data = {
+      ...(adjudicator && { adjudicator }),
+      plea,
+    }
+    return new ManageAdjudicationsClient(user).amendHearingOutcomeV2(
       chargeNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
       data

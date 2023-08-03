@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { Request, Response } from 'express'
+import config from '../../../config'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
@@ -38,12 +39,14 @@ export default class HearingCheckYourAnswersPage {
     const { chargeNumber } = req.params
     const { amount, adjudicator, plea, caution } = req.query
     let actualAmount = amount as string
-
-    const queryParamsPresent = this.validateDataFromQueryPage(
-      plea as HearingOutcomePlea,
-      adjudicator as string,
-      caution as string
-    )
+    let queryParamsPresent = true
+    if (config.v2EndpointsFlag === 'false') {
+      queryParamsPresent = this.validateDataFromQueryPage(
+        plea as HearingOutcomePlea,
+        adjudicator as string,
+        caution as string
+      )
+    }
 
     if (this.pageOptions.isEdit() && !actualAmount) {
       try {
@@ -98,14 +101,30 @@ export default class HearingCheckYourAnswersPage {
         return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
       }
       if (this.pageOptions.isEdit()) {
-        await this.hearingsService.editChargeProvedOutcome(
+        if (config.v2EndpointsFlag === 'true') {
+          await this.hearingsService.editChargeProvedOutcomeV2(
+            chargeNumber,
+            user,
+            (adjudicator && (adjudicator as string)) || null,
+            (plea && HearingOutcomePlea[plea.toString()]) || null
+          )
+        } else {
+          await this.hearingsService.editChargeProvedOutcome(
+            chargeNumber,
+            caution === 'yes',
+            user,
+            (adjudicator && (adjudicator as string)) || null,
+            (plea && HearingOutcomePlea[plea.toString()]) || null,
+            !actualAmount ? null : actualAmount,
+            damagesOwed ? Boolean(damagesOwed) : null
+          )
+        }
+      } else if (config.v2EndpointsFlag === 'true') {
+        await this.hearingsService.createChargedProvedHearingOutcomeV2(
           chargeNumber,
-          caution === 'yes',
-          user,
-          (adjudicator && (adjudicator as string)) || null,
-          (plea && HearingOutcomePlea[plea.toString()]) || null,
-          !actualAmount ? null : actualAmount,
-          damagesOwed ? Boolean(damagesOwed) : null
+          adjudicator as string,
+          HearingOutcomePlea[plea as string],
+          user
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(
