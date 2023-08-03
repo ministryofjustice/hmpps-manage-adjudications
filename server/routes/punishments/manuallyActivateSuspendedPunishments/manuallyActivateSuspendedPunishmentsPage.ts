@@ -8,7 +8,6 @@ import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
 import validateForm from '../../punishment/punishmentValidation'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
-import config from '../../../config'
 
 type PageData = {
   error?: FormError
