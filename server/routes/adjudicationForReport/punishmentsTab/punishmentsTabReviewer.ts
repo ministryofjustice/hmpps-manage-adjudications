@@ -14,12 +14,7 @@ export default class PunishmentTabReviewerRoute {
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService
   ) {
-    this.page = new PunishmentsTabPage(
-      PageRequestType.REVIEWER,
-      reportedAdjudicationsService,
-      punishmentsService,
-      userService
-    )
+    this.page = new PunishmentsTabPage(PageRequestType.REVIEWER, reportedAdjudicationsService, punishmentsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
