@@ -898,7 +898,10 @@ const stubAmendHearingOutcome = ({ chargeNumber, status, response }): SuperAgent
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`,
+      url:
+        status === 'CHARGE_PROVED'
+          ? `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`
+          : `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
     },
     response: {
       status: 200,
