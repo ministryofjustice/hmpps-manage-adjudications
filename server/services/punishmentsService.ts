@@ -112,14 +112,8 @@ export default class PunishmentsService {
     return new ManageAdjudicationsClient(user).amendPunishments(chargeNumber, punishments)
   }
 
-  async getPunishmentsFromServer(
-    chargeNumber: string,
-    user: User
-  ): Promise<PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[]> {
-    const { reportedAdjudication } =
-      config.v2EndpointsFlag === 'true'
-        ? await new ManageAdjudicationsClient(user).getReportedAdjudicationV2(chargeNumber)
-        : await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+  async getPunishmentsFromServer(chargeNumber: string, user: User): Promise<PunishmentDataWithSchedule[]> {
+    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
     return reportedAdjudication.punishments
   }
 
