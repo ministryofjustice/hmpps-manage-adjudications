@@ -5,7 +5,6 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import config from '../../../config'
 import TestData from '../../testutils/testData'
 import { PunishmentType } from '../../../data/PunishmentResult'
 
@@ -33,7 +32,6 @@ beforeEach(() => {
       lastName: 'Smith',
     })
   )
-  config.addedDaysFlag = 'true'
 })
 
 afterEach(() => {

@@ -296,32 +296,31 @@ export default function routes(
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
 
-  if (config.addedDaysFlag === 'true') {
-    router.use(
-      adjudicationUrls.numberOfAdditionalDays.root,
-      numberOfAdditionalDaysRoutes({ userService, punishmentsService })
-    )
-    router.use(
-      adjudicationUrls.isPunishmentSuspended.root,
-      willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
-    )
-    router.use(
-      adjudicationUrls.isPunishmentConsecutive.root,
-      willPunishmentBeConsecutiveRoutes({ userService, punishmentsService })
-    )
-    router.use(
-      adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
-      whichPunishmentConsecutiveToRoutes({ userService, punishmentsService })
-    )
-    router.use(
-      adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root,
-      ManualEntryConsecutivePunishmentRoutes({ userService, punishmentsService })
-    )
-    router.use(
-      adjudicationUrls.manualConsecutivePunishmentError.root,
-      manualConsecutivePunishmentErrorRoutes({ userService, punishmentsService })
-    )
-  }
+  router.use(
+    adjudicationUrls.numberOfAdditionalDays.root,
+    numberOfAdditionalDaysRoutes({ userService, punishmentsService })
+  )
+  router.use(
+    adjudicationUrls.isPunishmentSuspended.root,
+    willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
+  )
+  router.use(
+    adjudicationUrls.isPunishmentConsecutive.root,
+    willPunishmentBeConsecutiveRoutes({ userService, punishmentsService })
+  )
+  router.use(
+    adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
+    whichPunishmentConsecutiveToRoutes({ userService, punishmentsService })
+  )
+  router.use(
+    adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root,
+    ManualEntryConsecutivePunishmentRoutes({ userService, punishmentsService })
+  )
+  router.use(
+    adjudicationUrls.manualConsecutivePunishmentError.root,
+    manualConsecutivePunishmentErrorRoutes({ userService, punishmentsService })
+  )
+
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
   router.use(
