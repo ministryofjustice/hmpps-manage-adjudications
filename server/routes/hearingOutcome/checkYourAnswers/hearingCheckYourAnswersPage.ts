@@ -134,7 +134,7 @@ export default class HearingCheckYourAnswersPage {
         )
       }
 
-      if (caution === 'no') {
+      if (config.v2EndpointsFlag === 'true' || caution === 'no') {
         const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
         if (adjudication.reportedAdjudication.punishments.length !== 0) {
           return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
