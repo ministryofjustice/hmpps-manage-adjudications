@@ -1,6 +1,7 @@
 ---
 generic-service:
   nameOverride: hmpps-manage-adjudications
+  productId: "DPS001"
 
   replicaCount: 4
 
