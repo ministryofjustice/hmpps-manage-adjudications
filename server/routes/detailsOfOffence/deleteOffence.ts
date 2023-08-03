@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'
 import url from 'url'
+import { Request, Response } from 'express'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'

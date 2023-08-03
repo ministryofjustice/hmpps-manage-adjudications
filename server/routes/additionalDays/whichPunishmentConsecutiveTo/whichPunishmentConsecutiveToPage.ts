@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { Request, Response } from 'express'
 import url from 'url'
 import { ParsedUrlQueryInput } from 'querystring'
+import { Request, Response } from 'express'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
