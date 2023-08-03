@@ -597,7 +597,7 @@ export default class ManageAdjudicationsClient {
   async createPunishmentsV2(
     chargeNumber: string,
     punishments: PunishmentDataV2[]
-  ): Promise<ReportedAdjudicationResult> {
+  ): Promise<ReportedAdjudicationResultV2> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/punishments/v2`,
       data: { punishments: [...punishments] },

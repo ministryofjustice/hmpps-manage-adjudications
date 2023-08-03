@@ -5,12 +5,18 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   PunishmentComment,
   PunishmentData,
+  PunishmentDataV2,
   PunishmentDataWithSchedule,
+  PunishmentDataWithScheduleV2,
   PunishmentType,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
 } from '../data/PunishmentResult'
-import { ReportedAdjudication, ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
+import {
+  ReportedAdjudication,
+  ReportedAdjudicationResult,
+  ReportedAdjudicationResultV2,
+} from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../data/manageAdjudicationsClient'
 import PrisonApiClient, { SanctionStatus } from '../data/prisonApiClient'
 import { convertToTitleCase, formatTimestampTo, getFormattedOfficerName } from '../utils/utils'
@@ -18,6 +24,7 @@ import PrisonerResult from '../data/prisonerResult'
 import logger from '../../logger'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
+import config from '../config'
 
 export default class PunishmentsService {
   constructor(
@@ -69,7 +76,11 @@ export default class PunishmentsService {
     return req.session?.punishments?.[chargeNumber]
   }
 
-  setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], chargeNumber: string) {
+  setAllSessionPunishments(
+    req: Request,
+    punishmentData: PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[],
+    chargeNumber: string
+  ) {
     this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
     const punishments = punishmentData.map(punishment => {
@@ -83,10 +94,13 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishments: PunishmentData[],
+    punishments: PunishmentData[] | PunishmentDataV2[],
     chargeNumber: string,
     user: User
-  ): Promise<ReportedAdjudicationResult> {
+  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
+    if (config.v2EndpointsFlag === 'true') {
+      return new ManageAdjudicationsClient(user).createPunishmentsV2(chargeNumber, punishments)
+    }
     return new ManageAdjudicationsClient(user).createPunishments(chargeNumber, punishments)
   }
 
@@ -98,8 +112,14 @@ export default class PunishmentsService {
     return new ManageAdjudicationsClient(user).amendPunishments(chargeNumber, punishments)
   }
 
-  async getPunishmentsFromServer(chargeNumber: string, user: User): Promise<PunishmentDataWithSchedule[]> {
-    const { reportedAdjudication } = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+  async getPunishmentsFromServer(
+    chargeNumber: string,
+    user: User
+  ): Promise<PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[]> {
+    const { reportedAdjudication } =
+      config.v2EndpointsFlag === 'true'
+        ? await new ManageAdjudicationsClient(user).getReportedAdjudicationV2(chargeNumber)
+        : await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
     return reportedAdjudication.punishments
   }
 
