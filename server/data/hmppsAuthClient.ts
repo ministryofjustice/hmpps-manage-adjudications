@@ -1,5 +1,5 @@
-import superagent from 'superagent'
 import querystring from 'querystring'
+import superagent from 'superagent'
 import type TokenStore from './tokenStore'
 
 import logger from '../../logger'

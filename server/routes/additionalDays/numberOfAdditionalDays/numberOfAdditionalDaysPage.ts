@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { Request, Response } from 'express'
 import url from 'url'
+import { Request, Response } from 'express'
 import validateForm from './numberOfAdditionalDaysValidation'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'

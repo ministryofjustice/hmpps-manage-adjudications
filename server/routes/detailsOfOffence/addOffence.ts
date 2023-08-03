@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'
 import url from 'url'
+import { Request, Response } from 'express'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
 import adjudicationUrls from '../../utils/urlGenerator'
 

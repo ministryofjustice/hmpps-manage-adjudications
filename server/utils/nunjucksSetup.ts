@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
+import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import escapeHtml from 'escape-html'
-import path from 'path'
 import config from '../config'
 import { FormError } from '../@types/template'
 import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType } from './utils'
