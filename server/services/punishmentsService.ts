@@ -163,7 +163,7 @@ export default class PunishmentsService {
     id: number,
     punishmentComment: string,
     user: User
-  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
+  ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsClient(user).amendPunishmentComment(chargeNumber, id, punishmentComment)
   }
 
