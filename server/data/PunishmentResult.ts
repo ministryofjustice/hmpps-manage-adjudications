@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
+import config from '../config'
+
 export enum PunishmentType {
   PRIVILEGE = 'PRIVILEGE',
   EARNINGS = 'EARNINGS',
@@ -192,7 +194,43 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
   }
 }
 
-export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {
+export function flattenPunishmentV2(punishment: PunishmentDataWithScheduleV2): PunishmentDataV2 {
+  const {
+    id,
+    redisId,
+    type,
+    privilegeType,
+    otherPrivilege,
+    stoppagePercentage,
+    schedule,
+    activatedFrom,
+    consecutiveReportNumber,
+    amount,
+  } = punishment
+  const { days, startDate, endDate, suspendedUntil } = schedule
+  return {
+    id,
+    redisId,
+    type,
+    days,
+    ...(privilegeType && { privilegeType }),
+    ...(otherPrivilege && { otherPrivilege }),
+    ...(stoppagePercentage && { stoppagePercentage }),
+    ...(suspendedUntil && { suspendedUntil }),
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+    ...(activatedFrom && { activatedFrom }),
+    ...(consecutiveReportNumber && { consecutiveReportNumber }),
+    ...(amount && { amount }),
+  }
+}
+
+export function flattenPunishments(
+  punishments: PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[]
+): PunishmentData[] | PunishmentDataV2 {
   if (!punishments) return null
+  if (config.v2EndpointsFlag === 'true') {
+    return punishments.map(punishment => flattenPunishmentV2(punishment))
+  }
   return punishments.map(punishment => flattenPunishment(punishment))
 }
