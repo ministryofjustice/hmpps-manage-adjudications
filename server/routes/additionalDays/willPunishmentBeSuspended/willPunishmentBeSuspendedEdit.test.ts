@@ -5,7 +5,6 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import config from '../../../config'
 import { PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
@@ -19,7 +18,6 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  config.addedDaysFlag = 'true'
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.ADDITIONAL_DAYS,
     days: 5,

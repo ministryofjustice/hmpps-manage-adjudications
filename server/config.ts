@@ -126,5 +126,4 @@ export default {
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   dataInsightsFlag: get('DATA_INSIGHTS_FLAG', false, requiredInProduction),
-  addedDaysFlag: get('ADDED_DAYS_FLAG', false, requiredInProduction),
 }

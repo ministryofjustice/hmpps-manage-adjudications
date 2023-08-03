@@ -6,7 +6,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import { PunishmentType } from '../../../data/PunishmentResult'
-import config from '../../../config'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -47,7 +46,6 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue(consecutivePunishments)
-  config.addedDaysFlag = 'true'
 })
 
 afterEach(() => {
@@ -58,7 +56,6 @@ describe('GET', () => {
   beforeEach(() => {
     app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
-    config.addedDaysFlag = 'true'
   })
   it('should load the `Page not found` page', () => {
     return request(app)

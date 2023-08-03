@@ -8,7 +8,6 @@ import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
-import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -60,7 +59,6 @@ export default class PunishmentPage {
       otherPrivilege,
       stoppagePercentage,
       isIndependentAdjudicatorHearing,
-      showAdditionalDaysOptions: config.addedDaysFlag === 'true',
     })
   }
 

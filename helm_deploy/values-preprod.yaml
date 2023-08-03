@@ -22,7 +22,6 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     MAINTENANCE_MODE: false
     DATA_INSIGHTS_FLAG: true
-    ADDED_DAYS_FLAG: true
 
   allowlist:
     global-protect: "35.176.93.186/32"
