@@ -134,4 +134,5 @@ export default {
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   dataInsightsFlag: get('DATA_INSIGHTS_FLAG', false, requiredInProduction),
+  v2EndpointsFlag: get('V2_ENDPOINTS_FLAG', false, requiredInProduction),
 }
