@@ -9,8 +9,8 @@ import { PunishmentType } from '../../data/PunishmentResult'
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')
 
-const userService = new UserService(null) as jest.Mocked<UserService>
-const punishmentsService = new PunishmentsService(null) as jest.Mocked<PunishmentsService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
+const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 
 let app: Express
 

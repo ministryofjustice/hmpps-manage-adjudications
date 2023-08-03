@@ -5,13 +5,14 @@ import {
   NotProceedReason,
 } from '../data/HearingAndOutcomeResult'
 
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 import {
   OicHearingType,
   ReportedAdjudicationResult,
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
+import { User } from '../data/hmppsManageUsersClient'
 
 export default class HearingsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}

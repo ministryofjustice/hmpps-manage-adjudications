@@ -5,7 +5,7 @@ import WitnessesSessionService from '../../services/witnessesSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import DamagesEvidenceWitnessHelper from '../../utils/damagesEvidenceWitnessesHelper'
 

@@ -6,7 +6,7 @@ import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PrisonerSearchService from '../../services/prisonerSearchService'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 
 enum ErrorType {
   PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NAME_INPUT = 'PRISONER_OUTSIDE_ESTABLISHMENT_MISSING_NAME_INPUT',

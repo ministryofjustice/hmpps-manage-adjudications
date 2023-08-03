@@ -9,7 +9,7 @@ import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
 
-const userService = new UserService(null) as jest.Mocked<UserService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 const hearingsService = new HearingsService(null) as jest.Mocked<HearingsService>
 
 let app: Express

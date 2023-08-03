@@ -21,13 +21,14 @@ const testDecisionsTree = question('A question').child(answer('An answer').type(
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
+  null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
-const userService = new UserService(null) as jest.Mocked<UserService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 
 const testData = new TestData()
 
-const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
 const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,

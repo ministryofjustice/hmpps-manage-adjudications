@@ -15,7 +15,7 @@ import {
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './pleaAndFindingValidation'
-import { User } from '../../../data/hmppsAuthClient'
+import { User } from '../../../data/hmppsManageUsersClient'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {

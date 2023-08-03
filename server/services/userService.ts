@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import { Request } from 'express'
 import { convertToTitleCase } from '../utils/utils'
-import HmppsAuthClient, { User, NomisUserResult } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
+import HmppsManageUsersClient, { NomisUserResult, User } from '../data/hmppsManageUsersClient'
 
 interface UserDetails {
   name: string
@@ -38,10 +39,13 @@ export const isCentralAdminCaseload = (caseloadId: string): boolean => {
 }
 
 export default class UserService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient
+  ) {}
 
   async getUserRoles(token: string): Promise<string[]> {
-    return this.hmppsAuthClient.getUserRoles(token)
+    return this.hmppsManageUsersClient.getUserRoles(token)
   }
 
   async getUserWithSession(req: Request, token: string): Promise<UserDetails> {
@@ -52,7 +56,7 @@ export default class UserService {
   }
 
   async getUser(token: string): Promise<UserDetails> {
-    const user = await this.hmppsAuthClient.getUser(token)
+    const user = await this.hmppsManageUsersClient.getUser(token)
     const allCaseLoads = await new PrisonApiClient(token).getUserCaseLoads()
 
     return {
@@ -65,28 +69,28 @@ export default class UserService {
 
   async getStaffFromUsername(username: string, user: User): Promise<UserWithEmail> {
     const [result, userEmail] = await Promise.all([
-      this.hmppsAuthClient.getUserFromUsername(username, user.token),
-      this.hmppsAuthClient.getUserEmail(username, user.token),
+      this.hmppsManageUsersClient.getUserFromUsername(username, user.token),
+      this.hmppsManageUsersClient.getUserEmail(username, user.token),
     ])
     return { ...result, email: userEmail.email }
   }
 
   async getStaffNameFromUsername(username: string, user: User): Promise<User> {
-    return this.hmppsAuthClient.getUserFromUsername(username, user.token)
+    return this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
   }
 
   getUserDetailsMap = async (nomisUsers: NomisUserResult[], token: string): Promise<Map<string, User>> => {
     const nomisUsernames = nomisUsers.map(nomisUser => nomisUser.username)
     const userDetails =
       (await Promise.all(
-        [...nomisUsernames].map(username => this.hmppsAuthClient.getUserFromUsername(username, token))
+        [...nomisUsernames].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, token))
       )) || []
     return new Map(userDetails.map(details => [details.username, details]))
   }
 
   async getStaffFromNames(name: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const users = await this.hmppsAuthClient.getUsersFromName(name, token)
+    const users = await this.hmppsManageUsersClient.getUsersFromName(name, token)
 
     const userDetailsMapById = await this.getUserDetailsMap(users.content, token)
 

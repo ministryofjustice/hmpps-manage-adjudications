@@ -9,7 +9,7 @@ import PlaceOnReportService, {
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { convertSubmittedDateTimeToDateObject, formatDate } from '../../utils/utils'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'

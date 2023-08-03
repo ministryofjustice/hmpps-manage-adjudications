@@ -6,7 +6,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import { DraftAdjudication, EvidenceCode } from '../../data/DraftAdjudicationResult'
 import { getEvidenceCategory } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import DamagesEvidenceWitnessHelper from '../../utils/damagesEvidenceWitnessesHelper'
 

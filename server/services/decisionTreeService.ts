@@ -1,7 +1,7 @@
 import Question from '../offenceCodeDecisions/Question'
 import PlaceOnReportService, { PrisonerResultSummary } from './placeOnReportService'
 import UserService from './userService'
-import { User } from '../data/hmppsAuthClient'
+import { User } from '../data/hmppsManageUsersClient'
 import { IncidentRole as IncidentRoleEnum, incidentRoleFromCode } from '../incidentRole/IncidentRole'
 import { AnswerDataDetails, PlaceholderValues, getPlaceholderValues } from '../offenceCodeDecisions/Placeholder'
 import PrisonerResult from '../data/prisonerResult'

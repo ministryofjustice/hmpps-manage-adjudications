@@ -10,7 +10,7 @@ import {
   properCase,
 } from '../utils/utils'
 
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
 
@@ -36,6 +36,7 @@ import adjudicationUrls from '../utils/urlGenerator'
 import { isPrisonerGenderKnown } from './prisonerSearchService'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
+import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -63,7 +64,10 @@ export type ExistingDraftIncidentDetails = {
 }
 
 export default class PlaceOnReportService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient
+  ) {}
 
   async getPrisonerImage(prisonerNumber: string, user: User): Promise<Readable> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -91,7 +95,7 @@ export default class PlaceOnReportService {
   }
 
   async getReporterName(username: string, user: User): Promise<string> {
-    const userDetails = await this.hmppsAuthClient.getUserFromUsername(username, user.token)
+    const userDetails = await this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
     return userDetails.name
   }
 
@@ -157,7 +161,10 @@ export default class PlaceOnReportService {
 
     const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(draftId)
     const { draftAdjudication } = draftAdjudicationInfo
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(draftAdjudication.startedByUserId, user.token)
+    const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
+      draftAdjudication.startedByUserId,
+      user.token
+    )
 
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')

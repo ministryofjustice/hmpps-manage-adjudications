@@ -17,10 +17,11 @@ const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
+  null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
-const punishmentsService = new PunishmentsService(null) as jest.Mocked<PunishmentsService>
-const userService = new UserService(null) as jest.Mocked<UserService>
+const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 
 let app: Express
 

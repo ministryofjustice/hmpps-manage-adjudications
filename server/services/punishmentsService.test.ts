@@ -1,8 +1,9 @@
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import { PrivilegeType, PunishmentType } from '../data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import PunishmentsService from './punishmentsService'
+import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 
 const getReportedAdjudication = jest.fn()
 const createPunishments = jest.fn()
@@ -32,9 +33,11 @@ jest.mock('../data/prisonApiClient', () => {
   })
 })
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../data/hmppsManageUsersClient')
 const testData = new TestData()
 const user = testData.userFromUsername('user1') as User
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const hmppsManageUsersClient = new HmppsManageUsersClient() as jest.Mocked<HmppsManageUsersClient>
 const token = 'some token'
 
 describe('PunishmentsService', () => {
@@ -43,7 +46,7 @@ describe('PunishmentsService', () => {
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
 
-    service = new PunishmentsService(hmppsAuthClient)
+    service = new PunishmentsService(hmppsAuthClient, hmppsManageUsersClient)
   })
 
   afterEach(() => {

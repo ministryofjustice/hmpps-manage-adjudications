@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import { User } from '../../../data/hmppsAuthClient'
+import { User } from '../../../data/hmppsManageUsersClient'
 import { flattenPunishments } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'

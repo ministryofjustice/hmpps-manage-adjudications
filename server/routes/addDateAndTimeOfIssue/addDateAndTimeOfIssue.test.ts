@@ -10,6 +10,7 @@ jest.mock('../../services/reportedAdjudicationsService.ts')
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
+  null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const testData = new TestData()

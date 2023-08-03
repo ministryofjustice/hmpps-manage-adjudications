@@ -24,6 +24,23 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
+  hmpps-manage-users-api:
+    image: quay.io/hmpps/hmpps-manage-users-api:latest
+    networks:
+      - hmpps
+    container_name: hmpps-manage-users-api
+    depends_on:
+      - hmpps-auth
+    ports:
+      - "8096:8096"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8096/health" ]
+    environment:
+      - SERVER_PORT=8096
+      - HMPPS_AUTH_ENDPOINT_URL=http://hmpps-auth:8080/auth
+      - API_BASE_URL_OAUTH=http://hmpps-auth:8080/auth
+      - SPRING_PROFILES_ACTIVE=dev
+
   gotenberg:
     image: gotenberg/gotenberg:7.9.1
     networks:

@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { FormError } from '../../@types/template'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 
 type PageData = {
   error?: FormError

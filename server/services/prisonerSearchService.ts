@@ -3,10 +3,11 @@ import type { PrisonerSearchByName, PrisonerSearchByPrisonerNumber } from '../da
 import PrisonerSearchClient from '../data/prisonerSearchClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchResult from '../data/prisonerSearchResult'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import { convertToTitleCase } from '../utils/utils'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import adjudicationUrls from '../utils/urlGenerator'
+import { User } from '../data/hmppsManageUsersClient'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
   displayName: string

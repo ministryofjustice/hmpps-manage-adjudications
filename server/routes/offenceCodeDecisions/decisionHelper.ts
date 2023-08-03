@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request } from 'express'
 import { DecisionForm } from './decisionForm'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'

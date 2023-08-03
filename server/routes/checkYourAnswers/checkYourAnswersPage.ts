@@ -7,7 +7,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { CheckYourAnswers, DraftAdjudication, EvidenceDetails } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 import { getEvidenceCategory } from '../../utils/utils'
 
 type PageData = {

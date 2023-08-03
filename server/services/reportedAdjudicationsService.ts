@@ -1,5 +1,5 @@
 import { ConfirmedOnReportData, ConfirmedOnReportChangedData } from '../data/ConfirmedOnReportData'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
 import ManageAdjudicationsClient, { AgencyReportCounts } from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
@@ -49,6 +49,7 @@ import {
   OutcomeHistory,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
+import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -60,6 +61,7 @@ function getNonEnglishLanguage(primaryLanguage: string): string {
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient,
     private readonly curiousApiService: CuriousApiService,
     private readonly locationService: LocationService
   ) {}
@@ -74,7 +76,7 @@ export default class ReportedAdjudicationsService {
 
     const reviewingOfficer =
       reportedAdjudication.reviewedByUserId &&
-      (await this.hmppsAuthClient.getUserFromUsername(reportedAdjudication.reviewedByUserId, user.token))
+      (await this.hmppsManageUsersClient.getUserFromUsername(reportedAdjudication.reviewedByUserId, user.token))
 
     const getReasonTitle = (status: ReportedAdjudicationStatus) => {
       switch (status) {
@@ -152,7 +154,7 @@ export default class ReportedAdjudicationsService {
     )
     const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
 
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(
+    const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
       adjudicationData.reportedAdjudication.createdByUserId,
       user.token
     )
@@ -184,7 +186,7 @@ export default class ReportedAdjudicationsService {
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
       adjudicationData.reportedAdjudication.prisonerNumber
     )
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(
+    const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
       adjudicationData.reportedAdjudication.createdByUserId,
       user.token
     )
@@ -238,7 +240,7 @@ export default class ReportedAdjudicationsService {
     const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
     const reporterNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
     const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
@@ -289,7 +291,7 @@ export default class ReportedAdjudicationsService {
     )
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
     const IssuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
 
@@ -450,7 +452,7 @@ export default class ReportedAdjudicationsService {
 
   async getPrisonerReport(user: User, adjudication: DraftAdjudication & ReportedAdjudication): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
-    const reporter = await this.hmppsAuthClient.getUserFromUsername(userId, user.token)
+    const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
 
     const dateTime = adjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')
@@ -553,7 +555,7 @@ export default class ReportedAdjudicationsService {
     const usernamesAndNames =
       (await Promise.all(
         [...governorUsernames].map(
-          username => username && this.hmppsAuthClient.getUserFromUsername(username, user.token)
+          username => username && this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
         )
       )) || []
     return new Map(usernamesAndNames.map(name => [name?.username, name?.name] || null))

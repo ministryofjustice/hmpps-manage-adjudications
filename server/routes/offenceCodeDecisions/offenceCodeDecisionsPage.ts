@@ -19,7 +19,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstablishmentDecisionHelper'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { OffenceData } from './offenceData'
-import { User } from '../../data/hmppsAuthClient'
+import { User } from '../../data/hmppsManageUsersClient'
 
 type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } & DecisionForm
 

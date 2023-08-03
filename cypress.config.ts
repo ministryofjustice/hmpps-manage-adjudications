@@ -9,6 +9,7 @@ import auth from './integration_tests/mockApis/auth'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import adjudications from './integration_tests/mockApis/adjudications'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
+import users from "./integration_tests/mockApis/users";
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -64,19 +65,20 @@ export default defineConfig({
             prisonApi.stubGetAgency(agencyIdResponse),
           ])
         },
-        stubGetUserFromUsername: auth.stubGetUserFromUsername,
+        stubGetUserFromUsername: users.stubGetUserFromUsername,
 
         stubSearch: prisonerSearch.stubSearch,
         stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
-        stubAuthUser: auth.stubAuthUser,
-        stubUserOriginatingAgency: auth.stubUserOriginatingAgency,
-        stubUserRoles: auth.stubUserRoles,
-        stubGetUser: auth.stubGetUser,
-        stubGetUserFromNames: auth.stubGetUserFromNames,
-        stubGetEmail: auth.stubGetEmail,
+        stubAuthUser: users.stubAuthUser,
+        stubUserOriginatingAgency: users.stubUserOriginatingAgency,
+        stubUserRoles: users.stubUserRoles,
+        stubGetUser: users.stubGetUser,
+        stubGetUserFromNames: users.stubGetUserFromNames,
+        stubGetEmail: users.stubGetEmail,
 
         stubTokenPing: status => tokenVerification.stubPing(status),
         stubAuthPing: status => auth.stubPing(status),
+        stubManageUsersApiPing: status => users.stubPing(status),
         stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
         stubPrisonApiPing: status => prisonApi.stubPing(status),
         stubAdjudicationsPing: status => adjudications.stubPing(status),

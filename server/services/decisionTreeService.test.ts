@@ -1,10 +1,10 @@
-import { User } from '../data/hmppsAuthClient'
 import Question from '../offenceCodeDecisions/Question'
 import TestData from '../routes/testutils/testData'
 import DecisionTreeService, { AnswerData } from './decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from './placeOnReportService'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import UserService from './userService'
+import { User } from '../data/hmppsManageUsersClient'
 
 const getPrisonerDetails = jest.fn()
 const getStaffFromUsername = jest.fn()
@@ -22,9 +22,10 @@ jest.mock('./userService', () => {
 jest.mock('./reportedAdjudicationsService')
 jest.mock('../offenceCodeDecisions/Question')
 
-const placeOnReportService = new PlaceOnReportService(null) as jest.Mocked<PlaceOnReportService>
-const userService = new UserService(null) as jest.Mocked<UserService>
+const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
   null,
   null,
   null

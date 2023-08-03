@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
-import HmppsAuthClient, { User } from '../data/hmppsAuthClient'
+import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   PunishmentComment,
   PunishmentData,
@@ -17,9 +17,13 @@ import { convertToTitleCase, formatTimestampTo, getFormattedOfficerName } from '
 import PrisonerResult from '../data/prisonerResult'
 import logger from '../../logger'
 import adjudicationUrls from '../utils/urlGenerator'
+import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 
 export default class PunishmentsService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient
+  ) {}
 
   private createSessionForAdjudicationIfNotExists(req: Request, chargeNumber: string) {
     if (!req.session.punishments) {
@@ -216,7 +220,7 @@ export default class PunishmentsService {
     const { punishmentComments } = reportedAdjudication
     const usernames = new Set(punishmentComments.map(it => it.createdByUserId))
     const users = await Promise.all(
-      Array.from(usernames).map(async username => this.hmppsAuthClient.getUserFromUsername(username, user.token))
+      Array.from(usernames).map(async username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
     )
     const names: { [key: string]: string } = Object.fromEntries(
       users.map(it => [it.username, getFormattedOfficerName(it.name)])

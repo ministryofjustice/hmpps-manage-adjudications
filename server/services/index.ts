@@ -16,15 +16,18 @@ import HearingsService from './hearingsService'
 import OutcomesService from './outcomesService'
 import PunishmentsService from './punishmentsService'
 import ChartApiService from './chartApiService'
+import HmppsManageUsersClient from '../data/hmppsManageUsersClient'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
-const userService = new UserService(hmppsAuthClient)
-const placeOnReportService = new PlaceOnReportService(hmppsAuthClient)
+const hmppsManageUsersClient = new HmppsManageUsersClient()
+const userService = new UserService(hmppsAuthClient, hmppsManageUsersClient)
+const placeOnReportService = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient)
 const curiousApiService = new CuriousApiService()
 const chartApiService = new ChartApiService(hmppsAuthClient)
 const locationService = new LocationService(hmppsAuthClient)
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   hmppsAuthClient,
+  hmppsManageUsersClient,
   curiousApiService,
   locationService
 )
@@ -40,7 +43,7 @@ const decisionTreeService = new DecisionTreeService(
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
 const outcomesService = new OutcomesService(hmppsAuthClient)
-const punishmentsService = new PunishmentsService(hmppsAuthClient)
+const punishmentsService = new PunishmentsService(hmppsAuthClient, hmppsManageUsersClient)
 const { applicationInfo } = dataAccess()
 
 export const services = {

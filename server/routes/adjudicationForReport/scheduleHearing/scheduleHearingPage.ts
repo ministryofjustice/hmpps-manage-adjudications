@@ -7,7 +7,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { FormError, SubmittedDateTime } from '../../../@types/template'
 import { PrisonLocation } from '../../../data/PrisonLocationResult'
-import { User } from '../../../data/hmppsAuthClient'
+import { User } from '../../../data/hmppsManageUsersClient'
 import logger from '../../../../logger'
 import {
   convertDateTimeStringToSubmittedDateTime,

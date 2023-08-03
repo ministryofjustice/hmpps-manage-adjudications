@@ -68,6 +68,14 @@ export default {
       systemClientId: get('SYSTEM_CLIENT_ID', 'manage-adjudications-client', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
+    hmppsManageUsers: {
+      url: get('HMPPS_MANAGE_USERS_API_URL', 'http://localhost:8080', requiredInProduction),
+      timeout: {
+        response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(),
+    },
     prison: {
       url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
       timeout: {
