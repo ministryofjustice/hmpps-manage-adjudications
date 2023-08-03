@@ -570,7 +570,7 @@ export default class ManageAdjudicationsClient {
     chargeNumber: string,
     status: ReportedAdjudicationStatus,
     amendedData: AmendedHearingOutcomeDataV2
-  ): Promise<ReportedAdjudicationResult> {
+  ): Promise<ReportedAdjudicationResultV2> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
       data: { ...amendedData },
