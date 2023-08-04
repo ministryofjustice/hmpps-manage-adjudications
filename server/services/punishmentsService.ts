@@ -105,10 +105,13 @@ export default class PunishmentsService {
   }
 
   async editPunishmentSet(
-    punishments: PunishmentData[],
+    punishments: PunishmentData[] | PunishmentDataV2[],
     chargeNumber: string,
     user: User
-  ): Promise<ReportedAdjudicationResult> {
+  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
+    if (config.v2EndpointsFlag === 'true') {
+      return new ManageAdjudicationsClient(user).amendPunishmentsV2(chargeNumber, punishments)
+    }
     return new ManageAdjudicationsClient(user).amendPunishments(chargeNumber, punishments)
   }
 
