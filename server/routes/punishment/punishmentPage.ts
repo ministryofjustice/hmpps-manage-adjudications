@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
+import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -15,6 +16,7 @@ type PageData = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
+  amount?: number
 }
 
 export enum PageRequestType {
@@ -44,7 +46,7 @@ export default class PunishmentPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = pageData
+    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount } = pageData
 
     const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
       chargeNumber,
@@ -59,6 +61,8 @@ export default class PunishmentPage {
       otherPrivilege,
       stoppagePercentage,
       isIndependentAdjudicatorHearing,
+      isV2Endpoints: config.v2EndpointsFlag === 'true',
+      amount,
     })
   }
 
@@ -86,7 +90,7 @@ export default class PunishmentPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.body
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount } = req.body
 
     const stoppageOfEarningsPercentage = stoppagePercentage ? Number(String(stoppagePercentage).trim()) : null
     const error = validateForm({
@@ -94,6 +98,7 @@ export default class PunishmentPage {
       privilegeType,
       otherPrivilege,
       stoppagePercentage: stoppageOfEarningsPercentage,
+      amount,
     })
 
     if (error)
@@ -103,7 +108,22 @@ export default class PunishmentPage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage: stoppageOfEarningsPercentage,
+        amount,
       })
+
+    if ([PunishmentType.CAUTION, PunishmentType.DAMAGES_OWED].includes(punishmentType)) {
+      const punishmentData = {
+        type: punishmentType,
+        days: 0,
+        // note can not add amount owed at present - relates to Neils tickets
+      }
+      if (this.pageOptions.isEdit()) {
+        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
+      } else {
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
+      }
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, punishmentType as PunishmentType)
     return res.redirect(
@@ -121,6 +141,7 @@ export default class PunishmentPage {
       }
       return adjudicationUrls.numberOfAdditionalDays.urls.start(chargeNumber)
     }
+
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.punishmentSchedule.urls.edit(chargeNumber, req.params.redisId)
     }

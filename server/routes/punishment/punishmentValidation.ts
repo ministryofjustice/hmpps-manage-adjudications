@@ -6,6 +6,7 @@ type PunishmentForm = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
+  amount?: number
 }
 
 const errors: { [key: string]: FormError } = {
@@ -29,6 +30,14 @@ const errors: { [key: string]: FormError } = {
     href: '#stoppagePercentage',
     text: 'Enter a number between 0 and 100',
   },
+  MISSING_AMOUNT: {
+    href: '#amount',
+    text: 'Enter amount being recovered',
+  },
+  NAN: {
+    href: '#amount',
+    text: 'Enter the amount in numbers',
+  },
 }
 
 export default function validateForm({
@@ -36,6 +45,7 @@ export default function validateForm({
   privilegeType,
   otherPrivilege,
   stoppagePercentage,
+  amount,
 }: PunishmentForm): FormError | null {
   if (!punishmentType) return errors.MISSING_PUNISHMENT_TYPE
 
@@ -48,5 +58,15 @@ export default function validateForm({
 
   if (punishmentType === PunishmentType.EARNINGS && (stoppagePercentage < 1 || stoppagePercentage > 100))
     return errors.STOPPAGE_PERCENTAGE
+
+  if (punishmentType === PunishmentType.DAMAGES_OWED) {
+    if (!amount) {
+      return errors.MISSING_AMOUNT
+    }
+    if (Number.isNaN(Number(amount))) {
+      return errors.NAN
+    }
+  }
+
   return null
 }

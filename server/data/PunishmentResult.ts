@@ -12,6 +12,8 @@ export enum PunishmentType {
   REMOVAL_WING = 'REMOVAL_WING',
   ADDITIONAL_DAYS = 'ADDITIONAL_DAYS',
   PROSPECTIVE_DAYS = 'PROSPECTIVE_DAYS',
+  CAUTION = 'CAUTION',
+  DAMAGES_OWED = 'DAMAGES_OWED',
 }
 
 export enum PrivilegeType {
@@ -158,6 +160,10 @@ export function convertPunishmentType(
       return 'Removal from activity'
     case PunishmentType.REMOVAL_WING:
       return 'Removal from wing or unit'
+    case PunishmentType.CAUTION:
+      return 'Caution'
+    case PunishmentType.DAMAGES_OWED:
+      return 'Recovery of money for damages'
     default:
       return null
   }
