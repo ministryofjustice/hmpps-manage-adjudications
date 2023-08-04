@@ -115,7 +115,7 @@ export default class PunishmentPage {
       const punishmentData = {
         type: punishmentType,
         days: 0,
-        // note can not add amount owed at present - relates to Neils tickets
+        damagesOwedAmount: amount,
       }
       if (this.pageOptions.isEdit()) {
         await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
