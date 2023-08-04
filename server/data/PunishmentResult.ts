@@ -76,7 +76,7 @@ export type PunishmentDataWithScheduleV2 = {
   activatedFrom?: number
   consecutiveReportNumber?: number
   consecutiveReportAvailable?: boolean
-  amount?: number
+  damagesOwedAmount?: number
 }
 
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
@@ -196,7 +196,7 @@ export function flattenPunishmentV2(punishment: PunishmentDataWithScheduleV2): P
     activatedFrom,
     consecutiveReportNumber,
     consecutiveReportAvailable,
-    amount,
+    damagesOwedAmount,
   } = punishment
   const { days, startDate, endDate, suspendedUntil } = schedule
   return {
@@ -213,7 +213,7 @@ export function flattenPunishmentV2(punishment: PunishmentDataWithScheduleV2): P
     ...(activatedFrom && { activatedFrom }),
     ...(consecutiveReportNumber && { consecutiveReportNumber }),
     ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
-    ...(amount && { amount }),
+    ...(damagesOwedAmount && { damagesOwedAmount }),
   }
 }
 
