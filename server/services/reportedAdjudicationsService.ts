@@ -1,38 +1,39 @@
-import { ConfirmedOnReportData, ConfirmedOnReportChangedData } from '../data/ConfirmedOnReportData'
+import { ConfirmedOnReportChangedData, ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
 import ManageAdjudicationsClient, { AgencyReportCounts } from '../data/manageAdjudicationsClient'
 import CuriousApiService from './curiousApiService'
 import {
+  IssueStatus,
   ReportedAdjudication,
+  ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationEnhanced,
+  ReportedAdjudicationEnhancedWithIssuingDetails,
   ReportedAdjudicationFilter,
   ReportedAdjudicationResult,
-  reportedAdjudicationStatusDisplayName,
-  ReportedAdjudicationStatus,
-  ScheduledHearing,
-  ReportedAdjudicationDISFormFilter,
-  ReportedAdjudicationEnhancedWithIssuingDetails,
-  IssueStatus,
+  ReportedAdjudicationResultV2,
   ReportedAdjudicationsResult,
+  ReportedAdjudicationStatus,
+  reportedAdjudicationStatusDisplayName,
+  ScheduledHearing,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
   convertToTitleCase,
+  formatLocation,
+  formatName,
+  formatTimestampTo,
+  formatTimestampToDate,
   getDate,
   getFormattedOfficerName,
   getTime,
-  formatTimestampToDate,
-  formatLocation,
-  formatTimestampTo,
-  formatName,
 } from '../utils/utils'
 import { LocationId } from '../data/PrisonLocationResult'
 import {
-  PrisonerReport,
-  DraftAdjudication,
   DamageDetails,
+  DraftAdjudication,
   EvidenceDetails,
+  PrisonerReport,
   WitnessDetails,
 } from '../data/DraftAdjudicationResult'
 import LocationService from './locationService'
@@ -50,6 +51,7 @@ import {
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
+import config from '../config'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -66,8 +68,13 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getReportedAdjudicationDetails(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+  async getReportedAdjudicationDetails(
+    chargeNumber: string,
+    user: User
+  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
+    return config.v2EndpointsFlag === 'true'
+      ? new ManageAdjudicationsClient(user).getReportedAdjudicationV2(chargeNumber)
+      : new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
   }
 
   async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {

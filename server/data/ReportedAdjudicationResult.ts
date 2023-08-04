@@ -50,6 +50,7 @@ export type ReportedAdjudication = {
 }
 
 export type ReportedAdjudicationV2 = {
+  chargeNumber: string
   prisonerNumber: string
   createdDateTime: string
   createdByUserId: string

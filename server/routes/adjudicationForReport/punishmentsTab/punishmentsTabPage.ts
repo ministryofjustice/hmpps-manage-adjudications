@@ -5,7 +5,7 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
-import UserService from '../../../services/userService'
+import config from '../../../config'
 
 export enum PageRequestType {
   REPORTER,
@@ -57,8 +57,7 @@ export default class PunishmentsTabPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly punishmentsService: PunishmentsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -120,6 +119,7 @@ export default class PunishmentsTabPage {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
+      showEditableDamagesAndCautionDetails: !(config.v2EndpointsFlag === 'true'),
     })
   }
 }
