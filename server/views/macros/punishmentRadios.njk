@@ -18,17 +18,17 @@
 
   {% set amountOwedHtml %}
   {{ govukInput({
-  id: "amount",
-  name: "amount",
-  value: amount,
-  classes: "govuk-input--width-5",
-  errorMessage: errors | findErrors(["amount"]),
-  prefix: {
-    text: "£"
-  },
-  label: {
-      text: "Amount"
-     }
+      id: "amount",
+      name: "amount",
+      value: amount,
+      classes: "govuk-input--width-5",
+      errorMessage: errors | findErrors(["amount"]),
+      prefix: {
+        text: "£"
+      },
+      label: {
+        text: "Amount"
+      }
     }) }}
   {% endset -%}
 
