@@ -160,6 +160,10 @@ export function convertPunishmentType(
       return 'Removal from activity'
     case PunishmentType.REMOVAL_WING:
       return 'Removal from wing or unit'
+    case PunishmentType.CAUTION:
+      return 'Caution'
+    case PunishmentType.DAMAGES_OWED:
+      return 'Recovery of money for damages'
     default:
       return null
   }
