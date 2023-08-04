@@ -12,6 +12,8 @@ export enum PunishmentType {
   REMOVAL_WING = 'REMOVAL_WING',
   ADDITIONAL_DAYS = 'ADDITIONAL_DAYS',
   PROSPECTIVE_DAYS = 'PROSPECTIVE_DAYS',
+  CAUTION = 'CAUTION',
+  DAMAGES_OWED = 'DAMAGES_OWED',
 }
 
 export enum PrivilegeType {
