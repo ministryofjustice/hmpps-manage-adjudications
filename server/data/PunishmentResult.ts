@@ -25,24 +25,6 @@ export enum PrivilegeType {
   OTHER = 'OTHER',
 }
 
-/**
- * @deprecated The method should not be used
- */
-export type PunishmentData = {
-  id?: number
-  redisId?: string
-  type: PunishmentType
-  privilegeType?: PrivilegeType
-  otherPrivilege?: string
-  stoppagePercentage?: number
-  days: number
-  startDate?: string
-  endDate?: string
-  suspendedUntil?: string
-  activatedFrom?: number
-  consecutiveReportNumber?: number
-}
-
 export type PunishmentDataV2 = {
   id?: number
   redisId?: string
@@ -169,7 +151,7 @@ export function convertPunishmentType(
   }
 }
 
-export function flattenPunishment(punishment: PunishmentDataWithSchedule): PunishmentData {
+export function flattenPunishment(punishment: PunishmentDataWithSchedule): PunishmentDataV2 {
   const {
     id,
     redisId,
@@ -233,7 +215,7 @@ export function flattenPunishmentV2(punishment: PunishmentDataWithScheduleV2): P
 
 export function flattenPunishments(
   punishments: PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[]
-): PunishmentData[] | PunishmentDataV2 {
+): PunishmentDataV2[] {
   if (!punishments) return null
   if (config.v2EndpointsFlag === 'true') {
     return punishments.map(punishment => flattenPunishmentV2(punishment))

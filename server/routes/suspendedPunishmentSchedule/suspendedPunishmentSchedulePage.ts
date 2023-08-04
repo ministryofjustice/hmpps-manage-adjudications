@@ -12,7 +12,7 @@ import { datePickerToApi, hasAnyRole } from '../../utils/utils'
 import PunishmentsService from '../../services/punishmentsService'
 import {
   PrivilegeType,
-  PunishmentData,
+  PunishmentDataV2,
   PunishmentType,
   SuspendedPunishment,
   flattenPunishment,
@@ -147,7 +147,7 @@ export default class SuspendedPunishmentSchedulePage {
     startDate: string,
     endDate: string,
     activatedFromReportNumber: number
-  ): PunishmentData {
+  ): PunishmentDataV2 {
     const activePunishment = {
       ...existingPunishment,
       redisId: uuidv4(),

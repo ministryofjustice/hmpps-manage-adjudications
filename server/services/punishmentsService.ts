@@ -4,7 +4,6 @@ import { Request } from 'express'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   PunishmentComment,
-  PunishmentData,
   PunishmentDataV2,
   PunishmentDataWithSchedule,
   PunishmentDataWithScheduleV2,
@@ -53,13 +52,13 @@ export default class PunishmentsService {
     return reportedAdjudication
   }
 
-  addSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string) {
+  addSessionPunishment(req: Request, punishmentData: PunishmentDataV2, chargeNumber: string) {
     this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     const newPunishment = { ...punishmentData, redisId: uuidv4() }
     return req.session.punishments[chargeNumber].push(newPunishment)
   }
 
-  updateSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string, redisId: string) {
+  updateSessionPunishment(req: Request, punishmentData: PunishmentDataV2, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
     const updatedPunishment = { ...punishmentData, redisId, id: punishment.id }
@@ -69,7 +68,9 @@ export default class PunishmentsService {
 
   async deleteSessionPunishments(req: Request, redisId: string, chargeNumber: string) {
     // get an array of the redisIds
-    const redisIdArray = req.session.punishments?.[chargeNumber].map((punishment: PunishmentData) => punishment.redisId)
+    const redisIdArray = req.session.punishments?.[chargeNumber].map(
+      (punishment: PunishmentDataV2) => punishment.redisId
+    )
     // get the index of the redisId we want to delete
     const indexOfPunishment = redisIdArray.indexOf(redisId)
 
@@ -81,7 +82,7 @@ export default class PunishmentsService {
   getSessionPunishment(req: Request, chargeNumber: string, redisId: string) {
     const sessionData = this.getAllSessionPunishments(req, chargeNumber)
 
-    return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)[0]
+    return sessionData.filter((punishment: PunishmentDataV2) => punishment.redisId === redisId)[0]
   }
 
   getAllSessionPunishments(req: Request, chargeNumber: string) {
@@ -106,7 +107,7 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishments: PunishmentData[] | PunishmentDataV2[],
+    punishments: PunishmentDataV2[],
     chargeNumber: string,
     user: User
   ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
@@ -117,7 +118,7 @@ export default class PunishmentsService {
   }
 
   async editPunishmentSet(
-    punishments: PunishmentData[] | PunishmentDataV2[],
+    punishments: PunishmentDataV2[],
     chargeNumber: string,
     user: User
   ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
