@@ -42,7 +42,6 @@ import {
   QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
 import {
-  PunishmentData,
   PunishmentDataV2,
   PunishmentDataWithSchedule,
   PunishmentType,
@@ -587,7 +586,7 @@ export default class ManageAdjudicationsClient {
   /**
    * @deprecated The method should not be used
    */
-  async createPunishments(chargeNumber: string, punishments: PunishmentData[]): Promise<ReportedAdjudicationResult> {
+  async createPunishments(chargeNumber: string, punishments: PunishmentDataV2[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/punishments`,
       data: { punishments: [...punishments] },
@@ -607,7 +606,7 @@ export default class ManageAdjudicationsClient {
   /**
    * @deprecated The method should not be used
    */
-  async amendPunishments(chargeNumber: string, punishments: PunishmentData[]): Promise<ReportedAdjudicationResult> {
+  async amendPunishments(chargeNumber: string, punishments: PunishmentDataV2[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/punishments`,
       data: { punishments: [...punishments] },
