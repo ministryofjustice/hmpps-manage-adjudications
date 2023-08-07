@@ -166,6 +166,7 @@ export default class HomepageRoutes {
       description:
         'Charts and data for adjudications in this establishment, including by location and different prisoner characteristics.',
       href: adjudicationUrls.dataInsights.root,
+      enabled: true,
     }
 
     return res.render('pages/homepage', {
