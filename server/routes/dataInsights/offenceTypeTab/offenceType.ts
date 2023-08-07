@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import ChartApiService from '../../../services/chartApiService'
 import OffenceTypeTabPage from './offenceTypeTabPage'
-import { checkDataInsightsPermissions } from '../dataInsightsTabsOptions'
 
 export default class OffenceTypeRoutes {
   page: OffenceTypeTabPage
@@ -11,7 +10,7 @@ export default class OffenceTypeRoutes {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    await checkDataInsightsPermissions(req, res, this.page.view)
+    await this.page.view(req, res)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
