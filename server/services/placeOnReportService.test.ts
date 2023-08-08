@@ -30,7 +30,7 @@ jest.mock('../data/prisonApiClient', () => {
     return { getPrisonerImage, getPrisonerDetails, getAgency, getBatchPrisonerDetails }
   })
 })
-jest.mock('../data/manageAdjudicationsClient', () => {
+jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
       postDraftIncidentStatement,

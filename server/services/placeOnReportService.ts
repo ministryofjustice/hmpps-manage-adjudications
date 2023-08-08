@@ -12,7 +12,7 @@ import {
 
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
-import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsSystemTokensClient from '../data/manageAdjudicationsSystemTokensClient'
 
 import PrisonerResult from '../data/prisonerResult'
 import { PrisonLocation } from '../data/PrisonLocationResult'
@@ -37,6 +37,7 @@ import { isPrisonerGenderKnown } from './prisonerSearchService'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
+import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -107,7 +108,8 @@ export default class PlaceOnReportService {
     gender: PrisonerGender,
     dateTimeOfDiscovery?: string
   ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     const prisoner = await this.getPrisonerDetails(prisonerNumber, user)
     const requestBody = {
       dateTimeOfIncident,
@@ -127,7 +129,8 @@ export default class PlaceOnReportService {
     removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     const requestBody = {
       isYouthOffenderRule: whichRuleChosen === 'yoi',
       removeExistingOffences,
@@ -142,7 +145,8 @@ export default class PlaceOnReportService {
     completed: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
 
     const { draftAdjudication } = await client.getDraftAdjudication(draftId)
     const editRequired = Boolean(draftAdjudication?.incidentStatement != null)
@@ -157,7 +161,8 @@ export default class PlaceOnReportService {
   }
 
   async getCheckYourAnswersInfo(draftId: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
 
     const draftAdjudicationInfo = await manageAdjudicationsClient.getDraftAdjudication(draftId)
     const { draftAdjudication } = draftAdjudicationInfo
@@ -214,7 +219,8 @@ export default class PlaceOnReportService {
     chargeNumber: string | number,
     user: User
   ): Promise<ExistingDraftIncidentDetails> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     const response = await manageAdjudicationsClient.getDraftAdjudication(chargeNumber)
     const { incidentDetails } = response.draftAdjudication
     const dateAndTimeOfIncident = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfIncident)
@@ -244,7 +250,8 @@ export default class PlaceOnReportService {
     user: User,
     dateTimeOfDiscovery: string
   ): Promise<DraftAdjudicationResult> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
@@ -261,7 +268,8 @@ export default class PlaceOnReportService {
     removeExistingOffences: boolean,
     user: User
   ): Promise<DraftAdjudicationResult> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     const editIncidentRoleRequest = {
       incidentRole: {
         roleCode,
@@ -273,13 +281,15 @@ export default class PlaceOnReportService {
   }
 
   async completeDraftAdjudication(id: number, user: User): Promise<string> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     const completedAdjudication = await manageAdjudicationsClient.submitCompleteDraftAdjudication(id)
     return completedAdjudication.chargeNumber
   }
 
   async getDraftAdjudicationDetails(draftId: number, user: User): Promise<DraftAdjudicationResult> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     return manageAdjudicationsClient.getDraftAdjudication(draftId)
   }
 
@@ -288,7 +298,11 @@ export default class PlaceOnReportService {
     filter: ContinueReportApiFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<DraftAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user).getAllDraftAdjudicationsForUser(filter, pageRequest)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const pageResponse = await new ManageAdjudicationsSystemTokensClient(token, user).getAllDraftAdjudicationsForUser(
+      filter,
+      pageRequest
+    )
 
     const prisonerDetails = new Map(
       (
@@ -326,7 +340,8 @@ export default class PlaceOnReportService {
   }
 
   async getInfoForTaskListStatuses(draftId: number, user: User): Promise<TaskListDetails> {
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     const { draftAdjudication } = await manageAdjudicationsClient.getDraftAdjudication(draftId)
 
     const statementComplete = draftAdjudication.incidentStatement?.completed || false
@@ -423,37 +438,43 @@ export default class PlaceOnReportService {
   }
 
   async getOffenceRule(offenceCode: number, isYouthOffender: boolean, gender: PrisonerGender, user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.getOffenceRule(offenceCode, isYouthOffender, gender)
   }
 
   async saveOffenceDetails(draftId: number, offenceDetails: OffenceDetails, user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.saveOffenceDetails(draftId, offenceDetails)
   }
 
   async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails, user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const client = new ManageAdjudicationsUserTokensClient(user)
     return client.aloAmendOffenceDetails(draftId, offenceDetails)
   }
 
   async saveAssociatedPrisoner(draftId: number, associatedPrisoner: AssociatedPrisoner, user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.saveAssociatedPrisoner(draftId, associatedPrisoner)
   }
 
   async saveDamageDetails(chargeNumber: string, damageDetails: DamageDetails[], user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.saveDamageDetails(chargeNumber, damageDetails)
   }
 
   async saveEvidenceDetails(chargeNumber: string, evidenceDetails: EvidenceDetails[], user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.saveEvidenceDetails(chargeNumber, evidenceDetails)
   }
 
   async saveWitnessDetails(chargeNumber: string, witnessDetails: WitnessDetails[], user: User) {
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.saveWitnessDetails(chargeNumber, witnessDetails)
   }
 
@@ -461,7 +482,8 @@ export default class PlaceOnReportService {
     const genderData = {
       gender: chosenGender,
     }
-    const client = new ManageAdjudicationsClient(user)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.amendGender(draftId, genderData)
   }
 
@@ -502,6 +524,7 @@ export default class PlaceOnReportService {
   }
 
   async removeDraftAdjudication(draftAdjudicationId: number, user: User): Promise<void> {
-    return new ManageAdjudicationsClient(user).removeDraftAdjudication(draftAdjudicationId)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).removeDraftAdjudication(draftAdjudicationId)
   }
 }

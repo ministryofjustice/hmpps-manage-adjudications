@@ -5,11 +5,12 @@ import TestData from '../routes/testutils/testData'
 
 const testData = new TestData()
 
-jest.mock('../data/manageAdjudicationsClient')
+jest.mock('../data/manageAdjudicationsUserTokensClient')
+jest.mock('../data/manageAdjudicationsSystemTokensClient')
 jest.mock('../data/hmppsAuthClient')
 const createChargeProvedHearingOutcome = jest.fn()
 
-jest.mock('../data/manageAdjudicationsClient', () => {
+jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
       createChargeProvedHearingOutcome,
