@@ -1,0 +1,120 @@
+import nock from 'nock'
+import moment from 'moment'
+import config from '../config'
+import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
+import TestData from '../routes/testutils/testData'
+import ManageAdjudicationsUserTokensClient from './manageAdjudicationsUserTokensClient'
+
+jest.mock('../../logger')
+const testData = new TestData()
+
+describe('manageAdjudicationsSystemTokensClient', () => {
+  let fakeManageAdjudicationsApi: nock.Scope
+  let client: ManageAdjudicationsUserTokensClient
+
+  const token = 'token-1'
+  const user = {
+    token,
+    username: '',
+    name: '',
+    activeCaseLoadId: '',
+    authSource: '',
+  }
+
+  beforeEach(() => {
+    fakeManageAdjudicationsApi = nock(config.apis.adjudications.url)
+    client = new ManageAdjudicationsUserTokensClient(user)
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+  })
+
+  describe('getYourCompletedAdjudications', () => {
+    const content = [
+      testData.reportedAdjudication({
+        chargeNumber: '2',
+        prisonerNumber: 'G6123VU',
+      }),
+      testData.reportedAdjudication({
+        chargeNumber: '1',
+        prisonerNumber: 'G6174VU',
+      }),
+    ]
+    const request = {
+      size: 20,
+      number: 0,
+    }
+    const response = {
+      size: 20,
+      pageNumber: 0,
+      totalElements: 2,
+      content,
+    }
+
+    it('should return a page of completed adjudications', async () => {
+      fakeManageAdjudicationsApi
+        .get(
+          `/reported-adjudications/my-reports?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01&status=AWAITING_REVIEW`
+        )
+        .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
+        .reply(200, response)
+
+      const result = await client.getYourCompletedAdjudications(
+        {
+          toDate: moment('2022-01-01', 'YYYY-MM-DD'),
+          fromDate: moment('2022-01-01', 'YYYY-MM-DD'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          transfersOnly: false,
+        },
+        request
+      )
+      expect(result).toEqual(response)
+    })
+  })
+
+  describe('getAllCompletedAdjudications', () => {
+    const content = [
+      testData.reportedAdjudication({
+        chargeNumber: '2',
+        prisonerNumber: 'G6123VU',
+      }),
+      testData.reportedAdjudication({
+        chargeNumber: '1',
+        prisonerNumber: 'G6174VU',
+      }),
+    ]
+    const request = {
+      size: 20,
+      number: 0,
+    }
+    const response = {
+      size: 20,
+      pageNumber: 0,
+      totalElements: 2,
+      content,
+    }
+
+    it('should return a page of completed adjudications', async () => {
+      fakeManageAdjudicationsApi
+        .get(
+          `/reported-adjudications/reports?page=0&size=20&startDate=2021-01-01&endDate=2021-01-01&status=AWAITING_REVIEW`
+        )
+        .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
+        .reply(200, response)
+
+      const result = await client.getAllCompletedAdjudications(
+        {
+          fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          toDate: moment('01/01/2021', 'DD/MM/YYYY'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          transfersOnly: false,
+        },
+        request
+      )
+      expect(result).toEqual(response)
+    })
+  })
+})

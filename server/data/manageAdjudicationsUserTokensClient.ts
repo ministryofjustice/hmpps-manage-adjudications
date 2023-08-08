@@ -6,6 +6,8 @@ import {
   ReportedAdjudication,
   ScheduledHearingList,
   ReportedAdjudicationStatus,
+  ReportedAdjudicationFilter,
+  allStatuses,
 } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 import {
@@ -24,6 +26,8 @@ import {
   SuspendedPunishmentResult,
 } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
+import { ApiPageRequest, ApiPageResponse } from './ApiData'
+import { momentDateToApi } from '../utils/utils'
 
 export type OutcomeInfo = {
   code: OutcomeCode
@@ -116,6 +120,28 @@ export default class ManageAdjudicationsUserTokensClient {
       user.activeCaseLoadId
     )
   }
+
+  private getCompletedAdjudications =
+    (prefix: string) =>
+    async (
+      filter: ReportedAdjudicationFilter,
+      pageRequest: ApiPageRequest
+    ): Promise<ApiPageResponse<ReportedAdjudication>> => {
+      const path =
+        `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
+        `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+        `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
+
+      return this.restClient.get({
+        path,
+      })
+    }
+
+  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/reports')
+
+  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
 
   async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails): Promise<ReportedAdjudication> {
     return this.restClient.post({
