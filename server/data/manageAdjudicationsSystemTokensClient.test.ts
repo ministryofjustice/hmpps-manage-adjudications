@@ -1,7 +1,7 @@
 import nock from 'nock'
 import moment from 'moment'
 import config from '../config'
-import ManageAdjudicationsClient from './manageAdjudicationsClient'
+import ManageAdjudicationsSystemTokensClient from './manageAdjudicationsSystemTokensClient'
 import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
 import { DamageCode, EvidenceCode, PrisonerGender } from './DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
@@ -9,9 +9,9 @@ import TestData from '../routes/testutils/testData'
 jest.mock('../../logger')
 const testData = new TestData()
 
-describe('manageAdjudicationsClient', () => {
+describe('manageAdjudicationsSystemTokensClient', () => {
   let fakeManageAdjudicationsApi: nock.Scope
-  let client: ManageAdjudicationsClient
+  let client: ManageAdjudicationsSystemTokensClient
 
   const token = 'token-1'
   const user = {
@@ -24,7 +24,7 @@ describe('manageAdjudicationsClient', () => {
 
   beforeEach(() => {
     fakeManageAdjudicationsApi = nock(config.apis.adjudications.url)
-    client = new ManageAdjudicationsClient(user)
+    client = new ManageAdjudicationsSystemTokensClient(token, user)
   })
 
   afterEach(() => {

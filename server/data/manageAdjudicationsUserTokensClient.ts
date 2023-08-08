@@ -1,37 +1,13 @@
 import config from '../config'
-import {
-  DraftAdjudicationResult,
-  IncidentStatement,
-  IncidentDetails,
-  EditedIncidentDetails,
-  EditIncidentRoleRequest,
-  OffenceRule,
-  OffenceDetails,
-  ApplicableRules,
-  AssociatedPrisoner,
-  DamageDetails,
-  EvidenceDetails,
-  WitnessDetails,
-  PrisonerGender,
-  DraftAdjudication,
-} from './DraftAdjudicationResult'
+import { OffenceDetails } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
   ReportedAdjudicationResultV2,
   ReportedAdjudication,
-  ReportedAdjudicationFilter,
-  ReviewAdjudication,
   ScheduledHearingList,
-  allStatuses,
-  ReportedAdjudicationDISFormFilter,
-  ReportedAdjudicationsResult,
-  allIssueStatuses,
   ReportedAdjudicationStatus,
 } from './ReportedAdjudicationResult'
-import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
-import { momentDateToApi } from '../utils/utils'
-import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import {
   HearingDetails,
   HearingOutcomeAdjournReason,
@@ -48,13 +24,6 @@ import {
   SuspendedPunishmentResult,
 } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
-
-export interface IncidentDetailsEnhanced extends IncidentDetails {
-  prisonerNumber: string
-  agencyId: string
-  overrideAgencyId?: string
-  gender: PrisonerGender
-}
 
 export type OutcomeInfo = {
   code: OutcomeCode
@@ -123,11 +92,6 @@ export type AmendedOutcomeData = {
   quashedReason?: QuashGuiltyFindingReason
 }
 
-export type AgencyReportCounts = {
-  reviewTotal: number
-  transferReviewTotal: number
-}
-
 export type ConsecutiveAdditionalDaysReport = {
   reportNumber: number
   chargeProvedDate: string
@@ -136,7 +100,12 @@ export type ConsecutiveAdditionalDaysReport = {
   consecutiveReportAvailable?: boolean
 }
 
-export default class ManageAdjudicationsClient {
+/**
+ * Use this client when we want to make calls to the Adjudications API and pass the user tokens, this
+ * include DPS roles such as ALO (ADJUDICATIONS_REVIEWER). As opposed to the system tokens (client credentials)
+ * which we have a different client for - ManageAdjudicationsSystemTokensClient.ts
+ */
+export default class ManageAdjudicationsUserTokensClient {
   restClient: RestClient
 
   constructor(user: User) {
@@ -148,237 +117,10 @@ export default class ManageAdjudicationsClient {
     )
   }
 
-  async startNewDraftAdjudication(incidentDetails: IncidentDetailsEnhanced): Promise<DraftAdjudicationResult> {
-    return this.restClient.post({
-      path: `/draft-adjudications`,
-      data: { ...incidentDetails },
-    })
-  }
-
-  async postDraftIncidentStatement(
-    draftId: number,
-    incidentStatement: IncidentStatement
-  ): Promise<DraftAdjudicationResult> {
-    return this.restClient.post({
-      path: `/draft-adjudications/${draftId}/incident-statement`,
-      data: { ...incidentStatement },
-    })
-  }
-
-  async putDraftIncidentStatement(
-    draftId: number,
-    incidentStatement: IncidentStatement
-  ): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${draftId}/incident-statement`,
-      data: { ...incidentStatement },
-    })
-  }
-
-  async getDraftAdjudication(chargeNumber: string | number): Promise<DraftAdjudicationResult> {
-    return this.restClient.get({
-      path: `/draft-adjudications/${chargeNumber}`,
-    })
-  }
-
-  async getAllDraftAdjudicationsForUser(
-    filter: ContinueReportApiFilter,
-    pageRequest: ApiPageRequest
-  ): Promise<ApiPageResponse<DraftAdjudication>> {
-    const path =
-      `/draft-adjudications/my-reports?page=${pageRequest.number}&size=${pageRequest.size}` +
-      `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
-      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
-
-    return this.restClient.get({
-      path,
-    })
-  }
-
-  async submitCompleteDraftAdjudication(id: number): Promise<ReportedAdjudication> {
-    return this.restClient.post({
-      path: `/draft-adjudications/${id}/complete-draft-adjudication`,
-    })
-  }
-
-  async editDraftIncidentDetails(
-    id: number,
-    editedIncidentDetails: EditedIncidentDetails
-  ): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${id}/incident-details`,
-      data: { ...editedIncidentDetails },
-    })
-  }
-
-  async updateIncidentRole(
-    id: number,
-    editIncidentRoleRequest: EditIncidentRoleRequest
-  ): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${id}/incident-role`,
-      data: { ...editIncidentRoleRequest },
-    })
-  }
-
-  /**
-   * @deprecated The method should not be used
-   */
-  async getReportedAdjudication(chargeNumber: string): Promise<ReportedAdjudicationResult> {
-    return this.restClient.get({
-      path: `/reported-adjudications/${chargeNumber}`,
-    })
-  }
-
-  async getReportedAdjudicationV2(chargeNumber: string): Promise<ReportedAdjudicationResultV2> {
-    return this.restClient.get({
-      path: `/reported-adjudications/${chargeNumber}/v2`,
-    })
-  }
-
-  async updateAdjudicationStatus(
-    chargeNumber: string,
-    payload: ReviewAdjudication
-  ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/status`,
-      data: payload,
-    })
-  }
-
-  private getCompletedAdjudications =
-    (prefix: string) =>
-    async (
-      filter: ReportedAdjudicationFilter,
-      pageRequest: ApiPageRequest
-    ): Promise<ApiPageResponse<ReportedAdjudication>> => {
-      const path =
-        `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
-        `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
-        `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
-        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
-
-      return this.restClient.get({
-        path,
-      })
-    }
-
-  getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/reports')
-
-  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
-
-  async getReportedAdjudicationIssueData(
-    filter: ReportedAdjudicationDISFormFilter
-  ): Promise<ReportedAdjudicationsResult> {
-    const path =
-      `/reported-adjudications/for-issue?` +
-      `${(filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
-      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
-    return this.restClient.get({
-      path,
-    })
-  }
-
-  async getReportedAdjudicationPrintData(
-    filter: ReportedAdjudicationDISFormFilter
-  ): Promise<ReportedAdjudicationsResult> {
-    const path =
-      `/reported-adjudications/for-print?${
-        (filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''
-      }` +
-      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-      `${(filter.issueStatus && `&issueStatus=${filter.issueStatus}`) || `&issueStatus=${allIssueStatuses}`}`
-    return this.restClient.get({
-      path,
-    })
-  }
-
-  async createDraftFromCompleteAdjudication(chargeNumber: string): Promise<DraftAdjudicationResult> {
-    return this.restClient.post({
-      path: `/reported-adjudications/${chargeNumber}/create-draft-adjudication`,
-    })
-  }
-
-  async getOffenceRule(offenceCode: number, isYouthOffender: boolean, gender: PrisonerGender): Promise<OffenceRule> {
-    return this.restClient.get({
-      path: `/draft-adjudications/offence-rule/${offenceCode}?youthOffender=${isYouthOffender}&gender=${gender}`,
-    })
-  }
-
-  async saveOffenceDetails(draftId: number, offenceDetails: OffenceDetails) {
-    return this.restClient.put({
-      path: `/draft-adjudications/${draftId}/offence-details`,
-      data: { offenceDetails },
-    })
-  }
-
   async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails): Promise<ReportedAdjudication> {
     return this.restClient.post({
       path: `/draft-adjudications/${draftId}/alo-offence-details`,
       data: { offenceDetails },
-    })
-  }
-
-  async saveYouthOffenderStatus(
-    draftId: number,
-    applicableRulesData: ApplicableRules
-  ): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${draftId}/applicable-rules`,
-      data: applicableRulesData,
-    })
-  }
-
-  async saveAssociatedPrisoner(
-    draftId: number,
-    associatedPrisoner: AssociatedPrisoner
-  ): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${draftId}/associated-prisoner`,
-      data: associatedPrisoner,
-    })
-  }
-
-  async saveDamageDetails(chargeNumber: string, damages: DamageDetails[]): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${chargeNumber}/damages`,
-      data: { damages },
-    })
-  }
-
-  async updateDamageDetails(chargeNumber: string, damages: DamageDetails[]): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/damages/edit`,
-      data: { damages },
-    })
-  }
-
-  async saveEvidenceDetails(chargeNumber: string, evidence: EvidenceDetails[]): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${chargeNumber}/evidence`,
-      data: { evidence },
-    })
-  }
-
-  async updateEvidenceDetails(chargeNumber: string, evidence: EvidenceDetails[]): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/evidence/edit`,
-      data: { evidence },
-    })
-  }
-
-  async saveWitnessDetails(chargeNumber: string, witnesses: WitnessDetails[]): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${chargeNumber}/witnesses`,
-      data: { witnesses },
-    })
-  }
-
-  async updateWitnessDetails(chargeNumber: string, witnesses: WitnessDetails[]): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/witnesses/edit`,
-      data: { witnesses },
     })
   }
 
@@ -411,20 +153,6 @@ export default class ManageAdjudicationsClient {
   async getHearingsGivenAgencyAndDate(chosenHearingDate: string): Promise<ScheduledHearingList> {
     return this.restClient.get({
       path: `/reported-adjudications/hearings?hearingDate=${chosenHearingDate}`,
-    })
-  }
-
-  async amendGender(draftId: number, chosenGender: { gender: PrisonerGender }): Promise<DraftAdjudicationResult> {
-    return this.restClient.put({
-      path: `/draft-adjudications/${draftId}/gender`,
-      data: { ...chosenGender },
-    })
-  }
-
-  async putDateTimeOfIssue(chargeNumber: string, dateTimeOfIssue: string): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/issue`,
-      data: { dateTimeOfIssue },
     })
   }
 
@@ -474,12 +202,6 @@ export default class ManageAdjudicationsClient {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/outcome/refer-police`,
       data: { details: outcomeDetails.details },
-    })
-  }
-
-  async removeDraftAdjudication(draftAdjudicationId: number): Promise<void> {
-    return this.restClient.delete({
-      path: `/draft-adjudications/${draftAdjudicationId}`,
     })
   }
 
@@ -650,12 +372,6 @@ export default class ManageAdjudicationsClient {
   async removePunishmentComment(chargeNumber: string, id: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${chargeNumber}/punishments/comment/${id}`,
-    })
-  }
-
-  async getAgencyReportCounts(): Promise<AgencyReportCounts> {
-    return this.restClient.get({
-      path: `/reported-adjudications/report-counts`,
     })
   }
 
