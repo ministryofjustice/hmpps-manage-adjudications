@@ -2,7 +2,7 @@ import moment from 'moment'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 
 import PrisonApiClient from '../data/prisonApiClient'
-import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsSystemTokensClient from '../data/manageAdjudicationsSystemTokensClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
 import LocationService from './locationService'
@@ -52,7 +52,7 @@ jest.mock('../data/prisonApiClient', () => {
     }
   })
 })
-jest.mock('../data/manageAdjudicationsClient', () => {
+jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
       getReportedAdjudication,
@@ -297,7 +297,7 @@ describe('reportedAdjudicationsService', () => {
       it('makes the correct calls', async () => {
         await service.getConfirmationDetails('123', user)
 
-        expect(ManageAdjudicationsClient).toBeCalledWith(user)
+        expect(ManageAdjudicationsSystemTokensClient).toBeCalledWith(token, user)
         expect(getReportedAdjudication).toBeCalledWith('123')
         expect(PrisonApiClient).toBeCalledWith(token)
         expect(getPrisonerDetails).toBeCalledWith('A1234AA')

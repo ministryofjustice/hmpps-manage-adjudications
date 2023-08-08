@@ -1,7 +1,9 @@
 import { ConfirmedOnReportChangedData, ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
-import ManageAdjudicationsClient, { AgencyReportCounts } from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsSystemTokensClient, {
+  AgencyReportCounts,
+} from '../data/manageAdjudicationsSystemTokensClient'
 import CuriousApiService from './curiousApiService'
 import {
   IssueStatus,
@@ -52,6 +54,7 @@ import {
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import config from '../config'
+import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -72,9 +75,10 @@ export default class ReportedAdjudicationsService {
     chargeNumber: string,
     user: User
   ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return config.v2EndpointsFlag === 'true'
-      ? new ManageAdjudicationsClient(user).getReportedAdjudicationV2(chargeNumber)
-      : new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+      ? new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudicationV2(chargeNumber)
+      : new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
   }
 
   async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {
@@ -141,9 +145,11 @@ export default class ReportedAdjudicationsService {
   }
 
   async getConfirmationDetails(chargeNumber: string, user: User): Promise<ConfirmedOnReportData> {
-    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
-
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const adjudicationData = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
+      chargeNumber
+    )
+
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
       adjudicationData.reportedAdjudication.prisonerNumber
     )
@@ -187,9 +193,11 @@ export default class ReportedAdjudicationsService {
   }
 
   async getSimpleConfirmationDetails(chargeNumber: string, user: User): Promise<ConfirmedOnReportChangedData> {
-    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
-
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const adjudicationData = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
+      chargeNumber
+    )
+
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
       adjudicationData.reportedAdjudication.prisonerNumber
     )
@@ -212,7 +220,11 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user).getYourCompletedAdjudications(filter, pageRequest)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const pageResponse = await new ManageAdjudicationsSystemTokensClient(token, user).getYourCompletedAdjudications(
+      filter,
+      pageRequest
+    )
 
     const prisonerDetails = new Map(
       (
@@ -237,7 +249,11 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsClient(user).getAllCompletedAdjudications(filter, pageRequest)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const pageResponse = await new ManageAdjudicationsSystemTokensClient(token, user).getAllCompletedAdjudications(
+      filter,
+      pageRequest
+    )
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
@@ -268,10 +284,11 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationDISFormFilter,
     filterUsingHearingDate: boolean
   ): Promise<ReportedAdjudicationsResult> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     if (filterUsingHearingDate) {
-      return new ManageAdjudicationsClient(user).getReportedAdjudicationPrintData(filter)
+      return new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudicationPrintData(filter)
     }
-    return new ManageAdjudicationsClient(user).getReportedAdjudicationIssueData(filter)
+    return new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudicationIssueData(filter)
   }
 
   async getAdjudicationDISFormData(
@@ -328,7 +345,8 @@ export default class ReportedAdjudicationsService {
     details: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateAdjudicationStatus(chargeNumber, {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).updateAdjudicationStatus(chargeNumber, {
       status,
       statusReason: reason,
       statusDetails: details,
@@ -340,7 +358,8 @@ export default class ReportedAdjudicationsService {
     damages: DamageDetails[],
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateDamageDetails(chargeNumber, damages)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).updateDamageDetails(chargeNumber, damages)
   }
 
   async updateEvidenceDetails(
@@ -348,7 +367,8 @@ export default class ReportedAdjudicationsService {
     evidence: EvidenceDetails[],
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateEvidenceDetails(chargeNumber, evidence)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).updateEvidenceDetails(chargeNumber, evidence)
   }
 
   async updateWitnessDetails(
@@ -356,7 +376,8 @@ export default class ReportedAdjudicationsService {
     witnesses: WitnessDetails[],
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).updateWitnessDetails(chargeNumber, witnesses)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).updateWitnessDetails(chargeNumber, witnesses)
   }
 
   private getPrisonerDisplayNames(prisonerResult: PrisonerSimpleResult) {
@@ -451,9 +472,11 @@ export default class ReportedAdjudicationsService {
   }
 
   async createDraftFromCompleteAdjudication(user: User, chargeNumber: string): Promise<number> {
-    const newDraftAdjudicationData = await new ManageAdjudicationsClient(user).createDraftFromCompleteAdjudication(
-      chargeNumber
-    )
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const newDraftAdjudicationData = await new ManageAdjudicationsSystemTokensClient(
+      token,
+      user
+    ).createDraftFromCompleteAdjudication(chargeNumber)
     return newDraftAdjudicationData.draftAdjudication.id
   }
 
@@ -599,11 +622,11 @@ export default class ReportedAdjudicationsService {
   }
 
   async deleteHearing(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).cancelHearing(chargeNumber)
+    return new ManageAdjudicationsUserTokensClient(user).cancelHearing(chargeNumber)
   }
 
   async deleteCompleteHearingOutcome(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).cancelCompleteHearing(chargeNumber)
+    return new ManageAdjudicationsUserTokensClient(user).cancelCompleteHearing(chargeNumber)
   }
 
   async scheduleHearing(
@@ -618,7 +641,7 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user).createHearing(chargeNumber, dataToSend)
+    return new ManageAdjudicationsUserTokensClient(user).createHearing(chargeNumber, dataToSend)
   }
 
   async rescheduleHearing(
@@ -633,11 +656,11 @@ export default class ReportedAdjudicationsService {
       dateTimeOfHearing,
       oicHearingType,
     }
-    return new ManageAdjudicationsClient(user).amendHearing(chargeNumber, dataToSend)
+    return new ManageAdjudicationsUserTokensClient(user).amendHearing(chargeNumber, dataToSend)
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {
-    const results = await new ManageAdjudicationsClient(user).getHearingsGivenAgencyAndDate(chosenHearingDate)
+    const results = await new ManageAdjudicationsUserTokensClient(user).getHearingsGivenAgencyAndDate(chosenHearingDate)
 
     const { hearings } = results
 
@@ -666,9 +689,11 @@ export default class ReportedAdjudicationsService {
   }
 
   async getAcceptedReportConfirmationDetails(chargeNumber: string, user: User) {
-    const adjudicationData = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
-
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const adjudicationData = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
+      chargeNumber
+    )
+
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
       adjudicationData.reportedAdjudication.prisonerNumber
     )
@@ -701,7 +726,8 @@ export default class ReportedAdjudicationsService {
   }
 
   async issueDISForm(chargeNumber: string, dateTimeOfIssue: string, user: User) {
-    return new ManageAdjudicationsClient(user).putDateTimeOfIssue(chargeNumber, dateTimeOfIssue)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).putDateTimeOfIssue(chargeNumber, dateTimeOfIssue)
   }
 
   getPrimaryButtonInfoForHearingDetails(
@@ -849,7 +875,8 @@ export default class ReportedAdjudicationsService {
   }
 
   async getAgencyReportCounts(user: User): Promise<AgencyReportCounts> {
-    return new ManageAdjudicationsClient(user).getAgencyReportCounts()
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).getAgencyReportCounts()
   }
 
   async getPrisonerLatestADMMovement(

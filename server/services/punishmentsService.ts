@@ -17,7 +17,9 @@ import {
   ReportedAdjudicationResultV2,
   ReportedAdjudicationV2,
 } from '../data/ReportedAdjudicationResult'
-import ManageAdjudicationsClient, { ConsecutiveAdditionalDaysReport } from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsSystemTokensClient, {
+  ConsecutiveAdditionalDaysReport,
+} from '../data/manageAdjudicationsSystemTokensClient'
 import PrisonApiClient, { SanctionStatus } from '../data/prisonApiClient'
 import { convertToTitleCase, formatTimestampTo, getFormattedOfficerName } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
@@ -25,6 +27,7 @@ import logger from '../../logger'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import config from '../config'
+import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 
 export default class PunishmentsService {
   constructor(
@@ -45,10 +48,11 @@ export default class PunishmentsService {
     chargeNumber: string,
     user: User
   ): Promise<ReportedAdjudication | ReportedAdjudicationV2> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const { reportedAdjudication } =
       config.v2EndpointsFlag === 'true'
-        ? await new ManageAdjudicationsClient(user).getReportedAdjudicationV2(chargeNumber)
-        : await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+        ? await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudicationV2(chargeNumber)
+        : await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
     return reportedAdjudication
   }
 
@@ -112,9 +116,9 @@ export default class PunishmentsService {
     user: User
   ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
     if (config.v2EndpointsFlag === 'true') {
-      return new ManageAdjudicationsClient(user).createPunishmentsV2(chargeNumber, punishments)
+      return new ManageAdjudicationsUserTokensClient(user).createPunishmentsV2(chargeNumber, punishments)
     }
-    return new ManageAdjudicationsClient(user).createPunishments(chargeNumber, punishments)
+    return new ManageAdjudicationsUserTokensClient(user).createPunishments(chargeNumber, punishments)
   }
 
   async editPunishmentSet(
@@ -123,9 +127,9 @@ export default class PunishmentsService {
     user: User
   ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
     if (config.v2EndpointsFlag === 'true') {
-      return new ManageAdjudicationsClient(user).amendPunishmentsV2(chargeNumber, punishments)
+      return new ManageAdjudicationsUserTokensClient(user).amendPunishmentsV2(chargeNumber, punishments)
     }
-    return new ManageAdjudicationsClient(user).amendPunishments(chargeNumber, punishments)
+    return new ManageAdjudicationsUserTokensClient(user).amendPunishments(chargeNumber, punishments)
   }
 
   async getPunishmentsFromServer(
@@ -143,7 +147,7 @@ export default class PunishmentsService {
 
   async getSuspendedPunishmentDetails(chargeNumber: string, user: User): Promise<SuspendedPunishmentDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const manageAdjudicationsClient = new ManageAdjudicationsClient(user)
+    const manageAdjudicationsClient = new ManageAdjudicationsUserTokensClient(user)
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
 
@@ -171,7 +175,7 @@ export default class PunishmentsService {
     punishmentComment: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).createPunishmentComment(chargeNumber, punishmentComment)
+    return new ManageAdjudicationsUserTokensClient(user).createPunishmentComment(chargeNumber, punishmentComment)
   }
 
   async editPunishmentComment(
@@ -180,11 +184,11 @@ export default class PunishmentsService {
     punishmentComment: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).amendPunishmentComment(chargeNumber, id, punishmentComment)
+    return new ManageAdjudicationsUserTokensClient(user).amendPunishmentComment(chargeNumber, id, punishmentComment)
   }
 
   async removePunishmentComment(chargeNumber: string, id: number, user: User): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsClient(user).removePunishmentComment(chargeNumber, id)
+    return new ManageAdjudicationsUserTokensClient(user).removePunishmentComment(chargeNumber, id)
   }
 
   async checkAdditionalDaysAvailability(chargeNumber: string, user: User): Promise<boolean> {
@@ -216,7 +220,7 @@ export default class PunishmentsService {
     user: User
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
-    return new ManageAdjudicationsClient(user).getPossibleConsecutivePunishments(
+    return new ManageAdjudicationsUserTokensClient(user).getPossibleConsecutivePunishments(
       reportedAdjudication.prisonerNumber,
       punishmentType,
       chargeNumber

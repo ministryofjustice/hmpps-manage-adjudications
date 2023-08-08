@@ -6,7 +6,7 @@ import {
 } from '../data/HearingAndOutcomeResult'
 
 import HmppsAuthClient from '../data/hmppsAuthClient'
-import ManageAdjudicationsClient from '../data/manageAdjudicationsClient'
+import ManageAdjudicationsSystemTokensClient from '../data/manageAdjudicationsSystemTokensClient'
 import {
   OicHearingType,
   ReportedAdjudicationResult,
@@ -14,6 +14,7 @@ import {
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import { User } from '../data/hmppsManageUsersClient'
+import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 
 export default class HearingsService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -30,7 +31,7 @@ export default class HearingsService {
       code: hearingOutcome,
       details: referralReason,
     }
-    return new ManageAdjudicationsClient(user).createReferral(chargeNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsUserTokensClient(user).createReferral(chargeNumber, hearingOutcomeDetails)
   }
 
   async createAdjourn(
@@ -49,18 +50,24 @@ export default class HearingsService {
       reason: adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user).createAdjourn(chargeNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsUserTokensClient(user).createAdjourn(chargeNumber, hearingOutcomeDetails)
   }
 
   async getHearingOutcome(chargeNumber: string, user: User) {
-    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const adjudication = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
+      chargeNumber
+    )
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
     return latestHearing?.hearing.outcome || null
   }
 
   async getHearingAdjudicatorType(chargeNumber: string, user: User) {
-    const adjudication = await new ManageAdjudicationsClient(user).getReportedAdjudication(chargeNumber)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const adjudication = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
+      chargeNumber
+    )
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
     return latestHearing.hearing.oicHearingType as OicHearingType
@@ -79,7 +86,10 @@ export default class HearingsService {
       details,
     }
 
-    return new ManageAdjudicationsClient(user).createDismissedHearingOutcome(chargeNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsUserTokensClient(user).createDismissedHearingOutcome(
+      chargeNumber,
+      hearingOutcomeDetails
+    )
   }
 
   async createChargedProvedHearingOutcome(
@@ -97,7 +107,10 @@ export default class HearingsService {
       amount: !amount ? null : Number(amount),
     }
 
-    return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcome(chargeNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsUserTokensClient(user).createChargeProvedHearingOutcome(
+      chargeNumber,
+      hearingOutcomeDetails
+    )
   }
 
   async createChargedProvedHearingOutcomeV2(
@@ -111,7 +124,10 @@ export default class HearingsService {
       plea,
     }
 
-    return new ManageAdjudicationsClient(user).createChargeProvedHearingOutcomeV2(chargeNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsUserTokensClient(user).createChargeProvedHearingOutcomeV2(
+      chargeNumber,
+      hearingOutcomeDetails
+    )
   }
 
   async createNotProceedHearingOutcome(
@@ -129,7 +145,10 @@ export default class HearingsService {
       details,
     }
 
-    return new ManageAdjudicationsClient(user).createNotProceedHearingOutcome(chargeNumber, hearingOutcomeDetails)
+    return new ManageAdjudicationsUserTokensClient(user).createNotProceedHearingOutcome(
+      chargeNumber,
+      hearingOutcomeDetails
+    )
   }
 
   async editAdjournHearingOutcome(
@@ -146,7 +165,7 @@ export default class HearingsService {
       adjournReason,
       plea,
     }
-    return new ManageAdjudicationsClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
       chargeNumber,
       ReportedAdjudicationStatus.ADJOURNED,
       data
@@ -168,7 +187,7 @@ export default class HearingsService {
       hearingOutcome === HearingOutcomeCode.REFER_INAD
         ? ReportedAdjudicationStatus.REFER_INAD
         : ReportedAdjudicationStatus.REFER_POLICE
-    return new ManageAdjudicationsClient(user).amendHearingOutcomeV2(chargeNumber, status, data)
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(chargeNumber, status, data)
   }
 
   async editChargeProvedOutcome(
@@ -187,7 +206,7 @@ export default class HearingsService {
       amount,
       damagesOwed,
     }
-    return new ManageAdjudicationsClient(user).amendHearingOutcome(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
       data
@@ -204,7 +223,7 @@ export default class HearingsService {
       ...(adjudicator && { adjudicator }),
       plea,
     }
-    return new ManageAdjudicationsClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
       chargeNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
       data
@@ -223,7 +242,7 @@ export default class HearingsService {
       plea,
       details,
     }
-    return new ManageAdjudicationsClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
       chargeNumber,
       ReportedAdjudicationStatus.DISMISSED,
       data
@@ -244,7 +263,7 @@ export default class HearingsService {
       details,
       notProceedReason: reason,
     }
-    return new ManageAdjudicationsClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
       chargeNumber,
       ReportedAdjudicationStatus.NOT_PROCEED,
       data

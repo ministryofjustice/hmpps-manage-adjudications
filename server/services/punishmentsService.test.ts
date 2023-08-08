@@ -13,15 +13,21 @@ const removePunishmentComment = jest.fn()
 const getPrisonerDetails = jest.fn()
 const getSuspendedPunishments = jest.fn()
 
-jest.mock('../data/manageAdjudicationsClient', () => {
+jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
       createPunishments,
       createPunishmentComment,
       amendPunishmentComment,
       removePunishmentComment,
-      getReportedAdjudication,
       getSuspendedPunishments,
+    }
+  })
+})
+jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getReportedAdjudication,
     }
   })
 })

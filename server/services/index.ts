@@ -42,7 +42,7 @@ const decisionTreeService = new DecisionTreeService(
 )
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
-const outcomesService = new OutcomesService(hmppsAuthClient)
+const outcomesService = new OutcomesService()
 const punishmentsService = new PunishmentsService(hmppsAuthClient, hmppsManageUsersClient)
 const { applicationInfo } = dataAccess()
 

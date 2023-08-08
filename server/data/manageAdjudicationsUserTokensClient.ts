@@ -102,7 +102,7 @@ export type ConsecutiveAdditionalDaysReport = {
 
 /**
  * Use this client when we want to make calls to the Adjudications API and pass the user tokens, this
- * include DPS roles such as ALO (ADJUDICATIONS_REVIEWER). As opposed to the system tokens (client credentials)
+ * includes DPS roles such as ALO (ADJUDICATIONS_REVIEWER). As opposed to passing the system tokens (client credentials)
  * which we have a different client for - ManageAdjudicationsSystemTokensClient.ts
  */
 export default class ManageAdjudicationsUserTokensClient {
