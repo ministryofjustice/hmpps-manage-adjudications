@@ -220,7 +220,8 @@ export default class ReportedAdjudicationsService {
     filter: ReportedAdjudicationFilter,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
-    const pageResponse = await new ManageAdjudicationsUserTokensClient(user).getYourCompletedAdjudications(
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const pageResponse = await new ManageAdjudicationsSystemTokensClient(token, user).getYourCompletedAdjudications(
       filter,
       pageRequest
     )
@@ -343,8 +344,7 @@ export default class ReportedAdjudicationsService {
     details: string,
     user: User
   ): Promise<ReportedAdjudicationResult> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    return new ManageAdjudicationsSystemTokensClient(token, user).updateAdjudicationStatus(chargeNumber, {
+    return new ManageAdjudicationsUserTokensClient(user).updateAdjudicationStatus(chargeNumber, {
       status,
       statusReason: reason,
       statusDetails: details,

@@ -31,6 +31,50 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     nock.cleanAll()
   })
 
+  describe('getYourCompletedAdjudications', () => {
+    const content = [
+      testData.reportedAdjudication({
+        chargeNumber: '2',
+        prisonerNumber: 'G6123VU',
+      }),
+      testData.reportedAdjudication({
+        chargeNumber: '1',
+        prisonerNumber: 'G6174VU',
+      }),
+    ]
+    const request = {
+      size: 20,
+      number: 0,
+    }
+    const response = {
+      size: 20,
+      pageNumber: 0,
+      totalElements: 2,
+      content,
+    }
+
+    it('should return a page of completed adjudications', async () => {
+      fakeManageAdjudicationsApi
+        .get(
+          `/reported-adjudications/my-reports?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01&status=AWAITING_REVIEW`
+        )
+        .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
+        .reply(200, response)
+
+      const result = await client.getYourCompletedAdjudications(
+        {
+          toDate: moment('2022-01-01', 'YYYY-MM-DD'),
+          fromDate: moment('2022-01-01', 'YYYY-MM-DD'),
+          status: ReportedAdjudicationStatus.AWAITING_REVIEW,
+          transfersOnly: false,
+        },
+        request
+      )
+      expect(result).toEqual(response)
+    })
+  })
+
   describe('startNewDraftAdjudication', () => {
     it('should return the new draft adjudication', async () => {
       const result = {

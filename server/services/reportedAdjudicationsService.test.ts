@@ -55,7 +55,6 @@ jest.mock('../data/prisonApiClient', () => {
 jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
-      getYourCompletedAdjudications,
       getAllCompletedAdjudications,
     }
   })
@@ -63,6 +62,7 @@ jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
 jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
   return jest.fn().mockImplementation(() => {
     return {
+      getYourCompletedAdjudications,
       getReportedAdjudication,
       createDraftFromCompleteAdjudication,
       getHearingsGivenAgencyAndDate,

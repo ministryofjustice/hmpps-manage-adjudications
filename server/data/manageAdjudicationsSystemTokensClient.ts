@@ -19,10 +19,11 @@ import {
   ReportedAdjudicationResult,
   ReportedAdjudicationResultV2,
   ReportedAdjudication,
-  ReviewAdjudication,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationsResult,
   allIssueStatuses,
+  ReportedAdjudicationFilter,
+  allStatuses,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -151,15 +152,25 @@ export default class ManageAdjudicationsSystemTokensClient {
     })
   }
 
-  async updateAdjudicationStatus(
-    chargeNumber: string,
-    payload: ReviewAdjudication
-  ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/status`,
-      data: payload,
-    })
-  }
+  private getCompletedAdjudications =
+    (prefix: string) =>
+    async (
+      filter: ReportedAdjudicationFilter,
+      pageRequest: ApiPageRequest
+    ): Promise<ApiPageResponse<ReportedAdjudication>> => {
+      const path =
+        `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
+        `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+        `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
+
+      return this.restClient.get({
+        path,
+      })
+    }
+
+  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
 
   async getReportedAdjudicationIssueData(
     filter: ReportedAdjudicationDISFormFilter

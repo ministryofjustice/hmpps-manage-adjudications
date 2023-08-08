@@ -8,6 +8,7 @@ import {
   ReportedAdjudicationStatus,
   ReportedAdjudicationFilter,
   allStatuses,
+  ReviewAdjudication,
 } from './ReportedAdjudicationResult'
 import RestClient from './restClient'
 import {
@@ -121,6 +122,16 @@ export default class ManageAdjudicationsUserTokensClient {
     )
   }
 
+  async updateAdjudicationStatus(
+    chargeNumber: string,
+    payload: ReviewAdjudication
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${chargeNumber}/status`,
+      data: payload,
+    })
+  }
+
   private getCompletedAdjudications =
     (prefix: string) =>
     async (
@@ -140,8 +151,6 @@ export default class ManageAdjudicationsUserTokensClient {
     }
 
   getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/reports')
-
-  getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
 
   async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails): Promise<ReportedAdjudication> {
     return this.restClient.post({
