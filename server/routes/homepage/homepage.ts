@@ -5,7 +5,6 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import config from '../../config'
 
 type TaskType = {
   id: string
@@ -167,7 +166,7 @@ export default class HomepageRoutes {
       description:
         'Charts and data for adjudications in this establishment, including by location and different prisoner characteristics.',
       href: adjudicationUrls.dataInsights.root,
-      enabled: config.dataInsightsFlag === 'true' && res.locals.user.activeCaseLoadId === 'RNI',
+      enabled: true,
     }
 
     return res.render('pages/homepage', {

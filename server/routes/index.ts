@@ -1,6 +1,5 @@
 import type { Router } from 'express'
 
-import config from '../config'
 import incidentStatementRoutes from './incidentStatement'
 import incidentDetailsRoutes from './incidentDetails'
 import incidentRoleRoutes from './incidentRole'
@@ -198,20 +197,18 @@ export default function routes(
     hearingTabRoutes({ reportedAdjudicationsService, userService, outcomesService })
   )
 
-  if (config.dataInsightsFlag === 'true') {
-    router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartApiService }))
-    router.use(
-      adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
-      totalsAdjudicationsAndLocationsRoutes({ chartApiService })
-    )
-    router.use(
-      adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(),
-      protectedAndResponsivityCharacteristicsRoutes({ chartApiService })
-    )
-    router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartApiService }))
-    router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartApiService }))
-    router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartApiService }))
-  }
+  router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartApiService }))
+  router.use(
+    adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
+    totalsAdjudicationsAndLocationsRoutes({ chartApiService })
+  )
+  router.use(
+    adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(),
+    protectedAndResponsivityCharacteristicsRoutes({ chartApiService })
+  )
+  router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartApiService }))
+  router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartApiService }))
+  router.use(adjudicationUrls.dataInsights.urls.pleasAndFindings(), pleasAndFindingsRoutes({ chartApiService }))
 
   router.use(
     adjudicationUrls.scheduleHearing.root,
