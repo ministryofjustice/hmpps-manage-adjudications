@@ -16,7 +16,7 @@ type PageData = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
-  amount?: number
+  damagesOwedAmount?: number
 }
 
 export enum PageRequestType {
@@ -46,7 +46,7 @@ export default class PunishmentPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount } = pageData
+    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount } = pageData
 
     const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
       chargeNumber,
@@ -62,7 +62,7 @@ export default class PunishmentPage {
       stoppagePercentage,
       isIndependentAdjudicatorHearing,
       isV2Endpoints: config.v2EndpointsFlag === 'true',
-      amount,
+      damagesOwedAmount,
     })
   }
 
@@ -90,7 +90,7 @@ export default class PunishmentPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount } = req.body
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount } = req.body
 
     const stoppageOfEarningsPercentage = stoppagePercentage ? Number(String(stoppagePercentage).trim()) : null
     const error = validateForm({
@@ -98,7 +98,7 @@ export default class PunishmentPage {
       privilegeType,
       otherPrivilege,
       stoppagePercentage: stoppageOfEarningsPercentage,
-      amount,
+      damagesOwedAmount,
     })
 
     if (error)
@@ -108,14 +108,14 @@ export default class PunishmentPage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage: stoppageOfEarningsPercentage,
-        amount,
+        damagesOwedAmount,
       })
 
     if ([PunishmentType.CAUTION, PunishmentType.DAMAGES_OWED].includes(punishmentType)) {
       const punishmentData = {
         type: punishmentType,
         days: 0,
-        damagesOwedAmount: amount,
+        damagesOwedAmount,
       }
       if (this.pageOptions.isEdit()) {
         await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
