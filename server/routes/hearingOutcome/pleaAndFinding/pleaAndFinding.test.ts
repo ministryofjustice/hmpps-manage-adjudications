@@ -47,7 +47,9 @@ describe('POST /hearing-plea-finding', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.moneyRecoveredForDamages.urls.start('100')}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.moneyRecoveredForDamages.urls.start(
+          '100'
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=CHARGE_PROVED`
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
@@ -62,7 +64,9 @@ describe('POST /hearing-plea-finding', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingReasonForFinding.urls.start('100')}?adjudicator=Judge%20Red&plea=GUILTY`
+        `${adjudicationUrls.hearingReasonForFinding.urls.start(
+          '100'
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=DISMISSED`
       )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
@@ -79,7 +83,7 @@ describe('POST /hearing-plea-finding', () => {
         'Location',
         `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(
           '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY`
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`
       )
   })
 })

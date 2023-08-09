@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-
+import url from 'url'
 import { Request, Response } from 'express'
 import config from '../../../config'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
@@ -37,7 +37,7 @@ export default class HearingCheckYourAnswersPage {
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { amount, adjudicator, plea, caution } = req.query
+    const { amount, adjudicator, plea, finding, caution } = req.query
     let actualAmount = amount as string
     const queryParamsPresent = this.validateDataFromQueryPage(
       plea as HearingOutcomePlea,
@@ -61,7 +61,23 @@ export default class HearingCheckYourAnswersPage {
       }
     }
 
+    if (config.v2EndpointsFlag === 'true') {
+      const changeHref = url.format({
+        pathname: adjudicationUrls.hearingPleaAndFinding.urls.start(chargeNumber),
+        query: { adjudicator: String(adjudicator), previousPlea: String(plea), previousFinding: String(finding) },
+      })
+
+      return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
+        v2Flag: true,
+        plea,
+        finding,
+        changeHref,
+        cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
+      })
+    }
+
     return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
+      v2Flag: false,
       moneyRecoveredBoolean: queryParamsPresent ? !!amount : !!actualAmount,
       moneyRecoveredAmount: (+actualAmount).toFixed(2),
       cautionAnswer: caution === 'yes',
