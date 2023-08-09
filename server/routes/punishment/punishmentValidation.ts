@@ -6,7 +6,7 @@ type PunishmentForm = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
-  amount?: number
+  damagesOwedAmount?: number
 }
 
 const errors: { [key: string]: FormError } = {
@@ -45,7 +45,7 @@ export default function validateForm({
   privilegeType,
   otherPrivilege,
   stoppagePercentage,
-  amount,
+  damagesOwedAmount,
 }: PunishmentForm): FormError | null {
   if (!punishmentType) return errors.MISSING_PUNISHMENT_TYPE
 
@@ -60,10 +60,10 @@ export default function validateForm({
     return errors.STOPPAGE_PERCENTAGE
 
   if (punishmentType === PunishmentType.DAMAGES_OWED) {
-    if (!amount) {
+    if (!damagesOwedAmount) {
       return errors.MISSING_AMOUNT
     }
-    if (Number.isNaN(Number(amount))) {
+    if (Number.isNaN(Number(damagesOwedAmount))) {
       return errors.NAN
     }
   }
