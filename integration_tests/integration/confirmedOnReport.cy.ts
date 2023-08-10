@@ -18,7 +18,7 @@ context('Report has been submitted for review', () => {
         lastName: 'Smith',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524242,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

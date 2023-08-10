@@ -31,7 +31,7 @@ context('Damages and punishments summary', () => {
         lastName: 'SMITH',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 99,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -81,7 +81,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 98,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -109,7 +109,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -137,7 +137,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 103,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -165,7 +165,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -175,7 +175,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -226,7 +226,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 112,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -280,7 +280,7 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 110,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -311,7 +311,7 @@ context('Damages and punishments summary', () => {
       },
     })
 
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 111,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -587,7 +587,7 @@ context('Reporter view', () => {
         lastName: 'SMITH',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 99,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -628,7 +628,7 @@ context('Reporter view', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -656,7 +656,7 @@ context('Reporter view', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -666,7 +666,7 @@ context('Reporter view', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

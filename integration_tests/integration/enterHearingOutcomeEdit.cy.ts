@@ -35,7 +35,7 @@ context('Enter hearing outcome', () => {
       response: testData.emailFromUsername('JBLACK_GEN'),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -57,7 +57,7 @@ context('Enter hearing outcome', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

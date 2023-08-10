@@ -69,7 +69,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: {
@@ -89,7 +89,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         },
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 101,
       response: {
         reportedAdjudication: {
@@ -127,7 +127,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       reportNumber: 101,
       response: susPun,
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

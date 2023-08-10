@@ -120,7 +120,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
         userDescription: 'Houseblock 1',
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524493,
       response: reportedAdjudicationResponse({
         chargeNumber: '1524493',
@@ -133,7 +133,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       transferableActionsAllowed: true,
       overrideAgencyId: 'LEI',
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524495,
       response: awaitingReviewReport,
     })
@@ -145,7 +145,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       id: 1,
       response: draftAdjudication(awaitingReviewReport, 1),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524494,
       response: reportedAdjudicationResponse({
         chargeNumber: '1524494',

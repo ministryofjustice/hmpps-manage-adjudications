@@ -97,7 +97,7 @@ context('Check your answers before submitting', () => {
       })
     })
     it('should submit successfully - caution no', () => {
-      cy.task('stubGetReportedAdjudication', {
+      cy.task('stubGetReportedAdjudicationV1', {
         id: 100,
         response: {
           reportedAdjudication: testData.reportedAdjudication({

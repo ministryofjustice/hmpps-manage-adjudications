@@ -22,7 +22,7 @@ context('Manually activate an existing suspended punishment', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -49,7 +49,7 @@ context('Manually activate an existing suspended punishment', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -316,7 +316,7 @@ context('Manually activate an existing suspended punishment', () => {
       awardPunishmentsPage.editPunishment().should('not.exist')
       awardPunishmentsPage.continue().click()
       const checkPunishmentsPage = Page.verifyOnPage(CheckPunishmentsPage)
-      cy.task('stubGetReportedAdjudication', {
+      cy.task('stubGetReportedAdjudicationV1', {
         id: 100,
         response: {
           reportedAdjudication: testData.reportedAdjudication({

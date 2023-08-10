@@ -173,31 +173,31 @@ context('Transfers flow', () => {
           number: 0,
           allContent: [transferredPrisonersAdjudicationUnscheduled],
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 1,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationUnscheduled,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 2,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationScheduled,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 3,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationReferPolice,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 4,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationProved,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 5,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationProvedPunishments,
@@ -425,31 +425,31 @@ context('Transfers flow', () => {
           number: 0,
           allContent: [transferredPrisonersAdjudicationUnscheduled],
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 1,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationUnscheduled,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 2,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationScheduled,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 3,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationReferPolice,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 4,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationProved,
           },
         })
-        cy.task('stubGetReportedAdjudication', {
+        cy.task('stubGetReportedAdjudicationV1', {
           id: 5,
           response: {
             reportedAdjudication: transferredPrisonersAdjudicationProvedPunishments,
@@ -621,13 +621,13 @@ context('Transfer banner', () => {
           },
         ],
       }
-      cy.task('stubGetReportedAdjudication', {
+      cy.task('stubGetReportedAdjudicationV1', {
         id: 6,
         response: {
           reportedAdjudication: transferredPrisonersAdjudicationUnscheduled,
         },
       })
-      cy.task('stubGetReportedAdjudication', {
+      cy.task('stubGetReportedAdjudicationV1', {
         id: 7,
         response: {
           reportedAdjudication: transferredPrisonersAdjudicationScheduled,

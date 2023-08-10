@@ -114,7 +114,7 @@ context('Prisoner report - reviewer view', () => {
         isYouthOffender: false,
       }),
     }
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 12345,
       response: awaitingReviewReport,
     })
@@ -128,7 +128,7 @@ context('Prisoner report - reviewer view', () => {
         isYouthOffender: false,
       }),
     }
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 56789,
       response: returnedReport,
     })
@@ -142,7 +142,7 @@ context('Prisoner report - reviewer view', () => {
         isYouthOffender: false,
       }),
     }
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 356789,
       response: rejectedReport,
     })

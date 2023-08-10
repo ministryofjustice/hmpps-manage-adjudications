@@ -123,7 +123,7 @@ context('Prisoner report - reporter view', () => {
       status: ReportedAdjudicationStatus.AWAITING_REVIEW,
       isYouthOffender: false,
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 12345,
       response: awaitingReviewReport,
     })
@@ -136,7 +136,7 @@ context('Prisoner report - reporter view', () => {
       response: draftAdjudicationResponse(awaitingReviewReport, 177),
     })
 
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 56789,
       response: reportedAdjudicationResponse({
         chargeNumber: '56789',
@@ -156,7 +156,7 @@ context('Prisoner report - reporter view', () => {
       statusDetails: 'More detail please.',
       isYouthOffender: true,
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524493,
       response: returnedReport,
     })

@@ -16,7 +16,7 @@ context('Prisoner has been placed on report', () => {
         lastName: 'SMITH',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524242,
       response: {
         reportedAdjudication: {

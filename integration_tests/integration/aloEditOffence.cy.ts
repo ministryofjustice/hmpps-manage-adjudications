@@ -222,7 +222,7 @@ context('ALO edits offence - test 1', () => {
         lastName: 'WRIGHT',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 12345,
       response: originalReportedTestOne,
     })
@@ -378,7 +378,7 @@ context('ALO edits offence - test 2', () => {
         lastName: 'JONES',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524493,
       response: originalReportedTestTwo,
     })

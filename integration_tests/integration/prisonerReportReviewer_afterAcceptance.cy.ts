@@ -94,7 +94,7 @@ context('Prisoner report - reviewer view', () => {
       }),
     })
 
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 456791,
       response: {
         reportedAdjudication: reportedAdjudicationResponse({
@@ -105,7 +105,7 @@ context('Prisoner report - reviewer view', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 456789,
       response: {
         reportedAdjudication: reportedAdjudicationResponse({

@@ -25,7 +25,7 @@ context('Edit punishment comment', () => {
         lastName: 'SMITH',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 99,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

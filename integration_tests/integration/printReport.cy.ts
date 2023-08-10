@@ -19,7 +19,7 @@ context('Print a copy of this report', () => {
         language: 'French',
       }),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524242,
       response: {
         reportedAdjudication: {

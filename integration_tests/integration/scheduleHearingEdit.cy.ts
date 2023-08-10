@@ -73,7 +73,7 @@ context('Schedule a hearing page', () => {
       response: testData.residentialLocations()[0],
     })
 
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, originalHearing]),
     })
@@ -114,7 +114,7 @@ context('Schedule a hearing page', () => {
       locationId: 25538,
       response: testData.residentialLocations()[1],
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', [changedLocationHearing]),
     })
@@ -136,7 +136,7 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the date is changed', () => {
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', [changedDayHearing]),
     })
@@ -149,7 +149,7 @@ context('Schedule a hearing page', () => {
     })
   })
   it('should submit the form successfully when the time is changed', () => {
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', [changedTimeHearing]),
     })

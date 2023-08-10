@@ -45,7 +45,7 @@ context('Schedule a hearing page', () => {
       locationId: 123,
       response: testData.residentialLocations()[0],
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', singleHearing),
     })

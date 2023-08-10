@@ -26,7 +26,7 @@ context('Is this punishment a caution?', () => {
       chargeNumber: 100,
       response: {},
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -63,7 +63,7 @@ context('Is this punishment a caution?', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -100,7 +100,7 @@ context('Is this punishment a caution?', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

@@ -106,7 +106,7 @@ context('Check Your Answers', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 234,
       response: completeReportedAdjudicationResponse('RETURNED', 'USER1', 'offence', 'wrong'),
     })
@@ -270,7 +270,7 @@ context('Check Your Answers', () => {
         id: 3456,
         response: completeDraftAdjudicationResponse(false),
       })
-      cy.task('stubGetReportedAdjudication', {
+      cy.task('stubGetReportedAdjudicationV1', {
         id: 234,
         response: completeReportedAdjudicationResponse('AWAITING_REVIEW'),
       })

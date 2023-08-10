@@ -189,7 +189,7 @@ const stubGetReportedAdjudicationV1 = ({
     },
   })
 
-const stubGetReportedAdjudication = ({
+const stubGetReportedAdjudicationV1 = ({
   id,
   response = {},
 }: {
@@ -1107,7 +1107,7 @@ export default {
   stubEditDraftIncidentDetails,
   stubUpdateDraftIncidentRole,
   stubGetReportedAdjudicationV1,
-  stubGetReportedAdjudication,
+  stubGetReportedAdjudicationV1,
   stubGetAllDraftAdjudicationsForUser,
   stubGetYourReportedAdjudications,
   stubGetAllReportedAdjudications,

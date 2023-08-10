@@ -101,7 +101,7 @@ export default defineConfig({
         stubSubmitCompleteDraftAdjudication: adjudications.stubSubmitCompleteDraftAdjudication,
         stubEditDraftIncidentDetails: adjudications.stubEditDraftIncidentDetails,
         stubUpdateDraftIncidentRole: adjudications.stubUpdateDraftIncidentRole,
-        stubGetReportedAdjudication: adjudications.stubGetReportedAdjudication,
+        stubGetReportedAdjudicationV1: adjudications.stubGetReportedAdjudicationV1,
         stubGetReportedAdjudicationV1: adjudications.stubGetReportedAdjudicationV1,
 
         stubGetLearnerProfile: curiousApi.stubGetLearnerProfile,

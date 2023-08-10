@@ -81,15 +81,15 @@ context('Details of evidence', () => {
       chargeNumber: '201',
       response: draftAdjudication(201, evidenceList),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 12345,
       response: reportedAdjudication('12345', null),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 23456,
       response: reportedAdjudication('23456', evidenceList),
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 34567,
       response: reportedAdjudication('34567', evidenceListMultiUser),
     })

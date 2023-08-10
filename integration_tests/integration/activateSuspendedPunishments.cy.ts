@@ -55,7 +55,7 @@ context('acivate suspended punishments page', () => {
         },
       ],
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

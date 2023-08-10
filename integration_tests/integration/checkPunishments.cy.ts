@@ -18,7 +18,7 @@ context('Check punishments', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 123,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -55,7 +55,7 @@ context('Check punishments', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
+    cy.task('stubGetReportedAdjudicationV1', {
       id: 456,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
