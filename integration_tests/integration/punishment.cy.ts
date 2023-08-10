@@ -48,39 +48,6 @@ context('Add a new punishment', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudication', {
-      id: 100,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          chargeNumber: '100',
-          prisonerNumber: 'G6123VU',
-          status: ReportedAdjudicationStatus.CHARGE_PROVED,
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2024-11-23T17:00:00',
-              id: 68,
-            }),
-          ],
-        }),
-      },
-    })
-    cy.task('stubGetReportedAdjudication', {
-      id: 101,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          chargeNumber: '101',
-          prisonerNumber: 'G6123VU',
-          status: ReportedAdjudicationStatus.CHARGE_PROVED,
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2024-11-23T17:00:00',
-              id: 60,
-              oicHearingType: OicHearingType.INAD_YOI,
-            }),
-          ],
-        }),
-      },
-    })
     cy.signIn()
   })
   describe('Loads', () => {
