@@ -66,7 +66,7 @@ context('What is the reason for this finding?', () => {
       },
     })
     cy.signIn()
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -103,7 +103,7 @@ context('What is the reason for this finding?', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

@@ -83,7 +83,7 @@ context('Suspended punishment schedule', () => {
       reportNumber: 102,
       response: susPun,
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -104,7 +104,7 @@ context('Suspended punishment schedule', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -124,7 +124,7 @@ context('Suspended punishment schedule', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 102,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

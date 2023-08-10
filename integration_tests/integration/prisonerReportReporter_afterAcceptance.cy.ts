@@ -111,7 +111,7 @@ context('Prisoner report - reporter view', () => {
         userDescription: 'Houseblock 1',
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: reportedAdjudicationResponse({
         chargeNumber: '1524493',
@@ -131,7 +131,7 @@ context('Prisoner report - reporter view', () => {
         },
       }),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse({
         chargeNumber: '1524494',

@@ -65,7 +65,7 @@ context('which punishment will it be consecutive to page', () => {
       chargeNumber: '101',
       response: [],
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -75,7 +75,7 @@ context('which punishment will it be consecutive to page', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

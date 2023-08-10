@@ -108,7 +108,7 @@ context('Warning - reviewer edits offence', () => {
       response: createDraftFromReportedAdjudicationResponse('12345', 177),
     })
 
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 12345,
       response: reportedAdjudicationResponse('12345', ReportedAdjudicationStatus.AWAITING_REVIEW),
     })

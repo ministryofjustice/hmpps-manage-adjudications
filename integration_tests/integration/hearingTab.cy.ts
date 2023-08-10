@@ -332,27 +332,27 @@ context('Hearing details page', () => {
         userDescription: 'Adj 2',
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: reportedAdjudicationResponse('1524493', ReportedAdjudicationStatus.AWAITING_REVIEW),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524480,
       response: reportedAdjudicationResponse('1524480', ReportedAdjudicationStatus.RETURNED),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524481,
       response: reportedAdjudicationResponse('1524481', ReportedAdjudicationStatus.REJECTED),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', ReportedAdjudicationStatus.ACCEPTED),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524497,
       response: reportedAdjudicationResponse('1524497', ReportedAdjudicationStatus.UNSCHEDULED),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524495,
       response: reportedAdjudicationResponse(
         '1524495',
@@ -361,7 +361,7 @@ context('Hearing details page', () => {
         historyWithOneHearing
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524300,
       response: reportedAdjudicationResponse(
         '1524300',
@@ -371,11 +371,11 @@ context('Hearing details page', () => {
         true
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524301,
       response: reportedAdjudicationResponse('1524301', ReportedAdjudicationStatus.UNSCHEDULED, [], [], true),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524498,
       response: reportedAdjudicationResponse(
         '1524498',
@@ -384,7 +384,7 @@ context('Hearing details page', () => {
         historyWithOneAdjournedHearing
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1111111,
       response: reportedAdjudicationResponse(
         '1111111',
@@ -394,7 +394,7 @@ context('Hearing details page', () => {
         true
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 2222222,
       response: reportedAdjudicationResponse(
         '2222222',
@@ -404,7 +404,7 @@ context('Hearing details page', () => {
         true
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524302,
       response: reportedAdjudicationResponse(
         '1524302',
@@ -414,7 +414,7 @@ context('Hearing details page', () => {
         true
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524496,
       response: reportedAdjudicationResponse(
         '1524496',
@@ -423,7 +423,7 @@ context('Hearing details page', () => {
         historyWithTwoHearings
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524303,
       response: reportedAdjudicationResponse(
         '1524303',
@@ -434,7 +434,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication with hearing - referred to police
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524500,
       response: reportedAdjudicationResponse(
         '1524500',
@@ -443,7 +443,7 @@ context('Hearing details page', () => {
         historyWithReferredHearing
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524304,
       response: reportedAdjudicationResponse(
         '1524304',
@@ -454,7 +454,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication with hearing - referred to ind ad
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524506,
       response: reportedAdjudicationResponse(
         '1524506',
@@ -463,7 +463,7 @@ context('Hearing details page', () => {
         historyWithInAdReferredHearing
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524305,
       response: reportedAdjudicationResponse(
         '1524305',
@@ -474,7 +474,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication with hearing - referred to ind ad with schedule hearing referral outcome
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524507,
       response: reportedAdjudicationResponse(
         '1524507',
@@ -484,7 +484,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication with hearing - referred to police - with referral outcome - prosecution
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524501,
       response: reportedAdjudicationResponse(
         '1524501',
@@ -493,7 +493,7 @@ context('Hearing details page', () => {
         historyWithReferredHearingWithProsecutionOutcome
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524306,
       response: reportedAdjudicationResponse(
         '1524306',
@@ -504,7 +504,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication with hearing - referred to police - with referral outcome - not proceed
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524505,
       response: reportedAdjudicationResponse(
         '1524505',
@@ -513,7 +513,7 @@ context('Hearing details page', () => {
         historyWithReferredHearingWithNotProceededOutcome
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524307,
       response: reportedAdjudicationResponse(
         '1524307',
@@ -524,7 +524,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication not proceeded with
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524502,
       response: reportedAdjudicationResponse(
         '1524502',
@@ -533,7 +533,7 @@ context('Hearing details page', () => {
         historyWithNotProceedOutcome
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524308,
       response: reportedAdjudicationResponse(
         '1524308',
@@ -544,7 +544,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication referred to police no hearing
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524503,
       response: reportedAdjudicationResponse(
         '1524503',
@@ -553,7 +553,7 @@ context('Hearing details page', () => {
         historyWithPoliceRefer
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524309,
       response: reportedAdjudicationResponse(
         '1524309',
@@ -564,7 +564,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication referred to police no hearing, referral outcome - not proceed
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524504,
       response: reportedAdjudicationResponse(
         '1524504',
@@ -574,7 +574,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication hearing complete and dismissed
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524508,
       response: reportedAdjudicationResponse(
         '1524508',
@@ -583,7 +583,7 @@ context('Hearing details page', () => {
         historyWithCompleteAndDismissedFinding
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524400,
       response: reportedAdjudicationResponse(
         '1524400',
@@ -594,7 +594,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication hearing complete and not proceeded with
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524509,
       response: reportedAdjudicationResponse(
         '1524509',
@@ -604,7 +604,7 @@ context('Hearing details page', () => {
       ),
     })
     // Adjudication hearing complete and proved
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524510,
       response: reportedAdjudicationResponse(
         '1524510',
@@ -613,7 +613,7 @@ context('Hearing details page', () => {
         historyWithCompleteAndProvedFinding
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524401,
       response: reportedAdjudicationResponse(
         '1524401',
@@ -623,7 +623,7 @@ context('Hearing details page', () => {
         true
       ),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524402,
       response: reportedAdjudicationResponse(
         '1524402',
@@ -820,7 +820,7 @@ context('Hearing details page', () => {
         chargeNumber: 1524502,
         response: reportedAdjudicationResponse('1524502', ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524502,
         response: reportedAdjudicationResponse('1524502', ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
@@ -863,7 +863,7 @@ context('Hearing details page', () => {
           }),
         },
       })
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524503,
         response: reportedAdjudicationResponse(
           '1524503',
@@ -1012,7 +1012,7 @@ context('Hearing details page', () => {
         chargeNumber: 1524498,
         response,
       })
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524498,
         response,
       })
@@ -1091,7 +1091,7 @@ context('Hearing details page', () => {
       })
     })
     it('Successfully cancels the latest hearing', () => {
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524497,
         response: reportedAdjudicationResponse(
           '1524497',
@@ -1115,7 +1115,7 @@ context('Hearing details page', () => {
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review('1524497'))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524497,
         response: reportedAdjudicationResponse(
           '1524497',
@@ -1259,7 +1259,7 @@ context('Hearing details page', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review('1524500'))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
 
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524500,
         response: reportedAdjudicationResponse(
           '1524500',
@@ -1517,7 +1517,7 @@ context('Hearing details page', () => {
         chargeNumber: 1524510,
         response: reportedAdjudicationResponse('1524510', ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524510,
         response: reportedAdjudicationResponse('1524510', ReportedAdjudicationStatus.UNSCHEDULED, [], []),
       })
@@ -1547,7 +1547,7 @@ context('Hearing details page', () => {
       hearingTabPage.reportQuashedGuiltyFindingButton().click()
       cy.get('#quashReason').select('Flawed case')
       cy.get('[data-qa="quash-details"]').type('Some details')
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524510,
         response: reportedAdjudicationResponse(
           '1524510',
@@ -1581,7 +1581,7 @@ context('Hearing details page', () => {
       cy.get("[data-qa='change-link-hearing-outcome-finding']").should('not.exist')
       cy.get("[data-qa='change-link-quash-guilty-finding']").should('exist')
       hearingTabPage.removeQuashedOutcomeButton().should('exist')
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 1524510,
         response: reportedAdjudicationResponse(
           '1524510',

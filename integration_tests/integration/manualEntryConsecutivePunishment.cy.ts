@@ -20,7 +20,7 @@ context('Which charge will it be consecutive to?', () => {
       offenderNo: 'G6123VU',
       responseBody: { status: 200 },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

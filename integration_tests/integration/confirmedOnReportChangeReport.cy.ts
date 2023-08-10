@@ -18,7 +18,7 @@ context('Report has been changed', () => {
         lastName: 'SMITH',
       }),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

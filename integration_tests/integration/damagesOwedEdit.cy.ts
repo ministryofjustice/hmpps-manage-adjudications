@@ -21,7 +21,7 @@ context('Is any money being recovered for damages?', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -59,7 +59,7 @@ context('Is any money being recovered for damages?', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: '101',
       response: {
         reportedAdjudication: testData.reportedAdjudication({

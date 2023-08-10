@@ -26,7 +26,7 @@ context('Will this charge continue to prosecution?', () => {
       },
     })
     cy.signIn()
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -49,7 +49,7 @@ context('Will this charge continue to prosecution?', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

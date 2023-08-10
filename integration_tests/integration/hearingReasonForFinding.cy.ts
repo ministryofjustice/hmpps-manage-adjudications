@@ -60,7 +60,7 @@ context('What is the reason for this finding?', () => {
         userDescription: 'Adj 2',
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({

@@ -9,6 +9,7 @@ import {
   IssueStatus,
   ReportedAdjudicationStatus,
 } from '../../server/data/ReportedAdjudicationResult'
+import config from '../../server/config'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -168,27 +169,6 @@ const stubUpdateDraftIncidentRole = ({
     },
   })
 
-const stubGetReportedAdjudicationV1 = ({
-  id,
-  response = {},
-}: {
-  id: number
-  response: Record<string, unknown>
-}): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/adjudications/reported-adjudications/${id}`,
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: response,
-    },
-  })
-
 const stubGetReportedAdjudication = ({
   id,
   response = {},
@@ -199,7 +179,10 @@ const stubGetReportedAdjudication = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/reported-adjudications/${id}/v2`,
+      url:
+        config.v2EndpointsFlag === 'true'
+          ? `/adjudications/reported-adjudications/${id}/v2`
+          : `/adjudications/reported-adjudications/${id}`,
     },
     response: {
       status: 200,
@@ -1107,7 +1090,6 @@ export default {
   stubEditDraftIncidentDetails,
   stubUpdateDraftIncidentRole,
   stubGetReportedAdjudication,
-  stubGetReportedAdjudicationV1,
   stubGetAllDraftAdjudicationsForUser,
   stubGetYourReportedAdjudications,
   stubGetAllReportedAdjudications,

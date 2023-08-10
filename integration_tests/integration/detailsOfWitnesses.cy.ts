@@ -94,15 +94,15 @@ context('Details of witnesses', () => {
       chargeNumber: '201',
       response: draftAdjudication(201, witnessesList),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 12345,
       response: reportedAdjudication('12345', null),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 23456,
       response: reportedAdjudication('23456', witnessesList),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 34567,
       response: reportedAdjudication('34567', witnessesListMultiUser),
     })

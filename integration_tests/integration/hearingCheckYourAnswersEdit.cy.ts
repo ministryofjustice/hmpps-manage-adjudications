@@ -27,7 +27,7 @@ context('Check your answers before submitting', () => {
       chargeNumber: 100,
       response: {},
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -65,7 +65,7 @@ context('Check your answers before submitting', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 101,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -175,7 +175,7 @@ context('Check your answers before submitting', () => {
       })
     })
     it('should submit successfully - caution no', () => {
-      cy.task('stubGetReportedAdjudicationV1', {
+      cy.task('stubGetReportedAdjudication', {
         id: 100,
         response: {
           reportedAdjudication: testData.reportedAdjudication({

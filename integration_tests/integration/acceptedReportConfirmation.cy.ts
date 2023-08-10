@@ -18,7 +18,7 @@ context('Report has been accepted', () => {
         lastName: 'SMITH',
       }),
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
@@ -32,7 +32,7 @@ context('Report has been accepted', () => {
         }),
       },
     })
-    cy.task('stubGetReportedAdjudicationV1', {
+    cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: {
         reportedAdjudication: testData.reportedAdjudication({
