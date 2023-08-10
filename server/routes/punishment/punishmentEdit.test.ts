@@ -8,6 +8,7 @@ import PunishmentsService from '../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import TestData from '../testutils/testData'
+import config from '../../config'
 
 const testData = new TestData()
 jest.mock('../../services/userService')
@@ -34,6 +35,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
     testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
   )
+  config.v2EndpointsFlag = 'true'
 })
 
 afterEach(() => {
@@ -61,7 +63,7 @@ describe('GET /punishment', () => {
       .get(adjudicationUrls.punishment.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Add a new punishment')
+        expect(res.text).toContain('Add a punishment or money for damages')
       })
   })
 })

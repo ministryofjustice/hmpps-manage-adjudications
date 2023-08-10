@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class PunishmentPage extends Page {
   constructor() {
-    super('Add a new punishment')
+    super('Add a')
   }
 
   punishment = (): PageElement => cy.get('[data-qa="punishment-radio-buttons"]')

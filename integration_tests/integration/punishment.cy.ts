@@ -15,6 +15,39 @@ context('Add a new punishment', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetReportedAdjudicationV1', {
+      id: 100,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '100',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudicationV1', {
+      id: 101,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '101',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 60,
+              oicHearingType: OicHearingType.INAD_YOI,
+            }),
+          ],
+        }),
+      },
+    })
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
@@ -73,6 +106,22 @@ context('Add a new punishment', () => {
       cy.get('#punishmentType-9').should('exist')
       cy.get('[for="punishmentType-9"]').should('include.text', 'Prospective additional days')
     })
+    // TODO: activate with v2EndpointsFlag (and delete above)
+    it.skip('should show additional days and prospective additional days radios if the hearing is IA', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('101'))
+      cy.get('#punishmentType-10').should('exist')
+      cy.get('[for="punishmentType-10"]').should('include.text', 'Additional days')
+      cy.get('#punishmentType-11').should('exist')
+      cy.get('[for="punishmentType-11"]').should('include.text', 'Prospective additional days')
+    })
+    // TODO: activate with v2EndpointsFlag
+    it.skip('should contain caution and damages radio buttons', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('101'))
+      cy.get('#punishmentType').should('exist')
+      cy.get('[for="punishmentType"]').should('include.text', 'Recovery of money for damages')
+      cy.get('#punishmentType-2').should('exist')
+      cy.get('[for="punishmentType-2"]').should('include.text', 'Caution')
+    })
   })
 
   describe('Validation', () => {
@@ -86,6 +135,19 @@ context('Add a new punishment', () => {
         .find('li')
         .then($error => {
           expect($error.get(0).innerText).to.contain('Select the type of punishment')
+        })
+    })
+    // TODO: activate with v2EndpointsFlag (and delete above)
+    it.skip('should error when no punishment type selected', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.submitButton().click()
+
+      punishmentPage
+        .errorSummary()
+        .find('li')
+        .then($error => {
+          expect($error.get(0).innerText).to.contain('Select a punishment or recovery of money for damages')
         })
     })
     it('should error when no privilege type selected', () => {

@@ -399,5 +399,33 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect(row.length).to.eq(3)
         })
     })
+    // TODO: activate with v2EndpointsFlag
+    it.skip('caution and damages radio buttons', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+
+      awardPunishmentsPage.newPunishment().click()
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="CAUTION"]').should('exist')
+      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').should('exist')
+
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+      punishmentPage.submitButton().click()
+      const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
+      punishmentSchedulePage.days().type('10')
+      punishmentSchedulePage.suspended().find('input[value="yes"]').check()
+      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+
+      punishmentSchedulePage.submitButton().click()
+      awardPunishmentsPage.newPunishment().click()
+
+      punishmentPage.punishment().find('input[value="CAUTION"]').should('not.exist')
+      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').check()
+      cy.get('#damagesOwedAmount').type('50')
+      punishmentPage.submitButton().click()
+      awardPunishmentsPage.newPunishment().click()
+      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').should('not.exist')
+    })
   })
 })

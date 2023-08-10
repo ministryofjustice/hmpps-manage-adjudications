@@ -168,7 +168,7 @@ const stubUpdateDraftIncidentRole = ({
     },
   })
 
-const stubGetReportedAdjudication = ({
+const stubGetReportedAdjudicationV1 = ({
   id,
   response = {},
 }: {
@@ -179,6 +179,27 @@ const stubGetReportedAdjudication = ({
     request: {
       method: 'GET',
       url: `/adjudications/reported-adjudications/${id}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubGetReportedAdjudication = ({
+  id,
+  response = {},
+}: {
+  id: number
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/${id}/v2`,
     },
     response: {
       status: 200,
@@ -1085,6 +1106,7 @@ export default {
   stubSubmitCompleteDraftAdjudication,
   stubEditDraftIncidentDetails,
   stubUpdateDraftIncidentRole,
+  stubGetReportedAdjudicationV1,
   stubGetReportedAdjudication,
   stubGetAllDraftAdjudicationsForUser,
   stubGetYourReportedAdjudications,

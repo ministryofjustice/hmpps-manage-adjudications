@@ -1,5 +1,6 @@
 import { FormError } from '../../@types/template'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
+import config from '../../config'
 
 type PunishmentForm = {
   punishmentType: PunishmentType
@@ -7,12 +8,17 @@ type PunishmentForm = {
   otherPrivilege?: string
   stoppagePercentage?: number
   damagesOwedAmount?: number
+  damagesAlreadyAdded?: boolean
 }
 
 const errors: { [key: string]: FormError } = {
   MISSING_PUNISHMENT_TYPE: {
     href: '#punishmentType',
-    text: 'Select the type of punishment',
+    text: 'Select a punishment or recovery of money for damages',
+  },
+  MISSING_PUNISHMENT_TYPE_DAMAGES_PRESENT: {
+    href: '#punishmentType',
+    text: 'Select a punishment',
   },
   MISSING_PRIVILEGE_TYPE: {
     href: '#privilegeType',
@@ -46,8 +52,20 @@ export default function validateForm({
   otherPrivilege,
   stoppagePercentage,
   damagesOwedAmount,
+  damagesAlreadyAdded,
 }: PunishmentForm): FormError | null {
-  if (!punishmentType) return errors.MISSING_PUNISHMENT_TYPE
+  if (!punishmentType) {
+    if (config.v2EndpointsFlag === 'true') {
+      if (damagesAlreadyAdded) {
+        return errors.MISSING_PUNISHMENT_TYPE_DAMAGES_PRESENT
+      }
+      return errors.MISSING_PUNISHMENT_TYPE
+    }
+    return {
+      href: '#punishmentType',
+      text: 'Select the type of punishment',
+    }
+  }
 
   if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
 
