@@ -54,11 +54,13 @@ export default class PleaAndFindingPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, hearingPlea, hearingFinding, adjudicatorNameFromApi } = pageData
     const { chargeNumber } = req.params
+    const { previousPlea, previousFinding } = req.query
+
     return res.render(`pages/hearingOutcome/pleaAndFinding.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
-      hearingPlea,
-      hearingFinding,
+      hearingPlea: hearingPlea || previousPlea,
+      hearingFinding: hearingFinding || previousFinding,
       adjudicatorName: adjudicatorNameFromApi,
     })
   }
@@ -121,7 +123,7 @@ export default class PleaAndFindingPage {
       return res.redirect(
         url.format({
           pathname: redirectUrl,
-          query: { adjudicator: String(nameOfAdjudicator), plea: hearingPlea },
+          query: { adjudicator: String(nameOfAdjudicator), plea: hearingPlea, finding: hearingFinding },
         })
       )
     } catch (postError) {

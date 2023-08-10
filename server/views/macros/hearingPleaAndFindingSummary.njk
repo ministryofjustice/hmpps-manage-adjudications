@@ -1,0 +1,43 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro hearingPleaAndFindingSummary(plea, finding, changeHref) %}
+  {% set pleaChangeLink = {
+    items: [
+      {
+        href: changeHref,
+        text: "Change",
+        visuallyHiddenText: ' plea',
+        attributes: {"data-qa": "change-link" }
+      }
+    ]
+  } %}
+  {% set findingChangeLink = {
+    items: [
+      {
+        href: changeHref,
+        text: "Change",
+        visuallyHiddenText: ' finding',
+        attributes: {"data-qa": "change-link" }
+      }
+    ]
+  } %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukSummaryList({
+        rows: [
+        {
+          key: { text: 'Plea' },
+          value: { text: plea | convertHearingOutcomePlea },
+          actions: pleaChangeLink or null
+        },
+        {
+          key: { text: 'Finding' },
+          value: { text: finding | convertHearingOutcomeFinding },
+          actions: findingChangeLink or null
+        }],
+        attributes: attributes
+      }) }}
+    </div>
+  </div>
+    {% endmacro %}

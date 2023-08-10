@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
+{% from "../../macros/hearingPleaAndFindingSummary.njk" import hearingPleaAndFindingSummary %}
 
 {% set title = 'Check your answers before submitting' %}
 
@@ -17,8 +18,11 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ hearingDamagesAndCautionSummary(chargeNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, { "data-qa": "money-caution-summary" }, false, moneyChangeLinkHref, cautionChangeLinkHref) }}
-
+  {% if v2Flag %}
+    {{ hearingPleaAndFindingSummary(plea, finding, changeHref) }}
+  {% else %}
+    {{ hearingDamagesAndCautionSummary(chargeNumber, moneyRecoveredBoolean, moneyRecoveredAmount, cautionAnswer, { "data-qa": "money-caution-summary" }, false, moneyChangeLinkHref, cautionChangeLinkHref) }}
+  {% endif %}
     <form method="POST" novalidate="novalidate">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       <div class="flex-container flex-center">
