@@ -9,6 +9,7 @@ import {
   IssueStatus,
   ReportedAdjudicationStatus,
 } from '../../server/data/ReportedAdjudicationResult'
+import config from '../../server/config'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -178,7 +179,10 @@ const stubGetReportedAdjudication = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/reported-adjudications/${id}`,
+      url:
+        config.v2EndpointsFlag === 'true'
+          ? `/adjudications/reported-adjudications/${id}/v2`
+          : `/adjudications/reported-adjudications/${id}`,
     },
     response: {
       status: 200,

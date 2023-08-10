@@ -6,7 +6,7 @@ import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
+import { PrivilegeType, PunishmentDataWithScheduleV2, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
 import config from '../../config'
 
@@ -53,6 +53,12 @@ export default class PunishmentPage {
       user
     )
 
+    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
+    const [damagesUnavailable, cautionUnavailable] = await Promise.all([
+      this.damagesAlreadyAdded(sessionPunishments),
+      this.punishmentsAlreadyAdded(sessionPunishments),
+    ])
+
     return res.render(`pages/punishment.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
@@ -62,20 +68,22 @@ export default class PunishmentPage {
       stoppagePercentage,
       isIndependentAdjudicatorHearing,
       isV2Endpoints: config.v2EndpointsFlag === 'true',
+      damagesUnavailable,
+      cautionUnavailable,
       damagesOwedAmount,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const { chargeNumber } = req.params
+    const { chargeNumber, redisId } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
     if (this.pageOptions.isEdit()) {
-      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
+      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
 
       return this.renderView(req, res, {
         punishmentType: sessionData.type,
@@ -89,8 +97,11 @@ export default class PunishmentPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { chargeNumber } = req.params
+    const { chargeNumber, redisId } = req.params
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount } = req.body
+
+    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
+    const damagesAlreadyAdded = await this.damagesAlreadyAdded(sessionPunishments)
 
     const stoppageOfEarningsPercentage = stoppagePercentage ? Number(String(stoppagePercentage).trim()) : null
     const error = validateForm({
@@ -99,6 +110,7 @@ export default class PunishmentPage {
       otherPrivilege,
       stoppagePercentage: stoppageOfEarningsPercentage,
       damagesOwedAmount,
+      damagesAlreadyAdded,
     })
 
     if (error)
@@ -118,7 +130,7 @@ export default class PunishmentPage {
         damagesOwedAmount,
       }
       if (this.pageOptions.isEdit()) {
-        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
+        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, redisId)
       } else {
         await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
       }
@@ -146,5 +158,24 @@ export default class PunishmentPage {
       return adjudicationUrls.punishmentSchedule.urls.edit(chargeNumber, req.params.redisId)
     }
     return adjudicationUrls.punishmentSchedule.urls.start(chargeNumber)
+  }
+
+  private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithScheduleV2[]) => {
+    if (sessionPunishments) {
+      return !!sessionPunishments.filter(
+        (punishment: PunishmentDataWithScheduleV2) => punishment.type === PunishmentType.DAMAGES_OWED
+      ).length
+    }
+    return false
+  }
+
+  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentDataWithScheduleV2[]) => {
+    if (sessionPunishments) {
+      return !!sessionPunishments.filter(
+        (punishment: PunishmentDataWithScheduleV2) =>
+          punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED
+      ).length
+    }
+    return false
   }
 }

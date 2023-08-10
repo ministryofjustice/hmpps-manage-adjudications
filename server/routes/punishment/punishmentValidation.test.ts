@@ -1,5 +1,10 @@
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import validateForm from './punishmentValidation'
+import config from '../../config'
+
+beforeEach(() => {
+  config.v2EndpointsFlag = 'true'
+})
 
 describe('validateForm', () => {
   it('Valid submit has no errors when type only', () => {
@@ -34,14 +39,26 @@ describe('validateForm', () => {
       })
     ).toBeNull()
   })
-  it('shows error when no punishment option selected', () => {
+  it('shows error when no punishment option selected - damages previously added', () => {
     expect(
       validateForm({
         punishmentType: null,
+        damagesAlreadyAdded: true,
       })
     ).toEqual({
       href: '#punishmentType',
-      text: 'Select the type of punishment',
+      text: 'Select a punishment',
+    })
+  })
+  it('shows error when no punishment option selected - damages not previously added', () => {
+    expect(
+      validateForm({
+        punishmentType: null,
+        damagesAlreadyAdded: false,
+      })
+    ).toEqual({
+      href: '#punishmentType',
+      text: 'Select a punishment or recovery of money for damages',
     })
   })
   it('shows error when no privilege option selected', () => {

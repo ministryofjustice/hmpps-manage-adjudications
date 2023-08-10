@@ -1,7 +1,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, isIndependentAdjudicatorHearing, isV2Endpoints, errors) %}
+{% macro punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, isIndependentAdjudicatorHearing, isV2Endpoints, damagesUnavailable, cautionUnavailable, errors) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
@@ -147,19 +147,24 @@
     }), radioButtonItems) %}
   {% endif %}
 
-  {% if isV2Endpoints %}
-    {% set radioButtonItems = (radioButtonItems.unshift({
-      value: "DAMAGES_OWED",
-      text: "Recovery of money for damages",
-      checked: punishmentType == 'DAMAGES_OWED',
-      conditional: {
-        html: amountOwedHtml
-      }
-    }, {
-      value: "CAUTION",
-      text: "Caution",
-      checked: punishmentType == 'CAUTION'
-    }), radioButtonItems) %}
+   {% if isV2Endpoints %}
+    {% if not cautionUnavailable %}
+      {% set radioButtonItems = (radioButtonItems.unshift({
+        value: "CAUTION",
+        text: "Caution",
+        checked: punishmentType == 'CAUTION'
+      }), radioButtonItems) %}
+    {% endif %}
+    {% if not damagesUnavailable %}
+      {% set radioButtonItems = (radioButtonItems.unshift({
+        value: "DAMAGES_OWED",
+        text: "Recovery of money for damages",
+        checked: punishmentType == 'DAMAGES_OWED',
+        conditional: {
+          html: amountOwedHtml
+        }
+      }), radioButtonItems) %}
+    {% endif %}
   {% endif %}
 
   {{ govukRadios({

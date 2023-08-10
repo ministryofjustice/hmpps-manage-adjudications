@@ -9,7 +9,7 @@ import auth from './integration_tests/mockApis/auth'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import adjudications from './integration_tests/mockApis/adjudications'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
-import users from "./integration_tests/mockApis/users";
+import users from './integration_tests/mockApis/users'
 
 export default defineConfig({
   chromeWebSecurity: false,
