@@ -7,7 +7,6 @@ import UserService from '../../../services/userService'
 import { PunishmentType } from '../../../data/PunishmentResult'
 import { FormError } from '../../../@types/template'
 import validateForm from './damagesAmountValidation'
-import config from '../../../config'
 
 export enum PageRequestType {
   CREATION,
