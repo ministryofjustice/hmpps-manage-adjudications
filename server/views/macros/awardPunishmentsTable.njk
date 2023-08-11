@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, chargeNumber, readOnly, consecutiveReportLinkAvailable) %}
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, chargeNumber, readOnly, consecutiveReportLinkAvailable, v2EndpointsFlag) %}
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
@@ -8,10 +8,17 @@
     {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
+    {% if v2EndpointFlag %}
     {% set changeUrl = adjudicationUrls.damagesAmount.urls.edit(chargeNumber, redisId) if data.type === 'DAMAGES_OWED' else adjudicationUrls
       .punishment
       .urls
       .edit(chargeNumber, redisId) %}
+    {% else %}
+    {% set changeUrl = adjudicationUrls
+      .punishment
+      .urls
+      .edit(chargeNumber, redisId) %}
+    {% endif %}
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
 
     {% if data.consecutiveReportNumber %}
