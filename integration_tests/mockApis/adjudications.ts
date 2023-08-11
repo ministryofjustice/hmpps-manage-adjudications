@@ -168,7 +168,6 @@ const stubUpdateDraftIncidentRole = ({
       jsonBody: response,
     },
   })
-
 const stubGetReportedAdjudication = ({
   id,
   response = {},

@@ -776,6 +776,18 @@ const adjudicationUrls = {
       edit: (chargeNumber: string) => `${adjudicationUrls.reviewerEditOffenceWarning.root}/${chargeNumber}`,
     },
   },
+  damagesAmount: {
+    root: '/damages-amount',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.damagesAmount.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.damagesAmount.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
   dataInsights: {
     root: '/data-insights',
     matchers: {

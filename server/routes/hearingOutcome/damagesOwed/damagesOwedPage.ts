@@ -42,7 +42,7 @@ export default class DamagesOwedPage {
     error: FormError | null
   ): Promise<void> => {
     const { chargeNumber } = req.params
-    return res.render(`pages/damagesOwed.njk`, {
+    return res.render(`pages/damagesOwed_v1.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       damagesOwed,

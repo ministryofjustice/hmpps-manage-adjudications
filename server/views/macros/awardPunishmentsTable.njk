@@ -8,13 +8,11 @@
     {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
-    {% set changeUrl = adjudicationUrls
+    {% set changeUrl = adjudicationUrls.damagesAmount.urls.edit(chargeNumber, redisId) if data.type === 'DAMAGES_OWED' else adjudicationUrls
       .punishment
       .urls
       .edit(chargeNumber, redisId) %}
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
-
-
 
     {% if data.consecutiveReportNumber %}
       {% if data.consecutiveReportAvailable and consecutiveReportLinkAvailable %}

@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
-import DamagesOwedPage from '../pages/damagesOwed'
+import DamagesOwedPage from '../pages/damagesOwed_v1'
 
 const testData = new TestData()
 context('Is any money being recovered for damages?', () => {
