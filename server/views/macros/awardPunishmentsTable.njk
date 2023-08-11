@@ -8,7 +8,7 @@
     {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
-    {% if v2EndpointFlag %}
+    {% if v2EndpointsFlag %}
     {% set changeUrl = adjudicationUrls.damagesAmount.urls.edit(chargeNumber, redisId) if data.type === 'DAMAGES_OWED' else adjudicationUrls
       .punishment
       .urls
