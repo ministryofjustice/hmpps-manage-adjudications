@@ -1,7 +1,7 @@
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
-import DamagesOwedPage from '../pages/damagesOwed'
+import DamagesOwedPage from '../pages/damagesOwed_v1'
 import {
   HearingOutcomeCode,
   HearingOutcomeFinding,

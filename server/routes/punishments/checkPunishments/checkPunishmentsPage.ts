@@ -4,6 +4,7 @@ import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import UserService from '../../../services/userService'
+import config from '../../../config'
 
 export enum PageRequestType {
   CREATION,
@@ -45,6 +46,7 @@ export default class CheckPunishmentsPage {
       punishments,
       changePunishmentLink: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
+      v2EndpointsFlag: config.v2EndpointsFlag === 'true',
     })
   }
 

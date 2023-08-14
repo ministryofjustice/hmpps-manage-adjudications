@@ -29,7 +29,7 @@
     {% endif %}
 
     {% if punishments | length %}
-      {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
+      {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable, v2EndpointsFlag) }}
 
       {% if not readOnly %}
         <div>
@@ -75,7 +75,7 @@
         }
       }) }}
     {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, true) }}
-    {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
+    {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable, v2EndpointsFlag) }}
 
   {% else %}
     <div data-qa="no-punishments">

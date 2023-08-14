@@ -76,8 +76,10 @@ import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
 import willPunishmentBeConsecutiveRoutes from './additionalDays/willPunishmentBeConsecutive'
 import whichPunishmentConsecutiveToRoutes from './additionalDays/whichPunishmentConsecutiveTo'
-import ManualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntryConsecutivePunishment'
+import manualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntryConsecutivePunishment'
 import manualConsecutivePunishmentErrorRoutes from './additionalDays/manualConsecutivePunishmentError'
+import damagesAmountRoutes from './punishments/damagesAmount'
+import config from '../config'
 
 export default function routes(
   router: Router,
@@ -311,7 +313,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root,
-    ManualEntryConsecutivePunishmentRoutes({ userService, punishmentsService })
+    manualEntryConsecutivePunishmentRoutes({ userService, punishmentsService })
   )
   router.use(
     adjudicationUrls.manualConsecutivePunishmentError.root,
@@ -337,6 +339,9 @@ export default function routes(
     adjudicationUrls.reviewerEditOffenceWarning.root,
     reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
   )
+  if (config.v2EndpointsFlag === 'true') {
+    router.use(adjudicationUrls.damagesAmount.root, damagesAmountRoutes({ punishmentsService, userService }))
+  }
 
   router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
 

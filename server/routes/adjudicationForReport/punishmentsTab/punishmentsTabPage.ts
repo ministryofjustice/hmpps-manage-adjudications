@@ -98,6 +98,8 @@ export default class PunishmentsTabPage {
       user
     )
 
+    const v2EndpointsFlag = config.v2EndpointsFlag === 'true'
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.chargeNumber,
@@ -119,7 +121,8 @@ export default class PunishmentsTabPage {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      showEditableDamagesAndCautionDetails: !(config.v2EndpointsFlag === 'true'),
+      showEditableDamagesAndCautionDetails: !v2EndpointsFlag,
+      v2EndpointsFlag,
     })
   }
 }

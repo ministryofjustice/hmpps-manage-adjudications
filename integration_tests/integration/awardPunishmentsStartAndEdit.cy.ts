@@ -10,6 +10,7 @@ import NumberOfAdditionalDaysPage from '../pages/numberOfAdditionalDays'
 import WillPunishmentBeSuspendedPage from '../pages/willPunishmentBeSuspended'
 import WillPunishmentBeConsecutivePage from '../pages/willPunishmentBeConsective'
 import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiveTo'
+import DamagesAmountPage from '../pages/damagesAmountOwed'
 import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -426,6 +427,19 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.submitButton().click()
       awardPunishmentsPage.newPunishment().click()
       punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').should('not.exist')
+    })
+    // TODO: activate with v2EndpointsFlag
+    it.skip('change link for damages goes to separate page', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage.newPunishment().click()
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').check()
+      cy.get('#damagesOwedAmount').type('50')
+      punishmentPage.submitButton().click()
+      awardPunishmentsPage.editPunishment().click()
+      const damagesAmountPage = Page.verifyOnPage(DamagesAmountPage)
+      damagesAmountPage.damagesAmount().should('have.value', 50)
     })
   })
 })
