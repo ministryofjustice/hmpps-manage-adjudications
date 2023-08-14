@@ -25,10 +25,12 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       {% if punishments | length %}
+      {% if v2EndpointsFlag %}
        {% if filteredPunishments.damages | length %}
         {{ awardPunishmentsTableDamages(filteredPunishments.damages, redirectAfterRemoveUrl, chargeNumber, false) }}
       {% endif %} 
         <h2 class="govuk-heading-m">Punishments</h2>
+      {% endif %}
         {{ awardPunishmentsTable(filteredPunishments.otherPunishments, redirectAfterRemoveUrl, chargeNumber, false, false, v2EndpointsFlag) }}
       {% else %}
         <p class="govuk-body">There are currently no punishments or damages for this adjudication. You can activate <br>existing suspended punishments and add new punishments.</p>
