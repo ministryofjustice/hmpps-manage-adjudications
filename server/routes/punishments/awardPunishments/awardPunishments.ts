@@ -96,6 +96,7 @@ export default class AwardPunishmentsPage {
   }
 
   hasCautionBeenAdded = async (punishments: PunishmentDataWithScheduleV2[]) => {
+    if (!punishments) return false
     return !!punishments.filter(pun => pun.type === PunishmentType.CAUTION).length
   }
 }
