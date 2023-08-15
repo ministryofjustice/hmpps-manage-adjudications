@@ -54,6 +54,11 @@ beforeEach(() => {
 
   punishmentsService.getAllSessionPunishments.mockReturnValueOnce(punishmentsOnSession)
 
+  punishmentsService.filteredPunishments.mockResolvedValue({
+    damages: [],
+    otherPunishments: punishmentsOnSession,
+  })
+
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService })
 })
 

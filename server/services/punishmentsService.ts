@@ -276,4 +276,18 @@ export default class PunishmentsService {
       }
     })
   }
+
+  async filteredPunishments(punishments: Array<PunishmentDataV2 | PunishmentDataWithScheduleV2>) {
+    if (!punishments)
+      return {
+        damages: [],
+        otherPunishments: [],
+      }
+    const damages = punishments.filter(pun => pun.type === PunishmentType.DAMAGES_OWED)
+    const otherPunishments = punishments.filter(pun => pun.type !== PunishmentType.DAMAGES_OWED)
+    return {
+      damages,
+      otherPunishments,
+    }
+  }
 }
