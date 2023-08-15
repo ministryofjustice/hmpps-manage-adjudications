@@ -86,6 +86,7 @@ export default class PunishmentsTabPage {
     const caution = finalOutcomeItem.outcome?.outcome?.caution || false
 
     const punishments = flattenPunishments(await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user))
+    const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
 
     const punishmentComments = await this.punishmentsService.formatPunishmentComments(
       reportedAdjudication,
@@ -115,13 +116,13 @@ export default class PunishmentsTabPage {
       moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(chargeNumber),
       cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(chargeNumber),
       punishments,
+      filteredPunishments,
       consecutiveReportLinkAvailable: this.pageOptions.isReviewer(),
       punishmentComments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      showEditableDamagesAndCautionDetails: !v2EndpointsFlag,
       v2EndpointsFlag,
     })
   }
