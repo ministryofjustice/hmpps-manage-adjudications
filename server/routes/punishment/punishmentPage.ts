@@ -54,9 +54,10 @@ export default class PunishmentPage {
     )
 
     const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
-    const [damagesUnavailable, cautionUnavailable] = await Promise.all([
+    const [damagesUnavailable, punishmentsAlreadyAdded, cautionAlreadyAdded] = await Promise.all([
       this.damagesAlreadyAdded(sessionPunishments),
       this.punishmentsAlreadyAdded(sessionPunishments),
+      this.cautionAlreadyAdded(sessionPunishments),
     ])
 
     return res.render(`pages/punishment.njk`, {
@@ -69,7 +70,7 @@ export default class PunishmentPage {
       isIndependentAdjudicatorHearing,
       isV2Endpoints: config.v2EndpointsFlag === 'true',
       damagesUnavailable,
-      cautionUnavailable,
+      cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
     })
   }
@@ -174,6 +175,15 @@ export default class PunishmentPage {
       return !!sessionPunishments.filter(
         (punishment: PunishmentDataWithScheduleV2) =>
           punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED
+      ).length
+    }
+    return false
+  }
+
+  private cautionAlreadyAdded = async (sessionPunishments: PunishmentDataWithScheduleV2[]) => {
+    if (sessionPunishments) {
+      return !!sessionPunishments.filter(
+        (punishment: PunishmentDataWithScheduleV2) => punishment.type === PunishmentType.CAUTION
       ).length
     }
     return false

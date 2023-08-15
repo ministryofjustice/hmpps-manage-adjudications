@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { User } from '../../../data/hmppsManageUsersClient'
-import { flattenPunishments } from '../../../data/PunishmentResult'
+import { PunishmentDataWithScheduleV2, PunishmentType, flattenPunishments } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
@@ -62,12 +62,19 @@ export default class AwardPunishmentsPage {
       await this.punishmentsService.deleteSessionPunishments(req, punishmentToDelete as string, chargeNumber)
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
+
     const continueHref = await this.getContinueHref(chargeNumber, user)
+
+    const filteredPunishments = await this.filteredPunishments(punishments)
+    const cautionAdded = await this.hasCautionBeenAdded(punishments)
+
     return res.render(`pages/awardPunishments.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       redirectAfterRemoveUrl,
       chargeNumber,
       punishments,
+      filteredPunishments,
+      cautionAdded,
       continueHref,
       v2EndpointsFlag: config.v2EndpointsFlag === 'true',
     })
@@ -85,5 +92,18 @@ export default class AwardPunishmentsPage {
     const punishments = await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user)
     if (punishments && punishments.length) return adjudicationUrls.checkPunishments.urls.submittedEdit(chargeNumber)
     return adjudicationUrls.checkPunishments.urls.start(chargeNumber)
+  }
+
+  filteredPunishments = async (punishments: PunishmentDataWithScheduleV2[]) => {
+    const damages = punishments.filter(pun => pun.type === PunishmentType.DAMAGES_OWED)
+    const otherPunishments = punishments.filter(pun => pun.type !== PunishmentType.DAMAGES_OWED)
+    return {
+      damages,
+      otherPunishments,
+    }
+  }
+
+  hasCautionBeenAdded = async (punishments: PunishmentDataWithScheduleV2[]) => {
+    return !!punishments.filter(pun => pun.type === PunishmentType.CAUTION).length
   }
 }

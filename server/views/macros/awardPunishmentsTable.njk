@@ -9,15 +9,20 @@
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
     {% if v2EndpointsFlag %}
-    {% set changeUrl = adjudicationUrls.damagesAmount.urls.edit(chargeNumber, redisId) if data.type === 'DAMAGES_OWED' else adjudicationUrls
-      .punishment
-      .urls
-      .edit(chargeNumber, redisId) %}
+      {% set changeUrl = adjudicationUrls
+        .damagesAmount
+        .urls
+        .edit(chargeNumber, redisId) if data
+        .type === 'DAMAGES_OWED' else 
+          adjudicationUrls
+            .punishment
+            .urls
+            .edit(chargeNumber, redisId) %}
     {% else %}
-    {% set changeUrl = adjudicationUrls
-      .punishment
-      .urls
-      .edit(chargeNumber, redisId) %}
+      {% set changeUrl = adjudicationUrls
+        .punishment
+        .urls
+        .edit(chargeNumber, redisId) %}
     {% endif %}
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
 
@@ -26,7 +31,7 @@
         {% set typeColumnValue = typeColumnValue + '<br> (consecutive to charge <a data-qa="consecutive-link" href="'+ adjudicationUrls.punishmentsAndDamages.urls.review(data.consecutiveReportNumber) +'">' + data.consecutiveReportNumber + '</a>)' %}
       {% else %}
         {% set typeColumnValue = typeColumnValue + '<br>(consecutive to charge ' + data.consecutiveReportNumber + ')' %}
-    {% endif %}
+      {% endif %}
     {% endif %}
 
     {% set rows = (rows.push(
@@ -98,5 +103,7 @@
         rows: rows,
         attributes: {"data-qa": "punishments-table"}
       }) }}
+  {% else %}
+    <p class="govuk-body">There are currently no punishments for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments.</p>
   {% endif %}
 {% endmacro %}

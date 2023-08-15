@@ -2,11 +2,18 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+{% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 
-{% set title = "Award punishments" %}
+{% if v2EndpointsFlag %}
+  {% set title = "Award punishments and add money for damages" %}
+  {% set primaryButtonText = "Add a new punishment" if filteredPunishments.damages.length else "Add a new punishment or money for damages" %}
+{% else %}
+  {% set title = "Award punishments" %}
+  {% set primaryButtonText = "Add a new punishment" %}
+{% endif %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -17,21 +24,46 @@
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-
       {% if punishments | length %}
-        {{ awardPunishmentsTable(punishments, redirectAfterRemoveUrl, chargeNumber, false, false, v2EndpointsFlag) }}
+      {% if v2EndpointsFlag %}
+       {% if filteredPunishments.damages | length %}
+        {{ awardPunishmentsTableDamages(filteredPunishments.damages, redirectAfterRemoveUrl, chargeNumber, false) }}
+      {% endif %} 
+        <h2 class="govuk-heading-m">Punishments</h2>
+      {% endif %}
+        {{ awardPunishmentsTable(filteredPunishments.otherPunishments, redirectAfterRemoveUrl, chargeNumber, false, false, v2EndpointsFlag) }}
       {% else %}
-        <p class="govuk-body">No punishments have been awarded for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments below.</p>
+        <p class="govuk-body">There are currently no punishments or damages for this adjudication. You can activate <br>existing suspended punishments and add new punishments.</p>
       {% endif %}
 
       <div>
+      {% if v2EndpointsFlag %}
+        {% if cautionAdded and not filteredPunishments.damages.length %}
         {{ govukButton({
-        text: 'Add a new punishment',
+        text: 'Add money for damages',
+        element: "a",
+        href: adjudicationUrls.damagesAmount.urls.start(chargeNumber),
+        classes: "govuk-button--secondary govuk-!-margin-bottom-3",
+        attributes: { "data-qa": "add-damages-button" }
+      }) }}
+        {% elseif not cautionAdded %}
+        {{ govukButton({
+        text: primaryButtonText,
         element: "a",
         href: adjudicationUrls.punishment.urls.start(chargeNumber),
         classes: "govuk-button--secondary govuk-!-margin-bottom-3",
         attributes: { "data-qa": "add-new-punishment-button" }
       }) }}
+        {% endif %}
+      {% else %}
+        {{ govukButton({
+        text: primaryButtonText,
+        element: "a",
+        href: adjudicationUrls.punishment.urls.start(chargeNumber),
+        classes: "govuk-button--secondary govuk-!-margin-bottom-3",
+        attributes: { "data-qa": "add-new-punishment-button" }
+      }) }}
+      {% endif %}
       </div>
       <div>
         {{ govukButton({
