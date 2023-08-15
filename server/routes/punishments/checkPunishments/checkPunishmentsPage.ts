@@ -40,10 +40,12 @@ export default class CheckPunishmentsPage {
     const { chargeNumber } = req.params
 
     const punishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
+    const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
 
     return res.render(`pages/checkPunishments.njk`, {
       chargeNumber,
       punishments,
+      filteredPunishments,
       changePunishmentLink: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       v2EndpointsFlag: config.v2EndpointsFlag === 'true',

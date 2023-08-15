@@ -2,11 +2,12 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+{% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 
 {% set title = "Check your answers before submitting" %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -18,6 +19,12 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
+      {% if v2EndpointsFlag %}
+        {% if filteredPunishments.damages | length %}
+          {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, chargeNumber, true) }}
+        {% endif %}
+      {% endif %}
+
       <div class="punishmentsTitleRow">
         <h2 class="govuk-heading-m">Punishments</h2>
         <p class="govuk-body">
@@ -25,8 +32,8 @@
         </p>
       </div>
 
-      {% if punishments | length %}
-        {{ awardPunishmentsTable(punishments, null, chargeNumber, true, false, v2EndpointsFlag) }}
+      {% if filteredPunishments.otherPunishments | length %}
+        {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, chargeNumber, true, false, v2EndpointsFlag) }}
       {% else %}
         <p class="govuk-body" data-qa="emptyState">No punishments have been awarded for this adjudication.</p>
       {% endif %}
