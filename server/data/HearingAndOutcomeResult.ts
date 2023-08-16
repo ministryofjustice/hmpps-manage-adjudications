@@ -96,24 +96,10 @@ export type HearingOutcomeDetails = {
   code: HearingOutcomeCode
   details?: string
   reason?: HearingOutcomeAdjournReason
-  // finding?: HearingOutcomeFinding
   plea?: HearingOutcomePlea
 }
 
-/**
- * @deprecated The method should not be used
- */
 export type Outcome = {
-  id: number
-  code: OutcomeCode
-  details: string
-  reason?: string
-  amount?: number
-  caution?: boolean
-  quashedReason?: QuashGuiltyFindingReason
-}
-
-export type OutcomeV2 = {
   id: number
   code: OutcomeCode
   details: string
@@ -128,28 +114,13 @@ export type ReferralOutcome = {
   reason?: NotProceedReason
 }
 
-/**
- * @deprecated The method should not be used
- */
 export type OutcomeDetails = {
   outcome: Outcome
   referralOutcome?: ReferralOutcome
 }
 
-export type OutcomeDetailsV2 = {
-  outcome: OutcomeV2
-  referralOutcome?: ReferralOutcome
-}
-
-/**
- * @deprecated The method should not be used
- */
 export type OutcomeDetailsHistory = {
   outcome: OutcomeDetails
-}
-
-export type OutcomeDetailsHistoryV2 = {
-  outcome: OutcomeDetailsV2
 }
 
 export type HearingDetailsHistory = {
@@ -157,12 +128,7 @@ export type HearingDetailsHistory = {
   outcome?: OutcomeDetails
 }
 
-/**
- * @deprecated The method should not be used
- */
 export type OutcomeHistory = Array<OutcomeDetailsHistory & HearingDetailsHistory>
-
-export type OutcomeHistoryV2 = Array<OutcomeDetailsHistoryV2 & HearingDetailsHistory>
 
 export interface HearingOutcomeResult extends HearingOutcomeDetails {
   id: number

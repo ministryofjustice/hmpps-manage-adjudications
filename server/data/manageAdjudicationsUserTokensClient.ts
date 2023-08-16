@@ -2,7 +2,6 @@ import config from '../config'
 import { OffenceDetails } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
-  ReportedAdjudicationResultV2,
   ReportedAdjudication,
   ScheduledHearingList,
   ReportedAdjudicationStatus,
@@ -21,7 +20,7 @@ import {
   QuashGuiltyFindingReason,
 } from './HearingAndOutcomeResult'
 import {
-  PunishmentDataV2,
+  PunishmentData,
   PunishmentDataWithSchedule,
   PunishmentType,
   SuspendedPunishmentResult,
@@ -49,17 +48,7 @@ export type NotProceedHearingOutcomeDetails = {
   details: string
 }
 
-/**
- * @deprecated The method should not be used
- */
 export type ChargeProvedHearingOutcomeDetails = {
-  adjudicator: string
-  plea: HearingOutcomePlea
-  caution: boolean
-  amount?: number
-}
-
-export type ChargeProvedHearingOutcomeDetailsV2 = {
   adjudicator: string
   plea: HearingOutcomePlea
 }
@@ -69,21 +58,7 @@ export type QuashData = {
   details: string
 }
 
-/**
- * @deprecated The method should not be used
- */
 export type AmendedHearingOutcomeData = {
-  adjudicator?: string
-  adjournReason?: HearingOutcomeAdjournReason
-  notProceedReason?: NotProceedReason
-  details?: string
-  plea?: HearingOutcomePlea
-  caution?: boolean
-  amount?: string
-  damagesOwed?: boolean
-}
-
-export type AmendedHearingOutcomeDataV2 = {
   adjudicator?: string
   adjournReason?: HearingOutcomeAdjournReason
   notProceedReason?: NotProceedReason
@@ -98,11 +73,9 @@ export type AmendedOutcomeData = {
 }
 
 export type ConsecutiveAdditionalDaysReport = {
-  reportNumber: number
+  chargeNumber: string
   chargeProvedDate: string
   punishment: PunishmentDataWithSchedule
-  consecutiveReportNumber?: number
-  consecutiveReportAvailable?: boolean
 }
 
 /**
@@ -268,22 +241,9 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
-  /**
-   * @deprecated The method should not be used
-   */
   async createChargeProvedHearingOutcome(
     chargeNumber: string,
     chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetails
-  ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.post({
-      path: `/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved`,
-      data: { ...chargeProvedHearingOutcomeDetails },
-    })
-  }
-
-  async createChargeProvedHearingOutcomeV2(
-    chargeNumber: string,
-    chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetailsV2
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved/v2`,
@@ -308,25 +268,11 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
-  /**
-   * @deprecated The method should not be used
-   */
   async amendHearingOutcome(
     chargeNumber: string,
     status: ReportedAdjudicationStatus,
     amendedData: AmendedHearingOutcomeData
   ): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`,
-      data: { ...amendedData },
-    })
-  }
-
-  async amendHearingOutcomeV2(
-    chargeNumber: string,
-    status: ReportedAdjudicationStatus,
-    amendedData: AmendedHearingOutcomeDataV2
-  ): Promise<ReportedAdjudicationResultV2> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
       data: { ...amendedData },
@@ -340,40 +286,14 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
-  /**
-   * @deprecated The method should not be used
-   */
-  async createPunishments(chargeNumber: string, punishments: PunishmentDataV2[]): Promise<ReportedAdjudicationResult> {
-    return this.restClient.post({
-      path: `/reported-adjudications/${chargeNumber}/punishments`,
-      data: { punishments: [...punishments] },
-    })
-  }
-
-  async createPunishmentsV2(
-    chargeNumber: string,
-    punishments: PunishmentDataV2[]
-  ): Promise<ReportedAdjudicationResultV2> {
+  async createPunishments(chargeNumber: string, punishments: PunishmentData[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/punishments/v2`,
       data: { punishments: [...punishments] },
     })
   }
 
-  /**
-   * @deprecated The method should not be used
-   */
-  async amendPunishments(chargeNumber: string, punishments: PunishmentDataV2[]): Promise<ReportedAdjudicationResult> {
-    return this.restClient.put({
-      path: `/reported-adjudications/${chargeNumber}/punishments`,
-      data: { punishments: [...punishments] },
-    })
-  }
-
-  async amendPunishmentsV2(
-    chargeNumber: string,
-    punishments: PunishmentDataV2[]
-  ): Promise<ReportedAdjudicationResultV2> {
+  async amendPunishments(chargeNumber: string, punishments: PunishmentData[]): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/punishments/v2`,
       data: { punishments: [...punishments] },

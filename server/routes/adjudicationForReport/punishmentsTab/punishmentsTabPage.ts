@@ -5,7 +5,6 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
-import config from '../../../config'
 
 export enum PageRequestType {
   REPORTER,
@@ -77,14 +76,6 @@ export default class PunishmentsTabPage {
     const readOnly =
       this.pageOptions.isReporter() || this.pageOptions.isViewOnly() || reportedAdjudication.outcomeEnteredInNomis
 
-    const finalOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-      chargeNumber,
-      [ReportedAdjudicationStatus.CHARGE_PROVED, ReportedAdjudicationStatus.QUASHED],
-      user
-    )
-    const amount = finalOutcomeItem.outcome?.outcome?.amount || false
-    const caution = finalOutcomeItem.outcome?.outcome?.caution || false
-
     const punishments = flattenPunishments(await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user))
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
 
@@ -99,8 +90,6 @@ export default class PunishmentsTabPage {
       user
     )
 
-    const v2EndpointsFlag = config.v2EndpointsFlag === 'true'
-
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.chargeNumber,
@@ -110,11 +99,6 @@ export default class PunishmentsTabPage {
       outcomeEnteredInNomis: reportedAdjudication.outcomeEnteredInNomis,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
       quashed: reportedAdjudication.status === ReportedAdjudicationStatus.QUASHED,
-      moneyRecoveredBoolean: !!amount,
-      moneyRecoveredAmount: amount && amount.toFixed(2),
-      caution,
-      moneyChangeLinkHref: adjudicationUrls.moneyRecoveredForDamages.urls.edit(chargeNumber),
-      cautionChangeLinkHref: adjudicationUrls.isThisACaution.urls.edit(chargeNumber),
       punishments,
       filteredPunishments,
       consecutiveReportLinkAvailable: this.pageOptions.isReviewer(),
@@ -123,7 +107,6 @@ export default class PunishmentsTabPage {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      v2EndpointsFlag,
     })
   }
 }

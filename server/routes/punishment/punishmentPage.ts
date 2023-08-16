@@ -6,9 +6,8 @@ import { FormError } from '../../@types/template'
 import UserService from '../../services/userService'
 import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { PrivilegeType, PunishmentDataWithScheduleV2, PunishmentType } from '../../data/PunishmentResult'
+import { PrivilegeType, PunishmentDataWithSchedule, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
-import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -68,7 +67,6 @@ export default class PunishmentPage {
       otherPrivilege,
       stoppagePercentage,
       isIndependentAdjudicatorHearing,
-      isV2Endpoints: config.v2EndpointsFlag === 'true',
       damagesUnavailable,
       cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
@@ -161,29 +159,29 @@ export default class PunishmentPage {
     return adjudicationUrls.punishmentSchedule.urls.start(chargeNumber)
   }
 
-  private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithScheduleV2[]) => {
+  private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithScheduleV2) => punishment.type === PunishmentType.DAMAGES_OWED
+        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.DAMAGES_OWED
       ).length
     }
     return false
   }
 
-  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentDataWithScheduleV2[]) => {
+  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithScheduleV2) =>
+        (punishment: PunishmentDataWithSchedule) =>
           punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED
       ).length
     }
     return false
   }
 
-  private cautionAlreadyAdded = async (sessionPunishments: PunishmentDataWithScheduleV2[]) => {
+  private cautionAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithScheduleV2) => punishment.type === PunishmentType.CAUTION
+        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.CAUTION
       ).length
     }
     return false

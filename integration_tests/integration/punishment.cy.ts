@@ -68,21 +68,12 @@ context('Add a new punishment', () => {
     })
     it('should show additional days and prospective additional days radios if the hearing is IA', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
-      cy.get('#punishmentType-8').should('exist')
-      cy.get('[for="punishmentType-8"]').should('include.text', 'Additional days')
-      cy.get('#punishmentType-9').should('exist')
-      cy.get('[for="punishmentType-9"]').should('include.text', 'Prospective additional days')
-    })
-    // TODO: activate with v2EndpointsFlag (and delete above)
-    it.skip('should show additional days and prospective additional days radios if the hearing is IA', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start('101'))
       cy.get('#punishmentType-10').should('exist')
       cy.get('[for="punishmentType-10"]').should('include.text', 'Additional days')
       cy.get('#punishmentType-11').should('exist')
       cy.get('[for="punishmentType-11"]').should('include.text', 'Prospective additional days')
     })
-    // TODO: activate with v2EndpointsFlag
-    it.skip('should contain caution and damages radio buttons', () => {
+    it('should contain caution and damages radio buttons', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
       cy.get('#punishmentType').should('exist')
       cy.get('[for="punishmentType"]').should('include.text', 'Recovery of money for damages')
@@ -93,19 +84,6 @@ context('Add a new punishment', () => {
 
   describe('Validation', () => {
     it('should error when no punishment type selected', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start('100'))
-      const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.submitButton().click()
-
-      punishmentPage
-        .errorSummary()
-        .find('li')
-        .then($error => {
-          expect($error.get(0).innerText).to.contain('Select the type of punishment')
-        })
-    })
-    // TODO: activate with v2EndpointsFlag (and delete above)
-    it.skip('should error when no punishment type selected', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.submitButton().click()

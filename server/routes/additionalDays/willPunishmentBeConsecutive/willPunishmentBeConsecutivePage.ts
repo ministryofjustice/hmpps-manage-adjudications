@@ -66,7 +66,7 @@ export default class WillPunishmentBeConsecutivePage {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
 
       return this.renderView(req, res, {
-        consecutive: sessionData.consecutiveReportNumber ? 'yes' : 'no',
+        consecutive: sessionData.consecutiveChargeNumber ? 'yes' : 'no',
       })
     }
 

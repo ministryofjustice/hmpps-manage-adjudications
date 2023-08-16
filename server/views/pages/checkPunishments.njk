@@ -19,11 +19,9 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-      {% if v2EndpointsFlag %}
         {% if filteredPunishments.damages | length %}
           {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, chargeNumber, true) }}
         {% endif %}
-      {% endif %}
 
       <div class="punishmentsTitleRow">
         <h2 class="govuk-heading-m">Punishments</h2>
@@ -33,7 +31,7 @@
       </div>
 
       {% if filteredPunishments.otherPunishments | length %}
-        {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, chargeNumber, true, false, v2EndpointsFlag) }}
+        {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, chargeNumber, true, false) }}
       {% else %}
         <p class="govuk-body" data-qa="emptyState">No punishments have been awarded for this adjudication.</p>
       {% endif %}

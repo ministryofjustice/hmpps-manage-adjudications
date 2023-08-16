@@ -17,7 +17,7 @@ let app: Express
 
 const consecutivePunishments = [
   {
-    reportNumber: 101,
+    chargeNumber: '101',
     chargeProvedDate: '2023-07-18',
     punishment: {
       id: 1,
@@ -28,7 +28,7 @@ const consecutivePunishments = [
     },
   },
   {
-    reportNumber: 102,
+    chargeNumber: '102',
     chargeProvedDate: '2023-07-19',
     punishment: {
       id: 2,
@@ -36,7 +36,7 @@ const consecutivePunishments = [
       schedule: {
         days: 2,
       },
-      consecutiveReportNumber: 99,
+      consecutiveChargeNumber: '99',
       consecutiveReportAvailable: true,
     },
   },
@@ -112,7 +112,7 @@ describe('POST', () => {
           {
             type: PunishmentType.ADDITIONAL_DAYS,
             days: 5,
-            consecutiveReportNumber: 101,
+            consecutiveChargeNumber: '101',
             otherPrivilege: null,
             privilegeType: null,
             stoppagePercentage: null,

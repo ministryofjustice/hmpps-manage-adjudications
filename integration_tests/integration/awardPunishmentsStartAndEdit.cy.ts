@@ -171,7 +171,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           punishment: {
             type: PunishmentType.PROSPECTIVE_DAYS,
             id: 71,
-            consecutiveReportNumber: 111,
+            consecutiveChargeNumber: '111',
             schedule: {
               days: 5,
             },
@@ -400,8 +400,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect(row.length).to.eq(3)
         })
     })
-    // TODO: activate with v2EndpointsFlag
-    it.skip('caution and damages radio buttons', () => {
+    it('caution and damages radio buttons', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
 
@@ -428,8 +427,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').should('not.exist')
     })
-    // TODO: activate with v2EndpointsFlag
-    it.skip('change link for damages goes to separate page', () => {
+    it('change link for damages goes to separate page', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
       awardPunishmentsPage.newPunishment().click()

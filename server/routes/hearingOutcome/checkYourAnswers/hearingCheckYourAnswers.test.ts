@@ -61,47 +61,7 @@ describe('GET /', () => {
 })
 
 describe('POST', () => {
-  it('should successfully call the endpoint and redirect - no amount given', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=&caution=yes`
-      )
-      .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      .then(() =>
-        expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          '100',
-          'Roxanne Red',
-          HearingOutcomePlea.GUILTY,
-          true,
-          expect.anything(),
-          null
-        )
-      )
-  })
-  it('should successfully call the endpoint and redirect - no amount given', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=yes`
-      )
-      .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      .then(() =>
-        expect(hearingsService.createChargedProvedHearingOutcome).toHaveBeenCalledWith(
-          '100',
-          'Roxanne Red',
-          HearingOutcomePlea.GUILTY,
-          true,
-          expect.anything(),
-          '500.0'
-        )
-      )
-  })
-  it('should successfully call the endpoint and redirect - no amount given and caution is no', () => {
+  it('should successfully call the endpoint and redirect', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',
@@ -111,11 +71,7 @@ describe('POST', () => {
       }),
     })
     return request(app)
-      .post(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&plea=GUILTY&amount=500.0&caution=no`
-      )
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.start('100')}?adjudicator=Roxanne%20Red&plea=GUILTY`)
       .expect(302)
       .expect('Location', adjudicationUrls.awardPunishments.urls.start('100'))
       .then(() =>
@@ -123,17 +79,8 @@ describe('POST', () => {
           '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
-          false,
-          expect.anything(),
-          '500.0'
+          expect.anything()
         )
       )
-  })
-  it('should not call the endpoint if query parameters are missing, instead redirecting them to enter the hearing outcome page', () => {
-    return request(app)
-      .post(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
-      .expect(302)
-      .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start('100'))
-      .then(() => expect(hearingsService.createChargedProvedHearingOutcome).not.toHaveBeenCalled())
   })
 })

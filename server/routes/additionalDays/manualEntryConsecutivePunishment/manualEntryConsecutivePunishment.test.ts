@@ -61,7 +61,7 @@ describe('POST', () => {
         )}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
       .send({
-        consecutiveChargeNumber: 1234567,
+        consecutiveChargeNumber: '1234567',
       })
       .then(() => {
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
@@ -69,7 +69,7 @@ describe('POST', () => {
           {
             type: PunishmentType.ADDITIONAL_DAYS,
             days: 5,
-            consecutiveReportNumber: 1234567,
+            consecutiveChargeNumber: '1234567',
             otherPrivilege: null,
             privilegeType: null,
             stoppagePercentage: null,

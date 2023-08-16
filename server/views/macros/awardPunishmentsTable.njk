@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, chargeNumber, readOnly, consecutiveReportLinkAvailable, v2EndpointsFlag) %}
+{% macro awardPunishmentsTable(dataArray, redirectAfterRemoveUrl, chargeNumber, readOnly, consecutiveReportLinkAvailable) %}
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
@@ -8,7 +8,7 @@
     {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
-    {% if v2EndpointsFlag %}
+
       {% set changeUrl = adjudicationUrls
         .damagesAmount
         .urls
@@ -18,19 +18,14 @@
             .punishment
             .urls
             .edit(chargeNumber, redisId) %}
-    {% else %}
-      {% set changeUrl = adjudicationUrls
-        .punishment
-        .urls
-        .edit(chargeNumber, redisId) %}
-    {% endif %}
+
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
 
-    {% if data.consecutiveReportNumber %}
+    {% if data.consecutiveChargeNumber %}
       {% if data.consecutiveReportAvailable and consecutiveReportLinkAvailable %}
-        {% set typeColumnValue = typeColumnValue + '<br> (consecutive to charge <a data-qa="consecutive-link" href="'+ adjudicationUrls.punishmentsAndDamages.urls.review(data.consecutiveReportNumber) +'">' + data.consecutiveReportNumber + '</a>)' %}
+        {% set typeColumnValue = typeColumnValue + '<br> (consecutive to charge <a data-qa="consecutive-link" href="'+ adjudicationUrls.punishmentsAndDamages.urls.review(data.consecutiveChargeNumber) +'">' + data.consecutiveChargeNumber + '</a>)' %}
       {% else %}
-        {% set typeColumnValue = typeColumnValue + '<br>(consecutive to charge ' + data.consecutiveReportNumber + ')' %}
+        {% set typeColumnValue = typeColumnValue + '<br>(consecutive to charge ' + data.consecutiveChargeNumber + ')' %}
       {% endif %}
     {% endif %}
 

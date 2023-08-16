@@ -35,7 +35,6 @@ beforeEach(() => {
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
     testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
   )
-  config.v2EndpointsFlag = 'true'
 })
 
 afterEach(() => {

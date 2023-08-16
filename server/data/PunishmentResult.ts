@@ -1,7 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-import config from '../config'
-
 export enum PunishmentType {
   PRIVILEGE = 'PRIVILEGE',
   EARNINGS = 'EARNINGS',
@@ -25,7 +23,7 @@ export enum PrivilegeType {
   OTHER = 'OTHER',
 }
 
-export type PunishmentDataV2 = {
+export type PunishmentData = {
   id?: number
   redisId?: string
   type: PunishmentType
@@ -36,8 +34,8 @@ export type PunishmentDataV2 = {
   startDate?: string
   endDate?: string
   suspendedUntil?: string
-  activatedFrom?: number
-  consecutiveReportNumber?: number
+  activatedFrom?: string
+  consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
 }
@@ -49,9 +47,6 @@ export type PunishmentSchedule = {
   suspendedUntil?: string
 }
 
-/**
- * @deprecated The method should not be used
- */
 export type PunishmentDataWithSchedule = {
   redisId?: string
   id?: number
@@ -60,31 +55,17 @@ export type PunishmentDataWithSchedule = {
   otherPrivilege?: string
   stoppagePercentage?: number
   schedule: PunishmentSchedule
-  activatedFrom?: number
-  consecutiveReportNumber?: number
-  consecutiveReportAvailable?: boolean
-}
-
-export type PunishmentDataWithScheduleV2 = {
-  redisId?: string
-  id?: number
-  type: PunishmentType
-  privilegeType?: PrivilegeType
-  otherPrivilege?: string
-  stoppagePercentage?: number
-  schedule: PunishmentSchedule
-  activatedFrom?: number
-  consecutiveReportNumber?: number
+  activatedFrom?: string
+  consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
 }
 
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
-  activatedBy?: number
+  activatedBy?: string
 }
 
 export type SuspendedPunishmentResult = {
-  reportNumber: number
   chargeNumber: string
   punishment: SuspendedPunishment
 }
@@ -153,7 +134,7 @@ export function convertPunishmentType(
   }
 }
 
-export function flattenPunishment(punishment: PunishmentDataWithSchedule): PunishmentDataV2 {
+export function flattenPunishment(punishment: PunishmentDataWithSchedule): PunishmentData {
   const {
     id,
     redisId,
@@ -163,38 +144,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     stoppagePercentage,
     schedule,
     activatedFrom,
-    consecutiveReportNumber,
-    consecutiveReportAvailable,
-  } = punishment
-  const { days, startDate, endDate, suspendedUntil } = schedule
-  return {
-    id,
-    redisId,
-    type,
-    days,
-    ...(privilegeType && { privilegeType }),
-    ...(otherPrivilege && { otherPrivilege }),
-    ...(stoppagePercentage && { stoppagePercentage }),
-    ...(suspendedUntil && { suspendedUntil }),
-    ...(startDate && { startDate }),
-    ...(endDate && { endDate }),
-    ...(activatedFrom && { activatedFrom }),
-    ...(consecutiveReportNumber && { consecutiveReportNumber }),
-    ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
-  }
-}
-
-export function flattenPunishmentV2(punishment: PunishmentDataWithScheduleV2): PunishmentDataV2 {
-  const {
-    id,
-    redisId,
-    type,
-    privilegeType,
-    otherPrivilege,
-    stoppagePercentage,
-    schedule,
-    activatedFrom,
-    consecutiveReportNumber,
+    consecutiveChargeNumber,
     consecutiveReportAvailable,
     damagesOwedAmount,
   } = punishment
@@ -211,18 +161,13 @@ export function flattenPunishmentV2(punishment: PunishmentDataWithScheduleV2): P
     ...(startDate && { startDate }),
     ...(endDate && { endDate }),
     ...(activatedFrom && { activatedFrom }),
-    ...(consecutiveReportNumber && { consecutiveReportNumber }),
+    ...(consecutiveChargeNumber && { consecutiveChargeNumber }),
     ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
     ...(damagesOwedAmount && { damagesOwedAmount }),
   }
 }
 
-export function flattenPunishments(
-  punishments: PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[]
-): PunishmentDataV2[] {
+export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {
   if (!punishments) return null
-  if (config.v2EndpointsFlag === 'true') {
-    return punishments.map(punishment => flattenPunishmentV2(punishment))
-  }
   return punishments.map(punishment => flattenPunishment(punishment))
 }

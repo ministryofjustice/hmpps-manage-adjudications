@@ -73,7 +73,7 @@ context('Damages and punishments summary', () => {
               schedule: {
                 days: 5,
               },
-              consecutiveReportNumber: 1525853,
+              consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
             },
           ],
@@ -718,7 +718,7 @@ context('Reporter view', () => {
               schedule: {
                 days: 5,
               },
-              consecutiveReportNumber: 1525853,
+              consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
             },
           ],

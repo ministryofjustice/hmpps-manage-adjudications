@@ -12,7 +12,7 @@ import { datePickerToApi, hasAnyRole } from '../../utils/utils'
 import PunishmentsService from '../../services/punishmentsService'
 import {
   PrivilegeType,
-  PunishmentDataV2,
+  PunishmentData,
   PunishmentType,
   SuspendedPunishment,
   flattenPunishment,
@@ -111,8 +111,15 @@ export default class SuspendedPunishmentSchedulePage {
           return susPun.punishment.id === suspendedPunishmentIdToActivate
         })
         if (punishmentToUpdate.length) {
-          const { punishment, reportNumber } = punishmentToUpdate[0]
-          const updatedPunishment = this.updatePunishment(punishment, days, startDate, endDate, reportNumber)
+          const { punishment } = punishmentToUpdate[0]
+          const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber
+          const updatedPunishment = this.updatePunishment(
+            punishment,
+            days,
+            startDate,
+            endDate,
+            activatedFromChargeNumber
+          )
           await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
         }
       } else {
@@ -124,7 +131,7 @@ export default class SuspendedPunishmentSchedulePage {
           days,
           startDate: startDate ? datePickerToApi(startDate) : null,
           endDate: endDate ? datePickerToApi(endDate) : null,
-          activatedFrom: Number(reportNo),
+          activatedFrom: reportNo as string,
         }
         await this.punishmentsService.addSessionPunishment(req, manuallyCreatedSuspendedPunishment, chargeNumber)
       }
@@ -146,12 +153,12 @@ export default class SuspendedPunishmentSchedulePage {
     days: number,
     startDate: string,
     endDate: string,
-    activatedFromReportNumber: number
-  ): PunishmentDataV2 {
+    activatedFromChargeNumber: string
+  ): PunishmentData {
     const activePunishment = {
       ...existingPunishment,
       redisId: uuidv4(),
-      activatedFrom: activatedFromReportNumber,
+      activatedFrom: activatedFromChargeNumber,
       schedule: {
         days,
         startDate: startDate ? datePickerToApi(startDate) : null,

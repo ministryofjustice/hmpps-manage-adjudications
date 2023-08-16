@@ -36,14 +36,13 @@ const suspendedPunishments = {
   prisonerName: 'James Wellbeloved',
   suspendedPunishments: [
     {
-      reportNumber: 100,
       chargeNumber: '100',
       punishment: {
         id: 71,
         type: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.MONEY,
-        activatedBy: 0,
-        activatedFrom: 0,
+        activatedBy: '0',
+        activatedFrom: '0',
         schedule: {
           days: 5,
           suspendedUntil: '2023-04-29',
@@ -51,13 +50,12 @@ const suspendedPunishments = {
       },
     },
     {
-      reportNumber: 101,
       chargeNumber: '101',
       punishment: {
         id: 60,
         type: PunishmentType.CONFINEMENT,
-        activatedBy: 0,
-        activatedFrom: 0,
+        activatedBy: '0',
+        activatedFrom: '0',
         schedule: {
           days: 5,
           suspendedUntil: '2023-05-20',

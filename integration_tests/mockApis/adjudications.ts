@@ -170,18 +170,14 @@ const stubUpdateDraftIncidentRole = ({
 const stubGetReportedAdjudication = ({
   id,
   response = {},
-  v2Endpoint = false,
 }: {
   id: number
   response: Record<string, unknown>
-  v2Endpoint: boolean
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: v2Endpoint
-        ? `/adjudications/reported-adjudications/${id}/v2`
-        : `/adjudications/reported-adjudications/${id}`,
+      url: `/adjudications/reported-adjudications/${id}/v2`,
     },
     response: {
       status: 200,

@@ -4,19 +4,13 @@ import { Request } from 'express'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   PunishmentComment,
-  PunishmentDataV2,
+  PunishmentData,
   PunishmentDataWithSchedule,
-  PunishmentDataWithScheduleV2,
   PunishmentType,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
 } from '../data/PunishmentResult'
-import {
-  ReportedAdjudication,
-  ReportedAdjudicationResult,
-  ReportedAdjudicationResultV2,
-  ReportedAdjudicationV2,
-} from '../data/ReportedAdjudicationResult'
+import { ReportedAdjudication, ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsSystemTokensClient, {
   ConsecutiveAdditionalDaysReport,
 } from '../data/manageAdjudicationsSystemTokensClient'
@@ -44,25 +38,22 @@ export default class PunishmentsService {
     }
   }
 
-  private async getReportedAdjudication(
-    chargeNumber: string,
-    user: User
-  ): Promise<ReportedAdjudication | ReportedAdjudicationV2> {
+  private async getReportedAdjudication(chargeNumber: string, user: User): Promise<ReportedAdjudication> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const { reportedAdjudication } =
-      config.v2EndpointsFlag === 'true'
-        ? await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudicationV2(chargeNumber)
-        : await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
+    const { reportedAdjudication } = await new ManageAdjudicationsSystemTokensClient(
+      token,
+      user
+    ).getReportedAdjudication(chargeNumber)
     return reportedAdjudication
   }
 
-  addSessionPunishment(req: Request, punishmentData: PunishmentDataV2, chargeNumber: string) {
+  addSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string) {
     this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     const newPunishment = { ...punishmentData, redisId: uuidv4() }
     return req.session.punishments[chargeNumber].push(newPunishment)
   }
 
-  updateSessionPunishment(req: Request, punishmentData: PunishmentDataV2, chargeNumber: string, redisId: string) {
+  updateSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
     const updatedPunishment = { ...punishmentData, redisId, id: punishment.id }
@@ -72,9 +63,7 @@ export default class PunishmentsService {
 
   async deleteSessionPunishments(req: Request, redisId: string, chargeNumber: string) {
     // get an array of the redisIds
-    const redisIdArray = req.session.punishments?.[chargeNumber].map(
-      (punishment: PunishmentDataV2) => punishment.redisId
-    )
+    const redisIdArray = req.session.punishments?.[chargeNumber].map((punishment: PunishmentData) => punishment.redisId)
     // get the index of the redisId we want to delete
     const indexOfPunishment = redisIdArray.indexOf(redisId)
 
@@ -86,18 +75,14 @@ export default class PunishmentsService {
   getSessionPunishment(req: Request, chargeNumber: string, redisId: string) {
     const sessionData = this.getAllSessionPunishments(req, chargeNumber)
 
-    return sessionData.filter((punishment: PunishmentDataV2) => punishment.redisId === redisId)[0]
+    return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)[0]
   }
 
   getAllSessionPunishments(req: Request, chargeNumber: string) {
     return req.session?.punishments?.[chargeNumber]
   }
 
-  setAllSessionPunishments(
-    req: Request,
-    punishmentData: PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[],
-    chargeNumber: string
-  ) {
+  setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], chargeNumber: string) {
     this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
     // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
     const punishments = punishmentData.map(punishment => {
@@ -111,31 +96,22 @@ export default class PunishmentsService {
   }
 
   async createPunishmentSet(
-    punishments: PunishmentDataV2[],
+    punishments: PunishmentData[],
     chargeNumber: string,
     user: User
-  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
-    if (config.v2EndpointsFlag === 'true') {
-      return new ManageAdjudicationsUserTokensClient(user).createPunishmentsV2(chargeNumber, punishments)
-    }
+  ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).createPunishments(chargeNumber, punishments)
   }
 
   async editPunishmentSet(
-    punishments: PunishmentDataV2[],
+    punishments: PunishmentData[],
     chargeNumber: string,
     user: User
-  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
-    if (config.v2EndpointsFlag === 'true') {
-      return new ManageAdjudicationsUserTokensClient(user).amendPunishmentsV2(chargeNumber, punishments)
-    }
+  ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).amendPunishments(chargeNumber, punishments)
   }
 
-  async getPunishmentsFromServer(
-    chargeNumber: string,
-    user: User
-  ): Promise<PunishmentDataWithSchedule[] | PunishmentDataWithScheduleV2[]> {
+  async getPunishmentsFromServer(chargeNumber: string, user: User): Promise<PunishmentDataWithSchedule[]> {
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
     return reportedAdjudication.punishments
   }
@@ -230,7 +206,7 @@ export default class PunishmentsService {
   async validateChargeNumber(
     chargeNumber: string,
     type: PunishmentType,
-    userEnteredChargeNumber: number,
+    userEnteredChargeNumber: string,
     user: User
   ): Promise<boolean> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -277,7 +253,7 @@ export default class PunishmentsService {
     })
   }
 
-  async filteredPunishments(punishments: Array<PunishmentDataV2 | PunishmentDataWithScheduleV2>) {
+  async filteredPunishments(punishments: Array<PunishmentData | PunishmentDataWithSchedule>) {
     if (!punishments)
       return {
         damages: [],

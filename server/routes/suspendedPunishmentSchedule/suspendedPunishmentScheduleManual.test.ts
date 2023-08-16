@@ -73,7 +73,7 @@ describe('POST suspended punishment schedule', () => {
             stoppagePercentage: null,
             otherPrivilege: null,
             privilegeType: null,
-            activatedFrom: 123456,
+            activatedFrom: '123456',
           },
           '100'
         )
@@ -104,7 +104,7 @@ describe('POST suspended punishment schedule', () => {
             stoppagePercentage: 10,
             otherPrivilege: null,
             privilegeType: null,
-            activatedFrom: 123456,
+            activatedFrom: '123456',
           },
           '100'
         )
@@ -135,7 +135,7 @@ describe('POST suspended punishment schedule', () => {
             stoppagePercentage: null,
             otherPrivilege: null,
             privilegeType: PrivilegeType.TV,
-            activatedFrom: 123456,
+            activatedFrom: '123456',
           },
           '100'
         )
@@ -166,7 +166,7 @@ describe('POST suspended punishment schedule', () => {
             stoppagePercentage: null,
             otherPrivilege: 'chocolate',
             privilegeType: PrivilegeType.OTHER,
-            activatedFrom: 123456,
+            activatedFrom: '123456',
           },
           '100'
         )
@@ -190,7 +190,7 @@ describe('POST suspended punishment schedule', () => {
           {
             type: PunishmentType.ADDITIONAL_DAYS,
             days: 5,
-            activatedFrom: 123456,
+            activatedFrom: '123456',
             endDate: null,
             startDate: null,
             otherPrivilege: null,
@@ -219,7 +219,7 @@ describe('POST suspended punishment schedule', () => {
           {
             type: PunishmentType.PROSPECTIVE_DAYS,
             days: 3,
-            activatedFrom: 123456,
+            activatedFrom: '123456',
             endDate: null,
             startDate: null,
             otherPrivilege: null,

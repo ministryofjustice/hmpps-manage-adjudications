@@ -142,21 +142,14 @@ export default class PleaAndFindingPage {
   getRedirectUrl = (isEdit: boolean, hearingFinding: HearingOutcomeFinding, chargeNumber: string) => {
     if (isEdit) {
       if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
-        if (config.v2EndpointsFlag === 'true') {
-          return adjudicationUrls.hearingsCheckAnswers.urls.edit(chargeNumber)
-        } else {
-          return adjudicationUrls.moneyRecoveredForDamages.urls.edit(chargeNumber)
-        }
+        return adjudicationUrls.hearingsCheckAnswers.urls.edit(chargeNumber)
       if (hearingFinding === HearingOutcomeFinding.DISMISSED)
         return adjudicationUrls.hearingReasonForFinding.urls.edit(chargeNumber)
+
       return adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(chargeNumber)
     }
     if (hearingFinding === HearingOutcomeFinding.CHARGE_PROVED)
-      if (config.v2EndpointsFlag === 'true') {
-        return adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber)
-      } else {
-        return adjudicationUrls.moneyRecoveredForDamages.urls.start(chargeNumber)
-      }
+      return adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber)
 
     if (hearingFinding === HearingOutcomeFinding.DISMISSED)
       return adjudicationUrls.hearingReasonForFinding.urls.start(chargeNumber)

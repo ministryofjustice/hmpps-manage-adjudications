@@ -1,7 +1,7 @@
 import { FormError } from '../../../@types/template'
 
 type ConsecutivePunishmentChargeNumberForm = {
-  consecutiveChargeNumber: number
+  consecutiveChargeNumber: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -22,9 +22,9 @@ const errors: { [key: string]: FormError } = {
 export default function validateForm({
   consecutiveChargeNumber,
 }: ConsecutivePunishmentChargeNumberForm): FormError | null {
-  if (Number.isNaN(consecutiveChargeNumber) || typeof consecutiveChargeNumber === 'string') return errors.NOT_NUMERICAL
   if (consecutiveChargeNumber === undefined || consecutiveChargeNumber === null || !consecutiveChargeNumber)
     return errors.MISSING_CHARGE
-  if (consecutiveChargeNumber.toString().length !== 7) return errors.NOT_CORRECT_LENGTH
+  if (Number.isNaN(Number(consecutiveChargeNumber))) return errors.NOT_NUMERICAL
+  if (String(consecutiveChargeNumber).length !== 7) return errors.NOT_CORRECT_LENGTH
   return null
 }
