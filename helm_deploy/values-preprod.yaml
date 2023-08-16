@@ -22,7 +22,7 @@ generic-service:
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     MAINTENANCE_MODE: false
-    V2_ENDPOINTS_FLAG: false
+    V2_ENDPOINTS_FLAG: true
 
   allowlist:
     global-protect: "35.176.93.186/32"
