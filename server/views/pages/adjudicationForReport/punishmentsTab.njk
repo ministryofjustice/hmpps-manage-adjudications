@@ -24,11 +24,12 @@
   {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref) }}
 
   {% if chargeProved %}
+
     {% if filteredPunishments.damages | length %}
       {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportNo, true) }}
     {% endif %}
 
-    {% if punishments | length %}
+    {% if filteredPunishments.otherPunishments | length %}
       <h2 class="govuk-heading-m">Punishments</h2>
       {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
 
@@ -55,6 +56,11 @@
       {% endif %}
 
     {% elif not readOnly and not caution %}
+      {% if not filteredPunishments.damages | length %}
+        <div data-qa="no-punishments">
+          <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
+        </div>
+      {% endif %}
       <div>
         {{ govukButton({
           text: 'Award punishments',
@@ -64,6 +70,7 @@
           attributes: { "data-qa": "award-punishments" }
         }) }}
       </div>
+
     {% endif %}
 
   {% elif quashed %}
@@ -76,7 +83,6 @@
         }
       }) }}
     {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
-
   {% else %}
     <div data-qa="no-punishments">
       <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>

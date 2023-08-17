@@ -171,7 +171,6 @@ context('Damages and punishments summary', () => {
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -352,6 +351,41 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 130,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '130',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
+            },
+          ],
+          punishments: [
+            {
+              id: 45,
+              type: PunishmentType.DAMAGES_OWED,
+              damagesOwedAmount: 100,
+              schedule: {
+                days: 0,
+              },
+            },
+          ],
+        }),
+      },
+    })
   })
 
   describe('Loads', () => {
@@ -423,10 +457,13 @@ context('Damages and punishments summary', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('103'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.awardPunishmentsButton().should('exist')
-      punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
-      punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
-      punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.noPunishments().should('exist')
+    })
+    it('should contain the required page elements - charge proved, damages added but no other punishments', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('130'))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.awardPunishmentsButton().should('exist')
+      punishmentsAndDamagesPage.noPunishments().should('not.exist')
     })
     it('should contain the required page elements - charge proved, punishments and comments present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
