@@ -9,6 +9,7 @@ import {
   OutcomeCode,
 } from '../../server/data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { PunishmentDataWithSchedule } from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
 
@@ -56,12 +57,11 @@ context('Check your answers before submitting', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  caution: true,
-                  amount: 100.5,
                 }),
               },
             },
           ],
+          punishments: [{} as PunishmentDataWithSchedule],
         }),
       },
     })
@@ -93,8 +93,6 @@ context('Check your answers before submitting', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  caution: true,
-                  amount: null,
                 }),
               },
             },
@@ -103,96 +101,54 @@ context('Check your answers before submitting', () => {
       },
     })
     cy.task('stubAmendHearingOutcome', {
-      chargeNumber: 100,
+      chargeNumber: '100',
       status: ReportedAdjudicationStatus.CHARGE_PROVED,
       response: {},
     })
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=yes`)
+      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().should('exist')
       checkAnswersPage.cancelLink().should('exist')
       checkAnswersPage.answersTable().should('exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=yes`)
+      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.cancelLink().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
       })
     })
-    it('shows the correct information in the summary table - money amount provided', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=yes`)
+    it('shows the correct information in the summary table', () => {
+      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage
         .answersTable()
         .get('dt')
         .then($summaryLabels => {
-          expect($summaryLabels.get(0).innerText).to.contain('Is any money being recovered for damages?')
-          expect($summaryLabels.get(1).innerText).to.contain('Is the punishment a caution?')
+          expect($summaryLabels.get(0).innerText).to.contain('Plea')
+          expect($summaryLabels.get(1).innerText).to.contain('Finding')
         })
       checkAnswersPage
         .answersTable()
         .get('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
-          expect($summaryData.get(2).innerText).to.contain('Yes')
-        })
-    })
-    it('shows the correct information in the summary table - money amount not provided', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('101')}?caution=yes`)
-      const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
-      checkAnswersPage
-        .answersTable()
-        .get('dd')
-        .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('No')
-        })
-    })
-    it('shows the correct information in the summary table - money provided from previous edit page', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?amount=999.99&caution=yes`)
-      const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
-      checkAnswersPage
-        .answersTable()
-        .get('dd')
-        .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Yes: £999.99')
-          expect($summaryData.get(2).innerText).to.contain('Yes')
+          expect($summaryData.get(0).innerText).to.contain('Guilty')
+          expect($summaryData.get(2).innerText).to.contain('Charge proved beyond reasonable doubt')
         })
     })
   })
 
   describe('saves', () => {
-    it('should submit successfully - caution yes', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=yes`)
+    it('should submit successful', () => {
+      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      })
-    })
-    it('should submit successfully - caution no', () => {
-      cy.task('stubGetReportedAdjudication', {
-        id: 100,
-        response: {
-          reportedAdjudication: testData.reportedAdjudication({
-            chargeNumber: '100',
-            prisonerNumber: 'G6415GD',
-            dateTimeOfIncident: '2022-11-15T09:10:00',
-            handoverDeadline: '2022-11-17T09:30:00',
-            punishments: [],
-          }),
-        },
-      })
-
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=no`)
-      const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
-      checkAnswersPage.submitButton().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
   })

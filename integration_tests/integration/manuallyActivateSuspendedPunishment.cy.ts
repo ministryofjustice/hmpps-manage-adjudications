@@ -40,8 +40,6 @@ context('Manually activate an existing suspended punishment', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -120,10 +118,10 @@ context('Manually activate an existing suspended punishment', () => {
     })
     it('should show additional days and prospective additional days radios if the hearing is IA', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
-      cy.get('#punishmentType-8').should('exist')
-      cy.get('[for="punishmentType-8"]').should('include.text', 'Additional days')
-      cy.get('#punishmentType-9').should('exist')
-      cy.get('[for="punishmentType-9"]').should('include.text', 'Prospective additional days')
+      cy.get('#punishmentType-10').should('exist')
+      cy.get('[for="punishmentType-10"]').should('include.text', 'Additional days')
+      cy.get('#punishmentType-11').should('exist')
+      cy.get('[for="punishmentType-11"]').should('include.text', 'Prospective additional days')
     })
   })
 
@@ -151,7 +149,7 @@ context('Manually activate an existing suspended punishment', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Select the type of punishment')
+          expect($error.get(0).innerText).to.contain('Select a punishment or recovery of money for damages')
         })
     })
     it('should error when no privilege type selected', () => {
@@ -334,8 +332,6 @@ context('Manually activate an existing suspended punishment', () => {
                 outcome: {
                   outcome: testData.outcome({
                     code: OutcomeCode.CHARGE_PROVED,
-                    amount: 100.5,
-                    caution: false,
                   }),
                 },
               },
@@ -345,7 +341,7 @@ context('Manually activate an existing suspended punishment', () => {
                 id: 14,
                 type: PunishmentType.PRIVILEGE,
                 privilegeType: PrivilegeType.MONEY,
-                activatedFrom: 123456,
+                activatedFrom: '123456',
                 schedule: {
                   days: 5,
                   startDate: '2030-10-10',

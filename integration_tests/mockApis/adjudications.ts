@@ -852,7 +852,7 @@ const stubPostCompleteHearingChargeProved = ({ chargeNumber, response }): SuperA
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved/v2`,
     },
     response: {
       status: 200,
@@ -897,10 +897,7 @@ const stubAmendHearingOutcome = ({ chargeNumber, status, response }): SuperAgent
   stubFor({
     request: {
       method: 'PUT',
-      url:
-        status === 'CHARGE_PROVED'
-          ? `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`
-          : `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
     },
     response: {
       status: 200,
@@ -945,7 +942,7 @@ const stubCreatePunishments = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments/v2`,
     },
     response: {
       status: 200,

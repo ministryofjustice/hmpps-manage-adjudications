@@ -110,6 +110,7 @@ export default class SuspendedPunishmentSchedulePage {
         const punishmentToUpdate = suspendedPunishments.filter(susPun => {
           return susPun.punishment.id === suspendedPunishmentIdToActivate
         })
+
         if (punishmentToUpdate.length) {
           const { punishment } = punishmentToUpdate[0]
           const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber

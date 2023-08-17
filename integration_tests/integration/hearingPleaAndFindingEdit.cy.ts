@@ -84,7 +84,7 @@ context('Plea and finding', () => {
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.hearingsCheckAnswers.urls.edit('100'))
       })
     })
     it('goes to the reason for finding page if data successfully submitted - change finding radio button to DISMISSED', () => {

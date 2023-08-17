@@ -73,8 +73,7 @@ export default class PunishmentsTabPage {
       reportedAdjudication.prisonerNumber,
       user
     )
-    const readOnly =
-      this.pageOptions.isReporter() || this.pageOptions.isViewOnly() || reportedAdjudication.outcomeEnteredInNomis
+    const readOnly = this.isReadOnly(reportedAdjudication)
 
     const punishments = flattenPunishments(await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user))
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
@@ -108,5 +107,15 @@ export default class PunishmentsTabPage {
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
     })
+  }
+
+  private isReadOnly = (reportedAdjudication: ReportedAdjudication) => {
+    if (
+      this.pageOptions.isReporter() ||
+      this.pageOptions.isViewOnly() ||
+      reportedAdjudication?.outcomeEnteredInNomis === true
+    )
+      return true
+    return false
   }
 }

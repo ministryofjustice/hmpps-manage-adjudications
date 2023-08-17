@@ -17,13 +17,13 @@ import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/Re
 
 const susPun = [
   {
-    reportNumber: 101,
+    chargeNumber: '101',
     punishment: {
       id: 71,
       type: PunishmentType.PRIVILEGE,
       privilegeType: PrivilegeType.MONEY,
-      activatedBy: 0,
-      activatedFrom: 0,
+      activatedBy: '0',
+      activatedFrom: '0',
       schedule: {
         days: 5,
         suspendedUntil: '2023-04-29',
@@ -31,12 +31,12 @@ const susPun = [
     },
   },
   {
-    reportNumber: 101,
+    chargeNumber: '101',
     punishment: {
       id: 73,
       type: PunishmentType.ADDITIONAL_DAYS,
-      activatedBy: 0,
-      activatedFrom: 0,
+      activatedBy: '0',
+      activatedFrom: '0',
       schedule: {
         days: 5,
         suspendedUntil: '2023-04-29',
@@ -44,12 +44,12 @@ const susPun = [
     },
   },
   {
-    reportNumber: 101,
+    chargeNumber: '101',
     punishment: {
       id: 74,
       type: PunishmentType.PROSPECTIVE_DAYS,
-      activatedBy: 0,
-      activatedFrom: 0,
+      activatedBy: '0',
+      activatedFrom: '0',
       schedule: {
         days: 5,
         suspendedUntil: '2023-04-29',
@@ -362,7 +362,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         })
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       const suspendedPunishmentSchedulePage = Page.verifyOnPage(SuspendedPunishmentSchedule)
-      suspendedPunishmentSchedulePage.days().type('10')
       forceDateInput(10, 10, 2030, '[data-qa="start-date-picker"]')
       forceDateInput(20, 10, 2030, '[data-qa="end-date-picker"]')
       suspendedPunishmentSchedulePage.submitButton().click()
@@ -373,7 +372,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect($summaryData.get(0).innerText).to.contain('Loss of money')
           expect($summaryData.get(1).innerText).to.contain('10 Oct 2030')
           expect($summaryData.get(2).innerText).to.contain('20 Oct 2030')
-          expect($summaryData.get(3).innerText).to.contain('10')
+          expect($summaryData.get(3).innerText).to.contain('5')
           expect($summaryData.get(4).innerText).to.contain('-')
           expect($summaryData.get(5).innerText).to.contain('101')
         })
@@ -435,7 +434,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').check()
       cy.get('#damagesOwedAmount').type('50')
       punishmentPage.submitButton().click()
-      awardPunishmentsPage.editPunishment().click()
+      cy.get('[data-qa="edit-damages"]').click()
       const damagesAmountPage = Page.verifyOnPage(DamagesAmountPage)
       damagesAmountPage.damagesAmount().should('have.value', 50)
     })

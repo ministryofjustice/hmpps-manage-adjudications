@@ -5,13 +5,11 @@ export default class PunishmentsAndDamagesPage extends Page {
     super('Adjudication for charge')
   }
 
-  moneyCautionSummary = (): PageElement => cy.get('[data-qa="money-caution-summary"]')
-
-  moneyCautionChangeLink = (): PageElement => cy.get('[data-qa="change-link"]')
-
   punishmentsTabName = (): PageElement => cy.get('[data-qa="punishmentsTab"]')
 
   awardPunishmentsTable = (): PageElement => cy.get('[data-qa="punishments-table"]')
+
+  damagesTable = (): PageElement => cy.get('[data-qa="damages-table"]')
 
   changePunishmentsButton = (): PageElement => cy.get('[data-qa="change-punishments"]')
 
