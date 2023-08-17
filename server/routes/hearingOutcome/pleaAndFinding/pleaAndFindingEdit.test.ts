@@ -68,7 +68,7 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.moneyRecoveredForDamages.urls.edit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit(
           '100'
         )}?adjudicator=Judge%20Red&plea=GUILTY&finding=CHARGE_PROVED`
       )

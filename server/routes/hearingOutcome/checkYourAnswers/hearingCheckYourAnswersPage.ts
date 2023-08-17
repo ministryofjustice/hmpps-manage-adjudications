@@ -43,7 +43,6 @@ export default class HearingCheckYourAnswersPage {
     })
 
     return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
-      v2Flag: true,
       plea,
       finding,
       changeHref,

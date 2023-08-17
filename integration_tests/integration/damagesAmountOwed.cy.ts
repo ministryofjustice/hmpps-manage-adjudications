@@ -4,8 +4,7 @@ import TestData from '../../server/routes/testutils/testData'
 import DamagesOwedPage from '../pages/damagesAmountOwed'
 
 const testData = new TestData()
-// V2_ENDPOINTS_FLAG unskip these when we turn flag on
-context.skip('Enter the amount to be recovered for damages', () => {
+context('Enter the amount to be recovered for damages', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
