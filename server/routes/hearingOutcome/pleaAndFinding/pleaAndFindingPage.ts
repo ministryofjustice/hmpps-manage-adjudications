@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
-import config from '../../../config'
 import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'

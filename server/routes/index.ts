@@ -77,7 +77,6 @@ import whichPunishmentConsecutiveToRoutes from './additionalDays/whichPunishment
 import manualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntryConsecutivePunishment'
 import manualConsecutivePunishmentErrorRoutes from './additionalDays/manualConsecutivePunishmentError'
 import damagesAmountRoutes from './punishments/damagesAmount'
-import config from '../config'
 
 export default function routes(
   router: Router,

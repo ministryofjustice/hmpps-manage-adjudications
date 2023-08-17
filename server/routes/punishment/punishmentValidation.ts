@@ -1,6 +1,5 @@
 import { FormError } from '../../@types/template'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
-import config from '../../config'
 
 type PunishmentForm = {
   punishmentType: PunishmentType

@@ -7,7 +7,6 @@ import PunishmentsService from '../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import TestData from '../testutils/testData'
-import config from '../../config'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')

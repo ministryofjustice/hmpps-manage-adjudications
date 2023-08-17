@@ -20,7 +20,6 @@ import PrisonerResult from '../data/prisonerResult'
 import logger from '../../logger'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
-import config from '../config'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 
 export default class PunishmentsService {
