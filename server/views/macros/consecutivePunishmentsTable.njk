@@ -7,8 +7,8 @@
     {% set sanction = punishment.punishment %}
     {% set selectButton = '<button type="submit" name="select"  value="consecutive-punishment-report-'+punishment.reportNumber+'" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" data-qa="select-button" >Select this punishment</button>' %}
     {% set typeColumnValue = sanction.type | convertPunishmentType(null, null, null) %}
-    {% if sanction.consecutiveReportNumber %}
-      {% set typeColumnValue = typeColumnValue + '<br>' + '(consecutive to charge ' + sanction.consecutiveReportNumber + ')' %}
+    {% if sanction.consecutiveChargeNumber %}
+      {% set typeColumnValue = typeColumnValue + '<br>' + '(consecutive to charge ' + sanction.consecutiveChargeNumber + ')' %}
     {% endif %}
 
     {% set rows = (rows.push(

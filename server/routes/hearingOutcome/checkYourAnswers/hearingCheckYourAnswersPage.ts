@@ -1,14 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
-import config from '../../../config'
 import { HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
-import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 
 export enum PageRequestType {
   CREATION,
@@ -37,57 +35,18 @@ export default class HearingCheckYourAnswersPage {
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { amount, adjudicator, plea, finding, caution } = req.query
-    let actualAmount = amount as string
-    const queryParamsPresent = this.validateDataFromQueryPage(
-      plea as HearingOutcomePlea,
-      adjudicator as string,
-      caution as string
-    )
+    const { adjudicator, plea, finding } = req.query
 
-    if (this.pageOptions.isEdit() && !actualAmount) {
-      try {
-        const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
-          chargeNumber,
-          [ReportedAdjudicationStatus.CHARGE_PROVED],
-          res.locals.user
-        )
-        if (lastOutcomeItem.outcome?.outcome.amount) {
-          actualAmount = lastOutcomeItem.outcome.outcome.amount.toFixed(2)
-        }
-      } catch (postError) {
-        res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
-        throw postError
-      }
-    }
-
-    if (config.v2EndpointsFlag === 'true') {
-      const changeHref = url.format({
-        pathname: adjudicationUrls.hearingPleaAndFinding.urls.start(chargeNumber),
-        query: { adjudicator: String(adjudicator), previousPlea: String(plea), previousFinding: String(finding) },
-      })
-
-      return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
-        v2Flag: true,
-        plea,
-        finding,
-        changeHref,
-        cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
-      })
-    }
+    const changeHref = url.format({
+      pathname: adjudicationUrls.hearingPleaAndFinding.urls.start(chargeNumber),
+      query: { adjudicator: String(adjudicator), previousPlea: String(plea), previousFinding: String(finding) },
+    })
 
     return res.render(`pages/hearingOutcome/hearingCheckAnswers.njk`, {
-      v2Flag: false,
-      moneyRecoveredBoolean: queryParamsPresent ? !!amount : !!actualAmount,
-      moneyRecoveredAmount: (+actualAmount).toFixed(2),
-      cautionAnswer: caution === 'yes',
+      plea,
+      finding,
+      changeHref,
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
-      moneyChangeLinkHref: `${adjudicationUrls.moneyRecoveredForDamages.urls.start(
-        chargeNumber
-      )}?adjudicator=${adjudicator}&plea=${plea}`,
-      cautionChangeLinkHref: `${adjudicationUrls.isThisACaution.urls.start(
-        chargeNumber
-      )}?adjudicator=${adjudicator}&plea=${plea}&amount=${amount}`,
     })
   }
 
@@ -103,73 +62,33 @@ export default class HearingCheckYourAnswersPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { plea, adjudicator, amount, damagesOwed, caution } = req.query
-    const actualAmount = amount as string
+    const { plea, adjudicator } = req.query
 
     try {
-      if (
-        !this.pageOptions.isEdit() &&
-        !this.validateDataFromQueryPage(plea as HearingOutcomePlea, adjudicator as string, caution as string)
-      ) {
-        return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
-      }
       if (this.pageOptions.isEdit()) {
-        if (config.v2EndpointsFlag === 'true') {
-          await this.hearingsService.editChargeProvedOutcomeV2(
-            chargeNumber,
-            user,
-            (adjudicator && (adjudicator as string)) || null,
-            (plea && HearingOutcomePlea[plea.toString()]) || null
-          )
-        } else {
-          await this.hearingsService.editChargeProvedOutcome(
-            chargeNumber,
-            caution === 'yes',
-            user,
-            (adjudicator && (adjudicator as string)) || null,
-            (plea && HearingOutcomePlea[plea.toString()]) || null,
-            !actualAmount ? null : actualAmount,
-            damagesOwed ? Boolean(damagesOwed) : null
-          )
-        }
-      } else if (config.v2EndpointsFlag === 'true') {
-        await this.hearingsService.createChargedProvedHearingOutcomeV2(
+        await this.hearingsService.editChargeProvedOutcome(
           chargeNumber,
-          adjudicator as string,
-          HearingOutcomePlea[plea as string],
-          user
+          user,
+          (adjudicator && (adjudicator as string)) || null,
+          (plea && HearingOutcomePlea[plea.toString()]) || null
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(
           chargeNumber,
           adjudicator as string,
           HearingOutcomePlea[plea as string],
-          caution === 'yes',
-          user,
-          !actualAmount ? null : actualAmount
+          user
         )
       }
 
-      if (config.v2EndpointsFlag === 'true' || caution === 'no') {
-        const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
-        if (adjudication.reportedAdjudication.punishments.length !== 0) {
-          return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
-        }
-        return res.redirect(adjudicationUrls.awardPunishments.urls.start(chargeNumber))
+      const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
+      if (adjudication.reportedAdjudication.punishments.length !== 0) {
+        return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
       }
-
-      return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
+      return res.redirect(adjudicationUrls.awardPunishments.urls.start(chargeNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber)
       throw postError
     }
-  }
-
-  private validateDataFromQueryPage = (plea: HearingOutcomePlea, adjudicator: string, caution: string) => {
-    if (config.v2EndpointsFlag === 'true') {
-      return true
-    }
-    if (!plea || !adjudicator || !caution) return false
-    return true
   }
 }

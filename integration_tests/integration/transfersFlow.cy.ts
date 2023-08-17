@@ -139,8 +139,6 @@ context('Transfers flow', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -280,7 +278,6 @@ context('Transfers flow', () => {
       it('punishments tab - unscheduled - should be locked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('1'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-        punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
         punishmentsAndDamagesPage.quashedWarning().should('not.exist')
         punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -293,20 +290,16 @@ context('Transfers flow', () => {
       it('punishments tab - proved, no punishments - should be locked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('4'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-        punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
         punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
         punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
-        punishmentsAndDamagesPage.moneyCautionChangeLink().should('not.exist')
       })
       it('punishments tab - proved, punishments - should be locked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('5'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-        punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
         punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
         punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-        punishmentsAndDamagesPage.moneyCautionChangeLink().should('not.exist')
       })
     })
     describe('TransferrableActionsAllowed is true', () => {
@@ -392,8 +385,6 @@ context('Transfers flow', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -520,7 +511,6 @@ context('Transfers flow', () => {
       it('punishments tab - unscheduled - should be locked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('1'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-        punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
         punishmentsAndDamagesPage.quashedWarning().should('not.exist')
         punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -533,18 +523,14 @@ context('Transfers flow', () => {
       it('punishments tab - proved, no punishments - should be unlocked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('4'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-        punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
         punishmentsAndDamagesPage.awardPunishmentsButton().should('exist')
-        punishmentsAndDamagesPage.moneyCautionChangeLink().first().should('exist')
       })
       it('punishments tab - proved, punishments - should be unlocked', () => {
         cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('5'))
         const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-        punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
         punishmentsAndDamagesPage.changePunishmentsButton().should('exist')
         punishmentsAndDamagesPage.reportQuashedButton().should('exist')
-        punishmentsAndDamagesPage.moneyCautionChangeLink().first().should('exist')
       })
     })
   })

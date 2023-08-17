@@ -282,16 +282,12 @@ export default class TestData {
     code = OutcomeCode.REFER_POLICE,
     details = 'Some details',
     reason,
-    amount,
-    caution,
     quashedReason,
   }: {
     id?: number
     code?: OutcomeCode
     details?: string
     reason?: NotProceedReason
-    amount?: number
-    caution?: boolean
     quashedReason?: QuashGuiltyFindingReason
   }): Outcome => {
     return {
@@ -299,8 +295,6 @@ export default class TestData {
       code,
       details,
       reason,
-      amount,
-      caution,
       quashedReason,
     }
   }
@@ -337,7 +331,7 @@ export default class TestData {
       endDate: '2023-04-12',
       suspendedUntil: '2023-04-03',
     },
-    activatedFrom = 0,
+    activatedFrom = '0',
   }: {
     redisId?: string
     id?: number
@@ -346,7 +340,7 @@ export default class TestData {
     otherPrivilege?: string
     stoppagePercentage?: number
     schedule?: PunishmentSchedule
-    activatedFrom?: number
+    activatedFrom?: string
   }): PunishmentDataWithSchedule => {
     return {
       id,

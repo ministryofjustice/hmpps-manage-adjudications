@@ -7,7 +7,6 @@ import PunishmentsService from '../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import TestData from '../testutils/testData'
-import config from '../../config'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')
@@ -31,7 +30,6 @@ beforeEach(() => {
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
     testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
   )
-  config.v2EndpointsFlag = 'true'
 })
 
 afterEach(() => {

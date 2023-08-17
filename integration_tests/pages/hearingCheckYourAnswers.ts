@@ -5,7 +5,7 @@ export default class HearingCheckAnswersPage extends Page {
     super('Check your answers before submitting')
   }
 
-  answersTable = (): PageElement => cy.get('[data-qa="money-caution-summary"]')
+  answersTable = (): PageElement => cy.get('[data-qa="plea-finding-summary"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 

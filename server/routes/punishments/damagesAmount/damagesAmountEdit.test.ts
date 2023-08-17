@@ -4,7 +4,6 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import config from '../../../config'
 import { PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
@@ -24,7 +23,6 @@ beforeEach(() => {
     days: 0,
     redisId: 'xyz',
   })
-  config.v2EndpointsFlag = 'true'
 })
 
 afterEach(() => {

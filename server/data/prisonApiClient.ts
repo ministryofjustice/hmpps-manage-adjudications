@@ -160,7 +160,7 @@ export default class PrisonApiClient {
     })
   }
 
-  async validateCharge(chargeNumber: number, status: SanctionStatus, offenderNo: string): Promise<{ status: number }> {
+  async validateCharge(chargeNumber: string, status: SanctionStatus, offenderNo: string): Promise<{ status: number }> {
     return this.restClient.get({
       path: `/api/adjudications/adjudication/${chargeNumber}/sanction/${status}/${offenderNo}/validate`,
     })

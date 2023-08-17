@@ -51,7 +51,7 @@ context('which punishment will it be consecutive to page', () => {
           punishment: {
             type: PunishmentType.ADDITIONAL_DAYS,
             id: 71,
-            consecutiveReportNumber: 111,
+            consecutiveChargeNumber: '111',
             schedule: {
               days: 5,
             },

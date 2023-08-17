@@ -12,7 +12,7 @@ import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
-  consecutiveChargeNumber?: number
+  consecutiveChargeNumber?: string
 }
 
 export enum PageRequestType {
@@ -76,9 +76,7 @@ export default class ManualEntryConsecutivePunishmentPage {
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
     const type = PunishmentType[punishmentType as string]
 
-    const trimmedConsecutiveChargeNumber = consecutiveChargeNumber
-      ? Number(String(consecutiveChargeNumber).trim())
-      : null
+    const trimmedConsecutiveChargeNumber = consecutiveChargeNumber ? String(consecutiveChargeNumber).trim() : null
 
     const redirectForErrorPage = url.format({
       pathname: this.getRedirectUrlForErrorPage(chargeNumber, req),
@@ -121,7 +119,7 @@ export default class ManualEntryConsecutivePunishmentPage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days: Number(days),
-        consecutiveReportNumber: trimmedConsecutiveChargeNumber,
+        consecutiveChargeNumber: trimmedConsecutiveChargeNumber,
       }
 
       if (this.pageOptions.isEdit()) {

@@ -70,7 +70,7 @@ export default class WhichPunishmentConsecutiveToPage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days: Number(days),
-        consecutiveReportNumber: Number(chargeNumberOfSelectedPunishment),
+        consecutiveChargeNumber: chargeNumberOfSelectedPunishment,
       }
 
       if (this.pageOptions.isEdit()) {

@@ -170,18 +170,14 @@ const stubUpdateDraftIncidentRole = ({
 const stubGetReportedAdjudication = ({
   id,
   response = {},
-  v2Endpoint = false,
 }: {
   id: number
   response: Record<string, unknown>
-  v2Endpoint: boolean
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: v2Endpoint
-        ? `/adjudications/reported-adjudications/${id}/v2`
-        : `/adjudications/reported-adjudications/${id}`,
+      url: `/adjudications/reported-adjudications/${id}/v2`,
     },
     response: {
       status: 200,
@@ -856,7 +852,7 @@ const stubPostCompleteHearingChargeProved = ({ chargeNumber, response }): SuperA
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved/v2`,
     },
     response: {
       status: 200,
@@ -901,10 +897,7 @@ const stubAmendHearingOutcome = ({ chargeNumber, status, response }): SuperAgent
   stubFor({
     request: {
       method: 'PUT',
-      url:
-        status === 'CHARGE_PROVED'
-          ? `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}`
-          : `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
     },
     response: {
       status: 200,
@@ -949,7 +942,7 @@ const stubCreatePunishments = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'POST',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments/v2`,
     },
     response: {
       status: 200,

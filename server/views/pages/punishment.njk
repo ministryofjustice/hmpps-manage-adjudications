@@ -6,12 +6,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "../macros/punishmentRadios.njk" import punishmentRadios %}
 
-{% if isV2Endpoints %}
-  {% set title = "Add a punishment" if damagesUnavailable else 
-    "Add a punishment or money for damages" %}
-{% else %}
-  {% set title = "Add a new punishment" %}
-{% endif %}
+{% set title = "Add a punishment" if damagesUnavailable else 
+  "Add a punishment or money for damages" %}
 {% block pageTitle %}
   {{ title }}
 {% endblock %}
@@ -31,7 +27,7 @@
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, isIndependentAdjudicatorHearing, isV2Endpoints, damagesUnavailable, cautionUnavailable, errors) }}
+      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, isIndependentAdjudicatorHearing, damagesUnavailable, cautionUnavailable, errors) }}
       <div class="govuk-button-group">
         {{ govukButton({
               text: 'Continue',
@@ -40,11 +36,8 @@
               classes: "govuk-button--submit govuk-!-margin-right-3",
               attributes: { "data-qa": "punishment-submit" }
               }) }}
-        {% if isV2Endpoints %}
-          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
-        {% else %}
-          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to 'Award punishments'</a>
-        {% endif %}
+
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
       </div>
 
     </form>

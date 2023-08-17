@@ -56,9 +56,7 @@ import nextStepPoliceRoutes from './nextSteps/police'
 import notProceedRoutes from './notProceed'
 import nextStepInadRoutes from './nextSteps/inad'
 import policeReasonForReferralRoutes from './hearingOutcome/referCase/policeReferral'
-import damagesOwedRoutes from './hearingOutcome/damagesOwed'
 import reasonForFindingRoutes from './hearingOutcome/reasonForFinding'
-import cautionRoutes from './hearingOutcome/caution'
 import reportAQuashedGuiltyFindingRoutes from './hearingOutcome/quashedGuiltyFinding'
 import hearingCheckYourAnswersRoutes from './hearingOutcome/checkYourAnswers'
 import punishmentsAndDamagesRoutes from './adjudicationForReport/punishmentsTab'
@@ -79,7 +77,6 @@ import whichPunishmentConsecutiveToRoutes from './additionalDays/whichPunishment
 import manualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntryConsecutivePunishment'
 import manualConsecutivePunishmentErrorRoutes from './additionalDays/manualConsecutivePunishmentError'
 import damagesAmountRoutes from './punishments/damagesAmount'
-import config from '../config'
 
 export default function routes(
   router: Router,
@@ -271,14 +268,9 @@ export default function routes(
   )
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
   router.use(
-    adjudicationUrls.moneyRecoveredForDamages.root,
-    damagesOwedRoutes({ reportedAdjudicationsService, userService })
-  )
-  router.use(
     adjudicationUrls.hearingReasonForFinding.root,
     reasonForFindingRoutes({ reportedAdjudicationsService, hearingsService, userService })
   )
-  router.use(adjudicationUrls.isThisACaution.root, cautionRoutes({ reportedAdjudicationsService, userService }))
   router.use(
     adjudicationUrls.reportAQuashedGuiltyFinding.root,
     reportAQuashedGuiltyFindingRoutes({ outcomesService, userService, reportedAdjudicationsService })
@@ -339,9 +331,7 @@ export default function routes(
     adjudicationUrls.reviewerEditOffenceWarning.root,
     reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
   )
-  if (config.v2EndpointsFlag === 'true') {
-    router.use(adjudicationUrls.damagesAmount.root, damagesAmountRoutes({ punishmentsService, userService }))
-  }
+  router.use(adjudicationUrls.damagesAmount.root, damagesAmountRoutes({ punishmentsService, userService }))
 
   router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
 

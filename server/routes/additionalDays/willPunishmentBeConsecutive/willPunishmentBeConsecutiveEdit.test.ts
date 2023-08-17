@@ -21,7 +21,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
-    consecutiveReportNumber: 99,
+    consecutiveChargeNumber: '99',
     type: PunishmentType.ADDITIONAL_DAYS,
     days: 10,
   })

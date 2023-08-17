@@ -1,12 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { User } from '../../../data/hmppsManageUsersClient'
-import { PunishmentDataWithScheduleV2, PunishmentType, flattenPunishments } from '../../../data/PunishmentResult'
+import { PunishmentDataWithSchedule, PunishmentType, flattenPunishments } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import UserService from '../../../services/userService'
-import config from '../../../config'
 
 export enum PageRequestType {
   PUNISHMENTS_FROM_API,
@@ -77,7 +76,6 @@ export default class AwardPunishmentsPage {
       filteredPunishments,
       cautionAdded,
       continueHref,
-      v2EndpointsFlag: config.v2EndpointsFlag === 'true',
     })
   }
 
@@ -95,7 +93,7 @@ export default class AwardPunishmentsPage {
     return adjudicationUrls.checkPunishments.urls.start(chargeNumber)
   }
 
-  hasCautionBeenAdded = async (punishments: PunishmentDataWithScheduleV2[]) => {
+  hasCautionBeenAdded = async (punishments: PunishmentDataWithSchedule[]) => {
     if (!punishments) return false
     return !!punishments.filter(pun => pun.type === PunishmentType.CAUTION).length
   }

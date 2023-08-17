@@ -49,8 +49,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -73,7 +71,7 @@ context('Damages and punishments summary', () => {
               schedule: {
                 days: 5,
               },
-              consecutiveReportNumber: 1525853,
+              consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
             },
           ],
@@ -99,8 +97,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -127,10 +123,26 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: true,
                 }),
               },
+            },
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CAUTION,
+              schedule: {
+                days: 0,
+              },
+            },
+            {
+              id: 2,
+              redisId: 'xyz',
+              type: PunishmentType.DAMAGES_OWED,
+              schedule: {
+                days: 0,
+              },
+              damagesOwedAmount: 50,
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -155,13 +167,10 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
           ],
-          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
         }),
       },
     })
@@ -193,8 +202,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -202,8 +209,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.QUASHED,
-                  amount: 100.5,
-                  caution: false,
                   quashedReason: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
                 }),
               },
@@ -247,8 +252,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -256,8 +259,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.QUASHED,
-                  amount: 100.5,
-                  caution: false,
                   quashedReason: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
                 }),
               },
@@ -301,8 +302,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: true,
                 }),
               },
             },
@@ -332,8 +331,6 @@ context('Damages and punishments summary', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: true,
                 }),
               },
             },
@@ -354,13 +351,47 @@ context('Damages and punishments summary', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 130,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '130',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
+            },
+          ],
+          punishments: [
+            {
+              id: 45,
+              type: PunishmentType.DAMAGES_OWED,
+              damagesOwedAmount: 100,
+              schedule: {
+                days: 0,
+              },
+            },
+          ],
+        }),
+      },
+    })
   })
 
   describe('Loads', () => {
     it('should contain the required page elements - status not `charge proved`', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('101'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-      punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
       punishmentsAndDamagesPage.quashedWarning().should('not.exist')
       punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -377,7 +408,6 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage
         .quashedWarning()
         .contains('The guilty finding has been quashed. Punishments and recovery of damages should not be enforced.')
-      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
@@ -397,29 +427,15 @@ context('Damages and punishments summary', () => {
       cy.get('[data-qa="change-link"').should('not.exist')
       punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
     })
-    it('should contain the required page elements - charge proved, no punishments, caution true', () => {
+    it('should contain the required page elements - charge proved, caution is true', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.punishmentsTabName().contains('Punishments and damages')
-
-      punishmentsAndDamagesPage
-        .moneyCautionSummary()
-        .find('dt')
-        .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Is any money being recovered for damages?')
-          expect($summaryData.get(1).innerText).to.contain('Is the punishment a caution?')
-        })
-      punishmentsAndDamagesPage
-        .moneyCautionSummary()
-        .find('dd')
-        .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
-          expect($summaryData.get(2).innerText).to.contain('Yes')
-        })
       punishmentsAndDamagesPage.quashedWarning().should('not.exist')
-      punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
-      punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
+      punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
+      punishmentsAndDamagesPage.damagesTable().should('exist')
+      punishmentsAndDamagesPage.damagesTable().contains('Money to be recovered for damages £50')
+      punishmentsAndDamagesPage.changePunishmentsButton().should('exist')
       punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
       punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
@@ -429,7 +445,6 @@ context('Damages and punishments summary', () => {
     it('should not show change links, change button or quash button if outcome is entered in NOMIS flag is present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('110'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.punishmentsTabName().contains('Punishments and damages')
 
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -441,24 +456,19 @@ context('Damages and punishments summary', () => {
     it('should contain the required page elements - charge proved, no punishments, caution false', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('103'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-      punishmentsAndDamagesPage
-        .moneyCautionSummary()
-        .find('dd')
-        .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
-          expect($summaryData.get(2).innerText).to.contain('No')
-        })
       punishmentsAndDamagesPage.awardPunishmentsButton().should('exist')
-      punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
-      punishmentsAndDamagesPage.changePunishmentCommentLink().should('exist')
-      punishmentsAndDamagesPage.removePunishmentCommentLink().should('exist')
-      punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
+      punishmentsAndDamagesPage.noPunishments().should('exist')
+    })
+    it('should contain the required page elements - charge proved, damages added but no other punishments', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('130'))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.awardPunishmentsButton().should('exist')
+      punishmentsAndDamagesPage.noPunishments().should('not.exist')
     })
     it('should contain the required page elements - charge proved, punishments and comments present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.quashedWarning().should('not.exist')
-      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
       punishmentsAndDamagesPage.changePunishmentsButton().should('exist')
       punishmentsAndDamagesPage.reportQuashedButton().should('exist')
@@ -480,7 +490,6 @@ context('Damages and punishments summary', () => {
     it('should not have any buttons or change links if outcome entered in NOMIS - charge proved, punishments present', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('111'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-      punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
       punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
       punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
       punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
@@ -503,20 +512,6 @@ context('Damages and punishments summary', () => {
   })
 
   describe('links', () => {
-    it('should got to money recovered edit', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      cy.get('[data-qa="change-link"').first().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.moneyRecoveredForDamages.urls.edit('100'))
-      })
-    })
-    it('should got to is caution edit', () => {
-      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      cy.get('[data-qa="change-link"').eq(1).click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isThisACaution.urls.edit('100'))
-      })
-    })
     it('change punishments goes to award punishments page', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
@@ -605,8 +600,6 @@ context('Reporter view', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: true,
                 }),
               },
             },
@@ -646,10 +639,26 @@ context('Reporter view', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: true,
                 }),
               },
+            },
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CAUTION,
+              schedule: {
+                days: 0,
+              },
+            },
+            {
+              id: 2,
+              redisId: 'xyz',
+              type: PunishmentType.DAMAGES_OWED,
+              schedule: {
+                days: 0,
+              },
+              damagesOwedAmount: 50,
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -684,8 +693,6 @@ context('Reporter view', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },
@@ -693,8 +700,6 @@ context('Reporter view', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.QUASHED,
-                  amount: 100.5,
-                  caution: false,
                   quashedReason: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
                 }),
               },
@@ -718,7 +723,7 @@ context('Reporter view', () => {
               schedule: {
                 days: 5,
               },
-              consecutiveReportNumber: 1525853,
+              consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
             },
           ],
@@ -730,7 +735,6 @@ context('Reporter view', () => {
   it('should contain the required page elements - status not `charge proved` - empty state', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('101'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-    punishmentsAndDamagesPage.moneyCautionSummary().should('not.exist')
     punishmentsAndDamagesPage.quashedWarning().should('not.exist')
     punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
     punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
@@ -741,22 +745,15 @@ context('Reporter view', () => {
       .contains('There are no punishments added. You can only add punishments if the charge is proved.')
     punishmentsAndDamagesPage.punishmentCommentsSection().should('not.exist')
   })
-  it('should contain the required page elements - status `charge proved` - no punishments', () => {
+  it('should contain the required page elements - status `charge proved` - caution true', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('100'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-    punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('not.exist')
-    punishmentsAndDamagesPage.awardPunishmentsTable().should('not.exist')
+    punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
+    punishmentsAndDamagesPage.damagesTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-    punishmentsAndDamagesPage
-      .moneyCautionSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
-        expect($summaryData.get(1).innerText).to.contain('Yes')
-      })
     punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
@@ -765,19 +762,11 @@ context('Reporter view', () => {
   it('should contain the required page elements - status `charge proved` - punishments present', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('99'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-    punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('not.exist')
     punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-    punishmentsAndDamagesPage
-      .moneyCautionSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
-        expect($summaryData.get(1).innerText).to.contain('Yes')
-      })
     punishmentsAndDamagesPage
       .awardPunishmentsTable()
       .find('td')
@@ -797,19 +786,11 @@ context('Reporter view', () => {
   it('should contain the required page elements - status quashed', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('102'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
-    punishmentsAndDamagesPage.moneyCautionSummary().should('exist')
     punishmentsAndDamagesPage.quashedWarning().should('exist')
     punishmentsAndDamagesPage.awardPunishmentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.awardPunishmentsButton().should('not.exist')
     punishmentsAndDamagesPage.reportQuashedButton().should('not.exist')
-    punishmentsAndDamagesPage
-      .moneyCautionSummary()
-      .find('dd')
-      .then($summaryData => {
-        expect($summaryData.get(0).innerText).to.contain('Yes: £100.50')
-        expect($summaryData.get(1).innerText).to.contain('No')
-      })
     punishmentsAndDamagesPage.punishmentCommentsTable().should('exist')
     punishmentsAndDamagesPage.changePunishmentCommentLink().should('not.exist')
     punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')

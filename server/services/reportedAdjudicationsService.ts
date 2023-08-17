@@ -13,7 +13,6 @@ import {
   ReportedAdjudicationEnhancedWithIssuingDetails,
   ReportedAdjudicationFilter,
   ReportedAdjudicationResult,
-  ReportedAdjudicationResultV2,
   ReportedAdjudicationsResult,
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
@@ -53,7 +52,6 @@ import {
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
-import config from '../config'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
@@ -71,14 +69,9 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getReportedAdjudicationDetails(
-    chargeNumber: string,
-    user: User
-  ): Promise<ReportedAdjudicationResult | ReportedAdjudicationResultV2> {
+  async getReportedAdjudicationDetails(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    return config.v2EndpointsFlag === 'true'
-      ? new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudicationV2(chargeNumber)
-      : new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
+    return new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
   }
 
   async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {

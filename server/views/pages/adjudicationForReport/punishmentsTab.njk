@@ -4,7 +4,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
-{% from "../../macros/hearingDamagesAndCautionSummary.njk" import hearingDamagesAndCautionSummary %}
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 {% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
@@ -25,17 +24,14 @@
   {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref) }}
 
   {% if chargeProved %}
-    {% if v2EndpointsFlag %}
-       {% if filteredPunishments.damages | length %}
-        {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportNo, true) }}
-      {% endif %} 
-    {% else %}
-      {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, readOnly, moneyChangeLinkHref, cautionChangeLinkHref) }}
+
+    {% if filteredPunishments.damages | length %}
+      {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportNo, true) }}
     {% endif %}
 
-    {% if punishments | length %}
+    {% if filteredPunishments.otherPunishments | length %}
       <h2 class="govuk-heading-m">Punishments</h2>
-      {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, reportNo, true, consecutiveReportLinkAvailable, v2EndpointsFlag) }}
+      {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
 
       {% if not readOnly %}
         <div>
@@ -60,6 +56,11 @@
       {% endif %}
 
     {% elif not readOnly and not caution %}
+      {% if not filteredPunishments.damages | length %}
+        <div data-qa="no-punishments">
+          <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
+        </div>
+      {% endif %}
       <div>
         {{ govukButton({
           text: 'Award punishments',
@@ -69,6 +70,7 @@
           attributes: { "data-qa": "award-punishments" }
         }) }}
       </div>
+
     {% endif %}
 
   {% elif quashed %}
@@ -80,9 +82,7 @@
           "data-qa": "quashed-warning"
         }
       }) }}
-    {{ hearingDamagesAndCautionSummary(reportNo, moneyRecoveredBoolean, moneyRecoveredAmount, caution, { "data-qa": "money-caution-summary" }, true) }}
-    {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable, v2EndpointsFlag) }}
-
+    {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
   {% else %}
     <div data-qa="no-punishments">
       <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
@@ -90,7 +90,8 @@
     </div>
   {% endif %}
 
-  {% if (chargeProved or quashed) and not outcomeEnteredInNomis %}
+  {% if (chargeProved or quashed) 
+    and not outcomeEnteredInNomis %}
     <div data-qa="punishment-comments-section">
 
       {% if punishmentComments | length > 0 %}

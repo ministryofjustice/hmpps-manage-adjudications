@@ -17,7 +17,6 @@ import {
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
-  ReportedAdjudicationResultV2,
   ReportedAdjudication,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationsResult,
@@ -45,11 +44,9 @@ export type AgencyReportCounts = {
 }
 
 export type ConsecutiveAdditionalDaysReport = {
-  reportNumber: number
+  chargeNumber: string
   chargeProvedDate: string
   punishment: PunishmentDataWithSchedule
-  consecutiveReportNumber?: number
-  consecutiveReportAvailable?: boolean
 }
 
 export default class ManageAdjudicationsSystemTokensClient {
@@ -137,16 +134,7 @@ export default class ManageAdjudicationsSystemTokensClient {
     })
   }
 
-  /**
-   * @deprecated The method should not be used
-   */
   async getReportedAdjudication(chargeNumber: string): Promise<ReportedAdjudicationResult> {
-    return this.restClient.get({
-      path: `/reported-adjudications/${chargeNumber}`,
-    })
-  }
-
-  async getReportedAdjudicationV2(chargeNumber: string): Promise<ReportedAdjudicationResultV2> {
     return this.restClient.get({
       path: `/reported-adjudications/${chargeNumber}/v2`,
     })

@@ -1,10 +1,5 @@
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import validateForm from './punishmentValidation'
-import config from '../../config'
-
-beforeEach(() => {
-  config.v2EndpointsFlag = 'true'
-})
 
 describe('validateForm', () => {
   it('Valid submit has no errors when type only', () => {

@@ -833,9 +833,7 @@ describe('reportedAdjudicationsService', () => {
 
           outcome: {
             outcome: testData.outcome({
-              caution: true,
               code: OutcomeCode.CHARGE_PROVED,
-              amount: 0,
               quashedReason: undefined,
               reason: undefined,
             }),
@@ -861,11 +859,9 @@ describe('reportedAdjudicationsService', () => {
             },
           },
           outcome: {
-            caution: true,
             code: OutcomeCode.CHARGE_PROVED,
             details: 'Some details',
             id: 1,
-            amount: 0,
           },
         },
       ]
@@ -891,9 +887,7 @@ describe('reportedAdjudicationsService', () => {
 
           outcome: {
             outcome: testData.outcome({
-              caution: true,
               code: OutcomeCode.CHARGE_PROVED,
-              amount: 0,
               quashedReason: undefined,
               reason: undefined,
             }),
@@ -919,11 +913,9 @@ describe('reportedAdjudicationsService', () => {
             },
           },
           outcome: {
-            caution: true,
             code: OutcomeCode.CHARGE_PROVED,
             details: 'Some details',
             id: 1,
-            amount: 0,
           },
         },
       ]
@@ -947,10 +939,7 @@ describe('reportedAdjudicationsService', () => {
                 }),
               }),
               outcome: {
-                outcome: testData.outcome({
-                  code: OutcomeCode.CHARGE_PROVED,
-                  caution: true,
-                }),
+                outcome: testData.outcome({}),
               },
             },
           ],
@@ -965,10 +954,7 @@ describe('reportedAdjudicationsService', () => {
           }),
         }),
         outcome: {
-          outcome: testData.outcome({
-            code: OutcomeCode.CHARGE_PROVED,
-            caution: true,
-          }),
+          outcome: testData.outcome({}),
         },
       })
     })
@@ -1006,8 +992,6 @@ describe('reportedAdjudicationsService', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 50.0,
-                  caution: false,
                 }),
               },
             },
@@ -1025,8 +1009,6 @@ describe('reportedAdjudicationsService', () => {
         outcome: {
           outcome: testData.outcome({
             code: OutcomeCode.CHARGE_PROVED,
-            amount: 50.0,
-            caution: false,
           }),
         },
       })

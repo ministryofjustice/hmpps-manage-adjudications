@@ -36,7 +36,9 @@
           value: { text: finding | convertHearingOutcomeFinding },
           actions: findingChangeLink or null
         }],
-        attributes: attributes
+        attributes: {
+          'data-qa': "plea-finding-summary"
+        }
       }) }}
     </div>
   </div>

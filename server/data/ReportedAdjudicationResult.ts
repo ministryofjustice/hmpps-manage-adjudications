@@ -12,12 +12,9 @@ import {
   WitnessDetails,
 } from './DraftAdjudicationResult'
 import { LocationId } from './PrisonLocationResult'
-import { HearingDetails, OutcomeHistory, OutcomeHistoryV2 } from './HearingAndOutcomeResult'
-import { PunishmentComment, PunishmentDataWithSchedule, PunishmentDataWithScheduleV2 } from './PunishmentResult'
+import { HearingDetails, OutcomeHistory } from './HearingAndOutcomeResult'
+import { PunishmentComment, PunishmentDataWithSchedule } from './PunishmentResult'
 
-/**
- * @deprecated The method should not be used
- */
 export type ReportedAdjudication = {
   chargeNumber: string
   prisonerNumber: string
@@ -49,46 +46,8 @@ export type ReportedAdjudication = {
   originatingAgencyId?: string
 }
 
-export type ReportedAdjudicationV2 = {
-  chargeNumber: string
-  prisonerNumber: string
-  createdDateTime: string
-  createdByUserId: string
-  incidentDetails: IncidentDetails
-  incidentStatement: IncidentStatement
-  incidentRole: IncidentRole
-  offenceDetails: OffenceDetails
-  status: ReportedAdjudicationStatus
-  isYouthOffender: boolean
-  reviewedByUserId?: string
-  statusReason?: string
-  statusDetails?: string
-  damages?: DamageDetails[]
-  evidence?: EvidenceDetails[]
-  witnesses?: WitnessDetails[]
-  hearings?: HearingDetails[]
-  gender: PrisonerGender
-  issuingOfficer?: string
-  dateTimeOfIssue?: string
-  dateTimeOfFirstHearing?: string
-  outcomes?: OutcomeHistoryV2
-  punishments?: PunishmentDataWithScheduleV2[]
-  punishmentComments?: PunishmentComment[]
-  outcomeEnteredInNomis?: boolean
-  transferableActionsAllowed?: boolean
-  overrideAgencyId?: string
-  originatingAgencyId?: string
-}
-
-/**
- * @deprecated The method should not be used
- */
 export type ReportedAdjudicationResult = {
   reportedAdjudication: ReportedAdjudication
-}
-
-export type ReportedAdjudicationResultV2 = {
-  reportedAdjudication: ReportedAdjudicationV2
 }
 
 export type ReportedAdjudicationsResult = {

@@ -10,7 +10,6 @@ import ManageAdjudicationsSystemTokensClient from '../data/manageAdjudicationsSy
 import {
   OicHearingType,
   ReportedAdjudicationResult,
-  ReportedAdjudicationResultV2,
   ReportedAdjudicationStatus,
 } from '../data/ReportedAdjudicationResult'
 import { User } from '../data/hmppsManageUsersClient'
@@ -96,35 +95,14 @@ export default class HearingsService {
     chargeNumber: string,
     adjudicatorName: string,
     plea: HearingOutcomePlea,
-    caution: boolean,
-    user: User,
-    amount?: string
+    user: User
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
       plea,
-      caution,
-      amount: !amount ? null : Number(amount),
     }
 
     return new ManageAdjudicationsUserTokensClient(user).createChargeProvedHearingOutcome(
-      chargeNumber,
-      hearingOutcomeDetails
-    )
-  }
-
-  async createChargedProvedHearingOutcomeV2(
-    chargeNumber: string,
-    adjudicatorName: string,
-    plea: HearingOutcomePlea,
-    user: User
-  ): Promise<ReportedAdjudicationResultV2> {
-    const hearingOutcomeDetails = {
-      adjudicator: adjudicatorName,
-      plea,
-    }
-
-    return new ManageAdjudicationsUserTokensClient(user).createChargeProvedHearingOutcomeV2(
       chargeNumber,
       hearingOutcomeDetails
     )
@@ -158,14 +136,14 @@ export default class HearingsService {
     plea: HearingOutcomePlea,
     user: User,
     adjudicator?: string
-  ): Promise<ReportedAdjudicationResultV2> {
+  ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       details,
       adjournReason,
       plea,
     }
-    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.ADJOURNED,
       data
@@ -178,7 +156,7 @@ export default class HearingsService {
     referralReason: string,
     user: User,
     adjudicator?: string
-  ): Promise<ReportedAdjudicationResultV2> {
+  ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       details: referralReason,
@@ -187,43 +165,20 @@ export default class HearingsService {
       hearingOutcome === HearingOutcomeCode.REFER_INAD
         ? ReportedAdjudicationStatus.REFER_INAD
         : ReportedAdjudicationStatus.REFER_POLICE
-    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(chargeNumber, status, data)
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(chargeNumber, status, data)
   }
 
   async editChargeProvedOutcome(
     chargeNumber: string,
-    caution: boolean,
     user: User,
     adjudicator?: string,
-    plea?: HearingOutcomePlea,
-    amount?: string,
-    damagesOwed?: boolean
+    plea?: HearingOutcomePlea
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       plea,
-      caution,
-      amount,
-      damagesOwed,
     }
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
-      chargeNumber,
-      ReportedAdjudicationStatus.CHARGE_PROVED,
-      data
-    )
-  }
-
-  async editChargeProvedOutcomeV2(
-    chargeNumber: string,
-    user: User,
-    adjudicator?: string,
-    plea?: HearingOutcomePlea
-  ): Promise<ReportedAdjudicationResultV2> {
-    const data = {
-      ...(adjudicator && { adjudicator }),
-      plea,
-    }
-    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
       chargeNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
       data
@@ -236,13 +191,13 @@ export default class HearingsService {
     user: User,
     adjudicator?: string,
     plea?: HearingOutcomePlea
-  ): Promise<ReportedAdjudicationResultV2> {
+  ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       plea,
       details,
     }
-    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.DISMISSED,
       data
@@ -256,14 +211,14 @@ export default class HearingsService {
     user: User,
     adjudicator?: string,
     plea?: HearingOutcomePlea
-  ): Promise<ReportedAdjudicationResultV2> {
+  ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       plea,
       details,
       notProceedReason: reason,
     }
-    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcomeV2(
+    return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.NOT_PROCEED,
       data

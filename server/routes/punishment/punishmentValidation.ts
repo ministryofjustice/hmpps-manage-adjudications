@@ -1,6 +1,5 @@
 import { FormError } from '../../@types/template'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
-import config from '../../config'
 
 type PunishmentForm = {
   punishmentType: PunishmentType
@@ -55,16 +54,10 @@ export default function validateForm({
   damagesAlreadyAdded,
 }: PunishmentForm): FormError | null {
   if (!punishmentType) {
-    if (config.v2EndpointsFlag === 'true') {
-      if (damagesAlreadyAdded) {
-        return errors.MISSING_PUNISHMENT_TYPE_DAMAGES_PRESENT
-      }
-      return errors.MISSING_PUNISHMENT_TYPE
+    if (damagesAlreadyAdded) {
+      return errors.MISSING_PUNISHMENT_TYPE_DAMAGES_PRESENT
     }
-    return {
-      href: '#punishmentType',
-      text: 'Select the type of punishment',
-    }
+    return errors.MISSING_PUNISHMENT_TYPE
   }
 
   if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE

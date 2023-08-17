@@ -21,7 +21,6 @@ beforeEach(() => {
     prisonerName: 'G6123VU',
     suspendedPunishments: [
       {
-        reportNumber: 102,
         chargeNumber: '102',
         punishment: {
           id: 72,
@@ -33,7 +32,6 @@ beforeEach(() => {
         },
       },
       {
-        reportNumber: 103,
         chargeNumber: '103',
         punishment: {
           id: 73,
@@ -45,7 +43,6 @@ beforeEach(() => {
         },
       },
       {
-        reportNumber: 104,
         chargeNumber: '104',
         punishment: {
           id: 74,
@@ -115,7 +112,7 @@ describe('POST suspended punishment schedule', () => {
             days: 10,
             startDate: '2023-04-03',
             endDate: '2023-04-13',
-            activatedFrom: 102,
+            activatedFrom: '102',
           },
           '100'
         )
@@ -141,7 +138,7 @@ describe('POST suspended punishment schedule', () => {
             redisId: expect.anything(),
             type: PunishmentType.ADDITIONAL_DAYS,
             days: 5,
-            activatedFrom: 103,
+            activatedFrom: '103',
           },
           '100'
         )
@@ -167,7 +164,7 @@ describe('POST suspended punishment schedule', () => {
             redisId: expect.anything(),
             type: PunishmentType.PROSPECTIVE_DAYS,
             days: 3,
-            activatedFrom: 104,
+            activatedFrom: '104',
           },
           '100'
         )

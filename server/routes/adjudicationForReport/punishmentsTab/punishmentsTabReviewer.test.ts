@@ -80,8 +80,7 @@ describe('GET Punishments and damages tab', () => {
       .get(adjudicationUrls.punishmentsAndDamages.urls.review('12345'))
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('Is any money being recovered for damages?')
-        expect(response.text).toContain('Is the punishment a caution?')
+        expect(response.text).toContain('Punishments')
         expect(response.text).toContain('Punishment comments')
         expect(response.text).toContain('1 January 2023')
         expect(response.text).toContain('J. Smith')

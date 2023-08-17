@@ -30,7 +30,7 @@ const outcomeHistory = {
     dateTimeOfHearing: '2023-03-10T22:00:00',
   }),
   outcome: {
-    outcome: testData.outcome({ caution: true, amount: 100.5 }),
+    outcome: testData.outcome({}),
   },
 }
 
@@ -72,23 +72,6 @@ describe('GET /', () => {
 
 describe('POST', () => {
   it('should successfully call the endpoint and redirect', () => {
-    return request(app)
-      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=yes`)
-      .expect(302)
-      .expect('Location', adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      .then(() =>
-        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
-          '100',
-          true,
-          expect.anything(),
-          null,
-          null,
-          null,
-          null
-        )
-      )
-  })
-  it('should successfully call the endpoint and redirect', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',
@@ -98,19 +81,11 @@ describe('POST', () => {
       }),
     })
     return request(app)
-      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=no`)
+      .post(adjudicationUrls.hearingsCheckAnswers.urls.edit('100'))
       .expect(302)
       .expect('Location', adjudicationUrls.awardPunishments.urls.start('100'))
       .then(() =>
-        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
-          '100',
-          false,
-          expect.anything(),
-          null,
-          null,
-          null,
-          null
-        )
+        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith('100', expect.anything(), null, null)
       )
   })
 
@@ -136,19 +111,11 @@ describe('POST', () => {
       }),
     })
     return request(app)
-      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?caution=no`)
+      .post(adjudicationUrls.hearingsCheckAnswers.urls.edit('100'))
       .expect(302)
       .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
-        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
-          '100',
-          false,
-          expect.anything(),
-          null,
-          null,
-          null,
-          null
-        )
+        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith('100', expect.anything(), null, null)
       )
   })
 })

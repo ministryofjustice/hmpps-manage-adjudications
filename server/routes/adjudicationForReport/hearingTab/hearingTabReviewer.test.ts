@@ -71,8 +71,6 @@ describe('GET hearing details page - reviewer version', () => {
     }
     const outcome = testData.outcome({
       code: OutcomeCode.CHARGE_PROVED,
-      amount: 0,
-      caution: true,
     })
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
