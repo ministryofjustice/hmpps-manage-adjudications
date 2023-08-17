@@ -70,7 +70,7 @@ export default question([
       .child(answer('Absconding from either prison or legal custody').offenceCode(7002))
       .child(answer('Failing to comply with any conditions of a temporary release').offenceCode(8001))
       .child(answer('Failing to return from their temporary release').offenceCode(8002))))
-  .child(answer('Possession of unauthorised articles, or drugs or alcohol related')
+  .child(answer('Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)')
     .child(question('What did the incident involve?')
       .child(answer('Possession of an unauthorised article')
         .child(question('What happened?')
