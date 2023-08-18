@@ -84,7 +84,8 @@ export default class PunishmentsTabPage {
       { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
       { source: (row: ChartEntryLine) => `${row.year}-${row.month}` },
       { source: (row: ChartEntryLine) => row.count },
-      'Percentage'
+      'Percentage',
+      'Total Punishments'
     )
 
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {
