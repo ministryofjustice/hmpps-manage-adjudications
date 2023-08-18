@@ -237,7 +237,7 @@ context('Incident details', () => {
   it('line 19', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Possession of an unauthorised article',
         'Has an unauthorised article in their possession',
         'Yes',
@@ -248,7 +248,7 @@ context('Incident details', () => {
   it('line 20', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Possession of an unauthorised article',
         'Has an unauthorised article in their possession',
         'No',
@@ -259,7 +259,7 @@ context('Incident details', () => {
   it('line 21', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Possession of an unauthorised article',
         'Sells or gives an unauthorised article to another person',
         'Yes',
@@ -270,7 +270,7 @@ context('Incident details', () => {
   it('line 22', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Possession of an unauthorised article',
         'Sells or gives an unauthorised article to another person',
         'No',
@@ -281,7 +281,7 @@ context('Incident details', () => {
   it('line 23', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Possession of an unauthorised article',
         'Takes an article from another person without permission',
       ],
@@ -291,7 +291,7 @@ context('Incident details', () => {
   it('line 24', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Receiving any controlled drug without the consent of an officer',
       ],
@@ -301,7 +301,7 @@ context('Incident details', () => {
   it('line 25', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Receiving any controlled drug or any other article during a visit',
       ],
@@ -311,7 +311,7 @@ context('Incident details', () => {
   it('line 26', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Tampering with or falsifying a drug testing sample',
       ],
@@ -321,7 +321,7 @@ context('Incident details', () => {
   it('line 27', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Refuses to provide a sample for drug testing',
       ],
@@ -331,7 +331,7 @@ context('Incident details', () => {
   it('line 28', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Administrating a controlled drug to themself',
       ],
@@ -341,7 +341,7 @@ context('Incident details', () => {
   it('line 29', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Failing to stop someone else administrating a controlled drug to them',
       ],
@@ -351,7 +351,7 @@ context('Incident details', () => {
   it('line 30', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Possessing any unauthorised controlled drugs',
       ],
@@ -361,7 +361,7 @@ context('Incident details', () => {
   it('line 31', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Drugs',
         'Possessing a greater quantity of controlled drugs than authorised to have',
       ],
@@ -370,14 +370,18 @@ context('Incident details', () => {
   })
   it('line 32', () => {
     checkSimpleDecisionPath(
-      ['Possession of unauthorised articles, or drugs or alcohol related', 'Alcohol', 'Consumes any alcoholic drink'],
+      [
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
+        'Alcohol',
+        'Consumes any alcoholic drink',
+      ],
       10001
     )
   })
   it('line 33', () => {
     checkSimpleDecisionPath(
       [
-        'Possession of unauthorised articles, or drugs or alcohol related',
+        'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         'Alcohol',
         'Consumes any alcoholic drink other than that provided to them under rule 25(1)',
       ],
