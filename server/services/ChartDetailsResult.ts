@@ -51,7 +51,7 @@ export interface ChartEntryDuoLine {
 }
 
 export interface ChartEntryCommentary {
-  count: number
+  data: string | number
   proportion: string
 }
 

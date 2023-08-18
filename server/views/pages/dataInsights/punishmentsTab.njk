@@ -6,6 +6,7 @@
 {% from "../../partials/charts/linesChart.njk" import linesChart %}
 {% from "../../partials/charts/linesChartWithSelect.njk" import linesChartWithSelect %}
 {% from "../../partials/charts/multiVerticalBarsChart.njk" import multiVerticalBarsChart %}
+{% from "../../partials/charts/commentaryChart.njk" import commentaryChart %}
 
 {% set title = "Adjudication data - Punishments" %}
 
@@ -34,6 +35,10 @@
 
     <div class="govuk-!-margin-bottom-6">
       {{ linesChart(chartSettingMap['4a']) }}
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
+      {{ commentaryChart(chartSettingMap['4d']) }}
     </div>
 
     <div class="govuk-!-margin-bottom-6">

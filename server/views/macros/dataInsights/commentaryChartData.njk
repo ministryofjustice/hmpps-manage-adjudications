@@ -7,8 +7,8 @@
 
 		{% for chartEntry in chartSetting.chartData.chartEntries %}
 			<div class="govuk-body chart-table-panel">
-				<div class="govuk-!-font-size-48 govuk-!-font-weight-bold">{{ chartEntry.count }}</div>
-				<div class="govuk-!-margin-top-2 govuk-!-font-size-19">This is approximately <span class="govuk-!-font-weight-bold">{{ chartEntry.proportion}}</span> of your population over this period.</div>
+				<div class="govuk-!-font-size-48 govuk-!-font-weight-bold">{{ chartEntry.data }}</div>
+				<div class="govuk-!-margin-top-2 govuk-!-font-size-19">{{ chartSetting.textBeforeProportion }} <span class="govuk-!-font-weight-bold">{{ chartEntry.proportion }}</span> {{ chartSetting.textAfterProportion }}</div>
 			</div>
 		{% endfor %}
 

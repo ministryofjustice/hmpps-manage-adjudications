@@ -61,11 +61,13 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Number of people placed on report in the past 30 days',
       '',
+      'This is approximately',
+      'of your population over this period.',
       await this.chartApiService.getChart(username, agencyId, '1c'),
       {
         source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
           return {
-            count: row.count,
+            data: row.count,
             proportion: `${Math.trunc(row.proportion * 100)}%`,
           } as ChartEntryCommentary
         },

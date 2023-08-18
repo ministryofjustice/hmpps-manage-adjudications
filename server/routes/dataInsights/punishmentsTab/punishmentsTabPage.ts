@@ -6,11 +6,17 @@ import { AgencyId } from '../../../data/PrisonLocationResult'
 import {
   ALL_DATA_FILTER,
   ChartDetailsResult,
+  ChartEntryCommentary,
   ChartEntryHorizontalBar,
   ChartEntryLine,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { getUniqueItems, produceLinesCharts, produceMultiVerticalBarsCharts } from '../chartService'
+import {
+  getUniqueItems,
+  produceCommentaryChart,
+  produceLinesCharts,
+  produceMultiVerticalBarsCharts,
+} from '../chartService'
 import DropDownEntry from '../dropDownEntry'
 import adjudicationUrls from '../../../utils/urlGenerator'
 
@@ -58,6 +64,25 @@ export default class PunishmentsTabPage {
       offenceTypes,
       req.query.offenceType as string,
       offenceTypes.length > 0 ? offenceTypes[0] : undefined
+    )
+
+    chartSettingMap['4d'] = await produceCommentaryChart(
+      '4d',
+      username,
+      agencyId,
+      'Most commonly used punishment last month',
+      '',
+      'In',
+      'of cases this was used in combination with other punishments.',
+      await this.chartApiService.getChart(username, agencyId, '1c'), // TODO make this 4d
+      {
+        source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
+          return {
+            data: 'some punishment', // TODO source this from the chart data
+            proportion: `${Math.trunc(row.proportion * 100)}%`,
+          } as ChartEntryCommentary
+        },
+      }
     )
 
     chartSettingMap['4b'] = await produceLinesCharts(
