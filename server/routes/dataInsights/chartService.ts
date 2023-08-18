@@ -67,7 +67,8 @@ export const produceMultiVerticalBarsCharts = async (
   yValueSource: RowSource,
   totalCountGroupByKey: RowSource,
   totalCountGroupBySource: RowSource,
-  yAxisLabel: string
+  yAxisLabel: string,
+  tableTotalLabel: string
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryLine[]
 
@@ -115,7 +116,7 @@ export const produceMultiVerticalBarsCharts = async (
         } as TableRowEntry
       }),
       {
-        label: 'Total adjudications',
+        label: tableTotalLabel,
         data:
           legends.length > 0
             ? chartEntriesMap
