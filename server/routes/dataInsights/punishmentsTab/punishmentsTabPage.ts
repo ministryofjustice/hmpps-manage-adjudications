@@ -74,11 +74,11 @@ export default class PunishmentsTabPage {
       '',
       'In',
       'of cases this was used in combination with other punishments.',
-      await this.chartApiService.getChart(username, agencyId, '1c'), // TODO make this 4d
+      await this.chartApiService.getChart(username, agencyId, '4d'),
       {
         source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
           return {
-            data: 'some punishment', // TODO source this from the chart data
+            data: row.sanction,
             proportion: `${Math.trunc(row.proportion * 100)}%`,
           } as ChartEntryCommentary
         },

@@ -21409,6 +21409,12 @@ const getChartEntriesMap = () => {
       proportion: 0.09,
     },
   ]
+  const chartEntries4d = [
+    {
+      sanction: 'Top Sanction',
+      proportion: 0.27,
+    },
+  ]
   const chartEntries5a = [
     {
       plea: 'Guilty',
@@ -22551,7 +22557,7 @@ const getChartEntriesMap = () => {
     '4a': chartEntries4a,
     '4b': chartEntries4b,
     '4c': chartEntries4c,
-    '4d': chartEntries1c, // TODO add chartEntries4d
+    '4d': chartEntries4d,
     '5a': chartEntries5a,
     '5b': chartEntries5b,
     '5c': chartEntries5c,
