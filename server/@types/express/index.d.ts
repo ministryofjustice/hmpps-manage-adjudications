@@ -2,6 +2,7 @@ import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
 import { PdfFooterData, PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
 import { PdfMargins } from '../../data/gotenbergClient'
+import { PunishmentReasonForChange } from '../../data/PunishmentResult'
 
 export default {}
 
@@ -32,6 +33,7 @@ declare module 'express-session' {
     witnesses: { [key: string]; witnesses? }
     punishments: { [key: string]; punishments? }
     userDetails: UserDetails
+    punishmentsReasonForChange: { [key: string]; punishmentsReasonForChange? }
   }
 }
 

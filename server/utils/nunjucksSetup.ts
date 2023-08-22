@@ -29,7 +29,7 @@ import {
   NextStep,
   QuashGuiltyFindingReason,
 } from '../data/HearingAndOutcomeResult'
-import { convertPunishmentType } from '../data/PunishmentResult'
+import { convertPunishmentType, PunishmentReasonForChange } from '../data/PunishmentResult'
 import { ApplicationInfo } from '../applicationInfo'
 
 const production = process.env.NODE_ENV === 'production'
@@ -256,6 +256,21 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     }
   })
 
+  njkEnv.addFilter('convertReasonForChangingPunishments', (reasonForChange: PunishmentReasonForChange) => {
+    switch (reasonForChange) {
+      case PunishmentReasonForChange.OTHER:
+        return 'Other'
+      case PunishmentReasonForChange.APPEAL:
+        return 'The punishments have been changed after an appeal'
+      case PunishmentReasonForChange.CORRECTION:
+        return 'To make a correction'
+      case PunishmentReasonForChange.GOV_OR_DIRECTOR:
+        return 'A Governor or Director has decided to terminate or change punishments for another reason'
+      default:
+        return 'Not known'
+    }
+  })
+
   njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
     if (!witnessLastName) return witnessFirstName
     return `${witnessLastName}, ${witnessFirstName}`
@@ -341,4 +356,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('NextStep', NextStep)
   njkEnv.addGlobal('NotProceedReason', NotProceedReason)
   njkEnv.addGlobal('QuashGuiltyFindingReason', QuashGuiltyFindingReason)
+  njkEnv.addGlobal('PunishmentReasonForChange', PunishmentReasonForChange)
 }

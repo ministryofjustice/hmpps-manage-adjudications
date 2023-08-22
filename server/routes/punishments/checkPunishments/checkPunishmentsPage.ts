@@ -41,10 +41,16 @@ export default class CheckPunishmentsPage {
     const punishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
 
+    let reasonForChange = null
+    if (this.pageOptions.isPreviouslySubmitted() && req.query.punishmentsChanged) {
+      reasonForChange = this.punishmentsService.getReasonForChangePunishments(req, chargeNumber)
+    }
+
     return res.render(`pages/checkPunishments.njk`, {
       chargeNumber,
       punishments,
       filteredPunishments,
+      reasonForChange,
       changePunishmentLink: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
     })
@@ -58,7 +64,23 @@ export default class CheckPunishmentsPage {
 
     if (this.pageOptions.isPreviouslySubmitted()) {
       try {
-        await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user)
+        if (req.query.punishmentsChanged) {
+          const { reasonForChange, detailsOfChange } = this.punishmentsService.getReasonForChangePunishments(
+            req,
+            chargeNumber
+          )
+          Promise.all([
+            await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user),
+            await this.punishmentsService.createReasonForChangingPunishmentComment(
+              chargeNumber,
+              detailsOfChange,
+              reasonForChange,
+              user
+            ),
+          ])
+        } else {
+          await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user)
+        }
         return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)

@@ -4,6 +4,13 @@
   {% set rows = [] %}
   {% for comment in punishmentComments %}
     {% set commentId = comment.id %}
+    {% set commentText %}
+      {% if comment.reasonForChange %}
+        {{ comment.reasonForChange | convertReasonForChangingPunishments }} </br></br> {{ comment.comment }}
+      {% else %}
+        {{ comment.comment }} 
+      {% endif %}
+    {% endset %}
 
     {% if not isReporter and comment.isOwner %}
       {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.changeLink+'" data-qa="change-punishment-comment-'+commentId+'" class="govuk-link">Change</a></p>' %}
@@ -20,15 +27,15 @@
           classes: "govuk-table__cell cellWidth-140 govuk-table__cell--multiline"
         },
         {
-          text: comment.comment,
+          html: commentText,
           classes: "govuk-table__cell--full-width"
         },
         {
-          html: changeLinkHref,
+          html: changeLinkHref if not comment.reasonForChange else '',
           classes: "tableLink"
         },
         {
-          html: removeLinkHref,
+          html: removeLinkHref if not comment.reasonForChange else '',
           classes: "tableLink"
         }
       ]

@@ -29,6 +29,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getAllSessionPunishments.mockResolvedValue(punishmentsOnSession)
+  punishmentsService.getReasonForChangePunishments.mockResolvedValue({})
 })
 
 afterEach(() => {
