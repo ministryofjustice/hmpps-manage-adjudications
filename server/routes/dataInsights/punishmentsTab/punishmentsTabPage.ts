@@ -110,7 +110,7 @@ export default class PunishmentsTabPage {
       { source: (row: ChartEntryLine) => `${row.year}-${row.month}` },
       { source: (row: ChartEntryLine) => row.count },
       'Percentage',
-      'Total Punishments'
+      'Total punishments'
     )
 
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {
