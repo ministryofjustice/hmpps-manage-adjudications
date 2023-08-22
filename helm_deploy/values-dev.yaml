@@ -15,7 +15,7 @@ generic-service:
     DIGITAL_PRISON_SERVICE_URL: https://digital-dev.prison.service.justice.gov.uk
     MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk
     CURIOUS_API_URL: https://testservices.sequation.net/sequation-virtual-campus2-api
-    PRISON_API_URL: https://api-dev.prison.service.justice.gov.uk
+    PRISON_API_URL: https://prison-api-dev.prison.service.justice.gov.uk
     SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
     PRISONER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
     DATA_INSIGHTS_API_URL: https://adjudications-insights-api-dev.hmpps.service.justice.gov.uk
