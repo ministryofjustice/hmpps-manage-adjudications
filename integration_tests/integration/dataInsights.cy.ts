@@ -169,6 +169,15 @@ context('Adjudication data', () => {
     })
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'RNI',
+      chartName: '4d',
+      response: {
+        agencyId: 'RNI',
+        chartName: '4d',
+        chartEntries: chartEntries['4d'],
+      } as ChartDetailsResult,
+    })
+    cy.task('stubGetDataInsightsChart', {
+      agencyId: 'RNI',
       chartName: '5a',
       response: {
         agencyId: 'RNI',
@@ -239,6 +248,7 @@ context('Adjudication data', () => {
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
     page.checkChartTitle('Punishments given – current month and previous 12 months')
+    page.checkChartTitle('Most commonly used punishment last month')
     page.checkChartTitle('Punishments given for each adjudication offence type - current month and previous 12 months')
     page.checkChartTitle('Suspended and activated punishments - current month and last 12 months')
   })
@@ -21399,6 +21409,12 @@ const getChartEntriesMap = () => {
       proportion: 0.09,
     },
   ]
+  const chartEntries4d = [
+    {
+      sanction: 'Top Sanction',
+      proportion: 0.27,
+    },
+  ]
   const chartEntries5a = [
     {
       plea: 'Guilty',
@@ -22541,6 +22557,7 @@ const getChartEntriesMap = () => {
     '4a': chartEntries4a,
     '4b': chartEntries4b,
     '4c': chartEntries4c,
+    '4d': chartEntries4d,
     '5a': chartEntries5a,
     '5b': chartEntries5b,
     '5c': chartEntries5c,

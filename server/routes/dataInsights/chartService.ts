@@ -247,6 +247,8 @@ export const produceCommentaryChart = async (
   agencyId: string,
   chartTitle: string,
   chartHint: string,
+  textBeforeProportion: string,
+  textAfterProportion: string,
   chartDetails: ChartDetailsResult,
   rowsSource: RowSource
 ) => {
@@ -259,6 +261,8 @@ export const produceCommentaryChart = async (
     elementId: chartName,
     chartTitle,
     chartHint,
+    textBeforeProportion,
+    textAfterProportion,
     chartEntries,
   })
 }
@@ -1036,11 +1040,15 @@ export const createCommentaryChartSettings = (params: {
   elementId: string
   chartTitle: string
   chartHint: string
+  textBeforeProportion: string
+  textAfterProportion: string
   chartEntries: ChartEntryCommentary[]
 }) => {
   return {
     title: params.chartTitle,
     chartHint: params.chartHint,
+    textBeforeProportion: params.textBeforeProportion,
+    textAfterProportion: params.textAfterProportion,
     chartData: {
       elementId: params.elementId,
       chartEntries: params.chartEntries,
