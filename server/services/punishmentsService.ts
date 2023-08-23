@@ -40,11 +40,11 @@ export default class PunishmentsService {
   }
 
   private createSessionForPunishmentChangeIfNotExists(req: Request, chargeNumber: string) {
-    if (!req.session.punishmentsReasonForChange) {
-      req.session.punishmentsReasonForChange = {}
+    if (!req.session.punishmentReasonForChange) {
+      req.session.punishmentReasonForChange = {}
     }
-    if (!req.session.punishmentsReasonForChange[chargeNumber]) {
-      req.session.punishmentsReasonForChange[chargeNumber] = {}
+    if (!req.session.punishmentReasonForChange[chargeNumber]) {
+      req.session.punishmentReasonForChange[chargeNumber] = {}
     }
   }
 
@@ -111,15 +111,15 @@ export default class PunishmentsService {
     // recreate the session object
     this.createSessionForPunishmentChangeIfNotExists(req, chargeNumber)
     // set the new reason
-    req.session.punishmentsReasonForChange[chargeNumber] = reasonForChange
+    req.session.punishmentReasonForChange[chargeNumber] = reasonForChange
   }
 
   getReasonForChangePunishments(req: Request, chargeNumber: string) {
-    return req.session?.punishmentsReasonForChange?.[chargeNumber]
+    return req.session?.punishmentReasonForChange?.[chargeNumber]
   }
 
   deleteReasonForChangePunishments(req: Request, chargeNumber: string) {
-    return delete req.session?.punishmentsReasonForChange?.[chargeNumber]
+    return delete req.session?.punishmentReasonForChange?.[chargeNumber]
   }
 
   async createPunishmentSet(
