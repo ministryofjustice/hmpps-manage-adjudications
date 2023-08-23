@@ -9,6 +9,7 @@ describe('validateForm', () => {
         days: 10,
         suspended: 'yes',
         suspendedUntil: '3/4/2023',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -20,6 +21,7 @@ describe('validateForm', () => {
         suspended: 'no',
         startDate: '3/4/2023',
         endDate: '3/4/2023',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -30,6 +32,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.PROSPECTIVE_DAYS,
         days: 10,
         suspended: 'no',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -40,6 +43,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.ADDITIONAL_DAYS,
         days: 10,
         suspended: 'no',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -50,6 +54,7 @@ describe('validateForm', () => {
         days: 10,
         suspended: 'yes',
         suspendedUntil: '10/5/2023',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -61,6 +66,7 @@ describe('validateForm', () => {
         days: 10,
         suspended: 'yes',
         suspendedUntil: '10/5/2023',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -71,6 +77,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         days: null,
         suspended: null,
+        isYOI: false,
       })
     ).toEqual({
       href: '#days',
@@ -83,10 +90,26 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         days: 0,
         suspended: null,
+        isYOI: false,
       })
     ).toEqual({
       href: '#days',
       text: 'Enter one or more days',
+    })
+  })
+  it('shows error when validatePunishmentDays errors', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
+        days: 11,
+        suspended: 'no',
+        startDate: '01/6/2023',
+        endDate: '10/6/2023',
+        isYOI: true,
+      })
+    ).toEqual({
+      href: '#days',
+      text: 'Cellular confinement cannot be more than 10 days for an offence under YOI rules',
     })
   })
   it('shows error when suspended decision not select', () => {
@@ -95,6 +118,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: null,
+        isYOI: false,
       })
     ).toEqual({
       href: '#suspended',
@@ -107,6 +131,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'yes',
+        isYOI: false,
       })
     ).toEqual({
       href: '#suspendedUntil',
@@ -119,6 +144,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         suspended: 'no',
+        isYOI: false,
       })
     ).toEqual({
       href: '#startDate',
@@ -132,6 +158,7 @@ describe('validateForm', () => {
         days: 10,
         suspended: 'no',
         startDate: '3/4/2023',
+        isYOI: false,
       })
     ).toEqual({
       href: '#endDate',
@@ -146,6 +173,7 @@ describe('validateForm', () => {
         suspended: 'no',
         startDate: '13/4/2023',
         endDate: '3/4/2023',
+        isYOI: false,
       })
     ).toEqual({
       href: '#endDate',

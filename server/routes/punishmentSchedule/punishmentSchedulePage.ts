@@ -7,6 +7,8 @@ import { datePickerToApi, hasAnyRole, apiDateToDatePicker } from '../../utils/ut
 import adjudicationUrls from '../../utils/urlGenerator'
 import PunishmentsService from '../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
+import { User } from '../../data/hmppsManageUsersClient'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type PageData = {
   error?: FormError
@@ -37,7 +39,8 @@ export default class PunishmentSchedulePage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -85,6 +88,7 @@ export default class PunishmentSchedulePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
+    const { user } = res.locals
     const { days, suspended, suspendedUntil, startDate, endDate } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
     const type = PunishmentType[punishmentType as string]
@@ -92,6 +96,7 @@ export default class PunishmentSchedulePage {
 
     const trimmedDays = days ? Number(String(days).trim()) : null
 
+    const isYOI = await this.getYoiInfo(chargeNumber, user)
     const error = validateForm({
       days: trimmedDays,
       suspended,
@@ -99,6 +104,8 @@ export default class PunishmentSchedulePage {
       startDate,
       endDate,
       punishmentType: type,
+      isYOI,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
     })
 
     if (error)
@@ -134,5 +141,11 @@ export default class PunishmentSchedulePage {
     }
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+  }
+
+  getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
+    const { reportedAdjudication } = adjudication
+    return reportedAdjudication.isYouthOffender
   }
 }

@@ -18,6 +18,8 @@ import {
   flattenPunishment,
 } from '../../data/PunishmentResult'
 import validateForm from './suspendedPunishmentScheduleValidation'
+import { User } from '../../data/hmppsManageUsersClient'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 type PageData = {
   error?: FormError
@@ -45,7 +47,8 @@ export default class SuspendedPunishmentSchedulePage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -95,11 +98,14 @@ export default class SuspendedPunishmentSchedulePage {
 
     const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
 
+    const isYOI = await this.getYoiInfo(chargeNumber, user)
     const error = validateForm({
       days,
       startDate,
       endDate,
       punishmentType: type,
+      isYOI,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
     })
 
     if (error) return this.renderView(req, res, { error, days, startDate, endDate })
@@ -168,5 +174,11 @@ export default class SuspendedPunishmentSchedulePage {
       },
     }
     return flattenPunishment(activePunishment)
+  }
+
+  getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
+    const { reportedAdjudication } = adjudication
+    return reportedAdjudication.isYouthOffender
   }
 }

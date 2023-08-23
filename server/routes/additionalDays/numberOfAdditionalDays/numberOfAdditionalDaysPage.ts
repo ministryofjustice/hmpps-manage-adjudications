@@ -7,6 +7,9 @@ import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
+import { User } from '../../../data/hmppsManageUsersClient'
+import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -37,7 +40,8 @@ export default class NumberOfAdditionalDaysPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -73,13 +77,20 @@ export default class NumberOfAdditionalDaysPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const { chargeNumber } = req.params
     const { days } = req.body
+    const { punishmentType, privilegeType } = req.query
+    const type = PunishmentType[punishmentType as string]
 
     const trimmedDays = days ? Number(String(days).trim()) : null
 
+    const isYOI = await this.getYoiInfo(chargeNumber, user)
     const error = validateForm({
       days: trimmedDays,
+      punishmentType: type,
+      isYOI,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
     })
 
     if (error)
@@ -105,5 +116,11 @@ export default class NumberOfAdditionalDaysPage {
       return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
     }
     return adjudicationUrls.isPunishmentSuspended.urls.start(chargeNumber)
+  }
+
+  getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
+    const { reportedAdjudication } = adjudication
+    return reportedAdjudication.isYouthOffender
   }
 }

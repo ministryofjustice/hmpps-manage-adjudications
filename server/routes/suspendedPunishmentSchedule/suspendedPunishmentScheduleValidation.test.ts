@@ -9,6 +9,7 @@ describe('validateForm', () => {
         days: 10,
         startDate: '01/6/2023',
         endDate: '10/6/2023',
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -17,6 +18,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.ADDITIONAL_DAYS,
         days: 10,
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -26,6 +28,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.ADDITIONAL_DAYS,
         days: 10,
+        isYOI: false,
       })
     ).toBeNull()
   })
@@ -34,6 +37,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: null,
+        isYOI: false,
       })
     ).toEqual({
       href: '#days',
@@ -45,10 +49,25 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 0,
+        isYOI: false,
       })
     ).toEqual({
       href: '#days',
       text: 'Enter one or more days',
+    })
+  })
+  it('shows error when validatePunishmentDays errors', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.CONFINEMENT,
+        days: 11,
+        startDate: '01/6/2023',
+        endDate: '10/6/2023',
+        isYOI: true,
+      })
+    ).toEqual({
+      href: '#days',
+      text: 'Cellular confinement cannot be more than 10 days for an offence under YOI rules',
     })
   })
   it('shows error when start date not set', () => {
@@ -56,6 +75,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
+        isYOI: false,
       })
     ).toEqual({
       href: '#startDate',
@@ -68,6 +88,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         days: 10,
         startDate: '3/4/2023',
+        isYOI: false,
       })
     ).toEqual({
       href: '#endDate',
@@ -81,6 +102,7 @@ describe('validateForm', () => {
         days: 10,
         startDate: '13/4/2023',
         endDate: '3/4/2023',
+        isYOI: false,
       })
     ).toEqual({
       href: '#endDate',

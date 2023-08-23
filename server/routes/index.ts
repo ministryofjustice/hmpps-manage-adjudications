@@ -285,11 +285,14 @@ export default function routes(
   )
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
-  router.use(adjudicationUrls.punishmentSchedule.root, PunishmentScheduleRoutes({ userService, punishmentsService }))
+  router.use(
+    adjudicationUrls.punishmentSchedule.root,
+    PunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
 
   router.use(
     adjudicationUrls.numberOfAdditionalDays.root,
-    numberOfAdditionalDaysRoutes({ userService, punishmentsService })
+    numberOfAdditionalDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
   )
   router.use(
     adjudicationUrls.isPunishmentSuspended.root,
@@ -320,7 +323,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.suspendedPunishmentSchedule.root,
-    suspendedPunishmentScheduleRoutes({ punishmentsService, userService })
+    suspendedPunishmentScheduleRoutes({ punishmentsService, userService, reportedAdjudicationsService })
   )
   router.use(
     adjudicationUrls.manuallyActivateSuspendedPunishment.root,

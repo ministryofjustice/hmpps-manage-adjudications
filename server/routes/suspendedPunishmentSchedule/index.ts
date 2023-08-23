@@ -6,22 +6,27 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import SuspendedPunishmentScheduleExistingRoute from './suspendedPunishmentScheduleExisting'
 import SuspendedPunishmentScheduleManualRoute from './suspendedPunishmentScheduleManual'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default function suspendedPunishmentScheduleRoutes({
   punishmentsService,
   userService,
+  reportedAdjudicationsService,
 }: {
   punishmentsService: PunishmentsService
   userService: UserService
+  reportedAdjudicationsService: ReportedAdjudicationsService
 }): Router {
   const router = express.Router()
   const suspendedPunishmentScheduleExistingRoute = new SuspendedPunishmentScheduleExistingRoute(
     punishmentsService,
-    userService
+    userService,
+    reportedAdjudicationsService
   )
   const suspendedPunishmentScheduleManualRoute = new SuspendedPunishmentScheduleManualRoute(
     punishmentsService,
-    userService
+    userService,
+    reportedAdjudicationsService
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
