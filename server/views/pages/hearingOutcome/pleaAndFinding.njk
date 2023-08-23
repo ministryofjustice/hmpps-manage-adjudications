@@ -41,14 +41,9 @@
       },
       items: [
         {
-          value: HearingOutcomePlea.UNFIT,
-          text: "No plea - unfit to plea or attend",
-          checked: hearingPlea === "UNFIT"
-        },
-        {
-          value: HearingOutcomePlea.ABSTAIN,
-          text: "No plea - abstained/refused to plea or attend",
-          checked: hearingPlea === "ABSTAIN"
+          value: HearingOutcomePlea.GUILTY,
+          text: "Guilty",
+          checked: hearingPlea === "GUILTY"
         },
         {
           value: HearingOutcomePlea.NOT_GUILTY,
@@ -56,9 +51,19 @@
           checked: hearingPlea === "NOT_GUILTY"
         },
         {
-          value: HearingOutcomePlea.GUILTY,
-          text: "Guilty",
-          checked: hearingPlea === "GUILTY"
+          value: HearingOutcomePlea.ABSTAIN,
+          text: "No plea - abstained or refused to plea or attend",
+          checked: hearingPlea === "ABSTAIN"
+        },
+        {
+          value: HearingOutcomePlea.NOT_ASKED,
+          text: "No plea - charge dismissed before the prisoner was asked",
+          checked: hearingPlea === "NOT_ASKED"
+        },
+        {
+          value: HearingOutcomePlea.UNFIT,
+          text: "No plea - unfit to plea or attend",
+          checked: hearingPlea === "UNFIT"
         }
       ]
     }) }}
