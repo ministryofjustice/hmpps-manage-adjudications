@@ -23,6 +23,13 @@ export enum PrivilegeType {
   OTHER = 'OTHER',
 }
 
+export enum PunishmentReasonForChange {
+  APPEAL = 'APPEAL',
+  CORRECTION = 'CORRECTION',
+  OTHER = 'OTHER',
+  GOV_OR_DIRECTOR = 'GOV_OR_DIRECTOR',
+}
+
 export type PunishmentData = {
   id?: number
   redisId?: string
@@ -80,6 +87,12 @@ export type PunishmentComment = {
   comment: string
   createdByUserId: string
   dateTime: string
+  reasonForChange?: PunishmentReasonForChange
+}
+
+export type punishmentChangeReasonAndDetails = {
+  reasonForChange: PunishmentReasonForChange
+  detailsOfChange: string
 }
 
 export function convertPrivilegeType(privilege: PrivilegeType) {

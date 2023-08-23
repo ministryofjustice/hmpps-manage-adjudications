@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 
@@ -34,6 +35,37 @@
         {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, chargeNumber, true, false) }}
       {% else %}
         <p class="govuk-body" data-qa="emptyState">No punishments have been awarded for this adjudication.</p>
+      {% endif %}
+
+      {% if reasonForChange %}
+        {{ govukSummaryList({
+          classes: "govuk-!-width-two-thirds",
+          attributes: {
+            "data-qa": "reason-for-change-summary"
+          },
+          rows: [
+            {
+              key: {
+                text: "What is the reason for changing the punishments?"
+              },
+              value: {
+                html: reasonForChange.reasonForChange | convertReasonForChangingPunishments +'</br></br>'+reasonForChange.detailsOfChange
+              },
+              actions: {
+                items: [
+                  {
+                    href: adjudicationUrls.reasonForChangePunishment.urls.edit(chargeNumber),
+                    text: "Change",
+                    visuallyHiddenText: "reason for changing punishments",
+                    attributes: {
+                      "data-qa": "reason-for-change-change-link"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }) }}
       {% endif %}
 
       <div class="flex-container flex-center">

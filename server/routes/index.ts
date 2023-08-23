@@ -77,6 +77,7 @@ import whichPunishmentConsecutiveToRoutes from './additionalDays/whichPunishment
 import manualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntryConsecutivePunishment'
 import manualConsecutivePunishmentErrorRoutes from './additionalDays/manualConsecutivePunishmentError'
 import damagesAmountRoutes from './punishments/damagesAmount'
+import reasonForChangeRoutes from './punishments/reasonForChange'
 
 export default function routes(
   router: Router,
@@ -325,6 +326,11 @@ export default function routes(
   router.use(
     adjudicationUrls.manuallyActivateSuspendedPunishment.root,
     manuallyActivateSuspendedPunishmentsRoutes({ punishmentsService, userService })
+  )
+
+  router.use(
+    adjudicationUrls.reasonForChangePunishment.root,
+    reasonForChangeRoutes({ punishmentsService, userService })
   )
 
   router.use(

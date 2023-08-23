@@ -6,9 +6,11 @@ import {
   PunishmentComment,
   PunishmentData,
   PunishmentDataWithSchedule,
+  PunishmentReasonForChange,
   PunishmentType,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
+  punishmentChangeReasonAndDetails,
 } from '../data/PunishmentResult'
 import { ReportedAdjudication, ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsSystemTokensClient, {
@@ -28,12 +30,21 @@ export default class PunishmentsService {
     private readonly hmppsManageUsersClient: HmppsManageUsersClient
   ) {}
 
-  private createSessionForAdjudicationIfNotExists(req: Request, chargeNumber: string) {
+  private createSessionForAdjudicationPunishmentIfNotExists(req: Request, chargeNumber: string) {
     if (!req.session.punishments) {
       req.session.punishments = {}
     }
     if (!req.session.punishments[chargeNumber]) {
       req.session.punishments[chargeNumber] = []
+    }
+  }
+
+  private createSessionForPunishmentChangeIfNotExists(req: Request, chargeNumber: string) {
+    if (!req.session.punishmentReasonForChange) {
+      req.session.punishmentReasonForChange = {}
+    }
+    if (!req.session.punishmentReasonForChange[chargeNumber]) {
+      req.session.punishmentReasonForChange[chargeNumber] = {}
     }
   }
 
@@ -47,7 +58,7 @@ export default class PunishmentsService {
   }
 
   addSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string) {
-    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
+    this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
     const newPunishment = { ...punishmentData, redisId: uuidv4() }
     return req.session.punishments[chargeNumber].push(newPunishment)
   }
@@ -82,7 +93,7 @@ export default class PunishmentsService {
   }
 
   setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], chargeNumber: string) {
-    this.createSessionForAdjudicationIfNotExists(req, chargeNumber)
+    this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
     // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
     const punishments = punishmentData.map(punishment => {
       return { ...punishment, redisId: uuidv4() }
@@ -92,6 +103,23 @@ export default class PunishmentsService {
 
   deleteAllSessionPunishments(req: Request, chargeNumber: string) {
     return delete req.session?.punishments?.[chargeNumber]
+  }
+
+  setReasonForChangePunishments(req: Request, reasonForChange: punishmentChangeReasonAndDetails, chargeNumber: string) {
+    // delete the previously saved reason for this charge number
+    this.deleteReasonForChangePunishments(req, chargeNumber)
+    // recreate the session object
+    this.createSessionForPunishmentChangeIfNotExists(req, chargeNumber)
+    // set the new reason
+    req.session.punishmentReasonForChange[chargeNumber] = reasonForChange
+  }
+
+  getReasonForChangePunishments(req: Request, chargeNumber: string) {
+    return req.session?.punishmentReasonForChange?.[chargeNumber]
+  }
+
+  deleteReasonForChangePunishments(req: Request, chargeNumber: string) {
+    return delete req.session?.punishmentReasonForChange?.[chargeNumber]
   }
 
   async createPunishmentSet(
@@ -151,6 +179,19 @@ export default class PunishmentsService {
     user: User
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).createPunishmentComment(chargeNumber, punishmentComment)
+  }
+
+  async createReasonForChangingPunishmentComment(
+    chargeNumber: string,
+    detailsOfChange: string,
+    reasonForChange: PunishmentReasonForChange,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsUserTokensClient(user).createPunishmentComment(
+      chargeNumber,
+      detailsOfChange,
+      reasonForChange
+    )
   }
 
   async editPunishmentComment(
@@ -248,6 +289,7 @@ export default class PunishmentsService {
         changeLink: adjudicationUrls.punishmentComment.urls.edit(chargeNumber, comment.id),
         removeLink: adjudicationUrls.punishmentComment.urls.delete(chargeNumber, comment.id),
         isOwner: user.username === comment.createdByUserId,
+        ...(comment.reasonForChange && { reasonForChange: comment.reasonForChange }),
       }
     })
   }

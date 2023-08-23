@@ -1,0 +1,86 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% set title = "What is the reason for this change?" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+        id: 'reasonForChange',
+        name: 'reasonForChange',
+        attributes: { "data-qa": "radio-buttons" },
+        errorMessage: "reasonForChange" | findError(errors),
+        items: [
+          {
+            value: "APPEAL",
+            text: "The punishments have been changed after an appeal",
+            checked: reasonForChange === PunishmentReasonForChange.APPEAL
+          },
+          {
+            value: "CORRECTION",
+            text: "To make a correction",
+            checked: reasonForChange === PunishmentReasonForChange.CORRECTION
+          },
+          {
+            value: "GOV_OR_DIRECTOR",
+            text: "A Governor or Director has decided to terminate or change punishments for another reason",
+            checked: reasonForChange === PunishmentReasonForChange.GOV_OR_DIRECTOR
+          },
+          {
+            value: "OTHER",
+            text: "Other",
+            checked: reasonForChange === PunishmentReasonForChange.OTHER
+          }]
+      }) }}
+
+      {{ govukCharacterCount({
+        label: {
+          text: "Give more details"
+        },
+        classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
+        rows: "6",
+        id: "detailsOfChange",
+        name: "detailsOfChange",
+        value: detailsOfChange,
+        attributes: {
+          'data-qa': "detailsOfChange"
+        },
+        errorMessage: "detailsOfChange" | findError(errors),
+        maxlength: 4000
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "submit" }
+        }) }}
+
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -32,6 +32,7 @@ declare module 'express-session' {
     witnesses: { [key: string]; witnesses? }
     punishments: { [key: string]; punishments? }
     userDetails: UserDetails
+    punishmentReasonForChange: { [key: string]; punishmentReasonForChange? }
   }
 }
 

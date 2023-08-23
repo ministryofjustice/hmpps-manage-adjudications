@@ -711,6 +711,17 @@ const adjudicationUrls = {
       modified: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}/modified`,
     },
   },
+  reasonForChangePunishment: {
+    root: '/punishments/reason-for-change',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.reasonForChangePunishment.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.reasonForChangePunishment.root}/${chargeNumber}/edit`,
+    },
+  },
   checkPunishments: {
     root: '/check-punishments',
     matchers: {

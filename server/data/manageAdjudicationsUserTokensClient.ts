@@ -22,6 +22,7 @@ import {
 import {
   PunishmentData,
   PunishmentDataWithSchedule,
+  PunishmentReasonForChange,
   PunishmentType,
   SuspendedPunishmentResult,
 } from './PunishmentResult'
@@ -306,10 +307,14 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
-  async createPunishmentComment(chargeNumber: string, punishmentComment: string): Promise<ReportedAdjudicationResult> {
+  async createPunishmentComment(
+    chargeNumber: string,
+    punishmentComment: string,
+    reasonForChange?: PunishmentReasonForChange
+  ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/punishments/comment`,
-      data: { comment: punishmentComment },
+      data: { comment: punishmentComment, reasonForChange },
     })
   }
 

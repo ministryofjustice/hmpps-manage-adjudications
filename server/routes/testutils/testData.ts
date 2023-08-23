@@ -34,6 +34,7 @@ import {
   PrivilegeType,
   PunishmentComment,
   PunishmentDataWithSchedule,
+  PunishmentReasonForChange,
   PunishmentSchedule,
   PunishmentType,
 } from '../../data/PunishmentResult'
@@ -359,17 +360,20 @@ export default class TestData {
     comment = 'punishment comment text',
     createdByUserId = 'user1',
     dateTime = '2023-01-01T06:00:00',
+    reasonForChange,
   }: {
     id?: number
     comment?: string
     createdByUserId?: string
     dateTime?: string
+    reasonForChange?: PunishmentReasonForChange
   }): PunishmentComment => {
     return {
       id,
       comment,
       createdByUserId,
       dateTime,
+      reasonForChange,
     }
   }
 

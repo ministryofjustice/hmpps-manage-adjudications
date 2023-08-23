@@ -1,5 +1,5 @@
 import HmppsAuthClient from '../data/hmppsAuthClient'
-import { PrivilegeType, PunishmentType } from '../data/PunishmentResult'
+import { PrivilegeType, PunishmentReasonForChange, PunishmentType } from '../data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import PunishmentsService from './punishmentsService'
@@ -12,6 +12,7 @@ const amendPunishmentComment = jest.fn()
 const removePunishmentComment = jest.fn()
 const getPrisonerDetails = jest.fn()
 const getSuspendedPunishments = jest.fn()
+const getUserFromUsername = jest.fn()
 
 jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
   return jest.fn().mockImplementation(() => {
@@ -39,7 +40,13 @@ jest.mock('../data/prisonApiClient', () => {
   })
 })
 jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/hmppsManageUsersClient')
+jest.mock('../data/hmppsManageUsersClient', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getUserFromUsername,
+    }
+  })
+})
 const testData = new TestData()
 const user = testData.userFromUsername('user1') as User
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
@@ -294,6 +301,49 @@ describe('PunishmentsService', () => {
       })
       const result = await service.checkAdditionalDaysAvailability('100', user)
       expect(result).toEqual(true)
+    })
+  })
+  describe('formatPunishmentComments', () => {
+    it('returns expected result with reasonForChange', async () => {
+      getUserFromUsername.mockResolvedValue(testData.userFromUsername())
+      const reportedAdjudication = testData.reportedAdjudication({
+        chargeNumber: '100',
+        prisonerNumber: 'G6123VU',
+        status: ReportedAdjudicationStatus.CHARGE_PROVED,
+        punishmentComments: [
+          testData.singlePunishmentComment({ createdByUserId: 'USER1' }),
+          testData.singlePunishmentComment({
+            id: 2,
+            createdByUserId: 'USER1',
+            reasonForChange: PunishmentReasonForChange.CORRECTION,
+            comment: 'it was wrong before',
+          }),
+        ],
+      })
+      const result = await service.formatPunishmentComments(reportedAdjudication, '100', user)
+      expect(result).toEqual([
+        {
+          changeLink: '/punishment-comment/100/edit/1',
+          comment: 'punishment comment text',
+          date: '1 January 2023',
+          id: 1,
+          isOwner: false,
+          name: 'T. User',
+          removeLink: '/punishment-comment/100/delete/1',
+          time: '06:00',
+        },
+        {
+          changeLink: '/punishment-comment/100/edit/2',
+          comment: 'it was wrong before',
+          date: '1 January 2023',
+          id: 2,
+          isOwner: false,
+          name: 'T. User',
+          reasonForChange: 'CORRECTION',
+          removeLink: '/punishment-comment/100/delete/2',
+          time: '06:00',
+        },
+      ])
     })
   })
 })

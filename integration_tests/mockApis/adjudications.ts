@@ -957,7 +957,7 @@ const stubAmendPunishments = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments`,
+      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments/v2`,
     },
     response: {
       status: 200,
