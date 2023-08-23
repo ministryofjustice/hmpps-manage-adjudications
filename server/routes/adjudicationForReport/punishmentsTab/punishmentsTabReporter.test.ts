@@ -42,6 +42,7 @@ beforeEach(() => {
     originatingAgencyToAddOutcome: false,
   })
   punishmentsService.formatPunishmentComments.mockResolvedValue([
+    // @ts-expect-error: TS doesn't get that the reason for change isn't always present
     {
       id: 1,
       comment: 'punishment comment text',

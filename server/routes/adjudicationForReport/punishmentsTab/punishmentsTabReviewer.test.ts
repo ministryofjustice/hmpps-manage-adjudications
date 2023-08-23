@@ -8,6 +8,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
 import { HearingOutcomeCode, HearingOutcomeFinding, HearingOutcomePlea } from '../../../data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { PunishmentReasonForChange } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/punishmentsService.ts')
@@ -44,6 +45,7 @@ beforeEach(() => {
   })
 
   punishmentsService.formatPunishmentComments.mockResolvedValue([
+    // @ts-expect-error: TS doesn't get that the reason for change isn't always present
     {
       id: 1,
       comment: 'punishment comment text',

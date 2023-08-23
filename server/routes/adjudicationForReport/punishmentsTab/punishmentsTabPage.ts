@@ -84,6 +84,8 @@ export default class PunishmentsTabPage {
       user
     )
 
+    console.log(punishmentComments)
+
     const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
       reportedAdjudication,
       user
