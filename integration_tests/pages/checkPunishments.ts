@@ -11,6 +11,10 @@ export default class CheckPunishmentsPage extends Page {
 
   changePunishmentsLink = (): PageElement => cy.get('[data-qa="changePunishmentsLink"]')
 
+  ReasonForChangeChangeLink = (): PageElement => cy.get('[data-qa="reason-for-change-change-link"]')
+
+  reasonForChangeSummary = (): PageElement => cy.get('[data-qa="reason-for-change-summary"]')
+
   submitButton = (): PageElement => cy.get('[data-qa="punishments-confirm"]')
 
   cancelLink = (): PageElement => cy.get('[data-qa="cancel"]')

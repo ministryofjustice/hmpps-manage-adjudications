@@ -40,6 +40,9 @@
       {% if reasonForChange %}
         {{ govukSummaryList({
           classes: "govuk-!-width-two-thirds",
+          attributes: {
+            "data-qa": "reason-for-change-summary"
+          },
           rows: [
             {
               key: {
@@ -53,7 +56,10 @@
                   {
                     href: adjudicationUrls.reasonForChangePunishment.urls.edit(chargeNumber),
                     text: "Change",
-                    visuallyHiddenText: "reason for changing punishments"
+                    visuallyHiddenText: "reason for changing punishments",
+                    attributes: {
+                      "data-qa": "reason-for-change-change-link"
+                    }
                   }
                 ]
               }

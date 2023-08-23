@@ -2,6 +2,7 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckPunishments from '../pages/checkPunishments'
+import ReasonForChangePunishmentPage from '../pages/reasonForChangePunishment'
 import Page from '../pages/page'
 import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { PunishmentType } from '../../server/data/PunishmentResult'
@@ -111,6 +112,37 @@ context('Check punishments', () => {
         }),
       },
     })
+    cy.task('stubCreatePunishmentComment', {
+      chargeNumber: 456,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '456',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.CONFINEMENT,
+              schedule: {
+                days: 5,
+                suspendedUntil: '2023-04-13',
+              },
+            },
+            {
+              id: 15,
+              type: PunishmentType.EARNINGS,
+              stoppagePercentage: 25,
+              schedule: {
+                startDate: '2023-04-13',
+                endDate: '2023-04-15',
+                days: 2,
+              },
+            },
+          ],
+          punishmentComments: [testData.singlePunishmentComment({})],
+        }),
+      },
+    })
 
     cy.signIn()
   })
@@ -124,6 +156,7 @@ context('Check punishments', () => {
       checkPunishmentsPage.changePunishmentsLink().should('exist')
       checkPunishmentsPage.submitButton().should('not.exist')
       checkPunishmentsPage.punishmentsTable().should('not.exist')
+      checkPunishmentsPage.reasonForChangeSummary().should('not.exist')
     })
     it('should go to award punishments page if change link is clicked', () => {
       cy.visit(adjudicationUrls.checkPunishments.urls.start('123'))
@@ -141,7 +174,7 @@ context('Check punishments', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('123'))
       })
     })
-    it.only('should show the data in the session when punishments are present', () => {
+    it('should show the data in the session when punishments are present', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('123'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
       cy.get('#punishmentType-5').click()
@@ -199,7 +232,7 @@ context('Check punishments', () => {
     it('can submit edited punishments', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('456'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-2').click()
+      cy.get('#punishmentType-3').click()
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
       cy.get('#days').type('2')
@@ -210,6 +243,11 @@ context('Check punishments', () => {
       forceDateInputWithDate(date2, '[data-qa="end-date-picker"]')
       cy.get('[data-qa="punishment-schedule-submit"]').click()
       cy.get('[data-qa="punishments-continue').click()
+      const reasonForChangePunishmentPage: ReasonForChangePunishmentPage =
+        Page.verifyOnPage(ReasonForChangePunishmentPage)
+      reasonForChangePunishmentPage.radios().find('input[value="APPEAL"]').click()
+      reasonForChangePunishmentPage.details().type('test text')
+      reasonForChangePunishmentPage.submitButton().click()
       const checkPunishmentsPage: CheckPunishments = Page.verifyOnPage(CheckPunishments)
       checkPunishmentsPage.punishmentsTable().should('exist')
       checkPunishmentsPage
@@ -228,6 +266,19 @@ context('Check punishments', () => {
           expect($summaryData.get(11).innerText).to.contain('2')
           expect($summaryData.get(12).innerText).to.contain('-')
           expect($summaryData.get(13).innerText).to.contain('-')
+        })
+      checkPunishmentsPage.reasonForChangeSummary().should('exist')
+      checkPunishmentsPage
+        .reasonForChangeSummary()
+        .find('dt')
+        .then($title => {
+          expect($title.get(0).innerText).to.contain('What is the reason for changing the punishments?')
+        })
+      checkPunishmentsPage
+        .reasonForChangeSummary()
+        .find('dd')
+        .then($info => {
+          expect($info.get(0).innerText).to.contain('The punishments have been changed after an appeal\n\ntest text')
         })
       checkPunishmentsPage.submitButton().click()
       cy.location().should(loc => {

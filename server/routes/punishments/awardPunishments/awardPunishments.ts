@@ -89,7 +89,7 @@ export default class AwardPunishmentsPage {
 
   getContinueHref = async (chargeNumber: string, user: User) => {
     const punishments = await this.punishmentsService.getPunishmentsFromServer(chargeNumber, user)
-    if (punishments && punishments.length) return adjudicationUrls.checkPunishments.urls.submittedEdit(chargeNumber)
+    if (punishments && punishments.length) return adjudicationUrls.reasonForChangePunishment.urls.start(chargeNumber)
     return adjudicationUrls.checkPunishments.urls.start(chargeNumber)
   }
 
