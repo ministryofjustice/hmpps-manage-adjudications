@@ -3,6 +3,8 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentSchedulePage from '../pages/punishmentSchedule'
 import { forceDateInput } from '../componentDrivers/dateInput'
+import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
 context('Punishment schedule', () => {
@@ -15,6 +17,23 @@ context('Punishment schedule', () => {
       response: testData.userFromUsername(),
     })
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetReportedAdjudication', {
+      id: 100,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '100',
+          prisonerNumber: 'G6415GD',
+          status: ReportedAdjudicationStatus.REFER_POLICE,
+          outcomes: [
+            {
+              outcome: {
+                outcome: testData.outcome({}),
+              },
+            },
+          ] as OutcomeHistory,
+        }),
+      },
+    })
     cy.signIn()
   })
   describe('Loads', () => {

@@ -1,6 +1,7 @@
 import { FormError } from '../../@types/template'
-import { PunishmentType } from '../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../data/PunishmentResult'
 import { datePickerToApi } from '../../utils/utils'
+import validatePunishmentDays from '../punishments/punishmentDaysValidator'
 
 type PunishmentScheduleForm = {
   punishmentType: PunishmentType
@@ -9,6 +10,8 @@ type PunishmentScheduleForm = {
   suspendedUntil?: string
   startDate?: string
   endDate?: string
+  isYOI: boolean
+  privilegeType?: PrivilegeType
 }
 
 const errors: { [key: string]: FormError } = {
@@ -49,6 +52,8 @@ export default function validateForm({
   suspendedUntil,
   startDate,
   endDate,
+  isYOI,
+  privilegeType,
 }: PunishmentScheduleForm): FormError | null {
   if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
   if (days === undefined || days === null || !days) return errors.MISSING_DAYS
@@ -64,5 +69,5 @@ export default function validateForm({
   }
   if (datePickerToApi(endDate) < datePickerToApi(startDate)) return errors.END_DATE_BEFORE_START_DATE
 
-  return null
+  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
 }

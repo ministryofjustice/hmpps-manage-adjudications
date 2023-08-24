@@ -1,7 +1,12 @@
 import { FormError } from '../../../@types/template'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import validatePunishmentDays from '../../punishments/punishmentDaysValidator'
 
 type NumberOfAddedDaysForm = {
+  punishmentType: PunishmentType
   days: number
+  isYOI: boolean
+  privilegeType?: PrivilegeType
 }
 
 const errors: { [key: string]: FormError } = {
@@ -19,9 +24,15 @@ const errors: { [key: string]: FormError } = {
   },
 }
 
-export default function validateForm({ days }: NumberOfAddedDaysForm): FormError | null {
+export default function validateForm({
+  punishmentType,
+  days,
+  isYOI,
+  privilegeType,
+}: NumberOfAddedDaysForm): FormError | null {
   if (Number.isNaN(days) || typeof days === 'string') return errors.NOT_NUMERICAL
   if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
   if (days === undefined || days === null || !days) return errors.MISSING_DAYS
-  return null
+
+  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
 }
