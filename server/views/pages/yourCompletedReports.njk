@@ -25,9 +25,10 @@
 
   {% for completedReport in yourCompletedReports.content %}
     {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.report(completedReport.chargeNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden">the report for {{ completedReport.friendlyName }}</span></a>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.report(completedReport.chargeNumber) }}" class="govuk-link" data-qa="start-report-link">View<span class="govuk-visually-hidden"> report the report for {{ completedReport.friendlyName }}</span></a>
     {% endset -%}
     {% set rows = (rows.push([
+      { text: completedReport.chargeNumber },
       { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
         "data-sort-value": completedReport.dateTimeOfDiscovery
@@ -45,6 +46,7 @@
 
     {{ govukTable({
       head: [
+        { text: "Charge number" },
         { text: "Discovery date and time",
           attributes: {
           "aria-sort": "descending"
