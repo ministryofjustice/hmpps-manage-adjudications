@@ -12,6 +12,7 @@ import {
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
 import { produceDuoVerticalBarsCharts, produceLinesCharts } from '../chartService'
+import { getFullDate } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -35,6 +36,9 @@ export default class PleasAndFindingsTabPage {
     const agencyId: AgencyId = user.activeCaseLoadId
 
     const chartSettingMap = {}
+    const lastModifiedDate = getFullDate(
+      (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate.toString()
+    )
 
     chartSettingMap['5a'] = await produceLinesCharts(
       '5a',
@@ -91,6 +95,7 @@ export default class PleasAndFindingsTabPage {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PLEAS_AND_FINDINGS),
       chartSettingMap,
+      lastModifiedDate,
     })
   }
 

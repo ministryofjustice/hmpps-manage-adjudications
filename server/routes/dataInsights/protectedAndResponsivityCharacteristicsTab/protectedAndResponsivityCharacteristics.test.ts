@@ -27,6 +27,12 @@ beforeEach(() => {
       chartEntries: [],
     })
   )
+  chartApiService.getLastModifiedChart.mockResolvedValue(
+    testData.chartLastUpdatedResult({
+      chartName: '2a',
+      lastModifiedDate: new Date(),
+    })
+  )
   app = appWithAllRoutes({ production: false }, { chartApiService })
 })
 

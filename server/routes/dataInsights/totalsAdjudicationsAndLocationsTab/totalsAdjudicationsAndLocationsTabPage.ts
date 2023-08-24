@@ -11,6 +11,7 @@ import {
   produceHorizontalBarsChart,
   produceVerticalBarsAndLineCharts,
 } from '../chartService'
+import { getFullDate } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -32,7 +33,9 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const { user } = res.locals
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
-
+    const lastModifiedDate = getFullDate(
+      (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate.toString()
+    )
     const chartSettingMap = {}
 
     chartSettingMap['1a'] = await produceVerticalBarsAndLineCharts(
@@ -118,6 +121,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.TOTALS_ADJUDICATIONS_AND_LOCATIONS),
       chartSettingMap,
+      lastModifiedDate,
     })
   }
 

@@ -7,6 +7,11 @@ export interface ChartDetailsResult {
   chartEntries: ChartEntryVerticalBar[] | ChartEntryHorizontalBar[] | ChartEntryLine[] | ChartEntryDuoLine[]
 }
 
+export interface ChartLastUpdatedResult {
+  chartName: string
+  lastModifiedDate: Date
+}
+
 export interface ChartEntryVerticalBar {
   month: number
   year_curr: number

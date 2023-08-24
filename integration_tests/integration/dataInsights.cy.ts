@@ -233,6 +233,7 @@ context('Adjudication data', () => {
     page.checkChartTitle('Punishment by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Plea by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Finding by protected or responsivity characteristic - last 30 days')
+    page.checkLastModifiedDate('23 August 2023')
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {

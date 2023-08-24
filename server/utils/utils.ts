@@ -111,6 +111,10 @@ export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): st
   return getDateOrTime(dateTimeString, format)
 }
 
+export const getFullDate = (dateTimeString: string, format = 'D MMMM YYYY'): string => {
+  return getDateOrTime(dateTimeString, format)
+}
+
 export const getTime = (dateTimeString: string, format = 'HH:mm'): string => {
   return getDateOrTime(dateTimeString, format)
 }

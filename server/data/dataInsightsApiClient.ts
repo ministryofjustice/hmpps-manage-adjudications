@@ -3,7 +3,7 @@ import config from '../config'
 import RestClient from './restClient'
 import { AgencyId } from './PrisonLocationResult'
 
-import { ChartDetailsResult } from '../services/ChartDetailsResult'
+import { ChartDetailsResult, ChartLastUpdatedResult } from '../services/ChartDetailsResult'
 
 export default class DataInsightsApiClient {
   restClient: RestClient
@@ -15,6 +15,12 @@ export default class DataInsightsApiClient {
   async getDataInsightsChart(agencyId: AgencyId, chartName: string): Promise<ChartDetailsResult> {
     return this.restClient.get({
       path: `/api/data-insights/chart/${agencyId}/${chartName}`,
+    })
+  }
+
+  async getLastModifiedDate(chartName: string): Promise<ChartLastUpdatedResult> {
+    return this.restClient.get({
+      path: `/api/data-insights/chart/last-updated/${chartName}`,
     })
   }
 }
