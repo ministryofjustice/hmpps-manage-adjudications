@@ -141,6 +141,7 @@ export enum ReportedAdjudicationStatus {
   CHARGE_PROVED = 'CHARGE_PROVED',
   QUASHED = 'QUASHED',
   ACCEPTED = 'ACCEPTED',
+  REFER_GOV = 'REFER_GOV',
 }
 
 export const allStatuses = [
@@ -196,6 +197,8 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Quashed'
     case ReportedAdjudicationStatus.PROSECUTION:
       return 'Police prosecution'
+    case ReportedAdjudicationStatus.REFER_GOV:
+      return 'Referred to Gov'
     default:
       return null
   }

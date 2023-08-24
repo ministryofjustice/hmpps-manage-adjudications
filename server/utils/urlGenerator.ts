@@ -517,7 +517,15 @@ const adjudicationUrls = {
       start: (chargeNumber: string) => `${adjudicationUrls.nextStepsInad.root}/${chargeNumber}`,
     },
   },
-
+  nextStepsGov: {
+    root: '/next-steps/gov',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.nextStepsGov.root}/${chargeNumber}`,
+    },
+  },
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {

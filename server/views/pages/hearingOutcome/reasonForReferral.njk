@@ -4,10 +4,10 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
-{% set title = 'What is the reason for the referral?' %}
+{% set title = 'What is the reason for not having an independent adjudicator hearing?' if referGov else 'What is the reason for the referral?' %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
@@ -22,7 +22,7 @@
         attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <h1 class="govuk-heading-l {% if referGov %}govuk-grid-column-two-thirds{% endif %}">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     <input id="hearingOutcomeCode" type="hidden" name="hearingOutcomeCode" value="{{ hearingOutcomeCode }}" />
