@@ -80,25 +80,27 @@ describe('validateForm', () => {
   })
 
   it('Valid submit has no errors - privilege type earnings for adult', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 42, false, PrivilegeType.TV)).toBeNull()
+    expect(validateForm(PunishmentType.PRIVILEGE, 42, false, PrivilegeType.CANTEEN)).toBeNull()
   })
 
   it('shows error when privilege days above max for adult', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.TV)).toEqual({
+    expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.CANTEEN)).toEqual({
       href: '#days',
-      text: `Days for loss of ${PrivilegeType.TV} cannot be more than 42 days for an offence under Adult rules`,
+      text: `Days for loss of ${convertPrivilegeType(
+        PrivilegeType.CANTEEN
+      )} cannot be more than 42 days for an offence under Adult rules`,
     })
   })
 
   it('Valid submit has no errors - punishment type privilege for YOI', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 21, true, PrivilegeType.TV)).toBeNull()
+    expect(validateForm(PunishmentType.PRIVILEGE, 21, true, PrivilegeType.CANTEEN)).toBeNull()
   })
 
   it('shows error when privilege days above max for YOI', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.TV)).toEqual({
+    expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.CANTEEN)).toEqual({
       href: '#days',
       text: `Days for loss of ${convertPrivilegeType(
-        PrivilegeType.TV
+        PrivilegeType.CANTEEN
       )} cannot be more than 21 days for an offence under YOI rules`,
     })
   })
