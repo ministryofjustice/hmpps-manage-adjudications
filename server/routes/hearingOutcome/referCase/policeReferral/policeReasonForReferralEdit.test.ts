@@ -72,8 +72,6 @@ describe('POST /reason-for-police-referral', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       .then(() => expect(outcomesService.createPoliceReferral).not.toHaveBeenCalled)
-      .then(() =>
-        expect(outcomesService.editPoliceReferralOutcome).toHaveBeenCalledWith('100', '123', expect.anything())
-      )
+      .then(() => expect(outcomesService.editReferralOutcome).toHaveBeenCalledWith('100', '123', expect.anything()))
   })
 })

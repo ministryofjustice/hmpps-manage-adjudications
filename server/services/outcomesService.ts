@@ -42,7 +42,15 @@ export default class OutcomesService {
     return new ManageAdjudicationsUserTokensClient(user).createPoliceReferral(chargeNumber, outcomeDetails)
   }
 
-  async editPoliceReferralOutcome(
+  async createGovReferral(chargeNumber: string, details: string, user: User): Promise<ReportedAdjudicationResult> {
+    const outcomeDetails = {
+      code: OutcomeCode.REFER_GOV,
+      details,
+    }
+    return new ManageAdjudicationsUserTokensClient(user).createGovReferral(chargeNumber, outcomeDetails)
+  }
+
+  async editReferralOutcome(
     chargeNumber: string,
     referralReason: string,
     user: User

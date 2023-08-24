@@ -1,0 +1,54 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% set title = 'What is the reason for not having an independent adjudicator hearing?' %}
+
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l govuk-grid-column-two-thirds">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {{ govukCharacterCount({
+      value: referralReason,
+      classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
+      rows: "6",
+      id: "referralReason",
+      name: "referralReason",
+      attributes: {
+        'data-qa': "referral-reason"
+      },
+      errorMessage: "referralReason" | findError(errors),
+      maxlength: 4000
+    }) }}
+
+    <div class="flex-container flex-center">
+      {{ govukButton({
+        text: 'Save',
+        type: "submit",
+        preventDoubleClick: true,
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "reason-for-gov-referral-submit" }
+      }) }}
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-gov-referral-cancel">Cancel</a></p>
+    </div>
+
+  </form>
+{% endblock %}

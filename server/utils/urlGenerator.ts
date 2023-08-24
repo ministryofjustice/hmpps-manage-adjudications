@@ -468,6 +468,17 @@ const adjudicationUrls = {
       edit: (chargeNumber: string) => `${adjudicationUrls.hearingReasonForReferral.root}/${chargeNumber}/edit`,
     },
   },
+  govReasonForReferral: {
+    root: '/reason-for-gov-referral',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.govReasonForReferral.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.govReasonForReferral.root}/${chargeNumber}/edit`,
+    },
+  },
   reasonForReferral: {
     root: '/reason-for-police-referral',
     matchers: {
