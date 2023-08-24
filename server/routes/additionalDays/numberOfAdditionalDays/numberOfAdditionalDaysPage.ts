@@ -80,7 +80,7 @@ export default class NumberOfAdditionalDaysPage {
     const { user } = res.locals
     const { chargeNumber } = req.params
     const { days } = req.body
-    const { punishmentType, privilegeType } = req.query
+    const { punishmentType, privilegeType, otherPrivilege } = req.query
     const type = PunishmentType[punishmentType as string]
 
     const trimmedDays = days ? Number(String(days).trim()) : null
@@ -91,6 +91,7 @@ export default class NumberOfAdditionalDaysPage {
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
     })
 
     if (error)

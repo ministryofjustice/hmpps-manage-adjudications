@@ -60,7 +60,8 @@ export default function validatePunishmentDays(
   punishmentType: PunishmentType,
   days: number,
   isYOI: boolean,
-  privilegeType?: PrivilegeType
+  privilegeType?: PrivilegeType,
+  otherPrivilege?: string
 ): FormError | null {
   if (punishmentType === PunishmentType.ADDITIONAL_DAYS && days > 42) {
     return errors.ADDITIONAL_DAYS_MAX
@@ -96,6 +97,7 @@ export default function validatePunishmentDays(
     if (!isYOI && days > 42) {
       return formatPrivilegeErrorText(
         privilegeType,
+        otherPrivilege,
         errors.PRIVILEGE_DAYS_MAX_ADULT.href,
         errors.PRIVILEGE_DAYS_MAX_ADULT.text
       )
@@ -103,6 +105,7 @@ export default function validatePunishmentDays(
     if (isYOI && days > 21) {
       return formatPrivilegeErrorText(
         privilegeType,
+        otherPrivilege,
         errors.PRIVILEGE_DAYS_MAX_YOI.href,
         errors.PRIVILEGE_DAYS_MAX_YOI.text
       )
@@ -129,9 +132,17 @@ export default function validatePunishmentDays(
   return null
 }
 
-function formatPrivilegeErrorText(privilegeType: PrivilegeType, href: string, text: string): FormError {
+function formatPrivilegeErrorText(
+  privilegeType: PrivilegeType,
+  otherPrivilege: string,
+  href: string,
+  text: string
+): FormError {
   return {
     href,
-    text: text.replace('[thing]', convertPrivilegeType(privilegeType)),
+    text: text.replace(
+      '[thing]',
+      privilegeType === PrivilegeType.OTHER ? otherPrivilege : convertPrivilegeType(privilegeType)
+    ),
   }
 }

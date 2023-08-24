@@ -106,6 +106,7 @@ export default class SuspendedPunishmentSchedulePage {
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
     })
 
     if (error) return this.renderView(req, res, { error, days, startDate, endDate })
