@@ -29,6 +29,7 @@ export enum ReferralOutcomeCode {
   REFER_INAD = 'REFER_INAD',
   DISMISSED = 'DISMISSED',
   CHARGE_PROVED = 'CHARGE_PROVED',
+  REFER_GOV = 'REFER_GOV',
 }
 
 export enum HearingOutcomeFinding {

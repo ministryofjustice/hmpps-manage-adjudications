@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import HearingsService from '../../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import UserService from '../../../../services/userService'
 import GovReasonForReferralPage, { PageRequestType } from './govReasonForReferralPage'
@@ -9,14 +8,12 @@ export default class GovReasonForReferralRoutes {
   page: GovReasonForReferralPage
 
   constructor(
-    hearingsService: HearingsService,
     userService: UserService,
     reportedAdjudicationsService: ReportedAdjudicationsService,
     outcomesService: OutcomesService
   ) {
     this.page = new GovReasonForReferralPage(
       PageRequestType.CREATION,
-      hearingsService,
       userService,
       reportedAdjudicationsService,
       outcomesService

@@ -11,12 +11,10 @@ import ReportedAdjudicationsService from '../../../../services/reportedAdjudicat
 import OutcomesService from '../../../../services/outcomesService'
 
 export default function govReasonForReferralRoutes({
-  hearingsService,
   userService,
   reportedAdjudicationsService,
   outcomesService,
 }: {
-  hearingsService: HearingsService
   userService: UserService
   reportedAdjudicationsService: ReportedAdjudicationsService
   outcomesService: OutcomesService
@@ -24,13 +22,11 @@ export default function govReasonForReferralRoutes({
   const router = express.Router()
 
   const govReasonForReferralRoute = new GovReasonForReferralRoutes(
-    hearingsService,
     userService,
     reportedAdjudicationsService,
     outcomesService
   )
   const GovReasonForReferralEditRoute = new GovReasonForReferralEditRoutes(
-    hearingsService,
     userService,
     reportedAdjudicationsService,
     outcomesService

@@ -2,9 +2,8 @@
 import { Request, Response } from 'express'
 import { FormError } from '../../../../@types/template'
 
-import HearingsService from '../../../../services/hearingsService'
 import UserService from '../../../../services/userService'
-import { HearingDetailsHistory, HearingOutcomeCode } from '../../../../data/HearingAndOutcomeResult'
+import { HearingDetailsHistory } from '../../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
@@ -35,7 +34,6 @@ export default class GovReasonForReferralPage {
 
   constructor(
     pageType: PageRequestType,
-    private readonly hearingsService: HearingsService,
     private readonly userService: UserService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly outcomesService: OutcomesService

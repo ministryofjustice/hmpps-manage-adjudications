@@ -49,6 +49,7 @@ import {
   OutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
+  ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
@@ -771,6 +772,14 @@ export default class ReportedAdjudicationsService {
         finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_GOV &&
         !finalHistoryItem.outcome.referralOutcome
       ) {
+        return {
+          href: adjudicationUrls.nextStepsGov.urls.start(chargeNumber),
+          text: 'Continue to next step',
+          name: 'continueToNextStepButton',
+          qa: 'continue-to-next-step-button',
+        }
+      }
+      if (finalHistoryItem.outcome.referralOutcome?.code === ReferralOutcomeCode.REFER_GOV) {
         return {
           href: adjudicationUrls.nextStepsGov.urls.start(chargeNumber),
           text: 'Continue to next step',
