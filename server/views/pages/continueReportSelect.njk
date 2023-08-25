@@ -44,6 +44,7 @@
       <p class="govuk-body continueReport-finalColumn"><a href="{{ adjudicationUrls.deleteReport.urls.delete(report.id) }}" class="govuk-link" data-qa="delete-report-link-{{report.id}}">Delete report<span class="govuk-visually-hidden">for {{ report.friendlyName }}</span></a></p>
     {% endset -%}
     {% set rows = (rows.push([
+    { text: report.id },
     { html: discoveryDateTimeHtml, attributes: {
         "data-sort-value": report.incidentDetails.dateTimeOfDiscovery
       } },
@@ -64,6 +65,7 @@
 
       {{ govukTable({
          head: [
+        { text: "Charge number" },
         { text: "Discovery date and time",
           classes: 'continueReport-firstColumn',
           attributes: {

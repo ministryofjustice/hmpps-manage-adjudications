@@ -2,11 +2,11 @@
   {% for completedReport in allCompletedReports.content %}
     {% if completedReport.transferableActionsAllowed == false %}
       {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span>
+      <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-report-link">View<span class="govuk-visually-hidden"> report for {{ completedReport.friendlyName }}</span>
         {% endset -%}
       {% else %}
         {% set viewCompletedReportlLinkHtml %}
-        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span>
+        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-report-link">View<span class="govuk-visually-hidden"> report for {{ completedReport.friendlyName }}</span>
         </a>
         {% endset -%}
       {% endif %}
@@ -26,6 +26,7 @@
         {% endif %}
 
         {% set rows = (rows.push([
+      { text: completedReport.chargeNumber },
       { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
         "data-sort-value": completedReport.dateTimeOfDiscovery
@@ -43,6 +44,7 @@
         <div class="results-table">
           {{ govukTable({
       head: [
+        { text: "Charge number" },
         { text: "Discovery date and time",
                   attributes: {
           "aria-sort": "descending"
