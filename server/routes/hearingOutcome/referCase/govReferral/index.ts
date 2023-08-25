@@ -6,7 +6,6 @@ import GovReasonForReferralEditRoutes from './govReasonForReferralEdit'
 
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
-import HearingsService from '../../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import OutcomesService from '../../../../services/outcomesService'
 
