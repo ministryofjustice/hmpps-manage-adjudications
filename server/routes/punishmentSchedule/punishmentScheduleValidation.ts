@@ -12,7 +12,6 @@ type PunishmentScheduleForm = {
   endDate?: string
   isYOI: boolean
   privilegeType?: PrivilegeType
-  otherPrivilege?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -55,7 +54,6 @@ export default function validateForm({
   endDate,
   isYOI,
   privilegeType,
-  otherPrivilege,
 }: PunishmentScheduleForm): FormError | null {
   if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
   if (days === undefined || days === null || !days) return errors.MISSING_DAYS
@@ -71,5 +69,5 @@ export default function validateForm({
   }
   if (datePickerToApi(endDate) < datePickerToApi(startDate)) return errors.END_DATE_BEFORE_START_DATE
 
-  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType, otherPrivilege)
+  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
 }

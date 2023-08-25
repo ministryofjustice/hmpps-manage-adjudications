@@ -106,7 +106,6 @@ export default class PunishmentSchedulePage {
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
-      otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
     })
 
     if (error)

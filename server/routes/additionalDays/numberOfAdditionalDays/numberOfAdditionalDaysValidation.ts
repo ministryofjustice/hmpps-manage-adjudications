@@ -7,7 +7,6 @@ type NumberOfAddedDaysForm = {
   days: number
   isYOI: boolean
   privilegeType?: PrivilegeType
-  otherPrivilege?: string
 }
 
 const errors: { [key: string]: FormError } = {
@@ -30,11 +29,10 @@ export default function validateForm({
   days,
   isYOI,
   privilegeType,
-  otherPrivilege,
 }: NumberOfAddedDaysForm): FormError | null {
   if (Number.isNaN(days) || typeof days === 'string') return errors.NOT_NUMERICAL
   if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
   if (days === undefined || days === null || !days) return errors.MISSING_DAYS
 
-  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType, otherPrivilege)
+  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
 }
