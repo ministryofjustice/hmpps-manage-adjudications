@@ -92,6 +92,20 @@ describe('validateForm', () => {
     })
   })
 
+  it('shows error when privilege other days above max for adult', () => {
+    expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.OTHER)).toEqual({
+      href: '#days',
+      text: `Days for loss of privilege cannot be more than 42 days for an offence under Adult rules`,
+    })
+  })
+
+  it('shows error when privilege other days above max for adult', () => {
+    expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.OTHER)).toEqual({
+      href: '#days',
+      text: `Days for loss of privilege cannot be more than 21 days for an offence under YOI rules`,
+    })
+  })
+
   it('Valid submit has no errors - punishment type privilege for YOI', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 21, true, PrivilegeType.CANTEEN)).toBeNull()
   })

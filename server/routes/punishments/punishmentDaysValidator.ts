@@ -132,6 +132,9 @@ export default function validatePunishmentDays(
 function formatPrivilegeErrorText(privilegeType: PrivilegeType, href: string, text: string): FormError {
   return {
     href,
-    text: text.replace('[thing]', convertPrivilegeType(privilegeType)),
+    text: text.replace(
+      '[thing]',
+      privilegeType === PrivilegeType.OTHER ? 'privilege' : convertPrivilegeType(privilegeType)
+    ),
   }
 }
