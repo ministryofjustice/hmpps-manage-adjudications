@@ -8,7 +8,7 @@
 {% set title = 'Report a quashed guilty finding' %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
@@ -37,16 +37,16 @@
         },
         items: [
             {  value: QuashGuiltyFindingReason.FLAWED_CASE,
-               text: "Flawed case"      
+               text: "Flawed case"
             },
             {  value: QuashGuiltyFindingReason.JUDICIAL_REVIEW,
-               text: "Quashed on judicial review"      
+               text: "Quashed on judicial review"
             },
             {  value: QuashGuiltyFindingReason.APPEAL_UPHELD,
-               text: "Prisoner appeal upheld"      
+               text: "Prisoner appeal upheld"
             },
             {  value: QuashGuiltyFindingReason.OTHER,
-               text: "Other"      
+               text: "Other"
             }
          ] | toSelect('value', 'text', quashReason),
         classes: '',

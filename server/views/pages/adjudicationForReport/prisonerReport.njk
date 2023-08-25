@@ -8,8 +8,10 @@
 {% from "../../macros/adjudicationReviewSummary.njk" import adjudicationReviewSummary %}
 {% from "../../macros/transferBanner.njk" import transferBanner%}
 
+{% set title = 'Prisoner’s report' %}
+
 {% block pageTitle %}
-  Prisoner’s report
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}

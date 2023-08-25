@@ -8,8 +8,10 @@
 {% from "../../partials/hearingDetailsVariations/outcomeTable.njk" import outcomeTable %}
 {% from "../../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
 
+{% set title = 'Hearing details' %}
+
 {% block pageTitle %}
-  Hearing details
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}

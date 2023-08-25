@@ -7,9 +7,10 @@
 {% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
 {% from "../macros/prisonerOutsideEstablishmentOffenceCodeDecisionInput.njk" import prisonerOutsideEstablishmentOffenceCodeDecisionInput %}
 
+{% set title %} Who did the prisoner {{ roleCode }} ? {% endset %}
 
 {% block pageTitle %}
-    Who did the prisoner {{ roleCode }}?
+    {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
@@ -30,7 +31,7 @@
     {% set decisionHtml %}
         {{ prisonerSearchOffenceCodeDecisionInput("internal", decisionData, viewData, errors) }}
     {% endset -%}
-           
+
     {% set items = (items.push({
         value: "internal",
         text: "A prisoner in this establishment",
@@ -43,7 +44,7 @@
     {% set decisionHtml %}
         {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput("external", decisionData, errors) }}
     {% endset -%}
-       
+
     {% set items = (items.push({
         value: "external",
         text: "A prisoner who's left this establishment",
@@ -52,8 +53,8 @@
         },
         checked: decisionData.selectedAnswerId == "external"
     }), items) %}
-  
-    
+
+
     <h1 class="govuk-heading-l">Who did {{ prisoner.friendlyName | safe }} {{ roleCode }}?</h1>
 
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="associated-prisoner-form">
@@ -85,5 +86,5 @@
         }) }}
 
     </form>
-	
+
 {% endblock %}

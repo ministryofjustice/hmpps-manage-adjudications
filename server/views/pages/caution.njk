@@ -7,7 +7,7 @@
 
 {% set title = "Is the punishment a caution?" %}
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -37,7 +37,7 @@
                 attributes: { "data-qa": "radio-buttons-caution" },
                 errorMessage: "caution" | findError(errors),
                 fieldset: {
-                   legend: legend 
+                   legend: legend
                 },
              items: [
            {

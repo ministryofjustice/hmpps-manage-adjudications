@@ -11,6 +11,10 @@
 
 {% set title = "Do you want to remove this offence?" %}
 
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+
 {% block content %}
   {% if errors | length %}
     {{ govukErrorSummary({

@@ -7,7 +7,7 @@
 {% set title %} Will this punishment be consecutive to another one given to {{prisonerName}}? {% endset %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -44,7 +44,7 @@
             text: "No",
             checked: consecutive == 'no'
           }
-        ] }) 
+        ] })
       }}
 
       <div class="govuk-button-group">

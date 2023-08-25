@@ -7,6 +7,10 @@
 
 {% set title = "Confirm DIS 1/2 has been issued to prisoner" %}
 
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
@@ -23,7 +27,7 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
   {{ DISFormFilter({filter:filter, locations:possibleLocations, errors:errors, clearUrl:adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken:csrfToken, dateTitle:"Date of discovery", disableFutureSelection: true, disablePastSelection: false, includeCheckboxes: false}) }}
-  
+
   {% set rows = [] %}
   {% for report in reports %}
     {% set index = loop.index %}

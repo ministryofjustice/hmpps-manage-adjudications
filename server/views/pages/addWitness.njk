@@ -7,7 +7,7 @@
 {% set title = "Add a witness" %}
 
 {% block pageTitle %}
-    {{ title }}
+    {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
@@ -34,7 +34,7 @@
             <div class="govuk-grid-column-three-quarters">
 
                 {% include "../partials/addWitnessRadios.njk" %}
-            
+
                 {{ govukButton({
                     text: "Save and continue",
                     type: "submit",
