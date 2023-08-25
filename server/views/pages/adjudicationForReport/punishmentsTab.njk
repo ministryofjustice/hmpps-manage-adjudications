@@ -9,8 +9,10 @@
 {% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
 {% from "../../macros/transferBanner.njk" import transferBanner%}
 
+{% set title = 'Punishments and damages' %}
+
 {% block pageTitle %}
-  Punishments and damages
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -90,7 +92,7 @@
     </div>
   {% endif %}
 
-  {% if (chargeProved or quashed) 
+  {% if (chargeProved or quashed)
     and not outcomeEnteredInNomis %}
     <div data-qa="punishment-comments-section">
 

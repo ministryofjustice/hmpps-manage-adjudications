@@ -11,7 +11,7 @@
 {% set title = 'Schedule a hearing' %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -76,7 +76,7 @@
         errorMessage: errors | findErrors(['hearingDate[date]'])
       }) }}
 
-    {{ timeSelect({         
+    {{ timeSelect({
         id: 'hearingDate[time]',
         label: 'Start time',
         name: 'hearingDate[time]',

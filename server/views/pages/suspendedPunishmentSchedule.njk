@@ -8,7 +8,7 @@
 {% set title = "Punishment schedule" %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -48,7 +48,7 @@
           attributes: {'data-disable-future-date':'false', 'data-qa': "start-date-picker" },
           classes: 'govuk-input--width-10',
           errorMessage: errors | findErrors(['startDate'])
-          })   
+          })
         }}
         {{
           datePicker({

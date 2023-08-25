@@ -6,10 +6,10 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "../macros/punishmentRadios.njk" import punishmentRadios %}
 
-{% set title = "Add a punishment" if damagesUnavailable else 
+{% set title = "Add a punishment" if damagesUnavailable else
   "Add a punishment or money for damages" %}
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}

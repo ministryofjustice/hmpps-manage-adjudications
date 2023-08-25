@@ -9,7 +9,7 @@
 {% set title = 'Adjourn the hearing for another reason' %}
 
 {% block pageTitle %}
-  {{ title }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
@@ -38,37 +38,37 @@
         },
         items: [
             {  value: HearingOutcomeAdjournReason.LEGAL_ADVICE,
-               text: "Request for legal advice approved"      
+               text: "Request for legal advice approved"
             },
             {  value: HearingOutcomeAdjournReason.LEGAL_REPRESENTATION,
-               text: "Request for legal representation approved"      
+               text: "Request for legal representation approved"
             },
             {  value: HearingOutcomeAdjournReason.RO_ATTEND,
-               text: "Adjourned so that reporting officer can attend"      
+               text: "Adjourned so that reporting officer can attend"
             },
             {  value: HearingOutcomeAdjournReason.HELP,
-               text: "Prisoner needs help, such as an interpreter or disability aid"      
+               text: "Prisoner needs help, such as an interpreter or disability aid"
             },
             {  value: HearingOutcomeAdjournReason.UNFIT,
-               text: "Prisoner unfit to proceed"      
+               text: "Prisoner unfit to proceed"
             },
             {  value: HearingOutcomeAdjournReason.WITNESS,
-               text: "Request for witness approved"      
+               text: "Request for witness approved"
             },
             {  value: HearingOutcomeAdjournReason.WITNESS_SUPPORT,
-               text: "Request for witness to support mitigation"      
+               text: "Request for witness to support mitigation"
             },
             {  value: HearingOutcomeAdjournReason.MCKENZIE,
-               text: "Request for McKenzie friend approved"      
+               text: "Request for McKenzie friend approved"
             },
             {  value: HearingOutcomeAdjournReason.EVIDENCE,
-               text: "Further evidence needed"      
+               text: "Further evidence needed"
             },
             {  value: HearingOutcomeAdjournReason.INVESTIGATION,
-               text: "Further investigation needed"      
+               text: "Further investigation needed"
             },
             {  value: HearingOutcomeAdjournReason.OTHER,
-               text: "Other reason"      
+               text: "Other reason"
             }
          ] | toSelect('value', 'text', adjournReason),
         classes: '',
@@ -129,7 +129,7 @@
       text: "Guilty",
       checked: adjournPlea == 'GUILTY'
     }
-    ] }) 
+    ] })
    }}
 
     <div class="flex-container flex-center">

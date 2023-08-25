@@ -21,9 +21,7 @@
 {% set title = "Incident details" %}
 
 {% block pageTitle %}
-  {{
-        title
-    }}
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
@@ -35,12 +33,12 @@
 {% block content %}
 
   {% if errors | length %}
-    {{    
+    {{
       govukErrorSummary({
           titleText: "There is a problem",
           errorList: errors,
           attributes: { "data-qa": "error-summary" }
-      }) 
+      })
     }}
   {% endif %}
 
@@ -54,17 +52,17 @@
 
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-      <input 
+      <input
         type="hidden"
         name="_csrf"
         value="{{csrfToken }}"
 />
 
       {% if originalReporterUsername != null %}
-        <input    
-          type="hidden" 
-          name="originalReporterUsername" 
-          value="{{originalReporterUsername }}" 
+        <input
+          type="hidden"
+          name="originalReporterUsername"
+          value="{{originalReporterUsername }}"
           id="originalReporterUsername"
 />
       {% endif %}
@@ -154,7 +152,7 @@
             preventDoubleClick: true,
             classes: "govuk-button--submit govuk-!-margin-right-3",
             attributes: { "data-qa": "incident-details-submit" }
-        }) 
+        })
         }}
 
       {% if exitButtonHref %}
@@ -165,7 +163,7 @@
               href: exitButtonHref,
               classes: "govuk-button--secondary",
               attributes: { "data-qa": "incident-details-exit" }
-          }) 
+          })
         }}
       {% endif %}
 

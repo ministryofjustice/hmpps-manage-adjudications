@@ -7,7 +7,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% set title = "What is the reason for not proceeding?" %}
 {% block pageTitle %}
-    {{ title }}
+    {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
     {{ breadcrumb() }}
@@ -36,31 +36,31 @@
                },
               items: [
                 {  value: NotProceedReason.ANOTHER_WAY,
-                  text: "Resolved in another way"      
+                  text: "Resolved in another way"
                 },
                 {  value: NotProceedReason.RELEASED,
-                  text: "Prisoner released"      
+                  text: "Prisoner released"
                 },
                 {  value: NotProceedReason.UNFIT,
-                  text: "Prisoner mentally or physically unfit to attend"      
+                  text: "Prisoner mentally or physically unfit to attend"
                 },
                 {  value: NotProceedReason.FLAWED,
-                  text: "Flawed notice of report"      
+                  text: "Flawed notice of report"
                 },
                 {  value: NotProceedReason.EXPIRED_NOTICE,
-                  text: "Notice of report issued more than 48 hours after discovery"      
+                  text: "Notice of report issued more than 48 hours after discovery"
                 },
                 {  value: NotProceedReason.EXPIRED_HEARING,
-                  text: "Hearing open outside timeframe"      
+                  text: "Hearing open outside timeframe"
                 },
                 {  value: NotProceedReason.NOT_FAIR,
-                  text: "Not fair to continue"      
+                  text: "Not fair to continue"
                 },
                 {  value: NotProceedReason.WITNESS_NOT_ATTEND,
-                  text: "Witness unable to attend"      
+                  text: "Witness unable to attend"
                 },
                 {  value: NotProceedReason.OTHER,
-                  text: "Other"      
+                  text: "Other"
                 }
               ] | toSelect('value', 'text', notProceedReason),
               classes: '',
