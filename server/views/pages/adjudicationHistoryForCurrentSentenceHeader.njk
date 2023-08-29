@@ -1,0 +1,38 @@
+<html>
+<head>
+    <style>
+        body {
+            -webkit-print-color-adjust: exact;
+            font-family: arial;
+        }
+        h1 {
+            font-size: 18px;
+        }
+        h2 {
+            font-size: 10px;
+            font-weight: normal;
+        }
+        .adjudication-pdf-header {
+            background-color: #d8d8d8;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left:30px;
+            padding-right: 30px;
+        }
+        .adjudication-pdf-header-bold {
+            font-weight: bold;
+        }
+        .adjudication-pdf-header-normal {
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class='adjudication-pdf-header'>
+        <h1>Adjudication history for current sentence</h1>
+        <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> <span class="adjudication-pdf-header-normal">{{ chargeNumber }}</span></h2>
+    </div>
+</body>
+</html>

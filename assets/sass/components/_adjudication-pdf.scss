@@ -20,12 +20,35 @@ div.adjudication-pdf {
   width: 30px;
 }
 
+.adjudication-pdf-input__small-square {
+  height: 15px;
+  width: 15px;
+}
+
 .adjudication-pdf-input-issuing-officer {
   height: 30px;
   width: 50%;
 }
 .adjudication-pdf-prisoner-statement {
   height: 400px;
+  width: 100%;
+}
+
+.adjudication-pdf-brief-offence-details {
+  height: 150px;
+  width: 100%;
+}
+.adjudication-pdf-brief-offence-details-small {
+  height: 150px;
+  width: 100%;
+}
+
+.adjudication-pdf-punishment-given {
+  height: 100px;
+  width: 100%;
+}
+.adjudication-pdf-punishment-given-small {
+  height: 100px;
   width: 100%;
 }
 
