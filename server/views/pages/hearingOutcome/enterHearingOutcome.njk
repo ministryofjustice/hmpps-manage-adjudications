@@ -7,6 +7,55 @@
 
 {% set title = 'Enter the hearing outcome' %}
 
+{% if adjudicatorType == "GOV_ADULT" or adjudicatorType == "GOV_YOI" %}
+  {% set items = [
+    {
+      value: HearingOutcomeCode.COMPLETE,
+      text: "Hearing complete - add adjudication finding",
+      checked: hearingOutcome === "COMPLETE"
+    },
+    {
+      value: HearingOutcomeCode.REFER_POLICE,
+      text: "Refer this case to the police",
+      checked: hearingOutcome === "REFER_POLICE"
+    },
+    {
+      value: HearingOutcomeCode.REFER_INAD,
+      text: "Refer this case to the independent adjudicator",
+      checked: hearingOutcome === "REFER_INAD"
+    },
+    {
+      value: HearingOutcomeCode.ADJOURN,
+      text: "Adjourn the hearing for another reason",
+      checked: hearingOutcome === "ADJOURN"
+    }
+  ]%}
+{% else %}
+  {% set items = [
+        {
+          value: HearingOutcomeCode.COMPLETE,
+          text: "Hearing complete - add adjudication finding",
+          checked: hearingOutcome === "COMPLETE"
+        },
+        {
+          value: HearingOutcomeCode.REFER_POLICE,
+          text: "Refer this case to the police",
+          checked: hearingOutcome === "REFER_POLICE"
+        },
+
+                {
+          value: HearingOutcomeCode.REFER_GOV,
+          text: "Refer this case to the governor",
+          checked: hearingOutcome === "REFER_GOV"
+        },
+        {
+          value: HearingOutcomeCode.ADJOURN,
+          text: "Adjourn the hearing for another reason",
+          checked: hearingOutcome === "ADJOURN"
+        }
+    ]%}
+{% endif %}
+
 {% block pageTitle %}
   {{ title }}
 {% endblock %}
@@ -42,28 +91,7 @@
           text: "What is the next step after this hearing?"
         }
       },
-      items: [
-        {
-          value: HearingOutcomeCode.COMPLETE,
-          text: "Hearing complete - add adjudication finding",
-          checked: hearingOutcome === "COMPLETE"
-        },
-        {
-          value: HearingOutcomeCode.REFER_POLICE,
-          text: "Refer this case to the police",
-          checked: hearingOutcome === "REFER_POLICE"
-        },
-        {
-          value: HearingOutcomeCode.REFER_INAD,
-          text: "Refer this case to the independent adjudicator",
-          checked: hearingOutcome === "REFER_INAD"
-        },
-        {
-          value: HearingOutcomeCode.ADJOURN,
-          text: "Adjourn the hearing for another reason",
-          checked: hearingOutcome === "ADJOURN"
-        }
-      ]
+      items: items
     }) }}
 
     <div class="flex-container flex-center">
@@ -74,7 +102,9 @@
         classes: "govuk-button--submit govuk-!-margin-right-3",
         attributes: { "data-qa": "hearing-outcome-submit" }
       }) }}
-      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="hearing-outcome-cancel">Cancel</a></p>
+      <p class="govuk-body govuk-!-margin-top-1">
+        <a href="{{ cancelHref }}" class="govuk-link" data-qa="hearing-outcome-cancel">Cancel</a>
+      </p>
     </div>
 
   </form>
