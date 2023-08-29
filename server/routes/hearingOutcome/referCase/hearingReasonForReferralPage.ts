@@ -130,7 +130,6 @@ export default class HearingReasonForReferralPage {
         if (!this.validDataFromEnterHearingOutcomePage(hearingOutcome as HearingOutcomeCode, adjudicator as string)) {
           return res.redirect(adjudicationUrls.enterHearingOutcome.urls.start(chargeNumber))
         }
-
         await this.hearingsService.createReferral(
           chargeNumber,
           hearingOutcome as HearingOutcomeCode,

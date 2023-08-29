@@ -161,11 +161,21 @@ export default class HearingsService {
       ...(adjudicator && { adjudicator }),
       details: referralReason,
     }
-    const status =
-      hearingOutcome === HearingOutcomeCode.REFER_INAD
-        ? ReportedAdjudicationStatus.REFER_INAD
-        : ReportedAdjudicationStatus.REFER_POLICE
+    const status = this.getStatusFromHearingOutcomeCode(hearingOutcome)
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(chargeNumber, status, data)
+  }
+
+  getStatusFromHearingOutcomeCode = (hearingOutcomeCode: HearingOutcomeCode) => {
+    switch (hearingOutcomeCode) {
+      case HearingOutcomeCode.REFER_INAD:
+        return ReportedAdjudicationStatus.REFER_INAD
+      case HearingOutcomeCode.REFER_POLICE:
+        return ReportedAdjudicationStatus.REFER_POLICE
+      case HearingOutcomeCode.REFER_GOV:
+        return ReportedAdjudicationStatus.REFER_GOV
+      default:
+        return null
+    }
   }
 
   async editChargeProvedOutcome(
