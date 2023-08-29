@@ -138,10 +138,10 @@ export enum ReportedAdjudicationStatus {
   REFER_POLICE = 'REFER_POLICE',
   PROSECUTION = 'PROSECUTION',
   REFER_INAD = 'REFER_INAD',
+  REFER_GOV = 'REFER_GOV',
   CHARGE_PROVED = 'CHARGE_PROVED',
   QUASHED = 'QUASHED',
   ACCEPTED = 'ACCEPTED',
-  REFER_GOV = 'REFER_GOV',
 }
 
 export const allStatuses = [
@@ -156,6 +156,7 @@ export const allStatuses = [
   ReportedAdjudicationStatus.REFER_POLICE,
   ReportedAdjudicationStatus.REFER_INAD,
   ReportedAdjudicationStatus.CHARGE_PROVED,
+  ReportedAdjudicationStatus.REFER_GOV,
   ReportedAdjudicationStatus.QUASHED,
   ReportedAdjudicationStatus.PROSECUTION,
 ]

@@ -15,9 +15,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -45,9 +45,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: true },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: true },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: true },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: true },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: true },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: true },
-      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: true },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -86,9 +86,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -112,9 +112,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -138,9 +138,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',

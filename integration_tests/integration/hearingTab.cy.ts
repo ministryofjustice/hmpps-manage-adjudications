@@ -1891,7 +1891,7 @@ context('Hearing details page', () => {
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.changeLink().should('not.exist')
     })
-    it.only('Refer to gov, next step hearing', () => {
+    it('Refer to gov, next step hearing', () => {
       cy.visit(adjudicationUrls.hearingDetails.urls.review('1525967'))
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage
