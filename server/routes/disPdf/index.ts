@@ -2,11 +2,11 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import AdjudicationPdf from './dis12Pdf'
+import Dis12Pdf from './dis12Pdf'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
-export default function adjudicationPdfRoutes({
+export default function disPdfRoutes({
   reportedAdjudicationsService,
   decisionTreeService,
 }: {
@@ -15,11 +15,11 @@ export default function adjudicationPdfRoutes({
 }): Router {
   const router = express.Router()
 
-  const adjudicationPdf = new AdjudicationPdf(reportedAdjudicationsService, decisionTreeService)
+  const dis12Pdf = new Dis12Pdf(reportedAdjudicationsService, decisionTreeService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.printPdf.matchers.start, adjudicationPdf.renderPdf)
+  get(adjudicationUrls.printPdf.matchers.dis12, dis12Pdf.renderPdf)
 
   return router
 }

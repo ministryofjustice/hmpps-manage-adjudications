@@ -93,7 +93,7 @@ context('Print a copy of this report', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.printReport.urls.start('1524242'))
+    cy.visit(adjudicationUrls.printReport.urls.dis12('1524242'))
     Page.verifyOnPage(PrintReport)
     cy.contains('John Smith must be given a copy of this report by 10:00 on Tuesday, 8 December 2020.')
     cy.contains('John Smith’s preferred language is:')
@@ -105,7 +105,7 @@ context('Print a copy of this report', () => {
 
   it('should redirect the user to the referrer on finish', () => {
     cy.visit(
-      `${adjudicationUrls.printReport.urls.start('1524242')}?referrer=${adjudicationUrls.prisonerReport.urls.report(
+      `${adjudicationUrls.printReport.urls.dis12('1524242')}?referrer=${adjudicationUrls.prisonerReport.urls.report(
         1524242
       )}`
     )

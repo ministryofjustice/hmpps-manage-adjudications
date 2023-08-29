@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
 
-export default class PrintReportRoutes {
+export default class PrintDis12ReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
@@ -12,7 +12,7 @@ export default class PrintReportRoutes {
     const { user } = res.locals
 
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
-    return res.render(`pages/printReport`, {
+    return res.render(`pages/printDis12Report`, {
       chargeNumber,
       expirationTime: formatTimestampToTime(adjudicationDetails.reportExpirationDateTime),
       expirationDay: formatTimestampToDate(adjudicationDetails.reportExpirationDateTime, 'dddd, D MMMM yyyy'),

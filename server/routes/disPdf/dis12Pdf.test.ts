@@ -6,7 +6,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { AnswerType as Type } from '../../offenceCodeDecisions/Answer'
 import { OffenceRule } from '../../data/DraftAdjudicationResult'
-import AdjudicationPdf from './dis12Pdf'
+import Dis12Pdf from './dis12Pdf'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import { answer, question } from '../../offenceCodeDecisions/Decisions'
@@ -97,7 +97,7 @@ describe('GET /all-completed-reports', () => {
     const req: Request = {
       params: { chargeNumber: reportedAdjudication.chargeNumber },
     } as unknown as Request
-    await new AdjudicationPdf(reportedAdjudicationsService, decisionTreeService).renderPdf(req, res)
+    await new Dis12Pdf(reportedAdjudicationsService, decisionTreeService).renderPdf(req, res)
     expect(res.renderPdf).toHaveBeenCalled()
     expect(res.renderPdf).toHaveBeenCalledWith(
       'pages/noticeOfBeingPlacedOnReport',

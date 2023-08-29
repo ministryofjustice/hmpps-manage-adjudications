@@ -44,7 +44,7 @@ import confirmDISFormsIssuedRoutes from './confirmDISFormsIssued'
 import addDateAndTimeOfIssueRoutes from './addDateAndTimeOfIssue'
 
 import { Services } from '../services'
-import adjudicationPdfRoutes from './dis12Pdf'
+import disPdfRoutes from './disPdf'
 import adjudicationUrls from '../utils/urlGenerator'
 import printCompletedDISFormsRoutes from './printCompletedDIS12Forms'
 import enterHearingOutcomeRoutes from './hearingOutcome/enterHearingOutcome'
@@ -144,10 +144,7 @@ export default function routes(
   router.use(adjudicationUrls.continueReport.root, continueReportSelectRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.deleteReport.root, deleteReportRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.printReport.root, printReportRoutes({ reportedAdjudicationsService }))
-  router.use(
-    adjudicationUrls.printPdf.root,
-    adjudicationPdfRoutes({ reportedAdjudicationsService, decisionTreeService })
-  )
+  router.use(adjudicationUrls.printPdf.root, disPdfRoutes({ reportedAdjudicationsService, decisionTreeService }))
   router.use(
     adjudicationUrls.prisonerReport.root,
     adjudicationReportRoutes({
