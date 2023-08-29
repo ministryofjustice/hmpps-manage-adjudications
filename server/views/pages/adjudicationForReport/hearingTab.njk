@@ -41,7 +41,7 @@
           {% set hearingNumber = hearingNumber + 1 %}
           {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportNo, changeLinksAvailable, reviewStatus) }}
           {% if item.outcome and item.hearing.outcome.code != HearingOutcomeCode.COMPLETE %}
-            {{ outcomeTable(item, readOnly, reportNo, true, changeLinksAvailable) }}
+            {{ outcomeTable(item, readOnly, reportNo, true, changeLinksAvailable, history[loop.index0+1]) }}
           {% endif %}
         {% else %}
           {# Tables not attached to a hearing #}

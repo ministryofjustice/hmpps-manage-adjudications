@@ -214,6 +214,13 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
+  async createGovReferral(chargeNumber: string, outcomeDetails: OutcomeInfo): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${chargeNumber}/outcome/refer-gov`,
+      data: { details: outcomeDetails.details },
+    })
+  }
+
   async removeNotProceedOrQuashed(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${chargeNumber}/outcome`,

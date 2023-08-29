@@ -15,6 +15,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
     ]
@@ -44,6 +45,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: true },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: true },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: true },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: true },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: true },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: true },
     ]
@@ -64,6 +66,7 @@ describe('reportedAdjudicationStatuses', () => {
         ReportedAdjudicationStatus.QUASHED,
         ReportedAdjudicationStatus.REFER_INAD,
         ReportedAdjudicationStatus.REFER_POLICE,
+        ReportedAdjudicationStatus.REFER_GOV,
       ],
       transfersOnly: false,
     }
@@ -83,6 +86,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
     ]
@@ -108,6 +112,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
     ]
@@ -133,6 +138,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_POLICE, text: 'Referred to police', checked: false },
       { value: ReportedAdjudicationStatus.PROSECUTION, text: 'Police prosecution', checked: false },
       { value: ReportedAdjudicationStatus.REFER_INAD, text: 'Referred to IA', checked: false },
+      { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
     ]

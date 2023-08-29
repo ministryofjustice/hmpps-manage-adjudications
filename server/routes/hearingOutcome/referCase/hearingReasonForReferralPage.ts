@@ -20,6 +20,7 @@ type PageData = {
   error?: FormError | FormError[]
   referralReason?: string
   hearingOutcomeCode?: HearingOutcomeCode
+  referGov?: boolean
 }
 
 class PageOptions {
@@ -43,7 +44,7 @@ export default class HearingReasonForReferralPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, referralReason, hearingOutcomeCode } = pageData
+    const { error, referralReason, hearingOutcomeCode, referGov } = pageData
     const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
@@ -51,6 +52,7 @@ export default class HearingReasonForReferralPage {
       errors: error ? [error] : [],
       referralReason,
       hearingOutcomeCode,
+      referGov,
     })
   }
 
@@ -58,7 +60,9 @@ export default class HearingReasonForReferralPage {
     if (
       !hearingOutcome ||
       !adjudicatorName ||
-      ![HearingOutcomeCode.REFER_INAD, HearingOutcomeCode.REFER_POLICE].includes(hearingOutcome)
+      ![HearingOutcomeCode.REFER_INAD, HearingOutcomeCode.REFER_POLICE, HearingOutcomeCode.REFER_GOV].includes(
+        hearingOutcome
+      )
     )
       return false
     return true
@@ -76,7 +80,11 @@ export default class HearingReasonForReferralPage {
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
-        [ReportedAdjudicationStatus.REFER_INAD, ReportedAdjudicationStatus.REFER_POLICE],
+        [
+          ReportedAdjudicationStatus.REFER_INAD,
+          ReportedAdjudicationStatus.REFER_POLICE,
+          ReportedAdjudicationStatus.REFER_GOV,
+        ],
         user
       )) as HearingDetailsHistory
       hearingOutcome = lastOutcomeItem.hearing?.outcome
@@ -84,6 +92,7 @@ export default class HearingReasonForReferralPage {
     return this.renderView(req, res, {
       referralReason: hearingOutcome?.details,
       hearingOutcomeCode: hearingOutcome?.code,
+      referGov: req.query.hearingOutcome === HearingOutcomeCode.REFER_GOV,
     })
   }
 
@@ -101,6 +110,7 @@ export default class HearingReasonForReferralPage {
       return this.renderView(req, res, {
         error,
         referralReason: trimmedReferralReason,
+        referGov: hearingOutcome === HearingOutcomeCode.REFER_GOV,
       })
 
     try {

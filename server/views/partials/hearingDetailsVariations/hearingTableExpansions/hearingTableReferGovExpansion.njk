@@ -1,0 +1,49 @@
+{% if changeLinksAvailableForAdjudicatorAndOutcome %}
+  {% set adjudicatorChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(chargeNumber, hearingId), 
+      text: "Change",
+      visuallyHiddenText: ' name of adjudicator',
+      attributes: {"data-qa": "change-link-hearing-outcome-adjudicator-name" }
+    }
+  ]
+} %}
+  {% set outcomeChangeLink = {
+  items: [
+    {
+      href: adjudicationUrls.enterHearingOutcome.urls.edit(chargeNumber, hearingId), 
+      text: "Change",
+      visuallyHiddenText: ' outcome',
+      attributes: {"data-qa": "change-link-hearing-outcome-outcome" }
+    }
+  ]
+} %}
+{% endif %}
+
+{% set adjudicatorName = hearingDetails.convertedAdjudicator if hearingDetails.oicHearingType.includes('GOV') else  hearingDetails.outcome.adjudicator %}
+
+{% set newRows = [
+  {
+    key: {
+      text: 'Name of adjudicator'
+    },
+    value: {
+      text: adjudicatorName | initialiseName
+    },
+    actions: adjudicatorChangeLink
+  }, {
+    key: {
+      text: 'Outcome'
+    },
+    value: {
+      text: 'Refer this case to the governor'
+    },
+    actions: outcomeChangeLink
+  }
+]
+ %}
+
+{% for individualRow in newRows %}
+  {% set rows = (rows.push(individualRow), rows) %}
+{% endfor %}

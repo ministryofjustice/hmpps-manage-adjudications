@@ -209,6 +209,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         return 'Police referral'
       case OutcomeCode.REFER_INAD:
         return 'Independent adjudicator referral'
+      case OutcomeCode.REFER_GOV:
+        return 'Governor referral'
       case OutcomeCode.QUASHED:
         return 'Guilty finding quashed'
       default:

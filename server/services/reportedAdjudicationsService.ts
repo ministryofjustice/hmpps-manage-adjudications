@@ -49,6 +49,7 @@ import {
   OutcomeCode,
   OutcomeDetailsHistory,
   OutcomeHistory,
+  ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
@@ -767,6 +768,25 @@ export default class ReportedAdjudicationsService {
           qa: 'continue-to-next-step-button',
         }
       }
+      if (
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_GOV &&
+        !finalHistoryItem.outcome.referralOutcome
+      ) {
+        return {
+          href: adjudicationUrls.nextStepsGov.urls.start(chargeNumber),
+          text: 'Continue to next step',
+          name: 'continueToNextStepButton',
+          qa: 'continue-to-next-step-button',
+        }
+      }
+      if (finalHistoryItem.outcome.referralOutcome?.code === ReferralOutcomeCode.REFER_GOV) {
+        return {
+          href: adjudicationUrls.nextStepsGov.urls.start(chargeNumber),
+          text: 'Continue to next step',
+          name: 'continueToNextStepButton',
+          qa: 'continue-to-next-step-button',
+        }
+      }
     }
     // No primary button
     return null
@@ -794,7 +814,8 @@ export default class ReportedAdjudicationsService {
       }
       if (
         finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_POLICE ||
-        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_INAD ||
+        finalHistoryItem.outcome.outcome.code === OutcomeCode.REFER_GOV
       ) {
         return {
           text: 'Remove this referral',

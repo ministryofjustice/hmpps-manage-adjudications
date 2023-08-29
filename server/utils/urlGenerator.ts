@@ -468,6 +468,17 @@ const adjudicationUrls = {
       edit: (chargeNumber: string) => `${adjudicationUrls.hearingReasonForReferral.root}/${chargeNumber}/edit`,
     },
   },
+  govReasonForReferral: {
+    root: '/reason-for-gov-referral',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.govReasonForReferral.root}/${chargeNumber}`,
+      edit: (chargeNumber: string) => `${adjudicationUrls.govReasonForReferral.root}/${chargeNumber}/edit`,
+    },
+  },
   reasonForReferral: {
     root: '/reason-for-police-referral',
     matchers: {
@@ -517,7 +528,15 @@ const adjudicationUrls = {
       start: (chargeNumber: string) => `${adjudicationUrls.nextStepsInad.root}/${chargeNumber}`,
     },
   },
-
+  nextStepsGov: {
+    root: '/next-steps/gov',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.nextStepsGov.root}/${chargeNumber}`,
+    },
+  },
   moneyRecoveredForDamages: {
     root: '/money-recovered',
     matchers: {

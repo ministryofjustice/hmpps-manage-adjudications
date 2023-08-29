@@ -85,6 +85,9 @@
     {% if hearingDetails.outcome.code === HearingOutcomeCode.REFER_INAD %}
       {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableReferInAdExpansion.njk' %}
     {% endif %}
+    {% if hearingDetails.outcome.code === HearingOutcomeCode.REFER_GOV %}
+      {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableReferGovExpansion.njk' %}
+    {% endif %}
     {% if hearingDetails.outcome.code === HearingOutcomeCode.ADJOURN %}
       {% include '../partials/hearingDetailsVariations/hearingTableExpansions/hearingTableAdjourn.njk' %}
     {% endif %}

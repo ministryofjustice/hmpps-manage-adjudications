@@ -1,11 +1,12 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
+{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false, nextOutcomeItem = null) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
 
-  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome or readOnly else changeLinksAvailable %}
-  
+  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome or readOnly else 
+    changeLinksAvailable %}
+
   {% if reasonForReferralChangeLinkAvailable %}
     {% set reasonForReferralChangeLink = {
       items: [
@@ -32,9 +33,18 @@
   ] %}
 
   {% if referralDetails %}
-    {% set nextStep = 'Not proceed with the charge' if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED else 
-      'Schedule a hearing' %}
     {% set notProceeding = referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %}
+    {% set referToGov = referralDetails.code == ReferralOutcomeCode.REFER_GOV %}
+    {% set scheduleHearing = referralDetails.code == ReferralOutcomeCode.SCHEDULE_HEARING %}
+
+    {% if notProceeding %}
+      {% set nextStep = "Not proceed with the charge" %}
+    {% elif scheduleHearing %}
+      {% set nextStep = "Schedule a hearing" %}
+    {% else %}
+      {% set nextStep = "Refer this case to a governor" %}
+    {% endif %}
+
     {% set rows = (rows.push({
       key: {
         text: 'Outcome'
@@ -60,4 +70,48 @@
       attributes: attributes
     }) }}
   {% endif %}
+
+  {# if the INAD has referred to gov, we need an extra table which shows the reason why, and what the next step is  #}
+  {% if nextOutcomeItem %}
+  {% set govNextStepChosen = nextOutcomeItem.outcome.code %}
+  {% set nextStepNotProceeding = govNextStepChosen == OutcomeCode.NOT_PROCEED %}
+  {% set nextStepHearing = govNextStepChosen == OutcomeCode.SCHEDULE_HEARING %}
+
+    {% if nextStepNotProceeding %}
+      {% set nextStepText = "Not proceed with the charge" %}
+    {% elif nextStepHearing %}
+      {% set nextStepText = "Schedule a hearing" %}
+    {% endif %}
+
+
+  {% set govReferralRows = [
+    {
+      key: {
+        text: 'What is the reason for not having an independent adjudicator hearing?'
+      },
+      value: {
+        text: referralDetails.details
+      },
+      actions: reasonForReferralChangeLink
+    }, {
+      key: {
+        text: 'Outcome'
+      },
+      value: {
+        text: nextStepText
+      }
+    }
+  ] %}
+
+  <h2 class="govuk-heading-m" data-qa="outcome-table-title">Governor referral</h2>
+  {% if govReferralRows.length %}
+    {{ govukSummaryList({
+      rows: govReferralRows,
+      attributes: {
+        "data-qa": "gov-referral-table"
+      }
+    }) }}
+  {% endif %}
+  {% endif %}
+
 {% endmacro %}

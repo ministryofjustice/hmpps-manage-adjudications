@@ -2,8 +2,9 @@
 {% from '../../macros/outcomeSummaries/outcomePoliceReferralSummary.njk' import outcomePoliceReferralSummary %}
 {% from '../../macros/outcomeSummaries/outcomeInAdReferralSummary.njk' import outcomeInAdReferralSummary %}
 {% from '../../macros/outcomeSummaries/outcomeQuashedSummary.njk' import outcomeQuashedSummary %}
+{% from '../../macros/outcomeSummaries/outcomeGovReferralSummary.njk' import outcomeGovReferralSummary %}
 
-{% macro outcomeTable(outcomeItem, readOnly, reportNo, attachedToHearing, changeLinksAvailable) %}
+{% macro outcomeTable(outcomeItem, readOnly, reportNo, attachedToHearing, changeLinksAvailable, nextOutcomeItem = null) %}
   {% set outcomeCode = outcomeItem.outcome.code %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
@@ -13,7 +14,9 @@
         {% elif outcomeCode === OutcomeCode.REFER_POLICE %}
           {{ outcomePoliceReferralSummary(reportNo, outcomeItem, { "data-qa": "police-referral-table" }, changeLinksAvailable, attachedToHearing, readOnly) }}
         {% elif outcomeCode === OutcomeCode.REFER_INAD %}
-          {{ outcomeInAdReferralSummary(reportNo, outcomeItem, { "data-qa": "inad-referral-table" }, changeLinksAvailable, readOnly) }}
+          {{ outcomeInAdReferralSummary(reportNo, outcomeItem, { "data-qa": "inad-referral-table" }, changeLinksAvailable, readOnly, nextOutcomeItem) }}
+        {% elif outcomeCode === OutcomeCode.REFER_GOV %}
+          {{ outcomeGovReferralSummary(reportNo, outcomeItem, { "data-qa": "gov-referral-table" }, changeLinksAvailable, readOnly) }}
         {% elif outcomeCode === OutcomeCode.QUASHED %}
           {{ outcomeQuashedSummary(reportNo, outcomeItem.outcome, { "data-qa": "quashed-table" }, changeLinksAvailable, readOnly) }}
         {% endif %}

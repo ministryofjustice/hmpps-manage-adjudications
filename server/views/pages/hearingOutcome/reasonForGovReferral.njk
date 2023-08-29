@@ -4,7 +4,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
-{% set title = 'What is the reason for not having an independent adjudicator hearing?' if referGov else 'What is the reason for the referral?' %}
+{% set title = 'What is the reason for not having an independent adjudicator hearing?' %}
 
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
@@ -22,15 +22,11 @@
         attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-  <h1 class="govuk-heading-l {% if referGov %}two-thirds govuk-!-padding-left-0{% endif %}">{{ title }}</h1>
+  <h1 class="govuk-heading-l two-thirds govuk-!-padding-left-0">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-    <input id="hearingOutcomeCode" type="hidden" name="hearingOutcomeCode" value="{{ hearingOutcomeCode }}" />
 
     {{ govukCharacterCount({
-      label: {
-        text: "Reason"
-      },
       value: referralReason,
       classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
       rows: "6",
@@ -49,9 +45,9 @@
         type: "submit",
         preventDoubleClick: true,
         classes: "govuk-button--submit govuk-!-margin-right-3",
-        attributes: { "data-qa": "reason-for-referral-submit" }
+        attributes: { "data-qa": "reason-for-gov-referral-submit" }
       }) }}
-      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-referral-cancel">Cancel</a></p>
+      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-gov-referral-cancel">Cancel</a></p>
     </div>
 
   </form>

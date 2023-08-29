@@ -3,12 +3,13 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../../@types/template'
 
 import UserService from '../../../../services/userService'
+import { HearingDetailsHistory } from '../../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
-import validateForm from '../hearingReasonForReferralValidation'
-import OutcomesService from '../../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import { ReportedAdjudicationStatus } from '../../../../data/ReportedAdjudicationResult'
+import validateForm from './govReasonForReferralValidation'
+import OutcomesService from '../../../../services/outcomesService'
 
 export enum PageRequestType {
   CREATION,
@@ -28,14 +29,14 @@ class PageOptions {
   }
 }
 
-export default class ReasonForReferralPage {
+export default class GovReasonForReferralPage {
   pageOptions: PageOptions
 
   constructor(
     pageType: PageRequestType,
-    private readonly outcomesService: OutcomesService,
     private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly outcomesService: OutcomesService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -43,8 +44,7 @@ export default class ReasonForReferralPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, referralReason } = pageData
     const { chargeNumber } = req.params
-
-    return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
+    return res.render(`pages/hearingOutcome/reasonForGovReferral.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       referralReason,
@@ -58,19 +58,17 @@ export default class ReasonForReferralPage {
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
-
-    let refOutcome = null
+    let referralOutcome = null
     if (this.pageOptions.isEdit()) {
-      const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
+      const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
-        [ReportedAdjudicationStatus.REFER_POLICE],
+        [ReportedAdjudicationStatus.REFER_GOV],
         user
-      )
-      refOutcome = lastOutcomeItem.outcome?.outcome
+      )) as HearingDetailsHistory
+      referralOutcome = lastOutcomeItem.hearing?.outcome
     }
-
     return this.renderView(req, res, {
-      referralReason: refOutcome?.details,
+      referralReason: referralOutcome?.details,
     })
   }
 
@@ -78,19 +76,18 @@ export default class ReasonForReferralPage {
     const { user } = res.locals
     const { chargeNumber } = req.params
     const { referralReason } = req.body
-
-    const error = validateForm({ referralReason })
+    const trimmedReferralReason = referralReason ? referralReason.trim() : null
+    const error = validateForm({ referralReason: trimmedReferralReason })
     if (error)
       return this.renderView(req, res, {
         error,
-        referralReason,
+        referralReason: trimmedReferralReason,
       })
-
     try {
       if (this.pageOptions.isEdit()) {
-        await this.outcomesService.editReferralOutcome(chargeNumber, referralReason, user)
+        await this.outcomesService.editReferralOutcome(chargeNumber, trimmedReferralReason, user)
       } else {
-        await this.outcomesService.createPoliceReferral(chargeNumber, referralReason, user)
+        await this.outcomesService.createGovReferral(chargeNumber, trimmedReferralReason, user)
       }
       return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(chargeNumber))
     } catch (postError) {

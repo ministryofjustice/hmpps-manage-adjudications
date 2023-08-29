@@ -22,7 +22,7 @@
                     name: 'fromDate[date]',
                     date: filter.fromDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
-                    classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
+                    classes: 'date-of-discovery-input' + (' govuk-input--error' if fromDateError else '')
                 }) }}
 
 
@@ -32,7 +32,7 @@
                     name: 'toDate[date]',
                     date: filter.toDate,
                     attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
-                    classes: 'govuk-input--width-10 govuk-!-margin-left-3'
+                    classes: 'govuk-!-margin-left-3 date-of-discovery-input'
                 }) }}
 
               <div id="statusFilterBox">
