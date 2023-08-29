@@ -59,7 +59,7 @@ const getVariablesForPageType = (
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
-      printHref: `${adjudicationUrls.printReport.urls.start(
+      printHref: `${adjudicationUrls.printReport.urls.dis12(
         chargeNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
@@ -100,7 +100,7 @@ const getVariablesForPageType = (
     }
   }
   return {
-    printHref: `${adjudicationUrls.printReport.urls.start(
+    printHref: `${adjudicationUrls.printReport.urls.dis12(
       chargeNumber
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(

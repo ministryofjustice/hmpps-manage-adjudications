@@ -5,7 +5,7 @@ import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnRep
 import config from '../../config'
 import DecisionTreeService from '../../services/decisionTreeService'
 
-export default class AdjudicationPdf {
+export default class Dis12Pdf {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly decisionTreeService: DecisionTreeService

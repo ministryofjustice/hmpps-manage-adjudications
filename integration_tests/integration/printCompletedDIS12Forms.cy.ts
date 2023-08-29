@@ -76,7 +76,7 @@ context('Print completed DIS forms', () => {
     printCompletedDISFormsPage.printDISFormsLink('12345').should('exist')
     printCompletedDISFormsPage.printDISFormsLink('12345').click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.printReport.urls.start('12345'))
+      expect(loc.pathname).to.eq(adjudicationUrls.printReport.urls.dis12('12345'))
       expect(loc.search).to.eq(`?referrer=${adjudicationUrls.printCompletedDisForms.urls.start()}`)
     })
   })

@@ -299,19 +299,19 @@ const adjudicationUrls = {
   printReport: {
     root: '/print-report',
     matchers: {
-      start: '/:chargeNumber',
+      dis12: '/:chargeNumber/dis12',
     },
     urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.printReport.root}/${chargeNumber}`,
+      dis12: (chargeNumber: string) => `${adjudicationUrls.printReport.root}/${chargeNumber}/dis12`,
     },
   },
   printPdf: {
     root: '/print',
     matchers: {
-      start: '/:chargeNumber/pdf',
+      dis12: '/:chargeNumber/dis12/pdf',
     },
     urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/pdf`,
+      dis12: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis12/pdf`,
     },
   },
   prisonerReport: {
