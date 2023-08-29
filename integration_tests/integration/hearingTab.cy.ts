@@ -290,7 +290,109 @@ const historyWithCompleteAndProvedFinding = [
       }),
     }),
     outcome: {
-      outcome: testData.outcome({ code: OutcomeCode.CHARGE_PROVED, amount: 0, caution: true, details: null }),
+      outcome: testData.outcome({ code: OutcomeCode.CHARGE_PROVED, details: null }),
+    },
+  },
+]
+
+const historyWithInAdReferringToGovThenHearing = [
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.REFER_INAD,
+        adjudicator: 'JRED_GEN',
+        optionalItems: {
+          details: 'Some details about the independent adjudicator referral',
+        },
+      }),
+    }),
+    outcome: {
+      outcome: testData.outcome({
+        code: OutcomeCode.REFER_INAD,
+        details: 'Some details about the independent adjudicator referral',
+      }),
+      referralOutcome: testData.referralOutcome({
+        code: ReferralOutcomeCode.REFER_GOV,
+        details: 'reason for referring to the governor',
+      }),
+    },
+  },
+  {
+    outcome: {
+      outcome: testData.outcome({
+        code: OutcomeCode.SCHEDULE_HEARING,
+      }),
+    },
+  },
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+    }),
+  },
+]
+
+const historyWithInAdReferringToGovThenNotProceed = [
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.REFER_INAD,
+        adjudicator: 'JRED_GEN',
+        optionalItems: {
+          details: 'Some details about the independent adjudicator referral',
+        },
+      }),
+    }),
+    outcome: {
+      outcome: testData.outcome({
+        code: OutcomeCode.REFER_INAD,
+        details: 'Some details about the independent adjudicator referral',
+      }),
+      referralOutcome: testData.referralOutcome({
+        code: ReferralOutcomeCode.REFER_GOV,
+        details: 'reason for referring to the governor',
+      }),
+    },
+  },
+  {
+    outcome: {
+      outcome: testData.outcome({
+        code: OutcomeCode.NOT_PROCEED,
+        details: 'Too late notice',
+        reason: NotProceedReason.EXPIRED_NOTICE,
+      }),
+    },
+  },
+]
+
+const historyWithReferGovHearingOutcome = [
+  {
+    hearing: testData.singleHearing({
+      locationId: 234,
+      dateTimeOfHearing: hearingDateTimeThree,
+      oicHearingType: OicHearingType.INAD_ADULT,
+      outcome: testData.hearingOutcome({
+        code: HearingOutcomeCode.REFER_GOV,
+        adjudicator: 'Jennifer Red',
+        optionalItems: {
+          details: 'Some details about the governor referral',
+        },
+      }),
+    }),
+    outcome: {
+      outcome: testData.outcome({
+        code: OutcomeCode.REFER_GOV,
+        details: 'Needs the big guns',
+      }),
+      referralOutcome: testData.referralOutcome({
+        code: ReferralOutcomeCode.NOT_PROCEED,
+        details: 'Reason for not proceeding',
+        reason: NotProceedReason.FLAWED,
+      }),
     },
   },
 ]
@@ -642,6 +744,39 @@ context('Hearing details page', () => {
           },
         ],
         true
+      ),
+    })
+    // InAd refers to gov, then hearing
+    cy.task('stubGetReportedAdjudication', {
+      id: 1525967,
+      response: reportedAdjudicationResponse(
+        '1525967',
+        ReportedAdjudicationStatus.SCHEDULED,
+        [],
+        historyWithInAdReferringToGovThenHearing,
+        false
+      ),
+    })
+    // InAd refers to gov, then not proceed
+    cy.task('stubGetReportedAdjudication', {
+      id: 1525968,
+      response: reportedAdjudicationResponse(
+        '1525968',
+        ReportedAdjudicationStatus.NOT_PROCEED,
+        [],
+        historyWithInAdReferringToGovThenNotProceed,
+        false
+      ),
+    })
+    // InAd hearing, refer to gov hearing outcome
+    cy.task('stubGetReportedAdjudication', {
+      id: 1525969,
+      response: reportedAdjudicationResponse(
+        '1525969',
+        ReportedAdjudicationStatus.REFER_GOV,
+        [],
+        historyWithReferGovHearingOutcome,
+        false
       ),
     })
     cy.task('stubGetAgency', {
@@ -1755,6 +1890,153 @@ context('Hearing details page', () => {
       hearingTabPage.removeHearingButton().should('not.exist')
       hearingTabPage.enterHearingOutcomeButton().should('not.exist')
       hearingTabPage.changeLink().should('not.exist')
+    })
+    it.only('Refer to gov, next step hearing', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review('1525967'))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+        })
+
+      hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+        })
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Some details about the independent adjudicator referral')
+          expect($summaryData.get(1).innerText).to.contain('Refer this case to a governor')
+        })
+      hearingTabPage.outcomeTableTitle().contains('Governor referral')
+      hearingTabPage
+        .govReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain(
+            'What is the reason for not having an independent adjudicator hearing?'
+          )
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+        })
+      hearingTabPage
+        .govReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('reason for referring to the governor')
+          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+        })
+      hearingTabPage
+        .hearingSummaryTable(2)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(2).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
+          expect($summaryData.get(4).innerText).to.contain('Governor')
+        })
+      hearingTabPage.removeHearingButton().should('exist')
+      hearingTabPage.enterHearingOutcomeButton().should('exist')
+    })
+    it('Refer to gov, next step not proceed', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review('1525968'))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
+        })
+
+      hearingTabPage.outcomeTableTitle().contains('Independent adjudicator referral')
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain('Reason for referral')
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+        })
+      hearingTabPage
+        .inAdReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Some details about the independent adjudicator referral')
+          expect($summaryData.get(1).innerText).to.contain('Refer this case to a governor')
+        })
+      hearingTabPage.outcomeTableTitle().contains('Governor referral')
+      hearingTabPage
+        .govReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain(
+            'What is the reason for not having an independent adjudicator hearing?'
+          )
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+        })
+      hearingTabPage
+        .govReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('reason for referring to the governor')
+          expect($summaryData.get(1).innerText).to.contain('Not proceed')
+        })
+      hearingTabPage
+        .notProceedTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(
+            'Notice of report issued more than 48 hours after incident\n\nToo late notice'
+          )
+        })
+      hearingTabPage.removeOutcomeButton().should('exist')
+    })
+    it('IA Refers to Gov as hearing outcome', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review('1525969'))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage
+        .hearingSummaryTable(1)
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain(hearingDateTimeThreeFormatted)
+          expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
+          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(3).innerText).to.contain('J. Red')
+          expect($summaryData.get(4).innerText).to.contain('Refer this case to the governor')
+        })
+      hearingTabPage.outcomeTableTitle().contains('Governor referral')
+      hearingTabPage
+        .govReferralTable()
+        .find('dt')
+        .then($summaryLabel => {
+          expect($summaryLabel.get(0).innerText).to.contain(
+            'What is the reason for not having an independent adjudicator hearing?'
+          )
+          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+          expect($summaryLabel.get(2).innerText).to.contain('Reason for not proceeding')
+        })
+      hearingTabPage
+        .govReferralTable()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Needs the big guns')
+          expect($summaryData.get(1).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(2).innerText).to.contain('Flawed notice of report\n\nReason for not proceeding')
+        })
+      hearingTabPage.removeReferralButton().should('exist')
     })
   })
   describe('Test scenarios - reporter view', () => {

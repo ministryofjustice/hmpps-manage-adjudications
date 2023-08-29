@@ -107,7 +107,9 @@
   {% if govReferralRows.length %}
     {{ govukSummaryList({
       rows: govReferralRows,
-      attributes: attributes
+      attributes: {
+        "data-qa": "gov-referral-table"
+      }
     }) }}
   {% endif %}
   {% endif %}
