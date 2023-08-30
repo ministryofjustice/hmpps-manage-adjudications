@@ -37,7 +37,7 @@ export default class PleasAndFindingsTabPage {
 
     const chartSettingMap = {}
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate.toString()
+      (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate
     )
 
     chartSettingMap['5a'] = await produceLinesCharts(

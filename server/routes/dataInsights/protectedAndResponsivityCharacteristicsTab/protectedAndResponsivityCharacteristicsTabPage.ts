@@ -59,7 +59,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       source: (row: ChartEntryHorizontalBar) => row.characteristic,
     })
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate.toString()
+      (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate
     )
     const characteristic: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       characteristics,

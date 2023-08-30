@@ -57,7 +57,7 @@ export default class OffenceTypeTabPage {
 
     const chartSettingMap = {}
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate.toString()
+      (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate
     )
 
     chartSettingMap['3a'] = await produceLinesCharts(

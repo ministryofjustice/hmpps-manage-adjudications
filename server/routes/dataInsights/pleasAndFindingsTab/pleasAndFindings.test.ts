@@ -22,7 +22,7 @@ beforeEach(() => {
   )
   chartApiService.getLastModifiedChart.mockResolvedValue(
     testData.chartLastUpdatedResult({
-      chartName: '1a',
+      chartName: '5a',
       lastModifiedDate: '2023-08-24T15:30:00',
     })
   )
