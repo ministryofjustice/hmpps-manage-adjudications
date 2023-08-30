@@ -309,9 +309,11 @@ const adjudicationUrls = {
     root: '/print',
     matchers: {
       dis12: '/:chargeNumber/dis12/pdf',
+      dis5: '/:chargeNumber/dis5/pdf',
     },
     urls: {
       dis12: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis12/pdf`,
+      dis5: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis5/pdf`,
     },
   },
   prisonerReport: {

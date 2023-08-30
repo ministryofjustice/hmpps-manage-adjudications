@@ -20,12 +20,56 @@ div.adjudication-pdf {
   width: 30px;
 }
 
+.adjudication-pdf-input__small-square {
+  height: 15px;
+  width: 15px;
+}
+
+.adjudication-pdf-input-text-box-sixth-width {
+  height: 30px;
+  width: 80px;
+}
+
+.adjudication-pdf-input-text-box-third-width {
+  height: 30px;
+  width: 200px;
+}
+
+.adjudication-pdf-input-text-box-full-width {
+  height: 30px;
+  width: 90%;
+}
+
+.adjudication-pdf-input-text-box-two-lines-full-width {
+  height: 40px;
+  width: 90%;
+}
+
 .adjudication-pdf-input-issuing-officer {
   height: 30px;
   width: 50%;
 }
 .adjudication-pdf-prisoner-statement {
   height: 400px;
+  width: 100%;
+}
+
+.adjudication-pdf-brief-text-entry {
+  height: 80px;
+  width: 100%;
+}
+
+.adjudication-pdf-brief-offence-details-small {
+  height: 130px;
+  width: 100%;
+}
+
+.adjudication-pdf-punishment-given {
+  height: 100px;
+  width: 100%;
+}
+.adjudication-pdf-punishment-given-small {
+  height: 100px;
   width: 100%;
 }
 
@@ -71,3 +115,28 @@ div.adjudication-pdf {
   }
 }
 
+.adjudication-pdf-section-sentence-details {
+  display: flex;
+
+  &__item {
+    width: 50%;
+    padding-right: govuk-spacing(6);
+  }
+}
+
+.adjudication-pdf-section-sentence-details-three-items {
+  display: flex;
+
+  &__item {
+    width: 33%;
+    padding-right: govuk-spacing(4);
+  }
+}
+
+.adjudication-pdf-section-sentence-details-four-items {
+  display: flex;
+
+  &__item {
+    width: 25%;
+  }
+}
