@@ -10,7 +10,6 @@ export default class DataInsightsPage extends Page {
   }
 
   checkLastModifiedDate(value: string): void {
-    console.log(value)
     cy.get('p').should('contain', `Date updated: ${value}`)
   }
 }
