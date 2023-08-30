@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import config from '../../config'
 import AdjudicationResultReportData from '../../data/adjudicationResultReportData'
+import { User } from '../../data/hmppsManageUsersClient'
 
 export default class Dis6Pdf {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -13,9 +14,9 @@ export default class Dis6Pdf {
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
 
-    const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails)
-    const isYOI = false
+    const isYOI = await this.getYoiInfo(chargeNumber, user)
     const header = isYOI ? 'Young Offender (YOI Rule 55)' : 'Adult (Prison Rule 51)'
+    const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails, isYOI)
 
     res.renderPdf(
       `pages/adjudicationResultReport`,
@@ -29,5 +30,11 @@ export default class Dis6Pdf {
         pdfMargins,
       }
     )
+  }
+
+  getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {
+    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
+    const { reportedAdjudication } = adjudication
+    return reportedAdjudication.isYouthOffender
   }
 }

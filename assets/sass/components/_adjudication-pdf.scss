@@ -40,6 +40,11 @@ div.adjudication-pdf {
   width: 200px;
 }
 
+.adjudication-pdf-input-text-box-five-lines-high-third-width {
+  height: 80px;
+  width: 300px;
+}
+
 .adjudication-pdf-input-text-box-half-width {
   height: 30px;
   width: 300px;
@@ -47,6 +52,11 @@ div.adjudication-pdf {
 
 .adjudication-pdf-input-text-box-full-width {
   height: 30px;
+  width: 90%;
+}
+
+.adjudication-pdf-input-text-box-five-lines-high-full-width {
+  height: 80px;
   width: 90%;
 }
 
@@ -186,7 +196,21 @@ div.adjudication-pdf {
     }
     &:nth-child(5) {
       width: 30%;
+    }
+  }
+}
+
+.adjudication-pdf-section-punishment-details-checkboxes {
+  display: flex;
+
+  &__item {
+    &:nth-child(1) {
+      width: 75%;
       padding-right: govuk-spacing(3);
+    }
+
+    &:nth-child(2) {
+      width: 25%;
     }
   }
 }
