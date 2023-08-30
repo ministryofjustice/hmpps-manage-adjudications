@@ -1,0 +1,81 @@
+{% macro conductReportDetails(conductReportData) %}
+    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name of establishment</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='adjudication-history-for-current-sentence-name-of-establishment'>
+                    {{ conductReportData.establishmentName }}
+                </p>
+            </div>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='adjudication-history-for-current-sentence-prisoner-number'>
+                    {{ conductReportData.prisonerNumber }}
+                </p>
+            </div>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prisoner’s full name</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='adjudication-history-for-current-sentence-prisoner-full-name'>
+                    {{ conductReportData.prisonerDisplayName }}
+                </p>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-signature-details'>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Key worker</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+            </div>
+        </div>
+
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+        <div>
+            <p>This conduct report should be completed by an officer with good knowledge of the prisoner,</br>
+               but <strong>not</strong> the officer who placed the prisoner on report.
+            </p>
+
+            <p>The report should be about the prisoner’s behaviour, on the wing or other unit, during their</br>
+               current sentence. Include any relevant dates and any comments on:
+            </p>
+            <ul class='govuk-list govuk-list--bullet'>
+                <li class='govuk-!-margin-bottom-1'>open ACCT</li>
+                <li class='govuk-!-margin-bottom-1'>CSIP</li>
+                <li class='govuk-!-margin-bottom-1'>mental health referrals</li>
+                <li class='govuk-!-margin-bottom-1'>debt</li>
+                <li class='govuk-!-margin-bottom-1'>positive or negative incentive comments on NOMIS</li>
+                <li class='govuk-!-margin-bottom-1'>case note</li>
+                <li class='govuk-!-margin-bottom-1'>engagement in work or education (while in prison).</li>
+            </ul>
+
+            <p>The report must be based on facts and not opinion. It should not include details about criminal</br>
+               history, adjudication history or employment.
+            </p>
+
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-conduct-statement'>
+
+            <div class='adjudication-pdf-section-signature-details'>
+                <div class='adjudication-pdf-section-signature-details__item'>
+                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Signature of officer</p>
+                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
+                </div>
+                <div class='adjudication-pdf-section-signature-details__item'>
+                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Name (BLOCK CAPITALS)</p>
+                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
+                </div>
+            </div>
+            <div class='adjudication-pdf-section-signature-details'>
+                <div class='adjudication-pdf-section-signature-details__item'>
+                </div>
+                <div class='adjudication-pdf-section-signature-details__item'>
+                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-1'>Date (DD/MM/YYYY)</p>
+                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}

@@ -35,6 +35,11 @@ div.adjudication-pdf {
   width: 200px;
 }
 
+.adjudication-pdf-input-text-box-half-width {
+  height: 30px;
+  width: 300px;
+}
+
 .adjudication-pdf-input-text-box-full-width {
   height: 30px;
   width: 90%;
@@ -51,6 +56,11 @@ div.adjudication-pdf {
 }
 .adjudication-pdf-prisoner-statement {
   height: 400px;
+  width: 100%;
+}
+
+.adjudication-pdf-conduct-statement {
+  height: 340px;
   width: 100%;
 }
 
@@ -138,5 +148,14 @@ div.adjudication-pdf {
 
   &__item {
     width: 25%;
+  }
+}
+
+.adjudication-pdf-section-signature-details {
+  display: flex;
+
+  &__item {
+    width: 50%;
+    padding-right: govuk-spacing(6);
   }
 }
