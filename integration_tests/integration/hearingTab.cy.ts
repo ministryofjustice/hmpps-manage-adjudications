@@ -91,9 +91,10 @@ const hearingWithReferToInAdOutcome = testData.singleHearing({
   dateTimeOfHearing: hearingDateTimeTwo,
   id: 988,
   locationId: 234,
-  oicHearingType: OicHearingType.INAD_ADULT,
+  oicHearingType: OicHearingType.GOV_ADULT,
   outcome: testData.hearingOutcome({
     code: HearingOutcomeCode.REFER_INAD,
+    adjudicator: 'JRED_GEN',
     optionalItems: { details: 'This is my reason for referring.' },
   }),
 })
@@ -1464,7 +1465,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
-          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
         })
@@ -1497,7 +1498,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
-          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
         })
@@ -1858,7 +1859,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
-          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
         })
@@ -2186,7 +2187,7 @@ context('Hearing details page', () => {
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(hearingDateTimeTwoFormatted)
           expect($summaryData.get(1).innerText).to.contain('Adj 2, Moorland (HMP & YOI)')
-          expect($summaryData.get(2).innerText).to.contain('Independent Adjudicator')
+          expect($summaryData.get(2).innerText).to.contain('Governor')
           expect($summaryData.get(3).innerText).to.contain('J. Red')
           expect($summaryData.get(4).innerText).to.contain('Refer this case to the independent adjudicator')
         })
