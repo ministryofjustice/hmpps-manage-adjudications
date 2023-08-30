@@ -1,0 +1,329 @@
+{% macro adjudicationResultReportDetails(adjudicationResultReportData) %}
+    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name of establishment</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='adjudication-history-for-current-sentence-name-of-establishment'>
+                    {{ adjudicationResultReportData.establishmentName }}
+                </p>
+            </div>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='adjudication-history-for-current-sentence-prisoner-number'>
+                    {{ adjudicationResultReportData.prisonerNumber }}
+                </p>
+            </div>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prisoner’s full name</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='adjudication-history-for-current-sentence-prisoner-full-name'>
+                    {{ adjudicationResultReportData.prisonerDisplayName }}
+                </p>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-sentence-details'>
+            <div class='adjudication-pdf-section-sentence-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date of charge (DD/MM/YYYY)</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+            </div>
+            <div class='adjudication-pdf-section-sentence-details__item govuk-!-margin-top-8'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> <strong>Copy for prison record</strong></span> <br/>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> <strong>Prisoner copy</strong></span>
+            </div>
+        </div>
+
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+        <div class='adjudication-pdf-section-sentence-details-three-items'>
+            <div class='adjudication-pdf-section-sentence-details-three-items__item'>
+                <p class='govuk-!-margin-bottom-1'>Is the punishment a caution? If yes, you do not have to fill in any punishments.</p>
+            </div>
+            <div class='adjudication-pdf-section-sentence-details-three-items__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
+            </div>
+            <div class='adjudication-pdf-section-sentence-details-three-items__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Max number of days possible</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Number of days given</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Last day of punishment (DD/MM/YYYY)</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Suspended until (DD/MM/YYYY) - max 6 months</strong></p>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1'><strong>Loss off privileges</strong></p>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Canteen</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Facilities to purchase</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Use of private cash</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>TV</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Association</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>___________________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>___________________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Stoppage of earnings</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>84</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>Percentage</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>________%</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Cellular confinement</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>21</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Exclusion from associated work</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>21</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Removal from wing/unit</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>28</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Non-punitive recovery of money for damages</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>£________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Days added to time in custody</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-punishment-details'>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Prospective additional days</strong></p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3 align-right'>42</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>_________</p>
+            </div>
+            <div class='adjudication-pdf-section-punishment-details__item'></div>
+            <div class='adjudication-pdf-section-punishment-details__item'>
+               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__medium-square'>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}

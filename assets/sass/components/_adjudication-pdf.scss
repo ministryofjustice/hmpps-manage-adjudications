@@ -20,6 +20,11 @@ div.adjudication-pdf {
   width: 30px;
 }
 
+.adjudication-pdf-input__medium-square {
+  height: 20px;
+  width: 20px;
+}
+
 .adjudication-pdf-input__small-square {
   height: 15px;
   width: 15px;
@@ -157,5 +162,31 @@ div.adjudication-pdf {
   &__item {
     width: 50%;
     padding-right: govuk-spacing(6);
+  }
+}
+
+.adjudication-pdf-section-punishment-details {
+  display: flex;
+
+  &__item {
+    &:nth-child(1) {
+      width: 20%;
+      padding-right: govuk-spacing(3);
+    }
+    &:nth-child(2) {
+      width: 12%;
+      padding-right: govuk-spacing(3);
+    }
+    &:nth-child(3) {
+      width: 8%;
+      padding-right: govuk-spacing(3);
+    }
+    &:nth-child(4) {
+      width: 30%;
+    }
+    &:nth-child(5) {
+      width: 30%;
+      padding-right: govuk-spacing(3);
+    }
   }
 }

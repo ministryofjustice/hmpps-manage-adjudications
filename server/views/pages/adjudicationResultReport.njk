@@ -1,0 +1,9 @@
+{% extends "../partials/pdfLayout.njk" %}
+{% from "../macros/adjudicationResultReportDetails.njk" import adjudicationResultReportDetails %}
+{% from "../macros/adjudicationResultReportLegal.njk" import adjudicationResultReportLegal %}
+{% block content %}
+    <div class='adjudication-pdf'>
+        {{ adjudicationResultReportDetails(adjudicationResultReportData) }}
+        {{ adjudicationResultReportLegal(chargeNumber) }}
+    </div>
+{% endblock %}
