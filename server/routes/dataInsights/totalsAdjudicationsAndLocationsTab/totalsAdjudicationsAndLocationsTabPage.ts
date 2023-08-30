@@ -34,7 +34,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.activeCaseLoadId
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate.toString()
+      (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate
     )
     const chartSettingMap = {}
 

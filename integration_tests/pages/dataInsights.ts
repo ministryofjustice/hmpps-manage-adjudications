@@ -1,10 +1,6 @@
 import Page from './page'
 
 export default class DataInsightsPage extends Page {
-  checkOnPage() {
-    throw new Error('Method not implemented.')
-  }
-
   constructor() {
     super('Adjudication data')
   }
@@ -14,6 +10,7 @@ export default class DataInsightsPage extends Page {
   }
 
   checkLastModifiedDate(value: string): void {
+    console.log(value)
     cy.get('p').should('contain', `Date updated: ${value}`)
   }
 }

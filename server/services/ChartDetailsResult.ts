@@ -9,7 +9,7 @@ export interface ChartDetailsResult {
 
 export interface ChartLastUpdatedResult {
   chartName: string
-  lastModifiedDate: Date
+  lastModifiedDate: string
 }
 
 export interface ChartEntryVerticalBar {
