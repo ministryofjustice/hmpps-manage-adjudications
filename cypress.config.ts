@@ -117,11 +117,8 @@ export default defineConfig({
         stubSaveYouthOffenderStatus: adjudications.stubSaveYouthOffenderStatus,
         stubSaveAssociatedPrisoner: adjudications.stubSaveAssociatedPrisoner,
         stubCancelHearing: adjudications.stubCancelHearing,
-        stubCancelHearingV1: adjudications.stubCancelHearingV1,
         stubScheduleHearing: adjudications.stubScheduleHearing,
-        stubScheduleHearingV1: adjudications.stubScheduleHearingV1,
         stubAmendHearing: adjudications.stubAmendHearing,
-        stubAmendHearingV1: adjudications.stubAmendHearingV1,
         stubGetHearingsGivenAgencyAndDate: adjudications.stubGetHearingsGivenAgencyAndDate,
         stubAmendPrisonerGender: adjudications.stubAmendPrisonerGender,
         stubGetIssueDataDiscDate: adjudications.stubGetIssueDataFilteredOnDiscDate,
@@ -153,6 +150,7 @@ export default defineConfig({
         stubGetDataInsightsChart: adjudications.stubGetDataInsightsChart,
         stubGetAgencyReportCounts: adjudications.stubGetAgencyReportCounts,
         stubGetConsecutivePunishments: adjudications.stubGetConsecutivePunishments,
+        stubCreateGovReferral: adjudications.stubCreateGovReferral,
       })
     },
 

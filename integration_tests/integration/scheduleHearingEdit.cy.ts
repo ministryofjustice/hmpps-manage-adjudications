@@ -77,11 +77,6 @@ context('Schedule a hearing page', () => {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, originalHearing]),
     })
-    cy.task('stubAmendHearingV1', {
-      chargeNumber: 1524494,
-      hearingId: 333,
-      response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, changedDayHearing]),
-    })
     cy.task('stubAmendHearing', {
       chargeNumber: 1524494,
       response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, changedDayHearing]),
