@@ -1,10 +1,14 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page from '../pages/page'
 import DataInsightsPage from '../pages/dataInsights'
-import { ChartDetailsResult } from '../../server/services/ChartDetailsResult'
+import { ChartDetailsResult, ChartLastUpdatedResult } from '../../server/services/ChartDetailsResult'
 import { CaseLoad } from '../../server/data/prisonApiClient'
+import { getFullDate } from '../../server/utils/utils'
 
 context('Adjudication data', () => {
+  const lastModifiedDate = '2023-08-24T15:30:00'
+  const fullLastModifiedDate = getFullDate(lastModifiedDate)
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', [
@@ -32,6 +36,7 @@ context('Adjudication data', () => {
         chartEntries: chartEntries['1a'],
       } as ChartDetailsResult,
     })
+
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'RNI',
       chartName: '1b',
@@ -41,6 +46,7 @@ context('Adjudication data', () => {
         chartEntries: chartEntries['1b'],
       } as ChartDetailsResult,
     })
+
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'RNI',
       chartName: '1c',
@@ -50,6 +56,7 @@ context('Adjudication data', () => {
         chartEntries: chartEntries['1c'],
       } as ChartDetailsResult,
     })
+
     cy.task('stubGetDataInsightsChart', {
       agencyId: 'RNI',
       chartName: '1d',
@@ -203,6 +210,47 @@ context('Adjudication data', () => {
         chartEntries: chartEntries['5c'],
       } as ChartDetailsResult,
     })
+
+    cy.task('stubGetLastUpdatedDate', {
+      chartName: '1a',
+      response: {
+        chartName: '1a',
+        lastModifiedDate,
+      } as ChartLastUpdatedResult,
+    })
+
+    cy.task('stubGetLastUpdatedDate', {
+      chartName: '2a',
+      response: {
+        chartName: '2a',
+        lastModifiedDate,
+      } as ChartLastUpdatedResult,
+    })
+
+    cy.task('stubGetLastUpdatedDate', {
+      chartName: '3a',
+      response: {
+        chartName: '3a',
+        lastModifiedDate,
+      } as ChartLastUpdatedResult,
+    })
+
+    cy.task('stubGetLastUpdatedDate', {
+      chartName: '4a',
+      response: {
+        chartName: '4a',
+        lastModifiedDate,
+      } as ChartLastUpdatedResult,
+    })
+
+    cy.task('stubGetLastUpdatedDate', {
+      chartName: '5a',
+      response: {
+        chartName: '5a',
+        lastModifiedDate,
+      } as ChartLastUpdatedResult,
+    })
+
     cy.signIn()
   })
 
@@ -221,6 +269,7 @@ context('Adjudication data', () => {
     page.checkChartTitle('Number of people placed on report in the past 30 days')
     page.checkChartTitle('Adjudication reports by location of adjudication incident - last 30 days')
     page.checkChartTitle('Adjudication reports by residential location of prisoner - last 30 days')
+    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/protected-and-responsivity-characteristics', () => {
@@ -233,6 +282,7 @@ context('Adjudication data', () => {
     page.checkChartTitle('Punishment by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Plea by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Finding by protected or responsivity characteristic - last 30 days')
+    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/offence-type', () => {
@@ -241,6 +291,7 @@ context('Adjudication data', () => {
     page.checkOnPage()
     page.checkChartTitle('Adjudication offence types - current month and previous 12 months')
     page.checkChartTitle('Adjudication offence type by location - last 30 days')
+    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {
@@ -251,6 +302,7 @@ context('Adjudication data', () => {
     page.checkChartTitle('Most commonly used punishment last month')
     page.checkChartTitle('Punishments given for each adjudication offence type - current month and previous 12 months')
     page.checkChartTitle('Suspended and activated punishments - current month and last 12 months')
+    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/pleas-and-findings', () => {
@@ -260,6 +312,7 @@ context('Adjudication data', () => {
     page.checkChartTitle('Pleas given - current month and previous 12 months')
     page.checkChartTitle('Findings - current month and previous 12 months')
     // page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
+    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 })
 

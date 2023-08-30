@@ -26,6 +26,12 @@
 
     {{ dataInsightsTabHeaderSingular(tabsOptions) }}
 
+     <div class="govuk-!-margin-bottom-6">
+        <p class="govuk-body" data-qa="last-da">Datasource: NOMIS <br/> 
+        Date updated: {{ lastModifiedDate }}
+        </p>
+    </div>
+
     <div>
       <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

@@ -19,6 +19,7 @@ import {
 } from '../chartService'
 import DropDownEntry from '../dropDownEntry'
 import adjudicationUrls from '../../../utils/urlGenerator'
+import { getFullDate } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -42,6 +43,10 @@ export default class PunishmentsTabPage {
     const agencyId: AgencyId = user.activeCaseLoadId
 
     const chartSettingMap = {}
+
+    const lastModifiedDate = getFullDate(
+      (await this.chartApiService.getLastModifiedChart(username, '4a')).lastModifiedDate
+    )
 
     chartSettingMap['4a'] = await produceLinesCharts(
       '4a',
@@ -117,6 +122,7 @@ export default class PunishmentsTabPage {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PUNISHMENTS),
       chartSettingMap,
+      lastModifiedDate,
       allSelectorParams: {
         offenceType: offenceType?.value,
       },

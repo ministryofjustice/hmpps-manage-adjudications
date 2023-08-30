@@ -25,6 +25,12 @@
     {{ dataInsightsTabHeaderSingular(tabsOptions) }}
 
     <div class="govuk-!-margin-bottom-6">
+        <p class="govuk-body" data-qa="last-da">Datasource: NOMIS <br/> 
+        Date updated: {{ lastModifiedDate }}
+        </p>
+    </div>
+
+    <div class="govuk-!-margin-bottom-6">
       {{ linesChart(chartSettingMap['3a']) }}
     </div>
 

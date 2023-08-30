@@ -8,4 +8,8 @@ export default class DataInsightsPage extends Page {
   checkChartTitle(value: string): void {
     cy.get('h2').should('contain', value)
   }
+
+  checkLastModifiedDate(value: string): void {
+    cy.get('p').should('contain', `Date updated: ${value}`)
+  }
 }

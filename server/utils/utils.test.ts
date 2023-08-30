@@ -13,6 +13,7 @@ import {
   convertNameForPlaceholder,
   convertDateTimeStringToSubmittedDateTime,
   convertSubmittedDateTimeToDateObject,
+  getFullDate,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -215,5 +216,27 @@ describe('convertSubmittedDateTimeToDateObject', () => {
   })
   it('null', () => {
     expect(convertSubmittedDateTimeToDateObject(null)).toEqual(null)
+  })
+})
+
+describe('getFullDate', () => {
+  test('should return the date in "D MMMM YYYY" format by default', () => {
+    const dateTime = '2023-08-24T15:30:00' // Date format is "YYYY-MM-DDTHH:mm:ss"
+    const result = getFullDate(dateTime)
+    expect(result).toBe('24 August 2023')
+  })
+
+  test('should return the date in a custom format when provided', () => {
+    const dateTime = '2023-08-24T15:30:00'
+    const format = 'MMMM D, YYYY h:mm a' // e.g. "August 24, 2023 3:30 pm"
+    const result = getFullDate(dateTime, format)
+    expect(result).toBe('August 24, 2023 3:30 pm')
+  })
+
+  test('should handle invalid date string gracefully', () => {
+    // Depending on the implementation of `getDateOrTime` this might throw an error or return a default value.
+    // Adjust the expected result accordingly.
+    const result = getFullDate(new Date().toString())
+    expect(result).toEqual('Invalid date or time') // assuming it returns 'Invalid date' for invalid inputs.
   })
 })

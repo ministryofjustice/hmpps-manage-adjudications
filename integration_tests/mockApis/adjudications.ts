@@ -998,6 +998,21 @@ const stubGetDataInsightsChart = ({ agencyId, chartName, response = {} }): Super
     },
   })
 
+const stubGetLastUpdatedDate = ({ chartName, response = {} }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/api/data-insights/chart/last-updated/${chartName}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubCreatePunishmentComment = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -1129,6 +1144,7 @@ export default {
   stubDeletePunishmentComment,
   stubAloAmendOffenceDetails,
   stubGetDataInsightsChart,
+  stubGetLastUpdatedDate,
   stubGetAgencyReportCounts,
   stubGetConsecutivePunishments,
 }

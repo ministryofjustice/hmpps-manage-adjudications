@@ -38,7 +38,7 @@ import {
   PunishmentSchedule,
   PunishmentType,
 } from '../../data/PunishmentResult'
-import { ChartDetailsResult } from '../../services/ChartDetailsResult'
+import { ChartDetailsResult, ChartLastUpdatedResult } from '../../services/ChartDetailsResult'
 import { OffenderMovementInfo } from '../../data/prisonApiClient'
 
 export default class TestData {
@@ -558,6 +558,8 @@ export default class TestData {
   }
 
   chartDetailsResult = (value: ChartDetailsResult) => value
+
+  chartLastUpdatedResult = (value: ChartLastUpdatedResult) => value
 
   prisonerMovement = ({
     offenderNo = 'A1234AA',

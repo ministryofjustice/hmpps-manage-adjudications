@@ -8,6 +8,7 @@ import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabs
 import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import DropDownEntry from '../dropDownEntry'
+import { getFullDate } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -57,6 +58,9 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.characteristic,
     })
+    const lastModifiedDate = getFullDate(
+      (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate
+    )
     const characteristic: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       characteristics,
       req.query.characteristic as string,
@@ -242,6 +246,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.PROTECTED_AND_RESPONSIVITY_CHARACTERISTICS),
       chartSettingMap,
+      lastModifiedDate,
       allSelectorParams: {
         characteristic: characteristic?.value,
         offenceType: offenceType?.value,

@@ -14,6 +14,7 @@ import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabs
 import { getUniqueItems, produceHorizontalBarsChart, produceLinesCharts } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import DropDownEntry from '../dropDownEntry'
+import { getFullDate } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -55,6 +56,9 @@ export default class OffenceTypeTabPage {
     const agencyId: AgencyId = user.activeCaseLoadId
 
     const chartSettingMap = {}
+    const lastModifiedDate = getFullDate(
+      (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate
+    )
 
     chartSettingMap['3a'] = await produceLinesCharts(
       '3a',
@@ -103,6 +107,7 @@ export default class OffenceTypeTabPage {
       errors: error ? [error] : [],
       tabsOptions: getDataInsightsTabsOptions(DataInsightsTab.OFFENCE_TYPE),
       chartSettingMap,
+      lastModifiedDate,
       allSelectorParams: {
         offenceType: offenceType?.value,
       },

@@ -151,6 +151,7 @@ export default defineConfig({
         stubDeletePunishmentComment: adjudications.stubDeletePunishmentComment,
         stubAloAmendOffenceDetails: adjudications.stubAloAmendOffenceDetails,
         stubGetDataInsightsChart: adjudications.stubGetDataInsightsChart,
+        stubGetLastUpdatedDate: adjudications.stubGetLastUpdatedDate,
         stubGetAgencyReportCounts: adjudications.stubGetAgencyReportCounts,
         stubGetConsecutivePunishments: adjudications.stubGetConsecutivePunishments,
       })
