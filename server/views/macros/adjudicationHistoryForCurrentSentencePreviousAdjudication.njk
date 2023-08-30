@@ -1,32 +1,38 @@
 {% macro adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
         <h2>Previous adjudication details</h2>
-        <div class='adjudication-pdf-section-issued-details'>
-            <div class='adjudication-pdf-section-issued-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Total previous findings of guilt on adjudication (on current sentence)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+        <div class='adjudication-pdf-section-sentence-details-four-items'>
+            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
+                <p class='govuk-!-margin-bottom-2'>Total previous findings of guilt on adjudication (on current sentence)</p>
             </div>
-            <div class='adjudication-pdf-section-issued-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Number of previous findings of guilt at the current establishment</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixth-width'>
             </div>
-        </div>
-
-        <div class='adjudication-pdf-section-issued-details'>
-            <div class='adjudication-pdf-section-issued-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Number of charges for same offences</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
+                <p class='govuk-!-margin-bottom-2'>Number of previous findings of guilt at the current establishment</p>
+            </div>
+            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixth-width'>
             </div>
         </div>
 
-        <div class='adjudication-pdf-section-issued-details'>
-            <div class='adjudication-pdf-section-issued-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Date of last reported same offence, if applicable (DD/MM/YYYY)</p>
+        <div class='adjudication-pdf-section-sentence-details-four-items'>
+            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
+                <p class='govuk-!-margin-bottom-2'>Number of charges for same offences</p>
+            </div>
+            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixth-width'>
+            </div>
+        </div>
+
+        <div class='adjudication-pdf-section-sentence-details'>
+            <div class='adjudication-pdf-section-sentence-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date of last reported same offence, if applicable (DD/MM/YYYY)</p>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
             </div>
-            <div class='adjudication-pdf-section-issued-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Charge number</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+            <div class='adjudication-pdf-section-sentence-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Charge number</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
             </div>
         </div>
 

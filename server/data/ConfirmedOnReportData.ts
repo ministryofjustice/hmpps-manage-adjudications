@@ -15,6 +15,7 @@ export type ConfirmedOnReportData = {
   prisonerNeurodiversities?: Array<string>
   createdDateTime: string
   isYouthOffender: boolean
+  prisonName?: string
 }
 
 export type ConfirmedOnReportChangedData = {

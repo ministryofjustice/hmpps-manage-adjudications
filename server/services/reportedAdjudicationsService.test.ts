@@ -297,6 +297,7 @@ describe('reportedAdjudicationsService', () => {
           reportingOfficer: 'T. User',
           isYouthOffender: false,
           createdDateTime: '2022-12-09T10:30:00',
+          prisonName: 'MDI',
         })
       })
 

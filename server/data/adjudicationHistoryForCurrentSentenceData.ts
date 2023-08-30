@@ -12,7 +12,7 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
     this.chargeNumber = chargeNumber
-    this.establishmentName = confirmedOnReportData.incidentLocationName
+    this.establishmentName = confirmedOnReportData.prisonName
     this.prisonerDisplayName = convertToTitleCase(
       `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
