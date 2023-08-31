@@ -1,0 +1,77 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../macros/printLink.njk" import printLink %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
+{% from "../../macros/transferBanner.njk" import transferBanner%}
+
+{% set title = 'Print and issue forms' %}
+
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+
+  {% if overrideAgencyId and transferBannerContent %}
+    {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
+  {% endif %}
+
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'forms', reportHref, hearingsHref, punishmentsHref, formsHref) }}
+
+  <div class="adjudicationsSummary">
+    <h3 class="govuk-heading-s">Print forms<h3>
+
+    {{ printLink('DIS 1/2 - Notice of being placed on report', adjudicationUrls.printPdf.urls.dis12(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
+    {# {{ printLink('DIS3 - Record of adjudication hearing', adjudicationUrls.printPdf.urls.dis6(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis3") }} #}
+    {# {{ printLink('DIS4 - Record of adjudication hearing continuation sheet', adjudicationUrls.printPdf.urls.dis6(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis4") }} #}
+    {{ printLink('DIS5 - Adjudication history for current sentence', adjudicationUrls.printPdf.urls.dis5(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis5") }}
+    {{ printLink('DIS6 - Conduct report', adjudicationUrls.printPdf.urls.dis6(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis6") }}
+    {{ printLink('DIS7 - Adjudication result', adjudicationUrls.printPdf.urls.dis7(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-1", "_blank", "printDis7") }}
+  </div>
+
+  <div class="adjudicationsSummary">
+    <h3 class="govuk-heading-s">Record of issuing DIS 1/2 to the prisoner<h3>
+
+    {% set rows = [] %}
+    {% for report in reports %}
+      {% set rows = (rows.push([
+        { text: report.formattedDateTimeOfIssue or ' - ' },
+        { text: report.issuingOfficer or ' - ' }
+      ]), rows) %}
+    {% endfor %}
+
+    {% if rows | length %}
+      <div class="results-table">
+        {{ govukTable({
+        head: [
+          { text: "Issue date and time",
+            classes: 'confirmDISFormTable-lastIssued'
+          },
+          { text: "Issuing officer",
+            classes: 'confirmDISFormTable-officerName'
+          }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
+      }) }}
+      </div>
+    {% else %}
+      <p class="govuk-!-padding-top-3" data-qa="no-results-message">Once you've given the DIS 1/2 to the prisoner, add the date and time you did this.</p>
+    {% endif %}
+
+    <div>
+      {{ govukButton({
+        text: 'Add date and time',
+        classes: "govuk-button--secondary",
+        href: adjudicationUrls.addIssueDateTime.urls.start(reportNo) + '?referrer=' + adjudicationUrls.forms.urls.review(reportNo),
+        attributes: { "data-qa": "add-issue-date-time" }
+      }) }}
+    </div>
+  </div>
+
+{% endblock %}

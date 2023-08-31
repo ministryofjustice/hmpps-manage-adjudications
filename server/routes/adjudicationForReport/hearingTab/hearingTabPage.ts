@@ -30,6 +30,7 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
       reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.review(reportedAdjudication.chargeNumber),
     }
   }
   if (pageOptions.isViewOnly()) {
@@ -37,12 +38,14 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
       reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.review(reportedAdjudication.chargeNumber),
     }
   }
   return {
     reportHref: adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber),
     hearingsHref: adjudicationUrls.hearingDetails.urls.review(reportedAdjudication.chargeNumber),
     punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(reportedAdjudication.chargeNumber),
+    formsHref: adjudicationUrls.forms.urls.review(reportedAdjudication.chargeNumber),
   }
 }
 

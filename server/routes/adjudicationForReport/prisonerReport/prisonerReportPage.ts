@@ -81,6 +81,7 @@ const getVariablesForPageType = (
       reportHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.review(chargeNumber),
     }
   }
   if (pageOptions.isReadOnlyView()) {
@@ -88,6 +89,7 @@ const getVariablesForPageType = (
       reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.review(chargeNumber),
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
         chargeNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
@@ -122,6 +124,7 @@ const getVariablesForPageType = (
     reportHref: adjudicationUrls.prisonerReport.urls.report(chargeNumber),
     hearingsHref: adjudicationUrls.hearingDetails.urls.report(chargeNumber),
     punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(chargeNumber),
+    formsHref: adjudicationUrls.forms.urls.review(chargeNumber),
   }
 }
 
