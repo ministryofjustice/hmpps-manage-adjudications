@@ -1,0 +1,35 @@
+{% macro adjudicationResultReportLegal(adjudicationResultReportData) %}
+    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8 page-break-before-always'>
+        <div class='break-inside-avoid'>
+            <p class='govuk-!-margin-top-3'><strong>If your adjudicator was a district judge</strong></p>
+            <p class='govuk-!-margin-bottom-1'>You cannot ask for a review of the decision. But if you - or your solicitor on your behalf - want to apply for a review of punishment and/or any
+            non-punitive compensation requirement (damages), ask for the form IA4 ‘Request for a review of an adjudication punishment imposed by
+            an independent adjudicator’.</p>
+
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>This must be completed and sent to the governor within 14 days of the end of your adjudication.</p>
+
+            <p class='govuk-!-margin-top-3'><strong>If your adjudicator was a governor or director</strong></p>
+            <p class='govuk-!-margin-bottom-1'>If you’re not satisfied with the outcome of your adjudication, you can:</p>
+            <ul class='govuk-list govuk-list--bullet'>
+                <li class='govuk-!-margin-bottom-1'>ask for a for a review of the findings, including any compensation requirement that may have been imposed and/or punishment - ask for
+                a DIS8 ‘Request for review’ form</li>
+                <li class='govuk-!-margin-bottom-1'>contact your solicitor for advice.</li>
+            </ul>
+
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>You must ask for your review within 6 weeks of the end of your adjudication.</p>
+
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>If your case is taken up by your solicitor, MP or any special interest group, it will still go through the same review procedure, although you
+            would not need to complete a DIS8 ‘Request for review’ form.</p>
+
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>When the review procedure has been completed, and if you’re still not satisfied, you can ask to write to the Prisons and Probation
+            Ombudsman.</p>
+
+            <p class='govuk-!-margin-top-3'><strong>Remission of additional days</strong></p>
+            <p class='govuk-!-margin-bottom-1'>If you receive a punishment of additional days, you can ask for some of these days to be removed, if the governor agrees. Ask for a DIS9
+            ‘Application for remission of additional days’ form if you want to apply for these days to be removed.</p>
+
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>If you’ve not been found guilty in an adjudication for {{ adjudicationResultReportData.applyMonths }} months, then you can apply. You can apply again every {{ adjudicationResultReportData.applyMonths }} months if you’ve not been
+            found guilty in an adjudication since your last application, and if you’ve not already been given half of your added days back.</p>
+        </div>
+    </div>
+{% endmacro %}
