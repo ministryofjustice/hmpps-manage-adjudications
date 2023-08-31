@@ -1,4 +1,4 @@
-{% macro adjudicationResultReportLegal() %}
+{% macro adjudicationResultReportLegal(adjudicationResultReportData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8 page-break-before-always'>
         <div class='break-inside-avoid'>
             <p class='govuk-!-margin-top-3'><strong>If your adjudicator was a district judge</strong></p>
@@ -28,7 +28,7 @@
             <p class='govuk-!-margin-bottom-1'>If you receive a punishment of additional days, you can ask for some of these days to be removed, if the governor agrees. Ask for a DIS9
             ‘Application for remission of additional days’ form if you want to apply for these days to be removed.</p>
 
-            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>If you’ve not been found guilty in an adjudication for 6 months, then you can apply. You can apply again every 6 months if you’ve not been
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>If you’ve not been found guilty in an adjudication for {{ adjudicationResultReportData.applyMonths }} months, then you can apply. You can apply again every {{ adjudicationResultReportData.applyMonths }} months if you’ve not been
             found guilty in an adjudication since your last application, and if you’ve not already been given half of your added days back.</p>
         </div>
     </div>

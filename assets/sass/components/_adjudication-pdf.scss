@@ -214,3 +214,10 @@ div.adjudication-pdf {
     }
   }
 }
+
+.adjudication-pdf-section-vertical-break {
+  border-left: 1px solid govuk-colour('mid-grey');
+  height: 650px;
+  position:absolute;
+  left: 68.5%;
+}

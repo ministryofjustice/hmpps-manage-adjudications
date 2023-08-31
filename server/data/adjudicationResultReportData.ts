@@ -34,6 +34,8 @@ export default class adjudicationResultReportData {
 
   prospectiveDaysMax: number
 
+  applyMonths: number
+
   constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData, isYOI: boolean) {
     this.chargeNumber = chargeNumber
     this.establishmentName = confirmedOnReportData.prisonName
@@ -53,5 +55,6 @@ export default class adjudicationResultReportData {
     this.removalDaysMax = isYOI ? 21 : 28
     this.daysAddedDaysMax = isYOI ? 42 : 42
     this.prospectiveDaysMax = isYOI ? 42 : 42
+    this.applyMonths = isYOI ? 4 : 6
   }
 }

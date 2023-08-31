@@ -5,7 +5,7 @@ import config from '../../config'
 import AdjudicationResultReportData from '../../data/adjudicationResultReportData'
 import { User } from '../../data/hmppsManageUsersClient'
 
-export default class Dis6Pdf {
+export default class Dis7Pdf {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
