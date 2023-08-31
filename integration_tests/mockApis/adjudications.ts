@@ -474,27 +474,6 @@ const stubSaveAssociatedPrisoner = ({ draftId, status = 200, response = {} }): S
     },
   })
 
-const stubCancelHearingV1 = ({
-  chargeNumber,
-  response = {},
-}: {
-  chargeNumber: string
-  response: Record<string, unknown>
-}): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'DELETE',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing`,
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: response,
-    },
-  })
-
 const stubCancelHearing = ({
   chargeNumber,
   response = {},
@@ -542,36 +521,6 @@ const stubScheduleHearing = ({ chargeNumber, status = 200, response = {} }): Sup
     request: {
       method: 'POST',
       url: `/adjudications/reported-adjudications/${chargeNumber}/hearing/v2`,
-    },
-    response: {
-      status,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: response,
-    },
-  })
-
-const stubScheduleHearingV1 = ({ chargeNumber, status = 200, response = {} }): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'POST',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing`,
-    },
-    response: {
-      status,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: response,
-    },
-  })
-
-const stubAmendHearingV1 = ({ chargeNumber, hearingId, status = 200, response = {} }): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'PUT',
-      url: `/adjudications/reported-adjudications/${chargeNumber}/hearing/${hearingId}`,
     },
     response: {
       status,
@@ -1087,6 +1036,21 @@ const stubGetConsecutivePunishments = ({ prisonerNumber, punishmentType, chargeN
     },
   })
 
+const stubCreateGovReferral = ({ chargeNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${chargeNumber}/outcome/refer-gov`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1109,11 +1073,8 @@ export default {
   stubSaveAssociatedPrisoner,
   stubSaveEvidenceDetails,
   stubSaveWitnessDetails,
-  stubCancelHearingV1,
   stubCancelHearing,
-  stubScheduleHearingV1,
   stubScheduleHearing,
-  stubAmendHearingV1,
   stubAmendHearing,
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,
@@ -1147,4 +1108,5 @@ export default {
   stubGetLastUpdatedDate,
   stubGetAgencyReportCounts,
   stubGetConsecutivePunishments,
+  stubCreateGovReferral,
 }

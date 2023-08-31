@@ -71,20 +71,26 @@
     }) }}
   {% endif %}
 
-  {# if the INAD has referred to gov, we need an extra table which shows the reason why, and what the next step is  #}
-  {% if nextOutcomeItem %}
-  {% set govNextStepChosen = nextOutcomeItem.outcome.code %}
-  {% set nextStepNotProceeding = govNextStepChosen == OutcomeCode.NOT_PROCEED %}
-  {% set nextStepHearing = govNextStepChosen == OutcomeCode.SCHEDULE_HEARING %}
+  {# IA refers to gov as the next step - creates referral outcome which needs separate table (this only occurs after an IA referral) #}
+  {% if referToGov %}
 
-    {% if nextStepNotProceeding %}
-      {% set nextStepText = "Not proceed with the charge" %}
-    {% elif nextStepHearing %}
-      {% set nextStepText = "Schedule a hearing" %}
-    {% endif %}
+ {% set reasonForGovernorReferralChangeLinkAvailable = false if nextOutcomeItem else 
+    changeLinksAvailable %}
 
+  {% if reasonForGovernorReferralChangeLinkAvailable %}
+    {% set reasonForReferralChangeLink = {
+      items: [
+        {
+          href: adjudicationUrls.govReasonForReferral.urls.edit(reportNo), 
+          text: "Change",
+          visuallyHiddenText: ' reason for governor referral',
+          attributes: {"data-qa": "change-link-hearing-outcome-reason-for-referral" }
+        }
+      ]
+    } %}
+  {% endif %}
 
-  {% set govReferralRows = [
+  {% set referToGovRows = [
     {
       key: {
         text: 'What is the reason for not having an independent adjudicator hearing?'
@@ -93,25 +99,41 @@
         text: referralDetails.details
       },
       actions: reasonForReferralChangeLink
-    }, {
+    }
+  ] %}
+
+
+  {# If there's an outcome on the end of the history list... #}
+  {% if nextOutcomeItem %}
+    {% set govNextStepChosen = nextOutcomeItem.outcome.code %}
+    {% set nextStepNotProceeding = govNextStepChosen == OutcomeCode.NOT_PROCEED %}
+    {% set nextStepHearing = govNextStepChosen == OutcomeCode.SCHEDULE_HEARING %}
+
+    {% if nextStepNotProceeding %}
+      {% set nextStepText = "Not proceed with the charge" %}
+    {% elif nextStepHearing %}
+      {% set nextStepText = "Schedule a hearing" %}
+    {% endif %}
+
+    {% set referToGovRows = (referToGovRows.push({
       key: {
         text: 'Outcome'
       },
       value: {
         text: nextStepText
       }
-    }
-  ] %}
+    }), referToGovRows) %}
+  {% endif %}
+  
 
+  {% if referToGovRows.length %}
   <h2 class="govuk-heading-m" data-qa="outcome-table-title">Governor referral</h2>
-  {% if govReferralRows.length %}
     {{ govukSummaryList({
-      rows: govReferralRows,
+      rows: referToGovRows,
       attributes: {
         "data-qa": "gov-referral-table"
       }
     }) }}
   {% endif %}
   {% endif %}
-
 {% endmacro %}

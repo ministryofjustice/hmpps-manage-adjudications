@@ -49,10 +49,6 @@ context('Schedule a hearing page', () => {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', singleHearing),
     })
-    cy.task('stubScheduleHearingV1', {
-      chargeNumber: 1524494,
-      response: reportedAdjudicationResponse('1524494', singleHearing),
-    })
     cy.task('stubScheduleHearing', {
       chargeNumber: 1524494,
       response: reportedAdjudicationResponse('1524494', singleHearing),

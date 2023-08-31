@@ -65,7 +65,7 @@ export default class GovReasonForReferralPage {
         [ReportedAdjudicationStatus.REFER_GOV],
         user
       )) as HearingDetailsHistory
-      referralOutcome = lastOutcomeItem.hearing?.outcome
+      referralOutcome = lastOutcomeItem.outcome.referralOutcome
     }
     return this.renderView(req, res, {
       referralReason: referralOutcome?.details,
