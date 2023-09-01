@@ -5,6 +5,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import TestData from '../../testutils/testData'
 import UserService from '../../../services/userService'
+import config from '../../../config'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -21,6 +22,7 @@ const userService = new UserService(null, null) as jest.Mocked<UserService>
 let app: Express
 
 beforeEach(() => {
+  config.formsTabFlag = 'true'
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   const reportedAdjudication = testData.reportedAdjudication({
     chargeNumber: '12345',
@@ -55,6 +57,17 @@ describe('GET /print-issue-forms', () => {
         expect(response.text).toContain('Print forms')
         expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
         expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
+      })
+  })
+
+  it('should not load print and issue forms page if user does not have ALO role', () => {
+    userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
+
+    return request(app)
+      .get(adjudicationUrls.forms.urls.review('12345'))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('Page not found')
       })
   })
 })

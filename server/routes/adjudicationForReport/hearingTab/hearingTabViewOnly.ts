@@ -2,15 +2,17 @@ import { Request, Response } from 'express'
 import OutcomesService from '../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import HearingTabPage, { PageRequestType } from './hearingTabPage'
+import UserService from '../../../services/userService'
 
 export default class HearingTabRoute {
   page: HearingTabPage
 
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly outcomesService: OutcomesService
+    private readonly outcomesService: OutcomesService,
+    private readonly userService: UserService
   ) {
-    this.page = new HearingTabPage(PageRequestType.VIEW, reportedAdjudicationsService, outcomesService)
+    this.page = new HearingTabPage(PageRequestType.VIEW, reportedAdjudicationsService, outcomesService, userService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

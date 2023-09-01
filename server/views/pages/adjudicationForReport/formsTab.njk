@@ -21,7 +21,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'forms', reportHref, hearingsHref, punishmentsHref, formsHref) }}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'forms', reportHref, hearingsHref, punishmentsHref, formsHref, true, true) }}
 
   <div class="adjudicationsSummary">
     <h3 class="govuk-heading-s">Print forms<h3>

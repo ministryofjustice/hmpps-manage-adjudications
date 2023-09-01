@@ -1,7 +1,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showForms = true) %}
+{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showFormsTab = false) %}
     {% set items = [{
       text: 'Report',
       href: reportHref,
@@ -25,7 +25,7 @@
       active: activeTab === 'report'
     }] %}
 
-    {% if showForms %}
+    {% if showFormsTab %}
       {% set items = (items.push({
         text: 'Print and issue forms',
         href: formsHref,

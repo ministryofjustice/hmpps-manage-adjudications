@@ -5,11 +5,12 @@ import DecisionTreeService from '../../../services/decisionTreeService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../../@types/template'
-import { getEvidenceCategory } from '../../../utils/utils'
+import { getEvidenceCategory, hasAnyRole } from '../../../utils/utils'
 import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
-import LocationService from '../../../services/locationService'
+import config from '../../../config'
+import UserService from '../../../services/userService'
 
 type PageData = {
   errors?: FormError[]
@@ -135,7 +136,7 @@ export default class prisonerReportRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly locationService: LocationService
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -174,6 +175,9 @@ export default class prisonerReportRoutes {
       user
     )
 
+    const userRoles = await this.userService.getUserRoles(user.token)
+    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
+
     const hideReportNumberAndPrintForAdjudicationStatuses = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
       ReportedAdjudicationStatus.REJECTED,
@@ -197,6 +201,7 @@ export default class prisonerReportRoutes {
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
       showReportNumberAndPrint: !hideReportNumberAndPrintForAdjudicationStatuses,
+      showFormsTab,
     })
   }
 

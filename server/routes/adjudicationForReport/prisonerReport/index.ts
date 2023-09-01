@@ -24,11 +24,7 @@ export default function prisonerReportRoutes({
 }): Router {
   const router = express.Router()
 
-  const prisonerReportRoute = new PrisonerReportRoutes(
-    reportedAdjudicationsService,
-    decisionTreeService,
-    locationService
-  )
+  const prisonerReportRoute = new PrisonerReportRoutes(reportedAdjudicationsService, decisionTreeService, userService)
   const prisonerReportReview = new PrisonerReportReviewRoutes(
     reportedAdjudicationsService,
     userService,
@@ -38,7 +34,7 @@ export default function prisonerReportRoutes({
   const prisonerReportViewRoute = new PrisonerReportViewRoutes(
     reportedAdjudicationsService,
     decisionTreeService,
-    locationService
+    userService
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))

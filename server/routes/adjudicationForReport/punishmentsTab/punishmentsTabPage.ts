@@ -5,6 +5,9 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
+import config from '../../../config'
+import { hasAnyRole } from '../../../utils/utils'
+import UserService from '../../../services/userService'
 
 export enum PageRequestType {
   REPORTER,
@@ -59,7 +62,8 @@ export default class PunishmentsTabPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -92,6 +96,9 @@ export default class PunishmentsTabPage {
       user
     )
 
+    const userRoles = await this.userService.getUserRoles(user.token)
+    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
+
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       reportNo: reportedAdjudication.chargeNumber,
@@ -106,6 +113,7 @@ export default class PunishmentsTabPage {
       consecutiveReportLinkAvailable: this.pageOptions.isReviewer(),
       punishmentComments,
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
+      showFormsTab,
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
