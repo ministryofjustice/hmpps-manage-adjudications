@@ -24,7 +24,7 @@
   {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'forms', reportHref, hearingsHref, punishmentsHref, formsHref, true, true) }}
 
   <div class="adjudicationsSummary">
-    <h3 class="govuk-heading-s">Print forms<h3>
+    <h2 class="govuk-heading-s">Print forms</h2>
 
     {{ printLink('DIS 1/2 - Notice of being placed on report', adjudicationUrls.printPdf.urls.dis12(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
     {# {{ printLink('DIS3 - Record of adjudication hearing', adjudicationUrls.printPdf.urls.dis3(reportNo), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis3") }} #}
@@ -35,7 +35,7 @@
   </div>
 
   <div class="adjudicationsSummary">
-    <h3 class="govuk-heading-s">Record of issuing DIS 1/2 to the prisoner<h3>
+    <h2 class="govuk-heading-s">Record of issuing DIS 1/2 to the prisoner</h2>
 
     {% set rows = [] %}
     {% for report in reports %}
@@ -48,20 +48,20 @@
     {% if rows | length %}
       <div class="results-table">
         {{ govukTable({
-        head: [
-          { text: "Issue date and time",
-            classes: 'confirmDISFormTable-lastIssued'
-          },
-          { text: "Issuing officer",
-            classes: 'confirmDISFormTable-officerName'
-          }
-        ],
-        rows: rows,
-        attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
-      }) }}
+          head: [
+            { text: "Issue date and time",
+              classes: 'confirmDISFormTable-lastIssued'
+            },
+            { text: "Issuing officer",
+              classes: 'confirmDISFormTable-officerName'
+            }
+          ],
+          rows: rows,
+          attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
+        }) }}
       </div>
     {% else %}
-      <p class="govuk-!-padding-top-3" data-qa="no-results-message">Once you've given the DIS 1/2 to the prisoner, add the date and time you did this.</p>
+      <p data-qa="no-results-message">Once you've given the DIS 1/2 to the prisoner, add the date and time you did this.</p>
     {% endif %}
 
     <div>
