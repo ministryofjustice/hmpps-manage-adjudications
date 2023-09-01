@@ -31,7 +31,11 @@ context('Add date and time', () => {
     })
     const date = new Date()
     const yesterday = new Date(date.setDate(date.getDate() - 1))
-    cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
+    cy.visit(
+      `${adjudicationUrls.addIssueDateTime.urls.start(
+        '12345'
+      )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`
+    )
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     forceDateInputWithDate(yesterday, '[data-qa="issued-date"]')
     addDateTimeOfIssuePage.hourInput().type('20')

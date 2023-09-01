@@ -1,6 +1,6 @@
-{% macro printLink(linkText = 'Print this page', href='', align = 'left', classes = '', target = '_self') %}
+{% macro printLink(linkText = 'Print this page', href='', align = 'left', classes = '', target = '_self', dataQa='printLink') %}
   <div style="text-align: {{ align }}" >
-    <p class="govuk-body"><a href="{{ href }}" target="{{ target }}" class="govuk-link print-link govuk-!-display-none-print {{ classes }}" data-qa="printLink">
+    <p class="govuk-body"><a href="{{ href }}" target="{{ target }}" class="govuk-link print-link govuk-!-display-none-print {{ classes }}" data-qa="{{ dataQa }}">
         {{ linkText }}
       </a></p>
   </div>

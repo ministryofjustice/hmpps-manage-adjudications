@@ -42,7 +42,11 @@ describe('GET /add-issue-date-time', () => {
 describe('POST /add-issue-date-time', () => {
   it('should redirect back to the confirm issued forms page on a successful submit', () => {
     return request(app)
-      .post(adjudicationUrls.addIssueDateTime.urls.start('12345'))
+      .post(
+        `${adjudicationUrls.addIssueDateTime.urls.start(
+          '12345'
+        )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`
+      )
       .send({ issuedDate: { date: '09/12/2022', time: { hour: '09', minute: '30' } } })
       .expect(() => {
         expect(reportedAdjudicationsService.issueDISForm).toBeCalledTimes(1)
