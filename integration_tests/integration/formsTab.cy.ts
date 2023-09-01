@@ -22,7 +22,7 @@ const reportedAdjudication = testData.reportedAdjudication({
   ],
 })
 
-context('Add a new punishment', () => {
+context('Navigated to forms tab', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -46,8 +46,7 @@ context('Add a new punishment', () => {
         lastName: 'SMITH',
       }),
     })
-    const prisoners = [testData.simplePrisoner('G6123VU', 'JAMES', 'SMITH', 'MDI-RECP')]
-    cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
+    cy.task('stubGetBatchPrisonerDetails', [testData.simplePrisoner('G6123VU', 'JAMES', 'SMITH', 'MDI-RECP')])
     cy.task('stubGetIssueDataDiscDate', {
       filter: { fromDate: moment().subtract(6, 'months').format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') },
       response: { reportedAdjudications: [] },
