@@ -49,7 +49,7 @@ context('Add a new punishment', () => {
     const prisoners = [testData.simplePrisoner('G6123VU', 'JAMES', 'SMITH', 'MDI-RECP')]
     cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
     cy.task('stubGetIssueDataDiscDate', {
-      filter: { fromDate: moment().subtract(2, 'years').format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') },
+      filter: { fromDate: moment().subtract(6, 'months').format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') },
       response: { reportedAdjudications: [] },
     })
     cy.signIn()
@@ -71,7 +71,10 @@ context('Add a new punishment', () => {
 
     it('should display table with records of issuing dis 1/2 to prisoner', () => {
       cy.task('stubGetIssueDataDiscDate', {
-        filter: { fromDate: moment().subtract(2, 'years').format('YYYY-MM-DD'), toDate: moment().format('YYYY-MM-DD') },
+        filter: {
+          fromDate: moment().subtract(6, 'months').format('YYYY-MM-DD'),
+          toDate: moment().format('YYYY-MM-DD'),
+        },
         response: { reportedAdjudications: [reportedAdjudication] },
       })
 

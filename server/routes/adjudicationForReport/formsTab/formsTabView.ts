@@ -32,7 +32,7 @@ export default class FormsTabRoute {
     )
 
     const filter = DISFormfilterFromUiFilter({
-      fromDate: momentDateToDatePicker(moment().subtract(2, 'years')),
+      fromDate: momentDateToDatePicker(moment().subtract(6, 'months')),
       toDate: momentDateToDatePicker(moment()),
       locationId: null,
     })
