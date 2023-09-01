@@ -133,4 +133,5 @@ export default {
   digitalPrisonServiceUrl: get('DIGITAL_PRISON_SERVICE_URL', 'http://localhost:3002', requiredInProduction),
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
+  formsTabFlag: get('FORMS_TAB_FLAG', false, requiredInProduction),
 }

@@ -14,7 +14,7 @@ export default class HearingTabRoute {
     private readonly userService: UserService,
     private readonly outcomesService: OutcomesService
   ) {
-    this.page = new HearingTabPage(PageRequestType.REVIEWER, reportedAdjudicationsService, outcomesService)
+    this.page = new HearingTabPage(PageRequestType.REVIEWER, reportedAdjudicationsService, outcomesService, userService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

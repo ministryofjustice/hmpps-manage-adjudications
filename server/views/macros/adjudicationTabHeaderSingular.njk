@@ -1,7 +1,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, showHearings = true) %}
+{% macro adjudicationTabHeaderSingular(reportNo, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showFormsTab = false) %}
     {% set items = [{
       text: 'Report',
       href: reportHref,
@@ -24,6 +24,15 @@
       attributes: { 'data-qa': 'reportTab' },
       active: activeTab === 'report'
     }] %}
+
+    {% if showFormsTab %}
+      {% set items = (items.push({
+        text: 'Print and issue forms',
+        href: formsHref,
+        attributes: { 'data-qa': 'formsTab' },
+        active: activeTab === 'forms'
+      }), items) %}
+    {% endif %}
 
   <h1 class="govuk-heading-l">Adjudication for charge {{ reportNo }}</h1>
   <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>

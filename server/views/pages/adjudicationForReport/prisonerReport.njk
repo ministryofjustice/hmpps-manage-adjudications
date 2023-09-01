@@ -22,7 +22,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, punishmentsHref, reviewData.reviewStatus !== 'Rejected') }}
+  {{ adjudicationTabHeaderSingular(reportNo, reviewData.reviewStatus, prisoner, 'report', reportHref, hearingsHref, punishmentsHref, formsHref, reviewData.reviewStatus !== 'Rejected', showFormsTab) }}
 
   {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered') }}
   {% if showReportNumberAndPrint %}

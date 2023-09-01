@@ -35,6 +35,7 @@ import punishmentsRoutes from './dataInsights/punishmentsTab'
 import pleasAndFindingsRoutes from './dataInsights/pleasAndFindingsTab'
 
 import hearingTabRoutes from './adjudicationForReport/hearingTab'
+import formsTabRoutes from './adjudicationForReport/formsTab'
 import adjudicationReportRoutes from './adjudicationForReport/prisonerReport'
 import scheduleHearingRoutes from './adjudicationForReport/scheduleHearing'
 import viewScheduledHearingsRoutes from './viewAllHearingsAndReports/allHearings'
@@ -195,6 +196,8 @@ export default function routes(
     adjudicationUrls.hearingDetails.root,
     hearingTabRoutes({ reportedAdjudicationsService, userService, outcomesService })
   )
+
+  router.use(adjudicationUrls.forms.root, formsTabRoutes({ reportedAdjudicationsService, userService }))
 
   router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartApiService }))
   router.use(

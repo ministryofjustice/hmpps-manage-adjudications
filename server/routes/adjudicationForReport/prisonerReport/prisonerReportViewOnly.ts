@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../../services/decisionTreeService'
 import PrisonerReportPage, { PageRequestType } from './prisonerReportPage'
-import LocationService from '../../../services/locationService'
+import UserService from '../../../services/userService'
 
 export default class prisonerReportViewRoutes {
   page: PrisonerReportPage
@@ -10,13 +10,13 @@ export default class prisonerReportViewRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly locationService: LocationService
+    private readonly userService: UserService
   ) {
     this.page = new PrisonerReportPage(
       PageRequestType.VIEW,
       reportedAdjudicationsService,
       decisionTreeService,
-      locationService
+      userService
     )
   }
 
