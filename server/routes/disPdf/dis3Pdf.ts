@@ -4,6 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import config from '../../config'
 import PrepareAndRecordAnAdjudicationHearingData from '../../data/prepareAndRecordAnAdjudicationHearingData'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { getEvidenceCategory } from '../../utils/utils'
 
 export default class Dis3Pdf {
   constructor(
@@ -28,10 +29,19 @@ export default class Dis3Pdf {
       true
     )
 
+    const { damages, evidence, witnesses } = reportedAdjudication
+    const [photoVideo, baggedAndTagged] = await Promise.all([
+      getEvidenceCategory(evidence, false),
+      getEvidenceCategory(evidence, true),
+    ])
+
     const prepareAndRecordAnAdjudicationHearingData = new PrepareAndRecordAnAdjudicationHearingData(
       chargeNumber,
       adjudicationDetails,
-      offences
+      offences,
+      damages,
+      { photoVideo, baggedAndTagged },
+      witnesses
     )
 
     res.renderPdf(

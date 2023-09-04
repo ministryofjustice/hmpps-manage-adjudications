@@ -231,12 +231,15 @@ div.adjudication-pdf {
   left: 68.5%;
 }
 
-.adjudication-pdf-section-header {
-  font-size: 18px;
-}
-
-.adjudication-pdf-section-header-inner {
-  font-size: 14px;
+div.adjudication-pdf {
+  .adjudication-pdf-section-header {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .adjudication-pdf-section-header-inner {
+    font-size: 16px;
+  }
 }
 
 .adjudication-pdf-section-prepare-record-checkboxes {
@@ -309,4 +312,26 @@ div.adjudication-pdf {
   &__item {
     width:55%;
   }
+}
+
+.restricted-width {
+  max-width: 60%;
+}
+
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th {
+  padding-right: 3em;
+}
+
+tr {
+  border-bottom: 1px solid grey;
+}
+
+td {
+  padding: 10px 0px;
 }
