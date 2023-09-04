@@ -84,6 +84,16 @@ export default class DecisionTreeService {
     user: User,
     prisonerView: boolean
   ): Promise<IncidentAndOffences> {
+    if (offenceData.offenceCode === 0) {
+      return {
+        questionsAndAnswers: [],
+        incidentRule: null,
+        offenceRule: {
+          paragraphNumber: offenceData.offenceRule?.paragraphNumber.split(':').pop(),
+          paragraphDescription: offenceData.offenceRule?.paragraphDescription,
+        },
+      }
+    }
     const incidentRoleEnum = incidentRoleFromCode(incidentRole.roleCode)
     const answerData = await this.answerDataDetails(offenceData, user)
     const offenceCode = Number(offenceData.offenceCode)

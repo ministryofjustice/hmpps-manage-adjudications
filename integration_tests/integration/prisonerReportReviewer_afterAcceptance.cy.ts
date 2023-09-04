@@ -13,6 +13,8 @@ const reportedAdjudicationResponse = ({
   statusReason = null,
   statusDetails = null,
   isYouthOffender = false,
+  paragraphNumber = '1',
+  offenceCode = 1001,
 }: {
   chargeNumber: string
   status: ReportedAdjudicationStatus
@@ -20,6 +22,8 @@ const reportedAdjudicationResponse = ({
   statusReason?: string
   statusDetails?: string
   isYouthOffender: boolean
+  paragraphNumber?: string
+  offenceCode?: number
 }) => {
   return testData.reportedAdjudication({
     chargeNumber,
@@ -32,9 +36,9 @@ const reportedAdjudicationResponse = ({
       completed: true,
     },
     offenceDetails: {
-      offenceCode: 1001,
+      offenceCode,
       offenceRule: {
-        paragraphNumber: '1',
+        paragraphNumber,
         paragraphDescription: 'Commits any assault',
       },
       victimPrisonersNumber: 'G5512G',
@@ -102,6 +106,19 @@ context('Prisoner report - reviewer view', () => {
           status: ReportedAdjudicationStatus.SCHEDULED,
           reviewedByUserId: 'USER1',
           isYouthOffender: false,
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: '456791-1',
+      response: {
+        reportedAdjudication: reportedAdjudicationResponse({
+          chargeNumber: '456791-1',
+          status: ReportedAdjudicationStatus.SCHEDULED,
+          reviewedByUserId: 'USER1',
+          isYouthOffender: false,
+          paragraphNumber: '51:1',
+          offenceCode: 0,
         }),
       },
     })
@@ -441,6 +458,28 @@ context('Prisoner report - reviewer view', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('456791'))
       })
+    })
+  })
+  describe('report MIGRATED', () => {
+    it.only('should contain the correct offence details', () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.review('456791-1'))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+
+      prisonerReportPage
+        .offenceDetailsSummary()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+          expect($summaryLabels.get(1).innerText).to.contain('This offence broke')
+        })
+
+      prisonerReportPage
+        .offenceDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+          expect($summaryData.get(1).innerText).to.contain('Prison rule 51, paragraph 1\n\nCommits any assault')
+        })
     })
   })
 })
