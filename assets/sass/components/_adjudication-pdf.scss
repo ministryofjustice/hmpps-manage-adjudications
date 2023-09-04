@@ -8,6 +8,10 @@ div.adjudication-pdf {
   h2 {
     font-size: 14px;
   }
+  h3 {
+    font-size: 12px;
+  }
+  
 }
 
 .adjudication-pdf-input {
@@ -53,6 +57,11 @@ div.adjudication-pdf {
 .adjudication-pdf-input-text-box-full-width {
   height: 30px;
   width: 90%;
+}
+
+.adjudication-pdf-input-text-box-large-full-width {
+  height: 700px;
+  width: 100%;
 }
 
 .adjudication-pdf-input-text-box-five-lines-high-full-width {
@@ -220,4 +229,47 @@ div.adjudication-pdf {
   height: 650px;
   position:absolute;
   left: 68.5%;
+}
+
+.adjudication-pdf-section-header {
+  font-size: 18px;
+}
+
+.adjudication-pdf-section-header-inner {
+  font-size: 14px;
+}
+
+.adjudication-pdf-section-prepare-record-checkboxes {
+  display: flex;
+
+  &__item {
+    &:nth-child(1) {
+      width: 66%;
+      padding-right: govuk-spacing(3);
+    }
+
+    &:nth-child(2) {
+      width: 33%;
+    }
+  }
+}
+
+.adjudication-pdf-section-other-underline {
+  width: 50%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.adjudication-pdf-section-hearing-details {
+  display: flex;
+  align-items: space-between;
+
+  &__item {
+    padding-right: govuk-spacing(4);
+
+    &:first-child {
+      width: 60%;
+    }
+  }
 }

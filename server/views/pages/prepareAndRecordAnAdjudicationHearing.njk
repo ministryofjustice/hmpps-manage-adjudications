@@ -1,0 +1,9 @@
+{% extends "../partials/pdfLayout.njk" %}
+{% from "../macros/prepareAndRecordAnAdjudicationHearingPrepare.njk" import prepareAndRecordAnAdjudicationHearingPrepare %}
+{% from "../macros/prepareAndRecordAnAdjudicationHearingDetails.njk" import prepareAndRecordAnAdjudicationHearingDetails %}
+{% block content %}
+  <div class='adjudication-pdf'>
+    {{ prepareAndRecordAnAdjudicationHearingPrepare(prepareAndRecordAnAdjudicationHearingData) }}
+    {{ prepareAndRecordAnAdjudicationHearingDetails(prepareAndRecordAnAdjudicationHearingData) }}
+  </div>
+{% endblock %}
