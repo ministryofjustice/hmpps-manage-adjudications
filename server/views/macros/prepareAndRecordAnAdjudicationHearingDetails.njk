@@ -1,6 +1,7 @@
 {% macro prepareAndRecordAnAdjudicationHearingDetails(prepareAndRecordAnAdjudicationHearingData) %}
-  <section>
+  <section class="page-break-before-always">
     <h2 class='adjudication-pdf-section-header'>Section 2 - Details of hearing</h2>
+    <div class="restricted-width">
     <p>
         There is space for 4 hearings to be recorded on this form. If there are more, record the following details in the ‘Record of hearing’ box.
     </p>
@@ -10,6 +11,7 @@
     <p>
         If you refuse to allow the prisoner to attend, record the decision and reasons in the ‘Record of hearing’ box, saying why it was just and fair in the circumstances. (See PSI 05/2018 Annex A Paras 2.3 and 2.4.)
     </p>
+    </div>
     <h3 class='adjudication-pdf-section-header-inner'>First hearing</h3>
     <div class='adjudication-pdf-section-hearing-details'>
       <div class="adjudication-pdf-section-hearing-details__item">
@@ -41,7 +43,7 @@
     </div>
     <div class='govuk-!-margin-top-3 break-inside-avoid'>
       <p class='govuk-!-margin-top-3'>If No, give reasons why the prisoner did not attend.</p>
-      <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+      <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
     </div>
     <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
       <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner understand the charge?</p>
@@ -54,7 +56,7 @@
     </div>
     <div class='govuk-!-margin-top-3 break-inside-avoid'>
       <p class='govuk-!-margin-top-3'>If No, offer the prisoner a futher explanation of the charge and record the details.</p>
-      <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+      <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
     </div>
     <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
       <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner need help?</p>
@@ -98,7 +100,7 @@
     </div>
     <div class='govuk-!-margin-top-3 break-inside-avoid'>
       <p class='govuk-!-margin-top-3'>If No, record the reason</p>
-      <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+      <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
     </div>
 
     <div class='govuk-!-margin-top-3 break-inside-avoid'>
@@ -139,11 +141,11 @@
       </div>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3'>If Yes, list the witness(es).</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
       </div>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3'>Say why any witnesses were accepted or refused.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </div>
 
@@ -161,7 +163,7 @@
       </div>
     </section>
 
-    <section >
+    <section class="page-break-before-always">
       <h3 class='adjudication-pdf-section-header-inner'>Record of the hearing</h3>
       <p>Record:</p>
       <ul>
@@ -175,7 +177,7 @@ evidence</li>
       <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-large-full-width'>
     </section>
 
-    <section class="break-inside-avoid">
+    <section class="break-inside-avoid page-break-before-always">
       <h3 class='adjudication-pdf-section-header-inner'>Finding</h3>
       <div class="adjudication-pdf-section-finding-checkboxes">
         <div class="adjudication-pdf-section-finding-checkboxes__item">
@@ -193,7 +195,7 @@ evidence</li>
       </div>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3'>If charge not proceeded with, give reasons why (see PSI 05/2018 – Annex A paragraph 2.56).</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
       <div class="govuk-!-margin-top-3">
         <p class='govuk-!-margin-bottom-1'>Prisoner informed of outcome (DD/MM/YYYY)</p>
@@ -223,7 +225,7 @@ evidence</li>
 
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3'>If Yes, record any mitigating evidence.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
       </div>
 
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
@@ -238,13 +240,15 @@ evidence</li>
 
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3'>If Yes, enter their names</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
       </div>
     </section>
 
     <section>
+      <div class="break-inside-avoid">
       <h3 class='adjudication-pdf-section-header-inner'>Adjudication report</h3>
       <p>Read out the DIS5 ‘Sentence and adjudication history’.</p>
+      </div>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to comment on this report, or do they have any questions they wish to ask about it?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
@@ -257,13 +261,13 @@ evidence</li>
 
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3'>If Yes, enter their comments and/or questions.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </section>
 
     <section>
       <h3 class='adjudication-pdf-section-header-inner'>Conduct report</h3>
-      <p>Read out the DIS6 ‘Conduct report’ on the prisoner’s behaviour during their current sentence. Any safer custody terms must be entered on the prisoner’s record and P-NOMIS, and appropriate action must be taken.</p>
+      <p class="restricted-width">Read out the DIS6 ‘Conduct report’ on the prisoner’s behaviour during their current sentence. Any safer custody terms must be entered on the prisoner’s record and P-NOMIS, and appropriate action must be taken.</p>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to comment on this report, or do they have any questions they wish to ask about it?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
@@ -278,22 +282,24 @@ evidence</li>
     <section>
       <h3 class='adjudication-pdf-section-header-inner'>Punishment</h3>
       <h3 class='adjudication-pdf-section-header-inner'>Punishment guidelines</h3>
-      <p>Consider punishment, including any possible not punitive compensation requirement for recovery of monies for damages to prison property, Take account of PSI 05/2018 Annex A para 2.64 and Annex C, including whether the prisoner is on an open ACCT or had an ACCT closed within 3 months of the charge being laid.</p>
+      <p class="restricted-width">Consider punishment, including any possible not punitive compensation requirement for recovery of monies for damages to prison property, Take account of PSI 05/2018 Annex A para 2.64 and Annex C, including whether the prisoner is on an open ACCT or had an ACCT closed within 3 months of the charge being laid.</p>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='govuk-!-margin-top-3'>If so, consider whether there are any risk factors that should be considered when imposing a punishment. Record any relevant points.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+        <p class='govuk-!-margin-top-3 restricted-width'>If so, consider whether there are any risk factors that should be considered when imposing a punishment. Record any relevant points.</p>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </section>
 
     <section>
       <h3 class='adjudication-pdf-section-header-inner'>For governor/director only</h3>
+      <div class="restricted-width">
       <p>Consider whether additional days may be an appropriate punishment, and if so refer the case to the independent adjudicator.</p>
       <h3 class='adjudication-pdf-section-header-inner'>Cellular confinement</h3>
       <p>If considering cellular confinement (CC), confirm Initial Segregation Health Screen (ISHS) recording fitness for this punishment has been completed before a decision on punishment is made, and take the recommendation into account.</p>
       <p>If the ISHS has not been completed, adjourn and ensure it’s completed within 2 hours of the hearing being completed. Record the outcome of the assessment. <span class="govuk-!-font-weight-bold">Attach the ISHS to this record.</span></p>
       <p>If imposing suspended cellular confinement, ensure a further ISHS is completed before any punishment is activated.</p>
+      </div>
       <h3 class='adjudication-pdf-section-header-inner'>Punishment decision</h3>
-      <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
+      <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
     </section>
 
     <section>
@@ -327,7 +333,7 @@ evidence</li>
       </div>
       <p>The finding and punishment, if any, must be entered on the prisoner’s record F2050 and P-NOMIS.</p>
     </section>
-    <section>
+    <section class="govuk-!-margin-top-3 break-inside-avoid">
       <div class="adjudication-pdf-section-signature-boxes">
         <div class="adjudication-pdf-section-signature-boxes__item">
           <p>Signature of governor/adjudicator</p>
