@@ -43,7 +43,6 @@ export default class Dis3Pdf {
       { photoVideo, baggedAndTagged },
       witnesses
     )
-
     res.renderPdf(
       `pages/prepareAndRecordAnAdjudicationHearing`,
       { adjudicationsUrl, prepareAndRecordAnAdjudicationHearingData },

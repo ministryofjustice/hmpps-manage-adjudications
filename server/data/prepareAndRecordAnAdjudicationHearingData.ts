@@ -11,17 +11,15 @@ type EvidenceDetailsSplit = {
 export default class prepareAndRecordAnAdjudicationHearingData {
   chargeNumber: string
 
-  establishmentName: string
-
   prisonerDisplayName: string
 
   prisonerNumber: string
 
-  locationName: string
-
   offences: IncidentAndOffences
 
   isYOI: boolean
+
+  prisonerLocationDescription: string
 
   damages: DamageDetails[]
 
@@ -38,11 +36,13 @@ export default class prepareAndRecordAnAdjudicationHearingData {
     witnesses: WitnessDetails[]
   ) {
     this.chargeNumber = chargeNumber
-    this.establishmentName = confirmedOnReportData.prisonName
     this.prisonerDisplayName = convertToTitleCase(
       `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
-    this.locationName = confirmedOnReportData.prisonerLivingUnitName
+    this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
+      confirmedOnReportData.prisonerLivingUnitName || 'Unknown'
+    }`
+
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.offences = offences
     this.isYOI = confirmedOnReportData.isYouthOffender
