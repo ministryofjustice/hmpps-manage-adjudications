@@ -8,6 +8,30 @@ div.adjudication-pdf {
   h2 {
     font-size: 14px;
   }
+  h3 {
+    font-size: 12px;
+  }
+  table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    font-size: 12px;
+    width: 60%;
+  }
+  
+  th {
+    text-align: start;
+    padding: 10px 0px;
+  }
+  
+  tr {
+    border-bottom: 1px solid grey;
+  }
+  
+  td {
+    padding: 10px 0px;
+    width:50%;
+  }
+  
 }
 
 .adjudication-pdf-input {
@@ -53,6 +77,11 @@ div.adjudication-pdf {
 .adjudication-pdf-input-text-box-full-width {
   height: 30px;
   width: 90%;
+}
+
+.adjudication-pdf-input-text-box-large-full-width {
+  height: 700px;
+  width: 100%;
 }
 
 .adjudication-pdf-input-text-box-five-lines-high-full-width {
@@ -112,7 +141,7 @@ div.adjudication-pdf {
 }
 .adjudication-pdf-section-prisoner {
   display: flex;
-  align-items: end;
+  align-items: start;
 
   &__item {
     display: flex;
@@ -220,4 +249,109 @@ div.adjudication-pdf {
   height: 650px;
   position:absolute;
   left: 68.5%;
+}
+
+div.adjudication-pdf {
+  .adjudication-pdf-section-header {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .adjudication-pdf-section-header-inner {
+    font-size: 16px;
+  }
+
+  .adjudication-pdf-section-subheader-inner {
+    font-size: 14px;
+  }
+}
+
+.adjudication-pdf-section-prepare-record-checkboxes {
+  display: flex;
+
+  &__item {
+    &:nth-child(1) {
+      width: 66%;
+      padding-right: govuk-spacing(3);
+    }
+
+    &:nth-child(2) {
+      width: 33%;
+    }
+  }
+}
+
+.adjudication-pdf-section-finding-checkboxes {
+  display: flex;
+  
+  &__item {
+      padding-right: govuk-spacing(3);
+  }
+}
+
+.adjudication-pdf-section-other-underline {
+  width: 50%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.adjudication-pdf-section-hearing-details {
+  display: flex;
+  align-items: space-between;
+
+  &__item {
+    padding-right: govuk-spacing(4);
+
+    &:first-child {
+      width: 60%;
+    }
+  }
+}
+
+.adjudication-pdf-section-signature-boxes {
+  width: 100%;
+  display: flex;
+  align-items: space-between;
+
+  &__item {
+    &:first-child {
+      width: 45%;
+    }
+    &:last-child {
+      width:55%;
+    }
+  }
+
+  .adjudication-pdf-signature-box {
+    width: 100%;
+    height: 100px;
+  }
+}
+
+.adjudication-pdf-section-date-signature {
+  display:flex;
+  justify-content: flex-end;
+
+  &__item {
+    width:55%;
+  }
+}
+
+.restricted-width {
+  max-width: 60%;
+}
+
+.none-added-text {
+  padding: 10px 0;
+}
+
+.adjudication-pdf-brief-text-area {
+  height: 130px;
+  width: 100%;
+}
+
+.adjudication-pdf-small-text-area {
+  height: 100px;
+  width: 100%;
 }

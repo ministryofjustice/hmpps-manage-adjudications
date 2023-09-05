@@ -69,7 +69,7 @@ context('Navigated to forms tab', () => {
       cy.visit(adjudicationUrls.forms.urls.review('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage.printLink('12')
-      // formsTabPage.printLink('3')
+      formsTabPage.printLink('3')
       // formsTabPage.printLink('4')
       formsTabPage.printLink('5')
       formsTabPage.printLink('6')

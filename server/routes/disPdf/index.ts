@@ -3,6 +3,7 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import Dis12Pdf from './dis12Pdf'
+import Dis3Pdf from './dis3Pdf'
 import Dis5Pdf from './dis5Pdf'
 import Dis6Pdf from './dis6Pdf'
 import Dis7Pdf from './dis7Pdf'
@@ -19,6 +20,7 @@ export default function disPdfRoutes({
   const router = express.Router()
 
   const dis12Pdf = new Dis12Pdf(reportedAdjudicationsService, decisionTreeService)
+  const dis3Pdf = new Dis3Pdf(reportedAdjudicationsService, decisionTreeService)
   const dis5Pdf = new Dis5Pdf(reportedAdjudicationsService)
   const dis6Pdf = new Dis6Pdf(reportedAdjudicationsService)
   const dis7Pdf = new Dis7Pdf(reportedAdjudicationsService)
@@ -26,6 +28,7 @@ export default function disPdfRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.printPdf.matchers.dis12, dis12Pdf.renderPdf)
+  get(adjudicationUrls.printPdf.matchers.dis3, dis3Pdf.renderPdf)
   get(adjudicationUrls.printPdf.matchers.dis5, dis5Pdf.renderPdf)
   get(adjudicationUrls.printPdf.matchers.dis6, dis6Pdf.renderPdf)
   get(adjudicationUrls.printPdf.matchers.dis7, dis7Pdf.renderPdf)
