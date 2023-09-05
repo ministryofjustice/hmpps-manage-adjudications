@@ -305,6 +305,15 @@ const adjudicationUrls = {
       dis12: (chargeNumber: string) => `${adjudicationUrls.printReport.root}/${chargeNumber}/dis12`,
     },
   },
+  forms: {
+    root: '/print-issue-forms',
+    matchers: {
+      review: '/:chargeNumber/review',
+    },
+    urls: {
+      review: (chargeNumber: string) => `${adjudicationUrls.forms.root}/${chargeNumber}/review`,
+    },
+  },
   printPdf: {
     root: '/print',
     matchers: {

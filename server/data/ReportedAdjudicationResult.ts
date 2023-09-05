@@ -44,6 +44,7 @@ export type ReportedAdjudication = {
   transferableActionsAllowed?: boolean
   overrideAgencyId?: string
   originatingAgencyId?: string
+  disIssueHistory?: DisIssue[]
 }
 
 export type ReportedAdjudicationResult = {
@@ -79,6 +80,7 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   dateTimeOfFirstHearing?: string
   issueStatus?: IssueStatus
   relevantAlerts?: AlertFlags[]
+  formattedDisIssueHistory?: FormattedDisIssue[]
 }
 
 export type ReportedAdjudicationFilter = {
@@ -208,6 +210,16 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
 export enum IssueStatus {
   ISSUED = 'ISSUED',
   NOT_ISSUED = 'NOT_ISSUED',
+}
+
+export type DisIssue = {
+  issuingOfficer?: string
+  dateTimeOfIssue?: string
+}
+
+export type FormattedDisIssue = {
+  issuingOfficer?: string
+  formattedDateTimeOfIssue?: string
 }
 
 export const allIssueStatuses = [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED]

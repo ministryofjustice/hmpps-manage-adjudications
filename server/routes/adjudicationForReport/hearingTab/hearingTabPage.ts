@@ -5,6 +5,9 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import OutcomesService from '../../../services/outcomesService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
+import config from '../../../config'
+import { hasAnyRole } from '../../../utils/utils'
+import UserService from '../../../services/userService'
 
 export enum PageRequestType {
   REPORTER,
@@ -30,6 +33,7 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
       reportHref: adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.report(reportedAdjudication.chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(reportedAdjudication.chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.review(reportedAdjudication.chargeNumber),
     }
   }
   if (pageOptions.isViewOnly()) {
@@ -37,12 +41,14 @@ const getVariablesForPageType = (pageOptions: PageOptions, reportedAdjudication:
       reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(reportedAdjudication.chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(reportedAdjudication.chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.review(reportedAdjudication.chargeNumber),
     }
   }
   return {
     reportHref: adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber),
     hearingsHref: adjudicationUrls.hearingDetails.urls.review(reportedAdjudication.chargeNumber),
     punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(reportedAdjudication.chargeNumber),
+    formsHref: adjudicationUrls.forms.urls.review(reportedAdjudication.chargeNumber),
   }
 }
 
@@ -52,7 +58,8 @@ export default class HearingTabPage {
   constructor(
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly outcomesService: OutcomesService
+    private readonly outcomesService: OutcomesService,
+    private readonly userService: UserService
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -82,6 +89,9 @@ export default class HearingTabPage {
       user
     )
 
+    const userRoles = await this.userService.getUserRoles(user.token)
+    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
+
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
       reportNo: reportedAdjudication.chargeNumber,
@@ -109,6 +119,7 @@ export default class HearingTabPage {
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
       yourCompletedReportsHref: adjudicationUrls.yourCompletedReports.urls.start(),
       ...getVariablesForPageType(this.pageOptions, reportedAdjudication),
+      showFormsTab,
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,

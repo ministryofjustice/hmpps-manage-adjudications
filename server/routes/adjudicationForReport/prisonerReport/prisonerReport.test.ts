@@ -1,19 +1,18 @@
 import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
-import LocationService from '../../../services/locationService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../../services/decisionTreeService'
 import { IncidentRole } from '../../../incidentRole/IncidentRole'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
+import UserService from '../../../services/userService'
 
-jest.mock('../../../services/locationService.ts')
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/decisionTreeService.ts')
+jest.mock('../../../services/userService.ts')
 
 const testData = new TestData()
-const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
@@ -21,6 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 
 let app: Express
 
@@ -63,8 +63,6 @@ beforeEach(() => {
     prisoner,
     associatedPrisoner: undefined,
   })
-
-  locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
     isYouthOffender: false,
@@ -131,7 +129,9 @@ beforeEach(() => {
     originatingAgencyToAddOutcome: false,
   })
 
-  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, decisionTreeService })
+  userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+
+  app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, decisionTreeService, userService })
 })
 
 afterEach(() => {

@@ -36,6 +36,7 @@ export default class AddDateAndTimeOfIssueRoutes {
       logger.error(`Failed to post issue date time for adjudication ${chargeNumber}: ${postError}`)
       res.locals.redirectUrl = adjudicationUrls.addIssueDateTime.urls.start(chargeNumber)
     }
-    return res.redirect(adjudicationUrls.confirmDISFormsIssued.urls.start())
+    const originalPageReferrerUrl = req.query.referrer as string
+    return res.redirect(originalPageReferrerUrl)
   }
 }

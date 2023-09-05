@@ -26,9 +26,17 @@ export default function HearingDetailsRoutes({
     userService,
     outcomesService
   )
-  const hearingTabReporterRoute = new HearingTabReporterRoute(reportedAdjudicationsService, outcomesService)
+  const hearingTabReporterRoute = new HearingTabReporterRoute(
+    reportedAdjudicationsService,
+    outcomesService,
+    userService
+  )
 
-  const hearingTabViewOnlyRoute = new HearingTabViewOnlyRoute(reportedAdjudicationsService, outcomesService)
+  const hearingTabViewOnlyRoute = new HearingTabViewOnlyRoute(
+    reportedAdjudicationsService,
+    outcomesService,
+    userService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
