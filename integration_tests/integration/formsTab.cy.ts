@@ -20,6 +20,16 @@ const reportedAdjudication = testData.reportedAdjudication({
       id: 68,
     }),
   ],
+  disIssueHistory: [
+    {
+      issuingOfficer: 'USER1',
+      dateTimeOfIssue: '2022-12-03T13:00:00',
+    },
+    {
+      issuingOfficer: 'USER1',
+      dateTimeOfIssue: '2022-12-04T14:00:00',
+    },
+  ],
 })
 
 context('Navigated to forms tab', () => {
@@ -97,8 +107,12 @@ context('Navigated to forms tab', () => {
         .resultsTable()
         .find('td')
         .then($data => {
-          expect($data.get(0).innerText).to.contain('5 December 2022 - 15:00')
+          expect($data.get(0).innerText).to.contain('3 December 2022 - 13:00')
           expect($data.get(1).innerText).to.contain('T. User')
+          expect($data.get(2).innerText).to.contain('4 December 2022 - 14:00')
+          expect($data.get(3).innerText).to.contain('T. User')
+          expect($data.get(4).innerText).to.contain('5 December 2022 - 15:00')
+          expect($data.get(5).innerText).to.contain('T. User')
         })
       formsTabPage.addIssueButton().should('exist')
     })

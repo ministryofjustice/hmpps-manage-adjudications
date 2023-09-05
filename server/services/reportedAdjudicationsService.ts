@@ -6,6 +6,7 @@ import ManageAdjudicationsSystemTokensClient, {
 } from '../data/manageAdjudicationsSystemTokensClient'
 import CuriousApiService from './curiousApiService'
 import {
+  FormattedDisIssue,
   IssueStatus,
   ReportedAdjudication,
   ReportedAdjudicationDISFormFilter,
@@ -311,13 +312,13 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const IssuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
 
     return reportedAdjudications.map(reportedAdjudication => {
       return this.enhanceAdjudicationWithIssuingDetails(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        IssuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer),
+        issuingOfficerNameByUsernameMap,
         filterUsingHearingDate ? alertMap.get(reportedAdjudication.prisonerNumber) : null
       )
     })
@@ -426,9 +427,10 @@ export default class ReportedAdjudicationsService {
   enhanceAdjudicationWithIssuingDetails(
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
-    issuingOfficerName: string,
+    issuingOfficerNameByUsernameMap: Map<string, string>,
     prisonersAlerts: Alert[] = []
   ): ReportedAdjudicationEnhancedWithIssuingDetails {
+    const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
@@ -443,6 +445,15 @@ export default class ReportedAdjudicationsService {
         alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
       )
     }
+
+    const formattedDisIssueHistory: FormattedDisIssue[] = []
+    reportedAdjudication.disIssueHistory.map(disIssue => {
+      const disIssueOfficerName = issuingOfficerNameByUsernameMap.get(disIssue.issuingOfficer)
+      return formattedDisIssueHistory.push({
+        issuingOfficer: getFormattedOfficerName(disIssueOfficerName && convertToTitleCase(disIssueOfficerName)) || '',
+        formattedDateTimeOfIssue: formatTimestampToDate(disIssue.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+      })
+    })
 
     return {
       ...reportedAdjudication,
@@ -461,6 +472,7 @@ export default class ReportedAdjudicationsService {
       formattedDateTimeOfFirstHearing: formatTimestampToDate(firstHearingDateTime, 'D MMMM YYYY - HH:mm'),
       issueStatus: formsAlreadyIssued ? IssueStatus.ISSUED : IssueStatus.NOT_ISSUED,
       relevantAlerts,
+      formattedDisIssueHistory,
     }
   }
 
