@@ -39,6 +39,13 @@
 
     {% set rows = [] %}
     {% for report in reports %}
+      {% for disIssue in report.formattedDisIssueHistory %}
+        {% set rows = (rows.push([
+          { text: disIssue.formattedDateTimeOfIssue or ' - ' },
+          { text: disIssue.issuingOfficer or ' - ' }
+        ]), rows) %}
+      {% endfor %}
+
       {% set rows = (rows.push([
         { text: report.formattedDateTimeOfIssue or ' - ' },
         { text: report.issuingOfficer or ' - ' }

@@ -12,7 +12,7 @@ import {
   WitnessCode,
   WitnessDetails,
 } from '../../data/DraftAdjudicationResult'
-import { OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { DisIssue, OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
 import { Location } from '../../data/PrisonLocationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
@@ -68,6 +68,7 @@ export default class TestData {
     createdByUserId = 'USER1',
     originatingAgencyId = 'MDI',
     otherData,
+    disIssueHistory = [],
   }: {
     chargeNumber?: string
     prisonerNumber: string
@@ -94,6 +95,7 @@ export default class TestData {
     createdByUserId?: string
     originatingAgencyId?: string
     otherData?: any
+    disIssueHistory?: DisIssue[]
   }) => {
     return {
       chargeNumber,
@@ -127,6 +129,7 @@ export default class TestData {
       dateTimeOfIssue,
       originatingAgencyId,
       ...otherData,
+      disIssueHistory,
     }
   }
 

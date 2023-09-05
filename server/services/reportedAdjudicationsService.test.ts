@@ -675,6 +675,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfFirstHearing: null,
             formattedDateTimeOfFirstHearing: null,
             relevantAlerts: null,
+            formattedDisIssueHistory: [],
           },
         }),
       ])
@@ -719,6 +720,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfFirstHearing: null,
             formattedDateTimeOfFirstHearing: null,
             relevantAlerts: [],
+            formattedDisIssueHistory: [],
           },
         }),
       ])
@@ -762,6 +764,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfFirstHearing: null,
             formattedDateTimeOfFirstHearing: null,
             relevantAlerts: null,
+            formattedDisIssueHistory: [],
           },
         }),
       ])
@@ -806,6 +809,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfFirstHearing: null,
             formattedDateTimeOfFirstHearing: null,
             relevantAlerts: [],
+            formattedDisIssueHistory: [],
           },
         }),
       ])
