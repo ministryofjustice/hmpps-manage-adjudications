@@ -21,7 +21,7 @@ export default class prepareAndRecordAnAdjudicationHearingData {
 
   offences: IncidentAndOffences
 
-  isYouthOffender: boolean
+  isYOI: boolean
 
   damages: DamageDetails[]
 
@@ -45,7 +45,7 @@ export default class prepareAndRecordAnAdjudicationHearingData {
     this.locationName = confirmedOnReportData.prisonerLivingUnitName
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.offences = offences
-    this.isYouthOffender = confirmedOnReportData.isYouthOffender
+    this.isYOI = confirmedOnReportData.isYouthOffender
     this.damages = damages
     this.evidence = evidence
     this.witnesses = witnesses

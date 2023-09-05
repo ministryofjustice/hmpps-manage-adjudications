@@ -11,6 +11,26 @@ div.adjudication-pdf {
   h3 {
     font-size: 12px;
   }
+  table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    font-size: 12px;
+    width: 60%;
+  }
+  
+  th {
+    text-align: start;
+    padding: 10px 0px;
+  }
+  
+  tr {
+    border-bottom: 1px solid grey;
+  }
+  
+  td {
+    padding: 10px 0px;
+    width:50%;
+  }
   
 }
 
@@ -320,27 +340,6 @@ div.adjudication-pdf {
 
 .restricted-width {
   max-width: 60%;
-}
-
-table {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  font-size: 12px;
-  width: 60%;
-}
-
-th {
-  text-align: start;
-  padding: 10px 0px;
-}
-
-tr {
-  border-bottom: 1px solid grey;
-}
-
-td {
-  padding: 10px 0px;
-  width:50%;
 }
 
 .none-added-text {

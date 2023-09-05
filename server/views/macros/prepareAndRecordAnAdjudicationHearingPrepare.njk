@@ -25,6 +25,10 @@
           {{ prepareAndRecordAnAdjudicationHearingData.establishmentName }} - {{ prepareAndRecordAnAdjudicationHearingData.locationName }}
         </p>
       </div>
+      <div class='adjudication-pdf-section-prisoner__item'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Key worker</p>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+      </div>
     </div>
     <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
     <h2 class='adjudication-pdf-section-header'>Section 1 - Prepare for hearing</h2>
@@ -39,10 +43,10 @@
       <div>
         <p class='govuk-!-margin-bottom-0'>This offence broke:</p>
         {% if offences.incidentRule %}
-          <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison rule {{ prepareAndRecordAnAdjudicationHearingData.isYouthOffender | prisonRule }}, paragraph {{ offences.incidentRule.paragraphNumber }}</p>
+          <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison rule {{ prepareAndRecordAnAdjudicationHearingData.isYOI | prisonRule }}, paragraph {{ offences.incidentRule.paragraphNumber }}</p>
           <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold restricted-width'>{{ offences.incidentRule.paragraphDescription | safe }}</p>
         {% endif %}
-        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison rule {{ prepareAndRecordAnAdjudicationHearingData.isYouthOffender | prisonRule }}, paragraph {{ offences.offenceRule.paragraphNumber }}</p>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison rule {{ prepareAndRecordAnAdjudicationHearingData.isYOI | prisonRule }}, paragraph {{ offences.offenceRule.paragraphNumber }}</p>
         <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold restricted-width'>{{ offences.offenceRule.paragraphDescription | safe }}</p>
       </div>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
