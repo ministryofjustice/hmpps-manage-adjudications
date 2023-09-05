@@ -17,6 +17,8 @@ export default class prepareAndRecordAnAdjudicationHearingData {
 
   prisonerNumber: string
 
+  locationName: string
+
   offences: IncidentAndOffences
 
   isYouthOffender: boolean
@@ -40,6 +42,7 @@ export default class prepareAndRecordAnAdjudicationHearingData {
     this.prisonerDisplayName = convertToTitleCase(
       `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
+    this.locationName = confirmedOnReportData.prisonerLivingUnitName
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.offences = offences
     this.isYouthOffender = confirmedOnReportData.isYouthOffender
