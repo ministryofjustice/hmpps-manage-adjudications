@@ -81,6 +81,10 @@ import manualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntry
 import manualConsecutivePunishmentErrorRoutes from './additionalDays/manualConsecutivePunishmentError'
 import damagesAmountRoutes from './punishments/damagesAmount'
 import reasonForChangeRoutes from './punishments/reasonForChange'
+import punishmentNumberOfDaysRoutes from './punishmentDates/numberOfDays'
+import punishmentSuspendedPage from './punishmentDates/isPunishmentSuspended'
+
+import config from '../config'
 
 export default function routes(
   router: Router,
@@ -304,7 +308,7 @@ export default function routes(
     numberOfAdditionalDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
   )
   router.use(
-    adjudicationUrls.isPunishmentSuspended.root,
+    adjudicationUrls.isPunishmentSuspendedAdditionalDays.root,
     willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
   )
   router.use(
@@ -351,6 +355,17 @@ export default function routes(
   router.use(adjudicationUrls.damagesAmount.root, damagesAmountRoutes({ punishmentsService, userService }))
 
   router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
+
+  if (config.automaticPunishmentDatesFlag) {
+    router.use(
+      adjudicationUrls.punishmentNumberOfDays.root,
+      punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    )
+    router.use(
+      adjudicationUrls.punishmentIsSuspended.root,
+      punishmentSuspendedPage({ userService, punishmentsService, reportedAdjudicationsService })
+    )
+  }
 
   return router
 }
