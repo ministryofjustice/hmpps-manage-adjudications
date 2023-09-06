@@ -113,19 +113,16 @@ div.adjudication-pdf {
   width: 100%;
 }
 
-.adjudication-pdf-brief-offence-details-small {
+.adjudication-pdf-brief-offence-details-small, .adjudication-pdf-brief-text-area {
   height: 130px;
   width: 100%;
 }
 
-.adjudication-pdf-punishment-given {
+.adjudication-pdf-punishment-given, .adjudication-pdf-punishment-given-small, .adjudication-pdf-small-text-area {
   height: 100px;
   width: 100%;
 }
-.adjudication-pdf-punishment-given-small {
-  height: 100px;
-  width: 100%;
-}
+
 
 .adjudication-pdf-section-issued-details {
   display: flex;
@@ -324,8 +321,8 @@ div.adjudication-pdf {
   }
 
   .adjudication-pdf-signature-box {
-    width: 100%;
     height: 100px;
+    width: 100%;
   }
 }
 
@@ -344,14 +341,4 @@ div.adjudication-pdf {
 
 .none-added-text {
   padding: 10px 0;
-}
-
-.adjudication-pdf-brief-text-area {
-  height: 130px;
-  width: 100%;
-}
-
-.adjudication-pdf-small-text-area {
-  height: 100px;
-  width: 100%;
 }
