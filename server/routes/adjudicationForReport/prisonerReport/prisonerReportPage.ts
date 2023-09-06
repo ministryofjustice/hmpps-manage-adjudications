@@ -9,7 +9,6 @@ import { getEvidenceCategory, hasAnyRole } from '../../../utils/utils'
 import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
-import config from '../../../config'
 import UserService from '../../../services/userService'
 
 type PageData = {
@@ -176,7 +175,7 @@ export default class prisonerReportRoutes {
     )
 
     const userRoles = await this.userService.getUserRoles(user.token)
-    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
+    const showFormsTab = hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
 
     const hideReportNumberAndPrintForAdjudicationStatuses = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
