@@ -81,6 +81,7 @@ import manualEntryConsecutivePunishmentRoutes from './additionalDays/manualEntry
 import manualConsecutivePunishmentErrorRoutes from './additionalDays/manualConsecutivePunishmentError'
 import damagesAmountRoutes from './punishments/damagesAmount'
 import reasonForChangeRoutes from './punishments/reasonForChange'
+import createOnBehalfOfRoutes from './createOnBehalfOf'
 
 export default function routes(
   router: Router,
@@ -228,6 +229,8 @@ export default function routes(
   )
 
   router.use(adjudicationUrls.selectGender.root, selectGenderRoutes({ placeOnReportService }))
+
+  router.use(adjudicationUrls.createOnBehalfOf.root, createOnBehalfOfRoutes({ decisionTreeService }))
 
   router.use(
     adjudicationUrls.confirmDISFormsIssued.root,
