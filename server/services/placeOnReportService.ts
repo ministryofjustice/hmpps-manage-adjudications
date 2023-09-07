@@ -487,6 +487,17 @@ export default class PlaceOnReportService {
     return client.amendGender(draftId, genderData)
   }
 
+  async setCreatedOnBehalfOf(
+    draftId: number,
+    createdOnBehalfOfOfficer: string,
+    createdOnBehalfOfReason: string,
+    user: User
+  ) {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
+    return client.setCreatedOnBehalfOf(draftId, createdOnBehalfOfOfficer, createdOnBehalfOfReason)
+  }
+
   setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {
     req.session[prisonerNumber] = { gender: genderSelected }
   }

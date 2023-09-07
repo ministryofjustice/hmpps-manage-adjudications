@@ -45,6 +45,8 @@ export type ReportedAdjudication = {
   overrideAgencyId?: string
   originatingAgencyId?: string
   disIssueHistory?: DisIssue[]
+  createdOnBehalfOfOfficer?: string
+  createdOnBehalfOfReason?: string
 }
 
 export type ReportedAdjudicationResult = {

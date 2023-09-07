@@ -157,6 +157,15 @@ const adjudicationUrls = {
         `${adjudicationUrls.selectGender.root}/${prisonerNumber}/${draftId}/edit`,
     },
   },
+  createOnBehalfOf: {
+    root: '/create-on-behalf-of',
+    matchers: {
+      check: '/:draftId/check',
+    },
+    url: {
+      check: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/check`,
+    },
+  },
   incidentRole: {
     root: '/incident-role',
     matchers: {
