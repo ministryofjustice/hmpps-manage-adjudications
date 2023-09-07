@@ -150,6 +150,8 @@ export default class TestData {
     isYouthOffender = false,
     startedByUserId = 'USER1',
     originatingAgencyId = 'MDI',
+    createdOnBehalfOfOfficer = null,
+    createdOnBehalfOfReason = null,
     otherData = {} as any,
   }: {
     id: number
@@ -168,6 +170,8 @@ export default class TestData {
     isYouthOffender?: boolean
     startedByUserId?: string
     originatingAgencyId?: string
+    createdOnBehalfOfOfficer?: string
+    createdOnBehalfOfReason?: string
     otherData?: any
   }) => {
     return {
@@ -190,6 +194,8 @@ export default class TestData {
       witnesses,
       isYouthOffender,
       originatingAgencyId,
+      createdOnBehalfOfOfficer,
+      createdOnBehalfOfReason,
       ...otherData,
     }
   }

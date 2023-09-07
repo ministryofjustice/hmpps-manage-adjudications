@@ -281,7 +281,10 @@ export default class ManageAdjudicationsSystemTokensClient {
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${draftId}/created-on-behalf-of`,
-      data: { createdOnBehalfOfRequest: { createdOnBehalfOfOfficer, createdOnBehalfOfReason } },
+      data: {
+        createdOnBehalfOfOfficer,
+        createdOnBehalfOfReason,
+      },
     })
   }
 

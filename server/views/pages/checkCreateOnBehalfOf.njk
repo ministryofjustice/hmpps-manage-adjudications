@@ -1,9 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
-{% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
+{% from "../macros/summaryListWithChangeLinks.njk" import summaryListWithChangeLinks %}
 
 {% set title = "Check your answers" %}
 
@@ -20,15 +18,16 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-      {{ createdOnBehalfOfOfficer }}
-      {{ createdOnBehalfOfReason }}
+      <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
+        {{ summaryListWithChangeLinks(checkData, 'Not entered', { "data-qa": "details-summary-table" }) }}
+      </div>
 
       <div class="flex-container flex-center">
         {{ govukButton({
           text: 'Confirm and continue',
           type: 'submit',
           preventDoubleClick: true,
-          classes: "govuk-button--submit govuk-!-margin-right-3",
+          classes: "govuk-button--submit govuk-!-margin-right-6",
           attributes: { "data-qa": "create-on-behalf-of-confirm" }
         }) }}
 

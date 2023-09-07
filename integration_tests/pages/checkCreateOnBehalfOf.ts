@@ -1,6 +1,6 @@
 import Page, { PageElement } from './page'
 
-export default class CheckYourAnswersPage extends Page {
+export default class CheckCreateOnBehalfOfPage extends Page {
   constructor() {
     super('Check your answers')
   }

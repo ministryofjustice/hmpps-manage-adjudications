@@ -230,7 +230,10 @@ export default function routes(
 
   router.use(adjudicationUrls.selectGender.root, selectGenderRoutes({ placeOnReportService }))
 
-  router.use(adjudicationUrls.createOnBehalfOf.root, createOnBehalfOfRoutes({ decisionTreeService }))
+  router.use(
+    adjudicationUrls.createOnBehalfOf.root,
+    createOnBehalfOfRoutes({ decisionTreeService, placeOnReportService })
+  )
 
   router.use(
     adjudicationUrls.confirmDISFormsIssued.root,
