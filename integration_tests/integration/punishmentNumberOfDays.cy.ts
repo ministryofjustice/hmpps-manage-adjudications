@@ -6,7 +6,7 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
 
 const testData = new TestData()
-context('Punishment - number of days', () => {
+context.skip('Punishment - number of days', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

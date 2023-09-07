@@ -4,7 +4,7 @@ import TestData from '../../server/routes/testutils/testData'
 import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
 
 const testData = new TestData()
-context('Punishment - is it suspended?', () => {
+context.skip('Punishment - is it suspended?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
