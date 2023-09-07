@@ -84,6 +84,7 @@ import reasonForChangeRoutes from './punishments/reasonForChange'
 import punishmentNumberOfDaysRoutes from './punishmentDates/numberOfDays'
 import punishmentSuspendedRoutes from './punishmentDates/isPunishmentSuspended'
 import punishmentSuspendedUntilDateRoutes from './punishmentDates/suspendedUntilDate'
+import createOnBehalfOfRoutes from './createOnBehalfOf'
 
 import config from '../config'
 
@@ -233,6 +234,11 @@ export default function routes(
   )
 
   router.use(adjudicationUrls.selectGender.root, selectGenderRoutes({ placeOnReportService }))
+
+  router.use(
+    adjudicationUrls.createOnBehalfOf.root,
+    createOnBehalfOfRoutes({ decisionTreeService, placeOnReportService })
+  )
 
   router.use(
     adjudicationUrls.confirmDISFormsIssued.root,

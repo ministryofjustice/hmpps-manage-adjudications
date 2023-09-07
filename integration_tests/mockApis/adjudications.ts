@@ -580,6 +580,21 @@ const stubAmendPrisonerGender = ({ draftId, response }): SuperAgentRequest =>
     },
   })
 
+const stubSetCreatedOnBehalfOf = ({ draftId, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/draft-adjudications/${draftId}/created-on-behalf-of`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubGetIssueDataFilteredOnDiscDate = ({
   filter = {
     fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
@@ -1078,6 +1093,7 @@ export default {
   stubAmendHearing,
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,
+  stubSetCreatedOnBehalfOf,
   stubGetIssueDataFilteredOnDiscDate,
   stubGetIssueDataFilteredOnHearingDate,
   stubPutDateTimeOfIssue,
