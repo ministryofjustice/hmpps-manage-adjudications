@@ -94,25 +94,6 @@ export default class PunishmentNumberOfDaysPage {
         days: trimmedDays,
       })
 
-    // try {
-    //   const punishmentData = {
-    //     type,
-    //     privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
-    //     otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
-    //     stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-    //     days: trimmedDays,
-    //   }
-
-    //   if (this.pageOptions.isEdit()) {
-    //     await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
-    //   } else {
-    //     await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
-    //   }
-    // } catch (postError) {
-    //   res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
-    //   throw postError
-    // }
-
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
     return res.redirect(
       url.format({
