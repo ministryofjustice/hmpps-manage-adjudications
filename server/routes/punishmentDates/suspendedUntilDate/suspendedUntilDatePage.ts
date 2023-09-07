@@ -1,7 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import url from 'url'
 import { Request, Response } from 'express'
-import { ParsedUrlQueryInput } from 'querystring'
 import validateForm from './suspendedUntilValidation'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
